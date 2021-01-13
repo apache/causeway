@@ -30,8 +30,6 @@ import org.springframework.beans.factory.FactoryBean;
 import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
 
-import org.apache.isis.persistence.jdo.applib.integration.JdoSupportService;
-
 /**
  * Proxy for a target JDO {@link javax.jdo.PersistenceManagerFactory},
  * returning the current thread-bound PersistenceManager (the Spring-managed
@@ -66,8 +64,7 @@ import org.apache.isis.persistence.jdo.applib.integration.JdoSupportService;
  */
 public class TransactionAwarePersistenceManagerFactoryProxy 
 implements 
-    FactoryBean<PersistenceManagerFactory>, 
-    JdoSupportService {
+    FactoryBean<PersistenceManagerFactory> {
 
 	private PersistenceManagerFactory target;
 
@@ -221,9 +218,6 @@ implements
 		}
 	}
 
-	// -- JDO SUPPORT SERVICE
-	
-    @Override
     public PersistenceManagerFactory getPersistenceManagerFactory() {
         return getObject();
     }

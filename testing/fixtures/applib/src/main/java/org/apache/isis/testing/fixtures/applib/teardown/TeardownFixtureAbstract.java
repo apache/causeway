@@ -28,7 +28,7 @@ import javax.jdo.metadata.TypeMetadata;
 
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.persistence.jdo.applib.services.IsisJdoSupport;
+import org.apache.isis.persistence.jdo.applib.integration.JdoSupportService;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 
 @Programmatic
@@ -41,7 +41,7 @@ public abstract class TeardownFixtureAbstract extends FixtureScript {
 
         final String value = discriminatorValueOf(cls);
         if(value == null) {
-            final TypeMetadata metadata = isisJdoSupport.getPersistenceManager()
+            final TypeMetadata metadata = jdoSupport.getPersistenceManager()
                             .getPersistenceManagerFactory().getMetadata(cls.getName());
             if(metadata == null) {
                 // fall-back
@@ -78,12 +78,12 @@ public abstract class TeardownFixtureAbstract extends FixtureScript {
         if (_Strings.isNullOrEmpty(schema)) {
             return deleteFrom(table);
         } else {
-            return isisJdoSupport.executeUpdate(String.format("DELETE FROM \"%s\".\"%s\"", schema, table));
+            return jdoSupport.executeUpdate(String.format("DELETE FROM \"%s\".\"%s\"", schema, table));
         }
     }
 
     protected Integer deleteFrom(final String table) {
-        return isisJdoSupport.executeUpdate(String.format("DELETE FROM \"%s\"", table));
+        return jdoSupport.executeUpdate(String.format("DELETE FROM \"%s\"", table));
     }
 
 
@@ -94,7 +94,7 @@ public abstract class TeardownFixtureAbstract extends FixtureScript {
             final String sql = String.format(
                     "DELETE FROM \"%s\".\"%s\" WHERE \"%s\"='%s'",
                     schema, table, column, value);
-            return this.isisJdoSupport.executeUpdate(sql);
+            return this.jdoSupport.executeUpdate(sql);
         }
     }
 
@@ -102,7 +102,7 @@ public abstract class TeardownFixtureAbstract extends FixtureScript {
         final String sql = String.format(
                 "DELETE FROM \"%s\" WHERE \"%s\"='%s'",
                 table, column, value);
-        return this.isisJdoSupport.executeUpdate(sql);
+        return this.jdoSupport.executeUpdate(sql);
     }
 
 
@@ -173,10 +173,10 @@ public abstract class TeardownFixtureAbstract extends FixtureScript {
     }
 
     private PersistenceManagerFactory getPersistenceManagerFactory() {
-        return isisJdoSupport.getPersistenceManager().getPersistenceManagerFactory();
+        return jdoSupport.getPersistenceManager().getPersistenceManagerFactory();
     }
 
-    @Inject private IsisJdoSupport isisJdoSupport;
+    @Inject private JdoSupportService jdoSupport;
 
 
 }

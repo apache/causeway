@@ -36,7 +36,6 @@ import org.apache.isis.applib.ViewModel;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.query.Query;
-import org.apache.isis.applib.services.user.UserMemento;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.services.inject.ServiceInjector;
@@ -45,12 +44,13 @@ import org.apache.isis.applib.services.metamodel.MetaModelService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.title.TitleService;
+import org.apache.isis.applib.services.user.UserMemento;
 import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.legacy.applib.filter.Filter;
-import org.apache.isis.persistence.jdo.applib.services.IsisJdoSupport;
+import org.apache.isis.persistence.jdo.applib.integration.JdoSupportService;
 
 import lombok.NonNull;
 import lombok.SneakyThrows;
@@ -68,7 +68,7 @@ public class DomainObjectContainer {
 	
 	@Inject private RepositoryService repositoryService;
 	@Inject private MetaModelService metaModelService;
-	@Inject private IsisJdoSupport isisJdoSupport;
+	@Inject private JdoSupportService jdoSupport;
 	@Inject private FactoryService factoryService;
 	@Inject private TitleService titleService;
 	@Inject private TransactionService transactionService;
@@ -115,7 +115,7 @@ public class DomainObjectContainer {
     @Programmatic
     @Deprecated
     public void resolve(Object domainObject) {
-    	isisJdoSupport.refresh(domainObject);
+        jdoSupport.refresh(domainObject);
     }
 
     /**

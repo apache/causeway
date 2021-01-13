@@ -331,7 +331,7 @@ implements EntityFacet {
         if(pmf==null) {
             getFacetHolder().getServiceInjector().injectServicesInto(this);
         }
-        return pmf.getPersistenceManager();
+        return pmf.getPersistenceManagerFactory().getPersistenceManager();
     }
     
     private TransactionalProcessor getTransactionalProcessor() {

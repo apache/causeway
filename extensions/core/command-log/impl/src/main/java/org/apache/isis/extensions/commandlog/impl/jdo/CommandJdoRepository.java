@@ -46,7 +46,7 @@ import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.iactn.InteractionContext;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.util.schema.CommandDtoUtils;
-import org.apache.isis.persistence.jdo.applib.services.IsisJdoSupport_v3_2;
+import org.apache.isis.persistence.jdo.applib.integration.JdoSupportService;
 import org.apache.isis.schema.cmd.v2.CommandDto;
 import org.apache.isis.schema.cmd.v2.CommandsDto;
 import org.apache.isis.schema.cmd.v2.MapDto;
@@ -70,7 +70,7 @@ public class CommandJdoRepository {
 
     @Inject final Provider<InteractionContext> interactionContextProvider;
     @Inject final RepositoryService repositoryService;
-    @Inject final IsisJdoSupport_v3_2 isisJdoSupport;
+    @Inject final JdoSupportService jdoSupport;
 
     public List<CommandJdo> findByFromAndTo(
             @Nullable final LocalDate from,
@@ -235,7 +235,7 @@ public class CommandJdoRepository {
 
 
     private CommandJdo findByUniqueIdElseNull(final UUID uniqueId) {
-        val tsq = isisJdoSupport.newTypesafeQuery(CommandJdo.class);
+        val tsq = jdoSupport.newTypesafeQuery(CommandJdo.class);
         val cand = QCommandJdo.candidate();
         val q = tsq.filter(
                 cand.uniqueIdStr.eq(tsq.parameter("uniqueIdStr", String.class))

@@ -19,8 +19,6 @@
 
 package org.apache.isis.persistence.jdo.integration.jdosupport;
 
-import static org.apache.isis.commons.internal.base._NullSafe.stream;
-
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
@@ -34,10 +32,12 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.jdo.Extent;
 import javax.jdo.JDOQLTypedQuery;
-import javax.jdo.PersistenceManager;
+import javax.jdo.PersistenceManagerFactory;
+import javax.jdo.Query;
 import javax.jdo.datastore.JDOConnection;
 import javax.jdo.query.BooleanExpression;
 
+import org.datanucleus.store.rdbms.RDBMSPropertyNames;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
@@ -49,29 +49,32 @@ import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel.adapter.oid.ObjectPersistenceException;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.persistence.jdo.applib.services.IsisJdoSupport_v3_2;
+import org.apache.isis.persistence.jdo.applib.integration.JdoSupportService;
 import org.apache.isis.persistence.jdo.spring.integration.TransactionAwarePersistenceManagerFactoryProxy;
+
+import static org.apache.isis.commons.internal.base._NullSafe.stream;
 
 import lombok.val;
 
 
 /**
- * This service provides a number of utility methods to supplement/support the capabilities of the JDO Objectstore.
+ * This service provides a number of utility methods to supplement/support 
+ * the capabilities of the JDO Objectstore.
  *
  */
 @Service
-@Named("isisJdoIntegration.IsisJdoSupport_v3_2")
+@Named("isisJdoIntegration.JdoSupportServiceDefault")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("DN5")
-public class IsisJdoSupportDN5 implements IsisJdoSupport_v3_2 {
+public class JdoSupportServiceDefault implements JdoSupportService {
 
     @Inject private TransactionAwarePersistenceManagerFactoryProxy pmf;
     @Inject private MetaModelContext mmc;
-    
+
     @Override
-    public PersistenceManager getPersistenceManager() {
-        return pmf.getPersistenceManager();
+    public PersistenceManagerFactory getPersistenceManagerFactory() {
+        return pmf.getPersistenceManagerFactory();
     }
     
     @Override
@@ -218,6 +221,16 @@ public class IsisJdoSupportDN5 implements IsisJdoSupport_v3_2 {
         } finally {
             query.closeAll();
         }
+    }
+
+    @Override
+    public void disableMultivaluedFetch(JDOQLTypedQuery<?> query) {
+        query.extension(RDBMSPropertyNames.PROPERTY_RDBMS_QUERY_MULTIVALUED_FETCH, "none");
+    }
+
+    @Override
+    public void disableMultivaluedFetch(Query<?> query) {
+        query.addExtension(RDBMSPropertyNames.PROPERTY_RDBMS_QUERY_MULTIVALUED_FETCH, "none");
     }
 
 

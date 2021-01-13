@@ -35,7 +35,7 @@ import org.apache.isis.applib.util.ZipWriter;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.NamedWithMimeType.CommonMimeType;
 import org.apache.isis.core.config.beans.IsisBeanTypeRegistry;
-import org.apache.isis.persistence.jdo.applib.services.IsisJdoSupport;
+import org.apache.isis.persistence.jdo.applib.integration.JdoSupportService;
 import org.apache.isis.persistence.jdo.provider.entities.JdoFacetContext;
 
 import lombok.val;
@@ -49,7 +49,7 @@ import lombok.val;
 public class JdoMetamodelMenu {
 
     @Inject private IsisBeanTypeRegistry isisBeanTypeRegistry;
-    @Inject private IsisJdoSupport jdoSupport;
+    @Inject private JdoSupportService jdoSupport;
     @Inject private JdoFacetContext jdoFacetContext;
     
     public static abstract class ActionDomainEvent

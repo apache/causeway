@@ -20,7 +20,7 @@ package org.apache.isis.subdomains.excel.fixtures.demoapp.todomodule.fixturescri
 
 import javax.inject.Inject;
 
-import org.apache.isis.persistence.jdo.applib.services.IsisJdoSupport;
+import org.apache.isis.persistence.jdo.applib.integration.JdoSupportService;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 
 public class ExcelDemoToDoItem_tearDown2 extends FixtureScript {
@@ -40,19 +40,19 @@ public class ExcelDemoToDoItem_tearDown2 extends FixtureScript {
 
         final String ownedBy = this.user != null ? this.user : userService.currentUserNameElseNobody();
 
-        isisJdoSupport.executeUpdate(String.format(
+        jdoSupport.executeUpdate(String.format(
                 "delete "
                         + "from \"excelFixture\".\"ExcelDemoToDoItemDependencies\" "
                         + "where \"dependingId\" IN "
                         + "(select \"id\" from \"excelFixture\".\"ExcelDemoToDoItem\" where \"ownedBy\" = '%s') ",
                 ownedBy));
 
-        isisJdoSupport.executeUpdate(String.format(
+        jdoSupport.executeUpdate(String.format(
                 "delete from \"excelFixture\".\"ExcelDemoToDoItem\" "
                         + "where \"ownedBy\" = '%s'", ownedBy));
     }
 
 
-    @Inject IsisJdoSupport isisJdoSupport;
+    @Inject JdoSupportService jdoSupport;
 
 }
