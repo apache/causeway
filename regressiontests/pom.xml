@@ -416,13 +416,6 @@
 		</dependency>
 		
 		<dependency>
-		    <groupId>org.eclipse.persistence</groupId>
-		    <artifactId>org.eclipse.persistence.moxy</artifactId>
-		    <version>2.7.7</version>
-		    <scope>test</scope>
-		</dependency>
-		
-		<dependency>
 			<groupId>org.apache.isis.mavendeps</groupId>
 			<artifactId>isis-mavendeps-integtests</artifactId>
 			<scope>test</scope>
