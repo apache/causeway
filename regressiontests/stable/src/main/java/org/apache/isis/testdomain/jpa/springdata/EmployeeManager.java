@@ -16,13 +16,29 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.testdomain.jpa;
+package org.apache.isis.testdomain.jpa.springdata;
 
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+import java.util.List;
 
-@SpringBootApplication(scanBasePackageClasses= {JpaTestDomainModule.class})
-@Deprecated
-public class JpaTestApplication {
+import javax.inject.Inject;
 
+import org.apache.isis.applib.annotation.Collection;
+import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.Nature;
+
+@DomainObject(nature=Nature.VIEW_MODEL, objectType = "isisLab.EmployeeManager")
+//@RequiredArgsConstructor(onConstructor_ = {@Inject}) //XXX not supported for view models yet
+public class EmployeeManager {
+
+    @Inject private EmployeeRepository employeeRepo;
+
+    public String title() {
+        return "Employee Manager";
+    }
+    
+    @Collection
+    public List<Employee> getAllEmployees(){
+        return employeeRepo.findAll();
+    }
 
 }
