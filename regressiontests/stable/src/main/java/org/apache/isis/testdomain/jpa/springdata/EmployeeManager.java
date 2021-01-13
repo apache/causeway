@@ -26,8 +26,7 @@ import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Nature;
 
-@DomainObject(nature=Nature.VIEW_MODEL, objectType = "isisLab.EmployeeManager")
-//@RequiredArgsConstructor(onConstructor_ = {@Inject}) //XXX not supported for view models yet
+@DomainObject(nature=Nature.VIEW_MODEL, objectType = "testdomain.jpa.springdata.EmployeeManager")
 public class EmployeeManager {
 
     @Inject private EmployeeRepository employeeRepo;

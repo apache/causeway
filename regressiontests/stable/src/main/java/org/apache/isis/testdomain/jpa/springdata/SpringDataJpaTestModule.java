@@ -18,17 +18,19 @@
  */
 package org.apache.isis.testdomain.jpa.springdata;
 
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 import org.apache.isis.applib.services.factory.FactoryService;
 
 @Configuration
 @Import({
-    Employee.class,
-    EmployeeManager.class,
-    //EmployeeRepository.class,    
+    
 })
+@EnableJpaRepositories(basePackageClasses = EmployeeRepository.class)
+@EntityScan(basePackageClasses = Employee.class)
 public class SpringDataJpaTestModule {
 
     public static void setupEmployeeFixture(final EmployeeRepository repository) {

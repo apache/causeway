@@ -33,7 +33,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 @Entity
-@DomainObject(nature=Nature.JPA_ENTITY, objectType = "isisLab.Employee")
+@DomainObject(nature=Nature.JPA_ENTITY, objectType = "testdomain.jpa.springdata.Employee")
 @Getter @Setter @ToString @EqualsAndHashCode
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Employee {
