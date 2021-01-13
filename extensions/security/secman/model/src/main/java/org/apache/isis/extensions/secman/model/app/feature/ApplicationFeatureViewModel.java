@@ -87,18 +87,17 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
         case MEMBER:
             final ApplicationFeature feature = applicationFeatureRepository.findFeature(featureId);
 
-            if(feature == null) {
-                // TODO: not sure why, yet...
-                return null;
+            if(feature != null) {
+                switch(feature.getMemberType()) {
+                case PROPERTY:
+                    return ApplicationClassProperty.class;
+                case COLLECTION:
+                    return ApplicationClassCollection.class;
+                case ACTION:
+                    return ApplicationClassAction.class;
+                }
             }
-            switch(feature.getMemberType()) {
-            case PROPERTY:
-                return ApplicationClassProperty.class;
-            case COLLECTION:
-                return ApplicationClassCollection.class;
-            case ACTION:
-                return ApplicationClassAction.class;
-            }
+
         }
         throw new IllegalArgumentException("could not determine feature type; featureId = " + featureId);
     }
@@ -236,17 +235,17 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
         final ApplicationFeatureId parentId;
         parentId = getType() == ApplicationFeatureType.MEMBER
                 ? getFeatureId().getParentClassId()
-                        : getFeatureId().getParentPackageId();
-                if(parentId == null) {
-                    return null;
-                }
-                final ApplicationFeature feature = applicationFeatureRepository.findFeature(parentId);
-                if (feature == null) {
-                    return null;
-                }
-                final Class<? extends ApplicationFeatureViewModel> cls = 
-                        viewModelClassFor(parentId, applicationFeatureRepository);
-                return factory.viewModel(cls, parentId.asEncodedString());
+                : getFeatureId().getParentPackageId();
+        if(parentId == null) {
+            return null;
+        }
+        final ApplicationFeature feature = applicationFeatureRepository.findFeature(parentId);
+        if (feature == null) {
+            return null;
+        }
+        final Class<? extends ApplicationFeatureViewModel> cls = 
+                viewModelClassFor(parentId, applicationFeatureRepository);
+        return factory.viewModel(cls, parentId.asEncodedString());
     }
 
 
