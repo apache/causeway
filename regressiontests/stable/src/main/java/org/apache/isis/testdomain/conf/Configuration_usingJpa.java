@@ -20,11 +20,9 @@ package org.apache.isis.testdomain.conf;
 
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
@@ -37,10 +35,12 @@ import org.apache.isis.testing.fixtures.applib.IsisModuleTestingFixturesApplib;
 
 @SpringBootConfiguration
 @EnableAutoConfiguration
-@EnableJpaRepositories
+//@EnableJpaRepositories
 
 //@Configuration
 @Import({
+    
+    JpaTestDomainModule.class,
     
     MyService.class, // testing injection into entities
     
@@ -50,10 +50,6 @@ import org.apache.isis.testing.fixtures.applib.IsisModuleTestingFixturesApplib;
     ,IsisModuleTestingFixturesApplib.class
     ,KVStoreForTesting.class, // Helper for JUnit Tests
 })
-@ComponentScan(
-        basePackageClasses= {               
-                JpaTestDomainModule.class
-        })
 @PropertySources({
     //@PropertySource("classpath:/org/apache/isis/testdomain/jdo/isis-persistence.properties"),
     @PropertySource(IsisPresets.H2InMemory_withUniqueSchema),

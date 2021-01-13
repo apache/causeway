@@ -18,14 +18,19 @@
  */
 package org.apache.isis.testdomain.jpa;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 
-/**
- * Just an entry-point to initialize class-path scanning. 
- */
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
-public final class JpaTestDomainModule {
+import org.apache.isis.testdomain.jpa.entities.JpaBook;
+
+@Configuration
+@Import({
+    JpaInventoryManager.class,
+    JpaInventoryResource.class
+})
+@EntityScan(basePackageClasses = JpaBook.class)
+public class JpaTestDomainModule {
 
 
 }
