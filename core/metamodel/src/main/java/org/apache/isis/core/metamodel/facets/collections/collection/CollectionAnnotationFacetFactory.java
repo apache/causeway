@@ -34,10 +34,9 @@ import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetInferredFromArray;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetInferredFromGenerics;
-import org.apache.isis.core.metamodel.facets.actions.contributing.ContributingFacetAbstract;
 import org.apache.isis.core.metamodel.facets.actions.contributing.ContributingFacet.Contributing;
+import org.apache.isis.core.metamodel.facets.actions.contributing.ContributingFacetAbstract;
 import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacetAbstract;
-import org.apache.isis.core.metamodel.facets.collections.collection.disabled.DisabledFacetForCollection;
 import org.apache.isis.core.metamodel.facets.collections.collection.hidden.HiddenFacetForCollectionAnnotation;
 import org.apache.isis.core.metamodel.facets.collections.collection.modify.CollectionAddToFacetForDomainEventFromAbstract;
 import org.apache.isis.core.metamodel.facets.collections.collection.modify.CollectionAddToFacetForDomainEventFromCollectionAnnotation;
@@ -73,7 +72,6 @@ public class CollectionAnnotationFacetFactory extends FacetFactoryAbstract {
 
         processModify(processMethodContext, collectionIfAny);
         processHidden(processMethodContext, collectionIfAny);
-        processEditing(processMethodContext);
         processTypeOf(processMethodContext, collectionIfAny);
     }
 
@@ -204,13 +202,6 @@ public class CollectionAnnotationFacetFactory extends FacetFactoryAbstract {
 
         // check for @Collection(hidden=...)
         val facet = HiddenFacetForCollectionAnnotation.create(collectionIfAny, holder);
-
-        super.addFacet(facet);
-    }
-
-    void processEditing(final ProcessMethodContext processMethodContext) {
-        val holder = processMethodContext.getFacetHolder();
-        val facet = DisabledFacetForCollection.create(holder);
 
         super.addFacet(facet);
     }
