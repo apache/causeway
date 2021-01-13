@@ -138,15 +138,14 @@ class EventExportDialog() : Command() {
     private fun asCsv(events: MutableList<ReplayEvent>): String {
         val DEL = ";"
         val NL = "\n"
-        var csv = "URL$DEL STATE$DEL METHOD$DEL REQUEST$DEL START$DEL DURATION$DEL RESPONSE$NL"
+        var csv = "URL$DEL STATE$DEL METHOD$DEL REQUEST$DEL START$DEL DURATION$NL"
         events.forEach { e ->
             csv += e.url + DEL
             csv += e.state + DEL
             csv += e.method + DEL
             csv += e.request + DEL
             csv += e.start + DEL
-            csv += e.duration.toString() + DEL
-            csv += e.response + NL
+            csv += e.duration.toString() + NL
         }
         return csv
     }
@@ -157,7 +156,7 @@ class EventExportDialog() : Command() {
                 method = logEntry.method!!,
                 request = logEntry.request,
                 state = logEntry.state.toString(),
-                start = logEntry.createdAt.toDateString(),
+                start = logEntry.createdAt.toISOString() ,
                 duration = logEntry.duration,
                 response = logEntry.response
         )
