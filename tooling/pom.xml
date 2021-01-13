@@ -45,7 +45,7 @@
 		<maven-model-builder.version>3.6.3</maven-model-builder.version>
 		<picocli.version>4.5.2</picocli.version>
 		<jsoup.version>1.13.1</jsoup.version>
-		<structurizr.version>1.5.0</structurizr.version>
+		<structurizr.version>1.6.0</structurizr.version>
 
 	</properties>
 
