@@ -36,33 +36,24 @@ import lombok.val;
 @RequiredArgsConstructor
 public class PropertyMementoSerializationVm_takeSnapshot {
 
-    @Inject
-    XmlSnapshotService xmlSnapshotService;
-    @Inject
-    XmlService xmlService;
+    @Inject XmlSnapshotService xmlSnapshotService;
+    @Inject XmlService xmlService;
 
-    // ...
-//end::class[]
-
-    private final PropertyMementoSerializationVm propertyMementoSerializationVm;
-
+    private final PropertyMementoSerializationVm vm;
 
 //tag::class[]
-    public Clob act() {
-        return snapshotUsing(propertyMementoSerializationVm);
-    }
-
-    private Clob snapshotUsing(
-            final Object parentVm) {
-        val builder = xmlSnapshotService.builderFor(parentVm);
+    public Clob act(String fileName) {
+        val builder = xmlSnapshotService.builderFor(vm);
         val snapshot = builder.build();
         val doc = snapshot.getXmlDocument();
-        return asClob(xmlService.asString(doc));
+        return asClob(xmlService.asString(doc), fileName);
+    }
+    public String default0Act() {
+        return "snapshot.xml";
     }
 
-
-    private static Clob asClob(final String xmlStr) {
-        return new Clob("snapshot.xml", "application/xml", xmlStr);
+    private static Clob asClob(final String xmlStr, final String fileName) {
+        return new Clob(fileName, "application/xml", xmlStr);
     }
 }
 //end::class[]

@@ -32,10 +32,11 @@ import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
 @XmlRootElement(name = "root")
 @XmlType
@@ -61,12 +62,15 @@ public class PropertyMementoSerializationVm implements HasAsciiDocDescription {
         return "PropertyMementoSerializationVm";
     }
 
+//tag::no-annotation[]
     @Property()
     @MemberOrder(name = "no-annotations", sequence = "1")
     @XmlElement(required = true)
     @Getter @Setter
     private String text;
+//end::no-annotation[]
 
+//tag::annotated-not_specified[]
     @Property(
         mementoSerialization = MementoSerialization.NOT_SPECIFIED
     )
@@ -77,7 +81,9 @@ public class PropertyMementoSerializationVm implements HasAsciiDocDescription {
     @XmlElement(required = true)
     @Getter @Setter
     private String notSpecifiedProperty;
+//end::annotated-not_specified[]
 
+//tag::annotated-excluded[]
     @Property(
         mementoSerialization = MementoSerialization.EXCLUDED
     )
@@ -88,7 +94,9 @@ public class PropertyMementoSerializationVm implements HasAsciiDocDescription {
     @XmlElement(required = true)
     @Getter @Setter
     private String excludedProperty;
+//end::annotated-excluded[]
 
+//tag::annotated-included[]
     @Property(
         mementoSerialization = MementoSerialization.INCLUDED
     )
@@ -99,7 +107,9 @@ public class PropertyMementoSerializationVm implements HasAsciiDocDescription {
     @XmlElement(required = true)
     @Getter @Setter
     private String includedProperty;
+//end::annotated-included[]
 
+//tag::meta-annotated-excluded[]
     @MementoSerializationExcludedMetaAnnotation     // <.>
     @Property()
     @PropertyLayout(
@@ -109,7 +119,9 @@ public class PropertyMementoSerializationVm implements HasAsciiDocDescription {
     @XmlElement(required = true)
     @Getter @Setter
     private String metaAnnotatedProperty;
+//end::meta-annotated-excluded[]
 
+//tag::meta-annotated-included[]
     @MementoSerializationIncludedMetaAnnotation                 // <.>
     @Property(
         mementoSerialization = MementoSerialization.EXCLUDED    // <.>
@@ -123,5 +135,6 @@ public class PropertyMementoSerializationVm implements HasAsciiDocDescription {
     @XmlElement(required = true)
     @Getter @Setter
     private String metaAnnotatedPropertyOverridden;
+//end::meta-annotated-included[]
 
 }
