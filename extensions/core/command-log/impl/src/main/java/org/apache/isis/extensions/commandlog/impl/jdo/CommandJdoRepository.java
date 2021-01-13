@@ -69,7 +69,7 @@ import lombok.val;
 public class CommandJdoRepository {
 
     @Inject final Provider<InteractionContext> interactionContextProvider;
-    @Inject final RepositoryService repositoryService;
+    @Inject final Provider<RepositoryService> repositoryServiceProvider;
     @Inject final JdoSupportService jdoSupport;
 
     public List<CommandJdo> findByFromAndTo(
@@ -96,31 +96,31 @@ public class CommandJdoRepository {
                 query = Query.named(CommandJdo.class, "find");
             }
         }
-        return repositoryService.allMatches(query);
+        return repositoryService().allMatches(query);
     }
 
 
     public Optional<CommandJdo> findByUniqueId(final UUID uniqueId) {
-        return repositoryService.firstMatch(
+        return repositoryService().firstMatch(
                 Query.named(CommandJdo.class, "findByUniqueIdStr")
                     .withParameter("uniqueIdStr", uniqueId.toString()));
     }
 
     public List<CommandJdo> findByParent(final CommandJdo parent) {
-        return repositoryService.allMatches(
+        return repositoryService().allMatches(
                 Query.named(CommandJdo.class, "findByParent")
                     .withParameter("parent", parent));
     }
 
 
     public List<CommandJdo> findCurrent() {
-        return repositoryService.allMatches(
+        return repositoryService().allMatches(
                 Query.named(CommandJdo.class, "findCurrent"));
     }
 
 
     public List<CommandJdo> findCompleted() {
-        return repositoryService.allMatches(
+        return repositoryService().allMatches(
                 Query.named(CommandJdo.class, "findCompleted"));
     }
 
@@ -155,7 +155,7 @@ public class CommandJdoRepository {
                         .withParameter("target", target);
             }
         }
-        return repositoryService.allMatches(query);
+        return repositoryService().allMatches(query);
     }
 
     private static Timestamp toTimestampStartOfDayWithOffset(final LocalDate dt, int daysOffset) {
@@ -169,14 +169,14 @@ public class CommandJdoRepository {
 
 
     public List<CommandJdo> findRecentByUsername(final String username) {
-        return repositoryService.allMatches(
+        return repositoryService().allMatches(
                 Query.named(CommandJdo.class, "findRecentByUsername")
                     .withParameter("username", username));
     }
 
 
     public List<CommandJdo> findRecentByTarget(final Bookmark target) {
-        return repositoryService.allMatches(
+        return repositoryService().allMatches(
                 Query.named(CommandJdo.class, "findRecentByTarget")
                     .withParameter("target", target));
     }
@@ -226,7 +226,7 @@ public class CommandJdoRepository {
     }
 
     private List<CommandJdo> findFirst() {
-        Optional<CommandJdo> firstCommandIfAny = repositoryService.firstMatch(
+        Optional<CommandJdo> firstCommandIfAny = repositoryService().firstMatch(
                 Query.named(CommandJdo.class, "findFirst"));
         return firstCommandIfAny
                 .map(Collections::singletonList)
@@ -258,7 +258,7 @@ public class CommandJdoRepository {
                         needsTrimFix ? 2L : batchSize
                 ));
         
-        final List<CommandJdo> commandJdos = repositoryService.allMatches(q);
+        final List<CommandJdo> commandJdos = repositoryService().allMatches(q);
         return needsTrimFix && commandJdos.size() > 1
                     ? commandJdos.subList(0,1)
                     : commandJdos;
@@ -276,7 +276,7 @@ public class CommandJdoRepository {
      */
     public Optional<CommandJdo> findMostRecentReplayed() {
 
-        return repositoryService.firstMatch(
+        return repositoryService().firstMatch(
                 Query.named(CommandJdo.class, "findMostRecentReplayed"));
     }
 
@@ -292,20 +292,20 @@ public class CommandJdoRepository {
      * </p>
      */
     public Optional<CommandJdo> findMostRecentCompleted() {
-        return repositoryService.firstMatch(
+        return repositoryService().firstMatch(
                 Query.named(CommandJdo.class, "findMostRecentCompleted"));
     }
 
 
     public List<CommandJdo> findNotYetReplayed() {
-        return repositoryService.allMatches(
+        return repositoryService().allMatches(
                 Query.named(CommandJdo.class, "findNotYetReplayed"));
     }
 
 
 
     public List<CommandJdo> findReplayedOnSecondary() {
-        return repositoryService.allMatches(
+        return repositoryService().allMatches(
                 Query.named(CommandJdo.class, "findReplayableMostRecentStarted"));
     }
 
@@ -350,11 +350,15 @@ public class CommandJdoRepository {
     }
 
     public void persist(final CommandJdo commandJdo) {
-        repositoryService.persist(commandJdo);
+        repositoryService().persist(commandJdo);
     }
 
     public void truncateLog() {
-        repositoryService.removeAll(CommandJdo.class);
+        repositoryService().removeAll(CommandJdo.class);
+    }
+    
+    private RepositoryService repositoryService() {
+        return repositoryServiceProvider.get();
     }
 
 }
