@@ -31,6 +31,9 @@ import lombok.Value;
 @Value(staticConstructor = "of")
 public final class TransactionId implements HasUniqueId {
     
+    /**
+     * The unique identifier of the request/interaction.
+     */
     private final UUID uniqueId;
     
     /**

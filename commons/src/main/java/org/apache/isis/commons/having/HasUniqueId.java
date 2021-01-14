@@ -27,7 +27,7 @@ import java.util.UUID;
 public interface HasUniqueId {
 
     /**
-     * The unique identifier (a GUID) of the request/interaction/transaction.
+     * A unique identifier (a GUID).
      */
     UUID getUniqueId();
 

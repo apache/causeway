@@ -1997,7 +1997,7 @@ public class IsisConfiguration {
              * If set, eg <code>https://dev.myapp.com/</code>, then this value will be used instead.
              * </p>
              */
-            @javax.validation.constraints.Pattern(regexp="^http[s]?://[^:]+?(:\\d+)?/([^/]+/)*$")
+            @javax.validation.constraints.Pattern(regexp="^http[s]?://[^:]+?(:\\d+)?/([^/]+/)*+$")
             private Optional<String> baseUri = Optional.empty();
         }
 

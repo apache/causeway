@@ -109,7 +109,7 @@ final class Oid_Marshaller implements Oid.Marshaller, Oid.Unmarshaller {
                             WORD_GROUP + SEPARATOR + WORD_GROUP +
                             ")" +
                             "(" +
-                            "(" + SEPARATOR_NESTING + WORD + SEPARATOR + WORD + ")*" + // nesting of aggregates
+                            "(" + SEPARATOR_NESTING + WORD + SEPARATOR + WORD + ")*+" + // nesting of aggregates
                             ")" +
                             ")" +
                             "(" + "[" + SEPARATOR_PARENTED + "]" + WORD + ")?"  + // optional collection name
