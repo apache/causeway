@@ -40,7 +40,7 @@ object EventStore {
     private fun log(logEntry: LogEntry) {
         log.add(logEntry)
         if (log.size == 1) {
-            logStartTime = logEntry.createdAt.getTime().toInt()
+            logStartTime = logEntry.createdAt.getMilliseconds()
         }
     }
 
@@ -58,13 +58,13 @@ object EventStore {
     }
 
     fun add(reSpec: ResourceSpecification) {
-        val entry = LogEntry(reSpec.url)
+        val entry = LogEntry(url = reSpec.url)
         log(entry)
         updateStatus(entry)
     }
 
     fun addView(title: String, aggregator: BaseAggregator, panel: SimplePanel) {
-        val entry = LogEntry(title = title, aggregator)
+        val entry = LogEntry(title = title, aggregator = aggregator)
         entry.obj = panel
         log(entry)
         updateStatus(entry)
