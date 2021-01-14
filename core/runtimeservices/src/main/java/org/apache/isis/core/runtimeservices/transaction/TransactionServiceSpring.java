@@ -21,12 +21,14 @@ package org.apache.isis.core.runtimeservices.transaction;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.Callable;
+import java.util.concurrent.atomic.LongAdder;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
+import org.springframework.context.event.EventListener;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -42,18 +44,32 @@ import org.apache.isis.applib.services.xactn.TransactionState;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.functional.Result;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.core.interaction.scope.InteractionScopeAware;
+import org.apache.isis.core.interaction.session.InteractionSession;
 import org.apache.isis.core.interaction.session.InteractionTracker;
+import org.apache.isis.core.transaction.events.TransactionAfterCompletionEvent;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
+/**
+ * @implNote This implementation yet does not support more than one {@link PlatformTransactionManager} 
+ * on the same Spring context. If more than one are discovered, some methods will fail 
+ * with {@link IllegalStateException}s.
+ * 
+ * @since 2.0 {@index}
+ *
+ */
 @Service
 @Named("isisRuntimeServices.TransactionServiceSpring")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Spring")
 @Log4j2
-public class TransactionServiceSpring implements TransactionService {
+public class TransactionServiceSpring 
+implements 
+    TransactionService, 
+    InteractionScopeAware {
 
     private final Can<PlatformTransactionManager> platformTransactionManagers;
     private final InteractionTracker interactionTracker;
@@ -121,10 +137,15 @@ public class TransactionServiceSpring implements TransactionService {
             .ifPresent(TransactionStatus::flush);
     }
 
+    
     @Override
     public Optional<TransactionId> currentTransactionId() {
         return interactionTracker.getConversationId()
-                .map(uuid->TransactionId.of(uuid, 0, "")); //TODO track tx completion-counts 
+                .map(uuid->{
+                    //XXX get current transaction's persistence context (once we support multiple contexts)
+                    val persistenceContext = "";
+                    return TransactionId.of(uuid, txCounter.get().intValue(), persistenceContext);
+                });  
     }
 
     @Override
@@ -145,6 +166,22 @@ public class TransactionServiceSpring implements TransactionService {
             
         })
         .orElse(TransactionState.NONE);
+    }
+    
+    // -- TRANSACTION SEQUENCE TRACKING
+    
+    private ThreadLocal<LongAdder> txCounter = ThreadLocal.withInitial(LongAdder::new);
+    
+    /** INTERACTION BEGIN BOUNDARY */
+    @Override
+    public void beforeEnteringTransactionalBoundary(InteractionSession interactionSession) {
+        txCounter.get().reset();
+    }
+    
+    /** TRANSACTION END BOUNDARY */
+    @EventListener(TransactionAfterCompletionEvent.class)
+    public void onTransactionEnded(TransactionAfterCompletionEvent event) {
+        txCounter.get().increment();
     }
     
     // -- HELPER
