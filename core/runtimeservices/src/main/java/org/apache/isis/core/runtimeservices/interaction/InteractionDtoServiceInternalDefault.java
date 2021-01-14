@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.core.runtimeservices.ixn;
+package org.apache.isis.core.runtimeservices.interaction;
 
 import java.util.List;
 

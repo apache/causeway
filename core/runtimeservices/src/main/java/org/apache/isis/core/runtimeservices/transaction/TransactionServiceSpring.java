@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.runtimeservices.xactn;
+package org.apache.isis.core.runtimeservices.transaction;
 
 import java.util.List;
 import java.util.Optional;
