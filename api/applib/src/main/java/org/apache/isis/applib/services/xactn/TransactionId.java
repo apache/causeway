@@ -22,13 +22,13 @@ import java.util.UUID;
 
 import org.apache.isis.commons.having.HasUniqueId;
 
-import lombok.Data;
+import lombok.Value;
 
 /**
  * 
  * @since 2.0 {@index}
  */
-@Data(staticConstructor = "of")
+@Value(staticConstructor = "of")
 public final class TransactionId implements HasUniqueId {
     
     private final UUID uniqueId;
@@ -40,6 +40,12 @@ public final class TransactionId implements HasUniqueId {
      */
     private final int sequence;
     
+    /**
+     * Unique identifier, to identify the persistence context, this TransactionId was created for.
+     * <p>
+     * Particularly useful, when there are multiple persistence contexts configured, while there are 
+     * no constraints to format of this String, this is left for the implementation to decide.  
+     */
     private final String context;
     
     // -- EMPTY
