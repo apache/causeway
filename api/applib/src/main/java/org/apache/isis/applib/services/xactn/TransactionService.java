@@ -52,9 +52,7 @@ public interface TransactionService extends TransactionalProcessor {
     void flushTransaction();
 
     /**
-     * Commits the current thread's transaction (if there is one), and begins a new one.
-     * <p>
-     * If there is no active transaction associated with the current thread, then does nothing.
+     * Commits the current thread's transaction (if there is one), and in any case begins a new one.
      */
     void nextTransaction();
 
