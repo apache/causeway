@@ -89,7 +89,7 @@ object RoMenuBar : SimplePanel() {
             ddLink(chartTitle,
                     icon = IconManager.find("Chart")
             ).onClick {
-                UiManager.add(chartTitle, ChartFactory().build())
+                UiManager.add(chartTitle, EventChart(SampleChartModel()))
             }
 
             val geoMapTitle = "Sample Geo Map"

@@ -35,12 +35,12 @@ import pl.treksoft.kvision.state.observableListOf
  */
 object EventStore {
     var log = observableListOf<LogEntry>()
-    private var logStartTime: Int = 0
+    var logStartTime: Int = 0
 
     private fun log(logEntry: LogEntry) {
         log.add(logEntry)
         if (log.size == 1) {
-            logStartTime = logEntry.createdAt.getMilliseconds()
+            logStartTime = logEntry.createdAt.getTime().toInt()
         }
     }
 
@@ -58,13 +58,13 @@ object EventStore {
     }
 
     fun add(reSpec: ResourceSpecification) {
-        val entry = LogEntry(url = reSpec.url)
+        val entry = LogEntry(reSpec.url)
         log(entry)
         updateStatus(entry)
     }
 
     fun addView(title: String, aggregator: BaseAggregator, panel: SimplePanel) {
-        val entry = LogEntry(title = title, aggregator = aggregator)
+        val entry = LogEntry(title = title, aggregator)
         entry.obj = panel
         log(entry)
         updateStatus(entry)

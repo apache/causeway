@@ -47,7 +47,7 @@ class EventExportDialog() : Command() {
     }
 
     override fun execute() {
-        val filter = extractUserInput("Filter");
+        val filter = extractUserInput("Filter")
         var fileName = ""
         when (filter) {
             "NONE" -> {
@@ -65,7 +65,7 @@ class EventExportDialog() : Command() {
             else -> {
             }
         }
-        val format = extractUserInput("Format");
+        val format = extractUserInput("Format")
         when (format) {
             "CSV" -> {
                 output = asCsv(events)
@@ -120,7 +120,6 @@ class EventExportDialog() : Command() {
     }
 
     fun open() {
-        console.log("[ExportDialog.open]")
         val format = mutableListOf<StringPair>()
         format.add(StringPair("CSV", "CSV"))
         format.add(StringPair("JSON", "JSON"))
@@ -136,16 +135,16 @@ class EventExportDialog() : Command() {
     }
 
     private fun asCsv(events: MutableList<ReplayEvent>): String {
-        val DEL = ";"
-        val NL = "\n"
-        var csv = "URL$DEL STATE$DEL METHOD$DEL REQUEST$DEL START$DEL DURATION$NL"
+        val del = ";"
+        val nl = "\n"
+        var csv = "URL$del STATE$del METHOD$del REQUEST$del START$del DURATION$nl"
         events.forEach { e ->
-            csv += e.url + DEL
-            csv += e.state + DEL
-            csv += e.method + DEL
-            csv += e.request + DEL
-            csv += e.start + DEL
-            csv += e.duration.toString() + NL
+            csv += e.url + del
+            csv += e.state + del
+            csv += e.method + del
+            csv += e.request + del
+            csv += e.start + del
+            csv += e.duration.toString() + nl
         }
         return csv
     }

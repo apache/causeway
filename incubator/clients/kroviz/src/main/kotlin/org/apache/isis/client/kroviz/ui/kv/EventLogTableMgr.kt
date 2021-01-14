@@ -46,6 +46,13 @@ class EventLogTableMgr {
         })
         menu.add(a3)
 
+        val title = "Chart"
+        val a4 = UIAction(buildLabel(title, title), {
+            UiManager.add(title, ChartFactory().build(EventStore.log))
+        })
+        menu.add(a4)
+
+
         return menu.toTypedArray().asDynamic()
     }
 
