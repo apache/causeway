@@ -106,11 +106,6 @@ public class CollectionAnnotationFacetFactoryTest extends AbstractFacetFactoryJU
         facetFactory.processHidden(processMethodContext, collectionIfAny);
     }
 
-    private static void processEditing(
-            CollectionAnnotationFacetFactory facetFactory, FacetFactory.ProcessMethodContext processMethodContext) {
-        val collectionIfAny = processMethodContext.synthesizeOnMethod(Collection.class);
-        facetFactory.processEditing(processMethodContext);
-    }
 
     private static void processTypeOf(
             CollectionAnnotationFacetFactory facetFactory, FacetFactory.ProcessMethodContext processMethodContext) {
@@ -429,41 +424,6 @@ public class CollectionAnnotationFacetFactoryTest extends AbstractFacetFactoryJU
             Assert.assertTrue(hiddenFacet == hiddenFacetForColl);
         }
 
-    }
-
-    /**
-     * This feature has been removed, so this is a negative test
-     */
-    public static class Editing extends CollectionAnnotationFacetFactoryTest {
-
-        @Test
-        public void withAnnotation() {
-
-            class Order {
-            }
-            class Customer {
-                @Collection()
-                public List<Order> getOrders() {
-                    return null;
-                }
-
-                public void setOrders(final List<Order> orders) {
-                }
-            }
-
-            // given
-            final Class<?> cls = Customer.class;
-            collectionMethod = findMethod(Customer.class, "getOrders");
-
-            // when
-            final FacetFactory.ProcessMethodContext processMethodContext = new FacetFactory.ProcessMethodContext(cls,
-                    null, collectionMethod, mockMethodRemover, facetedMethod);
-            processEditing(facetFactory, processMethodContext);
-
-            // then
-            final DisabledFacet disabledFacet = facetedMethod.getFacet(DisabledFacet.class);
-            Assert.assertNotNull(disabledFacet);
-        }
     }
 
     public static class TypeOf extends CollectionAnnotationFacetFactoryTest {

@@ -695,6 +695,9 @@ public class XmlSnapshot implements Snapshot {
                 }
 
                 final OneToOneAssociation valueAssociation = ((OneToOneAssociation) field);
+                if(valueAssociation.isNotPersisted()) {
+                    continue eachField;
+                }
                 final Element xmlValueElement = xmlFieldElement; // more meaningful locally scoped name
 
                 ManagedObject value;
