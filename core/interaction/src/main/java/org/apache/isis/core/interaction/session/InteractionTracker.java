@@ -19,6 +19,7 @@
 package org.apache.isis.core.interaction.session;
 
 import java.util.Optional;
+import java.util.UUID;
 
 import org.apache.logging.log4j.Logger;
 
@@ -60,8 +61,8 @@ extends InteractionContext, AuthenticationContext {
         return currentAuthenticationLayer().map(AuthenticationLayer::getExecutionContext);
     }
     
-    /** @return the unique id of the current top-level request- or test-scoped IsisInteraction*/
-    Optional<String> getConversationId();
+    /** @return the unique id of the current top-level request- or test-scoped Interaction*/
+    Optional<UUID> getConversationId();
 
     // -- MESSAGE BROKER
 

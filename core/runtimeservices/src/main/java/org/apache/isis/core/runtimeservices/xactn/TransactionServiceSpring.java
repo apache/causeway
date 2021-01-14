@@ -42,6 +42,7 @@ import org.apache.isis.applib.services.xactn.TransactionState;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.functional.Result;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.core.interaction.session.InteractionTracker;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
@@ -55,11 +56,17 @@ import lombok.extern.log4j.Log4j2;
 public class TransactionServiceSpring implements TransactionService {
 
     private final Can<PlatformTransactionManager> platformTransactionManagers;
+    private final InteractionTracker interactionTracker;
 
     @Inject
-    public TransactionServiceSpring(List<PlatformTransactionManager> platformTransactionManagers) {
+    public TransactionServiceSpring(
+            final List<PlatformTransactionManager> platformTransactionManagers,
+            final InteractionTracker interactionTracker) {
+        
         this.platformTransactionManagers = Can.ofCollection(platformTransactionManagers);
         log.info("PlatformTransactionManagers: {}", platformTransactionManagers);
+        
+        this.interactionTracker = interactionTracker;
     }
 
     // -- SPRING INTEGRATION
@@ -115,9 +122,9 @@ public class TransactionServiceSpring implements TransactionService {
     }
 
     @Override
-    public TransactionId currentTransactionId() {
-        System.err.println("currentTransactionId:" + currentTransactionStatus().getClass().getName());
-        return TransactionId.empty();
+    public Optional<TransactionId> currentTransactionId() {
+        return interactionTracker.getConversationId()
+                .map(uuid->TransactionId.of(uuid, 0, "")); //TODO track tx completion-counts 
     }
 
     @Override

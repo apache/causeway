@@ -19,40 +19,42 @@
 
 package org.apache.isis.applib.services.xactn;
 
+import java.util.Optional;
+
 /**
- * Handles <i>global</i> transactions. 
- * Global transactions enable you to work with multiple transactional resources, typically relational databases.
+ * Provides utilities to access active transactions associated with the current thread. 
+ * 
  * @since 2.0 {@index}
  */
 public interface TransactionService extends TransactionalProcessor {
 
     /**
-     * When called within an existing transactional boundary returns the unique identifier to the transaction,
-     * {@code null} otherwise.
-     *
-     * @return nullable
+     * Optionally returns the unique identifier of the current thread's transaction,
+     * based on whether there is an active transaction associated with the current thread.
      */
-    TransactionId currentTransactionId();
+    Optional<TransactionId> currentTransactionId();
 
     /**
-     * @return - the state of the current transaction.  If there is no current transaction, then returns {@link TransactionState#NONE}.
+     * Returns the state of the current thread's transaction., or returns 
+     * {@link TransactionState#NONE}, if there is no active transaction associated with the 
+     * current thread.
      */
     TransactionState currentTransactionState();
 
     /**
-     * Flush all changes to the object store.
-     *
+     * Flushes all changes to the object store.
      * <p>
      * Occasionally useful to ensure that newly persisted domain objects
      * are flushed to the database prior to a subsequent repository query.
-     * </p>
+     * <p>
+     * If there is no active transaction associated with the current thread, then does nothing.
      */
     void flushTransaction();
 
     /**
-     * Commits the current transaction (if there is one), and begins a new one.
-     *
-     * If there is no current transaction, then is a no-op.
+     * Commits the current thread's transaction (if there is one), and begins a new one.
+     * <p>
+     * If there is no active transaction associated with the current thread, then does nothing.
      */
     void nextTransaction();
 

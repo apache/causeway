@@ -33,6 +33,7 @@ import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.publishing.spi.EntityPropertyChangeSubscriber;
 import org.apache.isis.applib.services.user.UserService;
+import org.apache.isis.applib.services.xactn.TransactionId;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.having.HasEnabling;
@@ -74,7 +75,8 @@ public class EntityPropertyChangePublisherDefault implements EntityPropertyChang
         
         val currentTime = clockService.getClock().javaSqlTimestamp();
         val currentUser = userService.currentUserNameElseNobody();
-        val currentTransactionId = transactionService.currentTransactionId();
+        val currentTransactionId = transactionService.currentTransactionId()
+                .orElse(TransactionId.empty());
         
         hasEnlistedEntityPropertyChanges.streamPropertyChanges(
                 currentTime, 

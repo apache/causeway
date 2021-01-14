@@ -295,9 +295,8 @@ implements InteractionFactory, InteractionTracker {
     private final ThreadLocal<UUID> conversationId = ThreadLocal.withInitial(()->null);
     
     @Override
-    public Optional<String> getConversationId() {
-        return Optional.ofNullable(conversationId.get())
-                .map(UUID::toString);
+    public Optional<UUID> getConversationId() {
+        return Optional.ofNullable(conversationId.get());
     }
     
     // -- HELPER

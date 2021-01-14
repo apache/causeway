@@ -19,6 +19,7 @@
 package org.apache.isis.core.interaction.scope;
 
 import java.util.Map;
+import java.util.UUID;
 
 import javax.inject.Inject;
 
@@ -109,7 +110,9 @@ class InteractionScope implements Scope, InteractionScopeLifecycleHandler {
     @Override
     public String getConversationId() {
         // null by convention if not supported
-        return isisInteractionTracker.getConversationId().orElse(null);
+        return isisInteractionTracker.getConversationId()
+                .map(UUID::toString)
+                .orElse(null);
     }
     
     @Override
