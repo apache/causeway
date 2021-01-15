@@ -19,52 +19,17 @@
 		<version>2.0.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>isis-persistence-jpa-integration</artifactId>
+	<artifactId>isis-persistence-jpa-metamodel</artifactId>
 
-	<name>Apache Isis Persistence - JPA (integration)</name>
+	<name>Apache Isis Persistence - JPA (metamodel)</name>
 	<description>
-        JPA integration (facets, jpa-context)
+        JPA Metamodel Facets / Programming Model
     </description>
 
 	<properties>
-		<jar-plugin.automaticModuleName>org.apache.isis.persistence.jpa.integration</jar-plugin.automaticModuleName>
-		<git-plugin.propertiesDir>org/apache/isis/persistence/jpa/integration</git-plugin.propertiesDir>
+		<jar-plugin.automaticModuleName>org.apache.isis.persistence.jpa.metamodel</jar-plugin.automaticModuleName>
+		<git-plugin.propertiesDir>org/apache/isis/persistence/jpa/metamodel</git-plugin.propertiesDir>
 	</properties>
-
-	<build>
-		<resources>
-			<resource>
-				<filtering>false</filtering>
-				<directory>src/main/resources</directory>
-			</resource>
-			<resource>
-				<filtering>false</filtering>
-				<directory>src/main/java</directory>
-				<includes>
-					<include>**</include>
-				</includes>
-				<excludes>
-					<exclude>**/*.java</exclude>
-				</excludes>
-			</resource>
-		</resources>
-		<testResources>
-            <testResource>
-                <filtering>false</filtering>
-                <directory>src/test/resources</directory>
-            </testResource>
-            <testResource>
-                <filtering>false</filtering>
-                <directory>src/test/java</directory>
-                <includes>
-                    <include>**</include>
-                </includes>
-                <excludes>
-                    <exclude>**/*.java</exclude>
-                </excludes>
-            </testResource>
-        </testResources>
-	</build>
 
 	<dependencies>
 
@@ -74,18 +39,8 @@
 		</dependency>
 		
 		<dependency>
-			<groupId>org.apache.isis.persistence</groupId>
-			<artifactId>isis-persistence-jpa-metamodel</artifactId>
-		</dependency>
-		
-		<dependency>
 			<groupId>org.apache.isis.core</groupId>
 			<artifactId>isis-core-runtime</artifactId>
-		</dependency>
-		
-		<dependency>
-			<groupId>org.springframework.data</groupId>
-			<artifactId>spring-data-jpa</artifactId>
 		</dependency>
 
 		<!-- TESTING -->

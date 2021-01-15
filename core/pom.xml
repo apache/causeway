@@ -793,6 +793,11 @@
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.persistence</groupId>
+				<artifactId>isis-persistence-jpa-metamodel</artifactId>
+				<version>2.0.0-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.persistence</groupId>
 				<artifactId>isis-persistence-jpa-integration</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
