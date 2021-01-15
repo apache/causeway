@@ -10,9 +10,7 @@ enum BeanSort {
 
   VIEW_MODEL // <.>
 
-  ENTITY_JDO // <.>
-
-  ENTITY_JPA
+  ENTITY // <.>
 
   MANAGED_BEAN_CONTRIBUTING // <.>
 
@@ -36,15 +34,11 @@ enum BeanSort {
 
   boolean isCollection()
 
-  boolean isEntityJdo()
-
-  boolean isEntityJpa()
+  boolean isEntity()
 
   boolean isUnknown()
 
   boolean isToBeIntrospected()
-
-  boolean isEntity()
 
   boolean isWrappingSupported()
 }
@@ -59,7 +53,7 @@ Includes classes annotated with _@DomainObject_ , when *not* associated with a p
 
 see also _#ENTITY_
 --
-<.> `[teal]#*_ENTITY_JDO_*#`
+<.> `[teal]#*_ENTITY_*#`
 +
 --
 Persistable object, associated with a persistence layer/context.

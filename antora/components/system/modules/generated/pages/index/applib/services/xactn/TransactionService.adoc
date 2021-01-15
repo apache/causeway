@@ -1,14 +1,14 @@
 = TransactionService : _interface_
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
-Handles _global_ transactions. Global transactions enable you to work with multiple transactional resources, typically relational databases.
+Provides utilities to access active transactions associated with the current thread.
 
 .Java Sources
 [source,java]
 ----
 interface TransactionService {
 
-  TransactionId currentTransactionId() // <.>
+  Optional<TransactionId> currentTransactionId() // <.>
 
   TransactionState currentTransactionState() // <.>
 
@@ -18,22 +18,28 @@ interface TransactionService {
 }
 ----
 
-<.> `[teal]#*currentTransactionId*#()` : `xref:system:generated:index/applib/services/xactn/TransactionId.adoc[TransactionId]`
+<.> `[teal]#*currentTransactionId*#()` : `Optional<xref:system:generated:index/applib/services/xactn/TransactionId.adoc[TransactionId]>`
 +
 --
-When called within an existing transactional boundary returns the unique identifier to the transaction, _null_ otherwise.
+Optionally returns the unique identifier of the current thread's transaction, based on whether there is an active transaction associated with the current thread.
 --
 <.> `[teal]#*currentTransactionState*#()` : `xref:system:generated:index/applib/services/xactn/TransactionState.adoc[TransactionState]`
++
+--
+Returns the state of the current thread's transaction., or returns _TransactionState#NONE_ , if there is no active transaction associated with the current thread.
+--
 <.> `[teal]#*flushTransaction*#()` : `void`
 +
 --
-Flush all changes to the object store.
+Flushes all changes to the object store.
 
 Occasionally useful to ensure that newly persisted domain objects are flushed to the database prior to a subsequent repository query.
+
+If there is no active transaction associated with the current thread, then does nothing.
 --
 <.> `[teal]#*nextTransaction*#()` : `void`
 +
 --
-Commits the current transaction (if there is one), and begins a new one. If there is no current transaction, then is a no-op.
+Commits the current thread's transaction (if there is one), and in any case begins a new one.
 --
 

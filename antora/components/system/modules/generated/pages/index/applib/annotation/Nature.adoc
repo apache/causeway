@@ -12,9 +12,7 @@ enum Nature {
 
   NOT_SPECIFIED // <.>
 
-  JDO_ENTITY // <.>
-
-  JPA_ENTITY // <.>
+  ENTITY // <.>
 
   VIEW_MODEL // <.>
 
@@ -31,19 +29,10 @@ enum Nature {
 --
 The default; allows the programmer to combine `@DomainObject` annotation with the xref:system:generated:index/applib/ViewModel.adoc[ViewModel] annotation, or the _XmlRootElement_ annotation, or by implementing the _org.apache.isis.applib.ViewModel_ interface.
 --
-<.> `[teal]#*_JDO_ENTITY_*#`
+<.> `[teal]#*_ENTITY_*#`
 +
 --
-A domain entity whose persistence is managed internally by Isis, using JDO as the persistence implementation. Domain entities are considered to be part of the domain model layer.
-
-Domain entities are considered to be part of the domain model layer.
-
-Currently implies no additional semantics other than documentation.
---
-<.> `[teal]#*_JPA_ENTITY_*#`
-+
---
-A domain entity whose persistence is managed internally by Isis, using JPA as the persistence implementation. Domain entities are considered to be part of the domain model layer.
+A domain entity whose persistence is managed internally by Isis, using JPA or JDO as the persistence implementation.
 
 Domain entities are considered to be part of the domain model layer.
 

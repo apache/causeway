@@ -13,6 +13,6 @@ interface HasUniqueId {
 <.> `[teal]#*getUniqueId*#()` : `UUID`
 +
 --
-The unique identifier (a GUID) of the request/interaction/transaction.
+A unique identifier (a GUID).
 --
 

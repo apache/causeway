@@ -400,7 +400,8 @@ Folder: \core\interaction
 
 _Components_
 
-* o.a.i.core.interaction.scope.IsisInteractionScopeBeanFactoryPostProcessor
+* o.a.i.core.interaction.integration.InteractionAwareTransactionalBoundaryHandler
+* o.a.i.core.interaction.scope.InteractionScopeBeanFactoryPostProcessor
 
 _Dependencies_
 
@@ -499,6 +500,7 @@ Folder: \core\runtime
 _Components_
 
 * o.a.i.core.runtime.events.AppLifecycleEventService
+* o.a.i.core.runtime.events.TransactionEventEmitter
 
 _Dependencies_
 
@@ -564,7 +566,7 @@ _Dependencies_
 
 _Document Index Entries_
 
-xref:system:generated:index/core/runtimeservices/xml/XmlServiceDefault.adoc[XmlServiceDefault], xref:system:generated:index/core/runtimeservices/xmlsnapshot/XmlSnapshotServiceDefault.adoc[XmlSnapshotServiceDefault]
+xref:system:generated:index/core/runtimeservices/transaction/TransactionServiceSpring.adoc[TransactionServiceSpring], xref:system:generated:index/core/runtimeservices/xml/XmlServiceDefault.adoc[XmlServiceDefault], xref:system:generated:index/core/runtimeservices/xmlsnapshot/XmlSnapshotServiceDefault.adoc[XmlSnapshotServiceDefault]
 
 |Apache Isis Core - Security
 [source,yaml]
@@ -1109,11 +1111,6 @@ skinparam rectangle<<12>> {
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<13>> {
-  BackgroundColor #438dd5
-  FontColor #fffffe
-  BorderColor #2E6295
-}
 skinparam rectangle<<2>> {
   BackgroundColor #438dd5
   FontColor #fffffe
@@ -1161,28 +1158,26 @@ skinparam rectangle<<10>> {
 }
 package "Persistence\n[Software System]" {
   rectangle "==Apache Isis Persistence - JDO\n<size:10>[Container: packaging: pom]</size>" <<2>> as 2
-  rectangle "==Apache Isis Persistence - JDO (Spring)\n<size:10>[Container: packaging: jar]</size>" <<9>> as 9
+  rectangle "==Apache Isis Persistence - JDO (Spring)\n<size:10>[Container: packaging: jar]</size>" <<8>> as 8
   rectangle "==Apache Isis Persistence - JDO (applib)\n<size:10>[Container: packaging: jar]</size>" <<3>> as 3
   rectangle "==Apache Isis Persistence - JDO (integration)\n<size:10>[Container: packaging: jar]</size>" <<5>> as 5
-  rectangle "==Apache Isis Persistence - JDO (lightweight integration)\n<size:10>[Container: packaging: jar]</size>" <<6>> as 6
-  rectangle "==Apache Isis Persistence - JDO (metamodel)\n<size:10>[Container: packaging: jar]</size>" <<7>> as 7
-  rectangle "==Apache Isis Persistence - JDO (provider)\n<size:10>[Container: packaging: jar]</size>" <<8>> as 8
+  rectangle "==Apache Isis Persistence - JDO (metamodel)\n<size:10>[Container: packaging: jar]</size>" <<6>> as 6
+  rectangle "==Apache Isis Persistence - JDO (provider)\n<size:10>[Container: packaging: jar]</size>" <<7>> as 7
   rectangle "==Apache Isis Persistence - JDO Provider (DataNucleus)\n<size:10>[Container: packaging: jar]</size>" <<4>> as 4
-  rectangle "==Apache Isis Persistence - JPA\n<size:10>[Container: packaging: pom]</size>" <<10>> as 10
-  rectangle "==Apache Isis Persistence - JPA (applib)\n<size:10>[Container: packaging: jar]</size>" <<11>> as 11
-  rectangle "==Apache Isis Persistence - JPA (integration)\n<size:10>[Container: packaging: jar]</size>" <<13>> as 13
-  rectangle "==Apache Isis Persistence - JPA EclipseLink\n<size:10>[Container: packaging: jar]</size>" <<12>> as 12
+  rectangle "==Apache Isis Persistence - JPA\n<size:10>[Container: packaging: pom]</size>" <<9>> as 9
+  rectangle "==Apache Isis Persistence - JPA (applib)\n<size:10>[Container: packaging: jar]</size>" <<10>> as 10
+  rectangle "==Apache Isis Persistence - JPA (integration)\n<size:10>[Container: packaging: jar]</size>" <<12>> as 12
+  rectangle "==Apache Isis Persistence - JPA EclipseLink\n<size:10>[Container: packaging: jar]</size>" <<11>> as 11
 }
-2 .[#707070].> 9 : ""
+2 .[#707070].> 8 : ""
 2 .[#707070].> 3 : ""
 2 .[#707070].> 5 : ""
 2 .[#707070].> 6 : ""
 2 .[#707070].> 7 : ""
-2 .[#707070].> 8 : ""
 2 .[#707070].> 4 : ""
-10 .[#707070].> 11 : ""
-10 .[#707070].> 13 : ""
-10 .[#707070].> 12 : ""
+9 .[#707070].> 10 : ""
+9 .[#707070].> 12 : ""
+9 .[#707070].> 11 : ""
 @enduml
 ----
 .Projects/Modules (Persistence)
@@ -1217,6 +1212,10 @@ _Dependencies_
 * org.datanucleus:datanucleus-rdbms:jar:<managed>
 * org.datanucleus:javax.jdo:jar:<managed>
 
+_Document Index Entries_
+
+xref:system:generated:index/persistence/jdo/applib/integration/JdoSupportService.adoc[JdoSupportService]
+
 |Apache Isis Persistence - JDO Provider (DataNucleus)
 [source,yaml]
 ----
@@ -1230,7 +1229,12 @@ Folder: \persistence\jdo\datanucleus
 _Components_
 
 * o.a.i.persistence.jdo.datanucleus.config.DnEntityDiscoveryListener
+* o.a.i.persistence.jdo.datanucleus.config.DnSettings
 * o.a.i.persistence.jdo.datanucleus.entities.DnEntityStateProvider
+* o.a.i.persistence.jdo.datanucleus.exceptions.recognizers.ExceptionRecognizerForJDODataStoreException
+* o.a.i.persistence.jdo.datanucleus.exceptions.recognizers.ExceptionRecognizerForJDODataStoreExceptionIntegrityConstraintViolationForeignKeyNoActionException
+* o.a.i.persistence.jdo.datanucleus.exceptions.recognizers.ExceptionRecognizerForJDOObjectNotFoundException
+* o.a.i.persistence.jdo.datanucleus.exceptions.recognizers.ExceptionRecognizerForSQLIntegrityConstraintViolationUniqueOrIndexException
 
 _Dependencies_
 
@@ -1256,16 +1260,9 @@ Folder: \persistence\jdo\integration
 
 _Components_
 
-* o.a.i.persistence.jdo.integration.config.DataNucleusSettings
-* o.a.i.persistence.jdo.integration.exceprecog.ExceptionRecognizerForJDODataStoreException
-* o.a.i.persistence.jdo.integration.exceprecog.ExceptionRecognizerForJDODataStoreExceptionIntegrityConstraintViolationForeignKeyNoActionException
-* o.a.i.persistence.jdo.integration.exceprecog.ExceptionRecognizerForJDOObjectNotFoundException
-* o.a.i.persistence.jdo.integration.exceprecog.ExceptionRecognizerForSQLIntegrityConstraintViolationUniqueOrIndexException
 * o.a.i.persistence.jdo.integration.jdosupport.IsisJdoSupportDN5
-* o.a.i.persistence.jdo.integration.lifecycles.JdoPersistenceLifecycleService
 * o.a.i.persistence.jdo.integration.metamodel.JdoIntegrationProgrammingModel
-* o.a.i.persistence.jdo.integration.persistence.IsisPlatformTransactionManagerForJdo
-* o.a.i.persistence.jdo.integration.persistence.PersistenceSessionFactory5
+* o.a.i.persistence.jdo.integration.schema.JdoSchemaService
 
 _Dependencies_
 
@@ -1281,32 +1278,6 @@ _Dependencies_
 _Document Index Entries_
 
 xref:system:generated:index/persistence/jdo/integration/schema/JdoSchemaService.adoc[JdoSchemaService]
-
-|Apache Isis Persistence - JDO (lightweight integration)
-[source,yaml]
-----
-Group: org.apache.isis.persistence
-Artifact: isis-persistence-jdo-lightweight
-Type: jar
-Folder: \persistence\jdo\lightweight
-----
-|JDO lightweight integration (experimental)
-
-_Components_
-
-* o.a.i.persistence.jdo.lightweight.metamodel.JdoLightweightProgrammingModel
-* o.a.i.persistence.jdo.lightweight.services.LightweightJdoSupport
-
-_Dependencies_
-
-* org.apache.isis.commons:isis-commons:jar:<managed>
-* org.apache.isis.core:isis-applib:jar:<managed>
-* org.apache.isis.core:isis-core-internaltestsupport:jar:<managed>
-* org.apache.isis.core:isis-core-runtime:jar:<managed>
-* org.apache.isis.persistence:isis-persistence-jdo-applib:jar:<managed>
-* org.apache.isis.persistence:isis-persistence-jdo-datanucleus:jar:<managed>
-* org.apache.isis.persistence:isis-persistence-jdo-metamodel:jar:<managed>
-* org.apache.isis.persistence:isis-persistence-jdo-spring:jar:<managed>
 
 |Apache Isis Persistence - JDO (metamodel)
 [source,yaml]
@@ -1557,12 +1528,12 @@ skinparam {
   maxMessageSize 100
 }
 hide stereotype
-skinparam rectangle<<22>> {
+skinparam rectangle<<11>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<11>> {
+skinparam rectangle<<22>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
@@ -1652,12 +1623,12 @@ skinparam rectangle<<20>> {
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<21>> {
+skinparam rectangle<<10>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<10>> {
+skinparam rectangle<<21>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
@@ -1802,9 +1773,9 @@ Folder: \valuetypes\asciidoc\ui
 ----
 |_Dependencies_
 
-* com.github.jnr:jnr-constants:jar:0.10.0
-* com.github.jnr:jnr-enxio:jar:0.32.1
-* com.github.jnr:jnr-posix:jar:3.1.3
+* com.github.jnr:jnr-constants:jar:0.10.1
+* com.github.jnr:jnr-enxio:jar:0.32.3
+* com.github.jnr:jnr-posix:jar:3.1.4
 * org.apache.isis.core:isis-core-metamodel:jar:<managed>
 * org.apache.isis.valuetypes:isis-valuetypes-asciidoc-applib:jar:<managed>
 * org.asciidoctor:asciidoctorj:jar:${asciidoctorj.version}
@@ -2819,13 +2790,11 @@ _Dependencies_
 * org.apache.isis.mavendeps:isis-mavendeps-jdo:pom:<managed>
 * org.apache.isis.mavendeps:isis-mavendeps-jpa:pom:<managed>
 * org.apache.isis.mavendeps:isis-mavendeps-webapp:pom:<managed>
-* org.apache.isis.persistence:isis-persistence-jdo-lightweight:jar:<managed>
 * org.apache.isis.security:isis-security-shiro:jar:<managed>
 * org.apache.isis.testing:isis-testing-fixtures-applib:jar:<managed>
 * org.apache.isis.testing:isis-testing-specsupport-applib:jar:<managed>
 * org.apache.isis.tooling:isis-tooling-model4adoc:jar:${project.version}
 * org.apache.isis.viewer:isis-viewer-common:jar:<managed>
-* org.eclipse.persistence:org.eclipse.persistence.moxy:jar:2.7.7
 * org.glassfish:javax.json:jar:1.1.4
 * org.glassfish.jersey.ext:jersey-spring5:jar:<managed>
 * org.projectlombok:lombok:jar:<managed>
@@ -2847,6 +2816,7 @@ Folder: \regressiontests\stable
 * o.a.i.testdomain.applayer.publishing.EntityPropertyChangeSubscriberForTesting
 * o.a.i.testdomain.applayer.publishing.ExecutionSubscriberForTesting
 * o.a.i.testdomain.conf.Configuration_headless$HeadlessCommandSupport
+* o.a.i.testdomain.jpa.springdata.EmployeeRepository
 * o.a.i.testdomain.util.interaction.InteractionBoundaryProbe
 * o.a.i.testdomain.util.kv.KVStoreForTesting
 * o.a.i.testdomain.util.rest.RestEndpointService
@@ -3577,12 +3547,12 @@ skinparam rectangle<<11>> {
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<23>> {
+skinparam rectangle<<12>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<12>> {
+skinparam rectangle<<23>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
