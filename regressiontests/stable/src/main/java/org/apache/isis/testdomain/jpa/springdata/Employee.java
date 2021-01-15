@@ -18,10 +18,11 @@
  */
 package org.apache.isis.testdomain.jpa.springdata;
 
-import javax.inject.Named;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+
+import org.apache.isis.applib.annotation.DomainObject;
 
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
@@ -31,7 +32,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 @Entity
-@Named("testdomain.jpa.springdata.Employee")
+@DomainObject(objectType = "testdomain.jpa.springdata.Employee")
 @Getter @Setter @ToString @EqualsAndHashCode
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Employee {
