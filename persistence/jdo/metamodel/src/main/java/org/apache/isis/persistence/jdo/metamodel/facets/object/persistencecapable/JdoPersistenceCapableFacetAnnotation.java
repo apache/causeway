@@ -22,7 +22,7 @@ import javax.jdo.annotations.IdentityType;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
-public class JdoPersistenceCapableFacetAnnotation extends JdoPersistenceCapableFacetImpl {
+public class JdoPersistenceCapableFacetAnnotation extends JdoPersistenceCapableFacetAbstract {
 
     public JdoPersistenceCapableFacetAnnotation(
             final String schemaName,

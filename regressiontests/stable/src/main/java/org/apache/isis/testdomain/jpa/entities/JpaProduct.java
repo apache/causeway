@@ -36,7 +36,6 @@ import javax.persistence.OneToMany;
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
-import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.commons.internal.base._Strings;
 
@@ -54,9 +53,7 @@ import lombok.ToString;
         name="product_type", 
         discriminatorType = DiscriminatorType.STRING)
 @DomainObject(
-        objectType = "testdomain.jpa.Product",
-        nature = Nature.ENTITY //TODO[2033] should not be required, when using JPA quick classify SPI
-        )
+        objectType = "testdomain.jpa.Product")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED) 
 @ToString

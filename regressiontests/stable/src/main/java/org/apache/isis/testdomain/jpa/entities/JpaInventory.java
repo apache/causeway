@@ -30,7 +30,6 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 
 import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.Publishing;
 
@@ -43,7 +42,6 @@ import lombok.ToString;
 @Entity
 @DomainObject(
         objectType = "testdomain.jdo.Inventory",
-        nature = Nature.ENTITY, //TODO[2033] should not be required, when using JPA quick classify SPI
         entityChangePublishing = Publishing.ENABLED)
 @NamedQuery(
         name = "JpaInventory.findAffordableProducts", 

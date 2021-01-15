@@ -18,16 +18,16 @@
  */
 package org.apache.isis.persistence.jdo.provider.metamodel.facets.prop.notpersistent;
 
-import javax.jdo.annotations.PrimaryKey;
+import javax.jdo.annotations.NotPersistent;
 
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 
 
 /**
- * Corresponds to the property with the {@link PrimaryKey} annotation.
+ * Corresponds to the property with the {@link NotPersistent} annotation.
  * <p>
- * The JDO {@link PrimaryKey} annotation is used internally the JDO object store to
+ * The JDO {@link NotPersistent} annotation is used internally the JDO object store to
  * create the {@link Oid}.
  */
 public interface JdoNotPersistentFacet extends Facet {

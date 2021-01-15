@@ -45,7 +45,6 @@ import org.apache.isis.commons.internal.memento._Mementos.SerializingAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.object.entity.EntityFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -64,13 +63,14 @@ public class JpaEntityFacetFactory extends FacetFactoryAbstract {
     @Override
     public void process(ProcessClassContext processClassContext) {
         val cls = processClassContext.getCls();
-
-        val entityAnnotation = Annotations.getAnnotation(cls, Entity.class);
-        if (entityAnnotation == null) {
+        
+        val facetHolder = processClassContext.getFacetHolder();
+        
+        val entityAnnotation = processClassContext.synthesizeOnType(Entity.class);
+        if(!entityAnnotation.isPresent()) {
             return;
         }
         
-        val facetHolder = processClassContext.getFacetHolder();
         val serviceRegistry = super.getMetaModelContext().getServiceRegistry();
         val jpaEntityFacet = new JpaEntityFacet(facetHolder, cls, serviceRegistry);
             

@@ -16,21 +16,10 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.persistence.jdo.metamodel.facets.object.persistencecapable;
+package org.apache.isis.persistence.jpa.metamodel.facets.prop.transients;
 
-import javax.jdo.annotations.IdentityType;
+import org.apache.isis.core.metamodel.facetapi.Facet;
 
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-
-public class JdoPersistenceCapableFacetImpl extends JdoPersistenceCapableFacetAbstract {
-
-    public JdoPersistenceCapableFacetImpl(
-            final String schemaName,
-            final String tableOrTypeName,
-            final IdentityType identityType,
-            final FacetHolder holder) {
-        super(schemaName, tableOrTypeName, identityType, holder);
-    }
-
+public interface JpaTransientFacet extends Facet {
 
 }

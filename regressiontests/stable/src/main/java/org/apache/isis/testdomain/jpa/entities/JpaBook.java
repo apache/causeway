@@ -26,7 +26,6 @@ import javax.persistence.EntityListeners;
 import javax.persistence.Transient;
 
 import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.persistence.jpa.applib.integration.JpaEntityInjectionPointResolver;
@@ -46,7 +45,6 @@ import lombok.extern.log4j.Log4j2;
 @DiscriminatorValue("Book")
 @DomainObject(
         objectType = "testdomain.jpa.Book",
-        nature = Nature.ENTITY, //TODO[ISIS-2332] should not be required, when using JPA quick classify SPI 
         entityChangePublishing = Publishing.ENABLED)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString(callSuper = true)

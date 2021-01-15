@@ -28,7 +28,7 @@ import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFace
 public class MandatoryFacetDerivedFromJdoColumn extends MandatoryFacetAbstract {
 
 
-    public MandatoryFacetDerivedFromJdoColumn(final FacetHolder holder, boolean required ) {
+    public MandatoryFacetDerivedFromJdoColumn(final FacetHolder holder, final boolean required) {
         super(holder, Semantics.of(required));
     }
 

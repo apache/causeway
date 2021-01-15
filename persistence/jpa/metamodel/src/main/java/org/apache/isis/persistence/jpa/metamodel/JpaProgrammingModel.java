@@ -22,6 +22,9 @@ import org.springframework.stereotype.Component;
 
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
+import org.apache.isis.core.metamodel.progmodel.ProgrammingModel.Marker;
+import org.apache.isis.persistence.jpa.metamodel.facets.prop.column.MandatoryFromJpaColumnAnnotationFacetFactory;
+import org.apache.isis.persistence.jpa.metamodel.facets.prop.transients.JpaTransientAnnotationFacetFactory;
 
 import lombok.val;
 
@@ -33,7 +36,7 @@ public class JpaProgrammingModel implements MetaModelRefiner {
     @Override
     public void refineProgrammingModel(ProgrammingModel pm) {
 
-        val step1 = ProgrammingModel.FacetProcessingOrder.C2_AFTER_METHOD_REMOVING;
+//        val step1 = ProgrammingModel.FacetProcessingOrder.C2_AFTER_METHOD_REMOVING;
 //
 //        // come what may, we have to ignore the PersistenceCapable supertype.
 //        pm.addFactory(step1, RemoveJdoEnhancementTypesFacetFactory.class, Marker.JDO);
@@ -45,8 +48,8 @@ public class JpaProgrammingModel implements MetaModelRefiner {
 
 
         val step2 = ProgrammingModel.FacetProcessingOrder.A2_AFTER_FALLBACK_DEFAULTS;
-//
-//        pm.addFactory(step2, JdoPersistenceCapableAnnotationFacetFactory.class, Marker.JDO);
+
+        pm.addFactory(step2, JpaTransientAnnotationFacetFactory.class, Marker.JPA);
 //        pm.addFactory(step2, JdoDatastoreIdentityAnnotationFacetFactory.class, Marker.JDO);
 //
 //        pm.addFactory(step2, JdoPrimaryKeyAnnotationFacetFactory.class, Marker.JDO);
@@ -61,7 +64,7 @@ public class JpaProgrammingModel implements MetaModelRefiner {
 //        // must appear after JdoPrimaryKeyAnnotationFacetFactory (above)
 //        // and also MandatoryFacetOnPropertyMandatoryAnnotationFactory
 //        // and also PropertyAnnotationFactory
-//        pm.addFactory(step2, MandatoryFromJdoColumnAnnotationFacetFactory.class, Marker.JDO);
+        pm.addFactory(step2, MandatoryFromJpaColumnAnnotationFacetFactory.class, Marker.JPA);
 //
 //
 //        // -- validators

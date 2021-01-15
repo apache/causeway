@@ -18,11 +18,8 @@
  */
 package org.apache.isis.persistence.jpa.integration.metamodel;
 
-import javax.inject.Inject;
-
 import org.springframework.stereotype.Component;
 
-import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel.Marker;
@@ -32,7 +29,7 @@ import lombok.val;
 @Component
 public class JpaProgrammingModel implements MetaModelRefiner {
     
-    @Inject private IsisConfiguration config;
+    // @Inject private IsisConfiguration config;
 
     @Override
     public void refineProgrammingModel(ProgrammingModel pm) {

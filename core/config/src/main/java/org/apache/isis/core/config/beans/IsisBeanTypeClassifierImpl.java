@@ -22,6 +22,7 @@ import java.io.Serializable;
 import java.util.Collection;
 
 import javax.enterprise.inject.Vetoed;
+import javax.persistence.Entity;
 
 import org.springframework.stereotype.Component;
 
@@ -72,6 +73,11 @@ implements IsisBeanTypeClassifier {
             return BeanClassification.selfManaged(BeanSort.VIEW_MODEL);
         }
 
+        val entityAnnotation = findNearestAnnotation(type, Entity.class).orElse(null);
+        if(entityAnnotation!=null) {
+            return BeanClassification.selfManaged(BeanSort.ENTITY);
+        }
+        
         val aDomainObject = findNearestAnnotation(type, DomainObject.class).orElse(null);
         if(aDomainObject!=null) {
             switch (aDomainObject.nature()) {

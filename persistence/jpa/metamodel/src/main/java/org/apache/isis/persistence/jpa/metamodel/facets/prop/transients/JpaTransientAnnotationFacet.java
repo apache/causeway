@@ -16,15 +16,16 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.persistence.jdo.metamodel.facets.prop.notpersistent;
+package org.apache.isis.persistence.jpa.metamodel.facets.prop.transients;
 
+import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
+public class JpaTransientAnnotationFacet 
+extends FacetAbstract {
 
-public class JdoNotPersistentFacetImpl extends JdoNotPersistentFacetAbstract {
-
-    public JdoNotPersistentFacetImpl(final FacetHolder holder) {
-        super(holder);
+    protected JpaTransientAnnotationFacet(FacetHolder holder) {
+        super(JpaTransientFacet.class, holder);
     }
 
 }
