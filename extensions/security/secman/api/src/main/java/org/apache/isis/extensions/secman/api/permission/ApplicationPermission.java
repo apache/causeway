@@ -28,6 +28,34 @@ import org.apache.isis.extensions.secman.api.role.ApplicationRole;
 
 import lombok.val;
 
+/**
+ * Specifies how a particular {@link #getRole() application role} may interact with a specific
+ * {@link #getFeature() application feature}.
+ *
+ * <p>
+ *     Each permission has a {@link #getRule() rule} and a {@link #getMode() mode}.  The
+ *     {@link ApplicationPermissionRule rule} determines whether the permission {@link ApplicationPermissionRule#ALLOW grants}
+ *     access to the feature or {@link ApplicationPermissionRule#VETO veto}es access
+ *     to it.  The {@link ApplicationPermissionMode mode} indicates whether
+ *     the role can {@link ApplicationPermissionMode#VIEWING view} the feature
+ *     or can {@link ApplicationPermissionMode#CHANGING change} the state of the
+ *     system using the feature.
+ * </p>
+ *
+ * <p>
+ *     For a given permission, there is an interaction between the {@link ApplicationPermissionRule rule} and the
+ *     {@link ApplicationPermissionMode mode}:
+ * <ul>
+ *     <li>for an {@link ApplicationPermissionRule#ALLOW allow}, a
+ *     {@link ApplicationPermissionMode#CHANGING usability} allow
+ *     implies {@link ApplicationPermissionMode#VIEWING visibility} allow.
+ *     </li>
+ *     <li>conversely, for a {@link ApplicationPermissionRule#VETO veto},
+ *     a {@link ApplicationPermissionMode#VIEWING visibility} veto
+ *     implies a {@link ApplicationPermissionMode#CHANGING usability} veto.</li>
+ * </ul>
+ * </p>
+ */
 public interface ApplicationPermission {
     
     // -- DOMAIN EVENTS

@@ -24,10 +24,8 @@ import java.util.Optional;
 import java.util.function.Function;
 
 import javax.inject.Inject;
-import javax.jdo.annotations.IdGeneratorStrategy;
-import javax.jdo.annotations.IdentityType;
-import javax.jdo.annotations.InheritanceStrategy;
-import javax.jdo.annotations.VersionStrategy;
+import javax.persistence.Column;
+import javax.persistence.Entity;
 
 import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.DomainObject;
@@ -56,95 +54,62 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.UtilityClass;
 
-/**
- * Specifies how a particular {@link #getRole() application role} may interact with a specific
- * {@link #getFeature() application feature}.
- *
- * <p>
- *     Each permission has a {@link #getRule() rule} and a {@link #getMode() mode}.  The
- *     {@link ApplicationPermissionRule rule} determines whether the permission {@link ApplicationPermissionRule#ALLOW grants}
- *     access to the feature or {@link ApplicationPermissionRule#VETO veto}es access
- *     to it.  The {@link ApplicationPermissionMode mode} indicates whether
- *     the role can {@link ApplicationPermissionMode#VIEWING view} the feature
- *     or can {@link ApplicationPermissionMode#CHANGING change} the state of the
- *     system using the feature.
- * </p>
- *
- * <p>
- *     For a given permission, there is an interaction between the {@link ApplicationPermissionRule rule} and the
- *     {@link ApplicationPermissionMode mode}:
- * <ul>
- *     <li>for an {@link ApplicationPermissionRule#ALLOW allow}, a
- *     {@link ApplicationPermissionMode#CHANGING usability} allow
- *     implies {@link ApplicationPermissionMode#VIEWING visibility} allow.
- *     </li>
- *     <li>conversely, for a {@link ApplicationPermissionRule#VETO veto},
- *     a {@link ApplicationPermissionMode#VIEWING visibility} veto
- *     implies a {@link ApplicationPermissionMode#CHANGING usability} veto.</li>
- * </ul>
- * </p>
- */
-@javax.jdo.annotations.PersistenceCapable(
-        identityType = IdentityType.DATASTORE,
-        schema = "isisExtensionsSecman",
-        table = "ApplicationPermission")
-@javax.jdo.annotations.Inheritance(
-        strategy = InheritanceStrategy.NEW_TABLE)
-@javax.jdo.annotations.DatastoreIdentity(
-        strategy = IdGeneratorStrategy.NATIVE, column = "id")
-@javax.jdo.annotations.Version(
-        strategy = VersionStrategy.VERSION_NUMBER,
-        column = "version")
-@javax.jdo.annotations.Queries( {
-    @javax.jdo.annotations.Query(
-            name = "findByRole", language = "JDOQL",
-            value = "SELECT "
-                    + "FROM org.apache.isis.extensions.secman.jdo.dom.permission.ApplicationPermission "
-                    + "WHERE role == :role"),
-    @javax.jdo.annotations.Query(
-            name = "findByUser", language = "JDOQL",
-            value = "SELECT "
-                    + "FROM org.apache.isis.extensions.secman.jdo.dom.permission.ApplicationPermission "
-                    + "WHERE (u.roles.contains(role) && u.username == :username) "
-                    + "VARIABLES org.apache.isis.extensions.secman.jdo.dom.user.ApplicationUser u"),
-    @javax.jdo.annotations.Query(
-            name = "findByFeature", language = "JDOQL",
-            value = "SELECT "
-                    + "FROM org.apache.isis.extensions.secman.jdo.dom.permission.ApplicationPermission "
-                    + "WHERE featureType == :featureType "
-                    + "   && featureFqn == :featureFqn"),
-    @javax.jdo.annotations.Query(
-            name = "findByRoleAndRuleAndFeature", language = "JDOQL",
-            value = "SELECT "
-                    + "FROM org.apache.isis.extensions.secman.jdo.dom.permission.ApplicationPermission "
-                    + "WHERE role == :role "
-                    + "   && rule == :rule "
-                    + "   && featureType == :featureType "
-                    + "   && featureFqn == :featureFqn "),
-    @javax.jdo.annotations.Query(
-            name = "findByRoleAndRuleAndFeatureType", language = "JDOQL",
-            value = "SELECT "
-                    + "FROM org.apache.isis.extensions.secman.jdo.dom.permission.ApplicationPermission "
-                    + "WHERE role == :role "
-                    + "   && rule == :rule "
-                    + "   && featureType == :featureType "),
-})
-@javax.jdo.annotations.Uniques({
-    @javax.jdo.annotations.Unique(
-            name = "ApplicationPermission_role_feature_rule_UNQ", members = { "role", "featureType", "featureFqn", "rule" })
-})
+//@javax.jdo.annotations.PersistenceCapable(
+//        identityType = IdentityType.DATASTORE,
+//        schema = "isisExtensionsSecman",
+//        table = "ApplicationPermission")
+//@javax.jdo.annotations.Inheritance(
+//        strategy = InheritanceStrategy.NEW_TABLE)
+//@javax.jdo.annotations.DatastoreIdentity(
+//        strategy = IdGeneratorStrategy.NATIVE, column = "id")
+//@javax.jdo.annotations.Version(
+//        strategy = VersionStrategy.VERSION_NUMBER,
+//        column = "version")
+//@javax.jdo.annotations.Queries( {
+//    @javax.jdo.annotations.Query(
+//            name = "findByRole", language = "JDOQL",
+//            value = "SELECT "
+//                    + "FROM org.apache.isis.extensions.secman.jdo.dom.permission.ApplicationPermission "
+//                    + "WHERE role == :role"),
+//    @javax.jdo.annotations.Query(
+//            name = "findByUser", language = "JDOQL",
+//            value = "SELECT "
+//                    + "FROM org.apache.isis.extensions.secman.jdo.dom.permission.ApplicationPermission "
+//                    + "WHERE (u.roles.contains(role) && u.username == :username) "
+//                    + "VARIABLES org.apache.isis.extensions.secman.jdo.dom.user.ApplicationUser u"),
+//    @javax.jdo.annotations.Query(
+//            name = "findByFeature", language = "JDOQL",
+//            value = "SELECT "
+//                    + "FROM org.apache.isis.extensions.secman.jdo.dom.permission.ApplicationPermission "
+//                    + "WHERE featureType == :featureType "
+//                    + "   && featureFqn == :featureFqn"),
+//    @javax.jdo.annotations.Query(
+//            name = "findByRoleAndRuleAndFeature", language = "JDOQL",
+//            value = "SELECT "
+//                    + "FROM org.apache.isis.extensions.secman.jdo.dom.permission.ApplicationPermission "
+//                    + "WHERE role == :role "
+//                    + "   && rule == :rule "
+//                    + "   && featureType == :featureType "
+//                    + "   && featureFqn == :featureFqn "),
+//    @javax.jdo.annotations.Query(
+//            name = "findByRoleAndRuleAndFeatureType", language = "JDOQL",
+//            value = "SELECT "
+//                    + "FROM org.apache.isis.extensions.secman.jdo.dom.permission.ApplicationPermission "
+//                    + "WHERE role == :role "
+//                    + "   && rule == :rule "
+//                    + "   && featureType == :featureType "),
+//})
+//@javax.jdo.annotations.Uniques({
+//    @javax.jdo.annotations.Unique(
+//            name = "ApplicationPermission_role_feature_rule_UNQ", members = { "role", "featureType", "featureFqn", "rule" })
+//})
+@Entity
 @DomainObject(
         objectType = "isissecurity.ApplicationPermission"
         )
 @DomainObjectLayout(
         bookmarking = BookmarkPolicy.AS_CHILD
         )
-//@MemberGroupLayout(
-//        columnSpans = {3,3,6,12},
-//        left={"Role", "Metadata"},
-//        middle = {"Permissions"},
-//        right={"Feature"}
-//)
 public class ApplicationPermission implements org.apache.isis.extensions.secman.api.permission.ApplicationPermission, Comparable<ApplicationPermission> {
 
     private static final int TYPICAL_LENGTH_TYPE = 7;  // ApplicationFeatureType.PACKAGE is longest
@@ -155,7 +120,7 @@ public class ApplicationPermission implements org.apache.isis.extensions.secman.
     public static class RoleDomainEvent extends PropertyDomainEvent<ApplicationRole> {}
 
 
-    @javax.jdo.annotations.Column(name = "roleId", allowsNull="false")
+    @Column(name="roleId", nullable=false)
     @Property(
             domainEvent = RoleDomainEvent.class,
             editing = Editing.DISABLED
@@ -176,7 +141,7 @@ public class ApplicationPermission implements org.apache.isis.extensions.secman.
     public static class RuleDomainEvent extends PropertyDomainEvent<ApplicationPermissionRule> {}
 
 
-    @javax.jdo.annotations.Column(allowsNull="false")
+    @Column(nullable=false)
     @Property(
             domainEvent = RuleDomainEvent.class,
             editing = Editing.DISABLED
@@ -191,7 +156,7 @@ public class ApplicationPermission implements org.apache.isis.extensions.secman.
     public static class ModeDomainEvent extends PropertyDomainEvent<ApplicationPermissionMode> {}
 
 
-    @javax.jdo.annotations.Column(allowsNull="false")
+    @Column(nullable=false)
     @Property(
             domainEvent = ModeDomainEvent.class,
             editing = Editing.DISABLED
@@ -248,7 +213,7 @@ public class ApplicationPermission implements org.apache.isis.extensions.secman.
      *
      * @see #getFeatureFqn()
      */
-    @javax.jdo.annotations.Column(allowsNull="false")
+    @Column(nullable=false)
     @Setter
     private ApplicationFeatureType featureType;
 
@@ -275,7 +240,7 @@ public class ApplicationPermission implements org.apache.isis.extensions.secman.
      *
      * @see #getFeatureType()
      */
-    @javax.jdo.annotations.Column(allowsNull="false")
+    @Column(nullable=false)
     @Property(
             domainEvent = FeatureFqnDomainEvent.class,
             editing = Editing.DISABLED

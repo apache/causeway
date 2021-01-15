@@ -24,9 +24,9 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 import javax.inject.Inject;
-import javax.jdo.annotations.IdGeneratorStrategy;
-import javax.jdo.annotations.IdentityType;
-import javax.jdo.annotations.InheritanceStrategy;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.ManyToMany;
 
 import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.Bounding;
@@ -53,30 +53,31 @@ import org.apache.isis.extensions.secman.jpa.dom.user.ApplicationUser;
 import lombok.Getter;
 import lombok.Setter;
 
-@javax.jdo.annotations.PersistenceCapable(
-        identityType = IdentityType.DATASTORE,
-        schema = "isisExtensionsSecman",
-        table = "ApplicationRole")
-@javax.jdo.annotations.Inheritance(
-        strategy = InheritanceStrategy.NEW_TABLE)
-@javax.jdo.annotations.DatastoreIdentity(
-        strategy = IdGeneratorStrategy.NATIVE, column = "id")
-@javax.jdo.annotations.Uniques({
-    @javax.jdo.annotations.Unique(
-            name = "ApplicationRole_name_UNQ", members = { "name" })
-})
-@javax.jdo.annotations.Queries({
-    @javax.jdo.annotations.Query(
-            name = "findByName", language = "JDOQL",
-            value = "SELECT "
-                    + "FROM org.apache.isis.extensions.secman.jdo.dom.role.ApplicationRole "
-                    + "WHERE name == :name"),
-    @javax.jdo.annotations.Query(
-            name = "findByNameContaining", language = "JDOQL",
-            value = "SELECT "
-                    + "FROM org.apache.isis.extensions.secman.jdo.dom.role.ApplicationRole "
-                    + "WHERE name.matches(:nameRegex) ")
-})
+//@javax.jdo.annotations.PersistenceCapable(
+//        identityType = IdentityType.DATASTORE,
+//        schema = "isisExtensionsSecman",
+//        table = "ApplicationRole")
+//@javax.jdo.annotations.Inheritance(
+//        strategy = InheritanceStrategy.NEW_TABLE)
+//@javax.jdo.annotations.DatastoreIdentity(
+//        strategy = IdGeneratorStrategy.NATIVE, column = "id")
+//@javax.jdo.annotations.Uniques({
+//    @javax.jdo.annotations.Unique(
+//            name = "ApplicationRole_name_UNQ", members = { "name" })
+//})
+//@javax.jdo.annotations.Queries({
+//    @javax.jdo.annotations.Query(
+//            name = "findByName", language = "JDOQL",
+//            value = "SELECT "
+//                    + "FROM org.apache.isis.extensions.secman.jdo.dom.role.ApplicationRole "
+//                    + "WHERE name == :name"),
+//    @javax.jdo.annotations.Query(
+//            name = "findByNameContaining", language = "JDOQL",
+//            value = "SELECT "
+//                    + "FROM org.apache.isis.extensions.secman.jdo.dom.role.ApplicationRole "
+//                    + "WHERE name.matches(:nameRegex) ")
+//})
+@Entity
 @DomainObject(
         bounding = Bounding.BOUNDED,
         //		bounded = true,
@@ -98,7 +99,7 @@ implements org.apache.isis.extensions.secman.api.role.ApplicationRole, Comparabl
     public static class NameDomainEvent extends PropertyDomainEvent<String> {}
 
 
-    @javax.jdo.annotations.Column(allowsNull="false", length = MAX_LENGTH_NAME)
+    @Column(nullable=false, length=MAX_LENGTH_NAME)
     @Property(
             domainEvent = NameDomainEvent.class,
             editing = Editing.DISABLED
@@ -114,7 +115,7 @@ implements org.apache.isis.extensions.secman.api.role.ApplicationRole, Comparabl
     public static class DescriptionDomainEvent extends PropertyDomainEvent<String> {}
 
 
-    @javax.jdo.annotations.Column(allowsNull="true", length = DescriptionType.Meta.MAX_LEN)
+    @Column(nullable=true, length=DescriptionType.Meta.MAX_LEN)
     @Property(
             domainEvent = DescriptionDomainEvent.class,
             editing = Editing.DISABLED
@@ -165,7 +166,7 @@ implements org.apache.isis.extensions.secman.api.role.ApplicationRole, Comparabl
 
     public static class UsersDomainEvent extends CollectionDomainEvent<ApplicationUser> {}
 
-    @javax.jdo.annotations.Persistent(mappedBy = "roles")
+    @ManyToMany(mappedBy = "roles")
     @Collection(
             domainEvent = UsersDomainEvent.class,
             editing = Editing.DISABLED
@@ -222,8 +223,6 @@ implements org.apache.isis.extensions.secman.api.role.ApplicationRole, Comparabl
     public String toString() {
         return toString.toString(this);
     }
-
-
 
 
 }

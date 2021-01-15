@@ -22,10 +22,10 @@ import java.util.Comparator;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import javax.jdo.annotations.IdGeneratorStrategy;
-import javax.jdo.annotations.IdentityType;
-import javax.jdo.annotations.InheritanceStrategy;
-import javax.jdo.annotations.VersionStrategy;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.Collection;
@@ -45,37 +45,38 @@ import org.apache.isis.applib.util.ToString;
 import lombok.Getter;
 import lombok.Setter;
 
-@javax.jdo.annotations.PersistenceCapable(
-        identityType = IdentityType.APPLICATION,
-        schema = "isisExtensionsSecman",
-        table = "ApplicationTenancy")
-@javax.jdo.annotations.Inheritance(
-        strategy = InheritanceStrategy.NEW_TABLE)
-@javax.jdo.annotations.DatastoreIdentity(
-        strategy = IdGeneratorStrategy.NATIVE, column = "id")
-@javax.jdo.annotations.Version(
-        strategy = VersionStrategy.VERSION_NUMBER,
-        column = "version")
-@javax.jdo.annotations.Uniques({
-    @javax.jdo.annotations.Unique(
-            name = "ApplicationTenancy_name_UNQ", members = { "name" })
-})
-@javax.jdo.annotations.Queries( {
-    @javax.jdo.annotations.Query(
-            name = "findByPath", language = "JDOQL",
-            value = "SELECT "
-                    + "FROM org.apache.isis.extensions.secman.jdo.dom.tenancy.ApplicationTenancy "
-                    + "WHERE path == :path"),
-    @javax.jdo.annotations.Query(
-            name = "findByName", language = "JDOQL",
-            value = "SELECT "
-                    + "FROM org.apache.isis.extensions.secman.jdo.dom.tenancy.ApplicationTenancy "
-                    + "WHERE name == :name"),
-    @javax.jdo.annotations.Query(
-            name = "findByNameOrPathMatching", language = "JDOQL",
-            value = "SELECT "
-                    + "FROM org.apache.isis.extensions.secman.jdo.dom.tenancy.ApplicationTenancy "
-                    + "WHERE name.matches(:regex) || path.matches(:regex) ")})
+//@javax.jdo.annotations.PersistenceCapable(
+//        identityType = IdentityType.APPLICATION,
+//        schema = "isisExtensionsSecman",
+//        table = "ApplicationTenancy")
+//@javax.jdo.annotations.Inheritance(
+//        strategy = InheritanceStrategy.NEW_TABLE)
+//@javax.jdo.annotations.DatastoreIdentity(
+//        strategy = IdGeneratorStrategy.NATIVE, column = "id")
+//@javax.jdo.annotations.Version(
+//        strategy = VersionStrategy.VERSION_NUMBER,
+//        column = "version")
+//@javax.jdo.annotations.Uniques({
+//    @javax.jdo.annotations.Unique(
+//            name = "ApplicationTenancy_name_UNQ", members = { "name" })
+//})
+//@javax.jdo.annotations.Queries( {
+//    @javax.jdo.annotations.Query(
+//            name = "findByPath", language = "JDOQL",
+//            value = "SELECT "
+//                    + "FROM org.apache.isis.extensions.secman.jdo.dom.tenancy.ApplicationTenancy "
+//                    + "WHERE path == :path"),
+//    @javax.jdo.annotations.Query(
+//            name = "findByName", language = "JDOQL",
+//            value = "SELECT "
+//                    + "FROM org.apache.isis.extensions.secman.jdo.dom.tenancy.ApplicationTenancy "
+//                    + "WHERE name == :name"),
+//    @javax.jdo.annotations.Query(
+//            name = "findByNameOrPathMatching", language = "JDOQL",
+//            value = "SELECT "
+//                    + "FROM org.apache.isis.extensions.secman.jdo.dom.tenancy.ApplicationTenancy "
+//                    + "WHERE name.matches(:regex) || path.matches(:regex) ")})
+@Entity
 @DomainObject(
         objectType = "isissecurity.ApplicationTenancy",
         autoCompleteRepository = ApplicationTenancyRepository.class,
@@ -91,7 +92,7 @@ org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy {
 
     public static class NameDomainEvent extends PropertyDomainEvent<String> {}
 
-    @javax.jdo.annotations.Column(allowsNull="false", length = MAX_LENGTH_NAME)
+    @Column(nullable=false, length=MAX_LENGTH_NAME)
     @Property(
             domainEvent = NameDomainEvent.class,
             editing = Editing.DISABLED
@@ -109,8 +110,8 @@ org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy {
     public static class PathDomainEvent extends PropertyDomainEvent<String> {}
 
 
-    @javax.jdo.annotations.PrimaryKey
-    @javax.jdo.annotations.Column(length = MAX_LENGTH_PATH, allowsNull = "false")
+    @Id
+    @Column(nullable=false, length=MAX_LENGTH_PATH)
     @Property(
             domainEvent = PathDomainEvent.class,
             editing = Editing.DISABLED
@@ -124,7 +125,7 @@ org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy {
     public static class ParentDomainEvent extends PropertyDomainEvent<ApplicationTenancy> {}
 
 
-    @javax.jdo.annotations.Column(name = "parentPath", allowsNull = "true")
+    @Column(name="parentPath", nullable=true)
     @Property(
             domainEvent = ParentDomainEvent.class,
             editing = Editing.DISABLED
@@ -140,7 +141,7 @@ org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy {
 
     public static class ChildrenDomainEvent extends CollectionDomainEvent<ApplicationTenancy> {}
 
-    @javax.jdo.annotations.Persistent(mappedBy = "parent")
+    @OneToMany(mappedBy="parent")
     @Collection(
             domainEvent = ChildrenDomainEvent.class,
             editing = Editing.DISABLED

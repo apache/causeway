@@ -56,34 +56,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.UtilityClass;
 
-/**
- * Specifies how a particular {@link #getRole() application role} may interact with a specific
- * {@link #getFeature() application feature}.
- *
- * <p>
- *     Each permission has a {@link #getRule() rule} and a {@link #getMode() mode}.  The
- *     {@link ApplicationPermissionRule rule} determines whether the permission {@link ApplicationPermissionRule#ALLOW grants}
- *     access to the feature or {@link ApplicationPermissionRule#VETO veto}es access
- *     to it.  The {@link ApplicationPermissionMode mode} indicates whether
- *     the role can {@link ApplicationPermissionMode#VIEWING view} the feature
- *     or can {@link ApplicationPermissionMode#CHANGING change} the state of the
- *     system using the feature.
- * </p>
- *
- * <p>
- *     For a given permission, there is an interaction between the {@link ApplicationPermissionRule rule} and the
- *     {@link ApplicationPermissionMode mode}:
- * <ul>
- *     <li>for an {@link ApplicationPermissionRule#ALLOW allow}, a
- *     {@link ApplicationPermissionMode#CHANGING usability} allow
- *     implies {@link ApplicationPermissionMode#VIEWING visibility} allow.
- *     </li>
- *     <li>conversely, for a {@link ApplicationPermissionRule#VETO veto},
- *     a {@link ApplicationPermissionMode#VIEWING visibility} veto
- *     implies a {@link ApplicationPermissionMode#CHANGING usability} veto.</li>
- * </ul>
- * </p>
- */
 @javax.jdo.annotations.PersistenceCapable(
         identityType = IdentityType.DATASTORE,
         schema = "isisExtensionsSecman",
@@ -139,12 +111,6 @@ import lombok.experimental.UtilityClass;
 @DomainObjectLayout(
         bookmarking = BookmarkPolicy.AS_CHILD
         )
-//@MemberGroupLayout(
-//        columnSpans = {3,3,6,12},
-//        left={"Role", "Metadata"},
-//        middle = {"Permissions"},
-//        right={"Feature"}
-//)
 public class ApplicationPermission implements org.apache.isis.extensions.secman.api.permission.ApplicationPermission, Comparable<ApplicationPermission> {
 
     private static final int TYPICAL_LENGTH_TYPE = 7;  // ApplicationFeatureType.PACKAGE is longest
