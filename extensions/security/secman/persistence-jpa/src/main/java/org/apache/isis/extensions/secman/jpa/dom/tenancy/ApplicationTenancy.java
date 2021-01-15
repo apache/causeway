@@ -25,6 +25,7 @@ import java.util.TreeSet;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 
 import org.apache.isis.applib.annotation.BookmarkPolicy;
@@ -85,8 +86,10 @@ import lombok.Setter;
 @DomainObjectLayout(
         bookmarking = BookmarkPolicy.AS_ROOT
         )
-public class ApplicationTenancy implements Comparable<ApplicationTenancy>,
-org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy {
+public class ApplicationTenancy 
+implements 
+    Comparable<ApplicationTenancy>,
+    org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy {
 
     // -- name (property, title)
 
@@ -125,7 +128,7 @@ org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy {
     public static class ParentDomainEvent extends PropertyDomainEvent<ApplicationTenancy> {}
 
 
-    @Column(name="parentPath", nullable=true)
+    @JoinColumn(name="parentPath", nullable=true)
     @Property(
             domainEvent = ParentDomainEvent.class,
             editing = Editing.DISABLED

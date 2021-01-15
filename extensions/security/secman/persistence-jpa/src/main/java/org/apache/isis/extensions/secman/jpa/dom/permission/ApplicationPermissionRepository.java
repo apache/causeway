@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.services.appfeat.ApplicationMemberType;
@@ -55,7 +55,7 @@ import org.apache.isis.extensions.secman.jpa.dom.user.ApplicationUser;
 import lombok.NonNull;
 import lombok.val;
 
-@Repository
+@Service
 @Named("isisExtSecman.applicationPermissionRepository")
 public class ApplicationPermissionRepository
 implements org.apache.isis.extensions.secman.api.permission.ApplicationPermissionRepository<ApplicationPermission> {

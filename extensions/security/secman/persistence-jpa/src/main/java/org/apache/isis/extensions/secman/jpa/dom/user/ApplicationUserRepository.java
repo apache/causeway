@@ -27,7 +27,7 @@ import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.services.eventbus.EventBusService;
@@ -51,7 +51,7 @@ import org.apache.isis.extensions.secman.model.dom.user.ApplicationUser_unlock;
 import lombok.NonNull;
 import lombok.val;
 
-@Repository
+@Service
 @Named("isisExtSecman.applicationUserRepository")
 public class ApplicationUserRepository
 implements org.apache.isis.extensions.secman.api.user.ApplicationUserRepository<ApplicationUser> {

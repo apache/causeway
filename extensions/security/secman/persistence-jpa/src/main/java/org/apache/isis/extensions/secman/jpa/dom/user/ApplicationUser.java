@@ -26,6 +26,8 @@ import java.util.TreeSet;
 import javax.inject.Inject;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
@@ -124,18 +126,22 @@ import lombok.val;
 public class ApplicationUser implements Comparable<ApplicationUser>, 
 org.apache.isis.extensions.secman.api.user.ApplicationUser {
 
-    @Inject private ApplicationUserRepository applicationUserRepository;
-    @Inject private ApplicationPermissionRepository applicationPermissionRepository;
-    @Inject private UserService userService;
+    @Inject private transient ApplicationUserRepository applicationUserRepository;
+    @Inject private transient ApplicationPermissionRepository applicationPermissionRepository;
+    @Inject private transient UserService userService;
     /**
      * Optional service, if configured then is used to evaluate permissions within
      * {@link org.apache.isis.extensions.secman.api.permission.ApplicationPermissionValueSet#evaluate(ApplicationFeatureId, ApplicationPermissionMode)}
      * else will fallback to a {@link org.apache.isis.extensions.secman.api.permission.PermissionsEvaluationService#DEFAULT default}
      * implementation.
      */
-    @Inject private PermissionsEvaluationService permissionsEvaluationService;
-    @Inject private SecurityModuleConfig configBean;
+    @Inject private transient PermissionsEvaluationService permissionsEvaluationService;
+    @Inject private transient SecurityModuleConfig configBean;
 
+    @Id
+    @GeneratedValue
+    private Long id;
+    
     // -- name (derived property)
 
     public static class NameDomainEvent extends PropertyDomainEvent<String> {}
@@ -364,7 +370,7 @@ org.apache.isis.extensions.secman.api.user.ApplicationUser {
 //    @javax.jdo.annotations.Persistent(table="ApplicationUserRoles")
 //    @javax.jdo.annotations.Join(column="userId")
 //    @javax.jdo.annotations.Element(column="roleId")
-    @ManyToMany(mappedBy = "roles")
+    @ManyToMany(mappedBy = "users")
     @JoinTable(
             name = "ApplicationUserRoles", 
             joinColumns = {@JoinColumn(name = "userId")}, 

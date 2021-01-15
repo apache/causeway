@@ -18,14 +18,45 @@
  */
 package org.apache.isis.extensions.secman.jpa;
 
-import org.springframework.context.annotation.ComponentScan;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+
+import org.apache.isis.extensions.secman.jpa.dom.permission.ApplicationPermission;
+import org.apache.isis.extensions.secman.jpa.dom.permission.ApplicationPermissionRepository;
+import org.apache.isis.extensions.secman.jpa.dom.role.ApplicationRole;
+import org.apache.isis.extensions.secman.jpa.dom.role.ApplicationRoleRepository;
+import org.apache.isis.extensions.secman.jpa.dom.tenancy.ApplicationTenancy;
+import org.apache.isis.extensions.secman.jpa.dom.tenancy.ApplicationTenancyRepository;
+import org.apache.isis.extensions.secman.jpa.dom.user.ApplicationUser;
+import org.apache.isis.extensions.secman.jpa.dom.user.ApplicationUserRepository;
+import org.apache.isis.extensions.secman.jpa.seed.SeedSecurityModuleService;
 
 @Configuration
-@ComponentScan(
-        basePackageClasses= {
-                IsisModuleExtSecmanPersistenceJpa.class
-        })
+@Import({
+    ApplicationPermissionRepository.class,
+    ApplicationRoleRepository.class,
+    ApplicationTenancyRepository.class,
+    ApplicationUserRepository.class,
+
+    ApplicationPermission.class,
+    ApplicationRole.class,
+    ApplicationTenancy.class,
+    ApplicationUser.class,
+
+    SeedSecurityModuleService.class,
+
+})
+//@ComponentScan(
+//        basePackageClasses= {
+//                IsisModuleExtSecmanPersistenceJpa.class
+//        })
+@EntityScan(basePackageClasses = {
+        ApplicationPermission.class,
+        ApplicationRole.class,
+        ApplicationTenancy.class,
+        ApplicationUser.class,
+})
 public class IsisModuleExtSecmanPersistenceJpa {
 
 }

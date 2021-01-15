@@ -26,7 +26,7 @@ import java.util.Optional;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.services.factory.FactoryService;
@@ -40,7 +40,7 @@ import org.apache.isis.extensions.secman.model.dom.permission.ApplicationPermiss
 
 import lombok.val;
 
-@Repository
+@Service
 @Named("isisExtSecman.applicationRoleRepository")
 public class ApplicationRoleRepository 
 implements org.apache.isis.extensions.secman.api.role.ApplicationRoleRepository<ApplicationRole> {

@@ -26,6 +26,8 @@ import java.util.TreeSet;
 import javax.inject.Inject;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 
 import org.apache.isis.applib.annotation.BookmarkPolicy;
@@ -89,10 +91,16 @@ import lombok.Setter;
         bookmarking = BookmarkPolicy.AS_ROOT
         )
 public class ApplicationRole 
-implements org.apache.isis.extensions.secman.api.role.ApplicationRole, Comparable<ApplicationRole> {
+implements 
+    org.apache.isis.extensions.secman.api.role.ApplicationRole, 
+    Comparable<ApplicationRole> {
 
-    @Inject private ApplicationFeatureRepository applicationFeatureRepository;
-    @Inject private ApplicationPermissionRepository applicationPermissionRepository;
+    @Inject private transient ApplicationFeatureRepository applicationFeatureRepository;
+    @Inject private transient ApplicationPermissionRepository applicationPermissionRepository;
+    
+    @Id
+    @GeneratedValue
+    private Long id;
     
     // -- name (property)
 
@@ -166,7 +174,7 @@ implements org.apache.isis.extensions.secman.api.role.ApplicationRole, Comparabl
 
     public static class UsersDomainEvent extends CollectionDomainEvent<ApplicationUser> {}
 
-    @ManyToMany(mappedBy = "roles")
+    @ManyToMany
     @Collection(
             domainEvent = UsersDomainEvent.class,
             editing = Editing.DISABLED

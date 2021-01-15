@@ -26,6 +26,9 @@ import java.util.function.Function;
 import javax.inject.Inject;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 
 import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.DomainObject;
@@ -110,17 +113,25 @@ import lombok.experimental.UtilityClass;
 @DomainObjectLayout(
         bookmarking = BookmarkPolicy.AS_CHILD
         )
-public class ApplicationPermission implements org.apache.isis.extensions.secman.api.permission.ApplicationPermission, Comparable<ApplicationPermission> {
+public class ApplicationPermission 
+implements 
+    org.apache.isis.extensions.secman.api.permission.ApplicationPermission, 
+    Comparable<ApplicationPermission> {
 
     private static final int TYPICAL_LENGTH_TYPE = 7;  // ApplicationFeatureType.PACKAGE is longest
-
-
+    
+    @Inject private transient ApplicationFeatureRepositoryDefault applicationFeatureRepository;
+    
+    @Id
+    @GeneratedValue
+    private Long id;
+    
     // -- role (property)
 
     public static class RoleDomainEvent extends PropertyDomainEvent<ApplicationRole> {}
 
 
-    @Column(name="roleId", nullable=false)
+    @JoinColumn(name="roleId", nullable=false)
     @Property(
             domainEvent = RoleDomainEvent.class,
             editing = Editing.DISABLED
@@ -303,6 +314,6 @@ public class ApplicationPermission implements org.apache.isis.extensions.secman.
 
     }
 
-    @Inject private ApplicationFeatureRepositoryDefault applicationFeatureRepository;
+    
 
 }
