@@ -36,7 +36,7 @@ import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2.Mode;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
-import org.apache.isis.core.metamodel.facets.propcoll.memserexcl.MementoSerializationExcludeFacet;
+import org.apache.isis.core.metamodel.facets.propcoll.memserexcl.SnapshotExcludeFacet;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -148,14 +148,14 @@ public class OneToOneAssociationAbstractTest {
 
     @Test
     public void notPersistedWhenDerived() throws Exception {
-        final MementoSerializationExcludeFacet mockFacet = mockFacetIgnoring(MementoSerializationExcludeFacet.class);
+        final SnapshotExcludeFacet mockFacet = mockFacetIgnoring(SnapshotExcludeFacet.class);
         facetedMethod.addFacet(mockFacet);
         assertTrue(objectAssociation.isNotPersisted());
     }
 
     @Test
     public void notPersistedWhenFlaggedAsNotPersisted() throws Exception {
-        final MementoSerializationExcludeFacet mockFacet = mockFacetIgnoring(MementoSerializationExcludeFacet.class);
+        final SnapshotExcludeFacet mockFacet = mockFacetIgnoring(SnapshotExcludeFacet.class);
         facetedMethod.addFacet(mockFacet);
         assertTrue(objectAssociation.isNotPersisted());
     }

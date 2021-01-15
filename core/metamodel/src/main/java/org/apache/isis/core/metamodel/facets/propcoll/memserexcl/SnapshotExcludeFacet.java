@@ -16,25 +16,15 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.annotDomain.Property.mementoSerialization;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Inherited;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+package org.apache.isis.core.metamodel.facets.propcoll.memserexcl;
 
-import org.apache.isis.applib.annotation.MementoSerialization;
-import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.core.metamodel.facetapi.Facet;
 
-//tag::class[]
-@Property(mementoSerialization = MementoSerialization.EXCLUDED) // <.>
-@Inherited
-@Target({
-        ElementType.METHOD, ElementType.FIELD                   // <.>
-})
-@Retention(RetentionPolicy.RUNTIME)
-public @interface MementoSerializationExcludedMetaAnnotation {
+/**
+ * Indicates that a property should be excluded from snapshots (as per
+ * <code>XmlSnapshotService</code>.
+ */
+public interface SnapshotExcludeFacet extends Facet {
 
 }
-//end::class[]

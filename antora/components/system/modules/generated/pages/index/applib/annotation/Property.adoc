@@ -26,7 +26,7 @@ Domain semantics for domain object property.
 
   int maxLength() default -1; // <.>
 
-  MementoSerialization mementoSerialization() default MementoSerialization.NOT_SPECIFIED; // <.>
+  Snapshot snapshot() default Snapshot.NOT_SPECIFIED; // <.>
 
   Class<? extends Specification>[] mustSatisfy() default {}; // <.>
 
@@ -107,7 +107,7 @@ The maximum entry length of a field.
 
 The default value (-1) indicates that no maxLength has been specified.
 --
-<.> `[teal]#*_mementoSerialization_*#` : `xref:system:generated:index/applib/annotation/MementoSerialization.adoc[MementoSerialization]`
+<.> `[teal]#*_snapshot_*#` : `xref:system:generated:index/applib/annotation/MementoSerialization.adoc[MementoSerialization]`
 +
 --
 Indicates whether the property should be included or excluded from mementos.

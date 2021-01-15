@@ -30,7 +30,7 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.Clob;
 
-import demoapp.dom.annotDomain.Property.mementoSerialization.PropertyMementoSerializationVm;
+import demoapp.dom.annotDomain.Property.snapshot.PropertySnapshotVm;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
@@ -50,6 +50,7 @@ import demoapp.dom.annotDomain.Property.projecting.PropertyProjectingVm;
 import demoapp.dom.annotDomain.Property.projecting.child.PropertyProjectingChildVm;
 import demoapp.dom.annotDomain.Property.projecting.jdo.PropertyProjectingChildJdoEntities;
 import demoapp.dom.annotDomain.Property.regexPattern.PropertyRegexPatternVm;
+import demoapp.dom.annotDomain.Property.snapshot.child.PropertySnapshotChildVm;
 import demoapp.dom.types.Samples;
 
 @DomainService(nature=NatureOfService.VIEW, objectType = "demo.PropertyMenu")
@@ -132,13 +133,6 @@ public class PropertyMenu {
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-camera", describedAs = "Snapshot inclusion/exclusion")
-    public PropertyMementoSerializationVm mementoSerialization(){
-        val vm = new PropertyMementoSerializationVm("value");
-        return new PropertyMementoSerializationVm("value");
-    }
-
-    @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-star-half-alt", describedAs = "Regular expressions, such as email")
     public PropertyMustSatisfyVm mustSatisfy(){
         val vm = new PropertyMustSatisfyVm();
@@ -180,6 +174,18 @@ public class PropertyMenu {
         vm.setEmailAddressPropertyUsingMetaAnnotation("flo@bloggs.com");
         vm.setEmailAddressPropertyUsingMetaAnnotationButOverridden("mo@bloggs.org");
         return vm;
+    }
+
+    @Action(semantics = SemanticsOf.SAFE)
+    @ActionLayout(cssClassFa="fa-camera", describedAs = "Snapshot inclusion/exclusion")
+    public PropertySnapshotVm snapshot(){
+        val vm = new PropertySnapshotVm("value");
+
+        vm.getChildren().add(new PropertySnapshotChildVm("child 1"));
+        vm.getChildren().add(new PropertySnapshotChildVm("child 2"));
+        vm.getChildren().add(new PropertySnapshotChildVm("child 3"));
+
+        return new PropertySnapshotVm("value");
     }
 
     private void setSampleBlob(String suffix, Consumer<Blob> blobConsumer) {

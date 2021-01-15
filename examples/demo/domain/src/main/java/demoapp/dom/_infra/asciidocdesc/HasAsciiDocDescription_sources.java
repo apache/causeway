@@ -22,7 +22,7 @@ import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.LabelPosition;
 import org.apache.isis.applib.annotation.MemberOrder;
-import org.apache.isis.applib.annotation.MementoSerialization;
+import org.apache.isis.applib.annotation.Snapshot;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Where;
@@ -33,7 +33,7 @@ import lombok.val;
 
 import demoapp.dom._infra.resources.MarkupVariableResolverService;
 
-@Property(mementoSerialization = MementoSerialization.EXCLUDED)
+@Property(snapshot = Snapshot.EXCLUDED)
 @RequiredArgsConstructor @SuppressWarnings("CdiManagedBeanInconsistencyInspection")
 public class HasAsciiDocDescription_sources {
 

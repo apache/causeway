@@ -35,7 +35,7 @@ import org.apache.isis.core.metamodel.facets.members.hidden.method.HideForContex
 import org.apache.isis.core.metamodel.facets.members.hidden.method.HideForContextFacetViaMethod;
 import org.apache.isis.core.metamodel.facets.members.hidden.method.HideForContextFacetViaMethodFactory;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
-import org.apache.isis.core.metamodel.facets.propcoll.memserexcl.MementoSerializationExcludeFacet;
+import org.apache.isis.core.metamodel.facets.propcoll.memserexcl.SnapshotExcludeFacet;
 import org.apache.isis.core.metamodel.facets.properties.accessor.PropertyAccessorFacetViaAccessor;
 import org.apache.isis.core.metamodel.facets.properties.accessor.PropertyAccessorFacetViaAccessorFactory;
 import org.apache.isis.core.metamodel.facets.properties.autocomplete.PropertyAutoCompleteFacet;
@@ -48,7 +48,7 @@ import org.apache.isis.core.metamodel.facets.properties.defaults.PropertyDefault
 import org.apache.isis.core.metamodel.facets.properties.defaults.method.PropertyDefaultFacetViaMethod;
 import org.apache.isis.core.metamodel.facets.properties.defaults.method.PropertyDefaultFacetViaMethodFactory;
 import org.apache.isis.core.metamodel.facets.properties.disabled.inferred.DisabledFacetOnPropertyInferredFactory;
-import org.apache.isis.core.metamodel.facets.properties.update.NotPersistableFacetInferred;
+import org.apache.isis.core.metamodel.facets.properties.update.SnapshotExcludeFacetInferred;
 import org.apache.isis.core.metamodel.facets.properties.update.PropertyModifyFacetFactory;
 import org.apache.isis.core.metamodel.facets.properties.update.PropertySetAndClearFacetFactory;
 import org.apache.isis.core.metamodel.facets.properties.update.clear.PropertyClearFacet;
@@ -175,8 +175,8 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
         facetFactory.process(new FacetFactory.ProcessMethodContext(Customer.class, null, propertyAccessorMethod, methodRemover, facetedMethod));
 
-        assertNull(facetedMethod.getFacet(MementoSerializationExcludeFacet.class));
-        assertNull(facetedMethod.getFacet(MementoSerializationExcludeFacet.class));
+        assertNull(facetedMethod.getFacet(SnapshotExcludeFacet.class));
+        assertNull(facetedMethod.getFacet(SnapshotExcludeFacet.class));
     }
 
     public void testSetterFacetIsInstalledForModifyMethodAndMethodRemoved() {
@@ -239,9 +239,9 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         facetFactoryForModify.process(processMethodContext);
         disabledFacetOnPropertyInferredFactory.process(processMethodContext);
 
-        Facet facet = facetedMethod.getFacet(MementoSerializationExcludeFacet.class);
+        Facet facet = facetedMethod.getFacet(SnapshotExcludeFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof NotPersistableFacetInferred);
+        assertTrue(facet instanceof SnapshotExcludeFacetInferred);
 
         facet = facetedMethod.getFacet(DisabledFacet.class);
         assertNull(facet);

@@ -50,7 +50,7 @@ See this xref:userguide:btb:about.adoc#view-model-instantiation[tip] for further
 View models must have a no-arg constructor; this is used internally by the framework for subsequent "recreation".
 
 The view model's memento will be derived from the value of the view model object's properties.
-Any xref:refguide:applib-ant:Property.adoc#mementoSerialization[`@Property#mementoSerialization`] properties will be excluded from the memento, as will any properties excluded from the metamodel using xref:refguide:applib-ant:Programmatic.adoc[`@Programmatic`].
+Any properties annotated with xref:refguide:applib-ant:Programmatic.adoc[`@Programmatic`] will be excluded from the memento.
 Properties that are merely xref:refguide:applib-ant:Property.adoc#hidden[hidden] _are_ included in the memento.
 
 View models, as defined by `@DomainObject(nature=VIEW_MODEL)` have some limitations:
@@ -64,8 +64,8 @@ If you are using view models heavily, you may wish to restrict yourself to just 
 
 [NOTE]
 ====
-The `@DomainObject` annotation allows the `objectType` to be specified, 
-meaning that it is compatible with the metamodel validation check enabled by the 
+The `@DomainObject` annotation allows the `objectType` to be specified,
+meaning that it is compatible with the metamodel validation check enabled by the
 xref:refguide:config:configuring-core.adoc#metamodel-validation[`explicitObjectType`] configuration property.
 
 Instead, use xref:refguide:applib-ant:DomainObject.adoc#nature[`@DomainObject#nature()`] with `Nature.VIEW_MODEL`, and specify xref:refguide:applib-ant:DomainObject.adoc#objectType[`@DomainObject#objectType()`].

@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.services.core.xmlSnapshotService;
+package demoapp.dom.annotDomain.Property.snapshot.child;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,76 +24,73 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 import org.apache.isis.applib.annotation.Collection;
-import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.MemberOrder;
-import org.apache.isis.applib.annotation.Snapshot;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.PropertyLayout;
+import org.apache.isis.applib.annotation.Snapshot;
 
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.services.core.xmlSnapshotService.child.XmlSnapshotChildVm;
-import demoapp.dom.services.core.xmlSnapshotService.peer.XmlSnapshotPeerVm;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.val;
 
-@XmlRootElement(name = "root")
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+import demoapp.dom.annotDomain.Property.hidden.PropertyHiddenVm;
+import demoapp.dom.annotDomain.Property.snapshot.SnapshotExcludedMetaAnnotation;
+import demoapp.dom.annotDomain.Property.snapshot.SnapshotIncludedMetaAnnotation;
+
+//tag::class[]
+@XmlRootElement(name = "child")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(
-    nature=Nature.VIEW_MODEL,
-    objectType = "demo.XmlSnapshotParentVm"
+        nature=Nature.VIEW_MODEL,
+        objectType = "demo.PropertyHiddenChildVm"
 )
 @NoArgsConstructor
-public class XmlSnapshotParentVm implements HasAsciiDocDescription {
+public class PropertySnapshotChildVm implements HasAsciiDocDescription {
 
-    public XmlSnapshotParentVm(String text) {
-        this.text = text;
-        this.otherText = text;
+    public PropertySnapshotChildVm(String value) {
+        excludedProperty = value;
+        includedProperty = value;
     }
 
     public String title() {
-        return "XmlSnapshotService parent VM";
+        return "Property#xmlSnapshot (child object)";
     }
 
-    @Property(editing = Editing.ENABLED)
-    @MemberOrder(name = "properties", sequence = "1")
+//tag::annotated-excluded[]
+    @Property(
+        snapshot = Snapshot.EXCLUDED
+    )
+    @PropertyLayout(
+        describedAs = "@Property(snapshot = EXCLUDED)"
+    )
+    @MemberOrder(name = "annotations", sequence = "2")
     @XmlElement(required = true)
     @Getter @Setter
-    private String text;
+    private String excludedProperty;
+//end::annotated-excluded[]
 
-    @Property(editing = Editing.ENABLED, snapshot = Snapshot.EXCLUDED)
-    @MemberOrder(name = "properties", sequence = "2")
+//tag::annotated-included[]
+    @Property(
+            snapshot = Snapshot.INCLUDED
+    )
+    @PropertyLayout(
+            describedAs = "@Property(snapshot = INCLUDED)"
+    )
+    @MemberOrder(name = "annotations", sequence = "2")
     @XmlElement(required = true)
     @Getter @Setter
-    private String otherText;
+    private String includedProperty;
+//end::annotated-included[]
 
-    @Property(editing = Editing.ENABLED)
-    @MemberOrder(name = "properties", sequence = "3")
-    @XmlElement(required = false)
-    @Getter @Setter
-    private XmlSnapshotPeerVm peer;
-
-//tag::class-collections-children[]
-    @Collection()
-    @CollectionLayout()
-    @Getter
-    private List<XmlSnapshotChildVm> children = new ArrayList<>();
-
-    // ...
-//end::class-collections-children[]
-
-    public XmlSnapshotParentVm addChild(final String value) {
-        val childVm = new XmlSnapshotChildVm(value);
-        getChildren().add(childVm);
-        return this;
-    }
 
 }
+//end::class[]

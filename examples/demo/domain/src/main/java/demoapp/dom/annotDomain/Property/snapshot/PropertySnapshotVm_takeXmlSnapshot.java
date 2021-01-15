@@ -16,7 +16,9 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.annotDomain.Property.mementoSerialization;
+package demoapp.dom.annotDomain.Property.snapshot;
+
+import java.util.Locale;
 
 import javax.inject.Inject;
 
@@ -34,22 +36,41 @@ import lombok.val;
     semantics = SemanticsOf.SAFE
 )
 @RequiredArgsConstructor
-public class PropertyMementoSerializationVm_takeSnapshot {
+public class PropertySnapshotVm_takeXmlSnapshot {
 
     @Inject XmlSnapshotService xmlSnapshotService;
     @Inject XmlService xmlService;
 
-    private final PropertyMementoSerializationVm vm;
+    private final PropertySnapshotVm vm;
+
+    public static enum FileType {
+        XML,
+        XSD
+    }
 
 //tag::class[]
-    public Clob act(String fileName) {
+    public Clob act(
+            final FileType fileType,
+            final String fileName,
+            final boolean includeChildren,
+            final boolean forceIncludeExcluded) {
         val builder = xmlSnapshotService.builderFor(vm);
+        if(includeChildren) {
+            builder.includePath("children");
+        }
+        if(forceIncludeExcluded) {
+            builder.includePath("excludedProperty");
+        }
         val snapshot = builder.build();
-        val doc = snapshot.getXmlDocument();
+        val doc = fileType == FileType.XML
+                ? snapshot.getXmlDocument() : snapshot.getXsdDocument();
         return asClob(xmlService.asString(doc), fileName);
     }
-    public String default0Act() {
-        return "snapshot.xml";
+    public FileType default0Act() {
+        return FileType.XML;
+    }
+    public String default1Act(final FileType fileType) {
+        return "snapshot." + fileType.name().toLowerCase();
     }
 
     private static Clob asClob(final String xmlStr, final String fileName) {

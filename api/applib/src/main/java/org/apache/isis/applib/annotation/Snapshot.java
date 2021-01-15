@@ -16,16 +16,30 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+package org.apache.isis.applib.annotation;
 
-package org.apache.isis.core.metamodel.facets.properties.update;
+/**
+ * Whether the property is included if the domain object graph is serialized
+ * into a snapshot.
+ * @since 2.x {@index}
+ */
+public enum Snapshot {
 
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.propcoll.memserexcl.MementoSerializationExcludeFacetAbstract;
+    /**
+     * Property is included in any snapshots.
+     * This is the fallback/default if not explicitly excluded.
+     */
+    INCLUDED,
 
-public class NotPersistableFacetInferred extends MementoSerializationExcludeFacetAbstract {
+    /**
+     * Property is excluded from any snapshots.
+     */
+    EXCLUDED,
 
-    public NotPersistableFacetInferred(final FacetHolder holder) {
-        super(holder);
-    }
+    /**
+     * Ignore the value provided by this annotation (meaning that the framework
+     * will keep searching, in meta annotations or superclasses/interfaces).
+     */
+    NOT_SPECIFIED
 
 }

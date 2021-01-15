@@ -75,7 +75,7 @@ public class PropertySetAndClearFacetFactory extends MethodPrefixBasedFacetFacto
             FacetUtil.addFacet(new PropertySetterFacetViaSetterMethod(setMethod, property));
             FacetUtil.addFacet(new PropertyInitializationFacetViaSetterMethod(setMethod, property));
         } else {
-            FacetUtil.addFacet(new NotPersistableFacetInferred(property));
+            FacetUtil.addFacet(new SnapshotExcludeFacetInferred(property));
 
             // previously we also added the DisabledFacetAlwaysEverywhere facet here.
             // however, the PropertyModifyFacetFactory (which comes next) might install a PropertySetterFacet instead.

@@ -54,7 +54,7 @@ Maximum number of characters for string parameters; ignored otherwise +
 +
 TIP: In many/most cases you should however use xref:refguide:applib-ant:Column.adoc[`@Column#length()`]
 
-<.> xref:refguide:applib-ant:Property.adoc#mementoSerialization[`mementoSerialization()`]
+<.> xref:refguide:applib-ant:Property.adoc#snapshot[`snapshot()`]
 +
 Whether to exclude from snapshots. +
 
@@ -134,7 +134,7 @@ include::Property/fileAccept.adoc[leveloffset=+1]
 include::Property/hidden.adoc[leveloffset=+1]
 include::Property/maxLength.adoc[leveloffset=+1]
 include::Property/mustSatisfy.adoc[leveloffset=+1]
-include::Property/mementoSerialization.adoc[leveloffset=+1]
+include::Property/snapshot.adoc[leveloffset=+1]
 include::Property/optionality.adoc[leveloffset=+1]
 include::Property/projecting.adoc[leveloffset=+1]
 include::Property/regexPattern.adoc[leveloffset=+1]

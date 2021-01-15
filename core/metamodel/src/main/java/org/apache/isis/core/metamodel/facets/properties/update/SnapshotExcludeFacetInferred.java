@@ -17,20 +17,15 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.propcoll.memserexcl;
+package org.apache.isis.core.metamodel.facets.properties.update;
 
-import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.propcoll.memserexcl.SnapshotExcludeFacetAbstract;
 
-public abstract class MementoSerializationExcludeFacetAbstract extends FacetAbstract implements MementoSerializationExcludeFacet {
+public class SnapshotExcludeFacetInferred extends SnapshotExcludeFacetAbstract {
 
-    public static Class<? extends Facet> type() {
-        return MementoSerializationExcludeFacet.class;
-    }
-
-    public MementoSerializationExcludeFacetAbstract(final FacetHolder holder) {
-        super(type(), holder);
+    public SnapshotExcludeFacetInferred(final FacetHolder holder) {
+        super(holder);
     }
 
 }
