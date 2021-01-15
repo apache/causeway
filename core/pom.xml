@@ -158,7 +158,7 @@
 		<npm.version>6.13.1</npm.version>
 
 		<objenesis.version>3.1</objenesis.version>
-		<ognl.version>3.2.17</ognl.version>
+		<ognl.version>3.2.18</ognl.version>
 
 		<pdfbox.version>2.0.22</pdfbox.version>
 		<picocontainer.version>2.15</picocontainer.version>
@@ -172,7 +172,7 @@
 		<shiro.version>1.7.0</shiro.version>
 		<simpleslackapi.version>1.2.0</simpleslackapi.version>
 		<slf4j-api.version>1.7.30</slf4j-api.version> <!-- as provided by spring-boot, needed to solve convergence issues -->
-		<spring-boot.version>2.4.1</spring-boot.version> <!-- has no effect here, needs to be set in isis-parent/pom.xml -->
+		<spring-boot.version>2.4.2</spring-boot.version> <!-- has no effect here, needs to be set in isis-parent/pom.xml -->
 		<summernote.version>0.8.11</summernote.version>
 		<swagger-core.version>1.6.2</swagger-core.version>
 
