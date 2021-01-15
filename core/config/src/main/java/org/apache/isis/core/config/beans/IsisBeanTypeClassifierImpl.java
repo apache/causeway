@@ -79,10 +79,8 @@ implements IsisBeanTypeClassifier {
                 return BeanClassification.delegated(BeanSort.MANAGED_BEAN_CONTRIBUTING, objectType(aDomainObject));
             case MIXIN:
                 return BeanClassification.selfManaged(BeanSort.MIXIN);
-            case JDO_ENTITY:
-                return BeanClassification.selfManaged(BeanSort.ENTITY_JDO);
-            case JPA_ENTITY:
-                return BeanClassification.selfManaged(BeanSort.ENTITY_JPA);
+            case ENTITY:
+                return BeanClassification.selfManaged(BeanSort.ENTITY);
             case VIEW_MODEL:
             case NOT_SPECIFIED:
                 //because object is not associated with a persistence context unless discovered above

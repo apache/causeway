@@ -140,7 +140,7 @@ public class ViewModelSemanticCheckingFacetFactoryTest {
     @Test
     public void whenInvalidDomainObjectWithNatureJdoEntityImplementingRecreatableDomainObject() throws Exception {
 
-        @org.apache.isis.applib.annotation.DomainObject(nature = Nature.JDO_ENTITY)
+        @org.apache.isis.applib.annotation.DomainObject(nature = Nature.ENTITY)
         class InvalidDomainObjectWithNatureJdoEntityImplementingRecreatableDomainObject implements RecreatableDomainObject {
             @Override
             public String __isis_memento() {
@@ -153,7 +153,8 @@ public class ViewModelSemanticCheckingFacetFactoryTest {
 
         final ValidationFailures validationFailures = processThenValidate(InvalidDomainObjectWithNatureJdoEntityImplementingRecreatableDomainObject.class);
         assertThat(validationFailures.getNumberOfFailures(), is(1));
-        assertThat(validationFailures.getMessages().iterator().next(), containsString("should not be annotated with @DomainObject with nature of JDO_ENTITY and also implement RecreatableDomainObject (specify a nature of VIEW_MODEL)"));
+        assertThat(validationFailures.getMessages().iterator().next(), 
+                containsString("should not be annotated with @DomainObject with nature of ENTITY and also implement RecreatableDomainObject (specify a nature of VIEW_MODEL)"));
     }
 
 

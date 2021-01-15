@@ -20,6 +20,10 @@ package org.apache.isis.applib.annotation;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.springframework.cglib.proxy.Mixin;
+
+import org.apache.isis.applib.ViewModel;
+
 /**
  * The different sorts of domain objects recognized by Isis.
  *
@@ -39,32 +43,14 @@ public enum Nature {
     NOT_SPECIFIED,
 
     /**
-     * A domain entity whose persistence is managed internally by Isis, using JDO as the persistence implementation.
+     * A domain entity whose persistence is managed internally by Isis, 
+     * using JPA or JDO as the persistence implementation.
+     * <p>
      * Domain entities are considered to be part of the domain model layer.
-     *
      * <p>
-     *     Domain entities are considered to be part of the domain model layer.
-     * </p>
-     *
-     * <p>
-     *    Currently implies no additional semantics other than documentation.
-     * </p>
+     * Currently implies no additional semantics other than documentation.
      */
-    JDO_ENTITY,
-    
-    /**
-     * A domain entity whose persistence is managed internally by Isis, using JPA as the persistence implementation.
-     * Domain entities are considered to be part of the domain model layer.
-     *
-     * <p>
-     *     Domain entities are considered to be part of the domain model layer.
-     * </p>
-     *
-     * <p>
-     *    Currently implies no additional semantics other than documentation.
-     * </p>
-     */
-    JPA_ENTITY,
+    ENTITY,
 
     /**
      * An object that is conceptually part of the application layer, and which surfaces behavior and/or state that
@@ -103,8 +89,7 @@ public enum Nature {
     ;
     
     public boolean isEntity() {
-        return this == Nature.JDO_ENTITY 
-                || this == Nature.JPA_ENTITY;
+        return this == Nature.ENTITY;
     }
     
     

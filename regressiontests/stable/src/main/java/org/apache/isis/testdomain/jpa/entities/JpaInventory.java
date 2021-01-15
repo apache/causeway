@@ -43,7 +43,7 @@ import lombok.ToString;
 @Entity
 @DomainObject(
         objectType = "testdomain.jdo.Inventory",
-        nature = Nature.JPA_ENTITY, //TODO[2033] should not be required, when using JPA quick classify SPI
+        nature = Nature.ENTITY, //TODO[2033] should not be required, when using JPA quick classify SPI
         entityChangePublishing = Publishing.ENABLED)
 @NamedQuery(
         name = "JpaInventory.findAffordableProducts", 

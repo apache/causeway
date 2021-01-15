@@ -98,11 +98,8 @@ public class IsisBeanTypeRegistryDefault implements IsisBeanTypeRegistry {
             case MIXIN:
                 mixinTypes.add(cls);
                 return;
-            case ENTITY_JDO:
+            case ENTITY:
                 entityTypesJdo.add(cls);
-                return;
-            case ENTITY_JPA:
-                entityTypesJpa.add(cls);
                 return;
             case VIEW_MODEL:
                 viewModelTypes.add(cls);

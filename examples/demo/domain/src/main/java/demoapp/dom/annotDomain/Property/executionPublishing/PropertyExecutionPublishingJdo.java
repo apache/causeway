@@ -42,7 +42,7 @@ import demoapp.dom.annotDomain._interactions.ExposeCapturedInteractions;
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
 @DomainObject(
-        nature=Nature.JDO_ENTITY
+        nature=Nature.ENTITY
         , objectType = "demo.PropertyPublishingJdo"
         , editing = Editing.ENABLED
 )

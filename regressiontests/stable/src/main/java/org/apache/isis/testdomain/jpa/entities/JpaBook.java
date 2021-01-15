@@ -46,7 +46,7 @@ import lombok.extern.log4j.Log4j2;
 @DiscriminatorValue("Book")
 @DomainObject(
         objectType = "testdomain.jpa.Book",
-        nature = Nature.JPA_ENTITY, //TODO[ISIS-2332] should not be required, when using JPA quick classify SPI 
+        nature = Nature.ENTITY, //TODO[ISIS-2332] should not be required, when using JPA quick classify SPI 
         entityChangePublishing = Publishing.ENABLED)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString(callSuper = true)

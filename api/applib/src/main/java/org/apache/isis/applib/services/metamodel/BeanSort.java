@@ -38,7 +38,7 @@ public enum BeanSort {
      * with a persistence layer. <p>  see also {@link #VIEW_MODEL}
      *
      */
-    ENTITY_JDO, ENTITY_JPA,
+    ENTITY,
     /**
      * Injectable object, associated with a lifecycle context
      * (application-scoped, request-scoped, ...).
@@ -90,13 +90,10 @@ public enum BeanSort {
         return this == COLLECTION;
     }
 
-    public boolean isEntityJdo() {
-        return this == ENTITY_JDO;
+    public boolean isEntity() {
+        return this == ENTITY;
     }
     
-    public boolean isEntityJpa() {
-        return this == ENTITY_JPA;
-    }
     
     public boolean isUnknown() {
         return this == UNKNOWN;
@@ -114,10 +111,6 @@ public enum BeanSort {
         }
 
         return true;
-    }
-    
-    public boolean isEntity() {
-        return isEntityJdo() || isEntityJpa();
     }
 
     public boolean isWrappingSupported() {

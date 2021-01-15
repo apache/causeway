@@ -591,7 +591,7 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
 
     public static class Nature extends DomainObjectAnnotationFacetFactoryTest {
 
-        @DomainObject(nature = org.apache.isis.applib.annotation.Nature.JDO_ENTITY)
+        @DomainObject(nature = org.apache.isis.applib.annotation.Nature.ENTITY)
         class CustomerWithDomainObjectAndNatureSetToJdoEntity {
         }
 

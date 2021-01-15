@@ -40,7 +40,7 @@ import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
 @DomainObject(
-        nature=Nature.JDO_ENTITY
+        nature=Nature.ENTITY
         , objectType = "demo.PropertyProjectingChildJdo"
         , editing = Editing.DISABLED
 )

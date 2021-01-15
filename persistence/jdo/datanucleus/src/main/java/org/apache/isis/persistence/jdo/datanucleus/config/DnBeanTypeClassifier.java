@@ -29,7 +29,7 @@ import static org.apache.isis.commons.internal.reflection._Annotations.findNeare
 import lombok.val;
 
 /**
- * ServiceLoader plugin, classifies PersistenceCapable types into {@link BeanSort#ENTITY_JDO}
+ * ServiceLoader plugin, classifies PersistenceCapable types into {@link BeanSort#ENTITY}
  * @since 2.0
  */
 public class DnBeanTypeClassifier implements IsisBeanTypeClassifier {
@@ -49,7 +49,7 @@ public class DnBeanTypeClassifier implements IsisBeanTypeClassifier {
                 return null; // don't categorize as entity ... fall through in the caller's logic
             }
             
-            return BeanClassification.selfManaged(BeanSort.ENTITY_JDO);
+            return BeanClassification.selfManaged(BeanSort.ENTITY);
         }
         
         return null; // we don't feel responsible to classify given type

@@ -41,7 +41,7 @@ import demoapp.dom.annotDomain._commands.ExposePersistedCommands;
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
 @DomainObject(
-        nature=Nature.JDO_ENTITY
+        nature=Nature.ENTITY
         , objectType = "demo.PropertyCommandJdo"
         , editing = Editing.ENABLED
 )

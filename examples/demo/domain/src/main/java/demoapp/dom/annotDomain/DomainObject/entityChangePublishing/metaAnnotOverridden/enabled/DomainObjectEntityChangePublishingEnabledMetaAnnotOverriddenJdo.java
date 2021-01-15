@@ -41,7 +41,7 @@ import demoapp.dom.annotDomain.DomainObject.entityChangePublishing.metaAnnotOver
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
 @DomainObjectEntityChangePublishingDisabledMetaAnnotation                   // <.>
 @DomainObject(
-        nature=Nature.JDO_ENTITY
+        nature=Nature.ENTITY
         , objectType = "demo.DomainObjectAuditingEnabledMetaAnnotOverriddenJdo"
         , entityChangePublishing = Publishing.ENABLED         // <.>
         , bounding = Bounding.BOUNDED

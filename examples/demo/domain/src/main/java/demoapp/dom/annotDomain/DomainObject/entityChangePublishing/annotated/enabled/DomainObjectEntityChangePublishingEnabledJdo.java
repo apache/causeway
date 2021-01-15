@@ -39,7 +39,7 @@ import demoapp.dom.annotDomain.DomainObject.entityChangePublishing.DomainObjectE
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
 @DomainObject(
-    nature=Nature.JDO_ENTITY
+    nature=Nature.ENTITY
     , objectType = "demo.DomainObjectAuditingEnabledJdo"
     , entityChangePublishing = Publishing.ENABLED            // <.>
     , bounding = Bounding.BOUNDED

@@ -39,7 +39,7 @@ import lombok.Setter;
 @Entity
 @DomainObject(
         objectType = "testdomain.jpa.ProductComment",
-        nature = Nature.JPA_ENTITY) //TODO[ISIS-2332] should not be required, when using JPA quick classify SPI
+        nature = Nature.ENTITY) //TODO[ISIS-2332] should not be required, when using JPA quick classify SPI
 public class JpaProductComment implements Timestampable {
 
     @Id

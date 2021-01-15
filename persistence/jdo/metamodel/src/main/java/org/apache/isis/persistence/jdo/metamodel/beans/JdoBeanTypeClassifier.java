@@ -49,7 +49,7 @@ public class JdoBeanTypeClassifier implements IsisBeanTypeClassifier {
                 return null; // don't categorize as entity ... fall through in the caller's logic
             }
             
-            return BeanClassification.selfManaged(BeanSort.ENTITY_JDO);
+            return BeanClassification.selfManaged(BeanSort.ENTITY);
         }
         
         return null; // we don't feel responsible to classify given type
