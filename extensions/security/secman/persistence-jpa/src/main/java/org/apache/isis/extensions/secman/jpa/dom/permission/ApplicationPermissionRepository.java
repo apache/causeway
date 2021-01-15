@@ -49,6 +49,7 @@ import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureType;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionMode;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionRule;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionValue;
+import org.apache.isis.extensions.secman.jpa.dom.constants.NamedQueryNames;
 import org.apache.isis.extensions.secman.jpa.dom.role.ApplicationRole;
 import org.apache.isis.extensions.secman.jpa.dom.user.ApplicationUser;
 
@@ -80,7 +81,7 @@ implements org.apache.isis.extensions.secman.api.permission.ApplicationPermissio
 
     public List<ApplicationPermission> findByRole(@NonNull final ApplicationRole role) {
         return repository.allMatches(
-                Query.named(ApplicationPermission.class, "findByRole")
+                Query.named(ApplicationPermission.class, NamedQueryNames.PERMISSION_BY_ROLE)
                     .withParameter("role", role));
     }
 
@@ -97,7 +98,7 @@ implements org.apache.isis.extensions.secman.api.permission.ApplicationPermissio
 
     private List<ApplicationPermission> findByUser(final String username) {
         return repository.allMatches(
-                Query.named(ApplicationPermission.class, "findByUser")
+                Query.named(ApplicationPermission.class, NamedQueryNames.PERMISSION_BY_USER)
                     .withParameter("username", username));
     }
 
@@ -161,7 +162,7 @@ implements org.apache.isis.extensions.secman.api.permission.ApplicationPermissio
             final ApplicationPermissionRule rule,
             final ApplicationFeatureType type) {
         return repository.allMatches(Query.named(
-                        ApplicationPermission.class, "findByRoleAndRuleAndFeatureType")
+                        ApplicationPermission.class, NamedQueryNames.PERMISSION_BY_ROLE_RULE_FEATURE)
                     .withParameter("role", role)
                     .withParameter("rule", rule)
                     .withParameter("featureType", type))
@@ -191,7 +192,7 @@ implements org.apache.isis.extensions.secman.api.permission.ApplicationPermissio
 
         return repository
                 .uniqueMatch(Query.named(
-                                ApplicationPermission.class, "findByRoleAndRuleAndFeature")
+                                ApplicationPermission.class, NamedQueryNames.PERMISSION_BY_ROLE_RULE_FEATURE_FQN)
                         .withParameter("role", role)
                         .withParameter("rule", rule)
                         .withParameter("featureType", type)
@@ -211,7 +212,7 @@ implements org.apache.isis.extensions.secman.api.permission.ApplicationPermissio
     public Collection<ApplicationPermission> findByFeature(final ApplicationFeatureId featureId) {
         return repository.allMatches(
                 Query.named(
-                        ApplicationPermission.class, "findByFeature")
+                        ApplicationPermission.class, NamedQueryNames.PERMISSION_BY_FEATURE)
                 .withParameter("featureType", featureId.getType())
                 .withParameter("featureFqn", featureId.getFullyQualifiedName()))
                 .stream()

@@ -33,6 +33,7 @@ import org.apache.isis.applib.services.queryresultscache.QueryResultsCache;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.collections._Sets;
+import org.apache.isis.extensions.secman.jpa.dom.constants.NamedQueryNames;
 import org.apache.isis.extensions.secman.jpa.dom.user.ApplicationUser;
 
 import lombok.NonNull;
@@ -68,7 +69,7 @@ implements org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancyRepos
         if (search == null) {
             return Collections.emptySortedSet();
         }
-        return repository.allMatches(Query.named(ApplicationTenancy.class, "findByNameOrPathMatching")
+        return repository.allMatches(Query.named(ApplicationTenancy.class, NamedQueryNames.TENANCY_BY_NAME_OR_PATH_MATCHING)
                 .withParameter("regex", String.format("(?i).*%s.*", search.replace("*", ".*").replace("?", "."))))
                 .stream()
                 .collect(_Sets.toUnmodifiableSorted());
@@ -86,7 +87,7 @@ implements org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancyRepos
     }
 
     public ApplicationTenancy findByName(final String name) {
-        return repository.uniqueMatch(Query.named(ApplicationTenancy.class, "findByName")
+        return repository.uniqueMatch(Query.named(ApplicationTenancy.class, NamedQueryNames.TENANCY_BY_NAME)
                 .withParameter("name", name)).orElse(null);
     }
 
@@ -106,7 +107,7 @@ implements org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancyRepos
         if (path == null) {
             return null;
         }
-        return repository.uniqueMatch(Query.named(ApplicationTenancy.class, "findByPath")
+        return repository.uniqueMatch(Query.named(ApplicationTenancy.class, NamedQueryNames.TENANCY_BY_PATH)
                 .withParameter("path", path))
                 .orElse(null);
     }

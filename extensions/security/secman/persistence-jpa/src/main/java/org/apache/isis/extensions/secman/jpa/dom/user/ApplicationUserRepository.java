@@ -44,6 +44,7 @@ import org.apache.isis.extensions.secman.api.encryption.PasswordEncryptionServic
 import org.apache.isis.extensions.secman.api.events.UserCreatedEvent;
 import org.apache.isis.extensions.secman.api.user.AccountType;
 import org.apache.isis.extensions.secman.api.user.ApplicationUserStatus;
+import org.apache.isis.extensions.secman.jpa.dom.constants.NamedQueryNames;
 import org.apache.isis.extensions.secman.jpa.dom.role.ApplicationRole;
 import org.apache.isis.extensions.secman.model.dom.user.ApplicationUser_lock;
 import org.apache.isis.extensions.secman.model.dom.user.ApplicationUser_unlock;
@@ -98,7 +99,7 @@ implements org.apache.isis.extensions.secman.api.user.ApplicationUserRepository<
 
     @Override
     public Optional<ApplicationUser> findByUsername(final String username) {
-        return repository.uniqueMatch(Query.named(ApplicationUser.class, "findByUsername")
+        return repository.uniqueMatch(Query.named(ApplicationUser.class, NamedQueryNames.USER_BY_USERNAME)
                 .withParameter("username", username));
     }
 
@@ -110,7 +111,7 @@ implements org.apache.isis.extensions.secman.api.user.ApplicationUserRepository<
     }
 
     public Optional<ApplicationUser> findByEmailAddress(final String emailAddress) {
-        return repository.uniqueMatch(Query.named(ApplicationUser.class, "findByEmailAddress")
+        return repository.uniqueMatch(Query.named(ApplicationUser.class, NamedQueryNames.USER_BY_EMAIL)
                 .withParameter("emailAddress", emailAddress));
     }
 
@@ -119,7 +120,7 @@ implements org.apache.isis.extensions.secman.api.user.ApplicationUserRepository<
     @Override
     public Collection<ApplicationUser> find(final String search) {
         final String regex = String.format("(?i).*%s.*", search.replace("*", ".*").replace("?", "."));
-        return repository.allMatches(Query.named(ApplicationUser.class, "find")
+        return repository.allMatches(Query.named(ApplicationUser.class, NamedQueryNames.USER_FIND)
                 .withParameter("regex", regex))
                 .stream()
                 .collect(_Sets.toUnmodifiableSorted());
@@ -129,7 +130,7 @@ implements org.apache.isis.extensions.secman.api.user.ApplicationUserRepository<
 
     @Override
     public Collection<ApplicationUser> findByAtPath(final String atPath) {
-        return repository.allMatches(Query.named(ApplicationUser.class, "findByAtPath")
+        return repository.allMatches(Query.named(ApplicationUser.class, NamedQueryNames.USER_BY_ATPATH)
                 .withParameter("atPath", atPath))
                 .stream()
                 .collect(_Sets.toUnmodifiableSorted());

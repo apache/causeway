@@ -26,7 +26,11 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.Collection;
@@ -42,42 +46,38 @@ import org.apache.isis.applib.util.Equality;
 import org.apache.isis.applib.util.Hashing;
 import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.applib.util.ToString;
+import org.apache.isis.extensions.secman.jpa.dom.constants.NamedQueryNames;
 
 import lombok.Getter;
 import lombok.Setter;
 
-//@javax.jdo.annotations.PersistenceCapable(
-//        identityType = IdentityType.APPLICATION,
-//        schema = "isisExtensionsSecman",
-//        table = "ApplicationTenancy")
-//@javax.jdo.annotations.Inheritance(
-//        strategy = InheritanceStrategy.NEW_TABLE)
-//@javax.jdo.annotations.DatastoreIdentity(
-//        strategy = IdGeneratorStrategy.NATIVE, column = "id")
-//@javax.jdo.annotations.Version(
-//        strategy = VersionStrategy.VERSION_NUMBER,
-//        column = "version")
-//@javax.jdo.annotations.Uniques({
-//    @javax.jdo.annotations.Unique(
-//            name = "ApplicationTenancy_name_UNQ", members = { "name" })
-//})
-//@javax.jdo.annotations.Queries( {
-//    @javax.jdo.annotations.Query(
-//            name = "findByPath", language = "JDOQL",
-//            value = "SELECT "
-//                    + "FROM org.apache.isis.extensions.secman.jdo.dom.tenancy.ApplicationTenancy "
-//                    + "WHERE path == :path"),
-//    @javax.jdo.annotations.Query(
-//            name = "findByName", language = "JDOQL",
-//            value = "SELECT "
-//                    + "FROM org.apache.isis.extensions.secman.jdo.dom.tenancy.ApplicationTenancy "
-//                    + "WHERE name == :name"),
-//    @javax.jdo.annotations.Query(
-//            name = "findByNameOrPathMatching", language = "JDOQL",
-//            value = "SELECT "
-//                    + "FROM org.apache.isis.extensions.secman.jdo.dom.tenancy.ApplicationTenancy "
-//                    + "WHERE name.matches(:regex) || path.matches(:regex) ")})
 @Entity
+@Table(
+        schema = "isisExtensionsSecman",
+        name = "ApplicationTenancy", 
+        uniqueConstraints =
+            @UniqueConstraint(
+                    name = "ApplicationTenancy_name_UNQ", 
+                    columnNames={"name"})
+)
+@NamedQueries({
+    @NamedQuery(
+            name = NamedQueryNames.TENANCY_BY_PATH, 
+            query = "SELECT x "
+                  + "FROM org.apache.isis.extensions.secman.jpa.dom.tenancy.ApplicationTenancy x "
+                  + "WHERE x.path = :path"),
+    @NamedQuery(
+            name = NamedQueryNames.TENANCY_BY_NAME, 
+            query = "SELECT x "
+                  + "FROM org.apache.isis.extensions.secman.jpa.dom.tenancy.ApplicationTenancy x "
+                  + "WHERE x.name = :name"),
+//TODO not sure how to convert these
+//    @NamedQuery(
+//            name = NamedQueryNames.TENANCY_BY_NAME_OR_PATH_MATCHING, 
+//            query = "SELECT x "
+//                  + "FROM org.apache.isis.extensions.secman.jpa.dom.tenancy.ApplicationTenancy x "
+//                  + "WHERE x.name.matches(:regex) || x.path.matches(:regex)"),
+})
 @DomainObject(
         objectType = "isissecurity.ApplicationTenancy",
         autoCompleteRepository = ApplicationTenancyRepository.class,

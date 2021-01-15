@@ -26,9 +26,14 @@ import java.util.TreeSet;
 import javax.inject.Inject;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.Bounding;
@@ -48,38 +53,38 @@ import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.applib.util.ToString;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionMode;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionRule;
+import org.apache.isis.extensions.secman.jpa.dom.constants.NamedQueryNames;
 import org.apache.isis.extensions.secman.jpa.dom.permission.ApplicationPermission;
 import org.apache.isis.extensions.secman.jpa.dom.permission.ApplicationPermissionRepository;
 import org.apache.isis.extensions.secman.jpa.dom.user.ApplicationUser;
+import org.apache.isis.persistence.jpa.applib.integration.JpaEntityInjectionPointResolver;
 
 import lombok.Getter;
 import lombok.Setter;
 
-//@javax.jdo.annotations.PersistenceCapable(
-//        identityType = IdentityType.DATASTORE,
-//        schema = "isisExtensionsSecman",
-//        table = "ApplicationRole")
-//@javax.jdo.annotations.Inheritance(
-//        strategy = InheritanceStrategy.NEW_TABLE)
-//@javax.jdo.annotations.DatastoreIdentity(
-//        strategy = IdGeneratorStrategy.NATIVE, column = "id")
-//@javax.jdo.annotations.Uniques({
-//    @javax.jdo.annotations.Unique(
-//            name = "ApplicationRole_name_UNQ", members = { "name" })
-//})
-//@javax.jdo.annotations.Queries({
-//    @javax.jdo.annotations.Query(
-//            name = "findByName", language = "JDOQL",
-//            value = "SELECT "
-//                    + "FROM org.apache.isis.extensions.secman.jdo.dom.role.ApplicationRole "
-//                    + "WHERE name == :name"),
-//    @javax.jdo.annotations.Query(
-//            name = "findByNameContaining", language = "JDOQL",
-//            value = "SELECT "
-//                    + "FROM org.apache.isis.extensions.secman.jdo.dom.role.ApplicationRole "
-//                    + "WHERE name.matches(:nameRegex) ")
-//})
 @Entity
+@Table(
+        schema = "isisExtensionsSecman",
+        name = "ApplicationRole", 
+        uniqueConstraints =
+            @UniqueConstraint(
+                    name = "ApplicationRole_name_UNQ", 
+                    columnNames={"name"})
+)
+@NamedQueries({
+    @NamedQuery(
+            name = NamedQueryNames.ROLE_BY_NAME, 
+            query = "SELECT x "
+                  + "FROM org.apache.isis.extensions.secman.jpa.dom.role.ApplicationRole x "
+                  + "WHERE x.name = :name"),
+//TODO not sure how to convert these
+//    @NamedQuery(
+//            name = NamedQueryNames.ROLE_BY_NAME_CONTAINING, 
+//            query = "SELECT x "
+//                  + "FROM org.apache.isis.extensions.secman.jpa.dom.role.ApplicationRole x "
+//                  + "WHERE x.name.matches(:nameRegex)"),
+})
+@EntityListeners(JpaEntityInjectionPointResolver.class)
 @DomainObject(
         bounding = Bounding.BOUNDED,
         //		bounded = true,

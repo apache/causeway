@@ -26,11 +26,16 @@ import java.util.TreeSet;
 import javax.inject.Inject;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.Collection;
@@ -57,64 +62,61 @@ import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionVal
 import org.apache.isis.extensions.secman.api.permission.PermissionsEvaluationService;
 import org.apache.isis.extensions.secman.api.user.AccountType;
 import org.apache.isis.extensions.secman.api.user.ApplicationUserStatus;
+import org.apache.isis.extensions.secman.jpa.dom.constants.NamedQueryNames;
 import org.apache.isis.extensions.secman.jpa.dom.permission.ApplicationPermission;
 import org.apache.isis.extensions.secman.jpa.dom.permission.ApplicationPermissionRepository;
 import org.apache.isis.extensions.secman.jpa.dom.role.ApplicationRole;
+import org.apache.isis.persistence.jpa.applib.integration.JpaEntityInjectionPointResolver;
 
 import lombok.Getter;
 import lombok.Setter;
 import lombok.val;
 
-//@javax.jdo.annotations.PersistenceCapable(
-//        identityType = IdentityType.DATASTORE,
-//        schema = "isisExtensionsSecman",
-//        table = "ApplicationUser")
-//@javax.jdo.annotations.Inheritance(
-//        strategy = InheritanceStrategy.NEW_TABLE)
-//@javax.jdo.annotations.DatastoreIdentity(
-//        strategy = IdGeneratorStrategy.NATIVE, column = "id")
-//@javax.jdo.annotations.Version(
-//        strategy = VersionStrategy.VERSION_NUMBER,
-//        column = "version")
-//@javax.jdo.annotations.Uniques({
-//    @javax.jdo.annotations.Unique(
-//            name = "ApplicationUser_username_UNQ", members = { "username" })
-//})
-//@javax.jdo.annotations.Queries( {
-//    @javax.jdo.annotations.Query(
-//            name = "findByUsername", language = "JDOQL",
-//            value = "SELECT "
-//                    + "FROM org.apache.isis.extensions.secman.jdo.dom.user.ApplicationUser "
-//                    + "WHERE username == :username"),
-//    @javax.jdo.annotations.Query(
-//            name = "findByEmailAddress", language = "JDOQL",
-//            value = "SELECT "
-//                    + "FROM org.apache.isis.extensions.secman.jdo.dom.user.ApplicationUser "
-//                    + "WHERE emailAddress == :emailAddress"),
-//    @javax.jdo.annotations.Query(
-//            name = "findByAtPath", language = "JDOQL",
-//            value = "SELECT "
-//                    + "FROM org.apache.isis.extensions.secman.jdo.dom.user.ApplicationUser "
-//                    + "WHERE atPath == :atPath"),
-//    @javax.jdo.annotations.Query(
-//            name = "findByName", language = "JDOQL",
-//            value = "SELECT "
-//                    + "FROM org.apache.isis.extensions.secman.jdo.dom.user.ApplicationUser "
-//                    + "WHERE username.matches(:nameRegex)"
-//                    + "   || familyName.matches(:nameRegex)"
-//                    + "   || givenName.matches(:nameRegex)"
-//                    + "   || knownAs.matches(:nameRegex)"),
-//    @javax.jdo.annotations.Query(
-//            name = "find", language = "JDOQL",
-//            value = "SELECT "
-//                    + "FROM org.apache.isis.extensions.secman.jdo.dom.user.ApplicationUser "
-//                    + "WHERE username.matches(:regex)"
-//                    + " || familyName.matches(:regex)"
-//                    + " || givenName.matches(:regex)"
-//                    + " || knownAs.matches(:regex)"
-//                    + " || emailAddress.matches(:regex)")
-//})
 @Entity
+@Table(
+        schema = "isisExtensionsSecman",
+        name = "ApplicationUser", 
+        uniqueConstraints =
+            @UniqueConstraint(
+                    name = "ApplicationUser_username_UNQ", 
+                    columnNames={"username"})
+)
+@NamedQueries({
+    @NamedQuery(
+            name = NamedQueryNames.USER_BY_USERNAME, 
+            query = "SELECT x "
+                  + "FROM org.apache.isis.extensions.secman.jpa.dom.user.ApplicationUser x "
+                  + "WHERE x.username = :username"),
+    @NamedQuery(
+            name = NamedQueryNames.USER_BY_EMAIL, 
+            query = "SELECT x "
+                  + "FROM org.apache.isis.extensions.secman.jpa.dom.user.ApplicationUser x "
+                  + "WHERE x.emailAddress = :emailAddress"),
+    @NamedQuery(
+            name = NamedQueryNames.USER_BY_ATPATH, 
+            query = "SELECT x "
+                  + "FROM org.apache.isis.extensions.secman.jpa.dom.user.ApplicationUser x "
+                  + "WHERE x.atPath = :atPath"),
+//TODO not sure how to convert these    
+//    @NamedQuery(
+//            name = NamedQueryNames.USER_BY_NAME, 
+//            query = "SELECT x "
+//                  + "FROM org.apache.isis.extensions.secman.jpa.dom.user.ApplicationUser x "
+//                  + "WHERE x.username.matches(:nameRegex)"
+//                  + "   || x.familyName.matches(:nameRegex)"
+//                  + "   || x.givenName.matches(:nameRegex)"
+//                  + "   || x.knownAs.matches(:nameRegex)"),
+//    @NamedQuery(
+//            name = NamedQueryNames.USER_FIND, 
+//            query = "SELECT x "
+//                  + "FROM org.apache.isis.extensions.secman.jpa.dom.user.ApplicationUser x "
+//                  + "WHERE x.username.matches(:regex)"
+//                  + " || x.familyName.matches(:regex)"
+//                  + " || x.givenName.matches(:regex)"
+//                  + " || x.knownAs.matches(:regex)"
+//                  + " || x.emailAddress.matches(:regex)")
+})
+@EntityListeners(JpaEntityInjectionPointResolver.class)
 @DomainObject(
         objectType = "isissecurity.ApplicationUser",
         autoCompleteRepository = ApplicationUserRepository.class,

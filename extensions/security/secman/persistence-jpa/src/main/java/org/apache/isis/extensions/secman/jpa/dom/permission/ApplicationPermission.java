@@ -26,9 +26,14 @@ import java.util.function.Function;
 import javax.inject.Inject;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.DomainObject;
@@ -51,62 +56,59 @@ import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureType;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionMode;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionRule;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionValue;
+import org.apache.isis.extensions.secman.jpa.dom.constants.NamedQueryNames;
 import org.apache.isis.extensions.secman.jpa.dom.role.ApplicationRole;
+import org.apache.isis.persistence.jpa.applib.integration.JpaEntityInjectionPointResolver;
 
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.UtilityClass;
 
-//@javax.jdo.annotations.PersistenceCapable(
-//        identityType = IdentityType.DATASTORE,
-//        schema = "isisExtensionsSecman",
-//        table = "ApplicationPermission")
-//@javax.jdo.annotations.Inheritance(
-//        strategy = InheritanceStrategy.NEW_TABLE)
-//@javax.jdo.annotations.DatastoreIdentity(
-//        strategy = IdGeneratorStrategy.NATIVE, column = "id")
-//@javax.jdo.annotations.Version(
-//        strategy = VersionStrategy.VERSION_NUMBER,
-//        column = "version")
-//@javax.jdo.annotations.Queries( {
-//    @javax.jdo.annotations.Query(
-//            name = "findByRole", language = "JDOQL",
-//            value = "SELECT "
-//                    + "FROM org.apache.isis.extensions.secman.jdo.dom.permission.ApplicationPermission "
-//                    + "WHERE role == :role"),
-//    @javax.jdo.annotations.Query(
-//            name = "findByUser", language = "JDOQL",
-//            value = "SELECT "
-//                    + "FROM org.apache.isis.extensions.secman.jdo.dom.permission.ApplicationPermission "
-//                    + "WHERE (u.roles.contains(role) && u.username == :username) "
-//                    + "VARIABLES org.apache.isis.extensions.secman.jdo.dom.user.ApplicationUser u"),
-//    @javax.jdo.annotations.Query(
-//            name = "findByFeature", language = "JDOQL",
-//            value = "SELECT "
-//                    + "FROM org.apache.isis.extensions.secman.jdo.dom.permission.ApplicationPermission "
-//                    + "WHERE featureType == :featureType "
-//                    + "   && featureFqn == :featureFqn"),
-//    @javax.jdo.annotations.Query(
-//            name = "findByRoleAndRuleAndFeature", language = "JDOQL",
-//            value = "SELECT "
-//                    + "FROM org.apache.isis.extensions.secman.jdo.dom.permission.ApplicationPermission "
-//                    + "WHERE role == :role "
-//                    + "   && rule == :rule "
-//                    + "   && featureType == :featureType "
-//                    + "   && featureFqn == :featureFqn "),
-//    @javax.jdo.annotations.Query(
-//            name = "findByRoleAndRuleAndFeatureType", language = "JDOQL",
-//            value = "SELECT "
-//                    + "FROM org.apache.isis.extensions.secman.jdo.dom.permission.ApplicationPermission "
-//                    + "WHERE role == :role "
-//                    + "   && rule == :rule "
-//                    + "   && featureType == :featureType "),
-//})
-//@javax.jdo.annotations.Uniques({
-//    @javax.jdo.annotations.Unique(
-//            name = "ApplicationPermission_role_feature_rule_UNQ", members = { "role", "featureType", "featureFqn", "rule" })
-//})
 @Entity
+@Table(
+        schema = "isisExtensionsSecman",
+        name = "ApplicationPermission", 
+        uniqueConstraints=
+            @UniqueConstraint(
+                    name = "ApplicationPermission_role_feature_rule_UNQ", 
+                    columnNames={"role", "featureType", "featureFqn", "rule"})
+)
+@NamedQueries({
+    @NamedQuery(
+            name = NamedQueryNames.PERMISSION_BY_ROLE, 
+            query = "SELECT x "
+                  + "FROM org.apache.isis.extensions.secman.jpa.dom.permission.ApplicationPermission x "
+                  + "WHERE x.role = :role"),
+//TODO not sure how to convert these    
+//    @NamedQuery(
+//            name = NamedQueryNames.PERMISSION_BY_USER, 
+//            query = "SELECT x "
+//                  + "FROM org.apache.isis.extensions.secman.jpa.dom.permission.ApplicationPermission x "
+//                  + "WHERE (u.roles.contains(role) AND u.username == :username) "
+//                  + "VARIABLES org.apache.isis.extensions.secman.jdo.dom.user.ApplicationUser u"),
+    @NamedQuery(
+            name = NamedQueryNames.PERMISSION_BY_FEATURE, 
+            query = "SELECT x "
+                    + "FROM org.apache.isis.extensions.secman.jpa.dom.permission.ApplicationPermission x "
+                    + "WHERE x.featureType = :featureType "
+                    + "   AND x.featureFqn = :featureFqn"),
+    @NamedQuery(
+            name = NamedQueryNames.PERMISSION_BY_ROLE_RULE_FEATURE_FQN, 
+            query = "SELECT x "
+                  + "FROM org.apache.isis.extensions.secman.jpa.dom.permission.ApplicationPermission x "
+                  + "WHERE x.role = :role "
+                  + "   AND x.rule = :rule "
+                  + "   AND x.featureType = :featureType "
+                  + "   AND x.featureFqn = :featureFqn "),
+    @NamedQuery(
+            name = NamedQueryNames.PERMISSION_BY_ROLE_RULE_FEATURE, 
+            query = "SELECT x "
+                  + "FROM org.apache.isis.extensions.secman.jpa.dom.permission.ApplicationPermission x "
+                  + "WHERE x.role = :role "
+                  + "   AND x.rule = :rule "
+                  + "   AND x.featureType = :featureType "),
+})
+@EntityListeners(JpaEntityInjectionPointResolver.class)
 @DomainObject(
         objectType = "isissecurity.ApplicationPermission"
         )

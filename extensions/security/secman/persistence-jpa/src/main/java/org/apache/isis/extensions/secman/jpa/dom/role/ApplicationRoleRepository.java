@@ -35,6 +35,7 @@ import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.extensions.secman.api.SecurityModuleConfig;
+import org.apache.isis.extensions.secman.jpa.dom.constants.NamedQueryNames;
 import org.apache.isis.extensions.secman.jpa.dom.user.ApplicationUser;
 import org.apache.isis.extensions.secman.model.dom.permission.ApplicationPermission_delete;
 
@@ -68,7 +69,7 @@ implements org.apache.isis.extensions.secman.api.role.ApplicationRoleRepository<
         if(name == null) {
             return Optional.empty();
         }
-        return repository.uniqueMatch(Query.named(ApplicationRole.class, "findByName")
+        return repository.uniqueMatch(Query.named(ApplicationRole.class, NamedQueryNames.ROLE_BY_NAME)
                 .withParameter("name", name));
     }
 
@@ -78,7 +79,7 @@ implements org.apache.isis.extensions.secman.api.role.ApplicationRoleRepository<
         if(search != null && search.length() > 0) {
             String nameRegex = String.format("(?i).*%s.*", search.replace("*", ".*").replace("?", "."));
             return repository.allMatches(
-                    Query.named(ApplicationRole.class, "findByNameContaining")
+                    Query.named(ApplicationRole.class, NamedQueryNames.ROLE_BY_NAME_CONTAINING)
                     .withParameter("nameRegex", nameRegex))
                     .stream()
                     .collect(_Sets.toUnmodifiableSorted());
