@@ -21,7 +21,6 @@ package org.apache.isis.persistence.jdo.metamodel.beans;
 import javax.jdo.annotations.EmbeddedOnly;
 
 import org.apache.isis.applib.services.metamodel.BeanSort;
-import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.core.config.beans.IsisBeanTypeClassifier;
 import org.apache.isis.core.metamodel.facets.Annotations;
 
@@ -38,15 +37,9 @@ public class JdoBeanTypeClassifier implements IsisBeanTypeClassifier {
     @Override
     public BeanClassification classify(Class<?> type) {
 
-        if(type.getSimpleName().startsWith("JdoInventory")) {
-            _Probe.errOut("classify %s", type);    
-        }
-        
         val persistenceCapableAnnot = findNearestAnnotation(type, javax.jdo.annotations.PersistenceCapable.class);
         if(persistenceCapableAnnot.isPresent()) {
         
-            _Probe.errOut("entity found %s", type);
-            
             val embeddedOnlyAttribute = persistenceCapableAnnot.get().embeddedOnly();
             // Whether objects of this type can only be embedded, 
             // hence have no ID that binds them to the persistence layer
