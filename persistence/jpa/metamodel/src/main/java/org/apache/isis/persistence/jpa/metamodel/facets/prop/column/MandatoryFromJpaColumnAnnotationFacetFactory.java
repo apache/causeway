@@ -18,7 +18,10 @@
  */
 package org.apache.isis.persistence.jpa.metamodel.facets.prop.column;
 
+import java.util.Optional;
+
 import javax.persistence.Column;
+import javax.persistence.JoinColumn;
 
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -38,17 +41,23 @@ extends FacetFactoryAbstract {
 
         //val cls = processMethodContext.getCls();
 
-        final Column annotation = processMethodContext.synthesizeOnMethod(Column.class)
-                .orElse(null);
-
-        if (annotation == null) {
+        final Optional<Boolean> nullable1 = processMethodContext.synthesizeOnMethod(JoinColumn.class)
+                .map(JoinColumn::nullable);
+        
+        final Optional<Boolean> nullable2 = processMethodContext.synthesizeOnMethod(Column.class)
+                .map(Column::nullable);
+        
+        if(!nullable1.isPresent() 
+                && !nullable2.isPresent()) {
             return;
         }
+        
+        val nullable = nullable1.orElseGet(nullable2::get);
         
         val facetHolder = processMethodContext.getFacetHolder();
         FacetUtil.addFacet(new MandatoryFacetDerivedFromJpaColumn(
                 facetHolder,
-                !annotation.nullable()));
+                !nullable));
     }
     
     
