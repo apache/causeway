@@ -29,13 +29,13 @@ import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.config.beans.IsisBeanTypeRegistry;
 import org.apache.isis.persistence.jdo.integration.metamodel.JdoMetamodelUtil;
 
-import static org.apache.isis.commons.internal.base._NullSafe.stream;
-
 import lombok.NoArgsConstructor;
 import lombok.Synchronized;
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 @NoArgsConstructor
+@Log4j2
 public class JdoEntityTypeRegistry {
 
     private Set<String> entityTypes;
@@ -52,41 +52,45 @@ public class JdoEntityTypeRegistry {
 
     private static Set<String> findEntityTypes(IsisBeanTypeRegistry isisBeanTypeRegistry) {
 
-        val entityTypes = new LinkedHashSet<String>();
-
-        Set<Class<?>> persistenceCapableTypes = isisBeanTypeRegistry.getEntityTypesJdo();
-
         val classNamesNotEnhanced = _Lists.<String>newArrayList();
-        for (Class<?> persistenceCapableType : persistenceCapableTypes) {
-            if(ignore(persistenceCapableType)) {
-                continue;
+        
+        val entityTypes = isisBeanTypeRegistry.getEntityTypes()
+        .stream()
+        .filter(JdoEntityTypeRegistry::isJdo)
+        .filter(entityType->{
+            if(!JdoMetamodelUtil.isPersistenceEnhanced(entityType)) {
+                classNamesNotEnhanced.add(entityType.getCanonicalName());
+                return false;
             }
-            if(!JdoMetamodelUtil.isPersistenceEnhanced(persistenceCapableType)) {
-                classNamesNotEnhanced.add(persistenceCapableType.getCanonicalName());
-            }
-            entityTypes.add(persistenceCapableType.getCanonicalName());
-        }
+            return true;
+        })
+        .map(Class::getCanonicalName)
+        .collect(Collectors.toCollection(LinkedHashSet::new));
 
         if(!classNamesNotEnhanced.isEmpty()) {
-            final String classNamesNotEnhancedStr = 
-                    stream(classNamesNotEnhanced).collect(Collectors.joining("\n* "));
-            throw new IllegalStateException("Non-enhanced @PersistenceCapable classes found, will abort.  The classes in error are:\n\n* " + classNamesNotEnhancedStr + "\n\nDid the DataNucleus enhancer run correctly?\n");
+            val classNamesNotEnhancedStr = classNamesNotEnhanced.stream()
+            .collect(Collectors.joining("\n* "));
+            throw new IllegalStateException(
+                    "Non-enhanced @PersistenceCapable classes found, will abort.  "
+                    + "The classes in error are:\n\n* " + classNamesNotEnhancedStr + "\n\n"
+                            + "Did the DataNucleus enhancer run correctly?\n");
         }
 
         return entityTypes;
     }
 
 
-    private static boolean ignore(final Class<?> entityType) {
+    private static boolean isJdo(final Class<?> entityType) {
         try {
             if(entityType.isAnonymousClass() || entityType.isLocalClass() || entityType.isMemberClass() ||
                     entityType.isInterface() || entityType.isAnnotation()) {
-                return true;
+                return false;
             }
             final PersistenceCapable persistenceCapable = entityType.getAnnotation(PersistenceCapable.class);
-            return persistenceCapable == null; // ignore if doesn't have @PersistenceCapable
+            return persistenceCapable != null; // false if doesn't have @PersistenceCapable
         } catch (NoClassDefFoundError ex) {
-            return true;
+            log.error("failed to determine whether entity is a type to be managed by JDO", ex);
+            return false; // silently ignore
         }
     }
 

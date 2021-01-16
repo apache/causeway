@@ -282,9 +282,12 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
         introspect(Can.ofCollection(mixinSpecs), IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
         
         log.info(" - introspecting {} managed beans contributing (aka domain services)", isisBeanTypeRegistry.getManagedBeansContributing().size());
-        log.info(" - introspecting {}/{} entities (JDO/JPA)",
-                isisBeanTypeRegistry.getEntityTypesJdo().size(),
-                isisBeanTypeRegistry.getEntityTypesJpa().size());
+//        log.info(" - introspecting {}/{} entities (JDO/JPA)",
+//                isisBeanTypeRegistry.getEntityTypesJdo().size(),
+//                isisBeanTypeRegistry.getEntityTypesJpa().size());
+
+        log.info(" - introspecting {} entities (JDO+JPA)",
+                isisBeanTypeRegistry.getEntityTypes().size());
         log.info(" - introspecting {} view models", isisBeanTypeRegistry.getViewModelTypes().size());
         introspect(Can.ofCollection(domainObjectSpecs), IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
 

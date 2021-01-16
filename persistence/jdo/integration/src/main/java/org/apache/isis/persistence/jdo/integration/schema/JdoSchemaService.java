@@ -66,7 +66,7 @@ public class JdoSchemaService {
     public void init() {
         if(log.isDebugEnabled()) {
             log.debug("init entity types {}", 
-                    isisBeanTypeRegistry.getEntityTypesJdo());
+                    txAwarePmfProxy.getPersistenceManagerFactory().getManagedClasses());
         }
     }
 

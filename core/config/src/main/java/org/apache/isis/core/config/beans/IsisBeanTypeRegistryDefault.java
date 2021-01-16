@@ -60,8 +60,7 @@ public class IsisBeanTypeRegistryDefault implements IsisBeanTypeRegistry {
     // -- DISTINCT CATEGORIES OF BEAN SORTS
     
     @Getter(onMethod_ = {@Override}) private final Map<Class<?>, IsisBeanMetaData> managedBeansContributing = new HashMap<>();
-    @Getter(onMethod_ = {@Override}) private final Set<Class<?>> entityTypesJpa = new HashSet<>();
-    @Getter(onMethod_ = {@Override}) private final Set<Class<?>> entityTypesJdo = new HashSet<>();
+    @Getter(onMethod_ = {@Override}) private final Set<Class<?>> entityTypes = new HashSet<>();
     @Getter(onMethod_ = {@Override}) private final Set<Class<?>> mixinTypes = new HashSet<>();
     @Getter(onMethod_ = {@Override}) private final Set<Class<?>> viewModelTypes = new HashSet<>();
     
@@ -99,7 +98,7 @@ public class IsisBeanTypeRegistryDefault implements IsisBeanTypeRegistry {
                 mixinTypes.add(cls);
                 return;
             case ENTITY:
-                entityTypesJdo.add(cls);
+                entityTypes.add(cls);
                 return;
             case VIEW_MODEL:
                 viewModelTypes.add(cls);

@@ -33,8 +33,7 @@ public interface IsisBeanTypeRegistry {
     Stream<IsisBeanMetaData> streamIntrospectableTypes();
     
     Map<Class<?>, IsisBeanMetaData> getManagedBeansContributing();
-    Set<Class<?>> getEntityTypesJdo();
-    Set<Class<?>> getEntityTypesJpa();
+    Set<Class<?>> getEntityTypes();
     Set<Class<?>> getMixinTypes();
     Set<Class<?>> getViewModelTypes();
 
