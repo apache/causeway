@@ -19,7 +19,6 @@
 package org.apache.isis.extensions.secman.jpa.dom.tenancy;
 
 import java.util.Comparator;
-import java.util.SortedSet;
 import java.util.TreeSet;
 
 import javax.persistence.Column;
@@ -53,7 +52,7 @@ import lombok.Setter;
 
 @Entity
 @Table(
-        schema = "isisExtensionsSecman",
+//        schema = "isisExtensionsSecman",
         name = "ApplicationTenancy", 
         uniqueConstraints =
             @UniqueConstraint(
@@ -153,7 +152,7 @@ implements
             defaultView="table"
             )
     @Getter @Setter
-    private SortedSet<ApplicationTenancy> children = new TreeSet<>();
+    private TreeSet<ApplicationTenancy> children = new TreeSet<>();
 
 
     // necessary for integration tests

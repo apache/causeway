@@ -66,47 +66,47 @@ import lombok.experimental.UtilityClass;
 
 @Entity
 @Table(
-        schema = "isisExtensionsSecman",
+//        schema = "isisExtensionsSecman",
         name = "ApplicationPermission", 
         uniqueConstraints=
             @UniqueConstraint(
                     name = "ApplicationPermission_role_feature_rule_UNQ", 
-                    columnNames={"role", "featureType", "featureFqn", "rule"})
+                    columnNames={"roleId", "featureType", "featureFqn", "rule"})
 )
 @NamedQueries({
     @NamedQuery(
             name = NamedQueryNames.PERMISSION_BY_ROLE, 
-            query = "SELECT x "
-                  + "FROM org.apache.isis.extensions.secman.jpa.dom.permission.ApplicationPermission x "
-                  + "WHERE x.role = :role"),
-//TODO not sure how to convert these    
-//    @NamedQuery(
-//            name = NamedQueryNames.PERMISSION_BY_USER, 
-//            query = "SELECT x "
-//                  + "FROM org.apache.isis.extensions.secman.jpa.dom.permission.ApplicationPermission x "
-//                  + "WHERE (u.roles.contains(role) AND u.username == :username) "
-//                  + "VARIABLES org.apache.isis.extensions.secman.jdo.dom.user.ApplicationUser u"),
+            query = "SELECT p "
+                  + "FROM org.apache.isis.extensions.secman.jpa.dom.permission.ApplicationPermission p "
+                  + "WHERE p.role = :role"),
+    @NamedQuery(
+            name = NamedQueryNames.PERMISSION_BY_USER, 
+            query = "SELECT p "
+                  + "FROM org.apache.isis.extensions.secman.jpa.dom.permission.ApplicationPermission p "
+                  + ", org.apache.isis.extensions.secman.jpa.dom.user.ApplicationUser u "
+                  + "WHERE u.username = :username"
+                  + "    AND p.role MEMBER OF u.roles"),
     @NamedQuery(
             name = NamedQueryNames.PERMISSION_BY_FEATURE, 
-            query = "SELECT x "
-                    + "FROM org.apache.isis.extensions.secman.jpa.dom.permission.ApplicationPermission x "
-                    + "WHERE x.featureType = :featureType "
-                    + "   AND x.featureFqn = :featureFqn"),
+            query = "SELECT p "
+                    + "FROM org.apache.isis.extensions.secman.jpa.dom.permission.ApplicationPermission p "
+                    + "WHERE p.featureType = :featureType "
+                    + "   AND p.featureFqn = :featureFqn"),
     @NamedQuery(
             name = NamedQueryNames.PERMISSION_BY_ROLE_RULE_FEATURE_FQN, 
-            query = "SELECT x "
-                  + "FROM org.apache.isis.extensions.secman.jpa.dom.permission.ApplicationPermission x "
-                  + "WHERE x.role = :role "
-                  + "   AND x.rule = :rule "
-                  + "   AND x.featureType = :featureType "
-                  + "   AND x.featureFqn = :featureFqn "),
+            query = "SELECT p "
+                  + "FROM org.apache.isis.extensions.secman.jpa.dom.permission.ApplicationPermission p "
+                  + "WHERE p.role = :role "
+                  + "   AND p.rule = :rule "
+                  + "   AND p.featureType = :featureType "
+                  + "   AND p.featureFqn = :featureFqn "),
     @NamedQuery(
             name = NamedQueryNames.PERMISSION_BY_ROLE_RULE_FEATURE, 
-            query = "SELECT x "
-                  + "FROM org.apache.isis.extensions.secman.jpa.dom.permission.ApplicationPermission x "
-                  + "WHERE x.role = :role "
-                  + "   AND x.rule = :rule "
-                  + "   AND x.featureType = :featureType "),
+            query = "SELECT p "
+                  + "FROM org.apache.isis.extensions.secman.jpa.dom.permission.ApplicationPermission p "
+                  + "WHERE p.role = :role "
+                  + "   AND p.rule = :rule "
+                  + "   AND p.featureType = :featureType "),
 })
 @EntityListeners(JpaEntityInjectionPointResolver.class)
 @DomainObject(
