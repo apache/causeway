@@ -83,37 +83,28 @@ import lombok.val;
 @NamedQueries({
     @NamedQuery(
             name = NamedQueryNames.USER_BY_USERNAME, 
-            query = "SELECT x "
-                  + "FROM org.apache.isis.extensions.secman.jpa.dom.user.ApplicationUser x "
-                  + "WHERE x.username = :username"),
+            query = "SELECT u "
+                  + "FROM org.apache.isis.extensions.secman.jpa.dom.user.ApplicationUser u "
+                  + "WHERE u.username = :username"),
     @NamedQuery(
             name = NamedQueryNames.USER_BY_EMAIL, 
-            query = "SELECT x "
-                  + "FROM org.apache.isis.extensions.secman.jpa.dom.user.ApplicationUser x "
-                  + "WHERE x.emailAddress = :emailAddress"),
+            query = "SELECT u "
+                  + "FROM org.apache.isis.extensions.secman.jpa.dom.user.ApplicationUser u "
+                  + "WHERE u.emailAddress = :emailAddress"),
     @NamedQuery(
             name = NamedQueryNames.USER_BY_ATPATH, 
-            query = "SELECT x "
-                  + "FROM org.apache.isis.extensions.secman.jpa.dom.user.ApplicationUser x "
-                  + "WHERE x.atPath = :atPath"),
-//TODO not sure how to convert these    
-//    @NamedQuery(
-//            name = NamedQueryNames.USER_BY_NAME, 
-//            query = "SELECT x "
-//                  + "FROM org.apache.isis.extensions.secman.jpa.dom.user.ApplicationUser x "
-//                  + "WHERE x.username.matches(:nameRegex)"
-//                  + "   || x.familyName.matches(:nameRegex)"
-//                  + "   || x.givenName.matches(:nameRegex)"
-//                  + "   || x.knownAs.matches(:nameRegex)"),
-//    @NamedQuery(
-//            name = NamedQueryNames.USER_FIND, 
-//            query = "SELECT x "
-//                  + "FROM org.apache.isis.extensions.secman.jpa.dom.user.ApplicationUser x "
-//                  + "WHERE x.username.matches(:regex)"
-//                  + " || x.familyName.matches(:regex)"
-//                  + " || x.givenName.matches(:regex)"
-//                  + " || x.knownAs.matches(:regex)"
-//                  + " || x.emailAddress.matches(:regex)")
+            query = "SELECT u "
+                  + "FROM org.apache.isis.extensions.secman.jpa.dom.user.ApplicationUser u "
+                  + "WHERE u.atPath = :atPath"),
+    @NamedQuery(
+            name = NamedQueryNames.USER_FIND, 
+            query = "SELECT u "
+                  + "FROM org.apache.isis.extensions.secman.jpa.dom.user.ApplicationUser u "
+                  + "WHERE u.username LIKE '%:regex%'"
+                  + "  OR u.familyName LIKE '%:regex%'"
+                  + "  OR u.givenName LIKE '%:regex%'"
+                  + "  OR u.knownAs LIKE '%:regex%'"
+                  + "  OR u.emailAddress LIKE '%:regex%'")
 })
 @EntityListeners(JpaEntityInjectionPointResolver.class)
 @DomainObject(

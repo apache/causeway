@@ -73,15 +73,14 @@ import lombok.Setter;
 @NamedQueries({
     @NamedQuery(
             name = NamedQueryNames.ROLE_BY_NAME, 
-            query = "SELECT x "
-                  + "FROM org.apache.isis.extensions.secman.jpa.dom.role.ApplicationRole x "
-                  + "WHERE x.name = :name"),
-//TODO not sure how to convert these
-//    @NamedQuery(
-//            name = NamedQueryNames.ROLE_BY_NAME_CONTAINING, 
-//            query = "SELECT x "
-//                  + "FROM org.apache.isis.extensions.secman.jpa.dom.role.ApplicationRole x "
-//                  + "WHERE x.name.matches(:nameRegex)"),
+            query = "SELECT r "
+                  + "FROM org.apache.isis.extensions.secman.jpa.dom.role.ApplicationRole r "
+                  + "WHERE r.name = :name"),
+    @NamedQuery(
+            name = NamedQueryNames.ROLE_BY_NAME_CONTAINING, 
+            query = "SELECT r "
+                  + "FROM org.apache.isis.extensions.secman.jpa.dom.role.ApplicationRole r "
+                  + "WHERE r.name LIKE '%:nameRegex%'"),
 })
 @EntityListeners(JpaEntityInjectionPointResolver.class)
 @DomainObject(

@@ -62,20 +62,20 @@ import lombok.Setter;
 @NamedQueries({
     @NamedQuery(
             name = NamedQueryNames.TENANCY_BY_PATH, 
-            query = "SELECT x "
-                  + "FROM org.apache.isis.extensions.secman.jpa.dom.tenancy.ApplicationTenancy x "
-                  + "WHERE x.path = :path"),
+            query = "SELECT t "
+                  + "FROM org.apache.isis.extensions.secman.jpa.dom.tenancy.ApplicationTenancy t "
+                  + "WHERE t.path = :path"),
     @NamedQuery(
             name = NamedQueryNames.TENANCY_BY_NAME, 
-            query = "SELECT x "
-                  + "FROM org.apache.isis.extensions.secman.jpa.dom.tenancy.ApplicationTenancy x "
-                  + "WHERE x.name = :name"),
-//TODO not sure how to convert these
-//    @NamedQuery(
-//            name = NamedQueryNames.TENANCY_BY_NAME_OR_PATH_MATCHING, 
-//            query = "SELECT x "
-//                  + "FROM org.apache.isis.extensions.secman.jpa.dom.tenancy.ApplicationTenancy x "
-//                  + "WHERE x.name.matches(:regex) || x.path.matches(:regex)"),
+            query = "SELECT t "
+                  + "FROM org.apache.isis.extensions.secman.jpa.dom.tenancy.ApplicationTenancy t "
+                  + "WHERE t.name = :name"),
+    @NamedQuery(
+            name = NamedQueryNames.TENANCY_BY_NAME_OR_PATH_MATCHING, 
+            query = "SELECT t "
+                  + "FROM org.apache.isis.extensions.secman.jpa.dom.tenancy.ApplicationTenancy t "
+                  + "WHERE t.name LIKE '%:regex%' "
+                  + "    OR t.path LIKE '%:regex%'"),
 })
 @DomainObject(
         objectType = "isissecurity.ApplicationTenancy",
