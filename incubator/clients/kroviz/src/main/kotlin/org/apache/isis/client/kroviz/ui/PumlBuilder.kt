@@ -27,6 +27,7 @@ import org.apache.isis.client.kroviz.to.DomainType
 import org.apache.isis.client.kroviz.to.HasLinks
 import org.apache.isis.client.kroviz.to.Link
 import org.apache.isis.client.kroviz.to.RelType
+import org.apache.isis.client.kroviz.ui.kv.UiManager
 
 class PumlBuilder {
 
@@ -87,8 +88,6 @@ class PumlBuilder {
         var code = "$Q@startuml$NL"
         code += iterateOverChildren(rootLE)
         code += "@enduml$Q"
-        console.log("[PumlBuilder.withLogEntry]")
-        console.log(code)
         return code
     }
 
@@ -108,10 +107,14 @@ class PumlBuilder {
     }
 
     private fun amendWithChild(parentUrl: String, child: Link): String {
+        // kroki.io can not handle / (slash) in strings; escaping doesn't work either
+        val baseUrl = UiManager.getUrl()
+        var source = parentUrl.replace(baseUrl, "")
+        source = source.replace("/" , "_")
         val childUrl = child.href
-        val source = parentUrl.replace("http://localhost:8080/restful", "")
-        val target = childUrl.replace("http://localhost:8080/restful", "")
-        var code = "$Q$source$Q -> $Q$target$Q $NL"
+        var target = childUrl.replace(baseUrl, "")
+        target = target.replace("/" , "_")
+        var code = "$source -> $target $NL"
 
         val rs = ResourceSpecification(childUrl)
         val childLE = EventStore.find(rs)

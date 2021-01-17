@@ -29,7 +29,7 @@ class EventChart(model: ChartModel) : SimplePanel() {
     private val font = "'Open Sans Bold', sans-serif"
 
     private val yAxes = listOf(obj {
-        scaleLabel = { ScaleTitleOptions(display = true, labelString = "duration (ms)") }
+        scaleLabel = { ScaleTitleOptions(display = true, labelString = "duration (ms)", fontFamily = font) }
         gridLines = { GridLineOptions(visible = true) }
         ticks = obj {
             fontFamily = font
@@ -40,10 +40,10 @@ class EventChart(model: ChartModel) : SimplePanel() {
     private val tickFormatter = "function(tick) {return tick.split('\\n')[1]}"
 
     private val xAxes = listOf(obj {
-        scaleLabel = { ScaleTitleOptions(display = true, labelString = "start offset (ms)") }
+        scaleLabel = { ScaleTitleOptions(display = true, labelString = "start offset (sec)", fontFamily = font) }
         gridLines = { GridLineOptions(visible = true) }
         ticks = obj {
-            beginAtZero = true
+            beginAtZero = false
             fontFamily = font
             fontSize = 11.px
             //WHAT A HACK
@@ -57,9 +57,7 @@ class EventChart(model: ChartModel) : SimplePanel() {
             legend = LegendOptions(display = true),
             scales = ChartScales(
                     yAxes = yAxes,
-                    xAxes = xAxes,
-                    display = true,
-                    type = ScalesType.TIME),
+                    xAxes = xAxes),
             showLines = true,
             title = TitleOptions(display = true))
 

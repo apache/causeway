@@ -18,11 +18,9 @@
  */
 package org.apache.isis.client.kroviz.ui.kv
 
-import org.apache.isis.client.kroviz.core.event.EventStore
 import org.apache.isis.client.kroviz.core.event.LogEntry
 import pl.treksoft.kvision.chart.DataSets
 import pl.treksoft.kvision.core.Color
-import kotlin.math.max
 import kotlin.js.Date
 
 class EventChartModel(log: List<LogEntry>) : ChartModel {
@@ -44,17 +42,16 @@ class EventChartModel(log: List<LogEntry>) : ChartModel {
     private var startTime = Date()
 
     init {
-        val maxResponseLength = EventStore.maxResponseLength()
         var i = 0
         log.forEach { le ->
             i += 1
             if (i == 1) startTime = le.createdAt
-            val q = le.responseLength.div(maxResponseLength)
+            val q = le.responseLength
             when {
-                (q >= 0) && (q <= 0.2) -> bgColorList.add(blue)
-                (q > 0.2) && (q <= 0.4) -> bgColorList.add(green)
-                (q > 0.4) && (q <= 0.6) -> bgColorList.add(yellow)
-                (q > 0.6) && (q <= 0.8) -> bgColorList.add(red)
+                (q >= 0) && (q <= 1024) -> bgColorList.add(blue)
+                (q > 1024) && (q <= 2048) -> bgColorList.add(green)
+                (q > 2048) && (q <= 4096) -> bgColorList.add(yellow)
+                (q > 4096) && (q <= 8192) -> bgColorList.add(red)
                 else -> bgColorList.add(violett)
             }
             labelList.add(le.toLabel(i))
@@ -70,19 +67,13 @@ class EventChartModel(log: List<LogEntry>) : ChartModel {
     }
 
     fun LogEntry.toLabel(index: Int): String {
+        val relativeStarTime = ((this.createdAt.getTime() - startTime.getTime()) / 1000).toString()
+        val sec_1 = relativeStarTime.substring(0, relativeStarTime.length -2)
         return index.toString() + "\n" +
-                (this.createdAt.getTime() - startTime.getTime()).toString() + "\n" +
+                sec_1 + "\n" +
                 this.title + "\n" +
                 "start: " + this.createdAt.toISOString() + "\n" +
                 "rsp.len: " + this.responseLength
-    }
-
-    fun EventStore.maxResponseLength(): Int {
-        var maxRL = 0
-        log.forEach { le ->
-            maxRL = max(maxRL, le.responseLength)
-        }
-        return maxRL
     }
 
 }
