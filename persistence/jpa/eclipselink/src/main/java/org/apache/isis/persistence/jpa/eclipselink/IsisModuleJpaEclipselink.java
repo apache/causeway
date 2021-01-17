@@ -49,11 +49,11 @@ import org.apache.isis.persistence.jpa.integration.IsisModuleJpaIntegration;
 @Import({
     IsisModuleJpaIntegration.class
 })
-public class IsisModuleJpaEclipseLink extends JpaBaseConfiguration { 
+public class IsisModuleJpaEclipselink extends JpaBaseConfiguration { 
 
     @Inject private Provider<ServiceInjector> serviceInjectorProvider;
     
-    protected IsisModuleJpaEclipseLink(
+    protected IsisModuleJpaEclipselink(
             DataSource dataSource, 
             JpaProperties properties,
             ObjectProvider<JtaTransactionManager> jtaTransactionManager) {

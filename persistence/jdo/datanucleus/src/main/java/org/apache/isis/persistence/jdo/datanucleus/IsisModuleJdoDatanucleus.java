@@ -73,7 +73,7 @@ import lombok.val;
     JdoSupportServiceDefault.class,
     JdoSchemaService.class,
 })
-public class IsisModuleJdoProviderDatanucleus {
+public class IsisModuleJdoDatanucleus {
 
     // reserved for datanucleus' own config props
     @ConfigurationProperties(prefix = "isis.persistence.jdo-datanucleus.impl")

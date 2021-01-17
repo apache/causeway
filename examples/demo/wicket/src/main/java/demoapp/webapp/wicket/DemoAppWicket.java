@@ -24,7 +24,7 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 import org.springframework.context.annotation.Import;
 
 import org.apache.isis.extensions.viewer.wicket.pdfjs.ui.IsisModuleExtPdfjsUi;
-import org.apache.isis.persistence.jdo.datanucleus.IsisModuleJdoProviderDatanucleus;
+import org.apache.isis.persistence.jdo.datanucleus.IsisModuleJdoDatanucleus;
 import org.apache.isis.valuetypes.asciidoc.metamodel.IsisModuleValAsciidocMetaModel;
 import org.apache.isis.valuetypes.asciidoc.persistence.jdo.dn5.IsisModuleValAsciidocPersistenceJdoDn5;
 import org.apache.isis.valuetypes.asciidoc.ui.wkt.IsisModuleValAsciidocUiWkt;
@@ -59,7 +59,7 @@ import demoapp.webapp.wicket.ui.custom.WhereInTheWorldPanelFactory;
     WhereInTheWorldPanelFactory.class,
 
     // Persistence (JDO/DN5)
-    IsisModuleJdoProviderDatanucleus.class,
+    IsisModuleJdoDatanucleus.class,
     IsisModuleValAsciidocPersistenceJdoDn5.class,
     IsisModuleValMarkdownPersistenceJdoDn5.class,
 })
