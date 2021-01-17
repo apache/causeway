@@ -64,28 +64,8 @@ pushd isis-parent
 mvn org.apache.rat:apache-rat-plugin:check -D rat.numUnapprovedLicenses=1000 -Dreleased -P'!all'
 popd
 
-pushd antora
-mvn org.apache.rat:apache-rat-plugin:check -D rat.numUnapprovedLicenses=100
-popd
-
-pushd examples/demo
-mvn org.apache.rat:apache-rat-plugin:check -D rat.numUnapprovedLicenses=100
-popd
-
-pushd incubator
-mvn org.apache.rat:apache-rat-plugin:check -D rat.numUnapprovedLicenses=100
-popd
-
-pushd regressiontests
-mvn org.apache.rat:apache-rat-plugin:check -D rat.numUnapprovedLicenses=100
-popd
-
-pushd tooling
-mvn org.apache.rat:apache-rat-plugin:check -D rat.numUnapprovedLicenses=100
-popd
-
-for a in `/bin/find .. -name rat.txt -print`; do grep '!???' $a; done > /tmp/rat-qn.txt
-for a in `/bin/find .. -name rat.txt -print`; do grep '!AL' $a; done > /tmp/rat-al.txt
+for a in `/bin/find . -name rat.txt -print`; do grep '!???' $a; done > /tmp/rat-qn.txt
+for a in `/bin/find . -name rat.txt -print`; do grep '!AL' $a; done > /tmp/rat-al.txt
 ----
 
 NOTE: the parent `pom.xml` in each of these locations has the `apache-rat-plugin` appropriately configured.
@@ -115,7 +95,6 @@ It's first necessary to have built the framework locally at least once:
 
 [source,bash,subs="attributes+"]
 ----
-cd isis-parent
 mvn clean install -o
 ----
 
@@ -124,7 +103,7 @@ Once this is done, capture the missing license information using:
 [source,bash,subs="attributes+"]
 ----
 mvn license:download-licenses
-groovy ../scripts/checkmissinglicenses.groovy
+groovy scripts/checkmissinglicenses.groovy
 ----
 
 WARNING: this groovy script assumes it is being run from the `isis-parent` directory.

@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -33,7 +33,7 @@ import javax.xml.transform.stream.*
 // phase 1: find missing dependencies from each of the license.xml files
 //
 
-def parentDir=new File("..")
+def parentDir=new File(".")
 def missing = []
 
 parentDir.eachFileRecurse { file ->
@@ -51,8 +51,8 @@ parentDir.eachFileRecurse { file ->
       def url = dependency.licenses.license.url.text()
 
       if(! url) {
-	def mavenCoords = [ dependency.groupId.text() , 
-                            dependency.artifactId.text() , 
+	def mavenCoords = [ dependency.groupId.text() ,
+                            dependency.artifactId.text() ,
                             dependency.version.text() ]
         missing.add(mavenCoords)
       }
@@ -66,13 +66,13 @@ missing = missing.unique().sort()
 //
 // phase 2: convert existing supplemental model entries into list form
 //
-def supModelsFile = new File("../supplemental-model/src/main/resources/supplemental-models.xml")
+def supModelsFile = new File("supplemental-model/src/main/resources/supplemental-models.xml")
 def supModelsXml = new XmlSlurper().parseText(supModelsFile.text)
 
 def supplements = []
 supModelsXml.supplement.project.each { project ->
-    def mavenCoords = [ project.groupId.text(), 
-                        project.artifactId.text(), 
+    def mavenCoords = [ project.groupId.text(),
+                        project.artifactId.text(),
                         project.version.text() ]
     supplements.add(mavenCoords)
 }
@@ -101,7 +101,7 @@ println("licenses to add to supplemental-models.xml:")
 println("")
 
 if (missing.size()) {
-    missing.each { 
+    missing.each {
         println(it)
     }
 } else {
@@ -116,7 +116,7 @@ println("licenses to remove from supplemental-models.xml (are spurious):")
 println("")
 
 if (supplements.size()) {
-    supplements.each { 
+    supplements.each {
         println(it)
     }
 } else {
