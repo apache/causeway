@@ -341,11 +341,15 @@
 			<type>pom</type>
 		</dependency>
 		
-		<dependency>
-			<groupId>org.apache.isis.mavendeps</groupId>
-			<artifactId>isis-mavendeps-integtests</artifactId>
-			<type>pom</type>
-		</dependency>
+       <dependency>
+	    	<groupId>org.apache.isis.testing</groupId>
+        	<artifactId>isis-testing-unittestsupport-applib</artifactId>
+        </dependency>
+
+        <dependency>
+	    	<groupId>org.apache.isis.testing</groupId>
+        	<artifactId>isis-testing-integtestsupport-applib</artifactId>
+        </dependency>
 		
 		<dependency>
 			<groupId>org.apache.isis.security</groupId>
