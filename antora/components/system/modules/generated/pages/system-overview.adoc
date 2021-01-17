@@ -872,14 +872,14 @@ Artifact: isis-mavendeps-jdo
 Type: pom
 Folder: \mavendeps\jdo
 ----
-|Defines a module that provides the default JDO persistence layer integration 
+|Defines a module that provides the default JDO persistence layer integration
         for running an Apache Isis webapp (Wicket, Restful Objects and Shiro security).
 
 _Dependencies_
 
 * org.apache.isis.core:isis-applib:jar:<managed>
 * org.apache.isis.core:isis-schema:jar:<managed>
-* org.apache.isis.persistence:isis-persistence-jdo-integration:jar:<managed>
+* org.apache.isis.persistence:isis-persistence-jdo-datanucleus:jar:<managed>
 
 |Apache Isis Maven Deps - JPA
 [source,yaml]
@@ -889,7 +889,7 @@ Artifact: isis-mavendeps-jpa
 Type: pom
 Folder: \mavendeps\jpa
 ----
-|Defines a module that provides the default JPA persistence layer integration 
+|Defines a module that provides the default JPA persistence layer integration
         for running an Apache Isis webapp (Wicket, Restful Objects and Shiro security).
 
 _Dependencies_
@@ -897,7 +897,6 @@ _Dependencies_
 * org.apache.isis.core:isis-applib:jar:<managed>
 * org.apache.isis.core:isis-schema:jar:<managed>
 * org.apache.isis.persistence:isis-persistence-jpa-eclipselink:jar:<managed>
-* org.apache.isis.persistence:isis-persistence-jpa-integration:jar:<managed>
 
 |Apache Isis Maven Deps - Testing
 [source,yaml]
@@ -1111,6 +1110,11 @@ skinparam rectangle<<12>> {
   FontColor #fffffe
   BorderColor #2E6295
 }
+skinparam rectangle<<13>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
 skinparam rectangle<<2>> {
   BackgroundColor #438dd5
   FontColor #fffffe
@@ -1167,6 +1171,7 @@ package "Persistence\n[Software System]" {
   rectangle "==Apache Isis Persistence - JPA\n<size:10>[Container: packaging: pom]</size>" <<9>> as 9
   rectangle "==Apache Isis Persistence - JPA (applib)\n<size:10>[Container: packaging: jar]</size>" <<10>> as 10
   rectangle "==Apache Isis Persistence - JPA (integration)\n<size:10>[Container: packaging: jar]</size>" <<12>> as 12
+  rectangle "==Apache Isis Persistence - JPA (metamodel)\n<size:10>[Container: packaging: jar]</size>" <<13>> as 13
   rectangle "==Apache Isis Persistence - JPA EclipseLink\n<size:10>[Container: packaging: jar]</size>" <<11>> as 11
 }
 2 .[#707070].> 8 : ""
@@ -1177,6 +1182,7 @@ package "Persistence\n[Software System]" {
 2 .[#707070].> 4 : ""
 9 .[#707070].> 10 : ""
 9 .[#707070].> 12 : ""
+9 .[#707070].> 13 : ""
 9 .[#707070].> 11 : ""
 @enduml
 ----
@@ -1241,12 +1247,17 @@ _Dependencies_
 * org.apache.isis.core:isis-core-internaltestsupport:jar:<managed>
 * org.apache.isis.core:isis-core-runtime:jar:<managed>
 * org.apache.isis.persistence:isis-persistence-jdo-applib:jar:<managed>
+* org.apache.isis.persistence:isis-persistence-jdo-integration:jar:<managed>
 * org.apache.isis.persistence:isis-persistence-jdo-provider:jar:<managed>
 * org.datanucleus:datanucleus-api-jdo:jar:<managed>
 * org.datanucleus:datanucleus-core:jar:<managed>
 * org.datanucleus:datanucleus-jdo-query:jar:<managed>
 * org.datanucleus:datanucleus-jodatime:jar:<managed>
 * org.datanucleus:datanucleus-rdbms:jar:<managed>
+
+_Document Index Entries_
+
+xref:system:generated:index/persistence/jdo/datanucleus/schema/JdoSchemaService.adoc[JdoSchemaService]
 
 |Apache Isis Persistence - JDO (integration)
 [source,yaml]
@@ -1271,13 +1282,8 @@ _Dependencies_
 * org.apache.isis.core:isis-core-internaltestsupport:jar:<managed>
 * org.apache.isis.core:isis-core-runtime:jar:<managed>
 * org.apache.isis.persistence:isis-persistence-jdo-applib:jar:<managed>
-* org.apache.isis.persistence:isis-persistence-jdo-datanucleus:jar:<managed>
 * org.apache.isis.persistence:isis-persistence-jdo-metamodel:jar:<managed>
 * org.apache.isis.persistence:isis-persistence-jdo-spring:jar:<managed>
-
-_Document Index Entries_
-
-xref:system:generated:index/persistence/jdo/integration/schema/JdoSchemaService.adoc[JdoSchemaService]
 
 |Apache Isis Persistence - JDO (metamodel)
 [source,yaml]
@@ -1400,7 +1406,24 @@ _Dependencies_
 * org.apache.isis.core:isis-core-internaltestsupport:jar:<managed>
 * org.apache.isis.core:isis-core-runtime:jar:<managed>
 * org.apache.isis.persistence:isis-persistence-jpa-applib:jar:<managed>
+* org.apache.isis.persistence:isis-persistence-jpa-metamodel:jar:<managed>
 * org.springframework.data:spring-data-jpa:jar:<managed>
+
+|Apache Isis Persistence - JPA (metamodel)
+[source,yaml]
+----
+Group: org.apache.isis.persistence
+Artifact: isis-persistence-jpa-metamodel
+Type: jar
+Folder: \persistence\jpa\metamodel
+----
+|JPA Metamodel Facets / Programming Model
+
+_Dependencies_
+
+* org.apache.isis.core:isis-core-internaltestsupport:jar:<managed>
+* org.apache.isis.core:isis-core-runtime:jar:<managed>
+* org.apache.isis.persistence:isis-persistence-jpa-applib:jar:<managed>
 |===
 
 == Security
@@ -1528,12 +1551,12 @@ skinparam {
   maxMessageSize 100
 }
 hide stereotype
-skinparam rectangle<<11>> {
+skinparam rectangle<<22>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<22>> {
+skinparam rectangle<<11>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
@@ -1623,12 +1646,12 @@ skinparam rectangle<<20>> {
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<10>> {
+skinparam rectangle<<21>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<21>> {
+skinparam rectangle<<10>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
@@ -2659,9 +2682,7 @@ _Dependencies_
 * com.h2database:h2:jar:<managed>
 * org.apache.isis.core:isis-core-internaltestsupport:jar:<managed>
 * org.apache.isis.core:isis-core-runtimeservices:jar:<managed>
-* org.apache.isis.persistence:isis-persistence-jdo-applib:jar:<managed>
 * org.apache.isis.security:isis-security-bypass:jar:<managed>
-* org.datanucleus:javax.jdo:jar:<managed>
 * org.hamcrest:hamcrest-library:jar:<managed>
 * org.hsqldb:hsqldb:jar:<managed>
 * org.slf4j:slf4j-api:jar:${slf4j-api.version}
@@ -2792,7 +2813,9 @@ _Dependencies_
 * org.apache.isis.mavendeps:isis-mavendeps-webapp:pom:<managed>
 * org.apache.isis.security:isis-security-shiro:jar:<managed>
 * org.apache.isis.testing:isis-testing-fixtures-applib:jar:<managed>
+* org.apache.isis.testing:isis-testing-integtestsupport-applib:jar:<managed>
 * org.apache.isis.testing:isis-testing-specsupport-applib:jar:<managed>
+* org.apache.isis.testing:isis-testing-unittestsupport-applib:jar:<managed>
 * org.apache.isis.tooling:isis-tooling-model4adoc:jar:${project.version}
 * org.apache.isis.viewer:isis-viewer-common:jar:<managed>
 * org.glassfish:javax.json:jar:1.1.4
@@ -2889,6 +2912,11 @@ skinparam rectangle<<30>> {
   BorderColor #2E6295
 }
 skinparam rectangle<<31>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<32>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
@@ -3011,9 +3039,10 @@ package "Extensions\n[Software System]" {
   rectangle "==Apache Isis Ext - Sec Man Encryption (Using jbcrypt)\n<size:10>[Container: packaging: jar]</size>" <<26>> as 26
   rectangle "==Apache Isis Ext - Sec Man Model\n<size:10>[Container: packaging: jar]</size>" <<27>> as 27
   rectangle "==Apache Isis Ext - Sec Man Persistence (Using JDO)\n<size:10>[Container: packaging: jar]</size>" <<28>> as 28
-  rectangle "==Apache Isis Ext - Sec Man Realm (Using Shiro)\n<size:10>[Container: packaging: jar]</size>" <<29>> as 29
-  rectangle "==Apache Isis Ext - Security - Shiro LDAP Realm (impl)\n<size:10>[Container: packaging: jar]</size>" <<31>> as 31
-  rectangle "==Apache Isis Ext - Security - Shiro LDAP Realm (parent)\n<size:10>[Container: packaging: pom]</size>" <<30>> as 30
+  rectangle "==Apache Isis Ext - Sec Man Persistence (Using JPA)\n<size:10>[Container: packaging: jar]</size>" <<29>> as 29
+  rectangle "==Apache Isis Ext - Sec Man Realm (Using Shiro)\n<size:10>[Container: packaging: jar]</size>" <<30>> as 30
+  rectangle "==Apache Isis Ext - Security - Shiro LDAP Realm (impl)\n<size:10>[Container: packaging: jar]</size>" <<32>> as 32
+  rectangle "==Apache Isis Ext - Security - Shiro LDAP Realm (parent)\n<size:10>[Container: packaging: pom]</size>" <<31>> as 31
   rectangle "==Apache Isis Ext - Wicket Viewer - Excel Download (parent)\n<size:10>[Container: packaging: pom]</size>" <<10>> as 10
   rectangle "==Apache Isis Ext - Wicket Viewer - Excel Download (ui)\n<size:10>[Container: packaging: jar]</size>" <<11>> as 11
   rectangle "==Apache Isis Ext - Wicket Viewer - fullcalendar (applib)\n<size:10>[Container: packaging: jar]</size>" <<15>> as 15
@@ -3036,7 +3065,8 @@ package "Extensions\n[Software System]" {
 24 .[#707070].> 27 : ""
 24 .[#707070].> 28 : ""
 24 .[#707070].> 29 : ""
-30 .[#707070].> 31 : ""
+24 .[#707070].> 30 : ""
+31 .[#707070].> 32 : ""
 10 .[#707070].> 11 : ""
 14 .[#707070].> 15 : ""
 14 .[#707070].> 16 : ""
@@ -3050,7 +3080,7 @@ package "Extensions\n[Software System]" {
 2 .[#707070].> 12 : ""
 2 .[#707070].> 22 : ""
 2 .[#707070].> 24 : ""
-2 .[#707070].> 30 : ""
+2 .[#707070].> 31 : ""
 2 .[#707070].> 10 : ""
 2 .[#707070].> 14 : ""
 2 .[#707070].> 18 : ""
@@ -3109,6 +3139,8 @@ _Dependencies_
 * org.apache.isis.core:isis-core-runtimeservices:jar:<managed>
 * org.apache.isis.mavendeps:isis-mavendeps-jdo:pom:<managed>
 * org.apache.isis.testing:isis-testing-fixtures-applib:jar:<managed>
+* org.apache.isis.testing:isis-testing-integtestsupport-applib:jar:<managed>
+* org.apache.isis.testing:isis-testing-unittestsupport-applib:jar:<managed>
 
 |Apache Isis Ext - Command Replay
 [source,yaml]
@@ -3479,6 +3511,22 @@ _Dependencies_
 * org.apache.isis.persistence:isis-persistence-jdo-datanucleus:jar:<managed>
 * org.apache.isis.testing:isis-testing-fixtures-applib:jar:<managed>
 
+|Apache Isis Ext - Sec Man Persistence (Using JPA)
+[source,yaml]
+----
+Group: org.apache.isis.extensions
+Artifact: isis-extensions-secman-persistence-jpa
+Type: jar
+Folder: \extensions\security\secman\persistence-jpa
+----
+|_Dependencies_
+
+* org.apache.isis.core:isis-core-runtime:jar:<managed>
+* org.apache.isis.extensions:isis-extensions-secman-api:jar:<managed>
+* org.apache.isis.extensions:isis-extensions-secman-model:jar:<managed>
+* org.apache.isis.persistence:isis-persistence-jpa-applib:jar:<managed>
+* org.apache.isis.testing:isis-testing-fixtures-applib:jar:<managed>
+
 |Apache Isis Ext - Sec Man Realm (Using Shiro)
 [source,yaml]
 ----
@@ -3537,22 +3585,22 @@ skinparam {
   maxMessageSize 100
 }
 hide stereotype
-skinparam rectangle<<22>> {
-  BackgroundColor #438dd5
-  FontColor #fffffe
-  BorderColor #2E6295
-}
 skinparam rectangle<<11>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<12>> {
+skinparam rectangle<<22>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
 }
 skinparam rectangle<<23>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<12>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
@@ -3843,7 +3891,7 @@ Folder: \subdomains\excel\testing
 ----
 |_Dependencies_
 
-* org.apache.isis.persistence:isis-persistence-jdo-applib:jar:<managed>
+* org.apache.isis.core:isis-core-metamodel:jar:<managed>
 * org.apache.isis.subdomains:isis-subdomains-excel-applib:jar:<managed>
 * org.projectlombok:lombok:jar:<managed>
 
@@ -4487,6 +4535,7 @@ _Dependencies_
 * org.apache.isis.extensions:isis-extensions-secman-persistence-jdo:jar:<managed>
 * org.apache.isis.extensions:isis-extensions-secman-shiro-realm:jar:<managed>
 * org.apache.isis.testing:isis-testing-h2console-ui:jar:<managed>
+* org.apache.isis.testing:isis-testing-unittestsupport-applib:jar:<managed>
 * org.apache.isis.valuetypes:isis-valuetypes-markdown-applib:jar:<managed>
 * org.assertj:assertj-core:jar:<managed>
 * org.projectlombok:lombok:jar:<managed>
