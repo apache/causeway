@@ -342,6 +342,12 @@
 		</dependency>
 		
 		<dependency>
+			<groupId>org.apache.isis.mavendeps</groupId>
+			<artifactId>isis-mavendeps-integtests</artifactId>
+			<type>pom</type>
+		</dependency>
+		
+		<dependency>
 			<groupId>org.apache.isis.security</groupId>
 			<artifactId>isis-security-shiro</artifactId>
 		</dependency>
