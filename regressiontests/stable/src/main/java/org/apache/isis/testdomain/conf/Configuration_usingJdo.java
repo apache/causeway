@@ -26,6 +26,7 @@ import org.springframework.context.annotation.PropertySources;
 
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
+import org.apache.isis.persistence.jdo.datanucleus.IsisModuleJdoProviderDatanucleus;
 import org.apache.isis.persistence.jdo.integration.IsisModuleJdoIntegration;
 import org.apache.isis.security.bypass.IsisModuleSecurityBypass;
 import org.apache.isis.testdomain.jdo.JdoTestDomainModule;
@@ -35,15 +36,15 @@ import org.apache.isis.testing.fixtures.applib.IsisModuleTestingFixturesApplib;
 
 @Configuration
 @Import({
-    MyService.class, // testing injection into entities 
+    MyService.class, // testing injection into entities
     IsisModuleCoreRuntimeServices.class,
     IsisModuleSecurityBypass.class,
-    IsisModuleJdoIntegration.class,
+    IsisModuleJdoProviderDatanucleus.class,
     IsisModuleTestingFixturesApplib.class,
     KVStoreForTesting.class, // Helper for JUnit Tests
 })
 @ComponentScan(
-        basePackageClasses= {               
+        basePackageClasses= {
                 JdoTestDomainModule.class
         })
 @PropertySources({
@@ -52,6 +53,6 @@ import org.apache.isis.testing.fixtures.applib.IsisModuleTestingFixturesApplib;
     @PropertySource(IsisPresets.NoTranslations),
 })
 public class Configuration_usingJdo {
-    
+
 
 }

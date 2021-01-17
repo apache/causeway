@@ -32,6 +32,7 @@ import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
 import org.apache.isis.extensions.secman.api.SecurityModuleConfig;
 import org.apache.isis.extensions.secman.api.permission.PermissionsEvaluationService;
 import org.apache.isis.extensions.secman.api.permission.PermissionsEvaluationServiceAllowBeatsVeto;
+import org.apache.isis.persistence.jdo.datanucleus.IsisModuleJdoProviderDatanucleus;
 import org.apache.isis.persistence.jdo.integration.IsisModuleJdoIntegration;
 import org.apache.isis.security.shiro.IsisModuleSecurityShiro;
 import org.apache.isis.testdomain.jdo.JdoTestDomainModule;
@@ -42,12 +43,12 @@ import org.apache.isis.testing.fixtures.applib.IsisModuleTestingFixturesApplib;
 @Import({
     IsisModuleCoreRuntimeServices.class,
     IsisModuleSecurityShiro.class,
-    IsisModuleJdoIntegration.class,
+    IsisModuleJdoProviderDatanucleus.class,
     IsisModuleTestingFixturesApplib.class,
     KVStoreForTesting.class, // Helper for JUnit Tests
 })
 @ComponentScan(
-        basePackageClasses= {               
+        basePackageClasses= {
                 JdoTestDomainModule.class
         })
 @PropertySources({
