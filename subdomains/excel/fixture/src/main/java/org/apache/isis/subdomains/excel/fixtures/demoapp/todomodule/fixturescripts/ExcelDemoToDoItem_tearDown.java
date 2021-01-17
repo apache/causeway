@@ -19,9 +19,9 @@
 package org.apache.isis.subdomains.excel.fixtures.demoapp.todomodule.fixturescripts;
 
 import org.apache.isis.subdomains.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItem;
-import org.apache.isis.testing.fixtures.applib.teardown.TeardownFixtureAbstract;
+import org.apache.isis.testing.fixtures.applib.teardown.jdo.TeardownFixtureJdoAbstract;
 
-public class ExcelDemoToDoItem_tearDown extends TeardownFixtureAbstract {
+public class ExcelDemoToDoItem_tearDown extends TeardownFixtureJdoAbstract {
 
     @Override
     protected void execute(final ExecutionContext executionContext) {

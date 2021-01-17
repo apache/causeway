@@ -27,7 +27,7 @@ import org.apache.isis.extensions.commandlog.impl.jdo.CommandJdoRepository;
 import org.apache.isis.extensions.commandlog.impl.ui.CommandServiceMenu;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 import org.apache.isis.testing.fixtures.applib.modules.ModuleWithFixtures;
-import org.apache.isis.testing.fixtures.applib.teardown.TeardownFixtureAbstract;
+import org.apache.isis.testing.fixtures.applib.teardown.jdo.TeardownFixtureJdoAbstract;
 
 @Configuration
 @Import({
@@ -76,7 +76,7 @@ public class IsisModuleExtCommandLogImpl implements ModuleWithFixtures {
      * Should be run in the @Before of the test.
      */
     public FixtureScript getTeardownFixtureWillDelete() {
-        return new TeardownFixtureAbstract() {
+        return new TeardownFixtureJdoAbstract() {
             @Override
             protected void execute(final ExecutionContext executionContext) {
                 deleteFrom(CommandJdo.class);

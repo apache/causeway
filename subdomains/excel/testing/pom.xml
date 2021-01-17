@@ -28,14 +28,15 @@
 
     <dependencies>
 
-		<dependency>
-            <groupId>org.apache.isis.persistence</groupId>
-            <artifactId>isis-persistence-jdo-applib</artifactId>
-        </dependency>
-
         <dependency>
             <groupId>org.apache.isis.subdomains</groupId>
             <artifactId>isis-subdomains-excel-applib</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-core-metamodel</artifactId>
+            <scope>provided</scope>
         </dependency>
 
         <dependency>

@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.testing.fixtures.applib.teardown;
+package org.apache.isis.testing.fixtures.applib.teardown.jdo;
 
 import javax.inject.Inject;
 import javax.jdo.PersistenceManagerFactory;
@@ -32,8 +32,7 @@ import org.apache.isis.persistence.jdo.applib.integration.JdoSupportService;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 
 @Programmatic
-public abstract class TeardownFixtureAbstract extends FixtureScript {
-
+public abstract class TeardownFixtureJdoAbstract extends FixtureScript {
 
     protected void deleteFrom(Class<?> cls) {
 
