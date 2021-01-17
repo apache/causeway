@@ -742,14 +742,14 @@ under the License.
 							<goal>process</goal>
 						</goals>
 						<configuration>
-						
+
 						    <!-- Reference the supplemental-model artifact from module supplemental-model -->
 				            <supplementalModelArtifacts>
 				            	<supplementalModelArtifact>org.apache.isis:supplemental-model:1.0</supplementalModelArtifact>
 				            </supplementalModelArtifacts>
-						
+
 							<runOnlyAtExecutionRoot>true</runOnlyAtExecutionRoot>
-							
+
 							 <!-- Specify the path, relative to the JAR root, where the supplemental model file is located -->
 							<supplementalModels>
 								<supplementalModel>supplemental-models.xml</supplementalModel>
@@ -777,7 +777,7 @@ under the License.
 					</execution>
 				</executions>
 			</plugin>
-			
+
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-enforcer-plugin</artifactId>
@@ -996,7 +996,7 @@ under the License.
 		<!-- END SNIPPET: release-profile -->
 
 		<!-- APACHE ISIS customisation 7/7: start -->
-		
+
 		<profile>
 			<id>released</id>
 			<activation>
@@ -1015,7 +1015,7 @@ under the License.
 				<module>../valuetypes</module>
 			</modules>
 		</profile>
-		
+
 		<!-- APACHE ISIS customisation 7/7: end -->
 
 	</profiles>

@@ -1,3 +1,21 @@
+/*
+ *  Licensed to the Apache Software Foundation (ASF) under one
+ *  or more contributor license agreements.  See the NOTICE file
+ *  distributed with this work for additional information
+ *  regarding copyright ownership.  The ASF licenses this file
+ *  to you under the Apache License, Version 2.0 (the
+ *  "License"); you may not use this file except in compliance
+ *  with the License.  You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing,
+ *  software distributed under the License is distributed on an
+ *  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ *  KIND, either express or implied.  See the License for the
+ *  specific language governing permissions and limitations
+ *  under the License.
+ */
 package org.apache.isis.core.runtimeservices.executor;
 
 import java.lang.reflect.Method;
@@ -60,9 +78,9 @@ import lombok.extern.log4j.Log4j2;
 @Qualifier("Default")
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 @Log4j2
-public class MemberExecutorServiceDefault 
+public class MemberExecutorServiceDefault
 implements MemberExecutorService {
-    
+
     private final @Getter InteractionTracker isisInteractionTracker;
     private final @Getter IsisConfiguration configuration;
     private final @Getter ObjectManager objectManager;
@@ -72,17 +90,17 @@ implements MemberExecutorService {
     private final @Getter Provider<ExecutionPublisher> executionPublisher;
     private final @Getter MetamodelEventService metamodelEventService;
     private final @Getter TransactionService transactionService;
-    
+
     @Override
     public Optional<InternalInteraction> getInteraction() {
         return isisInteractionTracker.currentInteraction()
                 .map(InternalInteraction.class::cast);
     }
-    
+
     @Override
     public ManagedObject invokeAction(
-            final @NonNull ObjectAction owningAction, 
-            final @NonNull InteractionHead head, 
+            final @NonNull ObjectAction owningAction,
+            final @NonNull InteractionHead head,
             final @NonNull Can<ManagedObject> argumentAdapters,
             final @NonNull InteractionInitiatedBy interactionInitiatedBy,
             final @NonNull Method method,
@@ -92,13 +110,13 @@ implements MemberExecutorService {
 
         _Assert.assertEquals(owningAction.getParameterCount(), argumentAdapters.size(),
                 "action's parameter count and provided argument count must match");
-        
+
         val interaction = getInteractionElseFail();
         val command = interaction.getCommand();
-        
+
         command.updater().setPublishingEnabled(
                 CommandPublishingFacet.isPublishingEnabled(facetHolder));
-        
+
         val actionId = owningAction.getIdentifier().toClassAndNameIdentityString();
         log.debug("about to invoke action {}", actionId);
 
@@ -156,13 +174,13 @@ implements MemberExecutorService {
         }
 
         return filteredIfRequired(method, returnedAdapter, interactionInitiatedBy);
-        
+
     }
     @Override
     public ManagedObject setOrClearProperty(
-            final @NonNull OneToOneAssociation owningProperty, 
+            final @NonNull OneToOneAssociation owningProperty,
             final @NonNull InteractionHead head,
-            final @NonNull ManagedObject newValueAdapter, 
+            final @NonNull ManagedObject newValueAdapter,
             final @NonNull InteractionInitiatedBy interactionInitiatedBy,
             final @NonNull PropertyExecutorFactory propertyExecutorFactory,
             final @NonNull FacetHolder facetHolder,
@@ -174,7 +192,7 @@ implements MemberExecutorService {
         if( command==null ) {
             return head.getTarget();
         }
-        
+
         command.updater().setPublishingEnabled(
                 CommandPublishingFacet.isPublishingEnabled(facetHolder));
 
@@ -189,7 +207,7 @@ implements MemberExecutorService {
 
         val propertyEdit = new Interaction.PropertyEdit(interaction, propertyId, target, argValue, targetMemberName, targetClass);
         val executor = propertyExecutorFactory
-                .createExecutor(newValueAdapter, owningProperty, targetManagedObject, 
+                .createExecutor(newValueAdapter, owningProperty, targetManagedObject,
                         interactionInitiatedBy, head, editingVariant);
 
         // sets up startedAt and completedAt on the execution, also manages the execution call graph
@@ -214,11 +232,11 @@ implements MemberExecutorService {
         }
 
         return getObjectManager().adapt(targetPojo);
-        
+
     }
 
     // -- HELPER
-    
+
     private static String targetNameFor(ObjectAction owningAction, ManagedObject mixedInAdapter) {
         return ObjectAction.Util.targetNameFor(owningAction, mixedInAdapter)
                 .orElseGet(()->CommandUtil.targetMemberNameFor(owningAction));
@@ -249,9 +267,9 @@ implements MemberExecutorService {
                         + "which is an entity: {}", resultAdapter);
             }
         }
-        
+
         // ignore all other sorts of objects
-        
+
     }
 
     private ManagedObject filteredIfRequired(
@@ -259,7 +277,7 @@ implements MemberExecutorService {
             final ManagedObject resultAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(resultAdapter)) { 
+        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(resultAdapter)) {
             return null;
         }
 
@@ -273,9 +291,9 @@ implements MemberExecutorService {
         if(result instanceof Collection || result.getClass().isArray()) {
 
             val requiredContainerType = method.getReturnType();
-            
+
             val autofittedObjectContainer = ManagedObjects.VisibilityUtil
-                    .visiblePojosAutofit(resultAdapter, interactionInitiatedBy, requiredContainerType); 
+                    .visiblePojosAutofit(resultAdapter, interactionInitiatedBy, requiredContainerType);
 
             if (autofittedObjectContainer != null) {
                 return getObjectManager().adapt(autofittedObjectContainer);
@@ -293,5 +311,5 @@ implements MemberExecutorService {
     }
 
 
-    
+
 }
