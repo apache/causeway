@@ -107,15 +107,6 @@ public class IsisModuleJdoProviderDatanucleus {
             final Provider<EntityChangeTracker> entityChangeTrackerProvider,
             final DnSettings dnSettings) {
 
-        //final IsisBeanTypeRegistry beanTypeRegistry,
-        // final DnSettings dnSettings,
-        //final List<JdoEntityDiscoveryListener> jdoEntityDiscoveryListeners
-
-//      _NullSafe.stream(jdoEntityDiscoveryListeners)
-//      .forEach(listener->{
-//          listener.onEntitiesDiscovered(pmf, beanTypeRegistry.getEntityTypesJdo(), dnSettings.getAsMap());
-//      });
-
         val lpmfBean = new LocalPersistenceManagerFactoryBean() {
             @Override
             protected PersistenceManagerFactory newPersistenceManagerFactory(java.util.Map<?,?> props) {
