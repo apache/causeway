@@ -66,7 +66,7 @@ import lombok.experimental.UtilityClass;
 
 @Entity
 @Table(
-//        schema = "isisExtensionsSecman",
+        schema = "isisExtensionsSecman",
         name = "ApplicationPermission", 
         uniqueConstraints=
             @UniqueConstraint(

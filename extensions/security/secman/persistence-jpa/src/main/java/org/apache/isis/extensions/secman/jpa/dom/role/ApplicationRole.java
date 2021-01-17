@@ -63,7 +63,7 @@ import lombok.Setter;
 
 @Entity
 @Table(
-//        schema = "isisExtensionsSecman",
+        schema = "isisExtensionsSecman",
         name = "ApplicationRole", 
         uniqueConstraints =
             @UniqueConstraint(

@@ -52,7 +52,7 @@ public class SeedSecurityModuleService {
         log.debug("received app lifecycle event {}", event);
 
         if (event.isPostMetamodel()) {
-        	log.info("SEED security fixtures JDO");
+        	log.info("SEED security fixtures (JDO)");
 
             fixtureScripts.run(new SeedUsersAndRolesFixtureScript());
         }

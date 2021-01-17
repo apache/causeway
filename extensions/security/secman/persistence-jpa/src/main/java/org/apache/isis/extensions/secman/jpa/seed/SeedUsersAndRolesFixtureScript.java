@@ -31,9 +31,9 @@ import org.apache.isis.extensions.secman.jpa.seed.scripts.IsisModuleSecurityRegu
 
 /**
  * This fixture script will be run automatically on start-up by virtue of the fact that the
- * {@link org.apache.isis.extensions.secman.SeedSecurityModuleService.seed.SeedSecurityModuleService} is a
+ * {@link org.apache.isis.extensions.secman.jpa.seed.SeedSecurityModuleService} is a
  * {@link org.apache.isis.applib.annotation.DomainService} and calls the setup during its
- * {@link org.apache.isis.extensions.secman.SeedSecurityModuleService.seed.SeedSecurityModuleService#init() init} 
+ * {@link org.apache.isis.extensions.secman.jpa.seed.SeedSecurityModuleService#init() init} 
  * ({@link javax.annotation.PostConstruct}) method.
  */
 public class SeedUsersAndRolesFixtureScript extends FixtureScript {

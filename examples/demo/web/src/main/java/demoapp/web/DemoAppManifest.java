@@ -75,7 +75,7 @@ import demoapp.web.security.PrototypeActionsVisibilityAdvisor;
     // CORS
     IsisModuleExtCorsImpl.class,
     
-    IsisModuleTestingH2ConsoleUi.class,
+    IsisModuleTestingH2ConsoleUi.class, // enables the H2 console menu item
     IsisModuleExtExcelDownloadUi.class, // allows for collection download as excel
 
     // services
