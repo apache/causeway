@@ -19,6 +19,7 @@
 package org.apache.isis.extensions.secman.jpa.dom.permission;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -52,6 +53,7 @@ import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionVal
 import org.apache.isis.extensions.secman.jpa.dom.constants.NamedQueryNames;
 import org.apache.isis.extensions.secman.jpa.dom.role.ApplicationRole;
 import org.apache.isis.extensions.secman.jpa.dom.user.ApplicationUser;
+import org.apache.isis.extensions.secman.jpa.dom.user.ApplicationUserRepository;
 
 import lombok.NonNull;
 import lombok.val;
@@ -96,10 +98,25 @@ implements org.apache.isis.extensions.secman.api.permission.ApplicationPermissio
         return findByUser(user.getUsername());
     }
 
+    @Inject private ApplicationUserRepository userRepository;
+    
     private List<ApplicationPermission> findByUser(final String username) {
-        return repository.allMatches(
-                Query.named(ApplicationPermission.class, NamedQueryNames.PERMISSION_BY_USER)
-                    .withParameter("username", username));
+        
+        //TODO named query PERMISSION_BY_USER not working yet, using workaround  ...
+        
+        return userRepository.findByUsername(username)
+        .map(ApplicationUser::getRoles)
+        .map(_NullSafe::stream)
+        .map(roleStream->roleStream
+                .map(this::findByRole)
+                .flatMap(List::stream)
+                .collect(Collectors.toList()))
+        .orElse(Collections.emptyList())
+        ;
+
+//        return repository.allMatches(
+//                Query.named(ApplicationPermission.class, NamedQueryNames.PERMISSION_BY_USER)
+//                    .withParameter("username", username));
     }
 
 

@@ -57,7 +57,8 @@ public class SecurityModuleConfig {
     final String[] adminStickyPackagePermissions = new String[]{
             "org.apache.isis.extensions.secman.api",
             "org.apache.isis.extensions.secman.model",
-            "org.apache.isis.extensions.secman.jdo.dom",
+            "org.apache.isis.extensions.secman.jdo.dom", // either jdo or jpa is going to be orphaned
+            "org.apache.isis.extensions.secman.jpa.dom", // either jdo or jpa is going to be orphaned
     };
     
     @Getter @Singular 

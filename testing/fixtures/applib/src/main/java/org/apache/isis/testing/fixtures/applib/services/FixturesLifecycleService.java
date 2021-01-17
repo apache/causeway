@@ -93,12 +93,11 @@ public class FixturesLifecycleService {
 
         log.debug("received app lifecycle event {}", event);
 
-        if (event.isPostMetamodel()) {
-            log.info("SEED");
-
-            if(initialFixtureScript != null) {
-                    fixtureScripts.run(initialFixtureScript);
-            }
+        if (event.isPostMetamodel()
+                && initialFixtureScript != null) {
+            
+            log.info("install initial fixtures from script {}", initialFixtureScript.getFriendlyName());
+            fixtureScripts.run(initialFixtureScript);
         }
         
     }

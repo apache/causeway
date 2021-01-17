@@ -49,7 +49,7 @@ public class AbstractUserAndRolesFixtureScript extends FixtureScript {
     private final List<String> roleNames;
     
     /**
-     * The {@link org.apache.isis.extensions.secman.jdo.dom.user.ApplicationUser} 
+     * The {@link org.apache.isis.extensions.secman.jpa.dom.user.ApplicationUser} 
      * updated/created by the fixture.
      */
     @Getter private ApplicationUser applicationUser;

@@ -80,7 +80,8 @@ import lombok.experimental.UtilityClass;
                   + "FROM org.apache.isis.extensions.secman.jpa.dom.permission.ApplicationPermission p "
                   + "WHERE p.role = :role"),
     @NamedQuery(
-            name = NamedQueryNames.PERMISSION_BY_USER, 
+            name = NamedQueryNames.PERMISSION_BY_USER,
+            //TODO this query returns empty result
             query = "SELECT p "
                   + "FROM org.apache.isis.extensions.secman.jpa.dom.permission.ApplicationPermission p "
                   + ", org.apache.isis.extensions.secman.jpa.dom.user.ApplicationUser u "

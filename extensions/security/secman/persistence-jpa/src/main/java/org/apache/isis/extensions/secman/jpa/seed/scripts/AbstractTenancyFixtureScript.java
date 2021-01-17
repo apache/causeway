@@ -42,7 +42,7 @@ public abstract class AbstractTenancyFixtureScript extends FixtureScript {
     private ApplicationTenancy applicationTenancy;
 
     /**
-     * The {@link org.apache.isis.extensions.secman.jdo.dom.tenancy.ApplicationTenancy} created by this fixture.
+     * The {@link org.apache.isis.extensions.secman.jpa.dom.tenancy.ApplicationTenancy} created by this fixture.
      */
     public ApplicationTenancy getApplicationTenancy() {
         return applicationTenancy;
