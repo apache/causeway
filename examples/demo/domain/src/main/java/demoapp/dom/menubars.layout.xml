@@ -298,17 +298,17 @@ For latest we use: https://raw.githubusercontent.com/apache/isis/master/antora/s
                 </mb3:serviceAction>
             </mb3:section>
 			<mb3:section>
-                <mb3:serviceAction objectType="isisExtH2Console.H2ManagerMenu" id="openH2Console">
-                    <cpt:named>H2 Console</cpt:named>
+                <mb3:named>Prototype Actions (on Object)</mb3:named>
+                <mb3:serviceAction objectType="demoapp.PrototypeActionsVisibilityAdvisor" id="showPrototypeActions">
+                    <cpt:named>Show for Object</cpt:named>
+                </mb3:serviceAction>
+                <mb3:serviceAction objectType="demoapp.PrototypeActionsVisibilityAdvisor" id="doNotShowPrototypeActions">
+                    <cpt:named>Do not Show for Object</cpt:named>
                 </mb3:serviceAction>
             </mb3:section>
 			<mb3:section>
-                <mb3:named>Prototype Actions</mb3:named>
-                <mb3:serviceAction objectType="demoapp.PrototypeActionsVisibilityAdvisor" id="showPrototypeActions">
-                    <cpt:named>Show</cpt:named>
-                </mb3:serviceAction>
-                <mb3:serviceAction objectType="demoapp.PrototypeActionsVisibilityAdvisor" id="doNotShowPrototypeActions">
-                    <cpt:named>Do not Show</cpt:named>
+                <mb3:serviceAction objectType="isisExtH2Console.H2ManagerMenu" id="openH2Console">
+                    <cpt:named>H2 Console</cpt:named>
                 </mb3:serviceAction>
             </mb3:section>
         </mb3:menu>
