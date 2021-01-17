@@ -27,7 +27,7 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 
 @Service
-@Named("isisJdoDn.ExceptionRecognizerForJDODataStoreException")
+@Named("isisJdoIntegration.ExceptionRecognizerForJDODataStoreException")
 @Order(OrderPrecedence.MIDPOINT)
 @Qualifier("Default")
 public class ExceptionRecognizerForJDODataStoreException

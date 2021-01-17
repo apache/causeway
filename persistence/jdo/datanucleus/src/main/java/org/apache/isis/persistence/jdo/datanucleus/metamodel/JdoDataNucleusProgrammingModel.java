@@ -28,7 +28,7 @@ import org.apache.isis.persistence.jdo.datanucleus.metamodel.facets.entity.JdoEn
 import lombok.val;
 
 @Component
-public class JdoIntegrationProgrammingModel implements MetaModelRefiner {
+public class JdoDataNucleusProgrammingModel implements MetaModelRefiner {
 
     //@Inject private IsisConfiguration config;
 

@@ -27,7 +27,7 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 
 @Service
-@Named("isisJdoDn.ExceptionRecognizerForJDOObjectNotFoundException")
+@Named("isisJdoIntegration.ExceptionRecognizerForJDOObjectNotFoundException")
 @Order(OrderPrecedence.MIDPOINT)
 @Qualifier("Default")
 public class ExceptionRecognizerForJDOObjectNotFoundException

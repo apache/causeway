@@ -46,7 +46,7 @@ import lombok.extern.log4j.Log4j2;
  * @since 2.0 {@index}
  */
 @Service
-@Named("isisJdoIntegration.JdoSchemaService")
+@Named("isisJdoDn.JdoSchemaService")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")

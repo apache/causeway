@@ -28,7 +28,7 @@ import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerForType;
 
 @Service
-@Named("isisJdoDn.ExceptionRecognizerForSQLIntegrityConstraintViolationUniqueOrIndexException")
+@Named("isisJdoIntegration.ExceptionRecognizerForSQLIntegrityConstraintViolationUniqueOrIndexException")
 @Order(OrderPrecedence.MIDPOINT)
 @Qualifier("Default")
 public class ExceptionRecognizerForSQLIntegrityConstraintViolationUniqueOrIndexException

@@ -34,21 +34,18 @@ import org.springframework.context.annotation.Primary;
 import org.apache.isis.applib.services.eventbus.EventBusService;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.transaction.changetracking.EntityChangeTracker;
-import org.apache.isis.persistence.jdo.datanucleus.config.DnSettings;
+import org.apache.isis.persistence.jdo.datanucleus.changetracking.JdoLifecycleListener;
 import org.apache.isis.persistence.jdo.datanucleus.config.DnEntityDiscoveryListener;
+import org.apache.isis.persistence.jdo.datanucleus.config.DnSettings;
 import org.apache.isis.persistence.jdo.datanucleus.entities.DnEntityStateProvider;
-import org.apache.isis.persistence.jdo.integration.exceptions.recognizers.ExceptionRecognizerForJDODataStoreException;
-import org.apache.isis.persistence.jdo.integration.exceptions.recognizers.ExceptionRecognizerForJDODataStoreExceptionIntegrityConstraintViolationForeignKeyNoActionException;
-import org.apache.isis.persistence.jdo.integration.exceptions.recognizers.ExceptionRecognizerForJDOObjectNotFoundException;
-import org.apache.isis.persistence.jdo.integration.exceptions.recognizers.ExceptionRecognizerForSQLIntegrityConstraintViolationUniqueOrIndexException;
+import org.apache.isis.persistence.jdo.datanucleus.jdosupport.JdoSupportServiceDefault;
+import org.apache.isis.persistence.jdo.datanucleus.metamodel.JdoDataNucleusProgrammingModel;
 import org.apache.isis.persistence.jdo.datanucleus.mixins.Persistable_datanucleusIdLong;
 import org.apache.isis.persistence.jdo.datanucleus.mixins.Persistable_datanucleusVersionLong;
 import org.apache.isis.persistence.jdo.datanucleus.mixins.Persistable_datanucleusVersionTimestamp;
 import org.apache.isis.persistence.jdo.datanucleus.mixins.Persistable_downloadJdoMetadata;
-import org.apache.isis.persistence.jdo.datanucleus.changetracking.JdoLifecycleListener;
-import org.apache.isis.persistence.jdo.datanucleus.jdosupport.JdoSupportServiceDefault;
-import org.apache.isis.persistence.jdo.datanucleus.metamodel.JdoIntegrationProgrammingModel;
 import org.apache.isis.persistence.jdo.datanucleus.schema.JdoSchemaService;
+import org.apache.isis.persistence.jdo.integration.IsisModuleJdoIntegration;
 import org.apache.isis.persistence.jdo.spring.integration.JdoTransactionManager;
 import org.apache.isis.persistence.jdo.spring.integration.LocalPersistenceManagerFactoryBean;
 import org.apache.isis.persistence.jdo.spring.integration.TransactionAwarePersistenceManagerFactoryProxy;
@@ -57,8 +54,13 @@ import lombok.val;
 
 @Configuration
 @Import({
+    // modules
+    IsisModuleJdoIntegration.class,
+
+    // @Component's
     DnEntityDiscoveryListener.class,
     DnEntityStateProvider.class,
+    JdoDataNucleusProgrammingModel.class,
 
     // @Mixin's
     Persistable_datanucleusIdLong.class,
@@ -66,20 +68,10 @@ import lombok.val;
     Persistable_datanucleusVersionTimestamp.class,
     Persistable_downloadJdoMetadata.class,
 
-    // @Component's
-    JdoIntegrationProgrammingModel.class,
-
     // @Service's
     DnSettings.class,
-    IsisModuleJdoProviderDatanucleus.class,
     JdoSupportServiceDefault.class,
     JdoSchemaService.class,
-
-    ExceptionRecognizerForSQLIntegrityConstraintViolationUniqueOrIndexException.class,
-    ExceptionRecognizerForJDODataStoreExceptionIntegrityConstraintViolationForeignKeyNoActionException.class,
-    ExceptionRecognizerForJDOObjectNotFoundException.class,
-    ExceptionRecognizerForJDODataStoreException.class,
-
 })
 public class IsisModuleJdoProviderDatanucleus {
 
