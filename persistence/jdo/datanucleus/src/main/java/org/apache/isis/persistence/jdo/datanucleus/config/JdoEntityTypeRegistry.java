@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.persistence.jdo.integration.config;
+package org.apache.isis.persistence.jdo.datanucleus.config;
 
 import java.util.Collections;
 import java.util.LinkedHashSet;
@@ -27,7 +27,7 @@ import javax.jdo.annotations.PersistenceCapable;
 
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.config.beans.IsisBeanTypeRegistry;
-import org.apache.isis.persistence.jdo.integration.metamodel.JdoMetamodelUtil;
+import org.apache.isis.persistence.jdo.datanucleus.metamodel.JdoMetamodelUtil;
 
 import lombok.NoArgsConstructor;
 import lombok.Synchronized;
@@ -53,7 +53,7 @@ public class JdoEntityTypeRegistry {
     private static Set<String> findEntityTypes(IsisBeanTypeRegistry isisBeanTypeRegistry) {
 
         val classNamesNotEnhanced = _Lists.<String>newArrayList();
-        
+
         val entityTypes = isisBeanTypeRegistry.getEntityTypes()
         .stream()
         .filter(JdoEntityTypeRegistry::isJdo)

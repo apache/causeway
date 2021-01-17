@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.persistence.jdo.datanucleus.config;
+package org.apache.isis.persistence.jdo.integration.config;
 
 import javax.jdo.annotations.EmbeddedOnly;
 
@@ -32,26 +32,26 @@ import lombok.val;
  * ServiceLoader plugin, classifies PersistenceCapable types into {@link BeanSort#ENTITY}
  * @since 2.0
  */
-public class DnBeanTypeClassifier implements IsisBeanTypeClassifier {
+public class JdoBeanTypeClassifier implements IsisBeanTypeClassifier {
 
     @Override
     public BeanClassification classify(Class<?> type) {
-        
+
         val persistenceCapableAnnot = findNearestAnnotation(type, javax.jdo.annotations.PersistenceCapable.class);
         if(persistenceCapableAnnot.isPresent()) {
-        
+
             val embeddedOnlyAttribute = persistenceCapableAnnot.get().embeddedOnly();
-            // Whether objects of this type can only be embedded, 
+            // Whether objects of this type can only be embedded,
             // hence have no ID that binds them to the persistence layer
             final boolean embeddedOnly = Boolean.valueOf(embeddedOnlyAttribute)
-                    || Annotations.getAnnotation(type, EmbeddedOnly.class)!=null; 
+                    || Annotations.getAnnotation(type, EmbeddedOnly.class)!=null;
             if(embeddedOnly) {
                 return null; // don't categorize as entity ... fall through in the caller's logic
             }
-            
+
             return BeanClassification.selfManaged(BeanSort.ENTITY);
         }
-        
+
         return null; // we don't feel responsible to classify given type
     }
 

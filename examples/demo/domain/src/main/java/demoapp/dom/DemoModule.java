@@ -40,7 +40,7 @@ import org.apache.isis.testing.fixtures.applib.IsisModuleTestingFixturesApplib;
 @Import({
     IsisModuleCoreRuntimeServices.class,
 
-    IsisModuleJdoProviderDatanucleus.class,
+    IsisModuleJdoIntegration.class,
 
     IsisModuleTestingFixturesApplib.class,
 

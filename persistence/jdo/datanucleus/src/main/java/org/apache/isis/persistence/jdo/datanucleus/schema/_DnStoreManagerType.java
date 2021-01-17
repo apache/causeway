@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.persistence.jdo.integration.schema;
+package org.apache.isis.persistence.jdo.datanucleus.schema;
 
 import java.util.Map;
 import java.util.function.Function;
@@ -29,10 +29,10 @@ import org.datanucleus.store.schema.SchemaAwareStoreManager;
 
 /**
  * Given only config properties, tries to find, which kind of store manager
- * Datanucleus is going to utilize. We do this prior to bootstrapping Datanucleus, 
- * to allow for programmatic override of given config properties. 
- * (eg. proper schema creation setup)  
- * 
+ * Datanucleus is going to utilize. We do this prior to bootstrapping Datanucleus,
+ * to allow for programmatic override of given config properties.
+ * (eg. proper schema creation setup)
+ *
  * @since 2.0.0-M2
  */
 enum _DnStoreManagerType {
@@ -45,8 +45,8 @@ enum _DnStoreManagerType {
     public static _DnStoreManagerType typeOf(Map<String, Object> datanucleusProps) {
 
         if(hasSecondaryDataStore(datanucleusProps)) {
-            return Federated; 
-        } 
+            return Federated;
+        }
 
         if(isKnownSchemaAwareStoreManagerIfNotFederated(datanucleusProps)) {
             return SchemaAware;
@@ -109,12 +109,12 @@ enum _DnStoreManagerType {
     }
 
     private static _DnStoreManagerType probe(
-            Map<String, Object> datanucleusProps, 
+            Map<String, Object> datanucleusProps,
             Function<StoreManager, _DnStoreManagerType> categorizer) {
 
         // we create a throw-away instance of PMF so that we can probe whether DN has
         // been configured with a schema-aware store manager or not.
-        final JDOPersistenceManagerFactory probePmf = (JDOPersistenceManagerFactory) 
+        final JDOPersistenceManagerFactory probePmf = (JDOPersistenceManagerFactory)
                 _DnApplicationComponents.newPersistenceManagerFactory(datanucleusProps);
 
         try {

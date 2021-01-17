@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.persistence.jdo.integration.jdosupport;
+package org.apache.isis.persistence.jdo.datanucleus.jdosupport;
 
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
@@ -58,7 +58,7 @@ import lombok.val;
 
 
 /**
- * This service provides a number of utility methods to supplement/support 
+ * This service provides a number of utility methods to supplement/support
  * the capabilities of the JDO Objectstore.
  *
  */
@@ -76,7 +76,7 @@ public class JdoSupportServiceDefault implements JdoSupportService {
     public PersistenceManagerFactory getPersistenceManagerFactory() {
         return pmf.getPersistenceManagerFactory();
     }
-    
+
     @Override
     public <T> T refresh(final T domainObject) {
         val objectManager = mmc.getObjectManager();
@@ -129,7 +129,7 @@ public class JdoSupportServiceDefault implements JdoSupportService {
 
         try(Statement statement = connection.createStatement()) {
             try(final ResultSet rs = statement.executeQuery(sql)) {
-             
+
                 final ResultSetMetaData rsmd = rs.getMetaData();
                 while(rs.next()) {
                     final Map<String,Object> row = _Maps.newLinkedHashMap();
@@ -207,8 +207,8 @@ public class JdoSupportServiceDefault implements JdoSupportService {
     private static <T> List<T> executeListAndClose(final JDOQLTypedQuery<T> query) {
         try {
             final List<T> elements = query.executeList();
-            final List<T> list = _Lists.newArrayList(elements); 
-            return list;    
+            final List<T> list = _Lists.newArrayList(elements);
+            return list;
         } finally {
             query.closeAll();
         }

@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.persistence.jdo.datanucleus.exceptions.recognizers;
+package org.apache.isis.persistence.jdo.integration.exceptions.recognizers;
 
 import java.util.stream.Stream;
 
@@ -32,14 +32,14 @@ import lombok.val;
 final class _JdoNestedExceptionResolver {
 
     static Stream<Throwable> streamNestedExceptionsOf(Throwable throwable) {
-        
+
         if(throwable instanceof JDODataStoreException) {
             val jdoDataStoreException = (JDODataStoreException) throwable;
             return _NullSafe.stream(jdoDataStoreException.getNestedExceptions());
-            
+
         }
         return Stream.empty();
-        
+
     }
-    
+
 }

@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.persistence.jdo.integration.schema;
+package org.apache.isis.persistence.jdo.datanucleus.schema;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -40,9 +40,9 @@ import org.apache.isis.persistence.jdo.spring.integration.TransactionAwarePersis
 import lombok.extern.log4j.Log4j2;
 
 /**
- * Hooks into the application's lifecycle and runs database schema creation logic 
+ * Hooks into the application's lifecycle and runs database schema creation logic
  * as soon as the meta-model was populated.
- * 
+ *
  * @since 2.0 {@index}
  */
 @Service
@@ -55,17 +55,17 @@ public class JdoSchemaService {
 
     @Inject MetaModelContext metaModelContext;
     @Inject TransactionAwarePersistenceManagerFactoryProxy txAwarePmfProxy;
-    
+
     @Named("jdo-platform-transaction-manager")
     @Inject PlatformTransactionManager txManager;
-    
+
     @Inject IsisBeanTypeRegistry isisBeanTypeRegistry;
     @Inject DnSettings dnSettings;
 
     @PostConstruct
     public void init() {
         if(log.isDebugEnabled()) {
-            log.debug("init entity types {}", 
+            log.debug("init entity types {}",
                     txAwarePmfProxy.getPersistenceManagerFactory().getManagedClasses());
         }
     }

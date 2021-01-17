@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.persistence.jdo.integration.config;
+package org.apache.isis.persistence.jdo.datanucleus.config;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -43,7 +43,7 @@ import lombok.extern.log4j.Log4j2;
  * @implNote the methods in this class are <tt>protected</tt> to allow for easy subclassing.
  */
 @Log4j2
-public class CreateSchemaObjectFromClassMetadata 
+public class CreateSchemaObjectFromClassMetadata
 implements MetaDataListener, DataNucleusPropertiesAware {
 
     private Map<String, Object> properties;
@@ -134,7 +134,7 @@ implements MetaDataListener, DataNucleusPropertiesAware {
     protected String schemaNameFor(final AbstractClassMetaData cmd) {
         return cmd.getSchema();
     }
-    
+
     /**
      * Determine the schema creation SQL syntax.
      */
@@ -158,7 +158,7 @@ implements MetaDataListener, DataNucleusPropertiesAware {
         POSTGRES(url->url.startsWith("jdbc:postgres:")),
         HSQLDB(url->url.startsWith("jdbc:hsqldb:")),
         SQLSERVER(url->url.startsWith("jdbc:sqlserver:")),
-        MYSQL(url->url.startsWith("jdbc:mysql:") 
+        MYSQL(url->url.startsWith("jdbc:mysql:")
                 || url.startsWith("jdbc:mariadb:")),
         OTHER(url->true)
         ;
@@ -220,7 +220,7 @@ implements MetaDataListener, DataNucleusPropertiesAware {
         this.properties = properties;
     }
 
-    
+
     private String getPropertyAsString(String key) {
         return (String) properties.get(key);
     }

@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.persistence.jdo.datanucleus.exceptions.recognizers;
+package org.apache.isis.persistence.jdo.integration.exceptions.recognizers;
 
 import javax.inject.Named;
 
@@ -30,7 +30,7 @@ import org.apache.isis.applib.annotation.OrderPrecedence;
 @Named("isisJdoDn.ExceptionRecognizerForJDOObjectNotFoundException")
 @Order(OrderPrecedence.MIDPOINT)
 @Qualifier("Default")
-public class ExceptionRecognizerForJDOObjectNotFoundException 
+public class ExceptionRecognizerForJDOObjectNotFoundException
 extends ExceptionRecognizerForJDODataStoreExceptionAbstract {
 
     public ExceptionRecognizerForJDOObjectNotFoundException() {

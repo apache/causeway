@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.persistence.jdo.datanucleus.exceptions.recognizers;
+package org.apache.isis.persistence.jdo.integration.exceptions.recognizers;
 
 import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
@@ -35,21 +35,21 @@ import lombok.val;
 abstract class ExceptionRecognizerForJDODataStoreExceptionAbstract extends ExceptionRecognizerForType {
 
     @Inject private IsisConfiguration isisConfiguration;
-    
+
     protected ExceptionRecognizerForJDODataStoreExceptionAbstract(
             Category category,
             final Predicate<Throwable> predicate,
             final UnaryOperator<String> messageParser) {
         super(category, predicate, messageParser);
     }
-    
+
     protected ExceptionRecognizerForJDODataStoreExceptionAbstract(
             Category category,
             final Class<? extends Exception> exceptionType,
             final UnaryOperator<String> messageParser) {
         this(category, ofType(exceptionType), messageParser);
     }
-    
+
     @PostConstruct
     public void init() {
         val disabled = isisConfiguration
