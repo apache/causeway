@@ -59,7 +59,6 @@ import demoapp.webapp.wicket.ui.custom.WhereInTheWorldPanelFactory;
     WhereInTheWorldPanelFactory.class,
 
     // Persistence (JDO/DN5)
-    IsisModuleJdoDatanucleus.class,
     IsisModuleValAsciidocPersistenceJdoDn5.class,
     IsisModuleValMarkdownPersistenceJdoDn5.class,
 })
