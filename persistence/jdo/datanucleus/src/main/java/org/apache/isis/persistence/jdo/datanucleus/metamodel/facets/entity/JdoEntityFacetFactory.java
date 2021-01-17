@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.persistence.jdo.integration.metamodel.facets.entity;
+package org.apache.isis.persistence.jdo.datanucleus.metamodel.facets.entity;
 
 
 import javax.jdo.annotations.EmbeddedOnly;
@@ -29,12 +29,12 @@ import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.ObjectSpecIdFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.domainobject.DomainObjectAnnotationFacetFactory;
-import org.apache.isis.persistence.jdo.integration.metamodel.JdoMetamodelUtil;
+import org.apache.isis.persistence.jdo.datanucleus.metamodel.JdoMetamodelUtil;
 
 import lombok.val;
 
 /**
- * Implements {@link ObjectSpecIdFacetFactory} only because 
+ * Implements {@link ObjectSpecIdFacetFactory} only because
  * is a prereq of {@link DomainObjectAnnotationFacetFactory}.
  */
 public class JdoEntityFacetFactory
@@ -66,15 +66,15 @@ implements ObjectSpecIdFacetFactory {
         if (_Strings.isNullOrEmpty(annotationTableAttribute)) {
             annotationTableAttribute = cls.getSimpleName();
         }
-        
+
         val facetHolder = processClassContext.getFacetHolder();
-        
+
         val embeddedOnlyAttribute = annotation.embeddedOnly();
-        // Whether objects of this type can only be embedded, 
+        // Whether objects of this type can only be embedded,
         // hence have no ID that binds them to the persistence layer
         final boolean embeddedOnly = Boolean.valueOf(embeddedOnlyAttribute)
-                || Annotations.getAnnotation(cls, EmbeddedOnly.class)!=null; 
-        
+                || Annotations.getAnnotation(cls, EmbeddedOnly.class)!=null;
+
         if(embeddedOnly) {
             // suppress
         } else {
@@ -84,6 +84,6 @@ implements ObjectSpecIdFacetFactory {
 
         return;
     }
-    
-    
+
+
 }

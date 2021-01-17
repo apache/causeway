@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.persistence.jdo.integration.metamodel;
+package org.apache.isis.persistence.jdo.datanucleus.metamodel;
 
 import java.lang.reflect.Method;
 import java.util.Set;
@@ -27,7 +27,7 @@ import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Sets;
 
 public class JdoMetamodelUtil {
-    
+
     public static boolean isPersistenceEnhanced(@Nullable Class<?> cls) {
         if(cls==null) {
             return false;
@@ -40,14 +40,14 @@ public class JdoMetamodelUtil {
             return false;
         }
         ensureInit();
-        return /*methodStartsWith(method, "jdo") || */ 
+        return /*methodStartsWith(method, "jdo") || */
                 jdoMethodsProvidedByEnhancement.contains(method.toString());
     }
-    
+
     // -- HELPER
 
     private static final Set<String> jdoMethodsProvidedByEnhancement = _Sets.newHashSet();
-    
+
     private static Method[] getMethodsProvidedByEnhancement() {
         return org.datanucleus.enhancement.Persistable.class.getDeclaredMethods();
     }

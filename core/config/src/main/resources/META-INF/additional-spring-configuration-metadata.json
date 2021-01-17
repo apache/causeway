@@ -31,9 +31,6 @@
       "name": "isis.persistence.jdo-datanucleus.impl.datanucleus.PersistenceUnitLoadClasses"
     },
     {
-      "name": "isis.persistence.jdo-datanucleus.impl.datanucleus.objectProvider.className"
-    },
-    {
       "name": "isis.persistence.jdo-datanucleus.impl.datanucleus.schema.autoCreateAll",
       "type": "java.lang.Boolean"
     },

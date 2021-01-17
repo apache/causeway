@@ -32,15 +32,16 @@ import org.apache.isis.extensions.modelannotation.metamodel.IsisModuleExtModelAn
 import org.apache.isis.extensions.secman.api.SecurityModuleConfig;
 import org.apache.isis.extensions.secman.api.permission.PermissionsEvaluationService;
 import org.apache.isis.extensions.secman.api.permission.PermissionsEvaluationServiceAllowBeatsVeto;
+import org.apache.isis.persistence.jdo.datanucleus.IsisModuleJdoProviderDatanucleus;
 import org.apache.isis.persistence.jdo.integration.IsisModuleJdoIntegration;
 import org.apache.isis.testing.fixtures.applib.IsisModuleTestingFixturesApplib;
 
 @Configuration
 @Import({
     IsisModuleCoreRuntimeServices.class,
-    
+
     IsisModuleJdoIntegration.class,
-    
+
     IsisModuleTestingFixturesApplib.class,
 
     IsisModuleExtModelAnnotation.class, // @Model support
@@ -59,7 +60,7 @@ import org.apache.isis.testing.fixtures.applib.IsisModuleTestingFixturesApplib;
                 DemoModule.class
         })
 public class DemoModule {
-    
+
     @Bean
     public SecurityModuleConfig securityModuleConfigBean() {
         return SecurityModuleConfig.builder()
@@ -73,5 +74,5 @@ public class DemoModule {
     public PermissionsEvaluationService permissionsEvaluationService() {
         return new PermissionsEvaluationServiceAllowBeatsVeto();
     }
-    
+
 }

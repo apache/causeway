@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.persistence.jdo.integration.schema;
+package org.apache.isis.persistence.jdo.datanucleus.schema;
 
 import static org.apache.isis.commons.internal.base._NullSafe.stream;
 
@@ -45,7 +45,7 @@ import org.apache.isis.commons.internal.factory._InstanceUtil;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
-import org.apache.isis.persistence.jdo.integration.config.DataNucleusPropertiesAware;
+import org.apache.isis.persistence.jdo.datanucleus.config.DataNucleusPropertiesAware;
 import org.apache.isis.persistence.jdo.provider.metamodel.facets.object.query.JdoNamedQuery;
 import org.apache.isis.persistence.jdo.provider.metamodel.facets.object.query.JdoQueryFacet;
 
@@ -67,11 +67,11 @@ final class _DnApplicationComponents {
             final IsisConfiguration configuration,
             final Map<String, Object> datanucleusProps,
             final Set<String> persistableClassNameSet) {
-        
+
         this.configuration = configuration;
         this.datanucleusProps = datanucleusProps;
         this.persistableClassNameSet = persistableClassNameSet;
-        
+
         persistenceManagerFactory = createPmfAndSchemaIfRequired(
                 this.persistableClassNameSet, this.datanucleusProps);
     }
@@ -85,7 +85,7 @@ final class _DnApplicationComponents {
      */
     public void shutdown() {
         if(persistenceManagerFactory != null) {
-            
+
             try {
                 final ClassLoader cl = _Context.getDefaultClassLoader();
                 persistenceManagerFactory.close();
@@ -95,7 +95,7 @@ final class _DnApplicationComponents {
             } catch (Exception e) {
                 // ignore, since it only affects re-deploy-ability, which is nice to have but not critical
             }
-            
+
             persistenceManagerFactory = null;
         }
     }
@@ -113,7 +113,7 @@ final class _DnApplicationComponents {
 
     // REF: http://www.datanucleus.org/products/datanucleus/jdo/schema.html
     private PersistenceManagerFactory createPmfAndSchemaIfRequired(
-            final Set<String> persistableClassNameSet, 
+            final Set<String> persistableClassNameSet,
             final Map<String, Object> datanucleusProps) {
 
         final _DnStoreManagerType dnStoreManagerType = _DnStoreManagerType.typeOf(datanucleusProps);
@@ -164,7 +164,7 @@ final class _DnApplicationComponents {
     }
 
     private void configureAutoStart(
-            final Set<String> persistableClassNameSet, 
+            final Set<String> persistableClassNameSet,
             final Map<String, Object> datanucleusProps) {
 
         final String persistableClassNames =
@@ -183,7 +183,7 @@ final class _DnApplicationComponents {
 
         JDOPersistenceManagerFactory jdopmf = (JDOPersistenceManagerFactory) persistenceManagerFactory;
         final PersistenceNucleusContext nucleusContext = jdopmf.getNucleusContext();
-        final SchemaAwareStoreManager schemaAwareStoreManager = 
+        final SchemaAwareStoreManager schemaAwareStoreManager =
                 (SchemaAwareStoreManager)nucleusContext.getStoreManager();
 
         final MetaDataManager metaDataManager = nucleusContext.getMetaDataManager();
@@ -236,7 +236,7 @@ final class _DnApplicationComponents {
     static void catalogNamedQueries(
             final MetaModelContext metaModelContext,
             final Set<String> persistableClassNames) {
-        
+
         val namedQueryByName = _Maps.<String, JdoNamedQuery>newHashMap();
         for (val persistableClassName: persistableClassNames) {
             val spec = metaModelContext.getSpecificationLoader()

@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.persistence.jdo.datanucleus.exceptions.recognizers;
+package org.apache.isis.persistence.jdo.integration.exceptions.recognizers;
 
 import javax.inject.Named;
 
@@ -25,23 +25,22 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerForType;
 
 @Service
-@Named("isisJdoDn.ExceptionRecognizerForJDODataStoreException")
+@Named("isisJdoIntegration.ExceptionRecognizerForSQLIntegrityConstraintViolationUniqueOrIndexException")
 @Order(OrderPrecedence.MIDPOINT)
 @Qualifier("Default")
-public class ExceptionRecognizerForJDODataStoreException 
+public class ExceptionRecognizerForSQLIntegrityConstraintViolationUniqueOrIndexException
 extends ExceptionRecognizerForJDODataStoreExceptionAbstract {
 
-    public ExceptionRecognizerForJDODataStoreException() {
-        super(Category.SERVER_ERROR,
-                ofTypeExcluding(
-                        javax.jdo.JDODataStoreException.class,
-                        _JdoNestedExceptionResolver::streamNestedExceptionsOf,
-                        "NOT NULL check constraint"),
-                prefix("Unable to save changes.  " +
-                        "Does similar data already exist, or has referenced data been deleted?"));
+    public ExceptionRecognizerForSQLIntegrityConstraintViolationUniqueOrIndexException() {
+        super(Category.CONSTRAINT_VIOLATION,
+                ofTypeIncluding(
+                        java.sql.SQLIntegrityConstraintViolationException.class,
+                        ExceptionRecognizerForType.NestedExceptionResolver.NOOP,
+                        "unique constraint or index violation"),
+                prefix("Data already exists"));
     }
-
 
 }

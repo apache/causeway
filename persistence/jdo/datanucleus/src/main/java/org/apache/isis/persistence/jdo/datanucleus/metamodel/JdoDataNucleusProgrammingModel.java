@@ -16,19 +16,19 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.persistence.jdo.integration.metamodel;
+package org.apache.isis.persistence.jdo.datanucleus.metamodel;
 
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel.Marker;
-import org.apache.isis.persistence.jdo.integration.metamodel.facets.entity.JdoEntityFacetFactory;
+import org.apache.isis.persistence.jdo.datanucleus.metamodel.facets.entity.JdoEntityFacetFactory;
 
 import lombok.val;
 
 @Component
-public class JdoIntegrationProgrammingModel implements MetaModelRefiner {
+public class JdoDataNucleusProgrammingModel implements MetaModelRefiner {
 
     //@Inject private IsisConfiguration config;
 

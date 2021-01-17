@@ -83,9 +83,9 @@ import lombok.val;
 
 /**
  * Configuration 'beans' with meta-data (IDE-support).
- * 
+ *
  * @see <a href="https://docs.spring.io/spring-boot/docs/current/reference/html/configuration-metadata.html">spring.io</a>
- * 
+ *
  * @since 2.0
  */
 @ConfigurationProperties(IsisConfiguration.ROOT_PREFIX)
@@ -127,7 +127,7 @@ public class IsisConfiguration {
              * </p>
              */
             private boolean autoLogoutIfAlreadyAuthenticated = false;
-            
+
         }
     }
 
@@ -159,11 +159,11 @@ public class IsisConfiguration {
                 /**
                  * TODO[2464] semantic renaming audit/dispatch -> publishing
                  * The default for whether <i>domain entities</i> should be audited or not (meaning that any changes are
-                 * sent through to {@link EntityChangesSubscriber}s and 
+                 * sent through to {@link EntityChangesSubscriber}s and
                  * sent through to {@link EntityPropertyChangeSubscriber}.
                  *
                  * <p>
-                 * This setting can be overridden on a case-by-case basis using {@link org.apache.isis.applib.annotation.DomainObject#auditing()} DomainObject#getAuditing()}
+                 * This setting can be overridden on a case-by-case basis using {@link org.apache.isis.applib.annotation.DomainObject#entityChangePublishing()}
                  * </p>
                  *
                  * <p>
@@ -648,7 +648,7 @@ public class IsisConfiguration {
                  * </p>
                  */
                 private ActionPublishingPolicy commandPublishing = ActionPublishingPolicy.NONE;
-                
+
                 /**
                  * TODO[2464] semantic renaming audit/dispatch -> publishing
                  * The default for whether action invocations should be sent through to the
@@ -716,7 +716,7 @@ public class IsisConfiguration {
                 }
 
 
-                
+
 
             }
 
@@ -1229,12 +1229,12 @@ public class IsisConfiguration {
             @Data
             public static class Introspector {
                 /**
-                 * Whether to perform introspection in parallel. Meant to speed up bootstrapping.  
+                 * Whether to perform introspection in parallel. Meant to speed up bootstrapping.
                  * <p>
                  *     For now this is <i>experimental</i>. Leave this disabled (the default).
                  * </p>
                  */
-                private boolean parallelize = false; //TODO[ISIS-2382] concurrent spec-loading is broken 
+                private boolean parallelize = false; //TODO[ISIS-2382] concurrent spec-loading is broken
 
                 /**
                  * Whether all known types should be fully introspected as part of the bootstrapping, or should only be
@@ -1640,8 +1640,8 @@ public class IsisConfiguration {
         private final JdoDatanucleus jdoDatanucleus = new JdoDatanucleus();
         @Data
         public static class JdoDatanucleus {
-            
-            private String classMetadataLoadedListener = "org.apache.isis.persistence.jdo.integration.config.CreateSchemaObjectFromClassMetadata";
+
+            private String classMetadataLoadedListener = "org.apache.isis.persistence.jdo.datanucleus.config.CreateSchemaObjectFromClassMetadata";
 
             private final Impl impl = new Impl();
             @Data
@@ -1756,19 +1756,6 @@ public class IsisConfiguration {
                             @NotNull @NotEmpty
                             private String type = "none";
                         }
-                    }
-                    private final ObjectProvider objectProvider = new ObjectProvider();
-                    @Data
-                    public static class ObjectProvider {
-                        /**
-                         * Enables dependency injection into entities
-                         *
-                         * <p>
-                         *     See also <tt>additional-spring-configuration-metadata.json</tt> (camelCasing instead of kebab-casing).
-                         * </p>
-                         */
-                        @NotNull @NotEmpty
-                        private String className = "org.apache.isis.persistence.jdo.datanucleus5.datanucleus.JDOStateManagerForIsis";
                     }
                     private final Schema schema = new Schema();
                     @Data
@@ -2289,19 +2276,19 @@ public class IsisConfiguration {
              * </p>
              */
             private boolean wicketSourcePlugin = false;
-            
+
             //TODO no meta data yet ... https://docs.spring.io/spring-boot/docs/current/reference/html/appendix-configuration-metadata.html#configuration-metadata-property-attributes
             private final Application application = new Application();
             @Data
             public static class Application {
-                
+
                 /**
                  * Label used on the about page.
                  */
                 private String about;
-                
+
                 /**
-                 * Either the location of the image file (relative to the class-path resource root), 
+                 * Either the location of the image file (relative to the class-path resource root),
                  * or an absolute URL.
                  *
                  * <p>
@@ -2311,9 +2298,9 @@ public class IsisConfiguration {
                  */
                 @javax.validation.constraints.Pattern(regexp="^[^/].*$")
                 private Optional<String> brandLogoHeader = Optional.empty();
-                
+
                 /**
-                 * Either the location of the image file (relative to the class-path resource root), 
+                 * Either the location of the image file (relative to the class-path resource root),
                  * or an absolute URL.
                  *
                  * <p>
@@ -2323,7 +2310,7 @@ public class IsisConfiguration {
                  */
                 @javax.validation.constraints.Pattern(regexp="^[^/].*$")
                 private Optional<String> brandLogoSignin = Optional.empty();
-                
+
                 /**
                  * URL of file to read any custom CSS, relative to <code>static</code> package on the class path.
                  *
@@ -2350,7 +2337,7 @@ public class IsisConfiguration {
                  */
                 @javax.validation.constraints.Pattern(regexp="^[^/].*$")
                 private Optional<String> faviconUrl = Optional.empty();
-                
+
                 /**
                  */
                 /**
@@ -2383,7 +2370,7 @@ public class IsisConfiguration {
                  */
                 @NotNull @NotEmpty
                 private String name = "Apache Isis ™";
-                
+
                 /**
                  * The version of the application, eg 1.0, 1.1, etc.
                  *
@@ -2394,7 +2381,7 @@ public class IsisConfiguration {
                  */
                 private String version;
             }
-            
+
             private final BookmarkedPages bookmarkedPages = new BookmarkedPages();
             @Data
             public static class BookmarkedPages {
@@ -2487,7 +2474,7 @@ public class IsisConfiguration {
                  */
                 public boolean isDefined() { return (name != null || image != null) && url != null; }
             }
-            
+
             private final DatePicker datePicker = new DatePicker();
             @Data
             public static class DatePicker {
@@ -2607,8 +2594,8 @@ public class IsisConfiguration {
             public static class Welcome {
 
                 /**
-                 * Text to be displayed on the application’s home page, used as a fallback if 
-                 * welcome.file is not specified. If a @HomePage action exists, then that will take 
+                 * Text to be displayed on the application’s home page, used as a fallback if
+                 * welcome.file is not specified. If a @HomePage action exists, then that will take
                  * precedence.
                  */
                 private String text;
@@ -2967,16 +2954,16 @@ public class IsisConfiguration {
     private final Extensions extensions = new Extensions();
     @Data
     public static class Extensions {
-        
+
         private final Cors cors = new Cors();
         @Data
         public static class Cors {
-            
+
             /**
              * TODO missing java-doc
              */
             private boolean allowCredentials = false;
-            
+
             /**
              * Which origins are allowed to make CORS requests.
              *
@@ -3030,7 +3017,7 @@ public class IsisConfiguration {
              */
             private List<String> exposedHeaders = listOf("Authorization");
 
-            
+
         }
 
         private final Quartz quartz = new Quartz();
@@ -3101,7 +3088,7 @@ public class IsisConfiguration {
 
             }
         }
-        
+
 
     }
 

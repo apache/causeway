@@ -24,6 +24,7 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 import org.springframework.context.annotation.Import;
 
 import org.apache.isis.extensions.viewer.wicket.pdfjs.ui.IsisModuleExtPdfjsUi;
+import org.apache.isis.persistence.jdo.datanucleus.IsisModuleJdoProviderDatanucleus;
 import org.apache.isis.valuetypes.asciidoc.metamodel.IsisModuleValAsciidocMetaModel;
 import org.apache.isis.valuetypes.asciidoc.persistence.jdo.dn5.IsisModuleValAsciidocPersistenceJdoDn5;
 import org.apache.isis.valuetypes.asciidoc.ui.wkt.IsisModuleValAsciidocUiWkt;
@@ -31,6 +32,8 @@ import org.apache.isis.valuetypes.markdown.persistence.jdo.dn5.IsisModuleValMark
 import org.apache.isis.valuetypes.markdown.ui.wkt.IsisModuleValMarkdownUiWkt;
 import org.apache.isis.valuetypes.sse.ui.wkt.IsisModuleValSseUiWkt;
 import org.apache.isis.viewer.wicket.viewer.IsisModuleViewerWicketViewer;
+
+import lombok.extern.log4j.Log4j2;
 
 import demoapp.web.DemoAppManifest;
 import demoapp.webapp.wicket.ui.custom.WhereInTheWorldPanelFactory;
@@ -51,15 +54,16 @@ import demoapp.webapp.wicket.ui.custom.WhereInTheWorldPanelFactory;
     IsisModuleValAsciidocUiWkt.class,
     IsisModuleValMarkdownUiWkt.class,
     IsisModuleExtPdfjsUi.class,
-    
+
     // Custom Demo UI (Wicket Viewer)
     WhereInTheWorldPanelFactory.class,
 
     // Persistence (JDO/DN5)
+    IsisModuleJdoProviderDatanucleus.class,
     IsisModuleValAsciidocPersistenceJdoDn5.class,
     IsisModuleValMarkdownPersistenceJdoDn5.class,
 })
-//@Log4j2
+@Log4j2
 public class DemoAppWicket extends SpringBootServletInitializer {
 
     /**

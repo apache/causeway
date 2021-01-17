@@ -16,30 +16,11 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.persistence.jdo.datanucleus.exceptions.recognizers;
+package org.apache.isis.persistence.jdo.datanucleus.config;
 
-import java.util.stream.Stream;
+import java.util.Map;
 
-import javax.jdo.JDODataStoreException;
+public interface DataNucleusPropertiesAware {
 
-import org.apache.isis.commons.internal.base._NullSafe;
-
-import lombok.val;
-
-/**
- * @since 2.0
- */
-final class _JdoNestedExceptionResolver {
-
-    static Stream<Throwable> streamNestedExceptionsOf(Throwable throwable) {
-        
-        if(throwable instanceof JDODataStoreException) {
-            val jdoDataStoreException = (JDODataStoreException) throwable;
-            return _NullSafe.stream(jdoDataStoreException.getNestedExceptions());
-            
-        }
-        return Stream.empty();
-        
-    }
-    
+    public void setDataNucleusProperties(final Map<String, Object> properties);
 }

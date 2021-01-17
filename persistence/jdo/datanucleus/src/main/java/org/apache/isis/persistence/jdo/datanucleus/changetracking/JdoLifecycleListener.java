@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.persistence.jdo.integration.changetracking;
+package org.apache.isis.persistence.jdo.datanucleus.changetracking;
 
 import javax.enterprise.inject.Vetoed;
 import javax.inject.Provider;
@@ -95,11 +95,11 @@ DetachLifecycleListener, DirtyLifecycleListener, LoadLifecycleListener, StoreLif
     @Override
     public void preStore(InstanceLifecycleEvent event) {
         log.debug("preStore {}", ()->_Utils.debug(event));
-        
+
         final Persistable pojo = _Utils.persistableFor(event);
 
         eventBusService.post(PreStoreEvent.of(pojo));
-        
+
         /* Called either when an entity is initially persisted, or when an entity is updated; fires the appropriate
          * lifecycle callback. So filter for those events when initially persisting. */
         if(pojo.dnGetStateManager().isNew(pojo)) {
@@ -115,27 +115,27 @@ DetachLifecycleListener, DirtyLifecycleListener, LoadLifecycleListener, StoreLif
         final Persistable pojo = _Utils.persistableFor(event);
 
         val entity = adaptEntityAndInjectServices(pojo);
-        
+
         eventBusService.post(PostStoreEvent.of(pojo));
-        
+
         /* Called either when an entity is initially persisted, or when an entity is updated;
          * fires the appropriate lifecycle callback.*/
         if(pojo.dnGetStateManager().isNew(pojo)) {
-            
+
             getEntityChangeTracker().enlistCreated(entity);
         } else {
             // the callback and transaction.enlist are done in the preStore callback
             // (can't be done here, as the enlist requires to capture the 'before' values)
             getEntityChangeTracker().recognizeUpdating(entity);
         }
-        
+
     }
-    
+
 
     @Override
     public void preDirty(InstanceLifecycleEvent event) {
         log.debug("preDirty {}", ()->_Utils.debug(event));
-        
+
         final Persistable pojo = _Utils.persistableFor(event);
         val entity = adaptEntity(pojo);
         getEntityChangeTracker().enlistUpdating(entity);
@@ -149,7 +149,7 @@ DetachLifecycleListener, DirtyLifecycleListener, LoadLifecycleListener, StoreLif
     @Override
     public void preDelete(InstanceLifecycleEvent event) {
         log.debug("preDelete {}", ()->_Utils.debug(event));
-        
+
         final Persistable pojo = _Utils.persistableFor(event);
         val entity = adaptEntity(pojo);
         getEntityChangeTracker().enlistDeleting(entity);
@@ -186,21 +186,21 @@ DetachLifecycleListener, DirtyLifecycleListener, LoadLifecycleListener, StoreLif
         log.debug("postDetach {}", ()->_Utils.debug(event));
         _Utils.resolveInjectionPoints(metaModelContext, event);
     }
-    
+
     // -- HELPER
-    
+
     private ManagedObject adaptEntity(final @NonNull Persistable pojo) {
         return _Utils.adaptEntity(metaModelContext, pojo);
     }
-    
+
     private ManagedObject adaptEntityAndInjectServices(final @NonNull Persistable pojo) {
         return _Utils.adaptEntityAndInjectServices(metaModelContext, pojo);
     }
-            
+
     // -- DEPENDENCIES
-    
+
     private EntityChangeTracker getEntityChangeTracker() {
-        return entityChangeTrackerProvider.get(); 
+        return entityChangeTrackerProvider.get();
     }
 
 }

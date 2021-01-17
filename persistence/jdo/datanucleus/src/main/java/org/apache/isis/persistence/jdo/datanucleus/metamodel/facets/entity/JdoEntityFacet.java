@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.persistence.jdo.integration.metamodel.facets.entity;
+package org.apache.isis.persistence.jdo.datanucleus.metamodel.facets.entity;
 
 import java.lang.reflect.Method;
 import java.util.List;
@@ -53,7 +53,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.transaction.changetracking.EntityChangeTracker;
 import org.apache.isis.persistence.jdo.datanucleus.entities.DnEntityStateProvider;
 import org.apache.isis.persistence.jdo.datanucleus.oid.JdoObjectIdSerializer;
-import org.apache.isis.persistence.jdo.integration.metamodel.JdoMetamodelUtil;
+import org.apache.isis.persistence.jdo.datanucleus.metamodel.JdoMetamodelUtil;
 import org.apache.isis.persistence.jdo.spring.integration.TransactionAwarePersistenceManagerFactoryProxy;
 
 import lombok.NonNull;
@@ -61,10 +61,10 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
-public class JdoEntityFacet 
+public class JdoEntityFacet
 extends FacetAbstract
 implements EntityFacet {
-    
+
     @Inject private TransactionAwarePersistenceManagerFactoryProxy pmf;
     @Inject private TransactionService txService;
     @Inject private ObjectManager objectManager;
@@ -83,43 +83,43 @@ implements EntityFacet {
                     "The persistence layer cannot identify a pojo that is null (given type %s)",
                     spec.getCorrespondingClass().getName());
         }
-        
+
         if(!isPersistableType(pojo.getClass())) {
             throw _Exceptions.illegalArgument(
                     "The persistence layer does not recognize given type %s",
                     pojo.getClass().getName());
         }
-        
+
         val persistenceManager = getPersistenceManager();
         val primaryKey = persistenceManager.getObjectId(pojo);
-        
+
         if(primaryKey==null) {
             throw _Exceptions.illegalArgument(
                     "The persistence layer does not recognize given object of type %s, "
                     + "meaning the object has no identifier that associates it with the persistence layer. "
-                    + "(most likely, because the object is detached, eg. was not persisted after being new-ed up)", 
+                    + "(most likely, because the object is detached, eg. was not persisted after being new-ed up)",
                     pojo.getClass().getName());
         }
-        
+
         final String identifier = JdoObjectIdSerializer.toOidIdentifier(primaryKey);
         if(_Strings.isEmpty(identifier)) {
             throw _Exceptions.illegalArgument(
-                    "JdoObjectIdSerializer failed to convert primary key %s to a String.", 
+                    "JdoObjectIdSerializer failed to convert primary key %s to a String.",
                     primaryKey.getClass().getName());
         }
-        
+
         return identifier;
     }
-    
+
     @Override
     public ManagedObject fetchByIdentifier(
-            final @NonNull ObjectSpecification entitySpec, 
+            final @NonNull ObjectSpecification entitySpec,
             final @NonNull String identifier) {
-        
+
         _Assert.assertTrue(entitySpec.isEntity());
-        
+
         val rootOid = Oid.Factory.root(entitySpec.getSpecId(), identifier);
-        
+
         log.debug("fetchEntity; rootOid={}", rootOid);
 
         Object entityPojo;
@@ -130,7 +130,7 @@ implements EntityFacet {
             val fetchPlan = persistenceManager.getFetchPlan();
             fetchPlan.addGroup(FetchGroup.DEFAULT);
             entityPojo = persistenceManager.getObjectById(entityClass, primaryKey);
-            
+
         } catch (final RuntimeException e) {
 
             //XXX this idiom could be delegated to a service
@@ -151,86 +151,86 @@ implements EntityFacet {
         if (entityPojo == null) {
             throw new ObjectNotFoundException(rootOid);
         }
-        
+
         val actualEntitySpec = getSpecificationLoader().loadSpecification(entityPojo.getClass());
         getServiceInjector().injectServicesInto(entityPojo); // might be redundant
         //TODO integrate with entity change tracking
         return ManagedObject.identified(actualEntitySpec, entityPojo, rootOid);
     }
-    
+
     @Override
     public Can<ManagedObject> fetchByQuery(ObjectSpecification spec, Query<?> query) {
         if(!spec.isEntity()) {
             throw _Exceptions.unexpectedCodeReach();
         }
-        
+
         if (log.isDebugEnabled()) {
             log.debug("about to execute Query: {}", query.getDescription());
         }
-        
+
         val range = query.getRange();
-        
+
         if(query instanceof AllInstancesQuery) {
 
             val queryFindAllInstances = (AllInstancesQuery<?>) query;
             val queryEntityType = queryFindAllInstances.getResultType();
-            
+
             val persistenceManager = getPersistenceManager();
-            
+
             val typedQuery = persistenceManager.newJDOQLTypedQuery(queryEntityType);
             typedQuery.extension(RDBMSPropertyNames.PROPERTY_RDBMS_QUERY_MULTIVALUED_FETCH, "none");
-            
+
             if(!range.isUnconstrained()) {
                 typedQuery.range(range.getStart(), range.getEnd());
             }
-            
+
             val resultList = fetchWithinTransaction(typedQuery::executeList);
-            
+
             if(range.hasLimit()) {
                 _Assert.assertTrue(resultList.size()<=range.getLimit());
             }
-            
+
             return resultList;
-            
+
         } else if(query instanceof NamedQuery) {
-            
+
             val applibNamedQuery = (NamedQuery<?>) query;
             val queryResultType = applibNamedQuery.getResultType();
-            
+
             val persistenceManager = getPersistenceManager();
-            
+
             val namedParams = _Maps.<String, Object>newHashMap();
             val namedQuery = persistenceManager.newNamedQuery(queryResultType, applibNamedQuery.getName())
                     .setNamedParameters(namedParams);
             namedQuery.extension(RDBMSPropertyNames.PROPERTY_RDBMS_QUERY_MULTIVALUED_FETCH, "none");
-            
+
             if(!range.isUnconstrained()) {
                 namedQuery.range(range.getStart(), range.getEnd());
             }
-            
+
             // inject services into query params; not sure if required (might be redundant)
             {
                 val injector = getServiceInjector();
-                
+
                 applibNamedQuery
                 .getParametersByName()
                 .values()
                 .forEach(injector::injectServicesInto);
             }
-            
+
             applibNamedQuery
                 .getParametersByName()
                 .forEach(namedParams::put);
-            
+
             val resultList = fetchWithinTransaction(namedQuery::executeList);
-            
+
             if(range.hasLimit()) {
                 _Assert.assertTrue(resultList.size()<=range.getLimit());
             }
-            
+
             return resultList;
         }
-        
+
         throw _Exceptions.unsupportedOperation("query type %s (%s) not supported by this persistence implementation",
                 query.getClass(),
                 query.getDescription());
@@ -239,65 +239,65 @@ implements EntityFacet {
     @Override
     public void persist(final ObjectSpecification spec, final Object pojo) {
 
-        if(pojo==null 
+        if(pojo==null
                 || !isPersistableType(pojo.getClass())
                 || DnEntityStateProvider.entityState(pojo).isAttached()) {
             return; // nothing to do
         }
-        
+
         val pm = getPersistenceManager();
-        
+
         log.debug("about to persist entity {}", pojo);
-        
+
         getTransactionalProcessor()
         .runWithinCurrentTransactionElseCreateNew(()->pm.makePersistent(pojo))
         .nullableOrElseFail();
-        
+
         //TODO integrate with entity change tracking
     }
-    
+
     @Override
     public void delete(final ObjectSpecification spec, final Object pojo) {
-        
+
         if(pojo==null || !isPersistableType(pojo.getClass())) {
             return; // nothing to do
         }
-        
+
         if (!DnEntityStateProvider.entityState(pojo).isAttached()) {
             throw _Exceptions.illegalArgument("can only delete an attached entity");
         }
-        
+
         val pm = getPersistenceManager();
-        
+
         log.debug("about to delete entity {}", pojo);
-        
+
         getTransactionalProcessor()
         .runWithinCurrentTransactionElseCreateNew(()->pm.deletePersistent(pojo))
         .nullableOrElseFail();
-        
+
         //TODO integrate with entity change tracking
     }
-    
+
     @Override
     public void refresh(Object pojo) {
-        
+
         if(pojo==null
                 || !isPersistableType(pojo.getClass())
                 || !DnEntityStateProvider.entityState(pojo).isPersistable()) {
             return; // nothing to do
         }
-        
+
         val pm = getPersistenceManager();
-        
+
         log.debug("about to refresh entity {}", pojo);
-        
+
         getTransactionalProcessor()
         .runWithinCurrentTransactionElseCreateNew(()->pm.refresh(pojo))
         .nullableOrElseFail();
-        
+
         //TODO integrate with entity change tracking
     }
-    
+
     @Override
     public EntityState getEntityState(Object pojo) {
         return DnEntityStateProvider.entityState(pojo);
@@ -309,7 +309,7 @@ implements EntityFacet {
     }
 
     // -- HELPER
-    
+
     private static boolean isPersistableType(Class<?> type) {
         return Persistable.class.isAssignableFrom(type);
     }
@@ -320,54 +320,54 @@ implements EntityFacet {
     }
 
     // -- INTERACTION TRACKER LAZY LOOKUP
-    
-    // memoizes the lookup, just an optimization 
+
+    // memoizes the lookup, just an optimization
 //    private final _Lazy<InteractionTracker> isisInteractionTrackerLazy = _Lazy.threadSafe(
 //            ()->getServiceRegistry().lookupServiceElseFail(InteractionTracker.class));
-    
+
     // -- DEPENDENCIES
-    
+
     private PersistenceManager getPersistenceManager() {
         if(pmf==null) {
             getFacetHolder().getServiceInjector().injectServicesInto(this);
         }
         return pmf.getPersistenceManagerFactory().getPersistenceManager();
     }
-    
+
     private TransactionalProcessor getTransactionalProcessor() {
         if(txService==null) {
             getFacetHolder().getServiceInjector().injectServicesInto(this);
         }
         return txService;
     }
-    
+
 //    private JdoPersistenceSession getJdoPersistenceSession() {
 //        return isisInteractionTrackerLazy.get().currentInteractionSession()
 //                .map(interactionSession->interactionSession.getAttribute(JdoPersistenceSession.class))
 //                .orElseThrow(()->_Exceptions.illegalState("no JdoPersistenceSession on current thread"));
 //    }
-    
+
     // -- HELPER
-    
+
     private Can<ManagedObject> fetchWithinTransaction(Supplier<List<?>> fetcher) {
-        
-        val entityChangeTracker = getFacetHolder().getServiceRegistry().lookupServiceElseFail(EntityChangeTracker.class); 
-        
+
+        val entityChangeTracker = getFacetHolder().getServiceRegistry().lookupServiceElseFail(EntityChangeTracker.class);
+
         return getTransactionalProcessor().callWithinCurrentTransactionElseCreateNew(
                 ()->_NullSafe.stream(fetcher.get())
                     .map(fetchedObject->adopt(entityChangeTracker, fetchedObject))
                     .collect(Can.toCan()))
                 .orElseFail();
     }
-    
+
     private ManagedObject adopt(final EntityChangeTracker entityChangeTracker, final Object fetchedObject) {
         // handles lifecycle callbacks and injects services
-        
+
         // ought not to be necessary, however for some queries it seems that the
         // lifecycle listener is not called
         if(fetchedObject instanceof Persistable) {
             // an entity
-            val entity = objectManager.adapt(fetchedObject); 
+            val entity = objectManager.adapt(fetchedObject);
                     //fetchResultHandler.initializeEntityAfterFetched((Persistable) fetchedObject);
             entityChangeTracker.recognizeLoaded(entity);
             return entity;
@@ -376,6 +376,6 @@ implements EntityFacet {
             return objectManager.adapt(fetchedObject);
         }
     }
-    
+
 
 }

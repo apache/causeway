@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.persistence.jdo.datanucleus.exceptions.recognizers;
+package org.apache.isis.persistence.jdo.integration.exceptions.recognizers;
 
 import javax.inject.Named;
 
@@ -25,22 +25,19 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
-import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerForType;
 
 @Service
-@Named("isisJdoDn.ExceptionRecognizerForSQLIntegrityConstraintViolationUniqueOrIndexException")
+@Named("isisJdoIntegration.ExceptionRecognizerForJDOObjectNotFoundException")
 @Order(OrderPrecedence.MIDPOINT)
 @Qualifier("Default")
-public class ExceptionRecognizerForSQLIntegrityConstraintViolationUniqueOrIndexException
+public class ExceptionRecognizerForJDOObjectNotFoundException
 extends ExceptionRecognizerForJDODataStoreExceptionAbstract {
 
-    public ExceptionRecognizerForSQLIntegrityConstraintViolationUniqueOrIndexException() {
-        super(Category.CONSTRAINT_VIOLATION,
-                ofTypeIncluding(
-                        java.sql.SQLIntegrityConstraintViolationException.class,
-                        ExceptionRecognizerForType.NestedExceptionResolver.NOOP,
-                        "unique constraint or index violation"),
-                prefix("Data already exists"));
+    public ExceptionRecognizerForJDOObjectNotFoundException() {
+        super(Category.NOT_FOUND,
+                javax.jdo.JDOObjectNotFoundException.class,
+                prefix("Unable to load object.  " +
+                        "Has it been deleted by someone else?"));
     }
 
 }
