@@ -1594,6 +1594,15 @@ public class IsisConfiguration {
             public static class Translation {
 
                 private final Po po = new Po();
+                
+                /**
+                 * Specifies the relative resource path to look for translation files.
+                 * <p>
+                 * If {@code null} uses {@code servletContext.getResource("/WEB-INF/")}.
+                 * <p>
+                 * Replaces the former Servlet context parameter 'isis.config.dir';
+                 */
+                private String resourceLocation = null;
 
                 @Data
                 public static class Po {

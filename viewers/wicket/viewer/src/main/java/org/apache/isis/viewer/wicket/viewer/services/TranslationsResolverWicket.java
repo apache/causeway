@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.ServletContext;
 
@@ -39,32 +40,35 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.i18n.TranslationsResolver;
 import org.apache.isis.commons.internal.base._Text;
-import org.apache.isis.viewer.wicket.viewer.wicketapp.IsisWicketApplication;
+import org.apache.isis.core.config.IsisConfiguration;
 
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 
 /**
  * An implementation that reads from /WEB-INF/...
+ * TODO this Service is also required by the VaadinViewer, could be moved to a shared module
+ * TODO ... or (ideally) let Spring handle translations
  */
 @Service
 @Named("isisWicketViewer.TranslationsResolverWicket")
 @Order(OrderPrecedence.MIDPOINT)
 @Qualifier("Wicket")
+@RequiredArgsConstructor(onConstructor_ = {@Inject})
 @Log4j2
 public class TranslationsResolverWicket implements TranslationsResolver {
 
-    /**
-     * Servlet context parameter name used to specify the location for translations.
-     */
-    public static final String CONFIG_DIR_PARAM = "isis.config.dir";
+    private final ServletContext servletContext;
+    private final IsisConfiguration isisConfiguration;
 
     @Override
     public List<String> readLines(final String fileName) {
-        final ServletContext servletContext = getServletContext();
-
-        final String configLocation = servletContext.getInitParameter(CONFIG_DIR_PARAM);
+        
+        final String configLocation = 
+                isisConfiguration.getCore().getRuntimeServices().getTranslation().getResourceLocation();
+        
         try {
             if(configLocation != null) {
                 log.info( "Reading translations relative to config override location: {}", configLocation );
@@ -75,7 +79,7 @@ public class TranslationsResolverWicket implements TranslationsResolver {
                 return readLines(url);
             }
         } catch (final RuntimeException | IOException ignored) {
-            return null;
+            return Collections.emptyList();
         }
     }
 
@@ -85,15 +89,11 @@ public class TranslationsResolverWicket implements TranslationsResolver {
         return path.resolve(fileName);
     }
 
-    protected ServletContext getServletContext() {
-        return getIsisWicketApplication().getServletContext();
-    }
-
     private static final Pattern nonEmpty = Pattern.compile("^(#:|msgid|msgstr).+$");
     
     private static List<String> readLines(final URL url) throws IOException {
         if(url == null) {
-            return null;
+            return Collections.emptyList();
         }
         
         val acceptedLines = _Text.readLinesFromUrl(url, StandardCharsets.UTF_8)
@@ -102,10 +102,6 @@ public class TranslationsResolverWicket implements TranslationsResolver {
         .collect(Collectors.toList());
         
         return Collections.unmodifiableList(acceptedLines);
-    }
-
-    protected IsisWicketApplication getIsisWicketApplication() {
-        return IsisWicketApplication.get();
     }
 
 }
