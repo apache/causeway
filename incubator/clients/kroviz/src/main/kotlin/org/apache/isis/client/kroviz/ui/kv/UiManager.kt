@@ -31,7 +31,6 @@ import org.apache.isis.client.kroviz.to.TObject
 import org.apache.isis.client.kroviz.to.mb.Menubars
 import org.apache.isis.client.kroviz.utils.Utils
 import org.w3c.dom.events.KeyboardEvent
-import pl.treksoft.kvision.core.Component
 import pl.treksoft.kvision.core.Widget
 import pl.treksoft.kvision.dropdown.ContextMenu
 import pl.treksoft.kvision.panel.SimplePanel
@@ -49,6 +48,7 @@ object UiManager {
 
     private var session: Session? = null
     private val popups = mutableListOf<Widget>()
+    private val settings = mutableMapOf<String,Any>()
 
     init {
         window.addEventListener("keydown", fun(event) {
@@ -146,18 +146,18 @@ object UiManager {
         pop()
     }
 
-    fun topDialog(): Component {
-        val allDialogs = RoApp.getChildren().filter {
-            it is RoDialog
+    fun getUrl(): String {
+        return when (session) {
+            null -> ""
+            else -> session!!.url
         }
-        return allDialogs.first()
     }
 
-    fun getUrl(): String {
-        return if (session == null) {
-            ""
-        } else {
-            session!!.url
+    fun loadDomainTypes(): Boolean {
+        val k = "loadDomainTypes"
+        return when {
+            settings.containsKey(k) -> settings.getValue(k) as Boolean
+            else -> false
         }
     }
 
