@@ -184,6 +184,12 @@ implements
         txCounter.get().increment();
     }
     
+    /** INTERACTION END BOUNDARY */
+    @Override
+    public void afterLeavingTransactionalBoundary(InteractionSession interactionSession) {
+        txCounter.remove(); //XXX not tested yet: can we be certain that no txCounter.get() is called afterwards? 
+    }
+    
     // -- HELPER
     
     private PlatformTransactionManager transactionManagerForElseFail(TransactionDefinition def) {
