@@ -98,7 +98,7 @@
 
 		<cucumber.version>6.9.1</cucumber.version>
 
-		<cxf-rt-rs-client.version>3.4.0</cxf-rt-rs-client.version>
+		<cxf-rt-rs-client.version>3.4.2</cxf-rt-rs-client.version>
 
 		<danhaywood-java-assertjext.version>0.1.0</danhaywood-java-assertjext.version>
 		<danhaywood-java-testsupport.version>1.0.0</danhaywood-java-testsupport.version>
@@ -178,7 +178,7 @@
 
 		<togglz.version>2.9.2</togglz.version>
 
-		<vaadin.version>14.4.5</vaadin.version>
+		<vaadin.version>14.4.6</vaadin.version>
 
 		<wicket.version>8.11.0</wicket.version>
 		<wicket-bootstrap.version>2.0.14</wicket-bootstrap.version> <!-- de.agilecoders.wicket:wicket-bootstrap... -->
@@ -252,7 +252,7 @@
 			<extension>
 				<groupId>org.apache.maven.wagon</groupId>
 				<artifactId>wagon-ssh</artifactId>
-				<version>3.4.0</version>
+				<version>3.4.2</version>
 			</extension>
 			<!-- ftp support for deployments. -->
 			<extension>
