@@ -67,7 +67,7 @@ Similarly, the `Bulk.InteractionContext` domain service is replaced with the lin
 
 |`@Collection`
 |`notPersisted`
-| Removed, replaced with link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Collection_mementoSerialization[`@Collection#mementoSerialization()`]
+| Removed, no replacement.
 
 |`@CollectionInteraction`
 |
@@ -247,7 +247,7 @@ ChangedEvent`
 
 |`@Property`
 |`notPersisted`
-| Removed, replaced with link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Collection_mementoSerialization[`@Collection#mementoSerialization()`]
+| Removed, replaced with link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Property_snapshot[`@Property#snapshot()`]
 
 |`@PropertyInteraction`
 |

@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.annotDomain.Property.mementoSerialization;
+package demoapp.dom.annotDomain.Property.snapshot;
 
 import javax.inject.Inject;
 
@@ -30,39 +30,32 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 //tag::class[]
-@Action(
-    semantics = SemanticsOf.SAFE
-)
+@Action(semantics = SemanticsOf.SAFE)
 @RequiredArgsConstructor
-public class PropertyMementoSerializationVm_takeSnapshot {
+public class PropertySnapshotVm_takeXmlSnapshot {
 
-    @Inject
-    XmlSnapshotService xmlSnapshotService;
-    @Inject
-    XmlService xmlService;
-
+    @Inject XmlSnapshotService xmlSnapshotService;
     // ...
 //end::class[]
+    @Inject XmlService xmlService;
 
-    private final PropertyMementoSerializationVm propertyMementoSerializationVm;
-
-
+    private final PropertySnapshotVm vm;
 //tag::class[]
-    public Clob act() {
-        return snapshotUsing(propertyMementoSerializationVm);
-    }
-
-    private Clob snapshotUsing(
-            final Object parentVm) {
-        val builder = xmlSnapshotService.builderFor(parentVm);
+    public Clob act(final String fileName) {
+        val builder = xmlSnapshotService.builderFor(vm);
         val snapshot = builder.build();
         val doc = snapshot.getXmlDocument();
-        return asClob(xmlService.asString(doc));
+        return asClob(fileName, xmlService.asString(doc));
+    }
+    // ...
+//end::class[]
+    public String default0Act() {
+        return "snapshot.xml";
     }
 
-
-    private static Clob asClob(final String xmlStr) {
-        return new Clob("snapshot.xml", "application/xml", xmlStr);
+    private static Clob asClob(final String fileName, final String xmlStr) {
+        return new Clob(fileName, "application/xml", xmlStr);
     }
+//tag::class[]
 }
 //end::class[]

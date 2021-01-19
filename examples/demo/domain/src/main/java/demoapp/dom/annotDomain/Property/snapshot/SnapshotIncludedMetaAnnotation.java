@@ -16,33 +16,25 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.annotation;
+package demoapp.dom.annotDomain.Property.snapshot;
 
-/**
- * Whether the property or collection is included if the domain object is serialized into a memento.
- * @since 1.x {@index}
- */
-public enum MementoSerialization {
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Inherited;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-    /**
-     * Property or collection is included in any mementos.
-     * This is the fallback/default if not explicitly excluded.
-     */
-    INCLUDED,
+import org.apache.isis.applib.annotation.Snapshot;
+import org.apache.isis.applib.annotation.Property;
 
-    /**
-     * Property or collection's state is excluded from any mementos.
-     *
-     * <p>
-     *     Corresponds to <tt>@Property(notPersisted=true)</tt> or <tt>@Collection(notPersisted=true)</tt> prior to Isis 2.x
-     * </p>
-     */
-    EXCLUDED,
-
-    /**
-     * Ignore the value provided by this annotation (meaning that the framework will keep searching, in meta
-     * annotations or superclasses/interfaces).
-     */
-    NOT_SPECIFIED
+//tag::class[]
+@Property(snapshot = Snapshot.INCLUDED)
+@Inherited
+@Target({
+        ElementType.METHOD, ElementType.FIELD
+})
+@Retention(RetentionPolicy.RUNTIME)
+public @interface SnapshotIncludedMetaAnnotation {
 
 }
+//end::class[]

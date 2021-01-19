@@ -27,8 +27,8 @@ isis.core.metaModel.validator.serviceActionsOnly=true // <.>
 isis.core.metaModel.validator.mixins-only=true        // <.>
 ----
 <.> `@DomainService(natureOfService=VIEW/REST)` is now solely used for UI menu action providers and REST end-points.
-There is no longer the need to validate uses of `natureOfService=DOMAIN` as this option was removed.  
-<.> Support for services that contribute members to other `DomainObjects` was removed. Use `Mixins` instead. 
+There is no longer the need to validate uses of `natureOfService=DOMAIN` as this option was removed.
+<.> Support for services that contribute pathsToInclude to other `DomainObjects` was removed. Use `Mixins` instead.
 
 See the former java-doc for hints on how to migrate the previous options.
 
@@ -87,19 +87,16 @@ VIEW_CONTRIBUTIONS_ONLY,
 | was
 | now what?
 
-| `@ActionLayout(contributed=...)` 
+| `@ActionLayout(contributed=...)`
 | was only effective on mixin methods; use `@Action`, `@Property` or `@Collection` instead
 
-| `@Action/@Property(command=...)` 
+| `@Action/@Property(command=...)`
 | replaced with `commandPublishing`
 
-| `@Action/@Property(publish=...)` 
+| `@Action/@Property(publish=...)`
 | replaced with `executionPublishing`
 
-| `@Collection(mementoSerialization=...)`
-| TODO: work in progress
-
-| `@DomainObject(audit=...)` 
+| `@DomainObject(audit=...)`
 | replaced with `entityChangePublishing`
 
 | `@DomainObject(nature=...)`
@@ -108,23 +105,23 @@ VIEW_CONTRIBUTIONS_ONLY,
 * `INMEMORY_ENTITY`
 | use `@DomainObject(nature=VIEW_MODEL)` instead
 
-| `@DomainObject(publish=...)` 
+| `@DomainObject(publish=...)`
 | replaced with `entityChangePublishing`
 
 | `@DomainService(repositoryFor=...)`
-| if this domain service acts as a repository for an entity type, 
+| if this domain service acts as a repository for an entity type,
 specify that entity type (was never implemented)
 
 | `@Mixin`
-| use `@Action`, `@Property` or `@Collection` instead; 
+| use `@Action`, `@Property` or `@Collection` instead;
 
-for more fine grained control (eg. setting the mixin's method name) 
+for more fine grained control (eg. setting the mixin's method name)
 use `@DomainObject(nature=MIXIN, ...)` combined with one of the above
 
 | `@ViewModel`
 | use `@DomainObject(nature=VIEW_MODEL)` instead
 
-| `@ViewModelLayout` 
+| `@ViewModelLayout`
 | use `@DomainObjectLayout` instead
 
 |===
@@ -190,18 +187,18 @@ CommandServiceInternal -> CommandPublisher
 | new
 
 | AuthenticationSession
-| Authentication (no longer holds MessageBroker or session attributes, is now immutable) 
+| Authentication (no longer holds MessageBroker or session attributes, is now immutable)
 
-| AuthenticationSessionStrategy 
+| AuthenticationSessionStrategy
 | AuthenticationStrategy
 
-| AuthenticationSessionStrategyBasicAuth (*1*)  
-| AuthenticationStrategyBasicAuth 
+| AuthenticationSessionStrategyBasicAuth (*1*)
+| AuthenticationStrategyBasicAuth
 
-| AuthenticationSessionStrategyDefault (*1*) 
+| AuthenticationSessionStrategyDefault (*1*)
 | AuthenticationStrategyDefault
 
-| AuthenticationSessionTracker#getInteraction : Interaction  
+| AuthenticationSessionTracker#getInteraction : Interaction
 | AuthenticationContext#currentInteraction : *Optional*<Interaction>
 
 | Clock (moved from applib module to fixture-applib module)
@@ -220,10 +217,10 @@ CommandServiceInternal -> CommandPublisher
 | MessageBroker is held by InteractionSession
 
 | QueryDefault removed
-| 
+|
 [line-through]#new QueryDefault<>(CommandJdo.class, "findByParent",
                         "parent", parent));#
-                        
+
 Query.named(CommandJdo.class, "findByParent") +
     .withParameter("parent", parent));
 
@@ -248,7 +245,7 @@ Query.named(CommandJdo.class, "findByParent") +
 <T> T detachedEntity(Class<T> ofType);     // <.>
 ----
 <.> if applicable use `<T> T detachedEntity(T entity)` instead ... "new is the new new", passing
-in a new-ed up (entity) instance is more flexible and also more error prone, eg. it allows the compiler to check 
+in a new-ed up (entity) instance is more flexible and also more error prone, eg. it allows the compiler to check
 validity of the used constructor rather than doing construction reflective at runtime
 
 

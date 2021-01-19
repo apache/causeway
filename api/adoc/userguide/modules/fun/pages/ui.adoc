@@ -13,7 +13,7 @@ The Apache Isis programming model includes several mechanisms to influence the w
 * the layout of application menu items (inferred from xref:domain-entities-and-services.adoc#domain-services[domain services])
 
 * the layout of domain objects (xref:domain-entities-and-services.adoc#domain-entities[domain entities] andxref:view-modules.adoc[view models]
-) allow the positioning of the xref:object-members.adoc[object members] into columns and tabs
+) allow the positioning of the xref:object-pathsToInclude.adoc[object pathsToInclude] into columns and tabs
 
 * UI hints provided by the domain object itself returning:
 

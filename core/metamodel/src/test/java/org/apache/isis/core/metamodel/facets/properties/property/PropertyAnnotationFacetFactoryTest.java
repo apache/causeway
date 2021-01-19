@@ -33,7 +33,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertTrue;
 
-import org.apache.isis.applib.annotation.MementoSerialization;
+import org.apache.isis.applib.annotation.Snapshot;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.Where;
@@ -54,7 +54,7 @@ import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.mustsatisfyspec.MustSatisfySpecificationFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.regex.RegExFacet;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacetAbstract;
-import org.apache.isis.core.metamodel.facets.propcoll.memserexcl.MementoSerializationExcludeFacet;
+import org.apache.isis.core.metamodel.facets.propcoll.memserexcl.SnapshotExcludeFacet;
 import org.apache.isis.core.metamodel.facets.properties.property.disabled.DisabledFacetForPropertyAnnotation;
 import org.apache.isis.core.metamodel.facets.properties.property.hidden.HiddenFacetForPropertyAnnotation;
 import org.apache.isis.core.metamodel.facets.properties.property.mandatory.MandatoryFacetForPropertyAnnotation;
@@ -67,7 +67,7 @@ import org.apache.isis.core.metamodel.facets.properties.property.modify.Property
 import org.apache.isis.core.metamodel.facets.properties.property.modify.PropertySetterFacetForDomainEventFromDefault;
 import org.apache.isis.core.metamodel.facets.properties.property.modify.PropertySetterFacetForDomainEventFromPropertyAnnotation;
 import org.apache.isis.core.metamodel.facets.properties.property.mustsatisfy.MustSatisfySpecificationFacetForPropertyAnnotation;
-import org.apache.isis.core.metamodel.facets.properties.property.notpersisted.MementoSerializationExcludeFacetForPropertyAnnotation;
+import org.apache.isis.core.metamodel.facets.properties.property.notpersisted.SnapshotExcludeFacetForPropertyAnnotation;
 import org.apache.isis.core.metamodel.facets.properties.property.regex.RegExFacetForPropertyAnnotation;
 import org.apache.isis.core.metamodel.facets.properties.update.clear.PropertyClearFacet;
 import org.apache.isis.core.metamodel.facets.properties.update.clear.PropertyClearFacetAbstract;
@@ -581,7 +581,7 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
         public void withAnnotation() {
 
             class Customer {
-                @Property(mementoSerialization = MementoSerialization.EXCLUDED)
+                @Property(snapshot = Snapshot.EXCLUDED)
                 @Getter @Setter private String name;
             }
 
@@ -595,9 +595,9 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
             processNotPersisted(facetFactory, processMethodContext);
 
             // then
-            final MementoSerializationExcludeFacet mementoSerializationExcludeFacet = facetedMethod.getFacet(MementoSerializationExcludeFacet.class);
-            Assert.assertNotNull(mementoSerializationExcludeFacet);
-            Assert.assertTrue(mementoSerializationExcludeFacet instanceof MementoSerializationExcludeFacetForPropertyAnnotation);
+            final SnapshotExcludeFacet snapshotExcludeFacet = facetedMethod.getFacet(SnapshotExcludeFacet.class);
+            Assert.assertNotNull(snapshotExcludeFacet);
+            Assert.assertTrue(snapshotExcludeFacet instanceof SnapshotExcludeFacetForPropertyAnnotation);
         }
 
     }

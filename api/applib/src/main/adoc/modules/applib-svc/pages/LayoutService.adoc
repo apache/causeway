@@ -71,11 +71,11 @@ As a developer, you therefore have a choice as to how you provide the metadata r
 * if you want all layout metadata to be read from the `.layout.xml` file, then download the "complete" version, and copy the file alongside the domain class.
 You can then remove all `@MemberGroupLayout`, `@MemberOrder`, `@ActionLayout`, `@PropertyLayout` and `@CollectionLayout` annotations from the source code of the domain class.
 
-* if you want to use layout XML file to describe the grid (columns, tabs etc) and specify which object members are associated with those regions of the grid, then download the "normalized" version.
+* if you want to use layout XML file to describe the grid (columns, tabs etc) and specify which object pathsToInclude are associated with those regions of the grid, then download the "normalized" version.
 You can then remove the `@MemberGroupLayout` and `@MemberOrder` annotations from the source code of the domain class, but retain the `@ActionLayout`, `@PropertyLayout` and `@CollectionLayout` annotations.
 
 * if you want to use layout XML file ONLY to describe the grid, then download the "minimal" version.
-The grid regions will be empty in this version, and the framework will use the `@MemberOrder` annotation to bind object members to those regions.
+The grid regions will be empty in this version, and the framework will use the `@MemberOrder` annotation to bind object pathsToInclude to those regions.
 The only annotation that can be safely removed from the source code with this style is the `@MemberGroupLayout` annotation.
 
 

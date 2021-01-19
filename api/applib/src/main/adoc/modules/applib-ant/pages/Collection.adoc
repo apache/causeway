@@ -14,14 +14,6 @@ include::refguide:applib-ant:example$annotation/Collection.java[tags="refguide"]
 +
 The event type to be posted to the xref:refguide:applib-svc:EventBusService.adoc[`EventBusService`] to broadcast the collection's business rule checking (hide, disable, validate) and its modification (before and after).
 
-<.> xref:refguide:applib-ant:Collection.adoc#editing[`editing()`]
-+
-Whether a collection can be added to or removed from within the UI
-
-<.> `editingDisabledReason()`
-+
-If `editing()` is `DISABLED`, provides a reason as to why.
-
 <.> xref:refguide:applib-ant:Collection.adoc#hidden[`hidden()`]
 +
 Indicates where (in the UI) the collection should be hidden from the user.
@@ -70,6 +62,5 @@ so that boilerplate-busting tools such as link:https://projectlombok.org/[Projec
 
 
 include::Collection/domainEvent.adoc[leveloffset=+1]
-include::Collection/editing.adoc[leveloffset=+1]
 include::Collection/hidden.adoc[leveloffset=+1]
 include::Collection/typeOf.adoc[leveloffset=+1]

@@ -110,13 +110,13 @@ public @interface Property {
             default "";
 
     /**
-     * Whether {@link Interaction.Execution}s 
-     * (triggered property edits), should be dispatched to 
+     * Whether {@link Interaction.Execution}s
+     * (triggered property edits), should be dispatched to
      * {@link ExecutionSubscriber}s.
      */
     Publishing executionPublishing()
             default Publishing.NOT_SPECIFIED;
-    
+
     /**
      * For uploading {@link Blob} or {@link Clob}, optionally restrict the files accepted (eg <tt>.xslx</tt>).
      *
@@ -153,8 +153,8 @@ public @interface Property {
      *     <code>javax.jdo.annotations.NotPersistent</code>
      * </p>
      */
-    MementoSerialization mementoSerialization()
-            default MementoSerialization.NOT_SPECIFIED;
+    Snapshot snapshot()
+            default Snapshot.NOT_SPECIFIED;
 
     /**
      * The {@link org.apache.isis.applib.spec.Specification}(s) to be satisfied by this property.

@@ -16,16 +16,25 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+package demoapp.dom.annotDomain.Property.snapshot;
 
-package org.apache.isis.core.metamodel.facets.properties.update;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Inherited;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.propcoll.memserexcl.MementoSerializationExcludeFacetAbstract;
+import org.apache.isis.applib.annotation.Snapshot;
+import org.apache.isis.applib.annotation.Property;
 
-public class NotPersistableFacetInferred extends MementoSerializationExcludeFacetAbstract {
-
-    public NotPersistableFacetInferred(final FacetHolder holder) {
-        super(holder);
-    }
+//tag::class[]
+@Property(snapshot = Snapshot.EXCLUDED)
+@Inherited
+@Target({
+        ElementType.METHOD, ElementType.FIELD
+})
+@Retention(RetentionPolicy.RUNTIME)
+public @interface SnapshotExcludedMetaAnnotation {
 
 }
+//end::class[]

@@ -87,5 +87,5 @@ The framework provides a default implementation of this service, `o.a.i.c.m.serv
 
 == Related Services
 
-The `MetaModelServiceMenu` provides a method to download all domain members as a CSV (by calling `MetaModelService#export()`) or as an XML (by calling `MetaModelService6#exportMetaModel(...)`.
+The `MetaModelServiceMenu` provides a method to download all domain pathsToInclude as a CSV (by calling `MetaModelService#export()`) or as an XML (by calling `MetaModelService6#exportMetaModel(...)`.
 

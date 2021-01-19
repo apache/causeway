@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.annotDomain.Property.mementoSerialization;
+package demoapp.dom.annotDomain.Property.snapshot;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -27,28 +27,29 @@ import javax.xml.bind.annotation.XmlType;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.MemberOrder;
-import org.apache.isis.applib.annotation.MementoSerialization;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
+import org.apache.isis.applib.annotation.Snapshot;
 
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
 @XmlRootElement(name = "root")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(
     nature=Nature.VIEW_MODEL,
-    objectType = "demo.PropertyMementoSerializationVm",
+    objectType = "demo.PropertySnapshotVm",
     editing = Editing.ENABLED
 )
 @NoArgsConstructor
-public class PropertyMementoSerializationVm implements HasAsciiDocDescription {
+public class PropertySnapshotVm implements HasAsciiDocDescription {
 
-    public PropertyMementoSerializationVm(String text) {
+    public PropertySnapshotVm(String text) {
         this.text = text;
         this.excludedProperty = text;
         this.includedProperty = text;
@@ -58,70 +59,82 @@ public class PropertyMementoSerializationVm implements HasAsciiDocDescription {
     }
 
     public String title() {
-        return "PropertyMementoSerializationVm";
+        return "PropertySnapshotVm";
     }
 
+//tag::no-annotation[]
     @Property()
     @MemberOrder(name = "no-annotations", sequence = "1")
     @XmlElement(required = true)
     @Getter @Setter
     private String text;
+//end::no-annotation[]
 
+//tag::annotated-not_specified[]
     @Property(
-        mementoSerialization = MementoSerialization.NOT_SPECIFIED
+        snapshot = Snapshot.NOT_SPECIFIED
     )
     @PropertyLayout(
-        describedAs = "@Property(mementoSerialization = NOT_SPECIFIED)"
+        describedAs = "@Property(snapshot = NOT_SPECIFIED)"
     )
     @MemberOrder(name = "annotations", sequence = "1")
     @XmlElement(required = true)
     @Getter @Setter
     private String notSpecifiedProperty;
+//end::annotated-not_specified[]
 
+//tag::annotated-excluded[]
     @Property(
-        mementoSerialization = MementoSerialization.EXCLUDED
+        snapshot = Snapshot.EXCLUDED
     )
     @PropertyLayout(
-        describedAs = "@Property(mementoSerialization = EXCLUDED)"
+        describedAs = "@Property(snapshot = EXCLUDED)"
     )
     @MemberOrder(name = "annotations", sequence = "2")
     @XmlElement(required = true)
     @Getter @Setter
     private String excludedProperty;
+//end::annotated-excluded[]
 
+//tag::annotated-included[]
     @Property(
-        mementoSerialization = MementoSerialization.INCLUDED
+        snapshot = Snapshot.INCLUDED
     )
     @PropertyLayout(
-        describedAs = "@Property(mementoSerialization = INCLUDED)"
+        describedAs = "@Property(snapshot = INCLUDED)"
     )
     @MemberOrder(name = "annotations", sequence = "2")
     @XmlElement(required = true)
     @Getter @Setter
     private String includedProperty;
+//end::annotated-included[]
 
-    @MementoSerializationExcludedMetaAnnotation     // <.>
+//tag::meta-annotated-excluded[]
+    @SnapshotExcludedMetaAnnotation
     @Property()
     @PropertyLayout(
-        describedAs = "@MementoSerializationExcludedMetaAnnotation "
+        describedAs = "@SnapshotExcludedMetaAnnotation "
     )
     @MemberOrder(name = "meta-annotations", sequence = "1")
     @XmlElement(required = true)
     @Getter @Setter
     private String metaAnnotatedProperty;
+//end::meta-annotated-excluded[]
 
-    @MementoSerializationIncludedMetaAnnotation                 // <.>
+//tag::meta-annotated-included[]
+    @SnapshotIncludedMetaAnnotation
     @Property(
-        mementoSerialization = MementoSerialization.EXCLUDED    // <.>
+        snapshot = Snapshot.EXCLUDED
     )
     @PropertyLayout(
         describedAs =
-            "@MementoSerializationIncludedMetaAnnotation "
-            + "@Property(mementoSerialization = EXCLUDED)"
+            "@SnapshotIncludedMetaAnnotation "
+            + "@Property(snapshot = EXCLUDED)"
     )
     @MemberOrder(name = "meta-annotations-overridden", sequence = "1")
     @XmlElement(required = true)
     @Getter @Setter
     private String metaAnnotatedPropertyOverridden;
+//end::meta-annotated-included[]
 
 }

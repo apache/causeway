@@ -724,6 +724,12 @@ isis.value-types. +
 
 
 
+=== Annotations
+
+Collections are no longer editable.
+The `@Collection#editing()` and `@Collection#editingDisabledReason()` pathsToInclude have been removed.
+
+
 === No longer any archetypes
 
 The archetypes have been replaced by starter apps.

@@ -124,7 +124,7 @@ import lombok.val;
 //    middle= {"Contact Details"},
 //    right= {"Status", "AtPath"}
 //)
-public class ApplicationUser implements Comparable<ApplicationUser>, 
+public class ApplicationUser implements Comparable<ApplicationUser>,
 org.apache.isis.extensions.secman.api.user.ApplicationUser {
 
     @Inject private ApplicationUserRepository applicationUserRepository;
@@ -371,8 +371,7 @@ org.apache.isis.extensions.secman.api.user.ApplicationUser {
     @javax.jdo.annotations.Join(column="userId")
     @javax.jdo.annotations.Element(column="roleId")
     @Collection(
-            domainEvent = RolesDomainEvent.class,
-            editing = Editing.DISABLED
+            domainEvent = RolesDomainEvent.class
             )
     @CollectionLayout(
             defaultView="table"
@@ -431,7 +430,7 @@ org.apache.isis.extensions.secman.api.user.ApplicationUser {
     // -- equals, hashCode, compareTo, toString
     private static final String propertyNames = "username";
 
-    private static final ObjectContract<ApplicationUser> contract = 
+    private static final ObjectContract<ApplicationUser> contract =
             ObjectContracts.parse(ApplicationUser.class, propertyNames);
 
 

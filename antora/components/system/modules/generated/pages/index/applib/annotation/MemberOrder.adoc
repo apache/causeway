@@ -19,7 +19,7 @@ An alternative is to use theXxx.layout.xmlfile, whereXxxis the domain object nam
 <.> `[teal]#*_name_*#` : `String`
 +
 --
-Groups or associate members with each other.
+Groups or associate pathsToInclude with each other.
 
 * For actions, indicates the property or collection to associate.
 * For properties, indicates the property group
@@ -28,6 +28,6 @@ Groups or associate members with each other.
 <.> `[teal]#*_sequence_*#` : `String`
 +
 --
-The order of this member relative to other members in the same group, in Dewey-decimal notation. For collections this is relative to each other (collections aren't grouped).
+The order of this member relative to other pathsToInclude in the same group, in Dewey-decimal notation. For collections this is relative to each other (collections aren't grouped).
 --
 

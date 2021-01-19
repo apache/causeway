@@ -55,7 +55,7 @@ import org.apache.isis.core.metamodel.facets.properties.property.modify.Property
 import org.apache.isis.core.metamodel.facets.properties.property.modify.PropertySetterFacetForDomainEventFromDefault;
 import org.apache.isis.core.metamodel.facets.properties.property.modify.PropertySetterFacetForDomainEventFromPropertyAnnotation;
 import org.apache.isis.core.metamodel.facets.properties.property.mustsatisfy.MustSatisfySpecificationFacetForPropertyAnnotation;
-import org.apache.isis.core.metamodel.facets.properties.property.notpersisted.MementoSerializationExcludeFacetForPropertyAnnotation;
+import org.apache.isis.core.metamodel.facets.properties.property.notpersisted.SnapshotExcludeFacetForPropertyAnnotation;
 import org.apache.isis.core.metamodel.facets.properties.property.regex.RegExFacetForPatternAnnotationOnProperty;
 import org.apache.isis.core.metamodel.facets.properties.property.regex.RegExFacetForPropertyAnnotation;
 import org.apache.isis.core.metamodel.facets.properties.update.clear.PropertyClearFacet;
@@ -315,7 +315,7 @@ implements MetaModelRefiner {
         val holder = processMethodContext.getFacetHolder();
 
         // search for @Property(notPersisted=...)
-        val facet = MementoSerializationExcludeFacetForPropertyAnnotation.create(propertyIfAny, holder);
+        val facet = SnapshotExcludeFacetForPropertyAnnotation.create(propertyIfAny, holder);
 
         super.addFacet(facet);
     }

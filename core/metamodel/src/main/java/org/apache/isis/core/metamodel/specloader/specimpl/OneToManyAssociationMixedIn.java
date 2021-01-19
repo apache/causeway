@@ -33,8 +33,8 @@ import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetAbstract;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacetInferred;
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacetForContributee;
-import org.apache.isis.core.metamodel.facets.propcoll.memserexcl.MementoSerializationExcludeFacet;
-import org.apache.isis.core.metamodel.facets.propcoll.memserexcl.MementoSerializationExcludeFacetAbstract;
+import org.apache.isis.core.metamodel.facets.propcoll.memserexcl.SnapshotExcludeFacet;
+import org.apache.isis.core.metamodel.facets.propcoll.memserexcl.SnapshotExcludeFacetAbstract;
 import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.services.publishing.ExecutionPublisher;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -100,11 +100,11 @@ public class OneToManyAssociationMixedIn extends OneToManyAssociationDefault imp
         //
         // ensure the mixedIn collection cannot be modified, and derive its TypeOfFaccet
         //
-        final MementoSerializationExcludeFacet mementoSerializationExcludeFacet = new MementoSerializationExcludeFacetAbstract(this) {};
+        final SnapshotExcludeFacet snapshotExcludeFacet = new SnapshotExcludeFacetAbstract(this) {};
         final DisabledFacet disabledFacet = disabledFacet();
         final TypeOfFacet typeOfFacet = new TypeOfFacetAbstract(getSpecification().getCorrespondingClass(), this) {};
 
-        FacetUtil.addFacet(mementoSerializationExcludeFacet);
+        FacetUtil.addFacet(snapshotExcludeFacet);
         FacetUtil.addFacet(disabledFacet);
         FacetUtil.addFacet(typeOfFacet);
 

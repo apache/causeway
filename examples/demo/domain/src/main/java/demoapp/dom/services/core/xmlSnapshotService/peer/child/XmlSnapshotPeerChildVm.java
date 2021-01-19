@@ -16,10 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.services.core.xmlSnapshotService;
-
-import java.util.ArrayList;
-import java.util.List;
+package demoapp.dom.services.core.xmlSnapshotService.peer.child;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -27,62 +24,41 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
-import org.apache.isis.applib.annotation.Collection;
-import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.PropertyLayout;
+import org.apache.isis.applib.annotation.Title;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.val;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.services.core.xmlSnapshotService.child.XmlSnapshotChildVm;
-import demoapp.dom.services.core.xmlSnapshotService.peer.XmlSnapshotPeerVm;
 
-@XmlRootElement(name = "root")
+//tag::class[]
+@XmlRootElement(name = "child")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(
-    nature=Nature.VIEW_MODEL,
-    objectType = "demo.XmlSnapshotParentVm"
+        nature=Nature.VIEW_MODEL,
+        objectType = "demo.XmlSnapshotPeerChildVm"
 )
 @NoArgsConstructor
-public class XmlSnapshotParentVm implements HasAsciiDocDescription {
+public class XmlSnapshotPeerChildVm implements HasAsciiDocDescription {
 
-    public XmlSnapshotParentVm(String text) {
-        this.text = text;
+    public XmlSnapshotPeerChildVm(String value) {
+        setValue(value);
     }
 
-    public String title() {
-        return "XmlSnapshotService parent VM";
-    }
-
-    @Property(editing = Editing.ENABLED)
-    @MemberOrder(name = "properties", sequence = "1")
-    @XmlElement(required = true)
-    @Getter @Setter
-    private String text;
-
-    @Property(editing = Editing.DISABLED)
-    @MemberOrder(name = "properties", sequence = "3")
+    @Title
+    @Property()
+    @PropertyLayout()
+    @MemberOrder(name = "annotation", sequence = "1")
     @XmlElement(required = false)
     @Getter @Setter
-    private XmlSnapshotPeerVm peer;
-
-    @Collection()
-    @CollectionLayout()
-    @Getter
-    private List<XmlSnapshotChildVm> children = new ArrayList<>();
-
-    public XmlSnapshotParentVm addChild(final String value) {
-        val childVm = new XmlSnapshotChildVm(value);
-        getChildren().add(childVm);
-        return this;
-    }
+    private String value;
 
 }
+//end::class[]

@@ -69,27 +69,6 @@ public @interface Collection {
 
     // end::refguide[]
     /**
-     * Whether the properties of this domain object can be edited, or collections of this object be added to/removed from.
-     *
-     * <p>
-     *     Note that non-editable objects can nevertheless have actions invoked upon them.
-     * </p>
-     */
-    // tag::refguide[]
-    Editing editing()                                           // <.>
-            default Editing.NOT_SPECIFIED;
-
-    // end::refguide[]
-    /**
-     * If {@link #editing()} is set to {@link Editing#DISABLED},
-     * then the reason to provide to the user as to why this property cannot be edited.
-     */
-    // tag::refguide[]
-    String editingDisabledReason()                              // <.>
-            default "";
-
-    // end::refguide[]
-    /**
      * Indicates when the collection is not visible to the user.
      */
     // tag::refguide[]

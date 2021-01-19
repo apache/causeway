@@ -87,12 +87,12 @@ import lombok.Setter;
 @DomainObjectLayout(
         bookmarking = BookmarkPolicy.AS_ROOT
         )
-public class ApplicationRole 
+public class ApplicationRole
 implements org.apache.isis.extensions.secman.api.role.ApplicationRole, Comparable<ApplicationRole> {
 
     @Inject private ApplicationFeatureRepository applicationFeatureRepository;
     @Inject private ApplicationPermissionRepository applicationPermissionRepository;
-    
+
     // -- name (property)
 
     public static class NameDomainEvent extends PropertyDomainEvent<String> {}
@@ -167,8 +167,7 @@ implements org.apache.isis.extensions.secman.api.role.ApplicationRole, Comparabl
 
     @javax.jdo.annotations.Persistent(mappedBy = "roles")
     @Collection(
-            domainEvent = UsersDomainEvent.class,
-            editing = Editing.DISABLED
+            domainEvent = UsersDomainEvent.class
             )
     @CollectionLayout(
             defaultView="table"

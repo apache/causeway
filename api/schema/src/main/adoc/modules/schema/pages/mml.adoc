@@ -7,9 +7,9 @@
 
 The metamodel ("mml") schema defines the serialized form of the metamodel, used by the framework to render and interact with the application's domain objects.
 
-The top-level metamodel consists of a set of domain classes, which in turn contain members (actions, properties and collections).
+The top-level metamodel consists of a set of domain classes, which in turn contain pathsToInclude (actions, properties and collections).
 Actions also have action parameters.
-All of the elements of the metamodel (domain classes, domain class members and action parameters) can have multiple facets associated with them.
+All of the elements of the metamodel (domain classes, domain class pathsToInclude and action parameters) can have multiple facets associated with them.
 Some facets relate to presentational aspects (for example the name), others to the domain layer (for example the presence of a `validateXxx()` method to enforce business rules).
 
 

@@ -44,5 +44,4 @@ public class Customer {
 
 This attribute can also be specified for:
 
-* xref:refguide:applib-ant:Collection.adoc#editing[collections]
 * xref:refguide:applib-ant:DomainObject.adoc#editing[domain object].

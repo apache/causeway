@@ -5,9 +5,9 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -43,7 +43,6 @@ import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetInferredFromArray;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetInferredFromGenerics;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
-import org.apache.isis.core.metamodel.facets.collections.collection.disabled.DisabledFacetForCollectionAnnotation;
 import org.apache.isis.core.metamodel.facets.collections.collection.hidden.HiddenFacetForCollectionAnnotation;
 import org.apache.isis.core.metamodel.facets.collections.collection.modify.CollectionAddToFacetForDomainEventFromCollectionAnnotation;
 import org.apache.isis.core.metamodel.facets.collections.collection.modify.CollectionAddToFacetForDomainEventFromDefault;
@@ -94,32 +93,27 @@ public class CollectionAnnotationFacetFactoryTest extends AbstractFacetFactoryJU
             }
         });
     }
-    
+
     private static void processModify(
             CollectionAnnotationFacetFactory facetFactory, FacetFactory.ProcessMethodContext processMethodContext) {
         val collectionIfAny = processMethodContext.synthesizeOnMethod(Collection.class);
         facetFactory.processModify(processMethodContext, collectionIfAny);
     }
-    
+
     private static void processHidden(
             CollectionAnnotationFacetFactory facetFactory, FacetFactory.ProcessMethodContext processMethodContext) {
         val collectionIfAny = processMethodContext.synthesizeOnMethod(Collection.class);
         facetFactory.processHidden(processMethodContext, collectionIfAny);
     }
 
-    private static void processEditing(
-            CollectionAnnotationFacetFactory facetFactory, FacetFactory.ProcessMethodContext processMethodContext) {
-        val collectionIfAny = processMethodContext.synthesizeOnMethod(Collection.class);
-        facetFactory.processEditing(processMethodContext, collectionIfAny);
-    }
-    
+
     private static void processTypeOf(
             CollectionAnnotationFacetFactory facetFactory, FacetFactory.ProcessMethodContext processMethodContext) {
         val collectionIfAny = processMethodContext.synthesizeOnMethod(Collection.class);
         facetFactory.processTypeOf(processMethodContext, collectionIfAny);
     }
 
-    
+
     @Before
     public void setUp() throws Exception {
         facetFactory = new CollectionAnnotationFacetFactory();
@@ -430,45 +424,6 @@ public class CollectionAnnotationFacetFactoryTest extends AbstractFacetFactoryJU
             Assert.assertTrue(hiddenFacet == hiddenFacetForColl);
         }
 
-    }
-
-    public static class Editing extends CollectionAnnotationFacetFactoryTest {
-
-        @Test
-        public void withAnnotation() {
-
-            class Order {
-            }
-            class Customer {
-                @Collection(
-                        editing = org.apache.isis.applib.annotation.Editing.DISABLED,
-                        editingDisabledReason = "you cannot edit the orders collection"
-                        )
-                public List<Order> getOrders() {
-                    return null;
-                }
-
-                public void setOrders(final List<Order> orders) {
-                }
-            }
-
-            // given
-            final Class<?> cls = Customer.class;
-            collectionMethod = findMethod(Customer.class, "getOrders");
-
-            // when
-            final FacetFactory.ProcessMethodContext processMethodContext = new FacetFactory.ProcessMethodContext(cls,
-                    null, collectionMethod, mockMethodRemover, facetedMethod);
-            processEditing(facetFactory, processMethodContext);
-
-            // then
-            final DisabledFacet disabledFacet = facetedMethod.getFacet(DisabledFacet.class);
-            Assert.assertNotNull(disabledFacet);
-            Assert.assertTrue(disabledFacet instanceof DisabledFacetForCollectionAnnotation);
-            final DisabledFacetForCollectionAnnotation disabledFacetImpl = (DisabledFacetForCollectionAnnotation) disabledFacet;
-            assertThat(disabledFacet.where(), is(Where.EVERYWHERE));
-            assertThat(disabledFacetImpl.getReason(), is("you cannot edit the orders collection"));
-        }
     }
 
     public static class TypeOf extends CollectionAnnotationFacetFactoryTest {

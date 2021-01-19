@@ -65,7 +65,7 @@ isis.persistence.jdo-datanucleus.impl.datanucleus.persistenceByReachabilityAtCom
 
 [plantuml]
 ----
-hide empty members
+hide empty pathsToInclude
 
 class Party
 class AgreementRole

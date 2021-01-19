@@ -16,15 +16,30 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
-package org.apache.isis.core.metamodel.facets.propcoll.memserexcl;
-
-import org.apache.isis.core.metamodel.facetapi.Facet;
+package org.apache.isis.applib.annotation;
 
 /**
- * Indicates that a property should be excluded from snapshots (as per
- * <code>XmlSnapshotService</code>.
+ * Whether the property is included if the domain object graph is serialized
+ * into a snapshot.
+ * @since 2.x {@index}
  */
-public interface MementoSerializationExcludeFacet extends Facet {
+public enum Snapshot {
+
+    /**
+     * Property is included in any snapshots.
+     * This is the fallback/default if not explicitly excluded.
+     */
+    INCLUDED,
+
+    /**
+     * Property is excluded from any snapshots.
+     */
+    EXCLUDED,
+
+    /**
+     * Ignore the value provided by this annotation (meaning that the framework
+     * will keep searching, in meta annotations or superclasses/interfaces).
+     */
+    NOT_SPECIFIED
 
 }

@@ -21,7 +21,7 @@ package org.apache.isis.core.metamodel.spec.feature;
 
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.facets.propcoll.memserexcl.MementoSerializationExcludeFacet;
+import org.apache.isis.core.metamodel.facets.propcoll.memserexcl.SnapshotExcludeFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 /**
@@ -56,7 +56,7 @@ public interface OneToOneAssociation extends ObjectAssociation, OneToOneFeature,
      * not be persisted.
      */
     default boolean isNotPersisted() {
-        return containsFacet(MementoSerializationExcludeFacet.class);
+        return containsFacet(SnapshotExcludeFacet.class);
     }
 
 

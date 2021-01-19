@@ -21,26 +21,26 @@ package org.apache.isis.core.metamodel.facets.properties.property.notpersisted;
 
 import java.util.Optional;
 
-import org.apache.isis.applib.annotation.MementoSerialization;
+import org.apache.isis.applib.annotation.Snapshot;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.propcoll.memserexcl.MementoSerializationExcludeFacet;
-import org.apache.isis.core.metamodel.facets.propcoll.memserexcl.MementoSerializationExcludeFacetAbstract;
+import org.apache.isis.core.metamodel.facets.propcoll.memserexcl.SnapshotExcludeFacet;
+import org.apache.isis.core.metamodel.facets.propcoll.memserexcl.SnapshotExcludeFacetAbstract;
 
-public class MementoSerializationExcludeFacetForPropertyAnnotation extends MementoSerializationExcludeFacetAbstract {
+public class SnapshotExcludeFacetForPropertyAnnotation extends SnapshotExcludeFacetAbstract {
 
-    public MementoSerializationExcludeFacetForPropertyAnnotation(final FacetHolder holder) {
+    public SnapshotExcludeFacetForPropertyAnnotation(final FacetHolder holder) {
         super(holder);
     }
 
-    public static MementoSerializationExcludeFacet create(
+    public static SnapshotExcludeFacet create(
             final Optional<Property> propertyIfAny,
             final FacetHolder holder) {
 
         return propertyIfAny
-                .map(Property::mementoSerialization)
-                .filter(mementoSerialization -> mementoSerialization == MementoSerialization.EXCLUDED)
-                .map(mementoSerialization -> new MementoSerializationExcludeFacetForPropertyAnnotation(holder))
+                .map(Property::snapshot)
+                .filter(snapshot -> snapshot == Snapshot.EXCLUDED)
+                .map(snapshot -> new SnapshotExcludeFacetForPropertyAnnotation(holder))
                 .orElse(null);
     }
 }

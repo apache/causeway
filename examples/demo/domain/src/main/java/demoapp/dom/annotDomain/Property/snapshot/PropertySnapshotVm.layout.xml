@@ -18,7 +18,7 @@
 	<bs3:row>
 		<bs3:col span="10" unreferencedActions="true">
 			<cpt:domainObject />
-			<cpt:action id="takeSnapshot"/>
+			<cpt:action id="takeXmlSnapshot"/>
 		</bs3:col>
 		<bs3:col span="2">
 			<cpt:fieldSet name="" id="sources" />
@@ -32,8 +32,9 @@
 					<cpt:fieldSet name="Not annotated" id="no-annotations"/>
 					<cpt:fieldSet name="Annotated" id="annotations"/>
 					<cpt:fieldSet name="Meta-annotated" id="meta-annotations"/>
-					<cpt:fieldSet name="Meta-annotated overrriden" id="meta-annotated-overrriden"/>
+					<cpt:fieldSet name="Meta-annotated overridden" id="meta-annotations-overridden"/>
 					<cpt:fieldSet name="Other" id="other" unreferencedProperties="true"/>
+					<cpt:collection id="children"/>
 				</bs3:col>
 			</bs3:row>
 		</bs3:col>

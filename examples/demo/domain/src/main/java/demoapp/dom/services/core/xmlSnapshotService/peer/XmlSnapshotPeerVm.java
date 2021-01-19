@@ -18,12 +18,17 @@
  */
 package demoapp.dom.services.core.xmlSnapshotService.peer;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
+import org.apache.isis.applib.annotation.Collection;
+import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Nature;
@@ -34,8 +39,10 @@ import org.apache.isis.applib.annotation.Title;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.val;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+import demoapp.dom.services.core.xmlSnapshotService.peer.child.XmlSnapshotPeerChildVm;
 
 //tag::class[]
 @XmlRootElement(name = "peer")
@@ -59,6 +66,17 @@ public class XmlSnapshotPeerVm implements HasAsciiDocDescription {
     @XmlElement(required = false)
     @Getter @Setter
     private String value;
+
+    @Collection()
+    @CollectionLayout()
+    @Getter
+    private List<XmlSnapshotPeerChildVm> children = new ArrayList<>();
+
+    public XmlSnapshotPeerVm addChild(final String value) {
+        val childVm = new XmlSnapshotPeerChildVm(value);
+        getChildren().add(childVm);
+        return this;
+    }
 
 }
 //end::class[]

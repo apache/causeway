@@ -1,4 +1,4 @@
-hide empty members
+hide empty pathsToInclude
 'hide methods
 
 skinparam class {

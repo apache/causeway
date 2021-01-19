@@ -17,7 +17,7 @@ These are generally of use to support development-time activities, for example c
 
 
 |xref:refguide:applib-svc:ApplicationFeatureRepository.adoc[ApplicationFeatureRepository]
-|Provides access to string representations of the features (package, class, class members) of the domain classes
+|Provides access to string representations of the features (package, class, class pathsToInclude) of the domain classes
 within the metamodel.
 |
 * xref:core:metamodel:about.adoc[Core MetaModel]

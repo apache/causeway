@@ -11,7 +11,7 @@ The core metamodel defines APIs and implementations for building the Apache Isis
 The description of each domain class consists of a number of elements:
 
 https://github.com/apache/isis/blob/master/core/metamodel/src/main/java/org/apache/isis/core/metamodel/spec/ObjectSpecification.java[ObjectSpecification]::
-Analogous to `java.lang.Class`; holds information about the class itself and holds collections of each of the three types of class' members (below);
+Analogous to `java.lang.Class`; holds information about the class itself and holds collections of each of the three types of class' pathsToInclude (below);
 
 https://github.com/apache/isis/blob/master/core/metamodel/src/main/java/org/apache/isis/core/metamodel/spec/feature/OneToOneAssociation.java[OneToOneAssociation]::
 Represents a class member that is a single-valued property of the class.
@@ -26,10 +26,10 @@ Represents a class member that is an operation that can be performed on the acti
 Returns either a single value, a collection of entities, or is `void`.
 
 The metamodel is built up through the https://github.com/apache/isis/blob/master/core/metamodel/src/main/java/org/apache/isis/core/metamodel/progmodel/ProgrammingModel.java[ProgrammingModel], which defines an API for registering a set of https://github.com/apache/isis/blob/master/core/metamodel/src/main/java/org/apache/isis/core/metamodel/facets/FacetFactory.java[FacetFactory]s.
-Two special `FacetFactory` implementations - https://github.com/apache/isis/blob/master/core/metamodel/src/main/java/org/apache/isis/core/metamodel/facets/properties/accessor/PropertyAccessorFacetViaAccessorFactory.java[PropertyAccessorFacetFactory] and https://github.com/apache/isis/blob/master/core/metamodel/src/main/java/org/apache/isis/core/metamodel/facets/collections/accessor/CollectionAccessorFacetViaAccessorFactory.java[CollectionAccessorFacetFactory] - are used to identify the class members.
+Two special `FacetFactory` implementations - https://github.com/apache/isis/blob/master/core/metamodel/src/main/java/org/apache/isis/core/metamodel/facets/properties/accessor/PropertyAccessorFacetViaAccessorFactory.java[PropertyAccessorFacetFactory] and https://github.com/apache/isis/blob/master/core/metamodel/src/main/java/org/apache/isis/core/metamodel/facets/collections/accessor/CollectionAccessorFacetViaAccessorFactory.java[CollectionAccessorFacetFactory] - are used to identify the class pathsToInclude.
 Pretty much all the other ``FacetFactory``s are responsible for installing https://github.com/apache/isis/blob/master/core/metamodel/src/main/java/org/apache/isis/core/metamodel/facetapi/Facet.java[Facet]s onto the metamodel elements.
 
-There are many many such ``Facet``s, and are used to do such things get values from properties or collections, modify properties or collections, invoke action, hide or disable class members, provide UI hints for class members, and so on.
+There are many many such ``Facet``s, and are used to do such things get values from properties or collections, modify properties or collections, invoke action, hide or disable class pathsToInclude, provide UI hints for class pathsToInclude, and so on.
 In short, the ``FacetFactory``s registered defines the Apache Isis programming conventions.
 
 == Modifying the Prog. Model
