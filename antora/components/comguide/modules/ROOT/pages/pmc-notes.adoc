@@ -13,7 +13,7 @@ More information about PMCs can be found link:http://www.apache.org/dev/pmc.html
 
 In Apache Isis, every committer is a member of the PMC.
 
-This page contains some general notes on maintenance activities required by PMC members.
+This page contains some general notes on maintenance activities required by PMC pathsToInclude.
 
 == Prereqs
 
@@ -34,9 +34,9 @@ To set up ssh in the first place, take a look at https://www.apache.org/dev/new-
 
 == New Committer/PMC member
 
-Currently we don't distinguish between committers and PMC members: every committer is automatically invited to also be a member of the PMC.
+Currently we don't distinguish between committers and PMC pathsToInclude: every committer is automatically invited to also be a member of the PMC.
 
-Further notes on the steps for new PMC members can be found http://www.apache.org/dev/pmc.html#newpmc[here].
+Further notes on the steps for new PMC pathsToInclude can be found http://www.apache.org/dev/pmc.html#newpmc[here].
 
 === Start a vote thread on private@
 
@@ -179,10 +179,10 @@ with body:
 The Apache Isis PMC has voted Joe Bloggs as a committer and also member of the PMC.     <1>
 
 Voting thread:
-https://mail-search.apache.org/members/private-arch/isis-private/xxx                    <1>
+https://mail-search.apache.org/pathsToInclude/private-arch/isis-private/xxx                    <1>
 
 Results announcement:
-https://mail-search.apache.org/members/private-arch/isis-private/xxx                    <1>
+https://mail-search.apache.org/pathsToInclude/private-arch/isis-private/xxx                    <1>
 
 The committee-info.txt file has been updated, as have the LDAP groups (modify_unix_group.pl,  modify_committee.pl).
 ----

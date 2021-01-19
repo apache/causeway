@@ -18,31 +18,25 @@
  */
 package demoapp.dom.annotDomain.Property.snapshot;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
-import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.MemberOrder;
-import org.apache.isis.applib.annotation.Snapshot;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
+import org.apache.isis.applib.annotation.Snapshot;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.annotDomain.Property.snapshot.child.PropertySnapshotChildVm;
 
 @XmlRootElement(name = "root")
 @XmlType
@@ -116,7 +110,7 @@ public class PropertySnapshotVm implements HasAsciiDocDescription {
 //end::annotated-included[]
 
 //tag::meta-annotated-excluded[]
-    @SnapshotExcludedMetaAnnotation     // <.>
+    @SnapshotExcludedMetaAnnotation
     @Property()
     @PropertyLayout(
         describedAs = "@SnapshotExcludedMetaAnnotation "
@@ -128,9 +122,9 @@ public class PropertySnapshotVm implements HasAsciiDocDescription {
 //end::meta-annotated-excluded[]
 
 //tag::meta-annotated-included[]
-    @SnapshotIncludedMetaAnnotation                 // <.>
+    @SnapshotIncludedMetaAnnotation
     @Property(
-        snapshot = Snapshot.EXCLUDED    // <.>
+        snapshot = Snapshot.EXCLUDED
     )
     @PropertyLayout(
         describedAs =
@@ -142,14 +136,5 @@ public class PropertySnapshotVm implements HasAsciiDocDescription {
     @Getter @Setter
     private String metaAnnotatedPropertyOverridden;
 //end::meta-annotated-included[]
-
-//tag::children[]
-    @Getter @Setter
-    @Collection
-    @XmlElementWrapper(name = "children")
-    @XmlElement(name = "child")
-    private List<PropertySnapshotChildVm> children = new ArrayList<>();
-//end::children[]
-
 
 }

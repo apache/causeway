@@ -70,7 +70,7 @@ Typical usage:
                              q.atPath.eq(atPath).and(
                              q.description.indexOf(description).gt(0))
                              );
-    
+
 ----
 
 --
@@ -88,7 +88,7 @@ Typical usage:
                              q.atPath.eq(atPath).and(
                              q.description.eq(description))
                              );
-    
+
 ----
 
 --
@@ -106,7 +106,7 @@ Fetch Optimization
 
 FromDN-5.2...
 
-For RDBMS any single-valued member will be fetched in the original SQL query, but with multiple-valued members this is not supported. However what will happen is that any collection/array field will be retrieved in a single SQL query for all candidate objects (by default using an EXISTS subquery); this avoids the "N+1" problem, resulting in 1 original SQL query plus 1 SQL query per collection member. Note that you can disable this by either not putting multi-valued fields in the FetchPlan, or by setting the query extension datanucleus.rdbms.query.multivaluedFetch to none (default is "exists" using the single SQL per field).
+For RDBMS any single-valued member will be fetched in the original SQL query, but with multiple-valued pathsToInclude this is not supported. However what will happen is that any collection/array field will be retrieved in a single SQL query for all candidate objects (by default using an EXISTS subquery); this avoids the "N+1" problem, resulting in 1 original SQL query plus 1 SQL query per collection member. Note that you can disable this by either not putting multi-valued fields in the FetchPlan, or by setting the query extension datanucleus.rdbms.query.multivaluedFetch to none (default is "exists" using the single SQL per field).
 --
 <.> `[teal]#*disableMultivaluedFetch*#(xref:system:generated:index/applib/query/Query.adoc[Query]<?> query)` : `void`
 +

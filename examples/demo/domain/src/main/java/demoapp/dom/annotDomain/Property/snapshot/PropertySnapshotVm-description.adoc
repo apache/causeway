@@ -1,86 +1,111 @@
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
-The `snapshot` element of the `@Property` annotation specifies whether a property should be included in an XML snapshot, as created by the `XmlSnapshotService`:
-
-The `takeSnapshot` mixin action shows how this service is used:
-
-[source,java,indent=0]
-----
-include::PropertyMementoSerializationVm_takeSnapshot.java[tags=class]
-----
-
-There are several use cases of the resultant XML; a common one is for adhoc auditing.
-Another is when there's a need to pass the state of an object (graph) into a supporting domain service, for example to perform a mail merge.
-All that is required is the state of the object, which can then be extracted, eg using XPath.
-This allows the domain object and service to have no direct knowledge of each other; the binding is entirely configuration driven.
-
+The `snapshot` element of the `@Property` annotation specifies whether a property should be included in an XML snapshot, as created by the `XmlSnapshotService`.
 
 
 == Annotations and Meta-annotations
 
-The example view model indicates which properties to include or exclude from the view model:
+The example view model indicates which properties to include or exclude from the snapshot:
 
-* with no annotation:
+* with no annotation, or annotated as not specified, or annotated as included:
 +
 [source,java,indent=0]
 ----
-include::PropertyMementoSerializationVm.java[tags=no-annotation]
+include::PropertySnapshotVm.java[tags=no-annotation]
 ----
 +
-These will be included by default.
-
-* explicitly included:
+and
 +
 [source,java,indent=0]
 ----
-include::PropertyMementoSerializationVm.java[tags=annotated-included]
+include::PropertySnapshotVm.java[tags=annotated-not_specified]
 ----
++
+and
++
+[source,java,indent=0]
+----
+include::PropertySnapshotVm.java[tags=annotated-included]
+----
++
+All of these will be included in the snapshot by default.
 
 * explicitly excluded:
 +
 [source,java,indent=0]
 ----
-include::PropertyMementoSerializationVm.java[tags=annotated-excluded]
+include::PropertySnapshotVm.java[tags=annotated-excluded]
 ----
++
+This will be _excluded_from the snapshot.
 
-* included through a meta-annotation:
+There is also support for meta-annotations:
+
+* a property can be included through a meta-annotation:
 +
 [source,java,indent=0]
 ----
-include::PropertyMementoSerializationVm.java[tags=meta-annotated-included]
+include::PropertySnapshotVm.java[tags=meta-annotated-included]
 ----
 +
 where the meta-annotation is:
 +
 [source,java,indent=0]
 ----
-include::MementoSerializationIncludedMetaAnnotation.java[tags=class]
+include::SnapshotIncludedMetaAnnotation.java[tags=class]
 ----
++
+then this property will be included in the snapshot
 
-* excluded through a meta-annotation:
+* conversely, a property can be excluded similarly:
 +
 [source,java,indent=0]
 ----
-include::PropertyMementoSerializationVm.java[tags=meta-annotated-excluded]
+include::PropertySnapshotVm.java[tags=meta-annotated-excluded]
 ----
 +
 where the meta-annotation is:
 +
 [source,java,indent=0]
 ----
-include::MementoSerializationExcludedMetaAnnotation.java[tags=class]
+include::SnapshotExcludedMetaAnnotation.java[tags=class]
 ----
 
 
 
-== Snapshot
 
-TODO: inline the resultant snapshot
+== Taking a Snapshot
+
+The `takeSnapshot` mixin action shows how the `XmlSnapshotService` service is used:
+
+[source,java,indent=0]
+----
+include::PropertySnapshotVm_takeXmlSnapshot.java[tags=class]
+----
+
+The resultant XML snapshot is:
 
 [source,xml]
 .snapshot.xml
 ----
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<app:PropertySnapshotVm
+    xmlns:app="..." xmlns:isis="..." xmlns:xsi="..."
+    isis:feature="class"
+    isis:fqn="demoapp.dom.annotDomain.Property.snapshot.PropertySnapshotVm"
+    isis:oid="demo.PropertySnapshotVm:..."
+    isis:plural="Property Snapshot Vms"
+    isis:singular="Property Snapshot Vm"
+    xsi:schemaLocation="... demoapp.dom.annotDomain.Property.snapshot.PropertySnapshotVm.xsd">
+  <isis:title>PropertySnapshotVm</isis:title>
+  <app:notSpecifiedProperty isis:datatype="isis:String" isis:feature="value">value</app:notSpecifiedProperty>
+  <app:includedProperty isis:datatype="isis:String" isis:feature="value">value</app:includedProperty>
+  <app:objectType isis:datatype="isis:String" isis:feature="value">demo.PropertySnapshotVm</app:objectType>
+  <app:objectIdentifier isis:datatype="isis:String" isis:feature="value">»3a1ba25e</app:objectIdentifier>
+  <app:text isis:datatype="isis:String" isis:feature="value">value</app:text>
+</app:PropertySnapshotVm>
 ----
 
+TIP: see menu:Services[Xml Snapshot] to showcase more sophisticated control of the resultant XML.
 
 

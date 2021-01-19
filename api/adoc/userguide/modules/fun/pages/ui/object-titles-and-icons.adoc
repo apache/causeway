@@ -342,8 +342,8 @@ public class OrderSubscriptions {
 == Switching Layouts
 
 A domain object may also have multiple layouts.
-One reason might be based on the role of the user viewing the object; the object members most relevant to a data entry clerk could be quite different to an manager that is viewing, eg to approve it.
-The layout could be used to hide some object members, show others.
+One reason might be based on the role of the user viewing the object; the object pathsToInclude most relevant to a data entry clerk could be quite different to an manager that is viewing, eg to approve it.
+The layout could be used to hide some object pathsToInclude, show others.
 
 If an alternative layout is indicated (we'll look at the mechanics of this below), then this is used to locate an alternative layout file.
 For example, if the "edit" layout is specified, then the `Xxx.edit.layout.xml` file is used (if it exists).

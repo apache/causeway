@@ -32,17 +32,17 @@ import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.MemberOrder;
-import org.apache.isis.applib.annotation.Snapshot;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Property;
 
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.services.core.xmlSnapshotService.child.XmlSnapshotChildVm;
-import demoapp.dom.services.core.xmlSnapshotService.peer.XmlSnapshotPeerVm;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.val;
+
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+import demoapp.dom.services.core.xmlSnapshotService.child.XmlSnapshotChildVm;
+import demoapp.dom.services.core.xmlSnapshotService.peer.XmlSnapshotPeerVm;
 
 @XmlRootElement(name = "root")
 @XmlType
@@ -56,7 +56,6 @@ public class XmlSnapshotParentVm implements HasAsciiDocDescription {
 
     public XmlSnapshotParentVm(String text) {
         this.text = text;
-        this.otherText = text;
     }
 
     public String title() {
@@ -69,26 +68,16 @@ public class XmlSnapshotParentVm implements HasAsciiDocDescription {
     @Getter @Setter
     private String text;
 
-    @Property(editing = Editing.ENABLED, snapshot = Snapshot.EXCLUDED)
-    @MemberOrder(name = "properties", sequence = "2")
-    @XmlElement(required = true)
-    @Getter @Setter
-    private String otherText;
-
-    @Property(editing = Editing.ENABLED)
+    @Property(editing = Editing.DISABLED)
     @MemberOrder(name = "properties", sequence = "3")
     @XmlElement(required = false)
     @Getter @Setter
     private XmlSnapshotPeerVm peer;
 
-//tag::class-collections-children[]
     @Collection()
     @CollectionLayout()
     @Getter
     private List<XmlSnapshotChildVm> children = new ArrayList<>();
-
-    // ...
-//end::class-collections-children[]
 
     public XmlSnapshotParentVm addChild(final String value) {
         val childVm = new XmlSnapshotChildVm(value);

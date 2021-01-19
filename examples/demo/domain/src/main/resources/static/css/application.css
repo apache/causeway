@@ -258,3 +258,7 @@ table.tableblock.grid-all td.tableblock {
 div.exceptionStackTracePanel div.errorInfo h2.mainMessage {
     margin-left: -32px;
 }
+
+.dropdown-menu{
+    overflow-y:auto;
+}

@@ -28,10 +28,10 @@ import org.apache.isis.applib.annotation.Snapshot;
 import org.apache.isis.applib.annotation.Property;
 
 //tag::class[]
-@Property(snapshot = Snapshot.INCLUDED) // <.>
+@Property(snapshot = Snapshot.INCLUDED)
 @Inherited
 @Target({
-        ElementType.METHOD, ElementType.FIELD                   // <.>
+        ElementType.METHOD, ElementType.FIELD
 })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface SnapshotIncludedMetaAnnotation {

@@ -94,7 +94,7 @@ The event type to be posted whenever an instance is about to be updated
 
 == Domain Events API
 
-These attributes define the events to be fired when a domain object's members (its actions, properties and collections) are interacted with.
+These attributes define the events to be fired when a domain object's pathsToInclude (its actions, properties and collections) are interacted with.
 
 These attributes define the default event types; they can be overridden for each specific domain member.
 

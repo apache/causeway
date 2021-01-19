@@ -134,19 +134,19 @@ The queries that are shown in the screencast include:
 
 * show parent and its children (titles) +
 +
-pass:[<pre>http://localhost:8080/restful/objects/PARENT/0?x-ro-follow-links=members[children\].value]
+pass:[<pre>http://localhost:8080/restful/objects/PARENT/0?x-ro-follow-links=pathsToInclude[children\].value]
 
 * show parent and its children (full details) +
 +
-pass:[<pre>http://localhost:8080/restful/objects/PARENT/0?x-ro-follow-links=members[children\].value.href]
+pass:[<pre>http://localhost:8080/restful/objects/PARENT/0?x-ro-follow-links=pathsToInclude[children\].value.href]
 
 * child's parent (title) +
 +
-pass:[<pre>http://localhost:8080/restful/objects/CHILD/0?x-ro-follow-links=members[parent\].value]
+pass:[<pre>http://localhost:8080/restful/objects/CHILD/0?x-ro-follow-links=pathsToInclude[parent\].value]
 
 * child's siblings (up to its parent, down to children) +
 +
-pass:[<pre>http://localhost:8080/restful/objects/CHILD/0?x-ro-follow-links=members[parent\].value.members[children\].value]
+pass:[<pre>http://localhost:8080/restful/objects/CHILD/0?x-ro-follow-links=pathsToInclude[parent\].value.pathsToInclude[children\].value]
 
 ==== Honor UI hints
 

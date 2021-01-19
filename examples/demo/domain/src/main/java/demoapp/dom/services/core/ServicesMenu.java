@@ -54,11 +54,16 @@ public class ServicesMenu {
 
         val parentVm = new XmlSnapshotParentVm("parent object");
 
-        parentVm.setPeer(new XmlSnapshotPeerVm("peer object"));
-
         parentVm.addChild("child 1");
         parentVm.addChild("child 2");
         parentVm.addChild("child 3");
+
+        final XmlSnapshotPeerVm peerVm = new XmlSnapshotPeerVm("peer object");
+        parentVm.setPeer(peerVm);
+
+        peerVm.addChild("child 1");
+        peerVm.addChild("child 2");
+        peerVm.addChild("child 3");
 
         return parentVm;
     }

@@ -59,7 +59,7 @@ The framework provides a default implementation of the service, `o.a.i.core.runt
 
 == Annotating Members
 
-As discussed in the introduction, the framework will automatically emit domain events for all of the object members (actions, properties or collections) of an object whenever that object is rendered or (more generally) interacted with.
+As discussed in the introduction, the framework will automatically emit domain events for all of the object pathsToInclude (actions, properties or collections) of an object whenever that object is rendered or (more generally) interacted with.
 
 For example:
 
@@ -226,7 +226,7 @@ public class LibraryMember {
 }
 ----
 
-This then allows for other classes - in particular domain services contributing members - to also inherit from the class-level domain events.
+This then allows for other classes - in particular domain services contributing pathsToInclude - to also inherit from the class-level domain events.
 
 
 

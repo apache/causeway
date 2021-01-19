@@ -16,7 +16,11 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.annotDomain.Property.snapshot;
+package demoapp.dom.services.core.xmlSnapshotService;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -30,32 +34,69 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 //tag::class[]
-@Action(semantics = SemanticsOf.SAFE)
+@Action(
+    semantics = SemanticsOf.SAFE
+)
 @RequiredArgsConstructor
-public class PropertySnapshotVm_takeXmlSnapshot {
+public class XmlSnapshotParentVm_takeXmlSnapshot {
 
     @Inject XmlSnapshotService xmlSnapshotService;
-    // ...
-//end::class[]
     @Inject XmlService xmlService;
+    // ...
 
-    private final PropertySnapshotVm vm;
+//end::class[]
+
+    private final XmlSnapshotParentVm xmlSnapshotParentVm;
+
+//tag::PathsToInclude[]
+    public enum PathsToInclude {
+        NONE,
+        PEER("peer"),
+        CHILDREN("children"),
+        PEER_AND_CHILDREN("peer", "children"),
+        PEER_AND_ITS_CHILDREN("peer/children");
+
+        final List<String> paths;
+        PathsToInclude(String... paths) {
+            this.paths = Collections.unmodifiableList(Arrays.asList(paths));
+        }
+    }
+//end::PathsToInclude[]
+
+//tag::SnapshotType[]
+    public enum SnapshotType {
+        XML,
+        XSD
+    }
+//end::SnapshotType[]
+
 //tag::class[]
-    public Clob act(final String fileName) {
-        val builder = xmlSnapshotService.builderFor(vm);
+    public Clob act(
+            final PathsToInclude pathsToInclude,
+            final SnapshotType snapshotType) {
+        val builder = xmlSnapshotService.builderFor(xmlSnapshotParentVm);
+        for (String path : pathsToInclude.paths) {
+            builder.includePath(path);
+        }
         val snapshot = builder.build();
-        val doc = snapshot.getXmlDocument();
+        val doc = snapshotType == SnapshotType.XML
+                ? snapshot.getXmlDocument() : snapshot.getXsdDocument();
+        val fileName = String.format("%s.%s", pathsToInclude.name(), snapshotType.name().toLowerCase());
         return asClob(fileName, xmlService.asString(doc));
     }
-    // ...
 //end::class[]
-    public String default0Act() {
-        return "snapshot.xml";
+
+    public PathsToInclude default0Act() {
+        return PathsToInclude.NONE;
+    }
+    public SnapshotType default1Act() {
+        return SnapshotType.XML;
     }
 
     private static Clob asClob(final String fileName, final String xmlStr) {
         return new Clob(fileName, "application/xml", xmlStr);
     }
 //tag::class[]
+    // ...
 }
 //end::class[]

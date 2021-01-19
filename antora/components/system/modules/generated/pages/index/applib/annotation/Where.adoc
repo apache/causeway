@@ -63,7 +63,7 @@ Synonym for _#EVERYWHERE_ .
 --
 The member should be disabled/hidden when displayed within an object form.
 
-For most viewers, this applies to property and collection members, not actions.
+For most viewers, this applies to property and collection pathsToInclude, not actions.
 --
 <.> `[teal]#*_REFERENCES_PARENT_*#`
 +

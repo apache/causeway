@@ -112,7 +112,7 @@
                     <xs:sequence>
                         <xs:element name="execution" type="memberExecutionDto" minOccurs="0" maxOccurs="unbounded">
                             <xs:annotation>
-                                <xs:documentation>Capture interactions with other members from this interaction, using the WrapperFactory service.  Typically this will be actions invoking other actions, but it is also possible for an action to perform a property edit, and - much rarer - for a property edit to invoke an action.  Whatever; these interactions nest together into a call/stack, more generally into a graph.
+                                <xs:documentation>Capture interactions with other pathsToInclude from this interaction, using the WrapperFactory service.  Typically this will be actions invoking other actions, but it is also possible for an action to perform a property edit, and - much rarer - for a property edit to invoke an action.  Whatever; these interactions nest together into a call/stack, more generally into a graph.
                                 </xs:documentation>
                             </xs:annotation>
                         </xs:element>

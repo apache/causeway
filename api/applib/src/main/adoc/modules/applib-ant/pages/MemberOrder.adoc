@@ -6,7 +6,7 @@
 
 // TODO: v2: replace @MemberOrder#name() with @PropertyLayout#group(); replace @MemberOrder#sequence() with @PropertyLayout#sequence().
 
-The `@MemberOrder` annotation is used to specify the relative order of domain object members, that is: properties, collections and actions.
+The `@MemberOrder` annotation is used to specify the relative order of domain object pathsToInclude, that is: properties, collections and actions.
 
 [source,java]
 ----
@@ -14,12 +14,12 @@ include::refguide:applib-ant:example$annotation/MemberOrder.java[tags="refguide"
 ----
 <.> xref:refguide:applib-ant:MemberOrder.adoc#name[`name()`]
 +
-Names a group of (property) members.
+Names a group of (property) pathsToInclude.
 All properties with this name will be grouped together.
 
 <.> xref:refguide:applib-ant:MemberOrder.adoc#sequence[`sequence()`]
 +
-Defines an ordering for members, within their container.
+Defines an ordering for pathsToInclude, within their container.
 
 As this is an important topic, there is xref:userguide:fun:ui.adoc#object-layout[chapter] in the user guide that discusses object layout in full.
 

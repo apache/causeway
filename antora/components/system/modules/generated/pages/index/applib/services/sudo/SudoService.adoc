@@ -19,7 +19,7 @@ interface SudoService {
 <.> `[teal]#*ACCESS_ALL_ROLE*#` : `xref:system:generated:index/applib/services/user/RoleMemento.adoc[RoleMemento]`
 +
 --
-If included in the list of roles, then will disable security checks (can view and use all object members).
+If included in the list of roles, then will disable security checks (can view and use all object pathsToInclude).
 --
 <.> `[teal]#*call*#<T>(UnaryOperator<xref:system:generated:index/applib/services/iactn/ExecutionContext.adoc[ExecutionContext]> sudoMapper, Callable<T> supplier)` : `T`
 +

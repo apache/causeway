@@ -83,7 +83,7 @@ This element is rendered as `<div class="row">`.
 +
 A container of almost everything else.
 A column most commonly contains properties (grouped into ``FieldSet``s, described above) or collections (specified by ``CollectionLayoutData``, also above).
-However, a `Col` might instead contain a ``BS3TabGroup`` (described below) in order that the object members is arranged into tabs.
+However, a `Col` might instead contain a ``BS3TabGroup`` (described below) in order that the object pathsToInclude is arranged into tabs.
 +
 It is also possible for a ``Col`` to contain the object's title/icon (using ``DomainObjectLayoutData``) or indeed arbitrary actions (using ``ActionLayoutData`).
 +
@@ -97,7 +97,7 @@ A container of ``BS3Tab``s.
 
 * `BS3Tab` +
 +
-A container of ``BS3Row``s, which will in turn contain ``BS3Col``s and thence ultimately the object's members.
+A container of ``BS3Row``s, which will in turn contain ``BS3Col``s and thence ultimately the object's pathsToInclude.
 
 There are also two close cousins of `Col`, namely `ClearFixVisible` and `ClearFixHidden`.
 These map to Bootstrap's link:http://getbootstrap.com/css/#responsive-utilities[responsive utility class]es, and provide greater control for responsive designs.

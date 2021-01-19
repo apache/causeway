@@ -16,34 +16,26 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.annotDomain.Property.snapshot.child;
-
-import java.util.ArrayList;
-import java.util.List;
+package demoapp.dom.services.core.xmlSnapshotService.peer.child;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
-import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
-import org.apache.isis.applib.annotation.Snapshot;
+import org.apache.isis.applib.annotation.Title;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.annotDomain.Property.hidden.PropertyHiddenVm;
-import demoapp.dom.annotDomain.Property.snapshot.SnapshotExcludedMetaAnnotation;
-import demoapp.dom.annotDomain.Property.snapshot.SnapshotIncludedMetaAnnotation;
 
 //tag::class[]
 @XmlRootElement(name = "child")
@@ -51,46 +43,22 @@ import demoapp.dom.annotDomain.Property.snapshot.SnapshotIncludedMetaAnnotation;
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(
         nature=Nature.VIEW_MODEL,
-        objectType = "demo.PropertyHiddenChildVm"
+        objectType = "demo.XmlSnapshotPeerChildVm"
 )
 @NoArgsConstructor
-public class PropertySnapshotChildVm implements HasAsciiDocDescription {
+public class XmlSnapshotPeerChildVm implements HasAsciiDocDescription {
 
-    public PropertySnapshotChildVm(String value) {
-        excludedProperty = value;
-        includedProperty = value;
+    public XmlSnapshotPeerChildVm(String value) {
+        setValue(value);
     }
 
-    public String title() {
-        return "Property#xmlSnapshot (child object)";
-    }
-
-//tag::annotated-excluded[]
-    @Property(
-        snapshot = Snapshot.EXCLUDED
-    )
-    @PropertyLayout(
-        describedAs = "@Property(snapshot = EXCLUDED)"
-    )
-    @MemberOrder(name = "annotations", sequence = "2")
-    @XmlElement(required = true)
+    @Title
+    @Property()
+    @PropertyLayout()
+    @MemberOrder(name = "annotation", sequence = "1")
+    @XmlElement(required = false)
     @Getter @Setter
-    private String excludedProperty;
-//end::annotated-excluded[]
-
-//tag::annotated-included[]
-    @Property(
-            snapshot = Snapshot.INCLUDED
-    )
-    @PropertyLayout(
-            describedAs = "@Property(snapshot = INCLUDED)"
-    )
-    @MemberOrder(name = "annotations", sequence = "2")
-    @XmlElement(required = true)
-    @Getter @Setter
-    private String includedProperty;
-//end::annotated-included[]
-
+    private String value;
 
 }
 //end::class[]

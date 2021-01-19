@@ -4,7 +4,7 @@
 :page-partial:
 
 
-Supporting methods are those that are associated with properties, collections and actions, providing additional imperative business rule checking and behaviour to be performed when the user interacts with those object members.
+Supporting methods are those that are associated with properties, collections and actions, providing additional imperative business rule checking and behaviour to be performed when the user interacts with those object pathsToInclude.
 
 This association is performed by name matching.
 Thus, a property called "firstName", derived from a method `getFirstName()` may have supporting methods `hideFirstName()`, `disableFirstName()` and `validateFirstName()`.

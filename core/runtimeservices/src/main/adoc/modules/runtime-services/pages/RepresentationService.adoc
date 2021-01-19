@@ -65,7 +65,7 @@ These methods provide:
 +
 eg `ObjectAdapter`, `ObjectAndProperty`, `ObjectAndCollection` etc
 
-* for members, whether the representation is in read/write mode +
+* for pathsToInclude, whether the representation is in read/write mode +
 +
 ie `MemberReprMode`
 

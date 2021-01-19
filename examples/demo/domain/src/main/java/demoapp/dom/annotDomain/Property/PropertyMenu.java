@@ -50,7 +50,6 @@ import demoapp.dom.annotDomain.Property.projecting.PropertyProjectingVm;
 import demoapp.dom.annotDomain.Property.projecting.child.PropertyProjectingChildVm;
 import demoapp.dom.annotDomain.Property.projecting.jdo.PropertyProjectingChildJdoEntities;
 import demoapp.dom.annotDomain.Property.regexPattern.PropertyRegexPatternVm;
-import demoapp.dom.annotDomain.Property.snapshot.child.PropertySnapshotChildVm;
 import demoapp.dom.types.Samples;
 
 @DomainService(nature=NatureOfService.VIEW, objectType = "demo.PropertyMenu")
@@ -179,12 +178,6 @@ public class PropertyMenu {
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-camera", describedAs = "Snapshot inclusion/exclusion")
     public PropertySnapshotVm snapshot(){
-        val vm = new PropertySnapshotVm("value");
-
-        vm.getChildren().add(new PropertySnapshotChildVm("child 1"));
-        vm.getChildren().add(new PropertySnapshotChildVm("child 2"));
-        vm.getChildren().add(new PropertySnapshotChildVm("child 3"));
-
         return new PropertySnapshotVm("value");
     }
 

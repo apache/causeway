@@ -7,7 +7,7 @@
 
 At its core, Apache Isis is a metamodel that is built at runtime from the domain classes (eg `Customer.java`), along with optional supporting metadata (eg `Customer.layout.xml`).
 
-The contents of this metamodel are the entities and supporting services, as well the members of those classes.
+The contents of this metamodel are the entities and supporting services, as well the pathsToInclude of those classes.
 These are all meta-annotated with link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/stereotype/Component.html[`@Component`] and are either registered explicitly (framework services) or dynamically discovered (entities and user-defined services) by Spring Boot on the classpath via link:https://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/context/annotation/ComponentScan.html[`@ComponentScan`].
 
 The detail of the metamodel is generally explicit, usually represented by Java annotations such as `@Title` or `@Action`, though this is configurable.
