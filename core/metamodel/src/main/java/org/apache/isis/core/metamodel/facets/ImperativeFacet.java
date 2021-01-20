@@ -83,8 +83,6 @@ public interface ImperativeFacet extends Facet {
          * Modify property using modify/clear rather than simply using set.
          */
         MODIFY_PROPERTY_SUPPORTING,
-        MODIFY_COLLECTION_ADD,
-        MODIFY_COLLECTION_REMOVE,
         CHOICES_OR_AUTOCOMPLETE,
         DEFAULTS,
         INITIALIZATION,
@@ -108,8 +106,7 @@ public interface ImperativeFacet extends Facet {
 
         /**
          * Returns the provided {@link Facet facet} as an {@link ImperativeFacet} if
-         * it either is one or if it is a {@link DecoratingFacet} that in turn wraps
-         * an {@link ImperativeFacet}.
+         * it either is one or if it wraps one.
          *
          * <p>
          * Otherwise, returns <tt>null</tt>.
@@ -134,7 +131,7 @@ public interface ImperativeFacet extends Facet {
                     .filter(_NullSafe::isPresent)
                     .filter(imperativeFacet->imperativeFacet.getMethods().contains(method))
                     .collect(Collectors.toList());
-            
+
             switch(imperativeFacets.size()) {
             case 0:
                 break;

@@ -28,9 +28,6 @@ import org.apache.isis.core.metamodel.consent.InteractionResult;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.collections.CollectionFacet;
-import org.apache.isis.core.metamodel.facets.collections.modify.CollectionAddToFacet;
-import org.apache.isis.core.metamodel.facets.collections.modify.CollectionClearFacet;
-import org.apache.isis.core.metamodel.facets.collections.modify.CollectionRemoveFromFacet;
 import org.apache.isis.core.metamodel.facets.collparam.semantics.CollectionSemantics;
 import org.apache.isis.core.metamodel.facets.collparam.semantics.CollectionSemanticsFacet;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
@@ -93,64 +90,6 @@ extends ObjectAssociationAbstract implements OneToManyAssociation {
 
 
 
-    // -- Validate Add
-    // Not API
-    private ValidityContext createValidateAddInteractionContext(
-            final InteractionInitiatedBy interactionInitiatedBy,
-            final ManagedObject ownerAdapter,
-            final ManagedObject proposedToAddAdapter) {
-        return new CollectionAddToContext(
-                headFor(ownerAdapter), getIdentifier(), proposedToAddAdapter,
-                interactionInitiatedBy);
-    }
-
-    @Override
-    public Consent isValidToAdd(
-            final ManagedObject ownerAdapter,
-            final ManagedObject proposedToAddAdapter,
-            final InteractionInitiatedBy interactionInitiatedBy) {
-        return isValidToAddResult(ownerAdapter, proposedToAddAdapter, interactionInitiatedBy).createConsent();
-    }
-
-    private InteractionResult isValidToAddResult(
-            final ManagedObject ownerAdapter,
-            final ManagedObject proposedToAddAdapter,
-            final InteractionInitiatedBy interactionInitiatedBy) {
-        final ValidityContext validityContext = createValidateAddInteractionContext(
-                interactionInitiatedBy, ownerAdapter, proposedToAddAdapter);
-        return InteractionUtils.isValidResult(this, validityContext);
-    }
-
-
-
-    // -- Validate Remove
-    private ValidityContext createValidateRemoveInteractionContext(
-            final ManagedObject ownerAdapter,
-            final ManagedObject proposedToRemoveAdapter,
-            final InteractionInitiatedBy interactionInitiatedBy) {
-        return new CollectionRemoveFromContext(
-                headFor(ownerAdapter), getIdentifier(), proposedToRemoveAdapter, interactionInitiatedBy);
-    }
-
-    @Override
-    public Consent isValidToRemove(
-            final ManagedObject ownerAdapter,
-            final ManagedObject proposedToRemoveAdapter,
-            final InteractionInitiatedBy interactionInitiatedBy) {
-        return isValidToRemoveResult(
-                ownerAdapter, proposedToRemoveAdapter, interactionInitiatedBy).createConsent();
-    }
-
-    private InteractionResult isValidToRemoveResult(
-            final ManagedObject ownerAdapter,
-            final ManagedObject proposedToRemoveAdapter,
-            final InteractionInitiatedBy interactionInitiatedBy) {
-        final ValidityContext validityContext = createValidateRemoveInteractionContext(
-                ownerAdapter, proposedToRemoveAdapter, interactionInitiatedBy);
-        return InteractionUtils.isValidResult(this, validityContext);
-    }
-
-
 
     // -- get, isEmpty, add, clear
 
@@ -180,41 +119,6 @@ extends ObjectAssociationAbstract implements OneToManyAssociation {
         return CollectionFacet.elementCount(collection) == 0;
     }
 
-    // -- add, clear
-
-    @Override
-    public void addElement(
-            final ManagedObject ownerAdapter,
-            final ManagedObject referencedAdapter,
-            final InteractionInitiatedBy interactionInitiatedBy) {
-
-        if (referencedAdapter == null) {
-            throw new IllegalArgumentException("Can't use null to add an item to a collection");
-        }
-        EntityUtil.requiresWhenFirstIsBookmarkableSecondIsAttached(
-                ownerAdapter,
-                referencedAdapter);
-
-        val facet = getFacet(CollectionAddToFacet.class);
-        facet.add(ownerAdapter, referencedAdapter, interactionInitiatedBy);
-    }
-
-    @Override
-    public void removeElement(
-            final ManagedObject ownerAdapter,
-            final ManagedObject referencedAdapter,
-            final InteractionInitiatedBy interactionInitiatedBy) {
-        if (referencedAdapter == null) {
-            throw new IllegalArgumentException("element should not be null");
-        }
-        final CollectionRemoveFromFacet facet = getFacet(CollectionRemoveFromFacet.class);
-        facet.remove(ownerAdapter, referencedAdapter, interactionInitiatedBy);
-    }
-
-    public void removeAllAssociations(final ManagedObject ownerAdapter) {
-        final CollectionClearFacet facet = getFacet(CollectionClearFacet.class);
-        facet.clear(ownerAdapter);
-    }
 
     // -- defaults
     @Override
@@ -274,8 +178,6 @@ extends ObjectAssociationAbstract implements OneToManyAssociation {
         str.append("type", getSpecification() == null ? "unknown" : getSpecification().getShortIdentifier());
         return str.toString();
     }
-
-
 
 
 }

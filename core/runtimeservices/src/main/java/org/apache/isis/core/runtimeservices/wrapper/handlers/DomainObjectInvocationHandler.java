@@ -69,7 +69,7 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
-public class DomainObjectInvocationHandler<T> 
+public class DomainObjectInvocationHandler<T>
 extends DelegatingInvocationHandlerDefault<T> {
 
     private final ProxyContextHandler proxyContextHandler;
@@ -95,7 +95,7 @@ extends DelegatingInvocationHandlerDefault<T> {
      */
     protected Method __isis_executionModes;
 
-    private EntityFacet entityFacet; 
+    private EntityFacet entityFacet;
 
     public DomainObjectInvocationHandler(
             final T domainObject,
@@ -116,7 +116,7 @@ extends DelegatingInvocationHandlerDefault<T> {
             __isis_saveMethod = WrappingObject.class.getMethod("__isis_save", _Constants.emptyClasses);
             __isis_wrappedMethod = WrappingObject.class.getMethod("__isis_wrapped", _Constants.emptyClasses);
             __isis_executionModes = WrappingObject.class.getMethod("__isis_executionModes", _Constants.emptyClasses);
-            
+
 
         } catch (final NoSuchMethodException nsme) {
             throw new IllegalStateException(
@@ -208,12 +208,6 @@ extends DelegatingInvocationHandlerDefault<T> {
             if (intent == Intent.ACCESSOR) {
                 return handleGetterMethodOnCollection(targetAdapter, args, otma, memberName);
             }
-            if (intent == Intent.MODIFY_COLLECTION_ADD) {
-                return handleCollectionAddToMethod(targetAdapter, args, otma);
-            }
-            if (intent == Intent.MODIFY_COLLECTION_REMOVE) {
-                return handleCollectionRemoveFromMethod(targetAdapter, args, otma);
-            }
         }
 
         if (objectMember instanceof ObjectAction) {
@@ -264,7 +258,7 @@ extends DelegatingInvocationHandlerDefault<T> {
     private static ObjectMember determineMixinMember(
             final ManagedObject domainObjectAdapter,
             final ObjectAction objectAction) {
-        
+
         if(domainObjectAdapter == null) {
             return null;
         }
@@ -290,7 +284,7 @@ extends DelegatingInvocationHandlerDefault<T> {
     }
 
     private boolean isEnhancedEntityMethod(final Method method) {
-        return entityFacet!=null 
+        return entityFacet!=null
                 ? entityFacet.isProxyEnhancement(method)
                 : false;
     }
@@ -323,17 +317,17 @@ extends DelegatingInvocationHandlerDefault<T> {
                     targetNoSpec.isValidResult(targetAdapter, getInteractionInitiatedBy());
             notifyListenersAndVetoIfRequired(interactionResult);
         });
-        
-        
+
+
         val spec = targetAdapter.getSpecification();
         if(spec.isEntity()) {
             return runExecutionTask(()->{
                 EntityUtil.persistInCurrentTransaction(targetAdapter);
                 return null;
-            }); 
+            });
         }
         return null;
-        
+
     }
 
     // /////////////////////////////////////////////////////////////////
@@ -352,9 +346,9 @@ extends DelegatingInvocationHandlerDefault<T> {
         });
 
         resolveIfRequired(targetAdapter);
-        
+
         return runExecutionTask(()->{
-        
+
             val interactionInitiatedBy = getInteractionInitiatedBy();
             val currentReferencedAdapter = property.get(targetAdapter, interactionInitiatedBy);
 
@@ -364,9 +358,9 @@ extends DelegatingInvocationHandlerDefault<T> {
                     getDelegate(), property.getIdentifier(), currentReferencedObj);
             notifyListeners(propertyAccessEvent);
             return currentReferencedObj;
-            
+
         });
-        
+
     }
 
 
@@ -377,19 +371,19 @@ extends DelegatingInvocationHandlerDefault<T> {
 
 
     private Object handleSetterMethodOnProperty(
-            final ManagedObject targetAdapter, 
+            final ManagedObject targetAdapter,
             final Object[] args,
             final OneToOneAssociation property) {
-        
+
         val singleArg = singleArgUnderlyingElseNull(args, "setter");
-        
+
         runValidationTask(()->{
             checkVisibility(targetAdapter, property);
             checkUsability(targetAdapter, property);
         });
-        
+
         val argumentAdapter = getObjectManager().adapt(singleArg);
-        
+
         resolveIfRequired(targetAdapter);
 
         runValidationTask(()->{
@@ -398,12 +392,12 @@ extends DelegatingInvocationHandlerDefault<T> {
                     .getInteractionResult();
             notifyListenersAndVetoIfRequired(interactionResult);
         });
-        
+
         return runExecutionTask(()->{
             property.set(targetAdapter, argumentAdapter, getInteractionInitiatedBy());
             return null;
         });
-        
+
     }
 
 
@@ -424,9 +418,9 @@ extends DelegatingInvocationHandlerDefault<T> {
         });
 
         resolveIfRequired(targetAdapter);
-        
+
         return runExecutionTask(()->{
-        
+
             val interactionInitiatedBy = getInteractionInitiatedBy();
             val currentReferencedAdapter = collection.get(targetAdapter, interactionInitiatedBy);
 
@@ -445,12 +439,12 @@ extends DelegatingInvocationHandlerDefault<T> {
                 notifyListeners(collectionAccessEvent);
                 return mapViewObject;
             }
-            
-            val msg = String.format("Collection type '%s' not supported by framework", currentReferencedObj.getClass().getName()); 
+
+            val msg = String.format("Collection type '%s' not supported by framework", currentReferencedObj.getClass().getName());
             throw new IllegalArgumentException(msg);
-            
+
         });
-        
+
     }
 
     private Collection<?> lookupWrappingObject(
@@ -479,81 +473,13 @@ extends DelegatingInvocationHandlerDefault<T> {
         return proxyContextHandler.proxy(mapToLookup, memberName, this, otma);
     }
 
-    // /////////////////////////////////////////////////////////////////
-    // collection - add to
-    // /////////////////////////////////////////////////////////////////
-
-    private Object handleCollectionAddToMethod(
-            final ManagedObject targetAdapter,
-            final Object[] args,
-            final OneToManyAssociation otma) {
-
-        val singleArg = singleArgUnderlyingElseThrow(args, "addTo");
-
-        runValidationTask(()->{
-            checkVisibility(targetAdapter, otma);
-            checkUsability(targetAdapter, otma);
-        });
-        
-        resolveIfRequired(targetAdapter);
-        val argumentAdapter = getObjectManager().adapt(singleArg);
-        
-        runValidationTask(()->{
-            val interactionResult = otma.isValidToAdd(targetAdapter, argumentAdapter,
-                    getInteractionInitiatedBy()).getInteractionResult();
-            notifyListenersAndVetoIfRequired(interactionResult);
-        });
-        
-        return runExecutionTask(()->{
-            otma.addElement(targetAdapter, argumentAdapter, getInteractionInitiatedBy());
-            return null;
-        });
-        
-    }
-
-
-    
-    // /////////////////////////////////////////////////////////////////
-    // collection - remove from
-    // /////////////////////////////////////////////////////////////////
-
-
-
-    private Object handleCollectionRemoveFromMethod(
-            final ManagedObject targetAdapter,
-            final Object[] args,
-            final OneToManyAssociation collection) {
-        
-        val singleArg = singleArgUnderlyingElseThrow(args, "removeFrom");
-
-        runValidationTask(()->{
-            checkVisibility(targetAdapter, collection);
-            checkUsability(targetAdapter, collection);
-        });
-
-        resolveIfRequired(targetAdapter);
-        val argumentAdapter = getObjectManager().adapt(singleArg);
-
-        runValidationTask(()->{
-            val interactionResult = collection.isValidToRemove(targetAdapter, argumentAdapter,
-                    getInteractionInitiatedBy()).getInteractionResult();
-            notifyListenersAndVetoIfRequired(interactionResult);
-        });
-        
-        return runExecutionTask(()->{
-            collection.removeElement(targetAdapter, argumentAdapter, getInteractionInitiatedBy());
-            return null;
-        });
-
-        
-    }
 
     // /////////////////////////////////////////////////////////////////
     // action
     // /////////////////////////////////////////////////////////////////
 
     private Object handleActionMethod(
-            final ManagedObject targetAdapter, 
+            final ManagedObject targetAdapter,
             final Object[] args,
             final ObjectAction objectAction) {
 
@@ -565,24 +491,24 @@ extends DelegatingInvocationHandlerDefault<T> {
             checkUsability(targetAdapter, objectAction);
             checkValidity(head, objectAction, argAdapters);
         });
-        
+
         return runExecutionTask(()->{
             val interactionInitiatedBy = getInteractionInitiatedBy();
-            
+
             val returnedAdapter = objectAction.execute(
                     head, argAdapters,
                     interactionInitiatedBy);
             return UnwrapUtil.single(returnedAdapter);
-            
+
         });
-        
+
     }
 
     private void checkValidity(
-            final ActionInteractionHead head, 
-            final ObjectAction objectAction, 
+            final ActionInteractionHead head,
+            final ObjectAction objectAction,
             final Can<ManagedObject> argAdapters) {
-        
+
         val interactionResult = objectAction
                 .isArgumentSetValid(head, argAdapters,getInteractionInitiatedBy())
                 .getInteractionResult();
@@ -593,7 +519,7 @@ extends DelegatingInvocationHandlerDefault<T> {
         val argAdapters = _NullSafe.stream(args)
         .map(getObjectManager()::adapt)
         .collect(Can.toCan());
-        
+
         return argAdapters;
     }
 
@@ -619,7 +545,7 @@ extends DelegatingInvocationHandlerDefault<T> {
     private void checkVisibility(
             final ManagedObject targetObjectAdapter,
             final ObjectMember objectMember) {
-        
+
         val visibleConsent = objectMember.isVisible(targetObjectAdapter, getInteractionInitiatedBy(), where);
         val interactionResult = visibleConsent.getInteractionResult();
         notifyListenersAndVetoIfRequired(interactionResult);
@@ -628,10 +554,10 @@ extends DelegatingInvocationHandlerDefault<T> {
     private void checkUsability(
             final ManagedObject targetObjectAdapter,
             final ObjectMember objectMember) {
-        
+
         val interactionResult = objectMember.isUsable(
                 targetObjectAdapter,
-                getInteractionInitiatedBy(), 
+                getInteractionInitiatedBy(),
                 where)
                 .getInteractionResult();
         notifyListenersAndVetoIfRequired(interactionResult);
@@ -672,15 +598,15 @@ extends DelegatingInvocationHandlerDefault<T> {
     }
 
     // -- HELPER
-    
+
     private boolean shouldEnforceRules() {
         return !getSyncControl().getExecutionModes().contains(ExecutionMode.SKIP_RULE_VALIDATION);
     }
-    
+
     private boolean shouldExecute() {
         return !getSyncControl().getExecutionModes().contains(ExecutionMode.SKIP_EXECUTION);
     }
-    
+
     private void runValidationTask(Runnable task) {
         if(!shouldEnforceRules()) {
             return;
@@ -707,11 +633,11 @@ extends DelegatingInvocationHandlerDefault<T> {
     private Object handleException(Exception ex) {
         val exceptionHandler = getSyncControl().getExceptionHandler()
                 .orElse(null);
-        
+
         if(exceptionHandler==null) {
             log.warn("No ExceptionHandler was setup to handle this Exception", ex);
         }
-        
+
         return exceptionHandler!=null
                 ? exceptionHandler.handle(ex)
                 : null;
@@ -729,7 +655,7 @@ extends DelegatingInvocationHandlerDefault<T> {
         }
         return argumentObj;
     }
-    
+
     private Object singleArgUnderlyingElseNull(Object[] args, String name) {
         if (args.length != 1) {
             throw new IllegalArgumentException(String.format(
@@ -738,14 +664,14 @@ extends DelegatingInvocationHandlerDefault<T> {
         val argumentObj = underlying(args[0]);
         return argumentObj;
     }
-    
+
     private void zeroArgsElseThrow(Object[] args, String name) {
         if (args.length != 0) {
             throw new IllegalArgumentException(String.format(
                     "Invoking '%s' should have no arguments", name));
         }
     }
-    
+
     // -- DEPENDENCIES
 
     private ObjectManager getObjectManager() {

@@ -38,7 +38,6 @@ import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
-import org.apache.isis.core.metamodel.facets.collections.modify.CollectionAddToFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
@@ -61,15 +60,14 @@ public class OneToManyAssociationDefaultTest {
     @Rule
     public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
 
-    @Mock private ManagedObject mockOwnerAdapter;
-    @Mock private ManagedObject mockAssociatedAdapter;
-    @Mock private AuthenticationContext mockAuthenticationContext;
-    @Mock private SpecificationLoader mockSpecificationLoader;
-    @Mock private ObjectSpecification mockOwnerAdapterSpec;
-    @Mock private MessageService mockMessageService;
-    @Mock private FacetedMethod mockPeer;
-    @Mock private NamedFacet mockNamedFacet;
-    @Mock private CollectionAddToFacet mockCollectionAddToFacet;
+    @Mock ManagedObject mockOwnerAdapter;
+    @Mock ManagedObject mockAssociatedAdapter;
+    @Mock AuthenticationContext mockAuthenticationContext;
+    @Mock SpecificationLoader mockSpecificationLoader;
+    @Mock ObjectSpecification mockOwnerAdapterSpec;
+    @Mock MessageService mockMessageService;
+    @Mock FacetedMethod mockPeer;
+    @Mock NamedFacet mockNamedFacet;
 
     private OneToManyAssociation association;
     private MetaModelContext_forTesting metaModelContext;
@@ -83,23 +81,23 @@ public class OneToManyAssociationDefaultTest {
                 .singleton(mockMessageService)
                 .build();
 
-        allowingPeerToReturnCollectionType();
+//        allowingPeerToReturnCollectionType();
         allowingPeerToReturnIdentifier();
-        allowingSpecLoaderToReturnSpecs();
+//        allowingSpecLoaderToReturnSpecs();
         association = new OneToManyAssociationDefault(mockPeer);
     }
 
-    private void allowingSpecLoaderToReturnSpecs() {
-        context.checking(new Expectations() {
-            {
-                allowing(mockSpecificationLoader).loadSpecification(Order.class);
-                
-                allowing(mockPeer).getMetaModelContext();
-                will(returnValue(metaModelContext));
-                
-            }
-        });
-    }
+//    private void allowingSpecLoaderToReturnSpecs() {
+//        context.checking(new Expectations() {
+//            {
+//                allowing(mockSpecificationLoader).loadSpecification(Order.class);
+//
+//                allowing(mockPeer).getMetaModelContext();
+//                will(returnValue(metaModelContext));
+//
+//            }
+//        });
+//    }
 
     @Test
     public void id() {
@@ -112,61 +110,14 @@ public class OneToManyAssociationDefaultTest {
         assertThat(association.getName(), is(equalTo("My name")));
     }
 
-    @Test
-    public void delegatesToUnderlying() {
-        final ObjectSpecification spec = association.getSpecification();
-        assertNotNull(spec); // looks like an incomplete testcase
-    }
-
-    @Test
-    public void canAddPersistable() {
-        context.checking(new Expectations() {
-            {
-//                oneOf(mockPeer).containsFacet(NotPersistedFacet.class);
-//                will(returnValue(false));
-
-                oneOf(mockOwnerAdapter).getSpecification();
-                will(returnValue(mockOwnerAdapterSpec));
-                
-                oneOf(mockOwnerAdapterSpec).isParented();
-                will(returnValue(false));
-                
-                oneOf(mockOwnerAdapterSpec).isEntity();
-                will(returnValue(false));
-                
-                oneOf(mockOwnerAdapterSpec).isIdentifiable();
-                will(returnValue(true));
-                
-                oneOf(mockAssociatedAdapter).getSpecification();
-                will(returnValue(mockOwnerAdapterSpec));
-
-                oneOf(mockPeer).getFacet(CollectionAddToFacet.class);
-                will(returnValue(mockCollectionAddToFacet));
-
-                oneOf(mockCollectionAddToFacet).add(mockOwnerAdapter, mockAssociatedAdapter, InteractionInitiatedBy.USER);
-            }
-        });
-        association.addElement(mockOwnerAdapter, mockAssociatedAdapter, InteractionInitiatedBy.USER);
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void cannotRemoveNull() {
-        association.removeElement(mockOwnerAdapter, null, InteractionInitiatedBy.USER);
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void cannotAddNull() {
-        association.addElement(mockOwnerAdapter, null, InteractionInitiatedBy.USER);
-    }
-
-    private void allowingPeerToReturnCollectionType() {
-        context.checking(new Expectations() {
-            {
-                allowing(mockPeer).getType();
-                will(returnValue(COLLECTION_TYPE));
-            }
-        });
-    }
+//    private void allowingPeerToReturnCollectionType() {
+//        context.checking(new Expectations() {
+//            {
+//                allowing(mockPeer).getType();
+//                will(returnValue(COLLECTION_TYPE));
+//            }
+//        });
+//    }
 
     private void allowingPeerToReturnIdentifier() {
         context.checking(new Expectations() {

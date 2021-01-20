@@ -38,18 +38,10 @@ import org.apache.isis.core.metamodel.facets.actions.contributing.ContributingFa
 import org.apache.isis.core.metamodel.facets.actions.contributing.ContributingFacetAbstract;
 import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacetAbstract;
 import org.apache.isis.core.metamodel.facets.collections.collection.hidden.HiddenFacetForCollectionAnnotation;
-import org.apache.isis.core.metamodel.facets.collections.collection.modify.CollectionAddToFacetForDomainEventFromAbstract;
-import org.apache.isis.core.metamodel.facets.collections.collection.modify.CollectionAddToFacetForDomainEventFromCollectionAnnotation;
-import org.apache.isis.core.metamodel.facets.collections.collection.modify.CollectionAddToFacetForDomainEventFromDefault;
 import org.apache.isis.core.metamodel.facets.collections.collection.modify.CollectionDomainEventFacetAbstract;
 import org.apache.isis.core.metamodel.facets.collections.collection.modify.CollectionDomainEventFacetDefault;
 import org.apache.isis.core.metamodel.facets.collections.collection.modify.CollectionDomainEventFacetForCollectionAnnotation;
-import org.apache.isis.core.metamodel.facets.collections.collection.modify.CollectionRemoveFromFacetForDomainEventFromAbstract;
-import org.apache.isis.core.metamodel.facets.collections.collection.modify.CollectionRemoveFromFacetForDomainEventFromCollectionAnnotation;
-import org.apache.isis.core.metamodel.facets.collections.collection.modify.CollectionRemoveFromFacetForDomainEventFromDefault;
 import org.apache.isis.core.metamodel.facets.collections.collection.typeof.TypeOfFacetOnCollectionFromCollectionAnnotation;
-import org.apache.isis.core.metamodel.facets.collections.modify.CollectionAddToFacet;
-import org.apache.isis.core.metamodel.facets.collections.modify.CollectionRemoveFromFacet;
 import org.apache.isis.core.metamodel.facets.object.domainobject.domainevents.CollectionDomainEventDefaultFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -137,48 +129,6 @@ public class CollectionAnnotationFacetFactory extends FacetFactoryAbstract {
                 getConfiguration().getApplib().getAnnotation().getCollection().getDomainEvent().isPostForDefault()
                 )) {
             super.addFacet(collectionDomainEventFacet);
-        }
-
-
-        //
-        // if the collection is mutable, then replace the existing addTo and removeFrom facets with equivalents that
-        // also post to the event bus.
-        //
-        // here we support the deprecated annotations
-        //
-        final CollectionAddToFacet collectionAddToFacet = holder.getFacet(CollectionAddToFacet.class);
-        if (collectionAddToFacet != null) {
-            // the current collectionAddToFacet will end up as the underlying facet of
-            // one of these facets to be created.
-            final CollectionAddToFacetForDomainEventFromAbstract replacementFacet;
-
-            if(collectionDomainEventFacet instanceof CollectionDomainEventFacetForCollectionAnnotation) {
-                replacementFacet = new CollectionAddToFacetForDomainEventFromCollectionAnnotation(
-                        collectionDomainEventFacet.getEventType(), getterFacet, collectionAddToFacet,
-                        collectionDomainEventFacet, holder, getServiceRegistry());
-            } else
-                // default
-            {
-                replacementFacet = new CollectionAddToFacetForDomainEventFromDefault(
-                        collectionDomainEventFacet.getEventType(), getterFacet,
-                        collectionAddToFacet, collectionDomainEventFacet, holder, getServiceRegistry());
-            }
-            super.addFacet(replacementFacet);
-        }
-
-        final CollectionRemoveFromFacet collectionRemoveFromFacet = holder.getFacet(CollectionRemoveFromFacet.class);
-        if (collectionRemoveFromFacet != null) {
-            // the current collectionRemoveFromFacet will end up as the underlying facet of the PostsCollectionRemovedFromEventFacetAnnotation
-
-            final CollectionRemoveFromFacetForDomainEventFromAbstract replacementFacet;
-
-            if(collectionDomainEventFacet instanceof CollectionDomainEventFacetForCollectionAnnotation) {
-                replacementFacet = new CollectionRemoveFromFacetForDomainEventFromCollectionAnnotation(collectionDomainEventFacet.getEventType(), getterFacet, collectionRemoveFromFacet, collectionDomainEventFacet, getServiceRegistry(), holder);
-            } else {
-                // default
-                replacementFacet = new CollectionRemoveFromFacetForDomainEventFromDefault(collectionDomainEventFacet.getEventType(), getterFacet, collectionRemoveFromFacet, collectionDomainEventFacet, getServiceRegistry(), holder);
-            }
-            super.addFacet(replacementFacet);
         }
 
     }

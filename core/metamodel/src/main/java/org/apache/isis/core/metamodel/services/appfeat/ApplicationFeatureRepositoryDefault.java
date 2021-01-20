@@ -45,8 +45,6 @@ import org.apache.isis.core.config.metamodel.services.ApplicationFeaturesInitCon
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.SingleIntValueFacet;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
-import org.apache.isis.core.metamodel.facets.collections.modify.CollectionAddToFacet;
-import org.apache.isis.core.metamodel.facets.collections.modify.CollectionRemoveFromFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet;
 import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
@@ -134,7 +132,7 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
     }
 
     void createApplicationFeaturesFor(final ObjectSpecification spec) {
-        
+
         if (exclude(spec)) {
             return;
         }
@@ -171,7 +169,7 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
             addedMembers = newProperty(classFeatureId, property, returnType, maxLength, typicalLength, derived) || addedMembers;
         }
         for (final ObjectAssociation collection : collections) {
-            final boolean derived = !(collection.containsNonFallbackFacet(CollectionAddToFacet.class) || collection.containsNonFallbackFacet(CollectionRemoveFromFacet.class));
+            final boolean derived = false;
             final Class<?> elementType = correspondingClassFor(collection.getSpecification());
             addedMembers = newCollection(classFeatureId, collection, elementType, derived) || addedMembers;
         }
@@ -247,7 +245,7 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
             final ApplicationFeatureId classFeatureId,
             final ObjectMember objectMember,
             final Class<?> returnType,
-            final Integer maxLength, 
+            final Integer maxLength,
             final Integer typicalLength,
             final boolean derived) {
         return newMember(classFeatureId, objectMember, ApplicationMemberType.PROPERTY, returnType, derived, maxLength, typicalLength, null);
@@ -275,7 +273,7 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
             final ApplicationMemberType memberType,
             final Class<?> returnType,
             final Boolean derived,
-            final Integer maxLength, 
+            final Integer maxLength,
             final Integer typicalLength,
             final SemanticsOf actionSemantics) {
         if (objectMember.isAlwaysHidden()) {
@@ -332,14 +330,14 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
 
 
     protected boolean exclude(final ObjectSpecification spec) {
-        
+
         val excluded = spec.isAbstract() ||
                 spec.getBeanSort().isUnknown() ||
                 isBuiltIn(spec) ||
                 isHidden(spec);
-        
+
         if(excluded && log.isDebugEnabled()) {
-            log.debug("{} excluded because: abstract:{} unknown-sort:{} builtIn:{} hidden:{}", 
+            log.debug("{} excluded because: abstract:{} unknown-sort:{} builtIn:{} hidden:{}",
                     spec.getCorrespondingClass().getSimpleName(),
                     spec.isAbstract(),
                     spec.getBeanSort().isUnknown(),
@@ -347,7 +345,7 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
                     isHidden(spec)
                     );
         }
-        
+
         return excluded;
     }
 
@@ -355,14 +353,14 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
 //    /**
 //     * Ignore the (strict) super-classes of any services.
 //     * <p>
-//     * For example, we want to ignore <code>ExceptionRecognizerComposite</code> 
+//     * For example, we want to ignore <code>ExceptionRecognizerComposite</code>
 //     * because there is no service of that type (only of subtypes of that).
 //     * </p>
 //     */
 //    private boolean isSuperClassOfService(final ObjectSpecification spec) {
 //
 //        val specClass = spec.getCorrespondingClass();
-//        
+//
 //        // is this class a supertype or the actual type of one of the services?
 //        boolean serviceCls = false;
 //        for (final ManagedBeanAdapter bean : registeredServices.get()) {
@@ -490,7 +488,7 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
 
 
     // -- packageNames, packageNamesContainingClasses, classNamesContainedIn, memberNamesOf
-    @Override 
+    @Override
     public SortedSet<String> packageNames() {
         initializeIfRequired();
         return stream(allFeatures(ApplicationFeatureType.PACKAGE))
@@ -498,7 +496,7 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
                 .collect(_Sets.toUnmodifiableSorted());
     }
 
-    @Override 
+    @Override
     public SortedSet<String> packageNamesContainingClasses(final ApplicationMemberType memberType) {
         initializeIfRequired();
         final Collection<ApplicationFeature> packages = allFeatures(ApplicationFeatureType.PACKAGE);
@@ -509,7 +507,7 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
                 .collect(_Sets.toUnmodifiableSorted());
     }
 
-    @Override 
+    @Override
     public SortedSet<String> classNamesContainedIn(final String packageFqn, final ApplicationMemberType memberType) {
         initializeIfRequired();
         final ApplicationFeatureId packageId = ApplicationFeatureId.newPackage(packageFqn);
@@ -524,7 +522,7 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
                 .collect(_Sets.toUnmodifiableSorted());
     }
 
-    @Override 
+    @Override
     public SortedSet<String> classNamesRecursivelyContainedIn(final String packageFqn) {
         initializeIfRequired();
         final ApplicationFeatureId packageId = ApplicationFeatureId.newPackage(packageFqn);
@@ -539,7 +537,7 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
                 .collect(_Sets.toUnmodifiableSorted());
     }
 
-    @Override 
+    @Override
     public SortedSet<String> memberNamesOf(
             final String packageFqn,
             final String className,

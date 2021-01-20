@@ -18,14 +18,13 @@
  */
 package org.apache.isis.viewer.restfulobjects.rendering.domainobjects;
 
+import java.util.Collections;
 import java.util.Map;
 
 import org.apache.isis.applib.util.Enums;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet;
 import org.apache.isis.core.metamodel.facets.actions.validate.ActionValidationFacet;
-import org.apache.isis.core.metamodel.facets.collections.modify.CollectionAddToFacet;
-import org.apache.isis.core.metamodel.facets.collections.modify.CollectionRemoveFromFacet;
 import org.apache.isis.core.metamodel.facets.collections.validate.CollectionValidateAddToFacet;
 import org.apache.isis.core.metamodel.facets.collections.validate.CollectionValidateRemoveFromFacet;
 import org.apache.isis.core.metamodel.facets.properties.update.clear.PropertyClearFacet;
@@ -57,9 +56,8 @@ public enum MemberType {
      * {@link CollectionSemantics#getAddToKey()}
      */
     COLLECTION("collections/", RepresentationType.OBJECT_COLLECTION,
-            _Maps.unmodifiable(
-                    "addToSet", MutatorSpec.of(Rel.ADD_TO, CollectionValidateAddToFacet.class, CollectionAddToFacet.class, RestfulHttpMethod.PUT, BodyArgs.ONE),
-                    "addToList", MutatorSpec.of(Rel.ADD_TO, CollectionValidateAddToFacet.class, CollectionAddToFacet.class, RestfulHttpMethod.POST, BodyArgs.ONE), "removeFrom", MutatorSpec.of(Rel.REMOVE_FROM, CollectionValidateRemoveFromFacet.class, CollectionRemoveFromFacet.class, RestfulHttpMethod.DELETE, BodyArgs.ONE))) {
+            Collections.emptyMap()
+            ) {
         @Override
         public ObjectSpecification specFor(final ObjectMember objectMember) {
             return objectMember.getSpecification();
@@ -67,7 +65,6 @@ public enum MemberType {
     },
     /**
      * {@link #getMutators()} are keyed by
-     * {@link ActionSemantics#getInvokeKey()}
      */
     ACTION("actions/", RepresentationType.OBJECT_ACTION,
             _Maps.unmodifiable(

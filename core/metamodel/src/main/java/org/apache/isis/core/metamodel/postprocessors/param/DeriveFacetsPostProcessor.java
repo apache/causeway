@@ -43,8 +43,6 @@ import org.apache.isis.core.metamodel.facets.collections.collection.CollectionAn
 import org.apache.isis.core.metamodel.facets.collections.collection.modify.CollectionDomainEventFacet;
 import org.apache.isis.core.metamodel.facets.collections.collection.modify.CollectionDomainEventFacetAbstract;
 import org.apache.isis.core.metamodel.facets.collections.collection.modify.CollectionDomainEventFacetForCollectionAnnotation;
-import org.apache.isis.core.metamodel.facets.collections.disabled.fromimmutable.DisabledFacetOnCollectionDerivedFromImmutable;
-import org.apache.isis.core.metamodel.facets.collections.disabled.fromimmutable.DisabledFacetOnCollectionDerivedFromImmutableFactory;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.members.describedas.annotprop.DescribedAsFacetOnMemberDerivedFromType;
 import org.apache.isis.core.metamodel.facets.members.describedas.annotprop.DescribedAsFacetOnMemberFactory;
@@ -61,8 +59,6 @@ import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
 import org.apache.isis.core.metamodel.facets.object.projection.ProjectionFacetFromProjectingProperty;
 import org.apache.isis.core.metamodel.facets.object.projection.ident.IconFacetDerivedFromProjectionFacet;
 import org.apache.isis.core.metamodel.facets.object.projection.ident.TitleFacetDerivedFromProjectionFacet;
-import org.apache.isis.core.metamodel.facets.object.recreatable.DisabledFacetOnCollectionDerivedFromRecreatableObject;
-import org.apache.isis.core.metamodel.facets.object.recreatable.DisabledFacetOnCollectionDerivedFromViewModelFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.recreatable.DisabledFacetOnPropertyDerivedFromRecreatableObject;
 import org.apache.isis.core.metamodel.facets.object.recreatable.DisabledFacetOnPropertyDerivedFromRecreatableObjectFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
@@ -117,9 +113,9 @@ import lombok.val;
 /**
  * Sets up all the {@link Facet}s for an action in a single shot.
  */
-public class DeriveFacetsPostProcessor 
+public class DeriveFacetsPostProcessor
 implements ObjectSpecificationPostProcessor, MetaModelContextAware {
-    
+
     @Setter(onMethod = @__(@Override))
     private MetaModelContext metaModelContext;
 
@@ -176,8 +172,6 @@ implements ObjectSpecificationPostProcessor, MetaModelContextAware {
         collections.forEach(collection->{
 
             derivePropertyOrCollectionDescribedAsFromType(collection);
-            deriveCollectionDisabledFromViewModel(collection);
-            deriveCollectionDisabledFromImmutable(collection);
 
             // ... see if any of its actions has a collection parameter of the same type
             //
@@ -283,19 +277,19 @@ implements ObjectSpecificationPostProcessor, MetaModelContextAware {
             if(method != null) {
                 // this is basically a subset of the code that is in CollectionAnnotationFacetFactory,
                 // ignoring stuff which is deprecated for Isis v2
-                
-                final Collection collectionAnnot = 
+
+                final Collection collectionAnnot =
                         _Annotations.synthesizeInherited(method, Collection.class)
                         .orElse(null);
-                
+
 //                _Assert.assertEquals("expected same", collectionAnnot,
 //                        Annotations.getAnnotation(method, Collection.class));
-                
+
                 if(collectionAnnot != null) {
                     final Class<? extends CollectionDomainEvent<?, ?>> collectionDomainEventType =
                             CollectionAnnotationFacetFactory.defaultFromDomainObjectIfRequired(
                                     objectSpecification, collectionAnnot.domainEvent());
-                    final CollectionDomainEventFacetForCollectionAnnotation collectionDomainEventFacet = 
+                    final CollectionDomainEventFacetForCollectionAnnotation collectionDomainEventFacet =
                             new CollectionDomainEventFacetForCollectionAnnotation(
                                     collectionDomainEventType, collection);
                     this.addFacet(collectionDomainEventFacet);
@@ -329,14 +323,14 @@ implements ObjectSpecificationPostProcessor, MetaModelContextAware {
             if(method != null) {
                 // this is basically a subset of the code that is in CollectionAnnotationFacetFactory,
                 // ignoring stuff which is deprecated for Isis v2
-                
-                final Property propertyAnnot = 
+
+                final Property propertyAnnot =
                         _Annotations.synthesizeInherited(method, Property.class)
                         .orElse(null);
-                
+
 //                _Assert.assertEquals("expected same", propertyAnnot,
 //                        Annotations.getAnnotation(method, Property.class));
-                
+
                 if(propertyAnnot != null) {
                     final Class<? extends PropertyDomainEvent<?, ?>> propertyDomainEventType =
                             PropertyAnnotationFacetFactory.defaultFromDomainObjectIfRequired(
@@ -391,9 +385,9 @@ implements ObjectSpecificationPostProcessor, MetaModelContextAware {
         .lookupNonFallbackFacet(DescribedAsFacet.class)
         .ifPresent(specFacet->
             this.addFacet(
-                    new DescribedAsFacetOnMemberDerivedFromType(specFacet, 
+                    new DescribedAsFacetOnMemberDerivedFromType(specFacet,
                             facetedMethodFor(objectAction))));
-        
+
     }
 
     /**
@@ -465,7 +459,7 @@ implements ObjectSpecificationPostProcessor, MetaModelContextAware {
         .lookupNonFallbackFacet(TypicalLengthFacet.class)
         .ifPresent(specFacet->
             this.addFacet(
-                    new TypicalLengthFacetOnParameterDerivedFromType(specFacet, 
+                    new TypicalLengthFacetOnParameterDerivedFromType(specFacet,
                             peerFor(parameter))));
     }
 
@@ -512,7 +506,7 @@ implements ObjectSpecificationPostProcessor, MetaModelContextAware {
             this.addFacet(
                     new TypicalLengthFacetOnPropertyDerivedFromType(
                             specFacet, facetedMethodFor(property))));
-        
+
     }
 
     /**
@@ -554,66 +548,35 @@ implements ObjectSpecificationPostProcessor, MetaModelContextAware {
         if(property.containsNonFallbackFacet(DisabledFacet.class)) {
             return;
         }
-        
+
         val typeSpec = property.getOnType();
-        
+
         typeSpec
         .lookupNonFallbackFacet(ImmutableFacet.class)
         .ifPresent(immutableFacet->{
-            
+
             if(immutableFacet instanceof ImmutableFacetFromConfiguration) {
-            
+
                 val isEditingEnabledOnType = typeSpec.lookupNonFallbackFacet(EditingEnabledFacet.class)
                         .isPresent();
-                
+
                 if(isEditingEnabledOnType) {
                     // @DomainObject(editing=ENABLED)
                     return;
                 }
-            
+
             }
-            
+
             this.addFacet(
                     DisabledFacetOnPropertyDerivedFromImmutable
                         .forImmutable(facetedMethodFor(property), immutableFacet));
         });
     }
 
-    /**
-     * Replaces {@link DisabledFacetOnCollectionDerivedFromViewModelFacetFactory}
-     * @param collection
-     */
-    private void deriveCollectionDisabledFromViewModel(final OneToManyAssociation collection) {
-        if(collection.containsNonFallbackFacet(DisabledFacet.class)){
-            return;
-        }
-        collection.getOnType()
-        .lookupNonFallbackFacet(ViewModelFacet.class)
-        .ifPresent(specFacet->
-            this.addFacet(
-                    new DisabledFacetOnCollectionDerivedFromRecreatableObject(
-                            facetedMethodFor(collection), inferSemanticsFrom(specFacet))));
-    }
-
-    /**
-     * Replaces {@link DisabledFacetOnCollectionDerivedFromImmutableFactory}
-     */
-    private void deriveCollectionDisabledFromImmutable(final OneToManyAssociation collection) {
-        if(collection.containsNonFallbackFacet(DisabledFacet.class)) {
-            return;
-        }
-        collection.getOnType()
-        .lookupNonFallbackFacet(ImmutableFacet.class)
-        .ifPresent(specFacet->
-            this.addFacet(
-                    new DisabledFacetOnCollectionDerivedFromImmutable(
-                            specFacet, facetedMethodFor(collection))));
-    }
-
 
     private void addCollectionParamDefaultsFacetIfNoneAlready(final ObjectActionParameter collectionParam) {
         if(collectionParam.getNumber()!=0) {
-            return; // with current programming model this can only be the first parameter of an action dialog 
+            return; // with current programming model this can only be the first parameter of an action dialog
         }
         if(collectionParam.containsNonFallbackFacet(ActionParameterDefaultsFacet.class)) {
             return;
@@ -640,7 +603,7 @@ implements ObjectSpecificationPostProcessor, MetaModelContextAware {
         }
         return ActionType.USER_ONLY;
     }
-    
+
     private void addFacet(Facet facet) {
         FacetUtil.addFacet(facet);
     }
