@@ -42,7 +42,7 @@ import org.apache.isis.core.metamodel.progmodels.dflt.ProgrammingModelFacetsJava
 import lombok.val;
 
 /**
- * needs the javac -parameter flag set when compiling this test 
+ * needs the javac -parameter flag set when compiling this test
  */
 public class ParameterNameFacetTest extends AbstractFacetFactoryJUnit4TestCase {
 
@@ -55,16 +55,16 @@ public class ParameterNameFacetTest extends AbstractFacetFactoryJUnit4TestCase {
         val mockServiceInjector = Mockito.mock(ServiceInjector.class);
 
         programmingModel = new ProgrammingModelFacetsJava8(mockServiceInjector);
-        
+
         val metaModelContext = MetaModelContext_forTesting.builder().build();
-        
+
         ((ProgrammingModelAbstract)programmingModel)
         .init(new ProgrammingModelInitFilterDefault(), metaModelContext);
-        
+
         super.setUpFacetedMethodAndParameter();
-        
-        // verify that 
-        assertEquals(124, programmingModel.streamFactories().count());
+
+        // verify that
+        assertEquals(122, programmingModel.streamFactories().count());
     }
 
     @Override
@@ -81,15 +81,15 @@ public class ParameterNameFacetTest extends AbstractFacetFactoryJUnit4TestCase {
             @SuppressWarnings("unused")
             public void someAction(final String anAwesomeName) { }
         }
-        
+
         val someAction = _Reflect.streamAllMethods(Customer.class, false)
         .filter(method->method.getName().equals("someAction"))
         .findFirst()
         .get();
-        
+
         assertEquals("anAwesomeName", someAction.getParameters()[0].getName());
     }
-    
+
     @Test
     public void someActionParameterShouldHaveProperName() {
 
@@ -102,10 +102,10 @@ public class ParameterNameFacetTest extends AbstractFacetFactoryJUnit4TestCase {
         actionMethod = findMethod(Customer.class, "someAction", new Class[]{String.class} );
 
         // when
-        val processParameterContext = 
+        val processParameterContext =
                 new FacetFactory.ProcessParameterContext(
                         Customer.class, actionMethod, 0, null, facetedMethodParameter);
-        
+
         programmingModel.streamFactories()
         .forEach(facetFactory->facetFactory.processParams(processParameterContext));
 
@@ -133,7 +133,7 @@ public class ParameterNameFacetTest extends AbstractFacetFactoryJUnit4TestCase {
         actionMethod = findMethod(Customer.class, "someAction", new Class[]{String.class} );
 
         // when
-        val processParameterContext = 
+        val processParameterContext =
                 new FacetFactory.ProcessParameterContext(
                         Customer.class, actionMethod, 0, null, facetedMethodParameter);
         programmingModel.streamFactories().forEach(facetFactory->facetFactory.processParams(processParameterContext));

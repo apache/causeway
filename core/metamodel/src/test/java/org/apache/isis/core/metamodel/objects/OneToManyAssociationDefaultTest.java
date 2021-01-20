@@ -81,23 +81,23 @@ public class OneToManyAssociationDefaultTest {
                 .singleton(mockMessageService)
                 .build();
 
-//        allowingPeerToReturnCollectionType();
+        allowingPeerToReturnCollectionType();
         allowingPeerToReturnIdentifier();
-//        allowingSpecLoaderToReturnSpecs();
+        allowingSpecLoaderToReturnSpecs();
         association = new OneToManyAssociationDefault(mockPeer);
     }
 
-//    private void allowingSpecLoaderToReturnSpecs() {
-//        context.checking(new Expectations() {
-//            {
-//                allowing(mockSpecificationLoader).loadSpecification(Order.class);
-//
-//                allowing(mockPeer).getMetaModelContext();
-//                will(returnValue(metaModelContext));
-//
-//            }
-//        });
-//    }
+    private void allowingSpecLoaderToReturnSpecs() {
+        context.checking(new Expectations() {
+            {
+                allowing(mockSpecificationLoader).loadSpecification(Order.class);
+
+                allowing(mockPeer).getMetaModelContext();
+                will(returnValue(metaModelContext));
+
+            }
+        });
+    }
 
     @Test
     public void id() {
@@ -110,14 +110,14 @@ public class OneToManyAssociationDefaultTest {
         assertThat(association.getName(), is(equalTo("My name")));
     }
 
-//    private void allowingPeerToReturnCollectionType() {
-//        context.checking(new Expectations() {
-//            {
-//                allowing(mockPeer).getType();
-//                will(returnValue(COLLECTION_TYPE));
-//            }
-//        });
-//    }
+    private void allowingPeerToReturnCollectionType() {
+        context.checking(new Expectations() {
+            {
+                allowing(mockPeer).getType();
+                will(returnValue(COLLECTION_TYPE));
+            }
+        });
+    }
 
     private void allowingPeerToReturnIdentifier() {
         context.checking(new Expectations() {
