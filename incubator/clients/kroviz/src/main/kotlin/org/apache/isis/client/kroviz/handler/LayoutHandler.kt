@@ -36,7 +36,7 @@ class LayoutHandler : org.apache.isis.client.kroviz.handler.BaseHandler() {
     }
 
     @UnstableDefault
-    override fun parse(response: String): TransferObject? {
+    override fun parse(response: String): TransferObject {
         return Json.parse(Layout.serializer(), response)
     }
 

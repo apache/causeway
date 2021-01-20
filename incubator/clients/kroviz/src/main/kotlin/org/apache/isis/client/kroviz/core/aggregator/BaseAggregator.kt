@@ -19,7 +19,6 @@
 package org.apache.isis.client.kroviz.core.aggregator
 
 import org.apache.isis.client.kroviz.core.event.LogEntry
-import org.apache.isis.client.kroviz.core.event.RoXmlHttpRequest
 import org.apache.isis.client.kroviz.core.model.DisplayModel
 import org.apache.isis.client.kroviz.to.Link
 import org.apache.isis.client.kroviz.to.TObject
@@ -39,9 +38,11 @@ import org.apache.isis.client.kroviz.to.TObject
  */
 abstract class BaseAggregator {
 
-    open lateinit var dsp: DisplayModel
+    open lateinit var dpm: DisplayModel
 
-    open fun update(logEntry: LogEntry, subType: String) {}
+    open fun update(logEntry: LogEntry, subType: String) {
+        /* default is do nothing - can be overridden in subclasses */
+    }
 
     open fun reset(): BaseAggregator {
         /* do nothing and */ return this
@@ -60,12 +61,13 @@ abstract class BaseAggregator {
         return links.firstOrNull { it.isLayout() }
     }
 
-    private fun Link.isLayout(): Boolean {
-        return href.isNotEmpty() && href.contains("layout")
+    override fun toString(): String {
+        return "[${this::class} \n" +
+                "TObject: ${this.getObject()} ]\n"
     }
 
-    fun Link.invokeWith(aggregator: BaseAggregator, subType: String = "json") {
-        RoXmlHttpRequest().invoke(this, aggregator, subType)
+    private fun Link.isLayout(): Boolean {
+        return href.isNotEmpty() && href.contains("layout")
     }
 
 }

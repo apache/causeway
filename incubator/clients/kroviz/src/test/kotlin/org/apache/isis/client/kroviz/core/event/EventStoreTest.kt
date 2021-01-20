@@ -231,4 +231,32 @@ class EventStoreTest : IntegrationTest() {
         val le = EventStore.find(rs)!!
         assertEquals("first response", le.response)
     }
+
+    @Test
+    fun testFindActionsStrings() {
+        //given
+        val url1 = "http://localhost:8080/restful/objects/demo.JavaLangTypesMenu/1/actions/strings"
+        val rs1 = ResourceSpecification(url1)
+        val url2 = "http://localhost:8080/restful/objects/demo.JavaLangTypesMenu/1/actions/strings/invoke"
+        val rs2 = ResourceSpecification(url2)
+
+        //when
+        EventStore.reset()
+        EventStore.add(rs1)
+        EventStore.add(rs2)
+        val le1 = EventStore.find(rs1)
+        val le2 = EventStore.find(rs2)
+
+        //then
+        assertEquals(2, EventStore.log.size)
+        assertNotEquals(le1, le2)
+
+        //when
+        val le1eq = EventStore.findEquivalent(rs1)
+        val le2eq = EventStore.findEquivalent(rs2)
+
+        //then
+        assertNotEquals(le1eq, le2eq)
+    }
+
 }

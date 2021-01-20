@@ -26,7 +26,6 @@ import org.apache.isis.client.kroviz.core.model.ListDM
 import org.apache.isis.client.kroviz.snapshots.simpleapp1_16_0.*
 import org.apache.isis.client.kroviz.to.Property
 import org.apache.isis.client.kroviz.to.RelType
-import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
@@ -68,7 +67,7 @@ class ListAggregatorTest : IntegrationTest() {
             assertNotNull(descLink)  // 4
 
             // then
-            val dl = obs.dsp as ListDM
+            val dl = obs.dpm as ListDM
             val propertyLabels = dl.propertyDescriptionList
             val property = pdLe.getTransferObject() as Property
             assertTrue(propertyLabels.size > 0)  // 5
@@ -89,7 +88,7 @@ class ListAggregatorTest : IntegrationTest() {
             mockResponse(SO_LIST_ALL, obs)
             mockResponse(SO_0, obs)
             // then
-            val ol = obs.dsp
+            val ol = obs.dpm
             assertNotNull(ol)
             assertEquals(1, (ol as ListDM).data.size)
         }

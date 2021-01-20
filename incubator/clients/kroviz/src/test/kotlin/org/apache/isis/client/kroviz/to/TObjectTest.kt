@@ -20,6 +20,7 @@ package org.apache.isis.client.kroviz.to
 
 import kotlinx.serialization.UnstableDefault
 import org.apache.isis.client.kroviz.handler.TObjectHandler
+import org.apache.isis.client.kroviz.snapshots.demo2_0_0.ACTIONS_STRINGS_INVOKE
 import org.apache.isis.client.kroviz.snapshots.demo2_0_0.ACTIONS_TEXT_INVOKE
 import org.apache.isis.client.kroviz.snapshots.demo2_0_0.ISIS_SECURITY_ME_SERVICE
 import org.apache.isis.client.kroviz.snapshots.simpleapp1_16_0.SO_0
@@ -105,6 +106,24 @@ class TObjectTest {
         val description = filteredProperties.first()
         val content = description.value!!.content as String
         assertTrue(content.startsWith("<div") && content.endsWith("div>"))
+    }
+
+    @Test
+    fun testActionsStringsInvoke() {
+        //given
+        val jsonStr = ACTIONS_STRINGS_INVOKE.str
+        // when
+        val to = TObjectHandler().parse(jsonStr) as TObject
+        val members = to.members
+        val properties = to.getProperties()
+        // then
+        assertNotNull(to.links)
+        assertEquals("String data type", to.links[0].title)
+        assertEquals(9, members.size)
+        assertEquals(0, properties.size)
+
+        val filteredProperties = properties.filter { it.id == "description" }
+        assertEquals(0, filteredProperties.size)
     }
 
 }

@@ -61,7 +61,7 @@ class PumlBuilderTest {
         val rs =  ResourceSpecification(response.url)
         EventStore.start(rs, Method.GET.operation)
         val le = EventStore.end(rs, response.str)!!
-        val tObj = handler.parse(response.str)
+        val tObj = handler.parse(response.str)!!
         le.setTransferObject(tObj)
     }
 

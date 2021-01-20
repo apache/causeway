@@ -19,6 +19,7 @@
 package org.apache.isis.client.kroviz.core.aggregator
 
 import org.apache.isis.client.kroviz.core.event.LogEntry
+import org.apache.isis.client.kroviz.core.event.RoXmlHttpRequest
 import org.apache.isis.client.kroviz.to.Action
 import org.apache.isis.client.kroviz.to.Link
 import org.apache.isis.client.kroviz.to.Method
@@ -44,23 +45,22 @@ class ActionDispatcher(private val at: Point = Point(100, 100)) : BaseAggregator
         }
     }
 
+    private fun process(action: Action, link: Link, aggregator: BaseAggregator = this) {
+        when {
+            link.hasArguments() -> ActionPrompt(action = action).open(at)
+            link.rel.contains("invoke") -> {
+                val title = Utils.deCamel(action.id)
+                RoXmlHttpRequest().invoke(link, ObjectAggregator(title))
+            }
+            else -> RoXmlHttpRequest().invoke(link, aggregator)
+        }
+    }
+
     /**
      *  link.rel should neither be: (self | up | describedBy )
      */
     private fun Link.isInvokeAction(): Boolean {
         return rel.contains("invoke") && rel.contains("action")
-    }
-
-    private fun process(action: Action, link: Link, aggregator: BaseAggregator = this) {
-        if (link.hasArguments()) {
-            ActionPrompt(action = action).open(at)
-        } else {
-            link.invokeWith(aggregator)
-        }
-    }
-
-    fun invoke(link: Link) {
-        link.invokeWith(this)
     }
 
 }

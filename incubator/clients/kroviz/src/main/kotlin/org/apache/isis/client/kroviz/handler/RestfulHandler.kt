@@ -32,7 +32,7 @@ class RestfulHandler : BaseHandler() {
     }
 
     @UnstableDefault
-    override fun parse(response: String): TransferObject? {
+    override fun parse(response: String): TransferObject {
         return Json.parse(Restful.serializer(), response)
     }
 

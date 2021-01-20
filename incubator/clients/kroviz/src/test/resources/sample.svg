@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg xmlns="http://www.w3.org/2000/svg" contentScriptType="application/ecmascript" contentStyleType="text/css"
+     height="99px" preserveAspectRatio="none" style="width:778px;height:99px;" version="1.1" viewBox="0 0 778 99"
+     width="778px" zoomAndPan="magnify">
+    <defs>
+        <filter height="300%" id="fs9rcsqxhjlmm" width="300%" x="-1" y="-1">
+            <feGaussianBlur result="blurOut" stdDeviation="2.0"/>
+            <feColorMatrix in="blurOut" result="blurOut2" type="matrix"
+                           values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .4 0"/>
+            <feOffset dx="4.0" dy="4.0" in="blurOut2" result="blurOut3"/>
+            <feBlend in="SourceGraphic" in2="blurOut3" mode="normal"/>
+        </filter>
+    </defs>
+    <g>
+        <rect fill="#FEFECE" filter="url(#fs9rcsqxhjlmm)" height="34.4001" rx="12.5" ry="12.5"
+              style="stroke:#A80036;stroke-width:1.5;" width="51" x="7" y="51.4"/>
+        <text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacingAndGlyphs" textLength="31"
+              x="17" y="73.4001">restful
+        </text>
+        <rect fill="#FEFECE" filter="url(#fs9rcsqxhjlmm)" height="34.4001" rx="12.5" ry="12.5"
+              style="stroke:#A80036;stroke-width:1.5;" width="73" x="567" y="51.4"/>
+        <text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacingAndGlyphs" textLength="53"
+              x="577" y="73.4001">restfuluser
+        </text>
+        <rect fill="#FEFECE" filter="url(#fs9rcsqxhjlmm)" height="34.4001" rx="12.5" ry="12.5"
+              style="stroke:#A80036;stroke-width:1.5;" width="104" x="660.5" y="51.4"/>
+        <text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacingAndGlyphs" textLength="84"
+              x="670.5" y="73.4001">restfuluserlogout
+        </text>
+        <rect fill="#FEFECE" filter="url(#fs9rcsqxhjlmm)" height="34.4001" rx="12.5" ry="12.5"
+              style="stroke:#A80036;stroke-width:1.5;" width="104" x="442.5" y="51.4"/>
+        <text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacingAndGlyphs" textLength="84"
+              x="452.5" y="73.4001">restfulmenuBars
+        </text>
+        <rect fill="#FEFECE" filter="url(#fs9rcsqxhjlmm)" height="34.4001" rx="12.5" ry="12.5"
+              style="stroke:#A80036;stroke-width:1.5;" width="94" x="328.5" y="51.4"/>
+        <text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacingAndGlyphs" textLength="74"
+              x="338.5" y="73.4001">restfulservices
+        </text>
+        <rect fill="#FEFECE" filter="url(#fs9rcsqxhjlmm)" height="34.4001" rx="12.5" ry="12.5"
+              style="stroke:#A80036;stroke-width:1.5;" width="88" x="220.5" y="51.4"/>
+        <text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacingAndGlyphs" textLength="68"
+              x="230.5" y="73.4001">restfulversion
+        </text>
+        <rect fill="#FEFECE" filter="url(#fs9rcsqxhjlmm)" height="34.4001" rx="12.5" ry="12.5"
+              style="stroke:#A80036;stroke-width:1.5;" width="122" x="78.5" y="51.4"/>
+        <text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacingAndGlyphs" textLength="102"
+              x="88.5" y="73.4001">restfuldomain-types
+        </text><!--MD5=[16619491c1c915796bfdbcff142dea61]
+link restful to restfuluser-->
+        <path d="M48.25,51.24 C56.43,43.59 67.09,35.42 78.5,31.4 C127.55,14.12 496.64,16.64 546.5,31.4 C558.17,34.86 569.7,41.54 579.3,48.28 "
+              fill="none" id="restful-to-restfuluser" style="stroke:#A80036;stroke-width:1.0;"/>
+        <polygon fill="#A80036" points="583.57,51.38,578.6279,42.8609,579.5208,48.4468,573.9348,49.3396,583.57,51.38"
+                 style="stroke:#A80036;stroke-width:1.0;"/><!--MD5=[1f96fb5d4ca807a3bd47abcb5c9ef4d6]
+link restfuluser to restfuluserlogout-->
+        <path d="M640.12,68.4 C645.21,68.4 650.3,68.4 655.39,68.4 " fill="none" id="restfuluser-to-restfuluserlogout"
+              style="stroke:#A80036;stroke-width:1.0;"/>
+        <polygon fill="#A80036" points="660.47,68.4,651.47,64.4,655.47,68.4,651.47,72.4,660.47,68.4"
+                 style="stroke:#A80036;stroke-width:1.0;"/><!--MD5=[b27c284fb7fcffae65abdec51403c83c]
+link restful to restfulmenuBars-->
+        <path d="M48.25,51.24 C56.43,43.59 67.09,35.42 78.5,31.4 C150.6,6 348.2,13.43 422.5,31.4 C436.98,34.9 451.81,41.85 464.22,48.78 "
+              fill="none" id="restful-to-restfulmenuBars" style="stroke:#A80036;stroke-width:1.0;"/>
+        <polygon fill="#A80036" points="468.68,51.33,462.8363,43.4021,464.3344,48.857,458.8795,50.3551,468.68,51.33"
+                 style="stroke:#A80036;stroke-width:1.0;"/><!--MD5=[cb588f3034bd8845a19ef734a6d50eeb]
+link restful to restfulservices-->
+        <path d="M48.25,51.24 C56.43,43.59 67.09,35.42 78.5,31.4 C126.71,14.42 259.01,18.64 308.5,31.4 C322.02,34.88 335.72,41.74 347.19,48.61 "
+              fill="none" id="restful-to-restfulservices" style="stroke:#A80036;stroke-width:1.0;"/>
+        <polygon fill="#A80036" points="351.63,51.34,346.0615,43.2165,347.3717,48.7195,341.8687,50.0298,351.63,51.34"
+                 style="stroke:#A80036;stroke-width:1.0;"/><!--MD5=[da1559ea3cb783f4c9ef72922576a587]
+link restful to restfulversion-->
+        <path d="M48.25,51.24 C56.43,43.59 67.09,35.42 78.5,31.4 C129.64,13.38 148.13,17.35 200.5,31.4 C213.52,34.89 226.63,41.75 237.57,48.62 "
+              fill="none" id="restful-to-restfulversion" style="stroke:#A80036;stroke-width:1.0;"/>
+        <polygon fill="#A80036" points="241.8,51.35,236.4122,43.1055,237.6006,48.6361,232.07,49.8245,241.8,51.35"
+                 style="stroke:#A80036;stroke-width:1.0;"/><!--MD5=[59c5352e3c7cffe140f57fc6e8fbe409]
+link restful to restfuldomain-types-->
+        <path d="M58.41,68.4 C63.3,68.4 68.18,68.4 73.07,68.4 " fill="none" id="restful-to-restfuldomain-types"
+              style="stroke:#A80036;stroke-width:1.0;"/>
+        <polygon fill="#A80036" points="78.37,68.4,69.37,64.4,73.37,68.4,69.37,72.4,78.37,68.4"
+                 style="stroke:#A80036;stroke-width:1.0;"/><!--MD5=[f00b689949abd7387198258032fc5f4b]
+@startuml
+restful -> restfuluser
+restfuluser -> restfuluserlogout
+restful -> restfulmenuBars
+restful -> restfulservices
+restful -> restfulversion
+restful -> restfuldomain-types
+@enduml
+
+PlantUML version 1.2020.23(Sun Dec 13 19:14:58 GMT 2020)
+(GPL source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 64-Bit Server VM
+Default Encoding: UTF-8
+Language: en
+Country: US
+-->
+    </g>
+</svg>

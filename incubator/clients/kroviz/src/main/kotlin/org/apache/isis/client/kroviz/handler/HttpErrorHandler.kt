@@ -32,7 +32,7 @@ class HttpErrorHandler : BaseHandler() {
     }
 
     @UnstableDefault
-    override fun parse(response: String): TransferObject? {
+    override fun parse(response: String): TransferObject {
         return Json.parse(HttpError.serializer(), response)
     }
 }

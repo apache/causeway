@@ -20,35 +20,31 @@ package org.apache.isis.client.kroviz.core.aggregator
 
 import kotlinx.serialization.UnstableDefault
 import org.apache.isis.client.kroviz.IntegrationTest
-import org.apache.isis.client.kroviz.snapshots.simpleapp1_16_0.ACTION_SO_CREATE
-import org.apache.isis.client.kroviz.to.ResultObject
-import org.apache.isis.client.kroviz.to.ResultType
+import org.apache.isis.client.kroviz.snapshots.demo2_0_0.ACTIONS_STRINGS
+import org.apache.isis.client.kroviz.snapshots.demo2_0_0.ACTIONS_STRINGS_INVOKE
+import org.apache.isis.client.kroviz.to.Action
+import org.apache.isis.client.kroviz.to.TObject
 import kotlin.test.Test
-import kotlin.test.assertEquals
+import kotlin.test.assertNotEquals
+import kotlin.test.assertTrue
 
 @UnstableDefault
-class ObjectAggregatorTest : IntegrationTest() {
+class ActionDispatcherTest : IntegrationTest() {
 
     @Test
     fun testRestfulServices() {
-        // given
-        val aggregator = ObjectAggregator("object test")
-        // when
-        val logEntry = mockResponse(ACTION_SO_CREATE, aggregator)
-        val ro = logEntry.getTransferObject() as ResultObject
-        val type = ro.resulttype
-        // then
-        assertEquals(ResultType.DOMAINOBJECT.type, type)
+        if (isAppAvailable()) {
+            // given
+            val aggregator = ActionDispatcher()
+            // when
+            val aLogEntry = mockResponse(ACTIONS_STRINGS, aggregator)
+            val tLogEntry = mockResponse(ACTIONS_STRINGS_INVOKE, ObjectAggregator(""))
 
-        val links = ro.links
-        assertEquals(0, links.size)
-
-        val ror = ro.result!!
-
-        val resLinks = ror.links
-        assertEquals(4, resLinks.size)
-
-        val title = ror.title
-        assertEquals("Object: Beutlin", title)
+            // then
+            assertNotEquals(aLogEntry, tLogEntry)
+            assertTrue(aLogEntry.getTransferObject() is Action)
+            assertTrue(tLogEntry.getTransferObject() is TObject)
+        }
     }
+
 }

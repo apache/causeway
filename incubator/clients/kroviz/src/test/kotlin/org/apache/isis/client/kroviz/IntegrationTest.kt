@@ -55,7 +55,7 @@ open class IntegrationTest {
             xhr.send() // there will be a 'pause' here until the response comes.
         } catch (e: Throwable) {
             return false
-        }  finally {
+        } finally {
 
         }
         val answer = xhr.status.equals(200)
@@ -64,10 +64,9 @@ open class IntegrationTest {
 
     fun mockResponse(response: Response, aggregator: BaseAggregator?): LogEntry {
         val str = response.str
-        val subType = if (XmlHelper.isXml(response.str)) {
-            Constants.subTypeXml
-        } else {
-            Constants.subTypeJson
+        val subType = when (XmlHelper.isXml(str)) {
+            true -> Constants.subTypeXml
+            else -> Constants.subTypeJson
         }
         val reSpec = ResourceSpecification(response.url, subType)
         EventStore.start(

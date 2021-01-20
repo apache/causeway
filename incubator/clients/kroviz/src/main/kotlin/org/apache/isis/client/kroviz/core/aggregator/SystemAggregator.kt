@@ -27,25 +27,25 @@ import org.apache.isis.client.kroviz.to.Version
 class SystemAggregator() : BaseAggregator() {
 
     init {
-        dsp = SystemDM("not filled (yet)")
+        dpm = SystemDM("not filled (yet)")
     }
 
     override fun update(logEntry: LogEntry, subType: String) {
 
         when (val obj = logEntry.getTransferObject()) {
-            is User -> dsp.addData(obj)
-            is Version -> dsp.addData(obj)
-            is DomainTypes -> dsp.addData(obj)
+            is User -> dpm.addData(obj)
+            is Version -> dpm.addData(obj)
+            is DomainTypes -> dpm.addData(obj)
             else -> log(logEntry)
         }
 
-        if (dsp.canBeDisplayed()) {
+        if (dpm.canBeDisplayed()) {
 //  TODO          UiManager.openObjectView(this)
         }
     }
 
     override fun reset(): SystemAggregator {
-        dsp.isRendered = false
+        dpm.isRendered = false
         return this
     }
 

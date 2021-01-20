@@ -28,15 +28,23 @@ class EventLogDetail(val logEntry: LogEntry) : Command() {
 
     fun open() {
         val formItems = mutableListOf<FormItem>()
+
         formItems.add(FormItem("Url", ValueType.TEXT, logEntry.url))
+
         var jsonStr = logEntry.response
         if (jsonStr.isNotEmpty() && logEntry.subType == Constants.subTypeJson) {
             jsonStr = Utils.format(jsonStr)
         }
-        formItems.add(FormItem("Text", ValueType.TEXT_AREA, jsonStr, 15))
-        val label = logEntry.title
+        formItems.add(FormItem("Text", ValueType.TEXT_AREA, jsonStr, 10))
+
+        var aggtStr = ""
+        logEntry.aggregators.forEach { it ->
+            aggtStr += it.toString()
+        }
+        formItems.add(FormItem("Aggregators", ValueType.TEXT_AREA, aggtStr, 5))
+
         RoDialog(
-                caption = label,
+                caption = "Error :" + logEntry.title,
                 items = formItems,
                 command = this,
                 defaultAction = "Visualize").open()

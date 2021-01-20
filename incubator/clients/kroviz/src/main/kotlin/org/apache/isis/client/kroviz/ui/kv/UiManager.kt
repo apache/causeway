@@ -100,7 +100,7 @@ object UiManager {
     }
 
     fun openListView(aggregator: BaseAggregator) {
-        val displayable = aggregator.dsp
+        val displayable = aggregator.dpm
         val title: String = Utils.extractTitle(displayable.title)
         val panel = RoTable(displayable as ListDM)
         add(title, panel, aggregator)
@@ -108,7 +108,7 @@ object UiManager {
     }
 
     fun openObjectView(aggregator: ObjectAggregator) {
-        val dm = aggregator.dsp as ObjectDM
+        val dm = aggregator.dpm as ObjectDM
         var title: String = Utils.extractTitle(dm.title)
         if (title.isEmpty()) {
             title = aggregator.actionTitle

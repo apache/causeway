@@ -19,6 +19,7 @@
 package org.apache.isis.client.kroviz.core.aggregator
 
 import org.apache.isis.client.kroviz.core.event.LogEntry
+import org.apache.isis.client.kroviz.core.event.RoXmlHttpRequest
 import org.apache.isis.client.kroviz.core.model.DiagramDM
 import org.apache.isis.client.kroviz.to.*
 import org.apache.isis.client.kroviz.ui.kv.RoStatusBar
@@ -26,7 +27,7 @@ import org.apache.isis.client.kroviz.ui.kv.RoStatusBar
 class DomainTypesAggregator(val url: String) : BaseAggregator() {
 
     init {
-        dsp = DiagramDM(url)
+        dpm = DiagramDM(url)
     }
 
     override fun update(logEntry: LogEntry, subType: String) {
@@ -38,14 +39,14 @@ class DomainTypesAggregator(val url: String) : BaseAggregator() {
             else -> log(logEntry)
         }
 
-        if (dsp.canBeDisplayed()) {
-            RoStatusBar.updateDiagram(dsp as DiagramDM)
-            dsp.isRendered = true
+        if (dpm.canBeDisplayed()) {
+            RoStatusBar.updateDiagram(dpm as DiagramDM)
+            dpm.isRendered = true
         }
     }
 
     private fun handleProperty(obj: Property) {
-        dsp.addData(obj)
+        dpm.addData(obj)
     }
 
     private fun handleAction(obj: Action) {
@@ -56,15 +57,15 @@ class DomainTypesAggregator(val url: String) : BaseAggregator() {
 
     private fun handleDomainType(obj: DomainType) {
         if (obj.isPrimitiveOrService()) {
-            (dsp as DiagramDM).decNumberOfClasses()
+            (dpm as DiagramDM).decNumberOfClasses()
         } else {
-            dsp.addData(obj)
+            dpm.addData(obj)
             val propertyList = obj.members.filter {
                 it.isProperty()
             }
-            (dsp as DiagramDM).incNumberOfProperties(propertyList.size)
+            (dpm as DiagramDM).incNumberOfProperties(propertyList.size)
             propertyList.forEach { p ->
-                p.invokeWith(this)
+                RoXmlHttpRequest().invoke(p,this)
             }
         }
     }
@@ -90,9 +91,9 @@ class DomainTypesAggregator(val url: String) : BaseAggregator() {
                 }
             }
         }
-        (dsp as DiagramDM).numberOfClasses = domainTypeLinkList.size
+        (dpm as DiagramDM).numberOfClasses = domainTypeLinkList.size
         domainTypeLinkList.forEach {
-            it.invokeWith(this)
+            RoXmlHttpRequest().invoke(it,this)
         }
     }
 

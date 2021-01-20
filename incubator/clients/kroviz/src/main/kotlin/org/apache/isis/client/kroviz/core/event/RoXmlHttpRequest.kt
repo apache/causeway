@@ -33,7 +33,7 @@ import org.w3c.xhr.XMLHttpRequest
  */
 class RoXmlHttpRequest {
 
-    fun invoke(link: Link, aggregator: BaseAggregator?, subType: String = Constants.subTypeJson) {
+    fun invoke(link: Link, aggregator: BaseAggregator? = null, subType: String = Constants.subTypeJson) {
         val rs = ResourceSpecification(link.href)
         when {
             EventStore.isCached(rs, link.method) -> processCached(rs)
@@ -44,12 +44,12 @@ class RoXmlHttpRequest {
     private fun processCached(rs: ResourceSpecification) {
         val le = EventStore.find(rs)!!
         le.retrieveResponse()
-        getHandler().handle(le)
+        getHandlerChain().handle(le)
         EventStore.cached(rs)
     }
 
     // encapsulate implementation (Singleton vs. Object vs. Pool)
-    private fun getHandler(): ResponseHandler {
+    private fun getHandlerChain(): ResponseHandler {
         return ResponseHandler
     }
 
@@ -92,8 +92,6 @@ class RoXmlHttpRequest {
 
     fun invokeAnonymous(link: Link, aggregator: BaseAggregator?, subType: String = Constants.subTypeXml) {
         val rs = ResourceSpecification(link.href)
-        console.log("[RXHR.invokeAnonymous]")
-        console.log(EventStore.isCached(rs, link.method))
         when {
             EventStore.isCached(rs, link.method) -> processCached(rs)
             else -> processAnonymous(link, aggregator, subType)
@@ -130,7 +128,7 @@ class RoXmlHttpRequest {
     private fun handleResult(rs: ResourceSpecification, xhr: XMLHttpRequest) {
         val responseText = xhr.responseText
         val logEntry: LogEntry? = EventStore.end(rs, responseText)
-        if (logEntry != null) getHandler().handle(logEntry)
+        if (logEntry != null) getHandlerChain().handle(logEntry)
     }
 
     private fun handleError(rs: ResourceSpecification, xhr: XMLHttpRequest) {

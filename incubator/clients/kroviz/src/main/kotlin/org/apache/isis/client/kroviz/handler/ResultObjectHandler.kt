@@ -32,7 +32,7 @@ class ResultObjectHandler : BaseHandler() {
     }
 
     @UnstableDefault
-    override fun parse(response: String): TransferObject? {
+    override fun parse(response: String): TransferObject {
         return Json.parse(ResultObject.serializer(), response)
     }
 

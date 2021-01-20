@@ -23,6 +23,7 @@ import org.apache.isis.client.kroviz.IntegrationTest
 import org.apache.isis.client.kroviz.core.aggregator.ActionDispatcher
 import org.apache.isis.client.kroviz.core.event.EventStore
 import org.apache.isis.client.kroviz.core.event.ResourceSpecification
+import org.apache.isis.client.kroviz.core.event.RoXmlHttpRequest
 import org.apache.isis.client.kroviz.to.Link
 import org.apache.isis.client.kroviz.to.Method
 import kotlin.test.assertEquals
@@ -59,7 +60,7 @@ class UrlsTest : IntegrationTest() {
             for (entry in urls) {
                 val href = entry.key
                 val link = Link(method = Method.GET.operation, href = href)
-                ActionDispatcher().invoke(link)
+                RoXmlHttpRequest().invoke(link, ActionDispatcher())
             }
 
             // then

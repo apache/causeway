@@ -20,7 +20,7 @@ package org.apache.isis.client.kroviz.snapshots.demo2_0_0
 
 import org.apache.isis.client.kroviz.snapshots.Response
 
-object ACTIONS_STRING_INVOKE : Response() {
+object ACTIONS_STRINGS_INVOKE : Response() {
     override val url = "http://localhost:8080/restful/objects/demo.JavaLangTypesMenu/1/actions/strings/invoke"
     override val str = """{
   "links": [

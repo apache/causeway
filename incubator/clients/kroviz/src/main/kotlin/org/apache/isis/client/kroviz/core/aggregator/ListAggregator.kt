@@ -20,6 +20,7 @@ package org.apache.isis.client.kroviz.core.aggregator
 
 import org.apache.isis.client.kroviz.core.event.EventState
 import org.apache.isis.client.kroviz.core.event.LogEntry
+import org.apache.isis.client.kroviz.core.event.RoXmlHttpRequest
 import org.apache.isis.client.kroviz.core.model.ListDM
 import org.apache.isis.client.kroviz.layout.Layout
 import org.apache.isis.client.kroviz.to.*
@@ -37,7 +38,7 @@ import org.apache.isis.client.kroviz.ui.kv.UiManager
 class ListAggregator(actionTitle: String) : BaseAggregator() {
 
     init {
-        dsp = ListDM(actionTitle)
+        dpm = ListDM(actionTitle)
     }
 
     override fun update(logEntry: LogEntry, subType: String) {
@@ -54,7 +55,7 @@ class ListAggregator(actionTitle: String) : BaseAggregator() {
                 else -> log(logEntry)
             }
 
-            if (dsp.canBeDisplayed()) {
+            if (dpm.canBeDisplayed()) {
                 UiManager.openListView(this)
             }
         }
@@ -64,23 +65,23 @@ class ListAggregator(actionTitle: String) : BaseAggregator() {
         if (resultList.resulttype != "void") {
             val result = resultList.result!!
             result.value.forEach {
-                it.invokeWith(this)
+                RoXmlHttpRequest().invoke(it,this)
             }
         }
     }
 
     private fun handleObject(obj: TObject) {
-        dsp.addData(obj)
+        dpm.addData(obj)
         val l = obj.getLayoutLink()!!
         // Json.Layout is invoked first
-        l.invokeWith(this)
+        RoXmlHttpRequest().invoke(l,this)
         // then Xml.Layout is to be invoked as well
-        l.invokeWith(this, Constants.subTypeXml)
+        RoXmlHttpRequest().invoke(l,this, Constants.subTypeXml)
     }
 
     //TODO same code in ObjectAggregator? -> pullup refactoring to be applied
     private fun handleLayout(layout: Layout) {
-        val dm = dsp as ListDM
+        val dm = dpm as ListDM
         // TODO layout is passed in at least twice.
         //  Eventually due to parallel invocations  - only once required -> IMPROVE
         if (dm.layout == null) {
@@ -92,28 +93,28 @@ class ListAggregator(actionTitle: String) : BaseAggregator() {
                 dm.addPropertyDescription(id, id)
                 if (!isDn) {
                     //invoking DN links leads to an error
-                    l.invokeWith(this)
+                    RoXmlHttpRequest().invoke(l,this)
                 }
             }
         }
     }
 
     private fun handleGrid(grid: Grid) {
-        (dsp as ListDM).grid = grid
+        (dpm as ListDM).grid = grid
     }
 
     private fun handleProperty(p: Property) {
-        val dm = dsp as ListDM
+        val dm = dpm as ListDM
         if (p.isPropertyDescription()) {
             dm.addPropertyDescription(p)
         } else {
             dm.addProperty(p)
-            p.descriptionLink()?.invokeWith(this)
+            RoXmlHttpRequest().invoke(p.descriptionLink()!!,this)
         }
     }
 
     override fun reset(): ListAggregator {
-        dsp.reset()
+        dpm.reset()
         return this
     }
 

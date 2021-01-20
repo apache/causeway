@@ -35,17 +35,16 @@ import org.apache.isis.client.kroviz.ui.kv.Constants
  */
 abstract class BaseHandler {
     var successor: BaseHandler? = null
-    protected var logEntry = LogEntry("")
+    lateinit var logEntry: LogEntry
 
     /**
-     * @see https://en.wikipedia.org/wiki/Template_method_pattern
+     * @link https://en.wikipedia.org/wiki/Template_method_pattern
      */
     open fun handle(logEntry: LogEntry) {
         this.logEntry = logEntry
-        if (canHandle(logEntry.response)) {
-            doHandle()
-        } else {
-            successor!!.handle(logEntry)
+        when {
+            canHandle(logEntry.response) -> doHandle()
+            else -> successor!!.handle(logEntry)
         }
     }
 
@@ -53,12 +52,12 @@ abstract class BaseHandler {
      * Default implementation - may be overridden in subclasses.
      */
     open fun canHandle(response: String): Boolean {
-        try {
-            val obj = parse(response)
+        return try {
+            val obj = parse(response)!!
             logEntry.setTransferObject(obj)
-            return true
+            true
         } catch (ex: Exception) {
-            return false
+            false
         }
     }
 

@@ -18,8 +18,8 @@
  */
 package org.apache.isis.client.kroviz.ui.kv
 
-import org.apache.isis.client.kroviz.core.aggregator.ActionDispatcher
 import org.apache.isis.client.kroviz.core.event.EventStore
+import org.apache.isis.client.kroviz.core.event.RoXmlHttpRequest
 import org.apache.isis.client.kroviz.to.Link
 import org.apache.isis.client.kroviz.to.Member
 import org.apache.isis.client.kroviz.to.TObject
@@ -53,7 +53,9 @@ object MenuFactory {
             val link = buildActionLink(it.id, text)
             val invokeLink = it.getInvokeLink()!!
             link.onClick {
-                ActionDispatcher().invoke(invokeLink)
+                console.log("[MF.buildForObject]")
+                console.log(invokeLink)
+                RoXmlHttpRequest().invoke(invokeLink)
             }
             dd.add(link)
         }
@@ -78,7 +80,7 @@ object MenuFactory {
             section.serviceAction.forEach { sa ->
                 val action = buildActionLink(sa.id!!, menuTitle)
                 action.onClick {
-                    ActionDispatcher().invoke(sa.link!!)
+                    RoXmlHttpRequest().invoke(sa.link!!)
                 }
                 action.setDragDropData(Constants.stdMimeType, action.id!!)
                 dd.add(action)
@@ -121,7 +123,7 @@ object MenuFactory {
                     val action = buildActionLink(sa.id, menuTitle)
                     action.label = ""
                     action.onClick {
-                        ActionDispatcher().invoke(sa.link!!)
+                        RoXmlHttpRequest().invoke(sa.link!!)
                     }
                     return action
                 }
@@ -173,7 +175,7 @@ object MenuFactory {
                 label = "save",
                 menuTitle = tObject.domainType)
         saveAction.onClick {
-            ActionDispatcher().invoke(saveLink)
+            RoXmlHttpRequest().invoke(saveLink)
         }
         dd.add(saveAction)
 
@@ -182,7 +184,7 @@ object MenuFactory {
                 label = "undo",
                 menuTitle = tObject.domainType)
         undoAction.onClick {
-            ActionDispatcher().invoke(undoLink)
+            RoXmlHttpRequest().invoke(undoLink)
         }
         dd.add(undoAction)
     }
@@ -217,7 +219,5 @@ object MenuFactory {
     private fun Member.getInvokeLink(): Link? {
         return links.firstOrNull { it.rel.indexOf(id) > 0 }
     }
-
-
 
 }

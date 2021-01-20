@@ -26,14 +26,15 @@ import org.apache.isis.client.kroviz.to.TransferObject
 
 class ActionHandler : BaseHandler() {
 
+    @UnstableDefault
+    override fun parse(response: String): TransferObject {
+        return Json.parse(Action.serializer(), response)
+    }
+
     override fun doHandle() {
         logEntry.addAggregator(ActionDispatcher())
         update()
     }
 
-    @UnstableDefault
-    override fun parse(response: String): TransferObject? {
-        return Json.parse(Action.serializer(), response)
-    }
 }
 

@@ -32,12 +32,12 @@ object DEMO_DOMAIN_TYPES_PROPERTY : Response(){
     "type" : "application/json;profile=\"urn:org.restfulobjects:repr-types/property-description\""
   }, {
     "rel" : "up",
-    "href" : "https://demo-wicket.isis.incode.work/restful/domain-types/demo.JavaTimeOffsetTimeJdo",
+    "href" : "https://localhost:8080/restful/domain-types/demo.JavaTimeOffsetTimeJdo",
     "method" : "GET",
     "type" : "application/json;profile=\"urn:org.restfulobjects:repr-types/domain-type\""
   }, {
     "rel" : "urn:org.restfulobjects:rels/return-type",
-    "href" : "https://demo-wicket.isis.incode.work/restful/domain-types/java.time.OffsetTime",
+    "href" : "https://localhost:8080/restful/domain-types/java.time.OffsetTime",
     "method" : "GET",
     "type" : "application/json;profile=\"urn:org.restfulobjects:repr-types/domain-type\""
   } ],

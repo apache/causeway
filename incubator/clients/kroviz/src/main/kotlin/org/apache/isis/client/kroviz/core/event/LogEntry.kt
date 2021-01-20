@@ -22,6 +22,8 @@ import kotlinx.serialization.ContextualSerialization
 import kotlinx.serialization.Serializable
 import org.apache.isis.client.kroviz.core.aggregator.ActionDispatcher
 import org.apache.isis.client.kroviz.core.aggregator.BaseAggregator
+import org.apache.isis.client.kroviz.core.aggregator.ObjectAggregator
+import org.apache.isis.client.kroviz.to.TObject
 import org.apache.isis.client.kroviz.to.TransferObject
 import org.apache.isis.client.kroviz.ui.kv.Constants
 import org.apache.isis.client.kroviz.ui.kv.UiManager
@@ -75,7 +77,7 @@ data class LogEntry(
     var duration: Int = 0
 
     var cacheHits = 0
-    private val aggregators by lazy { mutableListOf<BaseAggregator>() }
+    val aggregators by lazy { mutableListOf<BaseAggregator>() }
     var nOfAggregators: Int = 0 // must be accessible (public) for LogEntryTable
 
     @ContextualSerialization
@@ -132,7 +134,7 @@ data class LogEntry(
         }
     }
 
-    fun setTransferObject(to: TransferObject?) {
+    fun setTransferObject(to: TransferObject) {
         this.obj = to
     }
 
@@ -188,18 +190,13 @@ data class LogEntry(
     }
 
     fun getAggregator(): BaseAggregator? {
-        // is the last agg always the right one?
+        //TODO is the last agg always the right one?
         return aggregators.last()
     }
 
     fun addAggregator(aggregator: BaseAggregator) {
-/*        if (aggregator is ActionDispatcher && aggregators.isNotEmpty()) {
-            console.log("[LogEntry.addAggregator] ActionDispatcher")
-            console.log(this)
-        } else { */
-            aggregators.add(aggregator)
-            nOfAggregators = aggregators.size
-       // }
+        aggregators.add(aggregator)
+        nOfAggregators = aggregators.size
     }
 
     fun matches(reSpec: ResourceSpecification): Boolean {
