@@ -52,8 +52,6 @@ public interface ObjectFeature extends Specification {
     /**
      * Returns a description of how the member is used - this complements the
      * help text.
-     *
-     * @see #getHelp()
      */
     @Override
     String getDescription();
@@ -76,7 +74,7 @@ public interface ObjectFeature extends Specification {
      * </ul>
      */
     ObjectSpecification getSpecification();
-    
+
     /**
      * Returns a flag indicating if it can be left unset when the action can be
      * invoked.

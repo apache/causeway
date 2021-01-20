@@ -289,9 +289,6 @@ extends DelegatingInvocationHandlerDefault<T> {
                 : false;
     }
 
-    // /////////////////////////////////////////////////////////////////
-    // title
-    // /////////////////////////////////////////////////////////////////
 
     private Object handleTitleMethod(final ManagedObject targetAdapter) {
 
@@ -305,9 +302,6 @@ extends DelegatingInvocationHandlerDefault<T> {
         return titleEvent.getTitle();
     }
 
-    // /////////////////////////////////////////////////////////////////
-    // save
-    // /////////////////////////////////////////////////////////////////
 
     private Object handleSaveMethod(
             final ManagedObject targetAdapter, final ObjectSpecification targetNoSpec) {
@@ -330,9 +324,6 @@ extends DelegatingInvocationHandlerDefault<T> {
 
     }
 
-    // /////////////////////////////////////////////////////////////////
-    // property - access
-    // /////////////////////////////////////////////////////////////////
 
     private Object handleGetterMethodOnProperty(
             final ManagedObject targetAdapter,
@@ -362,11 +353,6 @@ extends DelegatingInvocationHandlerDefault<T> {
         });
 
     }
-
-
-    // /////////////////////////////////////////////////////////////////
-    // property - modify
-    // /////////////////////////////////////////////////////////////////
 
 
 
@@ -401,9 +387,6 @@ extends DelegatingInvocationHandlerDefault<T> {
     }
 
 
-    // /////////////////////////////////////////////////////////////////
-    // collection - access
-    // /////////////////////////////////////////////////////////////////
 
     private Object handleGetterMethodOnCollection(
             final ManagedObject targetAdapter,
@@ -474,9 +457,6 @@ extends DelegatingInvocationHandlerDefault<T> {
     }
 
 
-    // /////////////////////////////////////////////////////////////////
-    // action
-    // /////////////////////////////////////////////////////////////////
 
     private Object handleActionMethod(
             final ManagedObject targetAdapter,
@@ -532,9 +512,6 @@ extends DelegatingInvocationHandlerDefault<T> {
         }
     }
 
-    // /////////////////////////////////////////////////////////////////
-    // visibility and usability checks (common to all members)
-    // /////////////////////////////////////////////////////////////////
 
     /**
      * REVIEW: ideally should provide some way to allow to caller to indicate the 'where' context.  Having
@@ -641,19 +618,6 @@ extends DelegatingInvocationHandlerDefault<T> {
         return exceptionHandler!=null
                 ? exceptionHandler.handle(ex)
                 : null;
-    }
-
-    private Object singleArgUnderlyingElseThrow(Object[] args, String name) {
-        if (args.length != 1) {
-            throw new IllegalArgumentException(String.format(
-                    "Invoking '%s' should only have a single argument", name));
-        }
-        val argumentObj = underlying(args[0]);
-        if (argumentObj == null) {
-            throw new IllegalArgumentException(String.format(
-                    "Must provide a non-null object to '%s'", name));
-        }
-        return argumentObj;
     }
 
     private Object singleArgUnderlyingElseNull(Object[] args, String name) {
