@@ -18,17 +18,20 @@
  */
 package org.apache.isis.testing.h2console.ui;
 
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 import org.apache.isis.core.webapp.IsisModuleCoreWebapp;
+import org.apache.isis.testing.h2console.ui.services.H2ManagerMenu;
+import org.apache.isis.testing.h2console.ui.webmodule.WebModuleH2Console;
 
 @Configuration
 @Import({
-        IsisModuleCoreWebapp.class
+        IsisModuleCoreWebapp.class,
+
+        H2ManagerMenu.class,
+        WebModuleH2Console.class
 })
-@ComponentScan
 public class IsisModuleTestingH2ConsoleUi {
 
 }
