@@ -1874,8 +1874,43 @@ public class IsisConfiguration {
                 }
             }
         }
+        
+        private final Jpa jpa = new Jpa();
+        @Data
+        public static class Jpa {
+            
+            /**
+             * List of additional schemas to be auto-created.
+             * <p>
+             * Explicitly creates given list of schemas by using the specified 
+             * {@link #getCreateSchemaSqlTemplate()} to generate the actual SQL 
+             * statement against the configured data-source.
+             * <p> 
+             * This configuration mechanism does not consider any schema-auto-creation 
+             * configuration (if any), that independently is provided the standard JPA way.
+             */
+            private final List<String> autoCreateSchemas = new ArrayList<>();
+            
+            /**
+             * Does lookup additional "mapping-files" in META-INF/orm-<i>name</i>.xml
+             * (equivalent to "mapping-file" entries in persistence.xml) and adds these 
+             * to those that are already configured the <i>Spring Data</i> way (if any). 
+             */
+            private final List<String> additionalOrmFiles = new ArrayList<>();
+            
+            /**
+             * SQL syntax to create a DB schema.
+             * <p>
+             * This template is passed through {@link String#format(String, schemaName)} to 
+             * make the actual SQL statement thats to be used against the configured data-source.
+             * <p>
+             * Default template is {@literal CREATE SCHEMA IF NOT EXISTS %S} with the schema name 
+             * converted to upper-case.  
+             */
+            private String createSchemaSqlTemplate = "CREATE SCHEMA IF NOT EXISTS %S";
+        
+        }
     }
-
 
 
     private final Viewer viewer = new Viewer();
@@ -2959,7 +2994,7 @@ public class IsisConfiguration {
         }
     }
 
-
+    
     private final Extensions extensions = new Extensions();
     @Data
     public static class Extensions {
