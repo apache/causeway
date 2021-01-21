@@ -98,7 +98,7 @@ class PumlBuilder {
         if (tObj is HasLinks) {
             tObj.getLinks().forEach { l ->
                 val rel = l.rel
-                if (rel != Relation.UP.rel && rel != Relation.SELF.rel) {
+                if (rel != Relation.UP.type && rel != Relation.SELF.type) {
                     code += amendWithChild(parentUrl, l)
                 }
             }

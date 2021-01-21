@@ -111,15 +111,32 @@ data class Property(val id: String = "",
 ) : TransferObject, HasLinks
 
 
-//IANA specified, cf. restfulobject-spec §2.7.1 & http://www.iana.org/assignments/link-relations/link-relations.xml
-enum class Relation(val rel: String) {
-    DESCRIBED_BY("describedBy"),
-    HELP("help"),
-    ICON("icon"),
-    PREVIOUS("previous"),
-    NEXT("next"),
-    SELF("self"),
-    UP("up"),
+/**
+ * IANA SPEC http://www.iana.org/assignments/link-relations/link-relations.xml
+ * RO SPEC restfulobject-spec.pdf §2.7.1
+*/
+enum class Relation(val type: String) {
+    ACTION("action"),
+    DESCRIBED_BY("describedBy"),  //IANA
+    DETAILS("details"),
+    DOMAIN_TYPE("domain-type"),
+    ELEMENT("element"),
+    HELP("help"),               //IANA
+    ICON("icon"),               //IANA
+    INVOKE("invoke"),
+    MODIFY("modify"),
+    NEXT("next"),               //IANA
+    PREVIOUS("previous"),       //IANA
+    PROPERTY("property"),
+    RETURN_TYPE("return-type"),
+    SELF("self"),               //IANA
+    SERVICE("service"),         //IANA (&RO)
+    SERVICES("services"),
+    UP("up"),                   //IANA
+    UPDATE("update"),
+    USER("user"),
+    VALUE("value"),
+    VERSION("version"),
 }
 
 @Serializable

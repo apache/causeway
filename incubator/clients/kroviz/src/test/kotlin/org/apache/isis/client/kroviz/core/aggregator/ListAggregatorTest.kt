@@ -62,7 +62,7 @@ class ListAggregatorTest : IntegrationTest() {
             assertEquals("className", p.id)  // 3
             val links = p.links
             val descLink = links.find {
-                it.rel == Relation.DESCRIBED_BY.rel
+                it.rel == Relation.DESCRIBED_BY.type
             }
             assertNotNull(descLink)  // 4
 

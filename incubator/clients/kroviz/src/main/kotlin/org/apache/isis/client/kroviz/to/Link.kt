@@ -26,7 +26,7 @@ data class Link(val rel: String = "",
                 val method: String = Method.GET.operation,
                 val href: String,
                 val type: String = "",
-        //TODO "args" should be changed to "arguments" - RO spec or SimpleApp?
+        //IMPROVE RO SPEC? "args" should be changed to "arguments" - RO spec or SimpleApp?
                 val args: Map<String, Argument> = emptyMap(),
         /* arguments can either be:
          * -> empty Map {}
@@ -36,6 +36,8 @@ data class Link(val rel: String = "",
                 val arguments: Map<String, Argument?> = emptyMap(),
                 val title: String = "")
     : TransferObject {
+
+    private val relPrefix = "urn:org.restfulobjects:rels/"
 
     fun argMap(): Map<String, Argument?>? {
         return when {
