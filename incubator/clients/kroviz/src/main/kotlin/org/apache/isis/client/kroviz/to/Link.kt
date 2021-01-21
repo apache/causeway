@@ -38,6 +38,19 @@ data class Link(val rel: String = "",
     : TransferObject {
 
     private val relPrefix = "urn:org.restfulobjects:rels/"
+    private val typePrefix = "application/json;profile=\"urn:org.restfulobjects:repr-types/"
+    val relation: Relation
+    val representation: Represention
+
+    init {
+        var rawRel = rel.replace(relPrefix, "")
+        rawRel = rawRel.split(";").first()  //TODO handle args=value separated by ;
+        relation = Relation.valueOf(rawRel)
+
+        var rawRep = type.replace(typePrefix, "")
+        rawRep = rawRep.replace("\"", "")
+        representation = Represention.valueOf(rawRep)
+    }
 
     fun argMap(): Map<String, Argument?>? {
         return when {
@@ -59,11 +72,11 @@ data class Link(val rel: String = "",
     }
 
     fun isProperty(): Boolean {
-        return rel.endsWith("/property")
+        return relation == Relation.PROPERTY
     }
 
     fun isAction(): Boolean {
-        return rel.endsWith("/action")
+        return relation ==  Relation.ACTION
     }
 
     fun name(): String {

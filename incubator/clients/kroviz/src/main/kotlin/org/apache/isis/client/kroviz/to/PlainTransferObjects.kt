@@ -112,9 +112,10 @@ data class Property(val id: String = "",
 
 
 /**
- * IANA SPEC http://www.iana.org/assignments/link-relations/link-relations.xml
  * RO SPEC restfulobject-spec.pdf §2.7.1
-*/
+ * extends ->
+ * IANA SPEC http://www.iana.org/assignments/link-relations/link-relations.xml
+ */
 enum class Relation(val type: String) {
     ACTION("action"),
     DESCRIBED_BY("describedBy"),  //IANA
@@ -130,12 +131,37 @@ enum class Relation(val type: String) {
     PROPERTY("property"),
     RETURN_TYPE("return-type"),
     SELF("self"),               //IANA
-    SERVICE("service"),         //IANA (&RO)
+    SERVICE("service"),         //specified in both IANA & RO
     SERVICES("services"),
     UP("up"),                   //IANA
     UPDATE("update"),
     USER("user"),
     VALUE("value"),
+    VERSION("version"),
+}
+
+/**
+ * RO SPEC restfulobject-spec.pdf §2.4.1
+ */
+enum class Represention(val type: String) {
+    ACTION("action"),                      // missing in RO SPEC ???
+    ACTION_DESCRIPTION("action-description"),
+    ACTION_RESULT("action-result"),
+    ACTION_PARAM_DESCRIPTION("action-param-description"),
+    COLLECTION_DESCRIPTION("collection-description"),
+    DOMAIN_TYPE("domain-type"),
+    ERROR("error"),
+    HOMEPAGE("homepage"),
+    LIST("list"),
+    OBJECT("object"),
+    OBJECT_ACTION("object-action"),
+    OBJECT_COLLECTION("object-collection"),
+    OBJECT_LAYOUT_BS3("object-layout-bs3"), // missing in RO SPEC ???
+    OBJECT_PROPERTY("object-property"),
+    PROPERTY_DESCRIPTION("property-description"),
+    TYPE_LIST("type-list"),
+    TYPE_ACTION_RESULT("type-action-result"),
+    USER("user"),
     VERSION("version"),
 }
 
