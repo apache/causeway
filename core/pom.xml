@@ -166,7 +166,7 @@
 
 		<quartz-scheduler.version>2.3.2</quartz-scheduler.version>
 
-		<resteasy4-spring-boot-starter.version>4.6.4.Final</resteasy4-spring-boot-starter.version>
+		<resteasy4-spring-boot-starter.version>4.7.0.Final</resteasy4-spring-boot-starter.version>
 
 		<select2.version>4.0.13</select2.version>
 		<shiro.version>1.7.0</shiro.version>
