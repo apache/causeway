@@ -97,8 +97,8 @@ class PumlBuilder {
         val parentUrl = logEntry.url
         if (tObj is HasLinks) {
             tObj.getLinks().forEach { l ->
-                val rel = l.rel
-                if (rel != Relation.UP.type && rel != Relation.SELF.type) {
+                val rel = l.relation()
+                if (rel != Relation.UP && rel != Relation.SELF) {
                     code += amendWithChild(parentUrl, l)
                 }
             }

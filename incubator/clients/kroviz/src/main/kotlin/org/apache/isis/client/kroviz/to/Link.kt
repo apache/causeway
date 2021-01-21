@@ -37,21 +37,6 @@ data class Link(val rel: String = "",
                 val title: String = "")
     : TransferObject {
 
-    private val relPrefix = "urn:org.restfulobjects:rels/"
-    private val typePrefix = "application/json;profile=\"urn:org.restfulobjects:repr-types/"
-    val relation: Relation
-    val representation: Represention
-
-    init {
-        var rawRel = rel.replace(relPrefix, "")
-        rawRel = rawRel.split(";").first()  //TODO handle args=value separated by ;
-        relation = Relation.valueOf(rawRel)
-
-        var rawRep = type.replace(typePrefix, "")
-        rawRep = rawRep.replace("\"", "")
-        representation = Represention.valueOf(rawRep)
-    }
-
     fun argMap(): Map<String, Argument?>? {
         return when {
             arguments.isNotEmpty() -> arguments
@@ -72,15 +57,34 @@ data class Link(val rel: String = "",
     }
 
     fun isProperty(): Boolean {
-        return relation == Relation.PROPERTY
+        return relation() == Relation.PROPERTY
     }
 
     fun isAction(): Boolean {
-        return relation ==  Relation.ACTION
+        return relation() == Relation.ACTION
     }
 
     fun name(): String {
         return href.split("/").last()
+    }
+
+    fun relation(): Relation {
+        val prefix = "urn:org.restfulobjects:rels/"
+        console.log("[Link.relation()]")
+        console.log(this)
+        var raw = rel.replace(prefix, "")
+        if (raw.contains(";")) {
+            raw = raw.split(";").first()  //TODO handle args=value separated by ;
+        }
+        console.log(raw)
+        return Relation.find(raw)!!
+    }
+
+    private fun representation(): Represention {
+        val prefix = "application/json;profile=\"urn:org.restfulobjects:repr-types/"
+        var raw = type.replace(prefix, "")
+        raw = raw.replace("\"", "")
+        return Represention.find(raw)!!
     }
 
 }

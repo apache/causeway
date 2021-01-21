@@ -116,7 +116,7 @@ data class Property(val id: String = "",
  * extends ->
  * IANA SPEC http://www.iana.org/assignments/link-relations/link-relations.xml
  */
-enum class Relation(val type: String) {
+enum class Relation(val type:String) {
     ACTION("action"),
     DESCRIBED_BY("describedBy"),  //IANA
     DETAILS("details"),
@@ -137,7 +137,11 @@ enum class Relation(val type: String) {
     UPDATE("update"),
     USER("user"),
     VALUE("value"),
-    VERSION("version"),
+    VERSION("version");
+
+    companion object {
+        fun find(value: String): Relation? = Relation.values().find { it.type == value }
+    }
 }
 
 /**
@@ -162,7 +166,12 @@ enum class Represention(val type: String) {
     TYPE_LIST("type-list"),
     TYPE_ACTION_RESULT("type-action-result"),
     USER("user"),
-    VERSION("version"),
+    VERSION("version");
+
+    companion object {
+        fun find(value: String): Represention? = Represention.values().find { it.type == value }
+    }
+
 }
 
 @Serializable

@@ -120,7 +120,7 @@ class ListAggregator(actionTitle: String) : BaseAggregator() {
 
     private fun Property.descriptionLink(): Link? {
         return links.find {
-            it.rel == Relation.DESCRIBED_BY.type
+            it.relation() == Relation.DESCRIBED_BY
         }
     }
 
