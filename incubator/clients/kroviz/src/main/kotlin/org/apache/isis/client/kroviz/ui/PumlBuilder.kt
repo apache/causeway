@@ -26,7 +26,7 @@ import org.apache.isis.client.kroviz.core.model.meta.MetaPackage
 import org.apache.isis.client.kroviz.to.DomainType
 import org.apache.isis.client.kroviz.to.HasLinks
 import org.apache.isis.client.kroviz.to.Link
-import org.apache.isis.client.kroviz.to.RelType
+import org.apache.isis.client.kroviz.to.Relation
 import org.apache.isis.client.kroviz.ui.kv.UiManager
 
 class PumlBuilder {
@@ -98,7 +98,7 @@ class PumlBuilder {
         if (tObj is HasLinks) {
             tObj.getLinks().forEach { l ->
                 val rel = l.rel
-                if (rel != RelType.UP.type && rel != RelType.SELF.type) {
+                if (rel != Relation.UP.rel && rel != Relation.SELF.rel) {
                     code += amendWithChild(parentUrl, l)
                 }
             }

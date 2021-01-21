@@ -25,7 +25,7 @@ import org.apache.isis.client.kroviz.core.event.ResourceSpecification
 import org.apache.isis.client.kroviz.core.model.ListDM
 import org.apache.isis.client.kroviz.snapshots.simpleapp1_16_0.*
 import org.apache.isis.client.kroviz.to.Property
-import org.apache.isis.client.kroviz.to.RelType
+import org.apache.isis.client.kroviz.to.Relation
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
@@ -62,7 +62,7 @@ class ListAggregatorTest : IntegrationTest() {
             assertEquals("className", p.id)  // 3
             val links = p.links
             val descLink = links.find {
-                it.rel == RelType.DESCRIBEDBY.type
+                it.rel == Relation.DESCRIBED_BY.rel
             }
             assertNotNull(descLink)  // 4
 

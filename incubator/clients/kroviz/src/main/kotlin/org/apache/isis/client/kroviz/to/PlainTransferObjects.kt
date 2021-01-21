@@ -80,19 +80,19 @@ data class Links(
 enum class MemberType(val type: String) {
     ACTION("action"),
     PROPERTY("property"),
-    COLLECTION("collection")
+    COLLECTION("collection"),
 }
 
 enum class MenuBarPosition(val position: String) {
     PRIMARY("PRIMARY"),
     SECONDARY("SECONDARY"),
-    TERNARY("TERNARY")
+    TERNARY("TERNARY"),
 }
 
 enum class Method(val operation: String) {
     GET("GET"),
     PUT("PUT"),
-    POST("POST")
+    POST("POST"),
 //    DELETE("DELETE")  not used - Apache Isis defines delete operations on DomainObjects
 }
 
@@ -110,10 +110,16 @@ data class Property(val id: String = "",
                     val maxLength: Int = 0
 ) : TransferObject, HasLinks
 
-enum class RelType(val type: String) {
+
+//IANA specified, cf. restfulobject-spec §2.7.1 & http://www.iana.org/assignments/link-relations/link-relations.xml
+enum class Relation(val rel: String) {
+    DESCRIBED_BY("describedBy"),
+    HELP("help"),
+    ICON("icon"),
+    PREVIOUS("previous"),
+    NEXT("next"),
     SELF("self"),
     UP("up"),
-    DESCRIBEDBY("describedby")
 }
 
 @Serializable
