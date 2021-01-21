@@ -31,6 +31,14 @@ import lombok.Singular;
 @Builder
 public class SecurityModuleConfig {
 
+    // -- SCHEMA
+    
+    /** Logical DB schema to use for the SecMan entities. 
+     * @implNote Yet just wishful thinking, not implemented. 
+     */
+    @Getter @Builder.Default @NonNull
+    final String databaseSchema = "";
+    
     // -- ROLES
 
     @Getter @Builder.Default @NonNull

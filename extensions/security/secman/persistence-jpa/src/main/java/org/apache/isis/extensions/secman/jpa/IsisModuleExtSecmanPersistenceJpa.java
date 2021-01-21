@@ -47,10 +47,6 @@ import org.apache.isis.extensions.secman.jpa.seed.SeedSecurityModuleService;
     SeedSecurityModuleService.class,
 
 })
-//@ComponentScan(
-//        basePackageClasses= {
-//                IsisModuleExtSecmanPersistenceJpa.class
-//        })
 @EntityScan(basePackageClasses = {
         ApplicationPermission.class,
         ApplicationRole.class,

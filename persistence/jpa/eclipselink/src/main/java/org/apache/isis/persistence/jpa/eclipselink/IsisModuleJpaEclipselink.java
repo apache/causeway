@@ -43,7 +43,7 @@ import org.apache.isis.persistence.jpa.integration.IsisModuleJpaIntegration;
  * EclipseLink integration. 
  * Sets up EclipseLink as the implementation provider for Spring Data JPA.
  * 
- * @see <a href=https://www.baeldung.com/spring-eclipselink>baeldung.com</a>
+ * @see <a href="https://www.baeldung.com/spring-eclipselink">baeldung.com</a>
  */
 @Configuration 
 @Import({
@@ -68,11 +68,12 @@ public class IsisModuleJpaEclipselink extends JpaBaseConfiguration {
     //TODO[2033] partly application specific configuration that belongs to application.yaml
     @Override
     protected Map<String, Object> getVendorProperties() {
-        HashMap<String, Object> map = new HashMap<>();
-        map.put(PersistenceUnitProperties.WEAVING, "false");
-        map.put(PersistenceUnitProperties.DDL_GENERATION, PersistenceUnitProperties.DROP_AND_CREATE);
-        map.put(PersistenceUnitProperties.CDI_BEANMANAGER, new BeanManagerForEntityListeners(serviceInjectorProvider));
-        return map;
+        HashMap<String, Object> jpaProps = new HashMap<>();
+        jpaProps.put(PersistenceUnitProperties.WEAVING, "false");
+        jpaProps.put(PersistenceUnitProperties.SCHEMA_GENERATION_CREATE_DATABASE_SCHEMAS, "true");
+        jpaProps.put(PersistenceUnitProperties.DDL_GENERATION, PersistenceUnitProperties.CREATE_OR_EXTEND);
+        jpaProps.put(PersistenceUnitProperties.CDI_BEANMANAGER, new BeanManagerForEntityListeners(serviceInjectorProvider));
+        return jpaProps;
     }
 
 }
