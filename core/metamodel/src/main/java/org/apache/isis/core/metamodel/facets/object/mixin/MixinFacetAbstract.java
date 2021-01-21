@@ -33,8 +33,8 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 import lombok.val;
 
-public abstract class MixinFacetAbstract 
-extends SingleValueFacetAbstract<String> 
+public abstract class MixinFacetAbstract
+extends SingleValueFacetAbstract<String>
 implements MixinFacet {
 
     private final Class<?> mixinType;
@@ -47,7 +47,7 @@ implements MixinFacet {
 
     public MixinFacetAbstract(
             final Class<?> mixinType,
-            final String value, 
+            final String value,
             final Constructor<?> constructor,
             final FacetHolder holder) {
 
@@ -76,7 +76,7 @@ implements MixinFacet {
         }
         if(!isMixinFor(domainPojo.getClass())) {
             throw _Exceptions.unrecoverableFormatted(
-                    "invalid mix-in declaration of type %s, unexpect owner type %s", 
+                    "invalid mix-in declaration of type %s, unexpect owner type %s",
                     mixinType, domainPojo.getClass());
         }
         try {
@@ -91,10 +91,14 @@ implements MixinFacet {
 
     @Override
     public boolean isCandidateForMain(Method method) {
-        return method.getName().equals(super.value()) &&
-                constructor.getDeclaringClass().equals(method.getDeclaringClass());
+        if (method.getName().equals(super.value())) {
+            final Class<?> constructorDeclaringClass = constructor.getDeclaringClass();
+            final Class<?> methodDeclaringClass = method.getDeclaringClass();
+            if (methodDeclaringClass.isAssignableFrom(constructorDeclaringClass)) return true;
+        }
+        return false;
     }
-    
+
     @Override
     public ManagedObject mixedIn(ManagedObject mixinAdapter, Policy policy) {
         val mixinPojo = mixinAdapter.getPojo();
@@ -104,17 +108,17 @@ implements MixinFacet {
                         : null;
     }
 
-    @Override 
+    @Override
     public void appendAttributesTo(final Map<String, Object> attributeMap) {
         super.appendAttributesTo(attributeMap);
         attributeMap.put("mixinType", mixinType);
         attributeMap.put("constructorType", constructorType);
     }
-    
+
     // -- HELPER
-    
+
     private Object holderPojoFor(Object mixinPojo, Policy policy) {
-        val mixinFields = mixinType.getDeclaredFields();
+        val mixinFields = mixinType.getFields();
         for (val mixinField : mixinFields) {
             if(mixinField.getType().isAssignableFrom(constructorType)) {
                 try {
