@@ -18,7 +18,6 @@
  */
 package org.apache.isis.client.kroviz.to
 
-import kotlinx.serialization.UnstableDefault
 import org.apache.isis.client.kroviz.handler.HttpErrorHandler
 import org.apache.isis.client.kroviz.snapshots.demo2_0_0.DEMO_HTTP_ERROR_500
 import org.apache.isis.client.kroviz.snapshots.demo2_0_0.HTTP_ERROR_405
@@ -29,7 +28,6 @@ import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
-@UnstableDefault
 class HttpErrorTest {
 
     @Test

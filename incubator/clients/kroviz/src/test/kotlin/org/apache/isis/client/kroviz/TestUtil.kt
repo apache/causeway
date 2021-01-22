@@ -44,7 +44,7 @@ interface DomSpec : TestSpec {
     override fun afterTest() {
         val div = document.getElementById("pretest")
         div?.remove()
-        jQuery(`object` = ".modal-backdrop").remove()
+//        jQuery(`object` = ".modal-backdrop").remove()
     }
 
 }

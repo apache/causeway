@@ -18,14 +18,12 @@
  */
 package org.apache.isis.client.kroviz.to
 
-import kotlinx.serialization.UnstableDefault
 import org.apache.isis.client.kroviz.handler.TObjectHandler
 import org.apache.isis.client.kroviz.snapshots.demo2_0_0.DEMO_PRIMITIVES
 import org.apache.isis.client.kroviz.snapshots.demo2_0_0.DEMO_TEMPORALS
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-@UnstableDefault
 class FeaturedTypesTest {
 
     @Test

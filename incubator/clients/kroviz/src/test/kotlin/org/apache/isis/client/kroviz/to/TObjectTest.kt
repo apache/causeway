@@ -18,7 +18,6 @@
  */
 package org.apache.isis.client.kroviz.to
 
-import kotlinx.serialization.UnstableDefault
 import org.apache.isis.client.kroviz.handler.TObjectHandler
 import org.apache.isis.client.kroviz.snapshots.demo2_0_0.ACTIONS_STRINGS_INVOKE
 import org.apache.isis.client.kroviz.snapshots.demo2_0_0.ACTIONS_TEXT_INVOKE
@@ -30,7 +29,6 @@ import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
-@UnstableDefault
 class TObjectTest {
 
     @Test

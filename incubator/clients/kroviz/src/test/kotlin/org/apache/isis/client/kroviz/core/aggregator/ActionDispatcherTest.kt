@@ -18,7 +18,6 @@
  */
 package org.apache.isis.client.kroviz.core.aggregator
 
-import kotlinx.serialization.UnstableDefault
 import org.apache.isis.client.kroviz.IntegrationTest
 import org.apache.isis.client.kroviz.snapshots.demo2_0_0.ACTIONS_STRINGS
 import org.apache.isis.client.kroviz.snapshots.demo2_0_0.ACTIONS_STRINGS_INVOKE
@@ -28,7 +27,6 @@ import kotlin.test.Test
 import kotlin.test.assertNotEquals
 import kotlin.test.assertTrue
 
-@UnstableDefault
 class ActionDispatcherTest : IntegrationTest() {
 
     @Test

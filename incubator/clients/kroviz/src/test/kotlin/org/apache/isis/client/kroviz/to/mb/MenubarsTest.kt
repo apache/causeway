@@ -18,7 +18,6 @@
  */
 package org.apache.isis.client.kroviz.to.mb
 
-import kotlinx.serialization.UnstableDefault
 import org.apache.isis.client.kroviz.handler.MenuBarsHandler
 import org.apache.isis.client.kroviz.snapshots.demo2_0_0.DEMO_MENUBARS
 import org.apache.isis.client.kroviz.snapshots.simpleapp1_16_0.RESTFUL_MENUBARS
@@ -26,7 +25,6 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 
-@UnstableDefault
 class MenubarsTest {
 
     @Test

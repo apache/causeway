@@ -69,10 +69,10 @@ data class Link(val rel: String = "",
     }
 
     fun relation(): Relation {
-        val prefix = "urn:org.restfulobjects:rels/"
-        console.log("[Link.relation()]")
-        console.log(this)
-        var raw = rel.replace(prefix, "")
+        val roPrefix = "urn:org.apache.isis.restfulobjects:rels/"
+        var raw = rel.replace(roPrefix, "")
+        val isisPrefix = "urn:org.restfulobjects:rels/"
+        raw = raw.replace(isisPrefix, "")
         if (raw.contains(";")) {
             raw = raw.split(";").first()  //TODO handle args=value separated by ;
         }
@@ -80,11 +80,80 @@ data class Link(val rel: String = "",
         return Relation.find(raw)!!
     }
 
-    private fun representation(): Represention {
+    fun representation(): Represention {
         val prefix = "application/json;profile=\"urn:org.restfulobjects:repr-types/"
         var raw = type.replace(prefix, "")
         raw = raw.replace("\"", "")
         return Represention.find(raw)!!
+    }
+
+}
+
+/**
+ * RO SPEC restfulobject-spec.pdf §2.7.1
+ * extends ->
+ * IANA SPEC http://www.iana.org/assignments/link-relations/link-relations.xml
+ */
+enum class Relation(val type: String) {
+    ACTION("action"),
+    DESCRIBED_BY("describedby"), //ISIS. IANA:"describedBy"
+    DETAILS("details"),
+    DOMAIN_TYPE("domain-type"),
+    DOMAIN_TYPES("domain-types"),
+    ELEMENT("element"),
+    HELP("help"),               //IANA
+    ICON("icon"),               //IANA
+    INVOKE("invoke"),
+    LOGOUT("logout"),
+    MENU_BARS("menuBars"),
+    MODIFY("modify"),
+    NEXT("next"),               //IANA
+    OBJECT_ICON("object-icon"),
+    OBJECT_LAYOUT("object-layout"),
+    PREVIOUS("previous"),       //IANA
+    PROPERTY("property"),
+    RETURN_TYPE("return-type"),
+    SELF("self"),               //IANA
+    SERVICE("service"),         //specified in both IANA & RO
+    SERVICES("services"),
+    UP("up"),                   //IANA
+    UPDATE("update"),
+    USER("user"),
+    VALUE("value"),
+    VERSION("version");
+
+    companion object {
+        fun find(value: String): Relation? = Relation.values().find { it.type == value }
+    }
+}
+
+/**
+ * RO SPEC restfulobject-spec.pdf §2.4.1
+ */
+enum class Represention(val type: String) {
+    ACTION("action"),                      // missing in RO SPEC ???
+    ACTION_DESCRIPTION("action-description"),
+    ACTION_RESULT("action-result"),
+    ACTION_PARAM_DESCRIPTION("action-param-description"),
+    COLLECTION_DESCRIPTION("collection-description"),
+    DOMAIN_TYPE("domain-type"),
+    ERROR("error"),
+    HOMEPAGE("homepage"),
+    LIST("list"),
+    OBJECT("object"),
+    OBJECT_ACTION("object-action"),
+    OBJECT_COLLECTION("object-collection"),
+    OBJECT_LAYOUT_BS3("object-layout-bs3"), // missing in RO SPEC ???
+    OBJECT_PROPERTY("object-property"),
+    PROPERTY_DESCRIPTION("property-description"),
+    SELF("self"),
+    TYPE_LIST("type-list"),
+    TYPE_ACTION_RESULT("type-action-result"),
+    USER("user"),
+    VERSION("version");
+
+    companion object {
+        fun find(value: String): Represention? = Represention.values().find { it.type == value }
     }
 
 }

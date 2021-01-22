@@ -18,7 +18,6 @@
  */
 package org.apache.isis.client.kroviz.to
 
-import kotlinx.serialization.UnstableDefault
 import org.apache.isis.client.kroviz.handler.PropertyHandler
 import org.apache.isis.client.kroviz.snapshots.demo2_0_0.DEMO_DOMAIN_TYPES_PROPERTY
 import org.apache.isis.client.kroviz.snapshots.demo2_0_0.DEMO_PROPERTY
@@ -29,7 +28,6 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
-@UnstableDefault
 class PropertyTest {
 
     @Test

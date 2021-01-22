@@ -35,7 +35,7 @@ class EventLogDetail(val logEntry: LogEntry) : Command() {
         if (jsonStr.isNotEmpty() && logEntry.subType == Constants.subTypeJson) {
             jsonStr = Utils.format(jsonStr)
         }
-        formItems.add(FormItem("Text", ValueType.TEXT_AREA, jsonStr, 10))
+        formItems.add(FormItem("Response", ValueType.TEXT_AREA, jsonStr, 10))
 
         var aggtStr = ""
         logEntry.aggregators.forEach { it ->
@@ -47,7 +47,8 @@ class EventLogDetail(val logEntry: LogEntry) : Command() {
                 caption = "Error :" + logEntry.title,
                 items = formItems,
                 command = this,
-                defaultAction = "Visualize").open()
+                defaultAction = "Visualize",
+                widthPerc = 60).open()
     }
 
 }

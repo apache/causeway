@@ -19,13 +19,11 @@
 
 package org.apache.isis.client.kroviz.handler
 
-import kotlinx.serialization.UnstableDefault
 import org.apache.isis.client.kroviz.IntegrationTest
 import org.apache.isis.client.kroviz.core.aggregator.ObjectAggregator
 import org.apache.isis.client.kroviz.snapshots.demo2_0_0.ACTIONS_STRINGS_INVOKE
 import kotlin.test.assertTrue
 
-@UnstableDefault
 class ResponseHandlerTest : IntegrationTest() {
 
     //@Test

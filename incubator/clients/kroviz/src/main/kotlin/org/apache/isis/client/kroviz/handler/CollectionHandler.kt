@@ -16,20 +16,23 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.client.kroviz.to
+package org.apache.isis.client.kroviz.handler
 
-import org.apache.isis.client.kroviz.handler.VersionHandler
-import org.apache.isis.client.kroviz.snapshots.simpleapp1_16_0.RESTFUL_VERSION
-import kotlin.test.Test
-import kotlin.test.assertEquals
+import kotlinx.serialization.json.Json
+import org.apache.isis.client.kroviz.to.Collection
+import org.apache.isis.client.kroviz.to.TransferObject
 
-class VersionTest {
+class CollectionHandler : BaseHandler() {
 
-    @Test
-    fun testParse() {
-        val version = VersionHandler().parse(RESTFUL_VERSION.str) as Version
-        assertEquals("1.0.0", version.specVersion)
-        assertEquals("formal", version.optionalCapabilities["domainModel"])
+    
+    override fun parse(response: String): TransferObject {
+        return Json.decodeFromString(Collection.serializer(), response)
+    }
+
+    override fun doHandle() {
+        //logEntry.addAggregator(ActionDispatcher())
+        update()
     }
 
 }
+

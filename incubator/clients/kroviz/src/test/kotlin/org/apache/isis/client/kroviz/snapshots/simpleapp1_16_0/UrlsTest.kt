@@ -18,7 +18,6 @@
  */
 package org.apache.isis.client.kroviz.snapshots.simpleapp1_16_0
 
-import kotlinx.serialization.UnstableDefault
 import org.apache.isis.client.kroviz.IntegrationTest
 import org.apache.isis.client.kroviz.core.aggregator.ActionDispatcher
 import org.apache.isis.client.kroviz.core.event.EventStore
@@ -35,7 +34,6 @@ import kotlin.test.assertEquals
  * @item check if the href 'self' can be invoked and
  * @item compare the response of invoking 'self' with what is hardcoded
  */
-@UnstableDefault
 class UrlsTest : IntegrationTest() {
 
     //@Test

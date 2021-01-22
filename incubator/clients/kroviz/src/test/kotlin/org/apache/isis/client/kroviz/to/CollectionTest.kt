@@ -16,37 +16,35 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.client.kroviz.core.aggregator
+package org.apache.isis.client.kroviz.to
 
 import org.apache.isis.client.kroviz.IntegrationTest
-import org.apache.isis.client.kroviz.snapshots.simpleapp1_16_0.ACTION_SO_CREATE
-import org.apache.isis.client.kroviz.to.ResultObject
-import org.apache.isis.client.kroviz.to.ResultType
+import org.apache.isis.client.kroviz.handler.CollectionHandler
+import org.apache.isis.client.kroviz.snapshots.demo2_0_0.COLLECTIONS_ENTITIES
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class ObjectAggregatorTest : IntegrationTest() {
+class CollectionTest : IntegrationTest() {
 
     @Test
-    fun testRestfulServices() {
-        // given
-        val aggregator = ObjectAggregator("object test")
-        // when
-        val logEntry = mockResponse(ACTION_SO_CREATE, aggregator)
-        val ro = logEntry.getTransferObject() as ResultObject
-        val type = ro.resulttype
-        // then
-        assertEquals(ResultType.DOMAINOBJECT.type, type)
+    fun testParse() {
+        //given
+        val jsonStr = COLLECTIONS_ENTITIES.str
+        //when
+        val collection = CollectionHandler().parse(jsonStr) as Collection
+        //then
+        assertEquals("entities", collection.id)
+        assertEquals("collection", collection.memberType)
 
-        val links = ro.links
-        assertEquals(0, links.size)
+        val linkList = collection.links
+        assertEquals(3, linkList.size)
 
-        val ror = ro.result!!
+        assertEquals("list", collection.extensions.collectionSemantics)
 
-        val resLinks = ror.links
-        assertEquals(4, resLinks.size)
+        val valueList = collection.value as List<Link>
+        assertEquals(2, valueList.size)
 
-        val title = ror.title
-        assertEquals("Object: Beutlin", title)
+        assertEquals("Immutable", collection.disabledReason)
     }
+
 }

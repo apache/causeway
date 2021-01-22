@@ -18,7 +18,6 @@
  */
 package org.apache.isis.client.kroviz.handler
 
-import kotlinx.serialization.UnstableDefault
 import kotlinx.serialization.json.Json
 import org.apache.isis.client.kroviz.core.aggregator.RestfulDispatcher
 import org.apache.isis.client.kroviz.to.Restful
@@ -31,9 +30,9 @@ class RestfulHandler : BaseHandler() {
         update()
     }
 
-    @UnstableDefault
+    
     override fun parse(response: String): TransferObject {
-        return Json.parse(Restful.serializer(), response)
+        return Json.decodeFromString(Restful.serializer(), response)
     }
 
 }

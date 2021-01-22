@@ -37,6 +37,10 @@ data class TObject(override val links: List<Link> = emptyList(),
         return getMembersOfType(MemberType.ACTION.type)
     }
 
+    fun getCollections(): MutableList<Member> {
+        return getMembersOfType(MemberType.COLLECTION.type)
+    }
+
     private fun getMembersOfType(type: String): MutableList<Member> {
         val result = mutableListOf<Member>()
         members.forEach {

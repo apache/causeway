@@ -18,7 +18,6 @@
  */
 package org.apache.isis.client.kroviz.core.model
 
-import kotlinx.serialization.UnstableDefault
 import org.apache.isis.client.kroviz.handler.TObjectHandler
 import org.apache.isis.client.kroviz.snapshots.simpleapp1_16_0.CFG_1
 import org.apache.isis.client.kroviz.snapshots.simpleapp1_16_0.SO_0
@@ -28,7 +27,6 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 
-@UnstableDefault
 class ExposerTest {
 
     @Test

@@ -18,7 +18,6 @@
  */
 package org.apache.isis.client.kroviz.core.aggregator
 
-import kotlinx.serialization.UnstableDefault
 import org.apache.isis.client.kroviz.IntegrationTest
 import org.apache.isis.client.kroviz.core.event.EventStore
 import org.apache.isis.client.kroviz.core.event.ResourceSpecification
@@ -30,7 +29,6 @@ import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
-@UnstableDefault
 class ListAggregatorTest : IntegrationTest() {
 
     //@Test

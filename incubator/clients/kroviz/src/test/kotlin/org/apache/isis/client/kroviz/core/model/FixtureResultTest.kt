@@ -18,7 +18,7 @@
  */
 package org.apache.isis.client.kroviz.core.model
 
-import kotlinx.serialization.UnstableDefault
+import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import org.apache.isis.client.kroviz.snapshots.simpleapp1_16_0.FR_OBJECT_BAZ
 import org.apache.isis.client.kroviz.to.Link
@@ -29,7 +29,6 @@ import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
-@UnstableDefault
 class FixtureResultTest {
 
     @Test
@@ -38,7 +37,7 @@ class FixtureResultTest {
         val jsonStr = FR_OBJECT_BAZ.str
 
         // when
-        val tObj = Json.parse(TObject.serializer(), jsonStr)
+        val tObj = Json.decodeFromString(TObject.serializer(), jsonStr)
         val dynObj = tObj.asDynamic()
 
         // then

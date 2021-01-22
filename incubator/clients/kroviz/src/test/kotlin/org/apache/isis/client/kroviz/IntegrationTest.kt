@@ -21,7 +21,6 @@ package org.apache.isis.client.kroviz
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.serialization.UnstableDefault
 import org.apache.isis.client.kroviz.core.aggregator.BaseAggregator
 import org.apache.isis.client.kroviz.core.event.EventStore
 import org.apache.isis.client.kroviz.core.event.LogEntry
@@ -36,7 +35,6 @@ import org.w3c.xhr.XMLHttpRequest
 
 // subclasses expect a running backend, here SimpleApp localhost:8080/restful*
 
-@UnstableDefault
 open class IntegrationTest {
 
     fun isAppAvailable(): Boolean {

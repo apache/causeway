@@ -19,7 +19,6 @@
 
 package org.apache.isis.client.kroviz.handler
 
-import kotlinx.serialization.UnstableDefault
 import kotlinx.serialization.json.Json
 import org.apache.isis.client.kroviz.to.*
 import org.apache.isis.client.kroviz.to.mb.Menubars
@@ -29,57 +28,57 @@ import org.apache.isis.client.kroviz.to.mb.Menubars
  */
 
 class DomainTypeHandler : BaseHandler() {
-    @UnstableDefault
+    
     override fun parse(response: String): TransferObject {
-        return Json.parse(DomainType.serializer(), response)
+        return Json.decodeFromString(DomainType.serializer(), response)
     }
 }
 
 class MemberHandler : BaseHandler() {
-    @UnstableDefault
+    
     override fun parse(response: String): TransferObject {
-        return Json.parse(Member.serializer(), response)
+        return Json.decodeFromString(Member.serializer(), response)
     }
 }
 
 class MenuBarsHandler : BaseHandler() {
-    @UnstableDefault
+    
     override fun parse(response: String): TransferObject {
-        return Json.parse(Menubars.serializer(), response)
+        return Json.decodeFromString(Menubars.serializer(), response)
     }
 }
 
 class PropertyHandler : BaseHandler() {
-    @UnstableDefault
+    
     override fun parse(response: String): TransferObject {
-        return Json.parse(Property.serializer(), response)
+        return Json.decodeFromString(Property.serializer(), response)
     }
 }
 
 class ServiceHandler : BaseHandler() {
-    @UnstableDefault
+    
     override fun parse(response: String): TransferObject {
-        return Json.parse(Service.serializer(), response)
+        return Json.decodeFromString(Service.serializer(), response)
     }
 }
 
 class TObjectHandler : BaseHandler() {
-    @UnstableDefault
+    
     override fun parse(response: String): TransferObject {
-        return Json.parse(TObject.serializer(), response)
+        return Json.decodeFromString(TObject.serializer(), response)
     }
 }
 
 class UserHandler : BaseHandler() {
-    @UnstableDefault
+    
     override fun parse(response: String): TransferObject {
-        return Json.parse(User.serializer(), response)
+        return Json.decodeFromString(User.serializer(), response)
     }
 }
 
 class VersionHandler : BaseHandler() {
-    @UnstableDefault
+    
     override fun parse(response: String): TransferObject {
-        return Json.parse(Version.serializer(), response)
+        return Json.decodeFromString(Version.serializer(), response)
     }
 }

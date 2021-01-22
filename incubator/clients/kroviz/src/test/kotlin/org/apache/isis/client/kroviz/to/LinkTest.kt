@@ -18,12 +18,12 @@
  */
 package org.apache.isis.client.kroviz.to
 
-import kotlinx.serialization.UnstableDefault
 import kotlinx.serialization.json.Json
+import org.apache.isis.client.kroviz.handler.RestfulHandler
+import org.apache.isis.client.kroviz.snapshots.simpleapp1_16_0.RESTFUL
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-@UnstableDefault
 class LinkTest {
 
     @Test
@@ -38,7 +38,7 @@ class LinkTest {
         }"""
 
         // when
-        val link = Json.parse(Link.serializer(), jsonStr)
+        val link = Json.decodeFromString(Link.serializer(), jsonStr)
 
         // then
         assertEquals("R", link.rel)
@@ -55,6 +55,41 @@ class LinkTest {
         val arguments = l.argMap()!!
         val a = arguments[""]
         assertEquals("href", a!!.key)
+    }
+
+    @Test
+    fun testFindRelation() {
+        //given
+        var rel:Relation?
+        //when
+        rel = Relation.find("menuBars")
+        //then
+        assertEquals(Relation.MENU_BARS, rel)
+
+        //when
+        rel = Relation.find("self")
+        //then
+        assertEquals(Relation.SELF, rel)
+
+        //when
+        rel = Relation.find("services")
+        //then
+        assertEquals(Relation.SERVICES, rel)
+    }
+
+    @Test
+    fun testFindParsedLinkEnums() {
+        //given
+        val jsonStr = RESTFUL.str
+        val ro = RestfulHandler().parse(jsonStr) as Restful
+        val links = ro.links
+        var rel:Relation?
+        //when
+        links.forEach { it ->
+            it.relation()    //TODO
+//            it.representation()
+        }
+        //then
     }
 
 }

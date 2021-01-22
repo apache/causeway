@@ -18,7 +18,6 @@
  */
 package org.apache.isis.client.kroviz.to
 
-import kotlinx.serialization.UnstableDefault
 import kotlinx.serialization.json.Json
 import org.apache.isis.client.kroviz.snapshots.demo2_0_0.DEMO_FILE_NODE
 import org.apache.isis.client.kroviz.snapshots.simpleapp1_16_0.SO
@@ -26,7 +25,6 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 
-@UnstableDefault
 class DomainTypeTest {
 
     @Test
@@ -34,7 +32,7 @@ class DomainTypeTest {
         // given
         val jsonStr = SO.str
         // when
-        val domainType = Json.parse(DomainType.serializer(), jsonStr)
+        val domainType = Json.decodeFromString(DomainType.serializer(), jsonStr)
         // then
         val linkList = domainType.links
         assertEquals(2, linkList.size)
@@ -55,7 +53,7 @@ class DomainTypeTest {
         // given
         val jsonStr = DEMO_FILE_NODE.str
         // when
-        val domainType = Json.parse(DomainType.serializer(), jsonStr)
+        val domainType = Json.decodeFromString(DomainType.serializer(), jsonStr)
         // then
         val linkList = domainType.links
         assertEquals(2, linkList.size)

@@ -18,7 +18,6 @@
  */
 package org.apache.isis.client.kroviz.core.event
 
-import kotlinx.serialization.UnstableDefault
 import org.apache.isis.client.kroviz.IntegrationTest
 import org.apache.isis.client.kroviz.core.aggregator.ListAggregator
 import org.apache.isis.client.kroviz.core.aggregator.ObjectAggregator
@@ -29,7 +28,6 @@ import org.apache.isis.client.kroviz.utils.XmlHelper
 import pl.treksoft.kvision.panel.VPanel
 import kotlin.test.*
 
-@UnstableDefault
 class EventStoreTest : IntegrationTest() {
 
     //@Test

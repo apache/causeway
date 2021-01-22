@@ -18,7 +18,7 @@
  */
 package org.apache.isis.client.kroviz.core.event
 
-import kotlinx.serialization.ContextualSerialization
+import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 import org.apache.isis.client.kroviz.core.aggregator.ActionDispatcher
 import org.apache.isis.client.kroviz.core.aggregator.BaseAggregator
@@ -52,7 +52,7 @@ data class LogEntry(
         val method: String? = "",
         val request: String = "",
         val subType: String = Constants.subTypeJson,
-        @ContextualSerialization val createdAt: Date = Date()) {
+        @Contextual val createdAt: Date = Date()) {
     var state = EventState.INITIAL
     var title: String = ""
     var requestLength: Int = 0 // must be accessible (public) for LogEntryTable
@@ -61,26 +61,27 @@ data class LogEntry(
 
     init {
         state = EventState.RUNNING
-        title = stripHostPort(url)
+        title = url // stripHostPort(url)
         requestLength = request.length
     }
 
-    @ContextualSerialization
+    @Contextual
     var updatedAt: Date? = null
 
-    @ContextualSerialization
+    @Contextual
     private var lastAccessedAt: Date? = null
 
     private var fault: String? = null
 
-    @ContextualSerialization
+    @Contextual
     var duration: Int = 0
 
     var cacheHits = 0
-    val aggregators by lazy { mutableListOf<BaseAggregator>() }
+
+    val aggregators = mutableListOf<@Contextual BaseAggregator>()
     var nOfAggregators: Int = 0 // must be accessible (public) for LogEntryTable
 
-    @ContextualSerialization
+    @Contextual
     var obj: Any? = null
 
     // alternative constructor for UI events (eg. from user interaction)

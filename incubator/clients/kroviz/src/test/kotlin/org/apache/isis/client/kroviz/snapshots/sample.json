@@ -1,38 +1,45 @@
 {
-  "id": "strings",
-  "memberType": "action",
+  "id": "entities",
+  "memberType": "collection",
   "links": [
     {
       "rel": "self",
-      "href": "https://demo-wicket.isis.incode.work/restful/objects/demo.JavaLangTypesMenu/1/actions/strings",
+      "href": "http://localhost:8080/restful/objects/demo.JavaLangStrings/PADw_eG1sIHZlcnNpb249IjEuMCIgZW5jb2Rpbmc9IlVURi04IiBzdGFuZGFsb25lPSJ5ZXMiPz4KPERlbW8vPgo=/collections/entities",
       "method": "GET",
-      "type": "application/json;profile=\"urn:org.restfulobjects:repr-types/object-action\""
+      "type": "application/json;profile=\"urn:org.restfulobjects:repr-types/object-collection\""
     },
     {
       "rel": "up",
-      "href": "https://demo-wicket.isis.incode.work/restful/objects/demo.JavaLangTypesMenu/1",
+      "href": "http://localhost:8080/restful/objects/demo.JavaLangStrings/PADw_eG1sIHZlcnNpb249IjEuMCIgZW5jb2Rpbmc9IlVURi04IiBzdGFuZGFsb25lPSJ5ZXMiPz4KPERlbW8vPgo=",
       "method": "GET",
       "type": "application/json;profile=\"urn:org.restfulobjects:repr-types/object\"",
-      "title": "JavaLangTypes"
-    },
-    {
-      "rel": "urn:org.restfulobjects:rels/invoke;action=\"strings\"",
-      "href": "https://demo-wicket.isis.incode.work/restful/objects/demo.JavaLangTypesMenu/1/actions/strings/invoke",
-      "method": "GET",
-      "type": "application/json;profile=\"urn:org.restfulobjects:repr-types/object-action\"",
-      "arguments": {}
+      "title": "String data type"
     },
     {
       "rel": "describedby",
-      "href": "https://demo-wicket.isis.incode.work/restful/domain-types/demo.JavaLangTypesMenu/actions/strings",
+      "href": "http://localhost:8080/restful/domain-types/demo.JavaLangStrings/collections/entities",
       "method": "GET",
-      "type": "application/json;profile=\"urn:org.restfulobjects:repr-types/action-description\""
+      "type": "application/json;profile=\"urn:org.restfulobjects:repr-types/collection-description\""
     }
   ],
   "extensions": {
-    "actionType": "user",
-    "actionSemantics": "safe"
+    "collectionSemantics": "list"
   },
-  "parameters": {
-  }
+  "value": [
+    {
+      "rel": "urn:org.restfulobjects:rels/value",
+      "href": "http://localhost:8080/restful/objects/demo.JavaLangStringJdo/1",
+      "method": "GET",
+      "type": "application/json;profile=\"urn:org.restfulobjects:repr-types/object\"",
+      "title": "StringJDO entity: Hello"
+    },
+    {
+      "rel": "urn:org.restfulobjects:rels/value",
+      "href": "http://localhost:8080/restful/objects/demo.JavaLangStringJdo/2",
+      "method": "GET",
+      "type": "application/json;profile=\"urn:org.restfulobjects:repr-types/object\"",
+      "title": "StringJDO entity: world"
+    }
+  ],
+  "disabledReason": "Immutable"
 }

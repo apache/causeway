@@ -18,18 +18,13 @@
  */
 package org.apache.isis.client.kroviz.to
 
-import org.apache.isis.client.kroviz.handler.VersionHandler
-import org.apache.isis.client.kroviz.snapshots.simpleapp1_16_0.RESTFUL_VERSION
-import kotlin.test.Test
-import kotlin.test.assertEquals
+import kotlinx.serialization.Serializable
 
-class VersionTest {
-
-    @Test
-    fun testParse() {
-        val version = VersionHandler().parse(RESTFUL_VERSION.str) as Version
-        assertEquals("1.0.0", version.specVersion)
-        assertEquals("formal", version.optionalCapabilities["domainModel"])
-    }
-
-}
+@Serializable
+data class Collection(val id: String,
+                      val memberType: String,
+                      override val links: List<Link> = emptyList(),
+                      val extensions: Extensions,
+                      val value: List<Link> = emptyList(),
+                      val disabledReason: String = ""
+) : TransferObject, HasLinks {}

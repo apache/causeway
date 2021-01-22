@@ -18,7 +18,6 @@
  */
 package org.apache.isis.client.kroviz
 
-import kotlinx.serialization.UnstableDefault
 import org.apache.isis.client.kroviz.core.event.EventStore
 import org.apache.isis.client.kroviz.core.event.LogEntry
 import org.apache.isis.client.kroviz.core.event.ResourceSpecification
@@ -48,7 +47,6 @@ class PumlBuilderTest {
         UiManager.login(url, user, pw)
     }
 
-    @UnstableDefault
     @Test
     fun testSimpleObject() {
         //given

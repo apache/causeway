@@ -18,7 +18,6 @@
  */
 package org.apache.isis.client.kroviz.core.model
 
-import kotlinx.serialization.UnstableDefault
 import org.apache.isis.client.kroviz.handler.LayoutHandler
 import org.apache.isis.client.kroviz.handler.LayoutXmlHandler
 import org.apache.isis.client.kroviz.handler.TObjectHandler
@@ -29,7 +28,6 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 
-@UnstableDefault
 class DisplayListTest {
 
     @Test

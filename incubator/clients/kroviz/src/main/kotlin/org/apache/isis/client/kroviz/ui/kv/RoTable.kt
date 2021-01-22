@@ -21,6 +21,7 @@ package org.apache.isis.client.kroviz.ui.kv
 import org.apache.isis.client.kroviz.core.model.Exposer
 import org.apache.isis.client.kroviz.core.model.ListDM
 import org.apache.isis.client.kroviz.utils.Utils
+import pl.treksoft.kvision.core.Container
 import pl.treksoft.kvision.core.CssSize
 import pl.treksoft.kvision.core.UNIT
 import pl.treksoft.kvision.panel.SimplePanel
@@ -28,7 +29,7 @@ import pl.treksoft.kvision.table.TableType
 import pl.treksoft.kvision.tabulator.Layout
 import pl.treksoft.kvision.tabulator.Tabulator
 import pl.treksoft.kvision.tabulator.TabulatorOptions
-import pl.treksoft.kvision.tabulator.tabulator
+import pl.treksoft.kvision.utils.set
 
 /**
  * access attributes from dynamic (JS) objects with varying
@@ -62,6 +63,34 @@ class RoTable(displayList: ListDM) : SimplePanel() {
                 }
             }
         }
+    }
+
+    fun <T : Any> Container.tabulator(
+            data: List<T>? = null,
+            dataUpdateOnEdit: Boolean = true,
+            options: TabulatorOptions<T> = TabulatorOptions(),
+            types: Set<TableType> = setOf(),
+            classes: Set<String>? = null,
+            className: String? = null,
+            init: (Tabulator<T>.() -> Unit)? = null
+    ): Tabulator<T> {
+        val tabulator = create(data, dataUpdateOnEdit, options, types, classes ?: className.set)
+        init?.invoke(tabulator)
+        this.add(tabulator)
+        return tabulator
+    }
+
+    fun <T : Any> create(
+            data: List<T>? = null,
+            dataUpdateOnEdit: Boolean = true,
+            options: TabulatorOptions<T> = TabulatorOptions(),
+            types: Set<TableType> = setOf(),
+            classes: Set<String> = setOf(),
+            init: (Tabulator<T>.() -> Unit)? = null
+    ): Tabulator<T> {
+        val tabulator = Tabulator(data, dataUpdateOnEdit, options, types, classes)
+        init?.invoke(tabulator)
+        return tabulator
     }
 
 }

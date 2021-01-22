@@ -27,6 +27,7 @@ import org.apache.isis.client.kroviz.core.event.LogEntry
 import org.apache.isis.client.kroviz.core.event.ResourceSpecification
 import org.apache.isis.client.kroviz.core.model.ListDM
 import org.apache.isis.client.kroviz.core.model.ObjectDM
+import org.apache.isis.client.kroviz.to.Relation
 import org.apache.isis.client.kroviz.to.TObject
 import org.apache.isis.client.kroviz.to.mb.Menubars
 import org.apache.isis.client.kroviz.utils.Utils
@@ -129,7 +130,7 @@ object UiManager {
 
     private fun linkLayout(tObject: TObject, aggregator: ObjectAggregator) {
         val layoutLink = tObject.links.firstOrNull {
-            it.rel.contains("object-layout")
+            it.relation() == Relation.OBJECT_LAYOUT
         }
         val reSpec = ResourceSpecification(layoutLink!!.href)
         val logEntry = EventStore.find(reSpec)
