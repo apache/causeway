@@ -21,6 +21,8 @@ class TransactionServiceSpring {
   void beforeEnteringTransactionalBoundary(InteractionSession interactionSession) // <.>
 
   void onTransactionEnded(TransactionAfterCompletionEvent event) // <.>
+
+  void afterLeavingTransactionalBoundary(InteractionSession interactionSession) // <.>
 }
 ----
 
@@ -33,5 +35,10 @@ INTERACTION BEGIN BOUNDARY
 +
 --
 TRANSACTION END BOUNDARY
+--
+<.> `[teal]#*afterLeavingTransactionalBoundary*#(InteractionSession interactionSession)` : `void`
++
+--
+INTERACTION END BOUNDARY
 --
 

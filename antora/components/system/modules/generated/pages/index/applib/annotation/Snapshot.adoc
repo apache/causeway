@@ -1,12 +1,12 @@
-= MementoSerialization : _enum_
+= Snapshot : _enum_
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
-Whether the property or collection is included if the domain object is serialized into a memento.
+Whether the property is included if the domain object graph is serialized into a snapshot.
 
 .Java Sources
 [source,java]
 ----
-enum MementoSerialization {
+enum Snapshot {
 
   INCLUDED // <.>
 
@@ -19,14 +19,12 @@ enum MementoSerialization {
 <.> `[teal]#*_INCLUDED_*#`
 +
 --
-Property or collection is included in any mementos. This is the fallback/default if not explicitly excluded.
+Property is included in any snapshots. This is the fallback/default if not explicitly excluded.
 --
 <.> `[teal]#*_EXCLUDED_*#`
 +
 --
-Property or collection's state is excluded from any mementos.
-
-Corresponds to `@Property(notPersisted=true)` or `@Collection(notPersisted=true)` prior to Isis 2.x
+Property is excluded from any snapshots.
 --
 <.> `[teal]#*_NOT_SPECIFIED_*#`
 +

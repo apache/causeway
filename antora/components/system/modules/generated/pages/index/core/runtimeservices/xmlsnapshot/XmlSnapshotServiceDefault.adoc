@@ -20,7 +20,7 @@ class XmlSnapshotServiceDefault {
 }
 ----
 
-<.> `[teal]#*snapshotFor*#(Object domainObject)` : `Snapshot`
+<.> `[teal]#*snapshotFor*#(Object domainObject)` : `xref:system:generated:index/applib/annotation/Snapshot.adoc[Snapshot]`
 +
 --
 Creates a simple snapshot of the domain object.
