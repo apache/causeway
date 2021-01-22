@@ -73,8 +73,8 @@ public class CommandJdoRepository {
     @Inject final JdoSupportService jdoSupport;
 
     public List<CommandJdo> findByFromAndTo(
-            @Nullable final LocalDate from,
-            @Nullable final LocalDate to) {
+            final @Nullable LocalDate from,
+            final @Nullable LocalDate to) {
         final Timestamp fromTs = toTimestampStartOfDayWithOffset(from, 0);
         final Timestamp toTs = toTimestampStartOfDayWithOffset(to, 1);
         
@@ -126,9 +126,9 @@ public class CommandJdoRepository {
 
 
     public List<CommandJdo> findByTargetAndFromAndTo(
-            final Bookmark target
-            , final LocalDate from
-            , final LocalDate to) {
+            final Bookmark target, 
+            final @Nullable LocalDate from, 
+            final @Nullable LocalDate to) {
 
         final Timestamp fromTs = toTimestampStartOfDayWithOffset(from, 0);
         final Timestamp toTs = toTimestampStartOfDayWithOffset(to, 1);
@@ -158,13 +158,15 @@ public class CommandJdoRepository {
         return repositoryService().allMatches(query);
     }
 
-    private static Timestamp toTimestampStartOfDayWithOffset(final LocalDate dt, int daysOffset) {
-        
-        val timestamp = dt.atStartOfDay().plusDays(daysOffset).atZone(ZoneId.systemDefault());
+    private static Timestamp toTimestampStartOfDayWithOffset(
+            final @Nullable LocalDate dt, 
+            final int daysOffset) {
         
         return dt!=null
-                ?new java.sql.Timestamp(Instant.from(timestamp).toEpochMilli())
-                :null;
+                ? new java.sql.Timestamp(
+                        Instant.from(dt.atStartOfDay().plusDays(daysOffset).atZone(ZoneId.systemDefault()))
+                        .toEpochMilli())
+                : null;
     }
 
 
