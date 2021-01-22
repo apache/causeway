@@ -38,7 +38,7 @@ extends SingleValueFacetAbstract<String>
 implements MixinFacet {
 
     private final Class<?> mixinType;
-    private final Class<?> constructorType;
+    private final Class<?> holderType;
     private final Constructor<?> constructor;
 
     public static Class<? extends Facet> type() {
@@ -54,7 +54,8 @@ implements MixinFacet {
         super(type(), value, holder);
         this.mixinType = mixinType;
         this.constructor = constructor;
-        this.constructorType = constructor.getParameterTypes()[0];
+        // by mixin convention: first constructor argument is identified as the holder type
+        this.holderType = constructor.getParameterTypes()[0]; 
     }
 
     @Override
@@ -62,7 +63,7 @@ implements MixinFacet {
         if (candidateDomainType == null) {
             return false;
         }
-        return constructorType.isAssignableFrom(candidateDomainType);
+        return holderType.isAssignableFrom(candidateDomainType);
     }
 
     @Override
@@ -91,12 +92,8 @@ implements MixinFacet {
 
     @Override
     public boolean isCandidateForMain(Method method) {
-        if (method.getName().equals(super.value())) {
-            final Class<?> constructorDeclaringClass = constructor.getDeclaringClass();
-            final Class<?> methodDeclaringClass = method.getDeclaringClass();
-            if (methodDeclaringClass.isAssignableFrom(constructorDeclaringClass)) return true;
-        }
-        return false;
+        return method.getName().equals(getMainMethodName())
+                && method.getDeclaringClass().isAssignableFrom(constructor.getDeclaringClass());
     }
 
     @Override
@@ -105,22 +102,30 @@ implements MixinFacet {
         val holderPojo = holderPojoFor(mixinPojo, policy);
         return holderPojo!=null
                 ? getObjectManager().adapt(holderPojo)
-                        : null;
+                : null;
     }
 
     @Override
     public void appendAttributesTo(final Map<String, Object> attributeMap) {
         super.appendAttributesTo(attributeMap);
         attributeMap.put("mixinType", mixinType);
-        attributeMap.put("constructorType", constructorType);
+        attributeMap.put("holderType", holderType);
     }
 
+    /**
+     * The mixin's main method name.
+     * @implNote as stored in the SingleValueFacetAbstract's value field
+     */
+    public String getMainMethodName() {
+        return super.value();
+    }
+    
     // -- HELPER
 
     private Object holderPojoFor(Object mixinPojo, Policy policy) {
         val mixinFields = mixinType.getFields();
         for (val mixinField : mixinFields) {
-            if(mixinField.getType().isAssignableFrom(constructorType)) {
+            if(mixinField.getType().isAssignableFrom(holderType)) {
                 try {
                     val holderPojo = _Reflect.getFieldOn(mixinField, mixinPojo);
                     return holderPojo;
