@@ -92,8 +92,16 @@ implements MixinFacet {
 
     @Override
     public boolean isCandidateForMain(Method method) {
+        
+        // include methods from super classes or interfaces
+        //
+        // it is sufficient to detect any match;
+        // mixin invocation will take care of calling the right method, 
+        // that is in terms of type-hierarchy the 'nearest' to this mixin 
+        
         return method.getName().equals(getMainMethodName())
-                && method.getDeclaringClass().isAssignableFrom(constructor.getDeclaringClass());
+                && method.getDeclaringClass()
+                    .isAssignableFrom(constructor.getDeclaringClass());
     }
 
     @Override
