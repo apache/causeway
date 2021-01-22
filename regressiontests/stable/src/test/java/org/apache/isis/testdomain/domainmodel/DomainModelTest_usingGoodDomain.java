@@ -32,14 +32,18 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
+import org.apache.isis.applib.services.title.TitleService;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacet;
+import org.apache.isis.core.metamodel.facets.object.icon.IconFacet;
+import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.specimpl.IntrospectionState;
 import org.apache.isis.schema.metamodel.v2.DomainClassDto;
 import org.apache.isis.testdomain.conf.Configuration_headless;
 import org.apache.isis.testdomain.model.good.Configuration_usingValidDomain;
+import org.apache.isis.testdomain.model.good.ProperMemberInheritance;
 import org.apache.isis.testdomain.model.good.ProperMemberSupport;
 import org.apache.isis.testing.integtestsupport.applib.validate.DomainModelValidator;
 
@@ -70,6 +74,7 @@ class DomainModelTest_usingGoodDomain {
     @Inject private ServiceRegistry serviceRegistry;
 //    @Inject private FactoryService factoryService;
     @Inject private SpecificationLoader specificationLoader;
+    @Inject private TitleService titleService;
 
     void debug() {
         val config = new MetaModelService.Config()
@@ -154,6 +159,24 @@ class DomainModelTest_usingGoodDomain {
         assertThrows(Exception.class, ()->holderSpec.getAssociationElseFail("openRestApi")); // should not be picked up as a property
         
     }
+    
+    @Test
+    void titleAndIconName_shouldBeInheritable() {
+        
+        val spec = specificationLoader.loadSpecification(ProperMemberInheritance.class, 
+                        IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
+        
+        val titleFacet = spec.getFacet(TitleFacet.class);
+        assertNotNull(titleFacet);
+        
+        val iconFacet = spec.getFacet(IconFacet.class);
+        assertNotNull(iconFacet);
+        
+        val properMemberInheritance = new ProperMemberInheritance();
+        assertEquals(properMemberInheritance.title(), titleService.titleOf(properMemberInheritance));
+        assertEquals(properMemberInheritance.iconName(), titleService.iconNameOf(properMemberInheritance));
+    }
+    
     
     // -- HELPER
     
