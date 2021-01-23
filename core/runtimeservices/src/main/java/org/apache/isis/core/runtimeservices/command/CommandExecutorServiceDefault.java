@@ -20,7 +20,6 @@ package org.apache.isis.core.runtimeservices.command;
 
 import java.sql.Timestamp;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
@@ -63,7 +62,6 @@ import org.apache.isis.core.metamodel.objectmanager.load.ObjectLoader;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
@@ -354,17 +352,10 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
             final ObjectSpecification specification,
             final String localPropertyId) {
 
-        final Stream<ObjectAssociation> associations = specification.streamDeclaredAssociations(MixedIn.INCLUDED);
-
-        return associations
-                .filter(association->
-                            Objects.equals(association.getId(), localPropertyId) &&
-                            association instanceof OneToOneAssociation
-                        )
-                .findAny()
-                .map(association->(OneToOneAssociation) association)
+        return specification.getAssociation(localPropertyId)
+                .filter(ObjectAssociation::isOneToOneAssociation)
+                .map(OneToOneAssociation.class::cast)
                 .orElse(null);
-
     }
 
     private Can<ManagedObject> argAdaptersFor(final ActionDto actionDto) {

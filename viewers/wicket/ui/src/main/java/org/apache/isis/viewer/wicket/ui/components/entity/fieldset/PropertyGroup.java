@@ -174,7 +174,7 @@ public class PropertyGroup extends PanelAbstract<EntityModel> implements HasDyna
                 .filter(propertyLayoutData -> propertyLayoutData.getMetadataError() == null)
                 .map(propertyLayoutData -> 
                     adapter.getSpecification()
-                    .getDeclaredAssociation(propertyLayoutData.getId())
+                    .getAssociation(propertyLayoutData.getId())
                     .orElse(null)
                 )
                 .filter(_NullSafe::isPresent)

@@ -32,7 +32,6 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Cell;
@@ -156,7 +155,7 @@ class ExcelConverter {
 
         final List<ManagedObject> adapters = domainObjects.stream().map(objectManager::adapt).collect(Collectors.toList());
 
-        final List<ObjectAssociation> propertyList = objectSpec.streamDeclaredAssociations(MixedIn.INCLUDED)
+        final List<ObjectAssociation> propertyList = objectSpec.streamAssociations(MixedIn.INCLUDED)
                                                         .filter(VISIBLE_PROPERTIES)
                                                         .collect(Collectors.toList());
 
@@ -248,7 +247,7 @@ class ExcelConverter {
 
         final ObjectSpecification objectSpec = specificationLoader.loadSpecification(factory.getCls());
 
-        final List<ObjectAssociation> propertyList = objectSpec.streamDeclaredAssociations(MixedIn.INCLUDED)
+        final List<ObjectAssociation> propertyList = objectSpec.streamAssociations(MixedIn.INCLUDED)
                 .filter(VISIBLE_PROPERTIES)
                 .collect(Collectors.toList());
 
@@ -543,15 +542,15 @@ class ExcelConverter {
         throw new IllegalArgumentException(String.format("Could not locate sheet named any of: '%s'", sheetNames));
     }
 
-    private static OneToOneAssociation getAssociation(final ObjectSpecification objectSpec, final String propertyNameOrId) {
-        final Stream<ObjectAssociation> associations = objectSpec.streamDeclaredAssociations(MixedIn.INCLUDED);
-        return associations
-                .filter(OneToOneAssociation.class::isInstance)
-                .map(OneToOneAssociation.class::cast)
-                .filter(association -> propertyNameOrId.equalsIgnoreCase(association.getName())
-                                    || propertyNameOrId.equalsIgnoreCase(association.getId()))
-                .findFirst()
-                .orElse(null);
+    private static OneToOneAssociation getAssociation(
+            final ObjectSpecification objectSpec, 
+            final String propertyNameOrId) {
+        
+        return objectSpec.streamProperties(MixedIn.INCLUDED)
+        .filter(association -> propertyNameOrId.equalsIgnoreCase(association.getName())
+                            || propertyNameOrId.equalsIgnoreCase(association.getId()))
+        .findFirst()
+        .orElse(null);
     }
 
     @ToString(of = {"name", "type", "currentValue"})

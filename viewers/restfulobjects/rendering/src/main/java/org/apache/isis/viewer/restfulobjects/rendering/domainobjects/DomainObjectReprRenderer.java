@@ -290,7 +290,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
         final JsonRepresentation appendTo =
                 mode.isUpdatePropertiesLinkArgs() ? representation : JsonRepresentation.newMap();
         final List<ObjectAssociation> associations = objectAdapter.getSpecification()
-                .streamDeclaredAssociations(MixedIn.INCLUDED)
+                .streamAssociations(MixedIn.INCLUDED)
                 .collect(Collectors.toList());
 
         addProperties(objectAdapter, appendTo, associations);

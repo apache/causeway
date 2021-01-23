@@ -38,7 +38,6 @@ import org.apache.isis.applib.services.grid.GridSystemService;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.services.message.MessageService;
-import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.core.config.environment.IsisSystemEnvironment;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -79,7 +78,6 @@ import org.apache.isis.core.metamodel.facets.properties.propertylayout.Unchangin
 import org.apache.isis.core.metamodel.layout.LayoutFacetUtil.MetamodelToGridOverridingVisitor;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
@@ -325,19 +323,11 @@ implements GridSystemService<G> {
     }
 
     protected static Stream<OneToOneAssociation> getOneToOneAssociations(final ObjectSpecification objectSpec) {
-        @SuppressWarnings("rawtypes")
-        Stream associations = objectSpec
-        .streamDeclaredAssociations(MixedIn.INCLUDED)
-        .filter(ObjectAssociation.Predicates.PROPERTIES);
-        return _Casts.uncheckedCast(associations);
+        return objectSpec.streamProperties(MixedIn.INCLUDED);
     }
 
     protected static Stream<OneToManyAssociation> getOneToManyAssociations(final ObjectSpecification objectSpec) {
-        @SuppressWarnings("rawtypes")
-        Stream associations = objectSpec
-        .streamDeclaredAssociations(MixedIn.INCLUDED)
-        .filter(ObjectAssociation.Predicates.COLLECTIONS);
-        return _Casts.uncheckedCast(associations);
+        return objectSpec.streamCollections(MixedIn.INCLUDED);
     }
 
 

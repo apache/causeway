@@ -130,12 +130,10 @@ public final class Util {
             final ObjectSpecification objectSpecification,
             final Predicate<ObjectAssociation> associationPredicate, final SwaggerService.Visibility visibility) {
 
-        final List<ObjectAssociation> list =
-                objectSpecification.streamDeclaredAssociations(MixedIn.INCLUDED)
+        return objectSpecification.streamAssociations(MixedIn.INCLUDED)
                 .filter(associationPredicate.and(associationsWith(visibility)))
+                .map(x->_Casts.<T>uncheckedCast(x))
                 .collect(Collectors.toList());
-
-        return _Casts.uncheckedCast(list);
     }
 
     static List<ObjectAction> actionsOf(

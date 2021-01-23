@@ -18,8 +18,7 @@
  */
 package org.apache.isis.viewer.restfulobjects.viewer.resources;
 
-import java.util.stream.Stream;
-
+import org.apache.isis.commons.internal.base._Refs;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -29,6 +28,8 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.viewer.context.ResourceContext;
+
+import lombok.val;
 
 /**
  * Utility class that encapsulates the logic for updating an
@@ -62,17 +63,16 @@ public class ObjectAdapterUpdateHelper {
             final JsonRepresentation propertiesMap,
             final Intent intent) {
 
-        final ObjectSpecification objectSpec = objectAdapter.getSpecification();
-        final Stream<ObjectAssociation> properties = objectSpec.streamDeclaredAssociations(MixedIn.EXCLUDED)
-                .filter(ObjectAssociation.Predicates.PROPERTIES);
-
-        final boolean[] allOk = {true}; // simply a non-thread-safe value reference
-
-        properties.forEach(association->{
-            allOk[0] &= copyOverProperty(association, propertiesMap, intent);
+        val allOk = _Refs.booleanRef(true); // simply a non-thread-safe boolean reference
+        
+        objectAdapter.getSpecification().streamAssociations(MixedIn.EXCLUDED)
+        .filter(ObjectAssociation.Predicates.PROPERTIES) // properties only
+        .forEach(association->{
+            
+            allOk.update(ok->ok &= copyOverProperty(association, propertiesMap, intent));
         });
 
-        return allOk[0];
+        return allOk.isTrue();
     }
 
     private boolean copyOverProperty(

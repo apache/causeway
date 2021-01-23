@@ -595,7 +595,7 @@ public interface ObjectAction extends ObjectMember {
 
             final Set<String> associationNamesAndIds = _Sets.newHashSet(); 
 
-            adapterSpec.streamDeclaredAssociations(MixedIn.INCLUDED)
+            adapterSpec.streamAssociations(MixedIn.INCLUDED)
             .forEach(ass->{
                 associationNamesAndIds.add(_Strings.lower(ass.getName()));
                 associationNamesAndIds.add(_Strings.lower(ass.getId()));

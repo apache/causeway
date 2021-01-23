@@ -19,7 +19,6 @@
 package org.apache.isis.persistence.jdo.metamodel.facets.prop.column;
 
 import java.math.BigDecimal;
-import java.util.stream.Stream;
 
 import javax.jdo.annotations.Column;
 import javax.jdo.annotations.IdentityType;
@@ -124,10 +123,7 @@ implements MetaModelRefiner {
                     return;
                 }
 
-                final Stream<ObjectAssociation> associations = objectSpec.streamDeclaredAssociations(MixedIn.EXCLUDED)
-                        .filter(ObjectAssociation.Predicates.PROPERTIES);
-
-                associations
+                objectSpec.streamProperties(MixedIn.EXCLUDED)
                 // skip checks if annotated with JDO @NotPersistent
                 .filter(association->!association.containsNonFallbackFacet(JdoNotPersistentFacet.class))
                 .forEach(association->{

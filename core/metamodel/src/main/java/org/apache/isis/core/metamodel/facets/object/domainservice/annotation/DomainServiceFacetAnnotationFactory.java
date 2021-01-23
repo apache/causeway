@@ -20,7 +20,6 @@ package org.apache.isis.core.metamodel.facets.object.domainservice.annotation;
 
 
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
@@ -92,9 +91,8 @@ implements MetaModelRefiner {
                         return;
                     }
 
-                    final Stream<ObjectAssociation> associations = thisSpec.streamDeclaredAssociations(MixedIn.EXCLUDED);
-
-                    final String associationNames = associations
+                    final String associationNames = thisSpec
+                            .streamAssociations(MixedIn.EXCLUDED)
                             .map(ObjectAssociation::getName)
                             // it's okay to have an "association" called "Id" (corresponding to getId() method)
                             .filter(associationName->!"Id".equalsIgnoreCase(associationName))

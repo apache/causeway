@@ -165,7 +165,7 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
             throw RestfulObjectsApplicationException.create(HttpStatusCode.NOT_FOUND);
         }
 
-        val objectMember = parentSpec.getDeclaredAssociation(propertyId)
+        val objectMember = parentSpec.getAssociation(propertyId)
                 .orElseThrow(()->RestfulObjectsApplicationException.create(HttpStatusCode.NOT_FOUND));
         
         if (objectMember.isOneToManyAssociation()) {
@@ -193,7 +193,7 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
             throw RestfulObjectsApplicationException.create(HttpStatusCode.NOT_FOUND);
         }
 
-        val objectMember = parentSpec.getDeclaredAssociation(collectionId)
+        val objectMember = parentSpec.getAssociation(collectionId)
                 .orElseThrow(()->RestfulObjectsApplicationException.create(HttpStatusCode.NOT_FOUND));
         
         if (objectMember.isOneToOneAssociation()) {

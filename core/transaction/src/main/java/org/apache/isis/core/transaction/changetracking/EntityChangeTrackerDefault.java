@@ -68,8 +68,6 @@ import org.apache.isis.core.metamodel.facets.object.publish.entitychange.EntityC
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects.EntityUtil;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.transaction.changetracking.events.IsisTransactionPlaceholder;
 import org.apache.isis.core.transaction.events.TransactionBeforeCompletionEvent;
 
@@ -267,10 +265,7 @@ implements
 
         log.debug("enlist entity's property changes for auditing {}", entity);
 
-        entity.getSpecification()
-        .streamDeclaredAssociations(MixedIn.EXCLUDED)
-        .filter(ObjectAssociation.Predicates.PROPERTIES)
-        .map(OneToOneAssociation.class::cast)
+        entity.getSpecification().streamProperties(MixedIn.EXCLUDED)
         .filter(property->!property.isNotPersisted())
         .map(property->AdapterAndProperty.of(entity, property))
         .filter(aap->!enlistedEntityPropertiesForAuditing.containsKey(aap)) // already enlisted, so ignore
