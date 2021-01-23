@@ -90,7 +90,7 @@ implements
         return Stream.concat(
                 streamDeclaredActions(contributed), 
                 superclass().streamActions(contributed))
-                .filter(association->ids.add(association.getId())); // ensure we don't emit duplicates
+                .filter(action->ids.add(action.getId())); // ensure we don't emit duplicates
     }
     
     // -- ASSOCIATIONS
