@@ -177,6 +177,35 @@ class DomainModelTest_usingGoodDomain {
         assertEquals(properMemberInheritance.iconName(), titleService.iconNameOf(properMemberInheritance));
     }
     
+    @Test
+    void metamodelContributingMembers_shouldBeInheritable() {
+        
+        val holderSpec1 = specificationLoader.loadSpecification(ProperMemberInheritance.class, 
+                        IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
+        
+        //TODO we need to synthesize any inherited members on the subclass instead 
+        val holderSpec = holderSpec1.superclass();
+        
+        val super_action = holderSpec.getObjectActionElseFail("sampleAction");
+        assertNotNull(super_action);
+        assertEquals("sampleAction", super_action.getId());
+        assertEquals("foo", super_action.getName());
+        assertEquals("bar", super_action.getDescription());
+        
+        val super_property = holderSpec.getAssociationElseFail("sampleProperty");
+        assertNotNull(super_property);
+        assertEquals("sampleProperty", super_property.getId());
+        assertEquals("foo", super_property.getName());
+        assertEquals("bar", super_property.getDescription());
+        
+        val super_collection = holderSpec.getAssociationElseFail("sampleCollection");
+        assertNotNull(super_collection);
+        assertEquals("sampleCollection", super_collection.getId());
+        assertEquals("foo", super_collection.getName());
+        assertEquals("bar", super_collection.getDescription());
+        
+    }
+    
     
     // -- HELPER
     

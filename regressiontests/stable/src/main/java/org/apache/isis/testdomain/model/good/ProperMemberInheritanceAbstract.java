@@ -18,6 +18,18 @@
  */
 package org.apache.isis.testdomain.model.good;
 
+import java.util.List;
+
+import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.Collection;
+import org.apache.isis.applib.annotation.CollectionLayout;
+import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.PropertyLayout;
+
+import lombok.Getter;
+import lombok.Setter;
+
 abstract class ProperMemberInheritanceAbstract {
     
     public String title() {
@@ -27,5 +39,20 @@ abstract class ProperMemberInheritanceAbstract {
     public String iconName() {
         return "inherited icon";
     }
+    
+    @Action
+    @ActionLayout(named = "foo", describedAs = "bar")
+    public void sampleAction() {
+    }
+    
+    @Property
+    @PropertyLayout(named = "foo", describedAs = "bar")
+    @Getter @Setter 
+    private String sampleProperty;
+    
+    @Collection
+    @CollectionLayout(named = "foo", describedAs = "bar")
+    @Getter @Setter 
+    private List<String> sampleCollection;
 
 }

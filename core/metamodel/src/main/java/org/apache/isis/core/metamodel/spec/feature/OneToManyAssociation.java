@@ -19,11 +19,6 @@
 
 package org.apache.isis.core.metamodel.spec.feature;
 
-import org.apache.isis.core.metamodel.consent.Consent;
-import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
-
 public interface OneToManyAssociation extends ObjectAssociation, OneToManyFeature {
-
 
 }

@@ -82,11 +82,11 @@ public interface ObjectActionContainer {
      * Returns an array of actions of the specified type, including or excluding
      * contributed actions as required.
      */
-    Stream<ObjectAction> streamObjectActions(ActionType type, MixedIn contributee);
+    Stream<ObjectAction> streamObjectActions(ActionType type, MixedIn contributed);
 
-    default Stream<ObjectAction> streamObjectActions(ImmutableEnumSet<ActionType> types, MixedIn contributee) {
+    default Stream<ObjectAction> streamObjectActions(ImmutableEnumSet<ActionType> types, MixedIn contributed) {
         return stream(types)
-                .flatMap(type->streamObjectActions(type, contributee));
+                .flatMap(type->streamObjectActions(type, contributed));
     }
 
 

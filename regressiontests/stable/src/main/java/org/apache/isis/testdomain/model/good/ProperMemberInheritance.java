@@ -24,4 +24,5 @@ import org.apache.isis.applib.annotation.Nature;
 @DomainObject(nature = Nature.VIEW_MODEL)
 public class ProperMemberInheritance extends ProperMemberInheritanceAbstract {
 
+    
 }
