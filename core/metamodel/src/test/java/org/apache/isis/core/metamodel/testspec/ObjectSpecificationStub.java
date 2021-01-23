@@ -357,5 +357,11 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
         // poorly implemented, inheritance not supported
         return getObjectAction(id, type);
     }
+    
+    @Override
+    public Optional<ObjectAssociation> findAssociation(String id) {
+        // poorly implemented, inheritance not supported
+        return getAssociation(id);
+    }
 
 }

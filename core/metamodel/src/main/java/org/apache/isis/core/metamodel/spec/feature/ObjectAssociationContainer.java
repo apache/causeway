@@ -26,6 +26,24 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.spec.ObjectSpecificationException;
 
 public interface ObjectAssociationContainer {
+    
+    // -- ASSOCIATION LOOKUP, PROPERTIES/COLLECTIONS (INHERITENCE CONSIDERED)
+    
+    /**
+     * Same as {@link #getAssociation(String)}, but also considering any inherited object members. 
+     * @param id
+     * 
+     * @implSpec If not found on the current 'type' search for the 'nearest' match in super-types, 
+     * and if nothing found there, search the interfaces.  
+     */
+    Optional<ObjectAssociation> findAssociation(String id);
+    
+    default ObjectAssociation findAssociationElseFail(String id) {
+        return findAssociation(id)
+                .orElseThrow(()->_Exceptions.noSuchElement("id=%s", id));
+    }
+
+    // -- ASSOCIATION LOOKUP, DECLARED PROPERTIES/COLLECTIONS (NO INHERITENCE CONSIDERED)
 
     /**
      * Get the field object representing the field with the specified field

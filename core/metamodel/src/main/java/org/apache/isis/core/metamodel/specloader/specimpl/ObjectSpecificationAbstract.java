@@ -711,6 +711,30 @@ implements ObjectSpecification {
         return Optional.empty();
     }
 
+    @Override
+    public Optional<ObjectAssociation> findAssociation(String id) {
+
+        if(isTypeHierarchyRoot()) {
+            return Optional.empty(); // stop search as we reached the Object class, which does not contribute actions 
+        }
+        
+        val declaredAction = getAssociation(id); // no inheritance nor type considered
+                
+        if(declaredAction.isPresent()) {
+            return declaredAction; 
+        }
+        
+        if(superclass()==null) {
+            // guard against unexpected reach of type hierarchy root
+            return Optional.empty();
+        }
+        
+        return superclass().findAssociation(id);
+        
+        //XXX future extensions should also search the interfaces, 
+        // but avoid doing redundant work when walking the type-hierarchy;
+        // (this elegant recursive solution will then need some tweaks to be efficient)
+    }
 
     /**
      * The association with the given {@link ObjectAssociation#getId() id}.

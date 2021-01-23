@@ -183,29 +183,25 @@ class DomainModelTest_usingGoodDomain {
         val holderSpec = specificationLoader.loadSpecification(ProperMemberInheritance.class, 
                         IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
         
-        //TODO we need to synthesize any inherited members on the subclass instead 
-        val holderSpec_super = holderSpec.superclass();
-        
         val super_action = holderSpec.findObjectActionElseFail("sampleAction");
         assertNotNull(super_action);
         assertEquals("sampleAction", super_action.getId());
         assertEquals("foo", super_action.getName());
         assertEquals("bar", super_action.getDescription());
         
-        val super_property = holderSpec_super.getAssociationElseFail("sampleProperty");
+        val super_property = holderSpec.findAssociationElseFail("sampleProperty");
         assertNotNull(super_property);
         assertEquals("sampleProperty", super_property.getId());
         assertEquals("foo", super_property.getName());
         assertEquals("bar", super_property.getDescription());
         
-        val super_collection = holderSpec_super.getAssociationElseFail("sampleCollection");
+        val super_collection = holderSpec.findAssociationElseFail("sampleCollection");
         assertNotNull(super_collection);
         assertEquals("sampleCollection", super_collection.getId());
         assertEquals("foo", super_collection.getName());
         assertEquals("bar", super_collection.getDescription());
         
     }
-    
     
     // -- HELPER
     
