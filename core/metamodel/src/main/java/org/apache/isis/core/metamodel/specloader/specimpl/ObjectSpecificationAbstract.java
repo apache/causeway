@@ -718,10 +718,10 @@ implements ObjectSpecification {
             return Optional.empty(); // stop search as we reached the Object class, which does not contribute actions 
         }
         
-        val declaredAction = getAssociation(id); // no inheritance nor type considered
+        val declaredAssociation = getAssociation(id); // no inheritance nor type considered
                 
-        if(declaredAction.isPresent()) {
-            return declaredAction; 
+        if(declaredAssociation.isPresent()) {
+            return declaredAssociation; 
         }
         
         if(superclass()==null) {
