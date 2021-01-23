@@ -24,6 +24,7 @@ import java.util.stream.Stream;
 import javax.annotation.Nullable;
 
 import org.apache.isis.commons.collections.ImmutableEnumSet;
+import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.Hierarchical;
@@ -38,6 +39,8 @@ import lombok.val;
 /**
  * Responsibility: member lookup and streaming with support for inheritance, 
  * based on access to declared members, super-classes and interfaces.
+ * <p>
+ * TODO performance: add memoization
  * <p>
  * TODO future extensions should also search the interfaces, 
  * but avoid doing redundant work when walking the type-hierarchy;
@@ -82,10 +85,12 @@ implements
             return Stream.empty(); // stop as we reached the Object class, which does not contribute actions 
         }
 
+        val ids = _Sets.<String>newHashSet();
+        
         return Stream.concat(
                 streamDeclaredActions(contributed), 
                 superclass().streamActions(contributed))
-                .distinct(); //FIXME equality by java object instance does not work here (will collect duplicates)
+                .filter(association->ids.add(association.getId())); // ensure we don't emit duplicates
     }
     
     // -- ASSOCIATIONS
@@ -113,10 +118,12 @@ implements
             return Stream.empty(); // stop as we reached the Object class, which does not contribute associations 
         }
 
+        val ids = _Sets.<String>newHashSet();
+        
         return Stream.concat(
                 streamDeclaredAssociations(contributed), 
                 superclass().streamAssociations(contributed))
-                .distinct(); //FIXME equality by java object instance does not work here (will collect duplicates)
+                .filter(association->ids.add(association.getId())); // ensure we don't emit duplicates
     }
     
 }

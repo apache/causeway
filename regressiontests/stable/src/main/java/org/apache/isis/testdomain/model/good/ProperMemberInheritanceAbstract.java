@@ -54,5 +54,22 @@ abstract class ProperMemberInheritanceAbstract {
     @CollectionLayout(named = "foo", describedAs = "bar")
     @Getter @Setter 
     private List<String> sampleCollection;
+    
+    // -- OVERRIDING TESTS
+    
+    @Action
+    @ActionLayout(named = "foo", describedAs = "bar")
+    public void sampleActionOverride() {
+    }
+    
+    @Action
+    @ActionLayout(named = "foo", describedAs = "bar")
+    public void sampleActionOverride(String x) {
+    }
+    
+    @Property
+    @PropertyLayout(named = "foo", describedAs = "bar")
+    @Getter @Setter 
+    private String samplePropertyOverride;
 
 }

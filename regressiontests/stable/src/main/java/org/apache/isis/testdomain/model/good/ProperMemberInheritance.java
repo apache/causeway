@@ -18,11 +18,28 @@
  */
 package org.apache.isis.testdomain.model.good;
 
+import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Nature;
+import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.PropertyLayout;
+
+import lombok.Getter;
+import lombok.Setter;
 
 @DomainObject(nature = Nature.VIEW_MODEL)
 public class ProperMemberInheritance extends ProperMemberInheritanceAbstract {
 
+    @Action
+    @ActionLayout(named = "foo", describedAs = "bar")
+    @Override
+    public void sampleActionOverride() {
+    }
+    
+    @Property
+    @PropertyLayout(named = "foo", describedAs = "bar")
+    @Getter @Setter 
+    private String samplePropertyOverride;
     
 }

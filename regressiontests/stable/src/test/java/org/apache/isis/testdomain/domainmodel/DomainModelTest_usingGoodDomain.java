@@ -38,6 +38,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacet;
 import org.apache.isis.core.metamodel.facets.object.icon.IconFacet;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
+import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.specimpl.IntrospectionState;
 import org.apache.isis.schema.metamodel.v2.DomainClassDto;
@@ -200,6 +201,42 @@ class DomainModelTest_usingGoodDomain {
         assertEquals("sampleCollection", super_collection.getId());
         assertEquals("foo", super_collection.getName());
         assertEquals("bar", super_collection.getDescription());
+        
+    }
+    
+    @Test
+    void metamodelContributingActions_shouldBeUnique_whenOverridden() {
+        
+        val holderSpec = specificationLoader.loadSpecification(ProperMemberInheritance.class, 
+                IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
+        
+        val super_action = holderSpec.getActionElseFail("sampleActionOverride");
+        assertNotNull(super_action);
+        assertEquals("sampleActionOverride", super_action.getId());
+        assertEquals("foo", super_action.getName());
+        assertEquals("bar", super_action.getDescription());
+        
+        assertEquals(1L, holderSpec.streamActions(MixedIn.EXCLUDED)
+                .filter(prop->prop.getId().equals("sampleActionOverride"))
+                .count());
+        
+    }
+    
+    @Test
+    void metamodelContributingProperties_shouldBeUnique_whenOverridden() {
+        
+        val holderSpec = specificationLoader.loadSpecification(ProperMemberInheritance.class, 
+                        IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
+        
+        val super_property = holderSpec.getAssociationElseFail("samplePropertyOverride");
+        assertNotNull(super_property);
+        assertEquals("samplePropertyOverride", super_property.getId());
+        assertEquals("foo", super_property.getName());
+        assertEquals("bar", super_property.getDescription());
+        
+        assertEquals(1L, holderSpec.streamProperties(MixedIn.EXCLUDED)
+                .filter(prop->prop.getId().equals("samplePropertyOverride"))
+                .count());
         
     }
     

@@ -95,7 +95,6 @@ public interface ObjectAssociationContainer {
      * To get the statically visible fields (where any invisible and
      * unauthorized fields have been removed) use
      * <tt>ObjectAssociationFilters#staticallyVisible(...)</tt>
-     * TODO make sure callers don't instead want the recursive variant
      */
     Stream<ObjectAssociation> streamDeclaredAssociations(MixedIn contributed);
 
