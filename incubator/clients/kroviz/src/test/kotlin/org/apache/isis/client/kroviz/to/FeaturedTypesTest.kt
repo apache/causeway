@@ -19,8 +19,8 @@
 package org.apache.isis.client.kroviz.to
 
 import org.apache.isis.client.kroviz.handler.TObjectHandler
-import org.apache.isis.client.kroviz.snapshots.demo2_0_0.DEMO_PRIMITIVES
-import org.apache.isis.client.kroviz.snapshots.demo2_0_0.DEMO_TEMPORALS
+import org.apache.isis.client.kroviz.snapshots.demo2_0_0.PRIMITIVES
+import org.apache.isis.client.kroviz.snapshots.demo2_0_0.TEMPORALS
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -29,7 +29,7 @@ class FeaturedTypesTest {
     @Test
     fun testTemporals() {
         //given
-        val jsonStr = DEMO_TEMPORALS.str
+        val jsonStr = TEMPORALS.str
         // when
         val tObject = TObjectHandler().parse(jsonStr) as TObject
         val properties = tObject.getProperties()
@@ -54,7 +54,7 @@ class FeaturedTypesTest {
     @Test
     fun testPrimitives() {
         //given
-        val jsonStr = DEMO_PRIMITIVES.str
+        val jsonStr = PRIMITIVES.str
         // when
         val tObject = TObjectHandler().parse(jsonStr) as TObject
         val properties = tObject.getProperties()

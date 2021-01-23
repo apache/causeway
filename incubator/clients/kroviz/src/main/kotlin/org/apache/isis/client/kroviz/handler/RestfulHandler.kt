@@ -30,7 +30,6 @@ class RestfulHandler : BaseHandler() {
         update()
     }
 
-    
     override fun parse(response: String): TransferObject {
         return Json.decodeFromString(Restful.serializer(), response)
     }

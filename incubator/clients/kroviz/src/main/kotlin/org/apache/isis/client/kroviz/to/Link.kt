@@ -69,20 +69,21 @@ data class Link(val rel: String = "",
     }
 
     fun relation(): Relation {
-        val roPrefix = "urn:org.apache.isis.restfulobjects:rels/"
+        val roPrefix = "urn:org.restfulobjects:rels/"
+        val isisPrefix = "urn:org.apache.isis.restfulobjects:rels/"
         var raw = rel.replace(roPrefix, "")
-        val isisPrefix = "urn:org.restfulobjects:rels/"
         raw = raw.replace(isisPrefix, "")
         if (raw.contains(";")) {
             raw = raw.split(";").first()  //TODO handle args=value separated by ;
         }
-        console.log(raw)
         return Relation.find(raw)!!
     }
 
     fun representation(): Represention {
-        val prefix = "application/json;profile=\"urn:org.restfulobjects:repr-types/"
-        var raw = type.replace(prefix, "")
+        val roPrefix = "application/json;profile=\"urn:org.restfulobjects:repr-types/"
+        val isisPrefix = "application/jsonprofile=\"urn:org.restfulobjects:repr-types/"
+        var raw = type.replace(roPrefix, "")
+        raw = raw.replace(isisPrefix, "")
         raw = raw.replace("\"", "")
         return Represention.find(raw)!!
     }
@@ -96,6 +97,7 @@ data class Link(val rel: String = "",
  */
 enum class Relation(val type: String) {
     ACTION("action"),
+    CLEAR("clear"),
     DESCRIBED_BY("describedby"), //ISIS. IANA:"describedBy"
     DETAILS("details"),
     DOMAIN_TYPE("domain-type"),
@@ -104,6 +106,7 @@ enum class Relation(val type: String) {
     HELP("help"),               //IANA
     ICON("icon"),               //IANA
     INVOKE("invoke"),
+    LAYOUT("layout"),
     LOGOUT("logout"),
     MENU_BARS("menuBars"),
     MODIFY("modify"),
@@ -139,6 +142,9 @@ enum class Represention(val type: String) {
     DOMAIN_TYPE("domain-type"),
     ERROR("error"),
     HOMEPAGE("homepage"),
+    IMAGE_PNG("image/png"),
+    LAYOUT_MENUBARS("layout-menubars"),
+    LAYOUT_BS3("layout-bs3"),
     LIST("list"),
     OBJECT("object"),
     OBJECT_ACTION("object-action"),

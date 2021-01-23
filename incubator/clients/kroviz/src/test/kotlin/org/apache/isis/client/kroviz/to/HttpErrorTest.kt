@@ -19,7 +19,7 @@
 package org.apache.isis.client.kroviz.to
 
 import org.apache.isis.client.kroviz.handler.HttpErrorHandler
-import org.apache.isis.client.kroviz.snapshots.demo2_0_0.DEMO_HTTP_ERROR_500
+import org.apache.isis.client.kroviz.snapshots.demo2_0_0.HTTP_ERROR_500
 import org.apache.isis.client.kroviz.snapshots.demo2_0_0.HTTP_ERROR_405
 import org.apache.isis.client.kroviz.snapshots.simpleapp1_16_0.HTTP_ERROR
 import org.apache.isis.client.kroviz.snapshots.simpleapp1_16_0.HTTP_ERROR_500_UNIQUE_CONSTRAINT_VIOLATION
@@ -32,7 +32,7 @@ class HttpErrorTest {
 
     @Test
     fun testDemo500() {
-        val jsonStr = DEMO_HTTP_ERROR_500.str
+        val jsonStr = HTTP_ERROR_500.str
         val error = HttpErrorHandler().parse(jsonStr) as HttpError
         val code = error.httpStatusCode
         assertEquals(500, code)

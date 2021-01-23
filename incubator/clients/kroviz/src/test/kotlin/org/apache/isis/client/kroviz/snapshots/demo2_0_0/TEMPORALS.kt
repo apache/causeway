@@ -20,7 +20,7 @@ package org.apache.isis.client.kroviz.snapshots.demo2_0_0
 
 import org.apache.isis.client.kroviz.snapshots.Response
 
-object DEMO_TEMPORALS: Response(){
+object TEMPORALS: Response(){
     override val url = "http://localhost:8080/restful/objects/demo.FeaturedTypesMenu/1/actions/temporals/invoke"
     override val str = """{
   "links": [

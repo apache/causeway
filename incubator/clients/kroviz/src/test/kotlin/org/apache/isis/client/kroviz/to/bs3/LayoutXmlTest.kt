@@ -19,7 +19,7 @@
 package org.apache.isis.client.kroviz.to.bs3
 
 import org.apache.isis.client.kroviz.handler.LayoutXmlHandler
-import org.apache.isis.client.kroviz.snapshots.demo2_0_0.DEMO_TAB_LAYOUT_XML
+import org.apache.isis.client.kroviz.snapshots.demo2_0_0.TAB_LAYOUT_XML
 import org.apache.isis.client.kroviz.snapshots.simpleapp1_16_0.SO_LAYOUT_XML
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -29,7 +29,7 @@ class LayoutXmlTest {
    @Test
     fun testDemoTabGrid() {
         //given
-        val xmlStr = DEMO_TAB_LAYOUT_XML.str
+        val xmlStr = TAB_LAYOUT_XML.str
         //when
         val grid = LayoutXmlHandler().parse(xmlStr) as Grid
         // then

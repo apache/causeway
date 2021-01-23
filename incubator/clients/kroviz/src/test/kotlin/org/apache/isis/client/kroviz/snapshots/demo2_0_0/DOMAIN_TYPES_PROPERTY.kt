@@ -20,7 +20,7 @@ package org.apache.isis.client.kroviz.snapshots.demo2_0_0
 
 import org.apache.isis.client.kroviz.snapshots.Response
 
-object DEMO_DOMAIN_TYPES_PROPERTY : Response(){
+object DOMAIN_TYPES_PROPERTY : Response(){
     override val url = "http://localhost:8080/restful/domain-types/demo.JavaTimeOffsetTimeJdo/properties/readOnlyPropertyDerivedRenderDayNotSpecified"
     override val str = """{
   "id" : "readOnlyPropertyDerivedRenderDayNotSpecified",

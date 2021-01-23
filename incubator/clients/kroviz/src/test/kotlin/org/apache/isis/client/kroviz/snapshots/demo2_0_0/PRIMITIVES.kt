@@ -20,7 +20,7 @@ package org.apache.isis.client.kroviz.snapshots.demo2_0_0
 
 import org.apache.isis.client.kroviz.snapshots.Response
 
-object DEMO_PRIMITIVES : Response(){
+object PRIMITIVES : Response(){
     override val url = "http://localhost:8080/restful/objects/demo.FeaturedTypesMenu/1/actions/primitives/invoke"
     override val str = """{
     "links": [

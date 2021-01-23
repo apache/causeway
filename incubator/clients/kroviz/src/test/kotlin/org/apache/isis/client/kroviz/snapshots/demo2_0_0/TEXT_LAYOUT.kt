@@ -20,7 +20,7 @@ package org.apache.isis.client.kroviz.snapshots.demo2_0_0
 
 import org.apache.isis.client.kroviz.snapshots.Response
 
-object DEMO_TEXT_LAYOUT : Response(){
+object TEXT_LAYOUT : Response(){
     override val url = "http://localhost:8080/restful/objects/demo.Text/AR-LCAAAAAAAAACFkLEOgkAMhneeorlJB0Xj4nBASIybi9EHOKExF3s9wx0Kby8ERKIkdvrTv_36pzKpDMEDC6ctR2K9XAlAzmyu-RqJ82m_2ApwXnGuyDJGokYnkjiQOzQ2DqAp6XzRTMcKOgGzjHR2A4NzGfbeePBQktekGeMUzFv3u4G7K-ZWbKBtu-UE7QMYY4-ocstUNzmKXg6BLqUHRWSfDjxWHhwSZn4ADquTMQc3_QZPpf1z6pcayLD75QsMtJyWiwEAAA==/object-layout"
     override val str = """{
     "row": [

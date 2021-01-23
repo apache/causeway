@@ -19,9 +19,9 @@
 package org.apache.isis.client.kroviz.to
 
 import org.apache.isis.client.kroviz.handler.PropertyHandler
-import org.apache.isis.client.kroviz.snapshots.demo2_0_0.DEMO_DOMAIN_TYPES_PROPERTY
-import org.apache.isis.client.kroviz.snapshots.demo2_0_0.DEMO_PROPERTY
-import org.apache.isis.client.kroviz.snapshots.demo2_0_0.DEMO_PROPERTY_DESCRIPTION
+import org.apache.isis.client.kroviz.snapshots.demo2_0_0.DOMAIN_TYPES_PROPERTY
+import org.apache.isis.client.kroviz.snapshots.demo2_0_0.PROPERTY
+import org.apache.isis.client.kroviz.snapshots.demo2_0_0.PROPERTY_DESCRIPTION
 import org.apache.isis.client.kroviz.snapshots.simpleapp1_16_0.FR_OBJECT_PROPERTY_
 import org.apache.isis.client.kroviz.snapshots.simpleapp1_16_0.SO_PROPERTY
 import kotlin.test.Test
@@ -32,7 +32,7 @@ class PropertyTest {
 
     @Test
     fun testDemoPropertyDescription() {
-        val jsonStr = DEMO_PROPERTY_DESCRIPTION.str
+        val jsonStr = PROPERTY_DESCRIPTION.str
         val p = PropertyHandler().parse(jsonStr) as Property
         assertEquals("parity", p.id)
         assertEquals("The parity of this 'DemoItem'.", p.extensions!!.description)
@@ -40,7 +40,7 @@ class PropertyTest {
 
     @Test
     fun testDemoObjectProperty() {
-        val jsonStr = DEMO_PROPERTY.str
+        val jsonStr = PROPERTY.str
         val p = PropertyHandler().parse(jsonStr) as Property
         assertEquals("string", p.id)
         assertEquals("string", p.extensions!!.xIsisFormat)
@@ -81,7 +81,7 @@ class PropertyTest {
 
     @Test
     fun testDemoDomainProperty() {
-        val jsonStr = DEMO_DOMAIN_TYPES_PROPERTY.str
+        val jsonStr = DOMAIN_TYPES_PROPERTY.str
         val p = PropertyHandler().parse(jsonStr) as Property
         val e: Extensions = p.extensions!!
         val actual = e.friendlyName

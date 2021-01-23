@@ -20,7 +20,7 @@ package org.apache.isis.client.kroviz.snapshots.demo2_0_0
 
 import org.apache.isis.client.kroviz.snapshots.Response
 
-object DEMO_TUPLE_OBJECT_LAYOUT : Response() {
+object TUPLE_OBJECT_LAYOUT : Response() {
     override val url = "http://localhost:8080/restful/objects/demo.TupleDemo/AKztAAVzcgARamF2YS51dGlsLkhhc2hNYXAFB9rBwxZg0QMAAkYACmxvYWRGYWN0b3JJAAl0aHJlc2hvbGR4cD9AAAAAAAAAdwgAAAAQAAAAAHg=/object-layout"
     override val str = """{
   "row": [

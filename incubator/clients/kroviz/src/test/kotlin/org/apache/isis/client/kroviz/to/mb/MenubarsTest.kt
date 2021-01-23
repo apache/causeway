@@ -19,7 +19,7 @@
 package org.apache.isis.client.kroviz.to.mb
 
 import org.apache.isis.client.kroviz.handler.MenuBarsHandler
-import org.apache.isis.client.kroviz.snapshots.demo2_0_0.DEMO_MENUBARS
+import org.apache.isis.client.kroviz.snapshots.demo2_0_0.MENUBARS
 import org.apache.isis.client.kroviz.snapshots.simpleapp1_16_0.RESTFUL_MENUBARS
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -30,7 +30,7 @@ class MenubarsTest {
     @Test
     fun testDemoMenubars() {
         //given
-        val jsonStr = DEMO_MENUBARS.str
+        val jsonStr = MENUBARS.str
         //when
         val menuBars = MenuBarsHandler().parse(jsonStr) as Menubars
 

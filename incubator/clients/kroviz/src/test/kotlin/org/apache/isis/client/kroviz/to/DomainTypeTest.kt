@@ -19,7 +19,7 @@
 package org.apache.isis.client.kroviz.to
 
 import kotlinx.serialization.json.Json
-import org.apache.isis.client.kroviz.snapshots.demo2_0_0.DEMO_FILE_NODE
+import org.apache.isis.client.kroviz.snapshots.demo2_0_0.FILE_NODE
 import org.apache.isis.client.kroviz.snapshots.simpleapp1_16_0.SO
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -51,7 +51,7 @@ class DomainTypeTest {
     @Test
     fun testParseFileNode() {
         // given
-        val jsonStr = DEMO_FILE_NODE.str
+        val jsonStr = FILE_NODE.str
         // when
         val domainType = Json.decodeFromString(DomainType.serializer(), jsonStr)
         // then

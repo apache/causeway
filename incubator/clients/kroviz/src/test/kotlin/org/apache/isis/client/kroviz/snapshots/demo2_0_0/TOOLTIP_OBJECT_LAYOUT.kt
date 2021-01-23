@@ -20,7 +20,7 @@ package org.apache.isis.client.kroviz.snapshots.demo2_0_0
 
 import org.apache.isis.client.kroviz.snapshots.Response
 
-object DEMO_TOOLTIP_OBJECT_LAYOUT : Response() {
+object TOOLTIP_OBJECT_LAYOUT : Response() {
     override val url = "http://localhost:8080/restful/objects/demo.Tooltip/AR-LCAAAAAAAAACdkDEOwjAMRXdOEWWHwMaQpkvFjAQcICQGIqU2SixEb0_UlKUSHfBkfb9nydbtu4_iBSkHwkbuNlspAB35gPdGXs6H9V6KzBa9jYTQyAGybM1Kd9CTWYlSOoH1hHE4cSrWMdETEg_mG2v1A6g2-MAl7UK21wh-xkxT4aexVst83ekoRnBcTqrBGKLtwdxCyqzV2FdWzeEFO4Mj9H_r_AhpwdaqPvUDOwJndpQBAAA=/object-layout"
     override val str = """{
   "row": [

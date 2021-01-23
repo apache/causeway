@@ -19,10 +19,12 @@
 package org.apache.isis.client.kroviz.to
 
 import kotlinx.serialization.json.Json
-import org.apache.isis.client.kroviz.handler.RestfulHandler
+import org.apache.isis.client.kroviz.handler.*
+import org.apache.isis.client.kroviz.snapshots.demo2_0_0.*
 import org.apache.isis.client.kroviz.snapshots.simpleapp1_16_0.RESTFUL
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 class LinkTest {
 
@@ -60,7 +62,7 @@ class LinkTest {
     @Test
     fun testFindRelation() {
         //given
-        var rel:Relation?
+        var rel: Relation?
         //when
         rel = Relation.find("menuBars")
         //then
@@ -77,19 +79,50 @@ class LinkTest {
         assertEquals(Relation.SERVICES, rel)
     }
 
+    val response2Handler = mapOf(
+            RESTFUL to RestfulHandler(),
+            ACTIONS_STRINGS to ActionHandler(),
+            ACTIONS_STRINGS_INVOKE to TObjectHandler(),
+            ACTIONS_TEXT_INVOKE to TObjectHandler(),
+            ASSOCIATED_ACTION_OBJECT_LAYOUT to LayoutHandler(),
+            COLLECTIONS_ENTITIES to CollectionHandler(),
+            DOMAIN_TYPES_PROPERTY to PropertyHandler(),
+            FILE_NODE to DomainTypeHandler(),
+            HTTP_ERROR_405 to HttpErrorHandler(),
+            HTTP_ERROR_500 to HttpErrorHandler(),
+            MENUBARS to MenuBarsHandler(),
+            OBJECT_LAYOUT to LayoutHandler(),
+            PRIMITIVES to TObjectHandler(),
+            PROPERTY to PropertyHandler(),
+            PROPERTY_DESCRIPTION to PropertyHandler(),
+            RESTFUL_DOMAIN_TYPES to DomainTypesHandler(),
+            TAB_OBJECT_LAYOUT to LayoutHandler(),
+            TAB_LAYOUT_XML to LayoutXmlHandler(),
+            TEMPORALS to TObjectHandler(),
+            TEXT_LAYOUT to LayoutHandler(),
+            TOOLTIP_OBJECT_LAYOUT to LayoutHandler(),
+            TUPLE_OBJECT_LAYOUT to LayoutHandler(),
+    )
+
     @Test
     fun testFindParsedLinkEnums() {
         //given
-        val jsonStr = RESTFUL.str
-        val ro = RestfulHandler().parse(jsonStr) as Restful
-        val links = ro.links
-        var rel:Relation?
         //when
-        links.forEach { it ->
-            it.relation()    //TODO
-//            it.representation()
+        response2Handler.forEach { rh ->
+            val jsonStr = rh.key.str
+            val ro = rh.value.parse(jsonStr)
+            if (ro is HasLinks) {
+                val links = ro.links
+                links.forEach { l ->
+                    console.log("[LT.testFindParsedLinkENums]")
+                    console.log(l)
+                    console.log(l.relation())
+                    console.log(l.representation())
+                }
+            }
         }
         //then
+        assertTrue(true, "no exception in loop")
     }
 
 }

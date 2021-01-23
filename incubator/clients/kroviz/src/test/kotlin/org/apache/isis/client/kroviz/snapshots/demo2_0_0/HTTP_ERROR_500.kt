@@ -20,7 +20,7 @@ package org.apache.isis.client.kroviz.snapshots.demo2_0_0
 
 import org.apache.isis.client.kroviz.snapshots.Response
 
-object DEMO_HTTP_ERROR_500 : Response() {
+object HTTP_ERROR_500 : Response() {
     val invoke = "\$invoke"
     val invokeOnTarget = "\$invokeOnTarget"
     val preprocess = "\$preprocess"

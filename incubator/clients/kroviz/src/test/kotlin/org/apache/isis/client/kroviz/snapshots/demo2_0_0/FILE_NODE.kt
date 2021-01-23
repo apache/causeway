@@ -20,7 +20,7 @@ package org.apache.isis.client.kroviz.snapshots.demo2_0_0
 
 import org.apache.isis.client.kroviz.snapshots.Response
 
-object DEMO_FILE_NODE : Response() {
+object FILE_NODE : Response() {
     override val url = "http://localhost:8080/restful/domain-types/demo.FileNode"
     override val str = """
 {
