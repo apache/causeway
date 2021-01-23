@@ -27,7 +27,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecificationException;
 
 public interface ObjectAssociationContainer {
     
-    // -- ASSOCIATION LOOKUP, PROPERTIES/COLLECTIONS (INHERITENCE CONSIDERED)
+    // -- ASSOCIATION LOOKUP, PROPERTIES/COLLECTIONS (INHERITANCE CONSIDERED)
     
     /**
      * Same as {@link #getDeclaredAssociation(String)}, but also considering any inherited object members.
@@ -43,7 +43,7 @@ public interface ObjectAssociationContainer {
                 .orElseThrow(()->_Exceptions.noSuchElement("id=%s", id));
     }
 
-    // -- ASSOCIATION LOOKUP, DECLARED PROPERTIES/COLLECTIONS (NO INHERITENCE CONSIDERED)
+    // -- ASSOCIATION LOOKUP, DECLARED PROPERTIES/COLLECTIONS (NO INHERITANCE CONSIDERED)
 
     /**
      * Get the field object representing the field with the specified field
@@ -54,7 +54,7 @@ public interface ObjectAssociationContainer {
      */
     Optional<ObjectAssociation> getDeclaredAssociation(String id);
     
-    // -- ASSOCIATION STREAMS (INHERITENCE CONSIDERED)
+    // -- ASSOCIATION STREAMS (INHERITANCE CONSIDERED)
 
     /**
      * Same as {@link #streamDeclaredAssociations(MixedIn)}, but also considering any inherited object members.
@@ -90,7 +90,7 @@ public interface ObjectAssociationContainer {
                 .map(OneToManyAssociation.class::cast);
     }
     
-    // -- ASSOCIATION STREAMS (INHERITENCE NOT CONSIDERED)
+    // -- ASSOCIATION STREAMS (INHERITANCE NOT CONSIDERED)
     
     /**
      * Return all the fields that exist in an object of this specification,

@@ -51,7 +51,6 @@ import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.consent.InteractionResult;
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.facets.all.help.HelpFacet;
@@ -94,7 +93,7 @@ import lombok.extern.log4j.Log4j2;
 @lombok.ToString(of = {"correspondingClass", "fullName", "beanSort"})
 @Log4j2 
 public abstract class ObjectSpecificationAbstract 
-extends FacetHolderImpl 
+extends ObjectMemberContainer
 implements ObjectSpecification {
 
 
@@ -677,12 +676,6 @@ implements ObjectSpecification {
     }
 
     // -- ASSOCIATIONS
-    
-    @Override
-    public Stream<ObjectAssociation> streamAssociations(MixedIn contributed) {
-        //FIXME poorly implemented, inheritance not supported
-        return streamDeclaredAssociations(contributed);
-    }
 
     @Override
     public Stream<ObjectAssociation> streamDeclaredAssociations(final MixedIn contributed) {
@@ -717,30 +710,7 @@ implements ObjectSpecification {
         return Optional.empty();
     }
 
-    @Override
-    public Optional<ObjectAssociation> getAssociation(String id) {
 
-        if(isTypeHierarchyRoot()) {
-            return Optional.empty(); // stop search as we reached the Object class, which does not contribute actions 
-        }
-        
-        val declaredAssociation = getDeclaredAssociation(id); // no inheritance considered
-                
-        if(declaredAssociation.isPresent()) {
-            return declaredAssociation; 
-        }
-        
-        if(superclass()==null) {
-            // guard against unexpected reach of type hierarchy root
-            return Optional.empty();
-        }
-        
-        return superclass().getAssociation(id);
-        
-        //XXX future extensions should also search the interfaces, 
-        // but avoid doing redundant work when walking the type-hierarchy;
-        // (this elegant recursive solution will then need some tweaks to be efficient)
-    }
 
     /**
      * The association with the given {@link ObjectAssociation#getId() id}.
@@ -753,13 +723,7 @@ implements ObjectSpecification {
                 .findFirst();
     }
     
-    @Override
-    public Stream<ObjectAction> streamActions(
-            final ImmutableEnumSet<ActionType> types, 
-            final MixedIn contributed) {
-        //FIXME poorly implemented, inheritance not supported
-        return streamDeclaredActions(contributed);
-    }
+
 
     @Override
     public Stream<ObjectAction> streamDeclaredActions(

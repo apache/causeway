@@ -31,7 +31,7 @@ import org.apache.isis.core.metamodel.spec.ActionType;
 
 public interface ObjectActionContainer {
 
-    // -- ACTION LOOKUP (INHERITENCE CONSIDERED)
+    // -- ACTION LOOKUP (INHERITANCE CONSIDERED)
     
     /**
      * Same as {@link #getDeclaredAction(String, ActionType)}, but also considering any inherited object members.
@@ -61,7 +61,7 @@ public interface ObjectActionContainer {
     }
     
     
-    // -- ACTION LOOKUP, DECLARED ACTIONS (NO INHERITENCE CONSIDERED)
+    // -- ACTION LOOKUP, DECLARED ACTIONS (NO INHERITANCE CONSIDERED)
     
     /**
      * Get the action object represented by the specified identity string.

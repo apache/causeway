@@ -26,8 +26,6 @@ import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.stream.Stream;
 
-import javax.annotation.Nullable;
-
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.metamodel.BeanSort;
 import org.apache.isis.commons.collections.ImmutableEnumSet;
@@ -268,38 +266,6 @@ implements FacetHolder {
     @Override
     public String getManagedBeanName() {
         return nameIfIsManagedBean;
-    }
-    
-    // -- findObjectAction
-    
-    @Override
-    public Optional<ObjectAction> getAction(String id, @Nullable ActionType type) {
-
-        if(isTypeHierarchyRoot()) {
-            return Optional.empty(); // stop search as we reached the Object class, which does not contribute actions 
-        }
-        
-        val declaredAction = getDeclaredAction(id); // no inheritance nor type considered
-                
-        if(declaredAction.isPresent()) {
-            // action found but if its not the right type, stop searching
-            if(type!=null
-                    && declaredAction.get().getType() != type) {
-                return Optional.empty();
-            }
-            return declaredAction; 
-        }
-        
-        if(superclass()==null) {
-            // guard against unexpected reach of type hierarchy root
-            return Optional.empty();
-        }
-        
-        return superclass().getAction(id, type);
-        
-        //XXX future extensions should also search the interfaces, 
-        // but avoid doing redundant work when walking the type-hierarchy;
-        // (this elegant recursive solution will then need some tweaks to be efficient)
     }
     
     // -- getObjectAction

@@ -61,5 +61,9 @@ public interface Hierarchical {
      * Get the specification for this specification's class's superclass.
      */
     ObjectSpecification superclass();
+    
+    default boolean isTypeHierarchyRoot() {
+        return superclass()==null;
+    }
 
 }

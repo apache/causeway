@@ -84,8 +84,13 @@ import lombok.val;
  * first, and then later work out its internals. Hence we create
  * {@link ObjectSpecification}s as we need them, and then introspect them later.
  */
-public interface ObjectSpecification extends Specification, ObjectActionContainer,
-        ObjectAssociationContainer, Hierarchical, DefaultProvider {
+public interface ObjectSpecification 
+extends 
+    Specification, 
+    ObjectActionContainer,
+    ObjectAssociationContainer, 
+    Hierarchical, 
+    DefaultProvider {
 
     final class Comparators{
         private Comparators(){}
@@ -539,10 +544,5 @@ public interface ObjectSpecification extends Specification, ObjectActionContaine
                 Serializable.class.isAssignableFrom(getCorrespondingClass())
                 || Externalizable.class.isAssignableFrom(getCorrespondingClass());
     }
-
-    default boolean isTypeHierarchyRoot() {
-        return getCorrespondingClass().getSuperclass()==null;
-    }
-    
 
 }
