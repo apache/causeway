@@ -137,13 +137,11 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
             return;
         }
 
-        final List<ObjectAssociation> properties = spec.streamDeclaredAssociations(MixedIn.INCLUDED)
-                .filter(ObjectAssociation.Predicates.PROPERTIES)
+        final List<ObjectAssociation> properties = spec.streamProperties(MixedIn.INCLUDED)
                 .collect(Collectors.toList());
-        final List<ObjectAssociation> collections = spec.streamDeclaredAssociations(MixedIn.INCLUDED)
-                .filter(ObjectAssociation.Predicates.COLLECTIONS)
+        final List<ObjectAssociation> collections = spec.streamCollections(MixedIn.INCLUDED)
                 .collect(Collectors.toList());
-        final List<ObjectAction> actions = spec.streamDeclaredActions(MixedIn.INCLUDED)
+        final List<ObjectAction> actions = spec.streamActions(MixedIn.INCLUDED)
                 .collect(Collectors.toList());
 
         if (properties.isEmpty() && collections.isEmpty() && actions.isEmpty()) {

@@ -302,7 +302,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
 
             if (mode.isRegular()) {
                 final Stream<ObjectAction> actions = objectAdapter.getSpecification()
-                        .streamDeclaredActions(MixedIn.INCLUDED);
+                        .streamActions(MixedIn.INCLUDED);
 
                 addActions(objectAdapter, actions, appendTo);
             }

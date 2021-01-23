@@ -30,17 +30,18 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.spec.ActionType;
 
 public interface ObjectActionContainer {
-
+    
     // -- ACTION LOOKUP (INHERITANCE CONSIDERED)
     
     /**
-     * Same as {@link #getDeclaredAction(String, ActionType)}, but also considering any inherited object members.
+     * Similar to {@link #getDeclaredAction(String, ActionType)}, 
+     * but also considering any inherited object members. (mixed-in included)
      * @param id
      * @param type
      * 
      * @implSpec If not found on the current 'type' search for the 'nearest' match in super-types, 
      * and if nothing found there, search the interfaces. Special care needs to be taken, as the
-     * {@link ActionType} might be redeclared when inheriting from a super-type or interface.  
+     * {@link ActionType} might be redeclared when inheriting from a super-type or interface.
      */
     Optional<ObjectAction> getAction(String id, @Nullable ActionType type);
     
@@ -50,7 +51,6 @@ public interface ObjectActionContainer {
                         id, 
                         type==null ? "any" : type.name()));
     }
-
 
     default Optional<ObjectAction> getAction(String id) {
         return getAction(id, null);
@@ -64,7 +64,7 @@ public interface ObjectActionContainer {
     // -- ACTION LOOKUP, DECLARED ACTIONS (NO INHERITANCE CONSIDERED)
     
     /**
-     * Get the action object represented by the specified identity string.
+     * Get the action object represented by the specified identity string. (mixed-in included)
      * <p>
      * The identity string can be either fully specified with parameters (as per
      * {@link Identifier#toNameParmsIdentityString()} or in abbreviated form (

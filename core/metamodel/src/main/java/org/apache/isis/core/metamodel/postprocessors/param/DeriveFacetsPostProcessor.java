@@ -122,9 +122,11 @@ implements ObjectSpecificationPostProcessor, MetaModelContextAware {
     @Override
     public void postProcess(final ObjectSpecification objectSpecification) {
 
+        //XXX in principle it would be sufficient to just process declared members; can optimize if worth the effort
+        
         // all the actions of this type
         val actionTypes = inferActionTypes();
-        final Stream<ObjectAction> objectActions = objectSpecification.streamDeclaredActions(actionTypes, MixedIn.INCLUDED);
+        final Stream<ObjectAction> objectActions = objectSpecification.streamActions(actionTypes, MixedIn.INCLUDED);
 
         // and all the collections of this type
         final Stream<OneToManyAssociation> collections = objectSpecification.streamCollections(MixedIn.INCLUDED);
@@ -185,7 +187,7 @@ implements ObjectSpecificationPostProcessor, MetaModelContextAware {
             final ObjectActionParameter.Predicates.ScalarParameter whetherScalarParamOfType =
                     new ObjectActionParameter.Predicates.ScalarParameter(specification);
 
-            objectSpecification.streamDeclaredActions(actionTypes, MixedIn.INCLUDED)
+            objectSpecification.streamActions(actionTypes, MixedIn.INCLUDED)
             .filter(ObjectAction.Predicates.associatedWith(collection))
             .forEach(action->{
 

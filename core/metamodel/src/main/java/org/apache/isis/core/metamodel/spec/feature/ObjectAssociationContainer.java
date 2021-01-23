@@ -35,9 +35,11 @@ public interface ObjectAssociationContainer {
      * 
      * @implSpec If not found on the current 'type' search for the 'nearest' match in super-types, 
      * and if nothing found there, search the interfaces.  
+     * TODO make sure callers don't instead want the non recursive variant
      */
     Optional<ObjectAssociation> getAssociation(String id);
     
+    // TODO make sure callers don't instead want the non recursive variant
     default ObjectAssociation getAssociationElseFail(String id) {
         return getAssociation(id)
                 .orElseThrow(()->_Exceptions.noSuchElement("id=%s", id));
@@ -51,6 +53,7 @@ public interface ObjectAssociationContainer {
      *
      * Throw a {@link ObjectSpecificationException} if no such association
      * exists.
+     * TODO make sure callers don't instead want the recursive variant
      */
     Optional<ObjectAssociation> getDeclaredAssociation(String id);
     
@@ -62,6 +65,9 @@ public interface ObjectAssociationContainer {
      * 
      * @implSpec Walk through the type hierarchy nearest to farthest and add any ObjectAssociation to the stream, 
      * except don't add ObjectAssociations that already have been added (due to inheritance).
+     * 
+     * TODO make sure callers don't instead want the non-recursive variant
+     * 
      */
     Stream<ObjectAssociation> streamAssociations(MixedIn contributed);
     
@@ -69,7 +75,7 @@ public interface ObjectAssociationContainer {
     /**
      * All {@link ObjectAssociation association}s that represent
      * {@link OneToOneAssociation properties}.
-     * 
+     * TODO make sure callers don't instead want the non recursive variant
      */
     default Stream<OneToOneAssociation> streamProperties(MixedIn contributed) {
         return streamAssociations(contributed)
@@ -80,9 +86,7 @@ public interface ObjectAssociationContainer {
     /**
      * All {@link ObjectAssociation association}s that represents
      * {@link OneToManyAssociation collections}.
-     *
-     * @return
-     * 
+     * TODO make sure callers don't instead want the non recursive variant
      */
     default Stream<OneToManyAssociation> streamCollections(MixedIn contributed){
         return streamAssociations(contributed)
@@ -99,7 +103,7 @@ public interface ObjectAssociationContainer {
      * To get the statically visible fields (where any invisible and
      * unauthorized fields have been removed) use
      * <tt>ObjectAssociationFilters#staticallyVisible(...)</tt>
-     *
+     * TODO make sure callers don't instead want the recursive variant
      */
     Stream<ObjectAssociation> streamDeclaredAssociations(MixedIn contributed);
 

@@ -326,9 +326,10 @@ implements FacetHolder {
     private void cataloguePropertiesAndCollections(BiConsumer<Method, ObjectMember> onMember) {
         streamDeclaredAssociations(MixedIn.EXCLUDED)
         .forEach(field->{
-            final Stream<Facet> facets = field.streamFacets().filter(ImperativeFacet.PREDICATE);
-            facets.forEach(facet->{
-                final ImperativeFacet imperativeFacet = ImperativeFacet.Util.getImperativeFacet(facet);
+            field.streamFacets()
+            .filter(ImperativeFacet.PREDICATE)
+            .forEach(facet->{
+                val imperativeFacet = ImperativeFacet.Util.getImperativeFacet(facet);
                 for (final Method imperativeFacetMethod : imperativeFacet.getMethods()) {
                     onMember.accept(imperativeFacetMethod, field);
                 }
@@ -339,9 +340,10 @@ implements FacetHolder {
     private void catalogueActions(BiConsumer<Method, ObjectMember> onMember) {
         streamDeclaredActions(MixedIn.INCLUDED)
         .forEach(userAction->{
-            final Stream<Facet> facets = userAction.streamFacets().filter(ImperativeFacet.PREDICATE);
-            facets.forEach(facet->{
-                final ImperativeFacet imperativeFacet = ImperativeFacet.Util.getImperativeFacet(facet);
+            userAction.streamFacets()
+            .filter(ImperativeFacet.PREDICATE)
+            .forEach(facet->{
+                val imperativeFacet = ImperativeFacet.Util.getImperativeFacet(facet);
                 for (final Method imperativeFacetMethod : imperativeFacet.getMethods()) {
                     onMember.accept(imperativeFacetMethod, userAction);
                 }

@@ -776,10 +776,7 @@ implements ObjectSpecification {
         }
         val mixinMethodName = mixinFacet.value();
 
-        final Stream<ObjectAction> mixinActions = specification
-                .streamDeclaredActions(ActionType.ANY, MixedIn.INCLUDED);
-
-        mixinActions
+        specification.streamActions(ActionType.ANY, MixedIn.INCLUDED)
         .filter(Predicates::isMixedInAssociation)
         .map(ObjectActionDefault.class::cast)
         .map(Factories.mixedInAssociation(this, mixinType, mixinMethodName))
@@ -831,10 +828,7 @@ implements ObjectSpecification {
         }
         val mixinMethodName = mixinFacet.value();
 
-        final Stream<ObjectAction> mixinsActions = mixinSpec
-                .streamDeclaredActions(ActionType.ANY, MixedIn.INCLUDED);
-
-        mixinsActions
+        mixinSpec.streamActions(ActionType.ANY, MixedIn.INCLUDED)
         .filter(Predicates::isMixedInAction)
         .map(ObjectActionDefault.class::cast)
         .map(Factories.mixedInAction(this, mixinType, mixinMethodName))

@@ -38,6 +38,10 @@ import lombok.val;
 /**
  * Responsibility: member lookup and streaming with support for inheritance, 
  * based on access to declared members, super-classes and interfaces.
+ * <p>
+ * TODO future extensions should also search the interfaces, 
+ * but avoid doing redundant work when walking the type-hierarchy;
+ * (current elegant recursive solution will then need some tweaks to be efficient)
  */
 public abstract class ObjectMemberContainer
 extends FacetHolderImpl 
@@ -66,24 +70,22 @@ implements
             return declaredAction; 
         }
         
-        if(superclass()==null) {
-            // guard against unexpected reach of type hierarchy root
-            return Optional.empty();
-        }
-        
         return superclass().getAction(id, type);
-        
-        //XXX future extensions should also search the interfaces, 
-        // but avoid doing redundant work when walking the type-hierarchy;
-        // (this elegant recursive solution will then need some tweaks to be efficient)
     }
     
     @Override
     public Stream<ObjectAction> streamActions(
             final ImmutableEnumSet<ActionType> types, 
             final MixedIn contributed) {
-        //FIXME poorly implemented, inheritance not supported
-        return streamDeclaredActions(contributed);
+        
+        if(isTypeHierarchyRoot()) {
+            return Stream.empty(); // stop as we reached the Object class, which does not contribute actions 
+        }
+
+        return Stream.concat(
+                streamDeclaredActions(contributed), 
+                superclass().streamActions(contributed))
+                .distinct(); //FIXME equality by java object instance does not work here (will collect duplicates)
     }
     
     // -- ASSOCIATIONS
@@ -92,7 +94,7 @@ implements
     public Optional<ObjectAssociation> getAssociation(String id) {
 
         if(isTypeHierarchyRoot()) {
-            return Optional.empty(); // stop search as we reached the Object class, which does not contribute actions 
+            return Optional.empty(); // stop search as we reached the Object class, which does not contribute associations 
         }
         
         val declaredAssociation = getDeclaredAssociation(id); // no inheritance considered
@@ -101,22 +103,20 @@ implements
             return declaredAssociation; 
         }
         
-        if(superclass()==null) {
-            // guard against unexpected reach of type hierarchy root
-            return Optional.empty();
-        }
-        
         return superclass().getAssociation(id);
-        
-        //XXX future extensions should also search the interfaces, 
-        // but avoid doing redundant work when walking the type-hierarchy;
-        // (this elegant recursive solution will then need some tweaks to be efficient)
     }
     
     @Override
     public Stream<ObjectAssociation> streamAssociations(MixedIn contributed) {
-        //FIXME poorly implemented, inheritance not supported
-        return streamDeclaredAssociations(contributed);
+        
+        if(isTypeHierarchyRoot()) {
+            return Stream.empty(); // stop as we reached the Object class, which does not contribute associations 
+        }
+
+        return Stream.concat(
+                streamDeclaredAssociations(contributed), 
+                superclass().streamAssociations(contributed))
+                .distinct(); //FIXME equality by java object instance does not work here (will collect duplicates)
     }
     
 }

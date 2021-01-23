@@ -178,7 +178,7 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
 
         val oneToOneAssociationById = ObjectMember.mapById(getOneToOneAssociations(objectSpec));
         val oneToManyAssociationById = ObjectMember.mapById(getOneToManyAssociations(objectSpec));
-        val objectActionById = ObjectMember.mapById( objectSpec.streamDeclaredActions(MixedIn.INCLUDED));
+        val objectActionById = ObjectMember.mapById(objectSpec.streamActions(MixedIn.INCLUDED));
 
         val propertyLayoutDataById = bs3Grid.getAllPropertiesById();
         val collectionLayoutDataById = bs3Grid.getAllCollectionsById();

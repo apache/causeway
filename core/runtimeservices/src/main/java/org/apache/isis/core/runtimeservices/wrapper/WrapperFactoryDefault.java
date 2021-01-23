@@ -18,9 +18,6 @@
  */
 package org.apache.isis.core.runtimeservices.wrapper;
 
-import static org.apache.isis.applib.services.metamodel.MetaModelService.Mode.RELAXED;
-import static org.apache.isis.applib.services.wrapper.control.SyncControl.control;
-
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -103,6 +100,9 @@ import org.apache.isis.core.runtimeservices.wrapper.handlers.ProxyContextHandler
 import org.apache.isis.core.runtimeservices.wrapper.proxy.ProxyCreator;
 import org.apache.isis.core.security.authentication.Authentication;
 import org.apache.isis.schema.cmd.v2.CommandDto;
+
+import static org.apache.isis.applib.services.metamodel.MetaModelService.Mode.RELAXED;
+import static org.apache.isis.applib.services.wrapper.control.SyncControl.control;
 
 import lombok.Data;
 import lombok.NonNull;
@@ -408,7 +408,7 @@ public class WrapperFactoryDefault implements WrapperFactory {
 
         // don't care about anything other than actions
         // (contributed properties and collections are read-only).
-        Optional<ObjectActionMixedIn> targetActionIfAny = mixedInSpec.streamDeclaredActions(MixedIn.INCLUDED)
+        Optional<ObjectActionMixedIn> targetActionIfAny = mixedInSpec.streamActions(MixedIn.INCLUDED)
                 .filter(ObjectActionMixedIn.class::isInstance)
                 .map(ObjectActionMixedIn.class::cast)
                 .filter(x -> x.hasMixinAction((ObjectAction) mixinMember))

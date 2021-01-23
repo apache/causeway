@@ -346,13 +346,8 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
     private static ObjectAction findActionElseNull(
             final ObjectSpecification specification,
             final String localActionId) {
-        final Stream<ObjectAction> objectActions = specification.streamDeclaredActions(MixedIn.INCLUDED);
-
-        return objectActions
-                .filter(objectAction->
-                        Objects.equals(objectAction.getId(), localActionId))
-                .findAny()
-                .orElse(null);
+        
+        return specification.getAction(localActionId).orElse(null);
     }
 
     private static OneToOneAssociation findOneToOneAssociationElseNull(

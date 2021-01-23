@@ -129,6 +129,9 @@ public class ApplicationFeatureRepositoryDefaultTest {
 
                 allowing(mockSpec).streamDeclaredActions(with(MixedIn.INCLUDED));
                 will(returnValue(actions.stream()));
+                
+                allowing(mockSpec).streamActions(with(MixedIn.INCLUDED));
+                will(returnValue(actions.stream()));
 
                 allowing(mockProp).getId();
                 will(returnValue("someProperty"));

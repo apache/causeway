@@ -20,7 +20,6 @@ package org.apache.isis.core.metamodel.services.metamodel;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Stream;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -48,7 +47,6 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
@@ -117,36 +115,17 @@ public class MetaModelServiceDefault implements MetaModelService {
                 continue;
             }
 
-            {
-                final Stream<ObjectAssociation> properties = 
-                        spec.streamDeclaredAssociations(MixedIn.EXCLUDED)
-                        .filter(ObjectAssociation.Predicates.PROPERTIES);
+            spec.streamProperties(MixedIn.INCLUDED)
+            .filter(otoa->!exclude(otoa))
+            .forEach(otoa->rows.add(new DomainMemberDefault(spec, otoa)));
 
-                properties
-                .map(property->(OneToOneAssociation) property)
-                .filter(otoa->!exclude(otoa))
-                .forEach(otoa->rows.add(new DomainMemberDefault(spec, otoa)));
-            }
+            spec.streamCollections(MixedIn.INCLUDED)
+            .filter(otma->!exclude(otma))
+            .forEach(otma->rows.add(new DomainMemberDefault(spec, otma)));
 
-            {
-                final Stream<ObjectAssociation> associations = 
-                        spec.streamDeclaredAssociations(MixedIn.EXCLUDED)
-                        .filter(ObjectAssociation.Predicates.COLLECTIONS);
-
-                associations
-                .map(collection->(OneToManyAssociation) collection)
-                .filter(otma->!exclude(otma))
-                .forEach(otma->rows.add(new DomainMemberDefault(spec, otma)));
-            }
-
-            {
-                final Stream<ObjectAction> actions = 
-                        spec.streamDeclaredActions(MixedIn.INCLUDED);
-
-                actions
-                .filter(action->!exclude(action))
-                .forEach(action->rows.add(new DomainMemberDefault(spec, action)));
-            }
+            spec.streamActions(MixedIn.INCLUDED)
+            .filter(action->!exclude(action))
+            .forEach(action->rows.add(new DomainMemberDefault(spec, action)));
         }
 
         Collections.sort(rows);

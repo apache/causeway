@@ -57,9 +57,8 @@ implements MetaModelRefiner {
         
         programmingModel.addValidator((objectSpec, validator) -> {
 
-            final Stream<ObjectAction> objectActions = objectSpec.streamDeclaredActions(MixedIn.EXCLUDED);
-
-            objectActions
+            // as an optimization only checking declared members (skipping inherited ones)
+            objectSpec.streamDeclaredActions(MixedIn.EXCLUDED)
             .filter(objectAction->{
                 final BookmarkPolicyFacet bookmarkFacet = objectAction.getFacet(BookmarkPolicyFacet.class);
                 if(bookmarkFacet == null || bookmarkFacet.isFallback() || 

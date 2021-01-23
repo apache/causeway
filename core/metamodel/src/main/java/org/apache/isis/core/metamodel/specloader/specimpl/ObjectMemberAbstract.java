@@ -292,8 +292,6 @@ implements ObjectMember, HasMetaModelContext, HasFacetHolder {
         return indexOfUnderscore != -1 && indexOfUnderscore != singularName.length() - 1;
     }
 
-
-
     // -- toString
 
     @Override

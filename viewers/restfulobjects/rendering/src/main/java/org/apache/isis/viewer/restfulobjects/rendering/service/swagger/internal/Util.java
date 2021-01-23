@@ -144,11 +144,11 @@ public final class Util {
             final ClassExcluder classExcluder) {
         val actionTypes = actionTypesFor(visibility);
 
-        return objectSpec.streamDeclaredActions(actionTypes, MixedIn.INCLUDED)
+        return objectSpec.streamActions(actionTypes, MixedIn.INCLUDED)
                 .filter(objectAction->
-                !classExcluder.exclude(objectAction) &&
-                !visibility.isPublic() || isVisibleForPublic(objectAction)
-                        )
+                    !classExcluder.exclude(objectAction) 
+                        && !visibility.isPublic() 
+                        || isVisibleForPublic(objectAction) )
                 .collect(Collectors.toList());
     }
 

@@ -111,7 +111,7 @@ public class DomainTypeReprRenderer extends ReprRendererAbstract<DomainTypeReprR
             }
         });
 
-        final Stream<ObjectAction> actions = objectSpecification.streamDeclaredActions(MixedIn.INCLUDED);
+        final Stream<ObjectAction> actions = objectSpecification.streamActions(MixedIn.INCLUDED);
 
         actions.forEach(action->{
             final LinkBuilder linkBuilder = ActionDescriptionReprRenderer

@@ -221,7 +221,7 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
             throw RestfulObjectsApplicationException.create(HttpStatusCode.NOT_FOUND);
         }
 
-        val action = parentSpec.getDeclaredAction(actionId)
+        val action = parentSpec.getAction(actionId)
                 .orElseThrow(()->RestfulObjectsApplicationException.create(HttpStatusCode.NOT_FOUND));
         
         final ActionDescriptionReprRenderer renderer = new ActionDescriptionReprRenderer(resourceContext, null, JsonRepresentation.newMap());
@@ -244,7 +244,7 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
             throw RestfulObjectsApplicationException.create(HttpStatusCode.NOT_FOUND);
         }
 
-        val parentAction = parentSpec.getDeclaredAction(actionId)
+        val parentAction = parentSpec.getAction(actionId)
                 .orElseThrow(()->RestfulObjectsApplicationException.create(HttpStatusCode.NOT_FOUND));
         
         final ObjectActionParameter actionParam = parentAction.getParameterByName(paramName);

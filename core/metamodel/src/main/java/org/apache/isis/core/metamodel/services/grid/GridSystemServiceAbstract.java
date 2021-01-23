@@ -181,7 +181,7 @@ implements GridSystemService<G> {
 
         val oneToOneAssociationById = ObjectMember.mapById(getOneToOneAssociations(objectSpec));
         val oneToManyAssociationById = ObjectMember.mapById(getOneToManyAssociations(objectSpec));
-        val objectActionById = ObjectMember.mapById(objectSpec.streamDeclaredActions(MixedIn.INCLUDED));
+        val objectActionById = ObjectMember.mapById(objectSpec.streamActions(MixedIn.INCLUDED));
 
         final AtomicInteger propertySequence = new AtomicInteger(0);
         fcGrid.visit(new Grid.VisitorAdapter() {

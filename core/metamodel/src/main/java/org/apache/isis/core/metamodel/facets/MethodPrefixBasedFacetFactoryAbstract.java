@@ -108,42 +108,44 @@ implements MethodPrefixBasedFacetFactory {
             @Override
             public boolean visit(ObjectSpecification objectSpec, MetaModelValidator metaModelValidator) {
 
+                // as an optimization only checking declared members (skipping inherited ones)  
+                
                 // ensure accepted actions do not have any of the reserved prefixes
                 objectSpec.streamDeclaredActions(MixedIn.EXCLUDED)
-                        .forEach(objectAction -> {
+                .forEach(objectAction -> {
 
-                            val actionId = objectAction.getId();
+                    val actionId = objectAction.getId();
 
-                            for (val prefix : prefixes) {
+                    for (val prefix : prefixes) {
 
-                                if (isPrefixed(actionId, prefix)) {
+                        if (isPrefixed(actionId, prefix)) {
 
-                                    val explanation =
-                                            objectAction.getParameterCount() > 0
-                                                    && noParamsOnly
-                                                    && (MethodLiteralConstants.HIDE_PREFIX.equals(prefix)
-                                                    || MethodLiteralConstants.DISABLE_PREFIX.equals(prefix))
-                                                    ? " (such methods must have no parameters, '"
-                                                    + "isis.core.meta-model.validator.no-params-only"
-                                                    + "' config property)"
-                                                    : "";
+                            val explanation =
+                                    objectAction.getParameterCount() > 0
+                                            && noParamsOnly
+                                            && (MethodLiteralConstants.HIDE_PREFIX.equals(prefix)
+                                            || MethodLiteralConstants.DISABLE_PREFIX.equals(prefix))
+                                            ? " (such methods must have no parameters, '"
+                                            + "isis.core.meta-model.validator.no-params-only"
+                                            + "' config property)"
+                                            : "";
 
-                                    val message = "%s#%s: has prefix %s, is probably intended as a supporting method "
-                                            + "for a property, collection or action%s.  If the method is intended to "
-                                            + "be an action, then rename and use @ActionLayout(named=\"...\") or ignore "
-                                            + "completely using @Programmatic";
+                            val message = "%s#%s: has prefix %s, is probably intended as a supporting method "
+                                    + "for a property, collection or action%s.  If the method is intended to "
+                                    + "be an action, then rename and use @ActionLayout(named=\"...\") or ignore "
+                                    + "completely using @Programmatic";
 
-                                    metaModelValidator.onFailure(
-                                            objectSpec,
-                                            objectSpec.getIdentifier(),
-                                            message,
-                                            objectSpec.getIdentifier().getClassName(),
-                                            actionId,
-                                            prefix,
-                                            explanation);
-                                }
-                            }
-                        });
+                            metaModelValidator.onFailure(
+                                    objectSpec,
+                                    objectSpec.getIdentifier(),
+                                    message,
+                                    objectSpec.getIdentifier().getClassName(),
+                                    actionId,
+                                    prefix,
+                                    explanation);
+                        }
+                    }
+                });
 
                 return true;
 

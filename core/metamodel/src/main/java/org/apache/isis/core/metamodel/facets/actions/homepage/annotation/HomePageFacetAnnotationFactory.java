@@ -80,10 +80,8 @@ implements MetaModelRefiner {
             @Override
             public boolean visit(ObjectSpecification objectSpec, MetaModelValidator validator) {
                 
-                val objectActions = 
-                        objectSpec.streamDeclaredActions(MixedIn.EXCLUDED);
-
-                objectActions
+                // as an optimization only checking declared members (skipping inherited ones)                 
+                objectSpec.streamDeclaredActions(MixedIn.EXCLUDED)
                 .filter(objectAction->objectAction.containsFacet(HomePageFacet.class))
                 .forEach(objectAction->{
                     

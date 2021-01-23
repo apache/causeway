@@ -187,10 +187,9 @@ implements MetaModelRefiner, ObjectSpecIdFacetFactory {
             if(!DomainServiceFacet.getNatureOfService(objectSpec).isPresent()) {
                 return false; //skip validation
             }
-
+            
             // don't check if domain service has only programmatic methods
-            final Stream<ObjectAction> objectActions = objectSpec.streamDeclaredActions(MixedIn.INCLUDED);
-            return objectActions.anyMatch(__->true); // return true if not empty
+            return objectSpec.streamActions(MixedIn.INCLUDED).count()>0L;
 
         }
         return false; //skip validation
