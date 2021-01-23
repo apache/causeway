@@ -27,13 +27,12 @@ import org.apache.isis.commons.collections.ImmutableEnumSet;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.spec.ActionType;
 
-import static org.apache.isis.commons.internal.base._NullSafe.stream;
-
 public interface ObjectActionContainer {
 
+    // -- ACTION LOOKUP
+    
     /**
      * Get the action object represented by the specified identity string.
-     *
      * <p>
      * The identity string can be either fully specified with parameters (as per
      * {@link Identifier#toNameParmsIdentityString()} or in abbreviated form (
@@ -41,18 +40,16 @@ public interface ObjectActionContainer {
      *
      * @see #getObjectAction(String)
      */
-    Optional<ObjectAction> getObjectAction(ActionType type, String id);
+    Optional<ObjectAction> getObjectAction(String id, ActionType type);
     
-    default ObjectAction getObjectActionElseFail(ActionType type, String id) {
-        return getObjectAction(type, id)
-                .orElseThrow(()->_Exceptions.noSuchElement("type=%s id=%s", type, id));  
+    default ObjectAction getObjectActionElseFail(String id, ActionType type) {
+        return getObjectAction(id, type)
+                .orElseThrow(()->_Exceptions.noSuchElement("id=%s type=%s", id, type));  
     }
-    
 
     /**
      * Get the action object represented by the specified identity string,
      * irrespective of {@link ActionType}.
-     *
      * <p>
      * The identity string can be either fully specified with parameters (as per
      * {@link Identifier#toNameParmsIdentityString()} or in abbreviated form (
@@ -67,20 +64,19 @@ public interface ObjectActionContainer {
                 .orElseThrow(()->_Exceptions.noSuchElement("id=%s", id));  
     }
 
-    default Stream<ObjectAction> streamObjectActions(MixedIn contributed) {
-        return streamObjectActions(ActionType.ALL, contributed);
-    }
+    // -- ACTION STREAM
 
     /**
      * Returns an array of actions of the specified type, including or excluding
      * contributed actions as required.
      */
-    Stream<ObjectAction> streamObjectActions(ActionType type, MixedIn contributed);
+    Stream<ObjectAction> streamObjectActions(ImmutableEnumSet<ActionType> types, MixedIn contributed);
 
-    default Stream<ObjectAction> streamObjectActions(ImmutableEnumSet<ActionType> types, MixedIn contributed) {
-        return stream(types)
-                .flatMap(type->streamObjectActions(type, contributed));
+    default Stream<ObjectAction> streamObjectActions(ActionType type, MixedIn contributed) {
+        return streamObjectActions(ImmutableEnumSet.of(type), contributed);
     }
-
-
+    
+    default Stream<ObjectAction> streamObjectActions(MixedIn contributed) {
+        return streamObjectActions(ActionType.ANY, contributed);
+    }
 }

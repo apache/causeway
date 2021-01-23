@@ -34,6 +34,7 @@ import javax.enterprise.inject.Vetoed;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.metamodel.BeanSort;
+import org.apache.isis.commons.collections.ImmutableEnumSet;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.base._Strings;
@@ -43,6 +44,7 @@ import org.apache.isis.commons.internal.collections._Multimaps.ListMultimap;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.collections._Streams;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.commons.internal.functions._Predicates;
 import org.apache.isis.core.config.beans.IsisBeanTypeRegistry;
 import org.apache.isis.core.metamodel.commons.ClassExtensions;
 import org.apache.isis.core.metamodel.consent.Consent;
@@ -733,16 +735,20 @@ implements ObjectSpecification {
     }
 
     @Override
-    public Stream<ObjectAction> streamObjectActions(final ActionType type, final MixedIn contributed) {
+    public Stream<ObjectAction> streamObjectActions(
+            final ImmutableEnumSet<ActionType> types, 
+            final MixedIn contributed) {
         introspectUpTo(IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
 
-        if(contributed.isIncluded()) {
+        if(contributed.isIncluded()) { // conditional not strictly required, could instead always go this code path 
             createMixedInActions(); // only if not already
-            return stream(objectActionsByType.get(type));
         }
-
-        return stream(objectActionsByType.get(type))
-                .filter(MixedIn::isNotMixedIn);
+        
+        return types.stream()
+                .flatMap(type->stream(objectActionsByType.get(type)))
+                .filter(contributed.isIncluded()
+                        ? _Predicates.alwaysTrue() 
+                        : MixedIn::isNotMixedIn);
     }
 
     // -- mixin associations (properties and collections)
@@ -780,7 +786,7 @@ implements ObjectSpecification {
         val mixinMethodName = mixinFacet.value();
 
         final Stream<ObjectAction> mixinActions = specification
-                .streamObjectActions(ActionType.ALL, MixedIn.INCLUDED);
+                .streamObjectActions(ActionType.ANY, MixedIn.INCLUDED);
 
         mixinActions
         .filter(Predicates::isMixedInAssociation)
@@ -835,7 +841,7 @@ implements ObjectSpecification {
         val mixinMethodName = mixinFacet.value();
 
         final Stream<ObjectAction> mixinsActions = mixinSpec
-                .streamObjectActions(ActionType.ALL, MixedIn.INCLUDED);
+                .streamObjectActions(ActionType.ANY, MixedIn.INCLUDED);
 
         mixinsActions
         .filter(Predicates::isMixedInAction)

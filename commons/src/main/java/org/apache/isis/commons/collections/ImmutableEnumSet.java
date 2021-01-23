@@ -20,6 +20,7 @@ package org.apache.isis.commons.collections;
 
 import java.util.EnumSet;
 import java.util.Iterator;
+import java.util.stream.Stream;
 
 /**
  * Immutable variant of {@link EnumSet}
@@ -82,7 +83,8 @@ implements Iterable<E>, java.io.Serializable {
         return delegate.iterator();
     }
 
-
-
+    public Stream<E> stream() {
+        return delegate.stream();
+    }
 
 }

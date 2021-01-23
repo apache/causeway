@@ -268,7 +268,7 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
     // -- getObjectAction
 
     @Override
-    public Optional<ObjectAction> getObjectAction(final ActionType type, final String id) {
+    public Optional<ObjectAction> getObjectAction(final String id, final ActionType type) {
         introspectUpTo(IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
 
         final Stream<ObjectAction> actions =
@@ -281,7 +281,7 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
         introspectUpTo(IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
 
         final Stream<ObjectAction> actions =
-                streamObjectActions(ActionType.ALL, MixedIn.INCLUDED);
+                streamObjectActions(ActionType.ANY, MixedIn.INCLUDED);
         return firstAction(actions, id);
     }
 

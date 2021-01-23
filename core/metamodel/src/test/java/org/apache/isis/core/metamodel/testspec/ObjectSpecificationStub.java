@@ -29,6 +29,7 @@ import java.util.stream.Stream;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.metamodel.BeanSort;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.collections.ImmutableEnumSet;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -167,7 +168,7 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
     }
 
     @Override
-    public Optional<ObjectAction> getObjectAction(final ActionType type, final String id) {
+    public Optional<ObjectAction> getObjectAction(final String id, final ActionType type) {
         final int openBracket = id.indexOf('(');
         return getObjectAction(type, id.substring(0, openBracket), null);
     }
@@ -175,7 +176,7 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
     @Override
     public Optional<ObjectAction> getObjectAction(final String nameParmsIdentityString) {
         for (final ActionType type : ActionType.values()) {
-            val action = getObjectAction(type, nameParmsIdentityString);
+            val action = getObjectAction(nameParmsIdentityString, type);
             if (action.isPresent()) {
                 return action;
             }
@@ -308,10 +309,10 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
     }
 
     @Override
-    public Stream<ObjectAction> streamObjectActions(final ActionType type, final MixedIn contributed) {
+    public Stream<ObjectAction> streamObjectActions(ImmutableEnumSet<ActionType> types, MixedIn contributed) {
         return null;
     }
-
+    
     // /////////////////////////////////////////////////////////
     // view models and wizards
     // /////////////////////////////////////////////////////////
