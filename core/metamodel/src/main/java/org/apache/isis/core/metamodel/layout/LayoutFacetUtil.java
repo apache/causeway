@@ -317,7 +317,7 @@ public class LayoutFacetUtil {
 
         @Override
         public void visit(final ActionLayoutData actionLayoutData) {
-            objectSpec.getObjectAction(actionLayoutData.getId())
+            objectSpec.getDeclaredAction(actionLayoutData.getId())
             .ifPresent(objectAction->{
                 setBookmarkingIfAny(actionLayoutData, objectAction);
                 setCssClassIfAny(actionLayoutData, objectAction);
@@ -331,7 +331,7 @@ public class LayoutFacetUtil {
 
         @Override
         public void visit(final CollectionLayoutData collectionLayoutData) {
-            objectSpec.getAssociation(collectionLayoutData.getId())
+            objectSpec.getDeclaredAssociation(collectionLayoutData.getId())
             .ifPresent(collection->{
                 setCssClassIfAny(collectionLayoutData, collection);
                 setDefaultViewIfAny(collectionLayoutData, collection);
@@ -345,7 +345,7 @@ public class LayoutFacetUtil {
 
         @Override
         public void visit(final PropertyLayoutData propertyLayoutData) {
-            objectSpec.getAssociation(propertyLayoutData.getId())
+            objectSpec.getDeclaredAssociation(propertyLayoutData.getId())
             .ifPresent(property->{
                 setCssClassIfAny(propertyLayoutData, property);
                 setDescribedAsIfAny(propertyLayoutData, property);

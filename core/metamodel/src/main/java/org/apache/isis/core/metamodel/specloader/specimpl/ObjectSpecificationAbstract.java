@@ -700,11 +700,11 @@ implements ObjectSpecification {
     public Optional<? extends ObjectMember> getMember(final String memberId) {
         introspectUpTo(IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
 
-        val objectAction = getObjectAction(memberId);
+        val objectAction = getDeclaredAction(memberId);
         if(objectAction.isPresent()) {
             return objectAction;
         }
-        val association = getAssociation(memberId);
+        val association = getDeclaredAssociation(memberId);
         if(association.isPresent()) {
             return association;
         }
@@ -712,13 +712,13 @@ implements ObjectSpecification {
     }
 
     @Override
-    public Optional<ObjectAssociation> findAssociation(String id) {
+    public Optional<ObjectAssociation> getAssociation(String id) {
 
         if(isTypeHierarchyRoot()) {
             return Optional.empty(); // stop search as we reached the Object class, which does not contribute actions 
         }
         
-        val declaredAssociation = getAssociation(id); // no inheritance considered
+        val declaredAssociation = getDeclaredAssociation(id); // no inheritance considered
                 
         if(declaredAssociation.isPresent()) {
             return declaredAssociation; 
@@ -729,7 +729,7 @@ implements ObjectSpecification {
             return Optional.empty();
         }
         
-        return superclass().findAssociation(id);
+        return superclass().getAssociation(id);
         
         //XXX future extensions should also search the interfaces, 
         // but avoid doing redundant work when walking the type-hierarchy;
@@ -738,20 +738,9 @@ implements ObjectSpecification {
 
     /**
      * The association with the given {@link ObjectAssociation#getId() id}.
-     *
-     * <p>
-     * This is overridable because {@link ObjectSpecificationOnContainer}
-     * simply returns <tt>null</tt>.
-     *
-     * <p>
-     * TODO put fields into hash.
-     *
-     * <p>
-     * TODO: could this be made final? (ie does the framework ever call this
-     * method for an {@link ObjectSpecificationOnContainer})
      */
     @Override
-    public Optional<ObjectAssociation> getAssociation(final String id) {
+    public Optional<ObjectAssociation> getDeclaredAssociation(final String id) {
         introspectUpTo(IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
         return streamAssociations(MixedIn.INCLUDED)
                 .filter(objectAssociation->objectAssociation.getId().equals(id))

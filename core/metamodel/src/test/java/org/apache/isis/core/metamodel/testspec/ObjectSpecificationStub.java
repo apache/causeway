@@ -71,11 +71,11 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
 
     @Override
     public Optional<? extends ObjectMember> getMember(final String memberId) {
-        val objectAction = getObjectAction(memberId);
+        val objectAction = getDeclaredAction(memberId);
         if(objectAction.isPresent()) {
             return objectAction;
         }
-        val association = getAssociation(memberId);
+        val association = getDeclaredAssociation(memberId);
         if(association.isPresent()) {
             return association;
         }
@@ -112,7 +112,7 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
     }
 
     @Override
-    public Optional<ObjectAssociation> getAssociation(final String name) {
+    public Optional<ObjectAssociation> getDeclaredAssociation(final String name) {
         for (int i = 0; i < fields.size(); i++) {
             if (fields.get(i).getId().equals(name)) {
                 return Optional.ofNullable(fields.get(i));
@@ -162,7 +162,7 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
     }
 
     @Override
-    public Optional<ObjectAction> getObjectAction(final String id, final ActionType type) {
+    public Optional<ObjectAction> getDeclaredAction(final String id, final ActionType type) {
         val nameParmsIdentityString = id.substring(0, id.indexOf('('));
         val action = lookupObjectAction(nameParmsIdentityString);
         
@@ -353,15 +353,15 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
     }
 
     @Override
-    public Optional<ObjectAction> findObjectAction(String id, ActionType type) {
+    public Optional<ObjectAction> getObjectAction(String id, ActionType type) {
         // poorly implemented, inheritance not supported
-        return getObjectAction(id, type);
+        return getDeclaredAction(id, type);
     }
     
     @Override
-    public Optional<ObjectAssociation> findAssociation(String id) {
+    public Optional<ObjectAssociation> getAssociation(String id) {
         // poorly implemented, inheritance not supported
-        return getAssociation(id);
+        return getDeclaredAssociation(id);
     }
 
 }

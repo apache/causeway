@@ -34,7 +34,7 @@ public interface ObjectActionContainer {
     // -- ACTION LOOKUP (INHERITENCE CONSIDERED)
     
     /**
-     * Same as {@link #getObjectAction(String, ActionType)}, but also considering any inherited object members. 
+     * Same as {@link #getDeclaredAction(String, ActionType)}, but also considering any inherited object members.
      * @param id
      * @param type
      * 
@@ -42,17 +42,17 @@ public interface ObjectActionContainer {
      * and if nothing found there, search the interfaces. Special care needs to be taken, as the
      * {@link ActionType} might be redeclared when inheriting from a super-type or interface.  
      */
-    Optional<ObjectAction> findObjectAction(String id, @Nullable ActionType type);
+    Optional<ObjectAction> getObjectAction(String id, @Nullable ActionType type);
     
-    default ObjectAction findObjectActionElseFail(String id, @Nullable ActionType type) {
-        return findObjectAction(id, type)
+    default ObjectAction getObjectActionElseFail(String id, @Nullable ActionType type) {
+        return getObjectAction(id, type)
                 .orElseThrow(()->_Exceptions.noSuchElement("id=%s type=%s", 
                         id, 
                         type==null ? "any" : type.name()));
     }
 
-     default ObjectAction findObjectActionElseFail(String id) {
-        return findObjectActionElseFail(id, null);
+     default ObjectAction getObjectActionElseFail(String id) {
+        return getObjectActionElseFail(id, null);
     }
     
     // -- ACTION LOOKUP, DECLARED ACTIONS (NO INHERITENCE CONSIDERED)
@@ -64,16 +64,16 @@ public interface ObjectActionContainer {
      * {@link Identifier#toNameParmsIdentityString()} or in abbreviated form (
      * {@link Identifier#toNameIdentityString()}).
      *
-     * @see #getObjectAction(String)
+     * @see #getDeclaredAction(String)
      */
-    Optional<ObjectAction> getObjectAction(String id, @Nullable ActionType type);
+    Optional<ObjectAction> getDeclaredAction(String id, @Nullable ActionType type);
 
     /**
-     * Shortcut to {@link #getObjectAction(String, null)}, meaning where action type is <i>any</i>.
-     * @see #getObjectAction(String, ActionType)
+     * Shortcut to {@link #getDeclaredAction(String, null)}, meaning where action type is <i>any</i>.
+     * @see #getDeclaredAction(String, ActionType)
      */
-    default Optional<ObjectAction> getObjectAction(String id) {
-        return getObjectAction(id, null);
+    default Optional<ObjectAction> getDeclaredAction(String id) {
+        return getDeclaredAction(id, null);
     }
 
     // -- ACTION STREAM

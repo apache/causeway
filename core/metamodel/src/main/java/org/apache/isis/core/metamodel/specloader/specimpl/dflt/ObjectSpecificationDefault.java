@@ -273,13 +273,13 @@ implements FacetHolder {
     // -- findObjectAction
     
     @Override
-    public Optional<ObjectAction> findObjectAction(String id, @Nullable ActionType type) {
+    public Optional<ObjectAction> getObjectAction(String id, @Nullable ActionType type) {
 
         if(isTypeHierarchyRoot()) {
             return Optional.empty(); // stop search as we reached the Object class, which does not contribute actions 
         }
         
-        val declaredAction = getObjectAction(id); // no inheritance nor type considered
+        val declaredAction = getDeclaredAction(id); // no inheritance nor type considered
                 
         if(declaredAction.isPresent()) {
             // action found but if its not the right type, stop searching
@@ -295,7 +295,7 @@ implements FacetHolder {
             return Optional.empty();
         }
         
-        return superclass().findObjectAction(id, type);
+        return superclass().getObjectAction(id, type);
         
         //XXX future extensions should also search the interfaces, 
         // but avoid doing redundant work when walking the type-hierarchy;
@@ -305,7 +305,7 @@ implements FacetHolder {
     // -- getObjectAction
 
     @Override
-    public Optional<ObjectAction> getObjectAction(final String id, final ActionType type) {
+    public Optional<ObjectAction> getDeclaredAction(final String id, final ActionType type) {
         introspectUpTo(IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
 
         final Stream<ObjectAction> actions =

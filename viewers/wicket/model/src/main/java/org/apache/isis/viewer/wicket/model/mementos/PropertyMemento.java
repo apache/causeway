@@ -83,7 +83,7 @@ public class PropertyMemento implements Serializable {
             final SpecificationLoader specificationLoader) {
         
         return (OneToOneAssociation) specificationLoader.lookupBySpecIdElseLoad(owningType)
-                .findAssociationElseFail(identifier);
+                .getAssociationElseFail(identifier);
     }
 
     /**

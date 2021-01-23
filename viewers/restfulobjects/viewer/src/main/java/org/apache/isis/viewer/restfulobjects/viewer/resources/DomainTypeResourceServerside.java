@@ -165,7 +165,7 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
             throw RestfulObjectsApplicationException.create(HttpStatusCode.NOT_FOUND);
         }
 
-        val objectMember = parentSpec.getAssociation(propertyId)
+        val objectMember = parentSpec.getDeclaredAssociation(propertyId)
                 .orElseThrow(()->RestfulObjectsApplicationException.create(HttpStatusCode.NOT_FOUND));
         
         if (objectMember.isOneToManyAssociation()) {
@@ -193,7 +193,7 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
             throw RestfulObjectsApplicationException.create(HttpStatusCode.NOT_FOUND);
         }
 
-        val objectMember = parentSpec.getAssociation(collectionId)
+        val objectMember = parentSpec.getDeclaredAssociation(collectionId)
                 .orElseThrow(()->RestfulObjectsApplicationException.create(HttpStatusCode.NOT_FOUND));
         
         if (objectMember.isOneToOneAssociation()) {
@@ -221,7 +221,7 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
             throw RestfulObjectsApplicationException.create(HttpStatusCode.NOT_FOUND);
         }
 
-        val action = parentSpec.getObjectAction(actionId)
+        val action = parentSpec.getDeclaredAction(actionId)
                 .orElseThrow(()->RestfulObjectsApplicationException.create(HttpStatusCode.NOT_FOUND));
         
         final ActionDescriptionReprRenderer renderer = new ActionDescriptionReprRenderer(resourceContext, null, JsonRepresentation.newMap());
@@ -244,7 +244,7 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
             throw RestfulObjectsApplicationException.create(HttpStatusCode.NOT_FOUND);
         }
 
-        val parentAction = parentSpec.getObjectAction(actionId)
+        val parentAction = parentSpec.getDeclaredAction(actionId)
                 .orElseThrow(()->RestfulObjectsApplicationException.create(HttpStatusCode.NOT_FOUND));
         
         final ObjectActionParameter actionParam = parentAction.getParameterByName(paramName);

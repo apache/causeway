@@ -127,7 +127,7 @@ public class CollectionContentsSortableDataProvider extends SortableDataProvider
         val elementSpec = model.getTypeOfSpecification();
         val sortPropertyId = sort.getProperty();
 
-        return elementSpec.getAssociation(sortPropertyId).orElse(null); // eg invalid propertyId
+        return elementSpec.getDeclaredAssociation(sortPropertyId).orElse(null); // eg invalid propertyId
     }
 
     private Predicate<ManagedObject> ignoreHidden() {

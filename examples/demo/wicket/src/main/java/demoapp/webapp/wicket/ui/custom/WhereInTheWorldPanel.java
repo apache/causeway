@@ -24,14 +24,11 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.request.resource.ByteArrayResource;
 
-import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.common.model.object.ObjectUiModel;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.model.mementos.PropertyMemento;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
-import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
@@ -101,7 +98,7 @@ public class WhereInTheWorldPanel extends PanelAbstract<EntityModel>  {
     private Component createPropertyComponent(final String propertyId) {
         val managedObject = getModel().getManagedObject();
         val spec = managedObject.getSpecification();                               // <.>
-        val otoa = (OneToOneAssociation) spec.findAssociationElseFail(propertyId);  // <.>
+        val otoa = (OneToOneAssociation) spec.getAssociationElseFail(propertyId);  // <.>
         val pm = new PropertyMemento(otoa);                                        // <.>
 
         val scalarModel =

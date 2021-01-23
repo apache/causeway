@@ -111,36 +111,36 @@ class DomainModelTest_usingGoodDomain {
         val holderSpec = specificationLoader.loadSpecification(ProperMemberSupport.class, 
                         IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
         
-        val mx_action = holderSpec.findObjectActionElseFail("action"); // when @Action at type level
+        val mx_action = holderSpec.getObjectActionElseFail("action"); // when @Action at type level
         assertNotNull(mx_action);
         assertEquals("action", mx_action.getId());
         assertEquals("foo", mx_action.getName());
         assertEquals("bar", mx_action.getDescription());
         assertHasPublishedActionFacet(mx_action);
         
-        val mx_action2 = holderSpec.findObjectActionElseFail("action2"); // proper mixed-in action support
+        val mx_action2 = holderSpec.getObjectActionElseFail("action2"); // proper mixed-in action support
         assertNotNull(mx_action2);
         assertHasPublishedActionFacet(mx_action2);
         
-        val mx_property = holderSpec.findAssociationElseFail("property"); // when @Property at type level
+        val mx_property = holderSpec.getAssociationElseFail("property"); // when @Property at type level
         assertNotNull(mx_property);
         assertEquals("property", mx_property.getId());
         assertEquals("foo", mx_property.getName());
         assertEquals("bar", mx_property.getDescription());
         
-        val mx_property2 = holderSpec.findAssociationElseFail("property2"); // when @Property at method level
+        val mx_property2 = holderSpec.getAssociationElseFail("property2"); // when @Property at method level
         assertNotNull(mx_property2);
         assertEquals("property2", mx_property2.getId());
         assertEquals("foo", mx_property2.getName());
         assertEquals("bar", mx_property2.getDescription());
         
-        val mx_collection = holderSpec.findAssociationElseFail("collection"); // when @Collection at type level
+        val mx_collection = holderSpec.getAssociationElseFail("collection"); // when @Collection at type level
         assertNotNull(mx_collection);
         assertEquals("collection", mx_collection.getId());
         assertEquals("foo", mx_collection.getName());
         assertEquals("bar", mx_collection.getDescription());
         
-        val mx_collection2 = holderSpec.findAssociationElseFail("collection2"); // when @Collection at method level
+        val mx_collection2 = holderSpec.getAssociationElseFail("collection2"); // when @Collection at method level
         assertNotNull(mx_collection2);
         assertEquals("collection2", mx_collection2.getId());
         assertEquals("foo", mx_collection2.getName());
@@ -153,10 +153,10 @@ class DomainModelTest_usingGoodDomain {
         
         val holderSpec = specificationLoader.loadSpecification(ProperMemberSupport.class);
         
-        val mx_openRestApi = holderSpec.getObjectAction("openRestApi"); // built-in mixin support
+        val mx_openRestApi = holderSpec.getDeclaredAction("openRestApi"); // built-in mixin support
         assertNotNull(mx_openRestApi);
         
-        assertThrows(Exception.class, ()->holderSpec.findAssociationElseFail("openRestApi")); // should not be picked up as a property
+        assertThrows(Exception.class, ()->holderSpec.getAssociationElseFail("openRestApi")); // should not be picked up as a property
         
     }
     
@@ -183,19 +183,19 @@ class DomainModelTest_usingGoodDomain {
         val holderSpec = specificationLoader.loadSpecification(ProperMemberInheritance.class, 
                         IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
         
-        val super_action = holderSpec.findObjectActionElseFail("sampleAction");
+        val super_action = holderSpec.getObjectActionElseFail("sampleAction");
         assertNotNull(super_action);
         assertEquals("sampleAction", super_action.getId());
         assertEquals("foo", super_action.getName());
         assertEquals("bar", super_action.getDescription());
         
-        val super_property = holderSpec.findAssociationElseFail("sampleProperty");
+        val super_property = holderSpec.getAssociationElseFail("sampleProperty");
         assertNotNull(super_property);
         assertEquals("sampleProperty", super_property.getId());
         assertEquals("foo", super_property.getName());
         assertEquals("bar", super_property.getDescription());
         
-        val super_collection = holderSpec.findAssociationElseFail("sampleCollection");
+        val super_collection = holderSpec.getAssociationElseFail("sampleCollection");
         assertNotNull(super_collection);
         assertEquals("sampleCollection", super_collection.getId());
         assertEquals("foo", super_collection.getName());

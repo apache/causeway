@@ -124,7 +124,7 @@ public class Col extends PanelAbstract<EntityModel> implements HasDynamicallyVis
                 .filter(actionLayoutData -> actionLayoutData.getMetadataError() == null)
                 .filter(_NullSafe::isPresent)
                 .map(actionLayoutData -> 
-                    getModel().getTypeOfSpecification().getObjectAction(actionLayoutData.getId()).orElse(null)
+                    getModel().getTypeOfSpecification().getDeclaredAction(actionLayoutData.getId()).orElse(null)
                 )
                 .filter(_NullSafe::isPresent)
                 .collect(Collectors.toList());

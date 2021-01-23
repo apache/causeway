@@ -451,7 +451,7 @@ public class XmlSnapshot implements Snapshot {
         final ObjectSpecification nos = object.getSpecification();
         // HACK: really want a ObjectSpecification.hasField method to
         // check first.
-        val field = nos.getAssociation(fieldName).orElse(null);
+        val field = nos.getDeclaredAssociation(fieldName).orElse(null);
         if (field == null) {
             if (log.isInfoEnabled()) {
                 log.info("includeField(Pl, Vec, Str): could not locate field, skipping");

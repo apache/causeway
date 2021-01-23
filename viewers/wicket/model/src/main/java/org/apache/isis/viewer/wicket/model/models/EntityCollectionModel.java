@@ -366,7 +366,7 @@ implements LinksProvider, UiHintContainer {
         val collectionId = collectionLayoutData.getId();
         val spec = entityModel.getTypeOfSpecification();
         
-        return (OneToManyAssociation) spec.findAssociationElseFail(collectionId);
+        return (OneToManyAssociation) spec.getAssociationElseFail(collectionId);
     }
 
     private static Class<?> forName(final ObjectSpecification objectSpec) {
