@@ -31,7 +31,31 @@ import org.apache.isis.core.metamodel.spec.ActionType;
 
 public interface ObjectActionContainer {
 
-    // -- ACTION LOOKUP
+    // -- ACTION LOOKUP (INHERITENCE CONSIDERED)
+    
+    /**
+     * Same as {@link #getObjectAction(String, ActionType)}, but also considering any inherited object members. 
+     * @param id
+     * @param type
+     * 
+     * @implSpec If not found on the current 'type' search for the 'nearest' match in super-types, 
+     * and if nothing found there, search the interfaces. Special care needs to be taken, as the
+     * {@link ActionType} might be redeclared when inheriting from a super-type or interface.  
+     */
+    Optional<ObjectAction> findObjectAction(String id, @Nullable ActionType type);
+    
+    default ObjectAction findObjectActionElseFail(String id, @Nullable ActionType type) {
+        return findObjectAction(id, type)
+                .orElseThrow(()->_Exceptions.noSuchElement("id=%s type=%s", 
+                        id, 
+                        type==null ? "any" : type.name()));
+    }
+
+     default ObjectAction findObjectActionElseFail(String id) {
+        return findObjectActionElseFail(id, null);
+    }
+    
+    // -- ACTION LOOKUP, DECLARED ACTIONS (NO INHERITENCE CONSIDERED)
     
     /**
      * Get the action object represented by the specified identity string.
@@ -60,8 +84,7 @@ public interface ObjectActionContainer {
     }
     
     default ObjectAction getObjectActionElseFail(String id) {
-        return getObjectAction(id)
-                .orElseThrow(()->_Exceptions.noSuchElement("id=%s", id));  
+        return getObjectActionElseFail(id, null);
     }
 
     // -- ACTION STREAM

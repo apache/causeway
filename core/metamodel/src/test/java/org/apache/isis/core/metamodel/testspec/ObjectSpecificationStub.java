@@ -352,4 +352,10 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
         return Optional.empty();
     }
 
+    @Override
+    public Optional<ObjectAction> findObjectAction(String id, ActionType type) {
+        // poorly implemented, inheritance not supported
+        return getObjectAction(id, type);
+    }
+
 }

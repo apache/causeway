@@ -71,7 +71,9 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2 
-public class ObjectSpecificationDefault extends ObjectSpecificationAbstract implements FacetHolder {
+public class ObjectSpecificationDefault 
+extends ObjectSpecificationAbstract 
+implements FacetHolder {
 
     private static String determineShortName(final Class<?> introspectedClass) {
         final String name = introspectedClass.getName();
@@ -264,6 +266,28 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
     @Override
     public String getManagedBeanName() {
         return nameIfIsManagedBean;
+    }
+    
+    // -- findObjectAction
+    
+    @Override
+    public Optional<ObjectAction> findObjectAction(String id, ActionType type) {
+
+        if(isTypeHierarchyRoot()) {
+            return Optional.empty();
+        }
+        
+        val declaredAction = getObjectAction(id, type); // no inheritance considered
+                
+        if(declaredAction.isPresent()) {
+            return declaredAction; 
+        }
+        
+        return superclass().findObjectAction(id, type);
+        
+        //XXX future extensions should also search the interfaces, 
+        // but avoid doing redundant work when walking the type-hierarchy;
+        // (this elegant recursive solution will then need some tweaks to be efficient)
     }
     
     // -- getObjectAction

@@ -540,7 +540,9 @@ public interface ObjectSpecification extends Specification, ObjectActionContaine
                 || Externalizable.class.isAssignableFrom(getCorrespondingClass());
     }
 
-    
+    default boolean isTypeHierarchyRoot() {
+        return getCorrespondingClass().getSuperclass()==null;
+    }
     
 
 }
