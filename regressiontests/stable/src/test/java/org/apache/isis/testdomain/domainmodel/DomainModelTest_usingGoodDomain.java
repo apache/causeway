@@ -111,14 +111,14 @@ class DomainModelTest_usingGoodDomain {
         val holderSpec = specificationLoader.loadSpecification(ProperMemberSupport.class, 
                         IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
         
-        val mx_action = holderSpec.getObjectActionElseFail("action"); // when @Action at type level
+        val mx_action = holderSpec.getActionElseFail("action"); // when @Action at type level
         assertNotNull(mx_action);
         assertEquals("action", mx_action.getId());
         assertEquals("foo", mx_action.getName());
         assertEquals("bar", mx_action.getDescription());
         assertHasPublishedActionFacet(mx_action);
         
-        val mx_action2 = holderSpec.getObjectActionElseFail("action2"); // proper mixed-in action support
+        val mx_action2 = holderSpec.getActionElseFail("action2"); // proper mixed-in action support
         assertNotNull(mx_action2);
         assertHasPublishedActionFacet(mx_action2);
         
@@ -183,7 +183,7 @@ class DomainModelTest_usingGoodDomain {
         val holderSpec = specificationLoader.loadSpecification(ProperMemberInheritance.class, 
                         IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
         
-        val super_action = holderSpec.getObjectActionElseFail("sampleAction");
+        val super_action = holderSpec.getActionElseFail("sampleAction");
         assertNotNull(super_action);
         assertEquals("sampleAction", super_action.getId());
         assertEquals("foo", super_action.getName());

@@ -86,7 +86,7 @@ public class CollectionContentsAsSummary extends PanelAbstract<EntityCollectionM
         addOrReplace(feedback);
 
         final Stream<ObjectAssociation> numberAssociations = elementSpec
-                .streamAssociations(MixedIn.EXCLUDED)
+                .streamDeclaredAssociations(MixedIn.EXCLUDED)
                 .filter(CollectionContentsAsSummaryFactory.OF_TYPE_BIGDECIMAL);
 
         final RepeatingView repeating = new RepeatingView(ID_REPEATING_SUMMARY);

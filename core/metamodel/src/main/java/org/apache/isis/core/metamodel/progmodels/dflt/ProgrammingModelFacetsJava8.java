@@ -360,10 +360,10 @@ public final class ProgrammingModelFacetsJava8 extends ProgrammingModelAbstract 
         addValidator(new TitlesAndTranslationsValidator());
 
         addValidator((objectSpec, validator) -> {
-            final long numActions = objectSpec.streamObjectActions(MixedIn.INCLUDED).count();
+            final long numActions = objectSpec.streamDeclaredActions(MixedIn.INCLUDED).count();
             if (numActions > 0L) {
 
-                val actionIds = objectSpec.streamObjectActions(MixedIn.INCLUDED)
+                val actionIds = objectSpec.streamDeclaredActions(MixedIn.INCLUDED)
                 .map(ObjectAction::getIdentifier)
                 .map(Identifier::toString)
                 .collect(Collectors.joining(", "));

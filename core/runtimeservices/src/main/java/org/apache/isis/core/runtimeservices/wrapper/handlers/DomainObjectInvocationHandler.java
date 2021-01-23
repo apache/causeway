@@ -263,8 +263,8 @@ extends DelegatingInvocationHandlerDefault<T> {
             return null;
         }
         val specification = domainObjectAdapter.getSpecification();
-        val objectActions = specification.streamObjectActions(MixedIn.INCLUDED);
-        val objectAssociations = specification.streamAssociations(MixedIn.INCLUDED);
+        val objectActions = specification.streamDeclaredActions(MixedIn.INCLUDED);
+        val objectAssociations = specification.streamDeclaredAssociations(MixedIn.INCLUDED);
 
         final Stream<ObjectMember> objectMembers = Stream.concat(objectActions, objectAssociations);
         return objectMembers

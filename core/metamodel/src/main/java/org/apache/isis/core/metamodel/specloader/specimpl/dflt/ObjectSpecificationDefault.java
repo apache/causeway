@@ -273,7 +273,7 @@ implements FacetHolder {
     // -- findObjectAction
     
     @Override
-    public Optional<ObjectAction> getObjectAction(String id, @Nullable ActionType type) {
+    public Optional<ObjectAction> getAction(String id, @Nullable ActionType type) {
 
         if(isTypeHierarchyRoot()) {
             return Optional.empty(); // stop search as we reached the Object class, which does not contribute actions 
@@ -295,7 +295,7 @@ implements FacetHolder {
             return Optional.empty();
         }
         
-        return superclass().getObjectAction(id, type);
+        return superclass().getAction(id, type);
         
         //XXX future extensions should also search the interfaces, 
         // but avoid doing redundant work when walking the type-hierarchy;
@@ -309,7 +309,7 @@ implements FacetHolder {
         introspectUpTo(IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
 
         final Stream<ObjectAction> actions =
-                streamObjectActions(
+                streamDeclaredActions(
                         type==null 
                             ? ActionType.ANY 
                             : ImmutableEnumSet.of(type), 
@@ -358,7 +358,7 @@ implements FacetHolder {
     }
 
     private void cataloguePropertiesAndCollections(BiConsumer<Method, ObjectMember> onMember) {
-        streamAssociations(MixedIn.EXCLUDED)
+        streamDeclaredAssociations(MixedIn.EXCLUDED)
         .forEach(field->{
             final Stream<Facet> facets = field.streamFacets().filter(ImperativeFacet.PREDICATE);
             facets.forEach(facet->{
@@ -371,7 +371,7 @@ implements FacetHolder {
     }
 
     private void catalogueActions(BiConsumer<Method, ObjectMember> onMember) {
-        streamObjectActions(MixedIn.INCLUDED)
+        streamDeclaredActions(MixedIn.INCLUDED)
         .forEach(userAction->{
             final Stream<Facet> facets = userAction.streamFacets().filter(ImperativeFacet.PREDICATE);
             facets.forEach(facet->{

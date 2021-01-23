@@ -142,7 +142,7 @@ implements MetaModelRefiner {
                 }
 
                 final Stream<ObjectAssociation> associations = objectSpec
-                        .streamAssociations(MixedIn.EXCLUDED)
+                        .streamDeclaredAssociations(MixedIn.EXCLUDED)
                         .filter(ObjectAssociation.Predicates.PROPERTIES);
 
                 associations

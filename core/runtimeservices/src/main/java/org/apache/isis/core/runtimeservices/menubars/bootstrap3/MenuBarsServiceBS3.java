@@ -368,7 +368,7 @@ public class MenuBarsServiceBS3 implements MenuBarsService {
             }
         }
 
-        final Stream<ObjectAction> objectActions = serviceSpec.streamObjectActions(actionType, MixedIn.INCLUDED);
+        final Stream<ObjectAction> objectActions = serviceSpec.streamDeclaredActions(actionType, MixedIn.INCLUDED);
 
         return objectActions
                 // skip if annotated to not be included in repository menu using legacy mechanism

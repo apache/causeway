@@ -81,7 +81,7 @@ implements MetaModelRefiner {
             public boolean visit(ObjectSpecification objectSpec, MetaModelValidator validator) {
                 
                 val objectActions = 
-                        objectSpec.streamObjectActions(MixedIn.EXCLUDED);
+                        objectSpec.streamDeclaredActions(MixedIn.EXCLUDED);
 
                 objectActions
                 .filter(objectAction->objectAction.containsFacet(HomePageFacet.class))

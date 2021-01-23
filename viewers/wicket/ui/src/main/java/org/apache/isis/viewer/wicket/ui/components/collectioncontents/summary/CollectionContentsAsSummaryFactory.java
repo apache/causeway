@@ -65,7 +65,7 @@ public class CollectionContentsAsSummaryFactory extends ComponentFactoryAbstract
         }
         final EntityCollectionModel entityCollectionModel = (EntityCollectionModel) model;
         final ObjectSpecification elementSpec = entityCollectionModel.getTypeOfSpecification();
-        final Stream<ObjectAssociation> associations = elementSpec.streamAssociations(MixedIn.EXCLUDED);
+        final Stream<ObjectAssociation> associations = elementSpec.streamDeclaredAssociations(MixedIn.EXCLUDED);
 
         return appliesIf(associations.anyMatch(OF_TYPE_BIGDECIMAL));
     }

@@ -57,7 +57,7 @@ implements MetaModelRefiner {
         
         programmingModel.addValidator((objectSpec, validator) -> {
 
-            final Stream<ObjectAction> objectActions = objectSpec.streamObjectActions(MixedIn.EXCLUDED);
+            final Stream<ObjectAction> objectActions = objectSpec.streamDeclaredActions(MixedIn.EXCLUDED);
 
             objectActions
             .filter(objectAction->{

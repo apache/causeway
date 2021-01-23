@@ -204,7 +204,7 @@ implements CollectionCountProvider {
                 .and(associationDoesNotReferenceParent(parentSpecIfAny));
 
         final Stream<? extends ObjectAssociation> propertyList = 
-                typeOfSpec.streamAssociations(MixedIn.INCLUDED)
+                typeOfSpec.streamDeclaredAssociations(MixedIn.INCLUDED)
                 .filter(predicate);
 
         final Map<String, ObjectAssociation> propertyById = _Maps.newLinkedHashMap();

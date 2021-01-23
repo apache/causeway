@@ -63,7 +63,7 @@ public class ObjectAdapterUpdateHelper {
             final Intent intent) {
 
         final ObjectSpecification objectSpec = objectAdapter.getSpecification();
-        final Stream<ObjectAssociation> properties = objectSpec.streamAssociations(MixedIn.EXCLUDED)
+        final Stream<ObjectAssociation> properties = objectSpec.streamDeclaredAssociations(MixedIn.EXCLUDED)
                 .filter(ObjectAssociation.Predicates.PROPERTIES);
 
         final boolean[] allOk = {true}; // simply a non-thread-safe value reference

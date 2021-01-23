@@ -679,7 +679,7 @@ implements ObjectSpecification {
     // -- ASSOCIATIONS
 
     @Override
-    public Stream<ObjectAssociation> streamAssociations(final MixedIn contributed) {
+    public Stream<ObjectAssociation> streamDeclaredAssociations(final MixedIn contributed) {
         introspectUpTo(IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
 
         if(contributed.isIncluded()) {
@@ -700,7 +700,7 @@ implements ObjectSpecification {
     public Optional<? extends ObjectMember> getMember(final String memberId) {
         introspectUpTo(IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
 
-        val objectAction = getObjectAction(memberId);
+        val objectAction = getAction(memberId);
         if(objectAction.isPresent()) {
             return objectAction;
         }
@@ -742,13 +742,13 @@ implements ObjectSpecification {
     @Override
     public Optional<ObjectAssociation> getDeclaredAssociation(final String id) {
         introspectUpTo(IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
-        return streamAssociations(MixedIn.INCLUDED)
+        return streamDeclaredAssociations(MixedIn.INCLUDED)
                 .filter(objectAssociation->objectAssociation.getId().equals(id))
                 .findFirst();
     }
 
     @Override
-    public Stream<ObjectAction> streamObjectActions(
+    public Stream<ObjectAction> streamDeclaredActions(
             final ImmutableEnumSet<ActionType> types, 
             final MixedIn contributed) {
         introspectUpTo(IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
@@ -799,7 +799,7 @@ implements ObjectSpecification {
         val mixinMethodName = mixinFacet.value();
 
         final Stream<ObjectAction> mixinActions = specification
-                .streamObjectActions(ActionType.ANY, MixedIn.INCLUDED);
+                .streamDeclaredActions(ActionType.ANY, MixedIn.INCLUDED);
 
         mixinActions
         .filter(Predicates::isMixedInAssociation)
@@ -854,7 +854,7 @@ implements ObjectSpecification {
         val mixinMethodName = mixinFacet.value();
 
         final Stream<ObjectAction> mixinsActions = mixinSpec
-                .streamObjectActions(ActionType.ANY, MixedIn.INCLUDED);
+                .streamDeclaredActions(ActionType.ANY, MixedIn.INCLUDED);
 
         mixinsActions
         .filter(Predicates::isMixedInAction)

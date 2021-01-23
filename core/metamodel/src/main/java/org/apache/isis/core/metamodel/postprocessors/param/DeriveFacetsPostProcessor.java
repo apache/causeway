@@ -124,7 +124,7 @@ implements ObjectSpecificationPostProcessor, MetaModelContextAware {
 
         // all the actions of this type
         val actionTypes = inferActionTypes();
-        final Stream<ObjectAction> objectActions = objectSpecification.streamObjectActions(actionTypes, MixedIn.INCLUDED);
+        final Stream<ObjectAction> objectActions = objectSpecification.streamDeclaredActions(actionTypes, MixedIn.INCLUDED);
 
         // and all the collections of this type
         final Stream<OneToManyAssociation> collections = objectSpecification.streamCollections(MixedIn.INCLUDED);
@@ -185,7 +185,7 @@ implements ObjectSpecificationPostProcessor, MetaModelContextAware {
             final ObjectActionParameter.Predicates.ScalarParameter whetherScalarParamOfType =
                     new ObjectActionParameter.Predicates.ScalarParameter(specification);
 
-            objectSpecification.streamObjectActions(actionTypes, MixedIn.INCLUDED)
+            objectSpecification.streamDeclaredActions(actionTypes, MixedIn.INCLUDED)
             .filter(ObjectAction.Predicates.associatedWith(collection))
             .forEach(action->{
 

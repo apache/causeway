@@ -25,7 +25,6 @@ import java.util.stream.Stream;
 import javax.inject.Inject;
 import javax.xml.bind.annotation.XmlType;
 
-import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -190,7 +189,7 @@ implements MetaModelRefiner, ObjectSpecIdFacetFactory {
             }
 
             // don't check if domain service has only programmatic methods
-            final Stream<ObjectAction> objectActions = objectSpec.streamObjectActions(MixedIn.INCLUDED);
+            final Stream<ObjectAction> objectActions = objectSpec.streamDeclaredActions(MixedIn.INCLUDED);
             return objectActions.anyMatch(__->true); // return true if not empty
 
         }

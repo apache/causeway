@@ -92,7 +92,7 @@ implements MetaModelRefiner {
                         return;
                     }
 
-                    final Stream<ObjectAssociation> associations = thisSpec.streamAssociations(MixedIn.EXCLUDED);
+                    final Stream<ObjectAssociation> associations = thisSpec.streamDeclaredAssociations(MixedIn.EXCLUDED);
 
                     final String associationNames = associations
                             .map(ObjectAssociation::getName)

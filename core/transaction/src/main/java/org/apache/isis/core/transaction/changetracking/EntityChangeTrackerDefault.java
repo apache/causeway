@@ -268,7 +268,7 @@ implements
         log.debug("enlist entity's property changes for auditing {}", entity);
 
         entity.getSpecification()
-        .streamAssociations(MixedIn.EXCLUDED)
+        .streamDeclaredAssociations(MixedIn.EXCLUDED)
         .filter(ObjectAssociation.Predicates.PROPERTIES)
         .map(OneToOneAssociation.class::cast)
         .filter(property->!property.isNotPersisted())

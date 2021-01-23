@@ -97,7 +97,7 @@ public class DomainTypeReprRenderer extends ReprRendererAbstract<DomainTypeReprR
     private void addMembers() {
         final JsonRepresentation membersList = JsonRepresentation.newArray();
         representation.mapPut("members", membersList);
-        final Stream<ObjectAssociation> associations = objectSpecification.streamAssociations(MixedIn.EXCLUDED);
+        final Stream<ObjectAssociation> associations = objectSpecification.streamDeclaredAssociations(MixedIn.EXCLUDED);
 
         associations.forEach(association->{
             if (association.isOneToOneAssociation()) {
@@ -111,7 +111,7 @@ public class DomainTypeReprRenderer extends ReprRendererAbstract<DomainTypeReprR
             }
         });
 
-        final Stream<ObjectAction> actions = objectSpecification.streamObjectActions(MixedIn.INCLUDED);
+        final Stream<ObjectAction> actions = objectSpecification.streamDeclaredActions(MixedIn.INCLUDED);
 
         actions.forEach(action->{
             final LinkBuilder linkBuilder = ActionDescriptionReprRenderer

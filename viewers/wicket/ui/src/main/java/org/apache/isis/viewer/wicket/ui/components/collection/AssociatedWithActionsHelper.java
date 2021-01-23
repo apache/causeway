@@ -59,7 +59,7 @@ public class AssociatedWithActionsHelper implements Serializable {
         final ObjectSpecification objectSpec = getObjectSpecification();
 
         val actionTypes = inferActionTypes(collectionModel.getCommonContext());
-        final Stream<ObjectAction> objectActions = objectSpec.streamObjectActions(actionTypes, MixedIn.INCLUDED);
+        final Stream<ObjectAction> objectActions = objectSpec.streamDeclaredActions(actionTypes, MixedIn.INCLUDED);
 
         return objectActions
                 .filter(ObjectAction.Predicates.associatedWithAndWithCollectionParameterFor(collection))

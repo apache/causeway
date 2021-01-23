@@ -346,7 +346,7 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
     private static ObjectAction findActionElseNull(
             final ObjectSpecification specification,
             final String localActionId) {
-        final Stream<ObjectAction> objectActions = specification.streamObjectActions(MixedIn.INCLUDED);
+        final Stream<ObjectAction> objectActions = specification.streamDeclaredActions(MixedIn.INCLUDED);
 
         return objectActions
                 .filter(objectAction->
@@ -359,7 +359,7 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
             final ObjectSpecification specification,
             final String localPropertyId) {
 
-        final Stream<ObjectAssociation> associations = specification.streamAssociations(MixedIn.INCLUDED);
+        final Stream<ObjectAssociation> associations = specification.streamDeclaredAssociations(MixedIn.INCLUDED);
 
         return associations
                 .filter(association->

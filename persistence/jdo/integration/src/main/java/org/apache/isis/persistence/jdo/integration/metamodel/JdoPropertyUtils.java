@@ -63,7 +63,7 @@ public final class JdoPropertyUtils {
 
 
         final List<ObjectAssociation> propertyList = objSpec
-                .streamAssociations(MixedIn.EXCLUDED)
+                .streamDeclaredAssociations(MixedIn.EXCLUDED)
                 .filter(predicate)
                 .limit(2)
                 .collect(Collectors.toList());

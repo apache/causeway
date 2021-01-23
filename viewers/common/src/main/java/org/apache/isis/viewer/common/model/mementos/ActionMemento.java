@@ -91,7 +91,7 @@ public class ActionMemento implements Serializable {
             SpecificationLoader specificationLoader) {
         
         val objectSpec = specificationLoader.lookupBySpecIdElseLoad(owningType);
-        return objectSpec.getObjectActionElseFail(nameParmsId, actionType);
+        return objectSpec.getActionElseFail(nameParmsId, actionType);
     }
 
 }

@@ -131,7 +131,7 @@ public final class Util {
             final Predicate<ObjectAssociation> associationPredicate, final SwaggerService.Visibility visibility) {
 
         final List<ObjectAssociation> list =
-                objectSpecification.streamAssociations(MixedIn.INCLUDED)
+                objectSpecification.streamDeclaredAssociations(MixedIn.INCLUDED)
                 .filter(associationPredicate.and(associationsWith(visibility)))
                 .collect(Collectors.toList());
 
@@ -144,7 +144,7 @@ public final class Util {
             final ClassExcluder classExcluder) {
         val actionTypes = actionTypesFor(visibility);
 
-        return objectSpec.streamObjectActions(actionTypes, MixedIn.INCLUDED)
+        return objectSpec.streamDeclaredActions(actionTypes, MixedIn.INCLUDED)
                 .filter(objectAction->
                 !classExcluder.exclude(objectAction) &&
                 !visibility.isPublic() || isVisibleForPublic(objectAction)

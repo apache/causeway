@@ -198,7 +198,7 @@ public class BookmarkTreeNode implements Serializable {
             val entityModel = (EntityModel) candidateBookmarkableModel;
             val candidateAdapter = entityModel.getObject();
             final Stream<ObjectAssociation> properties = candidateAdapter.getSpecification()
-                    .streamAssociations(MixedIn.EXCLUDED)
+                    .streamDeclaredAssociations(MixedIn.EXCLUDED)
                     .filter(ObjectAssociation.Predicates.REFERENCE_PROPERTIES);
 
             properties

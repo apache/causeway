@@ -35,11 +35,11 @@ final class MetamodelUtil {
         
         allSpecs.stream()
         .forEach(spec->{
-            spec.streamObjectActions(MixedIn.INCLUDED)
+            spec.streamDeclaredActions(MixedIn.INCLUDED)
             .forEach(feature->{
                 features.add(feature.getIdentifier().toString());
             });
-            spec.streamAssociations(MixedIn.INCLUDED)
+            spec.streamDeclaredAssociations(MixedIn.INCLUDED)
             .forEach(feature->{
                 features.add(feature.getIdentifier().toString());
             });

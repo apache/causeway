@@ -64,7 +64,7 @@ public interface ObjectAssociationContainer {
      * <tt>ObjectAssociationFilters#staticallyVisible(...)</tt>
      *
      */
-    Stream<ObjectAssociation> streamAssociations(MixedIn contributed);
+    Stream<ObjectAssociation> streamDeclaredAssociations(MixedIn contributed);
 
     /**
      * All {@link ObjectAssociation association}s that represent
@@ -72,7 +72,8 @@ public interface ObjectAssociationContainer {
      * 
      */
     default Stream<OneToOneAssociation> streamProperties(MixedIn contributed) {
-        return streamAssociations(contributed)
+        //TODO support inheritance
+        return streamDeclaredAssociations(contributed)
                 .filter(ObjectAssociation.Predicates.PROPERTIES)
                 .map(x->(OneToOneAssociation)x);
     }
@@ -85,7 +86,8 @@ public interface ObjectAssociationContainer {
      * 
      */
     default Stream<OneToManyAssociation> streamCollections(MixedIn contributed){
-        return streamAssociations(contributed)
+        //TODO support inheritance
+        return streamDeclaredAssociations(contributed)
                 .filter(ObjectAssociation.Predicates.COLLECTIONS)
                 .map(x->(OneToManyAssociation)x);
     }

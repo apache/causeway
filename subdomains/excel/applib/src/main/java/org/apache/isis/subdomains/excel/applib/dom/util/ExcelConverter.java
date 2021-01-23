@@ -156,7 +156,7 @@ class ExcelConverter {
 
         final List<ManagedObject> adapters = domainObjects.stream().map(objectManager::adapt).collect(Collectors.toList());
 
-        final List<ObjectAssociation> propertyList = objectSpec.streamAssociations(MixedIn.INCLUDED)
+        final List<ObjectAssociation> propertyList = objectSpec.streamDeclaredAssociations(MixedIn.INCLUDED)
                                                         .filter(VISIBLE_PROPERTIES)
                                                         .collect(Collectors.toList());
 
@@ -248,7 +248,7 @@ class ExcelConverter {
 
         final ObjectSpecification objectSpec = specificationLoader.loadSpecification(factory.getCls());
 
-        final List<ObjectAssociation> propertyList = objectSpec.streamAssociations(MixedIn.INCLUDED)
+        final List<ObjectAssociation> propertyList = objectSpec.streamDeclaredAssociations(MixedIn.INCLUDED)
                 .filter(VISIBLE_PROPERTIES)
                 .collect(Collectors.toList());
 
@@ -544,7 +544,7 @@ class ExcelConverter {
     }
 
     private static OneToOneAssociation getAssociation(final ObjectSpecification objectSpec, final String propertyNameOrId) {
-        final Stream<ObjectAssociation> associations = objectSpec.streamAssociations(MixedIn.INCLUDED);
+        final Stream<ObjectAssociation> associations = objectSpec.streamDeclaredAssociations(MixedIn.INCLUDED);
         return associations
                 .filter(OneToOneAssociation.class::isInstance)
                 .map(OneToOneAssociation.class::cast)

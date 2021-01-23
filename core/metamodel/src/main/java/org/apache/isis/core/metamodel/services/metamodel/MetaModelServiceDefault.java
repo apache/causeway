@@ -119,7 +119,7 @@ public class MetaModelServiceDefault implements MetaModelService {
 
             {
                 final Stream<ObjectAssociation> properties = 
-                        spec.streamAssociations(MixedIn.EXCLUDED)
+                        spec.streamDeclaredAssociations(MixedIn.EXCLUDED)
                         .filter(ObjectAssociation.Predicates.PROPERTIES);
 
                 properties
@@ -130,7 +130,7 @@ public class MetaModelServiceDefault implements MetaModelService {
 
             {
                 final Stream<ObjectAssociation> associations = 
-                        spec.streamAssociations(MixedIn.EXCLUDED)
+                        spec.streamDeclaredAssociations(MixedIn.EXCLUDED)
                         .filter(ObjectAssociation.Predicates.COLLECTIONS);
 
                 associations
@@ -141,7 +141,7 @@ public class MetaModelServiceDefault implements MetaModelService {
 
             {
                 final Stream<ObjectAction> actions = 
-                        spec.streamObjectActions(MixedIn.INCLUDED);
+                        spec.streamDeclaredActions(MixedIn.INCLUDED);
 
                 actions
                 .filter(action->!exclude(action))

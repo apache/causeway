@@ -128,7 +128,7 @@ public interface ObjectSpecification extends Specification, ObjectActionContaine
      * @since 2.0
      */
     public default Optional<MixedInMember> getMixedInMember(ObjectSpecification onType) {
-        return streamObjectActions(MixedIn.INCLUDED)
+        return streamDeclaredActions(MixedIn.INCLUDED)
                 .filter(MixedInMember.class::isInstance)
                 .map(MixedInMember.class::cast)
                 .filter(member->member.getMixinType() == onType)
@@ -448,8 +448,8 @@ public interface ObjectSpecification extends Specification, ObjectActionContaine
     default Stream<FacetHolder> streamFacetHolders(){
         
         val self = Stream.of(this);
-        val actions = streamObjectActions(MixedIn.EXCLUDED);
-        val actionParameters = streamObjectActions(MixedIn.EXCLUDED)
+        val actions = streamDeclaredActions(MixedIn.EXCLUDED);
+        val actionParameters = streamDeclaredActions(MixedIn.EXCLUDED)
                 .flatMap(action->action.getParameterCount()>0
                         ? action.getParameters().stream()
                                 : Stream.empty());

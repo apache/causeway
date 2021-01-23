@@ -408,7 +408,7 @@ public class WrapperFactoryDefault implements WrapperFactory {
 
         // don't care about anything other than actions
         // (contributed properties and collections are read-only).
-        Optional<ObjectActionMixedIn> targetActionIfAny = mixedInSpec.streamObjectActions(MixedIn.INCLUDED)
+        Optional<ObjectActionMixedIn> targetActionIfAny = mixedInSpec.streamDeclaredActions(MixedIn.INCLUDED)
                 .filter(ObjectActionMixedIn.class::isInstance)
                 .map(ObjectActionMixedIn.class::cast)
                 .filter(x -> x.hasMixinAction((ObjectAction) mixinMember))

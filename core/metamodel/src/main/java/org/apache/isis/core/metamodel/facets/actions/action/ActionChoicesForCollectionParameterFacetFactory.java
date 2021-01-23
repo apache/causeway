@@ -78,7 +78,7 @@ implements MetaModelRefiner {
                     final ObjectSpecification objectSpec,
                     final MetaModelValidator validator) {
                 
-                objectSpec.streamObjectActions(MixedIn.INCLUDED)
+                objectSpec.streamDeclaredActions(MixedIn.INCLUDED)
                 .forEach(objectAction->{
                     if(objectAction instanceof ObjectActionMixedIn) {
                         // we'll report only the mixin

@@ -110,10 +110,10 @@ public class ApplicationFeatureRepositoryDefaultTest {
                 allowing(mockSpec).getFullIdentifier();
                 will(returnValue(Bar.class.getName()));
 
-                allowing(mockSpec).streamAssociations(with(MixedIn.INCLUDED));//, with(ObjectAssociation.Predicates.PROPERTIES));
+                allowing(mockSpec).streamDeclaredAssociations(with(MixedIn.INCLUDED));//, with(ObjectAssociation.Predicates.PROPERTIES));
                 will(returnValue(properties.stream().filter(ObjectAssociation.Predicates.PROPERTIES)));
 
-                allowing(mockSpec).streamAssociations(with(MixedIn.INCLUDED));//, with(ObjectAssociation.Predicates.COLLECTIONS));
+                allowing(mockSpec).streamDeclaredAssociations(with(MixedIn.INCLUDED));//, with(ObjectAssociation.Predicates.COLLECTIONS));
                 will(returnValue(collections.stream().filter(ObjectAssociation.Predicates.COLLECTIONS)));
 
                 allowing(mockSpec).getFacet(HiddenFacet.class);
@@ -127,7 +127,7 @@ public class ApplicationFeatureRepositoryDefaultTest {
                 allowing(mockSpec).getCorrespondingClass();
                 will(returnValue(Bar.class));
 
-                allowing(mockSpec).streamObjectActions(with(MixedIn.INCLUDED));
+                allowing(mockSpec).streamDeclaredActions(with(MixedIn.INCLUDED));
                 will(returnValue(actions.stream()));
 
                 allowing(mockProp).getId();

@@ -109,7 +109,7 @@ implements MethodPrefixBasedFacetFactory {
             public boolean visit(ObjectSpecification objectSpec, MetaModelValidator metaModelValidator) {
 
                 // ensure accepted actions do not have any of the reserved prefixes
-                objectSpec.streamObjectActions(MixedIn.EXCLUDED)
+                objectSpec.streamDeclaredActions(MixedIn.EXCLUDED)
                         .forEach(objectAction -> {
 
                             val actionId = objectAction.getId();

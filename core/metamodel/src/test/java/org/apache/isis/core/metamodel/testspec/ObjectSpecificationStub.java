@@ -71,7 +71,7 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
 
     @Override
     public Optional<? extends ObjectMember> getMember(final String memberId) {
-        val objectAction = getObjectAction(memberId);
+        val objectAction = getAction(memberId);
         if(objectAction.isPresent()) {
             return objectAction;
         }
@@ -122,7 +122,7 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
     }
 
     @Override
-    public Stream<ObjectAssociation> streamAssociations(final MixedIn contributed) {
+    public Stream<ObjectAssociation> streamDeclaredAssociations(final MixedIn contributed) {
         return fields.stream();
     }
 
@@ -298,12 +298,12 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
     // /////////////////////////////////////////////////////////////
 
     @Override
-    public Stream<ObjectAction> streamObjectActions(final MixedIn contributed) {
+    public Stream<ObjectAction> streamDeclaredActions(final MixedIn contributed) {
         return null;
     }
 
     @Override
-    public Stream<ObjectAction> streamObjectActions(ImmutableEnumSet<ActionType> types, MixedIn contributed) {
+    public Stream<ObjectAction> streamDeclaredActions(ImmutableEnumSet<ActionType> types, MixedIn contributed) {
         return null;
     }
     
@@ -353,7 +353,7 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
     }
 
     @Override
-    public Optional<ObjectAction> getObjectAction(String id, ActionType type) {
+    public Optional<ObjectAction> getAction(String id, ActionType type) {
         // poorly implemented, inheritance not supported
         return getDeclaredAction(id, type);
     }

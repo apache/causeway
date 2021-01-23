@@ -55,7 +55,7 @@ public abstract class ManagedMember implements ManagedFeature {
         .map(collection->collection.isOneToManyAssociation()?collection:null)),
         
         ACTION(ObjectAction.class, (spec, actionId)->
-        spec.getObjectAction(actionId));
+        spec.getAction(actionId));
         
         @Getter private final Class<? extends ObjectMember> memberType;
         private final BiFunction<

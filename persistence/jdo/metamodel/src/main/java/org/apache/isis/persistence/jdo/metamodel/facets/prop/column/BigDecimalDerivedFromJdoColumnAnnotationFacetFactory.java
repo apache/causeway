@@ -124,7 +124,7 @@ implements MetaModelRefiner {
                     return;
                 }
 
-                final Stream<ObjectAssociation> associations = objectSpec.streamAssociations(MixedIn.EXCLUDED)
+                final Stream<ObjectAssociation> associations = objectSpec.streamDeclaredAssociations(MixedIn.EXCLUDED)
                         .filter(ObjectAssociation.Predicates.PROPERTIES);
 
                 associations

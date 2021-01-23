@@ -42,22 +42,22 @@ public interface ObjectActionContainer {
      * and if nothing found there, search the interfaces. Special care needs to be taken, as the
      * {@link ActionType} might be redeclared when inheriting from a super-type or interface.  
      */
-    Optional<ObjectAction> getObjectAction(String id, @Nullable ActionType type);
+    Optional<ObjectAction> getAction(String id, @Nullable ActionType type);
     
-    default ObjectAction getObjectActionElseFail(String id, @Nullable ActionType type) {
-        return getObjectAction(id, type)
+    default ObjectAction getActionElseFail(String id, @Nullable ActionType type) {
+        return getAction(id, type)
                 .orElseThrow(()->_Exceptions.noSuchElement("id=%s type=%s", 
                         id, 
                         type==null ? "any" : type.name()));
     }
 
 
-    default Optional<ObjectAction> getObjectAction(String id) {
-        return getObjectAction(id, null);
+    default Optional<ObjectAction> getAction(String id) {
+        return getAction(id, null);
     }
     
-    default ObjectAction getObjectActionElseFail(String id) {
-        return getObjectActionElseFail(id, null);
+    default ObjectAction getActionElseFail(String id) {
+        return getActionElseFail(id, null);
     }
     
     
@@ -88,13 +88,13 @@ public interface ObjectActionContainer {
      * Returns an array of actions of the specified type, including or excluding
      * contributed actions as required.
      */
-    Stream<ObjectAction> streamObjectActions(ImmutableEnumSet<ActionType> types, MixedIn contributed);
+    Stream<ObjectAction> streamDeclaredActions(ImmutableEnumSet<ActionType> types, MixedIn contributed);
 
-    default Stream<ObjectAction> streamObjectActions(ActionType type, MixedIn contributed) {
-        return streamObjectActions(ImmutableEnumSet.of(type), contributed);
+    default Stream<ObjectAction> streamDeclaredActions(ActionType type, MixedIn contributed) {
+        return streamDeclaredActions(ImmutableEnumSet.of(type), contributed);
     }
     
-    default Stream<ObjectAction> streamObjectActions(MixedIn contributed) {
-        return streamObjectActions(ActionType.ANY, contributed);
+    default Stream<ObjectAction> streamDeclaredActions(MixedIn contributed) {
+        return streamDeclaredActions(ActionType.ANY, contributed);
     }
 }

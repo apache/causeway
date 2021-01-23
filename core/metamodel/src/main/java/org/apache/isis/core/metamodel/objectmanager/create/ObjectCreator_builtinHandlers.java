@@ -100,7 +100,7 @@ final class ObjectCreator_builtinHandlers {
         private ManagedObject initializePropertiesAndDoCallback(ManagedObject adapter) {
 
             // initialize new object
-            adapter.getSpecification().streamAssociations(MixedIn.EXCLUDED)
+            adapter.getSpecification().streamDeclaredAssociations(MixedIn.EXCLUDED)
             .forEach(field->field.toDefault(adapter));
 
              val pojo = adapter.getPojo();

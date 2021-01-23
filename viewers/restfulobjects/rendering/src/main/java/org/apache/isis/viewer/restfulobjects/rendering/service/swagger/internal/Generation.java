@@ -171,9 +171,9 @@ class Generation {
     @SuppressWarnings("unused")
     private void debugTraverseAllSpecs(final Collection<ObjectSpecification> allSpecs) {
         for (final ObjectSpecification objectSpec :  allSpecs) {
-            objectSpec.streamAssociations(MixedIn.INCLUDED)
+            objectSpec.streamDeclaredAssociations(MixedIn.INCLUDED)
             .collect(Collectors.toList());
-            objectSpec.streamObjectActions(MixedIn.INCLUDED)
+            objectSpec.streamDeclaredActions(MixedIn.INCLUDED)
             .collect(Collectors.toList());
         }
     }
