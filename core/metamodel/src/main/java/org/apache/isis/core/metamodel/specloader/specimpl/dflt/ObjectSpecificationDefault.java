@@ -28,6 +28,7 @@ import java.util.stream.Stream;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.metamodel.BeanSort;
+import org.apache.isis.commons.collections.ImmutableEnumSet;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
@@ -272,16 +273,11 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
         introspectUpTo(IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
 
         final Stream<ObjectAction> actions =
-                streamObjectActions(type, MixedIn.INCLUDED);
-        return firstAction(actions, id);
-    }
-
-    @Override
-    public Optional<ObjectAction> getObjectAction(final String id) {
-        introspectUpTo(IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
-
-        final Stream<ObjectAction> actions =
-                streamObjectActions(ActionType.ANY, MixedIn.INCLUDED);
+                streamObjectActions(
+                        type==null 
+                            ? ActionType.ANY 
+                            : ImmutableEnumSet.of(type), 
+                        MixedIn.INCLUDED);
         return firstAction(actions, id);
     }
 

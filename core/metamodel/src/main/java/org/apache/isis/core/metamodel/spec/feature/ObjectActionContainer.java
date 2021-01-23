@@ -22,6 +22,8 @@ package org.apache.isis.core.metamodel.spec.feature;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import javax.annotation.Nullable;
+
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.commons.collections.ImmutableEnumSet;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
@@ -40,24 +42,22 @@ public interface ObjectActionContainer {
      *
      * @see #getObjectAction(String)
      */
-    Optional<ObjectAction> getObjectAction(String id, ActionType type);
+    Optional<ObjectAction> getObjectAction(String id, @Nullable ActionType type);
     
-    default ObjectAction getObjectActionElseFail(String id, ActionType type) {
+    default ObjectAction getObjectActionElseFail(String id, @Nullable ActionType type) {
         return getObjectAction(id, type)
-                .orElseThrow(()->_Exceptions.noSuchElement("id=%s type=%s", id, type));  
+                .orElseThrow(()->_Exceptions.noSuchElement("id=%s type=%s", 
+                        id, 
+                        type==null ? "any" : type.name()));  
     }
 
     /**
-     * Get the action object represented by the specified identity string,
-     * irrespective of {@link ActionType}.
-     * <p>
-     * The identity string can be either fully specified with parameters (as per
-     * {@link Identifier#toNameParmsIdentityString()} or in abbreviated form (
-     * {@link Identifier#toNameIdentityString()}).
-     *
-     * @see #getObjectAction(ActionType, String)
+     * Shortcut to {@link #getObjectAction(String, null)}, meaning where action type is <i>any</i>.
+     * @see #getObjectAction(String, ActionType)
      */
-    Optional<ObjectAction> getObjectAction(String id);
+    default Optional<ObjectAction> getObjectAction(String id) {
+        return getObjectAction(id, null);
+    }
     
     default ObjectAction getObjectActionElseFail(String id) {
         return getObjectAction(id)

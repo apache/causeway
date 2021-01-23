@@ -28,7 +28,6 @@ import java.util.stream.Stream;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.metamodel.BeanSort;
-import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.collections.ImmutableEnumSet;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.consent.Consent;
@@ -155,12 +154,7 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
         return null;
     }
 
-    //@Override
-    private Optional<ObjectAction> getObjectAction(
-            final ActionType type,
-            final String name, 
-            final Can<ObjectSpecification> parameters) {
-        
+    private Optional<ObjectAction> lookupObjectAction(final String name) {
         if (action != null && action.getId().equals(name)) {
             return Optional.of(action);
         }
@@ -169,19 +163,19 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
 
     @Override
     public Optional<ObjectAction> getObjectAction(final String id, final ActionType type) {
-        final int openBracket = id.indexOf('(');
-        return getObjectAction(type, id.substring(0, openBracket), null);
-    }
-
-    @Override
-    public Optional<ObjectAction> getObjectAction(final String nameParmsIdentityString) {
-        for (final ActionType type : ActionType.values()) {
-            val action = getObjectAction(nameParmsIdentityString, type);
-            if (action.isPresent()) {
-                return action;
-            }
+        val nameParmsIdentityString = id.substring(0, id.indexOf('('));
+        val action = lookupObjectAction(nameParmsIdentityString);
+        
+        if(type==null) {
+            return action;
+        }
+        
+        if (action.isPresent()
+                && action.get().getType() == type) {
+            return action;
         }
         return Optional.empty();
+        
     }
 
     @Override
