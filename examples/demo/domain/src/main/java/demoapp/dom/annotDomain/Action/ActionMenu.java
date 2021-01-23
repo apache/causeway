@@ -44,7 +44,6 @@ import demoapp.dom.annotDomain.Action.typeOf.ActionTypeOfVm;
 import demoapp.dom.annotDomain.Action.typeOf.child.ActionTypeOfChildVm;
 
 @DomainService(nature=NatureOfService.VIEW, objectType = "demo.ActionMenu")
-//@Log4j2
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class ActionMenu {
 
@@ -78,7 +77,7 @@ public class ActionMenu {
 
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-asterisk", describedAs = "Decouples interaction of actions")
+    @ActionLayout(cssClassFa="fa-asterisk", describedAs = "Class of the domain event emitted when interacting with the action")
     public ActionDomainEventVm domainEvent(){
         return new ActionDomainEventVm("value");
     }
@@ -88,7 +87,7 @@ public class ActionMenu {
     public ActionExecutionPublishingJdo executionPublishing(){
         return actionPublishingJdoEntities.first();
     }
-    
+
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-glasses", describedAs = "Visibility of actions")
     public ActionHiddenVm hidden(){
@@ -108,7 +107,7 @@ public class ActionMenu {
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-square", describedAs = "Semantic relationship between actions and other properties or collections")
+    @ActionLayout(cssClassFa="fa-shapes", describedAs = "Semantic relationship between actions and other properties or collections")
     public ActionTypeOfVm typeOf(){
         val typeOfVm = new ActionTypeOfVm();
         val children = typeOfVm.getChildren();

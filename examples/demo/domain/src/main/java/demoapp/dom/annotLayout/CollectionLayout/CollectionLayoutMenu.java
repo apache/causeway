@@ -18,20 +18,66 @@
  */
 package demoapp.dom.annotLayout.CollectionLayout;
 
-import javax.inject.Inject;
-
+import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
-import org.apache.isis.applib.services.clock.ClockService;
-import org.apache.isis.applib.value.Blob;
+import org.apache.isis.applib.annotation.SemanticsOf;
 
 import lombok.extern.log4j.Log4j2;
-
-import demoapp.dom.types.Samples;
 
 @DomainService(nature=NatureOfService.VIEW, objectType = "demo.CollectionLayoutMenu")
 @Log4j2
 public class CollectionLayoutMenu {
+
+    @Action(semantics = SemanticsOf.SAFE)
+    @ActionLayout(cssClassFa="fa-xxx", describedAs = "Xxx"
+            , named = "CSS Class (TODO)"
+    )
+    public void cssClass(){
+    }
+
+    @Action(semantics = SemanticsOf.SAFE)
+    @ActionLayout(cssClassFa="fa-xxx", describedAs = "Xxx"
+            , named = "Default View (TODO)"
+    )
+    public void defaultView(){
+    }
+
+    @Action(semantics = SemanticsOf.SAFE)
+    @ActionLayout(cssClassFa="fa-xxx", describedAs = "Xxx"
+            , named = "Described As (TODO)"
+    )
+    public void describedAs(){
+    }
+
+    @Action(semantics = SemanticsOf.SAFE)
+    @ActionLayout(cssClassFa="fa-xxx", describedAs = "Xxx"
+            , named = "Hidden (TODO)"
+    )
+    public void hidden(){
+    }
+
+    @Action(semantics = SemanticsOf.SAFE)
+    @ActionLayout(cssClassFa="fa-xxx", describedAs = "Xxx"
+            , named = "Named (TODO)"
+    )
+    public void named(){
+    }
+
+    @Action(semantics = SemanticsOf.SAFE)
+    @ActionLayout(cssClassFa="fa-xxx", describedAs = "Xxx"
+            , named = "Paged (TODO)"
+    )
+    public void paged(){
+    }
+
+    @Action(semantics = SemanticsOf.SAFE)
+    @ActionLayout(cssClassFa="fa-xxx", describedAs = "Xxx"
+            , named = "Sorted By (TODO)"
+    )
+    public void sortedBy(){
+    }
 
 
 }

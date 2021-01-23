@@ -42,7 +42,7 @@ public class CollectionMenu {
     final FactoryService factoryService;
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-asterisk", describedAs = "Decouples interaction of collections")
+    @ActionLayout(cssClassFa="fa-asterisk", describedAs = "Class of the domain event emitted when interacting with the collection")
     public CollectionDomainEventVm domainEvent(){
         val collectionDomainEventVm = new CollectionDomainEventVm();
 
@@ -51,6 +51,20 @@ public class CollectionMenu {
         addChild(collectionDomainEventVm).act();
 
         return collectionDomainEventVm;
+    }
+
+    @Action(semantics = SemanticsOf.SAFE)
+    @ActionLayout(cssClassFa="fa-glasses", describedAs = "Visibility of collections"
+    , named = "Hidden (TODO)"
+    )
+    public void hidden(){
+    }
+
+    @Action(semantics = SemanticsOf.SAFE)
+    @ActionLayout(cssClassFa="fa-shapes", describedAs = "Element type of collections"
+    , named = "Type of (TODO)"
+    )
+    public void typeOf(){
     }
 
     private CollectionDomainEventVm_addChild addChild(CollectionDomainEventVm collectionDomainEventVm) {

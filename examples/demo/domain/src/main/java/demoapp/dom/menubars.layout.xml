@@ -121,13 +121,16 @@ For latest we use: https://raw.githubusercontent.com/apache/isis/master/antora/s
             <mb3:named>Domain Annot</mb3:named>
             <mb3:section>
                 <mb3:named>@DomainObject</mb3:named>
+                <mb3:serviceAction objectType="demo.DomainObjectMenu" id="autoComplete"/>
+                <mb3:serviceAction objectType="demo.DomainObjectMenu" id="bounded"/>
+                <mb3:serviceAction objectType="demo.DomainObjectMenu" id="editing"/>
                 <mb3:serviceAction objectType="demo.DomainObjectMenu" id="entityChangePublishing"/>
-                <mb3:serviceAction objectType="demo.DomainObjectMenu" id="natureStateful">
-                    <cpt:describedAs>@DomainObject(nature=VIEW_MODEL) for a Stateful View Model</cpt:describedAs>
-                </mb3:serviceAction>
-                <mb3:serviceAction objectType="demo.DomainObjectMenu" id="natureStatefulRefsEntity">
-                    <cpt:describedAs>@DomainObject(nature=VIEW_MODEL) for a Stateful View Model referencing an entity</cpt:describedAs>
-                </mb3:serviceAction>
+                <mb3:serviceAction objectType="demo.DomainObjectMenu" id="mixinMethod"/>
+                <mb3:serviceAction objectType="demo.DomainObjectMenu" id="natureStateful"/>
+                <mb3:serviceAction objectType="demo.DomainObjectMenu" id="natureStatefulRefsEntity"/>
+                <mb3:serviceAction objectType="demo.DomainObjectMenu" id="objectType"/>
+                <mb3:serviceAction objectType="demo.DomainObjectMenu" id="xxxDomainEvent"/>
+                <mb3:serviceAction objectType="demo.DomainObjectMenu" id="xxxLifecycleEvent"/>
             </mb3:section>
             <mb3:section>
                 <mb3:named>@Action</mb3:named>
@@ -139,10 +142,6 @@ For latest we use: https://raw.githubusercontent.com/apache/isis/master/antora/s
                 <mb3:serviceAction objectType="demo.ActionMenu" id="restrictTo"/>
                 <mb3:serviceAction objectType="demo.ActionMenu" id="semantics"/>
                 <mb3:serviceAction objectType="demo.ActionMenu" id="typeOf"/>
-            </mb3:section>
-            <mb3:section>
-                <mb3:named>@Collection</mb3:named>
-                <mb3:serviceAction objectType="demo.CollectionMenu" id="domainEvent"/>
             </mb3:section>
             <mb3:section>
                 <mb3:named>@Property</mb3:named>
@@ -159,14 +158,38 @@ For latest we use: https://raw.githubusercontent.com/apache/isis/master/antora/s
                 <mb3:serviceAction objectType="demo.PropertyMenu" id="regexPattern"/>
                 <mb3:serviceAction objectType="demo.PropertyMenu" id="snapshot"/>
             </mb3:section>
+            <mb3:section>
+                <mb3:named>@Collection</mb3:named>
+                <mb3:serviceAction objectType="demo.CollectionMenu" id="domainEvent"/>
+                <mb3:serviceAction objectType="demo.CollectionMenu" id="hidden"/>
+                <mb3:serviceAction objectType="demo.CollectionMenu" id="typeOf"/>
+            </mb3:section>
         </mb3:menu>
 
         <mb3:menu>
             <mb3:named>Layout Annot</mb3:named>
             <mb3:section>
+                <mb3:named>@DomainObjectLayout</mb3:named>
+                <mb3:serviceAction objectType="demo.DomainObjectLayoutMenu" id="bookmarking"/>
+                <mb3:serviceAction objectType="demo.DomainObjectLayoutMenu" id="cssClass"/>
+                <mb3:serviceAction objectType="demo.DomainObjectLayoutMenu" id="cssClassFa"/>
+                <mb3:serviceAction objectType="demo.DomainObjectLayoutMenu" id="describedAs"/>
+                <mb3:serviceAction objectType="demo.DomainObjectLayoutMenu" id="named"/>
+                <mb3:serviceAction objectType="demo.DomainObjectLayoutMenu" id="paged"/>
+                <mb3:serviceAction objectType="demo.DomainObjectLayoutMenu" id="plural"/>
+                <mb3:serviceAction objectType="demo.DomainObjectLayoutMenu" id="xxxUiEvent"/>
+            </mb3:section>
+            <mb3:section>
                 <mb3:named>@ActionLayout</mb3:named>
+                <mb3:serviceAction objectType="demo.ActionLayoutMenu" id="bookmarking"/>
+                <mb3:serviceAction objectType="demo.ActionLayoutMenu" id="cssClass"/>
+                <mb3:serviceAction objectType="demo.ActionLayoutMenu" id="cssClassFa"/>
+                <mb3:serviceAction objectType="demo.ActionLayoutMenu" id="describedAs"/>
+                <mb3:serviceAction objectType="demo.ActionLayoutMenu" id="hidden"/>
+                <mb3:serviceAction objectType="demo.ActionLayoutMenu" id="named"/>
                 <mb3:serviceAction objectType="demo.ActionLayoutMenu" id="position"/>
                 <mb3:serviceAction objectType="demo.ActionLayoutMenu" id="promptStyle"/>
+                <mb3:serviceAction objectType="demo.ActionLayoutMenu" id="redirectPolicy"/>
             </mb3:section>
             <mb3:section>
                 <mb3:named>@PropertyLayout</mb3:named>
@@ -180,6 +203,16 @@ For latest we use: https://raw.githubusercontent.com/apache/isis/master/antora/s
                 <mb3:serviceAction objectType="demo.PropertyLayoutMenu" id="renderDay"/>
                 <mb3:serviceAction objectType="demo.PropertyLayoutMenu" id="repainting"/>
                 <mb3:serviceAction objectType="demo.PropertyLayoutMenu" id="typicalLength"/>
+            </mb3:section>
+            <mb3:section>
+                <mb3:named>@CollectionLayout</mb3:named>
+                <mb3:serviceAction objectType="demo.CollectionLayoutMenu" id="cssClass"/>
+                <mb3:serviceAction objectType="demo.CollectionLayoutMenu" id="defaultView"/>
+                <mb3:serviceAction objectType="demo.CollectionLayoutMenu" id="describedAs"/>
+                <mb3:serviceAction objectType="demo.CollectionLayoutMenu" id="hidden"/>
+                <mb3:serviceAction objectType="demo.CollectionLayoutMenu" id="named"/>
+                <mb3:serviceAction objectType="demo.CollectionLayoutMenu" id="paged"/>
+                <mb3:serviceAction objectType="demo.CollectionLayoutMenu" id="sortedBy"/>
             </mb3:section>
         </mb3:menu>
 

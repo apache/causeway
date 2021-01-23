@@ -26,28 +26,32 @@ The related `XmlService` domain service can be used to convert this into a strin
 The `XmlSnapshotParentVm` is used as the root of snapshots.
 It references a collection of objects as its children, and another single domain object as its peer.
 
-[plantuml]
 .`XmlSnapshotVm` is the root of the snapshots
-----
-hide empty members
+image::class-diagram.svg[]
 
-class XmlSnapshotParentVm {
-    text: String
-}
-class XmlSnapshotChildVm {
-    value: String
-}
-class XmlSnapshotPeerVm {
-    value: String
-}
-class XmlSnapshotPeerChildVm {
-    value: String
-}
 
-XmlSnapshotParentVm -r->  XmlSnapshotPeerVm : peer
-XmlSnapshotParentVm -d-> "0..*" XmlSnapshotChildVm : " children"
-XmlSnapshotPeerVm -d-> "0..*" XmlSnapshotPeerChildVm : " children"
-----
+//[plantuml]
+//.`XmlSnapshotVm` is the root of the snapshots
+//----
+//hide empty members
+//
+//class XmlSnapshotParentVm {
+//    text: String
+//}
+//class XmlSnapshotChildVm {
+//    value: String
+//}
+//class XmlSnapshotPeerVm {
+//    value: String
+//}
+//class XmlSnapshotPeerChildVm {
+//    value: String
+//}
+//
+//XmlSnapshotParentVm -r->  XmlSnapshotPeerVm : peer
+//XmlSnapshotParentVm -d-> "0..*" XmlSnapshotChildVm : " children"
+//XmlSnapshotPeerVm -d-> "0..*" XmlSnapshotPeerChildVm : " children"
+//----
 
 
 == XML Snapshot

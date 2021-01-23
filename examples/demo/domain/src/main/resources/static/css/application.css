@@ -261,4 +261,5 @@ div.exceptionStackTracePanel div.errorInfo h2.mainMessage {
 
 .dropdown-menu{
     overflow-y:auto;
+    max-height: 600px;
 }

@@ -30,7 +30,6 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.Clob;
 
-import demoapp.dom.annotDomain.Property.snapshot.PropertySnapshotVm;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
@@ -50,6 +49,7 @@ import demoapp.dom.annotDomain.Property.projecting.PropertyProjectingVm;
 import demoapp.dom.annotDomain.Property.projecting.child.PropertyProjectingChildVm;
 import demoapp.dom.annotDomain.Property.projecting.jdo.PropertyProjectingChildJdoEntities;
 import demoapp.dom.annotDomain.Property.regexPattern.PropertyRegexPatternVm;
+import demoapp.dom.annotDomain.Property.snapshot.PropertySnapshotVm;
 import demoapp.dom.types.Samples;
 
 @DomainService(nature=NatureOfService.VIEW, objectType = "demo.PropertyMenu")
@@ -70,7 +70,7 @@ public class PropertyMenu {
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-asterisk", describedAs = "Decouples interaction of properties")
+    @ActionLayout(cssClassFa="fa-asterisk", describedAs = "Class of the domain event emitted when interacting with the property")
     public PropertyDomainEventVm domainEvent(){
         return new PropertyDomainEventVm("change me");
     }

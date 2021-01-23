@@ -18,35 +18,74 @@
  */
 package demoapp.dom.annotLayout.DomainObjectLayout;
 
-import javax.inject.Inject;
-
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.services.clock.ClockService;
-import org.apache.isis.applib.value.Blob;
 
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
-
-import demoapp.dom.annotLayout.PropertyLayout.cssClass.PropertyLayoutCssClassVm;
-import demoapp.dom.annotLayout.PropertyLayout.describedAs.PropertyLayoutDescribedAsVm;
-import demoapp.dom.annotLayout.PropertyLayout.hidden.PropertyLayoutHiddenVm;
-import demoapp.dom.annotLayout.PropertyLayout.hidden.child.PropertyLayoutHiddenChildVm;
-import demoapp.dom.annotLayout.PropertyLayout.labelPosition.PropertyLayoutLabelPositionVm;
-import demoapp.dom.annotLayout.PropertyLayout.multiLine.PropertyLayoutMultiLineVm;
-import demoapp.dom.annotLayout.PropertyLayout.named.PropertyLayoutNamedVm;
-import demoapp.dom.annotLayout.PropertyLayout.navigable.FileNodeVm;
-import demoapp.dom.annotLayout.PropertyLayout.renderDay.PropertyLayoutRenderDayVm;
-import demoapp.dom.annotLayout.PropertyLayout.repainting.PropertyLayoutRepaintingVm;
-import demoapp.dom.annotLayout.PropertyLayout.typicalLength.PropertyLayoutTypicalLengthVm;
-import demoapp.dom.types.Samples;
 
 @DomainService(nature=NatureOfService.VIEW, objectType = "demo.DomainObjectLayoutMenu")
 @Log4j2
 public class DomainObjectLayoutMenu {
+
+    @Action(semantics = SemanticsOf.SAFE)
+    @ActionLayout(cssClassFa="fa-bookmark", describedAs = "Xxx"
+            , named = "Bookmarking (TODO)"
+    )
+    public void bookmarking(){
+    }
+
+
+    @Action(semantics = SemanticsOf.SAFE)
+    @ActionLayout(cssClassFa="fa-xxx", describedAs = "Xxx"
+            , named = "CSS Class (TODO)"
+    )
+    public void cssClass(){
+    }
+
+    @Action(semantics = SemanticsOf.SAFE)
+    @ActionLayout(cssClassFa="fa-xxx", describedAs = "Xxx"
+            , named = "CSS Class FA (TODO)"
+    )
+    public void cssClassFa(){
+    }
+
+    @Action(semantics = SemanticsOf.SAFE)
+    @ActionLayout(cssClassFa="fa-xxx", describedAs = "Xxx"
+            , named = "Described As (TODO)"
+    )
+    public void describedAs(){
+    }
+
+    @Action(semantics = SemanticsOf.SAFE)
+    @ActionLayout(cssClassFa="fa-xxx", describedAs = "Xxx"
+            , named = "Named (TODO)"
+    )
+    public void named(){
+    }
+
+    @Action(semantics = SemanticsOf.SAFE)
+    @ActionLayout(cssClassFa="fa-xxx", describedAs = "Xxx"
+            , named = "Paged (TODO)"
+    )
+    public void paged(){
+    }
+
+    @Action(semantics = SemanticsOf.SAFE)
+    @ActionLayout(cssClassFa="fa-xxx", describedAs = "Xxx"
+            , named = "Plural (TODO)"
+    )
+    public void plural(){
+    }
+
+    @Action(semantics = SemanticsOf.SAFE)
+    @ActionLayout(cssClassFa="fa-xxx", describedAs = "Xxx"
+            , named = "??? UI Event (TODO)"
+    )
+    public void xxxUiEvent(){
+    }
 
 
 }

@@ -31,6 +31,48 @@ import lombok.extern.log4j.Log4j2;
 public class ActionLayoutMenu {
 
     @Action(semantics = SemanticsOf.SAFE)
+    @ActionLayout(cssClassFa="fa-bookmark", describedAs = "Xxx"
+            , named = "Bookmarking (TODO)"
+    )
+    public void bookmarking(){
+    }
+
+    @Action(semantics = SemanticsOf.SAFE)
+    @ActionLayout(cssClassFa="fa-xxx", describedAs = "Xxx"
+            , named = "CSS Class (TODO)"
+    )
+    public void cssClass(){
+    }
+
+    @Action(semantics = SemanticsOf.SAFE)
+    @ActionLayout(cssClassFa="fa-xxx", describedAs = "Xxx"
+            , named = "CSS Class FA (TODO)"
+    )
+    public void cssClassFa(){
+    }
+
+    @Action(semantics = SemanticsOf.SAFE)
+    @ActionLayout(cssClassFa="fa-xxx", describedAs = "Xxx"
+            , named = "Described As (TODO)"
+    )
+    public void describedAs(){
+    }
+
+    @Action(semantics = SemanticsOf.SAFE)
+    @ActionLayout(cssClassFa="fa-xxx", describedAs = "Xxx"
+            , named = "Hidden (TODO)"
+    )
+    public void hidden(){
+    }
+
+    @Action(semantics = SemanticsOf.SAFE)
+    @ActionLayout(cssClassFa="fa-xxx", describedAs = "Xxx"
+            , named = "Named (TODO)"
+    )
+    public void named(){
+    }
+
+    @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-map-pin", describedAs = "Position of action buttons")
     public demoapp.dom.annotLayout.ActionLayout.position.ActionLayoutPositionVm position(){
         return new demoapp.dom.annotLayout.ActionLayout.position.ActionLayoutPositionVm();
@@ -40,6 +82,13 @@ public class ActionLayoutMenu {
     @ActionLayout(cssClassFa="fa-question-circle", describedAs = "Location and style of action's prompt dialog")
     public demoapp.dom.annotLayout.ActionLayout.promptStyle.ActionLayoutPromptStyleVm promptStyle(){
         return new demoapp.dom.annotLayout.ActionLayout.promptStyle.ActionLayoutPromptStyleVm();
+    }
+
+    @Action(semantics = SemanticsOf.SAFE)
+    @ActionLayout(cssClassFa="fa-xxx", describedAs = "Xxx"
+            , named = "Redirect Policy (TODO)"
+    )
+    public void redirectPolicy(){
     }
 
 
