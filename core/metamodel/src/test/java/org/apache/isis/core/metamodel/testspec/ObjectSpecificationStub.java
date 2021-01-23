@@ -359,9 +359,21 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
     }
     
     @Override
+    public Stream<ObjectAction> streamActions(ImmutableEnumSet<ActionType> types, MixedIn contributed) {
+        // poorly implemented, inheritance not supported
+        return streamDeclaredActions(contributed);
+    }
+    
+    @Override
     public Optional<ObjectAssociation> getAssociation(String id) {
         // poorly implemented, inheritance not supported
         return getDeclaredAssociation(id);
+    }
+
+    @Override
+    public Stream<ObjectAssociation> streamAssociations(MixedIn contributed) {
+        // poorly implemented, inheritance not supported
+        return streamDeclaredAssociations(contributed);
     }
 
 }

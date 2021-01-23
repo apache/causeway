@@ -82,7 +82,19 @@ public interface ObjectActionContainer {
         return getDeclaredAction(id, null);
     }
 
-    // -- ACTION STREAM
+    // -- ACTION STREAM (W/ INHERITANCE)
+    
+    Stream<ObjectAction> streamActions(ImmutableEnumSet<ActionType> types, MixedIn contributed);
+    
+    default Stream<ObjectAction> streamActions(ActionType type, MixedIn contributed) {
+        return streamActions(ImmutableEnumSet.of(type), contributed);
+    }
+    
+    default Stream<ObjectAction> streamActions(MixedIn contributed) {
+        return streamActions(ActionType.ANY, contributed);
+    }
+    
+    // -- ACTION STREAM (NO INHERITANCE)
 
     /**
      * Returns an array of actions of the specified type, including or excluding
@@ -97,4 +109,6 @@ public interface ObjectActionContainer {
     default Stream<ObjectAction> streamDeclaredActions(MixedIn contributed) {
         return streamDeclaredActions(ActionType.ANY, contributed);
     }
+
+    
 }

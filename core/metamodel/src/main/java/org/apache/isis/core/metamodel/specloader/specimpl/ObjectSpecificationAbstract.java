@@ -677,6 +677,12 @@ implements ObjectSpecification {
     }
 
     // -- ASSOCIATIONS
+    
+    @Override
+    public Stream<ObjectAssociation> streamAssociations(MixedIn contributed) {
+        //FIXME poorly implemented, inheritance not supported
+        return streamDeclaredAssociations(contributed);
+    }
 
     @Override
     public Stream<ObjectAssociation> streamDeclaredAssociations(final MixedIn contributed) {
@@ -745,6 +751,14 @@ implements ObjectSpecification {
         return streamDeclaredAssociations(MixedIn.INCLUDED)
                 .filter(objectAssociation->objectAssociation.getId().equals(id))
                 .findFirst();
+    }
+    
+    @Override
+    public Stream<ObjectAction> streamActions(
+            final ImmutableEnumSet<ActionType> types, 
+            final MixedIn contributed) {
+        //FIXME poorly implemented, inheritance not supported
+        return streamDeclaredActions(contributed);
     }
 
     @Override

@@ -54,17 +54,17 @@ public interface ObjectAssociationContainer {
      */
     Optional<ObjectAssociation> getDeclaredAssociation(String id);
     
+    // -- ASSOCIATION STREAMS (INHERITENCE CONSIDERED)
 
     /**
-     * Return all the fields that exist in an object of this specification,
-     * although they need not all be accessible or visible.
-     *
-     * To get the statically visible fields (where any invisible and
-     * unauthorized fields have been removed) use
-     * <tt>ObjectAssociationFilters#staticallyVisible(...)</tt>
-     *
+     * Same as {@link #streamDeclaredAssociations(MixedIn)}, but also considering any inherited object members.
+     * @param contributed
+     * 
+     * @implSpec Walk through the type hierarchy nearest to farthest and add any ObjectAssociation to the stream, 
+     * except don't add ObjectAssociations that already have been added (due to inheritance).
      */
-    Stream<ObjectAssociation> streamDeclaredAssociations(MixedIn contributed);
+    Stream<ObjectAssociation> streamAssociations(MixedIn contributed);
+    
 
     /**
      * All {@link ObjectAssociation association}s that represent
@@ -72,10 +72,9 @@ public interface ObjectAssociationContainer {
      * 
      */
     default Stream<OneToOneAssociation> streamProperties(MixedIn contributed) {
-        //TODO support inheritance
-        return streamDeclaredAssociations(contributed)
+        return streamAssociations(contributed)
                 .filter(ObjectAssociation.Predicates.PROPERTIES)
-                .map(x->(OneToOneAssociation)x);
+                .map(OneToOneAssociation.class::cast);
     }
 
     /**
@@ -86,10 +85,22 @@ public interface ObjectAssociationContainer {
      * 
      */
     default Stream<OneToManyAssociation> streamCollections(MixedIn contributed){
-        //TODO support inheritance
-        return streamDeclaredAssociations(contributed)
+        return streamAssociations(contributed)
                 .filter(ObjectAssociation.Predicates.COLLECTIONS)
-                .map(x->(OneToManyAssociation)x);
+                .map(OneToManyAssociation.class::cast);
     }
+    
+    // -- ASSOCIATION STREAMS (INHERITENCE NOT CONSIDERED)
+    
+    /**
+     * Return all the fields that exist in an object of this specification,
+     * although they need not all be accessible or visible.
+     *
+     * To get the statically visible fields (where any invisible and
+     * unauthorized fields have been removed) use
+     * <tt>ObjectAssociationFilters#staticallyVisible(...)</tt>
+     *
+     */
+    Stream<ObjectAssociation> streamDeclaredAssociations(MixedIn contributed);
 
 }
