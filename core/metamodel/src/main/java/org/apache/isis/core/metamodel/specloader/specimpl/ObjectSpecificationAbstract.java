@@ -700,11 +700,11 @@ implements ObjectSpecification {
     public Optional<? extends ObjectMember> getMember(final String memberId) {
         introspectUpTo(IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
 
-        val objectAction = getDeclaredAction(memberId);
+        val objectAction = getObjectAction(memberId);
         if(objectAction.isPresent()) {
             return objectAction;
         }
-        val association = getDeclaredAssociation(memberId);
+        val association = getAssociation(memberId);
         if(association.isPresent()) {
             return association;
         }

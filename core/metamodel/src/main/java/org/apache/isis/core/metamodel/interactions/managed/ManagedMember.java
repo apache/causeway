@@ -47,15 +47,15 @@ public abstract class ManagedMember implements ManagedFeature {
     @RequiredArgsConstructor
     public static enum MemberType {
         PROPERTY(OneToOneAssociation.class, (spec, propertyId)->
-        spec.getDeclaredAssociation(propertyId)
+        spec.getAssociation(propertyId)
         .map(property->property.isOneToOneAssociation()?property:null)),
         
         COLLECTION(OneToManyAssociation.class, (spec, collectionId)->
-        spec.getDeclaredAssociation(collectionId)
+        spec.getAssociation(collectionId)
         .map(collection->collection.isOneToManyAssociation()?collection:null)),
         
         ACTION(ObjectAction.class, (spec, actionId)->
-        spec.getDeclaredAction(actionId));
+        spec.getObjectAction(actionId));
         
         @Getter private final Class<? extends ObjectMember> memberType;
         private final BiFunction<

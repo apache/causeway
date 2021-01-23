@@ -51,9 +51,15 @@ public interface ObjectActionContainer {
                         type==null ? "any" : type.name()));
     }
 
-     default ObjectAction getObjectActionElseFail(String id) {
+
+    default Optional<ObjectAction> getObjectAction(String id) {
+        return getObjectAction(id, null);
+    }
+    
+    default ObjectAction getObjectActionElseFail(String id) {
         return getObjectActionElseFail(id, null);
     }
+    
     
     // -- ACTION LOOKUP, DECLARED ACTIONS (NO INHERITENCE CONSIDERED)
     

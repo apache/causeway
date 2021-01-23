@@ -71,11 +71,11 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
 
     @Override
     public Optional<? extends ObjectMember> getMember(final String memberId) {
-        val objectAction = getDeclaredAction(memberId);
+        val objectAction = getObjectAction(memberId);
         if(objectAction.isPresent()) {
             return objectAction;
         }
-        val association = getDeclaredAssociation(memberId);
+        val association = getAssociation(memberId);
         if(association.isPresent()) {
             return association;
         }
