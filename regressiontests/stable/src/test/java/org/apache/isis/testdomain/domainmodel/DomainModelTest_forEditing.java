@@ -82,7 +82,7 @@ class DomainModelTest_forEditing extends IsisIntegrationTestAbstract {
 
         val holderSpec = specificationLoader.loadSpecification(CustomerEna.class, 
                 IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
-        holderSpec.getAssociationElseFail("name");
+        holderSpec.findAssociationElseFail("name");
 
         //then ... should not fail
         wrapper.wrap(new CustomerEna()).setName("Bob");
@@ -108,7 +108,7 @@ class DomainModelTest_forEditing extends IsisIntegrationTestAbstract {
 
         val holderSpec = specificationLoader.loadSpecification(CustomerDis.class, 
                 IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
-        holderSpec.getAssociationElseFail("name");
+        holderSpec.findAssociationElseFail("name");
 
         //then ... should fail
         val disabledException = assertThrows(DisabledException.class, 
@@ -140,7 +140,7 @@ class DomainModelTest_forEditing extends IsisIntegrationTestAbstract {
 
         val holderSpec = specificationLoader.loadSpecification(CustomerEnaDis.class, 
                 IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
-        holderSpec.getAssociationElseFail("name");
+        holderSpec.findAssociationElseFail("name");
 
         //then ... should fail
         val disabledException = assertThrows(DisabledException.class, 
@@ -172,7 +172,7 @@ class DomainModelTest_forEditing extends IsisIntegrationTestAbstract {
 
         val holderSpec = specificationLoader.loadSpecification(CustomerDisEna.class, 
                 IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
-        holderSpec.getAssociationElseFail("name");
+        holderSpec.findAssociationElseFail("name");
 
         //then ... should not fail
         wrapper.wrap(new CustomerDisEna()).setName("Bob");

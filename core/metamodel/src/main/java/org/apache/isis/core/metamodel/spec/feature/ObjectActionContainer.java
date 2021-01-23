@@ -67,13 +67,6 @@ public interface ObjectActionContainer {
      * @see #getObjectAction(String)
      */
     Optional<ObjectAction> getObjectAction(String id, @Nullable ActionType type);
-    
-    default ObjectAction getObjectActionElseFail(String id, @Nullable ActionType type) {
-        return getObjectAction(id, type)
-                .orElseThrow(()->_Exceptions.noSuchElement("id=%s type=%s", 
-                        id, 
-                        type==null ? "any" : type.name()));  
-    }
 
     /**
      * Shortcut to {@link #getObjectAction(String, null)}, meaning where action type is <i>any</i>.
@@ -81,10 +74,6 @@ public interface ObjectActionContainer {
      */
     default Optional<ObjectAction> getObjectAction(String id) {
         return getObjectAction(id, null);
-    }
-    
-    default ObjectAction getObjectActionElseFail(String id) {
-        return getObjectActionElseFail(id, null);
     }
 
     // -- ACTION STREAM

@@ -54,11 +54,6 @@ public interface ObjectAssociationContainer {
      */
     Optional<ObjectAssociation> getAssociation(String id);
     
-    default ObjectAssociation getAssociationElseFail(String id) {
-        return getAssociation(id)
-                .orElseThrow(()->_Exceptions.noSuchElement("id=%s", id));
-    }
-    
 
     /**
      * Return all the fields that exist in an object of this specification,

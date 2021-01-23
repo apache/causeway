@@ -101,7 +101,7 @@ public class WhereInTheWorldPanel extends PanelAbstract<EntityModel>  {
     private Component createPropertyComponent(final String propertyId) {
         val managedObject = getModel().getManagedObject();
         val spec = managedObject.getSpecification();                               // <.>
-        val otoa = (OneToOneAssociation) spec.getAssociationElseFail(propertyId);  // <.>
+        val otoa = (OneToOneAssociation) spec.findAssociationElseFail(propertyId);  // <.>
         val pm = new PropertyMemento(otoa);                                        // <.>
 
         val scalarModel =

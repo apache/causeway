@@ -72,7 +72,7 @@ class DomainModelTest_jdoMixins {
         
         val holderSpec = specificationLoader.loadSpecification(JdoProduct.class);
         
-        val mx_datanucleusIdLong = holderSpec.getAssociationElseFail("datanucleusIdLong"); // plugged in mixin
+        val mx_datanucleusIdLong = holderSpec.findAssociationElseFail("datanucleusIdLong"); // plugged in mixin
         assertNotNull(mx_datanucleusIdLong);
         
     }

@@ -482,7 +482,7 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
         
         for (final String collectionId : collectionIds) {
             final BS3Tab bs3Tab = new BS3Tab();
-            bs3Tab.setName(objectSpec.getAssociationElseFail(collectionId).getName());
+            bs3Tab.setName(objectSpec.findAssociationElseFail(collectionId).getName());
             tabGroup.getTabs().add(bs3Tab);
             bs3Tab.setOwner(tabGroup);
 
