@@ -154,8 +154,8 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
         return null;
     }
 
-    @Override
-    public Optional<ObjectAction> getObjectAction(
+    //@Override
+    private Optional<ObjectAction> getObjectAction(
             final ActionType type,
             final String name, 
             final Can<ObjectSpecification> parameters) {

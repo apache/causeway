@@ -28,7 +28,6 @@ import java.util.stream.Stream;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.metamodel.BeanSort;
-import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
@@ -56,7 +55,6 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.specloader.facetprocessor.FacetProcessor;
@@ -270,18 +268,6 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
     // -- getObjectAction
 
     @Override
-    public Optional<ObjectAction> getObjectAction(
-            final ActionType type, 
-            final String id, 
-            final Can<ObjectSpecification> parameters) {
-        
-        introspectUpTo(IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
-        final Stream<ObjectAction> actions =
-                streamObjectActions(type, MixedIn.INCLUDED);
-        return firstAction(actions, id, parameters);
-    }
-
-    @Override
     public Optional<ObjectAction> getObjectAction(final ActionType type, final String id) {
         introspectUpTo(IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
 
@@ -297,36 +283,6 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
         final Stream<ObjectAction> actions =
                 streamObjectActions(ActionType.ALL, MixedIn.INCLUDED);
         return firstAction(actions, id);
-    }
-
-    private static Optional<ObjectAction> firstAction(
-            final Stream<ObjectAction> candidateActions,
-            final String actionName,
-            final Can<ObjectSpecification> parameters) {
-
-        return candidateActions
-                .filter(action->actionName == null || actionName.equals(action.getId()))
-                .filter(action->isMatchingSignature(parameters, action.getParameters()))
-                .findAny();
-    }
-
-    private static  boolean isMatchingSignature(
-            final Can<ObjectSpecification> a,
-            final Can<ObjectActionParameter> b) {
-
-        if(a.size() != b.size()) {
-            return false;
-        }
-        for (int j = 0; j < a.size(); j++) {
-            
-            val elementA = a.getElseFail(j); 
-            val elementB = b.getElseFail(j);
-            
-            if (!elementA.isOfType(elementB.getSpecification())) {
-                return false;
-            }
-        }
-        return true;
     }
 
     private static Optional<ObjectAction> firstAction(

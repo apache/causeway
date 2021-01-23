@@ -23,20 +23,13 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.collections.ImmutableEnumSet;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.spec.ActionType;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 import static org.apache.isis.commons.internal.base._NullSafe.stream;
 
 public interface ObjectActionContainer {
-
-    /**
-     * Returns the action of the specified type with the specified signature.
-     */
-    Optional<ObjectAction> getObjectAction(ActionType type, String id, Can<ObjectSpecification> parameters);
 
     /**
      * Get the action object represented by the specified identity string.
