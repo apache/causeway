@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.runtimeservices.error;
+package org.apache.isis.applib.services.error;
 
 import java.io.Serializable;
 import java.util.function.UnaryOperator;

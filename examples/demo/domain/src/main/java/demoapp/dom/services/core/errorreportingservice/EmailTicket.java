@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.runtimeservices.error;
+package demoapp.dom.services.core.errorreportingservice;
 
 import java.io.Serializable;
 import java.util.List;
@@ -24,6 +24,7 @@ import java.util.stream.Collectors;
 
 import org.apache.isis.applib.services.error.ErrorDetails;
 import org.apache.isis.applib.services.error.ErrorReportingService;
+import org.apache.isis.applib.services.error.SimpleTicket;
 
 import static org.apache.isis.commons.internal.base._NullSafe.stream;
 
