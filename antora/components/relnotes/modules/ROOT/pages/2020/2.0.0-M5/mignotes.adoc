@@ -105,6 +105,12 @@ VIEW_CONTRIBUTIONS_ONLY,
 * `INMEMORY_ENTITY`
 | use `@DomainObject(nature=VIEW_MODEL)` instead
 
+| `@DomainObject(nature=...)`
+
+* `JDO_ENTITY`
+* `JPA_ENTITY`
+| use `@DomainObject(nature=ENTITY)` instead
+
 | `@DomainObject(publish=...)`
 | replaced with `entityChangePublishing`
 
@@ -179,6 +185,10 @@ CommandServiceInternal -> CommandPublisher
 
 == Changes to Applib and Services
 
+* Interaction related classes have been moved to module `core/interaction`.
+* Transaction related classes have been moved to module `core/transaction`.
+* JDO classes have been split up into several modules under `persistence/jdo/`.
+
 [cols="3m,3m", options="header"]
 
 |===
@@ -207,6 +217,12 @@ CommandServiceInternal -> CommandPublisher
 | IsisInteractionFactory
 | InteractionFactory
 
+| IsisModuleJdoDataNucleus5
+| removed, use IsisModuleJdoDatanucleus instead (symmetry with JPA/IsisModuleJpaEclipselink)
+
+| IsisJdoSupport, IsisJdoSupport_v3_2
+| removed, use JdoSupportService instead (symmetry with JPA/JpaSupportService) 
+
 | InteractionClosure
 | AuthenticationLayer
 
@@ -216,7 +232,10 @@ CommandServiceInternal -> CommandPublisher
 | MessageBroker is held by Authentication(Session)
 | MessageBroker is held by InteractionSession
 
-| QueryDefault removed
+| ParentedOid, PojoRecreationException, PojoRefreshException
+| removed, as no longer used
+
+| QueryDefault (removed)
 |
 [line-through]#new QueryDefault<>(CommandJdo.class, "findByParent",
                         "parent", parent));#
@@ -224,14 +243,25 @@ CommandServiceInternal -> CommandPublisher
 Query.named(CommandJdo.class, "findByParent") +
     .withParameter("parent", parent));
 
+| SudoService
+| redefined, see java doc for details
+
 | TestClock (removed)
 | use factories of VirtualClock.frozenTestClock() instead
+
+| Transaction (removed)
+| no replacement (use TransactionService to get current tx id)
+
+| TransactionScopeListener (removed)
+| use Spring's TransactionSynchronization instead
+
+| TransactionService
+| improved API provides more fine grained control
 
 | UserService#getUser() : UserMemento
 | UserService#currentUser() : *Optional*<UserMemento>
 
-| SudoService
-| redefined, see java doc for details
+
 
 |===
 
