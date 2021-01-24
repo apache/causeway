@@ -85,6 +85,8 @@ _Other_
 [discrete]
 == Components
 
+_Overview_
+
 * xref:system:generated:system-overview.adoc[System Overview]
 
 _Viewers_
