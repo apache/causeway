@@ -41,7 +41,7 @@
 		<git-plugin.propertiesDir>org/apache/isis/tooling</git-plugin.propertiesDir>
 
 		<asciidoctorj.version>2.4.2</asciidoctorj.version>
-		<gradle-tooling.version>6.8</gradle-tooling.version>
+		<gradle-tooling.version>6.8.1</gradle-tooling.version>
 		<maven-model-builder.version>3.6.3</maven-model-builder.version>
 		<picocli.version>4.6.1</picocli.version>
 		<jsoup.version>1.13.1</jsoup.version>
