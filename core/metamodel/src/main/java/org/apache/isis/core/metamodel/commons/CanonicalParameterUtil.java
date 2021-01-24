@@ -53,13 +53,13 @@ public final class CanonicalParameterUtil {
 
     public static <T> T construct(Constructor<T> constructor, Object[] executionParameters) {
         val adaptedExecutionParameters = preprocess(constructor, executionParameters);
-        
+
         // supports effective private constructors as well
         return _Reflect.invokeConstructor(constructor, adaptedExecutionParameters)
         .mapFailure(ex->toVerboseException(constructor.getParameterTypes(), adaptedExecutionParameters, ex))
         .orElseFail();
     }
-    
+
     public static Object invoke(Method method, Object targetPojo, Object[] executionParameters)
             throws IllegalAccessException, InvocationTargetException {
 
@@ -70,7 +70,7 @@ public final class CanonicalParameterUtil {
         .mapFailure(ex->toVerboseException(method.getParameterTypes(), adaptedExecutionParameters, ex))
         .nullableOrElseFail();
     }
-    
+
     private static Object[] preprocess(Executable executable, Object[] executionParameters) {
         if (isEmpty(executionParameters)) {
             return executionParameters;
@@ -100,11 +100,11 @@ public final class CanonicalParameterUtil {
         if(obj==null) {
             return null;
         }
-        
+
         if(obj instanceof Can) {
-            obj = ((Can<?>)obj).toList();            
+            obj = ((Can<?>)obj).toList();
         }
-        
+
         if(_Arrays.isArrayType(parameterType)) {
             final Class<?> componentType = _Arrays.inferComponentTypeIfAny(parameterType);
             if(componentType==null) {
@@ -137,22 +137,21 @@ public final class CanonicalParameterUtil {
         return obj;
     }
 
-    private static IllegalArgumentException toVerboseException(
-            Class<?>[] parameterTypes, 
+    private static Throwable toVerboseException(
+            Class<?>[] parameterTypes,
             Object[] adaptedExecutionParameters,
             Throwable e) {
 
-        val sb = new StringBuilder();
-        
         final int expectedParamCount = _NullSafe.size(parameterTypes);
         final int actualParamCount = _NullSafe.size(adaptedExecutionParameters);
         if(expectedParamCount!=actualParamCount) {
-            sb.append(String.format("param-count mismatch: expected %d, got %d\n", 
-                    expectedParamCount, actualParamCount));
-        } else {
-            sb.append("expected param type mismatch\n");
+            return new IllegalArgumentException(String.format(
+                    "param-count mismatch: expected %d, got %d\n",
+                    expectedParamCount, actualParamCount), e);
         }
-        
+
+        boolean paramTypeMismatchEncountered = false;
+        val sb = new StringBuilder();
         for(int j=0;j<parameterTypes.length;++j) {
             final Class<?> parameterType = parameterTypes[j];
             final String parameterValueTypeLiteral = _Arrays.get(adaptedExecutionParameters, j)
@@ -160,13 +159,20 @@ public final class CanonicalParameterUtil {
                     .map(Class::getName)
                     .orElse("missing or null");
 
-            sb.append(String.format("param-type[%d]: '%s', got '%s'\n", 
-                    j, parameterType.getName(), parameterValueTypeLiteral));
+            final String expected = parameterType.getName();
+            final String actual = parameterValueTypeLiteral;
+            paramTypeMismatchEncountered = paramTypeMismatchEncountered || !(expected.equals(actual));
+            sb.append(String.format("param-type[%d]: '%s', got '%s'\n",
+                    j, expected, actual));
         }
-        
+
+        if(paramTypeMismatchEncountered) {
+            sb.insert(0, "expected param type mismatch\n");
+            return new IllegalArgumentException(sb.toString(), e);
+        }
 
         // re-throw more verbose
-        return new IllegalArgumentException(sb.toString(), e);
+        return e;
     }
 
 
