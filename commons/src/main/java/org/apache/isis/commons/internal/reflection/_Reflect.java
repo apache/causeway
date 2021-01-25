@@ -139,7 +139,7 @@ public final class _Reflect {
     /**
      * Stream fields of given {@code type}
      * @param type (nullable)
-     * @param ignoreAccess - determines if underlying method has to be accessible
+     * @param ignoreAccess - whether to include non-public members
      * @return
      */
     public static Stream<Field> streamFields(
@@ -158,15 +158,15 @@ public final class _Reflect {
     /**
      * Stream all fields of given {@code type}, up the super class hierarchy.
      * @param type (nullable)
-     * @param ignoreAccess - determines if underlying method has to be accessible
+     * @param ignoreAccess - whether to include non-public members
      * @return
      */
     public static Stream<Field> streamAllFields(
             @Nullable Class<?> type,
             final boolean ignoreAccess) {
 
-        return streamTypeHierarchy(type, /*includeInterfaces*/  InterfacePolicy.EXCLUDE) // interfaces don't have fields
-                .filter(Object.class::equals) // do not process Object class.
+        return streamTypeHierarchy(type, InterfacePolicy.EXCLUDE) // interfaces don't have fields
+                .filter(t->!Object.class.equals(t)) // do not process Object class.
                 .flatMap(t->streamFields(t, ignoreAccess));
     }
 
@@ -174,7 +174,7 @@ public final class _Reflect {
     /**
      * Stream methods of given {@code type}.
      * @param type (nullable)
-     * @param ignoreAccess - determines if underlying method has to be accessible
+     * @param ignoreAccess - whether to include non-public members
      * @return non-null
      */
     public static Stream<Method> streamMethods(
@@ -193,7 +193,7 @@ public final class _Reflect {
     /**
      * Stream all methods of given {@code type}, up the super class hierarchy.
      * @param type (nullable)
-     * @param ignoreAccess - determines if underlying method has to be accessible
+     * @param ignoreAccess - whether to include non-public members
      * @return non-null
      */
     public static Stream<Method> streamAllMethods(
@@ -201,7 +201,7 @@ public final class _Reflect {
             final boolean ignoreAccess
             ) {
 
-        return streamTypeHierarchy(type, /*includeInterfaces*/  InterfacePolicy.INCLUDE)
+        return streamTypeHierarchy(type, InterfacePolicy.INCLUDE)
                 .filter(t->!t.equals(Object.class)) // do not process Object class.
                 .flatMap(t->streamMethods(t, ignoreAccess));
     }

@@ -24,6 +24,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Map;
 
+import org.apache.isis.commons.functional.Result;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.reflection._Reflect;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -32,7 +33,9 @@ import org.apache.isis.core.metamodel.facets.SingleValueFacetAbstract;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
+@Log4j2
 public abstract class MixinFacetAbstract
 extends SingleValueFacetAbstract<String>
 implements MixinFacet {
@@ -131,27 +134,31 @@ implements MixinFacet {
     // -- HELPER
 
     private Object holderPojoFor(Object mixinPojo, Policy policy) {
-        val mixinFields = mixinType.getFields();
-        for (val mixinField : mixinFields) {
-            if(mixinField.getType().isAssignableFrom(holderType)) {
-                try {
-                    val holderPojo = _Reflect.getFieldOn(mixinField, mixinPojo);
-                    return holderPojo;
-                } catch (IllegalAccessException e) {
-                    if(policy == Policy.FAIL_FAST) {
-                        throw new RuntimeException(
-                                "Unable to access " + mixinField + " for " + getTitleService().titleOf(mixinPojo));
-                    }
-                    // otherwise continue to next possible field.
-                }
+        
+        //XXX optimization: we could memoize the field (not its value), if found
+        
+        // search the type hierarchy of the mixin type for any matching (public and non-public) fields
+        val holderPojoSearchResult = _Reflect.streamAllFields(mixinType, true)
+        .filter(mixinField->mixinField.getType().isAssignableFrom(holderType))
+        .findFirst()
+        .map(mixinField->Result.of(()->_Reflect.getFieldOn(mixinField, mixinPojo)))
+        .orElseGet(()->Result.failure("no such field"));
+                
+        if(holderPojoSearchResult.isFailure()) {
+            
+            val msg = String.format(
+                    "Could not find or access the \"mixed-in\" domain object within %s" 
+                            + " (tried to guess by looking at all public and non-public fields "
+                            + "and matching one against the constructor parameter's type)", 
+                            getTitleService().titleOf(mixinPojo));
+            
+            log.warn(msg);
+            
+            if(policy == Policy.FAIL_FAST) {
+                throw _Exceptions.unrecoverable(msg); 
             }
         }
-        if(policy == Policy.FAIL_FAST) {
-            throw new RuntimeException(
-                    "Could not find the \"mixed-in\" domain object within " + getTitleService().titleOf(mixinPojo)
-                    + " (tried to guess by looking at all private fields and matching one against the constructor parameter)");
-        }
-        // else just...
-        return null;
+
+        return holderPojoSearchResult.nullableOrElse(null);
     }
 }
