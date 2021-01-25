@@ -30,7 +30,7 @@ import org.apache.isis.applib.services.factory.FactoryService;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
-import demoapp.dom.progmodel.actions.assoc.DemoItem;
+import demoapp.dom.domain.actions.progmodel.assoc.DemoItem;
 
 @DomainService(nature=NatureOfService.VIEW, objectType = "demo.DescribedAsMenu")
 @RequiredArgsConstructor(onConstructor_ = { @Inject })

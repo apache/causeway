@@ -30,8 +30,8 @@ import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.entity.EntityComponentFactoryAbstract;
 
-import demoapp.dom.ui.custom.geocoding.GeoapifyClient;
-import demoapp.dom.ui.custom.vm.WhereInTheWorldVm;
+import demoapp.dom.featured.customui.geocoding.GeoapifyClient;
+import demoapp.dom.featured.customui.vm.WhereInTheWorldVm;
 
 //tag::class[]
 @org.springframework.stereotype.Component

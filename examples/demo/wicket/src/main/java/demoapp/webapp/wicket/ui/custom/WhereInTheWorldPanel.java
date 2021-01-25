@@ -35,8 +35,8 @@ import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import lombok.SneakyThrows;
 import lombok.val;
 
-import demoapp.dom.ui.custom.geocoding.GeoapifyClient;
-import demoapp.dom.ui.custom.vm.WhereInTheWorldVm;
+import demoapp.dom.featured.customui.geocoding.GeoapifyClient;
+import demoapp.dom.featured.customui.vm.WhereInTheWorldVm;
 
 //tag::class[]
 public class WhereInTheWorldPanel extends PanelAbstract<EntityModel>  {

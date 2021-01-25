@@ -41,7 +41,7 @@ import lombok.Setter;
 import lombok.val;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.annotDomain._commands.ExposePersistedCommands;
+import demoapp.dom.domain._commands.ExposePersistedCommands;
 
 //tag::class[]
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")

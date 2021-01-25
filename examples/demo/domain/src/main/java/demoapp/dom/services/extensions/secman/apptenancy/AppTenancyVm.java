@@ -57,7 +57,7 @@ public class AppTenancyVm implements HasAsciiDocDescription {
         return tenantedJdoEntities.all();
     }
 
-    //tag::hideRegex[]
+//tag::hideRegex[]
     public String getHideRegex() {
         return applicationTenancyEvaluatorForDemo.getHideRegex();
     }
@@ -72,9 +72,9 @@ public class AppTenancyVm implements HasAsciiDocDescription {
     public String default0UpdateHideRegex() {
         return getHideRegex();
     }
-    //end::hideRegex[]
+//end::hideRegex[]
 
-    //tag::disableRegex[]
+//tag::disableRegex[]
     public String getDisableRegex() {
         return applicationTenancyEvaluatorForDemo.getDisableRegex();
     }
@@ -89,7 +89,7 @@ public class AppTenancyVm implements HasAsciiDocDescription {
     public String default0UpdateDisableRegex() {
         return getDisableRegex();
     }
-    //end::disableRegex[]
+//end::disableRegex[]
 
 
     @Inject @XmlTransient

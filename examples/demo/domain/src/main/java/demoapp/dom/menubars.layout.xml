@@ -21,10 +21,130 @@ For latest we use: https://raw.githubusercontent.com/apache/isis/master/antora/s
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
     <mb3:primary>
+
+        <mb3:menu>
+            <mb3:named>Domain Objects</mb3:named>
+            <mb3:section>
+                <mb3:named>@DomainObject</mb3:named>
+                <mb3:serviceAction objectType="demo.DomainObjectMenu" id="autoComplete"/>
+                <mb3:serviceAction objectType="demo.DomainObjectMenu" id="bounded"/>
+                <mb3:serviceAction objectType="demo.DomainObjectMenu" id="editing"/>
+                <mb3:serviceAction objectType="demo.DomainObjectMenu" id="entityChangePublishing"/>
+                <mb3:serviceAction objectType="demo.DomainObjectMenu" id="mixinMethod"/>
+                <mb3:serviceAction objectType="demo.DomainObjectMenu" id="natureStateful"/>
+                <mb3:serviceAction objectType="demo.DomainObjectMenu" id="natureStatefulRefsEntity"/>
+                <mb3:serviceAction objectType="demo.DomainObjectMenu" id="objectType"/>
+                <mb3:serviceAction objectType="demo.DomainObjectMenu" id="xxxDomainEvent"/>
+                <mb3:serviceAction objectType="demo.DomainObjectMenu" id="xxxLifecycleEvent"/>
+            </mb3:section>
+            <mb3:section>
+                <mb3:named>@DomainObjectLayout</mb3:named>
+                <mb3:serviceAction objectType="demo.DomainObjectLayoutMenu" id="bookmarking"/>
+                <mb3:serviceAction objectType="demo.DomainObjectLayoutMenu" id="cssClass"/>
+                <mb3:serviceAction objectType="demo.DomainObjectLayoutMenu" id="cssClassFa"/>
+                <mb3:serviceAction objectType="demo.DomainObjectLayoutMenu" id="describedAs"/>
+                <mb3:serviceAction objectType="demo.DomainObjectLayoutMenu" id="named"/>
+                <mb3:serviceAction objectType="demo.DomainObjectLayoutMenu" id="paged"/>
+                <mb3:serviceAction objectType="demo.DomainObjectLayoutMenu" id="plural"/>
+                <mb3:serviceAction objectType="demo.DomainObjectLayoutMenu" id="xxxUiEvent"/>
+            </mb3:section>
+            <mb3:section>
+                <mb3:named>Other</mb3:named>
+                <mb3:serviceAction objectType="demo.MixinMenu" id="mixins"/>
+                <mb3:serviceAction objectType="demo.CustomValueTypeMenu" id="customValueTypes"/>
+            </mb3:section>
+        </mb3:menu>
+
+        <mb3:menu>
+            <mb3:named>Actions</mb3:named>
+            <mb3:section>
+                <mb3:named>@Action</mb3:named>
+                <mb3:serviceAction objectType="demo.ActionMenu" id="associateWith"/>
+                <mb3:serviceAction objectType="demo.ActionMenu" id="commandPublishing"/>
+                <mb3:serviceAction objectType="demo.ActionMenu" id="domainEvent"/>
+                <mb3:serviceAction objectType="demo.ActionMenu" id="executionPublishing"/>
+                <mb3:serviceAction objectType="demo.ActionMenu" id="hidden"/>
+                <mb3:serviceAction objectType="demo.ActionMenu" id="restrictTo"/>
+                <mb3:serviceAction objectType="demo.ActionMenu" id="semantics"/>
+                <mb3:serviceAction objectType="demo.ActionMenu" id="typeOf"/>
+            </mb3:section>
+            <mb3:section>
+                <mb3:named>@ActionLayout</mb3:named>
+                <mb3:serviceAction objectType="demo.ActionLayoutMenu" id="bookmarking"/>
+                <mb3:serviceAction objectType="demo.ActionLayoutMenu" id="cssClass"/>
+                <mb3:serviceAction objectType="demo.ActionLayoutMenu" id="cssClassFa"/>
+                <mb3:serviceAction objectType="demo.ActionLayoutMenu" id="describedAs"/>
+                <mb3:serviceAction objectType="demo.ActionLayoutMenu" id="hidden"/>
+                <mb3:serviceAction objectType="demo.ActionLayoutMenu" id="named"/>
+                <mb3:serviceAction objectType="demo.ActionLayoutMenu" id="position"/>
+                <mb3:serviceAction objectType="demo.ActionLayoutMenu" id="promptStyle"/>
+                <mb3:serviceAction objectType="demo.ActionLayoutMenu" id="redirectPolicy"/>
+            </mb3:section>
+            <mb3:section>
+                <mb3:named>Programming Model</mb3:named>
+                <mb3:serviceAction objectType="demo.AssociatedActionMenu" id="associatedActions"/>
+                <mb3:serviceAction objectType="demo.DependentArgsActionMenu" id="dependentArgsActions">
+                    <cpt:named>Dependent Arguments</cpt:named>
+                </mb3:serviceAction>
+            </mb3:section>
+        </mb3:menu>
+
+        <mb3:menu>
+            <mb3:named>Properties</mb3:named>
+            <mb3:section>
+                <mb3:named>@Property</mb3:named>
+                <mb3:serviceAction objectType="demo.PropertyMenu" id="commandPublishing"/>
+                <mb3:serviceAction objectType="demo.PropertyMenu" id="domainEvent"/>
+                <mb3:serviceAction objectType="demo.PropertyMenu" id="editing"/>
+                <mb3:serviceAction objectType="demo.PropertyMenu" id="executionPublishing"/>
+                <mb3:serviceAction objectType="demo.PropertyMenu" id="fileAccept"/>
+                <mb3:serviceAction objectType="demo.PropertyMenu" id="hidden"/>
+                <mb3:serviceAction objectType="demo.PropertyMenu" id="maxLength"/>
+                <mb3:serviceAction objectType="demo.PropertyMenu" id="mustSatisfy"/>
+                <mb3:serviceAction objectType="demo.PropertyMenu" id="optionality"/>
+                <mb3:serviceAction objectType="demo.PropertyMenu" id="projecting"/>
+                <mb3:serviceAction objectType="demo.PropertyMenu" id="regexPattern"/>
+                <mb3:serviceAction objectType="demo.PropertyMenu" id="snapshot"/>
+            </mb3:section>
+            <mb3:section>
+                <mb3:named>@PropertyLayout</mb3:named>
+                <mb3:serviceAction objectType="demo.PropertyLayoutMenu" id="cssClass"/>
+                <mb3:serviceAction objectType="demo.PropertyLayoutMenu" id="describedAs"/>
+                <mb3:serviceAction objectType="demo.PropertyLayoutMenu" id="hidden"/>
+                <mb3:serviceAction objectType="demo.PropertyLayoutMenu" id="labelPosition"/>
+                <mb3:serviceAction objectType="demo.PropertyLayoutMenu" id="multiLine"/>
+                <mb3:serviceAction objectType="demo.PropertyLayoutMenu" id="named"/>
+                <mb3:serviceAction objectType="demo.PropertyLayoutMenu" id="navigable"/>
+                <mb3:serviceAction objectType="demo.PropertyLayoutMenu" id="renderDay"/>
+                <mb3:serviceAction objectType="demo.PropertyLayoutMenu" id="repainting"/>
+                <mb3:serviceAction objectType="demo.PropertyLayoutMenu" id="typicalLength"/>
+            </mb3:section>
+        </mb3:menu>
+
+        <mb3:menu>
+            <mb3:named>Collections</mb3:named>
+            <mb3:section>
+                <mb3:named>@Collection</mb3:named>
+                <mb3:serviceAction objectType="demo.CollectionMenu" id="domainEvent"/>
+                <mb3:serviceAction objectType="demo.CollectionMenu" id="hidden"/>
+                <mb3:serviceAction objectType="demo.CollectionMenu" id="typeOf"/>
+            </mb3:section>
+            <mb3:section>
+                <mb3:named>@CollectionLayout</mb3:named>
+                <mb3:serviceAction objectType="demo.CollectionLayoutMenu" id="cssClass"/>
+                <mb3:serviceAction objectType="demo.CollectionLayoutMenu" id="defaultView"/>
+                <mb3:serviceAction objectType="demo.CollectionLayoutMenu" id="describedAs"/>
+                <mb3:serviceAction objectType="demo.CollectionLayoutMenu" id="hidden"/>
+                <mb3:serviceAction objectType="demo.CollectionLayoutMenu" id="named"/>
+                <mb3:serviceAction objectType="demo.CollectionLayoutMenu" id="paged"/>
+                <mb3:serviceAction objectType="demo.CollectionLayoutMenu" id="sortedBy"/>
+            </mb3:section>
+        </mb3:menu>
+
         <mb3:menu>
             <mb3:named>Basic Types</mb3:named>
             <mb3:section>
-            	<mb3:named>Primitives</mb3:named>
+                <mb3:named>Primitives</mb3:named>
                 <mb3:serviceAction objectType="demo.PrimitiveTypesMenu" id="shorts"/>
                 <mb3:serviceAction objectType="demo.PrimitiveTypesMenu" id="ints"/>
                 <mb3:serviceAction objectType="demo.PrimitiveTypesMenu" id="longs"/>
@@ -35,7 +155,7 @@ For latest we use: https://raw.githubusercontent.com/apache/isis/master/antora/s
                 <mb3:serviceAction objectType="demo.PrimitiveTypesMenu" id="booleans"/>
             </mb3:section>
             <mb3:section>
-            	<mb3:named>Wrappers</mb3:named>
+                <mb3:named>Wrappers</mb3:named>
                 <mb3:serviceAction objectType="demo.JavaLangWrapperTypesMenu" id="bytes"/>
                 <mb3:serviceAction objectType="demo.JavaLangWrapperTypesMenu" id="shorts"/>
                 <mb3:serviceAction objectType="demo.JavaLangWrapperTypesMenu" id="integers"/>
@@ -118,133 +238,17 @@ For latest we use: https://raw.githubusercontent.com/apache/isis/master/antora/s
         </mb3:menu>
 
         <mb3:menu>
-            <mb3:named>Domain Annot</mb3:named>
-            <mb3:section>
-                <mb3:named>@DomainObject</mb3:named>
-                <mb3:serviceAction objectType="demo.DomainObjectMenu" id="autoComplete"/>
-                <mb3:serviceAction objectType="demo.DomainObjectMenu" id="bounded"/>
-                <mb3:serviceAction objectType="demo.DomainObjectMenu" id="editing"/>
-                <mb3:serviceAction objectType="demo.DomainObjectMenu" id="entityChangePublishing"/>
-                <mb3:serviceAction objectType="demo.DomainObjectMenu" id="mixinMethod"/>
-                <mb3:serviceAction objectType="demo.DomainObjectMenu" id="natureStateful"/>
-                <mb3:serviceAction objectType="demo.DomainObjectMenu" id="natureStatefulRefsEntity"/>
-                <mb3:serviceAction objectType="demo.DomainObjectMenu" id="objectType"/>
-                <mb3:serviceAction objectType="demo.DomainObjectMenu" id="xxxDomainEvent"/>
-                <mb3:serviceAction objectType="demo.DomainObjectMenu" id="xxxLifecycleEvent"/>
-            </mb3:section>
-            <mb3:section>
-                <mb3:named>@Action</mb3:named>
-                <mb3:serviceAction objectType="demo.ActionMenu" id="associateWith"/>
-                <mb3:serviceAction objectType="demo.ActionMenu" id="commandPublishing"/>
-                <mb3:serviceAction objectType="demo.ActionMenu" id="domainEvent"/>
-                <mb3:serviceAction objectType="demo.ActionMenu" id="executionPublishing"/>
-                <mb3:serviceAction objectType="demo.ActionMenu" id="hidden"/>
-                <mb3:serviceAction objectType="demo.ActionMenu" id="restrictTo"/>
-                <mb3:serviceAction objectType="demo.ActionMenu" id="semantics"/>
-                <mb3:serviceAction objectType="demo.ActionMenu" id="typeOf"/>
-            </mb3:section>
-            <mb3:section>
-                <mb3:named>@Property</mb3:named>
-                <mb3:serviceAction objectType="demo.PropertyMenu" id="commandPublishing"/>
-                <mb3:serviceAction objectType="demo.PropertyMenu" id="domainEvent"/>
-                <mb3:serviceAction objectType="demo.PropertyMenu" id="editing"/>
-                <mb3:serviceAction objectType="demo.PropertyMenu" id="executionPublishing"/>
-                <mb3:serviceAction objectType="demo.PropertyMenu" id="fileAccept"/>
-                <mb3:serviceAction objectType="demo.PropertyMenu" id="hidden"/>
-                <mb3:serviceAction objectType="demo.PropertyMenu" id="maxLength"/>
-                <mb3:serviceAction objectType="demo.PropertyMenu" id="mustSatisfy"/>
-                <mb3:serviceAction objectType="demo.PropertyMenu" id="optionality"/>
-                <mb3:serviceAction objectType="demo.PropertyMenu" id="projecting"/>
-                <mb3:serviceAction objectType="demo.PropertyMenu" id="regexPattern"/>
-                <mb3:serviceAction objectType="demo.PropertyMenu" id="snapshot"/>
-            </mb3:section>
-            <mb3:section>
-                <mb3:named>@Collection</mb3:named>
-                <mb3:serviceAction objectType="demo.CollectionMenu" id="domainEvent"/>
-                <mb3:serviceAction objectType="demo.CollectionMenu" id="hidden"/>
-                <mb3:serviceAction objectType="demo.CollectionMenu" id="typeOf"/>
-            </mb3:section>
-        </mb3:menu>
-
-        <mb3:menu>
-            <mb3:named>Layout Annot</mb3:named>
-            <mb3:section>
-                <mb3:named>@DomainObjectLayout</mb3:named>
-                <mb3:serviceAction objectType="demo.DomainObjectLayoutMenu" id="bookmarking"/>
-                <mb3:serviceAction objectType="demo.DomainObjectLayoutMenu" id="cssClass"/>
-                <mb3:serviceAction objectType="demo.DomainObjectLayoutMenu" id="cssClassFa"/>
-                <mb3:serviceAction objectType="demo.DomainObjectLayoutMenu" id="describedAs"/>
-                <mb3:serviceAction objectType="demo.DomainObjectLayoutMenu" id="named"/>
-                <mb3:serviceAction objectType="demo.DomainObjectLayoutMenu" id="paged"/>
-                <mb3:serviceAction objectType="demo.DomainObjectLayoutMenu" id="plural"/>
-                <mb3:serviceAction objectType="demo.DomainObjectLayoutMenu" id="xxxUiEvent"/>
-            </mb3:section>
-            <mb3:section>
-                <mb3:named>@ActionLayout</mb3:named>
-                <mb3:serviceAction objectType="demo.ActionLayoutMenu" id="bookmarking"/>
-                <mb3:serviceAction objectType="demo.ActionLayoutMenu" id="cssClass"/>
-                <mb3:serviceAction objectType="demo.ActionLayoutMenu" id="cssClassFa"/>
-                <mb3:serviceAction objectType="demo.ActionLayoutMenu" id="describedAs"/>
-                <mb3:serviceAction objectType="demo.ActionLayoutMenu" id="hidden"/>
-                <mb3:serviceAction objectType="demo.ActionLayoutMenu" id="named"/>
-                <mb3:serviceAction objectType="demo.ActionLayoutMenu" id="position"/>
-                <mb3:serviceAction objectType="demo.ActionLayoutMenu" id="promptStyle"/>
-                <mb3:serviceAction objectType="demo.ActionLayoutMenu" id="redirectPolicy"/>
-            </mb3:section>
-            <mb3:section>
-                <mb3:named>@PropertyLayout</mb3:named>
-                <mb3:serviceAction objectType="demo.PropertyLayoutMenu" id="cssClass"/>
-                <mb3:serviceAction objectType="demo.PropertyLayoutMenu" id="describedAs"/>
-                <mb3:serviceAction objectType="demo.PropertyLayoutMenu" id="hidden"/>
-                <mb3:serviceAction objectType="demo.PropertyLayoutMenu" id="labelPosition"/>
-                <mb3:serviceAction objectType="demo.PropertyLayoutMenu" id="multiLine"/>
-                <mb3:serviceAction objectType="demo.PropertyLayoutMenu" id="named"/>
-                <mb3:serviceAction objectType="demo.PropertyLayoutMenu" id="navigable"/>
-                <mb3:serviceAction objectType="demo.PropertyLayoutMenu" id="renderDay"/>
-                <mb3:serviceAction objectType="demo.PropertyLayoutMenu" id="repainting"/>
-                <mb3:serviceAction objectType="demo.PropertyLayoutMenu" id="typicalLength"/>
-            </mb3:section>
-            <mb3:section>
-                <mb3:named>@CollectionLayout</mb3:named>
-                <mb3:serviceAction objectType="demo.CollectionLayoutMenu" id="cssClass"/>
-                <mb3:serviceAction objectType="demo.CollectionLayoutMenu" id="defaultView"/>
-                <mb3:serviceAction objectType="demo.CollectionLayoutMenu" id="describedAs"/>
-                <mb3:serviceAction objectType="demo.CollectionLayoutMenu" id="hidden"/>
-                <mb3:serviceAction objectType="demo.CollectionLayoutMenu" id="named"/>
-                <mb3:serviceAction objectType="demo.CollectionLayoutMenu" id="paged"/>
-                <mb3:serviceAction objectType="demo.CollectionLayoutMenu" id="sortedBy"/>
-            </mb3:section>
-        </mb3:menu>
-
-        <mb3:menu>
-            <mb3:named>Prog Model</mb3:named>
-            <mb3:section>
-                <mb3:named>Actions</mb3:named>
-                <mb3:serviceAction objectType="demo.AssociatedActionMenu" id="associatedActions"/>
-                <mb3:serviceAction objectType="demo.DependentArgsActionMenu" id="dependentArgsActions">
-                    <cpt:named>Dependent Arguments</cpt:named>
-                </mb3:serviceAction>
-            </mb3:section>
-            <mb3:section>
-                <mb3:named>Mixins</mb3:named>
-                <mb3:serviceAction objectType="demo.MixinMenu" id="mixinDemo">
-                    <cpt:named>Mixins</cpt:named>
-                </mb3:serviceAction>
-            </mb3:section>
-        </mb3:menu>
-
-        <mb3:menu>
             <mb3:named>Services</mb3:named>
             <mb3:section>
                 <mb3:named>Core</mb3:named>
+                <mb3:serviceAction objectType="demo.ServicesMenu" id="errorReportingService" />
+                <mb3:serviceAction objectType="demo.ServicesMenu" id="eventBusService" />
                 <mb3:serviceAction objectType="demo.ServicesMenu" id="wrapperFactory"/>
                 <mb3:serviceAction objectType="demo.ServicesMenu" id="xmlSnapshot"/>
-                <mb3:serviceAction objectType="demo.ErrorMenu" id="errorHandling" />
-                <mb3:serviceAction objectType="demo.EventsDemoMenu" id="eventsDemo" />
             </mb3:section>
             <mb3:section>
                 <mb3:named>Extensions - SecMan</mb3:named>
-                <mb3:serviceAction objectType="demo.IsisExtSecManMenu" id="appTenancy"/>
+                <mb3:serviceAction objectType="demo.ExtSecManMenu" id="appTenancy"/>
             </mb3:section>
         </mb3:menu>
 
@@ -265,7 +269,6 @@ For latest we use: https://raw.githubusercontent.com/apache/isis/master/antora/s
             <mb3:named>Experimental</mb3:named>
             <mb3:section>
             	<mb3:serviceAction objectType="demo.TupleDemoMenu" id="tupleDemo"/>
-                <mb3:serviceAction objectType="demo.JeeMenu" id="jeeInjectDemo" />
             </mb3:section>
         </mb3:menu>
 
