@@ -31,60 +31,90 @@ import lombok.extern.log4j.Log4j2;
 public class DomainObjectLayoutMenu {
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-bookmark", describedAs = "Xxx"
-            , named = "Bookmarking (TODO)"
-    )
+    @ActionLayout(cssClassFa="fa-bookmark", describedAs = "Add link to object once visited as a bookmark")
     public void bookmarking(){
+    }
+    public String disableBookmarking(){
+        return "Add link to object once visited as a bookmark" +
+                 " (not yet implemented in demo)";
     }
 
 
+
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-xxx", describedAs = "Xxx"
-            , named = "CSS Class (TODO)"
+    @ActionLayout(cssClassFa="fa-xxx", describedAs = "CSS class to wrap the UI component representing the domain object"
     )
     public void cssClass(){
     }
+    public String disableCssClass(){
+        return "CSS class to wrap the UI component representing the domain object" +
+                 " (not yet implemented in demo)";
+    }
+
+
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-xxx", describedAs = "Xxx"
-            , named = "CSS Class FA (TODO)"
-    )
+    @ActionLayout(cssClassFa="fa-font-awesome", describedAs = "Font awesome icon to represent domain object")
     public void cssClassFa(){
     }
+    public String disableCssClassFa(){
+        return "Font awesome icon to represent domain object" +
+                " (not yet implemented in demo)";
+    }
+
+
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-xxx", describedAs = "Xxx"
-            , named = "Described As (TODO)"
-    )
+    @ActionLayout(cssClassFa="fa-comment", describedAs = "Description of the property, shown as a tooltip")
     public void describedAs(){
     }
+    public String disableDescribedAs(){
+        return "Description of the property, shown as a tooltip" +
+                " (not yet implemented in demo)";
+    }
+
+
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-xxx", describedAs = "Xxx"
-            , named = "Named (TODO)"
-    )
+    @ActionLayout(cssClassFa="fa-signature", describedAs = "Custom text for the domain object's type wherever labelled")
     public void named(){
     }
+    public String disableNamed(){
+        return "Custom text for the domain object's type wherever labelled" +
+                " (not yet implemented in demo)";
+    }
+
+
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-xxx", describedAs = "Xxx"
-            , named = "Paged (TODO)"
-    )
+    @ActionLayout(cssClassFa="fa-fast-forward", describedAs = "Number of domain objects per page in collections")
     public void paged(){
     }
-
-    @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-xxx", describedAs = "Xxx"
-            , named = "Plural (TODO)"
-    )
-    public void plural(){
+    public String disablePaged(){
+        return "Number of domain objects per page in collections" +
+                " (not yet implemented in demo)";
     }
 
+
+
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-xxx", describedAs = "Xxx"
-            , named = "??? UI Event (TODO)"
-    )
+    @ActionLayout(cssClassFa="fa-signature", describedAs = "Overrides plural form for the domain object's type, eg for irregular plurals")
+    public void plural(){
+    }
+    public String disablePlural(){
+        return "Overrides plural form for the domain object's type, eg for irregular plurals" +
+                " (not yet implemented in demo)";
+    }
+
+
+
+    @Action(semantics = SemanticsOf.SAFE)
+    @ActionLayout(cssClassFa="fa-desktop", describedAs = "Class of the UI events emitted to allow subscribers to specify title, icon etc")
     public void xxxUiEvent(){
+    }
+    public String disableXxxUiEvent(){
+        return "Class of the UI events emitted to allow subscribers to specify title, icon etc" +
+                " (not yet implemented in demo)";
     }
 
 

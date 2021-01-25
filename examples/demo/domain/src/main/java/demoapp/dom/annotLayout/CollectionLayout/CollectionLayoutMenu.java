@@ -31,53 +31,79 @@ import lombok.extern.log4j.Log4j2;
 public class CollectionLayoutMenu {
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-xxx", describedAs = "Xxx"
-            , named = "CSS Class (TODO)"
-    )
+    @ActionLayout(cssClassFa="fa-pen-nib", describedAs = "CSS class to wrap the UI component representing this collection")
     public void cssClass(){
     }
+    public String disableCssClass(){
+        return "CSS class to wrap the UI component representing this collection" +
+                " (not yet implemented in demo)";
+    }
+
+
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-xxx", describedAs = "Xxx"
-            , named = "Default View (TODO)"
-    )
+    @ActionLayout(cssClassFa="fa-atom", describedAs = "View collection as a table, or collapsed, or some other representation if available")
     public void defaultView(){
     }
+    public String disableDefaultView(){
+        return "View collection as a table, or collapsed, or some other representation if available" +
+                " (not yet implemented in demo)";
+    }
+
+
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-xxx", describedAs = "Xxx"
-            , named = "Described As (TODO)"
-    )
+    @ActionLayout(cssClassFa="fa-comment", describedAs = "Description of the collection, shown as a tooltip")
     public void describedAs(){
     }
+    public String disableDescribedAs(){
+        return "Description of the collection, shown as a tooltip" +
+                " (not yet implemented in demo)";
+    }
+
+
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-xxx", describedAs = "Xxx"
-            , named = "Hidden (TODO)"
-    )
+    @ActionLayout(cssClassFa="fa-glasses", describedAs = "Visibility of the collection in different contexts")
     public void hidden(){
     }
+    public String disableHidden(){
+        return "Visibility of the collection in different contexts" +
+                " (not yet implemented in demo)";
+    }
+
+
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-xxx", describedAs = "Xxx"
-            , named = "Named (TODO)"
-    )
+    @ActionLayout(cssClassFa="fa-signature", describedAs = "Custom text for the collection's label")
     public void named(){
     }
+    public String disableNamed(){
+        return "Custom text for the collection's label" +
+                " (not yet implemented in demo)";
+    }
+
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-xxx", describedAs = "Xxx"
-            , named = "Paged (TODO)"
-    )
+    @ActionLayout(cssClassFa="fa-fast-forward", describedAs = "Number of domain objects per page in this collection")
     public void paged(){
     }
+    public String disablePaged(){
+        return "Number of domain objects per page in this collection" +
+                " (not yet implemented in demo)";
+    }
+
+
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-xxx", describedAs = "Xxx"
-            , named = "Sorted By (TODO)"
-    )
+    @ActionLayout(cssClassFa="fa-sort", describedAs = "Sort domain objects in this collection, overriding their default comparator")
     public void sortedBy(){
     }
+    public String disableSortedBy(){
+        return "Sort domain objects in this collection, overriding their default comparator" +
+                " (not yet implemented in demo)";
+    }
+
 
 
 }

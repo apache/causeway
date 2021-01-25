@@ -239,6 +239,8 @@ For latest we use: https://raw.githubusercontent.com/apache/isis/master/antora/s
                 <mb3:named>Core</mb3:named>
                 <mb3:serviceAction objectType="demo.ServicesMenu" id="wrapperFactory"/>
                 <mb3:serviceAction objectType="demo.ServicesMenu" id="xmlSnapshot"/>
+                <mb3:serviceAction objectType="demo.ErrorMenu" id="errorHandling" />
+                <mb3:serviceAction objectType="demo.EventsDemoMenu" id="eventsDemo" />
             </mb3:section>
             <mb3:section>
                 <mb3:named>Extensions - SecMan</mb3:named>
@@ -247,25 +249,23 @@ For latest we use: https://raw.githubusercontent.com/apache/isis/master/antora/s
         </mb3:menu>
 
         <mb3:menu>
-            <mb3:named>Misc</mb3:named>
+            <mb3:named>Featured</mb3:named>
             <mb3:section>
-                <mb3:serviceAction objectType="demo.TooltipMenu" id="tooltipDemo"/>
-                <mb3:serviceAction objectType="demo.EventsDemoMenu" id="eventsDemo" />
-                <mb3:serviceAction objectType="demo.ErrorMenu" id="errorHandling" />
+                <mb3:named>Layout</mb3:named>
+                <mb3:serviceAction objectType="demo.DescribedAsMenu" id="describedAs"/>
                 <mb3:serviceAction objectType="demo.TabMenu" id="tabDemo" />
             </mb3:section>
             <mb3:section>
-                <mb3:named>Experimental</mb3:named>
-            	<mb3:serviceAction objectType="demo.TupleDemoMenu" id="tupleDemo"/>
-                <mb3:serviceAction objectType="demo.JeeMenu" id="jeeInjectDemo" />
+                <mb3:named>Custom UI</mb3:named>
+                <mb3:serviceAction objectType="demo.WhereInTheWorldMenu" id="whereInTheWorld" />
             </mb3:section>
         </mb3:menu>
 
         <mb3:menu>
-            <mb3:named>UI</mb3:named>
+            <mb3:named>Experimental</mb3:named>
             <mb3:section>
-                <mb3:named>Custom UI</mb3:named>
-                <mb3:serviceAction objectType="demo.WhereInTheWorldMenu" id="whereInTheWorld" />
+            	<mb3:serviceAction objectType="demo.TupleDemoMenu" id="tupleDemo"/>
+                <mb3:serviceAction objectType="demo.JeeMenu" id="jeeInjectDemo" />
             </mb3:section>
         </mb3:menu>
 

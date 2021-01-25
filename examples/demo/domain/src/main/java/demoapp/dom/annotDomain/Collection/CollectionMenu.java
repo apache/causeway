@@ -53,19 +53,29 @@ public class CollectionMenu {
         return collectionDomainEventVm;
     }
 
-    @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-glasses", describedAs = "Visibility of collections"
-    , named = "Hidden (TODO)"
-    )
-    public void hidden(){
-    }
+
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-shapes", describedAs = "Element type of collections"
-    , named = "Type of (TODO)"
-    )
+    @ActionLayout(cssClassFa="fa-glasses", describedAs = "Visibility of collections")
+    public void hidden(){
+    }
+    public String disableHidden(){
+        return "Visibility of collections" +
+                 " (not yet implemented in demo)";
+    }
+
+
+
+    @Action(semantics = SemanticsOf.SAFE)
+    @ActionLayout(cssClassFa="fa-shapes", describedAs = "Element type of collections")
     public void typeOf(){
     }
+    public String disableTypeOf(){
+        return "Element type of collections" +
+                 " (not yet implemented in demo)";
+    }
+
+
 
     private CollectionDomainEventVm_addChild addChild(CollectionDomainEventVm collectionDomainEventVm) {
         return factoryService.mixin(CollectionDomainEventVm_addChild.class, collectionDomainEventVm);

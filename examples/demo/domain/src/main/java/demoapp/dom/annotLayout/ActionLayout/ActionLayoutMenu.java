@@ -31,46 +31,72 @@ import lombok.extern.log4j.Log4j2;
 public class ActionLayoutMenu {
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-bookmark", describedAs = "Xxx"
-            , named = "Bookmarking (TODO)"
+    @ActionLayout(cssClassFa="fa-bookmark", describedAs = "Add link to action prompt as a bookmark"
     )
     public void bookmarking(){
     }
+    public String disableBookmarking(){
+        return "Add link to action prompt as a bookmark" +
+                " (not supported by Wicket viewer)";
+    }
+
+
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-xxx", describedAs = "Xxx"
-            , named = "CSS Class (TODO)"
-    )
+    @ActionLayout(cssClassFa="fa-pen-nib", describedAs = "CSS class to wrap the UI component representing this action")
     public void cssClass(){
     }
+    public String disableCssClass(){
+        return "CSS class to wrap the UI component representing this action" +
+                " (not yet implemented in demo)";
+    }
+
+
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-xxx", describedAs = "Xxx"
-            , named = "CSS Class FA (TODO)"
-    )
+    @ActionLayout(cssClassFa="fa-font-awesome", describedAs = "Font awesome icon to represent action")
     public void cssClassFa(){
     }
+    public String disableCssClassFa(){
+        return "Font awesome icon to represent action" +
+                " (not yet implemented in demo)";
+    }
+
+
+
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-xxx", describedAs = "Xxx"
-            , named = "Described As (TODO)"
-    )
+    @ActionLayout(cssClassFa="fa-comment", describedAs = "Description of the action, shown as a tooltip")
     public void describedAs(){
     }
+    public String disableDescribedAs(){
+        return "Description of the action, shown as a tooltip" +
+                " (not yet implemented in demo)";
+    }
+
+
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-xxx", describedAs = "Xxx"
-            , named = "Hidden (TODO)"
-    )
+    @ActionLayout(cssClassFa="fa-glasses", describedAs = "Visibility of the action in different contexts")
     public void hidden(){
     }
+    public String disableHidden(){
+        return "Visibility of the action in different contexts" +
+                " (not yet implemented in demo)";
+    }
+
+
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-xxx", describedAs = "Xxx"
-            , named = "Named (TODO)"
-    )
+    @ActionLayout(cssClassFa="fa-signature", describedAs = "Custom text for the action's label")
     public void named(){
     }
+    public String disableNamed(){
+        return "Custom text for the action's label" +
+                " (not yet implemented in demo)";
+    }
+
+
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-map-pin", describedAs = "Position of action buttons")
@@ -78,17 +104,23 @@ public class ActionLayoutMenu {
         return new demoapp.dom.annotLayout.ActionLayout.position.ActionLayoutPositionVm();
     }
 
+
+
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-question-circle", describedAs = "Location and style of action's prompt dialog")
     public demoapp.dom.annotLayout.ActionLayout.promptStyle.ActionLayoutPromptStyleVm promptStyle(){
         return new demoapp.dom.annotLayout.ActionLayout.promptStyle.ActionLayoutPromptStyleVm();
     }
 
+
+
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-xxx", describedAs = "Xxx"
-            , named = "Redirect Policy (TODO)"
-    )
+    @ActionLayout(cssClassFa="fa-random", describedAs = "Whether to redraw page if action returns same object")
     public void redirectPolicy(){
+    }
+    public String disableRedirectPolicy(){
+        return "Whether to redraw page if action returns same object" +
+                " (not yet implemented in demo)";
     }
 
 

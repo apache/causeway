@@ -28,6 +28,8 @@ import org.apache.isis.applib.services.error.SimpleTicket;
 
 import static org.apache.isis.commons.internal.base._NullSafe.stream;
 
+import lombok.Builder;
+
 /**
  * Response from the {@link ErrorReportingService}, containing information to show to the end-user.
  *
@@ -43,36 +45,10 @@ public class EmailTicket extends SimpleTicket {
 
     // -- MAILTO VALUE TYPE
 
+    @Builder
     public static class MailTo implements Serializable {
 
         private static final long serialVersionUID = -817872853109724987L;
-
-        public static class MailToBuilder {
-            private final MailTo mailTo = new MailTo();
-            public MailTo build() {
-                return mailTo;
-            }
-            public MailToBuilder linkName(String linkName) {
-                mailTo.linkName = linkName;
-                return this;
-            }
-            public MailToBuilder receiver(String receiver) {
-                mailTo.receiver = receiver;
-                return this;
-            }
-            public MailToBuilder subject(String subject) {
-                mailTo.subject = subject;
-                return this;
-            }
-            public MailToBuilder body(String body) {
-                mailTo.body = body;
-                return this;
-            }
-        }
-
-        public static MailToBuilder builder() {
-            return new MailToBuilder();
-        }
 
         private String linkName = "Email";
         private String receiver = "no-one@nowhere";

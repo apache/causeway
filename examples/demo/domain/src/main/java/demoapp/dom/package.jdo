@@ -14,15 +14,6 @@
 	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/jdo/jdo http://xmlns.jcp.org/xml/ns/jdo/jdo_3_1.xsd"
 	version="3.1">
 
-	<package name="demoapp.dom.misc.events">
-		<class name="EventLogEntry" />
-	</package>
-
-	<package name="demoapp.dom.misc.experimental.tuple">
-		<class name="ComplexNumber" />
-		<class name="NumberConstant" />
-	</package>
-
 	<package name="demoapp.dom.annotDomain.DomainObject.nature.viewmodels.jaxbrefentity">
 		<class name="ChildJdo" />
 	</package>

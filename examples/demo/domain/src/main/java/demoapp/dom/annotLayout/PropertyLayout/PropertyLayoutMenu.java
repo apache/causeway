@@ -55,20 +55,25 @@ public class PropertyLayoutMenu {
     final ClockService clockService;
     final Samples<Blob> samples;
 
+
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-file-code", describedAs = "HTML styling")
+    @ActionLayout(cssClassFa="fa-pen-nib", describedAs = "CSS class to wrap the UI component representing this property")
     public PropertyLayoutCssClassVm cssClass(){
         return new PropertyLayoutCssClassVm();
     }
 
+
+
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-comment", describedAs = "Descriptions shown as tooltips")
+    @ActionLayout(cssClassFa="fa-comment", describedAs = "Description of the property, shown as a tooltip")
     public PropertyLayoutDescribedAsVm describedAs(){
         return new PropertyLayoutDescribedAsVm();
     }
 
+
+
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-glasses", describedAs = "Visibility of properties, eg in tables")
+    @ActionLayout(cssClassFa="fa-glasses", describedAs = "Visibility of the property in different contexts")
     public PropertyLayoutHiddenVm hidden() {
         val vm = new PropertyLayoutHiddenVm();
         vm.setPropertyHiddenAnywhere("hidden anywhere");
@@ -83,11 +88,15 @@ public class PropertyLayoutMenu {
         return vm;
     }
 
+
+
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-tag", describedAs = "Label positions")
     public PropertyLayoutLabelPositionVm labelPosition(){
         return new PropertyLayoutLabelPositionVm();
     }
+
+
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-align-justify", describedAs = "Textboxes")
@@ -109,11 +118,14 @@ public class PropertyLayoutMenu {
         return vm;
     }
 
+
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa="fa-signature", describedAs = "Customised label text")
+    @ActionLayout(cssClassFa="fa-signature", describedAs = "Custom text for the property's label")
     public PropertyLayoutNamedVm named(){
         return new PropertyLayoutNamedVm();
     }
+
+
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-sitemap", describedAs = "Breadcrumbs (and trees)")
@@ -121,11 +133,15 @@ public class PropertyLayoutMenu {
         return new FileNodeVm();
     }
 
+
+
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-step-forward", describedAs = "Inclusive and exclusive date ranges")
     public PropertyLayoutRenderDayVm renderDay(){
         return new PropertyLayoutRenderDayVm(clockService.getClock().localDate(ZoneId.systemDefault()));
     }
+
+
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-paint-brush", describedAs = "Performance hint for properties holding unchanging large objects")
@@ -143,6 +159,8 @@ public class PropertyLayoutMenu {
                 });
         return vm;
     }
+
+
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(cssClassFa="fa-ruler-horizontal", describedAs = "Length of text fields")
