@@ -20,9 +20,11 @@
 package org.apache.isis.core.metamodel.facets.object.mixin;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Map;
+import java.util.Optional;
 
 import org.apache.isis.commons.functional.Result;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
@@ -43,6 +45,7 @@ implements MixinFacet {
     private final Class<?> mixinType;
     private final Class<?> holderType;
     private final Constructor<?> constructor;
+    private final Field holderField; // XXX validators should check whether we found the field
 
     public static Class<? extends Facet> type() {
         return MixinFacet.class;
@@ -59,6 +62,18 @@ implements MixinFacet {
         this.constructor = constructor;
         // by mixin convention: first constructor argument is identified as the holder type
         this.holderType = constructor.getParameterTypes()[0]; 
+        // search the type hierarchy of the mixin type for any matching (public and non-public) fields
+        this.holderField = _Reflect.streamAllFields(mixinType, true)
+                .filter(mixinField->mixinField.getType().isAssignableFrom(holderType))
+                .findFirst()
+                .orElse(null);
+        
+        if(holderField==null) {
+            log.warn("Could not find or access the 'mixed-in' domain object within {}" 
+                            + " (tried to guess by looking at all public and non-public fields "
+                            + "and matching one against the constructor parameter's type)", 
+                            mixinType.getClass().getName());
+        }
     }
 
     @Override
@@ -135,21 +150,17 @@ implements MixinFacet {
 
     private Object holderPojoFor(Object mixinPojo, Policy policy) {
         
-        //XXX optimization: we could memoize the field (not its value), if found
-        
-        // search the type hierarchy of the mixin type for any matching (public and non-public) fields
-        val holderPojoSearchResult = _Reflect.streamAllFields(mixinType, true)
-        .filter(mixinField->mixinField.getType().isAssignableFrom(holderType))
-        .findFirst()
-        .map(mixinField->Result.of(()->_Reflect.getFieldOn(mixinField, mixinPojo)))
+        val holderPojoGetterResult = Optional.ofNullable(holderField)
+        .map(field->Result.of(()->_Reflect.getFieldOn(field, mixinPojo)))
         .orElseGet(()->Result.failure("no such field"));
                 
-        if(holderPojoSearchResult.isFailure()) {
+        if(holderPojoGetterResult.isFailure()) {
             
             val msg = String.format(
-                    "Could not find or access the \"mixed-in\" domain object within %s" 
+                    "Could not %s the \"mixed-in\" domain object within %s" 
                             + " (tried to guess by looking at all public and non-public fields "
-                            + "and matching one against the constructor parameter's type)", 
+                            + "and matching one against the constructor parameter's type)",
+                            holderField==null ? "find" : "access",
                             getTitleService().titleOf(mixinPojo));
             
             log.warn(msg);
@@ -159,6 +170,6 @@ implements MixinFacet {
             }
         }
 
-        return holderPojoSearchResult.nullableOrElse(null);
+        return holderPojoGetterResult.nullableOrElse(null);
     }
 }
