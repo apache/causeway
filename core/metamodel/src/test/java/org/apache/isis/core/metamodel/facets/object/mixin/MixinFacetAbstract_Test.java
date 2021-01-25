@@ -1,15 +1,9 @@
 package org.apache.isis.core.metamodel.facets.object.mixin;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Method;
-
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.val;
 
@@ -34,7 +28,8 @@ class MixinFacetAbstract_Test {
 
             // given
             val constructor = Collection_numberOfChildren.class.getConstructor(Object.class);
-            val facet = new MixinFacetAbstract(Collection_numberOfChildren.class, "prop", constructor, null) {};
+            val facet = new MixinFacetAbstract(
+                    Collection_numberOfChildren.class, "prop", constructor, null, null) {};
 
             val propMethodInSubclass = SimpleObject_numberOfChildren.class.getMethod("prop");
 

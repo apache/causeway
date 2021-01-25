@@ -293,8 +293,9 @@ implements MetaModelRefiner, PostConstructMethodCache, ObjectSpecIdFacetFactory 
                     .filter(domainObject -> domainObject.nature() == Nature.MIXIN)
                     .filter(domainObject -> mixinTypeValidator.ensureMixinType(facetHolder, cls));
 
-            val mixinFacet =
-                    MixinFacetForDomainObjectAnnotation.create(mixinDomainObjectIfAny, cls, facetHolder, getServiceInjector());
+            val mixinFacet = MixinFacetForDomainObjectAnnotation
+                    .create(mixinDomainObjectIfAny, cls, facetHolder, getServiceInjector(), mixinTypeValidator);
+            
             super.addFacet(mixinFacet);
         }
 

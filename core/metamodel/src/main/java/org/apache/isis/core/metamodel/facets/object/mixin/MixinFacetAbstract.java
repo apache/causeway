@@ -26,6 +26,9 @@ import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.Optional;
 
+import javax.annotation.Nullable;
+
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.commons.functional.Result;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.reflection._Reflect;
@@ -55,7 +58,8 @@ implements MixinFacet {
             final Class<?> mixinType,
             final String value,
             final Constructor<?> constructor,
-            final FacetHolder holder) {
+            final FacetHolder holder,
+            final @Nullable MetaModelValidatorForMixinTypes mixinTypeValidator) { //nullable for testing
 
         super(type(), value, holder);
         this.mixinType = mixinType;
@@ -69,10 +73,16 @@ implements MixinFacet {
                 .orElse(null);
         
         if(holderField==null) {
-            log.warn("Could not find or access the 'mixed-in' domain object within {}" 
+            
+            val msg = String.format("Could not find the 'mixed-in' domain object within %s" 
                             + " (tried to guess by looking at all public and non-public fields "
                             + "and matching one against the constructor parameter's type)", 
                             mixinType.getClass().getName());
+            log.warn(msg);
+            
+            if(mixinTypeValidator!=null) {
+                mixinTypeValidator.onFailure(holder, Identifier.classIdentifier(mixinType), msg);
+            }
         }
     }
 

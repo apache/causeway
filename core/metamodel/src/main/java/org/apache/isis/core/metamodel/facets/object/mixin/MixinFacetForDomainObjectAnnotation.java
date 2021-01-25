@@ -33,7 +33,8 @@ import static org.apache.isis.commons.internal.reflection._Reflect.Filter.paramC
 
 import lombok.val; 
 
-public class MixinFacetForDomainObjectAnnotation extends MixinFacetAbstract {
+public class MixinFacetForDomainObjectAnnotation 
+extends MixinFacetAbstract {
 
     public static Class<? extends Facet> type() {
         return MixinFacet.class;
@@ -43,16 +44,18 @@ public class MixinFacetForDomainObjectAnnotation extends MixinFacetAbstract {
             final Class<?> mixinType,
             final String value, 
             final Constructor<?> constructorType,
-            final FacetHolder holder) {
+            final FacetHolder holder, 
+            MetaModelValidatorForMixinTypes mixinTypeValidator) {
 
-        super(mixinType, value, constructorType, holder);
+        super(mixinType, value, constructorType, holder, mixinTypeValidator);
     }
 
     public static MixinFacet create(
             final Optional<DomainObject> domainObjectIfAny,
             final Class<?> candidateMixinType,
             final FacetHolder facetHolder,
-            final ServiceInjector servicesInjector) {
+            final ServiceInjector servicesInjector, 
+            final MetaModelValidatorForMixinTypes mixinTypeValidator) {
         
         return domainObjectIfAny
         .filter(domainObject -> domainObject.nature() == Nature.MIXIN)
@@ -67,7 +70,8 @@ public class MixinFacetForDomainObjectAnnotation extends MixinFacetAbstract {
                         candidateMixinType, 
                         domainObject.mixinMethod(), 
                         constructor, 
-                        facetHolder))
+                        facetHolder,
+                        mixinTypeValidator))
             .orElse(null);
         })
         .orElse(null);
