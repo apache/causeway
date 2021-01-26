@@ -36,7 +36,7 @@ import demoapp.dom.types.Samples;
 public class JavaTimeZonedDateTimeJdoSeedService {
 
     @EventListener(MetamodelEvent.class)
-    public void onAppLifecycleEvent(MetamodelEvent event) {
+    public void onMetamodelEvent(MetamodelEvent event) {
 
     	if (event.isPostMetamodel()) {
             fixtureScripts.run(new TemporalJavaTimeZonedDateTimeJdoEntityFixture());

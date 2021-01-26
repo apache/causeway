@@ -71,9 +71,9 @@ public class JdoSchemaService {
     }
 
     @EventListener(MetamodelEvent.class)
-    public void onAppLifecycleEvent(MetamodelEvent event) {
+    public void onMetamodelEvent(MetamodelEvent event) {
 
-        log.debug("received app lifecycle event {}", event);
+        log.debug("received metamodel event {}", event);
 
         switch (event) {
         case BEFORE_METAMODEL_LOADING:

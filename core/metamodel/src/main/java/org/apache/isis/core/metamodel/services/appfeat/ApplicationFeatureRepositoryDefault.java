@@ -88,7 +88,7 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
 
     // -- init
     @EventListener(MetamodelEvent.class)
-    public void onAppLifecycleEvent(MetamodelEvent event) {
+    public void onMetamodelEvent(MetamodelEvent event) {
         if (event.isPostMetamodel()
                 && isEagerInitialize()) {
             initializeIfRequired();

@@ -89,9 +89,9 @@ public class FixturesLifecycleService {
     }
 
     @EventListener(MetamodelEvent.class)
-    public void onAppLifecycleEvent(final MetamodelEvent event) {
+    public void onMetamodelEvent(final MetamodelEvent event) {
 
-        log.debug("received app lifecycle event {}", event);
+        log.debug("received metamodel event {}", event);
 
         if (event.isPostMetamodel()
                 && initialFixtureScript != null) {
