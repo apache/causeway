@@ -28,6 +28,7 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.eventbus.EventBusService;
+import org.apache.isis.core.metamodel.events.MetamodelEvent;
 
 /**
  * 
@@ -36,22 +37,22 @@ import org.apache.isis.applib.services.eventbus.EventBusService;
  * post-construct phase has finished and before the pre-destroy phase has begun.
  */
 @Service
-@Named("isisRuntime.AppLifecycleEventService")
+@Named("isisRuntime.MetamodelEventService")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")
-public class AppLifecycleEventService {
+public class MetamodelEventService {
     
     @Inject private EventBusService eventBusService;
 
    // -- APP
 
-    public void fireAppPreMetamodel() {
-        eventBusService.post(AppLifecycleEvent.PRE_METAMODEL);
+    public void fireBeforeMetamodelLoading() {
+        eventBusService.post(MetamodelEvent.BEFORE_METAMODEL_LOADING);
     }
 
-    public void fireAppPostMetamodel() {
-        eventBusService.post(AppLifecycleEvent.POST_METAMODEL);
+    public void fireAfterMetamodelLoaded() {
+        eventBusService.post(MetamodelEvent.AFTER_METAMODEL_LOADED);
     }
 
 }

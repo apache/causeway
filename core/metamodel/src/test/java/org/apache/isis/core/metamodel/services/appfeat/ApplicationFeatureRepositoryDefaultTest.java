@@ -84,7 +84,6 @@ public class ApplicationFeatureRepositoryDefaultTest {
 
         applicationFeatureRepository = new ApplicationFeatureRepositoryDefault(
                 /*configuration*/ null, 
-                mockServiceRegistry, 
                 mockSpecificationLoader, 
                 applicationFeatureFactory);
 

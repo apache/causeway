@@ -33,7 +33,7 @@ import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.config.beans.IsisBeanTypeRegistry;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.runtime.events.AppLifecycleEvent;
+import org.apache.isis.core.metamodel.events.MetamodelEvent;
 import org.apache.isis.persistence.jdo.datanucleus.config.DnSettings;
 import org.apache.isis.persistence.jdo.spring.integration.TransactionAwarePersistenceManagerFactoryProxy;
 
@@ -70,15 +70,15 @@ public class JdoSchemaService {
         }
     }
 
-    @EventListener(AppLifecycleEvent.class)
-    public void onAppLifecycleEvent(AppLifecycleEvent event) {
+    @EventListener(MetamodelEvent.class)
+    public void onAppLifecycleEvent(MetamodelEvent event) {
 
         log.debug("received app lifecycle event {}", event);
 
         switch (event) {
-        case PRE_METAMODEL:
+        case BEFORE_METAMODEL_LOADING:
             break;
-        case POST_METAMODEL:
+        case AFTER_METAMODEL_LOADED:
             new _DnApplication(metaModelContext, dnSettings); // creates schema
             break;
 

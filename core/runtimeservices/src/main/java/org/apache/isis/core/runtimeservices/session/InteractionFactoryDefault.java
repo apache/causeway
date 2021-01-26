@@ -66,7 +66,7 @@ import org.apache.isis.core.interaction.session.IsisInteraction;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.services.publishing.CommandPublisher;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.runtime.events.AppLifecycleEventService;
+import org.apache.isis.core.runtime.events.MetamodelEventService;
 import org.apache.isis.core.security.authentication.Authentication;
 import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
 
@@ -95,7 +95,7 @@ public class InteractionFactoryDefault
 implements InteractionFactory, InteractionTracker {
 
     @Inject AuthenticationManager authenticationManager;
-    @Inject AppLifecycleEventService runtimeEventService;
+    @Inject MetamodelEventService runtimeEventService;
     @Inject SpecificationLoader specificationLoader;
     @Inject MetaModelContext metaModelContext;
     @Inject IsisConfiguration configuration;
@@ -123,7 +123,7 @@ implements InteractionFactory, InteractionTracker {
         log.info("Initialising Isis System");
         log.info("working directory: {}", new File(".").getAbsolutePath());
 
-        runtimeEventService.fireAppPreMetamodel();
+        runtimeEventService.fireBeforeMetamodelLoading();
 
         val taskList = _ConcurrentTaskList.named("IsisInteractionFactoryDefault Init")
                 .addRunnable("SpecificationLoader::createMetaModel", specificationLoader::createMetaModel)
@@ -148,7 +148,7 @@ implements InteractionFactory, InteractionTracker {
             }
         }
 
-        runtimeEventService.fireAppPostMetamodel();
+        runtimeEventService.fireAfterMetamodelLoaded();
 
     }
 

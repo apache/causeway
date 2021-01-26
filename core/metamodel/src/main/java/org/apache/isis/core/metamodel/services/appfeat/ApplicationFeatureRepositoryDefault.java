@@ -26,22 +26,21 @@ import java.util.SortedMap;
 import java.util.SortedSet;
 import java.util.stream.Collectors;
 
-import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Repository;
 
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureRepository;
 import org.apache.isis.applib.services.appfeat.ApplicationMemberType;
-import org.apache.isis.applib.services.registry.ServiceRegistry;
-import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.metamodel.services.ApplicationFeaturesInitConfiguration;
+import org.apache.isis.core.metamodel.events.MetamodelEvent;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.SingleIntValueFacet;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
@@ -74,35 +73,33 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
     private final SortedMap<ApplicationFeatureId, ApplicationFeature> actionFeatures = _Maps.newTreeMap();
 
     private final IsisConfiguration configuration;
-    private final ServiceRegistry serviceRegistry;
     private final SpecificationLoader specificationLoader;
     private final ApplicationFeatureFactory applicationFeatureFactory;
 
     @Inject
     public ApplicationFeatureRepositoryDefault(
             IsisConfiguration configuration,
-            ServiceRegistry serviceRegistry,
             SpecificationLoader specificationLoader,
             ApplicationFeatureFactory applicationFeatureFactory) {
         this.configuration = configuration;
-        this.serviceRegistry = serviceRegistry;
         this.specificationLoader = specificationLoader;
         this.applicationFeatureFactory = applicationFeatureFactory;
     }
 
     // -- init
-
-
-    @PostConstruct
-    public void init() {
-        if(isEagerInitialize()) {
+    @EventListener(MetamodelEvent.class)
+    public void onAppLifecycleEvent(MetamodelEvent event) {
+        if (event.isPostMetamodel()
+                && isEagerInitialize()) {
             initializeIfRequired();
         }
     }
 
     private boolean isEagerInitialize() {
-        ApplicationFeaturesInitConfiguration setting = configuration.getCore().getRuntimeServices().getApplicationFeatures().getInit();
-        return setting == ApplicationFeaturesInitConfiguration.EAGER || setting == ApplicationFeaturesInitConfiguration.EAGERLY;
+        ApplicationFeaturesInitConfiguration setting = 
+                configuration.getCore().getRuntimeServices().getApplicationFeatures().getInit();
+        return setting == ApplicationFeaturesInitConfiguration.EAGER 
+                || setting == ApplicationFeaturesInitConfiguration.EAGERLY;
     }
 
     // -- initializeIfRequired
@@ -118,17 +115,9 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
             return;
         }
         initializationState = InitializationState.INITIALIZED;
-        val allSpecs = primeMetaModel();
-        for (val spec : allSpecs) {
+        for (val spec : specificationLoader.snapshotSpecifications()) {
             createApplicationFeaturesFor(spec);
         }
-    }
-
-    private Can<ObjectSpecification> primeMetaModel() {
-        log.warn("loading service specs here might be redundant");
-        serviceRegistry.streamRegisteredBeans()
-            .forEach(bean->specificationLoader.loadSpecification(bean.getBeanClass()));
-        return specificationLoader.snapshotSpecifications();
     }
 
     void createApplicationFeaturesFor(final ObjectSpecification spec) {

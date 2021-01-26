@@ -16,20 +16,19 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.runtime.events;
+package org.apache.isis.core.metamodel.events;
 
-public enum AppLifecycleEvent {
-        PRE_METAMODEL,
-        POST_METAMODEL,
-        //APP_PRE_DESTROY,
+public enum MetamodelEvent {
+        BEFORE_METAMODEL_LOADING,
+        AFTER_METAMODEL_LOADED,
         ;
 	
 	public boolean isPreMetamodel() {
-		return this == PRE_METAMODEL;
+		return this == BEFORE_METAMODEL_LOADING;
 	}
 	
 	public boolean isPostMetamodel() {
-		return this == POST_METAMODEL;
+		return this == AFTER_METAMODEL_LOADED;
 	}
 	
 }

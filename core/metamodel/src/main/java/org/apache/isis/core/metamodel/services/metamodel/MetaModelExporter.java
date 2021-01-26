@@ -62,8 +62,8 @@ class MetaModelExporter {
 
     SpecificationLoader specificationLookup;
 
-    public MetaModelExporter(final SpecificationLoader specificationLookup) {
-        this.specificationLookup = specificationLookup;
+    public MetaModelExporter(final SpecificationLoader specificationLoader) {
+        this.specificationLookup = specificationLoader;
     }
 
     /**

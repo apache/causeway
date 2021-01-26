@@ -21,7 +21,6 @@ package org.apache.isis.core.metamodel.services.metamodel;
 import java.util.Collections;
 import java.util.List;
 
-import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -64,13 +63,6 @@ public class MetaModelServiceDefault implements MetaModelService {
 
     @Inject private SpecificationLoader specificationLoader;
     @Inject private GridService gridService;
-    
-    private MetaModelExporter metaModelExporter;
-
-    @PostConstruct
-    public void init() {
-        metaModelExporter = new MetaModelExporter(specificationLoader);
-    }
 
     @Override
     public Class<?> fromObjectType(final String objectType) {
@@ -245,7 +237,7 @@ public class MetaModelServiceDefault implements MetaModelService {
 
     @Override
     public MetamodelDto exportMetaModel(final Config config) {
-        return metaModelExporter.exportMetaModel(config);
+        return new MetaModelExporter(specificationLoader).exportMetaModel(config);
     }
 
 

@@ -24,7 +24,7 @@ import javax.inject.Inject;
 
 import org.springframework.context.event.EventListener;
 
-import org.apache.isis.core.runtime.events.AppLifecycleEvent;
+import org.apache.isis.core.metamodel.events.MetamodelEvent;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 
@@ -36,8 +36,8 @@ public abstract class SeedServiceAbstract implements SeedService {
         this.fixtureScriptSupplier = fixtureScriptSupplier;
     }
 
-    @EventListener(AppLifecycleEvent.class)
-    public void onAppLifecycleEvent(AppLifecycleEvent event) {
+    @EventListener(MetamodelEvent.class)
+    public void onAppLifecycleEvent(MetamodelEvent event) {
         if (event.isPostMetamodel()) {
             fixtureScripts.run(fixtureScriptSupplier.get());
         }
