@@ -16,42 +16,43 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.objects.customvaluetypes;
-
-import javax.jdo.annotations.Column;
-import javax.jdo.annotations.DatastoreIdentity;
-import javax.jdo.annotations.IdGeneratorStrategy;
-import javax.jdo.annotations.IdentityType;
-import javax.jdo.annotations.PersistenceCapable;
-import javax.jdo.annotations.Persistent;
+package demoapp.dom.domain.objects.other.mixins;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
+import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.Where;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo" )
-@DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
-@DomainObject
-public class NumberConstantJdo {
+
+@DomainObject(
+        nature=Nature.VIEW_MODEL,
+        editing = Editing.DISABLED,
+        objectType = "demo.FibonacciNumberVm"
+)
+@NoArgsConstructor
+@AllArgsConstructor(staticName = "of")
+public class FibonacciNumberVm {
 
     public String title() {
-        return getName();
+        return String.format("%d ! = %d", getNumber(), getFibonacci());
     }
 
-    @javax.jdo.annotations.Column(allowsNull = "false")
-    @Property
+    @Property()
     @Getter @Setter
-    private String name;
+    private int number;
 
-    @javax.jdo.annotations.Embedded(members={
-            @Persistent(name="re", columns=@Column(name="number-re")),
-            @Persistent(name="im", columns=@Column(name="number-im"))
-    })
-    @Property(editing = Editing.ENABLED)
+    @Property()
     @Getter @Setter
-    private ComplexNumber number;
+    private int fibonacci;
+
+    @Property(hidden = Where.REFERENCES_PARENT)
+    @Getter @Setter
+    private CountHolder parent;
 
 }

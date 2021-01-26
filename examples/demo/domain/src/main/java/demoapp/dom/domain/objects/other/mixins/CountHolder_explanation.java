@@ -16,34 +16,25 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.objects.mixins;
+package demoapp.dom.domain.objects.other.mixins;
 
-import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.Editing;
-import org.apache.isis.applib.annotation.Nature;
+import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.annotation.PropertyLayout;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.RequiredArgsConstructor;
 
+//tag::class[]
+@Property                                   // <.>
+@RequiredArgsConstructor                    // <.>
+public class CountHolder_explanation {
 
-@DomainObject(nature=Nature.VIEW_MODEL, objectType = "demo.MixinVmItem")
-@NoArgsConstructor
-@AllArgsConstructor(staticName="of")
-public class MixinVmItem {
+    private final CountHolder holder;       // <.>
 
-    public String title() {
-        return String.format("DemoItem '%s'", getName());
+    @MemberOrder(name = "properties", sequence = "1")
+    public String prop() {
+        return String.format(
+                "The collection shows the first %d fibonacci numbers",
+                holder.getCount());
     }
-
-    @Property(editing = Editing.DISABLED)
-    @PropertyLayout(describedAs="The name of this 'DemoItem'.")
-    @Getter @Setter private String name;
-
-    @Property(editing = Editing.DISABLED)
-    @Getter @Setter private MixinVmItem friend;
-
 }
+//end::class[]

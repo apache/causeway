@@ -16,43 +16,42 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.objects.mixins;
+package demoapp.dom.domain.objects.other.customvaluetypes;
 
-import java.util.List;
-
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
+import javax.jdo.annotations.Column;
+import javax.jdo.annotations.DatastoreIdentity;
+import javax.jdo.annotations.IdGeneratorStrategy;
+import javax.jdo.annotations.IdentityType;
+import javax.jdo.annotations.PersistenceCapable;
+import javax.jdo.annotations.Persistent;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
-import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.annotation.PropertyLayout;
 
 import lombok.Getter;
 import lombok.Setter;
 
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-
-@XmlRootElement(name = "Demo")
-@XmlType
-@XmlAccessorType(XmlAccessType.FIELD)
-@DomainObject(nature=Nature.VIEW_MODEL, objectType = "demo.MixinVm")
-public class MixinVm implements HasAsciiDocDescription {
+@PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo" )
+@DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
+@DomainObject
+public class NumberConstantJdo {
 
     public String title() {
-        return "Mixin Demo";
+        return getName();
     }
 
-    @Property(editing = Editing.DISABLED) // inline edit disabled, but allows updates via mixin
-    @PropertyLayout(multiLine = 3)
-    @Getter @Setter private String note;
+    @javax.jdo.annotations.Column(allowsNull = "false")
+    @Property
+    @Getter @Setter
+    private String name;
 
-    // ---
-
-    List<MixinVmItem> collection;
-
+    @javax.jdo.annotations.Embedded(members={
+            @Persistent(name="re", columns=@Column(name="number-re")),
+            @Persistent(name="im", columns=@Column(name="number-im"))
+    })
+    @Property(editing = Editing.ENABLED)
+    @Getter @Setter
+    private ComplexNumber number;
 
 }

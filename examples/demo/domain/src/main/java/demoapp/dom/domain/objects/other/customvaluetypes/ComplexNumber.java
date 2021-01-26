@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.objects.customvaluetypes;
+package demoapp.dom.domain.objects.other.customvaluetypes;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

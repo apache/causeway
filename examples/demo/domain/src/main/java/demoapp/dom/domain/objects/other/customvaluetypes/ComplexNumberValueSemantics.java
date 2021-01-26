@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.objects.customvaluetypes;
+package demoapp.dom.domain.objects.other.customvaluetypes;
 
 import java.util.stream.Collectors;
 
@@ -30,8 +30,6 @@ import org.apache.isis.commons.internal.base._Strings;
 import lombok.val;
 
 public class ComplexNumberValueSemantics implements ValueSemanticsProvider<ComplexNumber>{
-
-
 
     @Override
     public Parser<ComplexNumber> getParser() {

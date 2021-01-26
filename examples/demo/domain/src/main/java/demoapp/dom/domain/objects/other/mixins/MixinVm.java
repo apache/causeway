@@ -16,30 +16,36 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.objects.customvaluetypes;
+package demoapp.dom.domain.objects.other.mixins;
 
-import java.util.List;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
-import javax.inject.Inject;
-
-import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.Nature;
+import org.apache.isis.applib.annotation.Property;
+
+import lombok.Getter;
+import lombok.Setter;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
-@DomainObject(nature=Nature.VIEW_MODEL, objectType = "demo.TupleDemo")
-public class CustomValueTypeVm implements HasAsciiDocDescription {
-
-    @Inject private NumberConstantJdoRepository numberConstantRepo;
+//tag::class[]
+@XmlRootElement(name = "Demo")
+@XmlType
+@XmlAccessorType(XmlAccessType.FIELD)
+@DomainObject(nature=Nature.VIEW_MODEL, objectType = "demo.MixinVm")
+public class MixinVm implements HasAsciiDocDescription, CountHolder {
 
     public String title() {
-        return "Custom Value Types";
+        return "Mixins";
     }
 
-    @Collection
-    public List<NumberConstantJdo> getAllConstants(){
-        return numberConstantRepo.listAll();
-    }
-
+    @Property(editing = Editing.DISABLED)           // <.>
+    @Getter @Setter
+    private int count;
 }
+//end::class[]

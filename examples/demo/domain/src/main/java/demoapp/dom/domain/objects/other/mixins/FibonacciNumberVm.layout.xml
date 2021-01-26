@@ -26,25 +26,22 @@
                         <bs3:tab name="Identity">
                             <bs3:row>
                                 <bs3:col span="12">
-                                    <cpt:fieldSet name="Identity" id="identity"/>
+                                    <cpt:fieldSet name="Identity">
+                                        <cpt:property id="number"/>
+                                    </cpt:fieldSet>
+                                    <cpt:fieldSet name="Fibonacci">
+                                        <cpt:property id="fibonacci"/>
+                                    </cpt:fieldSet>
+                                    <cpt:fieldSet name="Details">
+                                        <cpt:property id="parent"/>
+                                    </cpt:fieldSet>
                                 </bs3:col>
                             </bs3:row>
                         </bs3:tab>
                         <bs3:tab name="Other">
                             <bs3:row>
                                 <bs3:col span="12">
-                                    <cpt:fieldSet name="Other" id="other" unreferencedProperties="true">
-
-                                        <cpt:property id="name" typicalLength="25">
-                                            <cpt:named>Name</cpt:named>
-                                            <cpt:describedAs>The name of this 'DemoItem'.</cpt:describedAs>
-                                        </cpt:property>
-
-                                        <cpt:property id="friend">
-                                            <cpt:named>Friend</cpt:named>
-                                        </cpt:property>
-
-                                    </cpt:fieldSet>
+                                    <cpt:fieldSet name="Other" id="other" unreferencedProperties="true"/>
                                 </bs3:col>
                             </bs3:row>
                         </bs3:tab>
@@ -68,11 +65,6 @@
                             </bs3:row>
                         </bs3:tab>
                     </bs3:tabGroup>
-                </bs3:col>
-            </bs3:row>
-            <bs3:row>
-                <bs3:col span="12">
-                    <cpt:fieldSet name="Details" id="details"/>
                 </bs3:col>
             </bs3:row>
         </bs3:col>

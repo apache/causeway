@@ -9,7 +9,7 @@ CAUTION: TODO v2 - to document.  AbstractIsisInteractionTemplate has been remove
 [source,java]
 .DemoJob.java
 ----
-include::example$DemoJob.java[tag=class]
+include::example$DemoJob.java[tags=class]
 ----
 +
 Domain services (such as `IsisConfiguration`) can be injected into this class.
@@ -20,7 +20,7 @@ This runs within a transactionm under the user and role specified by `DemoJob`, 
 .DemoIsisInteractionTemplate.java
 [source,java]
 ----
-include::example$DemoIsisInteractionTemplate.java[tag=class]
+include::example$DemoIsisInteractionTemplate.java[tags=class]
 ----
 
 * Finally, the job is configured to run using Spring:
@@ -28,6 +28,6 @@ include::example$DemoIsisInteractionTemplate.java[tag=class]
 .DemoJobQuartzConfigurerModule.java
 [source,java]
 ----
-include::example$DemoJobQuartzConfigurerModule.java[tag=class]
+include::example$DemoJobQuartzConfigurerModule.java[tags=class]
 ----
 

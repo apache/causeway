@@ -16,21 +16,28 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.objects.mixins;
+package demoapp.dom.domain.objects.other.customvaluetypes;
 
-import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.PromptStyle;
 
 import lombok.RequiredArgsConstructor;
 
-@Property
+@Action(associateWith = "number")
+@ActionLayout(promptStyle = PromptStyle.DIALOG_SIDEBAR)
 @RequiredArgsConstructor
-public class MixinVm_mixedInProperty {
+public class NumberConstantJdo_updateNumberUsingAction {
 
-    @SuppressWarnings("unused")
-    private final MixinVm holder;
+    private final NumberConstantJdo numberConstantJdo;
 
-    public MixinVmItem prop() {
-        return MixinVmItem.of("A mixed-in Property", null);
+    public NumberConstantJdo act(ComplexNumber complexNumber) {
+        numberConstantJdo.setNumber(complexNumber);
+        return numberConstantJdo;
+    }
+
+    public ComplexNumber default0Act() {
+        return numberConstantJdo.getNumber();
     }
 
 }

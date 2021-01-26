@@ -16,28 +16,23 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.objects.customvaluetypes;
+package demoapp.dom.domain.objects.other.mixins;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.PromptStyle;
+import org.apache.isis.applib.annotation.DomainService;
 
-import lombok.RequiredArgsConstructor;
+import lombok.val;
 
-@Action(associateWith = "number")
-@ActionLayout(promptStyle = PromptStyle.DIALOG_SIDEBAR)
-@RequiredArgsConstructor
-public class NumberConstantJdo_updateNumberUsingAction {
+@DomainService(objectType = "demo.MixinMenu")
+public class MixinMenu {
 
-    private final NumberConstantJdo numberConstantJdo;
-
-    public NumberConstantJdo act(ComplexNumber complexNumber) {
-        numberConstantJdo.setNumber(complexNumber);
-        return numberConstantJdo;
-    }
-
-    public ComplexNumber default0Act() {
-        return numberConstantJdo.getNumber();
+    @Action
+    @ActionLayout(cssClassFa="fa-bolt", describedAs="Contribute behaviour to domain objects")
+    public MixinVm mixins(){
+        val vm = new MixinVm();
+        vm.setCount(10);
+        return vm;
     }
 
 }

@@ -16,22 +16,30 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.objects.mixins;
+package demoapp.dom.domain.objects.other.customvaluetypes;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 import org.apache.isis.applib.annotation.Collection;
+import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.Nature;
 
-import lombok.RequiredArgsConstructor;
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
-@Collection
-@RequiredArgsConstructor
-public class MixinVm_mixedInCollection {
+@DomainObject(nature=Nature.VIEW_MODEL, objectType = "demo.TupleDemo")
+public class CustomValueTypeVm implements HasAsciiDocDescription {
 
-    private final MixinVm holder;
+    @Inject private NumberConstantJdoRepository numberConstantRepo;
 
-    public List<MixinVmItem> coll() {
-        return holder.collection;
+    public String title() {
+        return "Custom Value Types";
+    }
+
+    @Collection
+    public List<NumberConstantJdo> getAllConstants(){
+        return numberConstantRepo.listAll();
     }
 
 }

@@ -8,7 +8,7 @@ collections of the same domain object. For complete reference see the
 https://isis.apache.org/guides/rgant/rgant.html#_rgant-Action_associateWith[Apache
 Isis Reference Guide]
 
-We setup a simple `MixinVmItem` class to demonstrate this.
+We setup a simple `FibonacciNumberVm` class to demonstrate this.
 
 [source,java]
 ----
@@ -26,7 +26,7 @@ public class DemoItem {
 ----
 
 Now following demo view model holds `items` a collection of element type
-`MixinVmItem`. The action method `doSomethingWithItems(...)` can be thought
+`FibonacciNumberVm`. The action method `doSomethingWithItems(...)` can be thought
 of as associated with the `items` collection, because it expresses this
 association using the annotation `@Action(associateWith="items")`.
 

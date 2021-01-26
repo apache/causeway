@@ -16,29 +16,11 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.objects.mixins;
+package demoapp.dom.domain.objects.other.mixins;
 
-import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.extensions.modelannotation.applib.annotation.Model;
-
-import lombok.RequiredArgsConstructor;
-
-@Action(associateWith = "note")
-@ActionLayout(named = "Update Note")
-@RequiredArgsConstructor
-public class MixinVm_mixedInAction {
-
-    private final MixinVm holder;
-
-    public MixinVm act(String newNote) {
-        holder.setNote(newNote);
-        return holder;
-    }
-
-    @Model
-    public String default0Act() {
-        return holder.getNote();
-    }
-
+//tag::class[]
+public interface CountHolder {
+    int getCount();
+    void setCount(int count);
 }
+//end::class[]
