@@ -65,7 +65,7 @@ public class TaggerDefault implements Tagger {
         }
         matcher = tagPatternForTwoParts.matcher(objType);
         if (matcher.matches()) {
-            if (objType.startsWith("isisApplib")) {
+            if (objType.startsWith("isis.applib.")) {
                 return ". apache isis applib";
             }
 

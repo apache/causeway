@@ -33,7 +33,7 @@ import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 import lombok.extern.log4j.Log4j2;
 
 @Service
-@Named("isisExtSecman.SeedSecurityModuleService")
+@Named("secman.SeedSecurityModuleService")
 @Order(OrderPrecedence.MIDPOINT)
 @Qualifier("Default")
 @Log4j2

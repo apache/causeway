@@ -39,7 +39,7 @@ import lombok.NonNull;
 import lombok.val;
 
 @Repository
-@Named("isisExtSecman.applicationTenancyRepository")
+@Named("secman.applicationTenancyRepository")
 public class ApplicationTenancyRepository 
 implements org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancyRepository<ApplicationTenancy> {
 

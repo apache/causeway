@@ -29,7 +29,7 @@ import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.extensions.secman.api.encryption.PasswordEncryptionService;
 
 @Service
-@Named("isisExtSecman.PasswordEncryptionServiceUsingJBcrypt")
+@Named("secman.PasswordEncryptionServiceUsingJBcrypt")
 @Order(OrderPrecedence.MIDPOINT)
 @Qualifier("JBCrypt")
 public class PasswordEncryptionServiceUsingJBcrypt implements PasswordEncryptionService {

@@ -53,7 +53,7 @@ import lombok.NonNull;
 import lombok.val;
 
 @Service
-@Named("isisExtSecman.applicationUserRepository")
+@Named("secman.applicationUserRepository")
 public class ApplicationUserRepository
 implements org.apache.isis.extensions.secman.api.user.ApplicationUserRepository<ApplicationUser> {
 

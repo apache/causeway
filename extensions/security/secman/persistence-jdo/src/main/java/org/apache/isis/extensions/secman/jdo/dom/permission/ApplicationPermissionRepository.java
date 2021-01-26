@@ -56,7 +56,7 @@ import lombok.NonNull;
 import lombok.val;
 
 @Repository
-@Named("isisExtSecman.applicationPermissionRepository")
+@Named("secman.applicationPermissionRepository")
 public class ApplicationPermissionRepository
 implements org.apache.isis.extensions.secman.api.permission.ApplicationPermissionRepository<ApplicationPermission> {
 

@@ -42,7 +42,7 @@ import org.apache.isis.extensions.secman.model.dom.permission.ApplicationPermiss
 import lombok.val;
 
 @Service
-@Named("isisExtSecman.applicationRoleRepository")
+@Named("secman.applicationRoleRepository")
 public class ApplicationRoleRepository 
 implements org.apache.isis.extensions.secman.api.role.ApplicationRoleRepository<ApplicationRole> {
 

@@ -34,7 +34,7 @@ import org.apache.isis.extensions.secman.shiro.util.ShiroUtils;
 import lombok.val;
 
 @Service
-@Named("isisExtSecman.SecurityRealmServiceUsingShiro")
+@Named("secman.SecurityRealmServiceUsingShiro")
 @Order(OrderPrecedence.MIDPOINT)
 @Qualifier("Shiro")
 public class SecurityRealmServiceUsingShiro implements SecurityRealmService {
