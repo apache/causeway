@@ -28,6 +28,7 @@ import org.apache.isis.applib.ViewModel;
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.applib.annotation.MemberOrder;
+import org.apache.isis.applib.annotation.Navigable;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
@@ -229,7 +230,9 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
     @Property(
             domainEvent = ParentDomainEvent.class
             )
-    @PropertyLayout(hidden=Where.ALL_TABLES)
+    @PropertyLayout(
+            navigable = Navigable.PARENT,
+            hidden = Where.ALL_TABLES)
     @MemberOrder(name = "Parent", sequence = "2.6")
     public ApplicationFeatureViewModel getParent() {
         final ApplicationFeatureId parentId;

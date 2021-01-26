@@ -23,9 +23,7 @@ import org.apache.isis.core.metamodel.commons.StringExtensions;
 public enum ApplicationFeatureType {
     
     /** 
-     * {@code namespace + "." + typeSimpleName} make up the fully qualified logical type name
-     * 
-     * @deprecated with v2.0.0-M5 semantics changed: should be renamed to NAMESPACE
+     * logical package aka <i>object namespace</i>
      */
     PACKAGE {
         @Override
@@ -38,7 +36,7 @@ public enum ApplicationFeatureType {
     },
     
     /** 
-     * {@code namespace + "." + typeSimpleName} make up the fully qualified logical type name
+     * logical class aka <i>object type</i>
      */
     CLASS {
         @Override
