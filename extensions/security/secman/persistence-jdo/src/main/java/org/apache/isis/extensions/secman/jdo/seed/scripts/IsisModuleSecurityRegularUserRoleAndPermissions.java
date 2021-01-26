@@ -18,6 +18,7 @@
  */
 package org.apache.isis.extensions.secman.jdo.seed.scripts;
 
+import org.apache.isis.core.security.authentication.logout.LogoutMenu;
 import org.apache.isis.extensions.secman.api.SecurityModuleConfig;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionMode;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionRule;
@@ -41,9 +42,15 @@ public class IsisModuleSecurityRegularUserRoleAndPermissions extends AbstractRol
         newMemberPermissions(
                 ApplicationPermissionRule.ALLOW,
                 ApplicationPermissionMode.CHANGING,
+                LogoutMenu.class,
+                "logout");
+
+        newMemberPermissions(
+                ApplicationPermissionRule.ALLOW,
+                ApplicationPermissionMode.CHANGING,
                 MeService.class,
                 "me");
-
+        
         newClassPermissions(
                 ApplicationPermissionRule.ALLOW,
                 ApplicationPermissionMode.VIEWING,
