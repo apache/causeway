@@ -19,11 +19,13 @@
 package org.apache.isis.security.shiro.webmodule;
 
 import java.util.Collection;
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.servlet.DispatcherType;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
@@ -187,7 +189,7 @@ public class WebModuleShiro extends WebModuleAbstract {
         registerFilter(ctx, SHIRO_FILTER_NAME, ShiroFilter.class)
             .ifPresent(filterReg -> {
                 filterReg.addMappingForUrlPatterns(
-                        null,
+                        EnumSet.of(DispatcherType.REQUEST, DispatcherType.ASYNC), 
                         false, // filter is forced first
                         "/*");
             });
