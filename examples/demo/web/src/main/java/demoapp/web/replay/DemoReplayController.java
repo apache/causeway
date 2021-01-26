@@ -27,7 +27,7 @@ import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.extensions.commandreplay.secondary.spi.ReplayCommandExecutionController;
 
-@DomainService(nature = NatureOfService.VIEW, objectType = "demoapp.web.DemoReplayController")
+@DomainService(nature = NatureOfService.VIEW, objectType = "demo.web.DemoReplayController")
 @Profile("secondary")
 public class DemoReplayController implements ReplayCommandExecutionController {
 

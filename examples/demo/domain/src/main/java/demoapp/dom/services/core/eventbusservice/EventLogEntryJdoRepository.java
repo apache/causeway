@@ -30,7 +30,7 @@ import org.apache.isis.applib.services.repository.RepositoryService;
 import lombok.RequiredArgsConstructor;
 
 @Repository
-@Named("demoapp.eventLogRepository")
+@Named("demo.eventLogRepository")
 @RequiredArgsConstructor(onConstructor_ = { @Inject })
 public class EventLogEntryJdoRepository {
 

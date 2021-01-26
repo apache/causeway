@@ -41,7 +41,7 @@ import demoapp.dom.services.core.eventbusservice.EventBusServiceDemoVm.UiButtonE
 import static demoapp.dom._infra.utils.LogUtils.emphasize;
 
 @Service
-@Named("demoapp.eventSubscriber")
+@Named("demo.eventSubscriber")
 @Qualifier("demo")
 @Log4j2
 @RequiredArgsConstructor(onConstructor_ = { @Inject })
@@ -63,7 +63,7 @@ public class EventSubscriberDemoImplementation {
 
     @DomainObject(
             nature = Nature.BEAN, // <-- have this Object's lifecycle managed by Spring
-            objectType = "demoapp.eventLogWriter")
+            objectType = "demo.eventLogWriter")
     public static class EventLogWriter {
 
         @Inject private EventLogEntryJdoRepository eventLogEntryJdoRepository;

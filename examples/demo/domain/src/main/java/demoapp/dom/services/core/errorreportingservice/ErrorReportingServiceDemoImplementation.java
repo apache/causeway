@@ -32,7 +32,7 @@ import lombok.val;
 
 // tag::class[]
 @Service
-@Named("demoapp.ErrorReportingServiceDemoImplementation")
+@Named("demo.ErrorReportingServiceDemoImplementation")
 @Qualifier("demo")
 public class ErrorReportingServiceDemoImplementation implements ErrorReportingService {
 

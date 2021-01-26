@@ -34,7 +34,7 @@ import lombok.val;
 
 // tag::refguide[]
 @Service
-@Named("demoapp.demoErrorReportingService")
+@Named("demo.demoErrorReportingService")
 @Qualifier("demo")
 public class DemoErrorReportingService implements ErrorReportingService {
 

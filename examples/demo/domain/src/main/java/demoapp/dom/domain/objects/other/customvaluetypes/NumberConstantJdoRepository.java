@@ -31,7 +31,7 @@ import org.apache.isis.applib.services.repository.RepositoryService;
 import lombok.val;
 
 @Repository
-@Named("demoapp.numberConstantRepository")
+@Named("demo.numberConstantRepository")
 public class NumberConstantJdoRepository {
 
     @Inject private RepositoryService repository;
