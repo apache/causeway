@@ -46,7 +46,7 @@ import lombok.val;
 
 @DomainService(
         nature = NatureOfService.VIEW,
-        objectType = "secman.ApplicationUserMenu"
+        objectType = "isis.ext.secman.ApplicationUserMenu"
         )
 @DomainServiceLayout(
         named = "Security",

@@ -30,7 +30,7 @@ import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureType;
 
 @DomainObject(
-        objectType = "secman.ApplicationPackage"
+        objectType = "isis.ext.secman.ApplicationPackage"
         )
 @DomainObjectLayout(paged=100)
 public class ApplicationPackage extends ApplicationFeatureViewModel {

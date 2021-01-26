@@ -26,7 +26,7 @@ import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureId;
 
 @DomainObject(
-        objectType = "secman.ApplicationClassProperty"
+        objectType = "isis.ext.secman.ApplicationClassProperty"
         )
 @DomainObjectLayout(paged=100)
 public class ApplicationClassProperty extends ApplicationClassMember {

@@ -30,7 +30,7 @@ import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureId;
 
 @DomainObject(
-        objectType = "secman.ApplicationClass"
+        objectType = "isis.ext.secman.ApplicationClass"
         )
 @DomainObjectLayout(
         paged=100,

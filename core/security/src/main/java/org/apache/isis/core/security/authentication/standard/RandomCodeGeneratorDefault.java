@@ -30,7 +30,7 @@ import org.springframework.stereotype.Component;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 
 @Component
-@Named("isisSecurityApi.RandomCodeGenerator10Chars")
+@Named("isis.security.RandomCodeGenerator10Chars")
 @Order(OrderPrecedence.LATE)
 @Primary
 @Qualifier("Default")

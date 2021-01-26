@@ -60,7 +60,7 @@ import lombok.val;
 
 public class IsisModuleExtSecmanShiroRealm extends AuthorizingRealm implements SecurityRealm {
 
-    private static final String SECMAN_ENABLE_DELEGATED_USERS = "secman.enableDelegatedUsers";
+    private static final String SECMAN_ENABLE_DELEGATED_USERS = "isis.ext.secman.enableDelegatedUsers";
 	@Inject protected ServiceInjector serviceInjector;
     @Inject protected InteractionFactory isisInteractionFactory;
     @Inject protected PlatformTransactionManager txMan;

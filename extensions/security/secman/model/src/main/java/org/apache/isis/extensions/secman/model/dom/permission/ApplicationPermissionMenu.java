@@ -35,7 +35,7 @@ import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionRep
 
 @DomainService(
         nature = NatureOfService.VIEW,
-        objectType = "secman.ApplicationPermissionMenu"
+        objectType = "isis.ext.secman.ApplicationPermissionMenu"
         )
 @DomainServiceLayout(
         named="Security",

@@ -26,7 +26,7 @@ import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureId;
 
 @DomainObject(
-        objectType = "secman.ApplicationClassMember"
+        objectType = "isis.ext.secman.ApplicationClassMember"
         )
 @DomainObjectLayout(
         bookmarking = BookmarkPolicy.AS_CHILD

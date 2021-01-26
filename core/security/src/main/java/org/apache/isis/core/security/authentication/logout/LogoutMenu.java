@@ -39,8 +39,8 @@ import org.apache.isis.core.security.authentication.AuthenticationContext;
 
 import lombok.RequiredArgsConstructor;
 
-@Named("isisSecurityApi.LogoutMenu")
-@DomainService(objectType = "isisSecurityApi.LogoutMenu")
+@Named("isis.security.LogoutMenu")
+@DomainService(objectType = "isis.security.LogoutMenu")
 @DomainServiceLayout(menuBar = DomainServiceLayout.MenuBar.TERTIARY)
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class LogoutMenu {
@@ -81,7 +81,7 @@ public class LogoutMenu {
             nature = Nature.VIEW_MODEL, //XXX was INMEMORY_ENTITY 
             objectType = LoginRedirect.OBJECT_TYPE)  
     public static class LoginRedirect {
-        public final static String OBJECT_TYPE = "isisSecurityApi.LoginRedirect";
+        public final static String OBJECT_TYPE = "isis.security.LoginRedirect";
     }
 
 }

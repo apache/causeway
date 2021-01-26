@@ -26,7 +26,7 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureId;
 
 @DomainObject(
-        objectType = "secman.ApplicationClassAction"
+        objectType = "isis.ext.secman.ApplicationClassAction"
         )
 @DomainObjectLayout(paged=100)
 public class ApplicationClassAction extends ApplicationClassMember {

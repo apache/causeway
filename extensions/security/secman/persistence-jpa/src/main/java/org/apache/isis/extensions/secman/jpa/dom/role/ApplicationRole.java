@@ -85,7 +85,7 @@ import lombok.Setter;
 @DomainObject(
         bounding = Bounding.BOUNDED,
         //		bounded = true,
-        objectType = "secman.ApplicationRole",
+        objectType = "isis.ext.secman.ApplicationRole",
         autoCompleteRepository = ApplicationRoleRepository.class,
         autoCompleteAction = "findMatching"
         )

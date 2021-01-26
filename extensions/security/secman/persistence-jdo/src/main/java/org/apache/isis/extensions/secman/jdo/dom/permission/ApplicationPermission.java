@@ -106,7 +106,7 @@ import lombok.experimental.UtilityClass;
             name = "ApplicationPermission_role_feature_rule_UNQ", members = { "role", "featureType", "featureFqn", "rule" })
 })
 @DomainObject(
-        objectType = "secman.ApplicationPermission"
+        objectType = "isis.ext.secman.ApplicationPermission"
         )
 @DomainObjectLayout(
         bookmarking = BookmarkPolicy.AS_CHILD

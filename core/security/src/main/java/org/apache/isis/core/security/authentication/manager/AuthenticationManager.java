@@ -47,7 +47,7 @@ import lombok.Getter;
 import lombok.val;
 
 @Service
-@Named("isisSecurityApi.AuthenticationManager")
+@Named("isis.security.AuthenticationManager")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")

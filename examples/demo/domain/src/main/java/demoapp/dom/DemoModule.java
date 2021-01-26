@@ -64,7 +64,8 @@ public class DemoModule {
     public SecmanConfiguration securityModuleConfigBean() {
         return SecmanConfiguration.builder()
                 .adminUserName("sven")
-                .adminAdditionalNamespacePermission("demoapp")
+                .adminAdditionalNamespacePermission("demo")
+                .adminAdditionalNamespacePermission("isis")
                 .adminAdditionalNamespacePermission("org.apache.isis")
                 .build();
     }

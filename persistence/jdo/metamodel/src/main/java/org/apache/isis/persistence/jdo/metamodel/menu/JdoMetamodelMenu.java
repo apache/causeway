@@ -39,8 +39,8 @@ import org.apache.isis.persistence.jdo.provider.entities.JdoFacetContext;
 
 import lombok.val;
 
-@Named("isisJdoDn.JdoMetamodelMenu")
-@DomainService(objectType = "isisJdoDn.JdoMetamodelMenu")
+@Named("isis.persistence.jdo.JdoMetamodelMenu")
+@DomainService(objectType = "isis.persistence.jdo.JdoMetamodelMenu")
 @DomainServiceLayout(
         named = "Prototyping",
         menuBar = DomainServiceLayout.MenuBar.SECONDARY

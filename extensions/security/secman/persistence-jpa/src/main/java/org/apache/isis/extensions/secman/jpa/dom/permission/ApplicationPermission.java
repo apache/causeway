@@ -110,7 +110,7 @@ import lombok.experimental.UtilityClass;
 })
 @EntityListeners(JpaEntityInjectionPointResolver.class)
 @DomainObject(
-        objectType = "secman.ApplicationPermission"
+        objectType = "isis.ext.secman.ApplicationPermission"
         )
 @DomainObjectLayout(
         bookmarking = BookmarkPolicy.AS_CHILD

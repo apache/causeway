@@ -38,7 +38,7 @@ import org.apache.isis.extensions.secman.api.role.ApplicationRoleRepository;
 
 @DomainService(
         nature = NatureOfService.VIEW,
-        objectType = "secman.ApplicationRoleMenu"
+        objectType = "isis.ext.secman.ApplicationRoleMenu"
         )
 @DomainServiceLayout(
         named = "Security",

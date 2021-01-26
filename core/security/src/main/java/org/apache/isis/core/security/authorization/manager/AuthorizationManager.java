@@ -42,7 +42,7 @@ import lombok.NonNull;
  * Authorizes the user in the current session view and use members of an object.
  */
 @Service
-@Named("isisSecurityApi.AuthorizationManager")
+@Named("isis.security.AuthorizationManager")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")
