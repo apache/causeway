@@ -60,7 +60,7 @@ public class ApplicationFeatureTypeTest {
             ApplicationFeatureType.PACKAGE.init(applicationFeatureId, "com.mycompany");
 
             assertThat(applicationFeatureId.getNamespace(), is("com.mycompany"));
-            assertThat(applicationFeatureId.getClassName(), is(nullValue()));
+            assertThat(applicationFeatureId.getTypeSimpleName(), is(nullValue()));
             assertThat(applicationFeatureId.getMemberName(), is(nullValue()));
 
         }
@@ -72,7 +72,7 @@ public class ApplicationFeatureTypeTest {
             ApplicationFeatureType.CLASS.init(applicationFeatureId, "com.mycompany.Bar");
 
             assertThat(applicationFeatureId.getNamespace(), is("com.mycompany"));
-            assertThat(applicationFeatureId.getClassName(), is("Bar"));
+            assertThat(applicationFeatureId.getTypeSimpleName(), is("Bar"));
             assertThat(applicationFeatureId.getMemberName(), is(nullValue()));
 
         }
@@ -84,7 +84,7 @@ public class ApplicationFeatureTypeTest {
             ApplicationFeatureType.MEMBER.init(applicationFeatureId, "com.mycompany.Bar#foo");
 
             assertThat(applicationFeatureId.getNamespace(), is("com.mycompany"));
-            assertThat(applicationFeatureId.getClassName(), is("Bar"));
+            assertThat(applicationFeatureId.getTypeSimpleName(), is("Bar"));
             assertThat(applicationFeatureId.getMemberName(), is("foo"));
         }
         @Test

@@ -69,7 +69,7 @@ public class ApplicationFeatureIdTest {
             // then
             assertThat(applicationFeatureId.getType(), is(ApplicationFeatureType.PACKAGE));
             assertThat(applicationFeatureId.getNamespace(), is("com.mycompany"));
-            assertThat(applicationFeatureId.getClassName(), is(nullValue()));
+            assertThat(applicationFeatureId.getTypeSimpleName(), is(nullValue()));
             assertThat(applicationFeatureId.getMemberName(), is(nullValue()));
         }
     }
@@ -83,7 +83,7 @@ public class ApplicationFeatureIdTest {
             // then
             assertThat(applicationFeatureId.getType(), is(ApplicationFeatureType.CLASS));
             assertThat(applicationFeatureId.getNamespace(), is("com.mycompany"));
-            assertThat(applicationFeatureId.getClassName(), is("Bar"));
+            assertThat(applicationFeatureId.getTypeSimpleName(), is("Bar"));
             assertThat(applicationFeatureId.getMemberName(), is(nullValue()));
         }
     }
@@ -97,7 +97,7 @@ public class ApplicationFeatureIdTest {
             // then
             assertThat(applicationFeatureId.getType(), is(ApplicationFeatureType.MEMBER));
             assertThat(applicationFeatureId.getNamespace(), is("com.mycompany"));
-            assertThat(applicationFeatureId.getClassName(), is("Bar"));
+            assertThat(applicationFeatureId.getTypeSimpleName(), is("Bar"));
             assertThat(applicationFeatureId.getMemberName(), is("foo"));
         }
 
@@ -108,7 +108,7 @@ public class ApplicationFeatureIdTest {
             // then
             assertThat(applicationFeatureId.getType(), is(ApplicationFeatureType.MEMBER));
             assertThat(applicationFeatureId.getNamespace(), is("com.mycompany"));
-            assertThat(applicationFeatureId.getClassName(), is("Bar"));
+            assertThat(applicationFeatureId.getTypeSimpleName(), is("Bar"));
             assertThat(applicationFeatureId.getMemberName(), is("foo"));
         }
 
@@ -286,7 +286,7 @@ public class ApplicationFeatureIdTest {
             // then
             assertThat(parentPackageId.getType(), is(ApplicationFeatureType.PACKAGE));
             assertThat(parentPackageId.getNamespace(), is("com"));
-            assertThat(parentPackageId.getClassName(), is(nullValue()));
+            assertThat(parentPackageId.getTypeSimpleName(), is(nullValue()));
             assertThat(parentPackageId.getMemberName(), is(nullValue()));
         }
 
@@ -321,7 +321,7 @@ public class ApplicationFeatureIdTest {
             // then
             assertThat(parentPackageId.getType(), is(ApplicationFeatureType.PACKAGE));
             assertThat(parentPackageId.getNamespace(), is("com.mycompany"));
-            assertThat(parentPackageId.getClassName(), is(nullValue()));
+            assertThat(parentPackageId.getTypeSimpleName(), is(nullValue()));
             assertThat(parentPackageId.getMemberName(), is(nullValue()));
         }
 
@@ -336,7 +336,7 @@ public class ApplicationFeatureIdTest {
             // then
             assertThat(parentPackageId.getType(), is(ApplicationFeatureType.PACKAGE));
             assertThat(parentPackageId.getNamespace(), is(""));
-            assertThat(parentPackageId.getClassName(), is(nullValue()));
+            assertThat(parentPackageId.getTypeSimpleName(), is(nullValue()));
             assertThat(parentPackageId.getMemberName(), is(nullValue()));
         }
 
@@ -368,7 +368,7 @@ public class ApplicationFeatureIdTest {
             // then
             assertThat(parentClassId.getType(), is(ApplicationFeatureType.CLASS));
             assertThat(parentClassId.getNamespace(), is("com.mycompany"));
-            assertThat(parentClassId.getClassName(), is("Bar"));
+            assertThat(parentClassId.getTypeSimpleName(), is("Bar"));
             assertThat(parentClassId.getMemberName(), is(nullValue()));
         }
 

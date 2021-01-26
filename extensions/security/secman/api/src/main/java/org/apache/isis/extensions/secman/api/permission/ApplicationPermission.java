@@ -96,11 +96,11 @@ public interface ApplicationPermission {
                 if(getFeatureFqn().length() < 30) {
                     buf.append(getFeatureFqn());          // com.mycompany.Bar
                 } else {
-                    buf.append(featureId.getClassName()); // Bar
+                    buf.append(featureId.getTypeSimpleName()); // Bar
                 }
                 break;
             case MEMBER:
-                buf.append(featureId.getClassName())
+                buf.append(featureId.getTypeSimpleName())
                 .append("#")
                 .append(featureId.getMemberName());   // com.mycompany.Bar#foo
                 break;

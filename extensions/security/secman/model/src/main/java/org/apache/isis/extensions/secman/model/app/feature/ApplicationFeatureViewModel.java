@@ -195,7 +195,7 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
     @PropertyLayout(typicalLength=ApplicationFeature.TYPICAL_LENGTH_CLS_NAME)
     @MemberOrder(name="Id", sequence = "2.3")
     public String getClassName() {
-        return getFeatureId().getClassName();
+        return getFeatureId().getTypeSimpleName();
     }
     public boolean hideClassName() {
         return getType().hideClassName();

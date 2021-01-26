@@ -31,7 +31,7 @@ public enum ApplicationFeatureType {
         @Override
         void init(final ApplicationFeatureId feature, final String fullyQualifiedName) {
             feature.setNamespace(fullyQualifiedName);
-            feature.setClassName(null);
+            feature.setTypeSimpleName(null);
             feature.setMemberName(null);
             feature.type = this;
         }
@@ -46,10 +46,10 @@ public enum ApplicationFeatureType {
             final int i = fullyQualifiedName.lastIndexOf(".");
             if(i != -1) {
                 feature.setNamespace(fullyQualifiedName.substring(0, i));
-                feature.setClassName(fullyQualifiedName.substring(i+1));
+                feature.setTypeSimpleName(fullyQualifiedName.substring(i+1));
             } else {
                 feature.setNamespace("");
-                feature.setClassName(fullyQualifiedName);
+                feature.setTypeSimpleName(fullyQualifiedName);
             }
             feature.setMemberName(null);
             feature.type = this;

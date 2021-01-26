@@ -47,7 +47,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecId;
  * <p>
  * This value is {@link Comparable}, the implementation of which considers 
  * {@link #getType() (feature) type}, {@link #getPackageName() package name}, 
- * {@link #getClassName() class name} and {@link #getMemberName() member name}.
+ * {@link #getTypeSimpleName() class name} and {@link #getMemberName() member name}.
  */
 @Value
 public class ApplicationFeatureId 
@@ -180,8 +180,8 @@ implements
     public String getFullyQualifiedName() {
         final StringBuilder buf = new StringBuilder();
         buf.append(getNamespace());
-        if(getClassName() != null) {
-            buf.append(".").append(getClassName());
+        if(getTypeSimpleName() != null) {
+            buf.append(".").append(getTypeSimpleName());
         }
         if(getMemberName() != null) {
             buf.append("#").append(getMemberName());
@@ -195,7 +195,7 @@ implements
 
     @Programmatic
     public ObjectSpecId getObjectSpecId() {
-        if (getClassName() == null) {
+        if (getTypeSimpleName() == null) {
             return null;
         }
 
@@ -203,7 +203,7 @@ implements
         if(!_Strings.isNullOrEmpty(getNamespace())) {
             buf.append(getNamespace()).append(".");
         }
-        buf.append(getClassName());
+        buf.append(getTypeSimpleName());
 
         return ObjectSpecId.of(buf.toString());
     }
@@ -239,17 +239,15 @@ implements
 
     // -- className (property, optional)
 
-    private String className;
+    private String typeSimpleName;
 
-    /** @deprecated with v2.0.0-M5 semantics changed: should be renamed to getTypeSimpleName() */
     @Programmatic
-    public String getClassName() {
-        return className;
+    public String getTypeSimpleName() {
+        return typeSimpleName;
     }
 
-    /** @deprecated with v2.0.0-M5 semantics changed: should be renamed to setTypeSimpleName() */
-    void setClassName(final String className) {
-        this.className = className;
+    void setTypeSimpleName(final String className) {
+        this.typeSimpleName = className;
     }
 
 
@@ -307,7 +305,7 @@ implements
      */
     public ApplicationFeatureId getParentClassId() {
         ApplicationFeatureType.ensureMember(this);
-        final String classFqn = this.getNamespace() + "." + getClassName();
+        final String classFqn = this.getNamespace() + "." + getTypeSimpleName();
         return newClass(classFqn);
     }
 
@@ -336,7 +334,7 @@ implements
         private Functions(){}
 
         public static final Function<ApplicationFeatureId, String> GET_CLASS_NAME = 
-                ApplicationFeatureId::getClassName;
+                ApplicationFeatureId::getTypeSimpleName;
 
         public static final Function<ApplicationFeatureId, String> GET_MEMBER_NAME = 
                 ApplicationFeatureId::getMemberName;
@@ -435,7 +433,7 @@ implements
     private static final Comparator<ApplicationFeatureId> byPackageName =
             comparing(ApplicationFeatureId::getNamespace, nullsFirst(naturalOrder()));
     private static final Comparator<ApplicationFeatureId> byClassName =
-            comparing(ApplicationFeatureId::getClassName, nullsFirst(naturalOrder()));
+            comparing(ApplicationFeatureId::getTypeSimpleName, nullsFirst(naturalOrder()));
     private static final Comparator<ApplicationFeatureId> byMemberName =
             comparing(ApplicationFeatureId::getMemberName, nullsFirst(naturalOrder()));
 
@@ -448,19 +446,19 @@ implements
     private static final Equality<ApplicationFeatureId> equality =
             ObjectContracts.checkEquals(ApplicationFeatureId::getType)
             .thenCheckEquals(ApplicationFeatureId::getNamespace)
-            .thenCheckEquals(ApplicationFeatureId::getClassName)
+            .thenCheckEquals(ApplicationFeatureId::getTypeSimpleName)
             .thenCheckEquals(ApplicationFeatureId::getMemberName);
 
     private static final Hashing<ApplicationFeatureId> hashing =
             ObjectContracts.hashing(ApplicationFeatureId::getType)
             .thenHashing(ApplicationFeatureId::getNamespace)
-            .thenHashing(ApplicationFeatureId::getClassName)
+            .thenHashing(ApplicationFeatureId::getTypeSimpleName)
             .thenHashing(ApplicationFeatureId::getMemberName);
 
     private static final ToString<ApplicationFeatureId> toString =
             ObjectContracts.toString("type", ApplicationFeatureId::getType)
             .thenToString("packageName", ApplicationFeatureId::getNamespace)
-            .thenToStringOmitIfAbsent("className", ApplicationFeatureId::getClassName)
+            .thenToStringOmitIfAbsent("className", ApplicationFeatureId::getTypeSimpleName)
             .thenToStringOmitIfAbsent("memberName", ApplicationFeatureId::getMemberName);
 
 

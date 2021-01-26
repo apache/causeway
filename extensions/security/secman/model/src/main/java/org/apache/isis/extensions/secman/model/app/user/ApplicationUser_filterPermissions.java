@@ -96,7 +96,7 @@ public class ApplicationUser_filterPermissions {
             }
 
             // match on class (if specified)
-            return className == null || Objects.equals(inputFeatureId.getClassName(), className);
+            return className == null || Objects.equals(inputFeatureId.getTypeSimpleName(), className);
         };
     }
 
