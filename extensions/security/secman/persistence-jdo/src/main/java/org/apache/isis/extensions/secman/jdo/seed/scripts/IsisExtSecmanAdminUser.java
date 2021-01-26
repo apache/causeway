@@ -18,24 +18,20 @@
  */
 package org.apache.isis.extensions.secman.jdo.seed.scripts;
 
+import java.util.Arrays;
+
 import org.apache.isis.extensions.secman.api.SecmanConfiguration;
-import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionMode;
-import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionRule;
+import org.apache.isis.extensions.secman.api.user.AccountType;
 
-/**
- * Role to run in the prototype fixture scripts for the example webapp for the security module.
- */
-public class IsisModuleSecurityFixtureRoleAndPermissions extends AbstractRoleAndPermissionsFixtureScript {
+public class IsisExtSecmanAdminUser extends AbstractUserAndRolesFixtureScript {
 
-    public IsisModuleSecurityFixtureRoleAndPermissions(SecmanConfiguration configBean) {
-        super(configBean.getFixtureRoleName(), "Security module fixtures");
-    }
-
-    @Override
-    protected void execute(ExecutionContext executionContext) {
-        newPackagePermissions(
-                ApplicationPermissionRule.ALLOW,
-                ApplicationPermissionMode.CHANGING,
-                "org.apache.isis.extensions.secman.jdo.fixture");
+    public IsisExtSecmanAdminUser(SecmanConfiguration configBean) {
+        super(
+                configBean.getAdminUserName(), 
+                configBean.getAdminPassword(),
+                null,
+                GlobalTenancy.TENANCY_PATH, 
+                AccountType.LOCAL,
+                Arrays.asList(configBean.getAdminRoleName()));
     }
 }

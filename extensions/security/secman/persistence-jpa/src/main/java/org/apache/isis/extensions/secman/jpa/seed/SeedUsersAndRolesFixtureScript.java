@@ -23,10 +23,10 @@ import javax.inject.Inject;
 import org.apache.isis.extensions.secman.api.SecmanConfiguration;
 import org.apache.isis.extensions.secman.jpa.seed.scripts.GlobalTenancy;
 import org.apache.isis.extensions.secman.jpa.seed.scripts.IsisExtFixturesFixtureResultsRoleAndPermissions;
-import org.apache.isis.extensions.secman.jpa.seed.scripts.IsisModuleSecurityAdminRoleAndPermissions;
-import org.apache.isis.extensions.secman.jpa.seed.scripts.IsisModuleSecurityAdminUser;
-import org.apache.isis.extensions.secman.jpa.seed.scripts.IsisModuleSecurityFixtureRoleAndPermissions;
-import org.apache.isis.extensions.secman.jpa.seed.scripts.IsisModuleSecurityRegularUserRoleAndPermissions;
+import org.apache.isis.extensions.secman.jpa.seed.scripts.IsisExtSecmanAdminRoleAndPermissions;
+import org.apache.isis.extensions.secman.jpa.seed.scripts.IsisExtSecmanAdminUser;
+import org.apache.isis.extensions.secman.jpa.seed.scripts.IsisExtSecmanFixtureRoleAndPermissions;
+import org.apache.isis.extensions.secman.jpa.seed.scripts.IsisExtSecmanRegularUserRoleAndPermissions;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 
 /**
@@ -47,12 +47,12 @@ public class SeedUsersAndRolesFixtureScript extends FixtureScript {
         executionContext.executeChild(this, new GlobalTenancy());
 
         // security module
-        executionContext.executeChild(this, new IsisModuleSecurityAdminRoleAndPermissions(configBean));
+        executionContext.executeChild(this, new IsisExtSecmanAdminRoleAndPermissions(configBean));
 
-        executionContext.executeChild(this, new IsisModuleSecurityFixtureRoleAndPermissions(configBean));
-        executionContext.executeChild(this, new IsisModuleSecurityRegularUserRoleAndPermissions(configBean));
+        executionContext.executeChild(this, new IsisExtSecmanFixtureRoleAndPermissions(configBean));
+        executionContext.executeChild(this, new IsisExtSecmanRegularUserRoleAndPermissions(configBean));
 
-        executionContext.executeChild(this, new IsisModuleSecurityAdminUser(configBean));
+        executionContext.executeChild(this, new IsisExtSecmanAdminUser(configBean));
 
         // isis applib
         executionContext.executeChild(this, new IsisExtFixturesFixtureResultsRoleAndPermissions());

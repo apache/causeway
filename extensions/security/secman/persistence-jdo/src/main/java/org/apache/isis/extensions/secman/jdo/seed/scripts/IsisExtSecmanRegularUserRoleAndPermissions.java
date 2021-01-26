@@ -16,23 +16,23 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.secman.jpa.seed.scripts;
+package org.apache.isis.extensions.secman.jdo.seed.scripts;
 
 import org.apache.isis.core.security.authentication.logout.LogoutMenu;
 import org.apache.isis.extensions.secman.api.SecmanConfiguration;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionMode;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionRule;
-import org.apache.isis.extensions.secman.jpa.dom.role.ApplicationRole;
-import org.apache.isis.extensions.secman.jpa.dom.user.ApplicationUser;
+import org.apache.isis.extensions.secman.jdo.dom.role.ApplicationRole;
+import org.apache.isis.extensions.secman.jdo.dom.user.ApplicationUser;
 import org.apache.isis.extensions.secman.model.app.user.MeService;
 
 /**
  * Role for regular users of the security module, providing the ability to lookup their user account using the
  * {@link org.apache.isis.extensions.secman.model.app.user.MeService}, and for viewing and maintaining their user details.
  */
-public class IsisModuleSecurityRegularUserRoleAndPermissions extends AbstractRoleAndPermissionsFixtureScript {
+public class IsisExtSecmanRegularUserRoleAndPermissions extends AbstractRoleAndPermissionsFixtureScript {
 
-    public IsisModuleSecurityRegularUserRoleAndPermissions(SecmanConfiguration configBean) {
+    public IsisExtSecmanRegularUserRoleAndPermissions(SecmanConfiguration configBean) {
         super(configBean.getRegularUserRoleName(), "Regular user of the security module");
     }
 
@@ -44,13 +44,13 @@ public class IsisModuleSecurityRegularUserRoleAndPermissions extends AbstractRol
                 ApplicationPermissionMode.CHANGING,
                 LogoutMenu.class,
                 "logout");
-        
+
         newMemberPermissions(
                 ApplicationPermissionRule.ALLOW,
                 ApplicationPermissionMode.CHANGING,
                 MeService.class,
                 "me");
-
+        
         newClassPermissions(
                 ApplicationPermissionRule.ALLOW,
                 ApplicationPermissionMode.VIEWING,

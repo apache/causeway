@@ -23,9 +23,9 @@ import java.util.Arrays;
 import org.apache.isis.extensions.secman.api.SecmanConfiguration;
 import org.apache.isis.extensions.secman.api.user.AccountType;
 
-public class IsisModuleSecurityAdminUser extends AbstractUserAndRolesFixtureScript {
+public class IsisExtSecmanAdminUser extends AbstractUserAndRolesFixtureScript {
 
-    public IsisModuleSecurityAdminUser(SecmanConfiguration configBean) {
+    public IsisExtSecmanAdminUser(SecmanConfiguration configBean) {
         super(
                 configBean.getAdminUserName(), 
                 configBean.getAdminPassword(),

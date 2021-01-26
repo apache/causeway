@@ -23,11 +23,11 @@ import org.apache.isis.extensions.secman.api.SecmanConfiguration;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionMode;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionRule;
 
-public class IsisModuleSecurityAdminRoleAndPermissions extends AbstractRoleAndPermissionsFixtureScript {
+public class IsisExtSecmanAdminRoleAndPermissions extends AbstractRoleAndPermissionsFixtureScript {
 
     private String[] adminInitialPackagePermissions;
 
-    public IsisModuleSecurityAdminRoleAndPermissions(SecmanConfiguration configBean) {
+    public IsisExtSecmanAdminRoleAndPermissions(SecmanConfiguration configBean) {
         super(configBean.getAdminRoleName(), "Administer security");
         this.adminInitialPackagePermissions = configBean.streamAdminNamespacePermissions()
                 .collect(_Arrays.toArray(String.class));

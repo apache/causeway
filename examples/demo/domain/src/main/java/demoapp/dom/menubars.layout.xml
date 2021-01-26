@@ -373,63 +373,63 @@ For latest we use: https://raw.githubusercontent.com/apache/isis/master/antora/s
         <mb3:menu>
             <mb3:named>Security</mb3:named>
             <mb3:section>
-                <mb3:serviceAction objectType="isissecurity.ApplicationRoleMenu" id="allRoles">
+                <mb3:serviceAction objectType="secman.ApplicationRoleMenu" id="allRoles">
                     <cpt:named>All Roles</cpt:named>
                 </mb3:serviceAction>
-                <mb3:serviceAction objectType="isissecurity.ApplicationRoleMenu" id="newRole">
+                <mb3:serviceAction objectType="secman.ApplicationRoleMenu" id="newRole">
                     <cpt:named>New Role</cpt:named>
                 </mb3:serviceAction>
-                <mb3:serviceAction objectType="isissecurity.ApplicationRoleMenu" id="findRoles">
+                <mb3:serviceAction objectType="secman.ApplicationRoleMenu" id="findRoles">
                     <cpt:named>Find Roles</cpt:named>
                 </mb3:serviceAction>
             </mb3:section>
             <mb3:section>
-                <mb3:serviceAction objectType="isissecurity.ApplicationTenancyMenu" id="newTenancy">
+                <mb3:serviceAction objectType="secman.ApplicationTenancyMenu" id="newTenancy">
                     <cpt:named>New Tenancy</cpt:named>
                 </mb3:serviceAction>
-                <mb3:serviceAction objectType="isissecurity.ApplicationTenancyMenu" id="findTenancies">
+                <mb3:serviceAction objectType="secman.ApplicationTenancyMenu" id="findTenancies">
                     <cpt:named>Find Tenancies</cpt:named>
                 </mb3:serviceAction>
-                <mb3:serviceAction objectType="isissecurity.ApplicationTenancyMenu" id="allTenancies">
+                <mb3:serviceAction objectType="secman.ApplicationTenancyMenu" id="allTenancies">
                     <cpt:named>All Tenancies</cpt:named>
                 </mb3:serviceAction>
             </mb3:section>
             <mb3:section>
-                <mb3:serviceAction objectType="isissecurity.ApplicationPermissionMenu" id="findOrphanedPermissions">
+                <mb3:serviceAction objectType="secman.ApplicationPermissionMenu" id="findOrphanedPermissions">
                     <cpt:named>Find Orphaned Permissions</cpt:named>
                 </mb3:serviceAction>
-                <mb3:serviceAction objectType="isissecurity.ApplicationPermissionMenu" id="allPermissions">
+                <mb3:serviceAction objectType="secman.ApplicationPermissionMenu" id="allPermissions">
                     <cpt:named>All Permissions</cpt:named>
                 </mb3:serviceAction>
             </mb3:section>
             <mb3:section>
-                <mb3:serviceAction objectType="isissecurity.ApplicationFeatureViewModels" id="allProperties">
+                <mb3:serviceAction objectType="secman.ApplicationFeatureViewModels" id="allProperties">
                     <cpt:named>All Properties</cpt:named>
                 </mb3:serviceAction>
-                <mb3:serviceAction objectType="isissecurity.ApplicationFeatureViewModels" id="allClasses">
+                <mb3:serviceAction objectType="secman.ApplicationFeatureViewModels" id="allClasses">
                     <cpt:named>All Classes</cpt:named>
                 </mb3:serviceAction>
-                <mb3:serviceAction objectType="isissecurity.ApplicationFeatureViewModels" id="allPackages">
+                <mb3:serviceAction objectType="secman.ApplicationFeatureViewModels" id="allPackages">
                     <cpt:named>All Packages</cpt:named>
                 </mb3:serviceAction>
-                <mb3:serviceAction objectType="isissecurity.ApplicationFeatureViewModels" id="allActions">
+                <mb3:serviceAction objectType="secman.ApplicationFeatureViewModels" id="allActions">
                     <cpt:named>All Actions</cpt:named>
                 </mb3:serviceAction>
-                <mb3:serviceAction objectType="isissecurity.ApplicationFeatureViewModels" id="allCollections">
+                <mb3:serviceAction objectType="secman.ApplicationFeatureViewModels" id="allCollections">
                     <cpt:named>All Collections</cpt:named>
                 </mb3:serviceAction>
             </mb3:section>
             <mb3:section>
-                <mb3:serviceAction objectType="isissecurity.ApplicationUserMenu" id="findUsers">
+                <mb3:serviceAction objectType="secman.ApplicationUserMenu" id="findUsers">
                     <cpt:named>Find Users</cpt:named>
                 </mb3:serviceAction>
-                <mb3:serviceAction objectType="isissecurity.ApplicationUserMenu" id="newLocalUser">
+                <mb3:serviceAction objectType="secman.ApplicationUserMenu" id="newLocalUser">
                     <cpt:named>New Local User</cpt:named>
                 </mb3:serviceAction>
-                <mb3:serviceAction objectType="isissecurity.ApplicationUserMenu" id="allUsers">
+                <mb3:serviceAction objectType="secman.ApplicationUserMenu" id="allUsers">
                     <cpt:named>All Users</cpt:named>
                 </mb3:serviceAction>
-                <mb3:serviceAction objectType="isissecurity.ApplicationUserMenu" id="newDelegateUser">
+                <mb3:serviceAction objectType="secman.ApplicationUserMenu" id="newDelegateUser">
                     <cpt:named>New Delegate User</cpt:named>
                 </mb3:serviceAction>
             </mb3:section>
@@ -439,7 +439,7 @@ For latest we use: https://raw.githubusercontent.com/apache/isis/master/antora/s
         <mb3:menu>
             <mb3:named/>
             <mb3:section>
-                <mb3:serviceAction objectType="isissecurity.MeService" id="me"/>
+                <mb3:serviceAction objectType="secman.MeService" id="me"/>
                 <mb3:serviceAction objectType="isisApplib.ConfigurationMenu" id="configuration"/>
             </mb3:section><mb3:section>
 	            <mb3:serviceAction objectType="isisSecurityApi.LogoutMenu" id="logout">
