@@ -71,6 +71,7 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
     private final SortedMap<ApplicationFeatureId, ApplicationFeature> propertyFeatures = _Maps.newTreeMap();
     private final SortedMap<ApplicationFeatureId, ApplicationFeature> collectionFeatures = _Maps.newTreeMap();
     private final SortedMap<ApplicationFeatureId, ApplicationFeature> actionFeatures = _Maps.newTreeMap();
+    private final SortedSet<String> namespaces = _Sets.newTreeSet();
 
     private final IsisConfiguration configuration;
     private final SpecificationLoader specificationLoader;
@@ -176,6 +177,8 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
         // and add all of its parent packages
         final ApplicationFeatureId classParentPackageId = addClassParent(classFeatureId);
         addParents(classParentPackageId);
+        
+        namespaces.add(spec.getSpecId().getNamespace());
     }
 
     private static Class<?> correspondingClassFor(final ObjectSpecification objectSpec) {
@@ -473,8 +476,16 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
         return actionFeatures.values();
     }
 
-
+    // -- namespaces
+    
+    @Override
+    public SortedSet<String> namespaces() {
+        initializeIfRequired();
+        return Collections.unmodifiableSortedSet(namespaces);
+    }
+    
     // -- packageNames, packageNamesContainingClasses, classNamesContainedIn, memberNamesOf
+    
     @Override
     public SortedSet<String> packageNames() {
         initializeIfRequired();

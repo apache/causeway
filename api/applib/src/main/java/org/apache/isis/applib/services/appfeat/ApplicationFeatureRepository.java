@@ -26,6 +26,8 @@ import java.util.SortedSet;
  */
 public interface ApplicationFeatureRepository  {
 
+    SortedSet<String> namespaces();
+    
     SortedSet<String> packageNames();
 
     SortedSet<String> packageNamesContainingClasses(

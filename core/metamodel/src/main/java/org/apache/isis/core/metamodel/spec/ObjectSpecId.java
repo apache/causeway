@@ -20,6 +20,7 @@ package org.apache.isis.core.metamodel.spec;
 
 import java.io.Serializable;
 
+import org.apache.isis.commons.internal.base._Refs;
 import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
 
 import static org.apache.isis.commons.internal.base._With.requiresNotEmpty;
@@ -43,10 +44,13 @@ public final class ObjectSpecId implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @NonNull private final String specId;
+    @NonNull private final String namespace;
 
-    public static ObjectSpecId of(String specId) {
+    public static ObjectSpecId of(final @NonNull String specId) {
         requiresNotEmpty(specId, "specId");
-        return new ObjectSpecId(specId);
+        return new ObjectSpecId(
+                specId, 
+                _Refs.stringRef(specId).cutAtLastIndexOf("."));
     }
 
     public String asString() {
@@ -57,6 +61,5 @@ public final class ObjectSpecId implements Serializable {
     public String toString() {
         return asString();
     }
-
 
 }
