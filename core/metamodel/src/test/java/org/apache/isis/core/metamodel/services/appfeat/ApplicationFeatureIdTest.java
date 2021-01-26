@@ -68,7 +68,7 @@ public class ApplicationFeatureIdTest {
             final ApplicationFeatureId applicationFeatureId = ApplicationFeatureId.newPackage("com.mycompany");
             // then
             assertThat(applicationFeatureId.getType(), is(ApplicationFeatureType.PACKAGE));
-            assertThat(applicationFeatureId.getPackageName(), is("com.mycompany"));
+            assertThat(applicationFeatureId.getNamespace(), is("com.mycompany"));
             assertThat(applicationFeatureId.getClassName(), is(nullValue()));
             assertThat(applicationFeatureId.getMemberName(), is(nullValue()));
         }
@@ -82,7 +82,7 @@ public class ApplicationFeatureIdTest {
             final ApplicationFeatureId applicationFeatureId = ApplicationFeatureId.newClass("com.mycompany.Bar");
             // then
             assertThat(applicationFeatureId.getType(), is(ApplicationFeatureType.CLASS));
-            assertThat(applicationFeatureId.getPackageName(), is("com.mycompany"));
+            assertThat(applicationFeatureId.getNamespace(), is("com.mycompany"));
             assertThat(applicationFeatureId.getClassName(), is("Bar"));
             assertThat(applicationFeatureId.getMemberName(), is(nullValue()));
         }
@@ -96,7 +96,7 @@ public class ApplicationFeatureIdTest {
             final ApplicationFeatureId applicationFeatureId = ApplicationFeatureId.newMember("com.mycompany.Bar", "foo");
             // then
             assertThat(applicationFeatureId.getType(), is(ApplicationFeatureType.MEMBER));
-            assertThat(applicationFeatureId.getPackageName(), is("com.mycompany"));
+            assertThat(applicationFeatureId.getNamespace(), is("com.mycompany"));
             assertThat(applicationFeatureId.getClassName(), is("Bar"));
             assertThat(applicationFeatureId.getMemberName(), is("foo"));
         }
@@ -107,7 +107,7 @@ public class ApplicationFeatureIdTest {
             final ApplicationFeatureId applicationFeatureId = ApplicationFeatureId.newMember("com.mycompany.Bar#foo");
             // then
             assertThat(applicationFeatureId.getType(), is(ApplicationFeatureType.MEMBER));
-            assertThat(applicationFeatureId.getPackageName(), is("com.mycompany"));
+            assertThat(applicationFeatureId.getNamespace(), is("com.mycompany"));
             assertThat(applicationFeatureId.getClassName(), is("Bar"));
             assertThat(applicationFeatureId.getMemberName(), is("foo"));
         }
@@ -285,7 +285,7 @@ public class ApplicationFeatureIdTest {
             final ApplicationFeatureId parentPackageId = applicationFeatureId.getParentPackageId();
             // then
             assertThat(parentPackageId.getType(), is(ApplicationFeatureType.PACKAGE));
-            assertThat(parentPackageId.getPackageName(), is("com"));
+            assertThat(parentPackageId.getNamespace(), is("com"));
             assertThat(parentPackageId.getClassName(), is(nullValue()));
             assertThat(parentPackageId.getMemberName(), is(nullValue()));
         }
@@ -320,7 +320,7 @@ public class ApplicationFeatureIdTest {
 
             // then
             assertThat(parentPackageId.getType(), is(ApplicationFeatureType.PACKAGE));
-            assertThat(parentPackageId.getPackageName(), is("com.mycompany"));
+            assertThat(parentPackageId.getNamespace(), is("com.mycompany"));
             assertThat(parentPackageId.getClassName(), is(nullValue()));
             assertThat(parentPackageId.getMemberName(), is(nullValue()));
         }
@@ -335,7 +335,7 @@ public class ApplicationFeatureIdTest {
 
             // then
             assertThat(parentPackageId.getType(), is(ApplicationFeatureType.PACKAGE));
-            assertThat(parentPackageId.getPackageName(), is(""));
+            assertThat(parentPackageId.getNamespace(), is(""));
             assertThat(parentPackageId.getClassName(), is(nullValue()));
             assertThat(parentPackageId.getMemberName(), is(nullValue()));
         }
@@ -367,7 +367,7 @@ public class ApplicationFeatureIdTest {
 
             // then
             assertThat(parentClassId.getType(), is(ApplicationFeatureType.CLASS));
-            assertThat(parentClassId.getPackageName(), is("com.mycompany"));
+            assertThat(parentClassId.getNamespace(), is("com.mycompany"));
             assertThat(parentClassId.getClassName(), is("Bar"));
             assertThat(parentClassId.getMemberName(), is(nullValue()));
         }

@@ -95,7 +95,7 @@ implements
 
     public static ApplicationFeatureId newPackage(final String packageFqn) {
         final ApplicationFeatureId featureId = new ApplicationFeatureId(ApplicationFeatureType.PACKAGE);
-        featureId.setPackageName(packageFqn);
+        featureId.setNamespace(packageFqn);
         return featureId;
     }
 
@@ -179,7 +179,7 @@ implements
     @Programmatic
     public String getFullyQualifiedName() {
         final StringBuilder buf = new StringBuilder();
-        buf.append(getPackageName());
+        buf.append(getNamespace());
         if(getClassName() != null) {
             buf.append(".").append(getClassName());
         }
@@ -200,8 +200,8 @@ implements
         }
 
         final StringBuilder buf = new StringBuilder();
-        if(!_Strings.isNullOrEmpty(getPackageName())) {
-            buf.append(getPackageName()).append(".");
+        if(!_Strings.isNullOrEmpty(getNamespace())) {
+            buf.append(getNamespace()).append(".");
         }
         buf.append(getClassName());
 
@@ -222,18 +222,16 @@ implements
 
     // //////////////////////////////////////
 
-    // -- packageName (property)
-    private String packageName;
+    // -- namespace (property)
+    private String namespace;
 
-    /** @deprecated with v2.0.0-M5 semantics changed: should be renamed to getNamespace() */
     @Programmatic
-    public String getPackageName() {
-        return packageName;
+    public String getNamespace() {
+        return namespace;
     }
 
-    /** @deprecated with v2.0.0-M5 semantics changed: should be renamed to setNamespace() */
-    void setPackageName(final String packageName) {
-        this.packageName = packageName;
+    void setNamespace(final String namespace) {
+        this.namespace = namespace;
     }
 
 
@@ -283,9 +281,9 @@ implements
         ApplicationFeatureType.ensurePackageOrClass(this);
 
         if(type == ApplicationFeatureType.CLASS) {
-            return ApplicationFeatureId.newPackage(getPackageName());
+            return ApplicationFeatureId.newPackage(getNamespace());
         } else {
-            final String packageName = getPackageName(); // eg aaa.bbb.ccc
+            final String packageName = getNamespace(); // eg aaa.bbb.ccc
 
             if(!packageName.contains(".")) {
                 return null; // parent is root
@@ -309,7 +307,7 @@ implements
      */
     public ApplicationFeatureId getParentClassId() {
         ApplicationFeatureType.ensureMember(this);
-        final String classFqn = this.getPackageName() + "." + getClassName();
+        final String classFqn = this.getNamespace() + "." + getClassName();
         return newClass(classFqn);
     }
 
@@ -435,7 +433,7 @@ implements
     private static final Comparator<ApplicationFeatureId> byType =
             comparing(ApplicationFeatureId::getType, nullsFirst(naturalOrder()));
     private static final Comparator<ApplicationFeatureId> byPackageName =
-            comparing(ApplicationFeatureId::getPackageName, nullsFirst(naturalOrder()));
+            comparing(ApplicationFeatureId::getNamespace, nullsFirst(naturalOrder()));
     private static final Comparator<ApplicationFeatureId> byClassName =
             comparing(ApplicationFeatureId::getClassName, nullsFirst(naturalOrder()));
     private static final Comparator<ApplicationFeatureId> byMemberName =
@@ -449,19 +447,19 @@ implements
 
     private static final Equality<ApplicationFeatureId> equality =
             ObjectContracts.checkEquals(ApplicationFeatureId::getType)
-            .thenCheckEquals(ApplicationFeatureId::getPackageName)
+            .thenCheckEquals(ApplicationFeatureId::getNamespace)
             .thenCheckEquals(ApplicationFeatureId::getClassName)
             .thenCheckEquals(ApplicationFeatureId::getMemberName);
 
     private static final Hashing<ApplicationFeatureId> hashing =
             ObjectContracts.hashing(ApplicationFeatureId::getType)
-            .thenHashing(ApplicationFeatureId::getPackageName)
+            .thenHashing(ApplicationFeatureId::getNamespace)
             .thenHashing(ApplicationFeatureId::getClassName)
             .thenHashing(ApplicationFeatureId::getMemberName);
 
     private static final ToString<ApplicationFeatureId> toString =
             ObjectContracts.toString("type", ApplicationFeatureId::getType)
-            .thenToString("packageName", ApplicationFeatureId::getPackageName)
+            .thenToString("packageName", ApplicationFeatureId::getNamespace)
             .thenToStringOmitIfAbsent("className", ApplicationFeatureId::getClassName)
             .thenToStringOmitIfAbsent("memberName", ApplicationFeatureId::getMemberName);
 

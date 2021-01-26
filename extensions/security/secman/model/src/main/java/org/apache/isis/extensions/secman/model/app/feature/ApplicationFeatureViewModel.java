@@ -178,7 +178,7 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
     @PropertyLayout(typicalLength=ApplicationFeature.TYPICAL_LENGTH_PKG_FQN)
     @MemberOrder(name="Id", sequence = "2.2")
     public String getPackageName() {
-        return getFeatureId().getPackageName();
+        return getFeatureId().getNamespace();
     }
 
     // -- className
