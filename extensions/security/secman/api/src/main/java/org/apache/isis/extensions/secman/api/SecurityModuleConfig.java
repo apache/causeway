@@ -31,29 +31,21 @@ import lombok.Singular;
 @Builder
 public class SecurityModuleConfig {
 
-    // -- SCHEMA
-    
-    /** Logical DB schema to use for the SecMan entities. 
-     * @implNote Yet just wishful thinking, not implemented. 
-     */
-    @Getter @Builder.Default @NonNull
-    final String databaseSchema = "";
-    
     // -- ROLES
 
     @Getter @Builder.Default @NonNull
-    final String regularUserRoleName = "isis-module-security-regular-user";
+    final String regularUserRoleName = "secman-regular-user";
 
     @Getter @Builder.Default @NonNull
-    final String fixtureRoleName = "isis-module-security-fixtures";
+    final String fixtureRoleName = "secman-fixtures";
 
     @Getter @Builder.Default @NonNull
-    final String adminRoleName = "isis-module-security-admin";
+    final String adminRoleName = "secman-admin";
 
     // -- ADMIN
 
     @Getter @Builder.Default @NonNull
-    final String adminUserName = "isis-module-security-admin";
+    final String adminUserName = "secman-admin";
 
     @Getter @Builder.Default @NonNull
     final String adminPassword = "pass";
@@ -63,10 +55,7 @@ public class SecurityModuleConfig {
      */
     @Getter @Builder.Default @NonNull
     final String[] adminStickyPackagePermissions = new String[]{
-            "org.apache.isis.extensions.secman.api",
-            "org.apache.isis.extensions.secman.model",
-            "org.apache.isis.extensions.secman.jdo.dom", // either jdo or jpa is going to be orphaned
-            "org.apache.isis.extensions.secman.jpa.dom", // either jdo or jpa is going to be orphaned
+            "secman"
     };
     
     @Getter @Singular 

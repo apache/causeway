@@ -37,7 +37,7 @@ import org.apache.isis.extensions.secman.api.user.ApplicationUserRepository;
 
 @DomainService(
         nature = NatureOfService.VIEW,
-        objectType = "isissecurity.MeService"
+        objectType = "secman.MeService"
         )
 @DomainServiceLayout(
         menuBar = DomainServiceLayout.MenuBar.TERTIARY

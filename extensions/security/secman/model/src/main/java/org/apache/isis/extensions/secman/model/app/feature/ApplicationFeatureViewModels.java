@@ -40,7 +40,7 @@ import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureReposit
 
 @DomainService(
         nature = NatureOfService.VIEW,
-        objectType = "isissecurity.ApplicationFeatureViewModels"
+        objectType = "secman.ApplicationFeatureViewModels"
         )
 @DomainServiceLayout(
         named="Security",

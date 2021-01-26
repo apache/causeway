@@ -28,7 +28,7 @@ import org.apache.isis.extensions.secman.api.user.ApplicationUserRepository;
 
 @DomainObject(
         nature = Nature.VIEW_MODEL,
-        objectType = "isissecurity.ApplicationUserManager"
+        objectType = "secman.ApplicationUserManager"
         )
 public class ApplicationUserManager {
 

@@ -39,7 +39,7 @@ import org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancyRepositor
 
 @DomainService(
         nature = NatureOfService.VIEW,
-        objectType = "isissecurity.ApplicationTenancyMenu"
+        objectType = "secman.ApplicationTenancyMenu"
         )
 @DomainServiceLayout(
         named = "Security",

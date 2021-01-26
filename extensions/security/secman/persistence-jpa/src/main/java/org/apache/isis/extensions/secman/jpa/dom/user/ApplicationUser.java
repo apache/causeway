@@ -107,7 +107,7 @@ import lombok.val;
 })
 @EntityListeners(JpaEntityInjectionPointResolver.class)
 @DomainObject(
-        objectType = "isissecurity.ApplicationUser",
+        objectType = "secman.ApplicationUser",
         autoCompleteRepository = ApplicationUserRepository.class,
         autoCompleteAction = "findMatching"
         )

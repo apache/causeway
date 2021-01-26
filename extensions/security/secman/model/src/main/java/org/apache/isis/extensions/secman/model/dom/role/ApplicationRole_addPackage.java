@@ -46,7 +46,8 @@ public class ApplicationRole_addPackage {
     private final ApplicationRole holder;
     
     /**
-     * Adds a {@link org.apache.isis.extensions.secman.jdo.dom.permission.ApplicationPermission permission} for this role to a
+     * Adds a {@link org.apache.isis.extensions.secman.jdo.dom.permission.ApplicationPermission permission}
+     * for this role to a
      * {@link ApplicationFeatureType#PACKAGE package}
      * {@link ApplicationFeature feature}.
      */
@@ -60,8 +61,7 @@ public class ApplicationRole_addPackage {
             final String packageFqn) {
         
         applicationPermissionRepository
-            .newPermission(
-                    holder, rule, mode, ApplicationFeatureType.PACKAGE, packageFqn);
+            .newPermission(holder, rule, mode, ApplicationFeatureType.PACKAGE, packageFqn);
         return holder;
     }
 

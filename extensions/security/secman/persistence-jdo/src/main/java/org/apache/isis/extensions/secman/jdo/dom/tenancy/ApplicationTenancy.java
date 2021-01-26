@@ -36,7 +36,6 @@ import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
-import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.util.Equality;
 import org.apache.isis.applib.util.Hashing;
@@ -78,7 +77,7 @@ import lombok.Setter;
                     + "FROM org.apache.isis.extensions.secman.jdo.dom.tenancy.ApplicationTenancy "
                     + "WHERE name.matches(:regex) || path.matches(:regex) ")})
 @DomainObject(
-        objectType = "isissecurity.ApplicationTenancy",
+        objectType = "secman.ApplicationTenancy",
         autoCompleteRepository = ApplicationTenancyRepository.class,
         autoCompleteAction = "findMatching"
         )

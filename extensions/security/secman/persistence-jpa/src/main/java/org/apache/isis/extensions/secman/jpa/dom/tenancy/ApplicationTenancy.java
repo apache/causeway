@@ -77,7 +77,7 @@ import lombok.Setter;
                   + "    OR t.path LIKE '%:regex%'"),
 })
 @DomainObject(
-        objectType = "isissecurity.ApplicationTenancy",
+        objectType = "secman.ApplicationTenancy",
         autoCompleteRepository = ApplicationTenancyRepository.class,
         autoCompleteAction = "findMatching"
         )

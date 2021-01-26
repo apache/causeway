@@ -261,8 +261,6 @@ Query.named(CommandJdo.class, "findByParent") +
 | UserService#getUser() : UserMemento
 | UserService#currentUser() : *Optional*<UserMemento>
 
-
-
 |===
 
 <1> These might be in use with configuration files, check yours!
@@ -278,4 +276,37 @@ Query.named(CommandJdo.class, "findByParent") +
 in a new-ed up (entity) instance is more flexible and also more error prone, eg. it allows the compiler to check
 validity of the used constructor rather than doing construction reflective at runtime
 
+== SecMan (Extension)
+
+[cols="3m,3m,3a", options="header"]
+
+|===
+
+| What
+| Old
+| New
+
+| Domain Object namespaces in SecMan scope like eg. objectType = "isissecurity.ApplicationUser"
+| isissecurity
+| secman
+
+WARNING: check menubars.layout.xml for any occurrences
+
+| Default Regular User Role Name
+| isis-module-security-regular-user 
+| secman-regular-user
+
+| Default Fixture Role Name 
+| isis-module-security-fixtures 
+| secman-fixtures
+
+| Default Admin Role Name
+| isis-module-security-admin 
+| secman-admin
+
+| Default Admin User Name
+| isis-module-security-admin 
+| secman-admin
+
+|===
 

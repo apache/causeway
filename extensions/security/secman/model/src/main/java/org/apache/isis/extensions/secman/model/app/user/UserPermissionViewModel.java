@@ -65,7 +65,7 @@ import lombok.val;
  */
 @DomainObject(
         nature = Nature.VIEW_MODEL,
-        objectType = "isissecurity.UserPermissionViewModel"
+        objectType = "secman.UserPermissionViewModel"
         )
 @DomainObjectLayout(
         bookmarking = BookmarkPolicy.AS_ROOT

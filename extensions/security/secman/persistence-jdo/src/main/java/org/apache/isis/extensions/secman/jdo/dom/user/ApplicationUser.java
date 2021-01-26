@@ -112,7 +112,7 @@ import lombok.val;
                     + " || emailAddress.matches(:regex)")
 })
 @DomainObject(
-        objectType = "isissecurity.ApplicationUser",
+        objectType = "secman.ApplicationUser",
         autoCompleteRepository = ApplicationUserRepository.class,
         autoCompleteAction = "findMatching"
         )
