@@ -20,12 +20,16 @@ package org.apache.isis.extensions.secman.jdo.seed.scripts;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureType;
+import org.apache.isis.core.metamodel.spec.ObjectSpecId;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionMode;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionRule;
 import org.apache.isis.extensions.secman.api.role.ApplicationRole;
@@ -39,6 +43,7 @@ public abstract class AbstractRoleAndPermissionsFixtureScript extends FixtureScr
 
     @Inject private ApplicationRoleRepository applicationRoleRepository;
     @Inject private ApplicationPermissionRepository applicationPermissionRepository;
+    @Inject private SpecificationLoader specificationLoader;
     
     private final String roleName;
     private final String roleDescription;
@@ -125,17 +130,24 @@ public abstract class AbstractRoleAndPermissionsFixtureScript extends FixtureScr
                     featureType, featureFqn);
         }
     }
+    
+    private String asFeatureFqns(Class<?> cls) {
+        return Optional.ofNullable(specificationLoader.loadSpecification(cls))
+                .map(ObjectSpecification::getSpecId)
+                .map(ObjectSpecId::asString)
+                .orElseGet(()->cls.getName());
+    }
 
-    private static List<String> asFeatureFqns(Class<?>[] classes) {
+    private List<String> asFeatureFqns(Class<?>[] classes) {
         return _NullSafe.stream(classes)
-                .map(Class::getName)
+                .map(this::asFeatureFqns)
                 .collect(Collectors.toList());
     }
 
-    private static Iterable<String> asFeatureFqns(final Class<?> cls, final String[] members) {
+    private Iterable<String> asFeatureFqns(final Class<?> cls, final String[] members) {
         return _NullSafe.stream(members)
                 .map(memberName->{
-                    val buf = new StringBuilder(cls.getName());
+                    val buf = new StringBuilder(asFeatureFqns(cls));
                     if(!memberName.startsWith("#")) {
                         buf.append("#");
                     }

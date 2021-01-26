@@ -55,7 +55,7 @@ public class SecmanConfiguration {
      */
     @Getter @Builder.Default @NonNull
     final String[] adminStickyNamespacePermissions = new String[]{
-            "secman"
+            "isis.ext.secman"
     };
     
     @Getter @Singular 
