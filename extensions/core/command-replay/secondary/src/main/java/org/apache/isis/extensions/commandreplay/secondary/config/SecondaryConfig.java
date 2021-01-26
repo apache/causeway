@@ -33,7 +33,7 @@ import lombok.Getter;
 import lombok.val;
 
 @Service
-@Named("isisExtensionsCommandReplaySecondary.SecondaryConfig")
+@Named("isis.ext.commandReplaySecondary.SecondaryConfig")
 @Order(OrderPrecedence.MIDPOINT)
 //@Log4j2
 public class SecondaryConfig {

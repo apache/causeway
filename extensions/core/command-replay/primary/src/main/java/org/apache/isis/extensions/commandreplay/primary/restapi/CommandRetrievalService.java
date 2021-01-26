@@ -43,9 +43,9 @@ import lombok.extern.log4j.Log4j2;
 
 @DomainService(
     nature = NatureOfService.REST,
-    objectType = "isisExtensionsCommandReplayPrimary.CommandRetrievalService"
+    objectType = "isis.ext.commandReplayPrimary.CommandRetrievalService"
 )
-@Named("isisExtensionsCommandReplayPrimary.CommandRetrievalService")
+@Named("isis.ext.commandReplayPrimary.CommandRetrievalService")
 @Order(OrderPrecedence.MIDPOINT)
 @Log4j2
 public class CommandRetrievalService {

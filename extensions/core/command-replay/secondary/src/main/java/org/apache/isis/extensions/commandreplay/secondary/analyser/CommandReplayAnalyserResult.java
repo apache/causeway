@@ -37,7 +37,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 @Service
-@Named("isisExtensionsCommandReplaySecondary.CommandReplayAnalyserResult")
+@Named("isis.ext.commandReplaySecondary.CommandReplayAnalyserResult")
 @Order(OrderPrecedence.MIDPOINT)
 @RequiredArgsConstructor
 public class CommandReplayAnalyserResult implements CommandReplayAnalyser {

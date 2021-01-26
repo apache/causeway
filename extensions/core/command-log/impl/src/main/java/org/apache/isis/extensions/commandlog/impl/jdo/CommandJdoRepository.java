@@ -61,7 +61,7 @@ import lombok.val;
  * {@link CommandJdo command} entities.
  */
 @Service
-@Named("isisExtensionsCommandLog.CommandJdoRepository")
+@Named("isis.ext.commandLog.CommandJdoRepository")
 @Order(OrderPrecedence.MIDPOINT)
 @Qualifier("Jdo")
 @RequiredArgsConstructor

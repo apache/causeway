@@ -242,7 +242,7 @@ import lombok.val;
 //        @javax.jdo.annotations.Index(name = "CommandJdo__replayState__startedAt__completedAt_IDX", members = {"startedAt", "replayState", "completedAt"}),
 })
 @DomainObject(
-        objectType = "isisExtensionsCommandLog.Command",
+        objectType = "isis.ext.commandLog.Command",
         editing = Editing.DISABLED
 )
 @DomainObjectLayout(

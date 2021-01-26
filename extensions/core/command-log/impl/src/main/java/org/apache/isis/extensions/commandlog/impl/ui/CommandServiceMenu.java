@@ -52,14 +52,14 @@ import lombok.RequiredArgsConstructor;
 
 @DomainService(
     nature = NatureOfService.VIEW,
-    objectType = "isisExtensionsCommandLog.CommandServiceMenu"
+    objectType = "isis.ext.commandLog.CommandServiceMenu"
 )
 @DomainServiceLayout(
     named = "Activity",
     menuBar = DomainServiceLayout.MenuBar.SECONDARY
 )
 @Service
-@Named("isisExtensionsCommandLog.CommandServiceMenu")
+@Named("isis.ext.commandLog.CommandServiceMenu")
 @Order(OrderPrecedence.MIDPOINT)
 @Qualifier("Jdo")
 @RequiredArgsConstructor(onConstructor_ = { @Inject })

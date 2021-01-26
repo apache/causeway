@@ -48,13 +48,13 @@ import lombok.extern.log4j.Log4j2;
 
 @DomainService(
     nature = NatureOfService.VIEW,
-    objectType = "isisExtensionsCommandReplaySecondary.CommandReplayOnSecondaryService"
+    objectType = "isis.ext.commandReplaySecondary.CommandReplayOnSecondaryService"
 )
 @DomainServiceLayout(
     named = "Activity",
     menuBar = DomainServiceLayout.MenuBar.SECONDARY
 )
-@Named("isisExtensionsCommandReplaySecondary.CommandReplayOnSecondaryService")
+@Named("isis.ext.commandReplaySecondary.CommandReplayOnSecondaryService")
 @Order(OrderPrecedence.MIDPOINT)
 @RequiredArgsConstructor
 @Log4j2

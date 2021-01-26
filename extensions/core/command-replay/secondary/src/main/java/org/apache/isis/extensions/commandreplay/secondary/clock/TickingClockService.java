@@ -54,7 +54,7 @@ import lombok.extern.log4j.Log4j2;
  * </p>
  */
 @Service()
-@Named("isisExtensionsCommandReplaySecondary.TickingClockService")
+@Named("isis.ext.commandReplaySecondary.TickingClockService")
 @Order(OrderPrecedence.MIDPOINT)
 @Log4j2
 @RequiredArgsConstructor

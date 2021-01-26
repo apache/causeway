@@ -48,8 +48,8 @@ public class TaggerDefault implements Tagger {
         if (objType.startsWith("isis.applib.")) {
             return ". apache isis applib";
         }
-        if (objType.startsWith("isisExt.")) {
-            return ". apache isis extensions - " + partsOf(objType).skip(1).limit(1).collect(Collectors.joining("."));
+        if (objType.startsWith("isis.ext.")) {
+            return ". apache isis extensions - " + partsOf(objType).skip(2).limit(1).collect(Collectors.joining("."));
         }
         if (objType.startsWith("org.springframework.")) {
             return "> spring framework " + partsOf(objType).skip(2).limit(1).collect(Collectors.joining("."));

@@ -44,7 +44,7 @@ import lombok.extern.log4j.Log4j2;
  * </p>
  */
 @Service
-@Named("isisExtensionsCommandReplaySecondary.CommandExecutorServiceWithTime")
+@Named("isis.ext.commandReplaySecondary.CommandExecutorServiceWithTime")
 @Order(OrderPrecedence.MIDPOINT - 10) // before CommandExecutorServiceDefault
 @Qualifier("WithTime")
 @Log4j2

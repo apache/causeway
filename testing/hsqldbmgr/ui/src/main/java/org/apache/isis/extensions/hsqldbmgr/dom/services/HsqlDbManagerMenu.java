@@ -37,7 +37,7 @@ import org.apache.isis.core.config.IsisConfiguration;
 
 @DomainService(
         nature = NatureOfService.VIEW,
-        objectType = "isisExtHsqldbMgr.HsqlDbManagerMenu"
+        objectType = "isis.ext.hsqldbMgr.HsqlDbManagerMenu"
         )
 @DomainServiceLayout(
         named = "Prototyping",

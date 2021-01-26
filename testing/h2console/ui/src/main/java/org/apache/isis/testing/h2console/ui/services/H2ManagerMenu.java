@@ -34,7 +34,7 @@ import org.apache.isis.testing.h2console.ui.webmodule.WebModuleH2Console;
 
 @DomainService(
         nature = NatureOfService.VIEW,
-        objectType = "isisExtH2Console.H2ManagerMenu"
+        objectType = "isis.ext.h2Console.H2ManagerMenu"
         )
 @DomainServiceLayout(
         named = "Prototyping",

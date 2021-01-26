@@ -42,7 +42,7 @@ import lombok.Setter;
 
 @DomainObject(
         nature = Nature.VIEW_MODEL,
-        objectType = "isisExtFixture.FixtureResult"
+        objectType = "isis.ext.fixtures.FixtureResult"
         )
 @DomainObjectLayout(paged=500)
 @XmlRootElement(name = "fixtureResult")

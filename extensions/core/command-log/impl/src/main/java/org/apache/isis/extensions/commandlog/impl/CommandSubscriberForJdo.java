@@ -37,7 +37,7 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Service
-@Named("isisExtensionsCommandLog.CommandCompletionHook")
+@Named("isis.ext.commandLog.CommandCompletionHook")
 @Order(OrderPrecedence.MIDPOINT) // after JdoPersistenceLifecycleService
 @Qualifier("Jdo")
 @Log4j2
