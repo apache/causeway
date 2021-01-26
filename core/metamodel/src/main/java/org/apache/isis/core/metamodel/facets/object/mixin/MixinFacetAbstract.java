@@ -77,7 +77,7 @@ implements MixinFacet {
             val msg = String.format("Could not find the 'mixed-in' domain object within %s" 
                             + " (tried to guess by looking at all public and non-public fields "
                             + "and matching one against the constructor parameter's type)", 
-                            mixinType.getClass().getName());
+                            mixinType.getName());
             log.warn(msg);
             
             if(mixinTypeValidator!=null) {
