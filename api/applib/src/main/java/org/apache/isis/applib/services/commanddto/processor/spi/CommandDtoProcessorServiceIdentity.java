@@ -32,7 +32,7 @@ import org.apache.isis.schema.cmd.v2.CommandDto;
  * @since 2.0 {@index}
  */
 @Service
-@Named("isisApplib.CommandDtoProcessorServiceIdentity")
+@Named("isis.applib.CommandDtoProcessorServiceIdentity")
 @Order(OrderPrecedence.LAST)
 public class CommandDtoProcessorServiceIdentity implements CommandDtoProcessorService {
 

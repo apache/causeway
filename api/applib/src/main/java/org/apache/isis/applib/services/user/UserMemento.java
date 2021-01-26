@@ -37,7 +37,7 @@ import lombok.NonNull;
  * Immutable serializable value holding details about a user and its roles.
  * @since 1.x revised in 2.0 {@index}
  */
-@DomainObject(objectType = "isisApplib.UserMemento")
+@DomainObject(objectType = "isis.applib.UserMemento")
 public final class UserMemento implements Serializable {
     
     private static final long serialVersionUID = 7190090455587885367L;

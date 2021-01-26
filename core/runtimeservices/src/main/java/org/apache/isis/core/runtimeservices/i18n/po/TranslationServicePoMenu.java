@@ -32,8 +32,8 @@ import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.value.Clob;
 
-@Named("isisApplib.TranslationServicePoMenu")
-@DomainService(objectType = "isisApplib.TranslationServicePoMenu")
+@Named("isis.applib.TranslationServicePoMenu")
+@DomainService(objectType = "isis.applib.TranslationServicePoMenu")
 @DomainServiceLayout(
         named = "Prototyping",
         menuBar = DomainServiceLayout.MenuBar.SECONDARY

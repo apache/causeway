@@ -37,8 +37,8 @@ import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.Clob;
 import org.apache.isis.commons.internal.base._Strings;
 
-@Named("isisApplib.LayoutServiceMenu")
-@DomainService(objectType = "isisApplib.LayoutServiceMenu")
+@Named("isis.applib.LayoutServiceMenu")
+@DomainService(objectType = "isis.applib.LayoutServiceMenu")
 @DomainServiceLayout(
         named = "Prototyping",
         menuBar = DomainServiceLayout.MenuBar.SECONDARY

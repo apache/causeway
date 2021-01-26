@@ -40,8 +40,8 @@ import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.config.RestEasyConfiguration;
 
 
-@Named("isisApplib.SwaggerServiceMenu")
-@DomainService(objectType = "isisApplib.SwaggerServiceMenu")
+@Named("isis.applib.SwaggerServiceMenu")
+@DomainService(objectType = "isis.applib.SwaggerServiceMenu")
 @DomainServiceLayout(
         named = "Prototyping",
         menuBar = DomainServiceLayout.MenuBar.SECONDARY

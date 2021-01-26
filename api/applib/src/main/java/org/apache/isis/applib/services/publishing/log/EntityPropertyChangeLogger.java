@@ -36,7 +36,7 @@ import lombok.extern.log4j.Log4j2;
  * @since 2.0 {@index}
  */
 @Service
-@Named("isisApplib.EntityPropertyChangeLogger")
+@Named("isis.applib.EntityPropertyChangeLogger")
 @Order(OrderPrecedence.LATE)
 @Primary
 @Qualifier("logging")

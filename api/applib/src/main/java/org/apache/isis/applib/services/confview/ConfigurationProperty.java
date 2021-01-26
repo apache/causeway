@@ -48,7 +48,7 @@ import lombok.Setter;
 )
 @DomainObject(
         editing = Editing.DISABLED,
-        objectType = "isisApplib.ConfigurationProperty"
+        objectType = "isis.applib.ConfigurationProperty"
         )
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObjectLayout(paged = 999)

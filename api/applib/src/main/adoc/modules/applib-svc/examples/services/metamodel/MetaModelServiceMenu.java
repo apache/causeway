@@ -47,8 +47,8 @@ import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.schema.metamodel.v2.MetamodelDto;
 
-@Named("isisApplib.MetaModelServiceMenu")
-@DomainService(objectType = "isisApplib.MetaModelServiceMenu")
+@Named("isis.applib.MetaModelServiceMenu")
+@DomainService(objectType = "isis.applib.MetaModelServiceMenu")
 @DomainServiceLayout(
         named = "Prototyping",
         menuBar = DomainServiceLayout.MenuBar.SECONDARY

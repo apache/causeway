@@ -32,8 +32,8 @@ import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
-@Named("isisApplib.ConfigurationMenu")
-@DomainService(objectType = "isisApplib.ConfigurationMenu")
+@Named("isis.applib.ConfigurationMenu")
+@DomainService(objectType = "isis.applib.ConfigurationMenu")
 @DomainServiceLayout(menuBar = DomainServiceLayout.MenuBar.TERTIARY)
 // tag::refguide[]
 // ...

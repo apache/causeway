@@ -50,7 +50,7 @@ import org.apache.isis.applib.jaxb.PersistentEntitiesAdapter;
         )
 @XmlAccessorType(XmlAccessType.FIELD)
 @DomainObject(
-        objectType = "isisApplib.DomainObjectList",
+        objectType = "isis.applib.DomainObjectList",
         editing = Editing.DISABLED,
         nature = Nature.VIEW_MODEL
         )

@@ -39,7 +39,7 @@ import org.apache.isis.schema.cmd.v2.CommandsDto;
  * @since 2.0 {@index}
  */
 @Service
-@Named("isisApplib.ContentMappingServiceForCommandsDto")
+@Named("isis.applib.ContentMappingServiceForCommandsDto")
 @Order(OrderPrecedence.EARLY)
 @Primary
 @Qualifier("CommandsDto")

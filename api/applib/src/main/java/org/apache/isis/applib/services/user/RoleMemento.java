@@ -30,7 +30,7 @@ import lombok.Value;
  * Immutable serializable value held by {@link UserMemento}.  
  * @since 2.0 {@index}
  */
-@DomainObject(objectType = "isisApplib.RoleMemento")
+@DomainObject(objectType = "isis.applib.RoleMemento")
 @Value
 public final class RoleMemento implements Serializable {
 

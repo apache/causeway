@@ -51,8 +51,8 @@ import org.apache.isis.schema.metamodel.v2.MetamodelDto;
  * 
  * @since 2.0 {@index}
  */
-@Named("isisApplib.MetaModelServiceMenu")
-@DomainService(objectType = "isisApplib.MetaModelServiceMenu")
+@Named("isis.applib.MetaModelServiceMenu")
+@DomainService(objectType = "isis.applib.MetaModelServiceMenu")
 @DomainServiceLayout(
         named = "Prototyping",
         menuBar = DomainServiceLayout.MenuBar.SECONDARY
