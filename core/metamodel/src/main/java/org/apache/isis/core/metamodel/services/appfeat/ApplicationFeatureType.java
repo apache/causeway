@@ -21,6 +21,12 @@ package org.apache.isis.core.metamodel.services.appfeat;
 import org.apache.isis.core.metamodel.commons.StringExtensions;
 
 public enum ApplicationFeatureType {
+    
+    /** 
+     * {@code namespace + "." + typeSimpleName} make up the fully qualified logical type name
+     * 
+     * @deprecated with v2.0.0-M5 semantics changed: should be renamed to NAMESPACE
+     */
     PACKAGE {
         @Override
         void init(final ApplicationFeatureId feature, final String fullyQualifiedName) {
@@ -30,6 +36,10 @@ public enum ApplicationFeatureType {
             feature.type = this;
         }
     },
+    
+    /** 
+     * {@code namespace + "." + typeSimpleName} make up the fully qualified logical type name
+     */
     CLASS {
         @Override
         void init(final ApplicationFeatureId feature, final String fullyQualifiedName) {
@@ -45,6 +55,11 @@ public enum ApplicationFeatureType {
             feature.type = this;
         }
     },
+    
+    /** 
+     * {@code namespace + "." + typeSimpleName + "." + memberName} 
+     * make up the fully qualified logical member name
+     */
     MEMBER {
         @Override
         void init(final ApplicationFeatureId feature, final String fullyQualifiedName) {

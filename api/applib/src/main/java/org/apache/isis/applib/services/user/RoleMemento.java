@@ -20,6 +20,7 @@ package org.apache.isis.applib.services.user;
 
 import java.io.Serializable;
 
+import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.MemberOrder;
 
 import lombok.Getter;
@@ -29,6 +30,7 @@ import lombok.Value;
  * Immutable serializable value held by {@link UserMemento}.  
  * @since 2.0 {@index}
  */
+@DomainObject(objectType = "isisApplib.RoleMemento")
 @Value
 public final class RoleMemento implements Serializable {
 

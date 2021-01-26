@@ -44,17 +44,16 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 
 /**
  * Value type representing a package, class or member.
- *
  * <p>
- *     This value is {@link Comparable}, the implementation of which considers {@link #getType() (feature) type},
- *     {@link #getPackageName() package name}, {@link #getClassName() class name} and {@link #getMemberName() member name}.
- * </p>
+ * This value is {@link Comparable}, the implementation of which considers 
+ * {@link #getType() (feature) type}, {@link #getPackageName() package name}, 
+ * {@link #getClassName() class name} and {@link #getMemberName() member name}.
  */
 @Value
-public class ApplicationFeatureId implements Comparable<ApplicationFeatureId>, Serializable {
-
-
-    // //////////////////////////////////////
+public class ApplicationFeatureId 
+implements
+    Comparable<ApplicationFeatureId>, 
+    Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -65,7 +64,10 @@ public class ApplicationFeatureId implements Comparable<ApplicationFeatureId>, S
 
     // -- factory methods
 
-    public static ApplicationFeatureId newFeature(final ApplicationFeatureType featureType, final String fullyQualifiedName) {
+    public static ApplicationFeatureId newFeature(
+            final ApplicationFeatureType featureType, 
+            final String fullyQualifiedName) {
+        
         switch (featureType) {
         case PACKAGE:
             return newPackage(fullyQualifiedName);
@@ -78,7 +80,9 @@ public class ApplicationFeatureId implements Comparable<ApplicationFeatureId>, S
     }
 
     public static ApplicationFeatureId newFeature(
-            final String packageFqn, final String className, final String memberName) {
+            final String packageFqn, 
+            final String className,
+            final String memberName) {
         if(className == null) {
             return newPackage(packageFqn);
         }
@@ -221,11 +225,13 @@ public class ApplicationFeatureId implements Comparable<ApplicationFeatureId>, S
     // -- packageName (property)
     private String packageName;
 
+    /** @deprecated with v2.0.0-M5 semantics changed: should be renamed to getNamespace() */
     @Programmatic
     public String getPackageName() {
         return packageName;
     }
 
+    /** @deprecated with v2.0.0-M5 semantics changed: should be renamed to setNamespace() */
     void setPackageName(final String packageName) {
         this.packageName = packageName;
     }
@@ -237,11 +243,13 @@ public class ApplicationFeatureId implements Comparable<ApplicationFeatureId>, S
 
     private String className;
 
+    /** @deprecated with v2.0.0-M5 semantics changed: should be renamed to getTypeSimpleName() */
     @Programmatic
     public String getClassName() {
         return className;
     }
 
+    /** @deprecated with v2.0.0-M5 semantics changed: should be renamed to setTypeSimpleName() */
     void setClassName(final String className) {
         this.className = className;
     }

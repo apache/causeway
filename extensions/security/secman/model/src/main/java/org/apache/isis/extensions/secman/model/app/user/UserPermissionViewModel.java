@@ -146,23 +146,23 @@ public class UserPermissionViewModel implements ViewModel {
         final ApplicationFeatureId changingEvaluationCauseFeatureId = changingEvaluationCause != null? changingEvaluationCause.getFeatureId(): null;
 
         return join(
-                username, 
-
-                viewingEvaluationGranted,
-                viewingEvaluationCauseFeatureId != null? viewingEvaluationCauseFeatureId.getType(): "",
-                        viewingEvaluationCauseFeatureId != null? viewingEvaluationCauseFeatureId.getFullyQualifiedName(): "",
-                                viewingEvaluationCause != null? viewingEvaluationCause.getRule(): "",
-                                        viewingEvaluationCause != null? viewingEvaluationCause.getMode(): "",
-
-                                                changingEvaluationGranted,
-                                                changingEvaluationCauseFeatureId != null? changingEvaluationCauseFeatureId.getType(): "",
-                                                        changingEvaluationCauseFeatureId != null? changingEvaluationCauseFeatureId.getFullyQualifiedName(): "",
-                                                                changingEvaluationCause != null? changingEvaluationCause.getRule(): "",
-                                                                        changingEvaluationCause != null? changingEvaluationCause.getMode(): "",
-
-                                                                                featureId.getType(), 
-                                                                                featureId.getFullyQualifiedName()
-                );
+        username, 
+        
+        viewingEvaluationGranted,
+        viewingEvaluationCauseFeatureId != null? viewingEvaluationCauseFeatureId.getType(): "",
+        viewingEvaluationCauseFeatureId != null? viewingEvaluationCauseFeatureId.getFullyQualifiedName(): "",
+        viewingEvaluationCause != null? viewingEvaluationCause.getRule(): "",
+        viewingEvaluationCause != null? viewingEvaluationCause.getMode(): "",
+        
+        changingEvaluationGranted,
+        changingEvaluationCauseFeatureId != null? changingEvaluationCauseFeatureId.getType(): "",
+        changingEvaluationCauseFeatureId != null? changingEvaluationCauseFeatureId.getFullyQualifiedName(): "",
+        changingEvaluationCause != null? changingEvaluationCause.getRule(): "",
+        changingEvaluationCause != null? changingEvaluationCause.getMode(): "",
+        
+        featureId.getType(), 
+        featureId.getFullyQualifiedName()
+        );
     }
 
     private static String join(Object ... args) {

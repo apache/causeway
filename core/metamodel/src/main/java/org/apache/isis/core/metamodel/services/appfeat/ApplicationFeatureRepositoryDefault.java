@@ -138,8 +138,8 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
             return;
         }
 
-        final String fullIdentifier = spec.getFullIdentifier();
-        final ApplicationFeatureId classFeatureId = ApplicationFeatureId.newClass(fullIdentifier);
+        final String specIdString = spec.getSpecId().asString();
+        final ApplicationFeatureId classFeatureId = ApplicationFeatureId.newClass(specIdString);
 
         // add class to our map
         // (later on it may get removed if the class turns out to have no features,
@@ -174,7 +174,7 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
         }
 
         // leave the class as is and (as there were indeed members for this class)
-        // and add all of its parent packages
+        // add all of its parent packages
         final ApplicationFeatureId classParentPackageId = addClassParent(classFeatureId);
         addParents(classParentPackageId);
         
@@ -195,7 +195,6 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
 
     ApplicationFeatureId addClassParent(final ApplicationFeatureId classFeatureId) {
         final ApplicationFeatureId parentPackageId = classFeatureId.getParentPackageId();
-
         final ApplicationFeature parentPackage = findPackageElseCreate(parentPackageId);
 
         parentPackage.addToContents(classFeatureId);
@@ -321,7 +320,7 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
 
     protected boolean exclude(final ObjectSpecification spec) {
 
-        val excluded = spec.isAbstract() ||
+        val excluded = spec.isMixin() || spec.isAbstract() ||
                 spec.getBeanSort().isUnknown() ||
                 isBuiltIn(spec) ||
                 isHidden(spec);
