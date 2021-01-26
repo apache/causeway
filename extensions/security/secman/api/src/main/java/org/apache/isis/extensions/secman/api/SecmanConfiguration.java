@@ -29,7 +29,7 @@ import lombok.NonNull;
 import lombok.Singular;
 
 @Builder
-public class SecurityModuleConfig {
+public class SecmanConfiguration {
 
     // -- ROLES
 
@@ -54,12 +54,12 @@ public class SecurityModuleConfig {
      * cannot be removed via user interface
      */
     @Getter @Builder.Default @NonNull
-    final String[] adminStickyPackagePermissions = new String[]{
+    final String[] adminStickyNamespacePermissions = new String[]{
             "secman"
     };
     
     @Getter @Singular 
-    final Set<String> adminAdditionalPackagePermissions;
+    final Set<String> adminAdditionalNamespacePermissions;
     
     /**
      * Delegated users, on first successful logon, are auto-created but disabled (by default).
@@ -75,14 +75,14 @@ public class SecurityModuleConfig {
 
     // -- UTILITIES
     
-    public Stream<String> streamAdminPackagePermissions() {
+    public Stream<String> streamAdminNamespacePermissions() {
         return Stream.concat(
-                _NullSafe.stream(adminStickyPackagePermissions),
-                _NullSafe.stream(adminAdditionalPackagePermissions));
+                _NullSafe.stream(adminStickyNamespacePermissions),
+                _NullSafe.stream(adminAdditionalNamespacePermissions));
     }
     
-    public boolean isStickyAdminPackage(String featureFqn) {
-        return _NullSafe.stream(adminStickyPackagePermissions)
+    public boolean isStickyAdminNamespace(String featureFqn) {
+        return _NullSafe.stream(adminStickyNamespacePermissions)
         .anyMatch(stickyPackage->stickyPackage.equals(featureFqn));
     }
 

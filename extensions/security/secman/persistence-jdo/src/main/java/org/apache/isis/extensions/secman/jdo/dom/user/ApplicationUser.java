@@ -48,7 +48,7 @@ import org.apache.isis.applib.util.ObjectContracts.ObjectContract;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureId;
-import org.apache.isis.extensions.secman.api.SecurityModuleConfig;
+import org.apache.isis.extensions.secman.api.SecmanConfiguration;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionMode;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionValueSet;
 import org.apache.isis.extensions.secman.api.permission.PermissionsEvaluationService;
@@ -137,7 +137,7 @@ org.apache.isis.extensions.secman.api.user.ApplicationUser {
      * implementation.
      */
     @Inject private PermissionsEvaluationService permissionsEvaluationService;
-    @Inject private SecurityModuleConfig configBean;
+    @Inject private SecmanConfiguration configBean;
 
     // -- name (derived property)
 

@@ -19,7 +19,7 @@
 package org.apache.isis.extensions.secman.jdo.seed.scripts;
 
 import org.apache.isis.commons.internal.collections._Arrays;
-import org.apache.isis.extensions.secman.api.SecurityModuleConfig;
+import org.apache.isis.extensions.secman.api.SecmanConfiguration;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionMode;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionRule;
 
@@ -27,9 +27,9 @@ public class IsisModuleSecurityAdminRoleAndPermissions extends AbstractRoleAndPe
 
     private String[] adminInitialPackagePermissions;
 
-    public IsisModuleSecurityAdminRoleAndPermissions(SecurityModuleConfig configBean) {
+    public IsisModuleSecurityAdminRoleAndPermissions(SecmanConfiguration configBean) {
         super(configBean.getAdminRoleName(), "Administer security");
-        this.adminInitialPackagePermissions = configBean.streamAdminPackagePermissions()
+        this.adminInitialPackagePermissions = configBean.streamAdminNamespacePermissions()
                 .collect(_Arrays.toArray(String.class));
     }
 

@@ -23,7 +23,7 @@ import java.util.HashSet;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.services.repository.RepositoryService;
-import org.apache.isis.extensions.secman.api.SecurityModuleConfig;
+import org.apache.isis.extensions.secman.api.SecmanConfiguration;
 import org.apache.isis.extensions.secman.api.role.ApplicationRole;
 import org.apache.isis.extensions.secman.api.role.ApplicationRoleRepository;
 import org.apache.isis.extensions.secman.api.user.ApplicationUser;
@@ -120,7 +120,7 @@ implements PersonaWithBuilderScript<BuilderScriptAbstract<?>>  {
                 
                 @Inject private ApplicationUserRepository<? extends ApplicationUser> applicationUserRepository;
                 @Inject private ApplicationRoleRepository<? extends ApplicationRole> applicationRoleRepository;
-                @Inject private SecurityModuleConfig securityConfig;
+                @Inject private SecmanConfiguration securityConfig;
 
             };
         }    

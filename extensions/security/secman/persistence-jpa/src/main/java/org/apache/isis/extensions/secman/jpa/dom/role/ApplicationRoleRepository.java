@@ -34,7 +34,7 @@ import org.apache.isis.applib.services.queryresultscache.QueryResultsCache;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.collections._Sets;
-import org.apache.isis.extensions.secman.api.SecurityModuleConfig;
+import org.apache.isis.extensions.secman.api.SecmanConfiguration;
 import org.apache.isis.extensions.secman.jpa.dom.constants.NamedQueryNames;
 import org.apache.isis.extensions.secman.jpa.dom.user.ApplicationUser;
 import org.apache.isis.extensions.secman.model.dom.permission.ApplicationPermission_delete;
@@ -48,7 +48,7 @@ implements org.apache.isis.extensions.secman.api.role.ApplicationRoleRepository<
 
     @Inject private FactoryService factoryService;
     @Inject private RepositoryService repository;
-    @Inject private SecurityModuleConfig configBean;
+    @Inject private SecmanConfiguration configBean;
     
     @Inject private javax.inject.Provider<QueryResultsCache> queryResultsCacheProvider;
 

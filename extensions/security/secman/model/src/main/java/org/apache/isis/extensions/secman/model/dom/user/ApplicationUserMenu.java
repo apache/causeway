@@ -34,7 +34,7 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.value.Password;
 import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
-import org.apache.isis.extensions.secman.api.SecurityModuleConfig;
+import org.apache.isis.extensions.secman.api.SecmanConfiguration;
 import org.apache.isis.extensions.secman.api.SecurityRealmCharacteristic;
 import org.apache.isis.extensions.secman.api.SecurityRealmService;
 import org.apache.isis.extensions.secman.api.role.ApplicationRole;
@@ -54,7 +54,7 @@ import lombok.val;
         )
 public class ApplicationUserMenu {
 
-    @Inject private SecurityModuleConfig configBean;
+    @Inject private SecmanConfiguration configBean;
     @Inject private ApplicationRoleRepository<? extends ApplicationRole> applicationRoleRepository;
     @Inject private ApplicationUserRepository<? extends ApplicationUser> applicationUserRepository;
     @Inject private SecurityRealmService securityRealmService;

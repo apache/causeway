@@ -45,7 +45,7 @@ import org.apache.isis.commons.internal.collections._Arrays;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.interaction.session.InteractionFactory;
 import org.apache.isis.core.security.authorization.standard.Authorizor;
-import org.apache.isis.extensions.secman.api.SecurityModuleConfig;
+import org.apache.isis.extensions.secman.api.SecmanConfiguration;
 import org.apache.isis.extensions.secman.api.SecurityRealm;
 import org.apache.isis.extensions.secman.api.SecurityRealmCharacteristic;
 import org.apache.isis.extensions.secman.api.encryption.PasswordEncryptionService;
@@ -64,7 +64,7 @@ public class IsisModuleExtSecmanShiroRealm extends AuthorizingRealm implements S
 	@Inject protected ServiceInjector serviceInjector;
     @Inject protected InteractionFactory isisInteractionFactory;
     @Inject protected PlatformTransactionManager txMan;
-    @Inject private SecurityModuleConfig configBean;
+    @Inject private SecmanConfiguration configBean;
 	@Inject protected IsisConfiguration isisConfiguration;
     
     @Getter @Setter private AuthenticatingRealm delegateAuthenticationRealm;

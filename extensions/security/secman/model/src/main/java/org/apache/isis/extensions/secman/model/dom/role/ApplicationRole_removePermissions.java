@@ -29,7 +29,7 @@ import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.commons.internal.base._NullSafe;
-import org.apache.isis.extensions.secman.api.SecurityModuleConfig;
+import org.apache.isis.extensions.secman.api.SecmanConfiguration;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermission;
 import org.apache.isis.extensions.secman.api.role.ApplicationRole;
 import org.apache.isis.extensions.secman.api.role.ApplicationRole.RemovePermissionDomainEvent;
@@ -47,7 +47,7 @@ import lombok.RequiredArgsConstructor;
 public class ApplicationRole_removePermissions {
 
     @Inject private MessageService messageService;
-    @Inject private SecurityModuleConfig configBean;
+    @Inject private SecmanConfiguration configBean;
     @Inject private RepositoryService repository;
     @Inject private ApplicationRoleRepository<? extends ApplicationRole> applicationRoleRepository;
     
@@ -68,9 +68,9 @@ public class ApplicationRole_removePermissions {
             return false;
         }
         if(applicationRoleRepository.isAdminRole(holder) 
-                && configBean.isStickyAdminPackage(permission.getFeatureFqn())) {
+                && configBean.isStickyAdminNamespace(permission.getFeatureFqn())) {
             
-            messageService.warnUser("Cannot remove top-level package permissions for the admin role.");
+            messageService.warnUser("Cannot remove top-level namespace permissions for the admin role.");
             return false;
         }
         return true;

@@ -308,5 +308,15 @@ WARNING: check menubars.layout.xml for any occurrences
 | isis-module-security-admin 
 | secman-admin
 
+| Class 
+| SecurityModuleConfig 
+| SecmanConfiguration
+
+| Option 
+| SecurityModuleConfig#adminAdditionalPackagePermission
+| SecmanConfiguration#adminAdditionalNamespacePermission
+
+
+
 |===
 

@@ -20,12 +20,12 @@ package org.apache.isis.extensions.secman.jdo.seed.scripts;
 
 import java.util.Arrays;
 
-import org.apache.isis.extensions.secman.api.SecurityModuleConfig;
+import org.apache.isis.extensions.secman.api.SecmanConfiguration;
 import org.apache.isis.extensions.secman.api.user.AccountType;
 
 public class IsisModuleSecurityAdminUser extends AbstractUserAndRolesFixtureScript {
 
-    public IsisModuleSecurityAdminUser(SecurityModuleConfig configBean) {
+    public IsisModuleSecurityAdminUser(SecmanConfiguration configBean) {
         super(
                 configBean.getAdminUserName(), 
                 configBean.getAdminPassword(),

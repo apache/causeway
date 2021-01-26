@@ -28,7 +28,7 @@ import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeature;
 import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureType;
-import org.apache.isis.extensions.secman.api.SecurityModuleConfig;
+import org.apache.isis.extensions.secman.api.SecmanConfiguration;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermission;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionRepository;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionRule;
@@ -46,7 +46,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ApplicationRole_removePermission {
 
-    @Inject private SecurityModuleConfig configBean;
+    @Inject private SecmanConfiguration configBean;
     @Inject private RepositoryService repository;
     @Inject private ApplicationRoleRepository<? extends ApplicationRole> applicationRoleRepository;
     @Inject private ApplicationPermissionRepository<? extends ApplicationPermission> applicationPermissionRepository;
@@ -80,8 +80,8 @@ public class ApplicationRole_removePermission {
             @ParameterLayout(named="Feature", typicalLength=ApplicationFeature.TYPICAL_LENGTH_MEMBER_NAME)
             final String featureFqn) {
         if(applicationRoleRepository.isAdminRole(holder) 
-                && configBean.isStickyAdminPackage(featureFqn)) {
-            return "Cannot remove top-level package permissions for the admin role.";
+                && configBean.isStickyAdminNamespace(featureFqn)) {
+            return "Cannot remove top-level namespace permissions for the admin role.";
         }
         return null;
     }

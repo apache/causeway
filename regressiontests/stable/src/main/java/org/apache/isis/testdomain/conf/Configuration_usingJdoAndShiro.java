@@ -29,7 +29,7 @@ import org.springframework.context.annotation.PropertySources;
 
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
-import org.apache.isis.extensions.secman.api.SecurityModuleConfig;
+import org.apache.isis.extensions.secman.api.SecmanConfiguration;
 import org.apache.isis.extensions.secman.api.permission.PermissionsEvaluationService;
 import org.apache.isis.extensions.secman.api.permission.PermissionsEvaluationServiceAllowBeatsVeto;
 import org.apache.isis.persistence.jdo.datanucleus.IsisModuleJdoDatanucleus;
@@ -59,8 +59,8 @@ import org.apache.isis.testing.fixtures.applib.IsisModuleTestingFixturesApplib;
 public class Configuration_usingJdoAndShiro {
 
     @Bean @Singleton
-    public SecurityModuleConfig securityModuleConfigBean() {
-        return SecurityModuleConfig.builder()
+    public SecmanConfiguration securityModuleConfigBean() {
+        return SecmanConfiguration.builder()
                 .build();
     }
 

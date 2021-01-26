@@ -39,7 +39,7 @@ import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.config.IsisConfiguration;
-import org.apache.isis.extensions.secman.api.SecurityModuleConfig;
+import org.apache.isis.extensions.secman.api.SecmanConfiguration;
 import org.apache.isis.extensions.secman.api.encryption.PasswordEncryptionService;
 import org.apache.isis.extensions.secman.api.events.UserCreatedEvent;
 import org.apache.isis.extensions.secman.api.user.AccountType;
@@ -59,7 +59,7 @@ implements org.apache.isis.extensions.secman.api.user.ApplicationUserRepository<
 
     @Inject private FactoryService factoryService;
     @Inject private RepositoryService repository;
-    @Inject private SecurityModuleConfig configBean;
+    @Inject private SecmanConfiguration configBean;
     @Inject private Optional<PasswordEncryptionService> passwordEncryptionService; // empty if no candidate is available
 	@Inject protected IsisConfiguration isisConfiguration;
     @Inject private EventBusService eventBusService;  

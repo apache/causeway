@@ -23,7 +23,7 @@ import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.extensions.secman.api.SecurityModuleConfig;
+import org.apache.isis.extensions.secman.api.SecmanConfiguration;
 import org.apache.isis.extensions.secman.api.user.ApplicationUser;
 import org.apache.isis.extensions.secman.api.user.ApplicationUser.LockDomainEvent;
 import org.apache.isis.extensions.secman.api.user.ApplicationUserRepository;
@@ -40,7 +40,7 @@ import lombok.RequiredArgsConstructor;
 public class ApplicationUser_lock {
     
     @Inject private ApplicationUserRepository<? extends ApplicationUser> applicationUserRepository;
-    @Inject private SecurityModuleConfig configBean;
+    @Inject private SecmanConfiguration configBean;
     
     private final ApplicationUser holder;
 

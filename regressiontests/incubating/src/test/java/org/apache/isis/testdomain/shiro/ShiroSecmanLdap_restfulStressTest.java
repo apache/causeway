@@ -36,7 +36,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.core.config.presets.IsisPresets;
-import org.apache.isis.extensions.secman.api.SecurityModuleConfig;
+import org.apache.isis.extensions.secman.api.SecmanConfiguration;
 import org.apache.isis.extensions.secman.encryption.jbcrypt.IsisModuleExtSecmanEncryptionJbcrypt;
 import org.apache.isis.extensions.secman.jdo.IsisModuleExtSecmanPersistenceJdo;
 import org.apache.isis.extensions.secman.model.IsisModuleExtSecmanModel;
@@ -86,7 +86,7 @@ class ShiroSecmanLdap_restfulStressTest extends AbstractShiroTest {
     @Inject LdapServerService ldapServerService;
 //    @Inject ApplicationUserRepository applicationUserRepository;
 //    @Inject ApplicationRoleRepository applicationRoleRepository;
-    @Inject SecurityModuleConfig securityConfig;
+    @Inject SecmanConfiguration securityConfig;
     @Inject ServiceInjector serviceInjector;
     
     @BeforeAll

@@ -20,14 +20,14 @@ package org.apache.isis.extensions.secman.jdo.seed;
 
 import javax.inject.Inject;
 
-import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
-import org.apache.isis.extensions.secman.api.SecurityModuleConfig;
+import org.apache.isis.extensions.secman.api.SecmanConfiguration;
 import org.apache.isis.extensions.secman.jdo.seed.scripts.GlobalTenancy;
 import org.apache.isis.extensions.secman.jdo.seed.scripts.IsisExtFixturesFixtureResultsRoleAndPermissions;
 import org.apache.isis.extensions.secman.jdo.seed.scripts.IsisModuleSecurityAdminRoleAndPermissions;
 import org.apache.isis.extensions.secman.jdo.seed.scripts.IsisModuleSecurityAdminUser;
 import org.apache.isis.extensions.secman.jdo.seed.scripts.IsisModuleSecurityFixtureRoleAndPermissions;
 import org.apache.isis.extensions.secman.jdo.seed.scripts.IsisModuleSecurityRegularUserRoleAndPermissions;
+import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 
 /**
  * This fixture script will be run automatically on start-up by virtue of the fact that the
@@ -38,7 +38,7 @@ import org.apache.isis.extensions.secman.jdo.seed.scripts.IsisModuleSecurityRegu
  */
 public class SeedUsersAndRolesFixtureScript extends FixtureScript {
 
-    @Inject private SecurityModuleConfig configBean;
+    @Inject private SecmanConfiguration configBean;
 
     @Override
     protected void execute(ExecutionContext executionContext) {

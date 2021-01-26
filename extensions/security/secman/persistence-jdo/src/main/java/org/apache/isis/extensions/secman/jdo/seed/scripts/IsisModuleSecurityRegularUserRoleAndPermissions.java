@@ -19,7 +19,7 @@
 package org.apache.isis.extensions.secman.jdo.seed.scripts;
 
 import org.apache.isis.core.security.authentication.logout.LogoutMenu;
-import org.apache.isis.extensions.secman.api.SecurityModuleConfig;
+import org.apache.isis.extensions.secman.api.SecmanConfiguration;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionMode;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionRule;
 import org.apache.isis.extensions.secman.jdo.dom.role.ApplicationRole;
@@ -32,7 +32,7 @@ import org.apache.isis.extensions.secman.model.app.user.MeService;
  */
 public class IsisModuleSecurityRegularUserRoleAndPermissions extends AbstractRoleAndPermissionsFixtureScript {
 
-    public IsisModuleSecurityRegularUserRoleAndPermissions(SecurityModuleConfig configBean) {
+    public IsisModuleSecurityRegularUserRoleAndPermissions(SecmanConfiguration configBean) {
         super(configBean.getRegularUserRoleName(), "Regular user of the security module");
     }
 

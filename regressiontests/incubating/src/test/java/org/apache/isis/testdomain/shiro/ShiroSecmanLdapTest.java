@@ -38,7 +38,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.apache.isis.applib.services.inject.ServiceInjector;
-import org.apache.isis.extensions.secman.api.SecurityModuleConfig;
+import org.apache.isis.extensions.secman.api.SecmanConfiguration;
 import org.apache.isis.extensions.secman.api.role.ApplicationRole;
 import org.apache.isis.extensions.secman.api.role.ApplicationRoleRepository;
 import org.apache.isis.extensions.secman.api.user.ApplicationUser;
@@ -82,7 +82,7 @@ class ShiroSecmanLdapTest extends AbstractShiroTest {
     @Inject LdapServerService ldapServerService;
     @Inject ApplicationUserRepository<? extends ApplicationUser> applicationUserRepository;
     @Inject ApplicationRoleRepository<? extends ApplicationRole> applicationRoleRepository;
-    @Inject SecurityModuleConfig securityConfig;
+    @Inject SecmanConfiguration securityConfig;
     @Inject ServiceInjector serviceInjector;
 
     @BeforeEach

@@ -96,8 +96,6 @@ public abstract class AbstractRoleAndPermissionsFixtureScript extends FixtureScr
     }
 
 
-
-
     // -- helpers
 
     private void newPermissions(
