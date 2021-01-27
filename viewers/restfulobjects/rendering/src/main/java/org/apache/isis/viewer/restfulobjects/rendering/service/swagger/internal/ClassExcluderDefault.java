@@ -23,7 +23,7 @@ import javax.inject.Named;
 import org.springframework.stereotype.Component;
 
 @Component
-@Named("isisMetaModel.ClassExcluderDefault")
+@Named("isis.metamodel.ClassExcluderDefault")
 public class ClassExcluderDefault extends ClassExcluderAbstract {
 
     public ClassExcluderDefault() {

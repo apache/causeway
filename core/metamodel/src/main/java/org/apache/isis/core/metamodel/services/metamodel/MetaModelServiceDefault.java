@@ -55,7 +55,7 @@ import org.apache.isis.schema.metamodel.v2.MetamodelDto;
 import lombok.val;
 
 @Service
-@Named("isisMetaModel.MetaModelServiceDefault")
+@Named("isis.metamodel.MetaModelServiceDefault")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")

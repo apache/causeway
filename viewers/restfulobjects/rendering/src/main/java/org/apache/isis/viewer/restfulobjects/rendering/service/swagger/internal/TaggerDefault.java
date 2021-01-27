@@ -31,7 +31,7 @@ import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.commons.internal.base._Strings;
 
 @Component
-@Named("isisMetaModel.TaggerDefault")
+@Named("isis.metamodel.TaggerDefault")
 public class TaggerDefault implements Tagger {
 
     static Pattern tagPatternForFqcn = Pattern.compile("^.*\\.([^\\.]+)\\.([^\\.]+)$");

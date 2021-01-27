@@ -45,7 +45,7 @@ import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import lombok.val;
 
 @Service
-@Named("isisMetaModel.LayoutServiceDefault")
+@Named("isis.metamodel.LayoutServiceDefault")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")

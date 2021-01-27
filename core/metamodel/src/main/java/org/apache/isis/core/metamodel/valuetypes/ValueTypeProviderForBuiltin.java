@@ -34,7 +34,7 @@ import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeature;
 import org.apache.isis.schema.common.v2.ValueType;
 
 @Component
-@Named("isisMetaModel.ValueTypeProviderForBuiltin")
+@Named("isis.metamodel.ValueTypeProviderForBuiltin")
 @Order(OrderPrecedence.MIDPOINT)
 public class ValueTypeProviderForBuiltin implements ValueTypeProvider {
 

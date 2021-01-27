@@ -45,7 +45,7 @@ import org.apache.isis.core.config.environment.IsisSystemEnvironment;
 import lombok.val;
 
 @Service
-@Named("isisMetaModel.ServiceRegistryDefault")
+@Named("isis.metamodel.ServiceRegistryDefault")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")

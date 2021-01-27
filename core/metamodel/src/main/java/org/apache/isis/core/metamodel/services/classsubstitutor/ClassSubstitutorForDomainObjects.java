@@ -33,7 +33,7 @@ import lombok.NonNull;
 import lombok.val;
 
 @Component
-@Named("isisMetaModel.ClassSubstitutorForDomainObjects")
+@Named("isis.metamodel.ClassSubstitutorForDomainObjects")
 @Order(OrderPrecedence.MIDPOINT - 20) // before ClassSubstitutorForCollections
 public class ClassSubstitutorForDomainObjects implements ClassSubstitutor {
 

@@ -43,7 +43,7 @@ import lombok.NonNull;
 import lombok.val;
 
 @Service
-@Named("isisMetaModel.IsisBeanTypeRegistryImpl")
+@Named("isis.metamodel.IsisBeanTypeRegistryImpl")
 @Order(OrderPrecedence.EARLY)
 @Primary
 @Qualifier("Default")

@@ -45,7 +45,7 @@ import lombok.Value;
 import lombok.extern.log4j.Log4j2;
 
 @Service
-@Named("isisMetaModel.GridLoaderServiceDefault")
+@Named("isis.metamodel.GridLoaderServiceDefault")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")

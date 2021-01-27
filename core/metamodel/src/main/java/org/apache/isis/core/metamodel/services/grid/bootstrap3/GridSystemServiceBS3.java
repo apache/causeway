@@ -77,7 +77,7 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Service
-@Named("isisMetaModel.GridSystemServiceBS3")
+@Named("isis.metamodel.GridSystemServiceBS3")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("BS3")

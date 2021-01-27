@@ -36,7 +36,7 @@ import org.apache.isis.viewer.restfulobjects.rendering.service.swagger.internal.
 import lombok.val;
 
 @Service
-@Named("isisMetaModel.swaggerServiceDefault")
+@Named("isis.metamodel.swaggerServiceDefault")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")

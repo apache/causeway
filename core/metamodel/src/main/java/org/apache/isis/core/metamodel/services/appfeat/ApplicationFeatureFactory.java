@@ -28,7 +28,7 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 
 @Service
-@Named("isisMetaModel.ApplicationFeatureFactory")
+@Named("isis.metamodel.ApplicationFeatureFactory")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")

@@ -40,6 +40,9 @@ import lombok.val;
  * <p>
  * If a messaging-parsing {@link Function} is provided through the constructor,
  * then the message can be altered.  Otherwise the exception's {@link Throwable#getMessage() message} is returned as-is.
+ * 
+ * @since 2.0 {@index}
+ * 
  */
 public class ExceptionRecognizerForType extends ExceptionRecognizerAbstract {
 

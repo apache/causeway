@@ -28,7 +28,7 @@ import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.graph.tree.TreeAdapter;
 
 @Component
-@Named("isisMetaModel.ClassSubstitutorDefault")
+@Named("isis.metamodel.ClassSubstitutorDefault")
 @Order(OrderPrecedence.MIDPOINT)
 public class ClassSubstitutorDefault extends ClassSubstitutorAbstract {
 

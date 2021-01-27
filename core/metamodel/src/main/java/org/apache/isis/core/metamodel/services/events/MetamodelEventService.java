@@ -44,7 +44,7 @@ import lombok.Builder;
  *
  */
 @Service 
-@Named("isisMetaModel.MetamodelEventService")
+@Named("isis.metamodel.MetamodelEventService")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")

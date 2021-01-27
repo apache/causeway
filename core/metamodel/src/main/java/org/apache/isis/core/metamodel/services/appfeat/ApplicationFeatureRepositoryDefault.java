@@ -60,7 +60,7 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Repository
-@Named("isisMetaModel.ApplicationFeatureRepositoryDefault")
+@Named("isis.metamodel.ApplicationFeatureRepositoryDefault")
 @Log4j2
 public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRepository {
 

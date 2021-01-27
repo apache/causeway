@@ -32,7 +32,7 @@ import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.core.metamodel.spec.InjectorMethodEvaluator;
 
 @Service
-@Named("isisMetaModel.InjectorMethodEvaluatorDefault")
+@Named("isis.metamodel.InjectorMethodEvaluatorDefault")
 @Order(OrderPrecedence.EARLY)
 @Primary
 @Qualifier("Default")
