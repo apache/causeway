@@ -18,6 +18,7 @@
  */
 package org.apache.isis.client.kroviz.ui.kv
 
+import kotlinx.browser.window
 import org.apache.isis.client.kroviz.core.Session
 import org.apache.isis.client.kroviz.core.aggregator.BaseAggregator
 import org.apache.isis.client.kroviz.core.aggregator.ObjectAggregator
@@ -36,7 +37,6 @@ import pl.treksoft.kvision.core.Widget
 import pl.treksoft.kvision.dropdown.ContextMenu
 import pl.treksoft.kvision.panel.SimplePanel
 import pl.treksoft.kvision.utils.ESC_KEY
-import kotlin.browser.window
 
 /**
  * Single point of contact for view components consisting of:

@@ -20,7 +20,6 @@ package org.apache.isis.client.kroviz.core.aggregator
 
 import org.apache.isis.client.kroviz.core.event.EventState
 import org.apache.isis.client.kroviz.core.event.LogEntry
-import org.apache.isis.client.kroviz.core.event.RoXmlHttpRequest
 import org.apache.isis.client.kroviz.core.model.ListDM
 import org.apache.isis.client.kroviz.layout.Layout
 import org.apache.isis.client.kroviz.to.*
@@ -43,8 +42,9 @@ class ListAggregator(actionTitle: String) : BaseAggregator() {
 
     override fun update(logEntry: LogEntry, subType: String) {
 
-        //TODO duplicates should no be propagated to handlers at all: IMPROVE
-        if (logEntry.state != EventState.DUPLICATE) {
+        if (logEntry.state == EventState.DUPLICATE) {
+            console.log("[LA.update] TODO duplicates should not be propagated to handlers")
+        } else {
             when (val obj = logEntry.getTransferObject()) {
                 null -> log(logEntry)
                 is ResultList -> handleList(obj)
@@ -62,10 +62,10 @@ class ListAggregator(actionTitle: String) : BaseAggregator() {
     }
 
     private fun handleList(resultList: ResultList) {
-        if (resultList.resulttype != "void") {
+        if (resultList.resulttype != ResultType.VOID.type) {
             val result = resultList.result!!
             result.value.forEach {
-                RoXmlHttpRequest().invoke(it,this)
+                invoke(it, this)
             }
         }
     }
@@ -73,10 +73,11 @@ class ListAggregator(actionTitle: String) : BaseAggregator() {
     private fun handleObject(obj: TObject) {
         dpm.addData(obj)
         val l = obj.getLayoutLink()!!
-        // Json.Layout is invoked first
-        RoXmlHttpRequest().invoke(l,this)
-        // then Xml.Layout is to be invoked as well
-        RoXmlHttpRequest().invoke(l,this, Constants.subTypeXml)
+        if (l.representation() == Represention.OBJECT_LAYOUT_BS3) {
+            invoke(l, this, Constants.subTypeXml)
+        } else {
+            invoke(l, this)
+        }
     }
 
     //TODO same code in ObjectAggregator? -> pullup refactoring to be applied
@@ -93,7 +94,7 @@ class ListAggregator(actionTitle: String) : BaseAggregator() {
                 dm.addPropertyDescription(id, id)
                 if (!isDn) {
                     //invoking DN links leads to an error
-                    RoXmlHttpRequest().invoke(l,this)
+                    invoke(l, this)
                 }
             }
         }
@@ -109,7 +110,7 @@ class ListAggregator(actionTitle: String) : BaseAggregator() {
             dm.addPropertyDescription(p)
         } else {
             dm.addProperty(p)
-            RoXmlHttpRequest().invoke(p.descriptionLink()!!,this)
+            invoke(p.descriptionLink()!!, this)
         }
     }
 
@@ -124,18 +125,11 @@ class ListAggregator(actionTitle: String) : BaseAggregator() {
         }
     }
 
-    /**
-     * property-description's have extensions.friendlyName whereas
-     * plain properties don't have them  cf.:
-     * FR_PROPERTY_DESCRIPTION
-     * FR_OBJECT_PROPERTY_
-     */
     private fun Property.isPropertyDescription(): Boolean {
-        val hasExtensions = extensions != null
-        if (!hasExtensions) {
-            return false
+        val selfLink = this.links.find { l ->
+            l.relation() == Relation.SELF
         }
-        return extensions!!.friendlyName.isNotEmpty()
+        return selfLink!!.representation() == Represention.PROPERTY_DESCRIPTION
     }
 
 }

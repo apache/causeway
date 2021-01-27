@@ -112,16 +112,15 @@ class TObjectTest {
         val jsonStr = ACTIONS_STRINGS_INVOKE.str
         // when
         val to = TObjectHandler().parse(jsonStr) as TObject
-        val members = to.members
-        val properties = to.getProperties()
         // then
-        assertNotNull(to.links)
         assertEquals("String data type", to.links[0].title)
-        assertEquals(9, members.size)
-        assertEquals(0, properties.size)
+        assertEquals(13, to.members.size)
+        assertEquals(1, to.getCollections().size)
+        assertEquals(8, to.getActions().size)
+        assertEquals(4, to.getProperties().size)
 
-        val filteredProperties = properties.filter { it.id == "description" }
-        assertEquals(0, filteredProperties.size)
+        val filteredProperties = to.getProperties().filter { it.id == "description" }
+        assertEquals(1, filteredProperties.size)
     }
 
 }

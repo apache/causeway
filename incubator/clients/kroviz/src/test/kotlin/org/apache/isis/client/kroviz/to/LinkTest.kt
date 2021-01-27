@@ -79,36 +79,12 @@ class LinkTest {
         assertEquals(Relation.SERVICES, rel)
     }
 
-    val response2Handler = mapOf(
-            RESTFUL to RestfulHandler(),
-            ACTIONS_STRINGS to ActionHandler(),
-            ACTIONS_STRINGS_INVOKE to TObjectHandler(),
-            ACTIONS_TEXT_INVOKE to TObjectHandler(),
-            ASSOCIATED_ACTION_OBJECT_LAYOUT to LayoutHandler(),
-            COLLECTIONS_ENTITIES to CollectionHandler(),
-            DOMAIN_TYPES_PROPERTY to PropertyHandler(),
-            FILE_NODE to DomainTypeHandler(),
-            HTTP_ERROR_405 to HttpErrorHandler(),
-            HTTP_ERROR_500 to HttpErrorHandler(),
-            MENUBARS to MenuBarsHandler(),
-            OBJECT_LAYOUT to LayoutHandler(),
-            PRIMITIVES to TObjectHandler(),
-            PROPERTY to PropertyHandler(),
-            PROPERTY_DESCRIPTION to PropertyHandler(),
-            RESTFUL_DOMAIN_TYPES to DomainTypesHandler(),
-            TAB_OBJECT_LAYOUT to LayoutHandler(),
-            TAB_LAYOUT_XML to LayoutXmlHandler(),
-            TEMPORALS to TObjectHandler(),
-            TEXT_LAYOUT to LayoutHandler(),
-            TOOLTIP_OBJECT_LAYOUT to LayoutHandler(),
-            TUPLE_OBJECT_LAYOUT to LayoutHandler(),
-    )
-
     @Test
     fun testFindParsedLinkEnums() {
         //given
+        val map = Response2Handler.map
         //when
-        response2Handler.forEach { rh ->
+        map.forEach { rh ->
             val jsonStr = rh.key.str
             val ro = rh.value.parse(jsonStr)
             if (ro is HasLinks) {

@@ -19,7 +19,6 @@
 package org.apache.isis.client.kroviz.core.aggregator
 
 import org.apache.isis.client.kroviz.core.event.LogEntry
-import org.apache.isis.client.kroviz.core.event.RoXmlHttpRequest
 import org.apache.isis.client.kroviz.core.model.ObjectDM
 import org.apache.isis.client.kroviz.layout.Layout
 import org.apache.isis.client.kroviz.to.*
@@ -28,6 +27,13 @@ import org.apache.isis.client.kroviz.ui.ErrorDialog
 import org.apache.isis.client.kroviz.ui.kv.Constants
 import org.apache.isis.client.kroviz.ui.kv.UiManager
 
+/** sequence of operations:
+ * (0) Menu Action              User clicks BasicTypes.String -> handled by ActionDispatcher
+ * (1) OBJECT                TObjectHandler -> invoke()   -> passed on to ObjectAggregator
+ * (2) OBJECT_LAYOUT         layoutHandler -> invoke(layout.getProperties()[].getLink()) link can be null?
+ * (3) ???_OBJECT_PROPERTY       PropertyHandler -> invoke()
+ * (4) ???_PROPERTY_DESCRIPTION  <PropertyDescriptionHandler>
+ */
 class ObjectAggregator(val actionTitle: String) : BaseAggregator() {
 
     init {
@@ -35,20 +41,20 @@ class ObjectAggregator(val actionTitle: String) : BaseAggregator() {
     }
 
     override fun update(logEntry: LogEntry, subType: String) {
-
-        when (val obj = logEntry.getTransferObject()) {
+        val obj = logEntry.getTransferObject()
+        when (obj) {
             is TObject -> handleObject(obj)
             is ResultObject -> handleResultObject(obj)
             is Property -> handleProperty(obj)
-            is Collection -> handleCollection(obj)
             is Layout -> handleLayout(obj)
             is Grid -> handleGrid(obj)
             is HttpError -> ErrorDialog(logEntry).open()
             else -> log(logEntry)
         }
 
-        console.log("[ObjectAggregator.update]")
-        console.log(logEntry.getTransferObject())
+        console.log("[OA.update]")
+        console.log(obj)
+        console.log(dpm)
 
         if (dpm.canBeDisplayed()) {
             UiManager.openObjectView(this)
@@ -56,23 +62,31 @@ class ObjectAggregator(val actionTitle: String) : BaseAggregator() {
     }
 
     fun handleObject(obj: TObject) {
-        dpm.addData(obj)
+        // After ~/action/invoke is called, the actual object instance (containing properties) needs to be invoked as well.
+        // Note that rel.self/href is identical in both cases and both are of type TObject. logEntry.url is different, though.
+        if (obj.getProperties().size == 0) {
+            invokeInstance(obj)
+        } else {
+            dpm.addData(obj)
+        }
         val l = obj.getLayoutLink()!!
-        // Json.Layout is invoked first
-        RoXmlHttpRequest().invoke(l, this)
-        // then Xml.Layout is to be invoked as well
-        RoXmlHttpRequest().invoke(l, this, Constants.subTypeXml)
+        if (l.representation() == Represention.OBJECT_LAYOUT_BS3) {
+            invoke(l, this, Constants.subTypeXml)
+        } else {
+            invoke(l, this)
+        }
     }
 
-    fun handleCollection(obj: Collection) {
-        // TODO dsp.addData(obj)
-        console.log("[ObjectAggregator.handleCollection] TODO")
-        console.log(obj)
+    private fun invokeInstance(obj: TObject) {
+        val selfLink = obj.links.find { l ->
+            l.relation() == Relation.SELF
+        }
+        invoke(selfLink!!, this)
     }
+
 
     fun handleResultObject(obj: ResultObject) {
-        // TODO dsp.addData(obj)
-        console.log("[ObjectAggregator.handleResultObject] TODO")
+        console.log("[OA.handleResultObject] TODO implement")
         console.log(obj)
     }
 
@@ -81,8 +95,7 @@ class ObjectAggregator(val actionTitle: String) : BaseAggregator() {
     }
 
     private fun handleProperty(property: Property) {
-        //TODO  yet to be implemented
-        console.log("[ObjectAggregator.handleProperty] TODO")
+        console.log("[OA.handleProperty] TODO implement")
         console.log(property)
     }
 
@@ -95,7 +108,7 @@ class ObjectAggregator(val actionTitle: String) : BaseAggregator() {
                 val isDn = l.href.contains("datanucleus")
                 if (isDn) {
                     //invoking DN links leads to an error
-                    RoXmlHttpRequest().invoke(l, this)
+                    invoke(l, this)
                 }
             }
         }

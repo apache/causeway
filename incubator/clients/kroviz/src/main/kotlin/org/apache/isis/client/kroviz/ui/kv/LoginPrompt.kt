@@ -31,7 +31,7 @@ class LoginPrompt : Command() {
     private lateinit var form: RoDialog
 
     //Default values
-    private var url = "http://localhost:8080/"
+   private var url = "http://localhost:8080/"
 //    private var url = "https://demo-wicket.isis.incode.work/"
     private var username = "sven"
     private var password = "pass"

@@ -19,7 +19,6 @@
 package org.apache.isis.client.kroviz.core.aggregator
 
 import org.apache.isis.client.kroviz.core.event.LogEntry
-import org.apache.isis.client.kroviz.core.event.RoXmlHttpRequest
 import org.apache.isis.client.kroviz.core.model.DiagramDM
 import org.apache.isis.client.kroviz.to.*
 import org.apache.isis.client.kroviz.ui.kv.RoStatusBar
@@ -65,7 +64,7 @@ class DomainTypesAggregator(val url: String) : BaseAggregator() {
             }
             (dpm as DiagramDM).incNumberOfProperties(propertyList.size)
             propertyList.forEach { p ->
-                RoXmlHttpRequest().invoke(p,this)
+                invoke(p, this)
             }
         }
     }
@@ -75,17 +74,28 @@ class DomainTypesAggregator(val url: String) : BaseAggregator() {
         obj.values.forEach { link ->
             val it = link.href
             when {
-                it.contains("/org.apache.isis") -> {}
-                it.contains("/isisApplib") -> {}
-                it.contains("/java") -> {}
-                it.contains("/void") -> {}
-                it.contains("/boolean") -> {}
-                it.contains("fixture") -> {}
-                it.contains("service") -> {}
-                it.contains("/homepage") -> {}
-                it.endsWith("Menu") -> {}
-                it.startsWith("demoapp.dom.annot") -> {}
-                it.startsWith("demoapp.dom.types.javatime") -> {}
+                it.contains("/org.apache.isis") -> {
+                }
+                it.contains("/isisApplib") -> {
+                }
+                it.contains("/java") -> {
+                }
+                it.contains("/void") -> {
+                }
+                it.contains("/boolean") -> {
+                }
+                it.contains("fixture") -> {
+                }
+                it.contains("service") -> {
+                }
+                it.contains("/homepage") -> {
+                }
+                it.endsWith("Menu") -> {
+                }
+                it.startsWith("demoapp.dom.annot") -> {
+                }
+                it.startsWith("demoapp.dom.types.javatime") -> {
+                }
                 else -> {
                     domainTypeLinkList.add(link)
                 }
@@ -93,7 +103,7 @@ class DomainTypesAggregator(val url: String) : BaseAggregator() {
         }
         (dpm as DiagramDM).numberOfClasses = domainTypeLinkList.size
         domainTypeLinkList.forEach {
-            RoXmlHttpRequest().invoke(it,this)
+            invoke(it, this)
         }
     }
 

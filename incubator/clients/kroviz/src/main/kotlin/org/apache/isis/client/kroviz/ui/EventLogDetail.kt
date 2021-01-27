@@ -44,11 +44,15 @@ class EventLogDetail(val logEntry: LogEntry) : Command() {
         formItems.add(FormItem("Aggregators", ValueType.TEXT_AREA, aggtStr, 5))
 
         RoDialog(
-                caption = "Error :" + logEntry.title,
+                caption = "Details :" + logEntry.title,
                 items = formItems,
                 command = this,
-                defaultAction = "Visualize",
+                defaultAction = "Debug",
                 widthPerc = 60).open()
+    }
+
+    override fun execute() {
+        console.log(logEntry)
     }
 
 }

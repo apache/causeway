@@ -104,7 +104,7 @@ class EventLogTable(val model: List<LogEntry>) : VPanel() {
     private fun buildActionButton(data: LogEntry): Button {
         val b = Button(
                 text = "",
-                icon = "fa fa-ellipsis-v",
+                icon = "fa fa-info-circle",
                 style = data.state.style)
         return b
     }

@@ -19,9 +19,11 @@
 package org.apache.isis.client.kroviz.core.aggregator
 
 import org.apache.isis.client.kroviz.core.event.LogEntry
+import org.apache.isis.client.kroviz.core.event.RoXmlHttpRequest
 import org.apache.isis.client.kroviz.core.model.DisplayModel
 import org.apache.isis.client.kroviz.to.Link
 import org.apache.isis.client.kroviz.to.TObject
+import org.apache.isis.client.kroviz.ui.kv.Constants
 
 /**
  * An Aggregator:
@@ -68,6 +70,10 @@ abstract class BaseAggregator {
 
     private fun Link.isLayout(): Boolean {
         return href.isNotEmpty() && href.contains("layout")
+    }
+
+    protected fun invoke(link:Link, aggregator: BaseAggregator, subType :String = Constants.subTypeJson) {
+        RoXmlHttpRequest().invoke(link, aggregator, subType)
     }
 
 }

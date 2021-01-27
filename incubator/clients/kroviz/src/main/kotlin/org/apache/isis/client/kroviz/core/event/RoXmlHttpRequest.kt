@@ -69,25 +69,26 @@ class RoXmlHttpRequest {
 
         val rs = buildResourceSpecificationAndSetupHandler(url, subType, xhr)
 
-        var body = ""
-        when {
-            link.hasArguments() -> body = Utils.argumentsAsBody(link)
-            link.method == Method.PUT.operation -> {
-                val logEntry = EventStore.findBy(aggregator!!)
-                when (val obj = logEntry?.obj) {
-                    is TObject -> body = Utils.propertiesAsBody(obj)
-                    else -> {
-                    }
-                }
-            }
-            else -> {
-            }
-        }
+        val body = buildBody(link, aggregator)
         when {
             body.isEmpty() -> xhr.send()
             else -> xhr.send(body)
         }
         EventStore.start(rs, method, body, aggregator)
+    }
+
+    private fun buildBody(link: Link, aggregator: BaseAggregator?): String {
+        return when {
+            link.hasArguments() -> Utils.argumentsAsBody(link)
+            link.method == Method.PUT.operation -> {
+                val logEntry = EventStore.findBy(aggregator!!)
+                when (val obj = logEntry?.obj) {
+                    is TObject -> Utils.propertiesAsBody(obj)
+                    else -> ""
+                }
+            }
+            else -> ""
+        }
     }
 
     fun invokeAnonymous(link: Link, aggregator: BaseAggregator?, subType: String = Constants.subTypeXml) {

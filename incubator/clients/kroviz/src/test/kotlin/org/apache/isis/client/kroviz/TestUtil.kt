@@ -18,8 +18,7 @@
  */
 package org.apache.isis.client.kroviz
 
-import pl.treksoft.jquery.jQuery
-import kotlin.browser.document
+import kotlinx.browser.document
 
 interface TestSpec {
     fun beforeTest()

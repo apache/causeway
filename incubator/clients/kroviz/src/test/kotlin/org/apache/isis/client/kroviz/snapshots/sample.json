@@ -1,45 +1,154 @@
 {
-  "id": "entities",
-  "memberType": "collection",
   "links": [
     {
       "rel": "self",
-      "href": "http://localhost:8080/restful/objects/demo.JavaLangStrings/PADw_eG1sIHZlcnNpb249IjEuMCIgZW5jb2Rpbmc9IlVURi04IiBzdGFuZGFsb25lPSJ5ZXMiPz4KPERlbW8vPgo=/collections/entities",
-      "method": "GET",
-      "type": "application/json;profile=\"urn:org.restfulobjects:repr-types/object-collection\""
-    },
-    {
-      "rel": "up",
-      "href": "http://localhost:8080/restful/objects/demo.JavaLangStrings/PADw_eG1sIHZlcnNpb249IjEuMCIgZW5jb2Rpbmc9IlVURi04IiBzdGFuZGFsb25lPSJ5ZXMiPz4KPERlbW8vPgo=",
+      "href": "https://demo-wicket.isis.incode.work/restful/objects/demo.JavaLangStrings/PADw_eG1sIHZlcnNpb249IjEuMCIgZW5jb2Rpbmc9IlVURi04IiBzdGFuZGFsb25lPSJ5ZXMiPz4KPERlbW8vPgo=",
       "method": "GET",
       "type": "application/json;profile=\"urn:org.restfulobjects:repr-types/object\"",
       "title": "String data type"
     },
     {
       "rel": "describedby",
-      "href": "http://localhost:8080/restful/domain-types/demo.JavaLangStrings/collections/entities",
+      "href": "https://demo-wicket.isis.incode.work/restful/domain-types/demo.JavaLangStrings",
       "method": "GET",
-      "type": "application/json;profile=\"urn:org.restfulobjects:repr-types/collection-description\""
+      "type": "application/json;profile=\"urn:org.restfulobjects:repr-types/domain-type\""
+    },
+    {
+      "rel": "urn:org.apache.isis.restfulobjects:rels/object-layout",
+      "href": "https://demo-wicket.isis.incode.work/restful/objects/demo.JavaLangStrings/PADw_eG1sIHZlcnNpb249IjEuMCIgZW5jb2Rpbmc9IlVURi04IiBzdGFuZGFsb25lPSJ5ZXMiPz4KPERlbW8vPgo=/object-layout",
+      "method": "GET",
+      "type": "application/json;profile=\"urn:org.restfulobjects:repr-types/object-layout-bs3\""
+    },
+    {
+      "rel": "urn:org.apache.isis.restfulobjects:rels/object-icon",
+      "href": "https://demo-wicket.isis.incode.work/restful/objects/demo.JavaLangStrings/PADw_eG1sIHZlcnNpb249IjEuMCIgZW5jb2Rpbmc9IlVURi04IiBzdGFuZGFsb25lPSJ5ZXMiPz4KPERlbW8vPgo=/image",
+      "method": "GET",
+      "type": "image/png"
+    },
+    {
+      "rel": "urn:org.restfulobjects:rels/update",
+      "href": "https://demo-wicket.isis.incode.work/restful/objects/demo.JavaLangStrings:PADw_eG1sIHZlcnNpb249IjEuMCIgZW5jb2Rpbmc9IlVURi04IiBzdGFuZGFsb25lPSJ5ZXMiPz4KPERlbW8vPgo=",
+      "method": "PUT",
+      "type": "application/json;profile=\"urn:org.restfulobjects:repr-types/object\"",
+      "arguments": {}
     }
   ],
   "extensions": {
-    "collectionSemantics": "list"
+    "oid": "demo.JavaLangStrings:PADw_eG1sIHZlcnNpb249IjEuMCIgZW5jb2Rpbmc9IlVURi04IiBzdGFuZGFsb25lPSJ5ZXMiPz4KPERlbW8vPgo=",
+    "isService": false,
+    "isPersistent": true
   },
-  "value": [
-    {
-      "rel": "urn:org.restfulobjects:rels/value",
-      "href": "http://localhost:8080/restful/objects/demo.JavaLangStringJdo/1",
-      "method": "GET",
-      "type": "application/json;profile=\"urn:org.restfulobjects:repr-types/object\"",
-      "title": "StringJDO entity: Hello"
+  "title": "String data type",
+  "domainType": "demo.JavaLangStrings",
+  "instanceId": "PADw_eG1sIHZlcnNpb249IjEuMCIgZW5jb2Rpbmc9IlVURi04IiBzdGFuZGFsb25lPSJ5ZXMiPz4KPERlbW8vPgo=",
+  "members": {
+    "entities": {
+      "id": "entities",
+      "memberType": "collection",
+      "links": [
+        {
+          "rel": "urn:org.restfulobjects:rels/details;collection=\"entities\"",
+          "href": "https://demo-wicket.isis.incode.work/restful/objects/demo.JavaLangStrings/PADw_eG1sIHZlcnNpb249IjEuMCIgZW5jb2Rpbmc9IlVURi04IiBzdGFuZGFsb25lPSJ5ZXMiPz4KPERlbW8vPgo=/collections/entities",
+          "method": "GET",
+          "type": "application/json;profile=\"urn:org.restfulobjects:repr-types/object-collection\""
+        }
+      ]
     },
-    {
-      "rel": "urn:org.restfulobjects:rels/value",
-      "href": "http://localhost:8080/restful/objects/demo.JavaLangStringJdo/2",
-      "method": "GET",
-      "type": "application/json;profile=\"urn:org.restfulobjects:repr-types/object\"",
-      "title": "StringJDO entity: world"
+    "openViewModel": {
+      "id": "openViewModel",
+      "memberType": "action",
+      "links": [
+        {
+          "rel": "urn:org.restfulobjects:rels/details;action=\"openViewModel\"",
+          "href": "https://demo-wicket.isis.incode.work/restful/objects/demo.JavaLangStrings/PADw_eG1sIHZlcnNpb249IjEuMCIgZW5jb2Rpbmc9IlVURi04IiBzdGFuZGFsb25lPSJ5ZXMiPz4KPERlbW8vPgo=/actions/openViewModel",
+          "method": "GET",
+          "type": "application/json;profile=\"urn:org.restfulobjects:repr-types/object-action\""
+        }
+      ]
+    },
+    "clearHints": {
+      "id": "clearHints",
+      "memberType": "action",
+      "links": [
+        {
+          "rel": "urn:org.restfulobjects:rels/details;action=\"clearHints\"",
+          "href": "https://demo-wicket.isis.incode.work/restful/objects/demo.JavaLangStrings/PADw_eG1sIHZlcnNpb249IjEuMCIgZW5jb2Rpbmc9IlVURi04IiBzdGFuZGFsb25lPSJ5ZXMiPz4KPERlbW8vPgo=/actions/clearHints",
+          "method": "GET",
+          "type": "application/json;profile=\"urn:org.restfulobjects:repr-types/object-action\""
+        }
+      ]
+    },
+    "inspectMetamodel": {
+      "id": "inspectMetamodel",
+      "memberType": "action",
+      "links": [
+        {
+          "rel": "urn:org.restfulobjects:rels/details;action=\"inspectMetamodel\"",
+          "href": "https://demo-wicket.isis.incode.work/restful/objects/demo.JavaLangStrings/PADw_eG1sIHZlcnNpb249IjEuMCIgZW5jb2Rpbmc9IlVURi04IiBzdGFuZGFsb25lPSJ5ZXMiPz4KPERlbW8vPgo=/actions/inspectMetamodel",
+          "method": "GET",
+          "type": "application/json;profile=\"urn:org.restfulobjects:repr-types/object-action\""
+        }
+      ]
+    },
+    "downloadLayoutXml": {
+      "id": "downloadLayoutXml",
+      "memberType": "action",
+      "links": [
+        {
+          "rel": "urn:org.restfulobjects:rels/details;action=\"downloadLayoutXml\"",
+          "href": "https://demo-wicket.isis.incode.work/restful/objects/demo.JavaLangStrings/PADw_eG1sIHZlcnNpb249IjEuMCIgZW5jb2Rpbmc9IlVURi04IiBzdGFuZGFsb25lPSJ5ZXMiPz4KPERlbW8vPgo=/actions/downloadLayoutXml",
+          "method": "GET",
+          "type": "application/json;profile=\"urn:org.restfulobjects:repr-types/object-action\""
+        }
+      ]
+    },
+    "rebuildMetamodel": {
+      "id": "rebuildMetamodel",
+      "memberType": "action",
+      "links": [
+        {
+          "rel": "urn:org.restfulobjects:rels/details;action=\"rebuildMetamodel\"",
+          "href": "https://demo-wicket.isis.incode.work/restful/objects/demo.JavaLangStrings/PADw_eG1sIHZlcnNpb249IjEuMCIgZW5jb2Rpbmc9IlVURi04IiBzdGFuZGFsb25lPSJ5ZXMiPz4KPERlbW8vPgo=/actions/rebuildMetamodel",
+          "method": "GET",
+          "type": "application/json;profile=\"urn:org.restfulobjects:repr-types/object-action\""
+        }
+      ]
+    },
+    "recentCommands": {
+      "id": "recentCommands",
+      "memberType": "action",
+      "links": [
+        {
+          "rel": "urn:org.restfulobjects:rels/details;action=\"recentCommands\"",
+          "href": "https://demo-wicket.isis.incode.work/restful/objects/demo.JavaLangStrings/PADw_eG1sIHZlcnNpb249IjEuMCIgZW5jb2Rpbmc9IlVURi04IiBzdGFuZGFsb25lPSJ5ZXMiPz4KPERlbW8vPgo=/actions/recentCommands",
+          "method": "GET",
+          "type": "application/json;profile=\"urn:org.restfulobjects:repr-types/object-action\""
+        }
+      ]
+    },
+    "downloadMetamodelXml": {
+      "id": "downloadMetamodelXml",
+      "memberType": "action",
+      "links": [
+        {
+          "rel": "urn:org.restfulobjects:rels/details;action=\"downloadMetamodelXml\"",
+          "href": "https://demo-wicket.isis.incode.work/restful/objects/demo.JavaLangStrings/PADw_eG1sIHZlcnNpb249IjEuMCIgZW5jb2Rpbmc9IlVURi04IiBzdGFuZGFsb25lPSJ5ZXMiPz4KPERlbW8vPgo=/actions/downloadMetamodelXml",
+          "method": "GET",
+          "type": "application/json;profile=\"urn:org.restfulobjects:repr-types/object-action\""
+        }
+      ]
+    },
+    "openRestApi": {
+      "id": "openRestApi",
+      "memberType": "action",
+      "links": [
+        {
+          "rel": "urn:org.restfulobjects:rels/details;action=\"openRestApi\"",
+          "href": "https://demo-wicket.isis.incode.work/restful/objects/demo.JavaLangStrings/PADw_eG1sIHZlcnNpb249IjEuMCIgZW5jb2Rpbmc9IlVURi04IiBzdGFuZGFsb25lPSJ5ZXMiPz4KPERlbW8vPgo=/actions/openRestApi",
+          "method": "GET",
+          "type": "application/json;profile=\"urn:org.restfulobjects:repr-types/object-action\""
+        }
+      ]
     }
-  ],
-  "disabledReason": "Immutable"
+  }
 }

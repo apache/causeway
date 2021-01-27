@@ -30,21 +30,21 @@ data class TObject(override val links: List<Link> = emptyList(),
 ) : TransferObject, HasLinks {
 
     fun getProperties(): MutableList<Member> {
-        return getMembersOfType(MemberType.PROPERTY.type)
+        return getMembersOfType(MemberType.PROPERTY)
     }
 
     fun getActions(): MutableList<Member> {
-        return getMembersOfType(MemberType.ACTION.type)
+        return getMembersOfType(MemberType.ACTION)
     }
 
     fun getCollections(): MutableList<Member> {
-        return getMembersOfType(MemberType.COLLECTION.type)
+        return getMembersOfType(MemberType.COLLECTION)
     }
 
-    private fun getMembersOfType(type: String): MutableList<Member> {
+    private fun getMembersOfType(memberType: MemberType): MutableList<Member> {
         val result = mutableListOf<Member>()
         members.forEach {
-            if (it.value.memberType == type) {
+            if (it.value.memberType == memberType.type) {
                 result.add(it.value)
             }
         }

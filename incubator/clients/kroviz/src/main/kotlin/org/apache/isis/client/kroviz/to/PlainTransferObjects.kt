@@ -158,7 +158,8 @@ data class ResultObjectResult(
 enum class ResultType(val type: String) {
     LIST("list"),
     SCALARVALUE("scalarvalue"),
-    DOMAINOBJECT("domainobject")
+    DOMAINOBJECT("domainobject"),
+    VOID("void")
 }
 
 @Serializable
