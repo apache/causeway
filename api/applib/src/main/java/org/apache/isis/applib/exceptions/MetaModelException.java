@@ -19,14 +19,10 @@
 
 package org.apache.isis.applib.exceptions;
 
-import org.apache.isis.commons.exceptions.IsisException;
+import org.apache.isis.applib.UnrecoverableException;
 
-public class MetaModelException extends IsisException {
+public class MetaModelException extends UnrecoverableException {
     private static final long serialVersionUID = 1L;
-
-    public MetaModelException() {
-        super();
-    }
 
     public MetaModelException(final String message) {
         super(message);

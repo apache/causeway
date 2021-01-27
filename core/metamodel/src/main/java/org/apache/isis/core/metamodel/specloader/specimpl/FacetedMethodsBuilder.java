@@ -30,11 +30,11 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.apache.isis.applib.UnrecoverableException;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.exceptions.MetaModelException;
-import org.apache.isis.commons.exceptions.IsisException;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.reflection._Annotations;
@@ -181,7 +181,7 @@ public class FacetedMethodsBuilder {
                 try {
                     facetFactory = facetFactorie.newInstance();
                 } catch (final InstantiationException | IllegalAccessException e) {
-                    throw new IsisException(e);
+                    throw new UnrecoverableException(e);
                 }
                 getFacetProcessor().injectDependenciesInto(facetFactory);
                 facetFactory.process(new ProcessClassContext(introspectedClass, methodRemover, inspectedTypeSpec));

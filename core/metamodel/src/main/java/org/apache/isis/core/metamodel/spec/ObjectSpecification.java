@@ -31,9 +31,9 @@ import java.util.stream.Stream;
 
 import javax.annotation.Nullable;
 
+import org.apache.isis.applib.UnrecoverableException;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.services.metamodel.BeanSort;
-import org.apache.isis.commons.exceptions.IsisException;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Streams;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
@@ -433,14 +433,14 @@ extends
 
         final Class<?> cls = correspondingClass;
         if (Modifier.isAbstract(cls.getModifiers())) {
-            throw new IsisException("Cannot create an instance of an abstract class: " + cls);
+            throw new UnrecoverableException("Cannot create an instance of an abstract class: " + cls);
         }
 
         final Object newInstance;
         try {
             newInstance = cls.newInstance();
         } catch (final IllegalAccessException | InstantiationException e) {
-            throw new IsisException("Failed to create instance of type " + getFullIdentifier(), e);
+            throw new UnrecoverableException("Failed to create instance of type " + getFullIdentifier(), e);
         }
 
         return newInstance; 

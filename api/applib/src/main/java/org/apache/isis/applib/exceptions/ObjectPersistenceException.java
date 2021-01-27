@@ -19,14 +19,10 @@
 
 package org.apache.isis.applib.exceptions;
 
-import org.apache.isis.commons.exceptions.IsisException;
+import org.apache.isis.applib.UnrecoverableException;
 
-public class ObjectPersistenceException extends IsisException {
+public class ObjectPersistenceException extends UnrecoverableException {
     private static final long serialVersionUID = 1L;
-
-    public ObjectPersistenceException() {
-        super();
-    }
 
     public ObjectPersistenceException(final String message) {
         super(message);

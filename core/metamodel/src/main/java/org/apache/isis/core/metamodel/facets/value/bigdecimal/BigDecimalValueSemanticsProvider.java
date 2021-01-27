@@ -25,10 +25,10 @@ import java.text.NumberFormat;
 import java.util.Locale;
 import java.util.Map;
 
+import org.apache.isis.applib.UnrecoverableException;
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.exceptions.TextEntryParseException;
-import org.apache.isis.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.commons.LocaleUtil;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -127,7 +127,7 @@ implements BigDecimalValueFacet {
                 return (String) type.getMethod("toString", (Class[]) null).invoke(object, (Object[]) null);
             }
         } catch (final Exception e) {
-            throw new IsisException(e);
+            throw new UnrecoverableException(e);
         }
 
     }

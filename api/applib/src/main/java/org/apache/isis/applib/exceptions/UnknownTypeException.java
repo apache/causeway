@@ -19,9 +19,9 @@
 
 package org.apache.isis.applib.exceptions;
 
-import org.apache.isis.commons.exceptions.IsisException;
+import org.apache.isis.applib.UnrecoverableException;
 
-public class UnknownTypeException extends IsisException {
+public class UnknownTypeException extends UnrecoverableException {
     private static final long serialVersionUID = 1L;
 
     public UnknownTypeException(final String message) {

@@ -19,17 +19,14 @@
 
 package org.apache.isis.applib.exceptions;
 
-import org.apache.isis.commons.exceptions.IsisException;
+import org.apache.isis.applib.UnrecoverableException;
 
 /**
  * Indicates that there is no Authenticator available to authenticate a user
  * based on this request.
  */
-public class NoAuthenticatorException extends IsisException {
+public class NoAuthenticatorException extends UnrecoverableException {
     private static final long serialVersionUID = 1L;
-
-    public NoAuthenticatorException() {
-    }
 
     public NoAuthenticatorException(final String msg) {
         super(msg);

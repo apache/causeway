@@ -23,7 +23,7 @@ import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
-import org.apache.isis.commons.exceptions.IsisException;
+import org.apache.isis.applib.UnrecoverableException;
 
 public final class ArrayExtensions {
 
@@ -41,17 +41,17 @@ public final class ArrayExtensions {
                 convertedArray[i] = constructor.newInstance(new Object[] { Array.get(extendee, i).toString() });
             }
         } catch (final NoSuchMethodException e) {
-            throw new IsisException(e);
+            throw new UnrecoverableException(e);
         } catch (final ArrayIndexOutOfBoundsException e) {
-            throw new IsisException(e);
+            throw new UnrecoverableException(e);
         } catch (final IllegalArgumentException e) {
-            throw new IsisException(e);
+            throw new UnrecoverableException(e);
         } catch (final InstantiationException e) {
-            throw new IsisException(e);
+            throw new UnrecoverableException(e);
         } catch (final IllegalAccessException e) {
-            throw new IsisException(e);
+            throw new UnrecoverableException(e);
         } catch (final InvocationTargetException e) {
-            throw new IsisException(e);
+            throw new UnrecoverableException(e);
         }
         return convertedArray;
     }

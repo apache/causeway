@@ -38,10 +38,10 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import org.apache.isis.applib.UnrecoverableException;
 import org.apache.isis.applib.ViewModel;
 import org.apache.isis.applib.services.xmlsnapshot.XmlSnapshotService.Snapshot;
 import org.apache.isis.applib.snapshot.SnapshottableWithInclusions;
-import org.apache.isis.commons.exceptions.IsisException;
 import org.apache.isis.commons.internal.codec._DocumentFactories;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -164,7 +164,7 @@ public class XmlSnapshot implements Snapshot {
 
         } catch (final ParserConfigurationException e) {
             log.error("unable to build snapshot", e);
-            throw new IsisException(e);
+            throw new UnrecoverableException(e);
         }
 
         for (final String path : getPathsFor(rootAdapter.getPojo())) {

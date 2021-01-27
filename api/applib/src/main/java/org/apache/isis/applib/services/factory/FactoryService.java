@@ -23,8 +23,8 @@ import java.util.NoSuchElementException;
 
 import javax.annotation.Nullable;
 
+import org.apache.isis.applib.UnrecoverableException;
 import org.apache.isis.applib.services.repository.RepositoryService;
-import org.apache.isis.commons.exceptions.IsisException;
 
 import lombok.NonNull;
 
@@ -48,7 +48,7 @@ public interface FactoryService {
      * @param requiredType
      * @return
      * @throws NoSuchElementException if result is empty
-     * @throws IsisException if instance creation failed
+     * @throws UnrecoverableException if instance creation failed
      * @throws IllegalArgumentException if requiredType is not recognized by the meta-model
      *
      * @since 2.0
@@ -67,7 +67,7 @@ public interface FactoryService {
      * (i.e. not multiple candidates found with none marked as primary)
      *
      * @throws NoSuchElementException if result is empty
-     * @throws IsisException if instance creation failed
+     * @throws UnrecoverableException if instance creation failed
      *
      * @apiNote does not force the requiredType to be added to the meta-model
      * @since 2.0

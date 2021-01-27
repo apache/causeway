@@ -19,13 +19,13 @@
 
 package org.apache.isis.applib.exceptions;
 
-import org.apache.isis.commons.exceptions.IsisException;
+import org.apache.isis.applib.UnrecoverableException;
 
 /**
  * Indicates that the persistence context was unable to get an instantiate 
- * of for the specified object identifier.
+ * for the specified object identifier.
  */
-public class ObjectNotFoundException extends IsisException {
+public class ObjectNotFoundException extends UnrecoverableException {
     private static final long serialVersionUID = 1L;
 
     public ObjectNotFoundException(final String oid) {

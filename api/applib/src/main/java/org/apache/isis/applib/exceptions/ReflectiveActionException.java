@@ -19,14 +19,10 @@
 
 package org.apache.isis.applib.exceptions;
 
-import org.apache.isis.commons.exceptions.IsisException;
+import org.apache.isis.applib.UnrecoverableException;
 
-public class ReflectiveActionException extends IsisException {
+public class ReflectiveActionException extends UnrecoverableException {
     private static final long serialVersionUID = 1L;
-
-    public ReflectiveActionException() {
-        super();
-    }
 
     public ReflectiveActionException(final String msg) {
         super(msg);

@@ -19,13 +19,13 @@
 
 package org.apache.isis.applib.exceptions;
 
-import org.apache.isis.commons.exceptions.IsisException;
+import org.apache.isis.applib.UnrecoverableException;
 
 /**
  * Indicates that a call was made to a method (normally an overridden one) that
  * was not expected, and hence not coded for.
  */
-public class UnexpectedCallException extends IsisException {
+public class UnexpectedCallException extends UnrecoverableException {
     private static final long serialVersionUID = 1L;
 
     public UnexpectedCallException() {

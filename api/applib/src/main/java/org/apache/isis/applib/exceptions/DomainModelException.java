@@ -19,18 +19,14 @@
 
 package org.apache.isis.applib.exceptions;
 
-import org.apache.isis.commons.exceptions.IsisException;
+import org.apache.isis.applib.UnrecoverableException;
 
 /**
  * Thrown when a problem is found with the domain model, and Isis cannot
  * proceed.
  */
-public class DomainModelException extends IsisException {
+public class DomainModelException extends UnrecoverableException {
     private static final long serialVersionUID = 1L;
-
-    public DomainModelException() {
-        super();
-    }
 
     public DomainModelException(final String message) {
         super(message);

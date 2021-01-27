@@ -41,9 +41,9 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.Text;
 
+import org.apache.isis.applib.UnrecoverableException;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.xml.XmlService;
-import org.apache.isis.commons.exceptions.IsisException;
 import org.apache.isis.commons.internal.codec._DocumentFactories;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 
@@ -98,9 +98,9 @@ public class XmlServiceDefault implements XmlService {
 
             return writer.toString();
         } catch (TransformerConfigurationException e) {
-            throw new IsisException(e);
+            throw new UnrecoverableException(e);
         } catch (TransformerException e) {
-            throw new IsisException(e);
+            throw new UnrecoverableException(e);
         }
     }
 
