@@ -19,13 +19,13 @@
 
 package org.apache.isis.applib.exceptions;
 
-import org.ietf.jgss.Oid;
+import org.apache.isis.commons.exceptions.IsisException;
 
 /**
- * Indicates that the <tt>PojoRecreator</tt> was unable to instantiate a new pojo for the specified
- * {@link Oid}.
+ * Indicates that the persistence context was unable to get an instantiate 
+ * of for the specified object identifier.
  */
-public class ObjectNotFoundException extends ObjectPersistenceException {
+public class ObjectNotFoundException extends IsisException {
     private static final long serialVersionUID = 1L;
 
     public ObjectNotFoundException(final String oid) {

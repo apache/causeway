@@ -19,9 +19,11 @@
 
 package org.apache.isis.applib.exceptions;
 
+import org.apache.isis.applib.ApplicationException;
+
 /**
  * Indicates that a value entry is not valid. Note the entry may still parse
- * correctly, but is does fulfil other other entry requirements.
+ * correctly, but it does *not* fulfill other requirements.
  */
 public class InvalidEntryException extends ApplicationException {
     private static final long serialVersionUID = 1L;

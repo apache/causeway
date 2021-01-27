@@ -19,16 +19,14 @@
 
 package org.apache.isis.applib.exceptions;
 
+import org.apache.isis.applib.ApplicationException;
+
 /**
  * Indicates that a text entry could not be satisfactorily parsed into a useful
  * value by the value adapter.
  */
 public class TextEntryParseException extends ApplicationException {
     private static final long serialVersionUID = 1L;
-
-    public TextEntryParseException() {
-        super();
-    }
 
     public TextEntryParseException(final String message) {
         super(message);
