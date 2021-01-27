@@ -27,7 +27,7 @@ import javax.inject.Named;
 
 import org.springframework.core.annotation.Order;
 
-import org.apache.isis.applib.ApplicationException;
+import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainService;
@@ -50,7 +50,6 @@ import org.apache.isis.schema.cmd.v2.CommandsDto;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
 
 @DomainService(
     nature = NatureOfService.VIEW,
@@ -63,7 +62,7 @@ import lombok.extern.log4j.Log4j2;
 @Named("isis.ext.commandReplayPrimary.CommandReplayOnPrimaryService")
 @Order(OrderPrecedence.MIDPOINT)
 @RequiredArgsConstructor
-@Log4j2
+//@Log4j2
 public class CommandReplayOnPrimaryService {
 
     @Inject final CommandJdoRepository commandServiceRepository;
@@ -77,7 +76,7 @@ public class CommandReplayOnPrimaryService {
 
 
     public static class FindCommandsDomainEvent extends ActionDomainEvent { }
-    public static class NotFoundException extends ApplicationException {
+    public static class NotFoundException extends RecoverableException {
         private static final long serialVersionUID = 1L;
         @Getter
         private final UUID uniqueId;

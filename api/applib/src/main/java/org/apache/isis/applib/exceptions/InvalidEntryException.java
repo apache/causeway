@@ -19,13 +19,13 @@
 
 package org.apache.isis.applib.exceptions;
 
-import org.apache.isis.applib.ApplicationException;
+import org.apache.isis.applib.RecoverableException;
 
 /**
  * Indicates that a value entry is not valid. Note the entry may still parse
  * correctly, but it does *not* fulfill other requirements.
  */
-public class InvalidEntryException extends ApplicationException {
+public class InvalidEntryException extends RecoverableException {
     private static final long serialVersionUID = 1L;
 
     public InvalidEntryException(final String message) {

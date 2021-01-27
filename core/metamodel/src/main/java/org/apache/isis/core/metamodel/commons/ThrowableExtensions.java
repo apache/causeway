@@ -23,7 +23,6 @@ import java.lang.invoke.WrongMethodTypeException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.function.Consumer;
 
-import org.apache.isis.applib.ApplicationException;
 import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.applib.exceptions.MetaModelException;
 import org.apache.isis.applib.exceptions.ReflectiveActionException;
@@ -74,7 +73,7 @@ public final class ThrowableExtensions {
             recovery.accept(e);
 
         // an application exception from the domain code is re-thrown as an
-        throw new ApplicationException("Exception invoking " + memberName, e);
+        throw new RecoverableException("Exception invoking " + memberName, e);
     }
 
 }

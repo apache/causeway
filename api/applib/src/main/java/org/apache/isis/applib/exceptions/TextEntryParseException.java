@@ -19,13 +19,13 @@
 
 package org.apache.isis.applib.exceptions;
 
-import org.apache.isis.applib.ApplicationException;
+import org.apache.isis.applib.RecoverableException;
 
 /**
  * Indicates that a text entry could not be satisfactorily parsed into a useful
  * value by the value adapter.
  */
-public class TextEntryParseException extends ApplicationException {
+public class TextEntryParseException extends RecoverableException {
     private static final long serialVersionUID = 1L;
 
     public TextEntryParseException(final String message) {

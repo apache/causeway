@@ -25,7 +25,6 @@ import java.util.UUID;
 import java.util.concurrent.Callable;
 import java.util.function.Predicate;
 
-import org.apache.isis.applib.ApplicationException;
 import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Where;
@@ -477,7 +476,7 @@ implements ObjectAction {
         try {
             return callable.call();
         } catch (Exception e) {
-            throw new ApplicationException(e);
+            throw new RecoverableException(e);
         } finally {
             commandTargetAdaptersHolder.remove();
         }

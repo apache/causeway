@@ -21,7 +21,7 @@ package org.apache.isis.core.metamodel.postprocessors.param;
 
 import java.util.function.Function;
 
-import org.apache.isis.applib.ApplicationException;
+import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.param.defaults.ActionParameterDefaultsFacetAbstract;
@@ -29,7 +29,8 @@ import org.apache.isis.core.metamodel.interactions.managed.ParameterNegotiationM
 
 import lombok.NonNull;
 
-public class ActionParameterDefaultsFacetFromAssociatedCollection extends ActionParameterDefaultsFacetAbstract {
+public class ActionParameterDefaultsFacetFromAssociatedCollection 
+extends ActionParameterDefaultsFacetAbstract {
 
     private static ThreadLocal<Can<Object>> _selectedPojos = ThreadLocal.withInitial(Can::empty);
 
@@ -52,7 +53,7 @@ public class ActionParameterDefaultsFacetFromAssociatedCollection extends Action
             _selectedPojos.set(selectedPojos);
             return function.apply(argument);
         } catch (Exception e) {
-            throw new ApplicationException(e);
+            throw new RecoverableException(e);
         } finally {
             _selectedPojos.remove();
         }

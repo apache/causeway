@@ -197,6 +197,9 @@ CommandServiceInternal -> CommandPublisher
 | was
 | new
 
+| ApplicationException (removed) 
+| removed, adds no new semantics compared to the already existing RecoverableException
+
 | AuthenticationSession
 | Authentication (no longer holds MessageBroker or session attributes, is now immutable)
 
