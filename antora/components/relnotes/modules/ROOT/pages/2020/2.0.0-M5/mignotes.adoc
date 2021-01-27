@@ -310,6 +310,9 @@ WARNING: check menubars.layout.xml for any occurrences
 | isisExt*
 | isis.ext.*
 
+| isisSub*
+| isis.sub.*
+
 |===
 
 

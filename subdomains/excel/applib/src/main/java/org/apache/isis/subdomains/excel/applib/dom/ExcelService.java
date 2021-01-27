@@ -43,7 +43,7 @@ import org.apache.isis.subdomains.excel.applib.dom.util.ExcelServiceImpl;
 import org.apache.isis.subdomains.excel.applib.dom.util.Mode;
 
 @Service
-@Named("isisSubExcel.ExcelService")
+@Named("isis.sub.excel.ExcelService")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")

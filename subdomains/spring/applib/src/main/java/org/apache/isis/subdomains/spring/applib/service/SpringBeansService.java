@@ -38,7 +38,7 @@ import lombok.experimental.UtilityClass;
  * Borrowed from BeansEndpoint.
  */
 @Service
-@Named("isisSubSpring.SpringBeansService")
+@Named("isis.sub.spring.SpringBeansService")
 @Order(OrderPrecedence.MIDPOINT)
 @Qualifier("Default")
 public class SpringBeansService {
