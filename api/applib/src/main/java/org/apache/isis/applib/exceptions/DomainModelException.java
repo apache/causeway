@@ -17,23 +17,31 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.exceptions.persistence;
+package org.apache.isis.applib.exceptions;
 
-import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.commons.exceptions.IsisException;
 
 /**
- * TODO: v2 - review - doesn't seem to be used?
- * @deprecated
+ * Thrown when a problem is found with the domain model, and Isis cannot
+ * proceed.
  */
-@Deprecated
-public class PojoRefreshException extends ObjectNotFoundException {
+public class DomainModelException extends IsisException {
     private static final long serialVersionUID = 1L;
 
-    public PojoRefreshException(Oid oid) {
-        super(oid);
+    public DomainModelException() {
+        super();
     }
 
-    public PojoRefreshException(Oid oid, Throwable cause) {
-        super(oid, cause);
+    public DomainModelException(final String message) {
+        super(message);
     }
+
+    public DomainModelException(final Throwable cause) {
+        super(cause);
+    }
+
+    public DomainModelException(final String message, final Throwable cause) {
+        super(message, cause);
+    }
+
 }

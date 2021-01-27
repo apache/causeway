@@ -17,20 +17,29 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.exceptions.persistence;
+package org.apache.isis.applib.exceptions;
 
-import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.commons.exceptions.IsisException;
 
 /**
- * TODO: v2 - review - doesn't seem to be used?
- * @deprecated
+ * Indicates a problem initialising the Apache Isis framework.
  */
-@Deprecated
-public class PojoRecreationException extends ObjectPersistenceException {
+public class InitialisationException extends IsisException {
     private static final long serialVersionUID = 1L;
 
-    public PojoRecreationException(Oid oid, Throwable cause) {
-        super(String.format("Could not recreate pojo for oid '%s'.", oid), cause);
+    public InitialisationException() {
+        super();
+    }
 
+    public InitialisationException(final String s) {
+        super(s);
+    }
+
+    public InitialisationException(final Throwable cause) {
+        super(cause);
+    }
+
+    public InitialisationException(final String msg, final Throwable cause) {
+        super(msg, cause);
     }
 }

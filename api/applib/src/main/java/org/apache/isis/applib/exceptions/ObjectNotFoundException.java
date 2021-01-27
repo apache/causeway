@@ -17,31 +17,22 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.spec;
+package org.apache.isis.applib.exceptions;
 
-import org.apache.isis.commons.exceptions.IsisException;
+import org.ietf.jgss.Oid;
 
 /**
- * Thrown when a problem is found with the domain model, and Isis cannot
- * proceed.
+ * Indicates that the <tt>PojoRecreator</tt> was unable to instantiate a new pojo for the specified
+ * {@link Oid}.
  */
-public class DomainModelException extends IsisException {
+public class ObjectNotFoundException extends ObjectPersistenceException {
     private static final long serialVersionUID = 1L;
 
-    public DomainModelException() {
-        super();
+    public ObjectNotFoundException(final String oid) {
+        super("Object not found in store with oid " + oid);
     }
 
-    public DomainModelException(final String message) {
-        super(message);
+    public ObjectNotFoundException(final String oid, final Throwable cause) {
+        super("Object not found in store with oid " + oid, cause);
     }
-
-    public DomainModelException(final Throwable cause) {
-        super(cause);
-    }
-
-    public DomainModelException(final String message, final Throwable cause) {
-        super(message, cause);
-    }
-
 }

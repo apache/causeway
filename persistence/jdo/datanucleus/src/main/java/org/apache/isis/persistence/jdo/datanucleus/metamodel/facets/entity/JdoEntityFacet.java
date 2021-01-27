@@ -29,10 +29,12 @@ import javax.jdo.PersistenceManager;
 import org.datanucleus.enhancement.Persistable;
 import org.datanucleus.store.rdbms.RDBMSPropertyNames;
 
+import org.apache.isis.applib.exceptions.ObjectNotFoundException;
 import org.apache.isis.applib.query.AllInstancesQuery;
 import org.apache.isis.applib.query.NamedQuery;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
+import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerService;
 import org.apache.isis.applib.services.repository.EntityState;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.applib.services.xactn.TransactionalProcessor;
@@ -42,7 +44,6 @@ import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.metamodel.adapter.oid.ObjectNotFoundException;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -52,8 +53,8 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.transaction.changetracking.EntityChangeTracker;
 import org.apache.isis.persistence.jdo.datanucleus.entities.DnEntityStateProvider;
-import org.apache.isis.persistence.jdo.datanucleus.oid.JdoObjectIdSerializer;
 import org.apache.isis.persistence.jdo.datanucleus.metamodel.JdoMetamodelUtil;
+import org.apache.isis.persistence.jdo.datanucleus.oid.JdoObjectIdSerializer;
 import org.apache.isis.persistence.jdo.spring.integration.TransactionAwarePersistenceManagerFactoryProxy;
 
 import lombok.NonNull;
@@ -68,6 +69,7 @@ implements EntityFacet {
     @Inject private TransactionAwarePersistenceManagerFactoryProxy pmf;
     @Inject private TransactionService txService;
     @Inject private ObjectManager objectManager;
+    @Inject private ExceptionRecognizerService exceptionRecognizerService;
 
     public JdoEntityFacet(
             final FacetHolder holder) {
@@ -133,15 +135,10 @@ implements EntityFacet {
 
         } catch (final RuntimeException e) {
 
-            //XXX this idiom could be delegated to a service
-            //or remodel the method to return a Result<T>
-            for (val exceptionRecognizer : getMetaModelContext().getServiceRegistry()
-                    .select(ExceptionRecognizer.class)) {
-                val recognition = exceptionRecognizer.recognize(e).orElse(null);
-                if(recognition != null) {
-                    if(recognition.getCategory() == ExceptionRecognizer.Category.NOT_FOUND) {
-                        throw new ObjectNotFoundException(rootOid, e);
-                    }
+            val recognition = exceptionRecognizerService.recognize(e);
+            if(recognition.isPresent()) {
+                if(recognition.get().getCategory() == ExceptionRecognizer.Category.NOT_FOUND) {
+                    throw new ObjectNotFoundException(""+rootOid, e);
                 }
             }
 
@@ -149,7 +146,7 @@ implements EntityFacet {
         }
 
         if (entityPojo == null) {
-            throw new ObjectNotFoundException(rootOid);
+            throw new ObjectNotFoundException(""+rootOid);
         }
 
         val actualEntitySpec = getSpecificationLoader().loadSpecification(entityPojo.getClass());

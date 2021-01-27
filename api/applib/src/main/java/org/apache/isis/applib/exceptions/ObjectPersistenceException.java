@@ -17,15 +17,10 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.exceptions.persistence;
+package org.apache.isis.applib.exceptions;
 
 import org.apache.isis.commons.exceptions.IsisException;
 
-/**
- * TODO: v2 - review - doesn't seem to be used?
- * @deprecated
- */
-@Deprecated
 public class ObjectPersistenceException extends IsisException {
     private static final long serialVersionUID = 1L;
 

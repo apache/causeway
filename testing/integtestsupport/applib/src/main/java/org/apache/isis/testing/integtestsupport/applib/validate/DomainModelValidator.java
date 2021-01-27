@@ -31,12 +31,12 @@ import javax.inject.Inject;
 import org.junit.jupiter.api.Assertions;
 
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.exceptions.DomainModelException;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.core.config.environment.IsisSystemEnvironment;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.metamodel.specloader.IntrospectionMode;
-import org.apache.isis.core.metamodel.spec.DomainModelException;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.validator.ValidationFailure;
 import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
