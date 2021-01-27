@@ -17,7 +17,9 @@
  *  under the License.
  */
 
-package org.apache.isis.commons.exceptions;
+package org.apache.isis.applib.exceptions;
+
+import org.apache.isis.commons.exceptions.IsisException;
 
 /**
  * Indicates an error raised by the application code.
@@ -31,23 +33,23 @@ package org.apache.isis.commons.exceptions;
  * {@link org.apache.isis.applib.RecoverableException}, {@link org.apache.isis.applib.NonRecoverableException} or {@link org.apache.isis.applib.FatalException}
  * </p>
  */
-public class IsisApplicationException extends IsisException {
+public class ApplicationException extends IsisException {
 
     private static final long serialVersionUID = 1L;
 
-    public IsisApplicationException() {
+    public ApplicationException() {
         super();
     }
 
-    public IsisApplicationException(final String msg) {
+    public ApplicationException(final String msg) {
         super(msg);
     }
 
-    public IsisApplicationException(final Throwable cause) {
+    public ApplicationException(final Throwable cause) {
         super(cause);
     }
 
-    public IsisApplicationException(final String msg, final Throwable cause) {
+    public ApplicationException(final String msg, final Throwable cause) {
         super(msg, cause);
     }
 

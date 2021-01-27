@@ -21,8 +21,8 @@ package org.apache.isis.core.metamodel.facets.param.defaults.methodnum;
 
 import java.util.EnumSet;
 
+import org.apache.isis.applib.exceptions.MetaModelException;
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.core.metamodel.exceptions.MetaModelException;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.MethodLiteralConstants;

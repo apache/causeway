@@ -33,6 +33,7 @@ import javax.inject.Inject;
 import org.springframework.beans.factory.InjectionPoint;
 import org.springframework.core.MethodParameter;
 
+import org.apache.isis.applib.exceptions.MetaModelException;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.internal._Constants;
@@ -43,7 +44,6 @@ import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.reflection._Reflect;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.commons.ToString;
-import org.apache.isis.core.metamodel.exceptions.MetaModelException;
 import org.apache.isis.core.metamodel.spec.InjectorMethodEvaluator;
 
 import lombok.val;

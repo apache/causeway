@@ -188,6 +188,7 @@ CommandServiceInternal -> CommandPublisher
 * Interaction related classes have been moved to module `core/interaction`.
 * Transaction related classes have been moved to module `core/transaction`.
 * JDO classes have been split up into several modules under `persistence/jdo/`.
+* Multiple `Exception` classes have been relocated at `org.apache.isis.applib.exceptions`  
 
 [cols="3m,3m", options="header"]
 
@@ -225,6 +226,9 @@ CommandServiceInternal -> CommandPublisher
 
 | InteractionClosure
 | AuthenticationLayer
+
+| IsisApplicationException
+| ApplicationException
 
 | IsisInteractionTracker
 | InteractionTracker
@@ -290,6 +294,9 @@ WARNING: check menubars.layout.xml for any occurrences
 
 | isisApplib
 | isis.applib
+
+| isisMetaModel
+| isis.metamodel
 
 | isisSecurityApi
 | isis.security

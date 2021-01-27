@@ -17,15 +17,13 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.object.parseable;
-
-import org.apache.isis.commons.exceptions.IsisApplicationException;
+package org.apache.isis.applib.exceptions;
 
 /**
  * Indicates that a text entry could not be satisfactorily parsed into a useful
  * value by the value adapter.
  */
-public class TextEntryParseException extends IsisApplicationException {
+public class TextEntryParseException extends ApplicationException {
     private static final long serialVersionUID = 1L;
 
     public TextEntryParseException() {

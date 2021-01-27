@@ -17,27 +17,24 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.exceptions;
+package org.apache.isis.applib.exceptions;
 
-import org.apache.isis.commons.exceptions.IsisException;
-
-public class MetaModelException extends IsisException {
+/**
+ * Indicates that a value entry is not valid. Note the entry may still parse
+ * correctly, but is does fulfil other other entry requirements.
+ */
+public class InvalidEntryException extends ApplicationException {
     private static final long serialVersionUID = 1L;
 
-    public MetaModelException() {
-        super();
-    }
-
-    public MetaModelException(final String message) {
+    public InvalidEntryException(final String message) {
         super(message);
     }
 
-    public MetaModelException(final Throwable cause) {
-        super(cause);
+    public InvalidEntryException(final Throwable cause) {
+        this("Invalid value", cause);
     }
 
-    public MetaModelException(final String message, final Throwable cause) {
+    public InvalidEntryException(final String message, final Throwable cause) {
         super(message, cause);
     }
-
 }

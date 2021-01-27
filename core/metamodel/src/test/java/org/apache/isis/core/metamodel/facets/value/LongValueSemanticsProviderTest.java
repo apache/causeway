@@ -25,10 +25,10 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
+import org.apache.isis.applib.exceptions.TextEntryParseException;
 import org.apache.isis.core.metamodel.context.MetaModelContextAware;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
-import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseException;
 import org.apache.isis.core.metamodel.facets.value.longs.LongValueSemanticsProviderAbstract;
 import org.apache.isis.core.metamodel.facets.value.longs.LongWrapperValueSemanticsProvider;
 

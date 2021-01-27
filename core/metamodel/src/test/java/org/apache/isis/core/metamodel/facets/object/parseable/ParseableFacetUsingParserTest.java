@@ -28,6 +28,7 @@ import org.junit.Test;
 
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.adapters.ParsingException;
+import org.apache.isis.applib.exceptions.TextEntryParseException;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;

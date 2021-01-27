@@ -19,10 +19,10 @@
 
 package org.apache.isis.core.metamodel.facets.value.booleans;
 
+import org.apache.isis.applib.exceptions.TextEntryParseException;
 import org.apache.isis.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseException;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
