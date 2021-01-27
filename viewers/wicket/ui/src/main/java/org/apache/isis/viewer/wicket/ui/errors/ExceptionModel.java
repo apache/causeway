@@ -21,7 +21,7 @@ package org.apache.isis.viewer.wicket.ui.errors;
 import java.util.List;
 import java.util.Optional;
 
-import org.apache.isis.applib.NonRecoverableException;
+import org.apache.isis.applib.UnrecoverableException;
 import org.apache.isis.applib.services.error.ErrorReportingService;
 import org.apache.isis.applib.services.error.Ticket;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer.Recognition;
@@ -84,10 +84,10 @@ public class ExceptionModel extends ModelAbstract<List<StackTraceDetail>> {
 
                 // see if we can find a NonRecoverableException in the stack trace
                 
-                NonRecoverableException nonRecoverableException =
+                UnrecoverableException nonRecoverableException =
                 _Exceptions.streamCausalChain(ex)
-                .filter(NonRecoverableException.class::isInstance)
-                .map(NonRecoverableException.class::cast)
+                .filter(UnrecoverableException.class::isInstance)
+                .map(UnrecoverableException.class::cast)
                 .findFirst()
                 .orElse(null);
 

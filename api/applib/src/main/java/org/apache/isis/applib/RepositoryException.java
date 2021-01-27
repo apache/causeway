@@ -24,15 +24,15 @@ package org.apache.isis.applib;
  *
  * <p>
  * This exception is intended to represent an unexpected and non-recoverable condition (eg a syntax error in some
- * JDOQL query syntax or similar), and so is a subclass of {@link NonRecoverableException}.
+ * JDOQL query syntax or similar), and so is a subclass of {@link UnrecoverableException}.
  * Throwing this exception will therefore result in (some sort of) error page being displayed
  * to the user.
  *
- * @see NonRecoverableException
+ * @see UnrecoverableException
  * @see RecoverableException
  * @since ? {@index}
  */
-public class RepositoryException extends NonRecoverableException {
+public class RepositoryException extends UnrecoverableException {
 
     private static final long serialVersionUID = 1L;
 

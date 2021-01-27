@@ -43,7 +43,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.FatalException;
+import org.apache.isis.applib.UnrecoverableException;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.exceptions.ObjectPersistenceException;
 import org.apache.isis.commons.internal.collections._Lists;
@@ -171,7 +171,7 @@ public class JdoSupportServiceDefault implements JdoSupportService {
             try {
                 getPersistenceManager().deletePersistentAll(instances);
             } catch (final Exception ex) {
-                throw new FatalException(ex);
+                throw new UnrecoverableException(ex);
             }
         }
     }

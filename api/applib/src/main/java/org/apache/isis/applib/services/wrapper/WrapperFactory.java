@@ -21,6 +21,7 @@ package org.apache.isis.applib.services.wrapper;
 
 import java.util.List;
 
+import org.apache.isis.applib.exceptions.InteractionException;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.wrapper.control.AsyncControl;
 import org.apache.isis.applib.services.wrapper.control.SyncControl;

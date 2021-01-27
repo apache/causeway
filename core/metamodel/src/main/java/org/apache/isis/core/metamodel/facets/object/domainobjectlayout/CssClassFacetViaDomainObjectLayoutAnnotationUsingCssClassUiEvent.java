@@ -22,7 +22,7 @@ package org.apache.isis.core.metamodel.facets.object.domainobjectlayout;
 import java.util.Map;
 import java.util.Optional;
 
-import org.apache.isis.applib.NonRecoverableException;
+import org.apache.isis.applib.UnrecoverableException;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.events.ui.CssClassUiEvent;
 import org.apache.isis.commons.internal.base._Casts;
@@ -110,7 +110,7 @@ implements CssClassFacet {
             cssClassUiEvent.initSource(domainObject);
             return cssClassUiEvent;
         } catch (InstantiationException | IllegalAccessException ex) {
-            throw new NonRecoverableException(ex);
+            throw new UnrecoverableException(ex);
         }
     }
 

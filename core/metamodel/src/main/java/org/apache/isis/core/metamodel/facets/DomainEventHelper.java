@@ -25,8 +25,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.isis.applib.FatalException;
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.UnrecoverableException;
 import org.apache.isis.applib.events.domain.AbstractDomainEvent;
 import org.apache.isis.applib.events.domain.ActionDomainEvent;
 import org.apache.isis.applib.events.domain.CollectionDomainEvent;
@@ -158,7 +158,7 @@ public class DomainEventHelper {
 
             return event;
         } catch (Exception e) {
-            throw new FatalException(e);
+            throw new UnrecoverableException(e);
         }
     }
 
@@ -253,7 +253,7 @@ public class DomainEventHelper {
             metamodelEventService.firePropertyDomainEvent(event);
             return event;
         } catch (Exception e) {
-            throw new FatalException(e);
+            throw new UnrecoverableException(e);
         }
     }
 
@@ -338,7 +338,7 @@ public class DomainEventHelper {
             metamodelEventService.fireCollectionDomainEvent(event);
             return event;
         } catch (Exception e) {
-            throw new FatalException(e);
+            throw new UnrecoverableException(e);
         }
     }
 

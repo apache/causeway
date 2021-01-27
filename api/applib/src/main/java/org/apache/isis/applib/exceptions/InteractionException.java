@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.applib.services.wrapper;
+package org.apache.isis.applib.exceptions;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.RecoverableException;

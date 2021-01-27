@@ -27,46 +27,42 @@ import org.apache.isis.commons.internal.functions._Functions;
 /**
  * Indicates that an unexpected, non-recoverable (fatal) exception has occurred within
  * the application logic.
- *
  * <p>
- * Throwing this exception will (dependent on the viewer) result in some sort of an error page being displayed to the user.
- *
- * <p>
- * Note that this exception has identical semantics to {@link FatalException} (of which it is the immediate
- * superclass) and can be considered a synonym.
+ * Throwing this exception will (dependent on the viewer) result in some sort of an error 
+ * page being displayed to the user.
  *
  * @see RecoverableException
- * @see ApplicationException
- * @see FatalException
  * @since 1.x {@index}
  */
-public class NonRecoverableException extends RuntimeException implements TranslatableException {
+public class UnrecoverableException 
+extends RuntimeException 
+implements TranslatableException {
 
     private static final long serialVersionUID = 1L;
 
     private final TranslatableString translatableMessage;
     private final String translationContext;
 
-    public NonRecoverableException(final String msg) {
+    public UnrecoverableException(final String msg) {
         this(msg, null, null, null, null);
     }
 
-    public NonRecoverableException(
+    public UnrecoverableException(
             final TranslatableString translatableMessage,
             final Class<?> translationContextClass,
             final String translationContextMethod) {
         this(null, translatableMessage, translationContextClass, translationContextMethod, null);
     }
 
-    public NonRecoverableException(final Throwable cause) {
+    public UnrecoverableException(final Throwable cause) {
         this(null, null, null, null, cause);
     }
 
-    public NonRecoverableException(final String msg, final Throwable cause) {
+    public UnrecoverableException(final String msg, final Throwable cause) {
         this(msg, null, null, null, cause);
     }
 
-    public NonRecoverableException(
+    public UnrecoverableException(
             final TranslatableString translatableMessage,
             final Class<?> translationContextClass,
             final String translationContextMethod,
@@ -74,7 +70,7 @@ public class NonRecoverableException extends RuntimeException implements Transla
         this(null, translatableMessage, translationContextClass, translationContextMethod, cause);
     }
 
-    private NonRecoverableException(
+    private UnrecoverableException(
             final String message,
             final TranslatableString translatableMessage,
             final Class<?> translationContextClass,
@@ -135,7 +131,7 @@ public class NonRecoverableException extends RuntimeException implements Transla
         try {
             checkedRunnable.run();
         } catch (Exception cause) {
-            throw new NonRecoverableException(cause);
+            throw new UnrecoverableException(cause);
         }
     }
 

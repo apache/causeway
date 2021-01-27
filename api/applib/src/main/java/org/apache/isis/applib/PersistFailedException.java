@@ -24,15 +24,15 @@ package org.apache.isis.applib;
  *
  * <p>
  * This exception is intended to represent an unexpected and non-recoverable condition (eg a unique/primary key/
- * foreign key constaint has been violated), and so is a subclass of {@link NonRecoverableException}.
+ * foreign key constaint has been violated), and so is a subclass of {@link UnrecoverableException}.
  * Throwing this exception will therefore result in (some sort of) error page being displayed
  * to the user.
  *
- * @see NonRecoverableException
+ * @see UnrecoverableException
  * @see RecoverableException
  * @since 1.x {@index}
  */
-public class PersistFailedException extends NonRecoverableException {
+public class PersistFailedException extends UnrecoverableException {
 
     private static final long serialVersionUID = 1L;
 

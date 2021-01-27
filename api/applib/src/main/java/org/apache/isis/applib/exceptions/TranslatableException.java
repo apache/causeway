@@ -39,7 +39,7 @@ public interface TranslatableException {
      * <p>
      *     If returns <code>null</code>, then {@link Exception#getMessage()} will be used as a fallback.
      *     This design allows the Isis-provided {@link org.apache.isis.applib.RecoverableException} and
-     *     {@link org.apache.isis.applib.NonRecoverableException} to provide constructors that
+     *     {@link org.apache.isis.applib.UnrecoverableException} to provide constructors that
      *     accept a {@link org.apache.isis.applib.services.i18n.TranslatableString}, but can be left as null for any existing code.
      * </p>
      */

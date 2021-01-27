@@ -29,7 +29,7 @@ import java.util.zip.ZipOutputStream;
 
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.FatalException;
+import org.apache.isis.applib.UnrecoverableException;
 import org.apache.isis.commons.internal.base._Bytes;
 
 import lombok.Data;
@@ -66,7 +66,7 @@ public class ZipService {
             zos.close();
             return baos.toByteArray();
         } catch (final IOException ex) {
-            throw new FatalException("Unable to create zip", ex);
+            throw new UnrecoverableException("Unable to create zip", ex);
         }
     }
 
@@ -107,7 +107,7 @@ public class ZipService {
             zos.close();
             bytes = baos.toByteArray();
         } catch (final IOException ex) {
-            throw new FatalException("Unable to create zip", ex);
+            throw new UnrecoverableException("Unable to create zip", ex);
         }
         return bytes;
     }
