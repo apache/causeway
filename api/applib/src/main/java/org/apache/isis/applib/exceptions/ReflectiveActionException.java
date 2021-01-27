@@ -17,30 +17,27 @@
  *  under the License.
  */
 
-package org.apache.isis.core.security.authentication.standard;
+package org.apache.isis.applib.exceptions;
 
 import org.apache.isis.commons.exceptions.IsisException;
 
-/**
- * Indicates that there is no Authenticator available to authenticate a user
- * based on this request.
- */
-public class NoAuthenticatorException extends IsisException {
+public class ReflectiveActionException extends IsisException {
     private static final long serialVersionUID = 1L;
 
-    public NoAuthenticatorException() {
+    public ReflectiveActionException() {
+        super();
     }
 
-    public NoAuthenticatorException(final String msg) {
+    public ReflectiveActionException(final String msg) {
         super(msg);
     }
 
-    public NoAuthenticatorException(final String msg, final Throwable cause) {
-        super(msg, cause);
+    public ReflectiveActionException(final Throwable cause) {
+        super(cause);
     }
 
-    public NoAuthenticatorException(final Throwable cause) {
-        super(cause);
+    public ReflectiveActionException(final String msg, final Throwable cause) {
+        super(msg, cause);
     }
 
 }

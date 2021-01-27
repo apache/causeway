@@ -17,26 +17,19 @@
  *  under the License.
  */
 
-package org.apache.isis.persistence.jdo.applib.exceptions;
+package org.apache.isis.applib.exceptions;
 
 import org.apache.isis.commons.exceptions.IsisException;
 
-public class UnsupportedFindException extends IsisException {
+/**
+ * Indicates that a call was made to a method (normally an overridden one) that
+ * was not expected, and hence not coded for.
+ */
+public class UnexpectedCallException extends IsisException {
     private static final long serialVersionUID = 1L;
 
-    public UnsupportedFindException() {
-        super();
+    public UnexpectedCallException() {
+        super("This method call was not expected");
     }
 
-    public UnsupportedFindException(final String message) {
-        super(message);
-    }
-
-    public UnsupportedFindException(final Throwable cause) {
-        super(cause);
-    }
-
-    public UnsupportedFindException(final String message, final Throwable cause) {
-        super(message, cause);
-    }
 }

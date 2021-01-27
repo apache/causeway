@@ -17,17 +17,30 @@
  *  under the License.
  */
 
-package org.apache.isis.commons.exceptions;
+package org.apache.isis.applib.exceptions;
+
+import org.apache.isis.commons.exceptions.IsisException;
 
 /**
- * Indicates that a call was made to a method (normally an overridden one) that
- * was not expected, and hence not coded for.
+ * Indicates that there is no Authenticator available to authenticate a user
+ * based on this request.
  */
-public class UnexpectedCallException extends IsisException {
+public class NoAuthenticatorException extends IsisException {
     private static final long serialVersionUID = 1L;
 
-    public UnexpectedCallException() {
-        super("This method call was not expected");
+    public NoAuthenticatorException() {
+    }
+
+    public NoAuthenticatorException(final String msg) {
+        super(msg);
+    }
+
+    public NoAuthenticatorException(final String msg, final Throwable cause) {
+        super(msg, cause);
+    }
+
+    public NoAuthenticatorException(final Throwable cause) {
+        super(cause);
     }
 
 }

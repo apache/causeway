@@ -17,27 +17,27 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.specloader;
+package org.apache.isis.applib.exceptions;
 
 import org.apache.isis.commons.exceptions.IsisException;
 
-public class ReflectiveActionException extends IsisException {
+public class ServiceException extends IsisException {
     private static final long serialVersionUID = 1L;
 
-    public ReflectiveActionException() {
+    public ServiceException() {
         super();
     }
 
-    public ReflectiveActionException(final String msg) {
-        super(msg);
+    public ServiceException(final String message) {
+        super(message);
     }
 
-    public ReflectiveActionException(final Throwable cause) {
+    public ServiceException(final Throwable cause) {
         super(cause);
     }
 
-    public ReflectiveActionException(final String msg, final Throwable cause) {
-        super(msg, cause);
+    public ServiceException(final String message, final Throwable cause) {
+        super(message, cause);
     }
 
 }
