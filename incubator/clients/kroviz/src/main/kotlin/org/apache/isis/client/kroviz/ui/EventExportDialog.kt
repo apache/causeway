@@ -90,7 +90,6 @@ class EventExportDialog() : Command() {
                 is SimpleSelect -> {
                     val key = i.label!!
                     val value = i.getValue()!!
-                    console.log("[EED.extractUserInput] $key $value")
                     if (key == fieldName) {
                         return value
                     }

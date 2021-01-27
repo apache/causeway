@@ -52,10 +52,6 @@ class ObjectAggregator(val actionTitle: String) : BaseAggregator() {
             else -> log(logEntry)
         }
 
-        console.log("[OA.update]")
-        console.log(obj)
-        console.log(dpm)
-
         if (dpm.canBeDisplayed()) {
             UiManager.openObjectView(this)
         }
@@ -83,7 +79,6 @@ class ObjectAggregator(val actionTitle: String) : BaseAggregator() {
         }
         invoke(selfLink!!, this)
     }
-
 
     fun handleResultObject(obj: ResultObject) {
         console.log("[OA.handleResultObject] TODO implement")

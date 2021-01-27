@@ -40,19 +40,11 @@ class ObjectDM(override val title: String) : DisplayModelWithLayout() {
     }
 
     override fun addData(obj: TransferObject) {
-        console.log("[ODM.addData]")
         (obj as TObject)
-        console.log(obj)
-        console.log(obj.members)
-        console.log(obj.getActions())
-        console.log(obj.getCollections())
-        console.log(obj.getProperties())
         val exo = Exposer(obj)
         data = exo.dynamise() as? Exposer
         obj.getProperties().forEach { m ->
-            console.log(m)
             val p = createPropertyFrom(m)
-            console.log(p)
             addProperty(p)
         }
     }
