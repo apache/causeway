@@ -19,7 +19,7 @@
 
 package org.apache.isis.applib;
 
-import org.apache.isis.applib.services.exceprecog.TranslatableException;
+import org.apache.isis.applib.exceptions.TranslatableException;
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.functions._Functions;

@@ -19,7 +19,7 @@
 
 package org.apache.isis.applib;
 
-import org.apache.isis.applib.services.exceprecog.TranslatableException;
+import org.apache.isis.applib.exceptions.TranslatableException;
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
@@ -49,7 +49,9 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
  * @see FatalException
  * @since 1.x {@index}
  */
-public class RecoverableException extends RuntimeException implements TranslatableException {
+public class RecoverableException 
+extends RuntimeException 
+implements TranslatableException {
 
     private static final long serialVersionUID = 1L;
 

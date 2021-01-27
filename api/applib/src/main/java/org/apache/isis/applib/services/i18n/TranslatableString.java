@@ -208,7 +208,7 @@ public final class TranslatableString {
      *
      * <p>
      *     NB: this method is exposed only so that implementations of
-     *     {@link org.apache.isis.applib.services.exceprecog.TranslatableException} can return a non-null
+     *     {@link org.apache.isis.applib.exceptions.TranslatableException} can return a non-null
      *     {@link Exception#getMessage() message} when only a translatable message has been provided.
      * </p>
      */

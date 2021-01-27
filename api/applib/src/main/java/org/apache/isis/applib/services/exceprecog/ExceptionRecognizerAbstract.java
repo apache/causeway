@@ -26,6 +26,7 @@ import java.util.function.UnaryOperator;
 
 import javax.inject.Inject;
 
+import org.apache.isis.applib.exceptions.TranslatableException;
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.commons.internal.base._NullSafe;
