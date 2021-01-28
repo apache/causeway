@@ -25,8 +25,8 @@ import java.math.BigInteger;
 import java.time.LocalDate;
 import java.util.Date;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
@@ -40,7 +40,7 @@ import org.apache.isis.commons.internal.memento._Mementos;
 import org.apache.isis.commons.internal.memento._Mementos.Memento;
 import org.apache.isis.commons.internal.memento._Mementos.SerializingAdapter;
 
-public class MementosTest {
+class MementosTest {
 
     static enum DOW {
         Mon,Tue,Wed,Thu,Fri
@@ -50,8 +50,8 @@ public class MementosTest {
     UrlEncodingServiceUsingBaseEncodingAbstract serviceBaseEncoding;
     SerializingAdapter serializingAdapter;
 
-    @Before
-    public void setUp() throws Exception {
+    @BeforeEach
+    void setUp() throws Exception {
         serviceWithCompression = new UrlEncodingServiceWithCompression();
         serviceBaseEncoding = new UrlEncodingServiceUsingBaseEncodingAbstract(){};
 
@@ -71,12 +71,12 @@ public class MementosTest {
     }
 
     @Test
-    public void roundtrip() {
+    void roundtrip() {
         roundtrip(serviceBaseEncoding);
     }
 
     @Test
-    public void roundtrip_with_compression() {
+    void roundtrip_with_compression() {
         roundtrip(serviceWithCompression);
     }
 

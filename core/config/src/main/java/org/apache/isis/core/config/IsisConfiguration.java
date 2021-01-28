@@ -1576,13 +1576,13 @@ public class IsisConfiguration {
             @Data
             public static class ExceptionRecognizer {
 
-                private final Jdo jdo = new Jdo();
+                private final Dae dae = new Dae();
                 @Data
-                public static class Jdo {
+                public static class Dae {
                     /**
                      * Whether the {@link org.apache.isis.applib.services.exceprecog.ExceptionRecognizer}
-                     * implementation for JDO/DataNucleus object store - which attempts to sanitize any exceptions
-                     * arising from that object store - should be disabled (meaning that exceptions will potentially
+                     * implementation for Spring's DataAccessException - which attempts to sanitize any exceptions
+                     * arising from object stores - should be disabled (meaning that exceptions will potentially
                      * propagate as more serious to the end user).
                      */
                     private boolean disable = false;

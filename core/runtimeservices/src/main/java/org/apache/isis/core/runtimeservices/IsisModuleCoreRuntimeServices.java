@@ -35,7 +35,6 @@ import org.apache.isis.core.runtimeservices.command.CommandExecutorServiceDefaul
 import org.apache.isis.core.runtimeservices.confmenu.ConfigurationViewServiceDefault;
 import org.apache.isis.core.runtimeservices.email.EmailServiceDefault;
 import org.apache.isis.core.runtimeservices.eventbus.EventBusServiceSpring;
-import org.apache.isis.core.runtimeservices.exceprecog.ExceptionRecognizerServiceDefault;
 import org.apache.isis.core.runtimeservices.executor.MemberExecutorServiceDefault;
 import org.apache.isis.core.runtimeservices.factory.FactoryServiceDefault;
 import org.apache.isis.core.runtimeservices.homepage.HomePageResolverServiceDefault;
@@ -51,6 +50,11 @@ import org.apache.isis.core.runtimeservices.publish.EntityChangesPublisherDefaul
 import org.apache.isis.core.runtimeservices.publish.EntityPropertyChangePublisherDefault;
 import org.apache.isis.core.runtimeservices.publish.ExecutionPublisherDefault;
 import org.apache.isis.core.runtimeservices.queryresultscache.QueryResultsCacheDefault;
+import org.apache.isis.core.runtimeservices.recognizer.ExceptionRecognizerServiceDefault;
+import org.apache.isis.core.runtimeservices.recognizer.dae.impl.ExceptionRecognizerForDataAlreadyExists;
+import org.apache.isis.core.runtimeservices.recognizer.dae.impl.ExceptionRecognizerForObjectNotFound;
+import org.apache.isis.core.runtimeservices.recognizer.dae.impl.ExceptionRecognizerForRelatedDataExists;
+import org.apache.isis.core.runtimeservices.recognizer.dae.impl.ExceptionRecognizerForUnableToSaveData;
 import org.apache.isis.core.runtimeservices.repository.RepositoryServiceDefault;
 import org.apache.isis.core.runtimeservices.routing.RoutingServiceDefault;
 import org.apache.isis.core.runtimeservices.scratchpad.ScratchpadDefault;
@@ -114,6 +118,12 @@ import org.apache.isis.core.runtimeservices.xmlsnapshot.XmlSnapshotServiceDefaul
 
         // @DomainService's
         TranslationServicePoMenu.class,
+        
+        // Exception Recognizers
+        ExceptionRecognizerForDataAlreadyExists.class,
+        ExceptionRecognizerForObjectNotFound.class,
+        ExceptionRecognizerForRelatedDataExists.class,
+        ExceptionRecognizerForUnableToSaveData.class,
 
 })
 public class IsisModuleCoreRuntimeServices {

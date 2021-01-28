@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.persistence.jdo.integration.exceptions.recognizers;
+package org.apache.isis.core.runtimeservices.recognizer.dae;
 
 import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
@@ -27,10 +27,10 @@ import org.apache.isis.core.config.IsisConfiguration;
 /**
  * Common to those that can be disabled via IsisConfiguration.
  */
-abstract class ExceptionRecognizerForJDODataStoreExceptionAbstract 
+public abstract class ExceptionRecognizerForDataAccessException 
 extends ExceptionRecognizerForType {
 
-    protected ExceptionRecognizerForJDODataStoreExceptionAbstract(
+    protected ExceptionRecognizerForDataAccessException(
             final IsisConfiguration isisConfiguration,
             final Category category,
             final Predicate<Throwable> predicate,
@@ -38,11 +38,11 @@ extends ExceptionRecognizerForType {
         super(category, predicate, messageParser);
         
         super.setDisabled(
-                isisConfiguration
-                .getCore().getRuntimeServices().getExceptionRecognizer().getJdo().isDisable());
+                isisConfiguration.getCore().getRuntimeServices()
+                .getExceptionRecognizer().getDae().isDisable());
     }
 
-    protected ExceptionRecognizerForJDODataStoreExceptionAbstract(
+    protected ExceptionRecognizerForDataAccessException(
             final IsisConfiguration isisConfiguration,
             final Category category,
             final Class<? extends Exception> exceptionType,

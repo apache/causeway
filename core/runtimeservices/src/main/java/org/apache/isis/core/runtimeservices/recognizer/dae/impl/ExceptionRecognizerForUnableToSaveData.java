@@ -16,11 +16,10 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.persistence.jdo.integration.exceptions.recognizers;
+package org.apache.isis.core.runtimeservices.recognizer.dae.impl;
 
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.jdo.JDODataStoreException;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.annotation.Order;
@@ -28,23 +27,23 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.core.config.IsisConfiguration;
+import org.apache.isis.core.runtimeservices.recognizer.dae.ExceptionRecognizerForDataAccessException;
 
 @Service
-@Named("isisJdoIntegration.ExceptionRecognizerForJDODataStoreExceptionIntegrityConstraintViolationForeignKeyNoActionException")
+@Named("isis.runtime.ExceptionRecognizerForUnableToSaveData")
 @Order(OrderPrecedence.MIDPOINT)
 @Qualifier("Default")
-public class ExceptionRecognizerForJDODataStoreExceptionIntegrityConstraintViolationForeignKeyNoActionException
-extends ExceptionRecognizerForJDODataStoreExceptionAbstract {
+public class ExceptionRecognizerForUnableToSaveData
+extends ExceptionRecognizerForDataAccessException {
 
     @Inject
-    public ExceptionRecognizerForJDODataStoreExceptionIntegrityConstraintViolationForeignKeyNoActionException(IsisConfiguration conf) {
-        super(conf, 
-                Category.CONSTRAINT_VIOLATION,
-                ofTypeIncluding(
-                        JDODataStoreException.class,
-                        _JdoNestedExceptionResolver::streamNestedExceptionsOf,
-                        "integrity constraint violation: foreign key no action"),
-                prefix("Related data exists"));
+    public ExceptionRecognizerForUnableToSaveData(IsisConfiguration conf) {
+        super(conf,
+                Category.SERVER_ERROR,
+                ofType(org.springframework.dao.DataAccessException.class)
+                .and(including("TODO")), //TODO add magic words
+                prefix("Unable to save changes.  " +
+                        "Does similar data already exist, or has referenced data been deleted?"));
     }
 
 }

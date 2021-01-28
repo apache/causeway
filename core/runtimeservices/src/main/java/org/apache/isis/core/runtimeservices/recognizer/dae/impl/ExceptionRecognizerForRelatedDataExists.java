@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.persistence.jdo.integration.exceptions.recognizers;
+package org.apache.isis.core.runtimeservices.recognizer.dae.impl;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -27,24 +27,24 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.core.config.IsisConfiguration;
+import org.apache.isis.core.runtimeservices.recognizer.dae.ExceptionRecognizerForDataAccessException;
 
 @Service
-@Named("isisJdoIntegration.ExceptionRecognizerForJDODataStoreException")
+@Named("isis.runtime.ExceptionRecognizerForRelatedDataExists")
 @Order(OrderPrecedence.MIDPOINT)
 @Qualifier("Default")
-public class ExceptionRecognizerForJDODataStoreException
-extends ExceptionRecognizerForJDODataStoreExceptionAbstract {
+public class ExceptionRecognizerForRelatedDataExists
+extends ExceptionRecognizerForDataAccessException {
 
     @Inject
-    public ExceptionRecognizerForJDODataStoreException(IsisConfiguration conf) {
-        super(conf,
-                Category.SERVER_ERROR,
-                ofTypeExcluding(
-                        javax.jdo.JDODataStoreException.class,
-                        _JdoNestedExceptionResolver::streamNestedExceptionsOf,
-                        "NOT NULL check constraint"),
-                prefix("Unable to save changes.  " +
-                        "Does similar data already exist, or has referenced data been deleted?"));
+    public ExceptionRecognizerForRelatedDataExists(
+            final IsisConfiguration conf) {
+        super(conf, 
+                Category.CONSTRAINT_VIOLATION,
+                ofType(org.springframework.dao.DataAccessException.class)
+                .and(including(
+                        "integrity constraint violation: foreign key no action")),  //TODO magic words might have changed since migration to Spring
+                prefix("Related data exists"));
     }
 
 }

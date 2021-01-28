@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.persistence.jdo.integration.exceptions.recognizers;
+package org.apache.isis.core.runtimeservices.recognizer.dae.impl;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -27,21 +27,22 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.core.config.IsisConfiguration;
+import org.apache.isis.core.runtimeservices.recognizer.dae.ExceptionRecognizerForDataAccessException;
 
 @Service
-@Named("isisJdoIntegration.ExceptionRecognizerForJDOObjectNotFoundException")
+@Named("isis.runtime.ExceptionRecognizerForDataAlreadyExists")
 @Order(OrderPrecedence.MIDPOINT)
 @Qualifier("Default")
-public class ExceptionRecognizerForJDOObjectNotFoundException
-extends ExceptionRecognizerForJDODataStoreExceptionAbstract {
+public class ExceptionRecognizerForDataAlreadyExists
+extends ExceptionRecognizerForDataAccessException {
 
     @Inject
-    public ExceptionRecognizerForJDOObjectNotFoundException(IsisConfiguration conf) {
+    public ExceptionRecognizerForDataAlreadyExists(IsisConfiguration conf) {
         super(conf, 
-                Category.NOT_FOUND,
-                javax.jdo.JDOObjectNotFoundException.class,
-                prefix("Unable to load object.  " +
-                        "Has it been deleted by someone else?"));
+                Category.CONSTRAINT_VIOLATION,
+                ofType(org.springframework.dao.DataAccessException.class)
+                .and(including("unique constraint or index violation")), //TODO magic words might have changed since migration to Spring
+                prefix("Data already exists"));
     }
 
 }

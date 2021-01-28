@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.persistence.jdo.integration.exceptions.recognizers;
+package org.apache.isis.core.runtimeservices.recognizer.dae.impl;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -26,25 +26,24 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
-import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerForType;
 import org.apache.isis.core.config.IsisConfiguration;
+import org.apache.isis.core.runtimeservices.recognizer.dae.ExceptionRecognizerForDataAccessException;
 
 @Service
-@Named("isisJdoIntegration.ExceptionRecognizerForSQLIntegrityConstraintViolationUniqueOrIndexException")
+@Named("isis.runtime.ExceptionRecognizerForObjectNotFound")
 @Order(OrderPrecedence.MIDPOINT)
 @Qualifier("Default")
-public class ExceptionRecognizerForSQLIntegrityConstraintViolationUniqueOrIndexException
-extends ExceptionRecognizerForJDODataStoreExceptionAbstract {
+public class ExceptionRecognizerForObjectNotFound
+extends ExceptionRecognizerForDataAccessException {
 
     @Inject
-    public ExceptionRecognizerForSQLIntegrityConstraintViolationUniqueOrIndexException(IsisConfiguration conf) {
+    public ExceptionRecognizerForObjectNotFound(IsisConfiguration conf) {
         super(conf, 
-                Category.CONSTRAINT_VIOLATION,
-                ofTypeIncluding(
-                        java.sql.SQLIntegrityConstraintViolationException.class,
-                        ExceptionRecognizerForType.NestedExceptionResolver.NOOP,
-                        "unique constraint or index violation"),
-                prefix("Data already exists"));
+                Category.NOT_FOUND,
+                ofType(org.springframework.dao.DataAccessException.class)
+                .and(including("TODO")), //TODO add magic words
+                prefix("Unable to load object.  " +
+                        "Has it been deleted by someone else?"));
     }
 
 }

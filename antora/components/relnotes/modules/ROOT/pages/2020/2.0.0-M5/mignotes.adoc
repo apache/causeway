@@ -76,6 +76,23 @@ VIEW_MENU_ONLY,
 VIEW_CONTRIBUTIONS_ONLY,
 ----
 
+== Changes to the Configuration
+
+[cols="2a,3a", options="header"]
+.as mapped to IsisConfiguration
+|===
+
+| was
+| new
+
+| isis.persistence.???jdo??? //TODO
+| isis.persistence.schema
+
+| isis.core.runtimeservices.exception-recognizer.jdo
+| isis.core.runtimeservices.exception-recognizer.dae
+
+|===
+
 == Changes to the Programming Model
 
 === Removed (Programming Model)
