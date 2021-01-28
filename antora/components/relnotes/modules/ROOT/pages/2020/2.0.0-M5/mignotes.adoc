@@ -218,6 +218,9 @@ CommandServiceInternal -> CommandPublisher
 | Clock (moved from applib module to fixture-applib module)
 | VirtualClock (introduced)
 
+| FatalException (removed) 
+| removed, adds no new semantics compared to the already existing UnrecoverableException
+
 | IsisInteractionFactory
 | InteractionFactory
 
@@ -233,11 +236,21 @@ CommandServiceInternal -> CommandPublisher
 | IsisApplicationException
 | ApplicationException
 
+| IsisException (removed)
+| use one of 2 hierarchies (in support of i18n translation)
+
+- RecoverableException
+
+- UnrecoverableException
+
 | IsisInteractionTracker
 | InteractionTracker
 
 | MessageBroker is held by Authentication(Session)
 | MessageBroker is held by InteractionSession
+
+| NonRecoverableException
+| renamed to UnrecoverableException
 
 | ParentedOid, PojoRecreationException, PojoRefreshException
 | removed, as no longer used
