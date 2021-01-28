@@ -29,9 +29,12 @@ import org.eclipse.persistence.config.PersistenceUnitProperties;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration;
 import org.springframework.boot.autoconfigure.orm.jpa.JpaProperties;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
 import org.springframework.orm.jpa.vendor.AbstractJpaVendorAdapter;
+import org.springframework.orm.jpa.vendor.EclipseLinkJpaDialect;
 import org.springframework.orm.jpa.vendor.EclipseLinkJpaVendorAdapter;
 import org.springframework.transaction.jta.JtaTransactionManager;
 
@@ -60,6 +63,16 @@ import lombok.extern.log4j.Log4j2;
 public class IsisModuleJpaEclipselink extends JpaBaseConfiguration { 
 
     @Inject private Provider<ServiceInjector> serviceInjectorProvider;
+    
+    @Bean
+    public EclipseLinkJpaDialect eclipselinkJpaDialect() {
+        return new EclipseLinkJpaDialect();
+    }
+    
+    @Bean
+    public PersistenceExceptionTranslationPostProcessor persistenceExceptionTranslationPostProcessor(){
+        return new PersistenceExceptionTranslationPostProcessor();
+    }
     
     protected IsisModuleJpaEclipselink(
             IsisConfiguration isisConfiguration,

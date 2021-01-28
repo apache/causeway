@@ -30,7 +30,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.springframework.context.event.EventListener;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Where;
@@ -59,7 +59,7 @@ import static org.apache.isis.commons.internal.base._NullSafe.stream;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
-@Repository
+@Service
 @Named("isis.metamodel.ApplicationFeatureRepositoryDefault")
 @Log4j2
 public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRepository {
