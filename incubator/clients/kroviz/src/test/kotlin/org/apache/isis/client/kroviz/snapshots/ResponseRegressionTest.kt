@@ -22,6 +22,7 @@ import org.apache.isis.client.kroviz.snapshots.demo2_0_0.Response2Handler
 import org.apache.isis.client.kroviz.to.Link
 import org.apache.isis.client.kroviz.to.Method
 import org.apache.isis.client.kroviz.ui.kv.UiManager
+import pl.treksoft.kvision.require
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -36,6 +37,7 @@ class ResponseRegressionTest {
 
     @BeforeTest
     fun setup() {
+//        require("xmlhttprequest").XmlHttpRequest;
         val user = "sven"
         val pw = "pass"
         val url = "http://${user}:${pw}@localhost:8080/restful/"

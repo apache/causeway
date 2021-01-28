@@ -24,7 +24,6 @@ import org.apache.isis.client.kroviz.layout.Layout
 import org.apache.isis.client.kroviz.to.*
 import org.apache.isis.client.kroviz.to.bs3.Grid
 import org.apache.isis.client.kroviz.ui.ErrorDialog
-import org.apache.isis.client.kroviz.ui.kv.Constants
 import org.apache.isis.client.kroviz.ui.kv.UiManager
 
 /** sequence of operations:
@@ -34,7 +33,7 @@ import org.apache.isis.client.kroviz.ui.kv.UiManager
  * (3) ???_OBJECT_PROPERTY       PropertyHandler -> invoke()
  * (4) ???_PROPERTY_DESCRIPTION  <PropertyDescriptionHandler>
  */
-class ObjectAggregator(val actionTitle: String) : BaseAggregator() {
+class ObjectAggregator(val actionTitle: String) : AggregatorWithLayout() {
 
     init {
         dpm = ObjectDM(actionTitle)
@@ -46,7 +45,7 @@ class ObjectAggregator(val actionTitle: String) : BaseAggregator() {
             is TObject -> handleObject(obj)
             is ResultObject -> handleResultObject(obj)
             is Property -> handleProperty(obj)
-            is Layout -> handleLayout(obj)
+            is Layout -> handleLayout(obj, dpm as ObjectDM)
             is Grid -> handleGrid(obj)
             is HttpError -> ErrorDialog(logEntry).open()
             else -> log(logEntry)
@@ -65,12 +64,7 @@ class ObjectAggregator(val actionTitle: String) : BaseAggregator() {
         } else {
             dpm.addData(obj)
         }
-        val l = obj.getLayoutLink()!!
-        if (l.representation() == Represention.OBJECT_LAYOUT_BS3) {
-            invoke(l, this, Constants.subTypeXml)
-        } else {
-            invoke(l, this)
-        }
+        invokeLayoutLink(obj)
     }
 
     private fun invokeInstance(obj: TObject) {
@@ -92,21 +86,6 @@ class ObjectAggregator(val actionTitle: String) : BaseAggregator() {
     private fun handleProperty(property: Property) {
         console.log("[OA.handleProperty] TODO implement")
         console.log(property)
-    }
-
-    private fun handleLayout(layout: Layout) {
-        val dm = dpm as ObjectDM
-        if (dm.layout == null) {
-            dm.addLayout(layout)
-            dm.propertyLayoutList.forEach { p ->
-                val l = p.link!!
-                val isDn = l.href.contains("datanucleus")
-                if (isDn) {
-                    //invoking DN links leads to an error
-                    invoke(l, this)
-                }
-            }
-        }
     }
 
     private fun handleGrid(grid: Grid) {
