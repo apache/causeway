@@ -175,7 +175,7 @@
 			<properties>
 
 				<!-- keep in sync with versions used in Apache Isis -->
-				<datanucleus-api-jdo.version>5.2.4</datanucleus-api-jdo.version>
+				<datanucleus-api-jdo.version>5.2.5</datanucleus-api-jdo.version>
 				<datanucleus-core.version>5.2.6</datanucleus-core.version>
 				<datanucleus-jodatime.version>5.2.0-release</datanucleus-jodatime.version>
 				<datanucleus-maven-plugin.version>5.2.1</datanucleus-maven-plugin.version>
