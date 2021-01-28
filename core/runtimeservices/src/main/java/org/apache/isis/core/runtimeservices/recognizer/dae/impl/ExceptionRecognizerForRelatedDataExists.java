@@ -30,7 +30,7 @@ import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.runtimeservices.recognizer.dae.ExceptionRecognizerForDataAccessException;
 
 @Service
-@Named("isis.runtime.ExceptionRecognizerForRelatedDataExists")
+@Named("isis.runtimeservices.ExceptionRecognizerForRelatedDataExists")
 @Order(OrderPrecedence.MIDPOINT)
 @Qualifier("Default")
 public class ExceptionRecognizerForRelatedDataExists

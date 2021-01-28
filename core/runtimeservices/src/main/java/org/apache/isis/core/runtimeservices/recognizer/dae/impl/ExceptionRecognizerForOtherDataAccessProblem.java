@@ -23,27 +23,31 @@ import javax.inject.Named;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.annotation.Order;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.runtimeservices.recognizer.dae.ExceptionRecognizerForDataAccessException;
 
+/**
+ * Recognizes exceptions of type {@link DataAccessException} if no one else does (fallback). 
+ *  
+ * @since 2.0 {@index}
+ */
 @Service
-@Named("isis.runtimeservices.ExceptionRecognizerForUnableToSaveData")
-@Order(OrderPrecedence.MIDPOINT)
+@Named("isis.runtimeservices.ExceptionRecognizerForOtherDataAccessProblem")
+@Order(OrderPrecedence.LAST)
 @Qualifier("Default")
-public class ExceptionRecognizerForUnableToSaveData
+public class ExceptionRecognizerForOtherDataAccessProblem
 extends ExceptionRecognizerForDataAccessException {
 
     @Inject
-    public ExceptionRecognizerForUnableToSaveData(IsisConfiguration conf) {
+    public ExceptionRecognizerForOtherDataAccessProblem(IsisConfiguration conf) {
         super(conf,
-                Category.SERVER_ERROR,
-                ofType(org.springframework.dao.DataAccessException.class)
-                .and(including("TODO")), //TODO add magic words
-                prefix("Unable to save changes.  " +
-                        "Does similar data already exist, or has referenced data been deleted?"));
+                Category.OTHER,
+                ofType(org.springframework.dao.DataAccessException.class),
+                prefix("An unrecognized data access problem has occurred: "));
     }
 
 }

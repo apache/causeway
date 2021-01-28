@@ -30,7 +30,7 @@ import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.runtimeservices.recognizer.dae.ExceptionRecognizerForDataAccessException;
 
 @Service
-@Named("isis.runtime.ExceptionRecognizerForObjectNotFound")
+@Named("isis.runtimeservices.ExceptionRecognizerForObjectNotFound")
 @Order(OrderPrecedence.MIDPOINT)
 @Qualifier("Default")
 public class ExceptionRecognizerForObjectNotFound

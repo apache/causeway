@@ -348,7 +348,10 @@ public final class _Exceptions {
     
     // -- PREDICATES
     
-    public static boolean containsAnyOfTheseMessages(@Nullable Throwable throwable, @Nullable String ... messages) {
+    public static boolean containsAnyOfTheseMessages(
+            final @Nullable Throwable throwable, 
+            final @Nullable String ... messages) {
+        
         if(throwable==null) {
             return false;
         }
