@@ -51,7 +51,7 @@ For latest we use: https://raw.githubusercontent.com/apache/isis/master/antora/s
             <mb3:section>
                 <mb3:named>Other</mb3:named>
                 <mb3:serviceAction objectType="demo.MixinMenu" id="mixins"/>
-                <mb3:serviceAction objectType="demo.CustomValueTypeMenu" id="customValueTypes"/>
+                <mb3:serviceAction objectType="demo.EmbeddedTypeMenu" id="embeddedTypes"/>
             </mb3:section>
         </mb3:menu>
 
@@ -329,10 +329,10 @@ For latest we use: https://raw.githubusercontent.com/apache/isis/master/antora/s
             </mb3:section>
 			<mb3:section>
                 <mb3:named>Prototype Actions (on Object)</mb3:named>
-                <mb3:serviceAction objectType="demoapp.PrototypeActionsVisibilityAdvisor" id="showPrototypeActions">
+                <mb3:serviceAction objectType="demo.PrototypeActionsVisibilityAdvisor" id="showPrototypeActions">
                     <cpt:named>Show for Object</cpt:named>
                 </mb3:serviceAction>
-                <mb3:serviceAction objectType="demoapp.PrototypeActionsVisibilityAdvisor" id="doNotShowPrototypeActions">
+                <mb3:serviceAction objectType="demo.PrototypeActionsVisibilityAdvisor" id="doNotShowPrototypeActions">
                     <cpt:named>Do not Show for Object</cpt:named>
                 </mb3:serviceAction>
             </mb3:section>

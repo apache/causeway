@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.objects.other.customvaluetypes;
+package demoapp.dom.domain.objects.other.embedded;
 
 import javax.jdo.annotations.Column;
 import javax.jdo.annotations.DatastoreIdentity;
@@ -32,26 +32,33 @@ import org.apache.isis.applib.annotation.Property;
 import lombok.Getter;
 import lombok.Setter;
 
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+
+//tag::class[]
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo" )
 @DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
 @DomainObject
-public class NumberConstantJdo {
+public class NumberConstantJdo implements HasAsciiDocDescription {
 
+    // ...
+
+//end::class[]
     public String title() {
         return getName();
     }
 
+//tag::class[]
     @javax.jdo.annotations.Column(allowsNull = "false")
     @Property
     @Getter @Setter
     private String name;
 
-    @javax.jdo.annotations.Embedded(members={
-            @Persistent(name="re", columns=@Column(name="number-re")),
-            @Persistent(name="im", columns=@Column(name="number-im"))
+    @javax.jdo.annotations.Embedded(members={                           // <.>
+            @Persistent(name="re", columns=@Column(name="number_re")),  // <.>
+            @Persistent(name="im", columns=@Column(name="number_im"))   // <.>
     })
     @Property(editing = Editing.ENABLED)
     @Getter @Setter
-    private ComplexNumber number;
-
+    private ComplexNumberJdo number;
 }
+//end::class[]

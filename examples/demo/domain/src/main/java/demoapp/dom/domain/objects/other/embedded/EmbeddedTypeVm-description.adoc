@@ -1,0 +1,114 @@
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+The framework includes _experimental_ support for embedded types.
+These are somewhat similar to value types, in that they have no identity and are persisted inline within their owning object.
+They can also have custom behaviour.
+
+However, they are not quite true value types as the ORM needs to update their fields directly.
+Ensuring that The mutator method can be made `private`
+
+CAUTION: This is still work in progress, see link:https://issues.apache.org/jira/browse/ISIS-1695[ISIS-1695].
+
+== View model and collection
+
+The page shows the `EmbeddedTypeVm`.
+This simply has a collection of `NumberConstantJdo` entities:
+
+[source,java]
+.EmbeddedTypeVm.java
+----
+include::EmbeddedTypeVm.java[tags=class]
+----
+
+The `NumberConstantJdo` entity in turn declares a `name` property and a `complexNumber` property of type `ComplexNumberJdo`.
+This latter property is an embedded type:
+
+[source,java]
+.NumberConstantJdo.java
+----
+include::NumberConstantJdo.java[tags=class]
+----
+<.> JDO `@Embedded` annotation inlines the constituent parts of the value type as columns of the owning entity
+<.> maps the 'ComplexNumber.re' property to column `number_re`
+<.> maps the 'ComplexNumber.im' property to column `number_im`
+
+== Embedded (value) type
+
+The `ComplexNumberJdo` type must also be annotated as embedded.
+We also annotate it with `@Value`; this instructs the framework how to interact with the type:
+
+[source,java]
+.ComplexNumberJdo.java
+----
+include::ComplexNumberJdo.java[tags=class]
+----
+<.> Indicates to the ORM that this _is_ persisted data ...
+<.> \... but can only be embedded.
+<.> Indicates how the framework interacts with properties and parameters of this type.
+This is explained further in the "value semantics provider" section below.
+<.> All fields are accessible ...
+<.> \... but can only be mutated by the ORM (so acts like a value type).
+
+This class defines some behaviour:
+
+* its title:
++
+[source,java,indent=0]
+----
+include::ComplexNumberJdo.java[tags=title]
+----
+
+* how to parse a string:
++
+[source,java]
+----
+include::ComplexNumberJdo.java[tags=parse,indent=0]
+----
++
+This is used by the "value semantics provider", discussed in the next section.
+
+As well as using this type as a property, it can also be used as a parameter.
+The `NumberConstantJdo_updateNumber` mixin allows the value of the complex number held by any `NumberConstant` to be updated footnote:[somewhat dubious code, but this is only an example!]:
+
+[source,java]
+.NumberConstantJdo_updateNumber.java
+----
+include::NumberConstantJdo_updateNumber.java[tags=class]
+----
+
+
+== Value Semantics Provider
+
+As mentioned in the previous section, the framework uses an implementation of `ValueSemanticsProvider` to know how to interact with properties and parameters of the type:
+
+[source,java]
+.ComplexNumberJdoValueSemantics.java
+----
+include::ComplexNumberJdoValueSemantics.java[tags=class]
+----
+
+where:
+
+* `getParser()` is responsible for parsing the entered string (for either an editable property or a parameter):
++
+[source,java,indent=0]
+----
+include::ComplexNumberJdoValueSemantics.java[tags=getParser]
+----
++
+In this case the implementation just delegates to the `ComplexNumberJdo` class itself.
+
+* `getEncoderDecoder()` converts the value into a string for marshalling and other purposes:
++
+[source,java,indent=0]
+----
+include::ComplexNumberJdoValueSemantics.java[tags=getEncoderDecoder]
+----
+
+* `getDefaultsProvider()` returns the default value to be used for non-optional parameters and properties:
++
+[source,java,indent=0]
+----
+include::ComplexNumberJdoValueSemantics.java[tags=getDefaultsProvider]
+----
+

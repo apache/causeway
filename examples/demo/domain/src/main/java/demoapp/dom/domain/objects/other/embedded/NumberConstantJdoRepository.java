@@ -16,30 +16,40 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.objects.other.customvaluetypes;
+package demoapp.dom.domain.objects.other.embedded;
 
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
-import org.apache.isis.applib.annotation.Collection;
-import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.Nature;
+import org.springframework.stereotype.Repository;
 
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+import org.apache.isis.applib.services.factory.FactoryService;
+import org.apache.isis.applib.services.repository.RepositoryService;
 
-@DomainObject(nature=Nature.VIEW_MODEL, objectType = "demo.TupleDemo")
-public class CustomValueTypeVm implements HasAsciiDocDescription {
+import lombok.val;
 
-    @Inject private NumberConstantJdoRepository numberConstantRepo;
+@Repository
+@Named("demo.numberConstantRepository")
+public class NumberConstantJdoRepository {
 
-    public String title() {
-        return "Custom Value Types";
+    @Inject private RepositoryService repository;
+    @Inject private FactoryService factory;
+
+    public List<NumberConstantJdo> listAll(){
+        return repository.allInstances(NumberConstantJdo.class);
     }
 
-    @Collection
-    public List<NumberConstantJdo> getAllConstants(){
-        return numberConstantRepo.listAll();
+    public void add(String name, ComplexNumberJdo number) {
+        val numConst = factory.detachedEntity(new NumberConstantJdo());
+        numConst.setName(name);
+        numConst.setNumber(number);
+        add(numConst);
+    }
+
+    public void add(NumberConstantJdo entry) {
+        repository.persist(entry);
     }
 
 }

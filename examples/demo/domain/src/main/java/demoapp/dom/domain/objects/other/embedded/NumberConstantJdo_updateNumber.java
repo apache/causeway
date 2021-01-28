@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.objects.other.customvaluetypes;
+package demoapp.dom.domain.objects.other.embedded;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
@@ -24,20 +24,21 @@ import org.apache.isis.applib.annotation.PromptStyle;
 
 import lombok.RequiredArgsConstructor;
 
+// tag::class[]
 @Action(associateWith = "number")
 @ActionLayout(promptStyle = PromptStyle.DIALOG_SIDEBAR)
 @RequiredArgsConstructor
-public class NumberConstantJdo_updateNumberUsingAction {
+public class NumberConstantJdo_updateNumber {
 
     private final NumberConstantJdo numberConstantJdo;
 
-    public NumberConstantJdo act(ComplexNumber complexNumber) {
-        numberConstantJdo.setNumber(complexNumber);
+    public NumberConstantJdo act(ComplexNumberJdo complexNumberJdo) {
+        numberConstantJdo.setNumber(complexNumberJdo);
         return numberConstantJdo;
     }
 
-    public ComplexNumber default0Act() {
+    public ComplexNumberJdo default0Act() {
         return numberConstantJdo.getNumber();
     }
-
 }
+// end::class[]

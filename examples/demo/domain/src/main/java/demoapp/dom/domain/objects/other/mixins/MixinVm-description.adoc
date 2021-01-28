@@ -6,7 +6,7 @@ This behaviour isthen contributed to a target object as an action, property or c
 
 Mixins only contribute behaviour, not state.
 In the case of a contributed property or collection, these are in effect _derived_.
-(Behind the scenes a query is run against the contributing object).
+Behind the scenes a query is run against the contributing object.
 
 The contributee object is injected into the mixin through its (1-arg) constructor.
 Note that any type can be used, including interfaces.
@@ -21,8 +21,7 @@ include::MixinVm.java[tags=class]
 <.> editing disabled; it will be modified through a mixin
 
 The mixins contribute behaviour to list the first N fibonacci numbers.
-They don't contribute directly to the concrete `MixinVm` class.
-Since all they require is a count value, they instead contribute to the `CountHolder` interface that the `MixinVm` class implements:
+They don't contribute directly to the concrete `MixinVm` class, however; since all they require is a count value, they instead contribute to the `CountHolder` interface that the `MixinVm` class implements:
 
 [source,java]
 .CountHolder.java

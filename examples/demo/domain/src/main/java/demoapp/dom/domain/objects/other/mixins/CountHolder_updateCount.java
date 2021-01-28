@@ -39,9 +39,9 @@ public class CountHolder_updateCount {
     }
 
     public String validate0Act(final int proposedCount) {
-        return proposedCount >= 0 && proposedCount <= 50
+        return proposedCount >= 0 && proposedCount <= 46
                 ? null
-                : "Must be in the range [0,50]";
+                : "Must be in the range [0,46]";
     }
 }
 //end::class[]

@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package demoapp.dom.domain.objects.other.customvaluetypes;
+package demoapp.dom.domain.objects.other.embedded;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
@@ -26,26 +26,23 @@ import org.apache.isis.applib.services.factory.FactoryService;
 
 import lombok.RequiredArgsConstructor;
 
-@DomainService(nature=NatureOfService.VIEW, objectType = "demo.CustomValueTypeMenu")
+@DomainService(nature=NatureOfService.VIEW, objectType = "demo.EmbeddedTypeMenu")
 @RequiredArgsConstructor
-public class CustomValueTypeMenu {
+public class EmbeddedTypeMenu {
 
     private final FactoryService factoryService;
-    private final NumberConstantJdoRepository numberConstantRepo;
+    private final NumberConstantJdoRepository repo;
 
     @Action
-    @ActionLayout(cssClassFa="fa-bolt", describedAs = "Experimental support for custom value types")
-    public CustomValueTypeVm customValueTypes(){
+    @ActionLayout(cssClassFa="fa-stop-circle", describedAs = "Experimental support for embedded types")
+    public EmbeddedTypeVm embeddedTypes(){
 
-        if(numberConstantRepo.listAll().size() == 0) {
-            numberConstantRepo.add("Pi", ComplexNumber.of(Math.PI, 0.));
-            numberConstantRepo.add("Euler's Constant", ComplexNumber.of(Math.E, 0.));
-            numberConstantRepo.add("Imaginary Unit", ComplexNumber.parse("0 + 1i"));
+        if(repo.listAll().size() == 0) {
+            repo.add("Pi", ComplexNumberJdo.of(Math.PI, 0.));
+            repo.add("Euler's Constant", ComplexNumberJdo.of(Math.E, 0.));
+            repo.add("Imaginary Unit", ComplexNumberJdo.of(0, 1));
         }
 
-        return factoryService.viewModel(new CustomValueTypeVm());
+        return factoryService.viewModel(new EmbeddedTypeVm());
     }
-
-
-
 }

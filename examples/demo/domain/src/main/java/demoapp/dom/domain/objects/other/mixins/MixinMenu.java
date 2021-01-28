@@ -28,7 +28,7 @@ import lombok.val;
 public class MixinMenu {
 
     @Action
-    @ActionLayout(cssClassFa="fa-bolt", describedAs="Contribute behaviour to domain objects")
+    @ActionLayout(cssClassFa="fa-mortar-pestle", describedAs="Contribute behaviour to domain objects")
     public MixinVm mixins(){
         val vm = new MixinVm();
         vm.setCount(10);

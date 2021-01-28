@@ -259,3 +259,7 @@ div.exceptionStackTracePanel div.errorInfo h2.mainMessage {
     margin-left: -32px;
 }
 
+div.listingblock div.title {
+    font-style: italic;
+    color: darkred;
+}
