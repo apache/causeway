@@ -25,9 +25,9 @@ import java.util.UUID;
 import java.util.concurrent.Callable;
 import java.util.function.Predicate;
 
-import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.applib.exceptions.RecoverableException;
 import org.apache.isis.applib.exceptions.unrecoverable.DomainModelException;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.commons.collections.Can;

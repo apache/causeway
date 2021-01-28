@@ -21,7 +21,7 @@ package org.apache.isis.viewer.wicket.ui.errors;
 import java.util.List;
 import java.util.Optional;
 
-import org.apache.isis.applib.UnrecoverableException;
+import org.apache.isis.applib.exceptions.UnrecoverableException;
 import org.apache.isis.applib.services.error.ErrorReportingService;
 import org.apache.isis.applib.services.error.Ticket;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer.Recognition;

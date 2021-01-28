@@ -48,8 +48,8 @@ import lombok.val;
  *
  * <p>
  * The Isis framework also provides a default implementation of this
- * service that recognizes any {@link org.apache.isis.applib.RecoverableException}, simply returning
- * the exception's {@link org.apache.isis.applib.RecoverableException#getMessage() message}.  This
+ * service that recognizes any {@link org.apache.isis.applib.exceptions.RecoverableException}, simply returning
+ * the exception's {@link org.apache.isis.applib.exceptions.RecoverableException#getMessage() message}.  This
  * allows any component or domain object to throw this exception with
  * the knowledge that it will be handled appropriately.
  *

@@ -22,9 +22,9 @@ package org.apache.isis.core.metamodel.facets.object.domainobjectlayout;
 import java.util.Map;
 import java.util.Optional;
 
-import org.apache.isis.applib.UnrecoverableException;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.events.ui.LayoutUiEvent;
+import org.apache.isis.applib.exceptions.UnrecoverableException;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;

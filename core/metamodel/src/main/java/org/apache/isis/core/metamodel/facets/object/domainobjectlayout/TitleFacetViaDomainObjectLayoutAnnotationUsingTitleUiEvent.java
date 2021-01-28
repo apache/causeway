@@ -22,9 +22,9 @@ package org.apache.isis.core.metamodel.facets.object.domainobjectlayout;
 import java.util.Map;
 import java.util.Optional;
 
-import org.apache.isis.applib.UnrecoverableException;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.events.ui.TitleUiEvent;
+import org.apache.isis.applib.exceptions.UnrecoverableException;
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.commons.internal.base._Casts;

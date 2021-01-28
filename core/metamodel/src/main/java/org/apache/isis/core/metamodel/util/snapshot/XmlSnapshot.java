@@ -38,8 +38,8 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import org.apache.isis.applib.UnrecoverableException;
 import org.apache.isis.applib.ViewModel;
+import org.apache.isis.applib.exceptions.UnrecoverableException;
 import org.apache.isis.applib.services.xmlsnapshot.XmlSnapshotService.Snapshot;
 import org.apache.isis.applib.snapshot.SnapshottableWithInclusions;
 import org.apache.isis.commons.internal.codec._DocumentFactories;

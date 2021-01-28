@@ -27,7 +27,7 @@ import java.net.URL;
 import java.util.Objects;
 import java.util.Optional;
 
-import org.apache.isis.applib.UnrecoverableException;
+import org.apache.isis.applib.exceptions.UnrecoverableException;
 import org.apache.isis.commons.internal._Constants;
 import org.apache.isis.commons.internal.base._Reduction;
 import org.apache.isis.commons.internal.collections._Lists;

@@ -19,8 +19,8 @@
 
 package org.apache.isis.applib.exceptions.unrecoverable;
 
-import org.apache.isis.applib.RecoverableException;
-import org.apache.isis.applib.UnrecoverableException;
+import org.apache.isis.applib.exceptions.RecoverableException;
+import org.apache.isis.applib.exceptions.UnrecoverableException;
 
 /**
  * Indicates that a repository method has failed.

@@ -19,7 +19,7 @@
 
 package org.apache.isis.applib.exceptions.recoverable;
 
-import org.apache.isis.applib.RecoverableException;
+import org.apache.isis.applib.exceptions.RecoverableException;
 
 /**
  * Indicates that a value entry is not valid. Note the entry may still parse

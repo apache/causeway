@@ -17,23 +17,38 @@
  *  under the License.
  */
 
-package org.apache.isis.applib;
+package org.apache.isis.applib.exceptions;
 
-import org.apache.isis.applib.exceptions.TranslatableException;
 import org.apache.isis.applib.services.i18n.TranslatableString;
+import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 
 /**
- * Indicates that an unexpected, non-recoverable (fatal) exception has occurred within
- * the application logic.
- * <p>
- * Throwing this exception will (dependent on the viewer) result in some sort of an error 
- * page being displayed to the user.
+ * Indicates that an exceptional condition/problem has occurred within the application's domain logic.
  *
- * @see RecoverableException
+ * <p>
+ * Throwing this exception is equivalent to calling {@link MessageService#raiseError(String)}.
+ * The framework will trap the error and display the exception message as a warning.
+ *
+ * <p>
+ * This exception should only be thrown for &quot;recoverable&quot; exceptions, that is, those which
+ * could be anticipated by the application. It should not be thrown for fatal, unanticipated exceptions.
+ *
+ * <p>
+ * The framework attempts to apply some heuristics; if the underlying Isis transaction has been aborted
+ * (for example as the result of a problem persisting some data) but then the application attempts to
+ * throw this exception, the exception will be promoted to a fatal exception.
+ *
+ * <p>
+ * Note that this exception has identical semantics to {@link ApplicationException} (of which it is the immediate
+ * superclass), and can be considered a synonym.
+ *
+ * @see UnrecoverableException
+ * @see FatalException
  * @since 1.x {@index}
  */
-public class UnrecoverableException 
+public class RecoverableException 
 extends RuntimeException 
 implements TranslatableException {
 
@@ -42,26 +57,26 @@ implements TranslatableException {
     private final TranslatableString translatableMessage;
     private final String translationContext;
 
-    public UnrecoverableException(final String msg) {
+    public RecoverableException(final String msg) {
         this(msg, null, null, null, null);
     }
 
-    public UnrecoverableException(
+    public RecoverableException(
             final TranslatableString translatableMessage,
             final Class<?> translationContextClass,
             final String translationContextMethod) {
         this(null, translatableMessage, translationContextClass, translationContextMethod, null);
     }
 
-    public UnrecoverableException(final Throwable cause) {
+    public RecoverableException(final Throwable cause) {
         this(null, null, null, null, cause);
     }
 
-    public UnrecoverableException(final String msg, final Throwable cause) {
+    public RecoverableException(final String msg, final Throwable cause) {
         this(msg, null, null, null, cause);
     }
 
-    public UnrecoverableException(
+    public RecoverableException(
             final TranslatableString translatableMessage,
             final Class<?> translationContextClass,
             final String translationContextMethod,
@@ -69,7 +84,7 @@ implements TranslatableException {
         this(null, translatableMessage, translationContextClass, translationContextMethod, cause);
     }
 
-    private UnrecoverableException(
+    private RecoverableException(
             final String message,
             final TranslatableString translatableMessage,
             final Class<?> translationContextClass,
@@ -82,16 +97,16 @@ implements TranslatableException {
                 ? (translationContextClass.getName() +
                         (!_Strings.isNullOrEmpty(translationContextMethod)
                                 ? "#" + translationContextMethod
-                                : "")
+                                        : "")
                         )
-                : null;
+                        : null;
     }
 
     @Override
     public String getMessage() {
         return getTranslatableMessage() != null
                 ? getTranslatableMessage().getPattern()
-                : super.getMessage();
+                        : super.getMessage();
     }
 
     @Override
@@ -104,5 +119,20 @@ implements TranslatableException {
         return translationContext;
     }
 
+
+    public static class Util {
+        private Util() {}
+
+        public static RecoverableException getRecoverableExceptionIfAny(final Exception ex) {
+
+            return _Exceptions.streamCausalChain(ex)
+                    .filter(t->t instanceof RecoverableException)
+                    .map(t->(RecoverableException)t)
+                    .findFirst()
+                    .orElse(null)
+                    ;
+
+        }
+    }
 
 }

@@ -29,7 +29,7 @@ import java.util.zip.ZipOutputStream;
 
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.UnrecoverableException;
+import org.apache.isis.applib.exceptions.UnrecoverableException;
 import org.apache.isis.commons.internal.base._Bytes;
 
 import lombok.Data;

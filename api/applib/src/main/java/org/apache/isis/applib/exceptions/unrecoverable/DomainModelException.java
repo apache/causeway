@@ -19,7 +19,7 @@
 
 package org.apache.isis.applib.exceptions.unrecoverable;
 
-import org.apache.isis.applib.UnrecoverableException;
+import org.apache.isis.applib.exceptions.UnrecoverableException;
 
 /**
  * Thrown when a problem is found with the domain model, and Isis cannot

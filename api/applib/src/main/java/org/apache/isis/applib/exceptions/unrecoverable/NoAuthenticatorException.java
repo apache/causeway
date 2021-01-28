@@ -19,7 +19,7 @@
 
 package org.apache.isis.applib.exceptions.unrecoverable;
 
-import org.apache.isis.applib.UnrecoverableException;
+import org.apache.isis.applib.exceptions.UnrecoverableException;
 
 /**
  * Indicates that there is no Authenticator available to authenticate a user

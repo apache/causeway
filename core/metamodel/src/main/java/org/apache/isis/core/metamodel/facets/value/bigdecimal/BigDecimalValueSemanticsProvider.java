@@ -25,9 +25,9 @@ import java.text.NumberFormat;
 import java.util.Locale;
 import java.util.Map;
 
-import org.apache.isis.applib.UnrecoverableException;
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
+import org.apache.isis.applib.exceptions.UnrecoverableException;
 import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
 import org.apache.isis.core.metamodel.commons.LocaleUtil;
 import org.apache.isis.core.metamodel.facetapi.Facet;

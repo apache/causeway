@@ -28,7 +28,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.ext.ExceptionMapper;
 
-import org.apache.isis.applib.RecoverableException;
+import org.apache.isis.applib.exceptions.RecoverableException;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;

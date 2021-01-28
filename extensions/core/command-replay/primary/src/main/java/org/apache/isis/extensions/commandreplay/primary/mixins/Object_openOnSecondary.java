@@ -23,10 +23,10 @@ import java.net.URL;
 
 import javax.inject.Inject;
 
-import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.exceptions.RecoverableException;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.extensions.commandreplay.primary.IsisModuleExtCommandReplayPrimary;
 import org.apache.isis.extensions.commandreplay.primary.config.PrimaryConfig;
