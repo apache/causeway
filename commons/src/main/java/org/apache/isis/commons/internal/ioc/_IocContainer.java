@@ -29,7 +29,6 @@ import javax.annotation.Nullable;
 import org.springframework.context.ApplicationContext;
 
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.exceptions.IsisException;
 import org.apache.isis.commons.internal.base._With;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 
