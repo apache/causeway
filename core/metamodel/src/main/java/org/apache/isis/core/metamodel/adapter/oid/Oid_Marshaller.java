@@ -20,6 +20,7 @@ package org.apache.isis.core.metamodel.adapter.oid;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
@@ -145,6 +146,10 @@ final class Oid_Marshaller implements Oid.Marshaller, Oid.Unmarshaller {
         final String isTransientOrViewModelStr = getGroup(matcher, 3); // deprecated
 
         final String rootObjectType = getGroup(matcher, 4);
+        if(_Strings.isEmpty(rootObjectType)) {
+            throw _Exceptions.illegalArgument("cannot parse OID, must have an 'ObjectType'");
+        }
+        
         final String rootIdentifier = getGroup(matcher, 5);
 
         final String aggregateOidPart = getGroup(matcher, 6);
@@ -173,10 +178,10 @@ final class Oid_Marshaller implements Oid.Marshaller, Oid.Unmarshaller {
                 return _Casts.uncheckedCast(
                         Oid_Root.of(ObjectSpecId.of(rootObjectType), rootIdentifier));
             } else {
-                throw _Exceptions.illegalArgument("Aggregated Oids are no longer supported");
+                throw _Exceptions.illegalArgument("Aggregated OIDs are no longer supported");
             }
         } else {
-            throw _Exceptions.illegalArgument("Parented Oids are no longer supported.");
+            throw _Exceptions.illegalArgument("Parented OIDs are no longer supported.");
         }
     }
 
