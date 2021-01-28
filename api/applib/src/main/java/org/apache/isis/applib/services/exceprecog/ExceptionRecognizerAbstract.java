@@ -99,26 +99,26 @@ public abstract class ExceptionRecognizerAbstract implements ExceptionRecognizer
     private Optional<String> recognizeRootCause(Throwable ex) {
 
         return _Exceptions.streamCausalChain(ex)
-                .filter(predicate)
-                .map(throwable->{
-                    if(logRecognizedExceptions) {
-                        log.info("Recognized exception, stacktrace : ", throwable);
-                    }
-                    if(ex instanceof TranslatableException) {
-                        final TranslatableException translatableException = (TranslatableException) ex;
-                        final TranslatableString translatableMessage = translatableException.getTranslatableMessage();
-                        final String translationContext = translatableException.getTranslationContext();
-                        if(translatableMessage != null && translationContext != null) {
-                            return translatableMessage.translate(translationService, translationContext);
-                        }
-                    }
-                    final Throwable rootCause = _Exceptions.getRootCause(throwable);
-                    final String rootCauseMessage = rootCause.getMessage();
-                    final String parsedMessage = messageParser.apply(rootCauseMessage);
-                    return parsedMessage;
-                })
-                .filter(_NullSafe::isPresent)
-                .findFirst();
+        .filter(predicate)
+        .map(throwable->{
+            if(logRecognizedExceptions) {
+                log.info("Recognized exception, stacktrace : ", throwable);
+            }
+            if(ex instanceof TranslatableException) {
+                final TranslatableException translatableException = (TranslatableException) ex;
+                final TranslatableString translatableMessage = translatableException.getTranslatableMessage();
+                final String translationContext = translatableException.getTranslationContext();
+                if(translatableMessage != null && translationContext != null) {
+                    return translatableMessage.translate(translationService, translationContext);
+                }
+            }
+            final Throwable rootCause = _Exceptions.getRootCause(throwable);
+            final String rootCauseMessage = rootCause.getMessage();
+            final String parsedMessage = messageParser.apply(rootCauseMessage);
+            return parsedMessage;
+        })
+        .filter(_NullSafe::isPresent)
+        .findFirst();
     }
 
     @Override

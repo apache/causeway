@@ -18,6 +18,7 @@
  */
 package org.apache.isis.persistence.jdo.integration.exceptions.recognizers;
 
+import javax.inject.Inject;
 import javax.inject.Named;
 import javax.jdo.JDODataStoreException;
 
@@ -26,6 +27,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.core.config.IsisConfiguration;
 
 @Service
 @Named("isisJdoIntegration.ExceptionRecognizerForJDODataStoreExceptionIntegrityConstraintViolationForeignKeyNoActionException")
@@ -34,8 +36,10 @@ import org.apache.isis.applib.annotation.OrderPrecedence;
 public class ExceptionRecognizerForJDODataStoreExceptionIntegrityConstraintViolationForeignKeyNoActionException
 extends ExceptionRecognizerForJDODataStoreExceptionAbstract {
 
-    public ExceptionRecognizerForJDODataStoreExceptionIntegrityConstraintViolationForeignKeyNoActionException() {
-        super(Category.CONSTRAINT_VIOLATION,
+    @Inject
+    public ExceptionRecognizerForJDODataStoreExceptionIntegrityConstraintViolationForeignKeyNoActionException(IsisConfiguration conf) {
+        super(conf, 
+                Category.CONSTRAINT_VIOLATION,
                 ofTypeIncluding(
                         JDODataStoreException.class,
                         _JdoNestedExceptionResolver::streamNestedExceptionsOf,

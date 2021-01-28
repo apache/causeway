@@ -28,6 +28,7 @@ import javax.persistence.metamodel.EntityType;
 
 import org.springframework.data.jpa.repository.JpaContext;
 
+import org.apache.isis.applib.exceptions.unrecoverable.ObjectNotFoundException;
 import org.apache.isis.applib.query.AllInstancesQuery;
 import org.apache.isis.applib.query.NamedQuery;
 import org.apache.isis.applib.query.Query;
@@ -140,9 +141,13 @@ public class JpaEntityFacetFactory extends FacetFactoryAbstract {
             
             val primaryKey = getObjectIdSerializer().parse(identifier);
             val entityManager = getEntityManager();
-            val entity = entityManager.find(entityClass, primaryKey);
+            val entityPojo = entityManager.find(entityClass, primaryKey);
             
-            return ManagedObject.of(entitySpec, entity);
+            if (entityPojo == null) {
+                throw new ObjectNotFoundException(""+identifier);
+            }
+            
+            return ManagedObject.of(entitySpec, entityPojo);
         }
 
         @Override

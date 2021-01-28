@@ -33,7 +33,8 @@ import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerForType;
 
 /**
  * Framework-provided implementation of {@link ExceptionRecognizer},
- * which will automatically recognize any {@link org.apache.isis.applib.exceptions.RecoverableException}s.
+ * which will automatically recognize any 
+ * {@link org.apache.isis.applib.exceptions.RecoverableException}s.
  */
 @Service
 @Named("isis.metamodel.ExceptionRecognizerForRecoverableException")

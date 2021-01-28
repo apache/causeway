@@ -22,30 +22,21 @@ package org.apache.isis.applib.exceptions;
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.commons.internal.exceptions._Exceptions;
 
 /**
  * Indicates that an exceptional condition/problem has occurred within the application's domain logic.
- *
  * <p>
  * Throwing this exception is equivalent to calling {@link MessageService#raiseError(String)}.
  * The framework will trap the error and display the exception message as a warning.
- *
  * <p>
  * This exception should only be thrown for &quot;recoverable&quot; exceptions, that is, those which
  * could be anticipated by the application. It should not be thrown for fatal, unanticipated exceptions.
- *
  * <p>
  * The framework attempts to apply some heuristics; if the underlying Isis transaction has been aborted
  * (for example as the result of a problem persisting some data) but then the application attempts to
  * throw this exception, the exception will be promoted to a fatal exception.
  *
- * <p>
- * Note that this exception has identical semantics to {@link ApplicationException} (of which it is the immediate
- * superclass), and can be considered a synonym.
- *
  * @see UnrecoverableException
- * @see FatalException
  * @since 1.x {@index}
  */
 public class RecoverableException 
@@ -119,20 +110,5 @@ implements TranslatableException {
         return translationContext;
     }
 
-
-    public static class Util {
-        private Util() {}
-
-        public static RecoverableException getRecoverableExceptionIfAny(final Exception ex) {
-
-            return _Exceptions.streamCausalChain(ex)
-                    .filter(t->t instanceof RecoverableException)
-                    .map(t->(RecoverableException)t)
-                    .findFirst()
-                    .orElse(null)
-                    ;
-
-        }
-    }
 
 }

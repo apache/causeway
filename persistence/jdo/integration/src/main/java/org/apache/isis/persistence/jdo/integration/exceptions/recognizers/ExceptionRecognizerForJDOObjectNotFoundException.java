@@ -18,6 +18,7 @@
  */
 package org.apache.isis.persistence.jdo.integration.exceptions.recognizers;
 
+import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -25,6 +26,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.core.config.IsisConfiguration;
 
 @Service
 @Named("isisJdoIntegration.ExceptionRecognizerForJDOObjectNotFoundException")
@@ -33,8 +35,10 @@ import org.apache.isis.applib.annotation.OrderPrecedence;
 public class ExceptionRecognizerForJDOObjectNotFoundException
 extends ExceptionRecognizerForJDODataStoreExceptionAbstract {
 
-    public ExceptionRecognizerForJDOObjectNotFoundException() {
-        super(Category.NOT_FOUND,
+    @Inject
+    public ExceptionRecognizerForJDOObjectNotFoundException(IsisConfiguration conf) {
+        super(conf, 
+                Category.NOT_FOUND,
                 javax.jdo.JDOObjectNotFoundException.class,
                 prefix("Unable to load object.  " +
                         "Has it been deleted by someone else?"));

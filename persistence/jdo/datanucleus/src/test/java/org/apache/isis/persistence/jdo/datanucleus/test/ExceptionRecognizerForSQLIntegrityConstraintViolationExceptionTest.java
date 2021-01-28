@@ -28,6 +28,7 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 
+import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.persistence.jdo.integration.exceptions.recognizers.ExceptionRecognizerForSQLIntegrityConstraintViolationUniqueOrIndexException;
 
 import lombok.val;
@@ -38,7 +39,8 @@ public class ExceptionRecognizerForSQLIntegrityConstraintViolationExceptionTest 
 
     @Before
     public void setUp() throws Exception {
-        exceptionRecognizer = new ExceptionRecognizerForSQLIntegrityConstraintViolationUniqueOrIndexException();
+        exceptionRecognizer = new ExceptionRecognizerForSQLIntegrityConstraintViolationUniqueOrIndexException(
+                new IsisConfiguration(null));
     }
 
     @Test

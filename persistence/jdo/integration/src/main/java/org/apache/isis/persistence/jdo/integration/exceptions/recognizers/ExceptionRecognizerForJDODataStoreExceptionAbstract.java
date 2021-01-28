@@ -21,41 +21,33 @@ package org.apache.isis.persistence.jdo.integration.exceptions.recognizers;
 import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
 
-import javax.annotation.PostConstruct;
-import javax.inject.Inject;
-
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerForType;
 import org.apache.isis.core.config.IsisConfiguration;
 
-import lombok.val;
-
 /**
- * common to those that can be disabled via IsisConfiguration
+ * Common to those that can be disabled via IsisConfiguration.
  */
-abstract class ExceptionRecognizerForJDODataStoreExceptionAbstract extends ExceptionRecognizerForType {
-
-    @Inject private IsisConfiguration isisConfiguration;
+abstract class ExceptionRecognizerForJDODataStoreExceptionAbstract 
+extends ExceptionRecognizerForType {
 
     protected ExceptionRecognizerForJDODataStoreExceptionAbstract(
-            Category category,
+            final IsisConfiguration isisConfiguration,
+            final Category category,
             final Predicate<Throwable> predicate,
             final UnaryOperator<String> messageParser) {
         super(category, predicate, messageParser);
+        
+        super.setDisabled(
+                isisConfiguration
+                .getCore().getRuntimeServices().getExceptionRecognizer().getJdo().isDisable());
     }
 
     protected ExceptionRecognizerForJDODataStoreExceptionAbstract(
-            Category category,
+            final IsisConfiguration isisConfiguration,
+            final Category category,
             final Class<? extends Exception> exceptionType,
             final UnaryOperator<String> messageParser) {
-        this(category, ofType(exceptionType), messageParser);
+        this(isisConfiguration, category, ofType(exceptionType), messageParser);
     }
-
-    @PostConstruct
-    public void init() {
-        val disabled = isisConfiguration
-                .getCore().getRuntimeServices().getExceptionRecognizer().getJdo().isDisable();
-        super.setDisabled(disabled);
-    }
-
 
 }

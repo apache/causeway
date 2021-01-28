@@ -18,6 +18,7 @@
  */
 package org.apache.isis.persistence.jdo.integration.exceptions.recognizers;
 
+import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -25,6 +26,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.core.config.IsisConfiguration;
 
 @Service
 @Named("isisJdoIntegration.ExceptionRecognizerForJDODataStoreException")
@@ -33,8 +35,10 @@ import org.apache.isis.applib.annotation.OrderPrecedence;
 public class ExceptionRecognizerForJDODataStoreException
 extends ExceptionRecognizerForJDODataStoreExceptionAbstract {
 
-    public ExceptionRecognizerForJDODataStoreException() {
-        super(Category.SERVER_ERROR,
+    @Inject
+    public ExceptionRecognizerForJDODataStoreException(IsisConfiguration conf) {
+        super(conf,
+                Category.SERVER_ERROR,
                 ofTypeExcluding(
                         javax.jdo.JDODataStoreException.class,
                         _JdoNestedExceptionResolver::streamNestedExceptionsOf,
@@ -42,6 +46,5 @@ extends ExceptionRecognizerForJDODataStoreExceptionAbstract {
                 prefix("Unable to save changes.  " +
                         "Does similar data already exist, or has referenced data been deleted?"));
     }
-
 
 }

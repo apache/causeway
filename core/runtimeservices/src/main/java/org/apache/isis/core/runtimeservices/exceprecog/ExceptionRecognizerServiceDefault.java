@@ -20,10 +20,8 @@ package org.apache.isis.core.runtimeservices.exceprecog;
 
 import java.util.Optional;
 
-import javax.annotation.Nonnull;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.validation.constraints.NotNull;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
@@ -37,7 +35,7 @@ import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Lazy;
-import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 
 import lombok.NonNull;
 import lombok.val;
@@ -52,7 +50,8 @@ import lombok.val;
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")
-public class ExceptionRecognizerServiceDefault implements ExceptionRecognizerService {
+public class ExceptionRecognizerServiceDefault 
+implements ExceptionRecognizerService {
 
     @Inject private ServiceRegistry serviceRegistry;
     
@@ -64,12 +63,13 @@ public class ExceptionRecognizerServiceDefault implements ExceptionRecognizerSer
     @Override
     public Optional<Recognition> recognizeFromSelected(
             @NonNull final Can<ExceptionRecognizer> recognizers,
-            @NonNull final Exception ex) {
+            @NonNull final Throwable ex) {
         
-        return recognizers.stream()
-                .map($->handleSingle($, ex))
-                .filter(_NullSafe::isPresent)
-                .findFirst();
+        return _Exceptions.streamCausalChain(ex)
+        .map(nextEx->recognize(recognizers, nextEx))
+        .filter(Optional::isPresent)
+        .findFirst()
+        .orElse(Optional.empty());
     }
     
     // -- HELPER
@@ -77,16 +77,29 @@ public class ExceptionRecognizerServiceDefault implements ExceptionRecognizerSer
     private final _Lazy<Can<ExceptionRecognizer>> exceptionRecognizers = 
             _Lazy.threadSafe(()->serviceRegistry.select(ExceptionRecognizer.class));
 
+    private static Optional<Recognition> recognize(
+            final Can<ExceptionRecognizer> recognizers, 
+            final Throwable ex) {
+        
+        return recognizers.stream()
+        .map(recognizer->recognize(recognizer, ex))
+        .filter(Optional::isPresent)
+        .findFirst()
+        .orElse(Optional.empty());
+    }
+    
     /*
      * handle recognizers in a null-safe manner (might be third party contributed)
      */
-    private static Recognition handleSingle(ExceptionRecognizer recognizer, Exception ex) {
-        val recognized = recognizer.recognize(ex);
-        if(recognized==null || !recognized.isPresent()) {
-            return null;    
-        }
-        return recognized.get();
+    private static Optional<Recognition> recognize(
+            final ExceptionRecognizer recognizer, 
+            final Throwable ex) {
         
+        val recognized = recognizer.recognize(ex);
+        return recognized==null
+                ? Optional.empty()
+                : recognized;
     }
+    
     
 }

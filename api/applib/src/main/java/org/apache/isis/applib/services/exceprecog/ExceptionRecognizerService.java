@@ -43,18 +43,18 @@ public interface ExceptionRecognizerService {
      * @return optionally a recognition object, that describes both the category and reason,
      * that will be included with the user-friendly message.
      */
-    default Optional<Recognition> recognize(Exception ex) {
+    default Optional<Recognition> recognize(Throwable ex) {
         return recognizeFromSelected(getExceptionRecognizers(), ex);
     }
 
     /**
      * Takes into consideration ExceptionRecognizers as given by {@code recognizers}.
      *
-     * @param recognizers - one or more recognizers to attempt to recognize the exceptoin
+     * @param recognizers - one or more recognizers to attempt to recognize the exception
      * @param ex - the exception to be recognized
      * @return optionally a recognition object, that describes both the category and reason,
      * that will be included with the user-friendly message.
      */
-    Optional<Recognition> recognizeFromSelected(Can<ExceptionRecognizer> recognizers, Exception ex);
+    Optional<Recognition> recognizeFromSelected(Can<ExceptionRecognizer> recognizers, Throwable ex);
 
 }

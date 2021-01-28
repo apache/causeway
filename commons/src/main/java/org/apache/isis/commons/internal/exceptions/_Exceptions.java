@@ -321,7 +321,8 @@ public final class _Exceptions {
         if(ex==null) {
             return Stream.empty();
         }
-        return getCausalChain(ex).stream();
+        val chain = getCausalChain(ex);
+        return chain.stream();
     }
 
     public static Throwable getRootCause(@Nullable Throwable ex) {

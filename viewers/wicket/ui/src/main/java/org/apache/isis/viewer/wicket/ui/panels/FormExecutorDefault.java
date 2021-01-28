@@ -33,7 +33,6 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.util.visit.IVisit;
 import org.apache.wicket.util.visit.IVisitor;
 
-import org.apache.isis.applib.exceptions.RecoverableException;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer.Category;
@@ -193,50 +192,22 @@ implements FormExecutor {
 
             return true;
 
-//        } catch (ConcurrencyException ex) {
-//
-//            // second attempt should succeed, because the Oid would have
-//            // been updated in the attempt
-//            if (targetAdapter == null) {
-//                targetAdapter = obtainTargetAdapter();
-//            }
-//
-//            forwardOnConcurrencyException(targetAdapter, ex);
-//
-//            getMessageService().warnUser(ex.getMessage());
-//
-//            return false;
-
-        } catch (RuntimeException ex) {
+        } catch (Throwable ex) {
 
             // there's no need to set the abort cause on the transaction, it will have already been done
             // (in IsisTransactionManager#executeWithinTransaction(...)).
 
-
-            // see if is an application-defined exception. If so, convert to an application error,
-            final RecoverableException appEx = RecoverableException.Util.getRecoverableExceptionIfAny(ex);
-            String message = null;
-            if (appEx != null) {
-                message = appEx.getMessage();
-            }
-
-            // otherwise, attempt to recognize this exception using the ExceptionRecognizers
-            if(message == null) {
-                message = recognizeException(ex, targetIfAny, feedbackFormIfAny)
-                        .map($->$.toMessage(getTranslationService()))
-                        .orElse(null);
-            }
+            // attempt to recognize this exception using the ExceptionRecognizers
+            val messageWhenRecognized = recognizeException(ex, targetIfAny, feedbackFormIfAny)
+                        .map(recog->recog.toMessage(getTranslationService()));
 
             // if we did recognize the message, and not inline prompt, then display to user as a growl pop-up
-            if (message != null && !withinPrompt) {
+            if (messageWhenRecognized.isPresent() && !withinPrompt) {
                 // ... display as growl pop-up
                 
-                val errorMsg = message;
-                
                 currentMessageBroker().ifPresent(messageBroker->{
-                    messageBroker.setApplicationError(errorMsg);    
+                    messageBroker.setApplicationError(messageWhenRecognized.get());    
                 });
-                
 
                 //TODO [2089] hotfix to render the error on the same page instead of redirecting;
                 // previous behavior was to fall through and re-throw, which lead to the error never shown
@@ -246,6 +217,9 @@ implements FormExecutor {
 
             // irrespective, capture error in the Command, and propagate
             if (command != null) {
+
+                //TODO (dead code) should happen at a more fundamental level
+                // should not be a responsibility of the viewer
                 
                 command.updater().setResult(Result.failure(ex));
                 
@@ -415,7 +389,9 @@ implements FormExecutor {
         debug("Redrawing", componentsToRedraw);
     }
 
-    private void debug(final String title, final Collection<Component> list) {
+    private void debug(
+            final String title, 
+            final Collection<Component> list) {
         log.debug(">>> {}:", title);
         for (Component component : list) {
             log.debug(
@@ -426,18 +402,20 @@ implements FormExecutor {
         }
     }
 
-    private Optional<Recognition> recognizeException(RuntimeException ex, AjaxRequestTarget target, Form<?> feedbackForm) {
-        val exceptionRecognizerService = getExceptionRecognizerService();
-
-        val recognition = exceptionRecognizerService.recognize(ex);
-        recognition.ifPresent($->raiseWarning(target, feedbackForm, $));
+    private Optional<Recognition> recognizeException(
+            final Throwable ex, 
+            final AjaxRequestTarget target, 
+            final Form<?> feedbackForm) {
+        
+        val recognition = getExceptionRecognizerService().recognize(ex);
+        recognition.ifPresent(recog->raiseWarning(target, feedbackForm, recog));
         return recognition;
     }
 
     private void raiseWarning(
-            @Nullable final AjaxRequestTarget targetIfAny,
-            @Nullable final Form<?> feedbackFormIfAny,
-            @NonNull final Recognition recognition) {
+            final @Nullable AjaxRequestTarget targetIfAny,
+            final @Nullable Form<?> feedbackFormIfAny,
+            final @NonNull  Recognition recognition) {
 
         if(targetIfAny != null && feedbackFormIfAny != null) {
             //[ISIS-2419] for a consistent user experience with action dialog validation messages,

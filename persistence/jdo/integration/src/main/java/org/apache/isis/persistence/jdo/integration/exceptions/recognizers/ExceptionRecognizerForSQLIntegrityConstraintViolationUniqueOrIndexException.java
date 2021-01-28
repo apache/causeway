@@ -18,6 +18,7 @@
  */
 package org.apache.isis.persistence.jdo.integration.exceptions.recognizers;
 
+import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -26,6 +27,7 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerForType;
+import org.apache.isis.core.config.IsisConfiguration;
 
 @Service
 @Named("isisJdoIntegration.ExceptionRecognizerForSQLIntegrityConstraintViolationUniqueOrIndexException")
@@ -34,8 +36,10 @@ import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerForType;
 public class ExceptionRecognizerForSQLIntegrityConstraintViolationUniqueOrIndexException
 extends ExceptionRecognizerForJDODataStoreExceptionAbstract {
 
-    public ExceptionRecognizerForSQLIntegrityConstraintViolationUniqueOrIndexException() {
-        super(Category.CONSTRAINT_VIOLATION,
+    @Inject
+    public ExceptionRecognizerForSQLIntegrityConstraintViolationUniqueOrIndexException(IsisConfiguration conf) {
+        super(conf, 
+                Category.CONSTRAINT_VIOLATION,
                 ofTypeIncluding(
                         java.sql.SQLIntegrityConstraintViolationException.class,
                         ExceptionRecognizerForType.NestedExceptionResolver.NOOP,
