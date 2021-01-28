@@ -31,7 +31,7 @@ import java.util.StringTokenizer;
 import java.util.TimeZone;
 
 import org.apache.isis.applib.adapters.EncodingException;
-import org.apache.isis.applib.exceptions.TextEntryParseException;
+import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;

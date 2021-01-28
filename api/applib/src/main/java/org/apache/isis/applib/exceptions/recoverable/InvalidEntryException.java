@@ -17,23 +17,26 @@
  *  under the License.
  */
 
-package org.apache.isis.applib.exceptions;
+package org.apache.isis.applib.exceptions.recoverable;
 
-import org.apache.isis.applib.UnrecoverableException;
+import org.apache.isis.applib.RecoverableException;
 
-public class ReflectiveActionException extends UnrecoverableException {
+/**
+ * Indicates that a value entry is not valid. Note the entry may still parse
+ * correctly, but it does *not* fulfill other requirements.
+ */
+public class InvalidEntryException extends RecoverableException {
     private static final long serialVersionUID = 1L;
 
-    public ReflectiveActionException(final String msg) {
-        super(msg);
+    public InvalidEntryException(final String message) {
+        super(message);
     }
 
-    public ReflectiveActionException(final Throwable cause) {
-        super(cause);
+    public InvalidEntryException(final Throwable cause) {
+        this("Invalid value", cause);
     }
 
-    public ReflectiveActionException(final String msg, final Throwable cause) {
-        super(msg, cause);
+    public InvalidEntryException(final String message, final Throwable cause) {
+        super(message, cause);
     }
-
 }

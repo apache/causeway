@@ -28,7 +28,7 @@ import java.util.Set;
 
 import org.jmock.Expectations;
 
-import org.apache.isis.applib.exceptions.MetaModelException;
+import org.apache.isis.applib.exceptions.unrecoverable.MetaModelException;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;

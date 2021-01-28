@@ -17,38 +17,27 @@
  *  under the License.
  */
 
-package org.apache.isis.applib.exceptions;
+package org.apache.isis.applib.exceptions.unrecoverable;
 
-import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.applib.UnrecoverableException;
 
 /**
- * Indicates that the persistence of an object failed.
- *
- * <p>
- * This exception is intended to represent an unexpected and non-recoverable condition (eg a unique/primary key/
- * foreign key constaint has been violated), and so is a subclass of {@link UnrecoverableException}.
- * Throwing this exception will therefore result in (some sort of) error page being displayed
- * to the user.
- *
- * @see UnrecoverableException
- * @see RecoverableException
- * @since 1.x {@index}
+ * Indicates that there is no Authenticator available to authenticate a user
+ * based on this request.
  */
-public class PersistFailedException extends UnrecoverableException {
-
+public class NoAuthenticatorException extends UnrecoverableException {
     private static final long serialVersionUID = 1L;
 
-    public PersistFailedException(final String msg) {
+    public NoAuthenticatorException(final String msg) {
         super(msg);
     }
 
-    public PersistFailedException(final Throwable cause) {
-        super(cause);
+    public NoAuthenticatorException(final String msg, final Throwable cause) {
+        super(msg, cause);
     }
 
-    public PersistFailedException(final String msg, final Throwable cause) {
-        super(msg, cause);
+    public NoAuthenticatorException(final Throwable cause) {
+        super(cause);
     }
 
 }

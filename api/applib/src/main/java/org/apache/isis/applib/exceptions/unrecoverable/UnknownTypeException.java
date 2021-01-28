@@ -17,19 +17,19 @@
  *  under the License.
  */
 
-package org.apache.isis.applib.exceptions;
+package org.apache.isis.applib.exceptions.unrecoverable;
 
 import org.apache.isis.applib.UnrecoverableException;
 
-/**
- * Indicates that a call was made to a method (normally an overridden one) that
- * was not expected, and hence not coded for.
- */
-public class UnexpectedCallException extends UnrecoverableException {
+public class UnknownTypeException extends UnrecoverableException {
     private static final long serialVersionUID = 1L;
 
-    public UnexpectedCallException() {
-        super("This method call was not expected");
+    public UnknownTypeException(final String message) {
+        super(message);
+    }
+
+    public UnknownTypeException(final Object object) {
+        this(object == null ? "null" : object.toString());
     }
 
 }

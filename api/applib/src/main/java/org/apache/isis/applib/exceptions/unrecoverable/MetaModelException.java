@@ -17,26 +17,23 @@
  *  under the License.
  */
 
-package org.apache.isis.applib.exceptions;
+package org.apache.isis.applib.exceptions.unrecoverable;
 
-import org.apache.isis.applib.RecoverableException;
+import org.apache.isis.applib.UnrecoverableException;
 
-/**
- * Indicates that a value entry is not valid. Note the entry may still parse
- * correctly, but it does *not* fulfill other requirements.
- */
-public class InvalidEntryException extends RecoverableException {
+public class MetaModelException extends UnrecoverableException {
     private static final long serialVersionUID = 1L;
 
-    public InvalidEntryException(final String message) {
+    public MetaModelException(final String message) {
         super(message);
     }
 
-    public InvalidEntryException(final Throwable cause) {
-        this("Invalid value", cause);
+    public MetaModelException(final Throwable cause) {
+        super(cause);
     }
 
-    public InvalidEntryException(final String message, final Throwable cause) {
+    public MetaModelException(final String message, final Throwable cause) {
         super(message, cause);
     }
+
 }

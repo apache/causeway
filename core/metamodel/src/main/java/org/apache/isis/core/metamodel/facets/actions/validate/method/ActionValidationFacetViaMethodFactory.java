@@ -21,7 +21,7 @@ package org.apache.isis.core.metamodel.facets.actions.validate.method;
 
 import java.util.EnumSet;
 
-import org.apache.isis.applib.exceptions.MetaModelException;
+import org.apache.isis.applib.exceptions.unrecoverable.MetaModelException;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.ActionSupport;

@@ -17,27 +17,22 @@
  *  under the License.
  */
 
-package org.apache.isis.applib.exceptions;
+package org.apache.isis.applib.exceptions.unrecoverable;
 
-import org.apache.isis.applib.RecoverableException;
+import org.apache.isis.applib.UnrecoverableException;
 
 /**
- * Indicates that a text entry could not be satisfactorily parsed into a useful
- * value by the value adapter.
+ * Indicates that the persistence context was unable to get an instantiate 
+ * for the specified object identifier.
  */
-public class TextEntryParseException extends RecoverableException {
+public class ObjectNotFoundException extends UnrecoverableException {
     private static final long serialVersionUID = 1L;
 
-    public TextEntryParseException(final String message) {
-        super(message);
+    public ObjectNotFoundException(final String oid) {
+        super("Object not found in store with oid " + oid);
     }
 
-    public TextEntryParseException(final Throwable cause) {
-        super(cause);
+    public ObjectNotFoundException(final String oid, final Throwable cause) {
+        super("Object not found in store with oid " + oid, cause);
     }
-
-    public TextEntryParseException(final String message, final Throwable cause) {
-        super(message, cause);
-    }
-
 }

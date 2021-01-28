@@ -24,7 +24,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.isis.applib.exceptions.DomainModelException;
+import org.apache.isis.applib.exceptions.unrecoverable.DomainModelException;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.collections.CanVector;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;

@@ -33,7 +33,7 @@ import javax.inject.Inject;
 import org.springframework.beans.factory.InjectionPoint;
 import org.springframework.core.MethodParameter;
 
-import org.apache.isis.applib.exceptions.MetaModelException;
+import org.apache.isis.applib.exceptions.unrecoverable.MetaModelException;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.internal._Constants;

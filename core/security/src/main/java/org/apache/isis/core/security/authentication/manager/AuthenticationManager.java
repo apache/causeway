@@ -32,7 +32,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
-import org.apache.isis.applib.exceptions.NoAuthenticatorException;
+import org.apache.isis.applib.exceptions.unrecoverable.NoAuthenticatorException;
 import org.apache.isis.applib.util.ToString;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Timing;

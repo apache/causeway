@@ -36,8 +36,8 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Repository;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
-import org.apache.isis.applib.exceptions.PersistFailedException;
-import org.apache.isis.applib.exceptions.RepositoryException;
+import org.apache.isis.applib.exceptions.unrecoverable.PersistFailedException;
+import org.apache.isis.applib.exceptions.unrecoverable.RepositoryException;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.query.QueryRange;
 import org.apache.isis.applib.services.factory.FactoryService;

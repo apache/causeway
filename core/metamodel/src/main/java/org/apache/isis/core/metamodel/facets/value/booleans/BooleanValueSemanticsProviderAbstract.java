@@ -20,7 +20,7 @@
 package org.apache.isis.core.metamodel.facets.value.booleans;
 
 import org.apache.isis.applib.UnrecoverableException;
-import org.apache.isis.applib.exceptions.TextEntryParseException;
+import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;

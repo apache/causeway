@@ -19,7 +19,7 @@
 
 package org.apache.isis.applib.services.wrapper;
 
-import org.apache.isis.applib.exceptions.InteractionException;
+import org.apache.isis.applib.exceptions.recoverable.InteractionException;
 import org.apache.isis.applib.services.wrapper.events.InteractionEvent;
 import org.apache.isis.applib.services.wrapper.events.VisibilityEvent;
 

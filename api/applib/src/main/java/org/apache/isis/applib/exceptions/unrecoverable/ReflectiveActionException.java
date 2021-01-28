@@ -17,22 +17,23 @@
  *  under the License.
  */
 
-package org.apache.isis.applib.exceptions;
+package org.apache.isis.applib.exceptions.unrecoverable;
 
 import org.apache.isis.applib.UnrecoverableException;
 
-public class ObjectPersistenceException extends UnrecoverableException {
+public class ReflectiveActionException extends UnrecoverableException {
     private static final long serialVersionUID = 1L;
 
-    public ObjectPersistenceException(final String message) {
-        super(message);
+    public ReflectiveActionException(final String msg) {
+        super(msg);
     }
 
-    public ObjectPersistenceException(final String message, final Throwable cause) {
-        super(message, cause);
-    }
-
-    public ObjectPersistenceException(final Throwable cause) {
+    public ReflectiveActionException(final Throwable cause) {
         super(cause);
     }
+
+    public ReflectiveActionException(final String msg, final Throwable cause) {
+        super(msg, cause);
+    }
+
 }

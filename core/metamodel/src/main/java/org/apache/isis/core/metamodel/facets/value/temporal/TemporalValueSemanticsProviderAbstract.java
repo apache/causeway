@@ -33,7 +33,7 @@ import java.util.stream.Stream;
 import javax.annotation.Nullable;
 
 import org.apache.isis.applib.adapters.EncodingException;
-import org.apache.isis.applib.exceptions.TextEntryParseException;
+import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.collections._Maps;

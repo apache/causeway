@@ -17,27 +17,22 @@
  *  under the License.
  */
 
-package org.apache.isis.applib.exceptions;
+package org.apache.isis.applib.exceptions.unrecoverable;
 
 import org.apache.isis.applib.UnrecoverableException;
 
-/**
- * Indicates that there is no Authenticator available to authenticate a user
- * based on this request.
- */
-public class NoAuthenticatorException extends UnrecoverableException {
+public class ObjectPersistenceException extends UnrecoverableException {
     private static final long serialVersionUID = 1L;
 
-    public NoAuthenticatorException(final String msg) {
-        super(msg);
+    public ObjectPersistenceException(final String message) {
+        super(message);
     }
 
-    public NoAuthenticatorException(final String msg, final Throwable cause) {
-        super(msg, cause);
+    public ObjectPersistenceException(final String message, final Throwable cause) {
+        super(message, cause);
     }
 
-    public NoAuthenticatorException(final Throwable cause) {
+    public ObjectPersistenceException(final Throwable cause) {
         super(cause);
     }
-
 }

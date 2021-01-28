@@ -17,26 +17,26 @@
  *  under the License.
  */
 
-package org.apache.isis.applib.exceptions;
+package org.apache.isis.applib.exceptions.recoverable;
 
-import org.apache.isis.applib.UnrecoverableException;
+import org.apache.isis.applib.RecoverableException;
 
 /**
- * Thrown when a problem is found with the domain model, and Isis cannot
- * proceed.
+ * Indicates that a text entry could not be satisfactorily parsed into a useful
+ * value by the value adapter.
  */
-public class DomainModelException extends UnrecoverableException {
+public class TextEntryParseException extends RecoverableException {
     private static final long serialVersionUID = 1L;
 
-    public DomainModelException(final String message) {
+    public TextEntryParseException(final String message) {
         super(message);
     }
 
-    public DomainModelException(final Throwable cause) {
+    public TextEntryParseException(final Throwable cause) {
         super(cause);
     }
 
-    public DomainModelException(final String message, final Throwable cause) {
+    public TextEntryParseException(final String message, final Throwable cause) {
         super(message, cause);
     }
 

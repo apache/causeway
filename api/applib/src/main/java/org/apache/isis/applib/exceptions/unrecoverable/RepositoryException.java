@@ -17,23 +17,37 @@
  *  under the License.
  */
 
-package org.apache.isis.applib.exceptions;
+package org.apache.isis.applib.exceptions.unrecoverable;
 
+import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.applib.UnrecoverableException;
 
-public class MetaModelException extends UnrecoverableException {
+/**
+ * Indicates that a repository method has failed.
+ *
+ * <p>
+ * This exception is intended to represent an unexpected and non-recoverable condition (eg a syntax error in some
+ * JDOQL query syntax or similar), and so is a subclass of {@link UnrecoverableException}.
+ * Throwing this exception will therefore result in (some sort of) error page being displayed
+ * to the user.
+ *
+ * @see UnrecoverableException
+ * @see RecoverableException
+ * @since ? {@index}
+ */
+public class RepositoryException extends UnrecoverableException {
+
     private static final long serialVersionUID = 1L;
 
-    public MetaModelException(final String message) {
-        super(message);
+    public RepositoryException(final String msg) {
+        super(msg);
     }
 
-    public MetaModelException(final Throwable cause) {
+    public RepositoryException(final Throwable cause) {
         super(cause);
     }
 
-    public MetaModelException(final String message, final Throwable cause) {
-        super(message, cause);
+    public RepositoryException(final String msg, final Throwable cause) {
+        super(msg, cause);
     }
-
 }

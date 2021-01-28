@@ -17,22 +17,19 @@
  *  under the License.
  */
 
-package org.apache.isis.applib.exceptions;
+package org.apache.isis.applib.exceptions.unrecoverable;
 
 import org.apache.isis.applib.UnrecoverableException;
 
 /**
- * Indicates that the persistence context was unable to get an instantiate 
- * for the specified object identifier.
+ * Indicates that a call was made to a method (normally an overridden one) that
+ * was not expected, and hence not coded for.
  */
-public class ObjectNotFoundException extends UnrecoverableException {
+public class UnexpectedCallException extends UnrecoverableException {
     private static final long serialVersionUID = 1L;
 
-    public ObjectNotFoundException(final String oid) {
-        super("Object not found in store with oid " + oid);
+    public UnexpectedCallException() {
+        super("This method call was not expected");
     }
 
-    public ObjectNotFoundException(final String oid, final Throwable cause) {
-        super("Object not found in store with oid " + oid, cause);
-    }
 }

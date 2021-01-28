@@ -17,19 +17,27 @@
  *  under the License.
  */
 
-package org.apache.isis.applib.exceptions;
+package org.apache.isis.applib.exceptions.unrecoverable;
 
 import org.apache.isis.applib.UnrecoverableException;
 
-public class UnknownTypeException extends UnrecoverableException {
+/**
+ * Thrown when a problem is found with the domain model, and Isis cannot
+ * proceed.
+ */
+public class DomainModelException extends UnrecoverableException {
     private static final long serialVersionUID = 1L;
 
-    public UnknownTypeException(final String message) {
+    public DomainModelException(final String message) {
         super(message);
     }
 
-    public UnknownTypeException(final Object object) {
-        this(object == null ? "null" : object.toString());
+    public DomainModelException(final Throwable cause) {
+        super(cause);
+    }
+
+    public DomainModelException(final String message, final Throwable cause) {
+        super(message, cause);
     }
 
 }

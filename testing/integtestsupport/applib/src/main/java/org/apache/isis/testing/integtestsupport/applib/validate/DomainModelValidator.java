@@ -31,7 +31,7 @@ import javax.inject.Inject;
 import org.junit.jupiter.api.Assertions;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.exceptions.DomainModelException;
+import org.apache.isis.applib.exceptions.unrecoverable.DomainModelException;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.core.config.environment.IsisSystemEnvironment;
