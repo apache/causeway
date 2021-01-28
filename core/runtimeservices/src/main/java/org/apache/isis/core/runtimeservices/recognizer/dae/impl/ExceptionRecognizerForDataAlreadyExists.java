@@ -44,6 +44,8 @@ extends ExceptionRecognizerForDataAccessException {
 
     @Inject
     public ExceptionRecognizerForDataAlreadyExists(IsisConfiguration conf) {
+        //XXX used prefix could be made a config option 
+        // under isis.core.runtimeservices.exception-recognizers.dae
         super(conf, 
                 Category.CONSTRAINT_VIOLATION,
                 ofType(org.springframework.dao.DataIntegrityViolationException.class)

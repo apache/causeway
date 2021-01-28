@@ -38,6 +38,8 @@ extends ExceptionRecognizerForDataAccessException {
 
     @Inject
     public ExceptionRecognizerForObjectNotFound(IsisConfiguration conf) {
+        //XXX used prefix could be made a config option 
+        // under isis.core.runtimeservices.exception-recognizers.dae
         super(conf, 
                 Category.NOT_FOUND,
                 ofType(org.springframework.dao.DataAccessException.class)

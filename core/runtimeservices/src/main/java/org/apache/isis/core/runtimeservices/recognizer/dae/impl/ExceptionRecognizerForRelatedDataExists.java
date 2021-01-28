@@ -37,8 +37,9 @@ public class ExceptionRecognizerForRelatedDataExists
 extends ExceptionRecognizerForDataAccessException {
 
     @Inject
-    public ExceptionRecognizerForRelatedDataExists(
-            final IsisConfiguration conf) {
+    public ExceptionRecognizerForRelatedDataExists(final IsisConfiguration conf) {
+        //XXX used prefix could be made a config option 
+        // under isis.core.runtimeservices.exception-recognizers.dae
         super(conf, 
                 Category.CONSTRAINT_VIOLATION,
                 ofType(org.springframework.dao.DataAccessException.class)

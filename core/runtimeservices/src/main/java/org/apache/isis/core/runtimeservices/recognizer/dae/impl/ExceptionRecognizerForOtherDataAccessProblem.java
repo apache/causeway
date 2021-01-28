@@ -44,10 +44,12 @@ extends ExceptionRecognizerForDataAccessException {
 
     @Inject
     public ExceptionRecognizerForOtherDataAccessProblem(IsisConfiguration conf) {
+        //XXX used prefix could be made a config option 
+        // under isis.core.runtimeservices.exception-recognizers.dae 
         super(conf,
                 Category.OTHER,
                 ofType(org.springframework.dao.DataAccessException.class),
-                prefix("An unrecognized data access problem has occurred: "));
+                prefix("An unrecognized data access problem has occurred: ")); 
     }
 
 }
