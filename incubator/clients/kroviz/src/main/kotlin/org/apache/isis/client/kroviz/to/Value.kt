@@ -20,10 +20,11 @@ package org.apache.isis.client.kroviz.to
 
 import kotlinx.serialization.*
 import kotlinx.serialization.builtins.nullable
+import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonElement
-import kotlinx.serialization.json.JsonException
-import kotlinx.serialization.json.content
+import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.jsonPrimitive
 
 /**
  *  Custom data structure to handle 'untyped' value in Member, Property, Parameter
@@ -37,48 +38,47 @@ import kotlinx.serialization.json.content
 @Serializable
 data class Value(
         //IMPROVE: make content immutable (again) and handle property edits eg. via a wrapper
-        @ContextualSerialization @SerialName("value") var content: Any? = null
+        @Contextual @SerialName("value") var content: Any? = null
 ) : TransferObject {
 
+    @ExperimentalSerializationApi
     @Serializer(forClass = Value::class)
     companion object : KSerializer<Value> {
-        override fun serialize(encoder: Encoder, obj: Value) {
-            // Not required yet
-        }
 
-        override val descriptor: SerialDescriptor = SerialDescriptor("Value")
-
-        @UnstableDefault
+        @ExperimentalSerializationApi
         override fun deserialize(decoder: Decoder): Value {
-            var result: Value
-            var jse: JsonElement? = null
-            try {
-                val nss = JsonElement.serializer().nullable
-                jse = decoder.decode(nss)!!
-                val jsct = jse.content
-                when {
-                    jse.isNull -> result = Value(null)
-                    isLong(jsct) -> result = Value(jsct.toLong())
-                    else -> result = Value(jsct)
-                }
-            } catch (je: JsonException) {
-                val linkStr = jse.toString()
-                val link = Json.parse(Link.serializer(), linkStr)
-                result = Value(link)
+            val nss = JsonElement.serializer().nullable
+            val jse: JsonElement? = decoder.decodeNullableSerializableValue(nss)!!
+            val result: Value = when {
+                jse == null -> Value(null)
+                isNumeric(jse) -> Value(jse.jsonPrimitive.content.toLong())
+                jse is JsonObject -> toLink(jse)
+                else -> toString(jse)
             }
             return result
         }
 
-        private fun isLong(raw: String): Boolean {
-            var answer = true
-            try {
-                raw.toLong()
-            } catch (nfe: NumberFormatException) {
-                answer = false
-            }
-            return answer
+        private fun toString(jse: JsonElement): Value {
+            val s = jse.jsonPrimitive.content
+            return Value(s)
         }
 
+        private fun toLink(jse: JsonElement): Value {
+            val linkStr = jse.toString()
+            val link = Json.decodeFromString(Link.serializer(), linkStr)
+            return Value(link)
+        }
+
+        private fun isNumeric(jse: JsonElement): Boolean {
+            try {
+                jse.jsonPrimitive.content.toLong()
+                return true
+            } catch (nfe: NumberFormatException) {
+                return false
+            } catch (ie: IllegalArgumentException) {
+                return false
+            }
+        }
     }
 
 }

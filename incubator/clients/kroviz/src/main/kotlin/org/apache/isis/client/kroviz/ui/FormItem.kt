@@ -19,10 +19,11 @@
 package org.apache.isis.client.kroviz.ui
 
 import org.apache.isis.client.kroviz.to.Member
+import org.apache.isis.client.kroviz.to.ValueType
 
 class FormItem(
         val label: String,
-        val type: String,
+        val type: ValueType,
         var content: Any? = null,
         val size: Int? = null,
         val description: String? = "not set",

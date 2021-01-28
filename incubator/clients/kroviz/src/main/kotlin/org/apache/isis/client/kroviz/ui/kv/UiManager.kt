@@ -18,6 +18,7 @@
  */
 package org.apache.isis.client.kroviz.ui.kv
 
+import kotlinx.browser.window
 import org.apache.isis.client.kroviz.core.Session
 import org.apache.isis.client.kroviz.core.aggregator.BaseAggregator
 import org.apache.isis.client.kroviz.core.aggregator.ObjectAggregator
@@ -27,16 +28,15 @@ import org.apache.isis.client.kroviz.core.event.LogEntry
 import org.apache.isis.client.kroviz.core.event.ResourceSpecification
 import org.apache.isis.client.kroviz.core.model.ListDM
 import org.apache.isis.client.kroviz.core.model.ObjectDM
+import org.apache.isis.client.kroviz.to.Relation
 import org.apache.isis.client.kroviz.to.TObject
 import org.apache.isis.client.kroviz.to.mb.Menubars
 import org.apache.isis.client.kroviz.utils.Utils
 import org.w3c.dom.events.KeyboardEvent
-import pl.treksoft.kvision.core.Component
 import pl.treksoft.kvision.core.Widget
 import pl.treksoft.kvision.dropdown.ContextMenu
 import pl.treksoft.kvision.panel.SimplePanel
 import pl.treksoft.kvision.utils.ESC_KEY
-import kotlin.browser.window
 
 /**
  * Single point of contact for view components consisting of:
@@ -49,6 +49,7 @@ object UiManager {
 
     private var session: Session? = null
     private val popups = mutableListOf<Widget>()
+    private val settings = mutableMapOf<String,Any>()
 
     init {
         window.addEventListener("keydown", fun(event) {
@@ -100,7 +101,7 @@ object UiManager {
     }
 
     fun openListView(aggregator: BaseAggregator) {
-        val displayable = aggregator.dsp
+        val displayable = aggregator.dpm
         val title: String = Utils.extractTitle(displayable.title)
         val panel = RoTable(displayable as ListDM)
         add(title, panel, aggregator)
@@ -108,7 +109,7 @@ object UiManager {
     }
 
     fun openObjectView(aggregator: ObjectAggregator) {
-        val dm = aggregator.dsp as ObjectDM
+        val dm = aggregator.dpm as ObjectDM
         var title: String = Utils.extractTitle(dm.title)
         if (title.isEmpty()) {
             title = aggregator.actionTitle
@@ -129,7 +130,7 @@ object UiManager {
 
     private fun linkLayout(tObject: TObject, aggregator: ObjectAggregator) {
         val layoutLink = tObject.links.firstOrNull {
-            it.rel.contains("object-layout")
+            it.relation() == Relation.OBJECT_LAYOUT
         }
         val reSpec = ResourceSpecification(layoutLink!!.href)
         val logEntry = EventStore.find(reSpec)
@@ -146,18 +147,18 @@ object UiManager {
         pop()
     }
 
-    fun topDialog(): Component {
-        val allDialogs = RoApp.getChildren().filter {
-            it is RoDialog
+    fun getUrl(): String {
+        return when (session) {
+            null -> ""
+            else -> session!!.url
         }
-        return allDialogs.first()
     }
 
-    fun getUrl(): String {
-        return if (session == null) {
-            ""
-        } else {
-            session!!.url
+    fun loadDomainTypes(): Boolean {
+        val k = "loadDomainTypes"
+        return when {
+            settings.containsKey(k) -> settings.getValue(k) as Boolean
+            else -> false
         }
     }
 

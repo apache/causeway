@@ -67,4 +67,26 @@ class TypeMapper {
         }
     }
 
+    fun forType(type: String): ValueType {
+        when {
+            type == ValueType.BOOLEAN.type -> return ValueType.BOOLEAN
+            type == ValueType.DATE.type -> return ValueType.DATE
+            type == ValueType.HTML.type -> return ValueType.HTML
+            type == ValueType.IMAGE.type -> return ValueType.IMAGE
+            type == ValueType.NUMERIC.type -> return ValueType.NUMERIC
+            type == ValueType.PASSWORD.type -> return ValueType.PASSWORD
+            type == ValueType.TEXT.type -> return ValueType.TEXT
+            type == ValueType.TEXT_AREA.type -> return ValueType.TEXT_AREA
+            type == ValueType.TIME.type -> return ValueType.TIME
+            type == ValueType.SIMPLE_SELECT.type -> return ValueType.SIMPLE_SELECT
+            type == ValueType.SLIDER.type -> return ValueType.SLIDER
+            type == ValueType.SVG_MAPPED.type -> return ValueType.SVG_MAPPED
+            type == ValueType.SVG_INLINE.type -> return ValueType.SVG_INLINE
+            type == ValueType.IFRAME.type -> return ValueType.IFRAME
+            else -> {
+                return ValueType.TEXT
+            }
+        }
+    }
+
 }

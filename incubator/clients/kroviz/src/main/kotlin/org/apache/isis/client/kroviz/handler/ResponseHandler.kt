@@ -39,6 +39,7 @@ object ResponseHandler {
     private var _6 = LayoutHandler()
     private var _6a = LayoutXmlHandler()
     private var _7 = PropertyHandler()
+    private var _7a = CollectionHandler()
     private var _8 = MemberHandler()
     private var _9 = HttpErrorHandler()
     private var _10 = UserHandler()
@@ -60,7 +61,8 @@ object ResponseHandler {
         _5.successor = _6
         _6.successor = _6a
         _6a.successor = _7
-        _7.successor = _8
+        _7.successor = _7a
+        _7a.successor = _8
         _8.successor = _9
         _9.successor = _10
         _10.successor = _11

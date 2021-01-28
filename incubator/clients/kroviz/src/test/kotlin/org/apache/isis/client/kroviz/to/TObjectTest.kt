@@ -18,8 +18,8 @@
  */
 package org.apache.isis.client.kroviz.to
 
-import kotlinx.serialization.UnstableDefault
 import org.apache.isis.client.kroviz.handler.TObjectHandler
+import org.apache.isis.client.kroviz.snapshots.demo2_0_0.ACTIONS_STRINGS_INVOKE
 import org.apache.isis.client.kroviz.snapshots.demo2_0_0.ACTIONS_TEXT_INVOKE
 import org.apache.isis.client.kroviz.snapshots.demo2_0_0.ISIS_SECURITY_ME_SERVICE
 import org.apache.isis.client.kroviz.snapshots.simpleapp1_16_0.SO_0
@@ -29,7 +29,6 @@ import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
-@UnstableDefault
 class TObjectTest {
 
     @Test
@@ -105,6 +104,23 @@ class TObjectTest {
         val description = filteredProperties.first()
         val content = description.value!!.content as String
         assertTrue(content.startsWith("<div") && content.endsWith("div>"))
+    }
+
+    @Test
+    fun testActionsStringsInvoke() {
+        //given
+        val jsonStr = ACTIONS_STRINGS_INVOKE.str
+        // when
+        val to = TObjectHandler().parse(jsonStr) as TObject
+        // then
+        assertEquals("String data type", to.links[0].title)
+        assertEquals(13, to.members.size)
+        assertEquals(1, to.getCollections().size)
+        assertEquals(8, to.getActions().size)
+        assertEquals(4, to.getProperties().size)
+
+        val filteredProperties = to.getProperties().filter { it.id == "description" }
+        assertEquals(1, filteredProperties.size)
     }
 
 }

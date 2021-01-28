@@ -19,39 +19,36 @@
 package org.apache.isis.client.kroviz.ui.kv
 
 import pl.treksoft.kvision.chart.*
-import pl.treksoft.kvision.core.Color
 import pl.treksoft.kvision.panel.SimplePanel
 import pl.treksoft.kvision.utils.obj
 import pl.treksoft.kvision.utils.px
 
-external fun rgba(r: Int, g: Int, b: Int, a: Int): String
-
 //IMPROVE https://github.com/datavisyn/chartjs-chart-box-and-violin-plot
-class EventChart(model:ChartModel) : SimplePanel() {
+class EventChart(model: ChartModel) : SimplePanel() {
+
+    private val font = "'Open Sans Bold', sans-serif"
 
     private val yAxes = listOf(obj {
-        gridLines = {
-            display = Display.FLEX
-            color = Color.hex(0xffffff)
-            zeroLineColor = Color.hex(0xffffff)
-//            zeroLineWidth = 1
-        }
+        scaleLabel = { ScaleTitleOptions(display = true, labelString = "duration (ms)", fontFamily = font) }
+        gridLines = { GridLineOptions(visible = true) }
         ticks = obj {
-            fontFamily = "'Open Sans Bold', sans-serif"
-            fontSize = 11.px
+            fontFamily = font
+            fontSize =  11.px
         }
-        stacked = true
     })
 
+    private val tickFormatter = "function(tick) {return tick.split('\\n')[1]}"
+
     private val xAxes = listOf(obj {
-        barThickness = 20
-        ticks = obj {
-            beginAtZero = true
-            fontFamily = "'Open Sans Bold', sans-serif"
-            fontSize = 11.px
-        }
+        scaleLabel = { ScaleTitleOptions(display = true, labelString = "start offset (sec)", fontFamily = font) }
         gridLines = { GridLineOptions(visible = true) }
-        stacked = true
+        ticks = obj {
+            beginAtZero = false
+            fontFamily = font
+            fontSize = 11.px
+            //WHAT A HACK
+            callback = js(tickFormatter)
+        }
     })
 
     private val options = ChartOptions(
@@ -68,13 +65,13 @@ class EventChart(model:ChartModel) : SimplePanel() {
         this.marginTop = 10.px
         chart(
                 configuration = Configuration(
-                        type = ChartType.HORIZONTALBAR,
+                        type = ChartType.BAR,
                         dataSets = model.datasetList,
                         labels = model.labelList,
                         options = options
                 ),
-                chartHeight = 600,
-                chartWidth = 1000
+                chartHeight = 1000,
+                chartWidth = 3000
         )
     }
 

@@ -18,14 +18,12 @@
  */
 package org.apache.isis.client.kroviz.layout
 
-import kotlinx.serialization.UnstableDefault
 import org.apache.isis.client.kroviz.IntegrationTest
 import org.apache.isis.client.kroviz.handler.LayoutHandler
 import org.apache.isis.client.kroviz.snapshots.simpleapp1_16_0.SO_LAYOUT_JSON
 import kotlin.test.Test
 import kotlin.test.assertNotNull
 
-@UnstableDefault
 class LayoutTest : IntegrationTest() {
 
     @Test

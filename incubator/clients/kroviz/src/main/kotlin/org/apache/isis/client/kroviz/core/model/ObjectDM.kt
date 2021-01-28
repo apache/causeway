@@ -18,14 +18,10 @@
  */
 package org.apache.isis.client.kroviz.core.model
 
-import org.apache.isis.client.kroviz.core.aggregator.BaseAggregator
 import org.apache.isis.client.kroviz.core.event.EventStore
 import org.apache.isis.client.kroviz.core.event.ResourceSpecification
 import org.apache.isis.client.kroviz.core.event.RoXmlHttpRequest
-import org.apache.isis.client.kroviz.to.Link
-import org.apache.isis.client.kroviz.to.Method
-import org.apache.isis.client.kroviz.to.TObject
-import org.apache.isis.client.kroviz.to.TransferObject
+import org.apache.isis.client.kroviz.to.*
 
 class ObjectDM(override val title: String) : DisplayModelWithLayout() {
     var data: Exposer? = null
@@ -34,11 +30,8 @@ class ObjectDM(override val title: String) : DisplayModelWithLayout() {
     override fun canBeDisplayed(): Boolean {
         return when {
             isRendered -> false
-            layout == null -> false
-            grid == null -> false
-            else -> {
-                true
-            }
+            (layout == null) && (grid == null) -> false
+            else -> true
         }
     }
 
@@ -47,11 +40,16 @@ class ObjectDM(override val title: String) : DisplayModelWithLayout() {
     }
 
     override fun addData(obj: TransferObject) {
-        val exo = Exposer(obj as TObject)
+        (obj as TObject)
+        val exo = Exposer(obj)
         data = exo.dynamise() as? Exposer
+        obj.getProperties().forEach { m ->
+            val p = createPropertyFrom(m)
+            addProperty(p)
+        }
     }
 
-    override fun getObject(): TObject? {
+    override fun getObject(): TObject {
         return (data as Exposer).delegate
     }
 
@@ -68,10 +66,10 @@ class ObjectDM(override val title: String) : DisplayModelWithLayout() {
             val putLink = Link(method = Method.PUT.operation, href = href)
             val logEntry = EventStore.find(reSpec)
             val aggregator = logEntry?.getAggregator()!!
-            putLink.invokeWith(aggregator)
+            RoXmlHttpRequest().invoke(putLink, aggregator)
 
             // now data should be reloaded - wait for invoking PUT?
-            getLink.invokeWith(aggregator)
+            RoXmlHttpRequest().invoke(getLink, aggregator)
             //refresh of display to be triggered?
         }
     }
@@ -82,8 +80,18 @@ class ObjectDM(override val title: String) : DisplayModelWithLayout() {
         }
     }
 
-    fun Link.invokeWith(aggregator: BaseAggregator) {
-        RoXmlHttpRequest().invoke(this, aggregator)
+    private fun createPropertyFrom(m: Member): Property {
+        return Property(
+                id = m.id,
+                memberType = m.memberType,
+                links = m.links,
+                optional = m.optional,
+                title = m.id,
+                value = m.value,
+                extensions = m.extensions,
+                format = m.format,
+                disabledReason = m.disabledReason
+        )
     }
 
 }

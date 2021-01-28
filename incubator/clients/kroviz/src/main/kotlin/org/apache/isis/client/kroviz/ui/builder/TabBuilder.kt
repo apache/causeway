@@ -25,7 +25,6 @@ import pl.treksoft.kvision.core.Component
 import pl.treksoft.kvision.core.CssSize
 import pl.treksoft.kvision.core.UNIT
 import pl.treksoft.kvision.panel.SimplePanel
-import pl.treksoft.kvision.panel.VPanel
 
 class TabBuilder {
 

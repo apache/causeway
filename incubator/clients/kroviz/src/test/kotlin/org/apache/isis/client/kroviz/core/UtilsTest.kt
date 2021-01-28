@@ -40,10 +40,10 @@ class UtilsTest {
         assertEquals(expected, actual)
     }
 
-    //@Test //@Test  breaks on Travis #153 ???
+    @Test //@Test  breaks on Travis #153 ???
     fun testDate() {
         // given
-        val rawDate: Any? = "2020-01-25T13:07:05Z"
+        val rawDate: Any = "2020-01-25T13:07:05Z"
         //when
         val dateTime = DateHelper.toDate(rawDate)
         // then
@@ -54,10 +54,10 @@ class UtilsTest {
         assertEquals(7, dateTime.getMinutes())  // and again? shouldn't it be 7??
     }
 
-    //@Test  breaks on Travis #152 ? https://travis-ci.com/joerg-rade/kroviz/builds/149958789
+    @Test  //breaks on Travis #152 ? https://travis-ci.com/joerg-rade/kroviz/builds/149958789
     fun test_javaOffsetDateTime() {
         // given
-        val rawDate: Any? = "20200125T140705.356+0100"
+        val rawDate: Any = "20200125T140705.356+0100"
         val expected = "2020-01-25T14:07:05.356+0100"
         //when Then
 
@@ -74,7 +74,7 @@ class UtilsTest {
     }
 
 
-    // @Test
+    //@Test
     fun test_argumentsAsBody() {
         //given
         val href = "http://localhost:8080/restful/services/isisApplib.FixtureScriptsDefault/actions/runFixtureScript/invoke"
@@ -85,7 +85,7 @@ class UtilsTest {
         //link.setArgument(arguments)
 
         // when
-        val body = Utils.argumentsAsBody(link)
+        val body = Utils.argumentsAsBody(link)  //TODO link seems to be null
 
         // then
 //        console.log("[UtilsTest.test_argumentsAsBody]")

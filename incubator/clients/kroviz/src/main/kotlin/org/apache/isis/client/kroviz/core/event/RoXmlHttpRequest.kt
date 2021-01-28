@@ -33,19 +33,24 @@ import org.w3c.xhr.XMLHttpRequest
  */
 class RoXmlHttpRequest {
 
-    fun invoke(link: Link, aggregator: BaseAggregator?, subType: String = Constants.subTypeJson) {
-        val reSpec = ResourceSpecification(link.href)
+    fun invoke(link: Link, aggregator: BaseAggregator? = null, subType: String = Constants.subTypeJson) {
+        val rs = ResourceSpecification(link.href)
         when {
-            EventStore.isCached(reSpec, link.method) -> processCached(reSpec)
+            EventStore.isCached(rs, link.method) -> processCached(rs)
             else -> process(link, aggregator, subType)
         }
     }
 
-    private fun processCached(reSpec: ResourceSpecification) {
-        val le = EventStore.find(reSpec)!!
+    private fun processCached(rs: ResourceSpecification) {
+        val le = EventStore.find(rs)!!
         le.retrieveResponse()
-        ResponseHandler.handle(le)
-        EventStore.cached(reSpec)
+        getHandlerChain().handle(le)
+        EventStore.cached(rs)
+    }
+
+    // encapsulate implementation (Singleton vs. Object vs. Pool)
+    private fun getHandlerChain(): ResponseHandler {
+        return ResponseHandler
     }
 
     private fun process(link: Link, aggregator: BaseAggregator?, subType: String) {
@@ -62,39 +67,34 @@ class RoXmlHttpRequest {
         xhr.setRequestHeader("Content-Type", "application/$subType;charset=UTF-8")
         xhr.setRequestHeader("Accept", "application/$subType")
 
-        val reSpec = ResourceSpecification(url, subType)
-        xhr.onload = { _ -> resultHandler(reSpec, xhr.responseText) }
-        xhr.onerror = { _ -> errorHandler(reSpec, xhr.responseText) }
-        xhr.ontimeout = { _ -> errorHandler(reSpec, xhr.responseText) }
+        val rs = buildResourceSpecificationAndSetupHandler(url, subType, xhr)
 
-        var body = ""
-        when {
-            link.hasArguments() -> body = Utils.argumentsAsBody(link)
-            link.method == Method.PUT.operation -> {
-                val logEntry = EventStore.findBy(aggregator!!)
-                val obj = logEntry?.obj
-                when (obj) {
-                    is TObject -> body = Utils.propertiesAsBody(obj)
-                    else -> {
-                    }
-                }
-            }
-            else -> {
-            }
-        }
+        val body = buildBody(link, aggregator)
         when {
             body.isEmpty() -> xhr.send()
             else -> xhr.send(body)
         }
-        EventStore.start(reSpec, method, body, aggregator)
+        EventStore.start(rs, method, body, aggregator)
+    }
+
+    private fun buildBody(link: Link, aggregator: BaseAggregator?): String {
+        return when {
+            link.hasArguments() -> Utils.argumentsAsBody(link)
+            link.method == Method.PUT.operation -> {
+                val logEntry = EventStore.findBy(aggregator!!)
+                when (val obj = logEntry?.obj) {
+                    is TObject -> Utils.propertiesAsBody(obj)
+                    else -> ""
+                }
+            }
+            else -> ""
+        }
     }
 
     fun invokeAnonymous(link: Link, aggregator: BaseAggregator?, subType: String = Constants.subTypeXml) {
-        val reSpec = ResourceSpecification(link.href)
-        console.log("[RXHR.invokeAnonymous]")
-        console.log(EventStore.isCached(reSpec, link.method))
+        val rs = ResourceSpecification(link.href)
         when {
-            EventStore.isCached(reSpec, link.method) -> processCached(reSpec)
+            EventStore.isCached(rs, link.method) -> processCached(rs)
             else -> processAnonymous(link, aggregator, subType)
         }
     }
@@ -108,23 +108,33 @@ class RoXmlHttpRequest {
         xhr.setRequestHeader("Content-Type", Constants.stdMimeType)
         xhr.setRequestHeader("Accept", Constants.svgMimeType)
 
-        val reSpec = ResourceSpecification(url, subType)
-        xhr.onload = { _ -> resultHandler(reSpec, xhr.responseText) }
-        xhr.onerror = { _ -> errorHandler(reSpec, xhr.responseText) }
-        xhr.ontimeout = { _ -> errorHandler(reSpec, xhr.responseText) }
+        val rs = buildResourceSpecificationAndSetupHandler(url, subType, xhr)
 
         val body = Utils.argumentsAsList(link)
         xhr.send(body)
-        EventStore.start(reSpec, method, body, aggregator)
+        EventStore.start(rs, method, body, aggregator)
     }
 
-    private fun resultHandler(reSpec: ResourceSpecification, responseText: String) {
-        val logEntry: LogEntry? = EventStore.end(reSpec, responseText)
-        if (logEntry != null) ResponseHandler.handle(logEntry)
+    private fun buildResourceSpecificationAndSetupHandler(
+            url: String,
+            subType: String,
+            xhr: XMLHttpRequest): ResourceSpecification {
+        val rs = ResourceSpecification(url, subType)
+        xhr.onload = { _ -> handleResult(rs, xhr) }
+        xhr.onerror = { _ -> handleError(rs, xhr) }
+        xhr.ontimeout = { _ -> handleError(rs, xhr) }
+        return rs
     }
 
-    private fun errorHandler(reSpec: ResourceSpecification, responseText: String) {
-        EventStore.fault(reSpec, responseText)
+    private fun handleResult(rs: ResourceSpecification, xhr: XMLHttpRequest) {
+        val responseText = xhr.responseText
+        val logEntry: LogEntry? = EventStore.end(rs, responseText)
+        if (logEntry != null) getHandlerChain().handle(logEntry)
+    }
+
+    private fun handleError(rs: ResourceSpecification, xhr: XMLHttpRequest) {
+        val responseText = xhr.responseText
+        EventStore.fault(rs, responseText)
     }
 
 }

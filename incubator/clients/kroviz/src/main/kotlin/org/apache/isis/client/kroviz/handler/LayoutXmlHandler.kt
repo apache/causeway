@@ -33,7 +33,7 @@ class LayoutXmlHandler : org.apache.isis.client.kroviz.handler.BaseHandler() {
         return false
     }
 
-    override fun parse(response: String): TransferObject? {
+    override fun parse(response: String): TransferObject {
         val doc = XmlHelper.parseXml(response)
         return Grid(doc)
     }

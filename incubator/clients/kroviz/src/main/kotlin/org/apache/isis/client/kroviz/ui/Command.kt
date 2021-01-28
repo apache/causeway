@@ -18,6 +18,7 @@
  */
 package org.apache.isis.client.kroviz.ui
 
+import org.apache.isis.client.kroviz.core.aggregator.ActionDispatcher
 import org.apache.isis.client.kroviz.core.event.RoXmlHttpRequest
 import org.apache.isis.client.kroviz.to.Link
 
@@ -28,7 +29,7 @@ abstract class Command {
     }
 
     fun invoke(link: Link) {
-        RoXmlHttpRequest().invoke(link, null)
+        RoXmlHttpRequest().invoke(link, ActionDispatcher())
     }
 
 }

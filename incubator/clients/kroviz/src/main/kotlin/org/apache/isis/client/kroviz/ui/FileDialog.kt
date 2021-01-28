@@ -20,6 +20,7 @@ package org.apache.isis.client.kroviz.ui
 
 import org.apache.isis.client.kroviz.core.event.LogEntry
 import org.apache.isis.client.kroviz.to.ResultValue
+import org.apache.isis.client.kroviz.to.ValueType
 import org.apache.isis.client.kroviz.ui.kv.RoDialog
 
 class FileDialog(val logEntry: LogEntry) : Command() {
@@ -30,8 +31,8 @@ class FileDialog(val logEntry: LogEntry) : Command() {
         val value = rvr.value!!.content as String
         val list = value.split(":")
         val formItems = mutableListOf<FormItem>()
-        formItems.add(FormItem("URL", "Text", logEntry.url))
-        formItems.add(FormItem("Blob", "TextArea", list[1], 15))
+        formItems.add(FormItem("URL", ValueType.TEXT, logEntry.url))
+        formItems.add(FormItem("Blob", ValueType.TEXT_AREA, list[1], 15))
         val label = list[0] + "/" + list[1]
         RoDialog(
                 caption = label,

@@ -23,10 +23,10 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class Action(val id: String,
                   val memberType: String,
-                  val links: List<Link> = emptyList(),
+                  override val links: List<Link> = emptyList(),
                   val parameters: Map<String, Parameter> = emptyMap(),
                   val extensions: Extensions
-) : TransferObject {
+) : TransferObject, HasLinks {
 
     fun getInvokeLink(): Link? {
         return links.firstOrNull { it.rel.indexOf(id) > 0 }

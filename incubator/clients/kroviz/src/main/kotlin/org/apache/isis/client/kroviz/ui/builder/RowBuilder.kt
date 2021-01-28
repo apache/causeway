@@ -22,19 +22,19 @@ import org.apache.isis.client.kroviz.to.TObject
 import org.apache.isis.client.kroviz.to.bs3.Row
 import org.apache.isis.client.kroviz.ui.kv.MenuFactory
 import org.apache.isis.client.kroviz.ui.kv.RoDisplay
-import pl.treksoft.kvision.core.CssSize
-import pl.treksoft.kvision.core.UNIT
+import pl.treksoft.kvision.core.*
+import pl.treksoft.kvision.core.FlexWrap
 import pl.treksoft.kvision.panel.*
 
 class RowBuilder {
 
     fun create(row: Row, tObject: TObject, dsp: RoDisplay): SimplePanel {
         val result = FlexPanel(
-                FlexDir.ROW,
+                FlexDirection.ROW,
                 FlexWrap.NOWRAP,
-                FlexJustify.FLEXSTART,
-                FlexAlignItems.FLEXSTART,
-                FlexAlignContent.STRETCH,
+                JustifyContent.FLEXSTART,
+                AlignItems.FLEXSTART,
+                AlignContent.STRETCH,
                 spacing = 10 )
 
         for (c in row.colList) {

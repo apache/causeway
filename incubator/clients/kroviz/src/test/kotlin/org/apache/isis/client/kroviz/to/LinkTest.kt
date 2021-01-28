@@ -18,12 +18,14 @@
  */
 package org.apache.isis.client.kroviz.to
 
-import kotlinx.serialization.UnstableDefault
 import kotlinx.serialization.json.Json
+import org.apache.isis.client.kroviz.handler.*
+import org.apache.isis.client.kroviz.snapshots.demo2_0_0.*
+import org.apache.isis.client.kroviz.snapshots.simpleapp1_16_0.RESTFUL
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
-@UnstableDefault
 class LinkTest {
 
     @Test
@@ -38,7 +40,7 @@ class LinkTest {
         }"""
 
         // when
-        val link = Json.parse(Link.serializer(), jsonStr)
+        val link = Json.decodeFromString(Link.serializer(), jsonStr)
 
         // then
         assertEquals("R", link.rel)
@@ -55,6 +57,48 @@ class LinkTest {
         val arguments = l.argMap()!!
         val a = arguments[""]
         assertEquals("href", a!!.key)
+    }
+
+    @Test
+    fun testFindRelation() {
+        //given
+        var rel: Relation?
+        //when
+        rel = Relation.find("menuBars")
+        //then
+        assertEquals(Relation.MENU_BARS, rel)
+
+        //when
+        rel = Relation.find("self")
+        //then
+        assertEquals(Relation.SELF, rel)
+
+        //when
+        rel = Relation.find("services")
+        //then
+        assertEquals(Relation.SERVICES, rel)
+    }
+
+    @Test
+    fun testFindParsedLinkEnums() {
+        //given
+        val map = Response2Handler.map
+        //when
+        map.forEach { rh ->
+            val jsonStr = rh.key.str
+            val ro = rh.value.parse(jsonStr)
+            if (ro is HasLinks) {
+                val links = ro.links
+                links.forEach { l ->
+                    console.log("[LT.testFindParsedLinkENums]")
+                    console.log(l)
+                    console.log(l.relation())
+                    console.log(l.representation())
+                }
+            }
+        }
+        //then
+        assertTrue(true, "no exception in loop")
     }
 
 }

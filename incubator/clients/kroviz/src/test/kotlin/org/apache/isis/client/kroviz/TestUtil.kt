@@ -18,8 +18,7 @@
  */
 package org.apache.isis.client.kroviz
 
-import pl.treksoft.jquery.jQuery
-import kotlin.browser.document
+import kotlinx.browser.document
 
 interface TestSpec {
     fun beforeTest()
@@ -44,7 +43,7 @@ interface DomSpec : TestSpec {
     override fun afterTest() {
         val div = document.getElementById("pretest")
         div?.remove()
-        jQuery(`object` = ".modal-backdrop").remove()
+//        jQuery(`object` = ".modal-backdrop").remove()
     }
 
 }

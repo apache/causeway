@@ -27,12 +27,12 @@ import org.apache.isis.client.kroviz.utils.Direction
 import org.apache.isis.client.kroviz.utils.IconManager
 import org.apache.isis.client.kroviz.utils.Point
 import pl.treksoft.kvision.core.CssSize
+import pl.treksoft.kvision.core.JustifyContent
 import pl.treksoft.kvision.core.UNIT
 import pl.treksoft.kvision.core.Widget
 import pl.treksoft.kvision.form.FormPanel
 import pl.treksoft.kvision.html.Button
 import pl.treksoft.kvision.html.ButtonStyle
-import pl.treksoft.kvision.panel.FlexJustify
 import pl.treksoft.kvision.panel.HPanel
 import pl.treksoft.kvision.panel.vPanel
 import pl.treksoft.kvision.utils.perc
@@ -90,7 +90,7 @@ class RoDialog(
         contentWidth = CssSize(widthPerc, UNIT.perc)
         contentHeight = CssSize(heightPerc, UNIT.perc)
 
-        vPanel(justify = FlexJustify.SPACEBETWEEN) {
+        vPanel(justify = JustifyContent.SPACEBETWEEN) {
             height = 100.perc
             formPanel = FormPanelFactory(items).panel
 
@@ -132,7 +132,7 @@ class RoDialog(
 
     @Deprecated("remove once leaflet/svg is fully operational")
     private fun hasScalableContent(): Boolean {
-        val scalable = items.firstOrNull { it.type == ValueType.IMAGE.type }
+        val scalable = items.firstOrNull { it.type == ValueType.IMAGE }
         return scalable != null
     }
 

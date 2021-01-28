@@ -19,8 +19,8 @@
 package org.apache.isis.client.kroviz.core.aggregator
 
 import org.apache.isis.client.kroviz.core.event.LogEntry
-import org.apache.isis.client.kroviz.core.event.RoXmlHttpRequest
 import org.apache.isis.client.kroviz.to.Link
+import org.apache.isis.client.kroviz.to.Relation
 import org.apache.isis.client.kroviz.to.Restful
 
 class RestfulDispatcher() : BaseAggregator() {
@@ -30,19 +30,21 @@ class RestfulDispatcher() : BaseAggregator() {
         restful.links.forEach {
             when {
                 it.rel.endsWith("/menuBars") -> invokeNavigation(it)
-                it.rel == "self" -> {}
-                it.rel.endsWith("/services") -> {}
+                it.relation() == Relation.SELF -> {
+                }
+                it.rel.endsWith("/services") -> {
+                }
                 else -> invokeSystem(it)
             }
         }
     }
 
     private fun invokeNavigation(it: Link) {
-        RoXmlHttpRequest().invoke(it, NavigationDispatcher())
+        invoke(it, NavigationDispatcher())
     }
 
     private fun invokeSystem(it: Link) {
-        RoXmlHttpRequest().invoke(it, SystemAggregator())
+        invoke(it, SystemAggregator())
     }
 
 }

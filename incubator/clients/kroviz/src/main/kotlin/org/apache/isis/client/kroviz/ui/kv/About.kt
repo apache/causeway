@@ -37,13 +37,13 @@ class About : Command() {
         // see: https://upload.wikimedia.org/wikipedia/commons/6/6c/Trajans-Column-lower-animated.svg
         val fiImg = FormItem(
                 label = "svg",
-                type = ValueType.SVG_INLINE.type,
+                type = ValueType.SVG_INLINE,
                 callBack = UUID())
         formItems.add(fiImg)
         val fiText = FormItem(
                 label = "",
                 content = _LI,
-                type = ValueType.TEXT_AREA.type,
+                type = ValueType.TEXT_AREA,
                 size = 10)
         formItems.add(fiText)
         dialog = RoDialog(

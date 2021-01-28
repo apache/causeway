@@ -23,6 +23,7 @@ import org.apache.isis.client.kroviz.core.event.RoXmlHttpRequest
 import org.apache.isis.client.kroviz.core.model.DisplayModel
 import org.apache.isis.client.kroviz.to.Link
 import org.apache.isis.client.kroviz.to.TObject
+import org.apache.isis.client.kroviz.ui.kv.Constants
 
 /**
  * An Aggregator:
@@ -39,9 +40,11 @@ import org.apache.isis.client.kroviz.to.TObject
  */
 abstract class BaseAggregator {
 
-    open lateinit var dsp: DisplayModel
+    open lateinit var dpm: DisplayModel
 
-    open fun update(logEntry: LogEntry, subType: String) {}
+    open fun update(logEntry: LogEntry, subType: String) {
+        /* default is do nothing - can be overridden in subclasses */
+    }
 
     open fun reset(): BaseAggregator {
         /* do nothing and */ return this
@@ -60,12 +63,17 @@ abstract class BaseAggregator {
         return links.firstOrNull { it.isLayout() }
     }
 
+    override fun toString(): String {
+        return "[${this::class} \n" +
+                "TObject: ${this.getObject()} ]\n"
+    }
+
     private fun Link.isLayout(): Boolean {
         return href.isNotEmpty() && href.contains("layout")
     }
 
-    fun Link.invokeWith(aggregator: BaseAggregator, subType: String = "json") {
-        RoXmlHttpRequest().invoke(this, aggregator, subType)
+    protected fun invoke(link:Link, aggregator: BaseAggregator, subType :String = Constants.subTypeJson) {
+        RoXmlHttpRequest().invoke(link, aggregator, subType)
     }
 
 }

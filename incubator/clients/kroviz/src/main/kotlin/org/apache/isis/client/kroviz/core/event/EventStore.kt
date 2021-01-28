@@ -35,7 +35,7 @@ import pl.treksoft.kvision.state.observableListOf
  */
 object EventStore {
     var log = observableListOf<LogEntry>()
-    private var logStartTime: Int = 0
+    var logStartTime: Int = 0
 
     private fun log(logEntry: LogEntry) {
         log.add(logEntry)
@@ -117,13 +117,9 @@ object EventStore {
     }
 
     fun find(tObject: TObject): LogEntry? {
-        log.forEach {
-            val obj = it.obj
-            if (obj is TObject
-                    && obj.instanceId == tObject.instanceId)
-                return it
+        return log.firstOrNull() {
+            it.obj is TObject && (it.obj as TObject).instanceId == tObject.instanceId
         }
-        return null
     }
 
     fun findBy(aggregator: BaseAggregator): LogEntry? {
@@ -131,26 +127,30 @@ object EventStore {
     }
 
     fun findMenuBars(): LogEntry? {
-        this.log.forEach {
-            if (it.obj is Menubars)
-                return it
+        return log.firstOrNull() {
+            it.obj is Menubars
         }
-        return null
     }
 
     //public for test
     fun findExact(reSpec: ResourceSpecification): LogEntry? {
-        return log.firstOrNull { it.matches(reSpec) }
+        return log.firstOrNull {
+            it.matches(reSpec)
+        }
     }
 
     //public for test
     fun findView(title: String): LogEntry? {
-        return log.firstOrNull { it.title == title && it.isView() }
+        return log.firstOrNull {
+            it.title == title && it.isView()
+        }
     }
 
     //public for test
     fun findEquivalent(reSpec: ResourceSpecification): LogEntry? {
-        return log.firstOrNull { reSpec.matches(it) }
+        return log.firstOrNull {
+            reSpec.matches(it)
+        }
     }
 
     fun isCached(reSpec: ResourceSpecification, method: String): Boolean {

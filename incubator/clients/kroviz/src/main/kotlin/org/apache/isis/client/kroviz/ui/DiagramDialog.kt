@@ -36,7 +36,7 @@ class DiagramDialog(
     }
 
     init {
-        val fi = FormItem("svg", ValueType.SVG_INLINE.type, callBack = callBack)
+        val fi = FormItem("svg", ValueType.SVG_INLINE, callBack = callBack)
         formItems.add(fi)
 
         dialog = RoDialog(

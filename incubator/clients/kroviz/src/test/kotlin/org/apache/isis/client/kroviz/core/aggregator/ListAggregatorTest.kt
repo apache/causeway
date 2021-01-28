@@ -18,20 +18,17 @@
  */
 package org.apache.isis.client.kroviz.core.aggregator
 
-import kotlinx.serialization.UnstableDefault
 import org.apache.isis.client.kroviz.IntegrationTest
 import org.apache.isis.client.kroviz.core.event.EventStore
 import org.apache.isis.client.kroviz.core.event.ResourceSpecification
 import org.apache.isis.client.kroviz.core.model.ListDM
 import org.apache.isis.client.kroviz.snapshots.simpleapp1_16_0.*
 import org.apache.isis.client.kroviz.to.Property
-import org.apache.isis.client.kroviz.to.RelType
-import kotlin.test.Test
+import org.apache.isis.client.kroviz.to.Relation
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
-@UnstableDefault
 class ListAggregatorTest : IntegrationTest() {
 
     //@Test
@@ -63,12 +60,12 @@ class ListAggregatorTest : IntegrationTest() {
             assertEquals("className", p.id)  // 3
             val links = p.links
             val descLink = links.find {
-                it.rel == RelType.DESCRIBEDBY.type
+                it.rel == Relation.DESCRIBED_BY.type
             }
             assertNotNull(descLink)  // 4
 
             // then
-            val dl = obs.dsp as ListDM
+            val dl = obs.dpm as ListDM
             val propertyLabels = dl.propertyDescriptionList
             val property = pdLe.getTransferObject() as Property
             assertTrue(propertyLabels.size > 0)  // 5
@@ -89,7 +86,7 @@ class ListAggregatorTest : IntegrationTest() {
             mockResponse(SO_LIST_ALL, obs)
             mockResponse(SO_0, obs)
             // then
-            val ol = obs.dsp
+            val ol = obs.dpm
             assertNotNull(ol)
             assertEquals(1, (ol as ListDM).data.size)
         }

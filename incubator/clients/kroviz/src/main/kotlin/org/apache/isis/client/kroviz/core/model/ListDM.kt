@@ -30,7 +30,7 @@ class ListDM(override val title: String) : DisplayModelWithLayout() {
         if (!rawData.contains(obj)) {
             rawData.add(obj)
             val exo = Exposer(obj as TObject)
-            data.add(exo.dynamise())  //if exposer is not dynamised, data access in tables won't work
+            data.add(exo)  //if exposer is not dynamised, data access in tables won't work   .dynamise()
         }
     }
 

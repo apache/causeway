@@ -21,17 +21,19 @@ package org.apache.isis.client.kroviz.ui.builder
 import org.apache.isis.client.kroviz.to.TObject
 import org.apache.isis.client.kroviz.to.bs3.Col
 import org.apache.isis.client.kroviz.ui.kv.RoDisplay
+import pl.treksoft.kvision.core.*
+import pl.treksoft.kvision.core.FlexWrap
 import pl.treksoft.kvision.panel.*
 
 class ColBuilder {
 
     fun create(col: Col, tObject: TObject, dsp: RoDisplay): FlexPanel {
         val result = FlexPanel(
-                FlexDir.COLUMN,
+                FlexDirection.COLUMN,
                 FlexWrap.NOWRAP,
-                FlexJustify.SPACEBETWEEN,
-                FlexAlignItems.CENTER,
-                FlexAlignContent.STRETCH,
+                JustifyContent.SPACEBETWEEN,
+                AlignItems.CENTER,
+                AlignContent.STRETCH,
                 spacing = 10)
         for (tg in col.tabGroupList) {
             val tgCpt = TabGroupBuilder().create(tg, tObject, dsp)

@@ -18,7 +18,6 @@
  */
 package org.apache.isis.client.kroviz.core.aggregator
 
-import kotlinx.serialization.UnstableDefault
 import org.apache.isis.client.kroviz.IntegrationTest
 import org.apache.isis.client.kroviz.snapshots.simpleapp1_16_0.ACTION_SO_CREATE
 import org.apache.isis.client.kroviz.to.ResultObject
@@ -26,7 +25,6 @@ import org.apache.isis.client.kroviz.to.ResultType
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-@UnstableDefault
 class ObjectAggregatorTest : IntegrationTest() {
 
     @Test

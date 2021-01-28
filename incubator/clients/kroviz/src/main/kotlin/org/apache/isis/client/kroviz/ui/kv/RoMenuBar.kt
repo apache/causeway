@@ -20,8 +20,8 @@ package org.apache.isis.client.kroviz.ui.kv
 
 import org.apache.isis.client.kroviz.core.event.EventStore
 import org.apache.isis.client.kroviz.to.mb.Menubars
-import org.apache.isis.client.kroviz.ui.ExportDialog
 import org.apache.isis.client.kroviz.ui.samples.GeoMap
+import org.apache.isis.client.kroviz.ui.samples.SampleChartModel
 import org.apache.isis.client.kroviz.ui.samples.SvgInline
 import org.apache.isis.client.kroviz.ui.samples.SvgMap
 import org.apache.isis.client.kroviz.utils.IconManager
@@ -86,18 +86,11 @@ object RoMenuBar : SimplePanel() {
                 UiManager.add("Log Entries", EventLogTable(model))
             }
 
-            val exportTitle = "Export Events for Replay"
-            ddLink(exportTitle,
-                    icon = IconManager.find("Export")
-            ).onClick {
-                ExportDialog().open()
-            }
-
             val chartTitle = "Sample Chart"
             ddLink(chartTitle,
                     icon = IconManager.find("Chart")
             ).onClick {
-                UiManager.add(chartTitle, ChartFactory().build())
+                UiManager.add(chartTitle, EventChart(SampleChartModel()))
             }
 
             val geoMapTitle = "Sample Geo Map"

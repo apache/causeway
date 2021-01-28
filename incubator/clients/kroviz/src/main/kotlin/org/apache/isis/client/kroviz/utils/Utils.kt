@@ -21,6 +21,7 @@ package org.apache.isis.client.kroviz.utils
 import org.apache.isis.client.kroviz.to.Argument
 import org.apache.isis.client.kroviz.to.Link
 import org.apache.isis.client.kroviz.to.TObject
+import kotlinx.serialization.json.Json
 
 object Utils {
 
@@ -160,8 +161,7 @@ object Utils {
     }
 
     fun format(jsonStr: String): String {
-        val s1 = JSON.parse<String>(jsonStr)
-        return JSON.stringify(s1, null, 2)
+        return JSON.stringify(jsonStr, null, 2)
     }
 
     fun extractTitle(title: String): String {

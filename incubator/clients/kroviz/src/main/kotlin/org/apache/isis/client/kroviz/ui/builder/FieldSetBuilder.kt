@@ -19,7 +19,7 @@
 package org.apache.isis.client.kroviz.ui.builder
 
 import org.apache.isis.client.kroviz.to.TObject
-import org.apache.isis.client.kroviz.to.ValueType
+import org.apache.isis.client.kroviz.to.TypeMapper
 import org.apache.isis.client.kroviz.to.bs3.FieldSet
 import org.apache.isis.client.kroviz.ui.FormItem
 import org.apache.isis.client.kroviz.ui.kv.FormPanelFactory
@@ -34,28 +34,32 @@ class FieldSetBuilder {
             tab: RoDisplay
     ): FormPanel<String>? {
 
+        console.log("[FSB.init]")
         val members = tObject.getProperties()
         val items = mutableListOf<FormItem>()
+        console.log("Members: " + members.size)
+        console.log("Layout-Properties: " + fieldSetLayout.propertyList.size)
+
         for (p in fieldSetLayout.propertyList) {
             val label = p.id
 
             val member = members.firstOrNull() { it.id == label }
 
             if (member != null) {
-                var size = 1
-                if (p.multiLine > 1) {
-                    member.type = ValueType.TEXT_AREA.type
-                    size = p.multiLine
-                }
+                val memberType = TypeMapper().forType(member.type!!)
+
+                val size = maxOf(1, p.multiLine)
 
                 val fi = FormItem(
                         label = label,
-                        type = member.type!!,
+                        type = memberType,
                         content = member.value?.content,
                         size = size,
                         description = p.describedAs,
                         member = member,
                         dspl = tab)
+                console.log(fi)
+
                 items.add(fi)
             }
         }

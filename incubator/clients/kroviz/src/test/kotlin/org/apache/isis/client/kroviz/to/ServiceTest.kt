@@ -18,14 +18,12 @@
  */
 package org.apache.isis.client.kroviz.to
 
-import kotlinx.serialization.UnstableDefault
 import org.apache.isis.client.kroviz.handler.ServiceHandler
 import org.apache.isis.client.kroviz.snapshots.simpleapp1_16_0.SO_MENU
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
-@UnstableDefault
 class ServiceTest : ToTest() {
 
     @Test

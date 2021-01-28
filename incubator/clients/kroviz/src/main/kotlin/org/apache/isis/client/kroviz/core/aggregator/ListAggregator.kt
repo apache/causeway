@@ -37,13 +37,14 @@ import org.apache.isis.client.kroviz.ui.kv.UiManager
 class ListAggregator(actionTitle: String) : BaseAggregator() {
 
     init {
-        dsp = ListDM(actionTitle)
+        dpm = ListDM(actionTitle)
     }
 
     override fun update(logEntry: LogEntry, subType: String) {
 
-        //TODO duplicates should no be propagated to handlers at all: IMPROVE
-        if (logEntry.state != EventState.DUPLICATE) {
+        if (logEntry.state == EventState.DUPLICATE) {
+            console.log("[LA.update] TODO duplicates should not be propagated to handlers")
+        } else {
             when (val obj = logEntry.getTransferObject()) {
                 null -> log(logEntry)
                 is ResultList -> handleList(obj)
@@ -54,33 +55,34 @@ class ListAggregator(actionTitle: String) : BaseAggregator() {
                 else -> log(logEntry)
             }
 
-            if (dsp.canBeDisplayed()) {
+            if (dpm.canBeDisplayed()) {
                 UiManager.openListView(this)
             }
         }
     }
 
     private fun handleList(resultList: ResultList) {
-        if (resultList.resulttype != "void") {
+        if (resultList.resulttype != ResultType.VOID.type) {
             val result = resultList.result!!
             result.value.forEach {
-                it.invokeWith(this)
+                invoke(it, this)
             }
         }
     }
 
     private fun handleObject(obj: TObject) {
-        dsp.addData(obj)
+        dpm.addData(obj)
         val l = obj.getLayoutLink()!!
-        // Json.Layout is invoked first
-        l.invokeWith(this)
-        // then Xml.Layout is to be invoked as well
-        l.invokeWith(this, Constants.subTypeXml)
+        if (l.representation() == Represention.OBJECT_LAYOUT_BS3) {
+            invoke(l, this, Constants.subTypeXml)
+        } else {
+            invoke(l, this)
+        }
     }
 
     //TODO same code in ObjectAggregator? -> pullup refactoring to be applied
     private fun handleLayout(layout: Layout) {
-        val dm = dsp as ListDM
+        val dm = dpm as ListDM
         // TODO layout is passed in at least twice.
         //  Eventually due to parallel invocations  - only once required -> IMPROVE
         if (dm.layout == null) {
@@ -92,49 +94,42 @@ class ListAggregator(actionTitle: String) : BaseAggregator() {
                 dm.addPropertyDescription(id, id)
                 if (!isDn) {
                     //invoking DN links leads to an error
-                    l.invokeWith(this)
+                    invoke(l, this)
                 }
             }
         }
     }
 
     private fun handleGrid(grid: Grid) {
-        (dsp as ListDM).grid = grid
+        (dpm as ListDM).grid = grid
     }
 
     private fun handleProperty(p: Property) {
-        val dm = dsp as ListDM
+        val dm = dpm as ListDM
         if (p.isPropertyDescription()) {
             dm.addPropertyDescription(p)
         } else {
             dm.addProperty(p)
-            p.descriptionLink()?.invokeWith(this)
+            invoke(p.descriptionLink()!!, this)
         }
     }
 
     override fun reset(): ListAggregator {
-        dsp.reset()
+        dpm.reset()
         return this
     }
 
     private fun Property.descriptionLink(): Link? {
         return links.find {
-            it.rel == RelType.DESCRIBEDBY.type
+            it.relation() == Relation.DESCRIBED_BY
         }
     }
 
-    /**
-     * property-description's have extensions.friendlyName whereas
-     * plain properties don't have them  cf.:
-     * FR_PROPERTY_DESCRIPTION
-     * FR_OBJECT_PROPERTY_
-     */
     private fun Property.isPropertyDescription(): Boolean {
-        val hasExtensions = extensions != null
-        if (!hasExtensions) {
-            return false
+        val selfLink = this.links.find { l ->
+            l.relation() == Relation.SELF
         }
-        return extensions!!.friendlyName.isNotEmpty()
+        return selfLink!!.representation() == Represention.PROPERTY_DESCRIPTION
     }
 
 }
