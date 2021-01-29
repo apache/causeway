@@ -22,6 +22,7 @@ import java.util.Collection;
 
 import javax.inject.Inject;
 
+import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermission;
@@ -39,8 +40,13 @@ public class ApplicationOrphanedPermissionManager {
         return "Manage Orphaned Permissions";
     }
     
-    @org.apache.isis.applib.annotation.Collection
+    @org.apache.isis.applib.annotation.Collection(typeOf = ApplicationPermission.class)
     public Collection<? extends ApplicationPermission> getOrphanedPermissions() {
+        return applicationPermissionRepository.findOrphaned();
+    }
+    
+    @Action
+    public Collection<? extends ApplicationPermission> debugOrphanedPermissions() {
         return applicationPermissionRepository.findOrphaned();
     }
     

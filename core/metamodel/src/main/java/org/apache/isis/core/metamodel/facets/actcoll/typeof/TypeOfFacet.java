@@ -25,6 +25,7 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 
+import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.commons.internal.collections._Arrays;
 import org.apache.isis.commons.internal.collections._Collections;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -38,7 +39,7 @@ import lombok.val;
  * <p>
  * In the standard Apache Isis Programming Model, corresponds to annotating the
  * collection's accessor or the action's invoker method with the
- * <tt>@TypeOf</tt> annotation.
+ * {@link Collection#typeOf} annotation.
  */
 public interface TypeOfFacet extends SingleClassValueFacet {
 

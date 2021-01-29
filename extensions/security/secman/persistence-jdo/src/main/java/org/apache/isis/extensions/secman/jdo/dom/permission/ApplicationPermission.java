@@ -126,10 +126,6 @@ public class ApplicationPermission implements org.apache.isis.extensions.secman.
             domainEvent = RoleDomainEvent.class,
             editing = Editing.DISABLED
             )
-    @PropertyLayout(
-            hidden=Where.REFERENCES_PARENT
-            )
-    @MemberOrder(name="Role", sequence = "1")
     @Getter(onMethod = @__(@Override)) 
     private ApplicationRole role;
     
@@ -147,7 +143,6 @@ public class ApplicationPermission implements org.apache.isis.extensions.secman.
             domainEvent = RuleDomainEvent.class,
             editing = Editing.DISABLED
             )
-    @MemberOrder(name="Permissions", sequence = "2")
     @Getter(onMethod = @__(@Override)) 
     @Setter(onMethod = @__(@Override))
     private ApplicationPermissionRule rule;
@@ -162,7 +157,6 @@ public class ApplicationPermission implements org.apache.isis.extensions.secman.
             domainEvent = ModeDomainEvent.class,
             editing = Editing.DISABLED
             )
-    @MemberOrder(name="Permissions", sequence = "3")
     @Getter(onMethod = @__(@Override)) 
     @Setter(onMethod = @__(@Override))
     private ApplicationPermissionMode mode;
@@ -246,7 +240,6 @@ public class ApplicationPermission implements org.apache.isis.extensions.secman.
             domainEvent = FeatureFqnDomainEvent.class,
             editing = Editing.DISABLED
             )
-    @MemberOrder(name="Feature", sequence = "5.1")
     @Getter @Setter
     private String featureFqn;
 
