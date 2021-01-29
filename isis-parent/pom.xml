@@ -323,7 +323,7 @@ under the License.
 		<gpg.useagent>true</gpg.useagent>
 		<arguments />
 		<!-- APACHE ISIS customisation 3.1/7: start -->
-		<lombok.version>1.18.16</lombok.version> <!-- overriding Spring -->
+		<lombok.version>1.18.18</lombok.version> <!-- overriding Spring -->
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
 		<surefire.version>2.22.2</surefire.version>
