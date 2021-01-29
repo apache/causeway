@@ -46,7 +46,7 @@ public class ApplicationOrphanedPermissionManager_relocateSelected {
     private final ApplicationOrphanedPermissionManager holder;
     
     public ApplicationOrphanedPermissionManager act(
-            final Collection<? extends ApplicationPermission> permissions,
+            final Collection<ApplicationPermission> permissions,
             
             @Parameter(optionality = Optionality.MANDATORY)
             final String targetNamespace) {
