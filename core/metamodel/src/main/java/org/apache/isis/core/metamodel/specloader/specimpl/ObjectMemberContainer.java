@@ -80,15 +80,16 @@ implements
             final MixedIn contributed) {
         
         if(isTypeHierarchyRoot()) {
-            return Stream.empty(); // stop as we reached the Object class, which does not contribute actions 
+            return streamDeclaredActions(contributed); // stop going deeper
         }
-
+        
         val ids = _Sets.<String>newHashSet();
         
         return Stream.concat(
-                streamDeclaredActions(contributed), 
-                superclass().streamActions(contributed))
-                .filter(action->ids.add(action.getId())); // ensure we don't emit duplicates
+            streamDeclaredActions(contributed), 
+            superclass().streamActions(contributed)
+        )
+        .filter(action->ids.add(action.getId())); // ensure we don't emit duplicates
     }
     
     // -- ASSOCIATIONS
@@ -111,15 +112,16 @@ implements
     public Stream<ObjectAssociation> streamAssociations(MixedIn contributed) {
         
         if(isTypeHierarchyRoot()) {
-            return Stream.empty(); // stop as we reached the Object class, which does not contribute associations 
+            return streamDeclaredAssociations(contributed); // stop going deeper
         }
-
+        
         val ids = _Sets.<String>newHashSet();
         
         return Stream.concat(
                 streamDeclaredAssociations(contributed), 
-                superclass().streamAssociations(contributed))
-                .filter(association->ids.add(association.getId())); // ensure we don't emit duplicates
+                superclass().streamAssociations(contributed)
+        )
+        .filter(association->ids.add(association.getId())); // ensure we don't emit duplicates
     }
     
 }

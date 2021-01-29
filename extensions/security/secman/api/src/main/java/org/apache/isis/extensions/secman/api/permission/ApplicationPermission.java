@@ -26,6 +26,7 @@ import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureType;
 import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
@@ -61,7 +62,7 @@ import lombok.val;
  * </ul>
  * </p>
  */
-@DomainObject
+@DomainObject(objectType = "isis.ext.secman.IApplicationPermission")
 public interface ApplicationPermission {
     
     // -- DOMAIN EVENTS
@@ -123,17 +124,23 @@ public interface ApplicationPermission {
 
     @Property
     @MemberOrder(name="Feature", sequence = "5.1")
-    String getFeatureFqn();
+    default String getFeatureFqn() {
+        throw _Exceptions.unsupportedOperation("please implement me");
+    }
     void setFeatureFqn(String featureFqn);
     
     @Property
     @MemberOrder(name="Permissions", sequence = "2")
-    ApplicationPermissionRule getRule();
+    default ApplicationPermissionRule getRule() {
+        throw _Exceptions.unsupportedOperation("please implement me");
+    }
     void setRule(ApplicationPermissionRule rule);
     
     @Property
     @MemberOrder(name="Permissions", sequence = "3")
-    ApplicationPermissionMode getMode();
+    default ApplicationPermissionMode getMode() {
+        throw _Exceptions.unsupportedOperation("please implement me");
+    }
     void setMode(ApplicationPermissionMode changing);
     
     @Property
@@ -141,7 +148,9 @@ public interface ApplicationPermission {
             hidden=Where.REFERENCES_PARENT
             )
     @MemberOrder(name="Role", sequence = "1")
-    ApplicationRole getRole();
+    default ApplicationRole getRole() {
+        throw _Exceptions.unsupportedOperation("please implement me");
+    }
     void setRole(ApplicationRole applicationRole);
     
     // -- HELPER

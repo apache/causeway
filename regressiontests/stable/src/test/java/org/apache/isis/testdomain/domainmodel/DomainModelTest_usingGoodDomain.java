@@ -190,10 +190,6 @@ class DomainModelTest_usingGoodDomain {
     @MethodSource("provideProperMemberInheritanceTypes")
     void metamodelContributingMembers_shouldBeInheritable(Class<?> type) {
         
-        if(type.isInterface()) {
-            System.out.println("if");
-        }
-        
         val holderSpec = specificationLoader.loadSpecification(type, 
                         IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
         
