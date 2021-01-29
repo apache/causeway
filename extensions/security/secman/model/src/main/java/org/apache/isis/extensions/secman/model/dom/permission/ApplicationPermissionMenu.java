@@ -29,6 +29,7 @@ import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermission;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionRepository;
@@ -49,6 +50,7 @@ public class ApplicationPermissionMenu {
     public static abstract class ActionDomainEvent extends IsisModuleExtSecmanApi.ActionDomainEvent<ApplicationPermissionMenu> {}
 
     @Inject private ApplicationPermissionRepository<? extends ApplicationPermission> applicationPermissionRepository;
+    @Inject private FactoryService factoryService;
 
     // -- iconName
     public String iconName() {
@@ -64,8 +66,8 @@ public class ApplicationPermissionMenu {
             semantics = SemanticsOf.SAFE
             )
     @MemberOrder(sequence = "100.50.1")
-    public Collection<? extends ApplicationPermission> findOrphanedPermissions() {
-        return applicationPermissionRepository.findOrphaned();
+    public ApplicationOrphanedPermissionManager findOrphanedPermissions() {
+        return factoryService.viewModel(new ApplicationOrphanedPermissionManager());
     }
 
 

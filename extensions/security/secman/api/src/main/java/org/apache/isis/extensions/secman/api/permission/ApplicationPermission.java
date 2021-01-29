@@ -71,6 +71,8 @@ public interface ApplicationPermission {
     public static class ChangingDomainEvent extends ActionDomainEvent {}
     public static class ViewingDomainEvent extends ActionDomainEvent {}
     
+    public static class RelocateNamespaceDomainEvent extends ActionDomainEvent {}
+    
     // -- MODEL
     
     /**
@@ -114,6 +116,7 @@ public interface ApplicationPermission {
     ApplicationFeatureType getFeatureType();
 
     String getFeatureFqn();
+    void setFeatureFqn(String featureFqn);
     
     ApplicationPermissionRule getRule();
     void setRule(ApplicationPermissionRule rule);

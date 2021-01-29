@@ -42,6 +42,8 @@ import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 
+import lombok.NonNull;
+
 /**
  * Value type representing a package, class or member.
  * <p>
@@ -480,6 +482,16 @@ implements
     @Override
     public String toString() {
         return toString.toString(this);
+    }
+
+    // -- WITHERS
+    
+    /**
+     * Returns a new instance that is a clone of this, except for the namespace which is taken from the argument. 
+     * @param namespace
+     */
+    public ApplicationFeatureId withNamespace(final @NonNull String namespace) {
+        return newFeature(namespace, this.getTypeSimpleName(), this.getMemberName()); 
     }
 
 
