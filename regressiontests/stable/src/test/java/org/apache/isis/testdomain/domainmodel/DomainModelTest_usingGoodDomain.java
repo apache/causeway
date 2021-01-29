@@ -18,9 +18,14 @@
  */
 package org.apache.isis.testdomain.domainmodel;
 
+import java.util.stream.Stream;
+
 import javax.inject.Inject;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
@@ -44,7 +49,8 @@ import org.apache.isis.core.metamodel.specloader.specimpl.IntrospectionState;
 import org.apache.isis.schema.metamodel.v2.DomainClassDto;
 import org.apache.isis.testdomain.conf.Configuration_headless;
 import org.apache.isis.testdomain.model.good.Configuration_usingValidDomain;
-import org.apache.isis.testdomain.model.good.ProperMemberInheritance;
+import org.apache.isis.testdomain.model.good.ProperMemberInheritance_usingAbstract;
+import org.apache.isis.testdomain.model.good.ProperMemberInheritance_usingInterface;
 import org.apache.isis.testdomain.model.good.ProperMemberSupport;
 import org.apache.isis.testing.integtestsupport.applib.validate.DomainModelValidator;
 
@@ -161,10 +167,11 @@ class DomainModelTest_usingGoodDomain {
         
     }
     
-    @Test
-    void titleAndIconName_shouldBeInheritable() {
+    @ParameterizedTest
+    @MethodSource("provideProperMemberInheritanceTypes")
+    void titleAndIconName_shouldBeInheritable(Class<?> type) {
         
-        val spec = specificationLoader.loadSpecification(ProperMemberInheritance.class, 
+        val spec = specificationLoader.loadSpecification(type,
                         IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
         
         val titleFacet = spec.getFacet(TitleFacet.class);
@@ -173,41 +180,43 @@ class DomainModelTest_usingGoodDomain {
         val iconFacet = spec.getFacet(IconFacet.class);
         assertNotNull(iconFacet);
         
-        val properMemberInheritance = new ProperMemberInheritance();
+        val properMemberInheritance = new ProperMemberInheritance_usingAbstract();
         assertEquals(properMemberInheritance.title(), titleService.titleOf(properMemberInheritance));
         assertEquals(properMemberInheritance.iconName(), titleService.iconNameOf(properMemberInheritance));
     }
     
-    @Test
-    void metamodelContributingMembers_shouldBeInheritable() {
+    @ParameterizedTest
+    @MethodSource("provideProperMemberInheritanceTypes")
+    void metamodelContributingMembers_shouldBeInheritable(Class<?> type) {
         
-        val holderSpec = specificationLoader.loadSpecification(ProperMemberInheritance.class, 
+        val holderSpec = specificationLoader.loadSpecification(type, 
                         IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
         
-        val super_action = holderSpec.getActionElseFail("sampleAction");
-        assertNotNull(super_action);
-        assertEquals("sampleAction", super_action.getId());
-        assertEquals("foo", super_action.getName());
-        assertEquals("bar", super_action.getDescription());
+        val action = holderSpec.getActionElseFail("sampleAction");
+        assertNotNull(action);
+        assertEquals("sampleAction", action.getId());
+        assertEquals("foo", action.getName());
+        assertEquals("bar", action.getDescription());
         
-        val super_property = holderSpec.getAssociationElseFail("sampleProperty");
-        assertNotNull(super_property);
-        assertEquals("sampleProperty", super_property.getId());
-        assertEquals("foo", super_property.getName());
-        assertEquals("bar", super_property.getDescription());
+        val property = holderSpec.getAssociationElseFail("sampleProperty");
+        assertNotNull(property);
+        assertEquals("sampleProperty", property.getId());
+        assertEquals("foo", property.getName());
+        assertEquals("bar", property.getDescription());
         
-        val super_collection = holderSpec.getAssociationElseFail("sampleCollection");
-        assertNotNull(super_collection);
-        assertEquals("sampleCollection", super_collection.getId());
-        assertEquals("foo", super_collection.getName());
-        assertEquals("bar", super_collection.getDescription());
+        val collection = holderSpec.getAssociationElseFail("sampleCollection");
+        assertNotNull(collection);
+        assertEquals("sampleCollection", collection.getId());
+        assertEquals("foo", collection.getName());
+        assertEquals("bar", collection.getDescription());
         
     }
     
-    @Test
-    void metamodelContributingActions_shouldBeUnique_whenOverridden() {
+    @ParameterizedTest
+    @MethodSource("provideProperMemberInheritanceTypes")
+    void metamodelContributingActions_shouldBeUnique_whenOverridden(Class<?> type) {
         
-        val holderSpec = specificationLoader.loadSpecification(ProperMemberInheritance.class, 
+        val holderSpec = specificationLoader.loadSpecification(type, 
                 IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
         
         val super_action = holderSpec.getActionElseFail("sampleActionOverride");
@@ -222,10 +231,11 @@ class DomainModelTest_usingGoodDomain {
         
     }
     
-    @Test
-    void metamodelContributingProperties_shouldBeUnique_whenOverridden() {
+    @ParameterizedTest
+    @MethodSource("provideProperMemberInheritanceTypes")
+    void metamodelContributingProperties_shouldBeUnique_whenOverridden(Class<?> type) {
         
-        val holderSpec = specificationLoader.loadSpecification(ProperMemberInheritance.class, 
+        val holderSpec = specificationLoader.loadSpecification(type, 
                         IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
         
         val super_property = holderSpec.getAssociationElseFail("samplePropertyOverride");
@@ -245,6 +255,13 @@ class DomainModelTest_usingGoodDomain {
     private void assertHasPublishedActionFacet(FacetHolder facetHolder) {
         val facet = facetHolder.getFacet(ExecutionPublishingFacet.class);
         assertNotNull(facet);
+    }
+    
+    static Stream<Arguments> provideProperMemberInheritanceTypes() {
+        return Stream.of(
+                Arguments.of(ProperMemberInheritance_usingAbstract.class),
+                Arguments.of(ProperMemberInheritance_usingInterface.class)
+        );
     }
     
 

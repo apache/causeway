@@ -29,7 +29,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 @DomainObject(nature = Nature.VIEW_MODEL)
-public class ProperMemberInheritance extends ProperMemberInheritanceAbstract {
+public class ProperMemberInheritance_usingAbstract 
+extends ProperMemberInheritanceAbstract {
 
     @Action
     @ActionLayout(named = "foo", describedAs = "bar")

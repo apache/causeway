@@ -105,7 +105,9 @@ extends ObjectAssociationAbstract implements OneToManyAssociation {
     }
 
     @Override
-    public boolean isEmpty(final ManagedObject parentAdapter, final InteractionInitiatedBy interactionInitiatedBy) {
+    public boolean isEmpty(
+            final ManagedObject parentAdapter, 
+            final InteractionInitiatedBy interactionInitiatedBy) {
         // REVIEW should we be able to determine if a collection is empty
         // without loading it?
         final ManagedObject collection = get(parentAdapter, interactionInitiatedBy);
