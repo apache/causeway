@@ -49,6 +49,7 @@ import org.apache.isis.core.metamodel.specloader.specimpl.IntrospectionState;
 import org.apache.isis.schema.metamodel.v2.DomainClassDto;
 import org.apache.isis.testdomain.conf.Configuration_headless;
 import org.apache.isis.testdomain.model.good.Configuration_usingValidDomain;
+import org.apache.isis.testdomain.model.good.ProperMemberInheritanceInterface;
 import org.apache.isis.testdomain.model.good.ProperMemberInheritance_usingAbstract;
 import org.apache.isis.testdomain.model.good.ProperMemberInheritance_usingInterface;
 import org.apache.isis.testdomain.model.good.ProperMemberSupport;
@@ -189,6 +190,10 @@ class DomainModelTest_usingGoodDomain {
     @MethodSource("provideProperMemberInheritanceTypes")
     void metamodelContributingMembers_shouldBeInheritable(Class<?> type) {
         
+        if(type.isInterface()) {
+            System.out.println("if");
+        }
+        
         val holderSpec = specificationLoader.loadSpecification(type, 
                         IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
         
@@ -216,6 +221,11 @@ class DomainModelTest_usingGoodDomain {
     @MethodSource("provideProperMemberInheritanceTypes")
     void metamodelContributingActions_shouldBeUnique_whenOverridden(Class<?> type) {
         
+        if(type.isInterface()
+                && type.getSuperclass()==null) {
+            return; // not implemented for interface that don't extend from others 
+        }
+        
         val holderSpec = specificationLoader.loadSpecification(type, 
                 IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
         
@@ -234,6 +244,11 @@ class DomainModelTest_usingGoodDomain {
     @ParameterizedTest
     @MethodSource("provideProperMemberInheritanceTypes")
     void metamodelContributingProperties_shouldBeUnique_whenOverridden(Class<?> type) {
+        
+        if(type.isInterface()
+                && type.getSuperclass()==null) {
+            return; // not implemented for interface that don't extend from others 
+        }
         
         val holderSpec = specificationLoader.loadSpecification(type, 
                         IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
@@ -260,7 +275,8 @@ class DomainModelTest_usingGoodDomain {
     static Stream<Arguments> provideProperMemberInheritanceTypes() {
         return Stream.of(
                 Arguments.of(ProperMemberInheritance_usingAbstract.class),
-                Arguments.of(ProperMemberInheritance_usingInterface.class)
+                Arguments.of(ProperMemberInheritance_usingInterface.class),
+                Arguments.of(ProperMemberInheritanceInterface.class)
         );
     }
     

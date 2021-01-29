@@ -58,10 +58,6 @@ implements
     @Override
     public Optional<ObjectAction> getAction(String id, @Nullable ActionType type) {
 
-        if(isTypeHierarchyRoot()) {
-            return Optional.empty(); // stop search as we reached the Object class, which does not contribute actions 
-        }
-        
         val declaredAction = getDeclaredAction(id); // no inheritance nor type considered
                 
         if(declaredAction.isPresent()) {
@@ -72,8 +68,10 @@ implements
             }
             return declaredAction; 
         }
-        
-        return superclass().getAction(id, type);
+
+        return isTypeHierarchyRoot()
+                ? Optional.empty() // stop searching
+                : superclass().getAction(id, type);
     }
     
     @Override
@@ -98,17 +96,15 @@ implements
     @Override
     public Optional<ObjectAssociation> getAssociation(String id) {
 
-        if(isTypeHierarchyRoot()) {
-            return Optional.empty(); // stop search as we reached the Object class, which does not contribute associations 
-        }
-        
         val declaredAssociation = getDeclaredAssociation(id); // no inheritance considered
                 
         if(declaredAssociation.isPresent()) {
             return declaredAssociation; 
         }
         
-        return superclass().getAssociation(id);
+        return isTypeHierarchyRoot()
+               ? Optional.empty() // stop searching 
+               : superclass().getAssociation(id);
     }
     
     @Override

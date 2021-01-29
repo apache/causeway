@@ -27,7 +27,7 @@ import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 
-interface ProperMemberInheritanceInterface {
+public interface ProperMemberInheritanceInterface {
     
     default String title() {
         return "inherited title";
