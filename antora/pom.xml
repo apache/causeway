@@ -25,7 +25,7 @@
 
 	<packaging>pom</packaging>
 
-	<name>Apache Isis Antora</name>
+	<name>Apache Isis - Antora</name>
 
 	<build>
 		<plugins>

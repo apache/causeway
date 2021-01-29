@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Licensed to the Apache Software Foundation (ASF) under one or more contributor 
-	license agreements. See the NOTICE file distributed with this work for additional 
-	information regarding copyright ownership. The ASF licenses this file to 
-	you under the Apache License, Version 2.0 (the "License"); you may not use 
-	this file except in compliance with the License. You may obtain a copy of 
-	the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required 
-	by applicable law or agreed to in writing, software distributed under the 
-	License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS 
-	OF ANY KIND, either express or implied. See the License for the specific 
+<!-- Licensed to the Apache Software Foundation (ASF) under one or more contributor
+	license agreements. See the NOTICE file distributed with this work for additional
+	information regarding copyright ownership. The ASF licenses this file to
+	you under the Apache License, Version 2.0 (the "License"); you may not use
+	this file except in compliance with the License. You may obtain a copy of
+	the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required
+	by applicable law or agreed to in writing, software distributed under the
+	License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS
+	OF ANY KIND, either express or implied. See the License for the specific
 	language governing permissions and limitations under the License. -->
 <project xmlns="http://maven.apache.org/POM/4.0.0"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -22,16 +22,16 @@
 
 	<artifactId>isis-tooling-model4adoc</artifactId>
 
-	<name>Apache Isis Tooling - Model for AsciiDoc</name>
+	<name>Apache Isis - Tooling - Model for AsciiDoc</name>
 	<description>
-        Library for programmatic AsciiDoc generation. 
-        
+        Library for programmatic AsciiDoc generation.
+
         The AsciiDoc name is trademarked by the Eclipse Foundation (https://www.eclipse.org/).
-		This project is *not* part of the specification effort for _AsciiDoc_ under the 
+		This project is *not* part of the specification effort for _AsciiDoc_ under the
 		AsciiDoc Working Group. See https://projects.eclipse.org/proposals/asciidoc-language
-		and https://accounts.eclipse.org/mailing-list/asciidoc-wg. However, we are happy to 
-		help with transfer of source code, if any project (under the umbrella of the 
-		AsciiDoc Working Group) is willing to take over.  
+		and https://accounts.eclipse.org/mailing-list/asciidoc-wg. However, we are happy to
+		help with transfer of source code, if any project (under the umbrella of the
+		AsciiDoc Working Group) is willing to take over.
     </description>
 
 	<properties>
