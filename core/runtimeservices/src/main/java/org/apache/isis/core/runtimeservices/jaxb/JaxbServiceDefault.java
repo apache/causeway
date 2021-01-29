@@ -83,8 +83,10 @@ public class JaxbServiceDefault extends JaxbService.Simple {
     }
 
     @Override
-    protected Object internalFromXml(@NonNull JAXBContext jaxbContext, String xml,
-            Map<String, Object> unmarshallerProperties) throws JAXBException {
+    protected Object internalFromXml(
+            final @NonNull JAXBContext jaxbContext, 
+            final String xml,
+            final Map<String, Object> unmarshallerProperties) throws JAXBException {
      
         val pojo = super.internalFromXml(jaxbContext, xml, unmarshallerProperties);
         if(pojo instanceof DomainObjectList) {
@@ -97,7 +99,7 @@ public class JaxbServiceDefault extends JaxbService.Simple {
         }
         return pojo;
     }
-
+    
     @Override
     protected void configure(final Unmarshaller unmarshaller) {
         unmarshaller.setAdapter(PersistentEntityAdapter.class,
