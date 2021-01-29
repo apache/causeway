@@ -192,7 +192,6 @@ implements
             editing = Editing.DISABLED
             )
     @PropertyLayout(typicalLength=ApplicationPermission.TYPICAL_LENGTH_TYPE)
-    @MemberOrder(name="Feature", sequence = "5")
     public String getType() {
         final Enum<?> e = getFeatureType() != ApplicationFeatureType.MEMBER 
                 ? getFeatureType() 

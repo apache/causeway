@@ -180,11 +180,10 @@ public class ApplicationPermission implements org.apache.isis.extensions.secman.
             editing = Editing.DISABLED
             )
     @PropertyLayout(typicalLength=ApplicationPermission.TYPICAL_LENGTH_TYPE)
-    @MemberOrder(name="Feature", sequence = "5")
     public String getType() {
         final Enum<?> e = getFeatureType() != ApplicationFeatureType.MEMBER 
                 ? getFeatureType() 
-                        : getMemberType().orElse(null);
+                : getMemberType().orElse(null);
         return e != null ? e.name(): null;
     }
 

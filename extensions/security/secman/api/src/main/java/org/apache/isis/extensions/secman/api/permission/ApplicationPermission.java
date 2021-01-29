@@ -122,26 +122,7 @@ public interface ApplicationPermission {
     
     ApplicationFeatureType getFeatureType();
 
-    @Property
-    @MemberOrder(name="Feature", sequence = "5.1")
-    default String getFeatureFqn() {
-        throw _Exceptions.unsupportedOperation("please implement me");
-    }
-    void setFeatureFqn(String featureFqn);
-    
-    @Property
-    @MemberOrder(name="Permissions", sequence = "2")
-    default ApplicationPermissionRule getRule() {
-        throw _Exceptions.unsupportedOperation("please implement me");
-    }
-    void setRule(ApplicationPermissionRule rule);
-    
-    @Property
-    @MemberOrder(name="Permissions", sequence = "3")
-    default ApplicationPermissionMode getMode() {
-        throw _Exceptions.unsupportedOperation("please implement me");
-    }
-    void setMode(ApplicationPermissionMode changing);
+    // -- ROLE
     
     @Property
     @PropertyLayout(
@@ -152,6 +133,41 @@ public interface ApplicationPermission {
         throw _Exceptions.unsupportedOperation("please implement me");
     }
     void setRole(ApplicationRole applicationRole);
+    
+    // -- RULE
+    
+    @Property
+    @MemberOrder(name="Permissions", sequence = "2")
+    default ApplicationPermissionRule getRule() {
+        throw _Exceptions.unsupportedOperation("please implement me");
+    }
+    void setRule(ApplicationPermissionRule rule);
+    
+    // -- MODE
+    
+    @Property
+    @MemberOrder(name="Permissions", sequence = "3")
+    default ApplicationPermissionMode getMode() {
+        throw _Exceptions.unsupportedOperation("please implement me");
+    }
+    void setMode(ApplicationPermissionMode changing);
+    
+    // -- TYPE
+    
+    @Property
+    @MemberOrder(name="Feature", sequence = "5")
+    default String getType() {
+        throw _Exceptions.unsupportedOperation("please implement me");
+    }
+    
+    // -- FQN
+    
+    @Property
+    @MemberOrder(name="Feature", sequence = "5.1")
+    default String getFeatureFqn() {
+        throw _Exceptions.unsupportedOperation("please implement me");
+    }
+    void setFeatureFqn(String featureFqn);
     
     // -- HELPER
     
