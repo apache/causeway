@@ -87,15 +87,14 @@ public class JaxbServiceDefault extends JaxbService.Simple {
             final @NonNull JAXBContext jaxbContext, 
             final String xml,
             final Map<String, Object> unmarshallerProperties) throws JAXBException {
-     
+        
         val pojo = super.internalFromXml(jaxbContext, xml, unmarshallerProperties);
         if(pojo instanceof DomainObjectList) {
 
             // go around the loop again, so can properly deserialize the contents
             val domainObjectList = (DomainObjectList) pojo;
             val jaxbContextForList = jaxbContextForObject(domainObjectList);
-
-            return internalFromXml(jaxbContextForList, xml, unmarshallerProperties);
+            return super.internalFromXml(jaxbContextForList, xml, unmarshallerProperties);
         }
         return pojo;
     }

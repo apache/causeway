@@ -31,8 +31,6 @@ import javax.xml.bind.Unmarshaller;
 import org.apache.isis.applib.mixins.dto.Dto_downloadXsd;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._NullSafe;
-import org.apache.isis.commons.internal.debug._Probe;
-import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.resources._Xml;
 
 import lombok.NonNull;
@@ -211,12 +209,7 @@ public interface JaxbService {
             for (val entry : _NullSafe.entrySet(unmarshallerProperties)) {
                 unmarshaller.setProperty(entry.getKey(), entry.getValue());
             }
-            
-            if(xml.contains("<actionOwningType>isis.applib.ConfigurationMenu</actionOwningType>")) {
-                _Probe.errOut("+++++++++++\n\n %s", xml);
-                _Exceptions.dumpStackTrace();
-            }
-            
+
             configure(unmarshaller);
 
             val pojo = unmarshaller.unmarshal(new StringReader(xml));
