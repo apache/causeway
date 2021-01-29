@@ -21,6 +21,7 @@ package org.apache.isis.applib;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
+import org.apache.isis.applib.domain.DomainObjectList;
 import org.apache.isis.applib.mixins.dto.Dto_downloadXml;
 import org.apache.isis.applib.mixins.dto.Dto_downloadXsd;
 import org.apache.isis.applib.mixins.layout.Object_downloadLayoutXml;
@@ -35,6 +36,7 @@ import org.apache.isis.applib.services.commanddto.conmap.ContentMappingServiceFo
 import org.apache.isis.applib.services.commanddto.conmap.ContentMappingServiceForCommandsDto;
 import org.apache.isis.applib.services.commanddto.processor.spi.CommandDtoProcessorServiceIdentity;
 import org.apache.isis.applib.services.confview.ConfigurationMenu;
+import org.apache.isis.applib.services.confview.ConfigurationProperty;
 import org.apache.isis.applib.services.layout.LayoutServiceMenu;
 import org.apache.isis.applib.services.metamodel.MetaModelServiceMenu;
 import org.apache.isis.applib.services.publishing.log.CommandLogger;
@@ -42,6 +44,8 @@ import org.apache.isis.applib.services.publishing.log.EntityChangesLogger;
 import org.apache.isis.applib.services.publishing.log.EntityPropertyChangeLogger;
 import org.apache.isis.applib.services.publishing.log.ExecutionLogger;
 import org.apache.isis.applib.services.session.SessionLoggingServiceLogging;
+import org.apache.isis.applib.services.user.RoleMemento;
+import org.apache.isis.applib.services.user.UserMemento;
 import org.apache.isis.schema.IsisModuleSchema;
 
 @Configuration
@@ -61,12 +65,18 @@ import org.apache.isis.schema.IsisModuleSchema;
         Object_openRestApi.class,
         Object_rebuildMetamodel.class,
 
-        // @DomainService's
+        // @DomainObject(s)
+        ConfigurationProperty.class,
+        DomainObjectList.class,
+        RoleMemento.class,
+        UserMemento.class,
+        
+        // @DomainService(s)
         ConfigurationMenu.class,
         LayoutServiceMenu.class,
         MetaModelServiceMenu.class,
 
-        // @Service's
+        // @Service(s)
         CommandDtoProcessorServiceIdentity.class,
         CommandLogger.class,
         ContentMappingServiceForCommandDto.class,

@@ -342,8 +342,9 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
     private Optional<Grid> layoutAsGrid(
             final String domainType,
             final String instanceId) {
-
-        val objectSpec = getSpecificationLoader().lookupBySpecIdElseLoad(ObjectSpecId.of(domainType));
+        
+        val specId = ObjectSpecId.of(domainType);
+        val objectSpec = getSpecificationLoader().lookupBySpecIdElseLoad(specId);
         val gridFacet = objectSpec.getFacet(GridFacet.class);
 
         if(gridFacet == null) {

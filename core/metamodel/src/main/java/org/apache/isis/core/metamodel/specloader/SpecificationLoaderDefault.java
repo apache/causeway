@@ -428,13 +428,35 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
         cache.forEach(onSpec, shouldRunConcurrent);
     }
 
-    @Override @Nullable
+    @Override
     public Class<?> lookupType(final @NonNull ObjectSpecId objectSpecId) {
-        return specIdToClassResolver.lookup(objectSpecId)
-                //XXX falling back assuming the specId equals the fqn of the corresponding class
-                //which might not always be true
-                // (should warn log when fails with null)
-                .orElseGet(()->ClassUtil.forNameElseNull(objectSpecId.asString()));
+        Class<?> cls = specIdToClassResolver.lookup(objectSpecId)
+                .orElse(null);
+        if(cls!=null) {
+            return cls;
+        }
+        
+        // falling back assuming the specId equals the fqn of the corresponding class
+        // which might not always be true, hence the warning
+        //TODO desired behavior could be made a config option, eg. to throw an exception here instead
+        cls = ClassUtil.forNameElseNull(objectSpecId.asString());
+        if(cls!=null) {
+
+//TODO yet it seems we rely on this kind of fallback from several code paths, so lets not emit any warnings yet ...              
+//            log.warn("Lookup for ObjectSpecId '{}' failed, but found a matching fully qualified "
+//                    + "class name to use instead. This warning is an indicator, that {} is not "
+//                    + "discovered by Spring during bootstrapping of this application.", 
+//                    objectSpecId.getSpecId(),
+//                    cls.getName());
+            return cls;
+        }
+        
+        // immediately fail to not cause any NPEs further down the path
+        throw _Exceptions.unrecoverableFormatted(
+                "Lookup for ObjectSpecId '%s' failed, also found no matching fully qualified "
+                + "class name to use instead. This indicates, that the class we are not finding here"
+                + " is not discovered by Spring during bootstrapping of this application.",
+                objectSpecId.asString());
     }
     
     // -- VALIDATION STUFF
