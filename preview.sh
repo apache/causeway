@@ -3,16 +3,27 @@
 export ANTORA_CACHE_DIR=.antora-cache-dir
 export ANTORA_TARGET_SITE=antora/target/site
 
+#
+# for now, we disable index generation, because (a) java 11 dependency,
+# probably not available on CI build server, and (b) need to build tooling.
+#
+# nevertheless, a committer can use this script to easily regenerate the
+# index (only) using the -I flag.
+#
+export SKIP_INDEX_GENERATION=true
+
 PLAYBOOK_FILE=antora/playbooks/site.yml
 
-while getopts 'ECAKSecaksxyhf:' opt
+while getopts 'ECIAKSeciaksxyhf:' opt
 do
   case $opt in
     E) export SKIP_EXAMPLES=false
        forcing=true ;;
     C) export SKIP_CONFIGS=false
        forcing=true ;;
-    A) export SKIP_GENERATION=false
+    I) export SKIP_INDEX_GENERATION=false
+       forcing=true ;;
+    A) export SKIP_ANTORA_GENERATION=false
        export SKIP_CLEAR_CACHE=false
        export SKIP_CLEAR_PREVIOUS=false
        forcing=true ;;
@@ -23,7 +34,8 @@ do
 
     e) export SKIP_EXAMPLES=true ;;
     c) export SKIP_CONFIGS=true ;;
-    a) export SKIP_GENERATION=true
+    i) export SKIP_INDEX_GENERATION=true ;;
+    a) export SKIP_ANTORA_GENERATION=true
        export SKIP_CLEAR_CACHE=true
        export SKIP_CLEAR_PREVIOUS=true
       ;;
@@ -40,6 +52,7 @@ do
        echo "  -e skip examples"
        echo "  -k skip stale example check"
        echo "  -c skip config doc generation"
+       echo "  -i skip index generation"
        echo "  -a skip Antora generation"
        echo "  -s skip serving generated site"
        echo ""
@@ -47,6 +60,7 @@ do
        echo "  -E force examples"
        echo "  -K force stale example check"
        echo "  -C force config doc generation"
+       echo "  -I force index generation"
        echo "  -A force Antora generation"
        echo "  -S force serving generated site"
        echo ""
@@ -66,8 +80,11 @@ if [ "$forcing" = "true" ]; then
     if [ -z "$SKIP_CONFIGS" ]; then
       export SKIP_CONFIGS=true
     fi
-    if [ -z "$SKIP_GENERATION" ]; then
-      export SKIP_GENERATION=true
+    if [ -z "$SKIP_INDEX_GENERATION" ]; then
+      export SKIP_INDEX_GENERATION=true
+    fi
+    if [ -z "$SKIP_ANTORA_GENERATION" ]; then
+      export SKIP_ANTORA_GENERATION=true
       export SKIP_CLEAR_CACHE=true
       export SKIP_CLEAR_PREVIOUS=true
     fi
@@ -82,8 +99,9 @@ fi
 echo ""
 echo "SKIP_EXAMPLES              : $SKIP_EXAMPLES"
 echo "SKIP_STALE_EXAMPLE_CHECK   : $SKIP_STALE_EXAMPLE_CHECK"
+echo "SKIP_INDEX_GENERATION      : $SKIP_INDEX_GENERATION"
 echo "SKIP_CONFIGS               : $SKIP_CONFIGS"
-echo "SKIP_GENERATION (Antora)   : $SKIP_GENERATION"
+echo "SKIP_ANTORA_GENERATION     : $SKIP_ANTORA_GENERATION"
 echo "SKIP_SERVE                 : $SKIP_SERVE"
 echo "SKIP_CLEAR_PREVIOUS (site) : $SKIP_CLEAR_PREVIOUS"
 echo "SKIP_CLEAR_CACHE (template): $SKIP_SKIP_CLEAR_CACHE"

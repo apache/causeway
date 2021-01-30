@@ -40,10 +40,17 @@ else
 fi
 
 
-if [[ "$SKIP_GENERATION" == "true" ]]; then
-  echo "skipping building..."
+if [[ "$SKIP_INDEX_GENERATION" == "true" ]]; then
+  echo "skipping index generation"
 else
-  echo "building ..."
+  bash $SCRIPT_DIR/_adoc-gen-index.sh
+fi
+
+
+if [[ "$SKIP_ANTORA_GENERATION" == "true" ]]; then
+  echo "skipping Antora generation ..."
+else
+  echo "generating site using Antora ..."
   bash $SCRIPT_DIR/_adoc-antora.sh $*
   echo "site built in ${SECONDS}s"
 fi
