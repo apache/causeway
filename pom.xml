@@ -39,31 +39,40 @@
 		<tag>HEAD</tag>
 	</scm>
 
-	<!-- ESSENTIAL MODULES -->
-
-	<modules>
-		<!--
-		essential modules required to run web applications and tests;
-		non-essential modules can be added to the build via profiles
-		(as defined below);
-
-		keep module declarations in alphabetical order!
-
-		also keep profiles in sync with the site documentation
-		https://github.com/apache/isis/blob/master/antora/components/conguide/modules/ROOT/pages/building-apache-isis.adoc
-			-->
-		<module>core</module>
-		<module>extensions</module>
-		<module>isis-parent</module>
-		<module>mappings</module>
-		<module>mavendeps</module>
-		<module>starters</module>
-		<module>subdomains</module>
-		<module>testing</module>
-		<module>valuetypes</module>
-	</modules>
-
 	<profiles>
+
+		<!-- ESSENTIAL MODULES -->
+
+		<profile>
+			<id>essential</id>
+			<activation>
+				<property>
+					<name>!skip.essential</name>
+				</property>
+			</activation>
+			<modules>
+				<!--
+                essential modules required to run web applications and tests;
+                non-essential modules can be added to the build via profiles
+                (as defined below);
+
+                keep module declarations in alphabetical order!
+
+                also keep profiles in sync with the site documentation
+                https://github.com/apache/isis/blob/master/antora/components/conguide/modules/ROOT/pages/building-apache-isis.adoc
+                    -->
+				<module>core</module>
+				<module>extensions</module>
+				<module>isis-parent</module>
+				<module>mappings</module>
+				<module>mavendeps</module>
+				<module>starters</module>
+				<module>subdomains</module>
+				<module>testing</module>
+				<module>valuetypes</module>
+			</modules>
+
+		</profile>
 
 		<!-- ALL MODULES -->
 

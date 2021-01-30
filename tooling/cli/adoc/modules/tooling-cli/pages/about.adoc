@@ -3,37 +3,53 @@
 
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
-Command Line Interface for the _Apache Isis Tooling_ ecosystem.
+Command Line Interface for the _Apache Isis Tooling_ ecosystem, to generate documentation from program sources (`.java` files, `pom.xml`, etc).
 
-WARNING: This is work-in-progress. Regard the following text as an early draft.
+WARNING: This is work-in-progress.
+Regard the following text as an early draft.
+
+
+== Prerequisites
+
+From the root of the git repo, build the tooling using Java 11:
+
+[source,java]
+----
+mvn install -D module-tooling -Dskip.essential
+----
+
+This will generate the command line CLI as an executable jar in its target directory (`tooling/cli/target`).
+
 
 == Usage
 
-Use the included help command to see a list of available commands.
+Use the help command to see a list of available commands:
 
 [source]
 .calling for help
 ----
-java -cp "pathToCLIJar;..." org.apache.isis.tooling.cli.Cli --help
+java -jar tooling/cli/target/isis-tooling-cli.jar --help
 ----
 
-NOTE: TODO: list of commands
+which (currently) generates the folloing:
 
 [source]
-.Example Usage (one parameter per line)
 ----
--p=~/git-repo/isis                                              ; <.>
-projdoc                                                         ; <.>
--o=~/git-repo/isis/antora/components/system/modules/generated   ; <.>
+Usage: cli [-hV] [-p=<projectRootPath>] [COMMAND]
+CLI for the Apache Isis Tooling Ecosystem
+  -h, --help      Show this help message and exit.
+  -p, --project=<projectRootPath>
+                  path to the (multi-module) project root (default: current dir)
+  -V, --version   Print version information and exit.
+Commands:
+  projdoc  Writes a System Overview document (AsciiDoc) to given output.
 ----
 
-<.> `-p` the multi-project root
-<.> `projdoc` CLI sub-command selecting the _Project Doc Generator_
-<.> `-o` the output target root for generated _adoc_; we then do walk our way relative from there
+NOTE: there is currently only one subcommand, namely "projdoc".
 
+By default, the current directory is used as the target to perform sub-commands in.
 
-Per default, the current directory is used as the target to perform sub-commands
-in. Default options can be overruled by specifying a configuration file located at the multi-project root:
+Default options can be overruled by specifying a configuration file located at the root of the repo:
 
 [source,yml]
 .isis-tooling.yml
@@ -45,36 +61,52 @@ projectDoc: # <.>
 
 <.> eg. configuration for sub-command `projdoc`
 
-This configuration file is mapped onto the `CLIConfig` bean. Look it up in the java sources for more detailed information.
+This configuration file is mapped onto the `CLIConfig` bean.
+Look it up in the java sources for more detailed information.
 
-== Install
 
-NOTE: TODO: How to use Maven commands to fetch the dependencies, such that
-the jar artifacts can be used from command line with little hassle
-as possible?
+== Commands
 
-Use Maven and our snapshot repository for a preview:
-https://github.com/apache-isis-committers/isis-nightly#maven[]
+There is currently only one subcommand, namely "projdoc".
 
-[source,xml]
+=== projdoc
+
+Generates the _System Overview_ and the _Document Global Index_ (adoc) files.
+
+The `projdoc` command is usually invoked as follows:
+
+[source]
+.Example Usage
 ----
-<dependency>
-    <groupId>org.apache.isis.tooling</groupId>
-    <artifactId>isis-tooling-cli</artifactId>
-    <version>2.0.0-???</version>
-</dependency>
+java -jar tooling/cli/target/isis-tooling-cli.jar \
+    -p . \
+    projdoc \
+    -o antora/components/system/modules/generated
 ----
 
-== Sub Commands
+where :
 
-=== Project Document Generator (projdoc)
+* `-p` indicates the location of the multi-project root `pom.xml`
++
+in other words, the root of the git repo.
 
-Generates the _System Overview_ and the _Document Global Index_ (adoc).
+* `projdoc` is CLI sub-command
++
+selecting the _Project Doc Generator_ functionality
 
-Any class found with magic `{@index}` in its _java-doc_ section at type level, will be included with the _Document Global Index_. Adoc files may refer to the _Document Global Index_ via `xref` or `include` statements using paths like eg. `system:generated:index/applib/Xxx.adoc`.
+* `-o` the output target root for generated _adoc_
+
+
+Any class found with magic `{@index}` in its _java-doc_ section at type level, will be included with the _Document Global Index_.
+Adoc files may refer to the _Document Global Index_ via `xref` or `include` statements using paths like eg. `system:generated:index/applib/Xxx.adoc`.
+
+
+==== Configuration
+
+The `projdoc` command can be configured using the `projectDoc` entry in `isis-tooling.yml` file.
 
 [source,yml]
-.Configuraton
+.isis-tooling.yml
 ----
 projectDoc:
   description: "These tables summarize all Maven artifacts ..."           # <.>
@@ -84,7 +116,7 @@ projectDoc:
   documentGlobalIndexPath: "pages/index"                                  # <.>
   documentGlobalIndexXrefPageIdFormat: "system:generated:index/%s.adoc"   # <.>
   systemOverviewFilename: "system-overview.adoc"                          # <.>
-  fixOrphandedAdocIncludeStatements: true                                 # <.>
+  fixOrphanedAdocIncludeStatements: true                                  # <.>
   namespacePartsSkipCount: 3                                              # <.>
   artifactGroups:                                                         # <.>
     Base: org.apache.isis
@@ -105,15 +137,14 @@ projectDoc:
 <.> how many namespace parts in a _fqn_ one wants to skip, eg. in `org.apache.isis.applib.Xxx` if we skip 3 namespace parts we'll end up with `applib.Xxx`
 <.> Logical grouping of artifacts for the system overview, if not specified the natural Maven project hierarchy is reflected as is.
 
-
 The CLI also has an experimental `OrphanedIncludeStatementFixer` that checks orphaned index references in all _adoc_ files and tries to fix them.
 
 ==== Limitations
 
-Current limitation with the _Document Global Index_ is, that it can only contain classes
-unique by their simple name, otherwise the `OrphanedIncludeStatementFixer` would not be able to reason about how to fix orphaned references.
+There are currently a couple of limitations:
 
-The `OrphanedIncludeStatementFixer` also can only detect whether a class that is part of the _Document Global Index_ had been recently moved, but not if the class has been renamed.
-However, moving classes around is a very common refactoring step, at least this one is covered without hassle.
+* the _Document Global Index_ can only contain classes unique by their simple name, otherwise the `OrphanedIncludeStatementFixer` would not be able to reason about how to fix orphaned references.
+
+* the `OrphanedIncludeStatementFixer` also can fix up references to classes that have been moved, but it cannot fix up orphans where the class has been renamed.
 
 
