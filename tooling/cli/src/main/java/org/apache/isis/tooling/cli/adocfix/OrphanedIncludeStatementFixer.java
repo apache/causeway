@@ -38,29 +38,29 @@ public final class OrphanedIncludeStatementFixer {
 
     public static void fixIncludeStatements(
             final @NonNull SortedSet<File> adocFiles,
-            final @NonNull CliConfig cliConfig, 
+            final @NonNull CliConfig cliConfig,
             final @NonNull J2AdocContext j2aContext) {
-        
+
         if(cliConfig.getProjectDoc().isDryRun()) {
             System.out.println("IncludeStatementFixer: skip (dry-run)");
             return;
         }
-        
-        if(!cliConfig.getProjectDoc().isFixOrphandedAdocIncludeStatements()) {
+
+        if(!cliConfig.getProjectDoc().isFixOrphanedAdocIncludeStatements()) {
             System.out.println("IncludeStatementFixer: skip (disabled via config, fixOrphandedAdocIncludeStatements=false)");
             return;
         }
-        
+
         System.out.println(String.format("IncludeStatementFixer: about to process %d adoc files", adocFiles.size()));
-        
+
         val totalFixed = _Refs.intRef(0);
-        
+
         adocFiles.forEach(adocFile->{
-            //_Probe.errOut("adoc file found: %s", adocFile);    
-        
+            //_Probe.errOut("adoc file found: %s", adocFile);
+
             val fixedCounter = _Refs.intRef(0);
             val originLines = _Text.readLinesFromFile(adocFile, StandardCharsets.UTF_8);
-            
+
             val lines = IncludeStatements.rewrite(originLines, include->{
                 if(include.isLocal()
                         || !( "system".equals(include.getComponent()) // TODO should be reasoned from config
@@ -70,7 +70,7 @@ public final class OrphanedIncludeStatementFixer {
 
                 val correctedIncludeStatement = _Refs.<IncludeStatement>objectRef(null);
                 val typeSimpleName = include.getCanonicalName();
-                
+
                 j2aContext.getUnit(LookupKey.typeSimpleName(typeSimpleName))
                 .ifPresent(unit->{
 
@@ -81,41 +81,41 @@ public final class OrphanedIncludeStatementFixer {
                     .namespace(unit.getNamespace().stream()
                             .skip(j2aContext.getNamespacePartsSkipCount())
                             .collect(Can.toCan())
-                            .add(0, "index") //TODO this is antora config specific 
+                            .add(0, "index") //TODO this is antora config specific
                             )
                     .canonicalName(typeSimpleName)
                     .ext(".adoc")
                     .options("[leveloffset=+2]")
                     .build();
-                    
+
                     val includeLineShouldBe = expected.toAdocAsString();
-                    
+
                     if(!includeLineShouldBe.equals(include.getMatchingLine())) {
                         System.out.printf("mismatch\n %s\n %s\n", includeLineShouldBe, include.getMatchingLine());
-                        correctedIncludeStatement.setValue(expected);   
+                        correctedIncludeStatement.setValue(expected);
                         fixedCounter.inc();
                     }
-                    
+
                 });
-                
+
                 return correctedIncludeStatement
                         .getValue()
                         .orElse(null); // keep original line, don't mangle
-                 
+
             });
-            
+
             if(fixedCounter.getValue()>0) {
-                
+
                 // write lines to file
                 _Text.writeLinesToFile(lines, adocFile, StandardCharsets.UTF_8);
-                
+
                 totalFixed.update(n->n + fixedCounter.getValue());
             }
-            
+
         });
-        
+
         System.out.println(String.format("IncludeStatementFixer: all done. (%d orphanded inlcudes fixed)", totalFixed.getValue()));
-        
+
     }
 
     // -- HELPER

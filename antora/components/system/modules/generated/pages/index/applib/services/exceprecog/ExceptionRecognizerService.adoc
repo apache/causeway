@@ -8,19 +8,19 @@ interface ExceptionRecognizerService {
 
   Can<ExceptionRecognizer> getExceptionRecognizers() // <.>
 
-  Optional<Recognition> recognize(Exception ex) // <.>
+  Optional<Recognition> recognize(Throwable ex) // <.>
 
-  Optional<Recognition> recognizeFromSelected(Can<ExceptionRecognizer> recognizers, Exception ex) // <.>
+  Optional<Recognition> recognizeFromSelected(Can<ExceptionRecognizer> recognizers, Throwable ex) // <.>
 }
 ----
 
 <.> `[teal]#*getExceptionRecognizers*#()` : `Can<xref:system:generated:index/applib/services/exceprecog/ExceptionRecognizer.adoc[ExceptionRecognizer]>`
-<.> `[teal]#*recognize*#(Exception ex)` : `Optional<Recognition>`
+<.> `[teal]#*recognize*#(Throwable ex)` : `Optional<Recognition>`
 +
 --
 Takes into consideration ExceptionRecognizers as given by _#getExceptionRecognizers()_ .
 --
-<.> `[teal]#*recognizeFromSelected*#(Can<xref:system:generated:index/applib/services/exceprecog/ExceptionRecognizer.adoc[ExceptionRecognizer]> recognizers, Exception ex)` : `Optional<Recognition>`
+<.> `[teal]#*recognizeFromSelected*#(Can<xref:system:generated:index/applib/services/exceprecog/ExceptionRecognizer.adoc[ExceptionRecognizer]> recognizers, Throwable ex)` : `Optional<Recognition>`
 +
 --
 Takes into consideration ExceptionRecognizers as given by _recognizers_ .

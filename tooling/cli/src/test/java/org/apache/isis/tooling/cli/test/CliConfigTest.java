@@ -48,7 +48,7 @@ class CliConfigTest {
                 .nullableOrElse(null);
         assertConfigIsPopulated(config);
     }
-    
+
     // -- HELPER
 
     private void assertConfigIsPopulated(CliConfig config) {
@@ -57,9 +57,9 @@ class CliConfigTest {
         assertEquals("These tables summarize all Maven artifacts available with _Apache Isis_.", config.getProjectDoc().getDescription());
         assertNotNull(config.getProjectDoc().getArtifactGroups());
         assertTrue(config.getProjectDoc().getArtifactGroups().size()>5);
-        
-        
-        assertEquals(true, config.getProjectDoc().isFixOrphandedAdocIncludeStatements());
+
+
+        assertEquals(true, config.getProjectDoc().isFixOrphanedAdocIncludeStatements());
         assertEquals(3, config.getProjectDoc().getNamespacePartsSkipCount());
     }
 

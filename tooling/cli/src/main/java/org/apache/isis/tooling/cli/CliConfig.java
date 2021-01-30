@@ -29,13 +29,13 @@ import lombok.NonNull;
 
 @Data
 public class CliConfig {
-    
+
     private ProjectDoc projectDoc = new ProjectDoc();
-        
+
     @Data
     public static class ProjectDoc {
         private String description = "These tables summarize all Maven artifacts available with this project.";
-        private String licenseHeader = 
+        private String licenseHeader =
                 "Licensed to the Apache Software Foundation (ASF) under one or more contributor license "
                 + "agreements. See the NOTICE file distributed with this work for additional information regarding "
                 + "copyright ownership. The ASF licenses this file to you under the Apache License, "
@@ -46,38 +46,38 @@ public class CliConfig {
                 + "or implied. See the License for the specific language governing permissions and limitations under "
                 + "the License.";
         private LinkedHashMap<String, String> artifactGroups = new LinkedHashMap<>();
-        
+
         private File outputRootFolder = null; // where to write eg. system-overview.adoc
-        
+
         private String documentPagesPath = "pages";
         private String documentGlobalIndexPath = "pages/index";
         private String documentGlobalIndexXrefPageIdFormat = "system:generated:index/%s.adoc";
-        
-        private boolean fixOrphandedAdocIncludeStatements = false;
-        
+
+        private boolean fixOrphanedAdocIncludeStatements = false;
+
         private String systemOverviewFilename = "system-overview.adoc";
 
         // when 3 eg. skips first three parts of the package names 'org.apache.isis'
         private int namespacePartsSkipCount = 0;
-        
+
         public boolean isDryRun() {
             return getOutputRootFolder() == null;
         }
-        
+
         public File getDocumentIndexFolder() {
             return Optional.ofNullable(getOutputRootFolder())
                     .map(root->new File(root, getDocumentGlobalIndexPath()))
                     .orElse(null);
         }
-        
+
         public File getDocumentPagesFolder() {
             return Optional.ofNullable(getOutputRootFolder())
                     .map(root->new File(root, getDocumentPagesPath()))
                     .orElse(null);
         }
-        
+
     }
-    
+
     // -- LOADING
 
     public static CliConfig read(final @NonNull File file) {

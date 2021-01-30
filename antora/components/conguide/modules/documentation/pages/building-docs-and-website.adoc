@@ -37,8 +37,9 @@ This requires:
 To create/update documentation, we strongly recommend:
 
 * IntelliJ link:https://plugins.jetbrains.com/plugin/7391-asciidoc[Asciidoc plugin]
+* IntelliJ link:https://plugins.jetbrains.com/plugin/15635-diagrams-net-integration[Diagrams.net plugin]
 
-Even if you don't use IntelliJ as your primary IDE, it's worth using it for writing documentation - there's currently nothing as good as this plugin on any other editor platform, especially when it comes to Antora.
+Even if you don't use IntelliJ as your primary IDE, it's worth using it for writing documentation - there's currently nothing as good as the Asciidoc plugin on any other editor platform, especially when it comes to writing Antora.
 
 
 == Build
@@ -50,4 +51,8 @@ To build the website:
 
 Both scripts can be found at the root of this git repo.
 
+
+== Updating the Generated System Overview
+
+The xref:system:generated:system-overview.adoc[System Overview] contains a set of `.adoc` files that are generated from Java classes.
 

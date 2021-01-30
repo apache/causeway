@@ -7,7 +7,7 @@ Rather than redirecting to a general-purpose error page, the message (correspond
 
 More than one implementation of xref:system:generated:index/applib/services/exceprecog/ExceptionRecognizer.adoc[ExceptionRecognizer] can be registered; they will all be consulted (in the order as specified by the @Order annotation) to determine if they recognize the exception. The message returned by the first service recognizing the exception is used.
 
-The Isis framework also provides a default implementation of this service that recognizes any _org.apache.isis.applib.RecoverableException_ , simply returning the exception's _org.apache.isis.applib.RecoverableException#getMessage() message_ . This allows any component or domain object to throw this exception with the knowledge that it will be handled appropriately.
+The Isis framework also provides a default implementation of this service that recognizes any _org.apache.isis.applib.exceptions.RecoverableException_ , simply returning the exception's _org.apache.isis.applib.exceptions.RecoverableException#getMessage() message_ . This allows any component or domain object to throw this exception with the knowledge that it will be handled appropriately.
 
 Initially introduced for the Wicket viewer; check the documentation of other viewers to determine whether they also support this service.
 

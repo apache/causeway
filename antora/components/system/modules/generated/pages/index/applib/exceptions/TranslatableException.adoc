@@ -21,7 +21,7 @@ interface TranslatableException {
 --
 In the spirit of _Exception#getLocalizedMessage()_ , but using _org.apache.isis.applib.services.i18n.TranslatableString_ instead.
 
-If returnsnull, then _Exception#getMessage()_ will be used as a fallback. This design allows the Isis-provided _org.apache.isis.applib.RecoverableException_ and _org.apache.isis.applib.NonRecoverableException_ to provide constructors that accept a _org.apache.isis.applib.services.i18n.TranslatableString_ , but can be left as null for any existing code.
+If returnsnull, then _Exception#getMessage()_ will be used as a fallback. This design allows the Isis-provided _org.apache.isis.applib.exceptions.RecoverableException_ and _org.apache.isis.applib.exceptions.UnrecoverableException_ to provide constructors that accept a _org.apache.isis.applib.services.i18n.TranslatableString_ , but can be left as null for any existing code.
 --
 <.> `[teal]#*getTranslationContext*#()` : `String`
 +

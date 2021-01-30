@@ -36,14 +36,14 @@ import lombok.SneakyThrows;
 import lombok.val;
 
 /**
- * Writes an (AsciiDoc) Document Model to a given {@link Writer}.  
+ * Writes an (AsciiDoc) Document Model to a given {@link Writer}.
  * @since Sep 10, 2020
  * @apiNote The <i>AsciiDoc<i> name is trademarked by the <i>Eclipse Foundation</i>.
  * <p>
-    This project is <b>not</b> part of the specification effort for <i>AsciiDoc<i> under the 
+    This project is <b>not</b> part of the specification effort for <i>AsciiDoc<i> under the
     <i>AsciiDoc Working Group</i>. See https://projects.eclipse.org/proposals/asciidoc-language
-    and https://accounts.eclipse.org/mailing-list/asciidoc-wg. However, we are happy to 
-    help with transfer of source code, if any project (under the umbrella of the 
+    and https://accounts.eclipse.org/mailing-list/asciidoc-wg. However, we are happy to
+    help with transfer of source code, if any project (under the umbrella of the
     <i>AsciiDoc Working Group</i>) is willing to take over.
     </p>
  */
@@ -62,7 +62,7 @@ public class AsciiDocWriter {
         adocWriter.write(doc, stringWriter);
         return stringWriter.toString();
     }
-    
+
     /**
      * Print to given {@link File}
      * @param doc
@@ -75,7 +75,7 @@ public class AsciiDocWriter {
             return;
         }
         val adocWriter = new AsciiDocWriter();
-        try(val writer = new FileWriter(file, StandardCharsets.UTF_8)) {
+        try(FileWriter writer = new FileWriter(file, StandardCharsets.UTF_8)) {
             adocWriter.write(doc, writer);
         }
     }
@@ -93,10 +93,10 @@ public class AsciiDocWriter {
         }
         val adocWriter = new AsciiDocWriter();
         try(val writer = new PrintWriter(out)) {
-            adocWriter.write(doc, writer);    
+            adocWriter.write(doc, writer);
         }
     }
-    
+
     /**
      * Print to {@link System#out}
      * @param doc
@@ -105,7 +105,7 @@ public class AsciiDocWriter {
     public static void print(final @Nullable Document doc) {
         print(doc, System.out);
     }
-  
+
     /**
      * the inverse of {@link Asciidoctor#load(String, java.util.Map)}}
      */
@@ -115,11 +115,11 @@ public class AsciiDocWriter {
                 || writer==null) {
             return;
         }
-        
+
         val nodeWriter = new NodeWriter(writer);
         StructuralNodeTraversor.depthFirst(nodeWriter, doc);
         writer.flush();
     }
-    
-    
+
+
 }
