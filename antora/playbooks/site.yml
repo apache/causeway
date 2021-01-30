@@ -300,6 +300,14 @@ content:
       start_path: testing/unittestsupport/adoc # testing
       branches: HEAD
 
+# tooling
+    - url: .
+      start_path: tooling/adoc # toc
+      branches: HEAD
+    - url: .
+      start_path: tooling/cli/adoc # cli
+      branches: HEAD
+
 # valuetypes
     - url: .
       start_path: valuetypes/adoc # valuetypes

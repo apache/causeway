@@ -1,0 +1,51 @@
+#
+#  Licensed to the Apache Software Foundation (ASF) under one
+#  or more contributor license agreements.  See the NOTICE file
+#  distributed with this work for additional information
+#  regarding copyright ownership.  The ASF licenses this file
+#  to you under the Apache License, Version 2.0 (the
+#  "License"); you may not use this file except in compliance
+#  with the License.  You may obtain a copy of the License at
+#
+#        http://www.apache.org/licenses/LICENSE-2.0
+#
+#  Unless required by applicable law or agreed to in writing,
+#  software distributed under the License is distributed on an
+#  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+#  KIND, either express or implied.  See the License for the
+#  specific language governing permissions and limitations
+#  under the License.
+#
+
+projectDoc:
+  fixOrphanedAdocIncludeStatements: true
+  namespacePartsSkipCount: 3
+  description: "These tables summarize all Maven artifacts available with _Apache Isis_."
+  artifactGroups:
+    Base: org.apache.isis
+    Commons: org.apache.isis.commons.*
+    Core: org.apache.isis.core.*
+    App: org.apache.isis.app.*
+
+    Mavendeps: org.apache.isis.mavendeps.*
+    Mappings: org.apache.isis.mappings.*
+
+    Persistence: org.apache.isis.persistence.*
+    Security: org.apache.isis.security.*
+
+    Valuetypes: org.apache.isis.valuetypes.*
+    Viewer: org.apache.isis.viewer.*
+
+    Testing: org.apache.isis.testing.*
+    Regression Tests: org.apache.isis.regressiontests.*
+
+    Extensions: org.apache.isis.extensions.*
+    Subdomains: org.apache.isis.subdomains.*
+
+    Tooling: org.apache.isis.tooling.*
+
+    Examples: org.apache.isis.examples.*
+
+    Incubator: org.apache.isis.incubator.*
+    Legacy: org.apache.isis.legacy.*
+

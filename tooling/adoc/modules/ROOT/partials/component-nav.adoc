@@ -1,0 +1,24 @@
+include::tooling:ROOT:partial$module-nav.adoc[]
+
+* CLI
+
+include::security:session-log:partial$module-nav.adoc[]
+include::extensions:command-log:partial$module-nav.adoc[]
+include::extensions:command-replay:partial$module-nav.adoc[]
+include::userguide:flyway:partial$module-nav.adoc[]
+include::extensions:model-annotation:partial$module-nav.adoc[]
+
+* Security
+include::security:shiro-realm-ldap:partial$module-nav.adoc[]
+include::security:secman:partial$module-nav.adoc[]
+
+* Restful Objects Viewer
+
+include::vro:cors:partial$module-nav.adoc[]
+
+* Wicket Viewer
+
+include::vw:exceldownload:partial$module-nav.adoc[]
+include::vw:fullcalendar:partial$module-nav.adoc[]
+include::vw:gmap3:partial$module-nav.adoc[]
+include::vw:pdfjs:partial$module-nav.adoc[]
