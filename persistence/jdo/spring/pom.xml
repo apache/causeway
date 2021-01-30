@@ -23,7 +23,14 @@
 
 	<name>Apache Isis Persistence - JDO (Spring)</name>
 	<description>
-		JDO Spring integration. (EXPERIMENTAL)
+		JDO Spring integration.
+		
+		This is a fork of the Spring ORM JDO sources at github, 
+		for which support had been dropped back in 2016 [1].
+		
+		Credits to the original authors.
+		
+		[1] https://github.com/spring-projects/spring-framework/issues/18702
     </description>
 
 	<properties>
