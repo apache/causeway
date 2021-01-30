@@ -83,7 +83,7 @@ projectDoc:
   documentGlobalIndexPath: "pages/index"                                  # <.>
   documentGlobalIndexXrefPageIdFormat: "system:generated:index/%s.adoc"   # <.>
   systemOverviewFilename: "system-overview.adoc"                          # <.>                 
-  fixOrphandedAdocIncludeStatements: true                                 # <.>
+  fixOrphanedAdocIncludeStatements: true                                  # <.>
   namespacePartsSkipCount: 3                                              # <.>
   artifactGroups:                                                         # <.>
     Base: org.apache.isis
@@ -98,11 +98,11 @@ projectDoc:
 <.> the output target root for generated _adoc_; corresponds to command line option `-o` (if empty the current dir is used)
 <.> sub-folder name for _adoc_ pages
 <.> sub-folder name for the _Document Global Index_
-<.> format for include statements via which other _adoc_ files may refer to the Document Global Index  
+<.> format for include statements via which other _adoc_ files may refer to the _Document Global Index_  
 <.> name of the _System Overview_ (adoc) file  
 <.> whether to activate the `OrphanedIncludeStatementFixer`
-<.> how many namespace parts in a _fqn_ one wants to skip, eg. in `org.apache.isis.applib.Xxx` if we skip 3 namespace parts we'll end up with `applib.Xxx`
-<.> Logical grouping of artifacts for the system overview, if not specified the natural Maven project hierarchy is reflected as is.
+<.> how many namespace parts in a _fqn_ one wants to skip when generating the _Document Global Index_, eg. in `org.apache.isis.applib.Xxx` if we skip 3 namespace parts we'll end up with `applib.Xxx`
+<.> logical grouping of artifacts for the system overview, if not specified the natural Maven project hierarchy is reflected as is
 
 
 The CLI also has an experimental `OrphanedIncludeStatementFixer` that checks orphaned index references in all _adoc_ files and tries to fix them.
