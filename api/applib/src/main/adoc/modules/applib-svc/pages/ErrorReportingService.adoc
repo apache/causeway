@@ -81,17 +81,4 @@ By default a stack trace button is not shown if a ticket is returned (but _is_ s
 
 == Implementation
 
-There is no default implementation of this service, but there are a couple of concrete examples of `Ticket` in `core-runtime`.
-
-The xref:docs:demo:about.adoc[demo app] provides an example implementation:
-
-[source,java]
-----
-include::docs:demo:example$error/service/DemoErrorReportingService.java[tags="refguide"]
-----
-
-which is rendered as:
-
-image::reference-services-spi/ErrorReportingService/kitchensink-example.png[width="860px"]
-
-
+There is an example implementation in the demo app; https://demo-wicket.isis.incode.work[].

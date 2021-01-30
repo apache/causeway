@@ -2,7 +2,7 @@
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
 
-Command Line Interface for the _Apache Isis Tooling_ ecosystem. 
+Command Line Interface for the _Apache Isis Tooling_ ecosystem.
 
 WARNING: This is work-in-progress. Regard the following text as an early draft.
 
@@ -13,7 +13,7 @@ Use the included help command to see a list of available commands.
 [source]
 .calling for help
 ----
-java -cp "pathToCLIJar;..." org.apache.isis.tooling.cli.Cli --help 
+java -cp "pathToCLIJar;..." org.apache.isis.tooling.cli.Cli --help
 ----
 
 NOTE: TODO: list of commands
@@ -28,11 +28,11 @@ projdoc                                                         ; <.>
 
 <.> `-p` the multi-project root
 <.> `projdoc` CLI sub-command selecting the _Project Doc Generator_
-<.> `-o` the output target root for generated _adoc_; we then do walk our way relative from there  
+<.> `-o` the output target root for generated _adoc_; we then do walk our way relative from there
 
 
-Per default, the current directory is used as the target to perform sub-commands 
-in. Default options can be overruled by specifying a configuration file located at the multi-project root: 
+Per default, the current directory is used as the target to perform sub-commands
+in. Default options can be overruled by specifying a configuration file located at the multi-project root:
 
 [source,yml]
 .isis-tooling.yml
@@ -50,7 +50,7 @@ This configuration file is mapped onto the `CLIConfig` bean. Look it up in the j
 
 NOTE: TODO: How to use Maven commands to fetch the dependencies, such that
 the jar artifacts can be used from command line with little hassle
-as possible? 
+as possible?
 
 Use Maven and our snapshot repository for a preview:
 https://github.com/apache-isis-committers/isis-nightly#maven[]
@@ -78,12 +78,12 @@ Any class found with magic `{@index}` in its _java-doc_ section at type level, w
 projectDoc:
   description: "These tables summarize all Maven artifacts ..."           # <.>
   licenseHeader: "Licensed to the Apache Software Foundation (ASF) ..."   # <.>
-  outputRootFolder:                                                       # <.>  	
+  outputRootFolder:                                                       # <.>
   documentPagesPath: "pages"                                              # <.>
   documentGlobalIndexPath: "pages/index"                                  # <.>
   documentGlobalIndexXrefPageIdFormat: "system:generated:index/%s.adoc"   # <.>
-  systemOverviewFilename: "system-overview.adoc"                          # <.>                 
-  fixOrphanedAdocIncludeStatements: true                                  # <.>
+  systemOverviewFilename: "system-overview.adoc"                          # <.>
+  fixOrphandedAdocIncludeStatements: true                                 # <.>
   namespacePartsSkipCount: 3                                              # <.>
   artifactGroups:                                                         # <.>
     Base: org.apache.isis
@@ -98,22 +98,21 @@ projectDoc:
 <.> the output target root for generated _adoc_; corresponds to command line option `-o` (if empty the current dir is used)
 <.> sub-folder name for _adoc_ pages
 <.> sub-folder name for the _Document Global Index_
-<.> format for include statements via which other _adoc_ files may refer to the _Document Global Index_  
-<.> name of the _System Overview_ (adoc) file  
+<.> format for include statements via which other _adoc_ files may refer to the Document Global Index
+<.> name of the _System Overview_ (adoc) file
 <.> whether to activate the `OrphanedIncludeStatementFixer`
-<.> how many namespace parts in a _fqn_ one wants to skip when generating the _Document Global Index_, eg. in `org.apache.isis.applib.Xxx` if we skip 3 namespace parts we'll end up with `applib.Xxx`
-<.> logical grouping of artifacts for the system overview, if not specified the natural Maven project hierarchy is reflected as is
+<.> how many namespace parts in a _fqn_ one wants to skip, eg. in `org.apache.isis.applib.Xxx` if we skip 3 namespace parts we'll end up with `applib.Xxx`
+<.> Logical grouping of artifacts for the system overview, if not specified the natural Maven project hierarchy is reflected as is.
 
 
 The CLI also has an experimental `OrphanedIncludeStatementFixer` that checks orphaned index references in all _adoc_ files and tries to fix them.
 
 ==== Limitations
 
-Current limitation with the _Document Global Index_ is, that it can only contain classes 
+Current limitation with the _Document Global Index_ is, that it can only contain classes
 unique by their simple name, otherwise the `OrphanedIncludeStatementFixer` would not be able to reason about how to fix orphaned references.
 
-The `OrphanedIncludeStatementFixer` also can only detect whether a class that is part of the _Document Global Index_ had been recently moved, but not if the class has been renamed. 
+The `OrphanedIncludeStatementFixer` also can only detect whether a class that is part of the _Document Global Index_ had been recently moved, but not if the class has been renamed.
 However, moving classes around is a very common refactoring step, at least this one is covered without hassle.
 
 
- 
