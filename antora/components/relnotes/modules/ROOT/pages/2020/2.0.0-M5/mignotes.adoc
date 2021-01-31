@@ -238,6 +238,12 @@ CommandServiceInternal -> CommandPublisher
 | FatalException (removed) 
 | removed, adds no new semantics compared to the already existing UnrecoverableException
 
+| HoldsUpdatedBy, HoldsUpdatedAt, Timestampable
+| moved to 'commons' and renamed:
+ HasUpdatedBy, 
+ HasUpdatedAt,
+ HasUpdatedByAndAt
+
 | IsisInteractionFactory
 | InteractionFactory
 

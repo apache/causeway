@@ -28,10 +28,10 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
-import org.apache.isis.applib.mixins.timestamp.HoldsUpdatedAt;
-import org.apache.isis.applib.mixins.timestamp.HoldsUpdatedBy;
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.user.UserService;
+import org.apache.isis.commons.having.HasUpdatedAt;
+import org.apache.isis.commons.having.HasUpdatedBy;
 
 import lombok.val;
 
@@ -50,12 +50,12 @@ public class TimestampService {
 
         val persistableObject = event.getPersistableObject();
 
-        if(persistableObject instanceof HoldsUpdatedBy) {
-            ((HoldsUpdatedBy)persistableObject).setUpdatedBy(userService.currentUserNameElseNobody());
+        if(persistableObject instanceof HasUpdatedBy) {
+            ((HasUpdatedBy)persistableObject).setUpdatedBy(userService.currentUserNameElseNobody());
         }
         
-        if(persistableObject instanceof HoldsUpdatedAt) {
-            ((HoldsUpdatedAt)persistableObject).setUpdatedAt(clockService.getClock().javaSqlTimestamp());
+        if(persistableObject instanceof HasUpdatedAt) {
+            ((HasUpdatedAt)persistableObject).setUpdatedAt(clockService.getClock().javaSqlTimestamp());
         }
         
     }

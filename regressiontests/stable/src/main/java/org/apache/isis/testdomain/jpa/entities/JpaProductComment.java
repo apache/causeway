@@ -30,7 +30,7 @@ import javax.persistence.ManyToOne;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.mixins.timestamp.Timestampable;
+import org.apache.isis.commons.having.HasUpdatedByAndAt;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -38,7 +38,7 @@ import lombok.Setter;
 @Entity
 @DomainObject(
         objectType = "testdomain.jpa.ProductComment")
-public class JpaProductComment implements Timestampable {
+public class JpaProductComment implements HasUpdatedByAndAt {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

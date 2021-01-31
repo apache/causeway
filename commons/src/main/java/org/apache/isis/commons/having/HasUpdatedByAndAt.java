@@ -16,10 +16,10 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+package org.apache.isis.commons.having;
 
-/**
- * Defines a number of interfaces for mixins to contribute to.
- *
- * @see <a href="">Reference guide</a>
- */
-package org.apache.isis.applib.mixins.timestamp;
+public interface HasUpdatedByAndAt 
+extends 
+    HasUpdatedBy, 
+    HasUpdatedAt {
+}

@@ -16,13 +16,13 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.mixins.timestamp;
+package org.apache.isis.commons.having;
 
 /**
  * @since 2.0 {@index}
  */
-public interface HoldsUpdatedBy {
+public interface HasUpdatedAt {
 
-    void setUpdatedBy(String updatedBy);
+    void setUpdatedAt(java.sql.Timestamp updatedAt);
 
 }
