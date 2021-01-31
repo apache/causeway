@@ -4,6 +4,6 @@
 Command Line Interface for the _Apache Isis Tooling_ ecosystem. 
 
 Documentation can be found 
-at https://github.com/apache/isis/blob/master/tooling/adoc/modules/ROOT/pages/about.adoc[doc-sources]
+at https://github.com/apache/isis/blob/master/tooling/cli/adoc/modules/tooling-cli/pages/about.adoc[tooling-cli-sources]
 
 
