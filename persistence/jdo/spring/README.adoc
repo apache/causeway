@@ -9,11 +9,11 @@ Credits to the original authors!
 
 The following is an adoption of the original 
 footnote:[https://docs.spring.io/spring-framework/docs/3.0.0.RC2/reference/html/ch13s04.html[docs.spring.io]] 
-documentation. 
+documentation. (TODO: XML examples could be converted to programmatic configuration examples using Java.) 
 
 WARNING: Former package names `org.springframework.orm.jdo` have not been corrected to their forked
-correspondents in `org.apache.isis.persistence.jdo.spring`. 
-
+correspondents in `org.apache.isis.persistence.jdo.spring`. Likewise some references pointing to 
+ _Spring_ have not been corrected to point to _Apache Isis_.
 
 == 13.4 JDO
 
