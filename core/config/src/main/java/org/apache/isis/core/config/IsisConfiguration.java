@@ -1875,9 +1875,9 @@ public class IsisConfiguration {
             }
         }
         
-        private final Jpa jpa = new Jpa();
+        private final Schema schema = new Schema();
         @Data
-        public static class Jpa {
+        public static class Schema {
             
             /**
              * List of additional schemas to be auto-created.

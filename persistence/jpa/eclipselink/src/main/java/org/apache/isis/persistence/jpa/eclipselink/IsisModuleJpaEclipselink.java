@@ -109,18 +109,18 @@ public class IsisModuleJpaEclipselink extends JpaBaseConfiguration {
             final DataSource dataSource,
             final IsisConfiguration isisConfiguration) {
         
-        val isisJpaConf = isisConfiguration.getPersistence().getJpa();
+        val persistenceSchemaConf = isisConfiguration.getPersistence().getSchema();
         
-        if(!isisJpaConf.getAutoCreateSchemas().isEmpty()) {
+        if(!persistenceSchemaConf.getAutoCreateSchemas().isEmpty()) {
             
-            log.info("about to create db schema(s) {}", isisJpaConf.getAutoCreateSchemas());
+            log.info("about to create db schema(s) {}", persistenceSchemaConf.getAutoCreateSchemas());
             
             try(val con = dataSource.getConnection()){
                 
                 val s = con.createStatement();
                 
-                for(val schema : isisJpaConf.getAutoCreateSchemas()) {
-                    s.execute(String.format(isisJpaConf.getCreateSchemaSqlTemplate(), schema));
+                for(val schema : persistenceSchemaConf.getAutoCreateSchemas()) {
+                    s.execute(String.format(persistenceSchemaConf.getCreateSchemaSqlTemplate(), schema));
                 }
                 
             }
@@ -136,9 +136,9 @@ public class IsisModuleJpaEclipselink extends JpaBaseConfiguration {
             JpaProperties properties,
             IsisConfiguration isisConfiguration) {
 
-        val isisJpaConf = isisConfiguration.getPersistence().getJpa();
+        val persistenceSchemaConf = isisConfiguration.getPersistence().getSchema();
         
-        isisJpaConf.getAdditionalOrmFiles()
+        persistenceSchemaConf.getAdditionalOrmFiles()
         .forEach(schema->properties.getMappingResources()
                 .add(String.format("META-INF/orm-%s.xml", schema)));
         
