@@ -21,6 +21,9 @@ package org.apache.isis.subdomains.base.applib.services;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
+/**
+ * @since 2.0 {@index}
+ */
 @Configuration
 @ComponentScan
 public class BaseServicesModule {

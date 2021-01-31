@@ -41,37 +41,36 @@ import lombok.val;
 
 /**
  * Works in connection with {@link InteractionFactory}, such that it allows an {@link Interaction}
- * to run with its own simulated (or actual) time. 
+ * to run with its own simulated (or actual) time.
  * <p>
  * Relates to {@link VirtualContext}
- * 
- * @since 2.0 {@index}
  *
+ * @since 2.0 {@index}
  */
 @FunctionalInterface
 public interface VirtualClock extends Serializable {
-    
+
     // -- INTERFACE
-    
+
     /**
      * Returns the (virtual) time as an {@link Instant}.
-     * 
-     * @apiNote This is a universal time difference, that does not depend on 
-     * where you are (eg. your current timezone), just on when you are. 
+     *
+     * @apiNote This is a universal time difference, that does not depend on
+     * where you are (eg. your current timezone), just on when you are.
      *
      * @see {@link Instant}
      */
     Instant now();
-    
+
     // -- FACTORIES
-    
+
     /**
      * Returns a the system's default ticking clock.
      */
     static VirtualClock system() {
         return new VirtualClock_system();
     }
-    
+
     /**
      * Returns a ticking clock set to virtual time {@link Instant} {@code virtualNow}
      */
@@ -80,14 +79,14 @@ public interface VirtualClock extends Serializable {
         val offsetMillis = ChronoUnit.MILLIS.between(Instant.now(), virtualNow);
         return new VirtualClock_withOffset(offsetMillis);
     }
-    
+
     /**
      * Always returns the time {@link Instant} as given by {@code frozenAt}
      */
     static VirtualClock frozenAt(@NonNull Instant frozenAt) {
         return new VirtualClock_frozen(frozenAt);
     }
-    
+
     /**
      * Always returns the time {@link Instant} 2003/8/17 21:30:25 (UTC)
      */
@@ -96,14 +95,14 @@ public interface VirtualClock extends Serializable {
                 ZonedDateTime.of(2003, 7, 17, 21, 30, 25, 0, ZoneId.from(ZoneOffset.UTC)));
         return frozenAt(frozenAt);
     }
-    
+
     // -- UTILITY
-    
+
     /**
      * Returns the (virtual) time as the number of milliseconds since the epoch start.
-     * 
-     * @apiNote This is a universal time difference, that does not depend on 
-     * where you are (eg. your current timezone), just on when you are. 
+     *
+     * @apiNote This is a universal time difference, that does not depend on
+     * where you are (eg. your current timezone), just on when you are.
      *
      * @see {@link Instant}
      */
@@ -138,17 +137,17 @@ public interface VirtualClock extends Serializable {
     default java.util.Date javaUtilDate() {
         return new java.util.Date(getEpochMillis());
     }
-    
+
     default java.sql.Timestamp javaSqlTimestamp() {
         return new java.sql.Timestamp(getEpochMillis());
     }
-    
+
     default XMLGregorianCalendar xmlGregorianCalendar() {
         return JavaSqlXMLGregorianCalendarMarshalling.toXMLGregorianCalendar(javaSqlTimestamp());
     }
 
     // -- DEPRECATIONS
-    
+
     /**
      * Returns the time as a Joda {@link org.joda.time.DateTime},
      * using the {@link ZoneId#systemDefault() system default} timezone.
@@ -158,7 +157,7 @@ public interface VirtualClock extends Serializable {
     default org.joda.time.DateTime asJodaDateTime(final @NonNull ZoneId zoneId) {
         return new org.joda.time.DateTime(getEpochMillis(), DateTimeZone.forID(zoneId.getId()));
     }
-    
+
     /**
      * Returns the time as a Joda {@link DateTime},
      * using the {@link ZoneId#systemDefault() system default} timezone.
@@ -169,7 +168,7 @@ public interface VirtualClock extends Serializable {
         return new org.joda.time.LocalDate(getEpochMillis(), DateTimeZone.forID(zoneId.getId()));
     }
 
-    
+
 
 
 }

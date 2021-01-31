@@ -21,6 +21,9 @@ package org.apache.isis.security.shiro.authorization;
 import org.apache.shiro.authz.Permission;
 import org.apache.shiro.authz.permission.PermissionResolver;
 
+/**
+ * @since 1.x {@index}
+ */
 public class IsisPermissionResolver implements PermissionResolver {
 
     public IsisPermissionResolver(){

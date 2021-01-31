@@ -53,6 +53,8 @@ import lombok.extern.log4j.Log4j2;
  * <li>recognizePersisting <-> preStore (when NEW)</li>
  * <li>recognizeUpdating <-> postStore (when NOT NEW)</li>
  * </ul>
+ *
+ * @since 2.0 {@index}
  */
 @Vetoed // managed by isis
 @RequiredArgsConstructor

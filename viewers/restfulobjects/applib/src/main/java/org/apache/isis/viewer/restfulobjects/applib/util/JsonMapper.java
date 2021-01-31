@@ -43,6 +43,9 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 
+/**
+ * @since 1.x {@index}
+ */
 public final class JsonMapper {
 
     public static String getEntityAsStringFrom(Response response) {

@@ -22,8 +22,7 @@ import org.apache.isis.applib.services.iactn.InteractionContext;
 import org.apache.isis.schema.ixn.v2.MemberExecutionDto;
 
 /**
- * 
- * @since 2.0 {@index}
+ * @since 1.x {@index}
  */
 public interface MetricsService {
 

@@ -36,6 +36,8 @@ import lombok.experimental.UtilityClass;
 
 /**
  * Borrowed from BeansEndpoint.
+ *
+ * @since 2.0 {@index}
  */
 @Service
 @Named("isis.sub.spring.SpringBeansService")

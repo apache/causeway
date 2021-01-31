@@ -23,6 +23,9 @@ import org.datanucleus.store.types.converters.TypeConverter;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.schema.common.v2.OidDto;
 
+/**
+ * @since 2.0 {@index}
+ */
 public class IsisOidDtoConverter implements TypeConverter<OidDto, String>{
 
     private static final long serialVersionUID = 1L;

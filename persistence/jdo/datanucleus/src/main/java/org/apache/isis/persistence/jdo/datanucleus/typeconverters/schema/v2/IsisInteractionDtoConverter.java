@@ -23,6 +23,9 @@ import org.datanucleus.store.types.converters.TypeConverter;
 import org.apache.isis.applib.util.schema.InteractionDtoUtils;
 import org.apache.isis.schema.ixn.v2.InteractionDto;
 
+/**
+ * @since 2.0 {@index}
+ */
 public class IsisInteractionDtoConverter implements TypeConverter<InteractionDto, String>{
 
     private static final long serialVersionUID = 1L;

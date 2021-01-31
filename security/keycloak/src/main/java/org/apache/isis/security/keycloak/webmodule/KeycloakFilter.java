@@ -41,8 +41,11 @@ import org.apache.isis.core.security.authentication.standard.SimpleAuthenticatio
 
 import lombok.val;
 
+/**
+ * @since 2.0 {@index}
+ */
 public class KeycloakFilter implements Filter {
-    
+
     @Autowired private InteractionFactory isisInteractionFactory;
 
     @Override
@@ -61,11 +64,11 @@ public class KeycloakFilter implements Filter {
             return;
         }
         final List<String> roles = toClaims(rolesHeader);
-        
+
         val user = UserMemento.ofNameAndRoleNames(userid, roles.stream());
         val authentication = SimpleAuthentication.of(user, subjectHeader);
         authentication.setType(Authentication.Type.EXTERNAL);
-        
+
         isisInteractionFactory.runAuthenticated(
                 authentication,
                 ()->{

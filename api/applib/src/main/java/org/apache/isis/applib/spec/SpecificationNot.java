@@ -43,7 +43,7 @@ package org.apache.isis.applib.spec;
  *
  * @see SpecificationAnd
  * @see SpecificationOr
- * @since ? {@index}
+ * @since 1.x {@index}
  */
 public abstract class SpecificationNot implements Specification {
 

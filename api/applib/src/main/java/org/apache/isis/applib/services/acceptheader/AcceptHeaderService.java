@@ -23,8 +23,6 @@ import java.util.List;
 import javax.ws.rs.core.MediaType;
 
 /**
- * 
- * 
  * @since 1.x {@index}
  */
 public interface AcceptHeaderService {

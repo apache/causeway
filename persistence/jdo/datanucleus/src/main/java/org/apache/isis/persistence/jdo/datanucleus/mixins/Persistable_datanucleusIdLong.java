@@ -31,6 +31,9 @@ import org.apache.isis.applib.mixins.MixinConstants;
 
 import lombok.RequiredArgsConstructor;
 
+/**
+ * @since 2.0 {@index}
+ */
 @Property(
         domainEvent = Persistable_datanucleusIdLong.PropertyDomainEvent.class)
 @PropertyLayout(
@@ -42,7 +45,7 @@ public class Persistable_datanucleusIdLong {
 
     private final Persistable persistable;
 
-    public static class PropertyDomainEvent 
+    public static class PropertyDomainEvent
     extends org.apache.isis.applib.IsisModuleApplib.PropertyDomainEvent
     <Persistable_datanucleusIdLong, Long> {}
 

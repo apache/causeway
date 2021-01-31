@@ -25,23 +25,26 @@ import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureType;
 import org.apache.isis.extensions.secman.api.role.ApplicationRole;
 
+/**
+ * @since 2.0 {@index}
+ */
 public interface ApplicationPermissionRepository<P extends ApplicationPermission> {
 
     Optional<P> findByUserAndPermissionValue(String username, ApplicationPermissionValue changingPermissionValue);
 
     Optional<P> findByRoleAndRuleAndFeature(
-            ApplicationRole holder, 
+            ApplicationRole holder,
             ApplicationPermissionRule rule,
-            ApplicationFeatureType type, 
+            ApplicationFeatureType type,
             String featureFqn);
 
     Collection<P> allPermissions();
-    
+
     Collection<P> findOrphaned();
     Collection<P> findByFeatureCached(ApplicationFeatureId featureId);
     Collection<P> findByRoleAndRuleAndFeatureTypeCached(
             ApplicationRole holder,
-            ApplicationPermissionRule rule, 
+            ApplicationPermissionRule rule,
             ApplicationFeatureType type);
 
 
@@ -49,21 +52,21 @@ public interface ApplicationPermissionRepository<P extends ApplicationPermission
      * @return detached entity
      */
     P newApplicationPermission();
-    
+
     P newPermission(
             ApplicationRole role,
-            ApplicationPermissionRule rule, 
+            ApplicationPermissionRule rule,
             ApplicationPermissionMode mode,
-            String packageFqn, 
-            String className, 
+            String packageFqn,
+            String className,
             String memberName);
 
     P newPermission(
-            ApplicationRole holder, 
-            ApplicationPermissionRule rule, 
+            ApplicationRole holder,
+            ApplicationPermissionRule rule,
             ApplicationPermissionMode mode,
-            ApplicationFeatureType featureType, 
+            ApplicationFeatureType featureType,
             String featureFqn);
-    
+
 
 }

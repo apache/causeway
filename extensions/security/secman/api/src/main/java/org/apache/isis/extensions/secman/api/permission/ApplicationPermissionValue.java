@@ -35,6 +35,8 @@ import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureId;
  *     Intended for value type arithmetic and also for caching.  No user/role information is held because that information
  *     is not required to perform the arithmetic.
  * </p>
+ *
+ * @since 2.0 {@index}
  */
 public class ApplicationPermissionValue implements Comparable<ApplicationPermissionValue>, Serializable {
 

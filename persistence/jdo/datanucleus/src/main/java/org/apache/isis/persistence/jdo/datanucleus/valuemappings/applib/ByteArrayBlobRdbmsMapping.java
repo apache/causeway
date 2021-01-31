@@ -23,6 +23,9 @@ import org.datanucleus.store.rdbms.mapping.column.BlobColumnMapping;
 import org.datanucleus.store.rdbms.mapping.java.JavaTypeMapping;
 import org.datanucleus.store.rdbms.table.Column;
 
+/**
+ * @since 1.x {@index}
+ */
 public class ByteArrayBlobRdbmsMapping extends BlobColumnMapping {
 
     public ByteArrayBlobRdbmsMapping(JavaTypeMapping mapping, RDBMSStoreManager storeMgr, Column col) {

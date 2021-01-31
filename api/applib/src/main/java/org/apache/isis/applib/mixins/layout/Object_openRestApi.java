@@ -34,6 +34,9 @@ import org.apache.isis.applib.value.LocalResourcePath;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
+/**
+ * @since 1.x {@index}
+ */
 @Action(
         domainEvent = Object_openRestApi.ActionDomainEvent.class,
         semantics = SemanticsOf.SAFE,

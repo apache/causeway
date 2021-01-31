@@ -30,6 +30,8 @@ package org.apache.isis.applib.util;
  *
  * <p>
  * An alternative is to use the {@link Reasons} class.
+ *
+ * @since 1.x {@index}
  */
 public class ReasonBuffer {
     StringBuffer reasonBuffer = new StringBuffer();

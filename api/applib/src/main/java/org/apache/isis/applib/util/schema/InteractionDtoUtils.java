@@ -53,6 +53,9 @@ import org.apache.isis.schema.ixn.v2.InteractionDto;
 import org.apache.isis.schema.ixn.v2.MemberExecutionDto;
 import org.apache.isis.schema.ixn.v2.PropertyEditDto;
 
+/**
+ * @since 1.x {@index}
+ */
 public final class InteractionDtoUtils {
 
 
@@ -356,9 +359,9 @@ public final class InteractionDtoUtils {
     public static void addReturn(
             final ActionInvocationDto invocationDto,
             final Class<?> returnType,
-            final Object result, 
+            final Object result,
             final BookmarkService bookmarkService) {
-        
+
         final ValueWithTypeDto returned = CommonDtoUtils
                 .newValueWithTypeDto(returnType, result, bookmarkService);
         invocationDto.setReturned(returned);

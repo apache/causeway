@@ -33,7 +33,7 @@ import org.apache.isis.applib.exceptions.UnrecoverableException;
  *
  * @see UnrecoverableException
  * @see RecoverableException
- * @since ? {@index}
+ * @since 1.x {@index}
  */
 public class RepositoryException extends UnrecoverableException {
 

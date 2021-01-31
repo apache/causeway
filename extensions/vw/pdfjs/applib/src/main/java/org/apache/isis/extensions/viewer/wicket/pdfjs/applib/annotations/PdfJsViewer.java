@@ -29,6 +29,8 @@ import org.apache.isis.extensions.viewer.wicket.pdfjs.applib.config.Scale;
  * An annotation that could be applied on a property or parameter
  * of type {@link org.apache.isis.applib.value.Blob}. Such property/parameter will be visualized
  * with <a href="https://github.com/mozilla/pdf.js">PDF.js</a> viewer.
+ *
+ * @since 2.0 {@index}
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(value = {ElementType.METHOD, ElementType.FIELD})

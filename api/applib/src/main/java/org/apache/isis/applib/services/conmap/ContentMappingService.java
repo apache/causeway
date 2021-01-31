@@ -27,8 +27,8 @@ import javax.ws.rs.core.MediaType;
 import org.apache.isis.commons.internal.base._NullSafe;
 
 /**
- * 
- * @since 2.0 {@index}
+ *
+ * @since 1.x {@index}
  */
 public interface ContentMappingService {
 

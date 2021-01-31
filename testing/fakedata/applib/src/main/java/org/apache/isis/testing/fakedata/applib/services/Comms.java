@@ -18,6 +18,9 @@
  */
 package org.apache.isis.testing.fakedata.applib.services;
 
+/**
+ * @since 2.0 {@index}
+ */
 public class Comms extends AbstractRandomValueGenerator {
 
     final com.github.javafaker.Internet javaFakerInternet;

@@ -29,6 +29,8 @@ import org.apache.isis.extensions.secman.model.app.user.MeService;
 /**
  * Role for regular users of the security module, providing the ability to lookup their user account using the
  * {@link org.apache.isis.extensions.secman.model.app.user.MeService}, and for viewing and maintaining their user details.
+ *
+ * @since 2.0 {@index}
  */
 public class IsisExtSecmanRegularUserRoleAndPermissions extends AbstractRoleAndPermissionsFixtureScript {
 
@@ -44,7 +46,7 @@ public class IsisExtSecmanRegularUserRoleAndPermissions extends AbstractRoleAndP
                 ApplicationPermissionMode.CHANGING,
                 LogoutMenu.class,
                 "logout");
-        
+
         newMemberPermissions(
                 ApplicationPermissionRule.ALLOW,
                 ApplicationPermissionMode.CHANGING,

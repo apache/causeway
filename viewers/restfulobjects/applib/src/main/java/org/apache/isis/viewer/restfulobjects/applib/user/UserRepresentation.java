@@ -26,6 +26,9 @@ import org.apache.isis.viewer.restfulobjects.applib.LinkRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.DomainRepresentation;
 
+/**
+ * @since 1.x {@index}
+ */
 public class UserRepresentation extends DomainRepresentation implements HasLinkToUp {
 
     public UserRepresentation(final JsonNode jsonNode) {

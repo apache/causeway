@@ -29,6 +29,9 @@ import org.apache.isis.viewer.restfulobjects.applib.util.Parser;
 
 import lombok.Getter;
 
+/**
+ * @since 1.x {@index}
+ */
 public final class RestfulRequest {
 
     public enum DomainModel {

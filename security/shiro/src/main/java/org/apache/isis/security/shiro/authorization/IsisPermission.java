@@ -29,6 +29,9 @@ import org.apache.isis.commons.internal.collections._Multimaps.ListMultimap;
 
 import lombok.val;
 
+/**
+ * @since 1.x {@index}
+ */
 public class IsisPermission extends WildcardPermission {
 
     private static final long serialVersionUID = 1L;
@@ -89,10 +92,10 @@ public class IsisPermission extends WildcardPermission {
     public String toString() {
         return (isVetoed?"!":"") + (permissionGroup != null? permissionGroup + "/": "") + super.toString();
     }
-    
+
     // -- HELPER
-    
-    private static final ThreadLocal<ListMultimap<String, IsisPermission>> VETOING_PERMISSIONS = 
+
+    private static final ThreadLocal<ListMultimap<String, IsisPermission>> VETOING_PERMISSIONS =
             ThreadLocal.withInitial(_Multimaps::newListMultimap);
 
     public static void resetVetoedPermissions() {
@@ -114,7 +117,7 @@ public class IsisPermission extends WildcardPermission {
         val vetoMultimap = IsisPermission.VETOING_PERMISSIONS.get();
         vetoMultimap.putElement(permissionGroup, vetoingPermission);
     }
-    
+
     private boolean impliesWithoutVeto(Permission p) {
         return super.implies(p);
     }

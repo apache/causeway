@@ -38,19 +38,22 @@ import org.apache.isis.core.config.IsisConfiguration;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
+/**
+ * @since 2.0 {@index}
+ */
 @Configuration
 @Named("isis.ext.cors.WebModuleServerCors")
 @Qualifier("CORS")
 @Log4j2
 public class IsisModuleExtCorsImpl {
-    
+
     @Bean
     public FilterRegistrationBean<Filter> createCorsFilterRegistration(IsisConfiguration configuration) {
 
         final Map<String, String> cfgMap = configuration.getAsMap();
         final String resteasyBase = cfgMap.getOrDefault("resteasy.jaxrs.defaultPath", "/restful/*");
-        log.info("Setting up CORS to filter resteasy-base at '{}' with {}", 
-                resteasyBase, 
+        log.info("Setting up CORS to filter resteasy-base at '{}' with {}",
+                resteasyBase,
                 configuration.getExtensions().getCors());
 
         final FilterRegistrationBean<Filter> filterRegistrationBean = new FilterRegistrationBean<>();
@@ -61,21 +64,21 @@ public class IsisModuleExtCorsImpl {
     }
 
     private CorsFilter createCorsFilter(IsisConfiguration configuration) {
-        
+
         val isisCorsConfig = configuration.getExtensions().getCors();
-        
+
         val corsConfiguration = new CorsConfiguration();
         corsConfiguration.setAllowCredentials(isisCorsConfig.isAllowCredentials());
         corsConfiguration.setAllowedHeaders(isisCorsConfig.getAllowedHeaders());
         corsConfiguration.setAllowedMethods(isisCorsConfig.getAllowedMethods());
         corsConfiguration.setAllowedOrigins(isisCorsConfig.getAllowedOrigins());
         corsConfiguration.setExposedHeaders(isisCorsConfig.getExposedHeaders());
-        
+
         val source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", corsConfiguration);
-        
+
         return new CorsFilter(source);
     }
-    
+
 
 }

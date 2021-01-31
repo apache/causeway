@@ -20,6 +20,9 @@ package org.apache.isis.subdomains.base.applib.types;
 
 import lombok.experimental.UtilityClass;
 
+/**
+ * @since 2.0 {@index}
+ */
 @UtilityClass
 public class NameType {
 

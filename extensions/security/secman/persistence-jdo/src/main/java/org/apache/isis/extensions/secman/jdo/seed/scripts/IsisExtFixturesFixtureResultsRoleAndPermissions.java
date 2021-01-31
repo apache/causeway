@@ -22,6 +22,9 @@ import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureResult;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionMode;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionRule;
 
+/**
+ * @since 2.0 {@index}
+ */
 public class IsisExtFixturesFixtureResultsRoleAndPermissions extends AbstractRoleAndPermissionsFixtureScript {
 
     public static final String ROLE_NAME = "isis-ext-fixtures-fixtureresults";

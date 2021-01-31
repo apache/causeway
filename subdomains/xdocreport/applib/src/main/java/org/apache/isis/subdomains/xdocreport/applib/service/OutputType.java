@@ -18,6 +18,9 @@
  */
 package org.apache.isis.subdomains.xdocreport.applib.service;
 
+/**
+ * @since 2.0 {@index}
+ */
 public enum OutputType {
     DOCX,
     PDF

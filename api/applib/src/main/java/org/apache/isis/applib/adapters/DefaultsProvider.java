@@ -44,7 +44,8 @@ package org.apache.isis.applib.adapters;
  * @see Parser
  * @see EncoderDecoder
  * @see ValueSemanticsProvider
- * @since ? {@index}
+ *
+ * @since 1.x {@index}
  */
 public interface DefaultsProvider<T> {
 

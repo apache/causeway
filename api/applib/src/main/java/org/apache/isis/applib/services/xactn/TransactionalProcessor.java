@@ -29,33 +29,36 @@ import org.apache.isis.commons.functional.ThrowingRunnable;
 
 import lombok.val;
 
+/**
+ * @since 2.0 {@index}
+ */
 public interface TransactionalProcessor {
 
     // -- INTERFACE
-    
+
     /**
-     * Runs given {@code callable} with a transactional boundary, where the detailed transactional behavior 
+     * Runs given {@code callable} with a transactional boundary, where the detailed transactional behavior
      * is governed by given {@link TransactionDefinition} {@code def}.
-     * @return {@link Result} of calling given {@code callable} 
+     * @return {@link Result} of calling given {@code callable}
      */
     <T> Result<T> callTransactional(TransactionDefinition def, Callable<T> callable);
 
     /**
-     * Runs given {@code runnable} with a transactional boundary, where the detailed transactional behavior 
+     * Runs given {@code runnable} with a transactional boundary, where the detailed transactional behavior
      * is governed by given {@link TransactionDefinition} {@code def}.
      */
     default Result<Void> runTransactional(TransactionDefinition def, ThrowingRunnable runnable) {
         return callTransactional(def, ThrowingRunnable.toCallable(runnable));
     }
-    
+
     // -- SHORTCUTS - WITH PROPAGATION CONTROL
 
     /**
-     * Runs given {@code callable} with a transactional boundary, where the detailed transactional behavior 
+     * Runs given {@code callable} with a transactional boundary, where the detailed transactional behavior
      * is governed by given {@link Propagation} {@code propagation}.
      * <p>
      * More fine grained control is given via {@link #callTransactional(TransactionDefinition, Callable)}
-     * @return {@link Result} of calling given {@code callable} 
+     * @return {@link Result} of calling given {@code callable}
      */
     default <T> Result<T> callTransactional(Propagation propagation, Callable<T> callable) {
         val def = new DefaultTransactionDefinition();
@@ -64,7 +67,7 @@ public interface TransactionalProcessor {
     }
 
     /**
-     * Runs given {@code runnable} with a transactional boundary, where the detailed transactional behavior 
+     * Runs given {@code runnable} with a transactional boundary, where the detailed transactional behavior
      * is governed by given {@link Propagation} {@code propagation}.
      * <p>
      * More fine grained control is given via {@link #runTransactional(TransactionDefinition, Callable)}
@@ -72,25 +75,25 @@ public interface TransactionalProcessor {
     default Result<Void> runTransactional(Propagation propagation, ThrowingRunnable runnable) {
         return callTransactional(propagation, ThrowingRunnable.toCallable(runnable));
     }
-    
-    
+
+
     // -- SHORTCUTS - MOST FREQUENT USAGE
-    
+
     /**
      * Runs given {@code callable} within an existing transactional boundary, or in the absence of such a
      * boundary, creates a new one.
      * <p>
-     * In other words, support a current transaction, create a new one if none exists. 
+     * In other words, support a current transaction, create a new one if none exists.
      * @param <T>
      * @param callable
-     * @return {@link Result} of calling given {@code callable} 
+     * @return {@link Result} of calling given {@code callable}
      */
     default <T> Result<T> callWithinCurrentTransactionElseCreateNew(Callable<T> callable) {
         val def = new DefaultTransactionDefinition();
         def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
         return callTransactional(def, callable);
     }
-    
+
     /**
      * Runs given {@code runnable} within an existing transactional boundary, or in the absence of such a
      * boundary creates a new one.

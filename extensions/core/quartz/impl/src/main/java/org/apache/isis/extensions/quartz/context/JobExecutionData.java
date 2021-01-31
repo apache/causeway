@@ -25,6 +25,8 @@ import lombok.extern.log4j.Log4j2;
 
 /**
  * Requires that the job is annotated with the {@link org.quartz.PersistJobDataAfterExecution} annotation.
+ *
+ * @since 2.0 {@index}
  */
 @Log4j2
 @RequiredArgsConstructor

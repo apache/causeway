@@ -27,9 +27,12 @@ import org.jmock.api.Invocation;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
+/**
+ * @since 2.0 {@index}
+ */
 @RequiredArgsConstructor(staticName = "returnValuePostponed")
 public class PostponedAction implements Action {
-    
+
     @NonNull private Supplier<Object> resultSupplier;
 
     public Object invoke(Invocation invocation) throws Throwable {
@@ -40,7 +43,7 @@ public class PostponedAction implements Action {
         description.appendText("returns ");
         description.appendValue(resultSupplier.get());
     }
-    
-    
+
+
 
 }

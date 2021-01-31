@@ -23,11 +23,10 @@ import org.apache.isis.valuetypes.sse.applib.service.SseChannel;
 
 /**
  * Server-sent events.
- *  
- * @see https://www.w3schools.com/html/html5_serversentevents.asp
- * 
- * @since 2.0
  *
+ * @see https://www.w3schools.com/html/html5_serversentevents.asp
+ *
+ * @since 2.0 {@index}
  */
 public interface SseSource {
 
@@ -62,7 +61,7 @@ public interface SseSource {
             return false;
         }
         if(!SseSource.class.isAssignableFrom(type)) {
-            return false;    
+            return false;
         }
         return !type.equals(Noop.class);
     }

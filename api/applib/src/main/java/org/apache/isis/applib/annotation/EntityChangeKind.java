@@ -19,15 +19,11 @@
 package org.apache.isis.applib.annotation;
 
 /**
- * 
- * @since 1.x {@index}
+ *
+ * @since 2.0 {@index}
  */
 public enum EntityChangeKind {
-
     CREATE,
-
     UPDATE,
-
     DELETE,
-
 }

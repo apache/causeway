@@ -22,7 +22,6 @@ package org.apache.isis.applib.services.confview;
 import java.util.Set;
 
 /**
- * 
  * @since 2.0 {@index}
  */
 public interface ConfigurationViewService {

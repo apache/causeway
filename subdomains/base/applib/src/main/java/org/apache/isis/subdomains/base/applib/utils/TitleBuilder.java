@@ -23,7 +23,11 @@ import java.lang.reflect.Method;
 
 import org.apache.isis.applib.util.TitleBufferException;
 
+/**
+ * @since 2.0 {@index}
+ */
 public class TitleBuilder {
+
     private static final String SPACE = " ";
     private static final String DELIMITER = "[]";
     private static final String PARENT_SEPARATOR = " > ";

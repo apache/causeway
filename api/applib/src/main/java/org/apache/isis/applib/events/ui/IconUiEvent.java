@@ -22,6 +22,8 @@ import java.util.EventObject;
 
 /**
  * Emitted for subscribers to obtain a cssClass hint (equivalent to the <tt>iconName()</tt> supporting method).
+ *
+ * @since 1.x {@index}
  */
 public abstract class IconUiEvent<S> extends AbstractUiEvent<S> {
 

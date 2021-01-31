@@ -27,6 +27,8 @@ import lombok.val;
 
 /**
  * An implementation whereby a VETO permission for a feature overrides an ALLOW (for same scope).
+ *
+ * @since 2.0 {@index}
  */
 public class PermissionsEvaluationServiceVetoBeatsAllow extends PermissionsEvaluationServiceAbstract {
 

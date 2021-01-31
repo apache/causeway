@@ -30,6 +30,9 @@ import org.apache.isis.core.config.IsisConfiguration;
 import lombok.Getter;
 import lombok.val;
 
+/**
+ * @since 2.0 {@index}
+ */
 @Service
 @Named("isis.ext.commandReplayPrimary.PrimaryConfig")
 @Order(OrderPrecedence.MIDPOINT)

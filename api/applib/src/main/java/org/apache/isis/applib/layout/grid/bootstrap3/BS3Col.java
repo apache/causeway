@@ -50,6 +50,8 @@ import org.apache.isis.commons.internal.primitives._Ints.Bound;
  * <p>
  *     It is rendered as a (eg) &lt;div class=&quot;col-md-4 ...&quot;&gt;
  * </p>
+ *
+ * @since 1.x {@index}
  */
 @XmlRootElement(
         name = "col"

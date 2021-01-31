@@ -29,6 +29,8 @@ import org.junit.Test;
  * </p>
  *
  * @param <T>
+ *
+ * @since 2.0 {@index}
  */
 public abstract class ComparableContractTest_compareTo<T extends Comparable<T>> {
 

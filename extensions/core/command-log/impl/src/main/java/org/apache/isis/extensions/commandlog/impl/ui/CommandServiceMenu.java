@@ -50,6 +50,9 @@ import org.apache.isis.extensions.commandlog.impl.jdo.CommandJdoRepository;
 
 import lombok.RequiredArgsConstructor;
 
+/**
+ * @since 2.0 {@index}
+ */
 @DomainService(
     nature = NatureOfService.VIEW,
     objectType = "isis.ext.commandLog.CommandServiceMenu"
@@ -134,7 +137,7 @@ public class CommandServiceMenu {
         commandServiceRepository.truncateLog();
     }
 
-    
+
     private LocalDate now() {
         return clockService.getClock().localDate(ZoneId.systemDefault());
     }

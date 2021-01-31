@@ -24,8 +24,7 @@ import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.memento._Mementos.EncoderDecoder;
 
 /**
- * 
- * @since 2.0 {@index}
+ * @since 1.x {@index}
  */
 public interface UrlEncodingService extends EncoderDecoder {
 

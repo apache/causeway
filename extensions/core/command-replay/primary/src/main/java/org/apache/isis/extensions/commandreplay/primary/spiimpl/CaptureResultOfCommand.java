@@ -39,6 +39,10 @@ import org.apache.isis.schema.common.v2.PeriodDto;
 import lombok.val;
 
 /**
+ * @since 2.0 {@index}
+ */
+
+/**
  * Uses the SPI infrastructure to copy over standard properties from {@link Command} to {@link CommandDto}.
  */
 @Service

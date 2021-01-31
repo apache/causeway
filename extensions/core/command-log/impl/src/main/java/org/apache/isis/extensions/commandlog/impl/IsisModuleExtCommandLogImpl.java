@@ -29,6 +29,9 @@ import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 import org.apache.isis.testing.fixtures.applib.modules.ModuleWithFixtures;
 import org.apache.isis.testing.fixtures.applib.teardown.jdo.TeardownFixtureJdoAbstract;
 
+/**
+ * @since 2.0 {@index}
+ */
 @Configuration
 @Import({
         // @DomainService's

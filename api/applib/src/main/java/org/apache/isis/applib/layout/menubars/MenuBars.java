@@ -23,6 +23,9 @@ import java.util.Map;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.applib.layout.component.ServiceActionLayoutData;
 
+/**
+ * @since 1.x {@index}
+ */
 public interface MenuBars {
 
     @FunctionalInterface

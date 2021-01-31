@@ -27,19 +27,18 @@ import javax.ws.rs.client.Entity;
 import lombok.Getter;
 
 /**
- * 
- * @since 2.0
+ * @since 2.0 {@index}
  */
 public class ActionParameterListBuilder {
 
     private final Map<String, String> actionParameters = new LinkedHashMap<>();
-    
+
     @Getter
     private final Map<String, Class<?>> actionParameterTypes = new LinkedHashMap<>();
 
     public ActionParameterListBuilder addActionParameter(String parameterName, String parameterValue) {
-        actionParameters.put(parameterName, parameterValue != null 
-                ? value("\"" + parameterValue + "\"") 
+        actionParameters.put(parameterName, parameterValue != null
+                ? value("\"" + parameterValue + "\"")
                         : value(JSON_NULL_LITERAL));
         actionParameterTypes.put(parameterName, String.class);
         return this;
@@ -87,12 +86,12 @@ public class ActionParameterListBuilder {
         return this;
     }
 
-//XXX would be nice to have, but also requires the RO spec to be updated     
+//XXX would be nice to have, but also requires the RO spec to be updated
 //    public ActionParameterListBuilder addActionParameterDto(String parameterName, Object parameterDto) {
 //        actionParameters.put(parameterName, dto(parameterDto));
 //        return this;
 //    }
-    
+
     public Entity<String> build() {
 
         final StringBuilder sb = new StringBuilder();
@@ -112,7 +111,7 @@ public class ActionParameterListBuilder {
     private String value(String valueLiteral) {
         return "{\"value\" : " + valueLiteral + "}";
     }
-    
+
 //    @SneakyThrows
 //    private String dto(Object dto) {
 //        val mapper = new ObjectMapper();

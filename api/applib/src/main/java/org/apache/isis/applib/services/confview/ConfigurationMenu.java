@@ -32,13 +32,12 @@ import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
+/**
+ * @since 2.0 {@index}
+ */
 @Named("isis.applib.ConfigurationMenu")
 @DomainService(objectType = "isis.applib.ConfigurationMenu")
 @DomainServiceLayout(menuBar = DomainServiceLayout.MenuBar.TERTIARY)
-/**
- * 
- * @since 1.x {@index}
- */
 public class ConfigurationMenu {
 
     public static abstract class ActionDomainEvent

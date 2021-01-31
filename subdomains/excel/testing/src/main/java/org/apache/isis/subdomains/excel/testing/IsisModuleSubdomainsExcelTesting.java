@@ -24,6 +24,9 @@ import org.springframework.context.annotation.Import;
 
 import org.apache.isis.subdomains.excel.applib.IsisModuleSubdomainsExcelApplib;
 
+/**
+ * @since 2.0 {@index}
+ */
 @Configuration
 @Import({IsisModuleSubdomainsExcelApplib.class})
 @ComponentScan

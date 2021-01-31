@@ -26,7 +26,6 @@ import static org.apache.isis.commons.internal.base._With.requires;
 
 /**
  * @since 2.0 {@index}
- * 
  */
 public abstract class EventObjectBase<T> {
 

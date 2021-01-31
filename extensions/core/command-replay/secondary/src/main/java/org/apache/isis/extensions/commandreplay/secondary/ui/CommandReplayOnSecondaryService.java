@@ -46,6 +46,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
+/**
+ * @since 2.0 {@index}
+ */
 @DomainService(
     nature = NatureOfService.VIEW,
     objectType = "isis.ext.commandReplaySecondary.CommandReplayOnSecondaryService"

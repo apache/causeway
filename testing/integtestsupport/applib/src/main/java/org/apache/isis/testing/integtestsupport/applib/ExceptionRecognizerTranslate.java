@@ -23,6 +23,9 @@ import org.junit.jupiter.api.extension.TestExecutionExceptionHandler;
 
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
 
+/**
+ * @since 2.0 {@index}
+ */
 public class ExceptionRecognizerTranslate implements TestExecutionExceptionHandler {
 
     @Override

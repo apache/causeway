@@ -25,6 +25,9 @@ import org.apache.isis.viewer.restfulobjects.applib.LinkRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.DomainRepresentation;
 
+/**
+ * @since 1.x {@index}
+ */
 public class HealthRepresentation extends DomainRepresentation implements HasLinkToUp {
 
     public HealthRepresentation(final JsonNode jsonNode) {

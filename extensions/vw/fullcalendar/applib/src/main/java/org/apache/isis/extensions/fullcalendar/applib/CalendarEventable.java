@@ -24,6 +24,9 @@ import org.apache.isis.extensions.fullcalendar.applib.value.CalendarEvent;
 
 import lombok.experimental.UtilityClass;
 
+/**
+ * @since 2.0 {@index}
+ */
 public interface CalendarEventable {
 
     /**

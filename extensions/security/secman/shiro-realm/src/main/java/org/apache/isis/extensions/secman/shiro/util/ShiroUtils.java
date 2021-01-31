@@ -30,6 +30,9 @@ import org.apache.isis.extensions.secman.shiro.IsisModuleExtSecmanShiroRealm;
 
 import lombok.experimental.UtilityClass;
 
+/**
+ * @since 2.0 {@index}
+ */
 @UtilityClass
 public class ShiroUtils {
 
@@ -62,5 +65,5 @@ public class ShiroUtils {
         final RealmSecurityManager securityManager = getSecurityManager();
         return securityManager.getRealms().size() == 1;
     }
-    
+
 }

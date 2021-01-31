@@ -34,6 +34,9 @@ import org.apache.isis.core.metamodel.valuetypes.ValueTypeProvider;
 import org.apache.isis.schema.common.v2.ValueType;
 import org.apache.isis.valuetypes.asciidoc.applib.value.AsciiDoc;
 
+/**
+ * @since 2.0 {@index}
+ */
 @Configuration
 @Import({
         AsciiDocMetaModelRefiner.class,
@@ -48,7 +51,7 @@ public class IsisModuleValAsciidocMetaModel {
 class AsciiDocMetaModelRefiner implements MetaModelRefiner {
     @Override
     public void refineProgrammingModel(ProgrammingModel programmingModel) {
-// blueprint        
+// blueprint
 //        programmingModel.addFactory(
 //                ProgrammingModel.FacetProcessingOrder.G1_VALUE_TYPES,
 //                AsciiDocValueFacetUsingSemanticsProviderFactory.class);

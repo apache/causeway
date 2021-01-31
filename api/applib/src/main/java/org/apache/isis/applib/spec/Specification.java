@@ -22,7 +22,8 @@ package org.apache.isis.applib.spec;
 /**
  * An implementation of the <i>Specification</i> pattern, as described in Eric
  * Evans' <i>Domain Driven Design</i>, p224.
- * @since ? {@index}
+ *
+ * @since 1.x {@index}
  */
 public interface Specification {
 

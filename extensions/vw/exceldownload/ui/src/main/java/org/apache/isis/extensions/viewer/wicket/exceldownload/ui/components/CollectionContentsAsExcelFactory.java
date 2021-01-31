@@ -30,10 +30,12 @@ import org.apache.isis.viewer.wicket.ui.ComponentType;
 
 /**
  * {@link ComponentFactory} for {@link CollectionContentsAsExcel}.
+ *
+ * @since 2.0 {@index}
  */
 @org.springframework.stereotype.Component
-public class CollectionContentsAsExcelFactory 
-extends ComponentFactoryAbstract 
+public class CollectionContentsAsExcelFactory
+extends ComponentFactoryAbstract
 implements CollectionContentsAsFactory {
 
     private static final long serialVersionUID = 1L;

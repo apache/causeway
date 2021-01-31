@@ -25,6 +25,9 @@ import org.hamcrest.TypeSafeMatcher;
 
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 
+/**
+ * @since 2.0 {@index}
+ */
 public class ThrowableMatchers {
 
     ThrowableMatchers(){}

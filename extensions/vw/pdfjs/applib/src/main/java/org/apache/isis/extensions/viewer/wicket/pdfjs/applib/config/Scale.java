@@ -20,6 +20,9 @@ package org.apache.isis.extensions.viewer.wicket.pdfjs.applib.config;
 
 import org.apache.wicket.util.lang.Objects;
 
+/**
+ * @since 2.0 {@index}
+ */
 public enum Scale {
     AUTOMATIC("auto"),
     ACTUAL_SIZE("page-actual"),

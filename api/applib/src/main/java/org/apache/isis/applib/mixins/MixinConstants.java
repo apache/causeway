@@ -21,6 +21,9 @@ package org.apache.isis.applib.mixins;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
+/**
+ * @since 1.x {@index}
+ */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class MixinConstants {
 

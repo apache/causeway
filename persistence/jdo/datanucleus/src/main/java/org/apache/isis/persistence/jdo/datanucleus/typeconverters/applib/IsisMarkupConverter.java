@@ -22,6 +22,9 @@ import org.datanucleus.store.types.converters.TypeConverter;
 
 import org.apache.isis.applib.value.Markup;
 
+/**
+ * @since 2.0 {@index}
+ */
 public class IsisMarkupConverter implements TypeConverter<Markup, String>{
 
     private static final long serialVersionUID = 1L;

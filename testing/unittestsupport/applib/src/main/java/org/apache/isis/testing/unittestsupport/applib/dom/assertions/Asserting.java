@@ -18,11 +18,13 @@
  */
 package org.apache.isis.testing.unittestsupport.applib.dom.assertions;
 
+/**
+ * @since 2.0 {@index}
+ */
 public final class Asserting {
 
     private Asserting() {
     }
-
 
     public static <T> T assertType(Object o, Class<T> type) {
         if(o == null) {
@@ -34,6 +36,4 @@ public final class Asserting {
         }
         return type.cast(o);
     }
-
-
 }

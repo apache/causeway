@@ -32,6 +32,9 @@ import org.apache.isis.schema.ixn.v2.ObjectCountsDto;
 
 import lombok.NonNull;
 
+/**
+ * @since 1.x {@index}
+ */
 public final class MemberExecutionDtoUtils {
 
     public static <T extends MemberExecutionDto> T clone(final T dto) {
@@ -82,20 +85,20 @@ public final class MemberExecutionDtoUtils {
         }
         return differenceDto;
     }
-    
+
     public static <T extends MemberExecutionDto> String toXml(final @NonNull T dto) {
         return _Xml.writeXml(dto, writeOptions())
                 .orElseFail();
     }
 
     public static <T extends MemberExecutionDto> void toXml(
-            final @NonNull T dto, 
+            final @NonNull T dto,
             final @NonNull Writer writer) throws JAXBException {
         _Xml.writeXml(dto, writer, writeOptions());
     }
-    
+
     // -- HELPER
-    
+
     private static WriteOptions writeOptions() {
         return WriteOptions.builder()
                 .useContextCache(true)
@@ -104,5 +107,5 @@ public final class MemberExecutionDtoUtils {
                 .build();
     }
 
-    
+
 }

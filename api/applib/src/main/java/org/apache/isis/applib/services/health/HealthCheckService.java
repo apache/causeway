@@ -19,13 +19,12 @@
 package org.apache.isis.applib.services.health;
 
 /**
- * 
+ *
  * @since 2.0 {@index}
  */
 public interface HealthCheckService {
 
     Health check();
-
 }
 
 

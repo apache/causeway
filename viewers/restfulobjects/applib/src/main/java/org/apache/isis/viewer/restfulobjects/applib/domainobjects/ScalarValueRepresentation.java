@@ -22,6 +22,9 @@ import com.fasterxml.jackson.databind.JsonNode;
 
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 
+/**
+ * @since 1.x {@index}
+ */
 public class ScalarValueRepresentation extends DomainRepresentation {
 
     public ScalarValueRepresentation(final JsonNode jsonNode) {
@@ -31,5 +34,4 @@ public class ScalarValueRepresentation extends DomainRepresentation {
     public JsonRepresentation getValue() {
         return getRepresentation("value");
     }
-
 }

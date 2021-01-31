@@ -22,13 +22,15 @@ import org.apache.isis.applib.util.ObjectContracts.ToStringEvaluator;
 
 /**
  * Indicates that the implementing class has a {@link #getDescription() description}.
+ *
+ * @since 2.0 {@index}
  */
 public interface WithDescriptionGetter {
 
     public String getDescription();
-    
+
     /**
-     * Utility class for obtaining the string value of an object that implements {@link WithDescriptionGetter}. 
+     * Utility class for obtaining the string value of an object that implements {@link WithDescriptionGetter}.
      */
     public static final class ToString {
         private ToString() {}
@@ -38,7 +40,7 @@ public interface WithDescriptionGetter {
                 public boolean canEvaluate(final Object o) {
                     return o instanceof WithDescriptionGetter;
                 }
-                
+
                 @Override
                 public String evaluate(final Object o) {
                     return ((WithDescriptionGetter)o).getDescription();

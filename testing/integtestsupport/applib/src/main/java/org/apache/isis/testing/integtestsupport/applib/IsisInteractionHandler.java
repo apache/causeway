@@ -27,32 +27,35 @@ import org.junit.jupiter.api.extension.ExtensionContext;
 import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.core.interaction.session.InteractionFactory;
 
+/**
+ * @since 2.0 {@index}
+ */
 public class IsisInteractionHandler implements BeforeEachCallback, AfterEachCallback {
 
     @Override
     public void beforeEach(ExtensionContext extensionContext) throws Exception {
-        
+
         _Probe.errOut("before interaction in");
-        
+
         isisInteractionFactory(extensionContext)
         .ifPresent(isisInteractionFactory->isisInteractionFactory.openInteraction());
-        
+
         _Probe.errOut("before interaction out");
     }
-    
+
     @Override
     public void afterEach(ExtensionContext extensionContext) throws Exception {
-        
+
         _Probe.errOut("after interaction in");
-        
+
         isisInteractionFactory(extensionContext)
         .ifPresent(InteractionFactory::closeSessionStack);
-        
+
         _Probe.errOut("after interaction out");
     }
 
     // -- HELPER
-    
+
     private Optional<InteractionFactory> isisInteractionFactory(ExtensionContext extensionContext) {
         return extensionContext.getTestInstance()
         .filter(IsisIntegrationTestAbstract.class::isInstance)
@@ -60,5 +63,5 @@ public class IsisInteractionHandler implements BeforeEachCallback, AfterEachCall
         .map(IsisIntegrationTestAbstract::getServiceRegistry)
         .flatMap(serviceRegistry->serviceRegistry.lookupService(InteractionFactory.class));
     }
-    
+
 }

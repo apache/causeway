@@ -29,9 +29,7 @@ import org.apache.isis.applib.services.repository.RepositoryService;
 import lombok.NonNull;
 
 /**
- * 
- * @since 2.x {@index}
- *
+ * @since 1.x {@index}
  */
 public interface FactoryService {
 
@@ -86,7 +84,7 @@ public interface FactoryService {
      * @since 2.0
      */
     <T> T detachedEntity(@NonNull Class<T> domainClass);
-    
+
     /**
      * Creates a new detached entity instance, with injection points resolved.
      *
@@ -135,7 +133,7 @@ public interface FactoryService {
     default <T> T viewModel(@NonNull Class<T> viewModelClass) {
         return viewModel(viewModelClass, /*mementoStr*/null);
     }
-    
+
     /**
      * Resolves injection points for given ViewModel instance.
      * @param viewModel - most likely just new-ed up, without injection points resolved

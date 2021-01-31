@@ -26,6 +26,9 @@ import org.apache.isis.valuetypes.sse.ui.wkt.markup.ListeningMarkupPanelFactorie
 import org.apache.isis.valuetypes.sse.ui.wkt.services.SseServiceDefault;
 import org.apache.isis.valuetypes.sse.ui.wkt.webmodule.WebModuleServerSentEvents;
 
+/**
+ * @since 2.0 {@index}
+ */
 @Configuration
 @Import({
         // module dependencies
@@ -34,7 +37,7 @@ import org.apache.isis.valuetypes.sse.ui.wkt.webmodule.WebModuleServerSentEvents
         // @Component's
         ListeningMarkupPanelFactoriesForWicket.Parented.class,
         ListeningMarkupPanelFactoriesForWicket.Standalone.class,
-        
+
         // @Service's
         SseServiceDefault.class,
         WebModuleServerSentEvents.class

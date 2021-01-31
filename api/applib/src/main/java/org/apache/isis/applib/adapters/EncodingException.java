@@ -21,7 +21,8 @@ package org.apache.isis.applib.adapters;
 
 /**
  * Indicates that encoding or decoding has failed.
- * @since ? {@index}
+ *
+ * @since 1.x {@index}
  */
 public class EncodingException extends RuntimeException {
     private static final long serialVersionUID = 1L;

@@ -19,7 +19,7 @@
 package org.apache.isis.applib.events.lifecycle;
 
 /**
- * @since ? {@index}
+ * @since 1.x {@index}
  */
 public abstract class ObjectPersistedEvent<S> extends AbstractLifecycleEvent<S> {
 

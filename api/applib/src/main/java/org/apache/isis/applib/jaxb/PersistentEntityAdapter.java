@@ -26,7 +26,7 @@ import org.apache.isis.schema.common.v2.OidDto;
 import lombok.val;
 
 /**
- * @since ? {@index}
+ * @since 2.0 {@index}
  */
 public class PersistentEntityAdapter extends XmlAdapter<OidDto, Object> {
 

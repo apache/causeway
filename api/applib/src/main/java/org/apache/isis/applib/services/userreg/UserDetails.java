@@ -25,7 +25,8 @@ import lombok.Setter;
 
 /**
  * A model object for the signup page
- * @since 2.0 {@index}
+ *
+ * @since 1.x {@index}
  */
 public class UserDetails
                 implements Serializable {

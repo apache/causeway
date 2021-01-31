@@ -21,24 +21,23 @@ package org.apache.isis.applib.services.clock;
 import org.apache.isis.applib.clock.VirtualClock;
 
 /**
- * This service allows an application to be decoupled from the system time.  
- * The most common use case is in support of testing scenarios, to &quot;mock the clock&quot;.  
+ * This service allows an application to be decoupled from the system time.
+ * The most common use case is in support of testing scenarios, to &quot;mock the clock&quot;.
  * Use of this service also opens up the use of centralized
  * co-ordinated time management through a centralized time service.
  *
- * 
  * @since 1.x revised for 2.0 {@index}
  */
 public interface ClockService {
 
     VirtualClock getClock();
-    
+
     // -- SHORTCUTS
-    
+
     default long getEpochMillis() {
         return getClock().getEpochMillis();
     }
-    
+
 //    public java.time.LocalDate now() {
 //        return Clock.getTimeAsLocalDate();
 //    }

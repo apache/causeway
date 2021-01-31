@@ -18,6 +18,9 @@
  */
 package org.apache.isis.applib.mixins.dto;
 
+/**
+ * @since 1.x {@index}
+ */
 public interface Dto {
 
 }

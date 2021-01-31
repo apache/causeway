@@ -33,16 +33,19 @@ import org.apache.isis.commons.internal.base._Bytes;
 
 import lombok.val;
 
-public interface ClientConversationFilter 
+/**
+ * @since 2.0 {@index}
+ */
+public interface ClientConversationFilter
 extends ClientRequestFilter, ClientResponseFilter {
-    
+
     void onRequest(
             String endpoint,
             String method,
             String acceptHeaderParsing,
-            Map<String, List<String>> headers, 
+            Map<String, List<String>> headers,
             String body);
-    
+
     void onResponse(int httpReturnCode, Map<String, List<String>> headers, String body);
 
     @Override
@@ -66,10 +69,10 @@ extends ClientRequestFilter, ClientResponseFilter {
 
         onRequest(
                 endpoint, method, acceptHeaderParsing,
-                requestContext.getStringHeaders(), 
+                requestContext.getStringHeaders(),
                 requestBody);
     }
-    
+
     @Override
     default void filter(ClientRequestContext requestContext, ClientResponseContext responseContext) throws IOException {
 
@@ -85,6 +88,6 @@ extends ClientRequestFilter, ClientResponseFilter {
 
         onResponse(responseContext.getStatusInfo().getStatusCode(), responseContext.getHeaders(), responseBody);
     }
-  
-    
+
+
 }

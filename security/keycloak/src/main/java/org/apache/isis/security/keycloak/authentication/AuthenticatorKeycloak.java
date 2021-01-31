@@ -32,13 +32,16 @@ import org.apache.isis.core.security.authentication.Authentication;
 import org.apache.isis.core.security.authentication.AuthenticationContext;
 import org.apache.isis.core.security.authentication.standard.Authenticator;
 
+/**
+ * @since 2.0 {@index}
+ */
 @Service
 @Named("isis.security.AuthenticatorKeycloak")
 @Order(OrderPrecedence.EARLY)
 @Qualifier("Keycloak")
 @Singleton
 public class AuthenticatorKeycloak implements Authenticator {
-    
+
     @Inject private AuthenticationContext authenticationTracker;
 
     @Override
@@ -48,7 +51,7 @@ public class AuthenticatorKeycloak implements Authenticator {
 
     @Override
     public Authentication authenticate(final AuthenticationRequest request, final String code) {
-        // HTTP request filters should already have taken care of Authentication creation    
+        // HTTP request filters should already have taken care of Authentication creation
         return authenticationTracker.currentAuthentication().orElse(null);
     }
 

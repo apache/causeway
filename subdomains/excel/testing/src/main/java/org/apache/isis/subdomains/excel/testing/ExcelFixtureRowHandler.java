@@ -22,6 +22,9 @@ import java.util.List;
 
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 
+/**
+ * @since 2.0 {@index}
+ */
 public interface ExcelFixtureRowHandler {
     List<Object> handleRow(
             final FixtureScript.ExecutionContext executionContext,

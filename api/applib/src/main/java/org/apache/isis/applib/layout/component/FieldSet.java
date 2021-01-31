@@ -35,6 +35,8 @@ import org.apache.isis.applib.layout.grid.bootstrap3.BS3Col;
  * A {@link MemberRegion region} of the page containing a set of
  * related {@link PropertyLayoutData properties} and associated
  * {@link ActionLayoutData actions}.
+ *
+ * @since 1.x {@index}
  */
 @XmlRootElement(
         name = "fieldSet"

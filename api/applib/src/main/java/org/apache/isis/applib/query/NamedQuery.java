@@ -25,7 +25,7 @@ import javax.annotation.Nullable;
 import lombok.NonNull;
 
 /**
- * @since 2.0 {@index}
+ * @since 1.x {@index}
  */
 public interface NamedQuery<T> extends Query<T> {
 
@@ -33,9 +33,9 @@ public interface NamedQuery<T> extends Query<T> {
     Map<String, Object> getParametersByName();
 
     // -- WITHERS
-    
+
     @Override NamedQuery<T> withRange(@NonNull QueryRange range);
-    
+
     NamedQuery<T> withParameter(@NonNull String parameterName, @Nullable Object parameterValue);
-    
+
 }

@@ -48,6 +48,8 @@ import lombok.extern.log4j.Log4j2;
  *     (<code>{@link org.apache.isis.extensions.commandreplay.secondary.job.ReplicateAndReplayJob}</code>)
  *     files.
  * </p>
+ *
+ * @since 2.0 {@index}
  */
 @Log4j2
 public class ReplicateAndRunCommands implements Callable<SecondaryStatus> {

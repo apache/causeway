@@ -49,8 +49,7 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
- * 
- * @since 2.0
+ * @since 2.0 {@index}
  */
 @Log4j2
 public class ResponseDigest<T> {
@@ -63,12 +62,12 @@ public class ResponseDigest<T> {
      * @return
      */
     public static <T> ResponseDigest<T> of(
-            @NonNull final Response response, 
+            @NonNull final Response response,
             @NonNull final Class<T> entityType) {
-        
+
         return new ResponseDigest<>(response, entityType, null).digest();
     }
-    
+
     /**
      * synchronous response processing (list of entities)
      * @param <T>
@@ -78,17 +77,17 @@ public class ResponseDigest<T> {
      * @return
      */
     public static <T> ResponseDigest<T> ofList(
-            @NonNull final Response response, 
+            @NonNull final Response response,
             @NonNull final Class<T> entityType,
             @NonNull final GenericType<List<T>> genericType) {
-        
+
         return new ResponseDigest<>(response, entityType, genericType).digest();
     }
-    
+
     /** a-synchronous response failure processing */
     public static <T> ResponseDigest<T> ofAsyncFailure(
-            final Future<Response> asyncResponse, 
-            final Class<T> entityType, 
+            final Future<Response> asyncResponse,
+            final Class<T> entityType,
             final Exception failure) {
 
         Response response;
@@ -101,7 +100,7 @@ public class ResponseDigest<T> {
         final ResponseDigest<T> failureDigest = new ResponseDigest<>(response, entityType, null);
         return failureDigest.digestAsyncFailure(asyncResponse.isCancelled(), failure);
     }
-    
+
     private final Response response;
     private final Class<T> entityType;
     private final GenericType<List<T>> genericType;
@@ -129,44 +128,44 @@ public class ResponseDigest<T> {
     public boolean isFailure() {
         return failureCause!=null;
     }
-    
+
     /**
      * @return (non-null), optionally the result if cardinality is exactly ONE
      */
     public Optional<T> getEntity(){
         return getEntities().getSingleton();
     }
-    
+
     /**
-     * @return (non-null), the entities replied by the REST endpoint supporting any cardinality ZERO, ONE or more. 
+     * @return (non-null), the entities replied by the REST endpoint supporting any cardinality ZERO, ONE or more.
      */
     public Can<T> getEntities(){
         return entities;
     }
 
     /**
-     * @return (nullable), the failure case (if any), when the REST endpoint replied with a failure status code 
+     * @return (nullable), the failure case (if any), when the REST endpoint replied with a failure status code
      */
     public @Nullable Exception getFailureCause(){
         return failureCause;
     }
 
     /**
-     * @param failureMapper - fallback, to calculate a result from given failure exception 
-     * @return the result if cardinality is exactly ONE, otherwise the result of applying the failure to the {@code failureMapper} 
+     * @param failureMapper - fallback, to calculate a result from given failure exception
+     * @return the result if cardinality is exactly ONE, otherwise the result of applying the failure to the {@code failureMapper}
      */
     public T singletonOrElseMapFailure(Function<Exception, T> failureMapper) {
-        return isSuccess() 
+        return isSuccess()
                 ? getEntity().orElseGet(()->failureMapper.apply(new NoSuchElementException()))
                 : failureMapper.apply(getFailureCause());
     }
 
     /**
      * @param failureMapper - fallback, to calculate a result from given failure exception
-     * @return the result of any cardinality, otherwise the result of applying the failure to the {@code failureMapper} 
+     * @return the result of any cardinality, otherwise the result of applying the failure to the {@code failureMapper}
      */
     public Can<T> multipleOrElseMapFailure(Function<Exception, Can<T>> failureMapper) {
-        return isSuccess() 
+        return isSuccess()
                 ? getEntities()
                         : failureMapper.apply(getFailureCause());
     }
@@ -181,24 +180,24 @@ public class ResponseDigest<T> {
             return this;
         }
 
-        // a valid result corresponding to object not found, which is not an error per se  
+        // a valid result corresponding to object not found, which is not an error per se
         if(response.getStatusInfo().getStatusCode() == 404) {
             entities = Can.empty();
             return this;
         }
-        
+
         if(!response.hasEntity()) {
             entities = Can.empty();
             failureCause = new NoSuchElementException(defaultFailureMessage(response));
             return this;
         }
-        
+
         if(response.getStatusInfo().getFamily() != Family.SUCCESSFUL) {
             entities = Can.empty();
             failureCause = new RestfulClientException(defaultFailureMessage(response));
             return this;
         }
-        
+
         // see if we can extract the returned representation type (repr-type) from the header
         val contentTypeHeaderString = response.getHeaderString("Content-Type");
         val reprType = RepresentationTypeSimplifiedV2.parseContentTypeHeaderString(contentTypeHeaderString)
@@ -206,13 +205,13 @@ public class ResponseDigest<T> {
         if(reprType==null) {
             entities = Can.empty();
             failureCause = new RestfulClientException(String.format(
-                    "Invalid REST response, cannot parse header's Content-Type '%s' for the repr-type to use", 
+                    "Invalid REST response, cannot parse header's Content-Type '%s' for the repr-type to use",
                     contentTypeHeaderString));
             return this;
         }
-        
+
         try {
-            
+
             if(genericType==null) {
                 // when response is a singleton
                 val singleton = readSingle(reprType);
@@ -223,7 +222,7 @@ public class ResponseDigest<T> {
                 // when response is a list
                 entities = Can.ofCollection(readList(reprType));
             }
-            
+
         } catch (Exception e) {
             entities = Can.empty();
             failureCause = new RestfulClientException("failed to read JAX-RS response content", e);
@@ -232,12 +231,12 @@ public class ResponseDigest<T> {
         return this;
     }
 
-    private T readSingle(final RepresentationTypeSimplifiedV2 reprType) 
+    private T readSingle(final RepresentationTypeSimplifiedV2 reprType)
             throws JsonParseException, JsonMappingException, IOException {
-        
+
         log.debug("readSingle({})", reprType);
-        
-        if(reprType.isValue() 
+
+        if(reprType.isValue()
                 || isValueType(entityType)) {
             val mapper = new ObjectMapper();
             val jsonInput = response.readEntity(String.class);
@@ -246,25 +245,25 @@ public class ResponseDigest<T> {
         }
         return response.<T>readEntity(entityType);
     }
-    
-    private List<T> readList(final RepresentationTypeSimplifiedV2 reprType) 
+
+    private List<T> readList(final RepresentationTypeSimplifiedV2 reprType)
             throws JsonParseException, JsonMappingException, IOException {
-        
+
         log.debug("readList({})", reprType);
-        
-        if(reprType.isValues() 
+
+        if(reprType.isValues()
                 || isValueType(entityType)) {
             val mapper = new ObjectMapper();
             val jsonInput = response.readEntity(String.class);
-            final List<ScalarValueDtoV2> scalarValueDtoList = 
+            final List<ScalarValueDtoV2> scalarValueDtoList =
                     mapper.readValue(
-                            jsonInput, 
+                            jsonInput,
                             mapper.getTypeFactory().constructCollectionType(List.class, ScalarValueDtoV2.class));
-            
+
             final List<T> resultList = new ArrayList<>(scalarValueDtoList.size());
             for(val valueBody : scalarValueDtoList) {
                 // explicit loop, for simpler exception propagation
-                resultList.add(extractValue(valueBody)); 
+                resultList.add(extractValue(valueBody));
             }
             return resultList;
 
@@ -286,15 +285,15 @@ public class ResponseDigest<T> {
             return this;
         }
 
-        failureCause = new RestfulClientException("Async JAX-RS request failed " 
+        failureCause = new RestfulClientException("Async JAX-RS request failed "
                 + defaultFailureMessage(response), failure);
         return this;
 
     }
 
     private String defaultFailureMessage(Response response) {
-        String failureMessage = "non-successful JAX-RS response: " + 
-                String.format("%s (Http-Status-Code: %d)", 
+        String failureMessage = "non-successful JAX-RS response: " +
+                String.format("%s (Http-Status-Code: %d)",
                         response.getStatusInfo().getReasonPhrase(),
                         response.getStatus());
 
@@ -315,8 +314,8 @@ public class ResponseDigest<T> {
     private boolean isValueType(Class<T> entityType) {
         return CommonDtoUtils.isValueType(entityType);
     }
-    
-    private T extractValue(ScalarValueDtoV2 scalarValueDto) 
+
+    private T extractValue(ScalarValueDtoV2 scalarValueDto)
             throws JsonParseException, JsonMappingException, IOException {
         return _Casts.uncheckedCast(scalarValueDto.getValue());
     }

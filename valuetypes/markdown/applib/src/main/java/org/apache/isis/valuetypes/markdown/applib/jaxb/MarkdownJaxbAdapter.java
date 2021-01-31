@@ -26,6 +26,9 @@ import javax.xml.bind.annotation.adapters.XmlAdapter;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.valuetypes.markdown.applib.value.Markdown;
 
+/**
+ * @since 2.0 {@index}
+ */
 public final class MarkdownJaxbAdapter extends XmlAdapter<String, Markdown> {
 
     /**

@@ -35,6 +35,10 @@ import org.apache.isis.extensions.commandlog.impl.jdo.CommandJdo;
 import org.apache.isis.extensions.commandlog.impl.jdo.CommandJdoRepository;
 
 /**
+ * @since 2.0 {@index}
+ */
+
+/**
  * This mixin contributes a <tt>recentCommands</tt> action to any domain object
  * (unless also {@link HasUniqueId} - commands don't themselves have commands).
  */

@@ -26,7 +26,8 @@ import lombok.Getter;
 
 /**
  * Emitted for subscribers to obtain a layout hint (equivalent to the <tt>layout()</tt> supporting method).
- * @since ? {@index}
+ *
+ * @since 1.x {@index}
  */
 public abstract class LayoutUiEvent<S> extends AbstractUiEvent<S> {
 

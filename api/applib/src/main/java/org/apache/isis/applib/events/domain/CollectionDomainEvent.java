@@ -24,7 +24,7 @@ import org.apache.isis.applib.util.ToString;
 import lombok.Getter;
 
 /**
- * @since ? {@index}
+ * @since 1.x {@index}
  */
 public abstract class CollectionDomainEvent<S,T> extends AbstractDomainEvent<S> {
 

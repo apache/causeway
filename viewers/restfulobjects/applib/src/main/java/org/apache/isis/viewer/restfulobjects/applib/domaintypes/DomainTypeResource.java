@@ -28,21 +28,19 @@ import javax.ws.rs.core.Response;
 
 import org.apache.isis.viewer.restfulobjects.applib.RestfulMediaType;
 
+/**
+ * @since 1.x {@index}
+ */
 @Path("/domain-types")
 public interface DomainTypeResource {
 
-    // /////////////////////////////////////////////////////
-    // domainTypes (list of all )
-    // /////////////////////////////////////////////////////
 
     @GET
     @Path("/")
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_TYPE_LIST })
     public abstract Response domainTypes();
 
-    // /////////////////////////////////////////////////////
-    // domainType + member description
-    // /////////////////////////////////////////////////////
+
 
     @GET
     @Path("/{domainType}")
@@ -77,9 +75,7 @@ public interface DomainTypeResource {
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ACTION_PARAMETER_DESCRIPTION })
     public abstract Response typeActionParam(@PathParam("domainType") final String domainType, @PathParam("actionId") final String actionId, @PathParam("paramNum") final String paramName);
 
-    // //////////////////////////////////////////////////////////
-    // domain type actions
-    // //////////////////////////////////////////////////////////
+
 
     @GET
     @Path("/{domainType}/isSubtypeOf/invoke")
@@ -98,5 +94,4 @@ public interface DomainTypeResource {
             @QueryParam("supertype") String superType, // simple style
             @QueryParam("args") final String argumentsQueryString // formal style
             );
-
 }

@@ -20,6 +20,8 @@ package org.apache.isis.viewer.restfulobjects.applib;
 
 /**
  * Enumerates the organization that defined a {@link Rel}.
+ *
+ * @since 1.x {@index}
  */
 public enum RelDefinition {
 

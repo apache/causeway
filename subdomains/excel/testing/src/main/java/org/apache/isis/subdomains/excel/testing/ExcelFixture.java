@@ -52,6 +52,8 @@ import lombok.val;
 /**
  * This class should be executed using {@link FixtureScripts.MultipleExecutionStrategy#EXECUTE_ONCE_BY_VALUE} (it
  * has value semantics).
+ *
+ * @since 2.0 {@index}
  */
 @DomainObject(
         objectType = "isis.sub.excel.ExcelFixture"
@@ -59,7 +61,7 @@ import lombok.val;
 public class ExcelFixture extends FixtureScript {
 
     @Inject SpecificationLoader specLoader;
-    
+
     private final List<Class<?>> classes;
 
     public ExcelFixture(final URL excelResource, final Class<?>... classes) {
@@ -82,12 +84,12 @@ public class ExcelFixture extends FixtureScript {
 
     private ExcelFixture(final List<Class<?>> classes) {
         for (Class<?> cls : classes) {
-            
+
             val beanSort = Optional.ofNullable(specLoader)
             .map(sl->sl.loadSpecification(cls))
             .map(ObjectSpecification::getBeanSort)
             .orElse(BeanSort.UNKNOWN);
-            
+
             if (!beanSort.isViewModel() && !beanSort.isEntity()) {
                 throw new IllegalArgumentException(String.format(
                         "Class '%s' does not implement '%s', nor is it persistable",

@@ -21,8 +21,7 @@ package org.apache.isis.applib.services.grid;
 import org.apache.isis.applib.layout.grid.Grid;
 
 /**
- * 
- * @since 2.0 {@index}
+ * @since 1.x {@index}
  */
 public interface GridLoaderService {
 

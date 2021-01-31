@@ -37,6 +37,8 @@ import lombok.Getter;
 
 /**
  * WebModule to enable support for Keycloak.
+ *
+ * @since 2.0 {@index}
  */
 @Service
 @Named("isis.security.WebModuleKeycloak")

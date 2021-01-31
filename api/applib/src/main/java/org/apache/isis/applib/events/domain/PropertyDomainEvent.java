@@ -25,7 +25,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * @since ? {@index}
+ * @since 1.x {@index}
  */
 public abstract class PropertyDomainEvent<S,T> extends AbstractDomainEvent<S> {
 

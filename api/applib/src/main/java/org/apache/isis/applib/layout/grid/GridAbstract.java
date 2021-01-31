@@ -41,6 +41,8 @@ import org.apache.isis.applib.services.layout.LayoutService;
  * <p>
  *     It is used by the {@link LayoutService} as a common based type for any layouts read in from XML.
  * </p>
+ *
+ * @since 1.x {@index}
  */
 @XmlTransient // ignore this class
 public abstract class GridAbstract implements Grid {
@@ -98,7 +100,7 @@ public abstract class GridAbstract implements Grid {
     protected void traverseActions(
             final ActionLayoutDataOwner actionLayoutDataOwner,
             final GridAbstract.Visitor visitor) {
-        
+
         final List<ActionLayoutData> actionLayoutDatas = actionLayoutDataOwner.getActions();
         if(actionLayoutDatas == null) {
             return;

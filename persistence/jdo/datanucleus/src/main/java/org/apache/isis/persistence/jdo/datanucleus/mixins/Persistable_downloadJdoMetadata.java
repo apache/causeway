@@ -40,6 +40,9 @@ import org.apache.isis.persistence.jdo.applib.integration.JdoSupportService;
 
 import lombok.RequiredArgsConstructor;
 
+/**
+ * @since 2.0 {@index}
+ */
 @Action(
         domainEvent = Persistable_downloadJdoMetadata.ActionDomainEvent.class,
         semantics = SemanticsOf.SAFE,
@@ -53,7 +56,7 @@ import lombok.RequiredArgsConstructor;
 public class Persistable_downloadJdoMetadata {
 
     @Inject JdoSupportService jdoSupport;
-    
+
     private final Persistable persistable;
 
     public static class ActionDomainEvent extends org.apache.isis.applib.IsisModuleApplib.ActionDomainEvent<Persistable_downloadJdoMetadata> {}

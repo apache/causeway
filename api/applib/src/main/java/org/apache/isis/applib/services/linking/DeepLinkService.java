@@ -27,8 +27,8 @@ import java.net.URI;
  *     The implementation is specific to the viewer(s) configured for Isis.  At the time of writing only one
  *     implementation is available, for the Wicket viewer.
  * </p>
- * 
- * @since 2.0 {@index}
+ *
+ * @since 1.x {@index}
  */
 public interface DeepLinkService {
 

@@ -31,6 +31,8 @@ import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureId;
  *     All implementations of this interface must be {@link java.io.Serializable}, because
  *     an instance is serialized into {@link org.apache.isis.extensions.secman.api.permission.ApplicationPermissionValueSet}.
  * </p>
+ *
+ * @since 2.0 {@index}
  */
 public interface PermissionsEvaluationService extends Serializable {
 

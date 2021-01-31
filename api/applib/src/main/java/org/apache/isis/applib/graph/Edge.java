@@ -19,16 +19,13 @@
 package org.apache.isis.applib.graph;
 
 /**
- * Fundamental building block for graph structures. 
- * 
+ * Fundamental building block for graph structures.
+ *
  * @since 2.0 {@index}
  *
  * @param <T> type constraint for values contained by this edge's vertices
  */
 public interface Edge<T> {
-
     Vertex<T> getFrom();
-
     Vertex<T> getTo();
-
 }

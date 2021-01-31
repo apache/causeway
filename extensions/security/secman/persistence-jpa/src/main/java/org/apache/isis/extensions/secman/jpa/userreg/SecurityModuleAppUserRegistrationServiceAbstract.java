@@ -35,12 +35,14 @@ import org.apache.isis.extensions.secman.jpa.dom.user.ApplicationUserRepository;
 /**
  * An abstract implementation of {@link org.apache.isis.applib.services.userreg.UserRegistrationService}
  * with a single abstract method for the initial role of newly created local users
+ *
+ * @since 2.0 {@index}
  */
 public abstract class SecurityModuleAppUserRegistrationServiceAbstract implements UserRegistrationService {
 
     @Inject private ApplicationUserRepository applicationUserRepository;
     @Inject private ApplicationRoleRepository applicationRoleRepository;
-    
+
     @Override
     public boolean usernameExists(final String username) {
         return applicationUserRepository.findByUsername(username).isPresent();
@@ -52,19 +54,19 @@ public abstract class SecurityModuleAppUserRegistrationServiceAbstract implement
 
         final Password password = new Password(userDetails.getPassword());
         final ApplicationRole initialRole = getInitialRole();
-        
+
         final String username = userDetails.getUsername();
         final String emailAddress = userDetails.getEmailAddress();
         final ApplicationUser applicationUser = (ApplicationUser) applicationUserRepository
                 .newLocalUser(username, password, ApplicationUserStatus.ENABLED);
-        
+
         if(_Strings.isNotEmpty(emailAddress)) {
             applicationUser.setEmailAddress(emailAddress);
         }
         if(initialRole!=null) {
             applicationRoleRepository.addRoleToUser(initialRole, applicationUser);
         }
-        
+
         final Set<ApplicationRole> additionalRoles = getAdditionalInitialRoles();
         if(additionalRoles != null) {
             for (final ApplicationRole additionalRole : additionalRoles) {
@@ -99,5 +101,5 @@ public abstract class SecurityModuleAppUserRegistrationServiceAbstract implement
      * @return Additional roles for newly created local users
      */
     protected abstract Set<ApplicationRole> getAdditionalInitialRoles();
-    
+
 }

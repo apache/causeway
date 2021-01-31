@@ -27,8 +27,10 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.apache.isis.commons.internal.collections._Lists;
 
+/**
+ * @since 2.0 {@index}
+ */
 public class ComparableContractTester<T extends Comparable<T>> {
-
 
     private final List<List<T>> orderedTuples;
 

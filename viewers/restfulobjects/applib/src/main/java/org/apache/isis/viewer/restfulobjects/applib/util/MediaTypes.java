@@ -26,6 +26,9 @@ import javax.ws.rs.core.MediaType;
 
 import org.apache.isis.commons.internal.base._Strings;
 
+/**
+ * @since 1.x {@index}
+ */
 public class MediaTypes {
 
     /**

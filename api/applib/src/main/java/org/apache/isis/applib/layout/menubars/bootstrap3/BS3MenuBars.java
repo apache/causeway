@@ -32,6 +32,8 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
 
 /**
  * Describes the collection of domain services into menubars, broadly corresponding to the aggregation of information within {@link org.apache.isis.applib.annotation.DomainServiceLayout}.
+ *
+ * @since 1.x {@index}
  */
 @XmlRootElement(
         name = "menuBars"
@@ -132,7 +134,7 @@ public class BS3MenuBars extends org.apache.isis.applib.layout.menubars.MenuBars
 
         public static VisitorAdapter visitingMenuSections(Consumer<BS3MenuSection> onVisit) {
             return new VisitorAdapter() {
-                @Override public void visit(final BS3MenuSection section) { 
+                @Override public void visit(final BS3MenuSection section) {
                     onVisit.accept(section);
                 }
             };
@@ -140,7 +142,7 @@ public class BS3MenuBars extends org.apache.isis.applib.layout.menubars.MenuBars
 
         public static VisitorAdapter visitingMenus(Consumer<BS3Menu> onVisit) {
             return new VisitorAdapter() {
-                @Override public void visit(final BS3Menu menu) { 
+                @Override public void visit(final BS3Menu menu) {
                     onVisit.accept(menu);
                 }
             };

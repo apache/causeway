@@ -22,7 +22,6 @@ import java.util.Objects;
 import java.util.function.Predicate;
 
 /**
- * 
  * @since 1.x {@index}
  */
 public interface TranslationService {

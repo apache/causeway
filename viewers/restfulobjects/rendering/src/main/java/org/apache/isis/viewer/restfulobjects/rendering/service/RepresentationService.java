@@ -34,6 +34,8 @@ import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndAc
  * <p>
  * This interface is EXPERIMENTAL and may change in the future.
  * </p>
+ *
+ * @since 1.x {@index}
  */
 public interface RepresentationService {
 

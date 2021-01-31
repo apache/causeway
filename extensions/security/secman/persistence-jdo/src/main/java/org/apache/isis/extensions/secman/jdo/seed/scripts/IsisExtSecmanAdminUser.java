@@ -23,14 +23,17 @@ import java.util.Arrays;
 import org.apache.isis.extensions.secman.api.SecmanConfiguration;
 import org.apache.isis.extensions.secman.api.user.AccountType;
 
+/**
+ * @since 2.0 {@index}
+ */
 public class IsisExtSecmanAdminUser extends AbstractUserAndRolesFixtureScript {
 
     public IsisExtSecmanAdminUser(SecmanConfiguration configBean) {
         super(
-                configBean.getAdminUserName(), 
+                configBean.getAdminUserName(),
                 configBean.getAdminPassword(),
                 null,
-                GlobalTenancy.TENANCY_PATH, 
+                GlobalTenancy.TENANCY_PATH,
                 AccountType.LOCAL,
                 Arrays.asList(configBean.getAdminRoleName()));
     }

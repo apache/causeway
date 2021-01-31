@@ -25,9 +25,7 @@ import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 
 /**
- * 
- * @since 2.0
- *
+ * @since 2.0 {@index}
  */
 public class FixtureDatumFactoriesForTime {
 
@@ -40,7 +38,7 @@ public class FixtureDatumFactoriesForTime {
                 LocalTime.of(14, 45)
         );
     }
-    
+
 	public static PojoTester.FixtureDatumFactory<LocalDate> localDates() {
 		return new PojoTester.FixtureDatumFactory<>(
 				LocalDate.class,

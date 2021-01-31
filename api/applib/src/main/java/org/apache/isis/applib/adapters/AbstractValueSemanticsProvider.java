@@ -20,9 +20,9 @@
 package org.apache.isis.applib.adapters;
 
 /**
- * @since ? {@index}
+ * @since 1.x {@index}
  */
-public abstract class AbstractValueSemanticsProvider<T> 
+public abstract class AbstractValueSemanticsProvider<T>
 implements ValueSemanticsProvider<T> {
 
     @SuppressWarnings("unchecked")

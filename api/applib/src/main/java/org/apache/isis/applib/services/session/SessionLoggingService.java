@@ -21,10 +21,11 @@ package org.apache.isis.applib.services.session;
 import java.util.Date;
 
 /**
- * Similar to the {@link org.apache.isis.applib.services.publishing.spi.EntityPropertyChangeSubscriber}, 
+ * Similar to the {@link org.apache.isis.applib.services.publishing.spi.EntityPropertyChangeSubscriber},
  * this defines an API to track
  * the status of the current sessions (&quot;users logged on&quot;) on the system.
- * @since 2.0 {@index}
+ *
+ * @since 1.x {@index}
  */
 public interface SessionLoggingService {
 

@@ -20,11 +20,13 @@ package org.apache.isis.viewer.restfulobjects.applib;
 
 import lombok.RequiredArgsConstructor;
 
+/**
+ * @since 1.x {@index}
+ */
 @RequiredArgsConstructor
 public enum RestfulHttpMethod {
     GET,
     PUT,
     DELETE,
     POST,
-
 }

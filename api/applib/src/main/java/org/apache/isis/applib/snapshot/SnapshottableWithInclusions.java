@@ -27,7 +27,8 @@ import org.apache.isis.applib.services.xmlsnapshot.XmlSnapshotService;
  * Optional interface for domain objects with which an
  * snapshot is to be created using the {@link XmlSnapshotService}, indicating
  * paths to be {@link XmlSnapshotService.Snapshot#} automatically include additional paths within the snapshot.
- * @since ? {@index}
+ *
+ * @since 1.x {@index}
  */
 public interface SnapshottableWithInclusions {
 

@@ -38,8 +38,7 @@ import org.apache.isis.applib.value.Clob;
 import org.apache.isis.commons.internal.base._Strings;
 
 /**
- * 
- * @since 2.0 {@index}
+ * @since 1.x {@index}
  */
 @Named("isis.applib.LayoutServiceMenu")
 @DomainService(objectType = "isis.applib.LayoutServiceMenu")

@@ -25,7 +25,7 @@ import java.io.PrintStream;
 import java.util.concurrent.Callable;
 
 /**
- * @apiNote Used by domain apps only.
+ * @since 2.0 {@index}
  */
 public class NullPrintStream extends PrintStream {
     public NullPrintStream() {

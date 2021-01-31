@@ -34,6 +34,8 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel
 /**
  * {@link PanelAbstract Panel} that represents a {@link EntityCollectionModel
  * collection of entity}s rendered using {@link AjaxFallbackDefaultDataTable}.
+ *
+ * @since 2.0 {@index}
  */
 public class CollectionContentsAsExcel extends PanelAbstract<EntityCollectionModel> {
 

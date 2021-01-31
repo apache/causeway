@@ -24,6 +24,8 @@ import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionRul
 
 /**
  * Role to run in the prototype fixture scripts for the example webapp for the security module.
+ *
+ * @since 2.0 {@index}
  */
 public class IsisExtSecmanFixtureRoleAndPermissions extends AbstractRoleAndPermissionsFixtureScript {
 

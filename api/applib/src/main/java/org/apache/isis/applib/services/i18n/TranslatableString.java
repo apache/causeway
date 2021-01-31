@@ -28,7 +28,6 @@ import org.apache.isis.applib.annotation.Value;
 import org.apache.isis.commons.internal.collections._Lists;
 
 /**
- * 
  * @since 1.x {@index}
  */
 @Value

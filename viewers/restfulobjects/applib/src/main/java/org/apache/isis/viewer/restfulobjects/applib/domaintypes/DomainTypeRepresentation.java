@@ -22,10 +22,12 @@ import com.fasterxml.jackson.databind.JsonNode;
 
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.DomainRepresentation;
 
+/**
+ * @since 1.x {@index}
+ */
 public class DomainTypeRepresentation extends DomainRepresentation {
 
     public DomainTypeRepresentation(final JsonNode jsonNode) {
         super(jsonNode);
     }
-
 }

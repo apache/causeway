@@ -32,6 +32,9 @@ import org.apache.isis.extensions.commandreplay.secondary.config.SecondaryConfig
 
 import lombok.RequiredArgsConstructor;
 
+/**
+ * @since 2.0 {@index}
+ */
 @Collection(
     domainEvent = CommandJdo_replayQueue.CollectionDomainEvent.class
 )

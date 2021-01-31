@@ -38,8 +38,8 @@ import lombok.Getter;
  * This implementation has no UI and there is only one implementation (this class) in applib, it is annotated with
  * {@link org.apache.isis.applib.annotation.DomainService}.  This means that it is automatically registered and
  * available for use; no further configuration is required.
- * 
- * @since 2.0 {@index}
+ *
+ * @since 1.x {@index}
  */
 public interface QueryResultsCache extends DisposableBean {
 

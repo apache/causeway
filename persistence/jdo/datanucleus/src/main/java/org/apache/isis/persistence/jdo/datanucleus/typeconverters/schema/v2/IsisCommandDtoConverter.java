@@ -23,6 +23,9 @@ import org.datanucleus.store.types.converters.TypeConverter;
 import org.apache.isis.applib.util.schema.CommandDtoUtils;
 import org.apache.isis.schema.cmd.v2.CommandDto;
 
+/**
+ * @since 2.0 {@index}
+ */
 public class IsisCommandDtoConverter implements TypeConverter<CommandDto, String>{
 
     private static final long serialVersionUID = 1L;

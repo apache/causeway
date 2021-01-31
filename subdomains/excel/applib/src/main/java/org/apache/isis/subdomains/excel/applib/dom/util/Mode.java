@@ -19,7 +19,7 @@
 package org.apache.isis.subdomains.excel.applib.dom.util;
 
 /**
- * Created by jodo on 31/03/17.
+ * @since 2.0 {@index}
  */
 public enum Mode {
     /**

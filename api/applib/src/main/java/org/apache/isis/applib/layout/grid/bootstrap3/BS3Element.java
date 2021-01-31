@@ -20,6 +20,9 @@ package org.apache.isis.applib.layout.grid.bootstrap3;
 
 import java.io.Serializable;
 
+/**
+ * @since 1.x {@index}
+ */
 public interface BS3Element extends WithinGrid, Serializable {
 
     /**

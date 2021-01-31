@@ -22,26 +22,24 @@ import com.fasterxml.jackson.databind.JsonNode;
 
 import org.apache.isis.viewer.restfulobjects.applib.LinkRepresentation;
 
+/**
+ * @since 1.x {@index}
+ */
 public abstract class AbstractObjectMemberRepresentation extends DomainRepresentation {
 
     public AbstractObjectMemberRepresentation(final JsonNode jsonNode) {
         super(jsonNode);
     }
-
     public String getId() {
         return getString("id");
     }
-
     public String getMemberType() {
         return getString("memberType");
     }
-
     public String getDisabledReason() {
         return getString("disabledReason");
     }
-
     public LinkRepresentation getDetails() {
         return getLinkWithRel("details");
     }
-
 }

@@ -45,13 +45,14 @@ import lombok.extern.log4j.Log4j2;
  * <p>
  * If a messaging-parsing {@link Function} is provided through the constructor,
  * then the message can be altered.  Otherwise the exception's {@link Throwable#getMessage() message} is returned as-is.
- * 
+ *
+ * @since 1.x {@index}
  */
 @Log4j2
 public abstract class ExceptionRecognizerAbstract implements ExceptionRecognizer {
-    
+
     @Inject protected TranslationService translationService;
-    
+
     @Getter @Setter private boolean disabled = false;
 
     /**

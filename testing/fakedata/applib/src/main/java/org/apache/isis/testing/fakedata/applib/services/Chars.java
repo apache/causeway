@@ -20,6 +20,9 @@ package org.apache.isis.testing.fakedata.applib.services;
 
 import org.apache.isis.applib.annotation.Programmatic;
 
+/**
+ * @since 2.0 {@index}
+ */
 public class Chars extends AbstractRandomValueGenerator {
 
     public Chars(final FakeDataService fakeDataService) {

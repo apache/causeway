@@ -40,13 +40,13 @@ import org.apache.isis.applib.adapters.DefaultsProvider;
  * of {@link DefaultsProvider} could adjust the default it provides according to
  * circumstance, for example).
  *
- * @see <code>Encodable</code>
- * @see <code>Parseable</code>
- * @see Value
- *
  * <p>
  *     Note: This annotation is only incompletely recognized by the framework, and may be deprecated in the future.
  * </p>
+ *
+ * @see <code>Encodable</code>
+ * @see <code>Parseable</code>
+ * @see Value
  * @since 1.x {@index}
  */
 @Inherited

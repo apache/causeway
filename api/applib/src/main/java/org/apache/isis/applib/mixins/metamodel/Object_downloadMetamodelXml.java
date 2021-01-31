@@ -38,6 +38,9 @@ import org.apache.isis.applib.value.NamedWithMimeType.CommonMimeType;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
+/**
+ * @since 1.x {@index}
+ */
 @Action(
         domainEvent = Object_downloadMetamodelXml.ActionDomainEvent.class,
         semantics = SemanticsOf.SAFE,
@@ -52,7 +55,7 @@ public class Object_downloadMetamodelXml {
 
     private final Object holder;
 
-    public static class ActionDomainEvent 
+    public static class ActionDomainEvent
     extends org.apache.isis.applib.IsisModuleApplib.ActionDomainEvent<Object_downloadMetamodelXml> {}
 
     @MemberOrder(name = MixinConstants.METADATA_LAYOUT_GROUPNAME, sequence = "700.2")

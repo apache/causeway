@@ -61,6 +61,9 @@ import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationSer
 
 import lombok.val;
 
+/**
+ * @since 1.x {@index}
+ */
 @Service
 @Named("isis.viewer.ro.ContentNegotiationServiceForRestfulObjectsV1_0")
 @Order(OrderPrecedence.MIDPOINT)
@@ -118,7 +121,7 @@ public class ContentNegotiationServiceForRestfulObjectsV1_0 implements ContentNe
                 responseBuilder.status(Response.Status.CREATED);
             }
         }
-        
+
         return responseBuilder;
     }
 
@@ -214,10 +217,10 @@ public class ContentNegotiationServiceForRestfulObjectsV1_0 implements ContentNe
                 final String actionId = actionIdFrom(objectAndActionInvocation);
                 final String actionArguments = actionArgumentsFrom(objectAndActionInvocation);
                 final DomainObjectList list = domainObjectListFrom(collectionAdapters, elementSpec, actionOwningType, actionId, actionArguments);
-                
+
                 val listSpec = resourceContext.getSpecificationLoader().loadSpecification(list.getClass());
                 adapter = ManagedObject.of(listSpec, list);
-                
+
             } else {
                 adapter = objectAndActionInvocation.getReturnedAdapter();
             }
@@ -246,7 +249,7 @@ public class ContentNegotiationServiceForRestfulObjectsV1_0 implements ContentNe
         val argAdapters = objectAndActionInvocation.getArgAdapters();
         if(parameters.size() == argAdapters.size()) {
             for (int i = 0; i < parameters.size(); i++) {
-                
+
                 val paramIndex = i;
                 val param = parameters.getElseFail(paramIndex);
                 val argAdapter = argAdapters.getElseFail(paramIndex);
@@ -310,8 +313,8 @@ public class ContentNegotiationServiceForRestfulObjectsV1_0 implements ContentNe
 
     private ObjectSpecification elementSpecFrom(final ObjectAndActionInvocation objectAndActionInvocation) {
         final TypeOfFacet typeOfFacet = objectAndActionInvocation.getAction().getFacet(TypeOfFacet.class);
-        return typeOfFacet != null 
-                ? typeOfFacet.valueSpec() 
+        return typeOfFacet != null
+                ? typeOfFacet.valueSpec()
                         : specificationLoader.loadSpecification(Object.class) ;
     }
 
@@ -339,7 +342,7 @@ public class ContentNegotiationServiceForRestfulObjectsV1_0 implements ContentNe
         .using(resourceContext.getObjectAdapterLinkTo());
 
         final ResponseBuilder responseBuilder = Responses.ofOk(renderer, Caching.NONE, rootRepresentation);
-        
+
         return responseBuilder;
     }
 

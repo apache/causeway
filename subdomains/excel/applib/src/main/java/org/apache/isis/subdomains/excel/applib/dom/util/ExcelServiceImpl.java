@@ -42,6 +42,9 @@ import org.apache.isis.subdomains.excel.applib.dom.WorksheetSpec;
 
 import lombok.SneakyThrows;
 
+/**
+ * @since 2.0 {@index}
+ */
 public class ExcelServiceImpl {
 
     private final ExcelFileBlobConverter excelFileBlobConverter = new ExcelFileBlobConverter();
@@ -67,10 +70,10 @@ public class ExcelServiceImpl {
             final String fileName) {
         return toExcel(new WorksheetContent(domainObjects, new WorksheetSpec(cls, sheetName)), fileName);
     }
-    
+
     /**
-     * As {@link #toExcel(List, Class, String, String)}, but appends a single-sheet spreadsheet of the domain objects to 
-     * an existing workbook instead of creating one.  
+     * As {@link #toExcel(List, Class, String, String)}, but appends a single-sheet spreadsheet of the domain objects to
+     * an existing workbook instead of creating one.
      *
      * @param sheetName - must be 31 chars or less
      * @param in - an existing excel workbook to which this sheet will be appended
@@ -91,7 +94,7 @@ public class ExcelServiceImpl {
     public <T> Blob toExcel(WorksheetContent worksheetContent, final String fileName) {
         return toExcel(Collections.singletonList(worksheetContent), fileName);
     }
-    
+
     /**
      * As {@link #toExcel(List, Class, String, String)}, but with the domain objects, class and sheet name provided using a
      * {@link WorksheetContent} and with an input stream.
@@ -111,7 +114,7 @@ public class ExcelServiceImpl {
             throw new ExcelService.Exception(ex);
         }
     }
-    
+
     /**
      * As {@link #toExcel(WorksheetContent, String)}, but with multiple sheets and an input stream.
      */
@@ -239,7 +242,7 @@ public class ExcelServiceImpl {
 
     @javax.inject.Inject
     ServiceInjector serviceInjector;
-    
+
     @javax.inject.Inject
     ObjectManager objectManager;
 

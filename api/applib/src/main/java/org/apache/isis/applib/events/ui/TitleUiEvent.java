@@ -26,7 +26,8 @@ import lombok.Getter;
 
 /**
  * Emitted for subscribers to obtain a cssClass hint (equivalent to the <tt>title()</tt> supporting method).
- * @since ? {@index}
+ *
+ * @since 1.x {@index}
  */
 public abstract class TitleUiEvent<S> extends AbstractUiEvent<S> {
 

@@ -23,10 +23,13 @@ import java.time.format.DateTimeFormatter;
 
 import org.datanucleus.store.types.converters.TypeConverter;
 
+/**
+ * @since 2.0 {@index}
+ */
 public class IsoZonedDateTimeConverter implements TypeConverter<ZonedDateTime, String>{
 
     private static final long serialVersionUID = 1L;
-    
+
     @Override
     public String toDatastoreType(final ZonedDateTime offsetTime) {
         return offsetTime != null

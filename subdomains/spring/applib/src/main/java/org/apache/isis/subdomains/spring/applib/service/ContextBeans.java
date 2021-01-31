@@ -30,6 +30,9 @@ import org.springframework.context.ConfigurableApplicationContext;
 
 import lombok.Data;
 
+/**
+ * @since 2.0 {@index}
+ */
 @Data
 public final class ContextBeans {
 

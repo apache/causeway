@@ -24,6 +24,8 @@ import org.apache.isis.applib.exceptions.UnrecoverableException;
 /**
  * Indicates that a call was made to a method (normally an overridden one) that
  * was not expected, and hence not coded for.
+ *
+ * @since 1.x {@index}
  */
 public class UnexpectedCallException extends UnrecoverableException {
     private static final long serialVersionUID = 1L;

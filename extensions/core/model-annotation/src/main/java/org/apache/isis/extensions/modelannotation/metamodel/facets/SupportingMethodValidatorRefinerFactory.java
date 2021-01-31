@@ -38,12 +38,10 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.extensions.modelannotation.applib.annotation.Model;
 
 /**
- * 
- * @since 2.0
- *
+ * @since 2.0 {@index}
  */
-public class SupportingMethodValidatorRefinerFactory 
-extends FacetFactoryAbstract 
+public class SupportingMethodValidatorRefinerFactory
+extends FacetFactoryAbstract
 implements MetaModelRefiner {
 
     public SupportingMethodValidatorRefinerFactory() {
@@ -62,17 +60,17 @@ implements MetaModelRefiner {
 
             final Class<?> type = spec.getCorrespondingClass();
 
-//XXX for debugging ...            
+//XXX for debugging ...
 //            if(spec.getSpecId().asString().contains("ProperMemberSupport")) {
-//                
+//
 //                val sb = new StringBuffer();
-//                
+//
 //                sb.append("\n### debug " + spec.getSpecId().asString()).append("\n");
-//                
+//
 //                spec.streamFacetHolders()
 //                .flatMap(FacetHolder::streamFacets)
 //                .forEach(facet->sb.append("facet: " + facet).append("\n"));
-//                
+//
 //                System.out.println(sb);
 //            }
 
@@ -84,7 +82,7 @@ implements MetaModelRefiner {
                     .map(ImperativeFacet::getMethods)
                     .flatMap(List::stream)
                     .collect(Collectors.toCollection(HashSet::new));
-            
+
             // methods intended to be included with the meta-model
             final HashSet<Method> intendedMethods = _Sets.<Method>newHashSet();
             for(Method method: type.getDeclaredMethods()) {
@@ -97,7 +95,7 @@ implements MetaModelRefiner {
             final Set<Method> notRecognizedMethods =
                     _Sets.minus(intendedMethods, recognizedMethods);
 
-            // find reasons about why these are not recognized    
+            // find reasons about why these are not recognized
             notRecognizedMethods.forEach(notRecognizedMethod->{
                 final List<String>  unmetContraints = unmetContraints(spec, notRecognizedMethod);
 
@@ -123,7 +121,7 @@ implements MetaModelRefiner {
     // -- VALIDATION LOGIC
 
     private List<String> unmetContraints(
-            ObjectSpecification spec, 
+            ObjectSpecification spec,
             Method method) {
 
         //val type = spec.getCorrespondingClass();
@@ -132,7 +130,7 @@ implements MetaModelRefiner {
         if (!MethodUtil.isPublic(method)) {
             unmetContraints.add("method must be 'public'");
             return unmetContraints; // don't check any further
-        } 
+        }
 
         unmetContraints.add("misspelled prefix or unsupported method signature");
         return unmetContraints;

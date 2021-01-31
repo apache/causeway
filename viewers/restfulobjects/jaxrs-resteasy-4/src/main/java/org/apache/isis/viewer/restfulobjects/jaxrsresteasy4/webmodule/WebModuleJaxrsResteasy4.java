@@ -44,15 +44,8 @@ import lombok.val;
 
 /**
  * WebModule that provides the RestfulObjects Viewer.
- * 
- * @since 2.0
  *
- * @implNote CDI feels responsible to resolve injection points for any Servlet or Filter
- * we register programmatically on the ServletContext.
- * As long as injection points are considered to be resolved by Spring, we can workaround this fact:
- * By replacing annotations {@code @Inject} with {@code @Autowire} for any Servlet or Filter,
- * that get contributed by a WebModule, these will be ignored by CDI.
- *
+ * @since 1.x {@index}
  */
 @Service
 @Named("isis.viewer.ro.WebModuleJaxrsRestEasy4")
@@ -102,7 +95,7 @@ public final class WebModuleJaxrsResteasy4 extends WebModuleAbstract {
 
         val authenticationStrategyClassName = restEasyConfiguration.getAuthentication().getStrategyClassName()
                 .orElse(AuthenticationStrategyBasicAuth.class.getName());
-        
+
         registerFilter(ctx, INTERACTION_FILTER_NAME, IsisRestfulObjectsInteractionFilter.class)
         .ifPresent(filterReg -> {
             // this is mapped to the entire application;
@@ -113,7 +106,7 @@ public final class WebModuleJaxrsResteasy4 extends WebModuleAbstract {
                     null,
                     true,
                     this.urlPattern);
-            
+
             filterReg.setInitParameter(
                     "authenticationStrategy",
                     authenticationStrategyClassName);

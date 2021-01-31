@@ -35,39 +35,42 @@ import org.apache.isis.applib.services.inject.ServiceInjector;
 
 import lombok.val;
 
+/**
+ * @since 1.x {@index}
+ */
 @Component
 @Provider
 @Produces({"application/xml", "application/*+xml", "text/*+xml"})
 public class RestfulObjectsJaxbWriterForXml extends JAXBXmlRootElementProvider {
-    
+
     @Inject private ServiceInjector serviceInjector;
 
-    @Override 
+    @Override
     protected boolean isReadWritable(
-            final Class<?> type, 
-            final Type genericType, 
-            final Annotation[] annotations, 
+            final Class<?> type,
+            final Type genericType,
+            final Annotation[] annotations,
             final MediaType mediaType) {
-        
-        return super.isReadWritable(type, genericType, annotations, mediaType) && 
+
+        return super.isReadWritable(type, genericType, annotations, mediaType) &&
                 hasXRoDomainTypeParameter(mediaType);
     }
 
     @Override
     protected Marshaller getMarshaller(
-            final Class<?> type, 
-            final Annotation[] annotations, 
+            final Class<?> type,
+            final Annotation[] annotations,
             final MediaType mediaType) {
-        
+
         val adapter = serviceInjector.injectServicesInto(new PersistentEntityAdapter());
-        
+
         val marshaller = super.getMarshaller(type, annotations, mediaType);
         marshaller.setAdapter(PersistentEntityAdapter.class, adapter);
         return marshaller;
     }
-    
+
     // HELPER
-    
+
     private static boolean hasXRoDomainTypeParameter(final MediaType mediaType) {
         final boolean retval = mediaType.getParameters().containsKey("x-ro-domain-type");
         return retval;

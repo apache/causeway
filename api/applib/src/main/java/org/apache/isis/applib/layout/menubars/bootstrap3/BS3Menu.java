@@ -33,6 +33,8 @@ import lombok.ToString;
 
 /**
  * Describes the collection of domain services into menubars, broadly corresponding to the aggregation of information of {@link DomainServiceLayout} that have the same value of {@link DomainServiceLayout#named()}.
+ *
+ * @since 1.x {@index}
  */
 @XmlType(
         name = "menu"

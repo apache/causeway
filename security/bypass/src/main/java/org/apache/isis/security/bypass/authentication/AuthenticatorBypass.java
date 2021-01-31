@@ -31,6 +31,8 @@ import org.apache.isis.core.security.authentication.standard.AuthenticatorAbstra
 
 /**
  * Implementation that bypasses authentication.
+ *
+ * @since 1.x {@index}
  */
 @Service
 @Named("isis.security.AuthenticatorBypass")

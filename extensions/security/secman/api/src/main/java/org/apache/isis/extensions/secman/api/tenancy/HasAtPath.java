@@ -102,6 +102,8 @@ package org.apache.isis.extensions.secman.api.tenancy;
  * </table>
  * <p>any object that is not tenanted (that is, its class does not implement {@link HasAtPath the WithApplicationTenancy interface} is accessible by any user (usual permission rules apply).
  * </p>
+ *
+ * @since 2.0 {@index}
  */
 public interface HasAtPath {
 

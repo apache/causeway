@@ -27,15 +27,16 @@ import lombok.Getter;
 import lombok.Value;
 
 /**
- * Immutable serializable value held by {@link UserMemento}.  
- * @since 2.0 {@index}
+ * Immutable serializable value held by {@link UserMemento}.
+ *
+ * @since 1.x revised for 2.0 {@index}
  */
 @DomainObject(objectType = "isis.applib.RoleMemento")
 @Value
 public final class RoleMemento implements Serializable {
 
     private static final long serialVersionUID = -3876856609238378274L;
-    
+
     /**
      * Creates a new role with the specified name. Description is left blank.
      */

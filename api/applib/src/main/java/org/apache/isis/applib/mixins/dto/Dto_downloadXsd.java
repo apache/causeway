@@ -39,6 +39,9 @@ import org.apache.isis.applib.value.NamedWithMimeType.CommonMimeType;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
+/**
+ * @since 1.x {@index}
+ */
 @Action(
         domainEvent = Dto_downloadXsd.ActionDomainEvent.class,
         semantics = SemanticsOf.SAFE,
@@ -71,7 +74,7 @@ public class Dto_downloadXsd {
 
         if(schemaMap.isEmpty()) {
             val msg = String.format(
-                    "No schemas were generated for %s; programming error?", 
+                    "No schemas were generated for %s; programming error?",
                     holder.getClass().getName());
             messageService.warnUser(msg);
             return null;

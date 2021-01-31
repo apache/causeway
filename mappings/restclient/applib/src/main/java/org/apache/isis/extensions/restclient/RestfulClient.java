@@ -56,12 +56,12 @@ clientConfig.setUseRequestDebugLogging(true); // default = false
 
 RestfulClient client = RestfulClient.ofConfig(clientConfig);
  * </pre></blockquote>
- * 
+ *
  * Synchronous example:
  * <blockquote><pre>{@code
 
 Builder request = client.request(
-                "services/myService/actions/lookupMyObjectById/invoke", 
+                "services/myService/actions/lookupMyObjectById/invoke",
                 SuppressionType.RO);
 
 Entity<String> args = client.arguments()
@@ -80,9 +80,9 @@ if(digest.isSuccess()) {
 }
  * </pre></blockquote>
  * Asynchronous example:
- * <blockquote><pre>{@code 
+ * <blockquote><pre>{@code
 Builder request = client.request(
-                "services/myService/actions/lookupMyObjectById/invoke", 
+                "services/myService/actions/lookupMyObjectById/invoke",
                 SuppressionType.RO);
 
 Entity<String> args = client.arguments()
@@ -93,7 +93,7 @@ Future<Response> asyncResponse = request
         .async()
         .post(args);
 
-CompletableFuture<ResponseDigest<MyObject>> digestFuture = 
+CompletableFuture<ResponseDigest<MyObject>> digestFuture =
                 client.digest(asyncResponse, MyObject.class);
 
 ResponseDigest<MyObject> digest = digestFuture.get(); // blocking
@@ -105,7 +105,7 @@ if(digest.isSuccess()) {
     digest.getFailureCause().printStackTrace();
 }
  * </pre></blockquote>
- * 
+ *
  * Maven Setup:
  * <blockquote><pre>{@code
 <dependency>
@@ -129,8 +129,8 @@ if(digest.isSuccess()) {
     <version>2.7.5</version>
 </dependency>
  * }</pre></blockquote>
- * 
- * @since 2.0
+ *
+ * @since 2.0 {@index}
  */
 @Log4j2
 public class RestfulClient {
@@ -191,11 +191,11 @@ public class RestfulClient {
     public <T> ResponseDigest<T> digestList(Response response, Class<T> entityType, GenericType<List<T>> genericType) {
         return ResponseDigest.ofList(response, entityType, genericType);
     }
-    
+
     // -- RESPONSE PROCESSING (ASYNC)
 
     public <T> CompletableFuture<ResponseDigest<T>> digest(
-            final Future<Response> asyncResponse, 
+            final Future<Response> asyncResponse,
             final Class<T> entityType) {
 
         final CompletableFuture<ResponseDigest<T>> completableFuture = CompletableFuture.supplyAsync(()->{
@@ -212,9 +212,9 @@ public class RestfulClient {
 
         return completableFuture;
     }
-    
+
     public <T> CompletableFuture<ResponseDigest<T>> digestList(
-            final Future<Response> asyncResponse, 
+            final Future<Response> asyncResponse,
             final Class<T> entityType,
             GenericType<List<T>> genericType) {
 
@@ -226,9 +226,9 @@ public class RestfulClient {
                 return digest;
 
             } catch (Exception e) {
-                
+
                 return ResponseDigest.ofAsyncFailure(asyncResponse, entityType, e);
-                
+
             }
         });
 
@@ -251,7 +251,7 @@ public class RestfulClient {
     private void registerBasicAuthFilter() {
         if(clientConfig.isUseBasicAuth()){
             final Credentials credentials = Credentials.of(
-                    clientConfig.getRestfulAuthUser(), 
+                    clientConfig.getRestfulAuthUser(),
                     clientConfig.getRestfulAuthPassword());
             client.register(BasicAuthFilter.of(credentials));
         }
@@ -287,6 +287,6 @@ public class RestfulClient {
 
         return "";
     }
-    
+
 
 }

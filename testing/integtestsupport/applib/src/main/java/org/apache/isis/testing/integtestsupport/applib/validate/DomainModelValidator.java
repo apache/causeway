@@ -47,9 +47,7 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
- * 
- * @since 2.0
- *
+ * @since 2.0 {@index}
  */
 @Log4j2
 public class DomainModelValidator {
@@ -134,7 +132,7 @@ public class DomainModelValidator {
         return validationFailures.getFailures().stream()
                 .filter(failure->filter.test(failure.getOrigin()));
     }
-    
+
     public Stream<ValidationFailure> streamFailuresMatchingOriginatingClass(Class<?> cls) {
         requires(cls, "cls");
         return streamFailures(origin->origin.getClassName().equals(cls.getName()));
@@ -142,23 +140,23 @@ public class DomainModelValidator {
 
 
     // -- SHORTCUTS
-    
+
     /**
-     * primarily used for testing 
+     * primarily used for testing
      */
     public boolean anyMatchesContaining(Class<?> cls, String messageSnippet) {
         return streamFailuresMatchingOriginatingClass(cls)
                 .anyMatch(failure->
                     failure.getMessage().contains(messageSnippet));
     }
-    
+
     // -- HELPER
-    
+
     private void throwFailureException(String errorMessage, Collection<String> logMessages) {
         logErrors(logMessages);
         throw new DomainModelException(errorMessage);
     }
-    
+
     private void logErrors(Collection<String> logMessages) {
         log.error("### Domain Model Deficiencies");
         for (String logMessage : logMessages) {

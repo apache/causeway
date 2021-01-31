@@ -23,6 +23,9 @@ import org.datanucleus.store.types.converters.TypeConverter;
 import org.apache.isis.applib.util.schema.ChangesDtoUtils;
 import org.apache.isis.schema.chg.v2.ChangesDto;
 
+/**
+ * @since 2.0 {@index}
+ */
 public class IsisChangesDtoConverter implements TypeConverter<ChangesDto, String>{
 
     private static final long serialVersionUID = 1L;

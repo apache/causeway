@@ -34,6 +34,9 @@ import org.apache.isis.extensions.commandreplay.secondary.config.SecondaryConfig
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
+/**
+ * @since 2.0 {@index}
+ */
 @Action(
     semantics = SemanticsOf.SAFE,
     domainEvent = Object_openOnPrimary.ActionDomainEvent.class,

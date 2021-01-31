@@ -21,6 +21,9 @@ package org.apache.isis.valuetypes.sse.applib;
 import org.springframework.context.annotation.Configuration;
 
 
+/**
+ * @since 2.0 {@index}
+ */
 @Configuration
 public class IsisModuleValSseApplib {
 

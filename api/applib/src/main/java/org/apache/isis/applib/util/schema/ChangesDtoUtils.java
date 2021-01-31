@@ -36,7 +36,7 @@ import org.apache.isis.commons.internal.resources._Resources;
 import org.apache.isis.schema.chg.v2.ChangesDto;
 
 /**
- * @since ? {@index}
+ * @since 1.x {@index}
  */
 public final class ChangesDtoUtils {
 

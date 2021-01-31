@@ -25,7 +25,11 @@ import org.hamcrest.Description;
 import org.jmock.api.Action;
 import org.jmock.api.Invocation;
 
+/**
+ * @since 2.0 {@index}
+ */
 public final class InjectIntoJMockAction implements Action {
+
     @Override
     public void describeTo(final Description description) {
         description.appendText("inject self");

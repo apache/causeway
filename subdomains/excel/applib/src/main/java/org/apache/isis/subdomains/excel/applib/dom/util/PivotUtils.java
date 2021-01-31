@@ -26,6 +26,9 @@ import org.apache.poi.ss.usermodel.Row;
 
 import org.apache.isis.subdomains.excel.applib.dom.AggregationType;
 
+/**
+ * @since 2.0 {@index}
+ */
 public class PivotUtils {
 
     public static void createAnnotationRow(final Row annotationRow, final List<String> annotationList) {

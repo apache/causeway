@@ -23,6 +23,9 @@ import java.time.OffsetDateTime;
 
 import org.apache.isis.applib.annotation.Programmatic;
 
+/**
+ * @since 2.0 {@index}
+ */
 public class JavaSqlDates extends AbstractRandomValueGenerator {
 
     public JavaSqlDates(final FakeDataService fakeDataService) {

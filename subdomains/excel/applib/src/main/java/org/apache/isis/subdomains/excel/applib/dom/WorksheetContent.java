@@ -20,6 +20,9 @@ package org.apache.isis.subdomains.excel.applib.dom;
 
 import java.util.List;
 
+/**
+ * @since 2.0 {@index}
+ */
 public class WorksheetContent {
 
     private final List<?> domainObjects;

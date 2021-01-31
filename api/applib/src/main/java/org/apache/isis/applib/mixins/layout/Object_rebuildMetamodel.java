@@ -30,6 +30,9 @@ import org.apache.isis.applib.services.metamodel.MetaModelService;
 
 import lombok.RequiredArgsConstructor;
 
+/**
+ * @since 1.x {@index}
+ */
 @Action(
         domainEvent = Object_rebuildMetamodel.ActionDomainEvent.class,
         semantics = SemanticsOf.IDEMPOTENT,

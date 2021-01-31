@@ -24,10 +24,10 @@ import org.apache.isis.extensions.secman.api.user.ApplicationUser;
 import lombok.NonNull;
 import lombok.Value;
 
-/** 
+/**
  * SecMan fires this event when a new user entity just got persisted.
  * <p>
- * Users may subscribe to this event in order to apply business 
+ * Users may subscribe to this event in order to apply business
  * logic to the newly created user. eg. add default roles
  * <p>
  * <pre>
@@ -38,25 +38,26 @@ import lombok.Value;
  *         // business logic ...
  *     }
  * }
- *                     
+ *
  * </pre>
- * @since Jun 23, 2020
+ *
+ * @since 2.0 {@index}
  */
 @Value(staticConstructor="of")
 public class UserCreatedEvent {
-    
+
     @NonNull private ApplicationUser user;
 
     // -- SHORTCUTS
-    
+
     public AccountType getAccountType() {
-        return user.getAccountType(); 
+        return user.getAccountType();
     }
-    
+
     public String getUserName() {
-        return user.getUsername(); 
+        return user.getUsername();
     }
-    
+
     public boolean isDelegated() {
         return getAccountType()!=null && getAccountType().isDelegated();
     }

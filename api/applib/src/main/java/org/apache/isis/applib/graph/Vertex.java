@@ -21,8 +21,8 @@ package org.apache.isis.applib.graph;
 import java.util.stream.Stream;
 
 /**
- * Fundamental building block for graph structures. 
- * 
+ * Fundamental building block for graph structures.
+ *
  * @since 2.0 {@index}
  *
  * @param <T> type constraint for values contained by this vertex
@@ -36,5 +36,4 @@ public interface Vertex<T> {
 
     Stream<Edge<T>> streamIncoming();
     Stream<Edge<T>> streamOutgoing();
-
 }

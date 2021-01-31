@@ -35,19 +35,19 @@ import lombok.extern.log4j.Log4j2;
  * EntityListener class for listing with the {@link javax.persistence.EntityListeners} annotation, to
  * support injection point resolving for entities.
  * <p>
- * Instances of this class are not managed by Spring, but by the persistence layer. 
+ * Instances of this class are not managed by Spring, but by the persistence layer.
  * <p>
- * The particular persistence layer implementation in use needs to be configured, 
- * with a BeanManager, that is able to resolve injection points for this EntityListener.   
- *  
- * @since 2.0
+ * The particular persistence layer implementation in use needs to be configured,
+ * with a BeanManager, that is able to resolve injection points for this EntityListener.
+ *
+ * @since 2.0 {@index}
  */
 @Log4j2
 public class JpaEntityInjectionPointResolver {
 
     @Inject // not managed by Spring (directly)
     private ServiceInjector serviceInjector;
-    
+
     @PrePersist
     @PreUpdate
     @PreRemove
@@ -55,7 +55,7 @@ public class JpaEntityInjectionPointResolver {
         log.debug("beforeAnyUpdate: {}", entityPojo);
         serviceInjector.injectServicesInto(entityPojo);
     }
-    
+
     @PostPersist
     @PostUpdate
     @PostRemove
@@ -63,11 +63,11 @@ public class JpaEntityInjectionPointResolver {
         log.debug("afterAnyUpdate: {}" + entityPojo);
         //serviceInjector.injectServicesInto(entityPojo);
     }
-    
+
     @PostLoad
     private void afterLoad(Object entityPojo) {
         log.debug("afterLoad: {}" + entityPojo);
         serviceInjector.injectServicesInto(entityPojo);
     }
-    
+
 }

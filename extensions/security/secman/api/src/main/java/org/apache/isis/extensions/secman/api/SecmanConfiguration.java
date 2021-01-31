@@ -28,6 +28,9 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.Singular;
 
+/**
+ * @since 2.0 {@index}
+ */
 @Builder
 public class SecmanConfiguration {
 
@@ -57,30 +60,30 @@ public class SecmanConfiguration {
     final String[] adminStickyNamespacePermissions = new String[]{
             "isis.ext.secman"
     };
-    
-    @Getter @Singular 
+
+    @Getter @Singular
     final Set<String> adminAdditionalNamespacePermissions;
-    
+
     /**
      * Delegated users, on first successful logon, are auto-created but disabled (by default).
-     * <p> 
-     * This option allows to override this behavior, such that authenticated 
+     * <p>
+     * This option allows to override this behavior, such that authenticated
      * users are also auto-enabled.
      * <p>
-     * default: false 
+     * default: false
      *
      */
-    @Getter @Builder.Default 
+    @Getter @Builder.Default
     final boolean autoEnableIfDelegatedAndAuthenticated = false;
 
     // -- UTILITIES
-    
+
     public Stream<String> streamAdminNamespacePermissions() {
         return Stream.concat(
                 _NullSafe.stream(adminStickyNamespacePermissions),
                 _NullSafe.stream(adminAdditionalNamespacePermissions));
     }
-    
+
     public boolean isStickyAdminNamespace(String featureFqn) {
         return _NullSafe.stream(adminStickyNamespacePermissions)
         .anyMatch(stickyPackage->stickyPackage.equals(featureFqn));

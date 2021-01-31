@@ -19,6 +19,9 @@
 
 package org.apache.isis.applib.util;
 
+/**
+ * @since 1.x {@index}
+ */
 public class TitleBufferException extends RuntimeException {
     private static final long serialVersionUID = 1L;
     private Throwable cause;

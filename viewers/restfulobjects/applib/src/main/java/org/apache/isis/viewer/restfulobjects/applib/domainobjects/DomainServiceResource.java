@@ -34,6 +34,9 @@ import javax.ws.rs.core.Response;
 
 import org.apache.isis.viewer.restfulobjects.applib.RestfulMediaType;
 
+/**
+ * @since 1.x {@index}
+ */
 @Path("/services")
 public interface DomainServiceResource {
 

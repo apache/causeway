@@ -31,9 +31,7 @@ import org.apache.isis.applib.services.swagger.SwaggerService;
 import lombok.extern.log4j.Log4j2;
 
 /**
- * 
- * @since 2.0
- *
+ * @since 2.0 {@index}
  */
 @Log4j2
 public class SwaggerExporter {

@@ -26,13 +26,13 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Indicates that a method is a supporting-method, one that contributes (hide, validate, ...) 
+ * Indicates that a method is a supporting-method, one that contributes (hide, validate, ...)
  * to an <em>Action</em>.
  * <p>
- * By placing the {@link Model} annotation on a method, a contract with the meta-model is enforced, 
+ * By placing the {@link Model} annotation on a method, a contract with the meta-model is enforced,
  * such that this method must be recognized and cannot be ignored.
  *
- * @since 2.0
+ * @since 2.0 {@index}
  */
 @Inherited
 @Target({ ElementType.METHOD })

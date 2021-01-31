@@ -52,6 +52,8 @@ import lombok.extern.log4j.Log4j2;
  *     thread-local.  These methods should therefore only be used in single-user
  *     systems, eg a replay secondary.
  * </p>
+ *
+ * @since 2.0 {@index}
  */
 @Service()
 @Named("isis.ext.commandReplaySecondary.TickingClockService")

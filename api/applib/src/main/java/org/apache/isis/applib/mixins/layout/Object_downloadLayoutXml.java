@@ -34,6 +34,9 @@ import org.apache.isis.applib.value.NamedWithMimeType.CommonMimeType;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
+/**
+ * @since 1.x {@index}
+ */
 @Action(
         domainEvent = Object_downloadLayoutXml.ActionDomainEvent.class,
         semantics = SemanticsOf.SAFE,

@@ -37,6 +37,8 @@ import org.apache.isis.applib.annotation.Programmatic;
  * <p>
  *     It is rendered as a &lt;div class=&quot;row ...&quot;&gt;
  * </p>
+ *
+ * @since 1.x {@index}
  */
 @XmlType(
         name = "row"

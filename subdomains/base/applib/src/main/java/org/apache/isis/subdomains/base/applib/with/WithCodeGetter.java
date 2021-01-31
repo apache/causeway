@@ -22,13 +22,15 @@ import org.apache.isis.applib.util.ObjectContracts.ToStringEvaluator;
 
 /**
  * Indicates that the implementing class has a {@link #getCode() code}.
+ *
+ * @since 2.0 {@index}
  */
 public interface WithCodeGetter {
 
     public String getCode();
-    
+
     /**
-     * Utility class for obtaining the string value of an object that implements {@link WithCodeGetter}. 
+     * Utility class for obtaining the string value of an object that implements {@link WithCodeGetter}.
      */
     public static final class ToString {
         private ToString() {}
@@ -38,7 +40,7 @@ public interface WithCodeGetter {
                 public boolean canEvaluate(final Object o) {
                     return o instanceof WithCodeGetter;
                 }
-                
+
                 @Override
                 public String evaluate(final Object o) {
                     return ((WithCodeGetter)o).getCode();

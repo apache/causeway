@@ -42,9 +42,9 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 /**
- * Convenient base class to extend for integration tests. 
- *  
- * @since 2.0
+ * Convenient base class to extend for integration tests.
+ *
+ * @since 2.0 {@index}
  */
 @ExtendWith({ExceptionRecognizerTranslate.class, IsisInteractionHandler.class})
 public abstract class IsisIntegrationTestAbstract {
@@ -123,7 +123,7 @@ public abstract class IsisIntegrationTestAbstract {
     @Inject protected UserService userService;
     @Inject protected WrapperFactory wrapperFactory;
     @Inject protected TransactionService transactionService;
-    
-    
+
+
 
 }

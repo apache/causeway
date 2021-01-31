@@ -32,6 +32,8 @@ import org.apache.isis.applib.layout.menubars.MenuSection;
 
 /**
  * Corresponds to a domain service that contributes its serviceActions under a particular {@link BS3MenuBar}.
+ *
+ * @since 1.x {@index}
  */
 @XmlType(
         name = "section"
@@ -58,7 +60,7 @@ public class BS3MenuSection implements MenuSection, Serializable, ServiceActionL
     public void setNamed(String named) {
         this.named = named;
     }
-    
+
     private List<ServiceActionLayoutData> serviceActions = new ArrayList<>();
 
     // no wrapper

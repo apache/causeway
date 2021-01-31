@@ -22,6 +22,9 @@ import com.github.javafaker.service.FakeValuesService;
 
 import org.apache.isis.applib.annotation.Programmatic;
 
+/**
+ * @since 2.0 {@index}
+ */
 public class CreditCards extends AbstractRandomValueGenerator {
 
     final com.github.javafaker.Business javaFakerBusiness;

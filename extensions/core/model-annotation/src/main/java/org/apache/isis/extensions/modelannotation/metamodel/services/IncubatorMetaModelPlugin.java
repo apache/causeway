@@ -24,13 +24,16 @@ import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.extensions.modelannotation.metamodel.facets.SupportingMethodValidatorRefinerFactory;
 
+/**
+ * @since 2.0 {@index}
+ */
 @Component
 public class IncubatorMetaModelPlugin implements MetaModelRefiner {
 
     @Override
     public void refineProgrammingModel(ProgrammingModel programmingModel) {
         programmingModel.addFactory(
-                ProgrammingModel.FacetProcessingOrder.C2_AFTER_METHOD_REMOVING, 
+                ProgrammingModel.FacetProcessingOrder.C2_AFTER_METHOD_REMOVING,
                 SupportingMethodValidatorRefinerFactory.class,
                 ProgrammingModel.Marker.INCUBATING
                 );

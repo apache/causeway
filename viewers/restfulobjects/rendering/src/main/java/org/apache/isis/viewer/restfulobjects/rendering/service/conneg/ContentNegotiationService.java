@@ -27,6 +27,9 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.viewer.restfulobjects.rendering.IResourceContext;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndActionInvocation;
 
+/**
+ * @since 1.x {@index}
+ */
 public interface ContentNegotiationService {
 
     public Response.ResponseBuilder buildResponse(

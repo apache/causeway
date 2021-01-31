@@ -23,10 +23,13 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+/**
+ * @since 2.0 {@index}
+ */
 @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.ANNOTATION_TYPE })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ServerSentEvents {
-    
+
     Class<? extends SseSource> observe() default SseSource.Noop.class;
 
 }

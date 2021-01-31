@@ -24,11 +24,10 @@ import org.apache.isis.valuetypes.sse.applib.annotations.SseSource;
 
 /**
  * Server-sent events.
- *  
- * @see https://www.w3schools.com/html/html5_serversentevents.asp
- * 
- * @since 2.0
  *
+ * @see https://www.w3schools.com/html/html5_serversentevents.asp
+ *
+ * @since 2.0 {@index}
  */
 public interface SseService {
 

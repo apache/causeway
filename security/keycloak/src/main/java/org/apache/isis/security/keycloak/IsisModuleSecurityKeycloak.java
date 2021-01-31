@@ -29,8 +29,8 @@ import org.apache.isis.core.webapp.IsisModuleCoreWebapp;
 
 /**
  * Configuration Bean to support Isis Security using Shiro.
- *  
- * @since 2.0
+ *
+ * @since 2.0 {@index}
  */
 @Configuration
 @Import({

@@ -25,6 +25,9 @@ import java.util.function.Predicate;
 
 import org.apache.isis.applib.annotation.Programmatic;
 
+/**
+ * @since 2.0 {@index}
+ */
 public class Collections extends AbstractRandomValueGenerator {
 
     public Collections(final FakeDataService fakeDataService) {

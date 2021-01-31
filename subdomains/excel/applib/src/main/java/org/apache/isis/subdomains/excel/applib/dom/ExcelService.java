@@ -42,6 +42,9 @@ import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.subdomains.excel.applib.dom.util.ExcelServiceImpl;
 import org.apache.isis.subdomains.excel.applib.dom.util.Mode;
 
+/**
+ * @since 2.0 {@index}
+ */
 @Service
 @Named("isis.sub.excel.ExcelService")
 @Order(OrderPrecedence.MIDPOINT)
@@ -97,7 +100,7 @@ public class ExcelService {
             final String fileName) throws ExcelService.Exception {
         return excelServiceImpl.toExcel(domainObjects, cls, sheetName, fileName);
     }
-    
+
     public <T> Blob toExcel(
             final List<T> domainObjects,
             final Class<T> cls,
@@ -112,7 +115,7 @@ public class ExcelService {
             final String fileName) throws ExcelService.Exception {
         return excelServiceImpl.toExcel(worksheetContent, fileName);
     }
-    
+
     public <T> Blob toExcel(
             final WorksheetContent worksheetContent,
             final String fileName,
@@ -125,13 +128,13 @@ public class ExcelService {
             final String fileName) throws ExcelService.Exception {
         return excelServiceImpl.toExcel(worksheetContents, fileName);
     }
-    
+
     public Blob toExcel(
             final List<WorksheetContent> worksheetContents,
             final String fileName,
             final InputStream in) throws ExcelService.Exception {
         return excelServiceImpl.toExcel(worksheetContents, fileName, in);
-    }    
+    }
 
     public <T> Blob toExcelPivot(
             final List<T> domainObjects,

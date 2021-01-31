@@ -27,7 +27,8 @@ package org.apache.isis.applib;
  *      Objects that are view models (logically belonging to the UI/application layer) should instead implement
  *      {@link org.apache.isis.applib.ViewModel}.
  * </p>
- * @since ? {@index}
+ *
+ * @since 1.x {@index}
  */
 public interface RecreatableDomainObject {
 

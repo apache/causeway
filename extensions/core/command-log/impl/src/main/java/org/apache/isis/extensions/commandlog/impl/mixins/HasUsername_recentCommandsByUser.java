@@ -32,6 +32,9 @@ import org.apache.isis.extensions.commandlog.impl.jdo.CommandJdo;
 import org.apache.isis.extensions.commandlog.impl.jdo.CommandJdoRepository;
 
 
+/**
+ * @since 2.0 {@index}
+ */
 @Collection(
     domainEvent = HasUsername_recentCommandsByUser.CollectionDomainEvent.class
 )

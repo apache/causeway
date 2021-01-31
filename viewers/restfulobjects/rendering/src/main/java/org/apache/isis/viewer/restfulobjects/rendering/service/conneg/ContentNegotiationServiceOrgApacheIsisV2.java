@@ -55,6 +55,9 @@ import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationSer
 
 import lombok.val;
 
+/**
+ * @since 1.x {@index}
+ */
 @Service
 @Named("isis.viewer.ro.ContentNegotiationServiceOrgApacheIsisV2")
 @Order(OrderPrecedence.MIDPOINT - 200)
@@ -206,22 +209,22 @@ public class ContentNegotiationServiceOrgApacheIsisV2 extends ContentNegotiation
         final ManagedObject returnedAdapter = objectAndActionInvocation.getReturnedAdapter();
 
         final ActionResultRepresentation.ResultType resultType = objectAndActionInvocation.determineResultType();
-        final RepresentationTypeSimplifiedV2 headerContentType; 
-        
+        final RepresentationTypeSimplifiedV2 headerContentType;
+
         switch (resultType) {
         case DOMAIN_OBJECT:
 
             if(ManagedObjects.isNullOrUnspecifiedOrEmpty(returnedAdapter)) {
                 // 404 not found
                 return Responses.ofNotFound();
-                
+
             } else {
                 rootRepresentation = JsonRepresentation.newMap();
                 appendObjectTo(resourceContext, returnedAdapter, rootRepresentation, suppression);
             }
 
             headerContentType = RepresentationTypeSimplifiedV2.OBJECT;
-            
+
             break;
 
         case LIST:
@@ -229,11 +232,11 @@ public class ContentNegotiationServiceOrgApacheIsisV2 extends ContentNegotiation
             if(!objectAndActionInvocation.hasElements()) {
                 // 404 not found
                 return Responses.ofNotFound();
-                
+
             }
-            
+
             rootRepresentation = JsonRepresentation.newArray();
-            
+
             objectAndActionInvocation.streamElementAdapters()
             .forEach(elementAdapter->
                 appendElementTo(resourceContext, elementAdapter, rootRepresentation, suppression));
@@ -244,21 +247,21 @@ public class ContentNegotiationServiceOrgApacheIsisV2 extends ContentNegotiation
                 rootRepresentation.arrayAdd($$roContainerRepresentation);
                 $$roContainerRepresentation.mapPut("$$ro", $$roRepresentation);
             }
-            
+
             headerContentType = RepresentationTypeSimplifiedV2.LIST;
 
             break;
 
         case SCALAR_VALUES:
-            
+
             if(!objectAndActionInvocation.hasElements()) {
                 // 404 not found
                 return Responses.ofNotFound();
-                
+
             }
-            
+
             rootRepresentation = JsonRepresentation.newArray();
-            
+
             objectAndActionInvocation.streamElementAdapters()
             .map(elementAdapter->{
                 val pojo = elementAdapter.getPojo();
@@ -267,26 +270,26 @@ public class ContentNegotiationServiceOrgApacheIsisV2 extends ContentNegotiation
                     : ScalarValueDtoV2.forValue(pojo);
             })
             .forEach(rootRepresentation::arrayAdd);
-            
+
             headerContentType = RepresentationTypeSimplifiedV2.VALUES;
-            
+
             break;
-            
+
         case SCALAR_VALUE:
-            
+
             val pojo = returnedAdapter.getPojo();
             if(pojo==null) {
                 // 404 not found
                 return Responses.ofNotFound();
             }
-            
+
             val dto = ScalarValueDtoV2.forValue(pojo);
-                
+
             rootRepresentation = new JsonRepresentation(new POJONode(dto));
             headerContentType = RepresentationTypeSimplifiedV2.VALUE;
-            
+
             break;
-            
+
         case VOID:
             // represented as empty array
             rootRepresentation = JsonRepresentation.newArray();
@@ -330,11 +333,11 @@ public class ContentNegotiationServiceOrgApacheIsisV2 extends ContentNegotiation
         appendPropertiesTo(resourceContext, owner, rootRepresentation, suppression);
 
         val where = resourceContext.getWhere();
-        
+
         owner.getSpecification()
         .streamCollections(MixedIn.INCLUDED)
         .forEach(collection->{
-            
+
             val collectionRepresentation = JsonRepresentation.newArray();
             rootRepresentation.mapPut(collection.getId(), collectionRepresentation);
 
@@ -343,7 +346,7 @@ public class ContentNegotiationServiceOrgApacheIsisV2 extends ContentNegotiation
             if (!visibilityConsent.isAllowed()) {
                 return;
             }
-            
+
             val managedCollection = ManagedCollection.of(owner, collection, where);
 
             appendCollectionTo(resourceContext, managedCollection, collectionRepresentation, suppression);
@@ -356,7 +359,7 @@ public class ContentNegotiationServiceOrgApacheIsisV2 extends ContentNegotiation
             final ManagedObject objectAdapter,
             final JsonRepresentation rootRepresentation,
             final EnumSet<SuppressionType> suppression) {
-        
+
         val interactionInitiatedBy = resourceContext.getInteractionInitiatedBy();
         val where = resourceContext.getWhere();
         final Stream<OneToOneAssociation> properties = objectAdapter.getSpecification()
@@ -410,7 +413,7 @@ public class ContentNegotiationServiceOrgApacheIsisV2 extends ContentNegotiation
     private void appendCollectionTo(
             final IResourceContext resourceContext,
             final ManagedCollection managedCollection,
-            final JsonRepresentation representation, 
+            final JsonRepresentation representation,
             final EnumSet<SuppressionType> suppression) {
 
         managedCollection.streamElements(resourceContext.getInteractionInitiatedBy())
@@ -421,7 +424,7 @@ public class ContentNegotiationServiceOrgApacheIsisV2 extends ContentNegotiation
     private void appendElementTo(
             final IResourceContext resourceContext,
             final ManagedObject elementAdapter,
-            final JsonRepresentation collectionRepresentation, 
+            final JsonRepresentation collectionRepresentation,
             final EnumSet<SuppressionType> suppression) {
 
         val elementRepresentation = JsonRepresentation.newMap();

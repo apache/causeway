@@ -37,6 +37,8 @@ import org.apache.isis.applib.layout.links.Link;
 
 /**
  * Describes the layout of a single property, broadly corresponds to the {@link org.apache.isis.applib.annotation.PropertyLayout} annotation.
+ *
+ * @since 1.x {@index}
  */
 @XmlRootElement(
         name = "property"

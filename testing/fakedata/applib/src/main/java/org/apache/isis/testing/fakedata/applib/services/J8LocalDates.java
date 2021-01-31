@@ -24,6 +24,9 @@ import java.time.ZoneId;
 
 import org.apache.isis.applib.annotation.Programmatic;
 
+/**
+ * @since 2.0 {@index}
+ */
 public class J8LocalDates extends AbstractRandomValueGenerator {
 
     public J8LocalDates(final FakeDataService fakeDataService) {

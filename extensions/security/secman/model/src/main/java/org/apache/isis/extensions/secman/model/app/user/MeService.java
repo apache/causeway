@@ -35,6 +35,9 @@ import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
 import org.apache.isis.extensions.secman.api.user.ApplicationUser;
 import org.apache.isis.extensions.secman.api.user.ApplicationUserRepository;
 
+/**
+ * @since 2.0 {@index}
+ */
 @DomainService(
         nature = NatureOfService.VIEW,
         objectType = "isis.ext.secman.MeService"
@@ -51,7 +54,7 @@ public class MeService {
     @Inject private ApplicationUserRepository<? extends ApplicationUser> applicationUserRepository;
     @Inject private UserService userService;
     @Inject private javax.inject.Provider<QueryResultsCache> queryResultsCacheProvider;
-    
+
     // -- iconName
     public String iconName() {
         return "applicationUser";

@@ -22,6 +22,9 @@ import java.math.BigDecimal;
 
 import org.apache.isis.applib.annotation.Programmatic;
 
+/**
+ * @since 2.0 {@index}
+ */
 public class BigDecimals extends AbstractRandomValueGenerator {
 
     public BigDecimals(final FakeDataService fakeDataService) {

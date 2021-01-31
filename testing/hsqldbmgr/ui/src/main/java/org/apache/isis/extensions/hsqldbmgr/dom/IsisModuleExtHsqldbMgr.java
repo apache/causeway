@@ -24,6 +24,9 @@ import org.springframework.context.annotation.Import;
 
 import org.apache.isis.core.webapp.IsisModuleCoreWebapp;
 
+/**
+ * @since 2.0 {@index}
+ */
 @Configuration
 @Import({
         IsisModuleCoreWebapp.class

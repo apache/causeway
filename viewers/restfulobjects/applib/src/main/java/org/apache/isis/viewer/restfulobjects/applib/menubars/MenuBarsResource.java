@@ -31,6 +31,8 @@ import org.apache.isis.viewer.restfulobjects.applib.RestfulMediaType;
 
 /**
  * Not part of the Restful Objects spec.
+ *
+ * @since 1.x {@index}
  */
 @Path("/menuBars")
 public interface MenuBarsResource {

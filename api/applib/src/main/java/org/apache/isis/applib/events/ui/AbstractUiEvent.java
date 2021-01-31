@@ -24,7 +24,7 @@ import java.util.Map;
 import org.apache.isis.applib.events.EventObjectBase;
 
 /**
- * @since ? {@index}
+ * @since 1.x {@index}
  */
 public abstract class AbstractUiEvent<S> extends EventObjectBase<S> {
 

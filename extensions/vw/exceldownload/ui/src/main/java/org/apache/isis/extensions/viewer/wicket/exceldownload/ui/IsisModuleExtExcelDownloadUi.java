@@ -23,6 +23,9 @@ import org.springframework.context.annotation.Import;
 
 import org.apache.isis.extensions.viewer.wicket.exceldownload.ui.components.CollectionContentsAsExcelFactory;
 
+/**
+ * @since 2.0 {@index}
+ */
 @Configuration
 @Import({
         // @Component's

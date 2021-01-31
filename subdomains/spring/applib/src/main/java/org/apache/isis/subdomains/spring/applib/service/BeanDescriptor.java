@@ -41,6 +41,9 @@ import lombok.Value;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
+/**
+ * @since 2.0 {@index}
+ */
 @Getter
 @ToString
 @Log4j2
@@ -52,7 +55,7 @@ public final class BeanDescriptor {
     private final Class<?> type;
     private final String resource;
     private final Map<String, BeanNameAndDescriptor> dependenciesByName;
-    
+
     @Value(staticConstructor = "of")
     private static class BeanNameAndDescriptor {
         final String beanName;
@@ -62,7 +65,7 @@ public final class BeanDescriptor {
             return beanFactory.getBean(beanName);
         }
     }
-    
+
 
     BeanDescriptor(
             final String beanName,
@@ -82,7 +85,7 @@ public final class BeanDescriptor {
         this.resource = definition.getResourceDescription();
 
         val dependencies = beanFactory.getDependenciesForBean(beanName);
-        
+
         this.dependenciesByName = _NullSafe.stream(dependencies)
             .map(name -> {
                 try {
@@ -93,9 +96,9 @@ public final class BeanDescriptor {
             })
             .filter(Objects::nonNull)
             .collect(Collectors.toMap(BeanNameAndDescriptor::getBeanName, Function.identity()));
-        
+
     }
-    
+
     <T> List<T> dependencies(Class<T> cls) {
         log.warn("non optimzed implementation: creates a bean for each dependency, even if not returned with the result");
         return dependenciesByName.values().stream()

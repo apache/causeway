@@ -22,6 +22,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * @since 2.0 {@index}
+ */
 public class AnnotationList {
 
     AnnotationList(List<AnnotationTriplet> list){
@@ -40,5 +43,4 @@ public class AnnotationList {
         Collections.sort(result);
         return result;
     }
-
 }

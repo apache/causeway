@@ -22,6 +22,7 @@ package org.apache.isis.applib.adapters;
 /**
  * Indicates that parsing has failed, ie the entry is illegal (rather than
  * invalid).
+ *
  * @since 1.x {@index}
  */
 public class ParsingException extends RuntimeException {

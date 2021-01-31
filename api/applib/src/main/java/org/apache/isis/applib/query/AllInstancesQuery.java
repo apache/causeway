@@ -19,7 +19,7 @@
 package org.apache.isis.applib.query;
 
 /**
- * @since 2.0 {@index}
+ * @since 1.x {@index}
  */
 public interface AllInstancesQuery<T> extends Query<T> {
 

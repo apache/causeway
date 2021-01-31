@@ -30,16 +30,19 @@ import org.apache.isis.applib.services.bookmark.BookmarkService;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
+/**
+ * @since 1.x {@index}
+ */
 @Property
 @PropertyLayout(hidden = Where.ALL_TABLES)
 @RequiredArgsConstructor
 public class Object_objectType {
-    
+
     @Inject private BookmarkService bookmarkService;
 
     private final Object holder;
 
-    public static class ActionDomainEvent 
+    public static class ActionDomainEvent
     extends org.apache.isis.applib.IsisModuleApplib.ActionDomainEvent<Object_objectType> {}
 
     @MemberOrder(name = MixinConstants.METADATA_LAYOUT_GROUPNAME, sequence = "700.1")

@@ -28,9 +28,7 @@ import javax.jdo.annotations.Persistent;
 import org.apache.isis.commons.internal.base._Strings;
 
 /**
- * <p>
- *     Used by domain apps only.
- * </p>
+ * @since 2.0 {@index}
  */
 public class ReflectUtils {
 

@@ -55,11 +55,10 @@ import lombok.extern.log4j.Log4j2;
 
 /**
  * Server-sent events.
- *  
- * @see https://www.w3schools.com/html/html5_serversentevents.asp
- * 
- * @since 2.0
  *
+ * @see https://www.w3schools.com/html/html5_serversentevents.asp
+ *
+ * @since 2.0 {@index}
  */
 @Service
 @Named("isis.val.SseServiceDefault")
@@ -84,7 +83,7 @@ public class SseServiceDefault implements SseService {
 
         Objects.requireNonNull(task);
         Objects.requireNonNull(executionBehavior);
-        
+
         val executor = ForkJoinPool.commonPool();
 
         switch(executionBehavior) {
@@ -99,7 +98,7 @@ public class SseServiceDefault implements SseService {
         CompletableFuture.runAsync(()->{
 
             isisInteractionFactory.runAnonymous(()->{
-                transactionService.runWithinCurrentTransactionElseCreateNew(()->run(task));                    
+                transactionService.runWithinCurrentTransactionElseCreateNew(()->run(task));
             });
 
         }, executor);
@@ -144,7 +143,7 @@ public class SseServiceDefault implements SseService {
         }
 
         public synchronized EventStreamLifecycle acquireLifecycleForType(Class<?> sourceType) {
-            val eventStreamLifecycle = eventStreamsByType.computeIfAbsent(sourceType, 
+            val eventStreamLifecycle = eventStreamsByType.computeIfAbsent(sourceType,
                     __->EventStreamLifecycle.of(
                             new EventStreamDefault(UUID.randomUUID(), sourceType),
                             this));
@@ -178,11 +177,11 @@ public class SseServiceDefault implements SseService {
             synchronized ($LOCK) {
                 remaining = --runningTasksCounter;
                 if(remaining<1) {
-                    eventStreamPool.eventStreamsByType.remove(eventStream.getSourceType());    
+                    eventStreamPool.eventStreamsByType.remove(eventStream.getSourceType());
                 }
             }
 
-            // to keep the synchronized block concise, we run this outside the block, 
+            // to keep the synchronized block concise, we run this outside the block,
             // because it does not require synchronization
             if(remaining<1) {
                 eventStream.close();
@@ -244,7 +243,7 @@ public class SseServiceDefault implements SseService {
         public void listenWhile(Predicate<SseSource> listener) {
             synchronized ($LOCK) {
                 if(isActive()) {
-                    listeners.add(listener);   
+                    listeners.add(listener);
                 }
             }
         }

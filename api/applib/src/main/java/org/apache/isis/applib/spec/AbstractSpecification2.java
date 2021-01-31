@@ -39,7 +39,8 @@ import org.apache.isis.commons.internal.base._Casts;
  * <p>
  * Implementation note: inspired by (borrowed code from) Hamcrest's
  * <tt>TypeSafeMatcher</tt>.
- * @since ? {@index}
+ *
+ * @since 1.x {@index}
  */
 public abstract class AbstractSpecification2<T> implements Specification2 {
 

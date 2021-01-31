@@ -24,6 +24,8 @@ import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeature;
 /**
  * Whether the permission {@link #ALLOW grants} or {@link #VETO denies} access to an
  * {@link ApplicationFeature}.
+ *
+ * @since 2.0 {@index}
  */
 public enum ApplicationPermissionRule {
     /**

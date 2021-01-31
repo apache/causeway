@@ -34,15 +34,14 @@ import static org.apache.isis.commons.internal.exceptions._Exceptions.getCausalC
  * <p>
  * If a messaging-parsing {@link Function} is provided through the constructor,
  * then the message can be altered.  Otherwise the exception's {@link Throwable#getMessage() message} is returned as-is.
- * 
- * @since 2.0 {@index}
- * 
+ *
+ * @since 1.x {@index}
  */
 public class ExceptionRecognizerForType extends ExceptionRecognizerAbstract {
 
     protected static final Predicate<Throwable> ofType(
             final Class<? extends Throwable> exceptionType) {
-        
+
         return ex->exceptionType.isAssignableFrom(ex.getClass());
     }
 
@@ -56,19 +55,19 @@ public class ExceptionRecognizerForType extends ExceptionRecognizerAbstract {
      */
     protected static final Predicate<Throwable> excluding(
             final String... messages) {
-        
+
         return ex->{
-            
+
             for (final Throwable throwable : getCausalChain(ex)) {
                 if(containsAnyOfTheseMessages(throwable, messages)) {
-                    return false; 
+                    return false;
                 }
             }
-            
+
             return true;
         };
     }
-    
+
 
     /**
      * A {@link Predicate} that {@link Predicate#apply(Object) applies} only if at least one of the message(s)
@@ -80,15 +79,15 @@ public class ExceptionRecognizerForType extends ExceptionRecognizerAbstract {
      */
     protected static final Predicate<Throwable> including(
             final String... messages) {
-        
+
         return ex->{
-           
+
             for (final Throwable throwable : getCausalChain(ex)) {
                 if(containsAnyOfTheseMessages(throwable, messages)) {
-                    return true; 
+                    return true;
                 }
             }
-            
+
             return false;
         };
     }
@@ -108,7 +107,7 @@ public class ExceptionRecognizerForType extends ExceptionRecognizerAbstract {
     }
 
     public ExceptionRecognizerForType(
-            final Category category, 
+            final Category category,
             final Class<? extends Exception> exceptionType) {
         this(category, exceptionType, null);
     }

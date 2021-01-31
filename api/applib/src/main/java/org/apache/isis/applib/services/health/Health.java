@@ -22,7 +22,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
- * 
  * @since 2.0 {@index}
  */
 @AllArgsConstructor

@@ -59,7 +59,7 @@ global:
     Extensions: org.apache.isis.extensions
     "Core: Command Log": "org.apache.isis.extensions:isis-extensions-command-log.*"
     "Core: Command Replay": "org.apache.isis.extensions:isis-extensions-command-replay.*"
-    "Core: Flyway": "org.apache.isis.extensions:isis-extensions-flyway.*"
+    #"Core: Flyway": "org.apache.isis.extensions:isis-extensions-flyway.*"
     "Core: Model Annotation": "org.apache.isis.extensions:isis-extensions-modelannotation.*"
     "Core: Quartz": "org.apache.isis.extensions:isis-extensions-quartz.*"
     #"Security: Audit Trail": "org.apache.isis.security:isis-extensions-audit-trail.*"

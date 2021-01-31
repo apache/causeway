@@ -29,8 +29,8 @@ import org.springframework.beans.factory.DisposableBean;
  * This implementation has only one implementation (this class) in applib, so it is annotated with
  * {@link org.apache.isis.applib.annotation.DomainService}.  This means that it is automatically registered and
  * available for use; no further configuration is required.
- * 
- * @since 2.0 {@index}
+ *
+ * @since 1.x {@index}
  */
 public interface Scratchpad
         extends DisposableBean {

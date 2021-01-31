@@ -27,6 +27,9 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 
 import lombok.RequiredArgsConstructor;
 
+/**
+ * @since 1.x {@index}
+ */
 @Action(
         domainEvent = BookmarkHolder_lookup.ActionDomainEvent.class,
         semantics = SemanticsOf.SAFE
@@ -44,9 +47,9 @@ public class BookmarkHolder_lookup {
     public Object act() {
         return bookmarkService.lookup(bookmarkHolder);
     }
-    
+
     // -- DEPENDENCIES
-    
+
     @Inject private BookmarkService bookmarkService;
 
 }

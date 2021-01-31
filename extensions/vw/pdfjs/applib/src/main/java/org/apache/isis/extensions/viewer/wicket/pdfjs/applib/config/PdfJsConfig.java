@@ -24,6 +24,9 @@ import de.agilecoders.wicket.jquery.AbstractConfig;
 import de.agilecoders.wicket.jquery.IKey;
 import de.agilecoders.wicket.jquery.Key;
 
+/**
+ * @since 2.0 {@index}
+ */
 public class PdfJsConfig extends AbstractConfig {
 
     private static final IKey<Integer> INITIAL_PAGE = new Key<>("initialPage", 1);

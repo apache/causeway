@@ -22,6 +22,9 @@ import java.util.Objects;
 
 import org.apache.isis.applib.annotation.Programmatic;
 
+/**
+ * @since 2.0 {@index}
+ */
 public class PasswordEncryptionServiceNone implements PasswordEncryptionService {
 
     @Programmatic

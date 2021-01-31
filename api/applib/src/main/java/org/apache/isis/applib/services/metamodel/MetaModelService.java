@@ -36,7 +36,8 @@ import lombok.val;
  * <p>
  * This API is currently extremely limited, but the intention is to extend it gradually as use cases emerge.
  * </p>
- * @since 2.0 {@index}
+ *
+ * @since 1.x {@index}
  */
 public interface MetaModelService {
 

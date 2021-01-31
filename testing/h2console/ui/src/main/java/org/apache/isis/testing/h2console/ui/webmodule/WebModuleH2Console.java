@@ -48,6 +48,9 @@ import lombok.Getter;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
+/**
+ * @since 2.0 {@index}
+ */
 @Service
 @Named("isis.test.WebModuleH2Console")
 @Order(OrderPrecedence.MIDPOINT)
@@ -70,11 +73,11 @@ public class WebModuleH2Console extends WebModuleAbstract {
             final DataSourceIntrospectionService datasourceIntrospector,
             final IsisSystemEnvironment isisSystemEnvironment,
             final ServiceInjector serviceInjector) {
-          
+
         super(serviceInjector);
         this.isisSystemEnvironment = isisSystemEnvironment;
-        
-        this.applicable = isPrototyping() 
+
+        this.applicable = isPrototyping()
                 && isH2MemConnectionUsed(datasourceIntrospector);
         this.localResourcePathIfEnabled = applicable ? new LocalResourcePath(CONSOLE_PATH) : null;
     }
@@ -99,49 +102,49 @@ public class WebModuleH2Console extends WebModuleAbstract {
     public boolean isApplicable(WebModuleContext ctx) {
         return applicable;
     }
-    
+
     // -- WRAPPER AROUND H2'S SERVLET
-    
+
     public static class H2WebServlet extends WebServlet {
-        
+
         private static final long serialVersionUID = 1L;
-        
+
         private static String jdbcUrl;
 
         @Override
         public void init() {
             super.init();
-            
+
             if(_Strings.isEmpty(jdbcUrl)) {
                 return;
             }
-            
+
             val dataSourceProperties = new DataSourceProperties();
             dataSourceProperties.setUsername("sa");
             dataSourceProperties.setUrl(jdbcUrl);
-            
+
             val connectionInfo = new ConnectionInfo(
-                    String.format("Generic Spring Datasource|%s|%s|%s", 
-                            dataSourceProperties.determineDriverClassName(), 
-                            dataSourceProperties.determineUrl(), 
+                    String.format("Generic Spring Datasource|%s|%s|%s",
+                            dataSourceProperties.determineDriverClassName(),
+                            dataSourceProperties.determineUrl(),
                             dataSourceProperties.determineUsername()));
-            
+
             val webServlet = this;
-            
+
             try {
-                
+
                 val serverField = WebServlet.class.getDeclaredField("server");
-                val updateSettingMethod = WebServer.class.getDeclaredMethod("updateSetting", 
+                val updateSettingMethod = WebServer.class.getDeclaredMethod("updateSetting",
                         ConnectionInfo.class);
-                
+
                 val webServer = (WebServer) _Reflect.getFieldOn(serverField, webServlet);
-                
+
                 _Reflect.invokeMethodOn(updateSettingMethod, webServer, connectionInfo);
-                
+
             } catch (Exception ex) {
                 log.error("Unable to set a custom ConnectionInfo for H2 console", ex);
             }
-            
+
         }
 
         public static void configure(String jdbcUrl) {
@@ -156,13 +159,13 @@ public class WebModuleH2Console extends WebModuleAbstract {
     }
 
     private boolean isH2MemConnectionUsed(final DataSourceIntrospectionService datasourceIntrospector) {
-        
+
         return datasourceIntrospector.streamDataSourceInfos()
         .map(DataSourceInfo::getJdbcUrl)
         .anyMatch(jdbcUrl->{
             if(jdbcUrl.contains(":h2:mem:")) {
                 log.info("found h2 in-memory data-source: {}", jdbcUrl);
-                H2WebServlet.configure(jdbcUrl); 
+                H2WebServlet.configure(jdbcUrl);
                 return true;
             }
             return false;

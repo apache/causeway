@@ -23,6 +23,9 @@ import java.util.Date;
 
 import org.apache.isis.applib.annotation.Programmatic;
 
+/**
+ * @since 2.0 {@index}
+ */
 public class JavaSqlTimestamps extends AbstractRandomValueGenerator {
 
     public JavaSqlTimestamps(final FakeDataService fakeDataService) {

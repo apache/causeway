@@ -20,6 +20,7 @@ package org.apache.isis.applib.services.userreg.events;
 
 /**
  * An event send to all services interested in user password reset
+ *
  * @since 1.x {@index}
  */
 public class PasswordResetEvent extends EmailEventAbstract {

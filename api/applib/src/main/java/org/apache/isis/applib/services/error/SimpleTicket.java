@@ -37,6 +37,8 @@ import static org.apache.isis.commons.internal.base._NullSafe.isEmpty;
  *         <li>the class is {@link Serializable}</li> so that it can be stored by the Wicket viewer as a Wicket model.
  *     </ul>
  * </p>
+ *
+ * @since 2.0 {@index}
  */
 public class SimpleTicket implements Ticket {
 

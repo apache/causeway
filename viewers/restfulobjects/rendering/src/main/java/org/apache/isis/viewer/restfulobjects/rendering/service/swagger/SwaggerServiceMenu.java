@@ -40,6 +40,9 @@ import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.config.RestEasyConfiguration;
 
 
+/**
+ * @since 1.x {@index}
+ */
 @Named("isis.applib.SwaggerServiceMenu")
 @DomainService(objectType = "isis.applib.SwaggerServiceMenu")
 @DomainServiceLayout(
@@ -79,7 +82,7 @@ public class SwaggerServiceMenu {
     public LocalResourcePath openSwaggerUi() {
         return new LocalResourcePath("/swagger-ui/index.thtml");
     }
-    
+
     public String disableOpenSwaggerUi() {
         return disableReasonWhenRequiresROViewer();
     }
@@ -98,7 +101,7 @@ public class SwaggerServiceMenu {
     public LocalResourcePath openRestApi() {
         return new LocalResourcePath(basePath);
     }
-    
+
     public String disableOpenRestApi() {
         return disableReasonWhenRequiresROViewer();
     }
@@ -119,7 +122,7 @@ public class SwaggerServiceMenu {
             final String fileNamePrefix,
             final SwaggerService.Visibility visibility,
             final SwaggerService.Format format) {
-        
+
         final String fileName = buildFileName(fileNamePrefix, visibility, format);
         final String spec = swaggerService.generateSwaggerSpec(visibility, format);
         return new Clob(fileName, format.mediaType(), spec);
@@ -136,14 +139,14 @@ public class SwaggerServiceMenu {
     }
 
     // -- HELPER
-    
+
     private String disableReasonWhenRequiresROViewer() {
         final Optional<?> moduleIfAny = serviceRegistry.lookupBeanById("isisRoViewer.WebModuleJaxrsRestEasy4");
         return moduleIfAny.isPresent()
                 ? null
                 : "RestfulObjects viewer is not configured";
     }
-    
+
     private static String buildFileName(
             String fileNamePrefix,
             final SwaggerService.Visibility visibility,
@@ -154,9 +157,9 @@ public class SwaggerServiceMenu {
             fileNamePrefix = fileNamePrefix.substring(0, i);
         }
         return _Strings.asFileNameWithExtension(
-                fileNamePrefix + "-" + visibility.name().toLowerCase(), 
+                fileNamePrefix + "-" + visibility.name().toLowerCase(),
                 formatLower);
     }
-    
-     
+
+
 }

@@ -26,24 +26,26 @@ import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionVal
 import org.apache.isis.extensions.secman.api.role.ApplicationRole;
 import org.apache.isis.extensions.secman.api.tenancy.HasAtPath;
 
-
+/**
+ * @since 2.0 {@index}
+ */
 public interface ApplicationUser extends HasUsername, HasAtPath {
 
     // -- CONSTANTS
-    
+
     public static final int MAX_LENGTH_USERNAME = 30;
     public static final int MAX_LENGTH_FAMILY_NAME = 50;
     public static final int MAX_LENGTH_GIVEN_NAME = 50;
     public static final int MAX_LENGTH_KNOWN_AS = 20;
     public static final int MAX_LENGTH_EMAIL_ADDRESS = 50;
     public static final int MAX_LENGTH_PHONE_NUMBER = 25;
-    
-    // -- DOMAIN EVENTS 
-    
+
+    // -- DOMAIN EVENTS
+
     public static abstract class PropertyDomainEvent<T> extends IsisModuleExtSecmanApi.PropertyDomainEvent<ApplicationUser, T> {}
     public static abstract class CollectionDomainEvent<T> extends IsisModuleExtSecmanApi.CollectionDomainEvent<ApplicationUser, T> {}
     public static abstract class ActionDomainEvent extends IsisModuleExtSecmanApi.ActionDomainEvent<ApplicationUser> {}
-    
+
     public static class AddRoleDomainEvent extends ActionDomainEvent {}
     public static class UpdateAtPathDomainEvent extends ActionDomainEvent {}
     public static class UpdateUsernameDomainEvent extends ActionDomainEvent {}
@@ -63,7 +65,7 @@ public interface ApplicationUser extends HasUsername, HasAtPath {
     public static class UserDuplicateDomainEvent extends ActionDomainEvent {}
 
     // -- MODEL
-    
+
     /**
      * having a title() method (rather than using @Title annotation) is necessary as a workaround to be able to use
      * wrapperFactory#unwrap(...) method, which is otherwise broken in Isis 1.6.0
@@ -73,9 +75,9 @@ public interface ApplicationUser extends HasUsername, HasAtPath {
     }
 
     default String iconName() {
-        return getStatus().isEnabled() ? "enabled" : "disabled"; 
+        return getStatus().isEnabled() ? "enabled" : "disabled";
     }
-    
+
     String getName();
 
     String getEncryptedPassword();
@@ -111,13 +113,13 @@ public interface ApplicationUser extends HasUsername, HasAtPath {
     void setPhoneNumber(String phoneNumber);
 
     void setUsername(String username);
-    
+
     void setEncryptedPassword(String encryptedPassword);
 
     boolean isForSelfOrRunAsAdministrator();
 
     boolean isHasPassword();
-    
+
     default boolean isLocalAccount() {
         return getAccountType() == AccountType.LOCAL;
     }

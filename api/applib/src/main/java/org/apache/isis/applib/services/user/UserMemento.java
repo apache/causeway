@@ -35,24 +35,25 @@ import lombok.NonNull;
 
 /**
  * Immutable serializable value holding details about a user and its roles.
- * @since 1.x revised in 2.0 {@index}
+ *
+ * @since 1.x revised for 2.0 {@index}
  */
 @DomainObject(objectType = "isis.applib.UserMemento")
 public final class UserMemento implements Serializable {
-    
+
     private static final long serialVersionUID = 7190090455587885367L;
-    private static final UserMemento SYSTEM_USER = UserMemento.ofName("__system"); 
+    private static final UserMemento SYSTEM_USER = UserMemento.ofName("__system");
 //    private static final UserMemento NO_USER = UserMemento.ofName("__nobody");
-    
+
     // -- FACTORIES
-    
+
     /**
      * The framework's internal user with unrestricted privileges.
      */
     public static UserMemento system() {
         return SYSTEM_USER;
     }
-    
+
 //    /**
 //     * The framework's internal user with no privileges at all, returned by the
 //     * {@link UserService} if no user is logged in.
@@ -60,7 +61,7 @@ public final class UserMemento implements Serializable {
 //    public static UserMemento nobody() {
 //        return NO_USER;
 //    }
-    
+
     /**
      * Creates a new user with the specified name and no roles.
      */
@@ -68,34 +69,34 @@ public final class UserMemento implements Serializable {
             final @NonNull String name) {
         return new UserMemento(name, Stream.empty());
     }
-    
+
     /**
      * Creates a new user with the specified name and assigned roles.
      */
     public static UserMemento ofNameAndRoles(
-            final @NonNull String name, 
+            final @NonNull String name,
             final RoleMemento... roles) {
         return new UserMemento(name, Stream.of(roles));
     }
-    
+
     /**
      * Creates a new user with the specified name and assigned role names.
      */
     public static UserMemento ofNameAndRoleNames(
-            final @NonNull String name, 
+            final @NonNull String name,
             final String... roleNames) {
         return new UserMemento(name, Stream.of(roleNames).map(RoleMemento::new));
     }
-    
+
     /**
      * Creates a new user with the specified name and assigned role names.
      */
     public static UserMemento ofNameAndRoleNames(
-            final @NonNull String name, 
+            final @NonNull String name,
             final @NonNull Stream<String> roleNames) {
         return new UserMemento(name, roleNames.map(RoleMemento::new));
     }
-    
+
     // -- CONSTRUCTOR
 
     /**
@@ -106,7 +107,7 @@ public final class UserMemento implements Serializable {
             throw new IllegalArgumentException("Name not specified");
         }
         this.name = name;
-        this.roles = roles.collect(_Lists.toUnmodifiable()); 
+        this.roles = roles.collect(_Lists.toUnmodifiable());
     }
 
     public String title() {
@@ -139,18 +140,18 @@ public final class UserMemento implements Serializable {
     public boolean isCurrentUser(final @Nullable String userName) {
         return name.equals(userName);
     }
-    
+
     public Stream<String> streamRoleNames() {
         return roles.stream()
                 .map(RoleMemento::getName);
     }
-    
+
     public boolean hasRoleName(final @Nullable String roleName) {
         return streamRoleNames().anyMatch(myRoleName->myRoleName.equals(roleName));
     }
 
     // -- TO STRING, EQUALS, HASHCODE
-    
+
     @Override
     public String toString() {
         final StringBuilder buf = new StringBuilder();
@@ -159,7 +160,7 @@ public final class UserMemento implements Serializable {
         }
         return "User [name=" + getName() + ",roles=" + buf.toString() + "]";
     }
-    
+
     @Override
     public boolean equals(Object obj) {
         if (obj == this) {
@@ -183,18 +184,18 @@ public final class UserMemento implements Serializable {
         }
         return true;
     }
-    
+
     @Override
     public int hashCode() {
         return getName().hashCode(); // its good enough to hash on just the user's name
     }
-    
+
 
 }
 
 // -- REMOVED
 
-//XXX implemented as regex match, java-doc is not specific about what these methods actually do; so if in doubt, rather remove     
+//XXX implemented as regex match, java-doc is not specific about what these methods actually do; so if in doubt, rather remove
 ///**
 //* Determines if the user fulfills the specified role.
 //*
@@ -217,7 +218,7 @@ public final class UserMemento implements Serializable {
 //  return false;
 //}
 
-//XXX not used    
+//XXX not used
 //@UtilityClass
 //public static class NameType {
 //  @UtilityClass

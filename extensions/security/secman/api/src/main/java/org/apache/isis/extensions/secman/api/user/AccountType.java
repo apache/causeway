@@ -21,8 +21,10 @@ package org.apache.isis.extensions.secman.api.user;
 import org.apache.isis.core.metamodel.commons.StringExtensions;
 
 /**
- * Whether the user's account is local enabled (user/password) or 
+ * Whether the user's account is local enabled (user/password) or
  * delegated (eg LDAP), as per {@link IsisModuleSecurityRealm#setDelegateAuthenticationRealm(org.apache.shiro.realm.AuthenticatingRealm)}.
+ *
+ * @since 2.0 {@index}
  */
 public enum AccountType {
     LOCAL,
@@ -31,11 +33,11 @@ public enum AccountType {
     public boolean isLocal() {
         return this==LOCAL;
     }
-    
+
     public boolean isDelegated() {
         return this==DELEGATED;
     }
-    
+
     @Override
     public String toString() {
         return StringExtensions.capitalize(name());

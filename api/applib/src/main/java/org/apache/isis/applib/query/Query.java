@@ -46,11 +46,11 @@ import lombok.NonNull;
  *
  * <b>Note:</b> that the predicate is applied within the {@link RepositoryService}
  * (ie client-side) rather than being pushed back to the object store.
- * 
- * @since 1.x revised for 2.0 {@index}
+ *
+ * @since 1.x {@index}
  */
 public interface Query<T> extends Serializable {
-    
+
     /**
      * The {@link Class} of the objects returned by this query.
      */
@@ -65,32 +65,32 @@ public interface Query<T> extends Serializable {
      * Returns a model with start index into the set table and maximal number of items to return.
      */
     QueryRange getRange();
-    
+
     // -- WITHERS
-    
+
     Query<T> withRange(@NonNull QueryRange range);
-    
+
     default Query<T> withRange(long ...range) {
         return withRange(QueryRange.of(range));
     }
-    
+
     default Query<T> withStart(long start) {
         return withRange(start);
     }
-    
+
     default Query<T> withLimit(long limit) {
         return withRange(0L, limit);
     }
-    
+
     // -- FACTORIES
-    
+
     public static <T> Query<T> allInstances(
             final @NonNull Class<T> resultType) {
         return new _AllInstancesQueryDefault<>(resultType, QueryRange.unconstrained());
     }
-    
+
     public static <T> NamedQuery<T> named(
-            final @NonNull Class<T> resultType, 
+            final @NonNull Class<T> resultType,
             final @NonNull String queryName) {
         return new _NamedQueryDefault<>(resultType, queryName, QueryRange.unconstrained(), null);
     }

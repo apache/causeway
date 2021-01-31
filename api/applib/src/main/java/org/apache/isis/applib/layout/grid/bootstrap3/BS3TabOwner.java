@@ -22,6 +22,9 @@ import java.util.List;
 
 import org.apache.isis.applib.layout.component.Owner;
 
+/**
+ * @since 1.x {@index}
+ */
 public interface BS3TabOwner extends Owner, WithinGrid {
 
     List<BS3Tab> getTabs();

@@ -22,6 +22,9 @@ import java.math.BigInteger;
 
 import org.apache.isis.applib.annotation.Programmatic;
 
+/**
+ * @since 2.0 {@index}
+ */
 public class BigIntegers extends AbstractRandomValueGenerator {
 
     public BigIntegers(final FakeDataService fakeDataService) {

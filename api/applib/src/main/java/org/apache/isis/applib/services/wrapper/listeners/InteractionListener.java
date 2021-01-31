@@ -37,8 +37,7 @@ import org.apache.isis.applib.services.wrapper.events.PropertyUsabilityEvent;
 import org.apache.isis.applib.services.wrapper.events.PropertyVisibilityEvent;
 
 /**
- * 
- * @since 2.0 {@index}
+ * @since 1.x {@index}
  */
 public interface InteractionListener {
 

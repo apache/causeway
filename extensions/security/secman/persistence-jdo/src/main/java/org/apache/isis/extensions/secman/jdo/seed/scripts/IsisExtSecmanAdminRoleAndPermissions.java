@@ -23,6 +23,9 @@ import org.apache.isis.extensions.secman.api.SecmanConfiguration;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionMode;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionRule;
 
+/**
+ * @since 2.0 {@index}
+ */
 public class IsisExtSecmanAdminRoleAndPermissions extends AbstractRoleAndPermissionsFixtureScript {
 
     private String[] adminInitialPackagePermissions;
@@ -40,5 +43,5 @@ public class IsisExtSecmanAdminRoleAndPermissions extends AbstractRoleAndPermiss
                 ApplicationPermissionMode.CHANGING,
                 adminInitialPackagePermissions);
     }
-    
+
 }

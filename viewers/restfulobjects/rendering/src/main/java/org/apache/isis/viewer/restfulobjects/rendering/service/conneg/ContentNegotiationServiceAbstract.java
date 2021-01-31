@@ -37,6 +37,9 @@ import org.apache.isis.viewer.restfulobjects.rendering.IResourceContext;
 import org.apache.isis.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndActionInvocation;
 
+/**
+ * @since 1.x {@index}
+ */
 public abstract class ContentNegotiationServiceAbstract implements ContentNegotiationService {
 
     @Override

@@ -34,6 +34,9 @@ import org.apache.isis.core.metamodel.valuetypes.ValueTypeProvider;
 import org.apache.isis.schema.common.v2.ValueType;
 import org.apache.isis.valuetypes.markdown.applib.value.Markdown;
 
+/**
+ * @since 2.0 {@index}
+ */
 @Configuration
 @Import({
         MarkdownMetaModelRefiner.class,

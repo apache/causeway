@@ -26,11 +26,21 @@ import org.apache.isis.commons.internal._Constants;
 
 /**
  * Title buffer is a utility class to help produce titles for objects without
- * having to add lots of guard code. It provides two basic method: one to
+ * having to add lots of guard code.
+ *
+ * <p>
+ * It provides two basic method: one to
  * concatenate a title to the buffer; another to append a title with a joiner
- * string, taking care adding in necessary spaces. The benefits of using this
+ * string, taking care adding in necessary spaces.
+ * </p>
+ *
+ * <p>
+ * The benefits of using this
  * class is that null references are safely ignored (rather than appearing as
  * 'null'), and joiners (a space by default) are only added when needed.
+ * </p>
+ *
+ * @since 1.x {@index}
  */
 public class TitleBuffer {
     private static final String SPACE = " ";

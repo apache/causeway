@@ -32,6 +32,9 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.value.LocalResourcePath;
 import org.apache.isis.testing.h2console.ui.webmodule.WebModuleH2Console;
 
+/**
+ * @since 2.0 {@index}
+ */
 @DomainService(
         nature = NatureOfService.VIEW,
         objectType = "isis.ext.h2Console.H2ManagerMenu"

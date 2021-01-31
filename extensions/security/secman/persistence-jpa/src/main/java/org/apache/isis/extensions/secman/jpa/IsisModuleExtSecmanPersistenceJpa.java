@@ -32,6 +32,9 @@ import org.apache.isis.extensions.secman.jpa.dom.user.ApplicationUser;
 import org.apache.isis.extensions.secman.jpa.dom.user.ApplicationUserRepository;
 import org.apache.isis.extensions.secman.jpa.seed.SeedSecurityModuleService;
 
+/**
+ * @since 2.0 {@index}
+ */
 @Configuration
 @Import({
     ApplicationPermissionRepository.class,

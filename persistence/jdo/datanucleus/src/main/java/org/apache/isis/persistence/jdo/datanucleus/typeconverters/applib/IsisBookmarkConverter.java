@@ -22,6 +22,9 @@ import org.datanucleus.store.types.converters.TypeConverter;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
 
+/**
+ * @since 2.0 {@index}
+ */
 public class IsisBookmarkConverter implements TypeConverter<Bookmark, String>{
 
     private static final long serialVersionUID = 1L;

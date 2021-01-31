@@ -40,6 +40,9 @@ import org.apache.isis.extensions.commandreplay.primary.IsisModuleExtCommandRepl
 
 import lombok.Getter;
 
+/**
+ * @since 2.0 {@index}
+ */
 @DomainService(
     nature = NatureOfService.REST,
     objectType = "isis.ext.commandReplayPrimary.CommandRetrievalService"

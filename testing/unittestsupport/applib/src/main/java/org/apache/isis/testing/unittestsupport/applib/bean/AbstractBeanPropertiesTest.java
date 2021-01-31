@@ -24,6 +24,9 @@ import org.junit.Rule;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.testing.unittestsupport.applib.core.jmocking.JUnitRuleMockery2;
 
+/**
+ * @since 2.0 {@index}
+ */
 public abstract class AbstractBeanPropertiesTest {
 
     @Rule

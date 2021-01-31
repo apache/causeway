@@ -34,13 +34,12 @@ import lombok.experimental.UtilityClass;
 /**
  * Provides JAXB XmlAdapters for Java time temporal types.
  * <p>
- * 
+ *
  * Example:<pre>
  * &#64;XmlElement &#64;XmlJavaTypeAdapter(JavaTimeJaxbAdapters.LocalDateAdapter.class)
  * &#64;Getter &#64;Setter private java.time.LocalDate localDate;
  * </pre>
- * 
- *  
+ *
  * @since 2.0 {@index}
  */
 @UtilityClass

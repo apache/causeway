@@ -34,6 +34,7 @@ import org.apache.isis.applib.Identifier;
  * @see VisibilityEvent
  * @see ValidityEvent
  *
+ * @since 1.x {@index}
  */
 public abstract class AccessEvent extends InteractionEvent {
 

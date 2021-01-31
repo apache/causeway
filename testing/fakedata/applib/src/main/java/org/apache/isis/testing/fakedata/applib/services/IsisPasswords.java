@@ -21,6 +21,9 @@ package org.apache.isis.testing.fakedata.applib.services;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.value.Password;
 
+/**
+ * @since 2.0 {@index}
+ */
 public class IsisPasswords extends AbstractRandomValueGenerator {
 
     public IsisPasswords(final FakeDataService fakeDataService) {

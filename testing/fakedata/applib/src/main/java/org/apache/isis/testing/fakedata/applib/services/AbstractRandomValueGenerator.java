@@ -18,6 +18,9 @@
  */
 package org.apache.isis.testing.fakedata.applib.services;
 
+/**
+ * @since 2.0 {@index}
+ */
 abstract class AbstractRandomValueGenerator {
 
     final FakeDataService fake;

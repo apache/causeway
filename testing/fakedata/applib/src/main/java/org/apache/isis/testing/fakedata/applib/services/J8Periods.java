@@ -22,6 +22,9 @@ import java.time.Period;
 
 import org.apache.isis.applib.annotation.Programmatic;
 
+/**
+ * @since 2.0 {@index}
+ */
 public class J8Periods extends AbstractRandomValueGenerator {
 
     public J8Periods(final FakeDataService fakeDataService) {

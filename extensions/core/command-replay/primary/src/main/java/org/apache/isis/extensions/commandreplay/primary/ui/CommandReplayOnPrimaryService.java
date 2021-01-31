@@ -51,6 +51,9 @@ import org.apache.isis.schema.cmd.v2.CommandsDto;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+/**
+ * @since 2.0 {@index}
+ */
 @DomainService(
     nature = NatureOfService.VIEW,
     objectType = "isis.ext.commandReplayPrimary.CommandReplayOnPrimaryService"

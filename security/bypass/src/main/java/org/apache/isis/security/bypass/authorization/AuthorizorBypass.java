@@ -29,6 +29,9 @@ import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.core.security.authorization.standard.Authorizor;
 
+/**
+ * @since 1.x {@index}
+ */
 @Service
 @Named("isis.security.AuthorizorBypass")
 @Order(OrderPrecedence.LATE)

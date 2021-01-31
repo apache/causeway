@@ -24,6 +24,8 @@ import org.apache.isis.applib.exceptions.UnrecoverableException;
 /**
  * Thrown when a problem is found with the domain model, and Isis cannot
  * proceed.
+ *
+ * @since 1.x {@index}
  */
 public class DomainModelException extends UnrecoverableException {
     private static final long serialVersionUID = 1L;

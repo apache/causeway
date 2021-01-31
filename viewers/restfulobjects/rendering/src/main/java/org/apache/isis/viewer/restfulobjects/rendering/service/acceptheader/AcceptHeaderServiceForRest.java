@@ -43,6 +43,9 @@ import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.acceptheader.AcceptHeaderService;
 import org.apache.isis.commons.internal.base._NullSafe;
 
+/**
+ * @since 1.x {@index}
+ */
 @Service
 @Named("isis.viewer.ro.AcceptHeaderServiceForRest")
 @Order(OrderPrecedence.MIDPOINT)
@@ -94,7 +97,7 @@ public class AcceptHeaderServiceForRest implements AcceptHeaderService {
     public static class ResponseFilter implements ContainerResponseFilter {
         @Override
         public void filter(
-                final ContainerRequestContext requestContext, 
+                final ContainerRequestContext requestContext,
                 final ContainerResponseContext responseContext) throws IOException {
 
             removeMediaTypes();

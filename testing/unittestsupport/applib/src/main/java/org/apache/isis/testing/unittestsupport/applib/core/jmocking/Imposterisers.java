@@ -20,6 +20,9 @@ package org.apache.isis.testing.unittestsupport.applib.core.jmocking;
 
 import org.jmock.api.Imposteriser;
 
+/**
+ * @since 2.0 {@index}
+ */
 public final class Imposterisers {
 
     private Imposterisers() {}

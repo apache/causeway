@@ -54,6 +54,9 @@ import org.apache.isis.extensions.quartz.spring.AutowiringSpringBeanJobFactory;
 
 import lombok.val;
 
+/**
+ * @since 2.0 {@index}
+ */
 @Configuration
 @Import({
         // @Configuration's

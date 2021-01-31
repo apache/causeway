@@ -25,6 +25,9 @@ import org.joda.time.Period;
 
 import org.apache.isis.applib.annotation.Programmatic;
 
+/**
+ * @since 2.0 {@index}
+ */
 public class JodaDateTimes extends AbstractRandomValueGenerator{
 
     public JodaDateTimes(final FakeDataService fakeDataService) {
@@ -51,9 +54,9 @@ public class JodaDateTimes extends AbstractRandomValueGenerator{
         final Period upTo5Years = fake.jodaPeriods().yearsUpTo(5);
         return around(upTo5Years);
     }
-    
+
     private DateTime now() {
         return fake.clockService.getClock().asJodaDateTime(ZoneId.systemDefault());
     }
-    
+
 }

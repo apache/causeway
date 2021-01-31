@@ -26,13 +26,16 @@ import com.vladsch.flexmark.html.HtmlRenderer;
 import com.vladsch.flexmark.parser.Parser;
 import com.vladsch.flexmark.util.data.MutableDataSet;
 
+/**
+ * @since 2.0 {@index}
+ */
 public final class Converter {
 
     /**
-     * For syntax highlighting to work, the client/browser needs to load specific 
-     * java-script and css. 
+     * For syntax highlighting to work, the client/browser needs to load specific
+     * java-script and css.
      * <p>
-     * 1) In your web-app's {@code scripts/application.js} include the bundled 
+     * 1) In your web-app's {@code scripts/application.js} include the bundled
      * {@code src/main/resources/prism1.14.js}.
      * <pre>
      * function includeJs(jsFilePath) {
@@ -41,7 +44,7 @@ public final class Converter {
      *     js.src = jsFilePath;
      *     document.body.appendChild(js);
      * }
-     * 
+     *
      * includeJs("/scripts/prism1.14.js");
      * </pre>
      * <p>
@@ -50,7 +53,7 @@ public final class Converter {
      * <pre>
      * {@code @import "prism.css"}.
      * </pre>
-     *  
+     *
      * @param markdown - formated input to be converted to HTML
      */
     public static String mdToHtml(String markdown) {
@@ -73,7 +76,7 @@ public final class Converter {
 
             // uncomment to set optional extensions
             options.set(Parser.EXTENSIONS, Arrays.asList(
-                    TablesExtension.create(), 
+                    TablesExtension.create(),
                     StrikethroughExtension.create()));
 
             // uncomment to convert soft-breaks to hard breaks

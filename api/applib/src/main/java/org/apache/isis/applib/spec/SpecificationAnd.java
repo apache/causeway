@@ -42,7 +42,7 @@ import org.apache.isis.applib.util.ReasonBuffer;
  *
  * @see SpecificationOr
  * @see SpecificationNot
- * @since ? {@index}
+ * @since 1.x {@index}
  */
 public abstract class SpecificationAnd implements Specification {
 

@@ -24,6 +24,9 @@ import org.springframework.context.annotation.Import;
 import org.apache.isis.extensions.modelannotation.applib.IsisModuleIncModelApplib;
 import org.apache.isis.extensions.modelannotation.metamodel.services.IncubatorMetaModelPlugin;
 
+/**
+ * @since 2.0 {@index}
+ */
 @Configuration
 @Import({
         // modules

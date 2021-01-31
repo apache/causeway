@@ -52,13 +52,15 @@ import lombok.val;
  * However, although there are two objects, they are set up to share the same {@link SecurityManager Shiro SecurityManager}
  * (bound to a thread-local).
  * </p>
+ *
+ * @since 1.x {@index}
  */
 @Service
 @Named("isis.security.AuthorizorShiro")
 @Order(OrderPrecedence.EARLY)
 @Qualifier("Shiro")
 public class AuthorizorShiro implements Authorizor {
-    
+
     @Inject private SpecificationLoader specificationLoader;
 
     @Override
@@ -125,7 +127,7 @@ public class AuthorizorShiro implements Authorizor {
     }
 
     // -- DEPS
-    
+
     /**
      * The {@link SecurityManager} is shared between both the {@link Authenticator} and the {@link Authorizor}
      * (if shiro is configured for both components).
@@ -133,12 +135,12 @@ public class AuthorizorShiro implements Authorizor {
     protected RealmSecurityManager getSecurityManager() {
         return ShiroSecurityContext.getSecurityManager();
     }
-    
+
     // -- HELPER
-    
+
     /**
      * @deprecated while this is technically correct, we should not need to call the SpecificationLoader
-     * on every permission check 
+     * on every permission check
      */
     private String asFeatureFqns(Identifier identifier) {
         val className = identifier.getClassName();
@@ -146,7 +148,7 @@ public class AuthorizorShiro implements Authorizor {
                 .<String>mapSuccess(this::asFeatureFqns)
                 .orElse(className);
     }
-    
+
     private String asFeatureFqns(Class<?> cls) {
         return Optional.ofNullable(specificationLoader.loadSpecification(cls))
                 .map(ObjectSpecification::getSpecId)

@@ -27,6 +27,9 @@ import org.apache.isis.subdomains.excel.applib.dom.util.Mode;
 
 import lombok.Setter;
 
+/**
+ * @since 2.0 {@index}
+ */
 public class WorksheetSpec {
 
     /**

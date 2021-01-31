@@ -30,6 +30,9 @@ import org.apache.isis.commons.internal.resources._Resources;
 
 import lombok.val;
 
+/**
+ * @since 2.0 {@index}
+ */
 public class IsisClobs extends AbstractRandomValueGenerator {
 
     public IsisClobs(final FakeDataService fakeDataService) {
@@ -103,7 +106,7 @@ public class IsisClobs extends AbstractRandomValueGenerator {
         final String randomFileName = fileNames.get(randomIdx);
         return asClob(randomFileName);
     }
-    
+
     private static Clob asClob(final String fileName) {
         try(val is = _Resources.load(IsisBlobs.class, "clobs/" + fileName)) {
             return new Clob(fileName, mimeTypeFor(fileName), _Strings.read(is, StandardCharsets.US_ASCII));

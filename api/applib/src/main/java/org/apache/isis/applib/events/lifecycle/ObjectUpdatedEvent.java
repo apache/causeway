@@ -19,7 +19,7 @@
 package org.apache.isis.applib.events.lifecycle;
 
 /**
- * @since ? {@index}
+ * @since 1.x {@index}
  */
 public abstract class ObjectUpdatedEvent<S> extends AbstractLifecycleEvent<S> {
 
@@ -46,7 +46,7 @@ public abstract class ObjectUpdatedEvent<S> extends AbstractLifecycleEvent<S> {
 
     public ObjectUpdatedEvent() {
     }
-    
+
     public ObjectUpdatedEvent(final S source) {
         super(source);
     }

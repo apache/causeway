@@ -40,8 +40,7 @@ import org.apache.isis.viewer.wicket.viewer.services.mementos.ObjectMementoServi
 import org.apache.isis.viewer.wicket.viewer.webmodule.WebModuleWicket;
 
 /**
- * 
- * @since 2.0
+ * @since 1.x {@index}
  */
 @Configuration
 @Import({

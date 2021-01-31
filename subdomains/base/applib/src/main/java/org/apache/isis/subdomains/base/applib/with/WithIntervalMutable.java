@@ -26,6 +26,9 @@ import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.subdomains.base.applib.valuetypes.LocalDateInterval;
 
+/**
+ * @since 2.0 {@index}
+ */
 public interface WithIntervalMutable<T extends WithIntervalMutable<T>> extends WithInterval<T> {
 
     @Action(semantics = SemanticsOf.IDEMPOTENT)
@@ -43,7 +46,7 @@ public interface WithIntervalMutable<T extends WithIntervalMutable<T>> extends W
 
     /**
      * Helper class for implementations to delegate to.
-     * 
+     *
      * <p>
      * If the class implements {@link WithIntervalContiguous} then use
      * {@link WithIntervalContiguous.Helper} instead.

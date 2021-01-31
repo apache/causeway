@@ -31,7 +31,11 @@ import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 
+/**
+ * @since 1.x {@index}
+ */
 public class PathNode {
+
     private static final Pattern NODE = Pattern.compile("^([^\\[]*)(\\[(.+)\\])?$");
     private static final Pattern WHITESPACE = Pattern.compile("\\s+");
     private static final Pattern LIST_CRITERIA_SYNTAX = Pattern.compile("^([^=]+)=(.+)$");

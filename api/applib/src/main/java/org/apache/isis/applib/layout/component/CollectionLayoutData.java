@@ -38,6 +38,8 @@ import org.apache.isis.applib.layout.links.Link;
  *     Note that {@link org.apache.isis.applib.annotation.CollectionLayout#render()} is omitted because
  *     {@link #defaultView} is its replacement.
  * </p>
+ *
+ * @since 1.x {@index}
  */
 @XmlRootElement(
         name = "collection"

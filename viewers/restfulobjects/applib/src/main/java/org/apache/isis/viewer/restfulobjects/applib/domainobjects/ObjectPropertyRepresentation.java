@@ -20,10 +20,12 @@ package org.apache.isis.viewer.restfulobjects.applib.domainobjects;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
+/**
+ * @since 1.x {@index}
+ */
 public class ObjectPropertyRepresentation extends AbstractObjectMemberRepresentation {
 
     public ObjectPropertyRepresentation(final JsonNode jsonNode) {
         super(jsonNode);
     }
-
 }

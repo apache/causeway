@@ -24,6 +24,8 @@ import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeature;
 /**
  * Named after UNIX modes (<code>chmod</code> etc), determines that nature of access (of denial of access if vetoed)
  * to an {@link ApplicationFeature}.
+ *
+ * @since 2.0 {@index}
  */
 public enum ApplicationPermissionMode {
     /**

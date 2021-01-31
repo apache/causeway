@@ -133,6 +133,8 @@ import static org.apache.isis.commons.internal.base._NullSafe.stream;
  * See the sample for group and user attribute and mapping.
  * <p/>
  * </p>
+ *
+ * @since 1.x {@index}
  */
 public class IsisLdapRealm extends DefaultLdapRealm {
 

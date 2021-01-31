@@ -20,7 +20,9 @@ package org.apache.isis.applib.layout.component;
 
 import java.util.List;
 
+/**
+ * @since 1.x {@index}
+ */
 public interface CollectionLayoutDataOwner extends MemberRegionOwner {
-
     List<CollectionLayoutData> getCollections();
 }

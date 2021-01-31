@@ -42,7 +42,7 @@ import org.apache.isis.schema.common.v2.OidsDto;
 import org.apache.isis.schema.common.v2.PeriodDto;
 
 /**
- * @since ? {@index}
+ * @since 1.x {@index}
  */
 public final class CommandDtoUtils {
 

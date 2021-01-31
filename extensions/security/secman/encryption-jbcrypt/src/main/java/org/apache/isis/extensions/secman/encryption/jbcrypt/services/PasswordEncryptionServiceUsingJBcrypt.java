@@ -28,6 +28,9 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.extensions.secman.api.encryption.PasswordEncryptionService;
 
+/**
+ * @since 2.0 {@index}
+ */
 @Service
 @Named("isis.ext.secman.PasswordEncryptionServiceUsingJBcrypt")
 @Order(OrderPrecedence.MIDPOINT)

@@ -18,6 +18,9 @@
  */
 package org.apache.isis.applib.layout.menubars;
 
+/**
+ * @since 1.x {@index}
+ */
 public interface Menu extends HasNamed {
 
 }

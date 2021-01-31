@@ -23,6 +23,9 @@ import java.util.stream.Collectors;
 
 import org.apache.isis.commons.internal.base._Strings;
 
+/**
+ * @since 2.0 {@index}
+ */
 public final class StringUtils {
 
     private StringUtils() {
@@ -33,7 +36,7 @@ public final class StringUtils {
                 ? StringUtils.capitalize(input.toLowerCase())
                 : null;
     };
-    
+
     private static UnaryOperator<String> UPPER_CASE = (final String input) -> {
         return input != null
                 ? StringUtils.capitalize(input.toUpperCase())
@@ -45,7 +48,7 @@ public final class StringUtils {
         if(string == null) {
             return null;
         }
-        
+
         return _Strings.splitThenStream(string, "_")
         .map(LOWER_CASE_THEN_CAPITALIZE)
         .collect(Collectors.joining(" "));

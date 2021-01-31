@@ -25,6 +25,9 @@ import org.apache.isis.core.webapp.IsisModuleCoreWebapp;
 import org.apache.isis.testing.h2console.ui.services.H2ManagerMenu;
 import org.apache.isis.testing.h2console.ui.webmodule.WebModuleH2Console;
 
+/**
+ * @since 2.0 {@index}
+ */
 @Configuration
 @Import({
         IsisModuleCoreWebapp.class,

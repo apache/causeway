@@ -31,6 +31,9 @@ import com.fasterxml.jackson.databind.JsonNode;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 
+/**
+ * @since 1.x {@index}
+ */
 public final class UrlEncodingUtils {
 
     public static final Function<String, String> FUNCTION = new Function<String, String>() {

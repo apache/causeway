@@ -29,6 +29,7 @@ import org.apache.isis.applib.services.userreg.events.PasswordResetEvent;
  * The framework provides a default implementation which in turn uses the
  * {@link org.apache.isis.applib.services.email.EmailService}, namely <code>EmailServiceDefault</code>.
  * </p>
+ *
  * @since 1.x {@index}
  */
 public interface EmailNotificationService

@@ -27,6 +27,8 @@ import org.apache.isis.commons.internal.collections._Lists;
 
 /**
  * Extension to applib's {@link ReasonBuffer}.
+ *
+ * @since 2.0 {@index}
  */
 public class ReasonBuffer2 {
 

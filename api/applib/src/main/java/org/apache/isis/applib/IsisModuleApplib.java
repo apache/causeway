@@ -48,6 +48,9 @@ import org.apache.isis.applib.services.user.RoleMemento;
 import org.apache.isis.applib.services.user.UserMemento;
 import org.apache.isis.schema.IsisModuleSchema;
 
+/**
+ * @since 2.0 {@index}
+ */
 @Configuration
 @Import({
         // modules
@@ -70,7 +73,7 @@ import org.apache.isis.schema.IsisModuleSchema;
         DomainObjectList.class,
         RoleMemento.class,
         UserMemento.class,
-        
+
         // @DomainService(s)
         ConfigurationMenu.class,
         LayoutServiceMenu.class,

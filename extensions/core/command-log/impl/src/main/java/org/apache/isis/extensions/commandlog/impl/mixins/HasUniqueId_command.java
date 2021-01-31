@@ -36,6 +36,8 @@ import org.apache.isis.extensions.commandlog.impl.jdo.CommandJdoRepository;
  * This mixin contributes a <tt>command</tt> action to any (non-command) implementation of
  * {@link org.apache.isis.commons.having.HasUniqueId}; that is: audit entries, and published events.  Thus, it
  * is possible to navigate from the effect back to the cause.
+ *
+ * @since 2.0 {@index}
  */
 @Action(
     semantics = SemanticsOf.SAFE

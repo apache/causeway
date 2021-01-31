@@ -21,6 +21,9 @@ package org.apache.isis.applib.layout.component;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 
+/**
+ * @since 1.x {@index}
+ */
 public interface HasNamed {
 
     @XmlElement(required = false)

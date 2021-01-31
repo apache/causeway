@@ -61,27 +61,29 @@ import lombok.val;
  *     implies a {@link ApplicationPermissionMode#CHANGING usability} veto.</li>
  * </ul>
  * </p>
+ *
+ * @since 2.0 {@index}
  */
 @DomainObject(objectType = "isis.ext.secman.IApplicationPermission")
 public interface ApplicationPermission {
-    
+
     // -- DOMAIN EVENTS
-    
+
     public static abstract class PropertyDomainEvent<T> extends IsisModuleExtSecmanApi.PropertyDomainEvent<ApplicationPermission, T> {}
     public static abstract class CollectionDomainEvent<T> extends IsisModuleExtSecmanApi.CollectionDomainEvent<ApplicationPermission, T> {}
     public static abstract class ActionDomainEvent extends IsisModuleExtSecmanApi.ActionDomainEvent<ApplicationPermission> {}
-    
+
     public static class AllowDomainEvent extends ActionDomainEvent {}
     public static class UpdateRoleDomainEvent extends ActionDomainEvent {}
     public static class VetoDomainEvent extends ActionDomainEvent {}
     public static class DeleteDomainEvent extends ActionDomainEvent {}
     public static class ChangingDomainEvent extends ActionDomainEvent {}
     public static class ViewingDomainEvent extends ActionDomainEvent {}
-    
+
     public static class RelocateNamespaceDomainEvent extends ActionDomainEvent {}
-    
+
     // -- MODEL
-    
+
     /**
      * having a title() method (rather than using @Title annotation) is necessary as a workaround to be able to use
      * wrapperFactory#unwrap(...) method, which is otherwise broken in Isis 1.6.0
@@ -95,7 +97,7 @@ public interface ApplicationPermission {
 
         createFeatureId()
         .ifPresent(featureId->{
-            
+
             switch (featureId.getType()) {
             case PACKAGE:
                 buf.append(getFeatureFqn());              // com.mycompany
@@ -114,16 +116,16 @@ public interface ApplicationPermission {
                 .append(featureId.getMemberName());   // com.mycompany.Bar#foo
                 break;
             }
-            
+
         });
-        
+
         return buf.toString();
     }
-    
+
     ApplicationFeatureType getFeatureType();
 
     // -- ROLE
-    
+
     @Property
     @PropertyLayout(
             hidden=Where.REFERENCES_PARENT
@@ -133,49 +135,49 @@ public interface ApplicationPermission {
         throw _Exceptions.unsupportedOperation("please implement me");
     }
     void setRole(ApplicationRole applicationRole);
-    
+
     // -- RULE
-    
+
     @Property
     @MemberOrder(name="Permissions", sequence = "2")
     default ApplicationPermissionRule getRule() {
         throw _Exceptions.unsupportedOperation("please implement me");
     }
     void setRule(ApplicationPermissionRule rule);
-    
+
     // -- MODE
-    
+
     @Property
     @MemberOrder(name="Permissions", sequence = "3")
     default ApplicationPermissionMode getMode() {
         throw _Exceptions.unsupportedOperation("please implement me");
     }
     void setMode(ApplicationPermissionMode changing);
-    
+
     // -- TYPE
-    
+
     @Property
     @MemberOrder(name="Feature", sequence = "5")
     default String getType() {
         throw _Exceptions.unsupportedOperation("please implement me");
     }
-    
+
     // -- FQN
-    
+
     @Property
     @MemberOrder(name="Feature", sequence = "5.1")
     default String getFeatureFqn() {
         throw _Exceptions.unsupportedOperation("please implement me");
     }
     void setFeatureFqn(String featureFqn);
-    
+
     // -- HELPER
-    
+
     @Programmatic
     default Optional<ApplicationFeatureId> createFeatureId() {
         return Optional.of(getFeatureType())
                 .map(featureType -> ApplicationFeatureId.newFeature(featureType, getFeatureFqn()));
     }
-    
+
 
 }

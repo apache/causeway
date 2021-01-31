@@ -21,8 +21,7 @@ package org.apache.isis.applib.services.menu;
 import org.apache.isis.applib.layout.menubars.MenuBars;
 
 /**
- * 
- * @since 2.0 {@index}
+ * @since 1.x {@index}
  */
 public interface MenuBarsService {
 

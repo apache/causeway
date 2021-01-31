@@ -32,6 +32,9 @@ import org.datanucleus.store.rdbms.table.Table;
 
 import org.apache.isis.applib.value.Clob;
 
+/**
+ * @since 1.x {@index}
+ */
 public class IsisClobMapping extends SingleFieldMultiMapping {
 
     public IsisClobMapping() {

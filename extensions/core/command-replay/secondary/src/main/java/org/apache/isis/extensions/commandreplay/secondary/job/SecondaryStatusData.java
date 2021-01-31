@@ -26,6 +26,9 @@ import org.apache.isis.extensions.quartz.context.JobExecutionData;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
+/**
+ * @since 2.0 {@index}
+ */
 @Log4j2
 class SecondaryStatusData {
 

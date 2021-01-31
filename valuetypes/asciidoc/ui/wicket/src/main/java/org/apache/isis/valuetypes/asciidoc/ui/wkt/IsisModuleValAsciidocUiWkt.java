@@ -27,6 +27,9 @@ import org.apache.isis.valuetypes.asciidoc.ui.wkt.components.schema.chg.v2.Chang
 import org.apache.isis.valuetypes.asciidoc.ui.wkt.components.schema.cmd.v2.CommandDtoPanelFactoriesWkt;
 import org.apache.isis.valuetypes.asciidoc.ui.wkt.components.schema.ixn.v2.InteractionDtoPanelFactoriesWkt;
 
+/**
+ * @since 2.0 {@index}
+ */
 @Configuration
 @Import({
     IsisModuleValAsciidocApplib.class,

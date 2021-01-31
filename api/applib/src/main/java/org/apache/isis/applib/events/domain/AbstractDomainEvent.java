@@ -31,7 +31,7 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
 import lombok.Getter;
 
 /**
- * @since ? {@index}
+ * @since 1.x {@index}
  */
 public abstract class AbstractDomainEvent<S> extends EventObjectBase<S> {
 

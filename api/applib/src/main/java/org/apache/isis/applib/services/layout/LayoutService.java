@@ -23,8 +23,7 @@ import org.apache.isis.applib.layout.grid.Grid;
 import org.apache.isis.applib.services.menu.MenuBarsService;
 
 /**
- * 
- * @since 2.0 {@index}
+ * @since 1.x {@index}
  */
 public interface LayoutService {
 

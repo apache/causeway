@@ -56,6 +56,8 @@ import org.apache.isis.viewer.restfulobjects.applib.util.UrlEncodingUtils;
 /**
  * A wrapper around {@link JsonNode} that provides some additional helper
  * methods.
+ *
+ * @since 1.x {@index}
  */
 public class JsonRepresentation {
 

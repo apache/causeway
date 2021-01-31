@@ -28,7 +28,8 @@ import org.apache.isis.applib.services.i18n.TranslatableString;
  *     If implemented, then the {@link #satisfies(Object)} inherited from {@link Specification} can just return <tt>null</tt>;
  *     it will never be called by the framework.
  * </p>
- * @since ? {@index}
+ *
+ * @since 1.x {@index}
  */
 public interface Specification2 extends Specification {
 

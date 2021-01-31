@@ -22,6 +22,9 @@ import org.datanucleus.store.types.converters.TypeConverter;
 
 import org.apache.isis.valuetypes.markdown.applib.value.Markdown;
 
+/**
+ * @since 2.0 {@index}
+ */
 public class IsisMarkdownConverter implements TypeConverter<Markdown, String>{
 
     private static final long serialVersionUID = 1L;

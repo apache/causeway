@@ -30,9 +30,7 @@ import static org.apache.isis.commons.internal.base._NullSafe.stream;
 
 
 /**
- * <p>
- *     Used by domain apps only.
- * </p>
+ * @since 2.0 {@index}
  */
 public class SoapEndpointPublishingRule implements TestRule {
 

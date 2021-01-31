@@ -24,6 +24,8 @@ import org.apache.isis.applib.exceptions.UnrecoverableException;
 /**
  * Indicates that there is no Authenticator available to authenticate a user
  * based on this request.
+ *
+ * @since 1.x {@index}
  */
 public class NoAuthenticatorException extends UnrecoverableException {
     private static final long serialVersionUID = 1L;

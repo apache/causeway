@@ -22,6 +22,8 @@ import java.util.Collection;
 
 /**
  * An implementation whereby a VETO permission for a feature overrides an ALLOW (for same scope).
+ *
+ * @since 2.0 {@index}
  */
 public class PermissionsEvaluationServiceAllowBeatsVeto extends PermissionsEvaluationServiceAbstract {
 

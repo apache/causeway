@@ -38,6 +38,9 @@ import org.apache.isis.core.config.datasources.DataSourceIntrospectionService.Da
 
 import lombok.extern.log4j.Log4j2;
 
+/**
+ * @since 2.0 {@index}
+ */
 @DomainService(
         nature = NatureOfService.VIEW,
         objectType = "isis.ext.hsqldbMgr.HsqlDbManagerMenu"

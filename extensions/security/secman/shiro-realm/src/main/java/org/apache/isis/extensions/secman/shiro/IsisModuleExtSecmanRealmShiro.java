@@ -23,6 +23,9 @@ import org.springframework.context.annotation.Import;
 
 import org.apache.isis.extensions.secman.shiro.services.SecurityRealmServiceUsingShiro;
 
+/**
+ * @since 2.0 {@index}
+ */
 @Configuration
 @Import({
     SecurityRealmServiceUsingShiro.class

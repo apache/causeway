@@ -30,6 +30,9 @@ import org.apache.isis.applib.mixins.MixinConstants;
 
 import lombok.RequiredArgsConstructor;
 
+/**
+ * @since 2.0 {@index}
+ */
 @Property(
         domainEvent = Persistable_datanucleusVersionTimestamp.PropertyDomainEvent.class)
 @PropertyLayout(
@@ -41,7 +44,7 @@ public class Persistable_datanucleusVersionTimestamp {
 
     private final Persistable persistable;
 
-    public static class PropertyDomainEvent 
+    public static class PropertyDomainEvent
     extends org.apache.isis.applib.IsisModuleApplib.PropertyDomainEvent
     <Persistable_datanucleusVersionTimestamp, java.sql.Timestamp> {}
 

@@ -28,8 +28,8 @@ import org.apache.isis.schema.cmd.v2.CommandDto;
 
 /**
  * At least one implementation is required.
- * 
- * @since 2.0 {@index}
+ *
+ * @since 1.x {@index}
  */
 @Service
 @Named("isis.applib.CommandDtoProcessorServiceIdentity")

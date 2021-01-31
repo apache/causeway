@@ -22,9 +22,12 @@ import org.apache.isis.commons.internal.reflection._Reflect;
 
 import lombok.val;
 
+/**
+ * @since 2.0 {@index}
+ */
 public class ReflectUtils {
-    private ReflectUtils() {
-    }
+
+    private ReflectUtils() { }
 
     public static void inject(
             final Object target,
@@ -33,9 +36,9 @@ public class ReflectUtils {
 
         try {
             val field = target.getClass().getDeclaredField(fieldName);
-            
+
             _Reflect.setFieldOn(field, target, toInject);
-            
+
         } catch (NoSuchFieldException | IllegalAccessException e) {
             throw new RuntimeException(e);
         }

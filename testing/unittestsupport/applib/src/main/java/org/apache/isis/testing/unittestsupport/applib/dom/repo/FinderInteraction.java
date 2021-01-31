@@ -23,7 +23,11 @@ import java.util.Map;
 import org.apache.isis.applib.query.NamedQuery;
 import org.apache.isis.applib.query.Query;
 
+/**
+ * @since 2.0 {@index}
+ */
 public class FinderInteraction {
+
     public enum FinderMethod {
         FIRST_MATCH,
         ALL_MATCHES,

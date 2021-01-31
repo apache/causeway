@@ -19,7 +19,6 @@
 package org.apache.isis.applib.services.wrapper.control;
 
 /**
- * 
  * @since 2.0 {@index}
  */
 @FunctionalInterface

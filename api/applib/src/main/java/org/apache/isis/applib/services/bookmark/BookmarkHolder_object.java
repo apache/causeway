@@ -25,6 +25,9 @@ import org.apache.isis.applib.annotation.Property;
 
 import lombok.RequiredArgsConstructor;
 
+/**
+ * @since 1.x {@index}
+ */
 @Property(
         domainEvent = BookmarkHolder_object.PropertyDomainEvent.class
 )
@@ -33,7 +36,7 @@ public class BookmarkHolder_object {
 
     private final BookmarkHolder bookmarkHolder;
 
-    public static class PropertyDomainEvent 
+    public static class PropertyDomainEvent
     extends IsisModuleApplib.PropertyDomainEvent<BookmarkHolder_object, Object> { }
 
     public Object prop() {
@@ -41,7 +44,7 @@ public class BookmarkHolder_object {
     }
 
     // -- DEPENDENCIES
-    
+
     @Inject private BookmarkService bookmarkService;
 
 }

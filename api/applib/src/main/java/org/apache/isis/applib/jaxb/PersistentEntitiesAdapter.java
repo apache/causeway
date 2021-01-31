@@ -33,7 +33,7 @@ import lombok.Getter;
 import lombok.val;
 
 /**
- * @since ? {@index}
+ * @since 2.0 {@index}
  */
 public class PersistentEntitiesAdapter extends XmlAdapter<OidsDto, List<Object>> {
 

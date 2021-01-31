@@ -21,6 +21,9 @@ package org.apache.isis.subdomains.excel.applib.dom;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
+/**
+ * @since 2.0 {@index}
+ */
 @Retention(RetentionPolicy.RUNTIME)
 public @interface PivotColumn {
     int order();

@@ -18,6 +18,9 @@
  */
 package org.apache.isis.subdomains.excel.applib.dom.util;
 
+/**
+ * @since 2.0 {@index}
+ */
 public class AnnotationTriplet implements Comparable<AnnotationTriplet>{
 
     AnnotationTriplet(final String annotation, final Integer colNumber, final Integer order){

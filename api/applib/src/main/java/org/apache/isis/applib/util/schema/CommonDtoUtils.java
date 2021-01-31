@@ -67,7 +67,7 @@ import lombok.NonNull;
 import lombok.val;
 
 /**
- * @since ? {@index}
+ * @since 1.x {@index}
  */
 public final class CommonDtoUtils {
 
@@ -106,13 +106,13 @@ public final class CommonDtoUtils {
                     entry(OffsetDateTime.class, ValueType.OFFSET_DATE_TIME),
                     entry(OffsetTime.class, ValueType.OFFSET_TIME),
                     entry(ZonedDateTime.class, ValueType.ZONED_DATE_TIME),
-                    
+
                     // joda.time
                     entry(org.joda.time.DateTime.class, ValueType.JODA_DATE_TIME),
                     entry(org.joda.time.LocalDateTime.class, ValueType.JODA_LOCAL_DATE_TIME),
                     entry(org.joda.time.LocalDate.class, ValueType.JODA_LOCAL_DATE),
                     entry(org.joda.time.LocalTime.class, ValueType.JODA_LOCAL_TIME),
-                    
+
                     entry(java.sql.Timestamp.class, ValueType.JAVA_SQL_TIMESTAMP),
                     entry(Blob.class, ValueType.BLOB),
                     entry(Clob.class, ValueType.CLOB)
@@ -157,7 +157,7 @@ public final class CommonDtoUtils {
             final ValueType valueType,
             final Object value,
             final BookmarkService bookmarkService) {
-        
+
         valueWithTypeDto.setType(valueType);
 
         setValueOn((ValueDto)valueWithTypeDto, valueType, value, bookmarkService);
@@ -165,15 +165,15 @@ public final class CommonDtoUtils {
 
         return valueWithTypeDto;
     }
-    
+
     public static <T extends ValueWithTypeDto> T setValueOnNonScalar(
             final T valueWithTypeDto,
             final ValueType elementValueType,
             final Object value,
             final BookmarkService bookmarkService) {
-        
+
         valueWithTypeDto.setType(ValueType.COLLECTION);
-        
+
         val collectionDto = asCollectionDto(value, elementValueType, bookmarkService);
         valueWithTypeDto.setCollection(collectionDto);
         valueWithTypeDto.setNull(value == null);
@@ -317,8 +317,8 @@ public final class CommonDtoUtils {
         case REFERENCE: {
             final Bookmark bookmark = pojo instanceof Bookmark
                     ? (Bookmark) pojo
-                    : bookmarkService!=null 
-                            ? bookmarkService.bookmarkFor(pojo) 
+                    : bookmarkService!=null
+                            ? bookmarkService.bookmarkFor(pojo)
                             : null;
 
             if (bookmark != null) {
@@ -364,32 +364,32 @@ public final class CommonDtoUtils {
 
         val collectionDto = new CollectionDto();
         collectionDto.setType(commonElementValueType);
-        
+
         val needsCommonElementValueTypeAutodetect = commonElementValueType==ValueType.VOID;
-        
+
         val commonElementValueTypeRef = _Refs.<ValueType>objectRef(null);
-        
+
         _NullSafe.streamAutodetect(iterableOrArray)
         .forEach(element->{
             val valueDto = new ValueDto();
             if(element==null) {
                 setValueOn(valueDto, ValueType.VOID, element, bookmarkService);
             } else {
-                val elementValueType = asValueType(element.getClass()); 
+                val elementValueType = asValueType(element.getClass());
                 setValueOn(valueDto, elementValueType, element, bookmarkService);
-                
+
                 if(needsCommonElementValueTypeAutodetect) {
                     commonElementValueTypeRef.update(acc->reduce(acc, elementValueType));
                 }
-                
+
             }
             collectionDto.getValue().add(valueDto);
         });
-        
+
         if(needsCommonElementValueTypeAutodetect) {
             collectionDto.setType(commonElementValueTypeRef.getValueElseDefault(ValueType.VOID));
         }
-        
+
         return collectionDto;
     }
 
@@ -397,12 +397,12 @@ public final class CommonDtoUtils {
 
     private static ValueType reduce(ValueType acc, ValueType next) {
         if(acc==null) {
-            return next;    
+            return next;
         }
         if(acc==next) {
-            return acc;    
+            return acc;
         }
-        throw _Exceptions.unsupportedOperation("mixing types within a collection is not supported yet");    
+        throw _Exceptions.unsupportedOperation("mixing types within a collection is not supported yet");
     }
 
     public static <T> T getValue(
@@ -439,7 +439,7 @@ public final class CommonDtoUtils {
             return valueDto.getBigDecimal();
         case BIG_INTEGER:
             return valueDto.getBigInteger();
-         // JAVA TIME    
+         // JAVA TIME
         case LOCAL_DATE:
             return JavaTimeXMLGregorianCalendarMarshalling.toLocalDate(valueDto.getLocalDate());
         case LOCAL_TIME:
@@ -476,17 +476,17 @@ public final class CommonDtoUtils {
                 return Collections.emptyList();
             }
             val list = new ArrayList<Object>();
-            
+
             val elementValueType = collectionDto.getType();
-            
+
             for(val elementValueDto : collectionDto.getValue()) {
-                
+
                 if(elementValueDto instanceof ValueWithTypeDto) {
                     list.add(getValueAsObject(elementValueDto, ((ValueWithTypeDto)elementValueDto).getType()));
                 } else {
-                    list.add(getValueAsObject(elementValueDto, elementValueType));    
+                    list.add(getValueAsObject(elementValueDto, elementValueType));
                 }
-                
+
             }
             return list;
         case BLOB:
@@ -574,7 +574,7 @@ public final class CommonDtoUtils {
 
         return paramDto;
     }
-    
+
     public static ParamDto newParamDtoNonScalar(
             final String parameterName,
             final Class<?> parameterElementType,

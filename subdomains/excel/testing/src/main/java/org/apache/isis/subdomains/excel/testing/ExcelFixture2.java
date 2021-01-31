@@ -41,6 +41,8 @@ import lombok.val;
 /**
  * This class should be executed using {@link FixtureScripts.MultipleExecutionStrategy#EXECUTE_ONCE_BY_VALUE} (it
  * has value semantics).
+ *
+ * @since 2.0 {@index}
  */
 @DomainObject(
         objectType = "isis.sub.excel.ExcelFixture2"
@@ -121,7 +123,7 @@ public class ExcelFixture2 extends FixtureScript {
             throw new IllegalArgumentException("Could not read from resource: " + getExcelResource());
         }
     }
-    
+
     //endregion
 
 

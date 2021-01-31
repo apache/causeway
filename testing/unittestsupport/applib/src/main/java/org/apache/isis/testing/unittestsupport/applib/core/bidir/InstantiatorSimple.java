@@ -18,6 +18,9 @@
  */
 package org.apache.isis.testing.unittestsupport.applib.core.bidir;
 
+/**
+ * @since 2.0 {@index}
+ */
 public class InstantiatorSimple implements Instantiator {
 
     public final Class<?> cls;

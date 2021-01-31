@@ -22,8 +22,10 @@ package org.apache.isis.applib.exceptions.unrecoverable;
 import org.apache.isis.applib.exceptions.UnrecoverableException;
 
 /**
- * Indicates that the persistence context was unable to get an instantiate 
+ * Indicates that the persistence context was unable to get an instantiate
  * for the specified object identifier.
+ *
+ * @since 1.x {@index}
  */
 public class ObjectNotFoundException extends UnrecoverableException {
     private static final long serialVersionUID = 1L;

@@ -48,47 +48,49 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
- * EclipseLink integration. 
+ * EclipseLink integration.
  * <p>
  * Sets up EclipseLink as the implementation provider for Spring Data JPA.
- * 
+ *
  * @implNote does not (yet) support weaving, explicitly disables it
  * @see <a href="https://www.baeldung.com/spring-eclipselink">baeldung.com</a>
+ *
+ * @since 2.0 {@index}
  */
-@Configuration 
+@Configuration
 @Import({
     IsisModuleJpaIntegration.class
 })
 @Log4j2
-public class IsisModuleJpaEclipselink extends JpaBaseConfiguration { 
+public class IsisModuleJpaEclipselink extends JpaBaseConfiguration {
 
     @Inject private Provider<ServiceInjector> serviceInjectorProvider;
-    
+
     @Bean
     public EclipseLinkJpaDialect eclipselinkJpaDialect() {
         return new EclipseLinkJpaDialect();
     }
-    
+
     @Bean
     public PersistenceExceptionTranslationPostProcessor persistenceExceptionTranslationPostProcessor(){
         return new PersistenceExceptionTranslationPostProcessor();
     }
-    
+
     protected IsisModuleJpaEclipselink(
             IsisConfiguration isisConfiguration,
-            DataSource dataSource, 
+            DataSource dataSource,
             JpaProperties properties,
             ObjectProvider<JtaTransactionManager> jtaTransactionManager) {
-        
+
         super(
-                autoCreateSchemas(dataSource, isisConfiguration), 
-                addAdditionalOrmFiles(properties, isisConfiguration), 
+                autoCreateSchemas(dataSource, isisConfiguration),
+                addAdditionalOrmFiles(properties, isisConfiguration),
                 jtaTransactionManager);
     }
 
-    @Override 
-    protected AbstractJpaVendorAdapter createJpaVendorAdapter() { 
-        return new EclipseLinkJpaVendorAdapter(); 
+    @Override
+    protected AbstractJpaVendorAdapter createJpaVendorAdapter() {
+        return new EclipseLinkJpaVendorAdapter();
     }
 
     @Override
@@ -108,27 +110,27 @@ public class IsisModuleJpaEclipselink extends JpaBaseConfiguration {
     protected static DataSource autoCreateSchemas(
             final DataSource dataSource,
             final IsisConfiguration isisConfiguration) {
-        
+
         val persistenceSchemaConf = isisConfiguration.getPersistence().getJpa();
-        
+
         if(!persistenceSchemaConf.getAutoCreateSchemas().isEmpty()) {
-            
+
             log.info("about to create db schema(s) {}", persistenceSchemaConf.getAutoCreateSchemas());
-            
+
             try(val con = dataSource.getConnection()){
-                
+
                 val s = con.createStatement();
-                
+
                 for(val schema : persistenceSchemaConf.getAutoCreateSchemas()) {
                     s.execute(String.format(persistenceSchemaConf.getCreateSchemaSqlTemplate(), schema));
                 }
-                
+
             }
         }
 
         return dataSource;
     }
-    
+
     /**
      * integrates with settings from isis.persistence.jpa.*
      */
@@ -137,16 +139,16 @@ public class IsisModuleJpaEclipselink extends JpaBaseConfiguration {
             IsisConfiguration isisConfiguration) {
 
         val persistenceSchemaConf = isisConfiguration.getPersistence().getJpa();
-        
+
         persistenceSchemaConf.getAdditionalOrmFiles()
         .forEach(schema->properties.getMappingResources()
                 .add(String.format("META-INF/orm-%s.xml", schema)));
-        
+
         if(!properties.getMappingResources().isEmpty()) {
             log.info("using mapping-resources {}", properties.getMappingResources());
         }
-        
+
         return properties;
     }
-    
+
 }

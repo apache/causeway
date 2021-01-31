@@ -21,6 +21,9 @@ package org.apache.isis.subdomains.xdocreport.applib.service;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * @since 2.0 {@index}
+ */
 public interface XDocReportModel {
 
     @lombok.Data

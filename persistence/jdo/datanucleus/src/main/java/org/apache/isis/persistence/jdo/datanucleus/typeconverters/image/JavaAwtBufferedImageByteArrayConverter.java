@@ -26,9 +26,12 @@ import org.datanucleus.store.types.converters.TypeConverter;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.image._Images;
 
+/**
+ * @since 2.0 {@index}
+ */
 public class JavaAwtBufferedImageByteArrayConverter implements TypeConverter<BufferedImage, byte[]> {
 
-    // generated 
+    // generated
     private static final long serialVersionUID = 5481131533536472276L;
 
     @Override

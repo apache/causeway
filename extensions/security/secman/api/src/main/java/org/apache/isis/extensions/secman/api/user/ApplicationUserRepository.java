@@ -30,6 +30,9 @@ import org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy;
 
 import lombok.NonNull;
 
+/**
+ * @since 2.0 {@index}
+ */
 public interface ApplicationUserRepository<U extends ApplicationUser> {
 
     /**
@@ -45,7 +48,7 @@ public interface ApplicationUserRepository<U extends ApplicationUser> {
     Collection<U> findByAtPath(String atPath);
     Collection<U> findByRole(ApplicationRole role);
     Collection<U> findByTenancy(ApplicationTenancy tenancy);
-    
+
     /**
      * auto-complete support
      * @param search
@@ -59,11 +62,11 @@ public interface ApplicationUserRepository<U extends ApplicationUser> {
     boolean isPasswordFeatureEnabled(ApplicationUser holder);
 
     boolean updatePassword(ApplicationUser user, String password);
-    
+
     U newUser(String username, AccountType accountType, Consumer<U> beforePersist);
 
     default U newLocalUser(
-            @NonNull String username, 
+            @NonNull String username,
             @Nullable Password password,
             @NonNull ApplicationUserStatus status) {
 
@@ -88,7 +91,7 @@ public interface ApplicationUserRepository<U extends ApplicationUser> {
 
     }
 
-    
+
 
 
 }

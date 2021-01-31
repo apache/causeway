@@ -18,6 +18,9 @@
  */
 package org.apache.isis.subdomains.excel.applib.dom;
 
+/**
+ * @since 2.0 {@index}
+ */
 public enum AggregationType {
     SUM,
     COUNT;

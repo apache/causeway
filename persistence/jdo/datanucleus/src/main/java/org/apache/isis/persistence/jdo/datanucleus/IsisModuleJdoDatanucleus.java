@@ -52,6 +52,9 @@ import org.apache.isis.persistence.jdo.spring.integration.TransactionAwarePersis
 
 import lombok.val;
 
+/**
+ * @since 1.x {@index}
+ */
 @Configuration
 @Import({
     // modules

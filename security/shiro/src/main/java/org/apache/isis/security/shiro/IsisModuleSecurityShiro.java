@@ -28,8 +28,8 @@ import org.apache.isis.security.shiro.webmodule.WebModuleShiro;
 
 /**
  * Configuration Bean to support Isis Security using Shiro.
- *  
- * @since 2.0
+ *
+ * @since 1.x {@index}
  */
 @Configuration
 @Import({

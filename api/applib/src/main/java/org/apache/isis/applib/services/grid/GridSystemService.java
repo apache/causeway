@@ -22,7 +22,8 @@ import org.apache.isis.applib.layout.grid.Grid;
 
 /**
  * Provides an implementation of {@link Grid}.
- * @since 2.0 {@index}
+ *
+ * @since 1.x {@index}
  */
 public interface GridSystemService<G extends Grid> {
 

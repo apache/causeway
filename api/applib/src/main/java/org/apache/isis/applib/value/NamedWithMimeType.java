@@ -29,7 +29,7 @@ import org.apache.isis.commons.collections.Can;
 import lombok.Getter;
 
 /**
- * @since 2.0 {@index}
+ * @since 1.x {@index}
  */
 public interface NamedWithMimeType extends Serializable {
 
@@ -39,7 +39,7 @@ public interface NamedWithMimeType extends Serializable {
 
     /**
      * Subset of MimeTypes most commonly used.
-     * 
+     *
      * @since 2.0
      */
     public static enum CommonMimeType {
@@ -106,7 +106,7 @@ public interface NamedWithMimeType extends Serializable {
         WOFF2("font/woff2"),
         XHTML("application/xhtml+xml"),
         XML("application/xml"), /*alias*/ XSD("application/xml"),
-        
+
         XUL("application/vnd.mozilla.xul+xml"),
         ZIP("application/zip"),
         _7Z("application/x-7z-compressed"),
@@ -114,7 +114,7 @@ public interface NamedWithMimeType extends Serializable {
         // see
         // https://stackoverflow.com/questions/4212861/what-is-a-correct-mime-type-for-docx-pptx-etc
 
-        DOC("application/msword"), 
+        DOC("application/msword"),
         DOT("application/msword"),
 
         DOCX("application/vnd.openxmlformats-officedocument.wordprocessingml.document"),
@@ -122,7 +122,7 @@ public interface NamedWithMimeType extends Serializable {
         DOCM("application/vnd.ms-word.document.macroEnabled.12"),
         DOTM("application/vnd.ms-word.template.macroEnabled.12"),
 
-        XLS("application/vnd.ms-excel"), 
+        XLS("application/vnd.ms-excel"),
         XLT("application/vnd.ms-excel"),
         XLA("application/vnd.ms-excel"),
 
@@ -133,9 +133,9 @@ public interface NamedWithMimeType extends Serializable {
         XLAM("application/vnd.ms-excel.addin.macroEnabled.12"),
         XLSB("application/vnd.ms-excel.sheet.binary.macroEnabled.12"),
 
-        PPT("application/vnd.ms-powerpoint"), 
+        PPT("application/vnd.ms-powerpoint"),
         POT("application/vnd.ms-powerpoint"),
-        PPS("application/vnd.ms-powerpoint"), 
+        PPS("application/vnd.ms-powerpoint"),
         PPA("application/vnd.ms-powerpoint"),
 
         PPTX("application/vnd.openxmlformats-officedocument.presentationml.presentation"),
@@ -146,7 +146,7 @@ public interface NamedWithMimeType extends Serializable {
         POTM("application/vnd.ms-powerpoint.template.macroEnabled.12"),
         PPSM("application/vnd.ms-powerpoint.slideshow.macroEnabled.12"),
 
-        MDB("application/vnd.ms-access"), 
+        MDB("application/vnd.ms-access"),
 
         ;
 

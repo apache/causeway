@@ -37,6 +37,9 @@ import org.apache.isis.extensions.commandreplay.secondary.jobcallables.Replicate
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
+/**
+ * @since 2.0 {@index}
+ */
 @DisallowConcurrentExecution
 @PersistJobDataAfterExecution
 @Log4j2
@@ -53,9 +56,9 @@ public class ReplicateAndReplayJob implements Job {
 
         if(secondaryConfig.isConfigured()) {
             val user = UserMemento.ofNameAndRoleNames(
-                    secondaryConfig.getPrimaryUser(), 
+                    secondaryConfig.getPrimaryUser(),
                     secondaryConfig.getQuartzRoles().stream());
-            
+
             authentication = SimpleAuthentication.validOf(user);
             exec(quartzContext);
         }

@@ -21,9 +21,7 @@ package org.apache.isis.testing.unittestsupport.applib.core.utils;
 import java.util.Set;
 
 /**
- * <p>
- *     Used by domain apps only.
- * </p>
+ * @since 2.0 {@index}
  */
 public class CollectUtils {
 

@@ -33,6 +33,9 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
+/**
+ * @since 1.x {@index}
+ */
 @Property
 @PropertyLayout(hidden = Where.ALL_TABLES)
 @RequiredArgsConstructor
@@ -40,10 +43,10 @@ public class Object_objectIdentifier {
 
     @Inject private BookmarkService bookmarkService;
     @Inject private MetaModelService mmService;
-    
+
     private final Object holder;
 
-    public static class ActionDomainEvent 
+    public static class ActionDomainEvent
     extends org.apache.isis.applib.IsisModuleApplib.ActionDomainEvent<Object_objectIdentifier> {}
 
     @MemberOrder(name = MixinConstants.METADATA_LAYOUT_GROUPNAME, sequence = "700.2")
@@ -57,13 +60,13 @@ public class Object_objectIdentifier {
     }
 
     // -- HELPER
-    
+
     private String shortend(@NonNull String identifier) {
-        
+
         val hashHexed = Integer.toHexString(identifier.hashCode());
         val hashPadded = _Strings.padStart(hashHexed, 8, '0');
         return "»" + hashPadded;
     }
-    
+
 
 }

@@ -40,6 +40,9 @@ import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndAc
 
 import lombok.extern.log4j.Log4j2;
 
+/**
+ * @since 1.x {@index}
+ */
 @Service
 @Named("isis.viewer.ro.ContentNegotiationServiceOrgApacheIsisV1")
 @Order(OrderPrecedence.MIDPOINT - 200)
@@ -85,17 +88,17 @@ public class ContentNegotiationServiceOrgApacheIsisV1 extends ContentNegotiation
     }
 
     // -- HELPER
-    
+
     private boolean canAccept(final IResourceContext resourceContext) {
         final List<MediaType> acceptableMediaTypes = resourceContext.getAcceptableMediaTypes();
         return mediaTypeParameterMatches(acceptableMediaTypes, "profile", ACCEPT_PROFILE);
     }
-    
+
     private ResponseBuilder whenV1ThenNotImplemented(final IResourceContext resourceContext) {
         if(!canAccept(resourceContext)) {
             return null;
         }
-        log.warn("profile '{}' is no longer supported use '{}' instead", 
+        log.warn("profile '{}' is no longer supported use '{}' instead",
                 ACCEPT_PROFILE,
                 ContentNegotiationServiceOrgApacheIsisV2.ACCEPT_PROFILE);
         return Responses.ofNotImplemented();

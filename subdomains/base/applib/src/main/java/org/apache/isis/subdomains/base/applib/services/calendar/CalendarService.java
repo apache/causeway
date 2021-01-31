@@ -32,6 +32,9 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.clock.ClockService;
 
+/**
+ * @since 2.0 {@index}
+ */
 @Service
 @Named("isis.sub.base.CalendarService")
 @Order(OrderPrecedence.MIDPOINT)
@@ -40,9 +43,9 @@ import org.apache.isis.applib.services.clock.ClockService;
 public class CalendarService {
 
     private static final int MONTHS_IN_QUARTER = 3;
-    
+
     private ClockService clockService;
-    
+
     @Inject
     public CalendarService(ClockService clockService) {
         this.clockService = clockService;
@@ -64,7 +67,7 @@ public class CalendarService {
     public LocalDate beginningOfNextQuarter() {
         return beginningOfQuarter(nowAsLocalDate().plusMonths(3));
     }
-    
+
     static LocalDate beginningOfQuarter(final LocalDate date) {
         final LocalDate beginningOfMonth = beginningOfMonth(date);
         final int monthOfYear = beginningOfMonth.getMonthValue();
@@ -77,7 +80,7 @@ public class CalendarService {
     private LocalDate nowAsLocalDate() {
         return clockService.getClock().localDate(ZoneId.systemDefault());
     }
-    
+
     /**
      * @deprecated - use {@link ClockService#getClock()}.getEpochMillis()
      */
@@ -86,5 +89,5 @@ public class CalendarService {
         return clockService.getClock().getEpochMillis();
     }
 
-    
+
 }

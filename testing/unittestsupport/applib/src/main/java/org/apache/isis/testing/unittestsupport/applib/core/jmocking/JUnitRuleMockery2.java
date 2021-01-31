@@ -67,9 +67,7 @@ import junit.framework.AssertionFailedError;
  * make it explicit whether the context can mock only interfaces or interfaces
  * and classes.
  *
- * <p>
- *     Used by domain apps only.
- * </p>
+ * @since 2.0 {@index}
  */
 public class JUnitRuleMockery2 extends JUnit4Mockery implements MethodRule {
 
@@ -77,7 +75,7 @@ public class JUnitRuleMockery2 extends JUnit4Mockery implements MethodRule {
      * Factory method.
      */
     public static JUnitRuleMockery2 createFor(final Mode mode) {
-        
+
         final JUnitRuleMockery2 jUnitRuleMockery2 = new JUnitRuleMockery2();
         if (mode == Mode.INTERFACES_AND_CLASSES) {
             jUnitRuleMockery2.setImposteriser(Imposterisers.getDefault());
@@ -175,7 +173,7 @@ public class JUnitRuleMockery2 extends JUnit4Mockery implements MethodRule {
 
                     final Object cut = container.getComponent(cutType);
                     _Reflect.setFieldOn(cutField, target, cut);
-                    
+
 
                 } else {
                     cutType = null;
@@ -288,18 +286,18 @@ public class JUnitRuleMockery2 extends JUnit4Mockery implements MethodRule {
         }
     }
 
-    
+
     private static class ExpectationsWithInitializer extends Expectations {
         private ExpectationsWithInitializer(Consumer<Expectations> initializer) {
             super();
             initializer.accept(this);
         }
     }
-    
+
     public static Expectations expectationsWith(Consumer<Expectations> initializer) {
         return new ExpectationsWithInitializer(initializer);
     }
-    
+
 
 
 }

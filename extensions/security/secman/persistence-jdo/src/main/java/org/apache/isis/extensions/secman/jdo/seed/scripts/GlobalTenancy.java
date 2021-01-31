@@ -20,6 +20,9 @@ package org.apache.isis.extensions.secman.jdo.seed.scripts;
 
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 
+/**
+ * @since 2.0 {@index}
+ */
 public class GlobalTenancy extends AbstractTenancyFixtureScript {
 
     public static final String TENANCY_NAME = "Global";

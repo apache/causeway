@@ -24,7 +24,8 @@ import lombok.Getter;
 
 /**
  * Emitted for subscribers to obtain a cssClass hint (equivalent to the <tt>cssClass()</tt> supporting method or the {@link DomainObjectLayout#cssClass()} attribute).
- * @since ? {@index}
+ *
+ * @since 1.x {@index}
  */
 public abstract class CssClassUiEvent<S> extends AbstractUiEvent<S> {
 

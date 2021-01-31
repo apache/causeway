@@ -31,6 +31,8 @@ import org.apache.isis.applib.layout.links.Link;
 
 /**
  * Describes the layout of the title and icon of a domain object, broadly corresponding to {@link org.apache.isis.applib.annotation.DomainObjectLayout}.
+ *
+ * @since 1.x {@index}
  */
 @XmlRootElement(
         name = "domainObject"

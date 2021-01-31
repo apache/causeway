@@ -45,6 +45,9 @@ import org.apache.isis.viewer.restfulobjects.rendering.service.conneg.ContentNeg
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
+/**
+ * @since 1.x {@index}
+ */
 @Service
 @Named("isis.viewer.ro.RepresentationServiceContentNegotiator")
 @Order(OrderPrecedence.EARLY)
@@ -54,7 +57,7 @@ import lombok.extern.log4j.Log4j2;
 public class RepresentationServiceContentNegotiator implements RepresentationService {
 
     @Inject private List<ContentNegotiationService> contentNegotiationServices;
-    
+
     @Override
     public Response objectRepresentation(
             final IResourceContext renderContext,
@@ -139,17 +142,17 @@ public class RepresentationServiceContentNegotiator implements RepresentationSer
      */
     ResponseBuilder buildResponse(
             Function<ContentNegotiationService, ResponseBuilder> connegServiceBuildResponse) {
-        
+
         log.debug("ContentNegotiationServices:\n{}", ()->contentNegotiationServices.stream()
                 .map(Object::getClass)
                 .map(Class::getSimpleName)
                 .map(s->" - "+s)
                 .collect(Collectors.joining("\n")));
-        
+
         for (val contentNegotiationService : contentNegotiationServices) {
             val responseBuilder = connegServiceBuildResponse.apply(contentNegotiationService);
             if(responseBuilder != null) {
-                
+
                 log.debug("--> winner: {}", ()->contentNegotiationService.getClass().getSimpleName());
                 return responseBuilder;
             }
@@ -164,5 +167,5 @@ public class RepresentationServiceContentNegotiator implements RepresentationSer
         return responseBuilder.build();
     }
 
-    
+
 }

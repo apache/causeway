@@ -28,6 +28,8 @@ import lombok.experimental.UtilityClass;
 
 /**
  * As per {@link Command#getMemberIdentifier()} and {@link org.apache.isis.applib.services.publishing.spi.EntityPropertyChangeSubscriber#audit(UUID, int, String, Bookmark, String, String, String, String, String, Timestamp)}.
+ *
+ * @since 2.0 {@index}
  */
 public class MemberIdentifierType {
 

@@ -32,8 +32,7 @@ import org.apache.isis.applib.annotation.OrderPrecedence;
 import lombok.extern.log4j.Log4j2;
 
 /**
- * 
- * @since 2.0 {@index}
+ * @since 1.x {@index}
  */
 @Service
 @Named("isis.applib.SessionLoggingServiceLogging")

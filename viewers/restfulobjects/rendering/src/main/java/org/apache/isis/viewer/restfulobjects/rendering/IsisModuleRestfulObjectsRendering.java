@@ -37,6 +37,9 @@ import org.apache.isis.viewer.restfulobjects.rendering.service.swagger.internal.
 import org.apache.isis.viewer.restfulobjects.rendering.service.swagger.internal.TaggerDefault;
 import org.apache.isis.viewer.restfulobjects.rendering.service.swagger.internal.ValuePropertyFactoryDefault;
 
+/**
+ * @since 1.x {@index}
+ */
 @Configuration
 @Import({
         // modules
@@ -49,12 +52,12 @@ import org.apache.isis.viewer.restfulobjects.rendering.service.swagger.internal.
         TaggerDefault.class,
         ValuePropertyFactoryDefault.class,
 
-        
+
         // @Service's
         AcceptHeaderServiceForRest.class,
         ContentNegotiationServiceForRestfulObjectsV1_0.class,
         ContentNegotiationServiceOrgApacheIsisV2.class,
-        ContentNegotiationServiceOrgApacheIsisV1.class, // to intercept client requests and respond with HTTP 501 (no longer supported) 
+        ContentNegotiationServiceOrgApacheIsisV1.class, // to intercept client requests and respond with HTTP 501 (no longer supported)
         ContentNegotiationServiceXRoDomainType.class,
         JsonValueEncoder.class,
         RepresentationServiceContentNegotiator.class,

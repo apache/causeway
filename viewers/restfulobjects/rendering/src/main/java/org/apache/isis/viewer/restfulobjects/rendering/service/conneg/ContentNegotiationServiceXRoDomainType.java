@@ -51,6 +51,8 @@ import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndAc
  *     runtime type is annotated with the JAXB {@link javax.xml.bind.annotation.XmlRootElement} annotation so that RestEasy is able to
  *     unambiguously serialize it.
  * </p>
+ *
+ * @since 1.x {@index}
  */
 @Service
 @Named("isis.viewer.ro.ContentNegotiationServiceXRoDomainType")
@@ -61,7 +63,7 @@ public class ContentNegotiationServiceXRoDomainType extends ContentNegotiationSe
     public static final String X_RO_DOMAIN_TYPE = "x-ro-domain-type";
 
     @Inject private List<ContentMappingService> contentMappingServices;
-    
+
     /**
      * search for an accept header in form <code>application/xml;profile=urn:org.restfulobjects:repr-types/object;x-ro-domain-type=todoapp.dto.module.todoitem.ToDoItemDto</code>
      */
@@ -160,6 +162,6 @@ public class ContentNegotiationServiceXRoDomainType extends ContentNegotiationSe
         return domainObject;
     }
 
-    
+
 
 }

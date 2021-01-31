@@ -69,6 +69,8 @@ import lombok.extern.log4j.Log4j2;
  * However, although there are two objects, they are set up to share the same {@link SecurityManager Shiro SecurityManager}
  * (bound to a thread-local).
  * </p>
+ *
+ * @since 1.x {@index}
  */
 @Service
 @Named("isis.security.AuthenticatorShiro")
@@ -103,7 +105,7 @@ public class AuthenticatorShiro implements Authenticator {
         if(securityManager == null) {
             return null;
         }
-        
+
         final AuthenticationToken token = asAuthenticationToken(request);
 
         final Subject currentSubject = SecurityUtils.getSubject();
@@ -158,9 +160,9 @@ public class AuthenticatorShiro implements Authenticator {
     }
 
     Authentication authenticationFor(
-            AuthenticationRequest request, 
-            String validationCode, 
-            AuthenticationToken token, 
+            AuthenticationRequest request,
+            String validationCode,
+            AuthenticationToken token,
             Subject currentSubject) {
 
         final Stream<String> roles = Stream.concat(
@@ -169,8 +171,8 @@ public class AuthenticatorShiro implements Authenticator {
                 // copy over any roles passed in
                 // (this is used by the Wicket viewer, for example).
                 request.streamRoles());
-        
-        val user = UserMemento.ofNameAndRoleNames(request.getName(), roles); 
+
+        val user = UserMemento.ofNameAndRoleNames(request.getName(), roles);
         return SimpleAuthentication.of(user, validationCode);
     }
 

@@ -50,9 +50,7 @@ import static org.apache.isis.commons.internal.reflection._Reflect.withName;
 import static org.apache.isis.testing.unittestsupport.applib.core.utils.ReflectUtils.withParametersAssignableFrom;
 
 /**
- * <p>
- *     Used by domain apps only.
- * </p>
+ * @since 2.0 {@index}
  */
 public abstract class BidirectionalRelationshipContractTestAbstract extends AbstractApplyToAllContractTest implements Instantiators {
 

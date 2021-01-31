@@ -37,8 +37,7 @@ import org.apache.isis.commons.internal.reflection._Reflect;
 import lombok.val;
 
 /**
- * 
- * @since 2.0 {@index}
+ * @since 1.x {@index}
  */
 public interface ServiceRegistry {
 

@@ -31,6 +31,9 @@ import javax.xml.datatype.XMLGregorianCalendar;
 
 import lombok.experimental.UtilityClass;
 
+/**
+ * @since 2.0 {@index}
+ */
 @UtilityClass
 public final class JavaTimeXMLGregorianCalendarMarshalling {
 
