@@ -87,11 +87,6 @@ class Cli implements Callable<Integer> {
             description = "Writes a System Overview document (AsciiDoc) to given output.")
     static class SystemOverviewCommand extends CliCommandAbstract {
 
-        @Option(
-                names = {"-o", "--output"},
-                description = "path to the output file (default: NONE = write to std.out)")
-        private String outputFilePath;
-
         @Override
         public Integer call() throws Exception {
 
@@ -115,7 +110,7 @@ class Cli implements Callable<Integer> {
         @Override
         public Integer call() throws Exception {
 
-            if(getOutputPath() !=null) {
+            if(getOutputPath() != null) {
                 getConfig().getGlobal().setOutputRootFolder(getOutputPath());
             }
 

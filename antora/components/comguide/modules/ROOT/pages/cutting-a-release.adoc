@@ -127,6 +127,19 @@ licenses to remove from supplemental-models.xml (are spurious):
 
 If any missing entries are listed or are spurious, then update `supplemental-models.xml` and try again.
 
+
+=== Update and preview website
+
+Generate the website, ensuring that the config, examples, overview and index are all updated:
+
+[source,bash,subs="attributes+"]
+----
+sh preview.sh
+----
+
+Check for any Asciidoc errors, and fix.
+
+
 === Commit changes
 
 Commit any changes from the preceding steps:

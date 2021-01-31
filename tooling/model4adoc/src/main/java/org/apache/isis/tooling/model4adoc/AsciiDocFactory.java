@@ -45,14 +45,14 @@ import lombok.NonNull;
 import lombok.val;
 
 /**
- * Provides convenient factory methods to build a (AsciiDoc) Document Model.  
+ * Provides convenient factory methods to build a (AsciiDoc) Document Model.
  * @since Sep 10, 2020
  * @apiNote The <i>AsciiDoc<i> name is trademarked by the <i>Eclipse Foundation</i>.
  * <p>
-    This project is <b>not</b> part of the specification effort for <i>AsciiDoc<i> under the 
+    This project is <b>not</b> part of the specification effort for <i>AsciiDoc<i> under the
     <i>AsciiDoc Working Group</i>. See https://projects.eclipse.org/proposals/asciidoc-language
-    and https://accounts.eclipse.org/mailing-list/asciidoc-wg. However, we are happy to 
-    help with transfer of source code, if any project (under the umbrella of the 
+    and https://accounts.eclipse.org/mailing-list/asciidoc-wg. However, we are happy to
+    help with transfer of source code, if any project (under the umbrella of the
     <i>AsciiDoc Working Group</i>) is willing to take over.
     </p>
  */
@@ -62,15 +62,15 @@ public class AsciiDocFactory {
      * @return a blank/empty document object
      */
     public static Document doc() {
-        return new SimpleDocument();     
+        return new SimpleDocument();
     }
-    
+
     // -- ATTRIBUTES
-    
+
     public static void attrNotice(Document node, String value) {
         node.setAttribute("notice", value, true);
     }
-    
+
     // -- ADMONITIONS
 
     //NOTE
@@ -78,53 +78,53 @@ public class AsciiDocFactory {
     //IMPORTANT
     //CAUTION
     //WARNING
-    
+
     public static Block note(StructuralNode parent) {
         return admonition("Note", parent, null);
     }
-    
+
     public static Block note(StructuralNode parent, String source) {
         return admonition("Note", parent, source);
     }
-    
+
     public static Block tip(StructuralNode parent) {
         return admonition("Tip", parent, null);
     }
-    
+
     public static Block tip(StructuralNode parent, String source) {
         return admonition("Tip", parent, source);
     }
-    
+
     public static Block important(StructuralNode parent) {
         return admonition("Important", parent, null);
     }
-    
+
     public static Block important(StructuralNode parent, String source) {
         return admonition("Important", parent, source);
     }
-    
+
     public static Block caution(StructuralNode parent) {
         return admonition("Caution", parent, null);
     }
-    
+
     public static Block caution(StructuralNode parent, String source) {
         return admonition("Caution", parent, source);
     }
-    
+
     public static Block warning(StructuralNode parent) {
         return admonition("Warning", parent, null);
     }
-    
+
     public static Block warning(StructuralNode parent, String source) {
         return admonition("Warning", parent, source);
     }
-    
+
     // -- BLOCK
-    
+
     public static Block block(StructuralNode parent) {
         return block(parent, null);
     }
-    
+
     public static Block block(StructuralNode parent, String source) {
         val block = new SimpleBlock();
         block.setSource(source);
@@ -133,40 +133,40 @@ public class AsciiDocFactory {
         block.setParent(parent);
         return block;
     }
-    
+
     public static Block openBlock(ListItem listItem) {
         val openBlock = block(listItem);
         openBlock.setStyle("open");
         return openBlock;
     }
-    
+
     public static Block listingBlock(StructuralNode parent, @NonNull String source) {
         val listingBlock = block(parent, source);
         listingBlock.setStyle("listing");
         return listingBlock;
     }
-    
+
     // -- FOOTNOTES
-    
+
     public static org.asciidoctor.ast.List footnotes(StructuralNode parent) {
         val footnoteList = list(parent);
         footnoteList.setStyle("arabic");
         return footnoteList;
     }
-    
+
     public static ListItem footnote(org.asciidoctor.ast.List parent, @NonNull String source) {
         return listItem(parent, source);
     }
-    
+
     // -- TABLE
-    
+
     public static Table table(StructuralNode parent) {
         val table = new SimpleTable();
         parent.getBlocks().add(table);
         table.setParent(parent);
         return table;
     }
-    
+
     public static Column col(Table table) {
         val column = new SimpleColumn();
         table.getColumns().add(column);
@@ -179,19 +179,19 @@ public class AsciiDocFactory {
         table.getBody().add(row);
         return row;
     }
-    
+
     public static Row headRow(Table table) {
         val row = new SimpleRow();
         table.getHeader().add(row);
         return row;
     }
-    
+
     public static Row footRow(Table table) {
         val row = new SimpleRow();
         table.getFooter().add(row);
         return row;
     }
-    
+
     public static Cell cell(Row row, Column column, String source) {
         val cell = new SimpleCell();
         row.getCells().add(cell);
@@ -199,7 +199,7 @@ public class AsciiDocFactory {
         cell.setSource(source);
         return cell;
     }
-    
+
     public static Cell cell(Table table, Row row, String source) {
         val colIndex = row.getCells().size();
         val column = getOrCreateColumn(table, colIndex);
@@ -211,19 +211,19 @@ public class AsciiDocFactory {
         val col = getOrCreateColumn(table, colIndex);
         return cell(row, col, source);
     }
-    
+
     public static Cell headCell(Table table, int rowIndex, int colIndex, String source) {
         val row = getOrCreateHeadRow(table, rowIndex);
         val col = getOrCreateColumn(table, colIndex);
         return cell(row, col, source);
     }
-    
+
     public static Cell footCell(Table table, int rowIndex, int colIndex, String source) {
         val row = getOrCreateFootRow(table, rowIndex);
         val col = getOrCreateColumn(table, colIndex);
         return cell(row, col, source);
     }
-    
+
     public static org.asciidoctor.ast.List list(StructuralNode parent) {
         val list = new SimpleList();
         list.setLevel(parent.getLevel()+1);
@@ -231,11 +231,11 @@ public class AsciiDocFactory {
         list.setParent(parent);
         return list;
     }
-    
+
     public static ListItem listItem(org.asciidoctor.ast.List parent) {
         return listItem(parent, null);
     }
-    
+
     public static ListItem listItem(org.asciidoctor.ast.List parent, String source) {
         val listItem = new SimpleListItem();
         listItem.setLevel(parent.getLevel());
@@ -244,7 +244,7 @@ public class AsciiDocFactory {
         listItem.setSource(source);
         return listItem;
     }
-    
+
     public static class SourceFactory {
 
         public static String wrap(@NonNull String sourceType, @NonNull String source, @Nullable String title, Can<String> options) {
@@ -263,11 +263,11 @@ public class AsciiDocFactory {
             sb.append("----\n");
             return sb.toString();
         }
-        
+
         public static String xml(@NonNull String xmlSource, @Nullable String title) {
             return wrap("source,xml", xmlSource, title, Can.empty());
         }
-        
+
 //        [source,java]
 //        .title
 //        ----
@@ -278,59 +278,59 @@ public class AsciiDocFactory {
         public static String java(@NonNull String javaSource, @Nullable String title) {
             return wrap("source,java", javaSource, title, Can.empty());
         }
-        
+
         public static String json(@NonNull String jsonSource, @Nullable String title) {
             return wrap("source,json", jsonSource, title, Can.empty());
         }
-        
+
         public static String yaml(@NonNull String yamlSource, @Nullable String title) {
             return wrap("source,yaml", yamlSource, title, Can.empty());
         }
-        
-//      [plantuml,c4-demo,svg]
+
+//      [plantuml,c4-demo,png]
 //      ----
 //      @startuml
 //      ...
 //      @enduml
 //      ----
         public static String plantuml(@NonNull String plantumlSource, @NonNull String diagramKey, @Nullable String title) {
-            return wrap(String.format("plantuml,%s,svg", diagramKey), plantumlSource, title, Can.of());
+            return wrap(String.format("plantuml,%s,png", diagramKey), plantumlSource, title, Can.of());
         }
-        
-        
+
+
     }
-    
+
     // -- HELPER
-    
+
     private static Column getOrCreateColumn(Table table, int colIndex) {
-        int maxIndexAvailable = table.getColumns().size() - 1; 
+        int maxIndexAvailable = table.getColumns().size() - 1;
         int colsToBeCreated = colIndex - maxIndexAvailable;
         for(int i=0; i<colsToBeCreated; ++i) {
             col(table);
         }
         return table.getColumns().get(colIndex);
     }
-    
+
     private static Row getOrCreateRow(Table table, int rowIndex) {
-        int maxIndexAvailable = table.getBody().size() - 1; 
+        int maxIndexAvailable = table.getBody().size() - 1;
         int rowsToBeCreated = rowIndex - maxIndexAvailable;
         for(int i=0; i<rowsToBeCreated; ++i) {
             row(table);
         }
         return table.getBody().get(rowIndex);
     }
-    
+
     private static Row getOrCreateHeadRow(Table table, int rowIndex) {
-        int maxIndexAvailable = table.getHeader().size() - 1; 
+        int maxIndexAvailable = table.getHeader().size() - 1;
         int rowsToBeCreated = rowIndex - maxIndexAvailable;
         for(int i=0; i<rowsToBeCreated; ++i) {
             headRow(table);
         }
         return table.getHeader().get(rowIndex);
     }
-    
+
     private static Row getOrCreateFootRow(Table table, int rowIndex) {
-        int maxIndexAvailable = table.getFooter().size() - 1; 
+        int maxIndexAvailable = table.getFooter().size() - 1;
         int rowsToBeCreated = rowIndex - maxIndexAvailable;
         for(int i=0; i<rowsToBeCreated; ++i) {
             footRow(table);
@@ -346,7 +346,7 @@ public class AsciiDocFactory {
         return admonition;
     }
 
-    
 
-    
+
+
 }

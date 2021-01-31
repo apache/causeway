@@ -1,0 +1,3 @@
+* see also:
+** xref:core::about.adoc[Core Framework]
+

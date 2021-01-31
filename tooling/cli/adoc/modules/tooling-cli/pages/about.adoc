@@ -76,77 +76,190 @@ Inspect its https://github.com/apache/isis/blob/master/tooling/cli/src/main/java
 
 == Commands
 
-There is currently only one subcommand, namely "projdoc".
-
-=== projdoc
-
-Generates the _System Overview_ and the _Document Global Index_ (adoc) files.
-
-The `projdoc` command is usually invoked as follows:
-
-[source]
-.Example Usage
-----
-java -jar tooling/cli/target/isis-tooling-cli.jar \
-    -p . \
-    projdoc \
-    -o antora/components/system/modules/generated
-----
-
-where :
+All commands accept two parameters:
 
 * `-p` indicates the location of the multi-project root `pom.xml`
 +
 in other words, the root of the git repo.
 
-* `projdoc` is CLI sub-command
-+
-selecting the _Project Doc Generator_ functionality
-
 * `-o` the output target root for generated _adoc_
 
+These are specified first in the command line.
+The command is then specified, along with any command-specific options.
 
-Any class found with magic `{@index}` in its _java-doc_ section at type level, will be included with the _Document Global Index_.
-Adoc files may refer to the _Document Global Index_ via `xref` or `include` statements using paths like eg. `system:generated:index/applib/Xxx.adoc`.
-
-
-==== Configuration
-
-The `projdoc` command can be configured using the `projectDoc` entry in `isis-tooling.yml` file.
+A number of global configuration options can be specified under the `global` entry in the `isis-tooling.yml` file.
 
 [source,yml]
 .isis-tooling.yml
 ----
-projectDoc:
-  description: "These tables summarize all Maven artifacts ..."           # <.>
-  licenseHeader: "Licensed to the Apache Software Foundation (ASF) ..."   # <.>
+global:
   outputRootFolder:                                                       # <.>
+  licenseHeader: "Licensed to the Apache Software Foundation (ASF) ..."   # <.>
   documentPagesPath: "pages"                                              # <.>
-  documentGlobalIndexPath: "pages/index"                                  # <.>
-  documentGlobalIndexXrefPageIdFormat: "system:generated:index/%s.adoc"   # <.>
-  systemOverviewFilename: "system-overview.adoc"                          # <.>
-  fixOrphanedAdocIncludeStatements: true                                  # <.>
   namespacePartsSkipCount: 3                                              # <.>
-  artifactGroups:                                                         # <.>
-    Base: org.apache.isis
-    Commons: org.apache.isis.commons.*
-    Core: org.apache.isis.core.*
+  sections:                                                               # <.>
     App: org.apache.isis.app.*
+    Mavendeps: org.apache.isis.mavendeps.*
+    ...
+    Core: org.apache.isis.core.*
+    Persistence: org.apache.isis.persistence
+    JDO: "org.apache.isis.persistence:isis-persistence-jdo.*"
+    JPA: "org.apache.isis.persistence:isis-persistence-jpa.*"
     ...
 ----
 
-<.> _System Overview_ head line
-<.> license header to include with each generated _adoc_ file
 <.> the output target root for generated _adoc_; corresponds to command line option `-o` (if empty the current dir is used)
+<.> license header to include with each generated adoc file
 <.> sub-folder name for _adoc_ pages
-<.> sub-folder name for the _Document Global Index_
-<.> format for include statements via which other _adoc_ files may refer to _the Document Global Index_
+<.> how many namespace parts in a _fqn_ one wants to skip, eg. in `org.apache.isis.applib.Xxx` if we skip 3 namespace parts we'll end up with `applib.Xxx`
+<.> Logical grouping of modules for the system overview, but also used to determine which modules to scan for index files.
++
+If not specified the natural Maven project hierarchy is reflected as is.
+
+The `sections` configuration key is used to group module artifacts into named sections.
+It consists of key:value pairs:
+
+* the key is the section name (eg "App", or "JDO")
+* the value is a pattern that identifies Maven artifacts.
+
+This pattern in turn can be either:
+
+* an exact Maven `groupId`, such as `org.apache.isis.persistence`
++
+This matches all Maven modules with exactly that `groupId`.
+
+* a Maven `groupId` with wildcard, such as `org.apache.isis.core.*`
++
+This matches all Maven modules whose `groupId` pattern matches the groupId.
+
+* a Maven group and artifact optionally with wildcard, such as `org.apache.isis.persistence:isis-persistence-jdo.*`
++
+This matches all Maven modules whose `groupId` pattern equals the specified groupId and whose `artifactId` pattern matches the specified `artifactId`.
+
+If a Maven module matches more than one section, then the more specific section (with both group and artifact) is used.
+
+These different types of sections are exploited by the `overview` command, described <<system-overview-overview,below>>.
+
+=== System Overview (`overview`)
+
+This command generates the _System Overview_ (`.adoc) page.
+
+This page summarises the contents of each section (defined by the `global.sections` configuration key), also with a link:https://c4model.com/[C4] diagram showing how the modules relate.
+
+As described <<configuration-file,above>>, sections are defined that either match on a group or on a group and artifact.
+The overview command places these under a level 2 or a level 3 heading respectively.
+By sequencing the sections correctly, this therefore allows a hierarchy to be created.
+
+For example,
+
+[source,yml]
+.isis-tooling.yml
+----
+global:
+  ...
+  sections:                                                               # <.>
+    ...
+    Persistence: org.apache.isis.persistence
+    JDO: "org.apache.isis.persistence:isis-persistence-jdo.*"
+    JPA: "org.apache.isis.persistence:isis-persistence-jpa.*"
+    ...
+----
+
+The `overview` command will render "Persistence" section at level 2 (because its pattern is only for a `groupId`), and then the "JDO" and "JPA" sections underneath at level 3 (because there patterns also include an `artifactId`).
+
+In this way, sections can be defined that create a hierarchy.
+
+
+=== Usage
+
+The `overview` command is usually invoked as follows:
+
+[source]
+----
+java -jar tooling/cli/target/isis-tooling-cli.jar \
+    -p . \
+    -o antora/components/system/modules/generated \
+    overview
+----
+
+where :
+
+* `-p` and `-o` are the global options for all commands
+
+* `overview` selects this sub-command
+
+There are no command-specific options.
+
+
+
+[[overview-configuration]]
+==== Configuration
+
+The `overview` command supports a number of command-specific configuration options:
+
+[source,yml]
+.isis-tooling.yml
+----
+commands:
+  overview:
+    description: "These tables summarize all Maven artifacts ..."           # <.>
+    systemOverviewFilename: "system-overview.adoc"                          # <.>
+----
+<.> _System Overview_ head line
 <.> name of the _System Overview_ (adoc) file
-<.> whether to activate the `OrphanedIncludeStatementFixer`
-<.> how many namespace parts in a _fqn_ one wants to skip when generating the _Document Global Index_, eg. in `org.apache.isis.applib.Xxx` if we skip 3 namespace parts we'll end up with `applib.Xxx`
-<.> logical grouping of artifacts for the system overview, if not specified the natural Maven project hierarchy is reflected as is
+
+
+
+=== Index (`index`)
+
+This command generates the _Document Global Index_ (`.adoc`) files.
+
+Any class found with magic `{@index}` in its _java-doc_ section at type level, will be included with the _Document Global Index_.
+
+Asciidoc files may refer to the _Document Global Index_ via `xref` or `include` statements using paths such as `system:generated:index/applib/Xxx.adoc`.
+
+
+==== Usage
+
+The `index` command is usually invoked as follows:
+
+[source]
+----
+java -jar tooling/cli/target/isis-tooling-cli.jar \
+    -p . \
+    -o antora/components/system/modules/generated \
+    overview
+----
+
+where :
+
+* `-p` and `-o` are the global options for all commands
+
+* `index` selects this sub-command
+
+There are no command-specific options.
+
+
+[[index-configuration]]
+==== Configuration
+
+The `index` command supports a number of command-specific configuration options:
+
+[source,yml]
+.isis-tooling.yml
+----
+commands:
+  index:
+    documentGlobalIndexPath: "pages/index"                                  # <.>
+    documentGlobalIndexXrefPageIdFormat: "system:generated:index/%s.adoc"   # <.>
+    fixOrphanedAdocIncludeStatements: true                                  # <.>
+----
+<.> sub-folder name for the _Document Global Index_
+<.> format for include statements via which other _adoc_ files may refer to the Document Global Index
+<.> whether to activate the `OrphanedIncludeStatementFixer`, discussed below.
 
 The CLI also has an experimental `OrphanedIncludeStatementFixer` that checks orphaned index references in all _adoc_ files and tries to fix them.
+
 
 ==== Limitations
 

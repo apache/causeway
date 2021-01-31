@@ -20,6 +20,7 @@ package org.apache.isis.tooling.cli.projdoc;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
@@ -28,6 +29,8 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import java.util.function.BiFunction;
+import java.util.function.BinaryOperator;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -303,6 +306,11 @@ public class ProjectDocModel {
                         : "===";
         titleBlock.setSource(String.format("%s %s", headingLevel, sectionName));
 
+        val sectionModules = section.getMatchingProjectNodes();
+        if(sectionModules.isEmpty()) {
+            return;
+        }
+
         val descriptionBlock = block(doc);
         val groupDiagram = new GroupDiagram(C4.of(sectionName, null));
 
@@ -319,7 +327,7 @@ public class ProjectDocModel {
         val projRoot = _Files.canonicalPath(projTree.getProjectDirectory())
                 .orElseThrow(()->_Exceptions.unrecoverable("cannot resolve project root"));
 
-        section.getMatchingProjectNodes()
+        sectionModules
                 .forEach(module -> {
                     if(mode == Mode.INDEX) {
                         gatherAdocFiles(module.getProjectDirectory(), onAdocFile);
@@ -400,7 +408,7 @@ public class ProjectDocModel {
     }
 
     private String details(ProjectNode module, J2AdocContext j2aContext) {
-        val description = module.getDescription().trim();
+        val description = sanitizeDescription(module.getDescription());
         val dependencyList = module.getDependencies()
                 .stream()
                 .map(Dependency::getArtifactCoordinates)
@@ -439,6 +447,12 @@ public class ProjectDocModel {
         }
 
         return sb.toString();
+    }
+
+    static String sanitizeDescription(String str) {
+        return Arrays.stream(str.split("\n"))
+                .map(String::trim)
+                .reduce("", (x, y) -> x + (x.isEmpty() ? "" : "\n") + y);
     }
 
     private static String toAdocSection(String title, String content) {
