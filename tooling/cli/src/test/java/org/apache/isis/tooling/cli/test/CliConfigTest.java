@@ -53,14 +53,15 @@ class CliConfigTest {
 
     private void assertConfigIsPopulated(CliConfig config) {
         assertNotNull(config);
-        assertNotNull(config.getProjectDoc());
-        assertEquals("These tables summarize all Maven artifacts available with _Apache Isis_.", config.getProjectDoc().getDescription());
-        assertNotNull(config.getProjectDoc().getArtifactGroups());
-        assertTrue(config.getProjectDoc().getArtifactGroups().size()>5);
+        assertNotNull(config.getGlobal());
+        assertNotNull(config.getCommands().getOverview());
+        assertNotNull(config.getCommands().getIndex());
+        assertEquals("These tables summarize all Maven artifacts available with _Apache Isis_.", config.getCommands().getOverview().getDescription());
+        assertNotNull(config.getGlobal().getSections());
+        assertTrue(config.getGlobal().getSections().size()>5);
 
-
-        assertEquals(true, config.getProjectDoc().isFixOrphanedAdocIncludeStatements());
-        assertEquals(3, config.getProjectDoc().getNamespacePartsSkipCount());
+        assertTrue(config.getCommands().getIndex().isFixOrphanedAdocIncludeStatements());
+        assertEquals(3, config.getGlobal().getNamespacePartsSkipCount());
     }
 
 }

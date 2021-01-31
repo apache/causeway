@@ -25,9 +25,9 @@
 _Starter Apps_
 
 * xref:docs:starters:helloworld.adoc[HelloWorld]
-(link:https://helloworld.isis.incode.work[preview])
+(link:https://helloworld.isis.incode.work[online])
 * xref:docs:starters:simpleapp.adoc[SimpleApp]
-(link:https://simpleapp.isis.incode.work[preview])
+(link:https://simpleapp.isis.incode.work[online])
 
 _POMs_
 
@@ -36,11 +36,11 @@ _POMs_
 
 |
 [discrete]
-== Demos & Tutorial
+== Demos
 
 * xref:docs:demo:about.adoc[Demo App]
-(link:https://demo-wicket.isis.incode.work[preview])
-* link:https://danhaywood.gitlab.io/isis-petclinic-tutorial-docs/petclinic/1.16.2/intro.html[Petclinic (v1.16.2)]
+(link:https://demo-wicket.isis.incode.work[online])
+//* link:https://danhaywood.gitlab.io/isis-petclinic-tutorial-docs/petclinic/1.16.2/intro.html[Petclinic (v1.16.2)]
 
 [discrete]
 == Resources
@@ -84,10 +84,6 @@ _Other_
 |
 [discrete]
 == Components
-
-_Overview_
-
-* xref:system:generated:system-overview.adoc[System Overview]
 
 _Viewers_
 
@@ -133,17 +129,25 @@ _Nightly Builds (not ASF)_
 [discrete]
 == Framework
 
+_Process_
+
 * xref:conguide:ROOT:about.adoc[Contributors' Guide]
 * xref:comguide:ROOT:about.adoc[Committers' Guide]
-* xref:core:ROOT:about.adoc[Design Docs]
-* xref:more-thanks/more-thanks.adoc[Acknowledgements]
+** xref:tooling:ROOT:about.adoc[Tooling]
 
+_Design_
 
+* xref:system:generated:system-overview.adoc[System Overview]
+* xref:core:ROOT:about.adoc[Core Framework]
 
 _Analysis_
 
 * link:https://sonarcloud.io/dashboard?id=apache_isis[SonarCloud.io]
 * link:https://fisheye.apache.org/browse/~br=master/isis-git/[ASF Fisheye]
+
+_Thanks_
+
+* xref:more-thanks/more-thanks.adoc[Acknowledgements]
 
 
 |
@@ -166,38 +170,37 @@ _Academia_
 
 
 
-|
-[discrete]
-== Real-world Apps
+//|
+//[discrete]
+//== Real-world Apps
+//
+//* https://github.com/estatio/estatio[Estatio]
+//* https://github.com/incodehq/contactapp[ContactApp]
+//* https://github.com/incodehq/ecpcrm[ECP CRM]
 
-* https://github.com/estatio/estatio[Estatio]
-* https://github.com/incodehq/contactapp[ContactApp]
-* https://github.com/incodehq/ecpcrm[ECP CRM]
+//_Example Apps_
 
-_Example Apps_
+//* https://github.com/apache/isis-app-todoapp[TodoApp]
+//* https://github.com/isisaddons/isis-app-kitchensink[Kitchensink]
+//* https://github.com/isisaddons/isis-app-quickstart[Quickstart]
 
-* https://github.com/apache/isis-app-todoapp[TodoApp]
-* https://github.com/isisaddons/isis-app-kitchensink[Kitchensink]
-* https://github.com/isisaddons/isis-app-quickstart[Quickstart]
-
-_Experiments_
-
-* https://github.com/isisaddons/isis-app-neoapp[Neo4J Example]
-* https://github.com/isisaddons/isis-app-simpledsl[Isis DSL Example]
+//_Experiments_
+//
+//* https://github.com/isisaddons/isis-app-neoapp[Neo4J Example]
+//* https://github.com/isisaddons/isis-app-simpledsl[Isis DSL Example]
 
 
-|
-[discrete]
-== 3rd party
-
-_Restful Objects viewers_
-
-* link:https://github.com/sebastianslutzky/AngularViewerCLI[AngularViewer]
-* link:https://github.com/sebastianslutzky/rob[ROB]
-* link:https://github.com/joerg-rade/kroviz[Kroviz]
-
-|
-[discrete]
+//|
+//[discrete]
+//== 3rd party
+//
+//_Restful Objects viewers_
+//
+//* link:https://github.com/sebastianslutzky/AngularViewerCLI[AngularViewer]
+//* link:https://github.com/sebastianslutzky/rob[ROB]
+//
+//|
+//[discrete]
 
 
 

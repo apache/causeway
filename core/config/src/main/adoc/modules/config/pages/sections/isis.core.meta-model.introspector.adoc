@@ -16,7 +16,7 @@ include::../section-hooks/isis.core.meta-model.introspector~pre.adoc[]
 isis.core.meta-model.introspector. +
 lock-after-full-introspection
 
-|  true
+| 
 | If true, then no new specifications will be allowed to be loaded once introspection has been complete.
 
 Only applies if the introspector is configured to perform full introspection up-front (either because of ``IntrospectionMode#FULL`` or ``IntrospectionMode#LAZY_UNLESS_PRODUCTION`` when in production); otherwise is ignored.
@@ -49,7 +49,7 @@ For now this is _experimental_. Leave this disabled (the default).
 isis.core.meta-model.introspector. +
 validate-incrementally
 
-|  true
+| 
 | If true, then metamodel validation is performed after any new specification has been loaded (after the initial bootstrapping).
 
 This does _not_ apply if the introspector is configured to perform full introspection up-front AND when the metamodel is locked after initial bootstrapping (because in that case the lock check will simply prevent any new specs from being loaded). But it will apply otherwise.

@@ -20,6 +20,8 @@ package org.apache.isis.tooling.cli.projdoc;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -28,6 +30,7 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.annotation.Nullable;
 
@@ -60,6 +63,7 @@ import static org.apache.isis.tooling.model4adoc.AsciiDocFactory.row;
 import static org.apache.isis.tooling.model4adoc.AsciiDocFactory.table;
 
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -84,43 +88,112 @@ public class ProjectDocModel {
         this.projTree = projTree;
     }
 
-    public void generateAsciiDoc(final @NonNull CliConfig cliConfig) {
-        
+    public enum Mode {
+        OVERVIEW,
+        INDEX
+    }
+
+    public void generateAsciiDoc(final @NonNull CliConfig cliConfig, final @NonNull Mode mode) {
+
         modules = new TreeSet<ProjectNode>();
         projTree.depthFirst(modules::add);
-        
+
         final SortedSet<File> asciiDocFiles = new TreeSet<>();
 
         val j2aContext = J2AdocContext
                 //.compactFormat()
                 .javaSourceWithFootnotesFormat()
-                .licenseHeader(cliConfig.getProjectDoc().getLicenseHeader())
-                .xrefPageIdFormat(cliConfig.getProjectDoc().getDocumentGlobalIndexXrefPageIdFormat())
-                .namespacePartsSkipCount(cliConfig.getProjectDoc().getNamespacePartsSkipCount())
+                .licenseHeader(cliConfig.getGlobal().getLicenseHeader())
+                .xrefPageIdFormat(cliConfig.getCommands().getIndex().getDocumentGlobalIndexXrefPageIdFormat())
+                .namespacePartsSkipCount(cliConfig.getGlobal().getNamespacePartsSkipCount())
                 .build();
-        
+
         val doc = doc();
         doc.setTitle("System Overview");
 
-        _Strings.nonEmpty(cliConfig.getProjectDoc().getLicenseHeader())
+        _Strings.nonEmpty(cliConfig.getGlobal().getLicenseHeader())
         .ifPresent(notice->AsciiDocFactory.attrNotice(doc, notice));
-        
-        _Strings.nonEmpty(cliConfig.getProjectDoc().getDescription())
+
+        _Strings.nonEmpty(cliConfig.getCommands().getOverview().getDescription())
         .ifPresent(block(doc)::setSource);
 
-        cliConfig.getProjectDoc().getArtifactGroups().forEach((section, groupId)->{
-            createSection(doc, section, groupId, j2aContext, asciiDocFiles::add);
+        // partition modules into sections
+        val sections = new ArrayList<Section>();
+        cliConfig.getGlobal().getSections().forEach((section, groupIdArtifactIdPattern)->{
+            createSections(modules, section, groupIdArtifactIdPattern, sections::add);
         });
 
+        // ensure that each module is referenced only by a single section,
+        // preferring to be owned by a non-group section (ie more specific)
+        val modulesReferencedByNonGroupSections =
+            sections.stream()
+                .filter(Section::isNotGroupLevelOnly)
+                .flatMap(Section::streamMatchingProjectNodes)
+                .collect(Collectors.toList());
+
+        sections.stream()
+                .filter(Section::isGroupLevelOnly)
+                .forEach(section -> section.removeProjectNodes(modulesReferencedByNonGroupSections));
+
+        // any remaining modules go into an 'Other' section
+        sections.forEach(section -> modules.removeAll(section.getMatchingProjectNodes()));
         if(!modules.isEmpty()) {
-            createSection(doc, "Other", null, j2aContext, asciiDocFile->{ /* don't collect*/});
+            final Section other = new Section("Other", null, false);
+            modules.forEach(other::addProjectNode);
+            sections.add(other);
+            modules.clear();
         }
-        
-        ProjectDocWriter.write(cliConfig, doc, j2aContext);
-        
+
+        // now generate the overview or index
+        writeSections(sections, doc, j2aContext, mode, asciiDocFiles::add);
+
+        if (mode == Mode.OVERVIEW) {
+            ProjectDocWriter.write(cliConfig, doc, j2aContext, mode);
+        }
+
         // update include statements ...
         OrphanedIncludeStatementFixer.fixIncludeStatements(asciiDocFiles, cliConfig, j2aContext);
 
+    }
+
+    @RequiredArgsConstructor
+    public static class Section {
+        @Getter
+        private final String sectionName;
+        @Getter
+        private final String groupIdArtifactIdPattern;
+        @Getter
+        private final boolean addAdocFiles;
+
+        private final List<ProjectNode> matchingProjectNodes = new ArrayList<>();
+
+        public List<ProjectNode> getMatchingProjectNodes() {
+            return Collections.unmodifiableList(matchingProjectNodes);
+        }
+
+        public Stream<ProjectNode> streamMatchingProjectNodes() {
+            return matchingProjectNodes.stream();
+        }
+
+        void addProjectNode(ProjectNode projectNode) {
+            matchingProjectNodes.add(projectNode);
+        }
+
+        boolean isGroupLevelOnly() {
+            return ! isNotGroupLevelOnly();
+        }
+        boolean isNotGroupLevelOnly() {
+            return groupIdArtifactIdPattern.contains(":");
+        }
+
+        void removeProjectNodes(Collection<ProjectNode> projectNodes) {
+            matchingProjectNodes.removeAll(projectNodes);
+        }
+
+        @Override
+        public String toString() {
+            return String.format("%s (%s): %d modules", sectionName, isGroupLevelOnly() ? "group" : "non-group", getMatchingProjectNodes().size());
+        }
     }
 
     // -- HELPER
@@ -131,11 +204,11 @@ public class ProjectDocModel {
         final ProjectNode projectNode;
         @EqualsExclude final Container container;
     }
-    
+
     private static class GroupDiagram {
-        
+
         private final C4 c4;
-        private final List<ProjectNode> projectNodes = new ArrayList<>(); 
+        private final List<ProjectNode> projectNodes = new ArrayList<>();
 
         public GroupDiagram(C4 c4) {
             this.c4 = c4;
@@ -159,8 +232,8 @@ public class ProjectDocModel {
                 return ProjectAndContainerTuple.of(projectNode, container);
             });
 
-            
-            final _Graph<ProjectAndContainerTuple> adjMatrix = 
+
+            final _Graph<ProjectAndContainerTuple> adjMatrix =
                     _Graph.of(tuples, (a, b)->a.projectNode.getChildren().contains(b.projectNode));
 
             tuples.forEach(tuple->{
@@ -183,19 +256,52 @@ public class ProjectDocModel {
 
             return AsciiDocFactory.SourceFactory.plantuml(toPlantUml(softwareSystemName), key, null);
         }
-
     }
 
-    private void createSection(
-            final @NonNull Document doc, 
-            final @NonNull String sectionName, 
-            final @Nullable String groupIdPattern, 
+    private void createSections(
+            final @NonNull SortedSet<ProjectNode> projectNodes,
+            final @NonNull String sectionName,
+            final @Nullable String pattern,
+            final @NonNull Consumer<Section> sectionConsumer) {
+
+        val section = new Section(sectionName, pattern, true);
+
+        projectNodes.stream()
+                .filter(module->matchesGroupId(module, pattern))
+                .forEach(section::addProjectNode);
+
+        sectionConsumer.accept(section);
+    }
+
+    private void writeSections(
+            final @NonNull List<Section> sections,
+            final @NonNull Document doc,
             final @NonNull J2AdocContext j2aContext,
+            final @NonNull Mode mode,
             final @NonNull Consumer<File> onAdocFile) {
+
+        sections.forEach(section -> {
+            writeSection(section, doc, j2aContext, mode, onAdocFile);
+        });
+    }
+
+    private void writeSection(
+            final @NonNull Section section,
+            final @NonNull Document doc,
+            final @NonNull J2AdocContext j2aContext,
+            final @NonNull Mode mode,
+            final @NonNull Consumer<File> onAdocFile) {
+
+        val sectionName = section.getSectionName();
+        val groupIdPattern = section.getGroupIdArtifactIdPattern();
 
         val titleBlock = block(doc);
 
-        titleBlock.setSource(String.format("== %s", sectionName));
+        val headingLevel =
+                (groupIdPattern == null || !groupIdPattern.contains(":"))
+                        ? "=="
+                        : "===";
+        titleBlock.setSource(String.format("%s %s", headingLevel, sectionName));
 
         val descriptionBlock = block(doc);
         val groupDiagram = new GroupDiagram(C4.of(sectionName, null));
@@ -213,54 +319,59 @@ public class ProjectDocModel {
         val projRoot = _Files.canonicalPath(projTree.getProjectDirectory())
                 .orElseThrow(()->_Exceptions.unrecoverable("cannot resolve project root"));
 
-        Set<ProjectNode> modulesWritten = new HashSet<>();
+        section.getMatchingProjectNodes()
+                .forEach(module -> {
+                    if(mode == Mode.INDEX) {
+                        gatherAdocFiles(module.getProjectDirectory(), onAdocFile);
+                    }
 
-        modules.stream()
-        .filter(module->matchesGroupId(module, groupIdPattern))
-        .forEach(module->{
-            gatherAdocFiles(module.getProjectDirectory(), onAdocFile);
+                    val projPath = _Files.canonicalPath(module.getProjectDirectory()).get();
+                    val projRelativePath =
+                            Optional.ofNullable(
+                                    _Strings.emptyToNull(
+                                            _Files.toRelativePath(projRoot, projPath)))
+                                    .orElse("/");
 
-            val projPath = _Files.canonicalPath(module.getProjectDirectory()).get();
-            val projRelativePath = 
-                    Optional.ofNullable(
-                            _Strings.emptyToNull(
-                                    _Files.toRelativePath(projRoot, projPath)))
-                    .orElse("/");
+                    groupDiagram.collect(module);
 
-            modulesWritten.add(module);
-            groupDiagram.collect(module);
-
-            val row = row(table);
-            cell(table, row, coordinates(module, projRelativePath));
-            cell(table, row, details(module, j2aContext));
-        });
+                    val row = row(table);
+                    cell(table, row, coordinates(module, projRelativePath));
+                    cell(table, row, details(module, j2aContext));
+                });
 
         descriptionBlock.setSource(groupDiagram.toAsciiDoc(sectionName));
-
-        modules.removeAll(modulesWritten);
-
     }
 
     private boolean matchesGroupId(ProjectNode module, String groupIdPattern) {
-        if(_Strings.isNullOrEmpty(module.getArtifactCoordinates().getGroupId())) {
+        val moduleCoords = module.getArtifactCoordinates();
+
+        if(_Strings.isNullOrEmpty(moduleCoords.getGroupId())) {
             return false; // never match on missing data
         }
         if(_Strings.isNullOrEmpty(groupIdPattern)) {
             return true; // no groupIdPattern, always matches
         }
-        if(groupIdPattern.equals(module.getArtifactCoordinates().getGroupId())) {
+        if(groupIdPattern.equals(moduleCoords.getGroupId())) {
             return true; // exact match
         }
         if(groupIdPattern.endsWith(".*")) {
             val groupIdPrefix = groupIdPattern.substring(0, groupIdPattern.length()-2);
-            if(groupIdPrefix.equals(module.getArtifactCoordinates().getGroupId())) {
-                return true; // exact match
-            }
-            if(groupIdPrefix.equals(module.getArtifactCoordinates().getGroupId())) {
-                return true; // exact prefix match
-            }
-            if(module.getArtifactCoordinates().getGroupId().startsWith(groupIdPrefix+".")) {
-                return true; // prefix match
+            if(groupIdPattern.contains(":")) {
+                final String[] split = groupIdPrefix.split(":");
+                val groupId = split[0];
+                val artifactIdPrefix = split[1];
+                if(groupId.equals(moduleCoords.getGroupId())) {
+                    if(moduleCoords.getArtifactId().startsWith(artifactIdPrefix)) {
+                        return true; // match on artifactId
+                    }
+                }
+            } else {
+                if(groupIdPrefix.equals(moduleCoords.getGroupId())) {
+                    return true; // exact prefix match
+                }
+                if(moduleCoords.getGroupId().startsWith(groupIdPrefix+".")) {
+                    return true; // prefix match
+                }
             }
         }
         return false;
@@ -283,11 +394,11 @@ public class ProjectDocModel {
                 module.getName(),
                 AsciiDocFactory.SourceFactory.yaml(coors.toString(), null));
     }
-    
+
     private void appendKeyValue(StringBuilder sb, String key, String value) {
         sb.append(String.format("%s: %s\n", key, value));
     }
-    
+
     private String details(ProjectNode module, J2AdocContext j2aContext) {
         val description = module.getDescription().trim();
         val dependencyList = module.getDependencies()
@@ -303,7 +414,7 @@ public class ProjectDocModel {
                 .map(ProjectDocModel::toAdocListItem)
                 .collect(Collectors.joining())
                 .trim();
-        
+
         val indexEntriesCompactList = gatherGlobalDocIndexXrefs(module.getProjectDirectory(), j2aContext)
                 .stream()
                 .collect(Collectors.joining(", "))
@@ -322,7 +433,7 @@ public class ProjectDocModel {
         if(!dependencyList.isEmpty()) {
             sb.append(toAdocSection("Dependencies", dependencyList));
         }
-        
+
         if(!indexEntriesCompactList.isEmpty()) {
             sb.append(toAdocSection("Document Index Entries", indexEntriesCompactList));
         }
@@ -333,23 +444,23 @@ public class ProjectDocModel {
     private static String toAdocSection(String title, String content) {
         return String.format("_%s_\n\n%s\n\n", title, content);
     }
-    
+
     private static String toAdocListItem(String element) {
         return String.format("* %s\n", element);
     }
 
     private SortedSet<String> gatherGlobalDocIndexXrefs(File projDir, J2AdocContext j2aContext) {
-        
+
         val analyzerConfig = AnalyzerConfigFactory.maven(projDir, Language.JAVA).main();
 
         final SortedSet<String> docIndexXrefs = analyzerConfig.getSources(JAVA).stream()
         .flatMap(j2aContext::add)
         .map(unit->unit.getAsciiDocXref(j2aContext))
         .collect(Collectors.toCollection(TreeSet::new));
-        
+
         return docIndexXrefs;
     }
-    
+
     private SortedSet<String> gatherSpringComponents(File projDir) {
 
         val analyzerConfig = AnalyzerConfigFactory.maven(projDir, Language.JAVA).main();
@@ -367,16 +478,16 @@ public class ProjectDocModel {
 
         return components;
     }
-    
+
     private void gatherAdocFiles(File projDir, Consumer<File> onFile) {
-    
+
         val analyzerConfig = AnalyzerConfigFactory.maven(projDir, Language.ADOC).main();
 
         analyzerConfig.getSources(Language.ADOC)
                 .stream()
                 .forEach(onFile::accept);
     }
-                
+
 
 }
 

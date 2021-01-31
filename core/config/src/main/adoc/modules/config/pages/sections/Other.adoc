@@ -19,6 +19,41 @@ isis.as-map
 | null
 
 
+|
+[[isis.persistence.jpa.additional-orm-files]]
+isis.persistence.jpa. +
+additional-orm-files
+
+| 
+| Does lookup additional "mapping-files" in META-INF/orm-_name_.xml (equivalent to "mapping-file" entries in persistence.xml) and adds these to those that are already configured the _Spring Data_ way (if any).
+
+
+|
+[[isis.persistence.jpa.auto-create-schemas]]
+isis.persistence.jpa. +
+auto-create-schemas
+
+| 
+| List of additional schemas to be auto-created.
+
+Explicitly creates given list of schemas by using the specified ``#getCreateSchemaSqlTemplate()`` to generate the actual SQL statement against the configured data-source.
+
+This configuration mechanism does not consider any schema-auto-creation configuration (if any), that independently is provided the standard JPA way.
+
+
+|
+[[isis.persistence.jpa.create-schema-sql-template]]
+isis.persistence.jpa. +
+create-schema-sql-template
+
+| 
+| SQL syntax to create a DB schema.
+
+This template is passed through schemaName) to make the actual SQL statement thats to be used against the configured data-source.
+
+Default template is \{@literal CREATE SCHEMA IF NOT EXISTS %S} with the schema name converted to upper-case.
+
+
 
 |===
 

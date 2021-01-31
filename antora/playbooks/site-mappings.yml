@@ -44,7 +44,7 @@ content:
       start_path: mappings/minio/adoc # mappings
       branches: HEAD
     - url: .
-      start_path: mappings/publisher/adoc # mappings
+      start_path: mappings/outbox-publisher/adoc # mappings
       branches: HEAD
     - url: .
       start_path: mappings/restclient/adoc # mappings

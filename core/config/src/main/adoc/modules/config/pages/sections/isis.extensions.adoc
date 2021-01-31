@@ -16,7 +16,7 @@ include::../section-hooks/isis.extensions~pre.adoc[]
 isis.extensions.command-replay. +
 analyser.exception.enabled
 
-|  true
+| 
 | null
 
 
@@ -25,7 +25,7 @@ analyser.exception.enabled
 isis.extensions.command-replay. +
 analyser.result.enabled
 
-|  true
+| 
 | null
 
 
@@ -34,7 +34,7 @@ analyser.result.enabled
 isis.extensions.command-replay. +
 batch-size
 
-|  10
+| 
 | null
 
 
@@ -80,7 +80,7 @@ isis.extensions.command-replay. +
 quartz-replicate-and-replay-job. +
 repeat-interval
 
-|  10000
+| 
 | Number of milliseconds before running again.
 
 
@@ -90,7 +90,7 @@ isis.extensions.command-replay. +
 quartz-replicate-and-replay-job. +
 start-delay
 
-|  15000
+| 
 | Number of milliseconds before starting the job.
 
 
@@ -99,8 +99,7 @@ start-delay
 isis.extensions.command-replay. +
 quartz-session.roles
 
-|  isisModuleExtCommandReplaySecondar +
-yRole
+| 
 | null
 
 
@@ -109,8 +108,7 @@ yRole
 isis.extensions.command-replay. +
 quartz-session.user
 
-|  isisModuleExtCommandReplaySecondar +
-yUser
+| 
 | The user that runs the replay session secondary.
 
 
@@ -121,6 +119,15 @@ secondary-access.base-url-wicket
 
 | 
 | null
+
+
+|
+[[isis.extensions.cors.allow-credentials]]
+isis.extensions.cors. +
+allow-credentials
+
+| 
+| TODO missing java-doc
 
 
 |
@@ -150,7 +157,7 @@ For more information, check the usage of the ``methods`` init parameter for http
 isis.extensions.cors. +
 allowed-origins
 
-|  *
+| 
 | Which origins are allowed to make CORS requests.
 
 The default is the wildcard ("*") but this can be made more restrictive if necessary.
@@ -163,7 +170,7 @@ For more information, check the usage of the ``origins`` init parameter for http
 isis.extensions.cors. +
 exposed-headers
 
-|  Authorization
+| 
 | Which HTTP headers are exposed in a CORS request.
 
 For more information, check the usage of the ``headers`` init parameter for https://github.com/eBay/cors-filter[EBay CORSFilter].

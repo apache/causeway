@@ -49,3 +49,9 @@ div.paragraph code {
     padding-left: 1rem;
 }
 
+input#algolia-search-layout {
+    min-width: 23em;
+    padding: 5px;
+    border: 2px solid #87a83f;
+    border-radius: 5px;
+}

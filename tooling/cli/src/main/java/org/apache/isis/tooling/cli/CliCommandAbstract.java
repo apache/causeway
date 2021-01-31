@@ -28,10 +28,14 @@ abstract class CliCommandAbstract implements Callable<Integer> {
     public CliConfig getConfig() {
         return _Context.getElseFail(Cli.class).getConfig();
     }
-    
+
     public File getProjectRoot() {
         return _Context.getElseFail(Cli.class).getProjectRoot();
     }
 
-    
+    public File getOutputPath() {
+        return _Context.getElseFail(Cli.class).getOutputPath();
+    }
+
+
 }

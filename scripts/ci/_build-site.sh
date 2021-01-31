@@ -40,10 +40,17 @@ else
 fi
 
 
+if [[ "$SKIP_OVERVIEW_GENERATION" == "true" ]]; then
+  echo "skipping overview generation"
+else
+  bash $SCRIPT_DIR/_adoc-gen-tooling.sh overview
+fi
+
+
 if [[ "$SKIP_INDEX_GENERATION" == "true" ]]; then
   echo "skipping index generation"
 else
-  bash $SCRIPT_DIR/_adoc-gen-index.sh
+  bash $SCRIPT_DIR/_adoc-gen-tooling.sh index
 fi
 
 

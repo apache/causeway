@@ -499,7 +499,7 @@ Folder: \core\runtime
 
 _Components_
 
-* o.a.i.core.runtime.events.AppLifecycleEventService
+* o.a.i.core.runtime.events.MetamodelEventService
 * o.a.i.core.runtime.events.TransactionEventEmitter
 
 _Dependencies_
@@ -528,12 +528,11 @@ _Components_
 * o.a.i.core.runtimeservices.confmenu.ConfigurationViewServiceDefault
 * o.a.i.core.runtimeservices.email.EmailServiceDefault
 * o.a.i.core.runtimeservices.eventbus.EventBusServiceSpring
-* o.a.i.core.runtimeservices.exceprecog.ExceptionRecognizerServiceDefault
 * o.a.i.core.runtimeservices.executor.MemberExecutorServiceDefault
 * o.a.i.core.runtimeservices.factory.FactoryServiceDefault
 * o.a.i.core.runtimeservices.homepage.HomePageResolverServiceDefault
 * o.a.i.core.runtimeservices.i18n.po.TranslationServicePo
-* o.a.i.core.runtimeservices.ixn.InteractionDtoServiceInternalDefault
+* o.a.i.core.runtimeservices.interaction.InteractionDtoServiceInternalDefault
 * o.a.i.core.runtimeservices.jaxb.JaxbServiceDefault
 * o.a.i.core.runtimeservices.menubars.MenuBarsLoaderServiceDefault
 * o.a.i.core.runtimeservices.menubars.bootstrap3.MenuBarsServiceBS3
@@ -543,17 +542,23 @@ _Components_
 * o.a.i.core.runtimeservices.publish.EntityPropertyChangePublisherDefault
 * o.a.i.core.runtimeservices.publish.ExecutionPublisherDefault
 * o.a.i.core.runtimeservices.queryresultscache.QueryResultsCacheDefault
+* o.a.i.core.runtimeservices.recognizer.ExceptionRecognizerServiceDefault
+* o.a.i.core.runtimeservices.recognizer.dae.impl.ExceptionRecognizerForDataAlreadyExists
+* o.a.i.core.runtimeservices.recognizer.dae.impl.ExceptionRecognizerForObjectNotFound
+* o.a.i.core.runtimeservices.recognizer.dae.impl.ExceptionRecognizerForOtherDataAccessProblem
+* o.a.i.core.runtimeservices.recognizer.dae.impl.ExceptionRecognizerForRelatedDataExists
+* o.a.i.core.runtimeservices.recognizer.dae.impl.ExceptionRecognizerForUnableToSaveData
 * o.a.i.core.runtimeservices.repository.RepositoryServiceDefault
 * o.a.i.core.runtimeservices.routing.RoutingServiceDefault
 * o.a.i.core.runtimeservices.scratchpad.ScratchpadDefault
 * o.a.i.core.runtimeservices.session.InteractionFactoryDefault
 * o.a.i.core.runtimeservices.sudo.SudoServiceDefault
+* o.a.i.core.runtimeservices.transaction.TransactionServiceSpring
 * o.a.i.core.runtimeservices.urlencoding.UrlEncodingServiceWithCompression
 * o.a.i.core.runtimeservices.user.UserServiceDefault
 * o.a.i.core.runtimeservices.userprof.UserProfileServiceDefault
 * o.a.i.core.runtimeservices.userreg.EmailNotificationServiceDefault
 * o.a.i.core.runtimeservices.wrapper.WrapperFactoryDefault
-* o.a.i.core.runtimeservices.xactn.TransactionServiceSpring
 * o.a.i.core.runtimeservices.xml.XmlServiceDefault
 * o.a.i.core.runtimeservices.xmlsnapshot.XmlSnapshotServiceDefault
 
@@ -1237,10 +1242,9 @@ _Components_
 * o.a.i.persistence.jdo.datanucleus.config.DnEntityDiscoveryListener
 * o.a.i.persistence.jdo.datanucleus.config.DnSettings
 * o.a.i.persistence.jdo.datanucleus.entities.DnEntityStateProvider
-* o.a.i.persistence.jdo.datanucleus.exceptions.recognizers.ExceptionRecognizerForJDODataStoreException
-* o.a.i.persistence.jdo.datanucleus.exceptions.recognizers.ExceptionRecognizerForJDODataStoreExceptionIntegrityConstraintViolationForeignKeyNoActionException
-* o.a.i.persistence.jdo.datanucleus.exceptions.recognizers.ExceptionRecognizerForJDOObjectNotFoundException
-* o.a.i.persistence.jdo.datanucleus.exceptions.recognizers.ExceptionRecognizerForSQLIntegrityConstraintViolationUniqueOrIndexException
+* o.a.i.persistence.jdo.datanucleus.jdosupport.JdoSupportServiceDefault
+* o.a.i.persistence.jdo.datanucleus.metamodel.JdoDataNucleusProgrammingModel
+* o.a.i.persistence.jdo.datanucleus.schema.JdoSchemaService
 
 _Dependencies_
 
@@ -1268,12 +1272,6 @@ Type: jar
 Folder: \persistence\jdo\integration
 ----
 |JDO Integration (powered by DataNucleus)
-
-_Components_
-
-* o.a.i.persistence.jdo.integration.jdosupport.IsisJdoSupportDN5
-* o.a.i.persistence.jdo.integration.metamodel.JdoIntegrationProgrammingModel
-* o.a.i.persistence.jdo.integration.schema.JdoSchemaService
 
 _Dependencies_
 
@@ -1425,6 +1423,10 @@ Type: jar
 Folder: \persistence\jpa\metamodel
 ----
 |JPA Metamodel Facets / Programming Model
+
+_Components_
+
+* o.a.i.persistence.jpa.metamodel.JpaProgrammingModel
 
 _Dependencies_
 
@@ -2925,12 +2927,12 @@ skinparam rectangle<<31>> {
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<10>> {
+skinparam rectangle<<32>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<32>> {
+skinparam rectangle<<10>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
@@ -3528,7 +3530,15 @@ Artifact: isis-extensions-secman-persistence-jpa
 Type: jar
 Folder: \extensions\security\secman\persistence-jpa
 ----
-|_Dependencies_
+|_Components_
+
+* o.a.i.extensions.secman.jpa.dom.permission.ApplicationPermissionRepository
+* o.a.i.extensions.secman.jpa.dom.role.ApplicationRoleRepository
+* o.a.i.extensions.secman.jpa.dom.tenancy.ApplicationTenancyRepository
+* o.a.i.extensions.secman.jpa.dom.user.ApplicationUserRepository
+* o.a.i.extensions.secman.jpa.seed.SeedSecurityModuleService
+
+_Dependencies_
 
 * org.apache.isis.core:isis-core-runtime:jar:<managed>
 * org.apache.isis.extensions:isis-extensions-secman-api:jar:<managed>
@@ -3604,12 +3614,12 @@ skinparam rectangle<<11>> {
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<23>> {
+skinparam rectangle<<12>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<12>> {
+skinparam rectangle<<23>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
@@ -5080,4 +5090,67 @@ _Dependencies_
 * org.apache.isis.persistence:isis-persistence-jdo-datanucleus:jar:<managed>
 * org.apache.isis.viewer:isis-viewer-wicket-ui:jar:<managed>
 * org.datanucleus:javax.jdo:jar:<managed>
+|===
+
+== Other
+
+[plantuml,Other,svg]
+----
+@startuml(id=Other)
+title Other - Containers
+caption Artifact Hierarchy (Maven)
+
+skinparam {
+  shadowing false
+  arrowFontSize 10
+  defaultTextAlignment center
+  wrapWidth 200
+  maxMessageSize 100
+}
+hide stereotype
+skinparam rectangle<<2>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<3>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+package "Other\n[Software System]" {
+  rectangle "==Apache Isis Starter Parent\n<size:10>[Container: packaging: pom]</size>" <<2>> as 2
+  rectangle "==Apache Isis Supplemental - Legal Info\n<size:10>[Container: packaging: jar]</size>" <<3>> as 3
+}
+@enduml
+----
+.Projects/Modules (Other)
+[cols="3a,5a", options="header"]
+|===
+|Coordinates |Description 
+
+|Apache Isis Starter Parent
+[source,yaml]
+----
+Group: org.apache.isis.app
+Artifact: isis-app-starter-parent
+Type: pom
+Folder: \starters
+----
+|Parent pom providing dependency and plugin management for Apache Isis applications
+		built with Maven.  Builds on top of spring-boot-starter-parent.
+
+|Apache Isis Supplemental - Legal Info
+[source,yaml]
+----
+Group: org.apache.isis
+Artifact: supplemental-model
+Type: jar
+Folder: \supplemental-model
+----
+|For example, the templates used by many Apache distributions assemble a listing of project dependencies 
+  	according to their organization name (and URL), along with the URL each project's website. When dependency 
+  	POMs are missing this information, the dependency notice file that the Remote Resources Plugin renders can 
+  	be invalid.
+	To compensate for incomplete dependency POMs, we use the supplemental models support.
 |===

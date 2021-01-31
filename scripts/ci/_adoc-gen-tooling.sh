@@ -34,10 +34,11 @@ if [ -z "$REVISION" ]; then
 fi
 
 
+MODE=$1
 
 
 ##
-## run groovy
+## run java
 ##
 JAVA_CMD=$(command -v java)
 
@@ -47,9 +48,9 @@ echo ""
 
 # for now meant to run with nightly builds only
 if [ -z "${JAVA_CMD}" ]; then
-  echo "doc gen: no java, skipping"
+  echo "tooling gen: no java, skipping"
 else
-  java $PROJECT_ROOT_PATH/tooling/cli/target/isis-tooling-cli.jar -p $PROJECT_ROOT_PATH projdoc -o $PROJECT_ROOT_PATH/antora/components/system/modules/generated
+  java -jar "${PROJECT_ROOT_PATH}/tooling/cli/target/isis-tooling-cli.jar" -p "${PROJECT_ROOT_PATH}" -o "${PROJECT_ROOT_PATH}/antora/components/system/modules/generated" $MODE
 fi
 
 

@@ -14,12 +14,14 @@ export SKIP_INDEX_GENERATION=true
 
 PLAYBOOK_FILE=antora/playbooks/site.yml
 
-while getopts 'ECIAKSeciaksxyhf:' opt
+while getopts 'ECWIAKSecwiaksxyhf:' opt
 do
   case $opt in
     E) export SKIP_EXAMPLES=false
        forcing=true ;;
     C) export SKIP_CONFIGS=false
+       forcing=true ;;
+    W) export SKIP_OVERVIEW_GENERATION=false
        forcing=true ;;
     I) export SKIP_INDEX_GENERATION=false
        forcing=true ;;
@@ -34,6 +36,7 @@ do
 
     e) export SKIP_EXAMPLES=true ;;
     c) export SKIP_CONFIGS=true ;;
+    w) export SKIP_OVERVIEW_GENERATION=true ;;
     i) export SKIP_INDEX_GENERATION=true ;;
     a) export SKIP_ANTORA_GENERATION=true
        export SKIP_CLEAR_CACHE=true
@@ -52,6 +55,7 @@ do
        echo "  -e skip examples"
        echo "  -k skip stale example check"
        echo "  -c skip config doc generation"
+       echo "  -w skip system overview generation"
        echo "  -i skip index generation"
        echo "  -a skip Antora generation"
        echo "  -s skip serving generated site"
@@ -60,6 +64,7 @@ do
        echo "  -E force examples"
        echo "  -K force stale example check"
        echo "  -C force config doc generation"
+       echo "  -W force system overview generation"
        echo "  -I force index generation"
        echo "  -A force Antora generation"
        echo "  -S force serving generated site"
@@ -80,6 +85,9 @@ if [ "$forcing" = "true" ]; then
     if [ -z "$SKIP_CONFIGS" ]; then
       export SKIP_CONFIGS=true
     fi
+    if [ -z "$SKIP_OVERVIEW_GENERATION" ]; then
+      export SKIP_OVERVIEW_GENERATION=true
+    fi
     if [ -z "$SKIP_INDEX_GENERATION" ]; then
       export SKIP_INDEX_GENERATION=true
     fi
@@ -99,6 +107,7 @@ fi
 echo ""
 echo "SKIP_EXAMPLES              : $SKIP_EXAMPLES"
 echo "SKIP_STALE_EXAMPLE_CHECK   : $SKIP_STALE_EXAMPLE_CHECK"
+echo "SKIP_OVERVIEW_GENERATION   : $SKIP_OVERVIEW_GENERATION"
 echo "SKIP_INDEX_GENERATION      : $SKIP_INDEX_GENERATION"
 echo "SKIP_CONFIGS               : $SKIP_CONFIGS"
 echo "SKIP_ANTORA_GENERATION     : $SKIP_ANTORA_GENERATION"
@@ -135,7 +144,7 @@ if [[ "$SKIP_SERVE" == "true" ]]; then
   echo "skipping serving"
 else
   echo ""
-  echo "http://localhost:5000"
+  echo "http://localhost:5000/docs/latest/about.html"
   echo ""
 
   serve -S -p 5000 $ANTORA_TARGET_SITE

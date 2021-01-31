@@ -33,18 +33,25 @@ import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 
 @Command(
-        name = "cli", 
-        mixinStandardHelpOptions = true, 
+        name = "cli",
+        mixinStandardHelpOptions = true,
         version = "0.1",
         description = "CLI for the Apache Isis Tooling Ecosystem",
         subcommands = {
-                Cli.ProjectDocCommand.class})
+                Cli.SystemOverviewCommand.class,
+                Cli.GlobalIndexCommand.class,
+        })
 class Cli implements Callable<Integer> {
 
     @Option(
-            names = {"-p", "--project"}, 
+            names = {"-p", "--project"},
             description = "path to the (multi-module) project root (default: current dir)")
     private String projectRootPath;
+
+    @Option(
+            names = {"-o", "--output"},
+            description = "path to the output file (default: NONE = write to std.out)")
+    private String outputPath;
 
     private _Lazy<CliConfig> configRef = _Lazy.threadSafe(()->CliConfig
             .read(projectRootPath!=null
@@ -54,15 +61,21 @@ class Cli implements Callable<Integer> {
     public CliConfig getConfig() {
         return configRef.get();
     }
-    
+
     public  File getProjectRoot() {
         return projectRootPath!=null
                 ? new File(projectRootPath)
                 : new File(".");
     }
 
+    public  File getOutputPath() {
+        return outputPath !=null
+                ? new File(outputPath)
+                : new File(".");
+    }
+
     @Override
-    public Integer call() throws Exception { 
+    public Integer call() throws Exception {
         // not used
         return 0;
     }
@@ -70,38 +83,52 @@ class Cli implements Callable<Integer> {
     // -- SUB COMMANDS
 
     @Command(
-            name = "projdoc",
+            name = "overview",
             description = "Writes a System Overview document (AsciiDoc) to given output.")
-    static class ProjectDocCommand extends CliCommandAbstract {
+    static class SystemOverviewCommand extends CliCommandAbstract {
 
         @Option(
-                names = {"-o", "--output"}, 
+                names = {"-o", "--output"},
                 description = "path to the output file (default: NONE = write to std.out)")
         private String outputFilePath;
 
         @Override
         public Integer call() throws Exception {
 
-            if(outputFilePath!=null) {
-                getConfig().getProjectDoc().setOutputRootFolder(new File(outputFilePath));
+            if(getOutputPath()!=null) {
+                getConfig().getGlobal().setOutputRootFolder(getOutputPath());
             }
-            
+
             val projTree = ProjectNodeFactory.maven(getProjectRoot());
             val projectDocModel = new ProjectDocModel(projTree);
-            projectDocModel.generateAsciiDoc(getConfig());
+            projectDocModel.generateAsciiDoc(getConfig(), ProjectDocModel.Mode.OVERVIEW);
             return 0;
         }
     }
-    
+
+    @Command(
+            name = "index",
+            description = "Writes a Global Index (AsciiDoc) to given output.")
+    static class GlobalIndexCommand extends CliCommandAbstract {
+
+
+        @Override
+        public Integer call() throws Exception {
+
+            if(getOutputPath() !=null) {
+                getConfig().getGlobal().setOutputRootFolder(getOutputPath());
+            }
+
+            val projTree = ProjectNodeFactory.maven(getProjectRoot());
+            val projectDocModel = new ProjectDocModel(projTree);
+            projectDocModel.generateAsciiDoc(getConfig(), ProjectDocModel.Mode.INDEX);
+            return 0;
+        }
+    }
+
     //TODO mvn2gradle
     //description = "Detects differences between Maven and Gradle (multi-module) projects.",
-    
 
-    //    @Command
-    //    int shout() {
-    //        System.out.println("HI! " + getConfig());
-    //        return 0;
-    //    }
 
     // -- ENTRY POINT
 

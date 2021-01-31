@@ -41,12 +41,12 @@ public final class OrphanedIncludeStatementFixer {
             final @NonNull CliConfig cliConfig,
             final @NonNull J2AdocContext j2aContext) {
 
-        if(cliConfig.getProjectDoc().isDryRun()) {
+        if(cliConfig.getGlobal().isDryRun()) {
             System.out.println("IncludeStatementFixer: skip (dry-run)");
             return;
         }
 
-        if(!cliConfig.getProjectDoc().isFixOrphanedAdocIncludeStatements()) {
+        if(!cliConfig.getCommands().getIndex().isFixOrphanedAdocIncludeStatements()) {
             System.out.println("IncludeStatementFixer: skip (disabled via config, fixOrphandedAdocIncludeStatements=false)");
             return;
         }

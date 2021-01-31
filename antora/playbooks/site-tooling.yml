@@ -30,6 +30,15 @@ content:
     - url: .
       start_path: antora/components/comguide # comguide
       branches: HEAD
+    - url: .
+      start_path: antora/components/system # system
+      branches: HEAD
+
+# core
+    - url: .
+      start_path: core/adoc # core (design docs)
+      branches: HEAD
+
 # examples
     - url: .
       start_path: examples/demo/domain/src/main/adoc # docs

@@ -59,7 +59,7 @@ content:
 
 # core
     - url: .
-      start_path: core/adoc # core
+      start_path: core/adoc  # core (design docs)
       branches: HEAD
     - url: .
       start_path: core/codegen-bytebuddy/src/main/adoc # core
@@ -198,7 +198,7 @@ content:
       start_path: mappings/minio/adoc # mappings
       branches: HEAD
     - url: .
-      start_path: mappings/publisher/adoc # mappings
+      start_path: mappings/outbox-publisher/adoc # mappings
       branches: HEAD
     - url: .
       start_path: mappings/restclient/adoc # mappings

@@ -16,9 +16,7 @@ include::../section-hooks/isis.persistence.jdo-datanucleus~pre.adoc[]
 isis.persistence.jdo-datanucleus. +
 class-metadata-loaded-listener
 
-|  org.apache.isis.persistence.jdo. +
-datanucleus5.datanucleus. +
-CreateSchemaObjectFromClassMetadata
+| 
 | null
 
 

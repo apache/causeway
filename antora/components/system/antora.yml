@@ -20,3 +20,7 @@ title: "System Overview"
 version: latest
 start_page: generated:system-overview.adoc
 
+nav:
+- modules/generated/nav.adoc
+
+

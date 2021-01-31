@@ -17,7 +17,7 @@ isis.core.meta-model.validator. +
 action-collection-parameter- +
 choices
 
-|  true
+| 
 | Whether to validate that any actions that accept action parameters have either a corresponding choices or auto-complete for that action parameter, or are associated with a collection of the appropriate type.
 
 
@@ -26,7 +26,7 @@ choices
 isis.core.meta-model.validator. +
 allow-deprecated
 
-|  true
+| 
 | This setting is used to determine whether the use of such deprecated features is allowed.
 
 If not allowed, then metamodel validation errors will be flagged.
@@ -39,7 +39,7 @@ Note that this settings has no effect if the programming model has been configur
 isis.core.meta-model.validator. +
 ensure-unique-object-types
 
-|  true
+| 
 | Whether to ensure that the object type of all objects (which can be set either explicitly using ``DomainObject#objectType()`` or ``DomainService#objectType()``, or can be inferred implicitly using a variety of mechanisms) must be unique with respect to all other object types.
 
 It is _highly advisable_ to leave this set as enabled (the default), and to also use explicit types (see ``#isExplicitObjectType()``.
@@ -62,7 +62,7 @@ isis.core.meta-model.validator. +
 jaxb-view-model. +
 date-time-type-adapter
 
-|  true
+| 
 | If set, then ensures that for all properties of JAXB-style view models where the property's type is a date or time, then that property has been correctly annotated with @``XmlJavaTypeAdapter`` (so that the property's value can be converted into a serializable form).
 
 
@@ -80,7 +80,7 @@ jaxb-view-model.no-arg-constructor
 isis.core.meta-model.validator. +
 jaxb-view-model.not-abstract
 
-|  true
+| 
 | If set, then ensures that all JAXB-style view models are concrete classes, not abstract.
 
 
@@ -89,7 +89,7 @@ jaxb-view-model.not-abstract
 isis.core.meta-model.validator. +
 jaxb-view-model.not-inner-class
 
-|  true
+| 
 | If set, then ensures that all JAXB-style view models are either top-level classes or nested static classes (in other words, checks that they are not anonymous, local nor nested non-static classes).
 
 
@@ -99,7 +99,7 @@ isis.core.meta-model.validator. +
 jaxb-view-model. +
 reference-type-adapter
 
-|  true
+| 
 | If set, then ensures that for all properties of JAXB-style view models where the property's type is an entity, then that entity's type has been correctly annotated with @``XmlJavaTypeAdapter`` (so that the property's value can be converted into a serializable form).
 
 
@@ -108,7 +108,7 @@ reference-type-adapter
 isis.core.meta-model.validator. +
 jdoql.from-clause
 
-|  true
+| 
 | If set, then ensures that the 'FROM' clause within any JDOQL ``@Query``s annotations relates to a known entity type, and moreover that that type is compatible with the type on which the annotation appears: meaning its either a supertype of or the same type as the annotated type.
 
 
@@ -117,7 +117,7 @@ jdoql.from-clause
 isis.core.meta-model.validator. +
 jdoql.variables-clause
 
-|  true
+| 
 | If set, then ensures that the 'VARIABLES' clause within any JDOQL ``@Query``s relates to a known entity type.
 
 
@@ -139,26 +139,8 @@ Note that this aspect of the programming model relates to the ``hideXxx`` and ``
 isis.core.meta-model.validator. +
 parallelize
 
-|  true
+| 
 | Whether to perform metamodel validation in parallel.
-
-
-|
-[[isis.core.meta-model.validator.mixins-only]]
-isis.core.meta-model.validator. +
-mixins-only
-
-|  true
-| If set, then domain services actions are not contributed to domain objects. @deprecated - in that in the future the programming model will simply not support contributed actions from domain services.
-
-
-|
-[[isis.core.meta-model.validator.service-actions-only]]
-isis.core.meta-model.validator. +
-service-actions-only
-
-|  true
-| If set, checks that any domain services have only actions associated with them, not properties or collections. @deprecated - in that in the future the programming model will simply not search for properties or collections of domain services.
 
 
 

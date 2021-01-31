@@ -5,8 +5,6 @@
 
 Command Line Interface for the _Apache Isis Tooling_ ecosystem, to generate documentation from program sources (`.java` files, `pom.xml`, etc).
 
-WARNING: This is work-in-progress.
-Regard the following text as an early draft.
 
 
 == Prerequisites
@@ -21,7 +19,7 @@ mvn install -D module-tooling -Dskip.essential
 This will generate the command line CLI as an executable jar in its target directory (`tooling/cli/target`).
 
 
-== Usage
+== Available Commands
 
 Use the help command to see a list of available commands:
 
@@ -31,38 +29,49 @@ Use the help command to see a list of available commands:
 java -jar tooling/cli/target/isis-tooling-cli.jar --help
 ----
 
-which (currently) generates the folloing:
+which (currently) generates the following:
 
 [source]
 ----
-Usage: cli [-hV] [-p=<projectRootPath>] [COMMAND]
+Usage: cli [-hV] [-o=<outputPath>] [-p=<projectRootPath>] [COMMAND]
 CLI for the Apache Isis Tooling Ecosystem
   -h, --help      Show this help message and exit.
+  -o, --output=<outputPath>
+                  path to the output file (default: NONE = write to std.out)
   -p, --project=<projectRootPath>
                   path to the (multi-module) project root (default: current dir)
   -V, --version   Print version information and exit.
 Commands:
-  projdoc  Writes a System Overview document (AsciiDoc) to given output.
+  overview  Writes a System Overview document (AsciiDoc) to given output.
+  index     Writes a Global Index (AsciiDoc) to given output.
 ----
 
-NOTE: there is currently only one subcommand, namely "projdoc".
+By default, the current directory is used as the target to perform commands in.
 
-By default, the current directory is used as the target to perform sub-commands in.
 
-Default options can be overruled by specifying a configuration file located at the root of the repo:
+=== Configuration File
+
+The `isis-tooling.yml` configuration file (found in the root of the repo) provides default options for each command, as well as global defaults applicable to all commands:
 
 [source,yml]
 .isis-tooling.yml
 ----
-projectDoc: # <.>
+global: # <.>
   option ...
   option ...
+command:
+  overview: # <.>
+    ...
+  index:    # <.>
+    ...
 ----
 
-<.> eg. configuration for sub-command `projdoc`
+<.> configuration applicable to all commands
+<.> configuration for the "overview" command
+<.> configuration for the "index" command
 
-This configuration file is mapped onto the `CLIConfig` bean.
-Look it up in the java sources for more detailed information.
+TIP: This configuration file is mapped onto the `CLIConfig` bean.
+Inspect its https://github.com/apache/isis/blob/master/tooling/cli/src/main/java/org/apache/isis/tooling/cli/CliConfig.java#L31[source code] for more detailed information.
 
 
 == Commands
