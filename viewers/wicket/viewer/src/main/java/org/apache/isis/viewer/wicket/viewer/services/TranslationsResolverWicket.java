@@ -53,7 +53,7 @@ import lombok.extern.log4j.Log4j2;
  * TODO ... or (ideally) let Spring handle translations
  */
 @Service
-@Named("isisWicketViewer.TranslationsResolverWicket")
+@Named("isis.viewer.wicket.TranslationsResolverWicket")
 @Order(OrderPrecedence.MIDPOINT)
 @Qualifier("Wicket")
 @RequiredArgsConstructor(onConstructor_ = {@Inject})

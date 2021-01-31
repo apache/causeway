@@ -41,7 +41,7 @@ import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndAc
 import lombok.extern.log4j.Log4j2;
 
 @Service
-@Named("isisRoRendering.ContentNegotiationServiceOrgApacheIsisV1")
+@Named("isis.viewer.ro.ContentNegotiationServiceOrgApacheIsisV1")
 @Order(OrderPrecedence.MIDPOINT - 200)
 @Qualifier("OrgApacheIsisV1")
 @Log4j2

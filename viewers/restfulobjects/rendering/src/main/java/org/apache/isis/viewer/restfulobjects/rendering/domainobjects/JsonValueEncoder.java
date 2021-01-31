@@ -59,7 +59,7 @@ import lombok.val;
  * primitives.
  */
 @Service
-@Named("isisRoRendering.JsonValueEncoder")
+@Named("isis.viewer.ro.JsonValueEncoder")
 @Order(OrderPrecedence.EARLY)
 @Primary
 @Qualifier("Default")

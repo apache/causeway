@@ -44,7 +44,7 @@ import org.apache.isis.applib.services.acceptheader.AcceptHeaderService;
 import org.apache.isis.commons.internal.base._NullSafe;
 
 @Service
-@Named("isisRoRendering.AcceptHeaderServiceForRest")
+@Named("isis.viewer.ro.AcceptHeaderServiceForRest")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("ForRest")

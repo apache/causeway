@@ -54,7 +54,7 @@ import images.Images;
  * Searches for a fixed set of suffixes: <code>png, gif, jpeg, jpg, svg</code>.
  */
 @Service
-@Named("isisWicketViewer.ImageResourceCacheClassPath")
+@Named("isis.viewer.wicket.ImageResourceCacheClassPath")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("ClassPath")

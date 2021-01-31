@@ -46,7 +46,7 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Service
-@Named("isisRoRendering.RepresentationServiceContentNegotiator")
+@Named("isis.viewer.ro.RepresentationServiceContentNegotiator")
 @Order(OrderPrecedence.EARLY)
 @Primary
 @Qualifier("ContentNegotiator")

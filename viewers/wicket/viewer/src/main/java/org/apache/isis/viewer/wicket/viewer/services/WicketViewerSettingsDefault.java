@@ -34,7 +34,7 @@ import org.apache.isis.viewer.wicket.model.common.CommonContextUtils;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 
 @Service
-@Named("isisWicketViewer.WicketViewerSettingsDefault")
+@Named("isis.viewer.wicket..WicketViewerSettingsDefault")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")

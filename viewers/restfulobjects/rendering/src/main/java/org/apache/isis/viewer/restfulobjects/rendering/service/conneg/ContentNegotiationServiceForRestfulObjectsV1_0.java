@@ -62,7 +62,7 @@ import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationSer
 import lombok.val;
 
 @Service
-@Named("isisRoRendering.ContentNegotiationServiceForRestfulObjectsV1_0")
+@Named("isis.viewer.ro.ContentNegotiationServiceForRestfulObjectsV1_0")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("RestfulObjectsV1_0")

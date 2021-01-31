@@ -57,7 +57,7 @@ import lombok.val;
  *
  */
 @Service
-@Named("isisWicketViewer.ObjectMementoServiceWicket")
+@Named("isis.viewer.wicket.ObjectMementoServiceWicket")
 @Order(OrderPrecedence.MIDPOINT)
 @Qualifier("Wicket")
 @Singleton

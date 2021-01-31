@@ -101,7 +101,7 @@ import lombok.extern.log4j.Log4j2;
  * implementations discovered by the IoC container.
  */
 @Service
-@Named("isisWicketViewer.ComponentFactoryRegistrarDefault")
+@Named("isis.viewer.wicket.ComponentFactoryRegistrarDefault")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")

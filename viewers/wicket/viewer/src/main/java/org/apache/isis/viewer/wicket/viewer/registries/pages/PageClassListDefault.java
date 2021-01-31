@@ -48,7 +48,7 @@ import org.apache.isis.viewer.wicket.ui.pages.voidreturn.VoidReturnPage;
  * for each of the {@link PageType}s.
  */
 @Service
-@Named("isisWicketViewer.PageClassListDefault")
+@Named("isis.viewer.wicket.PageClassListDefault")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")

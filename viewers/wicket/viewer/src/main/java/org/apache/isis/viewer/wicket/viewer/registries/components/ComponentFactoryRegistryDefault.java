@@ -57,7 +57,7 @@ import lombok.val;
  * provided {@link ComponentFactoryRegistrar}.
  */
 @Service
-@Named("isisWicketViewer.ComponentFactoryRegistryDefault")
+@Named("isis.viewer.wicket.ComponentFactoryRegistryDefault")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")

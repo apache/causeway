@@ -55,7 +55,7 @@ import lombok.val;
  *
  */
 @Service
-@Named("isisRoViewer.WebModuleJaxrsRestEasy4")
+@Named("isis.viewer.ro.WebModuleJaxrsRestEasy4")
 @Order(OrderPrecedence.MIDPOINT - 80)
 @Qualifier("JaxrsRestEasy4")
 public final class WebModuleJaxrsResteasy4 extends WebModuleAbstract {

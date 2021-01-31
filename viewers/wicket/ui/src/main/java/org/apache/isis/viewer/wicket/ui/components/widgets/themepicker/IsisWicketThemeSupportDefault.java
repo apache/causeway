@@ -48,7 +48,7 @@ import de.agilecoders.wicket.themes.markup.html.bootswatch.BootswatchThemeProvid
  * @since 2.0
  */
 @Service
-@Named("isisWicketUi.IsisWicketThemeSupportDefault")
+@Named("isis.viewer.wicket.IsisWicketThemeSupportDefault")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")

@@ -39,7 +39,7 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Service
-@Named("isisWicketViewer.HintStoreUsingWicketSession")
+@Named("isis.viewer.wicket.HintStoreUsingWicketSession")
 @Order(OrderPrecedence.EARLY)
 @Qualifier("Wicket")
 @Log4j2

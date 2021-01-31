@@ -56,7 +56,7 @@ import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationSer
 import lombok.val;
 
 @Service
-@Named("isisRoRendering.ContentNegotiationServiceOrgApacheIsisV2")
+@Named("isis.viewer.ro.ContentNegotiationServiceOrgApacheIsisV2")
 @Order(OrderPrecedence.MIDPOINT - 200)
 @Qualifier("OrgApacheIsisV2")
 public class ContentNegotiationServiceOrgApacheIsisV2 extends ContentNegotiationServiceAbstract {

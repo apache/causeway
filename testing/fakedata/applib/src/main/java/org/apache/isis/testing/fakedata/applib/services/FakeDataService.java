@@ -39,7 +39,7 @@ import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.repository.RepositoryService;
 
 @Service
-@Named("isisTstFakeData.FakeDataService")
+@Named("isis.test.FakeDataService")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")

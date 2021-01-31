@@ -46,7 +46,7 @@ import lombok.Getter;
  * @since 2.0
  */
 @Service
-@Named("isisWicketViewer.WebModuleWicket")
+@Named("isis.viewer.wicket.WebModuleWicket")
 @Order(OrderPrecedence.MIDPOINT - 80)
 @Qualifier("Wicket")
 public final class WebModuleWicket extends WebModuleAbstract {
