@@ -30,7 +30,6 @@ import javax.inject.Inject;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.metamodel.BeanSort;
 import org.apache.isis.applib.services.repository.RepositoryService;
@@ -55,7 +54,7 @@ import lombok.val;
  * has value semantics).
  */
 @DomainObject(
-        objectType = "isisexcel.ExcelFixture"
+        objectType = "isis.sub.excel.ExcelFixture"
 )
 public class ExcelFixture extends FixtureScript {
 
@@ -63,7 +62,7 @@ public class ExcelFixture extends FixtureScript {
     
     private final List<Class<?>> classes;
 
-    public ExcelFixture(final URL excelResource, final Class... classes) {
+    public ExcelFixture(final URL excelResource, final Class<?>... classes) {
         this(excelResource, Arrays.asList(classes));
     }
 
@@ -72,7 +71,7 @@ public class ExcelFixture extends FixtureScript {
         setExcelResource(excelResource);
     }
 
-    public ExcelFixture(final Blob upload, final Class... classes) {
+    public ExcelFixture(final Blob upload, final Class<?>... classes) {
         this(upload, Arrays.asList(classes));
     }
 
@@ -208,7 +207,7 @@ public class ExcelFixture extends FixtureScript {
         objectList.addAll(createdObjects);
     }
 
-    private void addToCombined(final List<?> createdObjects) {
+    private void addToCombined(final List<Object> createdObjects) {
         this.objects.addAll(createdObjects);
     }
 
@@ -236,8 +235,8 @@ public class ExcelFixture extends FixtureScript {
 
     @javax.inject.Inject
     private RepositoryService repositoryService;
-    @javax.inject.Inject
-    private BookmarkService bookmarkService;
+//    @javax.inject.Inject
+//    private BookmarkService bookmarkService;
     @javax.inject.Inject
     private ServiceInjector serviceInjector;
 

@@ -55,7 +55,7 @@ import bsh.EvalError;
 import bsh.Interpreter;
 
 @Service
-@Named("isisTstH2Console.WebModuleH2Console")
+@Named("isis.test.WebModuleH2Console")
 @Order(OrderPrecedence.MIDPOINT)
 @Qualifier("H2Console")
 @Log4j2

@@ -44,7 +44,7 @@ public class IsisModuleValAsciidocMetaModel {
 }
 
 @Component
-@Named("isisAsciiDocMetaModel.MetaModelRefiner")
+@Named("isis.val.AsciiDocMetaModelRefiner")
 class AsciiDocMetaModelRefiner implements MetaModelRefiner {
     @Override
     public void refineProgrammingModel(ProgrammingModel programmingModel) {
@@ -56,7 +56,7 @@ class AsciiDocMetaModelRefiner implements MetaModelRefiner {
 }
 
 @Component
-@Named("isisAsciiDocMetaModel.ValueTypeProvider")
+@Named("isis.val.AsciiDocValueTypeProvider")
 class AsciiDocValueTypeProvider implements ValueTypeProvider {
     @Override
     public Collection<ValueTypeDefinition> definitions() {

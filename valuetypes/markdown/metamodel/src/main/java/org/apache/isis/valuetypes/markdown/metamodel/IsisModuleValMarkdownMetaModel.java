@@ -44,7 +44,7 @@ public class IsisModuleValMarkdownMetaModel {
 }
 
 @Component
-@Named("isisMarkdownMetaModel.MetaModelRefiner")
+@Named("isis.val.MarkdownMetaModelRefiner")
 class MarkdownMetaModelRefiner implements MetaModelRefiner {
     @Override
     public void refineProgrammingModel(ProgrammingModel programmingModel) {
@@ -56,7 +56,7 @@ class MarkdownMetaModelRefiner implements MetaModelRefiner {
 }
 
 @Component
-@Named("isisMarkdownMetaModel.ValueTypeProvider")
+@Named("isis.val.MarkdownValueTypeProvider")
 class MarkdownValueTypeProvider implements ValueTypeProvider {
     @Override
     public Collection<ValueTypeDefinition> definitions() {

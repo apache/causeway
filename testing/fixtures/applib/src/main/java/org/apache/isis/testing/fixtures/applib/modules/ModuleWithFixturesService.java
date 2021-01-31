@@ -51,7 +51,7 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Service
-@Named("isisTstFixtures.ModuleService")
+@Named("isis.test.ModuleWithFixturesService")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")

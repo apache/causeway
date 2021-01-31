@@ -26,10 +26,7 @@ import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.MemberOrder;
-import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.factory.FactoryService;
-import org.apache.isis.applib.services.registry.ServiceRegistry;
-import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.commons.internal.base._Bytes;
 import org.apache.isis.subdomains.excel.applib.dom.ExcelService;
@@ -46,7 +43,7 @@ import lombok.val;
  * has value semantics).
  */
 @DomainObject(
-        objectType = "isisexcel.ExcelFixture2"
+        objectType = "isis.sub.excel.ExcelFixture2"
 )
 public class ExcelFixture2 extends FixtureScript {
 
@@ -174,12 +171,12 @@ public class ExcelFixture2 extends FixtureScript {
 
     //endregion
 
-    @javax.inject.Inject
-    private RepositoryService repositoryService;
-    @javax.inject.Inject
-    private BookmarkService bookmarkService;
-    @javax.inject.Inject
-    private ServiceRegistry serviceRegistry;
+//    @javax.inject.Inject
+//    private RepositoryService repositoryService;
+//    @javax.inject.Inject
+//    private BookmarkService bookmarkService;
+//    @javax.inject.Inject
+//    private ServiceRegistry serviceRegistry;
 
     @Inject
     FactoryService factoryService;
