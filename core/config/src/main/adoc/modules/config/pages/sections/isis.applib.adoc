@@ -54,7 +54,7 @@ This setting can be overridden on a case-by-case basis using ``Action#commandPub
 isis.applib.annotation.action. +
 domain-event.post-for-default
 
-| 
+|  true
 | Influences whether an ``ActionDomainEvent`` should be published (on the internal ``EventBusService``) whenever an action is being interacted with.
 
 Up to five different events can be fired during an interaction, with the event's phase determining which (hide, disable, validate, executing and executed). Subscribers can influence the behaviour at each of these phases.
@@ -104,7 +104,7 @@ The value of this can be overridden on a case-by-case basis using ``CollectionLa
 isis.applib.annotation. +
 collection-layout.paged
 
-| 
+|  12
 | Defines the default number of objects that are shown in a "parented" collection of a domain object, result of invoking an action.
 
 This can be overridden on a case-by-case basis using ``CollectionLayout#paged()``.
@@ -115,7 +115,7 @@ This can be overridden on a case-by-case basis using ``CollectionLayout#paged()`
 isis.applib.annotation.collection. +
 domain-event.post-for-default
 
-| 
+|  true
 | Influences whether an ``CollectionDomainEvent`` should be published (on the internal ``EventBusService``) whenever a collection is being interacted with.
 
 Up to two different events can be fired during an interaction, with the event's phase determining which (hide, disable)Subscribers can influence the behaviour at each of these phases.
@@ -189,7 +189,7 @@ The default is ``false``, because otherwise the mere presence of ``@DomainObject
 isis.applib.annotation. +
 domain-object-layout.paged
 
-| 
+|  25
 | Defines the default number of objects that are shown in a "standalone" collection obtained as the result of invoking an action.
 
 This can be overridden on a case-by-case basis using ``DomainObjectLayout#paged()``.
@@ -220,7 +220,7 @@ domain-object. +
 created-lifecycle-event. +
 post-for-default
 
-| 
+|  true
 | Influences whether an ``ObjectCreatedEvent`` should be published (on the internal ``EventBusService``) whenever a domain object has been created using ``FactoryService``.
 
 The algorithm for determining whether (and what type of) an event is sent depends on the value of the @DomainObject(createdLifecycleEvent=...) for the domain object in question.
@@ -262,7 +262,7 @@ domain-object. +
 loaded-lifecycle-event. +
 post-for-default
 
-| 
+|  true
 | Influences whether an ``ObjectLoadedEvent`` should be published (on the internal ``EventBusService``) whenever a domain _entity_ has been loaded from the persistence store.
 
 The algorithm for determining whether (and what type of) an event is sent depends on the value of the @DomainObject(loadedLifecycleEvent=...) for the domain object in question.
@@ -281,7 +281,7 @@ domain-object. +
 persisted-lifecycle-event. +
 post-for-default
 
-| 
+|  true
 | Influences whether an ``ObjectPersistedEvent`` should be published (on the internal ``EventBusService``) whenever a domain _entity_ has been persisted (for the first time) to the persistence store.
 
 The algorithm for determining whether (and what type of) an event is sent depends on the value of the @DomainObject(persistedLifecycleEvent=...) for the domain object in question.
@@ -300,7 +300,7 @@ domain-object. +
 persisting-lifecycle-event. +
 post-for-default
 
-| 
+|  true
 | Influences whether an ``ObjectPersistingEvent`` should be published (on the internal ``EventBusService``) whenever a domain _entity_ is about to be persisting (for the first time) to the persistence store.
 
 The algorithm for determining whether (and what type of) an event is sent depends on the value of the @DomainObject(persistingLifecycleEvent=...) for the domain object in question.
@@ -319,7 +319,7 @@ domain-object. +
 removing-lifecycle-event. +
 post-for-default
 
-| 
+|  true
 | Influences whether an ``ObjectRemovingEvent`` should be published (on the internal ``EventBusService``) whenever a persistent domain _entity_ is about to be removed (that is, deleted) from the persistence store.
 
 The algorithm for determining whether (and what type of) an event is sent depends on the value of the @DomainObject(removingLifecycleEvent=...) for the domain object in question.
@@ -340,7 +340,7 @@ domain-object. +
 updated-lifecycle-event. +
 post-for-default
 
-| 
+|  true
 | Influences whether an ``ObjectUpdatedEvent`` should be published (on the internal ``EventBusService``) whenever a persistent domain _entity_ has been updated in the persistence store.
 
 The algorithm for determining whether (and what type of) an event is sent depends on the value of the @DomainObject(updatedLifecycleEvent=...) for the domain object in question.
@@ -359,7 +359,7 @@ domain-object. +
 updating-lifecycle-event. +
 post-for-default
 
-| 
+|  true
 | Influences whether an ``ObjectUpdatingEvent`` should be published (on the internal ``EventBusService``) whenever a persistent domain _entity_ is about to be updated in the persistence store.
 
 The algorithm for determining whether (and what type of) an event is sent depends on the value of the @DomainObject(updatingLifecycleEvent=...) for the domain object in question.
@@ -413,7 +413,7 @@ This setting can be overridden on a case-by-case basis using ``Property#commandD
 isis.applib.annotation.property. +
 domain-event.post-for-default
 
-| 
+|  true
 | Influences whether an ``PropertyDomainEvent`` should be published (on the internal ``EventBusService``) whenever an property is being interacted with.
 
 Up to five different events can be fired during an interaction, with the event's phase determining which (hide, disable, validate, executing and executed). Subscribers can influence the behaviour at each of these phases.
@@ -445,7 +445,7 @@ view-model-layout. +
 css-class-ui-event. +
 post-for-default
 
-| 
+|  true
 | Influences whether an ``CssClassUiEvent`` should be published (on the internal ``EventBusService``) whenever a view model (annotated with @ViewModel) is about to be rendered in the UI - thereby allowing subscribers to optionally ``CssClassUiEvent#setCssClass(String)`` change) the CSS classes that are used.
 
 The algorithm for determining whether (and what type of) an event is sent depends on the value of the ``ViewModelLayout#cssClassUiEvent()`` @ViewModelLayout(cssClassEvent=...)} for the domain object in question:
@@ -461,7 +461,7 @@ isis.applib.annotation. +
 view-model-layout.icon-ui-event. +
 post-for-default
 
-| 
+|  true
 | Influences whether an ``IconUiEvent`` should be published (on the internal ``EventBusService``) whenever a view model (annotated with @ViewModel) is about to be rendered in the UI - thereby allowing subscribers to optionally ``IconUiEvent#setIconName(String)`` change) the icon that is used.
 
 The algorithm for determining whether (and what type of) an event is sent depends on the value of the ``ViewModelLayout#iconUiEvent()`` @ViewModelLayout(iconEvent=...)} for the domain object in question:
@@ -477,7 +477,7 @@ isis.applib.annotation. +
 view-model-layout.layout-ui-event. +
 post-for-default
 
-| 
+|  true
 | Influences whether an ``LayoutUiEvent`` should be published (on the internal ``EventBusService``) whenever a view model (annotated with @ViewModel) is about to be rendered in the UI - thereby allowing subscribers to optionally ``LayoutUiEvent#setLayout(String)`` change) the layout that is used.
 
 If a different layout value has been set, then a layout in the form ``xml`` use used (where ``zzz`` is the name of the layout).
@@ -495,7 +495,7 @@ isis.applib.annotation. +
 view-model-layout.title-ui-event. +
 post-for-default
 
-| 
+|  true
 | Influences whether an ``TitleUiEvent`` should be published (on the internal ``EventBusService``) whenever a view model (annotated with @ViewModel) is about to be rendered in the UI - thereby allowing subscribers to optionally ``TitleUiEvent#setTitle(String)`` change) the title that is used.
 
 The algorithm for determining whether (and what type of) an event is sent depends on the value of the ``ViewModelLayout#titleUiEvent()`` @ViewModelLayout(titleEvent=...)} for the domain object in question:

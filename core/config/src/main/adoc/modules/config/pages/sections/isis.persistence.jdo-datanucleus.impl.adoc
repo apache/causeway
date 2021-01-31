@@ -65,7 +65,7 @@ impl.datanucleus.cache.level2.mode
 isis.persistence.jdo-datanucleus. +
 impl.datanucleus.cache.level2.type
 
-| 
+|  none
 | Name of the type of Level 2 Cache to use.
 
 Can be used to interface with external caching products. Use "none" to turn off L2 caching.
@@ -136,7 +136,7 @@ isis.persistence.jdo-datanucleus. +
 impl.datanucleus. +
 persistence-unit-load-classes
 
-| 
+|  true
 | Used when we have specified the persistence-unit name for a PMF/EMF and where we want the datastore "tables" for all classes of that persistence-unit loading up into the StoreManager.
 
 Defaults to true, which is the opposite of DataNucleus' own default. (The reason that DN defaults to false is because some databases are slow so such an operation would slow down the startup process).
@@ -212,7 +212,7 @@ isis.persistence.jdo-datanucleus. +
 impl.datanucleus.schema. +
 validate-all
 
-| 
+|  true
 | See also ``json`` (camelCasing instead of kebab-casing).
 
 NOTE: this config property isn't used by the framework, but is provided as a convenience for IDE autocomplete.
@@ -375,7 +375,8 @@ isis.persistence.jdo-datanucleus. +
 impl.javax.jdo. +
 persistence-manager-factory-class
 
-| 
+|  org.datanucleus.api.jdo. +
+JDOPersistenceManagerFactory
 | See also ``json`` (camelCasing instead of kebab-casing).
 
 NOTE: changing this property from its default is used to enable the flyway extension (in combination with ``Schema#isAutoCreateAll()``

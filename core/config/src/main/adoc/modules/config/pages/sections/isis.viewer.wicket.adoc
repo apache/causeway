@@ -23,7 +23,9 @@ isis.viewer.wicket.ajax-debug-mode
 [[isis.viewer.wicket.app]]
 isis.viewer.wicket.app
 
-| 
+|  org.apache.isis.viewer.wicket. +
+viewer.wicketapp. +
+IsisWicketApplication
 | Specifies the subclass of ``IsisWicketApplication`` that is used to bootstrap Wicket.
 
 There is usually very little reason to change this from its default.
@@ -105,7 +107,7 @@ A typical value is ``js``. This will result in this file being read from the ``s
 isis.viewer.wicket.application. +
 menubars-layout-xml
 
-| 
+|  menubars.layout.xml
 | Specifies the file name containing the menubars.
 
 This is expected to be a local resource.
@@ -116,7 +118,7 @@ This is expected to be a local resource.
 isis.viewer.wicket.application. +
 name
 
-| 
+|  Apache Isis ™
 | Identifies the application on the sign-in page (unless a sign-in image is configured) and on top-left in the header (unless a header image is configured).
 
 
@@ -135,7 +137,7 @@ If present, then this will be shown in the footer on every page as well as on th
 [[isis.viewer.wicket.base-path]]
 isis.viewer.wicket.base-path
 
-| 
+|  /wicket/
 | The base path at which the Wicket viewer is mounted.
 
 
@@ -144,7 +146,7 @@ isis.viewer.wicket.base-path
 isis.viewer.wicket. +
 bookmarked-pages.max-size
 
-| 
+|  15
 | Specifies the maximum number of bookmarks to show.
 
 These are aged out on an MRU-LRU basis.
@@ -155,7 +157,7 @@ These are aged out on an MRU-LRU basis.
 isis.viewer.wicket. +
 bookmarked-pages.show-chooser
 
-| 
+|  true
 | Whether the panel providing linsk to previously visited object should be accessible from the top-left of the header.
 
 
@@ -165,7 +167,7 @@ isis.viewer.wicket. +
 bookmarked-pages. +
 show-drop-down-on-footer
 
-| 
+|  true
 | Whether the drop-down list of previously visited objects should be shown in the footer.
 
 
@@ -174,7 +176,7 @@ show-drop-down-on-footer
 isis.viewer.wicket.breadcrumbs. +
 enabled
 
-| 
+|  true
 | Whether to enable the 'where am i' feature, in other words the breadcrumbs.
 
 
@@ -183,7 +185,7 @@ enabled
 isis.viewer.wicket.breadcrumbs. +
 max-parent-chain-length
 
-| 
+|  64
 | null
 
 
@@ -214,7 +216,7 @@ NOTE: For further discussion, see for example https://stackoverflow.com/question
 [[isis.viewer.wicket.date-pattern]]
 isis.viewer.wicket.date-pattern
 
-| 
+|  dd-MM-yyyy
 | The pattern used for rendering and parsing dates.
 
 Each Date scalar panel will use ``#getDatePattern()`` or ``#getDateTimePattern()`` depending on its date type. In the case of panels with a date picker, the pattern will be dynamically adjusted so that it can be used by the https://github.com/Eonasdan/bootstrap-datetimepicker[Bootstrap Datetime Picker] component (which uses http://momentjs.com/docs/#/parsing/string-format/[Moment.js formats], rather than those of regular Java code).
@@ -225,7 +227,7 @@ Each Date scalar panel will use ``#getDatePattern()`` or ``#getDateTimePattern()
 isis.viewer.wicket.date-picker. +
 max-date
 
-| 
+|  2100-01-01T00:00:00.000Z
 | Defines the first date available in the date picker.
 
 As per http://eonasdan.github.io/bootstrap-datetimepicker/Options/#maxdate, in ISO format (per https://github.com/moment/moment/issues/1407).
@@ -236,7 +238,7 @@ As per http://eonasdan.github.io/bootstrap-datetimepicker/Options/#maxdate, in I
 isis.viewer.wicket.date-picker. +
 min-date
 
-| 
+|  1900-01-01T00:00:00.000Z
 | Defines the first date available in the date picker.
 
 As per http://eonasdan.github.io/bootstrap-datetimepicker/Options/#maxdate, in ISO format (per https://github.com/moment/moment/issues/1407).
@@ -247,7 +249,7 @@ As per http://eonasdan.github.io/bootstrap-datetimepicker/Options/#maxdate, in I
 isis.viewer.wicket. +
 date-time-pattern
 
-| 
+|  dd-MM-yyyy HH:mm
 | The pattern used for rendering and parsing date/times.
 
 Each Date scalar panel will use ``#getDatePattern()`` or ``#getDateTimePattern()`` depending on its date type. In the case of panels with a date time picker, the pattern will be dynamically adjusted so that it can be used by the https://github.com/Eonasdan/bootstrap-datetimepicker[Bootstrap Datetime Picker] component (which uses http://momentjs.com/docs/#/parsing/string-format/[Moment.js formats], rather than those of regular Java code).
@@ -320,7 +322,7 @@ tables
 isis.viewer.wicket. +
 max-title-length-in-tables
 
-| 
+|  12
 | The maximum number of characters to use to render the title of a domain object (alongside the icon) in any table, if not otherwise overridden by either ``#getMaxTitleLengthInParentedTables()`` or ``#getMaxTitleLengthInStandaloneTables()``.
 
 If truncated, then the remainder of the title will be replaced with ellipses (...).
@@ -332,7 +334,7 @@ isis.viewer.wicket. +
 prevent-double-click-for-form- +
 submit
 
-| 
+|  true
 | Whether to disable a form submit button after it has been clicked, to prevent users causing an error if they do a double click. This behaviour is enabled by default, but can be disabled using this flag.
 
 
@@ -342,7 +344,7 @@ isis.viewer.wicket. +
 prevent-double-click-for-no-arg- +
 action
 
-| 
+|  true
 | Whether to disable a no-arg action button after it has been clicked, to prevent users causing an error if they do a double click.
 
 This behaviour is enabled by default, but can be disabled using this flag.
@@ -376,7 +378,7 @@ This behaviour is disabled by default; the viewer will update the existing page 
 isis.viewer.wicket.remember-me. +
 cookie-key
 
-| 
+|  isisWicketRememberMe
 | If the "remember me" feature is available, specifies the key to hold the encrypted credentials in the cookie.
 
 
@@ -412,7 +414,7 @@ isis.viewer.wicket. +
 replace-disabled-tag-with-readonly- +
 tag
 
-| 
+|  true
 | In Firefox and more recent versions of Chrome 54+, cannot copy out of disabled fields; instead we use the readonly attribute (https://www.w3.org/TR/2014/REC-html5-20141028/forms.html#the-readonly-attribute)
 
 This behaviour is enabled by default but can be disabled using this flag
@@ -422,7 +424,7 @@ This behaviour is enabled by default but can be disabled using this flag
 [[isis.viewer.wicket.show-footer]]
 isis.viewer.wicket.show-footer
 
-| 
+|  true
 | Whether to show the footer menu bar.
 
 This is enabled by default.
@@ -433,7 +435,7 @@ This is enabled by default.
 isis.viewer.wicket. +
 strip-wicket-tags
 
-| 
+|  true
 | Whether Wicket tags should be stripped from the markup.
 
 By default this is enabled, in other words Wicket tags are stripped. Please be aware that if tags are _not_ stripped, then this may break CSS rules on some browsers.
@@ -473,7 +475,7 @@ isis.viewer.wicket.themes.enabled
 [[isis.viewer.wicket.themes.initial]]
 isis.viewer.wicket.themes.initial
 
-| 
+|  Flatly
 | The initial theme to use.
 
 Expected to be in the list of ``#getEnabled()`` themes.
@@ -483,7 +485,9 @@ Expected to be in the list of ``#getEnabled()`` themes.
 [[isis.viewer.wicket.themes.provider]]
 isis.viewer.wicket.themes.provider
 
-| 
+|  org.apache.isis.viewer.wicket.ui. +
+components.widgets.themepicker. +
+IsisWicketThemeSupportDefault
 | Specifies an implementation of ``IsisWicketThemeSupport``
 
 
@@ -501,7 +505,7 @@ show-chooser
 isis.viewer.wicket. +
 use-indicator-for-form-submit
 
-| 
+|  true
 | Whether to show an indicator for a form submit button that it has been clicked.
 
 This behaviour is enabled by default.
@@ -512,7 +516,7 @@ This behaviour is enabled by default.
 isis.viewer.wicket. +
 use-indicator-for-no-arg-action
 
-| 
+|  true
 | Whether to show an indicator for a no-arg action button that it has been clicked.
 
 This behaviour is enabled by default.
@@ -542,7 +546,7 @@ This behaviour is disabled by default. Please be aware that enabloing it can sub
 isis.viewer.wicket. +
 timestamp-pattern
 
-| 
+|  yyyy-MM-dd HH:mm:ss.SSS
 | @deprecated - seemingly unused
 
 

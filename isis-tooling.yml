@@ -45,6 +45,9 @@ global:
     Wicket: "org.apache.isis.viewer:isis-viewer-wicket.*"
 
     Valuetypes: org.apache.isis.valuetypes.*
+    "Asciidoc": "org.apache.isis.valuetypes:isis-valuetypes-asciidoc.*"
+    "Markdown": "org.apache.isis.valuetypes:isis-valuetypes-markdown.*"
+    "SSE": "org.apache.isis.valuetypes:isis-valuetypes-ssec.*"
 
     Mappings: org.apache.isis.mappings
     #"Outbox Publisher": org.apache.isis.mappings:isis-mappings-jaxrsclient.*
