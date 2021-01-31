@@ -33,7 +33,7 @@ import org.apache.isis.core.security.authentication.AuthenticationContext;
 import org.apache.isis.core.security.authentication.standard.Authenticator;
 
 @Service
-@Named("isisSecurityKeycloak.AuthenticatorKeycloak")
+@Named("isis.security.AuthenticatorKeycloak")
 @Order(OrderPrecedence.EARLY)
 @Qualifier("Keycloak")
 @Singleton

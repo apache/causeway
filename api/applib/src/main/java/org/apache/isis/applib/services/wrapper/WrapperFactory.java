@@ -29,15 +29,16 @@ import org.apache.isis.applib.services.wrapper.events.InteractionEvent;
 import org.apache.isis.applib.services.wrapper.listeners.InteractionListener;
 
 /**
- * Provides the ability to &quot;wrap&quot; of a domain object such that it can
+ * 
+ * Provides the ability to 'wrap' a domain object such that it can
  * be interacted with while enforcing the hide/disable/validate rules implied by
  * the Apache Isis programming model.
  *
  * <p>
- *     The wrapper can alternatively also be used to execute the action
- *     asynchronously, through an {@link java.util.concurrent.ExecutorService}.
- *     Any business rules will be invoked synchronously beforehand, however.
- *     hand
+ * The wrapper can alternatively also be used to execute the action
+ * asynchronously, through an {@link java.util.concurrent.ExecutorService}.
+ * Any business rules will be invoked synchronously beforehand, however.
+ * hand
  * </p>
  *
  * <p>

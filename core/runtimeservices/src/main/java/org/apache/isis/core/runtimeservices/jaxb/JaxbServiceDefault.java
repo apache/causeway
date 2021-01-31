@@ -49,7 +49,7 @@ import lombok.SneakyThrows;
 import lombok.val;
 
 @Service
-@Named("isisRuntimeServices.JaxbServiceDefault")
+@Named("isis.runtimeservices.JaxbServiceDefault")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")

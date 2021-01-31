@@ -26,9 +26,9 @@ import javax.inject.Named;
 
 import org.datanucleus.PropertyNames;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
-import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.commons.internal.collections._Maps;
@@ -39,8 +39,8 @@ import lombok.extern.log4j.Log4j2;
 /**
  * @since 2.0
  */
-@Service
-@Named("isisJdoDn.DnSettings")
+@Configuration
+@Named("isis.persistence.jdo.DnSettings")
 @Order(OrderPrecedence.EARLY)
 @Primary
 @Qualifier("Default")

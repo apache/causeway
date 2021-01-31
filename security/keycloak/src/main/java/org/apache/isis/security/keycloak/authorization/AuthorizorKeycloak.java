@@ -30,7 +30,7 @@ import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.core.security.authorization.standard.Authorizor;
 
 @Service
-@Named("isisSecurityKeycloak.AuthorizorKeycloak")
+@Named("isis.security.AuthorizorKeycloak")
 @Order(OrderPrecedence.EARLY)
 @Qualifier("Keycloak")
 public class AuthorizorKeycloak implements Authorizor {

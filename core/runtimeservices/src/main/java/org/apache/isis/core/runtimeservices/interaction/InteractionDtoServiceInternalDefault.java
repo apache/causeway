@@ -55,7 +55,7 @@ import org.apache.isis.schema.ixn.v2.ActionInvocationDto;
 import org.apache.isis.schema.ixn.v2.PropertyEditDto;
 
 @Service
-@Named("isisRuntimeServices.InteractionDtoServiceInternalDefault")
+@Named("isis.runtimeservices.InteractionDtoServiceInternalDefault")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")

@@ -59,7 +59,7 @@ import lombok.SneakyThrows;
  * @deprecated
  */
 @Service
-@Named("isisLegacyApplib.domainObjectContainer")
+@Named("isis.legacy.applib.DomainObjectContainer")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")

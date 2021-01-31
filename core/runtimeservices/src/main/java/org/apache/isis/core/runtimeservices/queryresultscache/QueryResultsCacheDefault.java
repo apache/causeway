@@ -55,7 +55,7 @@ import lombok.extern.log4j.Log4j2;
  * understand.
  */
 @Service
-@Named("isisRuntime.QueryResultsCacheDefault")
+@Named("isis.runtimeservices.QueryResultsCacheDefault")
 @Order(OrderPrecedence.EARLY)
 @Primary
 @InteractionScope

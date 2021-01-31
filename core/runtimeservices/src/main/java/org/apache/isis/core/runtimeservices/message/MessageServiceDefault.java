@@ -37,7 +37,7 @@ import org.apache.isis.core.interaction.session.InteractionTracker;
 import org.apache.isis.core.interaction.session.MessageBroker;
 
 @Service
-@Named("isisRuntimeServices.MessageServiceDefault")
+@Named("isis.runtimeservices.MessageServiceDefault")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")

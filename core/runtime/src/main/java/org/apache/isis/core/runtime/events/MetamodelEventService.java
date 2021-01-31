@@ -37,7 +37,7 @@ import org.apache.isis.core.metamodel.events.MetamodelEvent;
  * post-construct phase has finished and before the pre-destroy phase has begun.
  */
 @Service
-@Named("isisRuntime.MetamodelEventService")
+@Named("isis.runtime.MetamodelEventService")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")

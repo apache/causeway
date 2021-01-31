@@ -40,18 +40,8 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.util.snapshot.XmlSnapshot;
 
-/**
- * This service allows an XML document to be generated capturing the data of a root entity and specified related
- * entities.  This XML can be used for various purposes, such as mail merge/reporting, or adhoc auditing.
- *
- * <p>
- * This implementation has no UI and there are no other implementations of the service API, and so it annotated
- * with {@link org.apache.isis.applib.annotation.DomainService}.  Because this class is implemented in core, this means
- * that it is automatically registered and available for use; no further configuration is required.
- * @since 2.0 {@index}
- */
 @Service
-@Named("isisRuntimeServices.XmlSnapshotServiceDefault")
+@Named("isis.runtimeservices.XmlSnapshotServiceDefault")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")

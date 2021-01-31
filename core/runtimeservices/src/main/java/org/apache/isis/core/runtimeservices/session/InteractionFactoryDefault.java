@@ -76,23 +76,20 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
- * Is the factory of {@link InteractionSession}s, also holding a reference to the current session using
- * a thread-local.
- *
- * <p>
- *     The class is considered as analogous to (and is in many ways a wrapper for) a JDO
- *     <code>PersistenceManagerFactory</code>.
- * </p>
- *
+ * Is the factory of {@link InteractionSession}s.
+ * 
+ * @implNote holds a reference to the current session using a thread-local
  */
 @Service
-@Named("isisRuntime.InteractionFactoryDefault")
+@Named("isis.runtimeservices.InteractionFactoryDefault")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")
 @Log4j2
 public class InteractionFactoryDefault 
-implements InteractionFactory, InteractionTracker {
+implements 
+    InteractionFactory, 
+    InteractionTracker {
 
     @Inject AuthenticationManager authenticationManager;
     @Inject MetamodelEventService runtimeEventService;

@@ -46,7 +46,7 @@ import lombok.val;
  *
  */
 @Service
-@Named("isisRuntimeServices.ExceptionRecognizerServiceDefault")
+@Named("isis.runtimeservices.ExceptionRecognizerServiceDefault")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")

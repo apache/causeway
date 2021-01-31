@@ -24,11 +24,11 @@ import org.w3c.dom.Element;
 /**
  * This service allows an XML document to be generated capturing the data of a root entity and specified related
  * entities.  This XML can be used for various purposes, such as mail merge/reporting, or adhoc auditing.
- *
  * <p>
  * The framework provides an implementation of this service (<tt>XmlSnapshotServiceDefault</tt>) which is automatically
  * registered and available for use; no further configuration is required.
  * </p>
+ * 
  * @since 1.x {@index}
  */
 public interface XmlSnapshotService {

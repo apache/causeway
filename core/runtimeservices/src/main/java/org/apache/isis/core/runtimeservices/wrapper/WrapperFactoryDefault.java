@@ -109,13 +109,8 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
-/**
- * This service provides the ability to 'wrap' a domain object such that it can
- * be interacted with, while enforcing the hide/disable/validate rules as implied by
- * the Isis programming model.
- */
 @Service
-@Named("isisRuntimeServices.WrapperFactoryDefault")
+@Named("isis.runtimeservices.WrapperFactoryDefault")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")

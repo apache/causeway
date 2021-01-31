@@ -81,7 +81,7 @@ import lombok.extern.log4j.Log4j2;
  * @since 2.0 {@index}
  */
 @Service
-@Named("isisRuntime.EntityChangeTrackerDefault")
+@Named("isis.transaction.EntityChangeTrackerDefault")
 @Order(OrderPrecedence.EARLY)
 @Primary
 @Qualifier("Default")

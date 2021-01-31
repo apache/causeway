@@ -17,7 +17,7 @@ import org.apache.isis.core.interaction.session.InteractionTracker;
 import lombok.RequiredArgsConstructor;
 
 @Service
-@Named("isisRuntimeServices.ClockServiceDefault")
+@Named("isis.runtimeservices.ClockServiceDefault")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")

@@ -33,7 +33,7 @@ import org.apache.isis.commons.internal.base._Bytes;
 import org.apache.isis.commons.internal.base._Strings;
 
 @Service
-@Named("isisRuntimeServices.UrlEncodingServiceWithCompression")
+@Named("isis.runtimeservices.UrlEncodingServiceWithCompression")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Compression")

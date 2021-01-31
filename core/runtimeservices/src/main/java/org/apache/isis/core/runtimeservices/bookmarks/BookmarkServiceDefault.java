@@ -53,7 +53,7 @@ import lombok.val;
  * This service enables a serializable 'bookmark' to be created for an entity.
  */
 @Service
-@Named("isisRuntimeServices.BookmarkServiceDefault")
+@Named("isis.runtimeservices.BookmarkServiceDefault")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")

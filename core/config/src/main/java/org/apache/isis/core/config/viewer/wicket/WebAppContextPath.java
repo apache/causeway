@@ -43,7 +43,7 @@ import lombok.val;
  */
 @Service
 @Singleton
-@Named("isisConfig.WebAppContextPath")
+@Named("isis.config.WebAppContextPath")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")

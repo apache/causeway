@@ -19,13 +19,11 @@
 package org.apache.isis.core.webapp.health;
 
 import java.util.Optional;
-import java.util.concurrent.Callable;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.springframework.boot.actuate.health.AbstractHealthIndicator;
-
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.stereotype.Component;
 
@@ -36,7 +34,7 @@ import org.apache.isis.core.security.authentication.health.HealthAuthentication;
 import lombok.val;
 
 @Component
-@Named("isisWebapp.HealthCheckService") // this appears in the endpoint.
+@Named("isis.webapp.HealthCheckService") // logical name appears in the endpoint
 public class HealthIndicatorUsingHealthCheckService extends AbstractHealthIndicator {
 
     private final InteractionFactory isisInteractionFactory;

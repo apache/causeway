@@ -50,7 +50,7 @@ import lombok.NonNull;
 import lombok.val;
 
 @Service
-@Named("isisRuntimeServices.FactoryServiceDefault")
+@Named("isis.runtimeservices.FactoryServiceDefault")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")

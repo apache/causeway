@@ -45,7 +45,7 @@ import lombok.val;
 import jakarta.annotation.PostConstruct;
 
 @Service
-@Named("isisRuntimeServices.SudoServiceDefault")
+@Named("isis.runtimeservices.SudoServiceDefault")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")

@@ -43,7 +43,7 @@ import org.apache.isis.core.config.IsisConfiguration;
 import lombok.val;
 
 @Service
-@Named("isisRuntimeServices.TranslationServicePo")
+@Named("isis.runtimeservices.TranslationServicePo")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Po")

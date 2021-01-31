@@ -18,5 +18,8 @@
  */
 package org.apache.isis.applib.mixins.timestamp;
 
-public interface Timestampable extends HoldsUpdatedBy, HoldsUpdatedAt {
+public interface Timestampable 
+extends 
+    HoldsUpdatedBy, 
+    HoldsUpdatedAt {
 }

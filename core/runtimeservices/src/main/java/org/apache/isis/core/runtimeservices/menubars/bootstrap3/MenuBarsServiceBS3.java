@@ -69,7 +69,7 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Service
-@Named("isisRuntimeServices.MenuBarsServiceBS3")
+@Named("isis.runtimeservices.MenuBarsServiceBS3")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("BS3")

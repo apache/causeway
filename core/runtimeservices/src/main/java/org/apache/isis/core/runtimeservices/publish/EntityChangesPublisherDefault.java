@@ -42,7 +42,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 @Service
-@Named("isisRuntimeServices.EntityChangesPublisherDefault")
+@Named("isis.runtimeservices.EntityChangesPublisherDefault")
 @Order(OrderPrecedence.EARLY)
 @Primary
 @Qualifier("Default")

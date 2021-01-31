@@ -43,7 +43,7 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Service
-@Named("isisRuntimeServices.MenuBarsLoaderServiceDefault")
+@Named("isis.runtimeservices.MenuBarsLoaderServiceDefault")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")

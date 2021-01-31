@@ -46,7 +46,7 @@ import lombok.extern.log4j.Log4j2;
  *
  */
 @Component
-@Named("isisConfig.IsisBeanFactoryPostProcessorForSpring")
+@Named("isis.config.IsisBeanFactoryPostProcessorForSpring")
 @Log4j2
 public class IsisBeanFactoryPostProcessorForSpring
 implements BeanFactoryPostProcessor {

@@ -54,7 +54,7 @@ import org.apache.isis.schema.common.v2.OidsDto;
 import lombok.val;
 
 @Service
-@Named("isisRuntimeServices.CommandDtoServiceInternalDefault")
+@Named("isis.runtimeservices.CommandDtoServiceInternalDefault")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")

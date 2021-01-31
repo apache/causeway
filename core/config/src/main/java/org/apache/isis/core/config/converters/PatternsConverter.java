@@ -33,7 +33,7 @@ import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Maps;
 
 @Component
-@Named("isisConfig.PatternsConverter")
+@Named("isis.config.PatternsConverter")
 @ConfigurationPropertiesBinding
 public class PatternsConverter implements Converter<String, Map<Pattern, String>> {
 

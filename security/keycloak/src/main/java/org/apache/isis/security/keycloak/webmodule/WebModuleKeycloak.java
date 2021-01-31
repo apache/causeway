@@ -39,7 +39,7 @@ import lombok.Getter;
  * WebModule to enable support for Keycloak.
  */
 @Service
-@Named("isisSecurityKeycloak.WebModuleKeycloak")
+@Named("isis.security.WebModuleKeycloak")
 @Order(OrderPrecedence.FIRST + 100)
 @Qualifier("Keycloak")
 public final class WebModuleKeycloak extends WebModuleAbstract {

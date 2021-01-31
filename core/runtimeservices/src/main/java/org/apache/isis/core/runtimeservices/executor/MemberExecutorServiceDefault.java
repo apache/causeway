@@ -72,7 +72,7 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Service
-@Named("isisRuntimeServices.MemberExecutorServiceDefault")
+@Named("isis.runtimeservices.MemberExecutorServiceDefault")
 @Order(OrderPrecedence.EARLY)
 @Primary
 @Qualifier("Default")

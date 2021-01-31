@@ -64,7 +64,7 @@ import lombok.extern.log4j.Log4j2;
  * @since 2.0
  */
 @Service
-@Named("isisSecurityShiro.WebModuleShiro")
+@Named("isis.security.WebModuleShiro")
 @Order(OrderPrecedence.FIRST + 200)
 @Qualifier("Shiro")
 @Log4j2

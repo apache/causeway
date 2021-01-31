@@ -31,7 +31,7 @@ import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.applib.services.userprof.UserProfileService;
 
 @Service
-@Named("isisRuntimeServices.UserProfileServiceDefault")
+@Named("isis.runtimeservices.UserProfileServiceDefault")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")

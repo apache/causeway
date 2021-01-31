@@ -40,7 +40,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 @Service
-@Named("isisRuntimeServices.CommandPublisherDefault")
+@Named("isis.runtimeservices.CommandPublisherDefault")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Internal")

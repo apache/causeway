@@ -36,7 +36,7 @@ import org.apache.isis.applib.services.user.UserService;
 import lombok.val;
 
 @Service
-@Named("isisTransaction.TimestampService")
+@Named("isis.transaction.TimestampService")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")

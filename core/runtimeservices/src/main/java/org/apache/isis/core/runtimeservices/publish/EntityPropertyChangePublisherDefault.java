@@ -44,7 +44,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 @Service
-@Named("isisRuntimeServices.EntityPropertyChangePublisherDefault")
+@Named("isis.runtimeservices.EntityPropertyChangePublisherDefault")
 @Order(OrderPrecedence.EARLY)
 @Primary
 @Qualifier("Default")

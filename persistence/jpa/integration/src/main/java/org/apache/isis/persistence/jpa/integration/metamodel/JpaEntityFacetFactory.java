@@ -54,7 +54,9 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
+@Log4j2
 public class JpaEntityFacetFactory extends FacetFactoryAbstract {
 
     public JpaEntityFacetFactory() {
@@ -230,6 +232,9 @@ public class JpaEntityFacetFactory extends FacetFactoryAbstract {
             }
             
             val entityManager = getEntityManager();
+            
+            log.debug("about to persist entity {}", pojo);
+
             entityManager.persist(pojo);
         }
 

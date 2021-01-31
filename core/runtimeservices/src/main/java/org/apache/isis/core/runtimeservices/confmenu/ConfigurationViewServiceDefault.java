@@ -51,7 +51,7 @@ import lombok.extern.log4j.Log4j2;
  * @since 2.0
  */
 @Service
-@Named("isisRuntimeServices.ConfigurationViewServiceDefault")
+@Named("isis.runtimeservices.ConfigurationViewServiceDefault")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")

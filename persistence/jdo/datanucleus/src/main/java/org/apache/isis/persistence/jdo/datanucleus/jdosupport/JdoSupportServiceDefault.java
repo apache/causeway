@@ -56,14 +56,8 @@ import static org.apache.isis.commons.internal.base._NullSafe.stream;
 
 import lombok.val;
 
-
-/**
- * This service provides a number of utility methods to supplement/support
- * the capabilities of the JDO Objectstore.
- *
- */
 @Service
-@Named("isisJdoDn.JdoSupportServiceDefault")
+@Named("isis.persistence.jdo.JdoSupportServiceDefault")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("DN5")

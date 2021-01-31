@@ -52,7 +52,7 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
  * @since 2.0 {@index}
  */
 @Service
-@Named("isisRuntimeServices.XmlService")
+@Named("isis.runtimeservice.XmlService")
 @Order(OrderPrecedence.EARLY)
 @Primary
 @Qualifier("Default")

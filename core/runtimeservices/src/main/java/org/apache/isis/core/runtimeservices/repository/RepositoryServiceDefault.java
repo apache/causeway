@@ -33,7 +33,7 @@ import javax.inject.Named;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.exceptions.unrecoverable.PersistFailedException;
@@ -57,8 +57,8 @@ import org.apache.isis.core.metamodel.spec.ManagedObjects.UnwrapUtil;
 import lombok.NonNull;
 import lombok.val;
 
-@Repository
-@Named("isisRuntimeServices.RepositoryServiceDefault")
+@Service
+@Named("isis.runtimeservices.RepositoryServiceDefault")
 @Order(OrderPrecedence.EARLY)
 @Primary
 @Qualifier("Default")

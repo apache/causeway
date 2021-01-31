@@ -39,7 +39,7 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Configuration
-@Named("isisMapCors.WebModuleServerCors")
+@Named("isis.ext.cors.WebModuleServerCors")
 @Qualifier("CORS")
 @Log4j2
 public class IsisModuleExtCorsImpl {

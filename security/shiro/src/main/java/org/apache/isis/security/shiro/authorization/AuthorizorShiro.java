@@ -54,7 +54,7 @@ import lombok.val;
  * </p>
  */
 @Service
-@Named("isisSecurityShiro.AuthorizorShiro")
+@Named("isis.security.AuthorizorShiro")
 @Order(OrderPrecedence.EARLY)
 @Qualifier("Shiro")
 public class AuthorizorShiro implements Authorizor {

@@ -31,7 +31,7 @@ import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.eventbus.EventBusService;
 
 @Service
-@Named("isisRuntimeServices.EventBusServiceSpring")
+@Named("isis.runtimeservices.EventBusServiceSpring")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Spring")

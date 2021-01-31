@@ -50,7 +50,7 @@ import lombok.extern.log4j.Log4j2;
  * @implNote acts as the framework's bootstrapping entry-point for Spring  
  */
 @Service
-@Named("isisCommons.IsisSystemEnvironment")
+@Named("isis.config.IsisSystemEnvironment")
 @Order(-1_073_741_824) // same as OrderedPrecedence#HIGH
 @Primary
 @Qualifier("Default")

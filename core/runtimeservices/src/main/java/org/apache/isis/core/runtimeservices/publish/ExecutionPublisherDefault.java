@@ -44,7 +44,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 @Service
-@Named("isisRuntimeServices.ExecutionPublisherDefault")
+@Named("isis.runtimeservices.ExecutionPublisherDefault")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")

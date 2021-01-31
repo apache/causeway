@@ -44,11 +44,8 @@ import org.apache.isis.applib.services.userreg.events.EmailRegistrationEvent;
 import org.apache.isis.applib.services.userreg.events.PasswordResetEvent;
 import org.apache.isis.commons.internal.resources._Resources;
 
-/**
- * A service that sends email notifications when specific events occur
- */
 @Service
-@Named("isisRuntimeServices.EmailNotificationServiceDefault")
+@Named("isis.runtimeservices.EmailNotificationServiceDefault")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")

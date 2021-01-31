@@ -35,7 +35,7 @@ import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.core.interaction.session.InteractionTracker;
 
 @Service
-@Named("isisRuntimeServices.UserServiceDefault")
+@Named("isis.runtimeservices.UserServiceDefault")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")
