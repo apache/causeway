@@ -30,6 +30,7 @@ import org.springframework.context.annotation.Import;
 import org.apache.isis.core.config.beans.IsisBeanFactoryPostProcessorForSpring;
 import org.apache.isis.core.config.beans.IsisBeanTypeRegistryDefault;
 import org.apache.isis.core.config.converters.PatternsConverter;
+import org.apache.isis.core.config.datasources.DataSourceIntrospectionService;
 import org.apache.isis.core.config.environment.IsisLocaleInitializer;
 import org.apache.isis.core.config.environment.IsisSystemEnvironment;
 import org.apache.isis.core.config.environment.IsisTimeZoneInitializer;
@@ -47,6 +48,7 @@ import org.apache.isis.core.config.viewer.wicket.WebAppContextPath;
     PatternOptionalStringConstraintValidator.class,
 
     // @Service's
+    DataSourceIntrospectionService.class,
     IsisBeanTypeRegistryDefault.class,
     IsisSystemEnvironment.class,
     WebAppContextPath.class,

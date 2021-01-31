@@ -63,10 +63,22 @@
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-applib</artifactId>
         </dependency>
+        
     	<dependency>
             <groupId>org.apache.isis.commons</groupId>
 			<artifactId>isis-commons</artifactId>
         </dependency>
+        
+        <!-- 
+        	TODO only used by DataSourceIntrospectionService to easy reflective lookup in 
+        	DataSource instances
+        	(should be removed in a final release)
+         -->
+    	<dependency>
+		    <groupId>org.beanshell</groupId>
+		    <artifactId>bsh</artifactId>
+		    <version>2.0b5</version>
+		</dependency>
 
         <dependency>
             <groupId>org.hibernate.validator</groupId>

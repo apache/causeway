@@ -18,14 +18,11 @@
  */
 package org.apache.isis.testing.h2console.ui.webmodule;
 
-import java.util.List;
-
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextListener;
 import javax.servlet.ServletException;
-import javax.sql.DataSource;
 
 import org.h2.server.web.ConnectionInfo;
 import org.h2.server.web.WebServer;
@@ -39,20 +36,17 @@ import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.value.LocalResourcePath;
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.functional.Result;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.reflection._Reflect;
+import org.apache.isis.core.config.datasources.DataSourceIntrospectionService;
+import org.apache.isis.core.config.datasources.DataSourceIntrospectionService.DataSourceInfo;
 import org.apache.isis.core.config.environment.IsisSystemEnvironment;
 import org.apache.isis.core.webapp.modules.WebModuleAbstract;
 import org.apache.isis.core.webapp.modules.WebModuleContext;
 
 import lombok.Getter;
-import lombok.SneakyThrows;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
-
-import bsh.EvalError;
-import bsh.Interpreter;
 
 @Service
 @Named("isis.test.WebModuleH2Console")
@@ -73,15 +67,15 @@ public class WebModuleH2Console extends WebModuleAbstract {
 
     @Inject
     public WebModuleH2Console(
+            final DataSourceIntrospectionService datasourceIntrospector,
             final IsisSystemEnvironment isisSystemEnvironment,
-            final ServiceInjector serviceInjector,
-            final List<DataSource> dataSources) {
+            final ServiceInjector serviceInjector) {
           
         super(serviceInjector);
         this.isisSystemEnvironment = isisSystemEnvironment;
         
         this.applicable = isPrototyping() 
-                && isUsesH2MemConnection(Can.ofCollection(dataSources));
+                && isH2MemConnectionUsed(datasourceIntrospector);
         this.localResourcePathIfEnabled = applicable ? new LocalResourcePath(CONSOLE_PATH) : null;
     }
 
@@ -161,39 +155,10 @@ public class WebModuleH2Console extends WebModuleAbstract {
         return isisSystemEnvironment.getDeploymentType().isPrototyping();
     }
 
-    @SneakyThrows
-    private boolean isUsesH2MemConnection(Can<DataSource> dataSources) {
+    private boolean isH2MemConnectionUsed(final DataSourceIntrospectionService datasourceIntrospector) {
         
-        log.info("looking for h2 in-memory data-source in: {}", 
-                dataSources.map(ds->ds.getClass().getName()));
-
-        bsh.Capabilities.setAccessibility(true); // allows us to access private fields
-        val shell = new Interpreter();  // construct a new bean-shell interpreter
-        
-        val foundAny = dataSources.stream()
-        .map(dataSource->{
-            try {
-                shell.set("ds", dataSource);
-            } catch (EvalError e) { 
-                // unexpected
-                e.printStackTrace();
-                return (String) null;
-            }
-            val dsClassName = dataSource.getClass().getName();
-            if("org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseFactory$EmbeddedDataSourceProxy"
-                    .equals(dsClassName)) {
-                return (String) Result.of(()->shell.eval("ds.dataSource.url")).nullableOrElse(null);
-            }
-            if("com.zaxxer.hikari.HikariDataSource"
-                    .equals(dsClassName)) {
-                return (String) Result.of(()->shell.eval("ds.getJdbcUrl()")).nullableOrElse(null);
-            }
-            log.warn("don't know how to extract the jdbc url from datasource of type {}; "
-                    + "ignoring it as a h2 candidate", 
-                    dsClassName);
-            return (String) null;
-        })
-        .map(_Strings::nullToEmpty)
+        return datasourceIntrospector.streamDataSourceInfos()
+        .map(DataSourceInfo::getJdbcUrl)
         .anyMatch(jdbcUrl->{
             if(jdbcUrl.contains(":h2:mem:")) {
                 log.info("found h2 in-memory data-source: {}", jdbcUrl);
@@ -202,12 +167,6 @@ public class WebModuleH2Console extends WebModuleAbstract {
             }
             return false;
         });
-        
-        return foundAny;
-        
     }
-    
-
-
 
 }

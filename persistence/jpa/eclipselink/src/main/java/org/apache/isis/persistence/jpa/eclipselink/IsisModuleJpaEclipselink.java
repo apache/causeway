@@ -102,7 +102,7 @@ public class IsisModuleJpaEclipselink extends JpaBaseConfiguration {
     }
 
     /**
-     * integrates with settings from isis.persistence.jpa.*
+     * integrates with settings from isis.persistence.schema.*
      */
     @SneakyThrows
     protected static DataSource autoCreateSchemas(
@@ -130,7 +130,7 @@ public class IsisModuleJpaEclipselink extends JpaBaseConfiguration {
     }
     
     /**
-     * integrates with settings from isis.persistence.jpa.*
+     * integrates with settings from isis.persistence.schema.*
      */
     protected static JpaProperties addAdditionalOrmFiles(
             JpaProperties properties,
