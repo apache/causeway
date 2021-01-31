@@ -25,6 +25,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.sql.DataSource;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
@@ -56,7 +57,8 @@ import bsh.EvalError;
 @Log4j2
 public class DataSourceIntrospectionService {
 
-    @Inject private List<DataSource> dataSources;
+    @Autowired(required = false)
+    private List<DataSource> dataSources;
     
     @Value
     public static class DataSourceInfo {

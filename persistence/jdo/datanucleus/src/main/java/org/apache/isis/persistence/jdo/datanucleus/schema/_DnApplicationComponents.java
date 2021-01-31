@@ -18,6 +18,8 @@
  */
 package org.apache.isis.persistence.jdo.datanucleus.schema;
 
+import static org.apache.isis.commons.internal.base._NullSafe.stream;
+
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
@@ -39,14 +41,13 @@ import org.datanucleus.store.schema.SchemaAwareStoreManager;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.context._Context;
+import org.apache.isis.commons.internal.factory._InstanceUtil;
+import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
-import org.apache.isis.persistence.jdo.datanucleus.config.CreateSchemaObjectFromClassMetadata;
 import org.apache.isis.persistence.jdo.datanucleus.config.DataNucleusPropertiesAware;
 import org.apache.isis.persistence.jdo.provider.metamodel.facets.object.query.JdoNamedQuery;
 import org.apache.isis.persistence.jdo.provider.metamodel.facets.object.query.JdoQueryFacet;
-
-import static org.apache.isis.commons.internal.base._NullSafe.stream;
 
 import lombok.Getter;
 import lombok.val;
@@ -57,14 +58,17 @@ import lombok.extern.log4j.Log4j2;
 final class _DnApplicationComponents {
 
     private final Set<String> persistableClassNameSet;
+    private final IsisConfiguration configuration;
     private final Map<String, Object> datanucleusProps;
 
     @Getter private PersistenceManagerFactory persistenceManagerFactory;
 
     public _DnApplicationComponents(
+            final IsisConfiguration configuration,
             final Map<String, Object> datanucleusProps,
             final Set<String> persistableClassNameSet) {
 
+        this.configuration = configuration;
         this.datanucleusProps = datanucleusProps;
         this.persistableClassNameSet = persistableClassNameSet;
 
@@ -216,8 +220,12 @@ final class _DnApplicationComponents {
     }
 
     private MetaDataListener createMetaDataListener() {
-        return new CreateSchemaObjectFromClassMetadata();
+        final String classMetadataListenerClassName = configuration.getPersistence().getJdoDatanucleus().getClassMetadataLoadedListener();
+        return classMetadataListenerClassName != null
+                ? _InstanceUtil.createInstance(classMetadataListenerClassName, MetaDataListener.class)
+                        : null;
     }
+
 
     private static Properties asProperties(final Map<String, Object> props) {
         final Properties properties = new Properties();

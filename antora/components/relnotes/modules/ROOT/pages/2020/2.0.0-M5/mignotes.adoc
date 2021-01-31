@@ -85,8 +85,8 @@ VIEW_CONTRIBUTIONS_ONLY,
 | was
 | new
 
-| isis.persistence.???jdo??? //TODO
-| isis.persistence.schema
+| isis.persistence.jdo-datanucleus.impl.javax
+| removed, instead configure datasources the Spring way
 
 | isis.core.runtimeservices.exception-recognizer.jdo
 | isis.core.runtimeservices.exception-recognizer.dae

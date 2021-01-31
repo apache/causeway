@@ -52,6 +52,7 @@ public class _DnApplication {
             final MetaModelContext metaModelContext,
             final DnSettings dnSettings) {
 
+        val configuration = metaModelContext.getConfiguration();
         val isisBeanTypeRegistry = metaModelContext.getServiceRegistry()
                 .lookupServiceElseFail(IsisBeanTypeRegistry.class);
 
@@ -64,6 +65,7 @@ public class _DnApplication {
         }
 
         val dataNucleusApplicationComponents = new _DnApplicationComponents(
+                configuration,
                 dnSettings.getAsProperties(),
                 classesToBePersisted);
 
