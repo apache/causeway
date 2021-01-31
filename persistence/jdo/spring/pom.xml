@@ -28,9 +28,10 @@
 		This is a fork of the Spring ORM JDO sources at github, 
 		for which support had been dropped back in 2016 [1].
 		
-		Credits to the original authors.
+		Credits to the original authors. See also docs [2].
 		
 		[1] https://github.com/spring-projects/spring-framework/issues/18702
+		[2] https://docs.spring.io/spring-framework/docs/3.0.0.RC2/reference/html/ch13s04.html
     </description>
 
 	<properties>
