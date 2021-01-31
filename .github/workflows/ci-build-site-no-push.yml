@@ -87,3 +87,4 @@ jobs:
       run: bash -x $CI_SCRIPTS_PATH/build-site.sh $ANTORA_PLAYBOOKS_PATH/site.yml
       env:
         REVISION: ${{ steps.revision.outputs.revision }}
+        SKIP_INDEX_GENERATION: true
