@@ -84,7 +84,11 @@ jobs:
     - name: Build Apache Isis Site
       shell: bash
       working-directory: ${{ env.PROJECT_ROOT_PATH }}
-      run: bash -x $CI_SCRIPTS_PATH/build-site.sh $ANTORA_PLAYBOOKS_PATH/site.yml
+      run: bash -x $CI_SCRIPTS_PATH/_build-site.sh $ANTORA_PLAYBOOKS_PATH/site.yml
       env:
         REVISION: ${{ steps.revision.outputs.revision }}
         SKIP_INDEX_GENERATION: true
+        SKIP_OVERVIEW_GENERATION: true
+        SKIP_EXAMPLES: true
+        SKIP_CONFIGS: true
+        SKIP_STALE_EXAMPLE_CHECK: true
