@@ -66,6 +66,7 @@ public class ConfigurationExample3 {
     public TransactionAwarePersistenceManagerFactoryProxy myPmfProxy(final PersistenceManagerFactory myPmf) {
         val myPmfProxy = new TransactionAwarePersistenceManagerFactoryProxy();
         myPmfProxy.setTargetPersistenceManagerFactory(myPmf);
+        myPmfProxy.setAllowCreate(false); // enforce active transactions
         return myPmfProxy;
     }
     

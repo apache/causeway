@@ -352,8 +352,50 @@ transactions through turning off `TransactionAwarePersistenceManagerFactoryProxy
 ====
 [source,java]
 ----
-//TODO
+@Configuration
+@Import({
+})
+public class ConfigurationExample3 {
+    
+    @Bean(destroyMethod = "close")
+    public DataSource getDataSource() {
+        val dataSourceBuilder = DataSourceBuilder.create().type(BasicDataSource.class);
+        dataSourceBuilder.driverClassName("org.h2.Driver");
+        dataSourceBuilder.url("jdbc:h2:mem:test");
+        dataSourceBuilder.username("sa");
+        dataSourceBuilder.password("");
+        return dataSourceBuilder.build();
+    }
+  
+    @Bean(destroyMethod = "close") @Named("myPmf")
+    public PersistenceManagerFactory myPmf(final DataSource dataSource) {
+        val myPmf = new JDOPersistenceManagerFactory();
+        myPmf.setConnectionFactory(dataSource);
+        myPmf.setNontransactionalRead(true);
+        return myPmf;
+    }
+    
+    @Bean @Named("myPmfProxy")
+    public TransactionAwarePersistenceManagerFactoryProxy myPmfProxy(final PersistenceManagerFactory myPmf) {
+        val myPmfProxy = new TransactionAwarePersistenceManagerFactoryProxy();
+        myPmfProxy.setTargetPersistenceManagerFactory(myPmf);
+        myPmfProxy.setAllowCreate(false); // <.>
+        return myPmfProxy;
+    }
+    
+    @Component
+    public static class ExampleDao {
+
+        @Inject
+        @Named("myPmfProxy")
+        @Getter 
+        private PersistenceManagerFactory persistenceManagerFactory;
+        
+    }
+
+}
 ----
+<.> enforce active transactions
 ====
 
 The main advantage of this DAO style is that it depends on JDO API only; no import of any _Spring_ class
