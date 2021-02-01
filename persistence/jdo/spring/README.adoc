@@ -27,7 +27,7 @@ style as the _Hibernate_ support. The corresponding integration classes reside i
 _Spring_ provides a `LocalPersistenceManagerFactoryBean` class that allows you to define a
 local JDO `PersistenceManagerFactory` within a _Spring_ application context:
 
-.Beans Configuration (XML)
+.Option 1 - Beans Configuration (XML)
 [%collapsible]
 ====
 [source,xml]
@@ -41,6 +41,57 @@ local JDO `PersistenceManagerFactory` within a _Spring_ application context:
 </beans>
 ----
 ====
+
+.Option 2 - Java Beans
+[%collapsible]
+====
+[source,java]
+----
+@Configuration
+@ConfigurationProperties(prefix = "isis.persistence.jdo-datanucleus")
+@Named("jdo-settings")
+public class JdoSettingsBean {
+
+    @Getter @Setter 
+    private Map<String, String> impl; //mapped by "isis.persistence.jdo-datanucleus.impl"
+    
+    private final Object lock = new Object();
+    private Map<String, Object> properties;
+
+    public Map<String, Object> getAsProperties() {
+        synchronized(lock) {
+            if(properties==null) {
+                properties = new HashMap<>();
+                properties.putAll(impl);
+                amendProperties(properties);
+            }
+        }
+        return properties;
+    }
+    
+    private void amendProperties(final Map<String, Object> properties) {
+        // add optional defaults if needed
+    }
+
+}
+
+@Configuration
+@EnableConfigurationProperties(JdoSettingsBean.class)
+public class ConfigurationExample {
+    
+    @Bean
+    public LocalPersistenceManagerFactoryBean myPmf(final JdoSettingsBean jdoSettings) {
+        
+        var myPmf = new LocalPersistenceManagerFactoryBean();
+        myPmf.setJdoPropertyMap(jdoSettings.getAsProperties());
+        return myPmf;
+    }
+
+}
+
+----
+====
+
 
 Alternatively, you can set up a `PersistenceManagerFactory` through direct instantiation of a
 `PersistenceManagerFactory` implementation class. A JDO `PersistenceManagerFactory` implementation

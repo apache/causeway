@@ -18,10 +18,6 @@
  */
 package org.apache.isis.persistence.jdo.datanucleus.test;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -38,22 +34,14 @@ import lombok.val;
  */
 @Configuration
 @Import({
-    JdoSettingsBean.class
 })
-@EnableConfigurationProperties
+@EnableConfigurationProperties(JdoSettingsBean.class)
 public class ConfigurationExample {
-    
-    // DatanNucleus config properties
-    @ConfigurationProperties(prefix = "isis.persistence.jdo-datanucleus.impl")
-    @Bean("jdo-settings")
-    public Map<String, String> getJdoSettings() {
-        return new HashMap<String, String>();
-    }
     
     @Bean
     public LocalPersistenceManagerFactoryBean myPmf(final JdoSettingsBean jdoSettings) {
 
-        _Probe.errOut("jdoSettings %s", _Maps.toString(jdoSettings.getAsProperties(), "\n"));
+        _Probe.errOut("jdoSettings:\n%s", _Maps.toString(jdoSettings.getAsProperties(), "\n"));
         
         val myPmf = new LocalPersistenceManagerFactoryBean();
         myPmf.setJdoPropertyMap(jdoSettings.getAsProperties());

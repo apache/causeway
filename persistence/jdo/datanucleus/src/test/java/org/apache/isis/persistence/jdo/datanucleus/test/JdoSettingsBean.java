@@ -21,38 +21,37 @@ package org.apache.isis.persistence.jdo.datanucleus.test;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
-import org.apache.isis.commons.internal.collections._Maps;
+import lombok.Getter;
+import lombok.Setter;
 
 @Configuration
+@ConfigurationProperties(prefix = "isis.persistence.jdo-datanucleus")
+@Named("jdo-settings")
 public class JdoSettingsBean {
 
-    @Inject @Named("jdo-settings") 
-    private Map<String, String> jdoSettings;
+    @Getter @Setter 
+    private Map<String, String> impl; //mapped by "isis.persistence.jdo-datanucleus.impl"
     
     private final Object lock = new Object();
-    private boolean amended = false;
-    
-    public Map<String, String> getAsMap() {
-        synchronized(lock) {
-            if(!amended) {
-                amendProperties();
-                amended = true;
-            }
-        }
-        return jdoSettings;
-    }
+    private Map<String, Object> properties;
 
     public Map<String, Object> getAsProperties() {
-        return _Maps.mapValues(getAsMap(), HashMap::new, Object.class::cast);
+        synchronized(lock) {
+            if(properties==null) {
+                properties = new HashMap<>();
+                properties.putAll(impl);
+                amendProperties(properties);
+            }
+        }
+        return properties;
     }
     
-    
-    private void amendProperties() {
+    private void amendProperties(final Map<String, Object> properties) {
         // add optional defaults if needed
     }
 
