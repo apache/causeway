@@ -26,20 +26,11 @@ import org.springframework.boot.test.context.SpringBootTest;
                 ConfigurationExample2.class
         },
         properties = {
-//                "isis.persistence.jdo-datanucleus.impl.datanucleus.cache.level2.mode=ENABLE_SELECTIVE",
-//                "isis.persistence.jdo-datanucleus.impl.datanucleus.cache.level2.type=none",
-//                "isis.persistence.jdo-datanucleus.impl.datanucleus.identifier.case=MixedCase",
-//                "isis.persistence.jdo-datanucleus.impl.datanucleus.persistenceByReachabilityAtCommit=false",
-//                "isis.persistence.jdo-datanucleus.impl.datanucleus.schema.autoCreateAll=true",
-//                "isis.persistence.jdo-datanucleus.impl.datanucleus.schema.validateAll=false",
-//                "isis.persistence.jdo-datanucleus.impl.datanucleus.schema.validateConstraints=true",
-//                "isis.persistence.jdo-datanucleus.impl.datanucleus.schema.validateTables=true",
-//                
-//                "isis.persistence.jdo-datanucleus.impl.javax.jdo.PersistenceManagerFactoryClass=org.datanucleus.api.jdo.JDOPersistenceManagerFactory",
-                "spring.datasource.url=jdbc:h2:mem:test",
-                "spring.datasource.driver-class-name=org.h2.Driver",
-                "spring.datasource.username=sa",
-                "spring.datasource.password=",
+//                XXX not used with this example 
+//                "spring.datasource.url=jdbc:h2:mem:test",
+//                "spring.datasource.driver-class-name=org.h2.Driver",
+//                "spring.datasource.username=sa",
+//                "spring.datasource.password=",
        }
 )
 class ConfigurationTest2 {

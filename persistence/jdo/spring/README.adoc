@@ -27,7 +27,7 @@ style as the _Hibernate_ support. The corresponding integration classes reside i
 _Spring_ provides a `LocalPersistenceManagerFactoryBean` class that allows you to define a
 local JDO `PersistenceManagerFactory` within a _Spring_ application context:
 
-.Option 1 - Beans Configuration (XML)
+.Option 1a - Beans Configuration (XML)
 [%collapsible]
 ====
 [source,xml]
@@ -42,7 +42,7 @@ local JDO `PersistenceManagerFactory` within a _Spring_ application context:
 ----
 ====
 
-.Option 2 - Java Beans
+.Option 1b - Java Beans (programmatic)
 [%collapsible]
 ====
 [source,java]
@@ -100,7 +100,7 @@ JDBC `DataSource`, passed into the connectionFactory property. For example, for 
 JDO implementation https://www.datanucleus.org/[DataNucleus],
 this is the XML configuration of the PersistenceManagerFactory implementation:
 
-.Option 1 - Beans Configuration (XML)
+.Option 2a - Beans Configuration (XML)
 [%collapsible]
 ====
 [source,xml]
@@ -123,7 +123,7 @@ this is the XML configuration of the PersistenceManagerFactory implementation:
 ----
 ====
 
-.Option 2 - Java Beans
+.Option 2b - Java Beans (programmatic)
 [%collapsible]
 ====
 [source,java]
