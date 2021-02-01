@@ -26,7 +26,7 @@ import org.apache.isis.applib.layout.component.ServiceActionLayoutData;
 /**
  * @since 1.x {@index}
  */
-1public interface MenuSection extends HasNamed {
+public interface MenuSection extends HasNamed {
 
     @Programmatic
     List<ServiceActionLayoutData> getServiceActions();
