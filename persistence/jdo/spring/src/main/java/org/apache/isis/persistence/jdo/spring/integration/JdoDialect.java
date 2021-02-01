@@ -31,7 +31,7 @@ import org.springframework.transaction.TransactionException;
 /**
  * SPI strategy that allows for customizing integration with a specific JDO provider,
  * in particular regarding transaction management and exception translation. To be
- * implemented for specific JDO providers such as JPOX, Kodo, Lido, Versant Open Access.
+ * implemented for specific JDO providers such as DataNucleus, Kodo, Lido, Versant Open Access.
  *
  * <p>JDO 3.0 defines standard ways for most of the functionality covered here.
  * Hence, Spring's {@link DefaultJdoDialect} uses the corresponding JDO 3.0 methods
