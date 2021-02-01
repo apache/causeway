@@ -16,24 +16,47 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.persistence.jdo.spring.test;
+package org.apache.isis.persistence.jdo.datanucleus.test;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 
+import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.persistence.jdo.spring.integration.LocalPersistenceManagerFactoryBean;
 
 import lombok.val;
 
 /**
- *  Corresponds to the documents of this module.
+ *  Corresponds to the documents of the 'spring-jdo' module.
  */
 @Configuration
+@Import({
+    JdoSettingsBean.class
+})
 public class ConfigurationExample {
     
+    // DatanNucleus config properties
+    //@ConfigurationProperties(prefix = "isis.persistence.jdo-datanucleus.impl")
+    @Bean("jdo-settings")
+    public Map<String, String> getJdoSettings() {
+        val settings = new HashMap<String, String>();
+        settings.put(
+                "javax.jdo.PersistenceManagerFactoryClass", 
+                "org.datanucleus.api.jdo.JDOPersistenceManagerFactory");
+        return settings;
+    }
+    
     @Bean
-    public LocalPersistenceManagerFactoryBean myPmf() {
+    public LocalPersistenceManagerFactoryBean myPmf(final JdoSettingsBean jdoSettings) {
+        
+        _Probe.errOut("jdoSettings %s", jdoSettings.getAsProperties());
+        
         val myPmf = new LocalPersistenceManagerFactoryBean();
+        myPmf.setJdoPropertyMap(jdoSettings.getAsProperties());
         return myPmf;
     }
 
