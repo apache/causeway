@@ -23,7 +23,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest(
         classes = {
-                ConfigurationExample.class
+                ConfigurationExample1.class
         },
         properties = {
                 "isis.persistence.jdo-datanucleus.impl.datanucleus.cache.level2.mode=ENABLE_SELECTIVE",
@@ -42,7 +42,7 @@ import org.springframework.boot.test.context.SpringBootTest;
                 "isis.persistence.jdo-datanucleus.impl.javax.jdo.option.ConnectionUserName=sa",
        }
 )
-class ConfigurationTest {
+class ConfigurationTest1 {
 
     @Test 
     void contextLoads() {

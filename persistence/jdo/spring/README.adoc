@@ -81,7 +81,6 @@ public class ConfigurationExample {
     
     @Bean
     public LocalPersistenceManagerFactoryBean myPmf(final JdoSettingsBean jdoSettings) {
-        
         var myPmf = new LocalPersistenceManagerFactoryBean();
         myPmf.setJdoPropertyMap(jdoSettings.getAsProperties());
         return myPmf;
@@ -101,7 +100,7 @@ JDBC `DataSource`, passed into the connectionFactory property. For example, for 
 JDO implementation https://www.datanucleus.org/[DataNucleus],
 this is the XML configuration of the PersistenceManagerFactory implementation:
 
-.Beans Configuration (XML)
+.Option 1 - Beans Configuration (XML)
 [%collapsible]
 ====
 [source,xml]
@@ -121,6 +120,48 @@ this is the XML configuration of the PersistenceManagerFactory implementation:
  </bean>
 
 </beans>
+----
+====
+
+.Option 2 - Java Beans
+[%collapsible]
+====
+[source,java]
+----
+import javax.jdo.PersistenceManagerFactory;
+import javax.sql.DataSource;
+
+import org.datanucleus.api.jdo.JDOPersistenceManagerFactory;
+import org.datanucleus.store.rdbms.datasource.dbcp2.BasicDataSource;
+import org.springframework.boot.jdbc.DataSourceBuilder;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+
+@Configuration
+@Import({
+})
+public class ConfigurationExample {
+    
+    @Bean(destroyMethod = "close")
+    public DataSource getDataSource() {
+        var dataSourceBuilder = DataSourceBuilder.create().type(BasicDataSource.class);
+        dataSourceBuilder.driverClassName("org.h2.Driver");
+        dataSourceBuilder.url("jdbc:h2:mem:test");
+        dataSourceBuilder.username("sa");
+        dataSourceBuilder.password("");
+        return dataSourceBuilder.build();
+    }
+  
+    @Bean(destroyMethod = "close")
+    public PersistenceManagerFactory myPmf(final DataSource dataSource) {
+        var myPmf = new JDOPersistenceManagerFactory();
+        myPmf.setConnectionFactory(dataSource);
+        myPmf.setNontransactionalRead(true);
+        return myPmf;
+    }
+
+}
 ----
 ====
 

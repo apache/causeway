@@ -18,14 +18,17 @@
  */
 package org.apache.isis.persistence.jdo.datanucleus.test;
 
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import javax.jdo.PersistenceManagerFactory;
+import javax.sql.DataSource;
+
+import org.datanucleus.api.jdo.JDOPersistenceManagerFactory;
+import org.datanucleus.store.rdbms.datasource.dbcp2.BasicDataSource;
+import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.debug._Probe;
-import org.apache.isis.persistence.jdo.spring.integration.LocalPersistenceManagerFactoryBean;
 
 import lombok.val;
 
@@ -35,16 +38,26 @@ import lombok.val;
 @Configuration
 @Import({
 })
-@EnableConfigurationProperties(JdoSettingsBean.class)
-public class ConfigurationExample {
+public class ConfigurationExample2 {
     
-    @Bean
-    public LocalPersistenceManagerFactoryBean myPmf(final JdoSettingsBean jdoSettings) {
-
-        _Probe.errOut("jdoSettings:\n%s", _Maps.toString(jdoSettings.getAsProperties(), "\n"));
+    @Bean(destroyMethod = "close")
+    public DataSource getDataSource() {
+        val dataSourceBuilder = DataSourceBuilder.create().type(BasicDataSource.class);
+        dataSourceBuilder.driverClassName("org.h2.Driver");
+        dataSourceBuilder.url("jdbc:h2:mem:test");
+        dataSourceBuilder.username("sa");
+        dataSourceBuilder.password("");
+        return dataSourceBuilder.build();
+    }
+  
+    @Bean(destroyMethod = "close")
+    public PersistenceManagerFactory myPmf(final DataSource dataSource) {
         
-        val myPmf = new LocalPersistenceManagerFactoryBean();
-        myPmf.setJdoPropertyMap(jdoSettings.getAsProperties());
+        _Probe.errOut("dataSource: %s", dataSource);
+        
+        val myPmf = new JDOPersistenceManagerFactory();
+        myPmf.setConnectionFactory(dataSource);
+        myPmf.setNontransactionalRead(true);
         return myPmf;
     }
 
