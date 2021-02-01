@@ -69,7 +69,7 @@ public class JdoSettingsBean {
         return properties;
     }
     
-    private void amendProperties(final Map<String, Object> properties) {
+    private void amendProperties(Map<String, Object> properties) {
         // add optional defaults if needed
     }
 
@@ -80,7 +80,7 @@ public class JdoSettingsBean {
 public class ConfigurationExample {
     
     @Bean
-    public LocalPersistenceManagerFactoryBean myPmf(final JdoSettingsBean jdoSettings) {
+    public LocalPersistenceManagerFactoryBean myPmf(JdoSettingsBean jdoSettings) {
         var myPmf = new LocalPersistenceManagerFactoryBean();
         myPmf.setJdoPropertyMap(jdoSettings.getAsProperties());
         return myPmf;
@@ -154,7 +154,7 @@ public class ConfigurationExample {
     }
   
     @Bean(destroyMethod = "close")
-    public PersistenceManagerFactory myPmf(final DataSource dataSource) {
+    public PersistenceManagerFactory myPmf(DataSource dataSource) {
         var myPmf = new JDOPersistenceManagerFactory();
         myPmf.setConnectionFactory(dataSource);
         myPmf.setNontransactionalRead(true);
@@ -208,9 +208,6 @@ public class ProductDaoImpl implements ProductDao {
 Because the above DAO follows the dependency injection pattern, it fits nicely into a _Spring_ container,
 just as it would if coded against _Spring's_ `JdoTemplate`:
 
-.Beans Configuration (XML)
-[%collapsible]
-====
 [source,xml]
 ----
 <beans>
@@ -221,7 +218,6 @@ just as it would if coded against _Spring's_ `JdoTemplate`:
 
 </beans>
 ----
-====
 
 The main problem with such DAOs is that they always get a new `PersistenceManager` from the factory.
 To access a _Spring_-managed transactional `PersistenceManager`, define a
@@ -229,7 +225,7 @@ To access a _Spring_-managed transactional `PersistenceManager`, define a
 `PersistenceManagerFactory`, then passing a reference to that proxy into your DAOs as in the
 following example:
 
-.Beans Configuration (XML)
+.Option 3a - Beans Configuration (XML)
 [%collapsible]
 ====
 [source,xml]
@@ -246,6 +242,55 @@ following example:
   </bean>
 
 </beans>
+----
+====
+
+.Option 3b - Java Beans (programmatic)
+[%collapsible]
+====
+[source,java]
+----
+@Configuration
+@Import({
+})
+public class ConfigurationExample {
+    
+    @Bean(destroyMethod = "close")
+    public DataSource getDataSource() {
+        var dataSourceBuilder = DataSourceBuilder.create().type(BasicDataSource.class);
+        dataSourceBuilder.driverClassName("org.h2.Driver");
+        dataSourceBuilder.url("jdbc:h2:mem:test");
+        dataSourceBuilder.username("sa");
+        dataSourceBuilder.password("");
+        return dataSourceBuilder.build();
+    }
+  
+    @Bean(destroyMethod = "close") @Named("myPmf")
+    public PersistenceManagerFactory myPmf(DataSource dataSource) {
+        var myPmf = new JDOPersistenceManagerFactory();
+        myPmf.setConnectionFactory(dataSource);
+        myPmf.setNontransactionalRead(true);
+        return myPmf;
+    }
+    
+    @Bean @Named("myPmfProxy")
+    public TransactionAwarePersistenceManagerFactoryProxy myPmfProxy(PersistenceManagerFactory myPmf) {
+        var myPmfProxy = new TransactionAwarePersistenceManagerFactoryProxy();
+        myPmfProxy.setTargetPersistenceManagerFactory(myPmf);
+        return myPmfProxy;
+    }
+    
+    @Component
+    public static class ExampleDao {
+
+        @Inject
+        @Named("myPmfProxy")
+        @Getter 
+        private PersistenceManagerFactory persistenceManagerFactory;
+        
+    }
+
+}
 ----
 ====
 
@@ -281,7 +326,7 @@ public class ProductDaoImpl implements ProductDao {
 With such DAOs that rely on active transactions, it is recommended that you enforce active
 transactions through turning off `TransactionAwarePersistenceManagerFactoryProxy`'s allowCreate flag:
 
-.Beans Configuration (XML)
+.Option 4a - Beans Configuration (XML)
 [%collapsible]
 ====
 [source,xml]
@@ -299,6 +344,15 @@ transactions through turning off `TransactionAwarePersistenceManagerFactoryProxy
   </bean>
 
 </beans>
+----
+====
+
+.Option 4b - Java Beans (programmatic)
+[%collapsible]
+====
+[source,java]
+----
+//TODO
 ----
 ====
 
@@ -329,9 +383,6 @@ done so, to get a more detailed coverage of _Spring_'s declarative transaction s
 To execute service operations within transactions, you can use _Spring_'s common declarative transaction
 facilities. For example:
 
-.Beans Configuration (XML)
-[%collapsible]
-====
 [source,xml]
 ----
 <?xml version="1.0" encoding="UTF-8"?>
@@ -371,7 +422,6 @@ facilities. For example:
 
 </beans>
 ----
-====
 
 JDO requires an active transaction to modify a persistent object. The non-transactional flush concept
 does not exist in JDO, in contrast to _Hibernate_. For this reason, you need to set up the chosen JDO

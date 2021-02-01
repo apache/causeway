@@ -18,6 +18,8 @@
  */
 package org.apache.isis.persistence.jdo.datanucleus.test;
 
+import javax.inject.Inject;
+import javax.inject.Named;
 import javax.jdo.PersistenceManagerFactory;
 import javax.sql.DataSource;
 
@@ -27,7 +29,11 @@ import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.stereotype.Component;
 
+import org.apache.isis.persistence.jdo.spring.integration.TransactionAwarePersistenceManagerFactoryProxy;
+
+import lombok.Getter;
 import lombok.val;
 
 /**
@@ -36,7 +42,7 @@ import lombok.val;
 @Configuration
 @Import({
 })
-public class ConfigurationExample2 {
+public class ConfigurationExample3 {
     
     @Bean(destroyMethod = "close")
     public DataSource getDataSource() {
@@ -48,12 +54,29 @@ public class ConfigurationExample2 {
         return dataSourceBuilder.build();
     }
   
-    @Bean(destroyMethod = "close")
+    @Bean(destroyMethod = "close") @Named("myPmf")
     public PersistenceManagerFactory myPmf(final DataSource dataSource) {
         val myPmf = new JDOPersistenceManagerFactory();
         myPmf.setConnectionFactory(dataSource);
         myPmf.setNontransactionalRead(true);
         return myPmf;
+    }
+    
+    @Bean @Named("myPmfProxy")
+    public TransactionAwarePersistenceManagerFactoryProxy myPmfProxy(final PersistenceManagerFactory myPmf) {
+        val myPmfProxy = new TransactionAwarePersistenceManagerFactoryProxy();
+        myPmfProxy.setTargetPersistenceManagerFactory(myPmf);
+        return myPmfProxy;
+    }
+    
+    @Component
+    public static class ExampleDao {
+
+        @Inject
+        @Named("myPmfProxy")
+        @Getter 
+        private PersistenceManagerFactory persistenceManagerFactory;
+        
     }
 
 }
