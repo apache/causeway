@@ -32,6 +32,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.annotation.Nullable;
@@ -143,6 +144,20 @@ public final class _Maps {
         return new AbstractMap.SimpleEntry<K, V>(k, v);
     }
 
+    // -- TO STRING
+    
+    public static String toString(
+            final @Nullable Map<?, ?> map, 
+            final @NonNull  CharSequence delimiter) {
+        
+        return map==null
+            ? ""
+            : map.entrySet()
+                .stream()
+                .map(Object::toString)
+                .collect(Collectors.joining(delimiter));
+        }
+    
     // -- MODIFICATIONS
 
     /**

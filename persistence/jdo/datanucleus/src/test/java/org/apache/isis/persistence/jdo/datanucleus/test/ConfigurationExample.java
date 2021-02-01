@@ -21,10 +21,13 @@ package org.apache.isis.persistence.jdo.datanucleus.test;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
+import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.persistence.jdo.spring.integration.LocalPersistenceManagerFactoryBean;
 
@@ -37,23 +40,20 @@ import lombok.val;
 @Import({
     JdoSettingsBean.class
 })
+@EnableConfigurationProperties
 public class ConfigurationExample {
     
     // DatanNucleus config properties
-    //@ConfigurationProperties(prefix = "isis.persistence.jdo-datanucleus.impl")
+    @ConfigurationProperties(prefix = "isis.persistence.jdo-datanucleus.impl")
     @Bean("jdo-settings")
     public Map<String, String> getJdoSettings() {
-        val settings = new HashMap<String, String>();
-        settings.put(
-                "javax.jdo.PersistenceManagerFactoryClass", 
-                "org.datanucleus.api.jdo.JDOPersistenceManagerFactory");
-        return settings;
+        return new HashMap<String, String>();
     }
     
     @Bean
     public LocalPersistenceManagerFactoryBean myPmf(final JdoSettingsBean jdoSettings) {
-        
-        _Probe.errOut("jdoSettings %s", jdoSettings.getAsProperties());
+
+        _Probe.errOut("jdoSettings %s", _Maps.toString(jdoSettings.getAsProperties(), "\n"));
         
         val myPmf = new LocalPersistenceManagerFactoryBean();
         myPmf.setJdoPropertyMap(jdoSettings.getAsProperties());

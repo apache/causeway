@@ -47,7 +47,7 @@ Alternatively, you can set up a `PersistenceManagerFactory` through direct insta
 class follows the JavaBeans pattern, just like a JDBC `DataSource` implementation class, which is a
 natural fit for a configuration that uses _Spring_. This setup style usually supports a _Spring_-defined
 JDBC `DataSource`, passed into the connectionFactory property. For example, for the open source
-JDO implementation http://www.datanucleus.org/[DataNucleus],
+JDO implementation https://www.datanucleus.org/[DataNucleus],
 this is the XML configuration of the PersistenceManagerFactory implementation:
 
 .Beans Configuration (XML)
@@ -78,7 +78,9 @@ usually through the JCA connector provided by the particular JDO implementation.
 `JndiObjectFactoryBean / <jee:jndi-lookup>` can be used to retrieve and expose such a
 `PersistenceManagerFactory`.
 However, outside an EJB context, no real benefit exists in holding the `PersistenceManagerFactory` in
-JNDI: only choose such a setup for a good reason. See Section _13.3.6_,
+JNDI: only choose such a setup for a good reason. See 
+_Spring Transactions Section 13.3.6_, https://docs.spring.io/spring-framework/docs/3.0.x/spring-framework-reference/html/orm.html#orm-hibernate-resources[Comparing container-managed and locally defined resources]
+
 “Comparing container-managed and locally defined resources” for a discussion; the arguments there
 apply to JDO as well.
 
@@ -227,7 +229,8 @@ DAOs throw plain JDOException, and you would have to convert explicitly to _Spri
 
 [NOTE]
 ====
-You are strongly encouraged to read Section 10.5, “Declarative transaction management” if you have not
+You are strongly encouraged to read _Spring Transactions Section 10.5_, https://docs.spring.io/spring-framework/docs/3.0.x/spring-framework-reference/html/transaction.html#transaction-declarative[Declarative transaction management] 
+if you have not
 done so, to get a more detailed coverage of _Spring_'s declarative transaction support.
 ====
 
