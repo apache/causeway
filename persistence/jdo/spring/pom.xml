@@ -77,6 +77,20 @@
 		    <artifactId>spring-web</artifactId>
 		    <scope>provided</scope>
 		</dependency>
+		
+		<!-- TESTING -->
+
+        <dependency>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-core-internaltestsupport</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+            <scope>test</scope>
+		</dependency>
 
 	</dependencies>
 
