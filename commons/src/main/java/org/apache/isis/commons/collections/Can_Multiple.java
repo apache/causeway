@@ -108,6 +108,15 @@ final class Can_Multiple<T> implements Can<T> {
     }
     
     @Override
+    public Can<T> reverse() {
+        val reverse = new ArrayList<T>(elements.size());
+        for(int i=elements.size()-1; i>=0; --i) {
+            reverse.add(elements.get(i));
+        }
+        return Can_Multiple.of(reverse);
+    }
+    
+    @Override
     public Can<T> filter(@Nullable Predicate<? super T> predicate) {
         if(predicate==null) {
             return this; // identity

@@ -54,6 +54,13 @@ class CanTest {
         SerializationTester.assertEqualsOnRoundtrip(Can.<String>of("hi", "there"));
     }
     
+    // -- REVERTING
+    
+    @Test
+    void multiCan_correctly_reverts() {
+        assertEquals(Can.<String>of("c", "b", "a"), Can.<String>of("a", "b", "c").reverse());
+    }
+    
     // -- FILTERING
     
     @Test

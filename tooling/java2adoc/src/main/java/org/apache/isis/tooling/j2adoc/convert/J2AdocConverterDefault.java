@@ -291,9 +291,11 @@ final class J2AdocConverterDefault implements J2AdocConverter {
         .stream()
         .collect(Collectors.joining("/"));
         
-        return String.format("xref:%s[%s]", 
+        val xref = String.format("xref:%s[%s]", 
                 String.format(j2aContext.getXrefPageIdFormat(), xrefCoordinates), 
-                unit.getFriendlyName()); 
+                unit.getFriendlyName());
+        
+        return xref;
     }
 
     private String xrefIfRequired(final @NonNull String typeSimpleName) {

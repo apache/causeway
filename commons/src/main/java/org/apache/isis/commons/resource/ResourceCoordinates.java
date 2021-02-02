@@ -18,15 +18,20 @@
  */
 package org.apache.isis.commons.resource;
 
+import java.io.File;
 import java.util.Comparator;
 
 import javax.annotation.Nullable;
 
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.base._Refs;
+import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.collections._Lists;
 
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import lombok.val;
 
 /**
  * @since 2.0 {@index}
@@ -35,6 +40,34 @@ import lombok.Value;
 public class ResourceCoordinates 
 implements Comparable<ResourceCoordinates> {
 
+    public static ResourceCoordinates fromFile(final @NonNull File file) {
+        val parts = _Lists.<String>newArrayList();
+        File next = file; 
+        while(next!=null) {
+            if(_Strings.isNotEmpty(next.getName())) {
+                parts.add(next.getName());
+            }
+            next = next.getParentFile();
+        }
+        
+        val nameRef = _Refs.stringRef(file.getName());
+        val simpleName = nameRef.cutAtLastIndexOfAndDrop(".");
+        val fileNameExtension = nameRef.getValue();
+        
+        return ResourceCoordinates.builder()
+             // could semantically mean the mount-point, but we don't have that info in a file instance
+             .location(Can.empty()) 
+             // just the filename without extension
+             .simpleName(simpleName)
+             .friendlyName(simpleName)
+             .name(_Strings.isEmpty(fileNameExtension) 
+                     ? Can.ofSingleton(simpleName)
+                     : Can.of(simpleName, fileNameExtension))
+             .nameAsString(file.getName())
+             .namespace(Can.ofStream(parts.stream().skip(1)).reverse())
+             .build();
+    }
+    
     /**
      * multi-part top level location specifier 
      * like eg. adoc include {@code component:module:page$}
@@ -87,6 +120,5 @@ implements Comparable<ResourceCoordinates> {
         }
         return comparator.compare(this, other);
     }
-
     
 }

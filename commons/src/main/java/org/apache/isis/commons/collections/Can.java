@@ -323,8 +323,14 @@ extends Iterable<T>, Comparable<Can<T>>, Serializable {
 
     }
 
-
     // -- OPERATORS
+
+    /**
+     * Returns a {@code Can} with all the elements from this {@code Can} but 
+     * contained in reversed order.
+     * @return non-null
+     */
+    public Can<T> reverse();
 
     /**
      * Returns a {@code Can} with all the elements from this {@code Can},

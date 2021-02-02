@@ -94,6 +94,11 @@ final class Can_Empty<T> implements Can<T> {
     }
     
     @Override
+    public Can<T> reverse() {
+        return this;
+    }
+    
+    @Override
     public Can<T> filter(@Nullable Predicate<? super T> predicate) {
         return this; // identity
     }

@@ -95,6 +95,11 @@ final class Can_Singleton<T> implements Can<T> {
     }
 
     @Override
+    public Can<T> reverse() {
+        return this;
+    }
+    
+    @Override
     public Can<T> filter(@Nullable Predicate<? super T> predicate) {
         if(predicate==null) {
             return this; // identity
