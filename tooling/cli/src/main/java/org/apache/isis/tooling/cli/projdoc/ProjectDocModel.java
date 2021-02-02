@@ -91,7 +91,7 @@ public class ProjectDocModel {
         ALL,
         OVERVIEW,
         INDEX;
-        public boolean includeOverview() {   return this == INDEX || this == ALL; }
+        public boolean includeOverview() {   return this == OVERVIEW || this == ALL; }
         public boolean includeIndex() {   return this == INDEX || this == ALL; }
     }
 

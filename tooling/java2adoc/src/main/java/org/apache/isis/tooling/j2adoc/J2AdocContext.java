@@ -141,16 +141,16 @@ public class J2AdocContext {
         
         
         val nameDiscriminatorPartIterator = nameDiscriminator.reverseIterator();
-        val typeSimpeNameFirstCandidate = Can.ofSingleton(nameDiscriminatorPartIterator.next());
+        val typeSimpleNameFirstCandidate = Can.ofSingleton(nameDiscriminatorPartIterator.next());
         
         return Stream.iterate(
-                typeSimpeNameFirstCandidate, 
+                typeSimpleNameFirstCandidate, 
                 __->nameDiscriminatorPartIterator.hasNext(), 
                 parts->parts.add(nameDiscriminatorPartIterator.next()))
-        .map((Can<String> typeSimpeNameParts)->typeSimpeNameParts.stream()
+        .map((Can<String> typeSimpleNameParts)->typeSimpleNameParts.stream()
                 .collect(Collectors.joining(".")))
-        .flatMap((String typeSimpeNameCandidate)->unitsByTypeSimpleName
-                .getOrElseEmpty(typeSimpeNameCandidate)
+        .flatMap((String typeSimpleNameCandidate)->unitsByTypeSimpleName
+                .getOrElseEmpty(typeSimpleNameCandidate)
                 .stream())
         .filter((J2AdocUnit unit)->{
                 Can<String> unitFqnParts = unit.getFqnParts();
