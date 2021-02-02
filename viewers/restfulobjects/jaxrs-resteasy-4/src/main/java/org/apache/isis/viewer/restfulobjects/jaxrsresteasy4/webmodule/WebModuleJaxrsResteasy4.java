@@ -44,8 +44,15 @@ import lombok.val;
 
 /**
  * WebModule that provides the RestfulObjects Viewer.
+ * 
+ * @since 2.0 {@index}
  *
- * @since 1.x {@index}
+ * @implNote CDI feels responsible to resolve injection points for any Servlet or Filter
+ * we register programmatically on the ServletContext.
+ * As long as injection points are considered to be resolved by Spring, we can workaround this fact:
+ * By replacing annotations {@code @Inject} with {@code @Autowire} for any Servlet or Filter,
+ * that get contributed by a WebModule, these will be ignored by CDI.
+ *
  */
 @Service
 @Named("isis.viewer.ro.WebModuleJaxrsRestEasy4")

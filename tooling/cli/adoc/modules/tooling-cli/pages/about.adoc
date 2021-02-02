@@ -157,7 +157,7 @@ For example,
 ----
 global:
   ...
-  sections:                                                               # <.>
+  sections:
     ...
     Persistence: org.apache.isis.persistence
     JDO: "org.apache.isis.persistence:isis-persistence-jdo.*"
@@ -167,7 +167,7 @@ global:
 
 The `overview` command will render "Persistence" section at level 2 (because its pattern is only for a `groupId`), and then the "JDO" and "JPA" sections underneath at level 3 (because there patterns also include an `artifactId`).
 
-In this way, sections can be defined that create a hierarchy.
+This way, sections can be defined that create a hierarchy.
 
 
 === Usage
@@ -228,7 +228,7 @@ The `index` command is usually invoked as follows:
 java -jar tooling/cli/target/isis-tooling-cli.jar \
     -p . \
     -o antora/components/system/modules/generated \
-    overview
+    index
 ----
 
 where :
