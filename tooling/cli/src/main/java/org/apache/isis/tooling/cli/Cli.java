@@ -40,6 +40,7 @@ import picocli.CommandLine.Option;
         subcommands = {
                 Cli.SystemOverviewCommand.class,
                 Cli.GlobalIndexCommand.class,
+                Cli.ProjectDocCommand.class
         })
 class Cli implements Callable<Integer> {
 

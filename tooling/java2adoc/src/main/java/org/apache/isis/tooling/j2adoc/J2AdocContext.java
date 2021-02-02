@@ -28,8 +28,6 @@ import java.util.stream.Stream;
 
 import javax.annotation.Nullable;
 
-import com.github.javaparser.ast.ImportDeclaration;
-
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Maps;
@@ -115,17 +113,20 @@ public class J2AdocContext {
     /**
      * Find the J2AdocUnit by given search parameters.
      * @param partialName - can be anything, originating eg. from java-doc {@literal link} tags.
-     * @param importDeclarations
+     * @param unit
      */
     public Optional<J2AdocUnit> findUnit(
             final @Nullable String partialName, 
-            final @NonNull  Can<ImportDeclaration> importDeclarations) {
+            final @NonNull  J2AdocUnit unit) {
         
         if(_Strings.isNullOrEmpty(partialName)) {
             return Optional.empty();
         }
         
-        if(partialName.contains("#")) {
+        val partialNameNoWhiteSpaces = partialName.split("\\s")[0];
+        
+        
+        if(partialNameNoWhiteSpaces.contains("#")) {
             // skip member reference lookup
             //XXX reserved for future extensions ... 
             //val partialNameWithoutMember = _Refs.stringRef(partialName).cutAtIndexOf("#");
@@ -133,37 +134,58 @@ public class J2AdocContext {
         }
         
         final Can<String> nameDiscriminator = Can.ofStream(
-                _Strings.splitThenStream(partialName, "."));
+                _Strings.splitThenStream(partialNameNoWhiteSpaces, "."));
         
         final Can<Can<String>> potentialFqns = Can.ofStream(
                 ImportDeclarations
-                .streamPotentialFqns(nameDiscriminator, importDeclarations));
+                .streamPotentialFqns(nameDiscriminator, unit.getImportDeclarations()));
         
         
         val nameDiscriminatorPartIterator = nameDiscriminator.reverseIterator();
         val typeSimpleNameFirstCandidate = Can.ofSingleton(nameDiscriminatorPartIterator.next());
         
-        return Stream.iterate(
+        val searchResult = Can.ofStream(Stream.iterate(
                 typeSimpleNameFirstCandidate, 
                 __->nameDiscriminatorPartIterator.hasNext(), 
-                parts->parts.add(nameDiscriminatorPartIterator.next()))
+                parts->parts.add(0, nameDiscriminatorPartIterator.next()))
         .map((Can<String> typeSimpleNameParts)->typeSimpleNameParts.stream()
                 .collect(Collectors.joining(".")))
+        //.peek(typeSimpleNameCandidate->System.out.println("!!! candidate: "+typeSimpleNameCandidate)) //debug
         .flatMap((String typeSimpleNameCandidate)->unitsByTypeSimpleName
                 .getOrElseEmpty(typeSimpleNameCandidate)
                 .stream())
-        .filter((J2AdocUnit unit)->{
-                Can<String> unitFqnParts = unit.getFqnParts();
+        .filter((J2AdocUnit referredUnit)->{
+                Can<String> unitFqnParts = referredUnit.getFqnParts();
                 return potentialFqns.stream()
                         .anyMatch(potentialFqn->potentialFqn.isEqualTo(unitFqnParts));
-        })
-        .findFirst();
+        }));
+
+        val selfReferential = searchResult.isEmpty()
+                && unit.getFqnParts().endsWith(nameDiscriminator);
+
+        // don't log self-referential lookups, as these are not an issue
+        if(!selfReferential) {
+            logIfCardinaltiyNotOne(searchResult, 
+                    String.format("while processing %s searching referenced unit by partial name '%s'",
+                            unit.getFriendlyName(),
+                            partialNameNoWhiteSpaces));
+        }
         
-        //TODO should log ambiguous cases
+        return searchResult.getSingleton();
     }
     
-    public Can<J2AdocUnit> findUnitsByTypeSimpleName(String typeSimpleName) {
-        return Can.ofCollection(unitsByTypeSimpleName.getOrElseEmpty(typeSimpleName));
+    public Optional<J2AdocUnit> findUnitByTypeSimpleName(final @Nullable String typeSimpleName) {
+        
+        if(_Strings.isNullOrEmpty(typeSimpleName)) {
+            return Optional.empty();
+        }
+        
+        val searchResult = Can.ofCollection(unitsByTypeSimpleName.getOrElseEmpty(typeSimpleName));
+        
+        logIfCardinaltiyNotOne(searchResult, 
+                String.format("searching unit by type-simple-name '%s'", typeSimpleName));
+        
+        return searchResult.getSingleton();
     }
     
     public Stream<J2AdocUnit> streamUnits() {
@@ -194,8 +216,17 @@ public class J2AdocContext {
                 ;        
     }
 
+    // -- LOG
 
-
+    private static void logIfCardinaltiyNotOne(Can<J2AdocUnit> units, String doingWhat) {
+        if(units.isEmpty()) {
+            System.out.printf("%s yielded no match %n", doingWhat);
+        } else if(units.isCardinalityMultiple()) {
+            System.err.printf("%s was ambiguous, "
+                    + "%s was ambiguous with results: %n", doingWhat);
+            units.forEach(unit->System.err.printf("\t%s%n", unit.toString()));
+        }
+    }
 
     
 }

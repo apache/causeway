@@ -70,8 +70,7 @@ public final class OrphanedIncludeStatementFixer {
                 val correctedIncludeStatement = _Refs.<IncludeStatement>objectRef(null);
                 val typeSimpleName = include.getCanonicalName();
 
-                j2aContext.findUnitsByTypeSimpleName(typeSimpleName)
-                .getSingleton() // selects for exactly one result, if ambiguous does nothing
+                j2aContext.findUnitByTypeSimpleName(typeSimpleName)
                 .ifPresent(unit->{
 
                     val expected = IncludeStatement.builder()
@@ -98,8 +97,6 @@ public final class OrphanedIncludeStatementFixer {
 
                 });
                 
-                //TODO log cases of ambiguity or when not found
-
                 return correctedIncludeStatement
                         .getValue()
                         .orElse(null); // keep original line, don't mangle
