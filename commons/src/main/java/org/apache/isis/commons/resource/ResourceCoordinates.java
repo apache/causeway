@@ -51,8 +51,10 @@ implements Comparable<ResourceCoordinates> {
         }
         
         val nameRef = _Refs.stringRef(file.getName());
-        val simpleName = nameRef.cutAtLastIndexOfAndDrop(".");
-        val fileNameExtension = nameRef.getValue();
+        
+        //XXX lombok issue, cannot use val 
+        final String simpleName = nameRef.cutAtLastIndexOfAndDrop(".");
+        final String fileNameExtension = nameRef.getValue();
         
         return ResourceCoordinates.builder()
              // could semantically mean the mount-point, but we don't have that info in a file instance
