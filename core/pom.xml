@@ -171,7 +171,7 @@
 
 		<select2.version>4.0.13</select2.version>
 		<shiro.version>1.7.1</shiro.version>
-		<simpleslackapi.version>1.2.0</simpleslackapi.version>
+		<simpleslackapi.version>1.3.0</simpleslackapi.version>
 		<slf4j-api.version>1.7.30</slf4j-api.version> <!-- as provided by spring-boot, needed to solve convergence issues -->
 		<spring-boot.version>2.4.2</spring-boot.version> <!-- has no effect here, needs to be set in isis-parent/pom.xml -->
 		<summernote.version>0.8.11</summernote.version>
