@@ -1,0 +1,40 @@
+= ReasonBuffer : _class_
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+Helper class to create properly concatenated reason string for use in method that return _String_ s with reasons.
+
+If no reasons are specified _#getReason()_ will returnnull, otherwise it will return a _String_ with all the valid reasons concatenated with a semi-colon separating each one.
+
+An alternative is to use the xref:system:generated:index/applib/util/Reasons.adoc[Reasons] class.
+
+.Java Sources
+[source,java]
+----
+class ReasonBuffer {
+
+  StringBuffer reasonBuffer;
+
+  void append(final String reason) // <.>
+
+  void appendOnCondition(final boolean condition, final String reason) // <.>
+
+  String getReason() // <.>
+}
+----
+
+<.> `[teal]#*append*#(String reason)` : `void`
++
+--
+Append a reason to the list of existing reasons.
+--
+<.> `[teal]#*appendOnCondition*#(boolean condition, String reason)` : `void`
++
+--
+Append a reason to the list of existing reasons if the condition flag is true.
+--
+<.> `[teal]#*getReason*#()` : `String`
++
+--
+Return the combined set of reasons, ornullif there are none.
+--
+

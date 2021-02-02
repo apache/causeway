@@ -6,6 +6,8 @@
 ----
 class ResourceCoordinates {
 
+  ResourceCoordinates fromFile(final File file)
+
   int compareTo(final ResourceCoordinates other)
 }
 ----

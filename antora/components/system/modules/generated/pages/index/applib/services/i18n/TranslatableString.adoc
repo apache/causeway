@@ -62,7 +62,7 @@ The arguments; excluded from _#equals(Object)_ comparison.
 <.> `[teal]#*translate*#(xref:system:generated:index/applib/services/i18n/TranslationService.adoc[TranslationService] translationService, String context)` : `String`
 +
 --
-Translates this string using the provided _org.apache.isis.applib.services.i18n.TranslationService_ , selecting either the single or plural form as per _#getPattern()_ .
+Translates this string using the provided xref:system:generated:index/applib/services/i18n/TranslationService.adoc[TranslationService] , selecting either the single or plural form as per _#getPattern()_ .
 --
 <.> `[teal]#*getPattern*#()` : `String`
 +

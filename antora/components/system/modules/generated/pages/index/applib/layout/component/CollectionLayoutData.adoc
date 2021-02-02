@@ -1,0 +1,102 @@
+= CollectionLayoutData : _class_
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+Describes the layout of a single collection, broadly corresponds to the _org.apache.isis.applib.annotation.CollectionLayout_ annotation.
+
+Note that _org.apache.isis.applib.annotation.CollectionLayout#render()_ is omitted because _#defaultView_ is its replacement.
+
+.Java Sources
+[source,java]
+----
+class CollectionLayoutData {
+
+  CollectionLayoutData()
+
+  CollectionLayoutData(final String id)
+
+  String getId() // <.>
+
+  void setId(String id)
+
+  String getCssClass()
+
+  void setCssClass(String cssClass)
+
+  String getDescribedAs()
+
+  void setDescribedAs(String describedAs)
+
+  String getDefaultView() // <.>
+
+  void setDefaultView(String defaultView)
+
+  Where getHidden()
+
+  void setHidden(Where hidden)
+
+  String getNamed()
+
+  void setNamed(String named)
+
+  Boolean getNamedEscaped()
+
+  void setNamedEscaped(Boolean namedEscaped)
+
+  Integer getPaged()
+
+  void setPaged(Integer paged)
+
+  String getSortedBy()
+
+  void setSortedBy(String sortedBy)
+
+  List<ActionLayoutData> getActions()
+
+  void setActions(List<ActionLayoutData> actionLayoutDatas)
+
+  CollectionLayoutDataOwner getOwner() // <.>
+
+  void setOwner(final CollectionLayoutDataOwner owner)
+
+  String getMetadataError() // <.>
+
+  void setMetadataError(final String metadataError)
+
+  Link getLink() // <.>
+
+  void setLink(final Link link)
+
+  String toString()
+}
+----
+
+<.> `[teal]#*getId*#()` : `String`
++
+--
+Collection identifier, being the getter method without "get" prefix, first letter lower cased.
+--
+<.> `[teal]#*getDefaultView*#()` : `String`
++
+--
+Typicallytableorhidden, but could be any other named view that is configured and appropriate, eggmap3orfullcalendar2.
+--
+<.> `[teal]#*getOwner*#()` : `xref:system:generated:index/applib/layout/component/CollectionLayoutDataOwner.adoc[CollectionLayoutDataOwner]`
++
+--
+Owner.
+
+Set programmatically by framework after reading in from XML.
+--
+<.> `[teal]#*getMetadataError*#()` : `String`
++
+--
+For diagnostics; populated by the framework if and only if a metadata error.
+--
+<.> `[teal]#*getLink*#()` : `xref:system:generated:index/applib/layout/links/Link.adoc[Link]`
++
+--
+The link to access this resource from the REST API (Restful Objects viewer).
+
+Populated by the framework automatically.
+--
+

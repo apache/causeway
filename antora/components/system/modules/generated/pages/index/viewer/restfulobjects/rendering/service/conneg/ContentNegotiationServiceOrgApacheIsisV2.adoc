@@ -1,0 +1,59 @@
+= ContentNegotiationServiceOrgApacheIsisV2 : _class_
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+.Java Sources
+[source,java]
+----
+class ContentNegotiationServiceOrgApacheIsisV2 {
+
+  public static final String ACCEPT_PROFILE; // <.>
+
+  ContentNegotiationServiceOrgApacheIsisV2(final ContentNegotiationServiceForRestfulObjectsV1_0 restfulObjectsV1_0)
+
+  Response.ResponseBuilder buildResponse(final IResourceContext resourceContext, final ManagedObject objectAdapter) // <.>
+
+  Response.ResponseBuilder buildResponse(final IResourceContext resourceContext, final ManagedProperty objectAndProperty) // <.>
+
+  Response.ResponseBuilder buildResponse(final IResourceContext resourceContext, final ManagedCollection managedCollection) // <.>
+
+  Response.ResponseBuilder buildResponse(final IResourceContext resourceContext, final ManagedAction objectAndAction) // <.>
+
+  Response.ResponseBuilder buildResponse(final IResourceContext resourceContext, final ObjectAndActionInvocation objectAndActionInvocation) // <.>
+
+  boolean canAccept(final IResourceContext resourceContext)
+}
+----
+
+<.> `[teal]#*_ACCEPT_PROFILE_*#` : `String`
++
+--
+Unlike RO v1.0, use a single content-type ofapplication/json;profile="urn:org.apache.isis/v2".
+
+The response content types xref:system:generated:index/applib/client/RepresentationTypeSimplifiedV2.adoc[RepresentationTypeSimplifiedV2] append the 'repr-type' parameter.
+--
+<.> `[teal]#*buildResponse*#(IResourceContext resourceContext, ManagedObject objectAdapter)` : `ResponseBuilder`
++
+--
+Domain object is returned as a map with the RO 1.0 representation as a special '$$ro' property within that map.
+--
+<.> `[teal]#*buildResponse*#(IResourceContext resourceContext, ManagedProperty objectAndProperty)` : `ResponseBuilder`
++
+--
+Individual property of an object is not supported.
+--
+<.> `[teal]#*buildResponse*#(IResourceContext resourceContext, ManagedCollection managedCollection)` : `ResponseBuilder`
++
+--
+Individual (parented) collection of an object is returned as a list with the RO representation as an object in the list with a single property named '$$ro'
+--
+<.> `[teal]#*buildResponse*#(IResourceContext resourceContext, ManagedAction objectAndAction)` : `ResponseBuilder`
++
+--
+Action prompt is not supported.
+--
+<.> `[teal]#*buildResponse*#(IResourceContext resourceContext, ObjectAndActionInvocation objectAndActionInvocation)` : `ResponseBuilder`
++
+--
+Action invocation is supported provided it returns a single domain object or a list of domain objects (ie invocations returning void or scalar value are not supported). Action invocations returning a domain object will be rendered as a map with the RO v1.0 representation as a '$$ro' property within (same as _#buildResponse(RepresentationService.Context2, ManagedObject)_ ), while action invocations returning a list will be rendered as a list with the RO v1.0 representation as a map object with a single '$$ro' property (similar to _#buildResponse(RepresentationService.Context2, ObjectAndCollection)_ )
+--
+

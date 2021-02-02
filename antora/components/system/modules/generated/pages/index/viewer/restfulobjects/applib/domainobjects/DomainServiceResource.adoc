@@ -1,0 +1,50 @@
+= DomainServiceResource : _interface_
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+.Java Sources
+[source,java]
+----
+interface DomainServiceResource {
+
+  Response services()
+
+  Response deleteServicesNotAllowed()
+
+  Response putServicesNotAllowed()
+
+  Response postServicesNotAllowed()
+
+  Response service(final String serviceId)
+
+  Response deleteServiceNotAllowed(final String serviceId)
+
+  Response putServiceNotAllowed(final String serviceId)
+
+  Response postServiceNotAllowed(final String serviceId)
+
+  Response actionPrompt(final String serviceId, final String actionId)
+
+  Response deleteActionPromptNotAllowed(final String serviceId, final String actionId)
+
+  Response putActionPromptNotAllowed(final String serviceId, final String actionId)
+
+  Response postActionPromptNotAllowed(final String serviceId, final String actionId)
+
+  Response invokeActionQueryOnly(final String serviceId, final String actionId, final String xIsisQueryString) // <.>
+
+  Response invokeActionIdempotent(final String serviceId, final String actionId, final InputStream arguments)
+
+  Response invokeAction(final String serviceId, final String actionId, final InputStream arguments)
+
+  Response deleteInvokeActionNotAllowed(final String serviceId, final String actionId)
+}
+----
+
+<.> `[teal]#*invokeActionQueryOnly*#(String serviceId, String actionId, String xIsisQueryString)` : `Response`
++
+--
+Because it isn't possible with the RestEasy client-side framework to specify a query string nor to pass arbitrary query params; instead we provide an additional syntax of passing an Isis-defined query param `x-isis-querystring` .
+
+The content of this is taken to be the URL encoded map of arguments.
+--
+

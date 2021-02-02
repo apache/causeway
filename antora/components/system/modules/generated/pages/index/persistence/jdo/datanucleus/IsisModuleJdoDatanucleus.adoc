@@ -1,0 +1,24 @@
+= IsisModuleJdoDatanucleus : _class_
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+.Java Sources
+[source,java]
+----
+class IsisModuleJdoDatanucleus {
+
+  Map<String, String> getAsMap()
+
+  TransactionAwarePersistenceManagerFactoryProxy getTransactionAwarePersistenceManagerFactoryProxy(final LocalPersistenceManagerFactoryBean localPmfBean) // <.>
+
+  LocalPersistenceManagerFactoryBean getLocalPersistenceManagerFactoryBean(final MetaModelContext metaModelContext, final EventBusService eventBusService, final Provider<EntityChangeTracker> entityChangeTrackerProvider, final DnSettings dnSettings)
+
+  JdoTransactionManager getTransactionManager(LocalPersistenceManagerFactoryBean localPmfBean)
+}
+----
+
+<.> `[teal]#*getTransactionAwarePersistenceManagerFactoryProxy*#(LocalPersistenceManagerFactoryBean localPmfBean)` : `TransactionAwarePersistenceManagerFactoryProxy`
++
+--
+_TransactionAwarePersistenceManagerFactoryProxy_ was retired by the Spring Framework, recommended usage is still online [1]. Sources have been recovered from [2].
+--
+

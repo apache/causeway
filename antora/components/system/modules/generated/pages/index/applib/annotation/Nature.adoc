@@ -27,7 +27,7 @@ enum Nature {
 <.> `[teal]#*_NOT_SPECIFIED_*#`
 +
 --
-The default; allows the programmer to combine `@DomainObject` annotation with the xref:system:generated:index/applib/ViewModel.adoc[ViewModel] annotation, or the _XmlRootElement_ annotation, or by implementing the _org.apache.isis.applib.ViewModel_ interface.
+The default; allows the programmer to combine `@DomainObject` annotation with the xref:system:generated:index/applib/ViewModel.adoc[ViewModel] annotation, or the _XmlRootElement_ annotation, or by implementing the xref:system:generated:index/applib/ViewModel.adoc[ViewModel] interface.
 --
 <.> `[teal]#*_ENTITY_*#`
 +

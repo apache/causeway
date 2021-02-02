@@ -1,0 +1,74 @@
+= VT : _class_
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+Factory methods for value types
+
+.Java Sources
+[source,java]
+----
+class VT {
+
+  LocalDateInterval ldi(String intervalStr)
+
+  LocalDateInterval ldi(LocalDate st, LocalDate endDate, AbstractInterval.IntervalEnding intervalEnding)
+
+  LocalDateInterval ldix(LocalDate st, LocalDate endDate)
+
+  LocalDate ld(String dateStr) // <.>
+
+  LocalDate ld(int yyyy, int mm, int dd)
+
+  BigInteger bi(int val)
+
+  BigInteger bi(Integer val)
+
+  BigDecimal bd(String str)
+
+  BigDecimal bd(double val)
+
+  BigDecimal bd(double v, int scale)
+
+  BigDecimal bd(double v, int scale, RoundingMode roundingMode)
+
+  BigDecimal bd2(double v)
+
+  BigDecimal bd2hup(double v)
+
+  BigDecimal bd4(double v)
+
+  BigDecimal bd(Double val)
+
+  BigDecimal bd(Double val, int scale)
+
+  BigDecimal bd(Double val, int scale, RoundingMode roundingMode)
+
+  BigDecimal bd2(Double val)
+
+  BigDecimal bd2hup(Double val)
+
+  BigDecimal bd4(Double val)
+
+  BigDecimal bd(int val)
+
+  BigDecimal bd(int val, int newScale)
+
+  BigDecimal bd1(int val)
+
+  BigDecimal bd2(int val)
+
+  BigDecimal bd4(int val)
+
+  BigDecimal bd(Integer val)
+
+  BigDecimal bd(Integer val, int newScale)
+
+  BigDecimal bd1(Integer val)
+
+  BigDecimal bd2(Integer val)
+
+  BigDecimal bd4(Integer val)
+}
+----
+
+<.> `[teal]#*_ld_*#(String dateStr)` : `LocalDate`
+

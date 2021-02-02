@@ -5,8 +5,6 @@ Convenience super class for view models that wish to interact with the container
 
 Subclassing is NOT mandatory; the methods in this superclass can be pushed down into domain objects and another superclass used if required.
 
-As an alternative, consider simply annotating the view model class with _org.apache.isis.applib.annotation.ViewModel_ .
-
 .Java Sources
 [source,java]
 ----

@@ -85,7 +85,7 @@ Method name.
 
 Overloaded methods are not supported.
 --
-<.> `[teal]#*getOwner*#()` : `ActionLayoutDataOwner`
+<.> `[teal]#*getOwner*#()` : `xref:system:generated:index/applib/layout/component/ActionLayoutDataOwner.adoc[ActionLayoutDataOwner]`
 +
 --
 Owner.
@@ -97,7 +97,7 @@ Set programmatically by framework after reading in from XML.
 --
 For diagnostics; populated by the framework if and only if a metadata error.
 --
-<.> `[teal]#*getLink*#()` : `Link`
+<.> `[teal]#*getLink*#()` : `xref:system:generated:index/applib/layout/links/Link.adoc[Link]`
 +
 --
 The link to access this resource from the REST API (Restful Objects viewer).
