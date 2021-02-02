@@ -21,6 +21,7 @@ package org.apache.isis.tooling.javamodel.ast;
 import java.util.Optional;
 
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.PackageDeclaration;
 import com.github.javaparser.ast.body.AnnotationDeclaration;
@@ -62,28 +63,28 @@ public final class AnyTypeDeclaration {
         public boolean isEnum() { return this == ENUM; }
         public boolean isInterface() { return this == INTERFACE; }
     }
-    
+
     private final @NonNull CompilationUnit cu;
     private final @NonNull Kind kind;
     private final TypeDeclaration<?> td;
     private final AnnotationDeclaration annotationDeclaration;
     private final ClassOrInterfaceDeclaration classOrInterfaceDeclaration; 
     private final EnumDeclaration enumDeclaration;
-    
+
     private final Can<AnnotationMemberDeclaration> annotationMemberDeclarations;
     private final Can<EnumConstantDeclaration> enumConstantDeclarations;
     private final Can<FieldDeclaration> publicFieldDeclarations;
     private final Can<ConstructorDeclaration> publicConstructorDeclarations;
     private final Can<MethodDeclaration> publicMethodDeclarations;
-    
-    
+
+
     // -- FACTORIES
-    
-    
+
+
     public static AnyTypeDeclaration of(
             final @NonNull AnnotationDeclaration annotationDeclaration,
             final @NonNull CompilationUnit cu) {
-        
+
         return new AnyTypeDeclaration(
                 cu,
                 Kind.ANNOTATION, 
@@ -93,38 +94,38 @@ public final class AnyTypeDeclaration {
                 null,
                 //members
                 AnnotationDeclarations.streamAnnotationMemberDeclarations(annotationDeclaration)
-                    .collect(Can.toCan()),
+                .collect(Can.toCan()),
                 Can.empty(),
                 AnnotationDeclarations.streamFieldDeclarations(annotationDeclaration)
-                    .collect(Can.toCan()),
+                .collect(Can.toCan()),
                 Can.empty(),
                 AnnotationDeclarations.streamMethodDeclarations(annotationDeclaration)
-                    .collect(Can.toCan())
+                .collect(Can.toCan())
                 );
     }
-    
+
     public static AnyTypeDeclaration of(
             final @NonNull ClassOrInterfaceDeclaration classOrInterfaceDeclaration,
             final @NonNull CompilationUnit cu) {
         return new AnyTypeDeclaration(
                 cu,
                 classOrInterfaceDeclaration.isInterface() ? Kind.INTERFACE : Kind.CLASS, 
-                classOrInterfaceDeclaration,
-                null,
-                classOrInterfaceDeclaration,
-                null,
-                //members
-                Can.empty(),
-                Can.empty(),
-                ClassOrInterfaceDeclarations.streamPublicFieldDeclarations(classOrInterfaceDeclaration)
-                    .collect(Can.toCan()),
-                ClassOrInterfaceDeclarations.streamPublicConstructorDeclarations(classOrInterfaceDeclaration)
-                    .collect(Can.toCan()),
-                ClassOrInterfaceDeclarations.streamPublicMethodDeclarations(classOrInterfaceDeclaration)
-                    .collect(Can.toCan())
+                        classOrInterfaceDeclaration,
+                        null,
+                        classOrInterfaceDeclaration,
+                        null,
+                        //members
+                        Can.empty(),
+                        Can.empty(),
+                        ClassOrInterfaceDeclarations.streamPublicFieldDeclarations(classOrInterfaceDeclaration)
+                        .collect(Can.toCan()),
+                        ClassOrInterfaceDeclarations.streamPublicConstructorDeclarations(classOrInterfaceDeclaration)
+                        .collect(Can.toCan()),
+                        ClassOrInterfaceDeclarations.streamPublicMethodDeclarations(classOrInterfaceDeclaration)
+                        .collect(Can.toCan())
                 );
     }
-    
+
     public static AnyTypeDeclaration of(
             final @NonNull EnumDeclaration enumDeclaration,
             final @NonNull CompilationUnit cu) {
@@ -138,20 +139,20 @@ public final class AnyTypeDeclaration {
                 //members
                 Can.empty(),
                 EnumDeclarations.streamEnumConstantDeclarations(enumDeclaration)
-                    .collect(Can.toCan()),
+                .collect(Can.toCan()),
                 EnumDeclarations.streamPublicFieldDeclarations(enumDeclaration)
-                    .collect(Can.toCan()),
+                .collect(Can.toCan()),
                 EnumDeclarations.streamPublicConstructorDeclarations(enumDeclaration)
-                    .collect(Can.toCan()),
+                .collect(Can.toCan()),
                 EnumDeclarations.streamPublicMethodDeclarations(enumDeclaration)
-                    .collect(Can.toCan())
+                .collect(Can.toCan())
                 );
     }
-    
-      public static AnyTypeDeclaration auto(
+
+    public static AnyTypeDeclaration auto(
             final @NonNull TypeDeclaration<?> td,
             final @NonNull CompilationUnit cu) {
-        
+
         if(td instanceof ClassOrInterfaceDeclaration) {
             return of((ClassOrInterfaceDeclaration)td, cu);
         }
@@ -163,34 +164,39 @@ public final class AnyTypeDeclaration {
         }
         throw _Exceptions.unsupportedOperation("unsupported TypeDeclaration %s", td.getClass());
     }
-    
+
     // -- UTILITY
-    
+
+    @Getter(lazy = true)
+    private final Can<ImportDeclaration> importDeclarations = CompilationUnits
+        .streamImportDeclarations(cu)
+        .collect(Can.toCan());
+
     public Optional<Javadoc> getJavadoc() {
         return td.getJavadoc();
     }
-    
+
     public Optional<PackageDeclaration> getPackageDeclaration() {
         return cu.getPackageDeclaration();
     }
-    
+
     public boolean hasIndexDirective() {
         return TypeDeclarations.hasIndexDirective(td);
     }
-    
+
     /**
      * Returns the recursively resolved (nested) type name. 
      * Same as {@link #getSimpleName()} if type is not nested. 
      */
     @Getter(lazy = true)
     private final Can<String> name = createName();
-    
+
     public String getSimpleName() {
         return td.getNameAsString();
     }
-    
+
     // -- HELPER 
-    
+
     private Can<String> createName() {
         val nameParts = _Lists.<String>newLinkedList();
         nameParts.push(td.getNameAsString());
@@ -204,5 +210,5 @@ public final class AnyTypeDeclaration {
         return Can.ofCollection(nameParts);
     }
 
-    
+
 }

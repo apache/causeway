@@ -21,6 +21,7 @@ package org.apache.isis.commons.collections;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Objects;
@@ -43,6 +44,7 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
 
 import static org.apache.isis.commons.internal.base._With.requires;
 
+import lombok.NonNull;
 import lombok.val;
 
 /**
@@ -394,11 +396,9 @@ extends Iterable<T>, Comparable<Can<T>>, Serializable {
 
     // -- TRAVERSAL
 
-    @Override
-    default void forEach(Consumer<? super T> action) {
-        requires(action, "action");
-        stream().forEach(action);
-    }
+    Iterator<T> reverseIterator();
+    
+    void forEach(@NonNull Consumer<? super T> action);
     
     /**
      * Similar to {@link #forEach(Consumer)}, but zipps in {@code zippedIn} to iterate through 
@@ -489,7 +489,7 @@ extends Iterable<T>, Comparable<Can<T>>, Serializable {
      * @param other
      * @return whether this is element-wise equal to {@code other}
      */
-    default boolean isEqualTo(Can<?> other) {
+    default boolean isEqualTo(final @Nullable Can<?> other) {
         if(other==null) {
             return false;
         }
@@ -507,6 +507,66 @@ extends Iterable<T>, Comparable<Can<T>>, Serializable {
         }
         
         return true;
+    }
+    
+    // -- PARTIAL EQUALITY
+
+    /**
+     * Let {@literal n} be the number of elements in {@code other}. 
+     * Returns whether the first {@literal n} elements of this {@code Can} are 
+     * element-wise equal to {@code other}.
+     * @param other
+     */
+    default boolean startsWith(final @Nullable Can<?> other) {
+        if(other==null
+                || other.isEmpty()) {
+            return true;
+        }
+        if(this.size()<other.size()) {
+            return false;
+        }
+        
+        val thisIterator = this.iterator();
+        val otherIterator = other.iterator();
+        
+        while(otherIterator.hasNext()) {
+            val otherElement = otherIterator.next();
+            val thisElement  = thisIterator.next();
+            
+            if(!thisElement.equals(otherElement)) {
+                return false;
+            }
+        }
+        return true; 
+    }
+
+    /**
+     * Let {@literal n} be the number of elements in {@code other}. 
+     * Returns whether the last {@literal n} elements of this {@code Can} are 
+     * element-wise equal to {@code other}.
+     * @param other
+     */
+    default boolean endsWith(final @Nullable Can<?> other) {
+        if(other==null
+                || other.isEmpty()) {
+            return true;
+        }
+        if(this.size()<other.size()) {
+            return false;
+        }
+        
+        val thisIterator = this.reverseIterator();
+        val otherIterator = other.reverseIterator();
+        
+        while(otherIterator.hasNext()) {
+            val otherElement = otherIterator.next();
+            val thisElement  = thisIterator.next();
+            
+            if(!thisElement.equals(otherElement)) {
+                return false;
+            }
+        }
+        return true; 
     }
 
     // -- SHORTCUTS FOR PREDICATES

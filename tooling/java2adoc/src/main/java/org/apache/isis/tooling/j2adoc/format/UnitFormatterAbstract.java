@@ -87,9 +87,12 @@ implements UnitFormatter {
     }
     
     protected void intro(final J2AdocUnit unit, final StructuralNode parent) {
+
+        val importDeclarations = unit.getImportDeclarations();
+        
         unit.getJavadoc()
         .filter(javadoc->!Javadocs.hasHidden(javadoc))
-        .map(javadoc->getConverter().javadoc(javadoc))
+        .map(javadoc->getConverter().javadoc(javadoc, importDeclarations))
         .ifPresent(doc->parent.getBlocks().addAll(doc.getBlocks()));
     }
     
@@ -108,6 +111,7 @@ implements UnitFormatter {
     
     protected void memberDescriptions(final J2AdocUnit unit, final StructuralNode parent) {
         
+        val importDeclarations = unit.getImportDeclarations();
         val ul = getMemberDescriptionContainer(parent);
         
         
@@ -119,7 +123,7 @@ implements UnitFormatter {
                 
                 appendMemberDescription(ul, 
                                 getConverter().enumConstantDeclaration(ecd),
-                                getConverter().javadoc(javadoc));
+                                getConverter().javadoc(javadoc, importDeclarations));
             });
         });
         
@@ -131,8 +135,8 @@ implements UnitFormatter {
             .ifPresent(javadoc->{
                 
                 appendMemberDescription(ul,
-                        getConverter().fieldDeclaration(fd),
-                        getConverter().javadoc(javadoc));
+                        getConverter().fieldDeclaration(fd, importDeclarations),
+                        getConverter().javadoc(javadoc, importDeclarations));
             });
             
         });
@@ -144,8 +148,8 @@ implements UnitFormatter {
             .ifPresent(javadoc->{
                 
                 appendMemberDescription(ul, 
-                                getConverter().annotationMemberDeclaration(ecd),
-                                getConverter().javadoc(javadoc));
+                                getConverter().annotationMemberDeclaration(ecd, importDeclarations),
+                                getConverter().javadoc(javadoc, importDeclarations));
             });
         });
         
@@ -157,8 +161,8 @@ implements UnitFormatter {
             .ifPresent(javadoc->{
                 
                 appendMemberDescription(ul,
-                        getConverter().constructorDeclaration(cd),
-                        getConverter().javadoc(javadoc));
+                        getConverter().constructorDeclaration(cd, importDeclarations),
+                        getConverter().javadoc(javadoc, importDeclarations));
             });
             
         });
@@ -171,8 +175,8 @@ implements UnitFormatter {
             .ifPresent(javadoc->{
                 
                 appendMemberDescription(ul,
-                        getConverter().methodDeclaration(md),
-                        getConverter().javadoc(javadoc));
+                        getConverter().methodDeclaration(md, importDeclarations),
+                        getConverter().javadoc(javadoc, importDeclarations));
             });
             
         });

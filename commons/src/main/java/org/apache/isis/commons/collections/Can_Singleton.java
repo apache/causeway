@@ -28,6 +28,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
@@ -97,6 +98,16 @@ final class Can_Singleton<T> implements Can<T> {
     @Override
     public Can<T> reverse() {
         return this;
+    }
+    
+    @Override
+    public Iterator<T> reverseIterator() {
+        return iterator();
+    }
+    
+    @Override
+    public void forEach(@NonNull Consumer<? super T> action) {
+        action.accept(this.element);
     }
     
     @Override

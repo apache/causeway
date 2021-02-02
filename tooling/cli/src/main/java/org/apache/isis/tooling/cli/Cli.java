@@ -120,9 +120,25 @@ class Cli implements Callable<Integer> {
             return 0;
         }
     }
+    
+    @Command(
+            name = "projdoc",
+            description = "Writes all generated (AsciiDoc) to given output.")
+    static class ProjectDocCommand extends CliCommandAbstract {
 
-    //TODO mvn2gradle
-    //description = "Detects differences between Maven and Gradle (multi-module) projects.",
+        @Override
+        public Integer call() throws Exception {
+
+            if(getOutputPath() != null) {
+                getConfig().getGlobal().setOutputRootFolder(getOutputPath());
+            }
+
+            val projTree = ProjectNodeFactory.maven(getProjectRoot());
+            val projectDocModel = new ProjectDocModel(projTree);
+            projectDocModel.generateAsciiDoc(getConfig(), ProjectDocModel.Mode.ALL);
+            return 0;
+        }
+    }
 
 
     // -- ENTRY POINT
@@ -133,8 +149,6 @@ class Cli implements Callable<Integer> {
         int exitCode = new CommandLine(cli).execute(args);
         System.exit(exitCode);
     }
-
-    // -- HELPER
 
 
 }

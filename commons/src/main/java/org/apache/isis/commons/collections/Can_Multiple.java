@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -36,6 +37,7 @@ import javax.annotation.Nullable;
 
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._Objects;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -108,6 +110,18 @@ final class Can_Multiple<T> implements Can<T> {
     }
     
     @Override
+    public Iterator<T> reverseIterator() {
+        return new Iterator<T>() {
+            private int remainingCount = size();
+            @Override public boolean hasNext() { return remainingCount>0; }
+            @Override public T next() {
+                if(!hasNext()) { throw _Exceptions.noSuchElement(); }
+                return elements.get(--remainingCount);
+            }
+        };
+    }
+    
+    @Override
     public Can<T> reverse() {
         val reverse = new ArrayList<T>(elements.size());
         for(int i=elements.size()-1; i>=0; --i) {
@@ -117,7 +131,12 @@ final class Can_Multiple<T> implements Can<T> {
     }
     
     @Override
-    public Can<T> filter(@Nullable Predicate<? super T> predicate) {
+    public void forEach(final @NonNull Consumer<? super T> action) {
+        elements.forEach(action);
+    }
+    
+    @Override
+    public Can<T> filter(final @Nullable Predicate<? super T> predicate) {
         if(predicate==null) {
             return this; // identity
         }

@@ -23,14 +23,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
-import java.util.function.BiFunction;
-import java.util.function.BinaryOperator;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -92,8 +88,11 @@ public class ProjectDocModel {
     }
 
     public enum Mode {
+        ALL,
         OVERVIEW,
-        INDEX
+        INDEX;
+        public boolean includeOverview() {   return this == INDEX || this == ALL; }
+        public boolean includeIndex() {   return this == INDEX || this == ALL; }
     }
 
     public void generateAsciiDoc(final @NonNull CliConfig cliConfig, final @NonNull Mode mode) {
@@ -150,7 +149,7 @@ public class ProjectDocModel {
         // now generate the overview or index
         writeSections(sections, doc, j2aContext, mode, asciiDocFiles::add);
 
-        if (mode == Mode.OVERVIEW) {
+        if (mode.includeOverview()) {
             ProjectDocWriter.write(cliConfig, doc, j2aContext, mode);
         }
 
@@ -329,7 +328,7 @@ public class ProjectDocModel {
 
         sectionModules
                 .forEach(module -> {
-                    if(mode == Mode.INDEX) {
+                    if(mode.includeIndex()) {
                         gatherAdocFiles(module.getProjectDirectory(), onAdocFile);
                     }
 

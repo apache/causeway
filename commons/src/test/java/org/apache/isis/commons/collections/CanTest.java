@@ -23,6 +23,8 @@ import java.io.IOException;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.isis.commons.SerializationTester;
 
@@ -59,6 +61,26 @@ class CanTest {
     @Test
     void multiCan_correctly_reverts() {
         assertEquals(Can.<String>of("c", "b", "a"), Can.<String>of("a", "b", "c").reverse());
+    }
+    
+    @Test
+    void multiCan_startsWith() {
+        assertTrue(Can.<String>of("a", "b", "c").startsWith(Can.<String>of("a", "b", "c")));
+        assertFalse(Can.<String>of("a", "b", "c").startsWith(Can.<String>of("a", "b", "c", "x")));
+        assertTrue(Can.<String>of("a", "b", "c").startsWith(Can.<String>of("a", "b")));
+        assertTrue(Can.<String>of("a", "b", "c").startsWith(Can.<String>empty()));
+        assertTrue(Can.<String>of("a", "b", "c").startsWith(null));
+        assertFalse(Can.<String>of("a", "b", "c").startsWith(Can.<String>of("a", "b", "x")));
+    }
+    
+    @Test
+    void multiCan_endsWith() {
+        assertTrue(Can.<String>of("a", "b", "c").endsWith(Can.<String>of("a", "b", "c")));
+        assertFalse(Can.<String>of("a", "b", "c").endsWith(Can.<String>of("x", "a", "b", "c")));
+        assertTrue(Can.<String>of("a", "b", "c").endsWith(Can.<String>of("b", "c")));
+        assertTrue(Can.<String>of("a", "b", "c").endsWith(Can.<String>empty()));
+        assertTrue(Can.<String>of("a", "b", "c").endsWith(null));
+        assertFalse(Can.<String>of("a", "b", "c").endsWith(Can.<String>of("x", "b", "a")));
     }
     
     // -- FILTERING

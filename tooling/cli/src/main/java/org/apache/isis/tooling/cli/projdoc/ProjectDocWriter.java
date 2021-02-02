@@ -52,7 +52,7 @@ final class ProjectDocWriter {
         val overview = cliConfig.getCommands().getOverview();
         val index = cliConfig.getCommands().getIndex();
 
-        val rootFolder = global.getOutputRootFolder();
+        //val rootFolder = global.getOutputRootFolder();
         val pagesFolder = global.getDocumentPagesFolder();
 
         val deleteCount = _Refs.intRef(0);
@@ -60,8 +60,7 @@ final class ProjectDocWriter {
 
         try {
 
-            // TODO: should split this out into two separate methods etc.
-            if (mode == ProjectDocModel.Mode.OVERVIEW) {
+            if (mode.includeOverview()) {
 
                 // write system overview
                 val overviewFile = new File(pagesFolder, overview.getSystemOverviewFilename());
@@ -70,12 +69,12 @@ final class ProjectDocWriter {
                 ++writeCount;
             }
 
-            if(mode == ProjectDocModel.Mode.INDEX) {
+            if(mode.includeIndex()) {
 
                 // delete all generated documents in the index
                 _Files.searchFiles(pagesFolder, dir->true, file-> {
                     val fileName = file.getName();
-                    return  fileName.endsWith(".adoc") &&
+                    return fileName.endsWith(".adoc") &&
                            !fileName.equals(overview.getSystemOverviewFilename());
                 })
                 .stream()

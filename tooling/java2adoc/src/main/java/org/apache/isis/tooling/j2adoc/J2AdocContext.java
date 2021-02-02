@@ -28,13 +28,20 @@ import java.util.stream.Stream;
 
 import javax.annotation.Nullable;
 
+import com.github.javaparser.ast.ImportDeclaration;
+
+import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Maps;
+import org.apache.isis.commons.internal.collections._Multimaps;
+import org.apache.isis.commons.internal.collections._Multimaps.ListMultimap;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.tooling.j2adoc.J2AdocUnit.LookupKey;
 import org.apache.isis.tooling.j2adoc.convert.J2AdocConverter;
 import org.apache.isis.tooling.j2adoc.format.UnitFormatter;
 import org.apache.isis.tooling.j2adoc.format.UnitFormatterCompact;
 import org.apache.isis.tooling.j2adoc.format.UnitFormatterWithSourceAndFootNotes;
+import org.apache.isis.tooling.javamodel.ast.ImportDeclarations;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -80,14 +87,19 @@ public class J2AdocContext {
     // -- UNIT INDEX
     
     private final Map<LookupKey, J2AdocUnit> unitIndex = _Maps.newTreeMap();
+    private final ListMultimap<String, J2AdocUnit> unitsByTypeSimpleName = _Multimaps.newListMultimap();
     
     public J2AdocContext add(final @NonNull J2AdocUnit unit) {
-        val previousKey = unitIndex.put(LookupKey.of(unit.getResourceCoordinates()), unit);
+        val unitKey = LookupKey.of(unit.getResourceCoordinates());
+        val previousKey = unitIndex.put(unitKey, unit);
         if(previousKey!=null) {
             throw _Exceptions.unrecoverableFormatted(
-                    "J2AUnit index entries must be unique (index key collision on %s)", 
-                    previousKey);
+                    "J2AUnit index entries must be unique, "
+                    + "index key collision on \nexists: %s\nnew:    %s", 
+                    previousKey,
+                    unit);
         }
+        unitsByTypeSimpleName.putElement(unit.getName().stream().collect(Collectors.joining(".")), unit);
         return this;
     }
     
@@ -98,6 +110,60 @@ public class J2AdocContext {
         // optimized for 1 result per source file, but can be more
         .collect(Collectors.toCollection(()->new ArrayList<>(1))) 
         .stream();
+    }
+    
+    /**
+     * Find the J2AdocUnit by given search parameters.
+     * @param partialName - can be anything, originating eg. from java-doc {@literal link} tags.
+     * @param importDeclarations
+     */
+    public Optional<J2AdocUnit> findUnit(
+            final @Nullable String partialName, 
+            final @NonNull  Can<ImportDeclaration> importDeclarations) {
+        
+        if(_Strings.isNullOrEmpty(partialName)) {
+            return Optional.empty();
+        }
+        
+        if(partialName.contains("#")) {
+            // skip member reference lookup
+            //XXX reserved for future extensions ... 
+            //val partialNameWithoutMember = _Refs.stringRef(partialName).cutAtIndexOf("#");
+            return Optional.empty();  
+        }
+        
+        final Can<String> nameDiscriminator = Can.ofStream(
+                _Strings.splitThenStream(partialName, "."));
+        
+        final Can<Can<String>> potentialFqns = Can.ofStream(
+                ImportDeclarations
+                .streamPotentialFqns(nameDiscriminator, importDeclarations));
+        
+        
+        val nameDiscriminatorPartIterator = nameDiscriminator.reverseIterator();
+        val typeSimpeNameFirstCandidate = Can.ofSingleton(nameDiscriminatorPartIterator.next());
+        
+        return Stream.iterate(
+                typeSimpeNameFirstCandidate, 
+                __->nameDiscriminatorPartIterator.hasNext(), 
+                parts->parts.add(nameDiscriminatorPartIterator.next()))
+        .map((Can<String> typeSimpeNameParts)->typeSimpeNameParts.stream()
+                .collect(Collectors.joining(".")))
+        .flatMap((String typeSimpeNameCandidate)->unitsByTypeSimpleName
+                .getOrElseEmpty(typeSimpeNameCandidate)
+                .stream())
+        .filter((J2AdocUnit unit)->{
+                Can<String> unitFqnParts = unit.getFqnParts();
+                return potentialFqns.stream()
+                        .anyMatch(potentialFqn->potentialFqn.isEqualTo(unitFqnParts));
+        })
+        .findFirst();
+        
+        //TODO should log ambiguous cases
+    }
+    
+    public Can<J2AdocUnit> findUnitsByTypeSimpleName(String typeSimpleName) {
+        return Can.ofCollection(unitsByTypeSimpleName.getOrElseEmpty(typeSimpleName));
     }
     
     public Stream<J2AdocUnit> streamUnits() {
@@ -127,5 +193,9 @@ public class J2AdocContext {
                 .formatterFactory(UnitFormatterCompact::new)
                 ;        
     }
+
+
+
+
     
 }

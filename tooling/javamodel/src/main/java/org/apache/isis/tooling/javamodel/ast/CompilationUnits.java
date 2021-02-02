@@ -25,6 +25,7 @@ import java.util.stream.Stream;
 
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.EnumDeclaration;
 import com.github.javaparser.ast.body.TypeDeclaration;
@@ -44,6 +45,11 @@ public final class CompilationUnits {
         return cu->cu.getPrimaryType()
         .map(primaryType->primaryType.isPublic())
         .orElse(false);
+    }
+    
+    public static <T> Stream<ImportDeclaration> streamImportDeclarations(
+            final @NonNull CompilationUnit compilationUnit) {
+        return compilationUnit.getImports().stream();
     }
     
     public static <T> Stream<AnyTypeDeclaration> streamTypeDeclarations(

@@ -27,7 +27,6 @@ import org.apache.isis.commons.internal.base._Refs;
 import org.apache.isis.commons.internal.base._Text;
 import org.apache.isis.tooling.cli.CliConfig;
 import org.apache.isis.tooling.j2adoc.J2AdocContext;
-import org.apache.isis.tooling.j2adoc.J2AdocUnit.LookupKey;
 import org.apache.isis.tooling.model4adoc.include.IncludeStatement;
 import org.apache.isis.tooling.model4adoc.include.IncludeStatements;
 
@@ -71,7 +70,8 @@ public final class OrphanedIncludeStatementFixer {
                 val correctedIncludeStatement = _Refs.<IncludeStatement>objectRef(null);
                 val typeSimpleName = include.getCanonicalName();
 
-                j2aContext.getUnit(LookupKey.typeSimpleName(typeSimpleName))
+                j2aContext.findUnitsByTypeSimpleName(typeSimpleName)
+                .getSingleton() // selects for exactly one result, if ambiguous does nothing
                 .ifPresent(unit->{
 
                     val expected = IncludeStatement.builder()
@@ -97,6 +97,8 @@ public final class OrphanedIncludeStatementFixer {
                     }
 
                 });
+                
+                //TODO log cases of ambiguity or when not found
 
                 return correctedIncludeStatement
                         .getValue()

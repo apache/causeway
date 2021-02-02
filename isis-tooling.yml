@@ -99,5 +99,5 @@ commands:
     description: "These tables summarize all Maven artifacts available with _Apache Isis_."
 
   index:
-    fixOrphanedAdocIncludeStatements: true
+    fixOrphanedAdocIncludeStatements: false
 

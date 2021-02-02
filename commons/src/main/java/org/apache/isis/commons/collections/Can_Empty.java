@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
@@ -96,6 +97,15 @@ final class Can_Empty<T> implements Can<T> {
     @Override
     public Can<T> reverse() {
         return this;
+    }
+    
+    @Override
+    public Iterator<T> reverseIterator() {
+        return iterator();
+    }
+    
+    @Override
+    public void forEach(Consumer<? super T> action) {
     }
     
     @Override

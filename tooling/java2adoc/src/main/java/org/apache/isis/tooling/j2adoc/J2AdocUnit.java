@@ -24,6 +24,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import com.github.javaparser.StaticJavaParser;
+import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.javadoc.Javadoc;
 
 import org.asciidoctor.ast.Document;
@@ -47,26 +48,30 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public final class J2AdocUnit {
     
-    //TODO not namespace aware yet
     @Value
     public static class LookupKey implements Comparable<LookupKey> {
-        private final @NonNull String key;
+        
+        /** full namespace, no parts discarded; delimited by {@literal .} */
+        private final @NonNull String namespace;
+        
+        /** full name, no parts discarded; delimited by {@literal $} */
+        private final @NonNull String name;
 
-        //XXX resco has all the info, to make keys namespace aware
         public static LookupKey of(final @NonNull ResourceCoordinates resco) {
-            return new LookupKey(resco.getName().stream().collect(Collectors.joining(".")));
+            return new LookupKey(
+                    resco.getNamespace().stream().collect(Collectors.joining(".")), 
+                    resco.getName().stream().collect(Collectors.joining("$")));
         }
-        //XXX in a better world we would resolve these types to fqn type names
-        public static @NonNull LookupKey typeSimpleName(final @NonNull String typeSimpleName) {
-            return new LookupKey(typeSimpleName);
-        }
-        //XXX in a better world we would resolve these links to fqn type names
-        public static @NonNull LookupKey javadocLink(final @NonNull String javadocLink) {
-            return new LookupKey(javadocLink);
-        }
+        
         @Override
         public int compareTo(LookupKey other) {
-            return _Strings.compareNullsFirst(this.key, other==null ? null : other.key);
+            if(other==null) {
+                return -1;
+            }
+            int c = _Strings.compareNullsFirst(this.namespace, other.namespace);
+            return (c!=0)
+                ?  c
+                : _Strings.compareNullsFirst(this.name, other.name);
         }
     }
 
@@ -156,6 +161,13 @@ public final class J2AdocUnit {
         return typeDeclaration.getKind().getJavaKeyword();
     }
     
+    public Can<ImportDeclaration> getImportDeclarations() {
+        return typeDeclaration.getImportDeclarations();
+    }
+    
+    @Getter(lazy = true)
+    private final Can<String> fqnParts = getNamespace().addAll(getName());
+    
     @Getter(lazy = true)
     private final Optional<Javadoc> javadoc = typeDeclaration.getJavadoc();
     
@@ -177,6 +189,5 @@ public final class J2AdocUnit {
                 getSimpleName(),
                 getFriendlyName());
     }
-
 
 }

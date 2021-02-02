@@ -18,6 +18,7 @@
  */
 package org.apache.isis.tooling.j2adoc.convert;
 
+import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.ast.body.AnnotationMemberDeclaration;
 import com.github.javaparser.ast.body.ConstructorDeclaration;
 import com.github.javaparser.ast.body.EnumConstantDeclaration;
@@ -27,6 +28,7 @@ import com.github.javaparser.javadoc.Javadoc;
 
 import org.asciidoctor.ast.Document;
 
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.tooling.j2adoc.J2AdocContext;
 import org.apache.isis.tooling.j2adoc.J2AdocUnit;
 
@@ -34,17 +36,17 @@ import lombok.NonNull;
 
 public interface J2AdocConverter {
 
-    Document javadoc(Javadoc javadoc);
+    Document javadoc(Javadoc javadoc, Can<ImportDeclaration> importDeclarations);
 
-    String annotationMemberDeclaration(AnnotationMemberDeclaration amd);
+    String annotationMemberDeclaration(AnnotationMemberDeclaration amd, Can<ImportDeclaration> importDeclarations);
     
     String enumConstantDeclaration(EnumConstantDeclaration ecd);
     
-    String fieldDeclaration(FieldDeclaration fd);
+    String fieldDeclaration(FieldDeclaration fd, Can<ImportDeclaration> importDeclarations);
     
-    String constructorDeclaration(ConstructorDeclaration cd);
+    String constructorDeclaration(ConstructorDeclaration cd, Can<ImportDeclaration> importDeclarations);
 
-    String methodDeclaration(MethodDeclaration md);
+    String methodDeclaration(MethodDeclaration md, Can<ImportDeclaration> importDeclarations);
     
     String xref(@NonNull J2AdocUnit unit);
     
