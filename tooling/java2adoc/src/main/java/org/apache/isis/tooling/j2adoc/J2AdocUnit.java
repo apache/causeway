@@ -46,7 +46,7 @@ import lombok.extern.log4j.Log4j2;
 @RequiredArgsConstructor
 @Log4j2
 public final class J2AdocUnit {
-    
+
     //TODO not namespace aware yet
     @Value
     public static class LookupKey implements Comparable<LookupKey> {
@@ -79,23 +79,23 @@ public final class J2AdocUnit {
             // ignore package files
             return Stream.empty();
         }
-        
+
         try {
-            
+
             // remove 'tag::' and 'end::' lines
             // remove '// <.>' foot note references
             val source = AsciiDocIncludeTagFilter.read(sourceFile);
 
             val cu = StaticJavaParser.parse(source);
-            
+
             cu.getPackageDeclaration();
-            
-            
+
+
             return Stream.of(cu)
             .flatMap(CompilationUnits::streamTypeDeclarations)
             .filter(AnyTypeDeclaration::hasIndexDirective)
             .map(atd->{
-               
+
                 val resourceCoordinates = ResourceCoordinates.builder()
                 .friendlyName(atd.getName().stream()
                         .collect(Collectors.joining(".")))
@@ -106,9 +106,9 @@ public final class J2AdocUnit {
                 .namespace(PackageDeclarations.namespace(atd.getPackageDeclaration()))
                 .name(atd.getName())
                 .build();
-                
+
                 return new J2AdocUnit(resourceCoordinates, atd);
-                
+
             });
 
         } catch (Exception e) {
@@ -117,47 +117,47 @@ public final class J2AdocUnit {
         }
 
     }
-    
+
     public String getCanonicalName() {
         return resourceCoordinates.getNameAsString();
     }
-    
+
     /**
-     * Returns the recursively resolved (nested) type name. 
-     * Same as {@link #getSimpleName()} if type is not nested. 
+     * Returns the recursively resolved (nested) type name.
+     * Same as {@link #getSimpleName()} if type is not nested.
      */
     public Can<String> getName() {
         return resourceCoordinates.getName();
     }
-    
+
     public String getFriendlyName() {
         return resourceCoordinates.getFriendlyName();
     }
-    
+
     public String getSimpleName() {
         return resourceCoordinates.getSimpleName();
     }
-    
+
     public Can<String> getNamespace() {
         return resourceCoordinates.getNamespace();
     }
-    
+
     public String getDeclarationKeywordFriendlyName() {
         return _Strings.capitalize(typeDeclaration.getKind().name().toLowerCase());
     }
-    
+
     public String getDeclarationKeyword() {
         return typeDeclaration.getKind().getJavaKeyword();
     }
-    
+
     @Getter(lazy = true)
     private final Optional<Javadoc> javadoc = typeDeclaration.getJavadoc();
-    
+
     public String getAsciiDocXref(
             final @NonNull J2AdocContext j2aContext) {
         return j2aContext.getConverter().xref(this);
     }
-    
+
     public Document toAsciiDoc(
             final @NonNull J2AdocContext j2aContext) {
         return j2aContext.getFormatter().apply(this);
