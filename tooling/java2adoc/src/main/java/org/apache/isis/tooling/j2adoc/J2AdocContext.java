@@ -133,32 +133,38 @@ public class J2AdocContext {
             return Optional.empty();  
         }
         
+        if(unit.getFriendlyName().equals("Action")
+                && partialNameNoWhiteSpaces.equals("Where")) {
+            System.out.println("Action");
+        }
+        
         final Can<String> nameDiscriminator = Can.ofStream(
                 _Strings.splitThenStream(partialNameNoWhiteSpaces, "."));
+        
+        val nameDiscriminatorPartIterator = nameDiscriminator.reverseIterator();
+        
+        val typeSimpleNameCandidates = Stream.iterate(
+                Can.ofSingleton(nameDiscriminatorPartIterator.next()), 
+                parts->parts.add(nameDiscriminatorPartIterator.next()))
+        .limit(nameDiscriminator.size())
+        .collect(Can.toCan());
         
         final Can<Can<String>> potentialFqns = Can.ofStream(
                 ImportDeclarations
                 .streamPotentialFqns(nameDiscriminator, unit.getImportDeclarations()));
         
-        
-        val nameDiscriminatorPartIterator = nameDiscriminator.reverseIterator();
-        val typeSimpleNameFirstCandidate = Can.ofSingleton(nameDiscriminatorPartIterator.next());
-        
-        val searchResult = Can.ofStream(Stream.iterate(
-                typeSimpleNameFirstCandidate, 
-                __->nameDiscriminatorPartIterator.hasNext(), 
-                parts->parts.add(0, nameDiscriminatorPartIterator.next()))
+        val searchResult = typeSimpleNameCandidates.stream()
         .map((Can<String> typeSimpleNameParts)->typeSimpleNameParts.stream()
                 .collect(Collectors.joining(".")))
-        //.peek(typeSimpleNameCandidate->System.out.println("!!! candidate: "+typeSimpleNameCandidate)) //debug
         .flatMap((String typeSimpleNameCandidate)->unitsByTypeSimpleName
                 .getOrElseEmpty(typeSimpleNameCandidate)
                 .stream())
-        .filter((J2AdocUnit referredUnit)->{
-                Can<String> unitFqnParts = referredUnit.getFqnParts();
-                return potentialFqns.stream()
-                        .anyMatch(potentialFqn->potentialFqn.isEqualTo(unitFqnParts));
-        }));
+        .filter((J2AdocUnit referredUnit)->potentialFqns.stream()
+                .anyMatch(potentialFqn->potentialFqn.isEqualTo(referredUnit.getFqnParts()))
+                || unit.getNamespace().equals(referredUnit.getNamespace()) //same package
+        )
+        .collect(Can.toCan());
+        
 
         val selfReferential = searchResult.isEmpty()
                 && unit.getFqnParts().endsWith(nameDiscriminator);

@@ -55,7 +55,8 @@ public final class ImportDeclarations {
             final Can<String> nameDiscriminator,
             final ImportDeclaration importDeclaration) {
                         
-        if(importDeclaration.isStatic()) {
+        if(importDeclaration.isStatic()
+                || nameDiscriminator.isEmpty()) {
             return Stream.empty();
         }
         
@@ -74,12 +75,11 @@ public final class ImportDeclarations {
         
         val nameDiscriminatorPartIterator = nameDiscriminator.reverseIterator();
 
-        val firstCandidate = fqnParts.add(nameDiscriminatorPartIterator.next());
-        
         return Stream.iterate(
-                firstCandidate, 
-                __->nameDiscriminatorPartIterator.hasNext(), 
-                parts->parts.add(nameDiscriminatorPartIterator.next()));
+                Can.ofSingleton(nameDiscriminatorPartIterator.next()), 
+                parts->parts.add(0, nameDiscriminatorPartIterator.next()))
+            .limit(nameDiscriminator.size())
+            .map(fqnParts::addAll);
     }
     
     // -- HELPER

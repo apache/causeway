@@ -19,6 +19,7 @@
 package org.apache.isis.commons.collections;
 
 import java.io.IOException;
+import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
 
@@ -27,6 +28,8 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.isis.commons.SerializationTester;
+
+import lombok.val;
 
 class CanTest {
 
@@ -120,6 +123,36 @@ class CanTest {
     void multiCanFilter_whenAcceptTwo_isDifferentCan() {
         assertEquals(Can.<String>of("hi", "hello"), Can.<String>of("hi", "hello", "there").filter(x->x.startsWith("h")));
     }
+    
+    // -- STREAM IDIOMS
+    
+    @Test
+    void partialSums_reversed() {
+        assertEquals(Can.<String>of("a", "b"), Can.<String>empty().add("a").add("b"));
+        assertEquals(Can.<String>of("a", "b"), Can.<String>empty().add(0, "b").add(0, "a"));
+        
+        final Can<String> all = Can.<String>of("a", "b", "c");
+        
+        val iterator = all.reverseIterator();
+        
+        val partialSums = Stream.iterate(
+                Can.<String>empty(), 
+                parts->parts.add(0, iterator.next()))
+        .limit(4)
+        .collect(Can.toCan());
+        
+        assertEquals(Can.of(
+                    Can.<String>empty(),
+                    Can.<String>of("c"),
+                    Can.<String>of("b", "c"),
+                    Can.<String>of("a", "b", "c")
+                ), 
+                partialSums);
+        
+    }
+    
+    
+    
     
     
 
