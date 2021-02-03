@@ -26,15 +26,15 @@ interface ServiceRegistry {
 }
 ----
 
-<.> `[teal]#*select*#<T>(Class<T> type, Annotation[] qualifiers)` : `Can<T>`
+<.> `[teal]#*select*#<T>(Class<T> type, Annotation[] qualifiers)` : `xref:system:generated:index/commons/collections/Can.adoc[Can]<T>`
 +
 --
-Obtains a _Can_ container containing any matching instances for the given required type and additional required qualifiers.
+Obtains a xref:system:generated:index/commons/collections/Can.adoc[Can] container containing any matching instances for the given required type and additional required qualifiers.
 --
-<.> `[teal]#*select*#<T>(Class<T> type)` : `Can<T>`
+<.> `[teal]#*select*#<T>(Class<T> type)` : `xref:system:generated:index/commons/collections/Can.adoc[Can]<T>`
 +
 --
-Obtains a _Can_ container containing any matching instances for the given required type.
+Obtains a xref:system:generated:index/commons/collections/Can.adoc[Can] container containing any matching instances for the given required type.
 --
 <.> `[teal]#*streamRegisteredBeansOfType*#(Class<?> requiredType)` : `Stream<_ManagedBeanAdapter>`
 +

@@ -40,6 +40,6 @@ Parse a string representation of a LocalDateInterval Since this method is only u
 <.> `[teal]#*_endDateFromStartDate_*#(LocalDate date)` : `LocalDate`
 +
 --
-Returns an end date given the start date of the next adjoining interverval
+Returns an end date given the start date of the next adjoining interval
 --
 

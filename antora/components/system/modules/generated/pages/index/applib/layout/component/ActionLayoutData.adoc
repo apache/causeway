@@ -3,8 +3,6 @@
 
 Describes the layout of a single action, broadly corresponding to _org.apache.isis.applib.annotation.ActionLayout_ .
 
-Note that _org.apache.isis.applib.annotation.ActionLayout#contributed()_ is omitted because this only applies to domain services.
-
 .Java Sources
 [source,java]
 ----

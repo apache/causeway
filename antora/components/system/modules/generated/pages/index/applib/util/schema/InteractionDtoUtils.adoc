@@ -61,12 +61,12 @@ class InteractionDtoUtils {
 <.> `[teal]#*_newInteractionDto_*#(Execution<?, ?> execution)` : `InteractionDto`
 +
 --
-Creates a _InteractionDto_ (serializable to XML) for the provided _Interaction.Execution_ (the applib object).
+Creates a _InteractionDto_ (serializable to XML) for the provided _org.apache.isis.applib.services.iactn.Interaction.Execution_ (the applib object).
 --
 <.> `[teal]#*_newInteractionDto_*#(Execution<?, ?> execution, Strategy strategy)` : `InteractionDto`
 +
 --
-Creates a _InteractionDto_ (serializable to XML) for the provided _Interaction.Execution_ (the applib object).
+Creates a _InteractionDto_ (serializable to XML) for the provided _org.apache.isis.applib.services.iactn.Interaction.Execution_ (the applib object).
 --
 <.> `[teal]#*_addReturn_*#(ActionInvocationDto invocationDto, Class<?> returnType, Object result, xref:system:generated:index/applib/services/bookmark/BookmarkService.adoc[BookmarkService] bookmarkService)` : `void`
 

@@ -86,7 +86,7 @@ If _#editing()_ is set to _Editing#DISABLED_ , then the reason to provide to the
 <.> `[teal]#*_executionPublishing_*#` : `xref:system:generated:index/applib/annotation/Publishing.adoc[Publishing]`
 +
 --
-Whether _Interaction.Execution_ s (triggered property edits), should be dispatched to xref:system:generated:index/applib/services/publishing/spi/ExecutionSubscriber.adoc[ExecutionSubscriber] s.
+Whether _org.apache.isis.applib.services.iactn.Interaction.Execution_ s (triggered property edits), should be dispatched to xref:system:generated:index/applib/services/publishing/spi/ExecutionSubscriber.adoc[ExecutionSubscriber] s.
 --
 <.> `[teal]#*_fileAccept_*#` : `String`
 +

@@ -91,8 +91,6 @@ Whether entity changes should be published to _org.apache.isis.applib.services.p
 <.> `[teal]#*_mixinMethod_*#` : `String`
 +
 --
-Equivalent to _Mixin#method()_ .
-
 Applicable only if _#nature()_ is _Nature#MIXIN_ .
 --
 <.> `[teal]#*_nature_*#` : `xref:system:generated:index/applib/annotation/Nature.adoc[Nature]`

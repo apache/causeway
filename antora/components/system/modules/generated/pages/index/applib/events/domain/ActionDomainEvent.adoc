@@ -32,7 +32,7 @@ Recommended because it reduces the amount of boilerplate in the domain object cl
 <.> `[teal]#*setReturnValue*#(Object returnValue)` : `void`
 +
 --
-Set by the framework. Event subscribers can replace the value with some other value if they wish, though only in the _Phase#EXECUTED_ phase.
+Set by the framework. Event subscribers can replace the value with some other value if they wish, though only in the _AbstractDomainEvent.Phase#EXECUTED_ phase.
 --
 <.> `[teal]#*setSemantics*#(xref:system:generated:index/applib/annotation/SemanticsOf.adoc[SemanticsOf] semantics)` : `void`
 +

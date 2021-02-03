@@ -110,7 +110,7 @@ An object was removed from the collection (or an attempt to remove it was made).
 --
 A method of a collection (such as `isEmpty()` or `size()` ) has been invoked.
 
-Unlike the other methods in this interface, the source of these events will be an instance of a Collection (such as `java.util.List` ) rather than the domain object. (The domain object is {@link CollectionMethodEvent#getDomainObject() still available, however).
+Unlike the other methods in this interface, the source of these events will be an instance of a Collection (such as `java.util.List` ) rather than the domain object. (The domain object is _CollectionMethodEvent#getDomainObject()_ still available, however).
 --
 <.> `[teal]#*actionVisible*#(xref:system:generated:index/applib/services/wrapper/events/ActionVisibilityEvent.adoc[ActionVisibilityEvent] interactionEvent)` : `void`
 +
