@@ -113,7 +113,7 @@ public class J2AdocContext {
     /**
      * Find the J2AdocUnit by given search parameters.
      * @param partialName - can be anything, originating eg. from java-doc {@literal link} tags.
-     * @param unit
+     * @param unit - the referring (originating) unit, that is currently processed
      */
     public Optional<J2AdocUnit> findUnit(
             final @Nullable String partialName, 
@@ -133,10 +133,20 @@ public class J2AdocContext {
             return Optional.empty();  
         }
         
-        if(unit.getFriendlyName().equals("Action")
-                && partialNameNoWhiteSpaces.equals("Where")) {
-            System.out.println("Action");
-        }
+        //XXX debug entry point (keep)
+//        if(unit.getFriendlyName().contains("")
+//                && partialNameNoWhiteSpaces.equals("Blob")) {
+//            System.out.println("!!! debug entry point");
+//        }
+        
+        // given the partialNameNoWhiteSpaces, we split it into parts delimited by '.'
+        // any possible ordered subset reachable through removing only leading parts 
+        // is a candidate representation of the typeSimpleName
+        // eg. given a.b.c.d the candidates are in order of likelihood ...
+        // d
+        // c.d
+        // b.c.d
+        // a.b.c.d
         
         final Can<String> nameDiscriminator = Can.ofStream(
                 _Strings.splitThenStream(partialNameNoWhiteSpaces, "."));
@@ -149,16 +159,25 @@ public class J2AdocContext {
         .limit(nameDiscriminator.size())
         .collect(Can.toCan());
         
+        // each Can<String> represents a fully qualified name, where all its String parts are 
+        // collected; which are the Java package-name parts and the Java simple-name parts combined 
+        // note: Java simple-name parts, are multiple when the class is nested
         final Can<Can<String>> potentialFqns = Can.ofStream(
                 ImportDeclarations
                 .streamPotentialFqns(nameDiscriminator, unit.getImportDeclarations()));
-        
+
+        // for performance reasons we only search the units that are hash mapped
+        // by the typeSimpleNameCandidates using the unitsByTypeSimpleName map
         val searchResult = typeSimpleNameCandidates.stream()
         .map((Can<String> typeSimpleNameParts)->typeSimpleNameParts.stream()
                 .collect(Collectors.joining(".")))
         .flatMap((String typeSimpleNameCandidate)->unitsByTypeSimpleName
                 .getOrElseEmpty(typeSimpleNameCandidate)
                 .stream())
+        // we have a match if either the candidate unit's namespace matches the one of the potentialFqns
+        // or otherwise if candidate unit and originating unit share the same Java package;
+        // that is, in Java sources, types may refer to other types within the same package without the 
+        // need for declaring an import statement, hence the second option is a fallback
         .filter((J2AdocUnit referredUnit)->potentialFqns.stream()
                 .anyMatch(potentialFqn->potentialFqn.isEqualTo(referredUnit.getFqnParts()))
                 || unit.getNamespace().equals(referredUnit.getNamespace()) //same package
@@ -171,7 +190,7 @@ public class J2AdocContext {
 
         // don't log self-referential lookups, as these are not an issue
         if(!selfReferential) {
-            logIfCardinaltiyNotOne(searchResult, 
+            logIfEmptyOrAmbiguous(searchResult, 
                     String.format("while processing %s searching referenced unit by partial name '%s'",
                             unit.getFriendlyName(),
                             partialNameNoWhiteSpaces));
@@ -188,7 +207,7 @@ public class J2AdocContext {
         
         val searchResult = Can.ofCollection(unitsByTypeSimpleName.getOrElseEmpty(typeSimpleName));
         
-        logIfCardinaltiyNotOne(searchResult, 
+        logIfEmptyOrAmbiguous(searchResult, 
                 String.format("searching unit by type-simple-name '%s'", typeSimpleName));
         
         return searchResult.getSingleton();
@@ -224,7 +243,7 @@ public class J2AdocContext {
 
     // -- LOG
 
-    private static void logIfCardinaltiyNotOne(Can<J2AdocUnit> units, String doingWhat) {
+    private static void logIfEmptyOrAmbiguous(Can<J2AdocUnit> units, String doingWhat) {
         if(units.isEmpty()) {
             System.out.printf("%s yielded no match %n", doingWhat);
         } else if(units.isCardinalityMultiple()) {
