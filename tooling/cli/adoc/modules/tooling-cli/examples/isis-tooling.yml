@@ -45,6 +45,9 @@ global:
     Wicket: "org.apache.isis.viewer:isis-viewer-wicket.*"
 
     Valuetypes: org.apache.isis.valuetypes.*
+    "Asciidoc": "org.apache.isis.valuetypes:isis-valuetypes-asciidoc.*"
+    "Markdown": "org.apache.isis.valuetypes:isis-valuetypes-markdown.*"
+    "SSE": "org.apache.isis.valuetypes:isis-valuetypes-ssec.*"
 
     Mappings: org.apache.isis.mappings
     #"Outbox Publisher": org.apache.isis.mappings:isis-mappings-jaxrsclient.*
@@ -56,7 +59,7 @@ global:
     Extensions: org.apache.isis.extensions
     "Core: Command Log": "org.apache.isis.extensions:isis-extensions-command-log.*"
     "Core: Command Replay": "org.apache.isis.extensions:isis-extensions-command-replay.*"
-    "Core: Flyway": "org.apache.isis.extensions:isis-extensions-flyway.*"
+    #"Core: Flyway": "org.apache.isis.extensions:isis-extensions-flyway.*"
     "Core: Model Annotation": "org.apache.isis.extensions:isis-extensions-modelannotation.*"
     "Core: Quartz": "org.apache.isis.extensions:isis-extensions-quartz.*"
     #"Security: Audit Trail": "org.apache.isis.security:isis-extensions-audit-trail.*"
@@ -96,5 +99,5 @@ commands:
     description: "These tables summarize all Maven artifacts available with _Apache Isis_."
 
   index:
-    fixOrphanedAdocIncludeStatements: true
+    fixOrphanedAdocIncludeStatements: false
 

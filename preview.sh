@@ -19,7 +19,7 @@ do
        forcing=true ;;
     C) export SKIP_CONFIGS=false
        forcing=true ;;
-    W) export SKIP_PROJDOC_GENERATION=false
+    P) export SKIP_PROJDOC_GENERATION=false
        forcing=true ;;
     A) export SKIP_ANTORA_GENERATION=false
        export SKIP_CLEAR_CACHE=false
