@@ -1,0 +1,49 @@
+= ApplicationPermission : _interface_
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+Specifies how a particular _#getRole() application role_ may interact with a specific _#getFeature() application feature_ .
+
+Each permission has a _#getRule() rule_ and a _#getMode() mode_ . The xref:system:generated:index/extensions/secman/api/permission/ApplicationPermissionRule.adoc[ApplicationPermissionRule] determines whether the permission _ApplicationPermissionRule#ALLOW grants_ access to the feature or _ApplicationPermissionRule#VETO veto_ es access to it. The xref:system:generated:index/extensions/secman/api/permission/ApplicationPermissionMode.adoc[ApplicationPermissionMode] indicates whether the role can _ApplicationPermissionMode#VIEWING view_ the feature or can _ApplicationPermissionMode#CHANGING change_ the state of the system using the feature.
+
+For a given permission, there is an interaction between the xref:system:generated:index/extensions/secman/api/permission/ApplicationPermissionRule.adoc[ApplicationPermissionRule] and the xref:system:generated:index/extensions/secman/api/permission/ApplicationPermissionMode.adoc[ApplicationPermissionMode] :
+
+* for an _ApplicationPermissionRule#ALLOW allow_ , a _ApplicationPermissionMode#CHANGING usability_ allow implies _ApplicationPermissionMode#VIEWING visibility_ allow.
+* conversely, for a _ApplicationPermissionRule#VETO veto_ , a _ApplicationPermissionMode#VIEWING visibility_ veto implies a _ApplicationPermissionMode#CHANGING usability_ veto.
+
+.Java Sources
+[source,java]
+----
+interface ApplicationPermission {
+
+  String title() // <.>
+
+  ApplicationFeatureType getFeatureType()
+
+  ApplicationRole getRole()
+
+  void setRole(ApplicationRole applicationRole)
+
+  ApplicationPermissionRule getRule()
+
+  void setRule(ApplicationPermissionRule rule)
+
+  ApplicationPermissionMode getMode()
+
+  void setMode(ApplicationPermissionMode changing)
+
+  String getType()
+
+  String getFeatureFqn()
+
+  void setFeatureFqn(String featureFqn)
+
+  Optional<ApplicationFeatureId> createFeatureId()
+}
+----
+
+<.> `[teal]#*title*#()` : `String`
++
+--
+having a title() method (rather than using @Title annotation) is necessary as a workaround to be able to use wrapperFactory#unwrap(...) method, which is otherwise broken in Isis 1.6.0
+--
+

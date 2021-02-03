@@ -3,7 +3,7 @@
 
  _Supported only by _org.apache.isis.applib.services.wrapper.WrapperFactory_ service,_ represents an interaction with a domain object or a particular feature (property, collection, action) of a domain object.
 
-Many of the interactions are checks for _VisibilityEvent visibility_ , _UsabilityEvent usability_ and _ValidityEvent validity_ .
+Many of the interactions are checks for xref:system:generated:index/applib/services/wrapper/events/VisibilityEvent.adoc[VisibilityEvent] , xref:system:generated:index/applib/services/wrapper/events/UsabilityEvent.adoc[UsabilityEvent] and xref:system:generated:index/applib/services/wrapper/events/ValidityEvent.adoc[ValidityEvent] .
 
 .Java Sources
 [source,java]

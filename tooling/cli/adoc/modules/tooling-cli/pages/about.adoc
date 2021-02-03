@@ -42,9 +42,12 @@ CLI for the Apache Isis Tooling Ecosystem
                   path to the (multi-module) project root (default: current dir)
   -V, --version   Print version information and exit.
 Commands:
+  projdoc   Writes all generated (AsciiDoc) to given output.
   overview  Writes a System Overview document (AsciiDoc) to given output.
   index     Writes a Global Index (AsciiDoc) to given output.
 ----
+
+The "projdoc" command is the usual command to use, as it performs both the "overview" and "index" commands.
 
 By default, the current directory is used as the target to perform commands in.
 
@@ -67,8 +70,8 @@ command:
 ----
 
 <.> configuration applicable to all commands
-<.> configuration for the "overview" command
-<.> configuration for the "index" command
+<.> configuration for the "overview" command (also used by the "projdoc" command)
+<.> configuration for the "index" command (also used by the "projdoc" command)
 
 TIP: This configuration file is mapped onto the `CLIConfig` bean.
 Inspect its https://github.com/apache/isis/blob/master/tooling/cli/src/main/java/org/apache/isis/tooling/cli/CliConfig.java#L31[source code] for more detailed information.
@@ -140,6 +143,40 @@ If a Maven module matches more than one section, then the more specific section 
 
 These different types of sections are exploited by the `overview` command, described <<system-overview-overview,below>>.
 
+=== Project documentation (`projdoc`)
+
+This command generates both a <<system-overview-overview,system overview>> and generates the <<index-index,global index>>, and as such is the command that you will probably want to use most of the time.
+See those two commands for further details.
+
+
+==== Usage
+
+The `projdoc` command is usually invoked as follows:
+
+[source]
+----
+java -jar tooling/cli/target/isis-tooling-cli.jar \
+    -p . \
+    -o antora/components/system/modules/generated \
+    projdoc
+----
+
+where :
+
+* `-p` and `-o` are the global options for all commands
+
+* `projdoc` selects this sub-command
+
+There are no command-specific options.
+
+
+[[projdoc-configuration]]
+==== Configuration
+
+The `projdoc` command has no specific configuration.
+However, as it is effectively just the combination of the `overview` and `index` commands, note that those two commands _do_ have their own configuration settings; see <<overview-configuration,overview configuration>> and <<index-configuration,index configuration>> respectively.
+
+[#system-overview-overview]
 === System Overview (`overview`)
 
 This command generates the _System Overview_ (`.adoc) page.
@@ -170,7 +207,7 @@ The `overview` command will render "Persistence" section at level 2 (because its
 This way, sections can be defined that create a hierarchy.
 
 
-=== Usage
+==== Usage
 
 The `overview` command is usually invoked as follows:
 

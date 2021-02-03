@@ -18,7 +18,7 @@ interface XmlSnapshotService {
 }
 ----
 
-<.> `[teal]#*snapshotFor*#(Object domainObject)` : `xref:system:generated:index/applib/annotation/Snapshot.adoc[Snapshot]`
+<.> `[teal]#*snapshotFor*#(Object domainObject)` : `Snapshot`
 +
 --
 Exports the state of a domain object into a Snapshot (which can then be converted into XML, for example).

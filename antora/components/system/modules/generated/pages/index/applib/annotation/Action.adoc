@@ -67,7 +67,7 @@ Whether action invocations, captured as xref:system:generated:index/applib/servi
 <.> `[teal]#*_domainEvent_*#` : `Class<? extends ActionDomainEvent<?>>`
 +
 --
-Indicates that an invocation of the action should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService event bus_ using a custom (subclass of) _org.apache.isis.applib.events.domain.ActionDomainEvent_ .
+Indicates that an invocation of the action should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService event bus_ using a custom (subclass of) xref:system:generated:index/applib/events/domain/ActionDomainEvent.adoc[ActionDomainEvent] .
 
 For example:
 
@@ -96,7 +96,7 @@ Indicates where (in the UI) the action is not visible to the user.
 
 It is also possible to suppress an action's visibility using _ActionLayout#hidden()_ .
 
-For _DomainService domain service_ actions, the action's visibility is dependent upon its _DomainService#nature() nature_ and for contributed actions on how it is _ActionLayout#contributed()_ .
+For xref:system:generated:index/applib/annotation/DomainService.adoc[DomainService] actions, the action's visibility is dependent upon its _DomainService#nature() nature_ and for contributed actions on how it is _ActionLayout#contributed()_ .
 --
 <.> `[teal]#*_restrictTo_*#` : `xref:system:generated:index/applib/annotation/RestrictTo.adoc[RestrictTo]`
 +
@@ -118,7 +118,7 @@ The type-of the elements returned by the action.
 <.> `[teal]#*_fileAccept_*#` : `String`
 +
 --
-For downloading xref:system:generated:index/applib/value/Blob.adoc[Blob] or xref:system:generated:index/applib/value/Clob.adoc[Clob] , optionally restrict the files accepted (eg `.xslx` ).
+For downloading _Blob_ or _Clob_ , optionally restrict the files accepted (eg `.xslx` ).
 
 The value should be of the form "file_extension|audio/*|video/*|image/*|media_type".
 --

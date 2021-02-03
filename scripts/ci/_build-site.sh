@@ -40,18 +40,12 @@ else
 fi
 
 
-if [[ "$SKIP_OVERVIEW_GENERATION" == "true" ]]; then
-  echo "skipping overview generation"
+if [[ "$SKIP_PROJDOC_GENERATION" == "true" ]]; then
+  echo "skipping projdoc generation"
 else
-  bash $SCRIPT_DIR/_adoc-gen-tooling.sh overview
+  bash $SCRIPT_DIR/_adoc-gen-projdoc.sh
 fi
 
-
-if [[ "$SKIP_INDEX_GENERATION" == "true" ]]; then
-  echo "skipping index generation"
-else
-  bash $SCRIPT_DIR/_adoc-gen-tooling.sh index
-fi
 
 
 if [[ "$SKIP_ANTORA_GENERATION" == "true" ]]; then

@@ -3,7 +3,7 @@
 
 Indicates that the domain object can be recreated from a string.
 
-Objects that are view models (logically belonging to the UI/application layer) should instead implement _org.apache.isis.applib.ViewModel_ .
+Objects that are view models (logically belonging to the UI/application layer) should instead implement xref:system:generated:index/applib/ViewModel.adoc[ViewModel] .
 
 .Java Sources
 [source,java]

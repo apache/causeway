@@ -57,7 +57,7 @@ Whether property edits, captured as xref:system:generated:index/applib/services/
 <.> `[teal]#*_domainEvent_*#` : `Class<? extends PropertyDomainEvent<?,?>>`
 +
 --
-Indicates that changes to the property that should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService event bus_ using a custom (subclass of) _org.apache.isis.applib.events.domain.PropertyDomainEvent_ .
+Indicates that changes to the property that should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService event bus_ using a custom (subclass of) xref:system:generated:index/applib/events/domain/PropertyDomainEvent.adoc[PropertyDomainEvent] .
 
 For example:
 
@@ -117,7 +117,7 @@ To ensure that the property is actually not persisted in the objectstore, also a
 <.> `[teal]#*_mustSatisfy_*#` : `Class<? extends Specification>[]`
 +
 --
-The _org.apache.isis.applib.spec.Specification_ (s) to be satisfied by this property.
+The xref:system:generated:index/applib/spec/Specification.adoc[Specification] (s) to be satisfied by this property.
 
 If more than one is provided, then all must be satisfied (in effect "AND"ed together).
 --

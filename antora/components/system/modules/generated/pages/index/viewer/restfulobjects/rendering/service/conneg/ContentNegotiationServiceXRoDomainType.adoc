@@ -1,0 +1,33 @@
+= ContentNegotiationServiceXRoDomainType : _class_
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+Handles content negotiation for accept headers requiringapplication/jsonorapplication/xmland specifying an x-ro-domain-type; will delegate to any available xref:system:generated:index/applib/services/conmap/ContentMappingService.adoc[ContentMappingService] s to (try to) map the result object into the required representation if possible.
+
+In the accept header the profile is also checked dependent on the resource being invoked; eitherprofile="urn:org.restfulobjects:repr-types/object"for an object representation, orprofile="profile=urn:org.restfulobjects:repr-types/action-result"for an action result.
+
+If the accept header specifiesapplication/xmlthen the service additionally verifies that the (mapped) domain object's runtime type is annotated with the JAXB _javax.xml.bind.annotation.XmlRootElement_ annotation so that RestEasy is able to unambiguously serialize it.
+
+.Java Sources
+[source,java]
+----
+class ContentNegotiationServiceXRoDomainType {
+
+  public static final String X_RO_DOMAIN_TYPE;
+
+  Response.ResponseBuilder buildResponse(final IResourceContext renderContext, final ManagedObject objectAdapter) // <.>
+
+  Response.ResponseBuilder buildResponse(final IResourceContext renderContext, final ObjectAndActionInvocation objectAndActionInvocation) // <.>
+}
+----
+
+<.> `[teal]#*buildResponse*#(IResourceContext renderContext, ManagedObject objectAdapter)` : `ResponseBuilder`
++
+--
+search for an accept header in formapplication/xml;profile=urn:org.restfulobjects:repr-types/object;x-ro-domain-type=todoapp.dto.module.todoitem.ToDoItemDto
+--
+<.> `[teal]#*buildResponse*#(IResourceContext renderContext, ObjectAndActionInvocation objectAndActionInvocation)` : `ResponseBuilder`
++
+--
+search for an accept header in formapplication/xml;profile=urn:org.restfulobjects:repr-types/action-result;x-ro-domain-type=todoapp.dto.module.todoitem.ToDoItemDto
+--
+

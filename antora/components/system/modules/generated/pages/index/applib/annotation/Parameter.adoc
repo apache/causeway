@@ -41,7 +41,7 @@ The default value (-1) indicates that no maxLength has been specified.
 <.> `[teal]#*_mustSatisfy_*#` : `Class<? extends Specification>[]`
 +
 --
-The _org.apache.isis.applib.spec.Specification_ (s) to be satisfied by this parameter.
+The xref:system:generated:index/applib/spec/Specification.adoc[Specification] (s) to be satisfied by this parameter.
 
 If more than one is provided, then all must be satisfied (in effect "AND"ed together).
 --

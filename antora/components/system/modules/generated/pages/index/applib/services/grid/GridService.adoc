@@ -41,39 +41,39 @@ To support metamodel invalidation/rebuilding of spec.
 --
 Whether any persisted layout metadata (eg a.layout.xmlfile) exists for this domain class.
 --
-<.> `[teal]#*load*#(Class<?> domainClass)` : `Grid`
+<.> `[teal]#*load*#(Class<?> domainClass)` : `xref:system:generated:index/applib/layout/grid/Grid.adoc[Grid]`
 +
 --
-Returns a new instance of a _Grid_ for the specified domain class, eg from alayout.xmlfile, elsenull.
+Returns a new instance of a xref:system:generated:index/applib/layout/grid/Grid.adoc[Grid] for the specified domain class, eg from alayout.xmlfile, elsenull.
 --
-<.> `[teal]#*load*#(Class<?> domainClass, String layout)` : `Grid`
+<.> `[teal]#*load*#(Class<?> domainClass, String layout)` : `xref:system:generated:index/applib/layout/grid/Grid.adoc[Grid]`
 +
 --
-Returns a new instance of a _Grid_ for the specified domain class, eg from a[domainClass].layout.[layout].xmlfile, elsenull.
+Returns a new instance of a xref:system:generated:index/applib/layout/grid/Grid.adoc[Grid] for the specified domain class, eg from a[domainClass].layout.[layout].xmlfile, elsenull.
 --
-<.> `[teal]#*defaultGridFor*#(Class<?> domainClass)` : `Grid`
+<.> `[teal]#*defaultGridFor*#(Class<?> domainClass)` : `xref:system:generated:index/applib/layout/grid/Grid.adoc[Grid]`
 +
 --
 Returns a default grid; eg where none can be loaded using _#load(Class)_ .
 --
-<.> `[teal]#*normalize*#(Grid grid)` : `Grid`
+<.> `[teal]#*normalize*#(xref:system:generated:index/applib/layout/grid/Grid.adoc[Grid] grid)` : `xref:system:generated:index/applib/layout/grid/Grid.adoc[Grid]`
 +
 --
 Returns a normalized grid for the domain class obtained previously using _#load(Class)_ .
 
 If a "normalized" grid is persisted as thelayout.xml, then the expectation is that the xref:system:generated:index/applib/annotation/MemberOrder.adoc[MemberOrder] annotation can be removed from the domain class because the binding of properties/collections/actions will be within the XML. However, the layout annotations ( xref:system:generated:index/applib/annotation/DomainObjectLayout.adoc[DomainObjectLayout] , xref:system:generated:index/applib/annotation/ActionLayout.adoc[ActionLayout] , xref:system:generated:index/applib/annotation/PropertyLayout.adoc[PropertyLayout] and xref:system:generated:index/applib/annotation/CollectionLayout.adoc[CollectionLayout] ) (if present) will continue to be used to provide additional layout metadata. Of course, there is nothing to prevent the developer from extending the layout XML to also include the layout XML (in other words moving towards a _#complete(Grid) complete_ grid. Metadata within thelayout.xmlfile takes precedence over any annotations.
 --
-<.> `[teal]#*complete*#(Grid grid)` : `Grid`
+<.> `[teal]#*complete*#(xref:system:generated:index/applib/layout/grid/Grid.adoc[Grid] grid)` : `xref:system:generated:index/applib/layout/grid/Grid.adoc[Grid]`
 +
 --
-Modifies the provided _Grid_ with additional metadata, broadly speaking corresponding to the xref:system:generated:index/applib/annotation/DomainObjectLayout.adoc[DomainObjectLayout] , xref:system:generated:index/applib/annotation/ActionLayout.adoc[ActionLayout] , xref:system:generated:index/applib/annotation/PropertyLayout.adoc[PropertyLayout] and xref:system:generated:index/applib/annotation/CollectionLayout.adoc[CollectionLayout] .
+Modifies the provided xref:system:generated:index/applib/layout/grid/Grid.adoc[Grid] with additional metadata, broadly speaking corresponding to the xref:system:generated:index/applib/annotation/DomainObjectLayout.adoc[DomainObjectLayout] , xref:system:generated:index/applib/annotation/ActionLayout.adoc[ActionLayout] , xref:system:generated:index/applib/annotation/PropertyLayout.adoc[PropertyLayout] and xref:system:generated:index/applib/annotation/CollectionLayout.adoc[CollectionLayout] .
 
 If a "completed" grid is persisted as thelayout.xml, then there should be no need for any of the layout annotations, nor the xref:system:generated:index/applib/annotation/MemberOrder.adoc[MemberOrder] annotations, to be required in the domain class itself.
 --
-<.> `[teal]#*minimal*#(Grid grid)` : `Grid`
+<.> `[teal]#*minimal*#(xref:system:generated:index/applib/layout/grid/Grid.adoc[Grid] grid)` : `xref:system:generated:index/applib/layout/grid/Grid.adoc[Grid]`
 +
 --
-Modifies the provided _Grid_ , removing all metadata except the basic grid structure.
+Modifies the provided xref:system:generated:index/applib/layout/grid/Grid.adoc[Grid] , removing all metadata except the basic grid structure.
 
 If a "minimal" grid is persisted as thelayout.xml, then the expectation is that most of the layout annotations ( xref:system:generated:index/applib/annotation/DomainObjectLayout.adoc[DomainObjectLayout] , xref:system:generated:index/applib/annotation/ActionLayout.adoc[ActionLayout] , xref:system:generated:index/applib/annotation/PropertyLayout.adoc[PropertyLayout] , xref:system:generated:index/applib/annotation/CollectionLayout.adoc[CollectionLayout] , but also xref:system:generated:index/applib/annotation/MemberOrder.adoc[MemberOrder] ) will still be retained in the domain class code.
 --

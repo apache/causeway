@@ -5,6 +5,8 @@ Indicates that the class should have a default, by providing a link to a xref:sy
 
 This possibly seems a little tortuous. The more obvious means to provide a default would seem to be a simple `@DefaultsTo(new SomeObject())` . However, Java only allows primitives, strings and class literals to be used in annotations. We therefore need delegate to an external implementation. (This more complex design is also more flexible of course; the implementation of xref:system:generated:index/applib/adapters/DefaultsProvider.adoc[DefaultsProvider] could adjust the default it provides according to circumstance, for example).
 
+Note: This annotation is only incompletely recognized by the framework, and may be deprecated in the future.
+
 .Java Sources
 [source,java]
 ----

@@ -21,7 +21,7 @@ Domain semantics for domain object collection.
 <.> `[teal]#*_domainEvent_*#` : `Class<? extends CollectionDomainEvent<?,?>>`
 +
 --
-Indicates that changes to the collection that should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService event bus_ using a custom (subclass of) _org.apache.isis.applib.events.domain.CollectionDomainEvent_ .
+Indicates that changes to the collection that should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService event bus_ using a custom (subclass of) xref:system:generated:index/applib/events/domain/CollectionDomainEvent.adoc[CollectionDomainEvent] .
 
 For example:
 

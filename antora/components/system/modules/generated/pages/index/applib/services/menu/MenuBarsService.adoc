@@ -12,7 +12,7 @@ interface MenuBarsService {
 }
 ----
 
-<.> `[teal]#*menuBars*#()` : `MenuBars`
+<.> `[teal]#*menuBars*#()` : `xref:system:generated:index/applib/layout/menubars/MenuBars.adoc[MenuBars]`
 +
 --
 Returns _#menuBars()_ with a type of _Type#DEFAULT_ .

@@ -19,9 +19,9 @@ interface TranslatableException {
 <.> `[teal]#*getTranslatableMessage*#()` : `xref:system:generated:index/applib/services/i18n/TranslatableString.adoc[TranslatableString]`
 +
 --
-In the spirit of _Exception#getLocalizedMessage()_ , but using _org.apache.isis.applib.services.i18n.TranslatableString_ instead.
+In the spirit of _Exception#getLocalizedMessage()_ , but using xref:system:generated:index/applib/services/i18n/TranslatableString.adoc[TranslatableString] instead.
 
-If returnsnull, then _Exception#getMessage()_ will be used as a fallback. This design allows the Isis-provided _org.apache.isis.applib.exceptions.RecoverableException_ and _org.apache.isis.applib.exceptions.UnrecoverableException_ to provide constructors that accept a _org.apache.isis.applib.services.i18n.TranslatableString_ , but can be left as null for any existing code.
+If returnsnull, then _Exception#getMessage()_ will be used as a fallback. This design allows the Isis-provided xref:system:generated:index/applib/exceptions/RecoverableException.adoc[RecoverableException] and xref:system:generated:index/applib/exceptions/UnrecoverableException.adoc[UnrecoverableException] to provide constructors that accept a xref:system:generated:index/applib/services/i18n/TranslatableString.adoc[TranslatableString] , but can be left as null for any existing code.
 --
 <.> `[teal]#*getTranslationContext*#()` : `String`
 +

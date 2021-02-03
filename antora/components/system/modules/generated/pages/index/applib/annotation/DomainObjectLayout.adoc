@@ -49,7 +49,7 @@ Indicates the css class that a domain class (type) should have.
 --
 Indicates theFont AwesomeCSS class to decorate an domain object.
 --
-<.> `[teal]#*_cssClassFaPosition_*#` : `CssClassFaPosition`
+<.> `[teal]#*_cssClassFaPosition_*#` : `xref:system:generated:index/applib/layout/component/CssClassFaPosition.adoc[CssClassFaPosition]`
 +
 --
 Indicates the position of theFont Awesomeicon. The icon could be rendered on the left or the right of the object's title.
@@ -90,7 +90,7 @@ This subclass must provide a no-arg constructor; the fields are set reflectively
 <.> `[teal]#*_iconUiEvent_*#` : `Class<? extends IconUiEvent<?>>`
 +
 --
-Which subclass of _IconUiEvent_ should be used to obtain an icon.
+Which subclass of xref:system:generated:index/applib/events/ui/IconUiEvent.adoc[IconUiEvent] should be used to obtain an icon.
 
 This subclass must provide a no-arg constructor; the fields are set reflectively.
 --

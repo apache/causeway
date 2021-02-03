@@ -49,7 +49,7 @@ For the Wicket viewer, this can be a bootstrap class such asbtn-info.
 --
 Indicates theFont AwesomeCSS class to decorate an action (button or menu item).
 --
-<.> `[teal]#*_cssClassFaPosition_*#` : `CssClassFaPosition`
+<.> `[teal]#*_cssClassFaPosition_*#` : `xref:system:generated:index/applib/layout/component/CssClassFaPosition.adoc[CssClassFaPosition]`
 +
 --
 Indicates the position of theFont Awesomeicon. The icon could be rendered on the left or the right of the action button

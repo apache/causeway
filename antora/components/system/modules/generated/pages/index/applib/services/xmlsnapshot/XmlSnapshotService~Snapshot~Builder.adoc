@@ -24,7 +24,7 @@ Enrich the snapshot to include the state of these referenced objects
 --
 Ditto, but add an XML annotation attribute to the included element(s).
 --
-<.> `[teal]#*build*#()` : `xref:system:generated:index/applib/annotation/Snapshot.adoc[Snapshot]`
+<.> `[teal]#*build*#()` : `Snapshot`
 +
 --
 Builds the Snapshot.

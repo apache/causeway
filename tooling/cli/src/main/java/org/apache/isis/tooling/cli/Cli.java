@@ -38,9 +38,9 @@ import picocli.CommandLine.Option;
         version = "0.1",
         description = "CLI for the Apache Isis Tooling Ecosystem",
         subcommands = {
+                Cli.ProjectDocCommand.class,
                 Cli.SystemOverviewCommand.class,
                 Cli.GlobalIndexCommand.class,
-                Cli.ProjectDocCommand.class
         })
 class Cli implements Callable<Integer> {
 
@@ -121,7 +121,7 @@ class Cli implements Callable<Integer> {
             return 0;
         }
     }
-    
+
     @Command(
             name = "projdoc",
             description = "Writes all generated (AsciiDoc) to given output.")

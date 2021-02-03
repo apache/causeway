@@ -17,9 +17,9 @@ interface MenuBarsLoaderService {
 --
 Whether dynamic reloading of layouts is enabled.
 --
-<.> `[teal]#*menuBars*#()` : `BS3MenuBars`
+<.> `[teal]#*menuBars*#()` : `xref:system:generated:index/applib/layout/menubars/bootstrap3/BS3MenuBars.adoc[BS3MenuBars]`
 +
 --
-Returns a new instance of a _BS3MenuBars_ , else `null` .
+Returns a new instance of a xref:system:generated:index/applib/layout/menubars/bootstrap3/BS3MenuBars.adoc[BS3MenuBars] , else `null` .
 --
 
