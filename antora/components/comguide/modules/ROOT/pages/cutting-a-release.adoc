@@ -130,7 +130,7 @@ If any missing entries are listed or are spurious, then update `supplemental-mod
 
 === Update and preview website
 
-Generate the website, ensuring that the config, examples, overview and index are all updated:
+Generate the website, ensuring that the config, examples, projdoc (system overview and global index) are all updated:
 
 [source,bash,subs="attributes+"]
 ----
