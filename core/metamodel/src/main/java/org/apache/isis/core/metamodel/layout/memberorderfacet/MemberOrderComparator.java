@@ -32,8 +32,8 @@ import org.apache.isis.core.metamodel.layout.DeweyOrderSet;
  * ).
  *
  * <p>
- * Will also compare {@link OrderSet}s; these are put after any
- * {@link FacetedMethod}s. If there is more than one OrderSet then these are
+ * Will also compare {@link DeweyOrderSet}s; these are put after any
+ * {@link FacetedMethod}s. If there is more than one DeweyOrderSet then these are
  * compared by an {@link OrderSetGroupNameComparator}.
  *
  * <p>

@@ -34,7 +34,7 @@ import lombok.Value;
 /**
  * 
  * @since 2.0
- * @see {@link TemporalAdjuster}
+ * @see TemporalAdjuster
  */
 @Value(staticConstructor = "of")
 public class TemporalAdjust {

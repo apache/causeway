@@ -150,7 +150,7 @@ public interface InteractionListener {
      * <p>
      * Unlike the other methods in this interface, the source of these events will be an instance of a
      * Collection (such as <tt>java.util.List</tt>) rather than the domain object. (The domain object is
-     * {@link CollectionMethodEvent#getDomainObject() still available,  however).
+     * {@link CollectionMethodEvent#getDomainObject()} still available,  however).
      *
      * @param interactionEvent
      */

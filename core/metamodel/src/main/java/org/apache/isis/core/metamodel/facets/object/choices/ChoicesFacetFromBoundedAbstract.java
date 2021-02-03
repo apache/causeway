@@ -48,12 +48,14 @@ import lombok.val;
  *
  * <p>
  * In the standard Apache Isis Programming Model, corresponds to annotating the
- * member with {@link org.apache.isis.applib.annotation.Bounded Bounded} annotation
- * or implementing the {@link Bounded} marker interface.
+ * member with {@link org.apache.isis.applib.annotation.Bounding Bounding} annotation.
  */
 public abstract class ChoicesFacetFromBoundedAbstract
 extends FacetAbstract
-implements ChoicesFacet, DisablingInteractionAdvisor, ValidatingInteractionAdvisor {
+implements 
+    ChoicesFacet, 
+    DisablingInteractionAdvisor, 
+    ValidatingInteractionAdvisor {
 
     public static Class<? extends Facet> type() {
         return ChoicesFacet.class;

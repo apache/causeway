@@ -48,7 +48,7 @@ public final class _Objects {
      * @param a
      * @param b
      * @return {@code <0} if {@code a < b}, {@code >0} if {@code a > b} else {@code 0}
-     * @see {@link Comparable#compareTo(Object)}
+     * @see Comparable#compareTo(Object)
      * @throws UnsupportedOperationException if neither object is comparable
      */
     public static <T> int compareNullsFirst(final @Nullable T a, final @Nullable T b) {
@@ -81,7 +81,7 @@ public final class _Objects {
      * @param a
      * @param b
      * @return {@code <0} if {@code a < b}, {@code >0} if {@code a > b} else {@code 0}
-     * @see {@link Comparable#compareTo(Object)}
+     * @see Comparable#compareTo(Object)
      * @throws UnsupportedOperationException if neither object is comparable 
      */
     public static <T> int compareNullsLast(final @Nullable T a, final @Nullable T b) {
@@ -115,7 +115,7 @@ public final class _Objects {
      * @param a - nun-null
      * @param b - nun-null
      * @return {@code <0} if {@code a < b}, {@code >0} if {@code a > b} else {@code 0}
-     * @see {@link Comparable#compareTo(Object)}
+     * @see Comparable#compareTo(Object)
      * @throws UnsupportedOperationException if neither object is comparable or both are {@code null} 
      */
     public static <T> int compareNonNull(final /*@NonNull*/ T a, final /*@NonNull*/ T b) {

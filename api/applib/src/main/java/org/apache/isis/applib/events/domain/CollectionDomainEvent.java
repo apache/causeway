@@ -62,8 +62,11 @@ public abstract class CollectionDomainEvent<S,T> extends AbstractDomainEvent<S> 
 
 
     /**
-     * The proposed reference to either add or remove (per {@link #getOf()}), populated at {@link org.apache.isis.applib.events.domain.AbstractDomainEvent.Phase#VALIDATE}
-     * and subsequent phases (is null for {@link org.apache.isis.applib.events.domain.AbstractDomainEvent.Phase#HIDE hidden} and {@link org.apache.isis.applib.events.domain.AbstractDomainEvent.Phase#DISABLE disable} phases).
+     * The proposed reference to either add or remove (per {@link #getOf()}), populated at 
+     * {@link org.apache.isis.applib.events.domain.AbstractDomainEvent.Phase#VALIDATE}
+     * and subsequent phases (is null for 
+     * {@link org.apache.isis.applib.events.domain.AbstractDomainEvent.Phase#HIDE hidden} 
+     * and {@link org.apache.isis.applib.events.domain.AbstractDomainEvent.Phase#DISABLE disable} phases).
      */
     @Getter
     private T value;
@@ -71,22 +74,22 @@ public abstract class CollectionDomainEvent<S,T> extends AbstractDomainEvent<S> 
     public static enum Of {
         /**
          * The collection is being accessed
-         * ({@link Phase#HIDE hide} and
-         * {@link Phase#DISABLE disable}) checks.
+         * ({@link AbstractDomainEvent.Phase#HIDE hide} and
+         * {@link AbstractDomainEvent.Phase#DISABLE disable}) checks.
          */
         ACCESS,
 
         /**
          * The collection is being added to
-         * ({@link Phase#VALIDATE validity} check and
-         * {@link Phase#EXECUTED execution}).
+         * ({@link AbstractDomainEvent.Phase#VALIDATE validity} check and
+         * {@link AbstractDomainEvent.Phase#EXECUTED execution}).
          */
         ADD_TO,
 
         /**
          * The collection is being removed from
-         * ({@link Phase#VALIDATE validity} check and
-         * {@link Phase#EXECUTED execution}).
+         * ({@link AbstractDomainEvent.Phase#VALIDATE validity} check and
+         * {@link AbstractDomainEvent.Phase#EXECUTED execution}).
          */
         REMOVE_FROM
 
@@ -102,8 +105,9 @@ public abstract class CollectionDomainEvent<S,T> extends AbstractDomainEvent<S> 
         this.value = value;
     }
     /**
-     * Not API; updates from {@link Of#ACCESS} to either {@link Of#ADD_TO} or {@link Of#REMOVE_FROM} when hits the
-     * {@link org.apache.isis.applib.events.domain.AbstractDomainEvent.Phase#VALIDATE validation phase}.
+     * Not API; updates from {@link Of#ACCESS} to either {@link Of#ADD_TO} 
+     * or {@link Of#REMOVE_FROM} when hits the
+     * {@link AbstractDomainEvent.Phase#VALIDATE validation phase}.
      */
     public void setOf(Of of) {
         this.of = of;

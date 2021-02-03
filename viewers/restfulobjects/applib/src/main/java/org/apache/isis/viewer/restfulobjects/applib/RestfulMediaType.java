@@ -26,7 +26,7 @@ package org.apache.isis.viewer.restfulobjects.applib;
  * Because these values are used in the <tt>@Produces</tt> annotation on the jax-rs
  * resources, they must be constants and must be strings.
  *
- * @see http://buzzword.org.uk/2009/draft-inkster-profile-parameter-00.html
+ * @see <a href="http://buzzword.org.uk/2009/draft-inkster-profile-parameter-00.html">buzzword.org.uk</a>
  *
  * @since 1.x {@index}
  */

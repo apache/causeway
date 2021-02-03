@@ -176,7 +176,6 @@ public final class BindingsVaa {
      * @param value
      * @param valueSpec
      * @param converter - converts between model and presentation 
-     * @param nullRepresentation - the model value to use instead of null
      * @param customizer - to customize the binding builder (ignored if null)
      */
     public static <P, M> void bindValueBidirectional(

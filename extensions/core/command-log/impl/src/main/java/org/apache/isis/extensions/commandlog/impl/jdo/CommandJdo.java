@@ -364,7 +364,7 @@ public class CommandJdo
     /**
      * Implementation note: persisted as a string rather than a UUID as fails
      * to persist if using h2 (perhaps would need to be mapped differently).
-     * @see <a href="https://www.datanucleus.org/products/accessplatform/jdo/mapping.html#_other_types">DN documentation</a>.
+     * @see <a href="https://www.datanucleus.org/products/accessplatform/jdo/mapping.html#_other_types">www.datanucleus.org</a>
      */
     @javax.jdo.annotations.PrimaryKey
     @javax.jdo.annotations.Persistent

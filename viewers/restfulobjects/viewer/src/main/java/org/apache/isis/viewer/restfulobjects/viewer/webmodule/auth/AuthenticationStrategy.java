@@ -33,7 +33,7 @@ public interface AuthenticationStrategy {
 
     /**
      * Returns a still-valid {@link Authentication} or {@code null}
-     * @see {@link AuthenticationManager#isSessionValid(Authentication)
+     * @see AuthenticationManager#isSessionValid(Authentication)
      */
     Authentication lookupValid(
             HttpServletRequest httpServletRequest, 

@@ -20,6 +20,7 @@
 package org.apache.isis.applib.services.wrapper;
 
 import org.apache.isis.applib.services.wrapper.control.ExecutionMode;
+import org.apache.isis.applib.services.wrapper.control.SyncControl;
 import org.apache.isis.commons.collections.ImmutableEnumSet;
 
 /**
@@ -64,10 +65,8 @@ public interface WrappingObject {
      * {@link SyncControl} with which this wrapper was
      * {@link WrapperFactory#wrap(Object, SyncControl) created}.
      *
-     * <p>
-     * NOTE: domain classes may not have a method with this name.  The <tt>__isis_</tt> prefix is
+     * @implNote domain classes may not have a method with this name.  The <tt>__isis_</tt> prefix is
      * intended to reduce the risk of a collision.
-     * </p>
      */
     ImmutableEnumSet<ExecutionMode> __isis_executionModes();
 

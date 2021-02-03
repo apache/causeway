@@ -22,7 +22,7 @@ import org.springframework.transaction.support.TransactionSynchronization;
 
 /**
  * @since 2.0 {@index}
- * @see {@link TransactionSynchronization}
+ * @see TransactionSynchronization
  */
 public enum TransactionAfterCompletionEvent {
 

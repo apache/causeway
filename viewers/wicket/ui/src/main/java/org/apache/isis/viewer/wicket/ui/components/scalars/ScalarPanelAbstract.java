@@ -848,7 +848,6 @@ implements ScalarModelSubscriber {
 
     /**
      * Mandatory hook, used to determine which component to attach feedback to.
-     * @return
      */
     protected abstract Component getScalarValueComponent();
 

@@ -115,8 +115,9 @@ public final class InteractionDtoUtils {
     // -- newInteractionDto
 
     /**
-     * Encapsulates the mechanism for obtaining a {@link MemberExecutionDto} DTO (XML memento) of the provided
-     * in-memory {@link Interaction.Execution}.
+     * Encapsulates the mechanism for obtaining a {@link MemberExecutionDto} DTO (XML memento) 
+     * of the provided in-memory 
+     * {@link org.apache.isis.applib.services.iactn.Interaction.Execution}.
      */
     public enum Strategy {
         FLAT {
@@ -172,7 +173,8 @@ public final class InteractionDtoUtils {
 
     /**
      * Creates a {@link InteractionDto} (serializable  to XML) for the provided
-     * {@link Interaction.Execution} (the applib object).
+     * {@link org.apache.isis.applib.services.iactn.Interaction.Execution} 
+     * (the applib object).
      */
     public static InteractionDto newInteractionDto(final Interaction.Execution<?, ?> execution) {
         return newInteractionDto(execution, Strategy.FLAT);
@@ -180,7 +182,8 @@ public final class InteractionDtoUtils {
 
     /**
      * Creates a {@link InteractionDto} (serializable  to XML) for the provided
-     * {@link Interaction.Execution} (the applib object).
+     * {@link org.apache.isis.applib.services.iactn.Interaction.Execution} 
+     * (the applib object).
      */
     public static InteractionDto newInteractionDto(
             final Interaction.Execution<?, ?> execution,

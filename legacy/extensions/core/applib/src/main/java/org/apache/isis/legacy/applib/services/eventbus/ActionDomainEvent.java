@@ -145,8 +145,10 @@ public abstract class ActionDomainEvent<S> extends AbstractDomainEvent<S> {
     // -- arguments
     private List<Object> arguments;
     /**
-     * The arguments being used to invoke the action; populated at {@link Phase#VALIDATE} and subsequent phases
-     * (but null for {@link Phase#HIDE hidden} and {@link Phase#DISABLE disable} phases).
+     * The arguments being used to invoke the action; 
+     * populated at {@link org.apache.isis.applib.events.domain.AbstractDomainEvent.Phase#VALIDATE} and subsequent phases
+     * (but null for {@link org.apache.isis.applib.events.domain.AbstractDomainEvent.Phase#HIDE hidden} 
+     * and {@link org.apache.isis.applib.events.domain.AbstractDomainEvent.Phase#DISABLE disable} phases).
      */
     public List<Object> getArguments() {
         return arguments;
@@ -170,7 +172,8 @@ public abstract class ActionDomainEvent<S> extends AbstractDomainEvent<S> {
      * The value returned by the action.
      *
      * <p>
-     *     Only available for the {@link org.apache.isis.applib.events.domain.AbstractDomainEvent.Phase#EXECUTED}
+     *     Only available for the 
+     *     {@link org.apache.isis.applib.events.domain.AbstractDomainEvent.Phase#EXECUTED}
      *     {@link #getEventPhase() phase}.
      * </p>
      */

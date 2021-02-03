@@ -40,9 +40,10 @@ public interface InternalInteraction extends Interaction {
 
     /**
      * Use the provided {@link MemberExecutor} to invoke an action, with the provided
-     * {@link ActionInvocation} capturing the details of said action.
+     * {@link org.apache.isis.applib.services.iactn.Interaction.ActionInvocation} capturing 
+     * the details of said action.
      * <p>
-     * Because this both pushes an {@link Interaction.Execution} to
+     * Because this both pushes an {@link org.apache.isis.applib.services.iactn.Interaction.Execution} to
      * represent the action invocation and then pops it, that completed
      * execution is accessible at {@link Interaction#getPriorExecution()}.
      */
@@ -55,9 +56,10 @@ public interface InternalInteraction extends Interaction {
 
     /**
      * Use the provided {@link MemberExecutor} to edit a property, with the provided
-     * {@link PropertyEdit} capturing the details of said property edit.
+     * {@link org.apache.isis.applib.services.iactn.Interaction.PropertyEdit} 
+     * capturing the details of said property edit.
      * <p>
-     * Because this both pushes an {@link Interaction.Execution} to
+     * Because this both pushes an {@link org.apache.isis.applib.services.iactn.Interaction.Execution} to
      * represent the property edit and then pops it, that completed
      * execution is accessible at {@link Interaction#getPriorExecution()}.
      */

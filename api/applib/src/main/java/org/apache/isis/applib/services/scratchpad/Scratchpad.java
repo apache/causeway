@@ -21,10 +21,9 @@ package org.apache.isis.applib.services.scratchpad;
 import org.springframework.beans.factory.DisposableBean;
 
 /**
- * This service (API and implementation) provides a mechanism to interchange information between multiple objects invoked in the same
- * interaction.  Most commonly this will be as the result of invoking a {@link org.apache.isis.applib.annotation.Bulk}
- * action.
- *
+ * This service (API and implementation) provides a mechanism to interchange information 
+ * between multiple objects invoked in the same interaction.  
+ * Most commonly this will be as the result of invoking a bulk action.
  * <p>
  * This implementation has only one implementation (this class) in applib, so it is annotated with
  * {@link org.apache.isis.applib.annotation.DomainService}.  This means that it is automatically registered and

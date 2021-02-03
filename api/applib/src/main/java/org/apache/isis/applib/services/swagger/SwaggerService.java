@@ -25,6 +25,8 @@ import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.RestrictTo;
 
 /**
+ * The {@link SwaggerService} generates Swagger schema definition files to describe the public and/or private
+ * RESTful APIs exposed by the RestfulObjects viewer.
  * 
  * @since 1.x {@index}
  */
@@ -41,7 +43,7 @@ public interface SwaggerService {
          * <p>
          * Restricted only to view models ({@link DomainObject} or equivalent) 
          * and {@link DomainService} with a nature
-         * of {@link NatureOfService#VIEW_REST_ONLY}.
+         * of {@link NatureOfService#REST}.
          * </p>
          */
         PUBLIC,

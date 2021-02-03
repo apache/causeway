@@ -230,7 +230,7 @@ public class DomainObjectContainer {
      *
      * @deprecated - in almost all cases the workflow is to {@link #newTransientInstance(Class)}, populate the object
      * (eg with the arguments to an action) and then to
-     * {@link #persist(Object) persist) the object.  It is exceptionally rare for
+     * {@link #persist(Object) persist} the object.  It is exceptionally rare for
      * an object to be created, and with no further data required - be in a state
      * to be persisted immediately.
      */

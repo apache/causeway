@@ -39,7 +39,8 @@ import org.apache.isis.applib.events.lifecycle.ObjectUpdatedEvent;
 import org.apache.isis.applib.events.lifecycle.ObjectUpdatingEvent;
 
 /**
- * Domain semantics for domain objects (entities and view models; for services see {@link org.apache.isis.applib.annotation.DomainService}).
+ * Domain semantics for domain objects (entities and view models; 
+ * for services see {@link org.apache.isis.applib.annotation.DomainService}).
  * 
  * @apiNote Meta annotation {@link Component} allows for the Spring framework to pick up (discover) the 
  * annotated type. 
@@ -120,11 +121,7 @@ public @interface DomainObject {
             default Publishing.NOT_SPECIFIED;
     
     /**
-     * Equivalent to {@link Mixin#method()}.
-     *
-     * <p>
-     *     Applicable only if {@link #nature()} is {@link Nature#MIXIN}.
-     * </p>
+     * Applicable only if {@link #nature()} is {@link Nature#MIXIN}.
      */
     String mixinMethod()
             default "$$";

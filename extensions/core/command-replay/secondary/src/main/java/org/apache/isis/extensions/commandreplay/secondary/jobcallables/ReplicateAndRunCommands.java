@@ -126,7 +126,7 @@ public class ReplicateAndRunCommands implements Callable<SecondaryStatus> {
     /**
      *
      * @param commandsToReplay
-     * @return - whether there was a command to process (and so continue)
+     * @apiNote could return, whether there was a command to process (and so continue)
      */
     private void replay(List<CommandJdo> commandsToReplay) {
 

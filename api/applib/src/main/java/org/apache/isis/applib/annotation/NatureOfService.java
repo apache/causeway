@@ -42,7 +42,7 @@ public enum NatureOfService {
 
     /**
      * Whether a service contributes its actions to viewers and to the REST API.
-     * @see {@link NatureOfService#VIEW}
+     * @see NatureOfService#VIEW
      */
     public boolean isView() {
         return this == VIEW;
@@ -50,7 +50,7 @@ public enum NatureOfService {
 
     /**
      * Whether a service contributes its actions exclusively to the REST API.
-     * @see {@link NatureOfService#REST}
+     * @see NatureOfService#REST
      */
     public boolean isRestOnly() {
         return this == REST;

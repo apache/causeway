@@ -88,8 +88,8 @@ public class IsisModuleJdoDatanucleus {
     /**
      * {@link TransactionAwarePersistenceManagerFactoryProxy} was retired by the Spring Framework, recommended usage is still online [1].
      * Sources have been recovered from [2].
-     * @see [1] https://docs.spring.io/spring-framework/docs/3.0.0.RC2/reference/html/ch13s04.html
-     * @see [2] https://github.com/spring-projects/spring-framework/tree/2b3445df8134e2b0c4e4a4c4136cbaf9d58b7fc4/spring-orm/src/main/java/org/springframework/orm/jdo
+     * @see <a href="https://docs.spring.io/spring-framework/docs/3.0.0.RC2/reference/html/ch13s04.html">[1] docs.spring.io</a>
+     * @see <a href="https://github.com/spring-projects/spring-framework/tree/2b3445df8134e2b0c4e4a4c4136cbaf9d58b7fc4/spring-orm/src/main/java/org/springframework/orm/jdo">[2] github.com/spring-projects</a>
      */
     @Bean @Primary @Named("transaction-aware-pmf-proxy")
     public TransactionAwarePersistenceManagerFactoryProxy getTransactionAwarePersistenceManagerFactoryProxy(

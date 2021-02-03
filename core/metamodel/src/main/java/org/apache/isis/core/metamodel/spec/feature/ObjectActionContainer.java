@@ -75,7 +75,8 @@ public interface ObjectActionContainer {
     Optional<ObjectAction> getDeclaredAction(String id, @Nullable ActionType type);
 
     /**
-     * Shortcut to {@link #getDeclaredAction(String, null)}, meaning where action type is <i>any</i>.
+     * Shortcut to {@link #getDeclaredAction(String, ActionType)} with {@code ActionType = null},
+     * meaning where action type is <i>any</i>.
      * @see #getDeclaredAction(String, ActionType)
      */
     default Optional<ObjectAction> getDeclaredAction(String id) {

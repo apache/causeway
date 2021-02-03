@@ -77,7 +77,7 @@ public class _Json {
      * Either deserialize JSON content from given JSON content InputStream into an instance of List
      * with given {@code elementType}, or any exception that occurred during parsing.
      * @param <T>
-     * @param elementType
+     * @param clazz
      * @param content
      */
     public static <T> Result<List<T>> readJsonList(final Class<T> clazz, final InputStream content) {
@@ -116,7 +116,7 @@ public class _Json {
      * Either deserialize JSON content from given JSON content String into an instance of List
      * with given {@code elementType}, or any exception that occurred during parsing.
      * @param <T>
-     * @param elementType
+     * @param clazz
      * @param content
      */
     public static <T> Result<List<T>> readJsonList(final Class<T> clazz, final String content) {
@@ -155,7 +155,7 @@ public class _Json {
      * Either deserialize JSON content from given JSON content File into an instance of List
      * with given {@code elementType}, or any exception that occurred during parsing.
      * @param <T>
-     * @param elementType
+     * @param clazz
      * @param content
      */
     public static <T> Result<List<T>> readJsonList(final Class<T> clazz, final File content) {
@@ -193,7 +193,7 @@ public class _Json {
      * Either deserialize JSON content from given JSON content byte[] into an instance of List
      * with given {@code elementType}, or any exception that occurred during parsing.
      * @param <T>
-     * @param elementType
+     * @param clazz
      * @param content
      */
     public static <T> Result<List<T>> readJsonList(final Class<T> clazz, final byte[] content) {

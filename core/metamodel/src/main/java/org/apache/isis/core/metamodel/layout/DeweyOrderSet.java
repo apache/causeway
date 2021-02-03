@@ -43,7 +43,7 @@ import org.apache.isis.core.metamodel.layout.memberorderfacet.MemberOrderCompara
  *
  * <p>
  * At each level the elements are either {@link FacetedMethod}s or they are
- * instances of {@link OrderSet} represent a group of {@link FacetedMethod}s
+ * instances of {@link DeweyOrderSet} represent a group of {@link FacetedMethod}s
  * that have a {@link MemberOrderFacet} of the same name.
  *
  * <p>

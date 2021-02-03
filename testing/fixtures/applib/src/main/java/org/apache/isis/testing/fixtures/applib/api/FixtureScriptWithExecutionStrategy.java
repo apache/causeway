@@ -24,7 +24,8 @@ import org.apache.isis.testing.fixtures.applib.fixturespec.FixtureScriptsSpecifi
 
 /**
  * Overrides the {@link FixtureScriptsSpecification#getMultipleExecutionStrategy() globally-defined}
- * {@link FixtureScripts.MultipleExecutionStrategy} strategy, allowing individual fixtures to indicate that they have their own execution strategy.
+ * {@link org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts.MultipleExecutionStrategy} 
+ * strategy, allowing individual fixtures to indicate that they have their own execution strategy.
  */
 public interface FixtureScriptWithExecutionStrategy {
 

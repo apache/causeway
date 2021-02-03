@@ -255,8 +255,8 @@ public final class _Refs {
          * @return  left - cut off - part of held value (non-null) at the index of the first 
          *          occurrence of the specified substring,
          *          or an empty string if there is no such occurrence.
-         * @see {@link #cutAtIndex(int)}
-         * @see {@link String#indexOf(String)}
+         * @see #cutAtIndex(int)
+         * @see String#indexOf(String)
          */
         public String cutAtIndexOf(String s) {
             return cutAtIndex(value.indexOf(s));
@@ -275,8 +275,8 @@ public final class _Refs {
          * @return  left - cut off - part of held value (non-null) at the index of the last 
          *          occurrence of the specified substring,
          *          or an empty string if there is no such occurrence.
-         * @see {@link #cutAtIndex(int)}
-         * @see {@link String#lastIndexOf(String)}
+         * @see #cutAtIndex(int)
+         * @see String#lastIndexOf(String)
          */
         public String cutAtLastIndexOf(String s) {
             return cutAtIndex(value.lastIndexOf(s));
@@ -296,8 +296,8 @@ public final class _Refs {
          * @return  left - cut off - part of held value (non-null) at the index of the first 
          *          occurrence of the specified substring,
          *          or an empty string if there is no such occurrence.
-         * @see {@link #cutAtIndex(int)}
-         * @see {@link String#indexOf(String)}
+         * @see #cutAtIndex(int)
+         * @see String#indexOf(String)
          */
         public String cutAtIndexOfAndDrop(String s) {
             if(!value.contains(s)) {
@@ -322,8 +322,8 @@ public final class _Refs {
          * @return  left - cut off - part of held value (non-null) at the index of the last 
          *          occurrence of the specified substring,
          *          or an empty string if there is no such occurrence.
-         * @see {@link #cutAtIndex(int)}
-         * @see {@link String#lastIndexOf(String)}
+         * @see #cutAtIndex(int)
+         * @see String#lastIndexOf(String)
          */
         public String cutAtLastIndexOfAndDrop(String s) {
             if(!value.contains(s)) {

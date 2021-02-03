@@ -56,7 +56,7 @@ public interface _IocContainer {
      * @param requiredType
      * @return an instance of the bean, or null if not available or not unique
      * (i.e. multiple candidates found with none marked as primary)
-     * @throws IsisException if instance creation failed
+     * @throws RuntimeException if instance creation failed
      */
     <T> Optional<T> get(Class<T> requiredType);    
     

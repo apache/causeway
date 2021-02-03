@@ -180,8 +180,9 @@ implements BreadcrumbModelProvider, BookmarkedPagesModelProvider, HasCommonConte
 
     /**
      * This is a no-op if the {@link #getAuthentication() authentication session}'s
-     * {@link Authentication#getType() type} is {@link Authentication.Type#EXTERNAL external} (eg as
-     * managed by keycloak).
+     * {@link Authentication#getType() type} is 
+     * {@link org.apache.isis.core.security.authentication.Authentication.Type#EXTERNAL external} 
+     * (eg as managed by keycloak).
      */
     public void invalidate() {
         if(this.authentication.getType() == Authentication.Type.EXTERNAL) {

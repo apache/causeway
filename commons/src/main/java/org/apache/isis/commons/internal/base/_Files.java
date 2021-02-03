@@ -123,7 +123,7 @@ public class _Files {
     }
     
     /**
-     * Deletes given {@link file}. This operation is ignored if the file is a directory or does not exist.  
+     * Deletes given {@link File}. This operation is ignored if the file is a directory or does not exist.  
      * @param file - the file to be deleted (null-able)
      */
     @SneakyThrows

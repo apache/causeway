@@ -226,7 +226,7 @@ implements FormUiModel, FormExecutorContext, BookmarkableModel {
 
 
     /** Resets arguments to their fixed point default values
-     * @see {@link PendingParameterModelHead#defaults()}
+     * @see PendingParameterModelHead#defaults()
      */
     public void clearArguments() {
 

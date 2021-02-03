@@ -318,7 +318,8 @@ public interface Interaction extends HasUniqueId {
         private T dto;
 
         /**
-         * <b>NOT API</b>: Set by framework (implementation of {@link MemberExecutor})
+         * <b>NOT API</b>: Set by framework (implementation of 
+         * {@link org.apache.isis.core.metamodel.execution.InternalInteraction.MemberExecutor})
          */
         public void setDto(final T executionDto) {
             this.dto = executionDto;

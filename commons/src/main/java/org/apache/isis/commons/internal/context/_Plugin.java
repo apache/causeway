@@ -149,11 +149,14 @@ public final class _Plugin {
 
     /**
      * Loads a plugin by name and class-path. (Most likely used by JUnit Tests.)
-     * @param pluginClass
+     * @param pluginInterfaceClass
      * @param classPath
      * @param pluginFullyQualifiedClassName
      */
-    public static <S> S load(Class<S> pluginInterfaceClass, File classPath, String pluginFullyQualifiedClassName) {
+    public static <S> S load(
+            Class<S> pluginInterfaceClass, 
+            File classPath, 
+            String pluginFullyQualifiedClassName) {
 
         try {
 

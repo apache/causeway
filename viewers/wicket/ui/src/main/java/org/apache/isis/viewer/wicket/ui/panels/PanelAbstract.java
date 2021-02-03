@@ -75,8 +75,6 @@ extends PanelBase/*<IModel<X>>*/ {
 
     /**
      * For subclasses
-     *
-     * @return
      */
     protected Component addOrReplace(final ComponentType componentType, final IModel<?> model) {
         return getComponentFactoryRegistry().addOrReplaceComponent(this, componentType, model);

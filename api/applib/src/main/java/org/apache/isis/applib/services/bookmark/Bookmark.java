@@ -50,7 +50,7 @@ public class Bookmark implements Serializable {
 
     /**
      * corresponds directly to the object's specification-id
-     * @see <code>RootOid</code>
+     * @see RootOid
      */
     @NonNull  private final String objectType;
     @NonNull  private final String identifier;

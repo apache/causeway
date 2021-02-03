@@ -19,7 +19,6 @@
 package org.apache.isis.applib.annotation;
 
 import org.apache.isis.applib.services.command.Command;
-import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.publishing.spi.CommandSubscriber;
 import org.apache.isis.applib.services.publishing.spi.EntityChanges;
 import org.apache.isis.applib.services.publishing.spi.EntityChangesSubscriber;
@@ -35,7 +34,7 @@ import org.apache.isis.applib.services.publishing.spi.ExecutionSubscriber;
  * <li><b>{@link EntityChanges} ... subscribed to via {@link EntityChangesSubscriber}</li>
  * <li><b>{@link EntityPropertyChange} ... subscribed to via {@link EntityPropertyChangeSubscriber}</li>
  * <li><b>{@link Command} ... subscribed to via {@link CommandSubscriber}</li>
- * <li><b>{@link Interaction.Execution} ... subscribed to via {@link ExecutionSubscriber}</li>
+ * <li><b>{@link org.apache.isis.applib.services.iactn.Interaction.Execution} ... subscribed to via {@link ExecutionSubscriber}</li>
  * </ul>
  * @since 1.x {@index}
  */

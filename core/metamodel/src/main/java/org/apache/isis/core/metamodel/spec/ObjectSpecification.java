@@ -197,7 +197,7 @@ extends
      * Returns the description, if any, of the specification.
      *
      * <p>
-     * Corresponds to the {@link DescribedAsFacet#value()) value} of
+     * Corresponds to the {@link DescribedAsFacet#value() value} of
      * {@link DescribedAsFacet}; is not necessarily immutable.
      */
     @Override
@@ -207,7 +207,7 @@ extends
      * Returns a help string or lookup reference, if any, of the specification.
      *
      * <p>
-     * Corresponds to the {@link HelpFacet#value()) value} of {@link HelpFacet};
+     * Corresponds to the {@link HelpFacet#value() value} of {@link HelpFacet};
      * is not necessarily immutable.
      */
     String getHelp();
@@ -225,7 +225,7 @@ extends
      * Returns the name of an icon to use for the specified object.
      *
      * <p>
-     * Corresponds to the {@link IconFacet#iconName(Instance)) icon name}
+     * Corresponds to the {@link IconFacet#iconName(ManagedObject) icon name}
      * returned by the {@link IconFacet}; is not necessarily immutable.
      */
     String getIconName(ManagedObject object);
@@ -241,7 +241,7 @@ extends
      * Returns the CSS class name to use for the specified object.
      *
      * <p>
-     * Corresponds to the {@link CssClassFacet#cssClass(org.apache.isis.core.metamodel.spec.Instance)} value}
+     * Corresponds to the {@link CssClassFacet#cssClass(ManagedObject)} value}
      * returned by the {@link CssClassFacet}.
      *
      * @param objectAdapter - to evaluate (may be <tt>null</tt> if called by deprecated {@link #getCssClass}).
@@ -311,7 +311,7 @@ extends
      * In effect, means that it doesn't have the {@link CollectionFacet}, and
      * therefore will return NOT {@link #isParentedOrFreeCollection()}
      *
-     * @see #isParentedOrFreeCollection().
+     * @see #isParentedOrFreeCollection()
      */
     default boolean isNotCollection() {
         return !isParentedOrFreeCollection();

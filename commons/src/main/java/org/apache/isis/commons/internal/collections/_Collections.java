@@ -101,7 +101,7 @@ public final class _Collections {
 
     /**
      * Adapts the {@code list} as unmodifiable collection.
-     * Same as {@link Collections#unmodifiableCollection(List)}.
+     * Same as {@link Collections#unmodifiableCollection(Collection)}.
      *
      * @param list
      * @return null if {@code list} is null
@@ -216,7 +216,7 @@ public final class _Collections {
     /**
      * @return a collector that collects elements of a stream into an unmodifiable
      * List, Set, SortedSet or Collection.
-     * @throws IllegalArgumentException if the {@link typeOfCollection} is not one of
+     * @throws IllegalArgumentException if {@code typeOfCollection} is not one of
      * List, Set, SortedSet or Collection.
      */
     public static <T> Collector<T, ?, ? extends Collection<T>> toUnmodifiableOfType(Class<?> typeOfCollection) {
@@ -316,9 +316,8 @@ public final class _Collections {
     }
 
     /**
-     *
-     * @param parameterType
-     * @param genericParameterType
+     * @param collectionType
+     * @param genericType
      * @return optionally the inferred element type, 
      * based on whether parameter is a (collection or array) and has an infer-able element type
      */

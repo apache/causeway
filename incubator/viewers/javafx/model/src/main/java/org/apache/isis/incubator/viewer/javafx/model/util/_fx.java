@@ -220,7 +220,6 @@ public final class _fx {
     /**
      * Do not consider node for layout calculations, when not visible
      * @param node
-     * @return
      */
     public static Node visibilityLayoutFix(Node node) {
         node.managedProperty().bind(node.visibleProperty());

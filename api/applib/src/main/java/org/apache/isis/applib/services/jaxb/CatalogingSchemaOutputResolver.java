@@ -45,7 +45,8 @@ import org.apache.isis.commons.internal.collections._Maps;
 
 /**
  * An implementation of {@link SchemaOutputResolver} that keeps track of all the schemas for which it has
- * {@link #createOutput(String, String) created} an output {@link StreamResult} containing the content of the schema.
+ * {@link #createOutput(String, String) created} an output {@link StreamResult} containing the content 
+ * of the schema.
  */
 class CatalogingSchemaOutputResolver extends SchemaOutputResolver {
 
@@ -124,7 +125,8 @@ class CatalogingSchemaOutputResolver extends SchemaOutputResolver {
 
     @Override
     public Result createOutput(
-            final String namespaceUri, final String suggestedFileName) throws IOException {
+            final String namespaceUri,
+            final String suggestedFileName) throws IOException {
 
         final StreamResultWithWriter result = new StreamResultWithWriter();
 

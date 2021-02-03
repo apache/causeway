@@ -93,20 +93,20 @@ public abstract class CollectionDomainEvent<S, T> extends AbstractDomainEvent<S>
     public static enum Of {
         /**
          * The collection is being accessed
-         * ({@link Phase#HIDE hide} and
-         * {@link Phase#DISABLE disable}) checks.
+         * ({@link org.apache.isis.applib.events.domain.AbstractDomainEvent.Phase#HIDE hide} and
+         * {@link org.apache.isis.applib.events.domain.AbstractDomainEvent.Phase#DISABLE disable}) checks.
          */
         ACCESS,
         /**
          * The collection is being added to
-         * ({@link Phase#VALIDATE validity} check and
-         * {@link Phase#EXECUTED execution}).
+         * ({@link org.apache.isis.applib.events.domain.AbstractDomainEvent.Phase#VALIDATE validity} check and
+         * {@link org.apache.isis.applib.events.domain.AbstractDomainEvent.Phase#EXECUTED execution}).
          */
         ADD_TO,
         /**
          * The collection is being removed from
-         * ({@link Phase#VALIDATE validity} check and
-         * {@link Phase#EXECUTED execution}).
+         * ({@link org.apache.isis.applib.events.domain.AbstractDomainEvent.Phase#VALIDATE validity} check and
+         * {@link org.apache.isis.applib.events.domain.AbstractDomainEvent.Phase#EXECUTED execution}).
          */
         REMOVE_FROM
     }

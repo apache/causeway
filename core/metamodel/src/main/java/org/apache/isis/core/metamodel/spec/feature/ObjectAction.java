@@ -137,9 +137,9 @@ public interface ObjectAction extends ObjectMember {
      *
      * <p>
      *     Basically just calls (the helper methods also called by) first
-     *     {@link #isArgumentSetValidForParameters(ManagedObject, List, InteractionInitiatedBy)}
+     *     {@link #isArgumentSetValidForParameters(InteractionHead, Can, InteractionInitiatedBy)}
      *     and then
-     *     {@link #isArgumentSetValidForAction(ManagedObject, List, InteractionInitiatedBy)}
+     *     {@link #isArgumentSetValidForAction(InteractionHead, Can, InteractionInitiatedBy)}
      *     Those methods are
      *     separated out so that viewers have more fine-grained control.
      * </p>
@@ -151,10 +151,10 @@ public interface ObjectAction extends ObjectMember {
 
     /**
      * Normally action validation is all performed by
-     * {@link #isArgumentSetValid(ManagedObject, List, InteractionInitiatedBy)}, which calls
-     * {@link #isArgumentSetValidForParameters(ManagedObject, List, InteractionInitiatedBy) this method} to
+     * {@link #isArgumentSetValid(InteractionHead, Can, InteractionInitiatedBy)}, which calls
+     * {@link #isArgumentSetValidForParameters(InteractionHead, Can, InteractionInitiatedBy) this method} to
      * validate arguments individually, and then
-     * {@link #isArgumentSetValidForAction(ManagedObject, List, InteractionInitiatedBy) validate argument set}
+     * {@link #isArgumentSetValidForAction(InteractionHead, Can, InteractionInitiatedBy) validate argument set}
      * afterwards.
      *
      * <p>
@@ -169,10 +169,10 @@ public interface ObjectAction extends ObjectMember {
 
     /**
      * Normally action validation is all performed by
-     * {@link #isArgumentSetValid(ManagedObject, List, InteractionInitiatedBy)}, which calls
-     * {@link #isArgumentSetValidForParameters(ManagedObject, List, InteractionInitiatedBy)} to
+     * {@link #isArgumentSetValid(InteractionHead, Can, InteractionInitiatedBy)}, which calls
+     * {@link #isArgumentSetValidForParameters(InteractionHead, Can, InteractionInitiatedBy)} to
      * validate arguments individually, and then
-     * {@link #isArgumentSetValidForAction(ManagedObject, List, InteractionInitiatedBy) this method} to
+     * {@link #isArgumentSetValidForAction(InteractionHead, Can, InteractionInitiatedBy) this method} to
      * validate the entire argument set afterwards.
      *
      * <p>

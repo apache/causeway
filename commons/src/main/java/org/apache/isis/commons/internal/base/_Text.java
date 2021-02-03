@@ -85,10 +85,12 @@ public final class _Text {
     /**
      * Reads content from given {@code input} into a {@link Can} of lines, 
      * removing new line characters {@code \n,\r} in the process.
-     * @param text - nullable
+     * @param input - nullable
      * @return non-null
      */
-    public static Can<String> readLines(final @Nullable InputStream input, final @NonNull Charset charset){
+    public static Can<String> readLines(
+            final @Nullable InputStream input, 
+            final @NonNull  Charset charset){
         if(input==null) {
             return Can.empty();
         }

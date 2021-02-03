@@ -20,8 +20,6 @@ package org.apache.isis.valuetypes.asciidoc.ui.wkt.components;
 
 import org.apache.wicket.model.IModel;
 
-import org.apache.isis.applib.util.schema.CommandDtoUtils;
-import org.apache.isis.schema.cmd.v2.CommandDto;
 import org.apache.isis.valuetypes.asciidoc.applib.value.AsciiDoc;
 
 import lombok.val;
@@ -38,7 +36,6 @@ public class AsciiDocForXmlComponentWkt extends AsciiDocComponentWkt {
     /**
      * for convenience of subtypes.
      * @param xml
-     * @return
      */
     protected final String asHtml(String xml) {
         val adoc = "[source,xml]\n----\n" + xml + "\n----";

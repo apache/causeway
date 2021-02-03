@@ -18,7 +18,6 @@
  */
 package org.apache.isis.core.metamodel.facets.object.bookmarkpolicy;
 
-
 import java.util.Map;
 
 import org.apache.isis.applib.annotation.BookmarkPolicy;
@@ -26,10 +25,9 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
-
-public abstract class BookmarkPolicyFacetAbstract extends FacetAbstract implements
-BookmarkPolicyFacet {
-
+public abstract class BookmarkPolicyFacetAbstract 
+extends FacetAbstract 
+implements BookmarkPolicyFacet {
 
     public static Class<? extends Facet> type() {
         return BookmarkPolicyFacet.class;

@@ -30,7 +30,6 @@ import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.commanddto.conmap.ContentMappingServiceForCommandDto;
 import org.apache.isis.applib.services.commanddto.conmap.ContentMappingServiceForCommandsDto;
 import org.apache.isis.applib.services.commanddto.processor.CommandDtoProcessor;
-import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.publishing.spi.CommandSubscriber;
 import org.apache.isis.applib.services.publishing.spi.ExecutionSubscriber;
 import org.apache.isis.applib.spec.Specification;
@@ -110,7 +109,8 @@ public @interface Property {
             default "";
 
     /**
-     * Whether {@link Interaction.Execution}s
+     * Whether 
+     * {@link org.apache.isis.applib.services.iactn.Interaction.Execution}s
      * (triggered property edits), should be dispatched to
      * {@link ExecutionSubscriber}s.
      */

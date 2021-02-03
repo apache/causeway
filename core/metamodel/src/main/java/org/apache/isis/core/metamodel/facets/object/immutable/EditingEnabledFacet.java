@@ -19,7 +19,6 @@
 
 package org.apache.isis.core.metamodel.facets.object.immutable;
 
-import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.object.value.EqualByContentFacet;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
@@ -29,7 +28,7 @@ import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
  * modified either through the viewer or indeed programmatically.
  * <p>
  * Overrides at type level the object editing configuration  
- * {@link IsisConfiguration.Applib.Annotation.DomainObject#getEditing()}
+ * {@link org.apache.isis.core.config.IsisConfiguration.Applib.Annotation.DomainObject#getEditing()}
  *
  * @see EqualByContentFacet
  * @see ValueFacet

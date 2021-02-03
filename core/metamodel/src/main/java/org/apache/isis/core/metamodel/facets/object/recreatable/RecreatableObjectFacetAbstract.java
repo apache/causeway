@@ -99,7 +99,8 @@ implements ViewModelFacet {
 
     /**
      * Hook for subclass; must be overridden if {@link #getRecreationMechanism()} is
-     * {@link RecreationMechanism#INSTANTIATES} (ignored otherwise).
+     * {@link org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet.RecreationMechanism#INSTANTIATES} 
+     * (ignored otherwise).
      */
     protected Object doInstantiate(final Class<?> viewModelClass, final String mementoStr) {
         throw new IllegalStateException("doInstantiate() must be overridden if RecreationMechanism is INSTANTIATES");
@@ -117,7 +118,8 @@ implements ViewModelFacet {
 
     /**
      * Hook for subclass; must be overridden if {@link #getRecreationMechanism()} is
-     * {@link RecreationMechanism#INITIALIZES} (ignored otherwise).
+     * {@link org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet.RecreationMechanism#INITIALIZES} 
+     * (ignored otherwise).
      */
     protected void doInitialize(final Object viewModelPojo, final String mementoStr) {
         throw new IllegalStateException("doInitialize() must be overridden if RecreationMechanism is INITIALIZE");

@@ -21,8 +21,6 @@ package org.apache.isis.testing.fixtures.applib.fixturescripts;
 /**
  * 
  * @since 2.0
- *
- * @param <T>
  */
 public abstract class BuilderScriptWithoutResult extends BuilderScriptAbstract<Object> {
 

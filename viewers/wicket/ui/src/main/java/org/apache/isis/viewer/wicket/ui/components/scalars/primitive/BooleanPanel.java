@@ -93,7 +93,7 @@ public class BooleanPanel extends ScalarPanelAbstract {
 
     /**
      * Mandatory hook method to build the component to render the model when in
-     * {@link Rendering#COMPACT compact} format.
+     * {@link org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract.Rendering#COMPACT compact} format.
      */
     @Override
     protected Component createComponentForCompact() {

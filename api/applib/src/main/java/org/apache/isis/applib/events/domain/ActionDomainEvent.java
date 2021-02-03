@@ -35,14 +35,15 @@ public abstract class ActionDomainEvent<S> extends AbstractDomainEvent<S> {
     /**
      * This class is the default for the
      * {@link org.apache.isis.applib.annotation.Action#domainEvent()} annotation attribute.  Whether this
-     * raises an event or not depends upon the <tt>isis.core.meta-model.annotation.action.domain-event.post-for-default</tt>
+     * raises an event or not depends upon the 
+     * <tt>isis.core.meta-model.annotation.action.domain-event.post-for-default</tt>
      * configuration property.
      */
     public static class Default extends ActionDomainEvent<Object> {}
 
     /**
-     * Convenience class to use indicating that an event should <i>not</i> be posted (irrespective of the configuration
-     * property setting for the {@link Default} event.
+     * Convenience class to use indicating that an event should <i>not</i> be posted 
+     * (irrespective of the configuration property setting for the {@link Default} event.
      */
     public static class Noop extends ActionDomainEvent<Object> {}
 
@@ -78,12 +79,14 @@ public abstract class ActionDomainEvent<S> extends AbstractDomainEvent<S> {
     private Object mixedIn;
 
     /**
-     * The arguments being used to invoke the action; populated at {@link Phase#VALIDATE} and subsequent phases
-     * (but null for {@link Phase#HIDE hidden} and {@link Phase#DISABLE disable} phases).
+     * The arguments being used to invoke the action;
+     * populated at {@link AbstractDomainEvent.Phase#VALIDATE} and subsequent phases
+     * (but null for {@link AbstractDomainEvent.Phase#HIDE hidden} and 
+     * {@link AbstractDomainEvent.Phase#DISABLE disable} phases).
      *
      * <p>
-     *     The argument values can also be modified by event handlders
-     *     during the {@link Phase#EXECUTING} phase.    The new value must be
+     *     The argument values can also be modified by event handlers
+     *     during the {@link AbstractDomainEvent.Phase#EXECUTING} phase. The new value must be
      *     the same type as the expected value; the framework performs
      *     no sanity checks.
      * </p>
@@ -95,8 +98,8 @@ public abstract class ActionDomainEvent<S> extends AbstractDomainEvent<S> {
      * The value returned by the action.
      *
      * <p>
-     *     Only available for the {@link org.apache.isis.applib.events.domain.AbstractDomainEvent.Phase#EXECUTED}
-     *     {@link #getEventPhase() phase}.
+     * Only available for the {@link AbstractDomainEvent.Phase#EXECUTED}
+     * {@link #getEventPhase() phase}.
      * </p>
      */
     @Getter
@@ -106,7 +109,7 @@ public abstract class ActionDomainEvent<S> extends AbstractDomainEvent<S> {
      * Set by the framework.
      *
      * Event subscribers can replace the value with some other value if they wish, though only in the
-     * {@link Phase#EXECUTED} phase.
+     * {@link AbstractDomainEvent.Phase#EXECUTED} phase.
      */
     public void setReturnValue(final Object returnValue) {
         this.returnValue = returnValue;

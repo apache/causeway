@@ -35,7 +35,7 @@ import lombok.ToString;
  * Value object that represents the information of a
  * {@link javax.jdo.annotations.Query}.
  *
- * @see {@link JdoQueryFacet}.
+ * @see org.apache.isis.persistence.jdo.provider.metamodel.facets.object.query.JdoQueryFacet
  */
 @Getter 
 @AllArgsConstructor(access = AccessLevel.PRIVATE) 

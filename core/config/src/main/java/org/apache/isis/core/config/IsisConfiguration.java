@@ -841,15 +841,15 @@ public class IsisConfiguration {
                  * {@link org.apache.isis.applib.services.publishing.spi.ExecutionSubscriber} for publishing.
                  *
                  * <p>
-                 *     The service's {@link org.apache.isis.applib.services.publishing.spi.ExecutionSubscriber#publish(Interaction.Execution) publish}
-                 *     method is called only once per transaction, with
-                 *     {@link Interaction.Execution} collecting details of
-                 *     the identity of the target object, the property edited, and the new value of the property.
+                 * The service's {@link org.apache.isis.applib.services.publishing.spi.ExecutionSubscriber#publish(Interaction.Execution) publish}
+                 * method is called only once per transaction, with
+                 * {@link Interaction.Execution} collecting details of
+                 * the identity of the target object, the property edited, and the new value of the property.
                  * </p>
                  *
                  * <p>
-                 *  This setting can be overridden on a case-by-case basis using {
-                 *  @link org.apache.isis.applib.annotation.Property#publishing()}.
+                 * This setting can be overridden on a case-by-case basis using
+                 * {@link org.apache.isis.applib.annotation.Property#publishing()}.
                  * </p>
                  */
                 private PropertyPublishingPolicy executionPublishing = PropertyPublishingPolicy.NONE;

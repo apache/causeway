@@ -207,7 +207,6 @@ public abstract class AbstractInterval<T extends AbstractInterval<T>> {
     /**
      * Mandatory hook
      * @param overlap
-     * @return
      */
     protected abstract T newInterval(Interval overlap);
 

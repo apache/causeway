@@ -19,7 +19,7 @@
 package org.apache.isis.commons.binding;
 
 /**
- * @param <T>
+ *
  */
 @FunctionalInterface
 public interface InvalidationListener {

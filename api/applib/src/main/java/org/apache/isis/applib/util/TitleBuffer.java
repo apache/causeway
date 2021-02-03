@@ -22,6 +22,7 @@ package org.apache.isis.applib.util;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
+import org.apache.isis.applib.services.title.TitleService;
 import org.apache.isis.commons.internal._Constants;
 
 /**
@@ -49,10 +50,11 @@ public class TitleBuffer {
      * Determines if the specified object's title is empty (or null).
      *
      * <p>
-     *     Note: this method only obtains the title using either <tt>title()</tt> or <tt>toString()</tt>; it doesn't
-     *     honour other mechanisms for specifying the title, such as {@link org.apache.isis.applib.annotation.Title}
+     *     Note: this method only obtains the title using either <tt>title()</tt> or <tt>toString()</tt>; 
+     *     it doesn't honour other mechanisms for specifying the title, such as 
+     *     {@link org.apache.isis.applib.annotation.Title}
      *     annotation.  If that functionality is required, first call
-     *     {@link org.apache.isis.applib.DomainObjectContainer#titleOf(Object)} on the object and pass in the resultant
+     *     {@link TitleService#titleOf(Object)} on the object and pass in the resultant
      *     string.
      * </p>
      */
@@ -107,7 +109,7 @@ public class TitleBuffer {
      *     Note: this method only obtains the title using either <tt>title()</tt> or <tt>toString()</tt>; it doesn't
      *     honour other mechanisms for specifying the title, such as {@link org.apache.isis.applib.annotation.Title}
      *     annotation.  If that functionality is required, first call
-     *     {@link org.apache.isis.applib.DomainObjectContainer#titleOf(Object)} on the object and pass in the resultant
+     *     {@link TitleService#titleOf(Object)} on the object and pass in the resultant
      *     string.
      * </p>
      */
@@ -123,7 +125,7 @@ public class TitleBuffer {
      *     Note: this method only obtains the title using either <tt>title()</tt> or <tt>toString()</tt>; it doesn't
      *     honour other mechanisms for specifying the title, such as {@link org.apache.isis.applib.annotation.Title}
      *     annotation.  If that functionality is required, first call
-     *     {@link org.apache.isis.applib.DomainObjectContainer#titleOf(Object)} on the object and pass in the resultant
+     *     {@link TitleService#titleOf(Object)} on the object and pass in the resultant
      *     string.
      * </p>
      */
@@ -160,7 +162,7 @@ public class TitleBuffer {
      *     Note: this method only obtains the title using either <tt>title()</tt> or <tt>toString()</tt>; it doesn't
      *     honour other mechanisms for specifying the title, such as {@link org.apache.isis.applib.annotation.Title}
      *     annotation.  If that functionality is required, first call
-     *     {@link org.apache.isis.applib.DomainObjectContainer#titleOf(Object)} on the object and pass in the resultant
+     *     {@link TitleService#titleOf(Object)} on the object and pass in the resultant
      *     string.
      * </p>
      */
@@ -181,7 +183,7 @@ public class TitleBuffer {
      *     Note: this method only obtains the title using either <tt>title()</tt> or <tt>toString()</tt>; it doesn't
      *     honour other mechanisms for specifying the title, such as {@link org.apache.isis.applib.annotation.Title}
      *     annotation.  If that functionality is required, first call
-     *     {@link org.apache.isis.applib.DomainObjectContainer#titleOf(Object)} on the object and pass in the resultant
+     *     {@link TitleService#titleOf(Object)} on the object and pass in the resultant
      *     string.
      * </p>
      *
@@ -223,7 +225,7 @@ public class TitleBuffer {
      *     Note: this method only obtains the title using either <tt>title()</tt> or <tt>toString()</tt>; it doesn't
      *     honour other mechanisms for specifying the title, such as {@link org.apache.isis.applib.annotation.Title}
      *     annotation.  If that functionality is required, first call
-     *     {@link org.apache.isis.applib.DomainObjectContainer#titleOf(Object)} on the object and pass in the resultant
+     *     {@link TitleService#titleOf(Object)} on the object and pass in the resultant
      *     string.
      * </p>
      *
@@ -250,7 +252,7 @@ public class TitleBuffer {
      *     Note: this method only obtains the title using either <tt>title()</tt> or <tt>toString()</tt>; it doesn't
      *     honour other mechanisms for specifying the title, such as {@link org.apache.isis.applib.annotation.Title}
      *     annotation.  If that functionality is required, first call
-     *     {@link org.apache.isis.applib.DomainObjectContainer#titleOf(Object)} on the object and pass in the resultant
+     *     {@link TitleService#titleOf(Object)} on the object and pass in the resultant
      *     string.
      * </p>
      *
@@ -335,7 +337,7 @@ public class TitleBuffer {
      *     Note: this method only obtains the title using either <tt>title()</tt> or <tt>toString()</tt>; it doesn't
      *     honour other mechanisms for specifying the title, such as {@link org.apache.isis.applib.annotation.Title}
      *     annotation.  If that functionality is required, first call
-     *     {@link org.apache.isis.applib.DomainObjectContainer#titleOf(Object)} on the object and pass in the resultant
+     *     {@link TitleService#titleOf(Object)} on the object and pass in the resultant
      *     string.
      * </p>
      *
@@ -394,7 +396,7 @@ public class TitleBuffer {
      *     Note: this method only obtains the title using either <tt>title()</tt> or <tt>toString()</tt>; it doesn't
      *     honour other mechanisms for specifying the title, such as {@link org.apache.isis.applib.annotation.Title}
      *     annotation.  If that functionality is required, first call
-     *     {@link org.apache.isis.applib.DomainObjectContainer#titleOf(Object)} on the object and pass in the resultant
+     *     {@link TitleService#titleOf(Object)} on the object and pass in the resultant
      *     string.
      * </p>
      *
@@ -418,7 +420,7 @@ public class TitleBuffer {
      *     Note: this method only obtains the title using either <tt>title()</tt> or <tt>toString()</tt>; it doesn't
      *     honour other mechanisms for specifying the title, such as {@link org.apache.isis.applib.annotation.Title}
      *     annotation.  If that functionality is required, first call
-     *     {@link org.apache.isis.applib.DomainObjectContainer#titleOf(Object)} on the object and pass in the resultant
+     *     {@link TitleService#titleOf(Object)} on the object and pass in the resultant
      *     string.
      * </p>
 

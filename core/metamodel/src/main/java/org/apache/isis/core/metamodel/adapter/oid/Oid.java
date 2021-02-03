@@ -27,11 +27,12 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.schema.common.v2.OidDto;
 
 /**
- * An immutable identifier for either a root object (subtype {@link RootOid}) or
- * a parented collection (subtype {@link ParentedOid}).
+ * An immutable identifier for a root object (subtype {@link RootOid}).
  *
  * <p>
- * Note that value objects (strings, ints, {@link Value}s etc) do not have an {@link Oid}.
+ * @apiNote value objects (strings, ints, {@link Value}s etc) do not have a 
+ * semantically meaningful {@link Oid}, but as an implementation detail 
+ * might have a placeholder {@link Oid}. 
  */
 public interface Oid extends Serializable {
 
