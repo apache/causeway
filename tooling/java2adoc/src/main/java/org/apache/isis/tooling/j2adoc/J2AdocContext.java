@@ -165,7 +165,7 @@ public class J2AdocContext {
         final Can<Can<String>> potentialFqns = Can.ofStream(
                 ImportDeclarations
                 .streamPotentialFqns(nameDiscriminator, unit.getImportDeclarations()));
-
+        
         // for performance reasons we only search the units that are hash mapped
         // by the typeSimpleNameCandidates using the unitsByTypeSimpleName map
         val searchResult = typeSimpleNameCandidates.stream()
@@ -184,12 +184,35 @@ public class J2AdocContext {
         )
         .collect(Can.toCan());
         
+        // what's left to do at this point is to log empty or ambiguous search results
+        // while also trying to suppress cases that are of no interest   
 
-        val selfReferential = searchResult.isEmpty()
-                && unit.getFqnParts().endsWith(nameDiscriminator);
+        val skipLog = searchResult.isEmpty() && (
+                unit.getFqnParts().endsWith(nameDiscriminator) // self referential
+                // java.lang types don't need import statements
+                || nameDiscriminator.isEqualTo(Can.of("String"))
+                || nameDiscriminator.isEqualTo(Can.of("Boolean"))
+                || nameDiscriminator.isEqualTo(Can.of("Exception"))
+                || nameDiscriminator.isEqualTo(Can.of("Class"))
+                || nameDiscriminator.isEqualTo(Can.of("Object"))
+                || nameDiscriminator.isEqualTo(Can.of("Integer"))
+                || nameDiscriminator.isEqualTo(Can.of("Long"))
+                || nameDiscriminator.isEqualTo(Can.of("Byte"))
+                || nameDiscriminator.isEqualTo(Can.of("Double"))
+                || nameDiscriminator.isEqualTo(Can.of("Short"))
+                || nameDiscriminator.isEqualTo(Can.of("Float"))
+                || nameDiscriminator.isEqualTo(Can.of("Character"))
+                || nameDiscriminator.isEqualTo(Can.of("Throwable"))
+                || nameDiscriminator.isEqualTo(Can.of("Math"))
+                || nameDiscriminator.isEqualTo(Can.of("Thread"))
+                || potentialFqns.stream().anyMatch(fqn->
+                    // known packages, we'll never find in the index                    
+                    fqn.startsWith(Can.of("java"))
+                    || fqn.startsWith(Can.of("javax")))
+        );
 
         // don't log self-referential lookups, as these are not an issue
-        if(!selfReferential) {
+        if(!skipLog) {
             logIfEmptyOrAmbiguous(searchResult, 
                     String.format("while processing %s searching referenced unit by partial name '%s'",
                             unit.getFriendlyName(),

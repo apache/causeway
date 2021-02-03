@@ -62,7 +62,7 @@ import lombok.val;
  * A {@link Can} must not contain elements equal to {@code null}.
  * 
  * @param <T>
- * @since 2.0
+ * @since 2.0 {@index}
  */
 public interface Can<T> 
 extends Iterable<T>, Comparable<Can<T>>, Serializable {
