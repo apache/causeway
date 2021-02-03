@@ -136,7 +136,6 @@ public interface WrapperFactory {
      * @param <T>
      * @param possibleWrappedDomainObject
      *            - object that might or might not be a wrapper.
-     * @return
      */
     <T> boolean isWrapper(T possibleWrappedDomainObject);
 
@@ -200,7 +199,6 @@ public interface WrapperFactory {
      * the container to fire the events).
      *
      * @param listener
-     * @return
      */
     boolean addInteractionListener(InteractionListener listener);
 
@@ -215,7 +213,6 @@ public interface WrapperFactory {
      * wrappers delegate back to the container to fire the events).
      *
      * @param listener
-     * @return
      */
     boolean removeInteractionListener(
                     InteractionListener listener);

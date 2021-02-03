@@ -98,8 +98,6 @@ public final class LinkRepresentation extends JsonRepresentation {
      * <p>
      * If there is no &quot;arguments&quot; node, then as a convenience will
      * return an empty map.
-     *
-     * @return
      */
     public JsonRepresentation getArguments() {
         final JsonNode arguments = asObjectNode().get("arguments");

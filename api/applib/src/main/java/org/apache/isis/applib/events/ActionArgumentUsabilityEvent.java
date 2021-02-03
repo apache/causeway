@@ -53,8 +53,6 @@ public class ActionArgumentUsabilityEvent extends UsabilityEvent {
 
     /**
      * The position (0-based) of the disabled parameter.
-     * 
-     * @return
      */
     public int getPosition() {
         return position;

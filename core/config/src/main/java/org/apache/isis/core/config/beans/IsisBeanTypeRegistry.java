@@ -45,7 +45,6 @@ public interface IsisBeanTypeRegistry {
      * recognized by the IoC container.
      *
      * @param type
-     * @return
      */
     default Optional<String> lookupManagedBeanNameForType(Class<?> type) {
         return Optional.ofNullable(getManagedBeansContributing().get(type))

@@ -60,7 +60,6 @@ public class _Json {
      * @param <T>
      * @param clazz
      * @param content
-     * @return
      */
     public static <T> Result<T> readJson(final Class<T> clazz, final InputStream content) {
         return Result.of(()->_readJson(clazz, content));
@@ -80,7 +79,6 @@ public class _Json {
      * @param <T>
      * @param elementType
      * @param content
-     * @return
      */
     public static <T> Result<List<T>> readJsonList(final Class<T> clazz, final InputStream content) {
         return Result.of(()->_readJsonList(clazz, content));
@@ -101,7 +99,6 @@ public class _Json {
      * @param <T>
      * @param clazz
      * @param content
-     * @return
      */
     public static <T> Result<T> readJson(final Class<T> clazz, final String content) {
         return Result.of(()->_readJson(clazz, content));
@@ -121,7 +118,6 @@ public class _Json {
      * @param <T>
      * @param elementType
      * @param content
-     * @return
      */
     public static <T> Result<List<T>> readJsonList(final Class<T> clazz, final String content) {
         return Result.of(()->_readJsonList(clazz, content));
@@ -142,7 +138,6 @@ public class _Json {
      * @param <T>
      * @param clazz
      * @param content
-     * @return
      */
     public static <T> Result<T> readJson(final Class<T> clazz, final File content) {
         return Result.of(()->_readJson(clazz, content));
@@ -162,7 +157,6 @@ public class _Json {
      * @param <T>
      * @param elementType
      * @param content
-     * @return
      */
     public static <T> Result<List<T>> readJsonList(final Class<T> clazz, final File content) {
         return Result.of(()->_readJsonList(clazz, content));
@@ -182,7 +176,6 @@ public class _Json {
      * @param <T>
      * @param clazz
      * @param content
-     * @return
      */
     public static <T> Result<T> readJson(final Class<T> clazz, final byte[] content) {
         return Result.of(()->_readJson(clazz, content));
@@ -202,7 +195,6 @@ public class _Json {
      * @param <T>
      * @param elementType
      * @param content
-     * @return
      */
     public static <T> Result<List<T>> readJsonList(final Class<T> clazz, final byte[] content) {
         return Result.of(()->_readJsonList(clazz, content));

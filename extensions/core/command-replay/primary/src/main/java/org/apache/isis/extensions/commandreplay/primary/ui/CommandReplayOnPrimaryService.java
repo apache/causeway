@@ -95,8 +95,6 @@ public class CommandReplayOnPrimaryService {
      *
      * @param uniqueId - to search from.  This transactionId will <i>not</i> be included in the response.
      * @param batchSize - the maximum number of commands to return.  If not specified, all found will be returned.
-     *
-     * @return
      * @throws NotFoundException - if the command with specified transaction cannot be found.
      */
     @Action(domainEvent = FindCommandsDomainEvent.class, semantics = SemanticsOf.SAFE)
@@ -125,8 +123,6 @@ public class CommandReplayOnPrimaryService {
      *
      * @param uniqueId - to search from.  This transactionId will <i>not</i> be included in the response.
      * @param batchSize - the maximum number of commands to return.  If not specified, all found will be returned.
-     *
-     * @return
      * @throws NotFoundException - if the command with specified transaction cannot be found.
      */
     @Action(domainEvent = DownloadCommandsDomainEvent.class, semantics = SemanticsOf.SAFE)
@@ -167,8 +163,6 @@ public class CommandReplayOnPrimaryService {
      * <code>application/xml;profile="urn:org.restfulobjects:repr-types/action-result";x-ro-domain-type="org.apache.isis.schema.cmd.v1.CommandDto"</code>
      *
      * @param uniqueId - to download.
-     *
-     * @return
      * @throws NotFoundException - if the command with specified transaction cannot be found.
      */
     @Action(domainEvent = DownloadCommandByIdDomainEvent.class, semantics = SemanticsOf.SAFE)

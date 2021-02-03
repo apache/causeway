@@ -164,7 +164,6 @@ implements OneToOneAssociation {
     /**
      * Sets up the {@link Command}, then delegates to the appropriate facet
      * ({@link PropertySetterFacet} or {@link PropertyClearFacet}).
-     * @return
      */
     @Override
     public ManagedObject set(

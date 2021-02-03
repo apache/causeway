@@ -265,7 +265,6 @@ public class JUnitRuleMockery2 extends JUnit4Mockery implements MethodRule {
 
     /**
      * Require one interaction
-     * @return
      */
     public Object oneOf(final Object mock) {
         checking(expectationsWith(exp->exp.oneOf(mock)));

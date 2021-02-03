@@ -143,8 +143,6 @@ public abstract class ConsentAbstract implements Serializable, Consent {
      * reason} property with a description of the event. This has now been
      * changed so that a non-<tt>null</tt> reason always implies a {@link Veto}.
      * This property captures the description.
-     *
-     * @return
      */
     @Override
     public String getDescription() {

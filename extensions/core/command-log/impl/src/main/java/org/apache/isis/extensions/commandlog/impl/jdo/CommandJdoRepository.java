@@ -213,8 +213,6 @@ public class CommandJdoRepository {
      *                   secondary), or null if no HWM was found there.
      * @param batchSize - to restrict the number returned (so that replay
      *                   commands can be batched).
-     *
-     * @return
      */
     public List<CommandJdo> findSince(final UUID uniqueId, final Integer batchSize) {
         if(uniqueId == null) {

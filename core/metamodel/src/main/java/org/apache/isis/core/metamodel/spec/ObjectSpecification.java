@@ -129,7 +129,6 @@ extends
 
     /**
      * @param onType
-     * @return
      * @since 2.0
      */
     public default Optional<MixedInMember> getMixedInMember(ObjectSpecification onType) {
@@ -141,7 +140,7 @@ extends
     }
 
     /**
-     * @return
+     * @return Java class this specification is associated with
      */
     Class<?> getCorrespondingClass();
 
@@ -234,7 +233,6 @@ extends
     /**
      * Returns this object's navigable parent, if any.
      * @param object
-     * @return
      * @since 2.0
      */
     Object getNavigableParent(Object object);
@@ -399,7 +397,6 @@ extends
      * If this specification represents a bean, that is a managed bean, then
      * returns the bean's name/id as recognized by the IoC container.
      * <p>Otherwise returns {@code null}. 
-     * @return
      */
     String getManagedBeanName();
 
@@ -467,7 +464,6 @@ extends
 
     /**
      * Introspecting up to the level required.
-     * @return whether it's necessary to re-run validations.
      * @since 2.0
      */
     void introspectUpTo(IntrospectionState upTo);

@@ -38,8 +38,6 @@ public abstract class AbstractTypeMemberReprRenderer<R extends ReprRendererAbstr
 
     /**
      * null if the feature is an object action param.
-     *
-     * @return
      */
     public MemberType getMemberType() {
         return memberType;

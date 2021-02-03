@@ -37,7 +37,6 @@ public interface ObjectSerializer {
      * @apiNote Rather use the more convenient specialized variants
      * {@link #serialize(ManagedObject)} and {@link #deserialize(ObjectSpecification, byte[])}
      * @param request
-     * @return
      */
     BiForm serializeObject(BiForm request);
     

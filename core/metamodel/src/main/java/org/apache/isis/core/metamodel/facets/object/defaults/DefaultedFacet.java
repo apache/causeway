@@ -40,8 +40,6 @@ public interface DefaultedFacet extends Facet {
 
     /**
      * The default (as a pojo, not a {@link ManagedObject}).
-     *
-     * @return
      */
     Object getDefault();
 }

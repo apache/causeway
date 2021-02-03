@@ -27,8 +27,6 @@ public interface Facet extends FacetWithAttributes {
 
     /**
      * The {@link FacetHolder holder} of this facet.
-     *
-     * @return
      */
     FacetHolder getFacetHolder();
 

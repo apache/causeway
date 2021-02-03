@@ -167,10 +167,9 @@ public interface TreeNode<T> extends Vertex<T> {
     // -- LAZY NODE ADAPTING
 
     /**
-     * @return
+     * @apiNote a class rather than an instance, because otherwise
+     * the adapter would need to be serializable for Wicket's trees to work correctly.
      */
-    // [ahuber] Implementation Note: a class rather than an instance, because otherwise
-    // the adapter would need to be serializable for Wicket's trees to work correctly.
     public Class<? extends TreeAdapter<T>> getTreeAdapterClass();
 
 

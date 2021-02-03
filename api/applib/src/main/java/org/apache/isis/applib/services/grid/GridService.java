@@ -100,7 +100,6 @@ public interface GridService {
      * </p>
      *
      * @param grid
-     * @return
      */
     Grid minimal(Grid grid);
 

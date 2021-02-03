@@ -206,7 +206,6 @@ implements IResourceContext {
 
     /**
      * Only applies to rendering of objects
-     * @return
      */
     @Override
     public RepresentationService.Intent getIntent() {

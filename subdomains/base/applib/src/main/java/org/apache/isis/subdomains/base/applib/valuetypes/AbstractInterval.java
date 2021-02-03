@@ -104,7 +104,6 @@ public abstract class AbstractInterval<T extends AbstractInterval<T>> {
      * Does this date contain the specified time interval.
      *
      * @param date
-     * @return
      */
     public boolean contains(final LocalDate date) {
         if (date == null){
@@ -126,7 +125,6 @@ public abstract class AbstractInterval<T extends AbstractInterval<T>> {
      * Does this time interval contain the specified time interval.
      *
      * @param localDateInterval
-     * @return
      */
     public boolean contains(final T localDateInterval) {
         return asInterval().contains(localDateInterval.asInterval());
@@ -134,8 +132,6 @@ public abstract class AbstractInterval<T extends AbstractInterval<T>> {
 
     /**
      * The duration in days
-     *
-     * @return
      */
     public int days() {
         if (isInfinite()) {
@@ -187,7 +183,6 @@ public abstract class AbstractInterval<T extends AbstractInterval<T>> {
      * Gets the overlap between this interval and another interval.
      *
      * @param otherInterval
-     * @return
      */
     @SuppressWarnings("unchecked")
     public T overlap(final T otherInterval) {
@@ -220,7 +215,6 @@ public abstract class AbstractInterval<T extends AbstractInterval<T>> {
      * Does this time interval contain the specified time interval.
      *
      * @param interval
-     * @return
      */
     public boolean overlaps(final T interval) {
         return asInterval().overlaps(interval.asInterval());
@@ -237,7 +231,6 @@ public abstract class AbstractInterval<T extends AbstractInterval<T>> {
      * Does this interval is within the specified interval
      *
      * @param interval
-     * @return
      */
     public boolean within(final T interval) {
         return interval.asInterval().contains(asInterval());

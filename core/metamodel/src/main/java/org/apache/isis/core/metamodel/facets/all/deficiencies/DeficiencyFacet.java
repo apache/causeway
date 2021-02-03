@@ -59,7 +59,6 @@ public final class DeficiencyFacet implements Facet {
      * @param facetHolder
      * @param deficiencyOrigin
      * @param deficiencyMessage
-     * @return
      */
     public static DeficiencyFacet appendTo(
             @NonNull FacetHolder facetHolder, 

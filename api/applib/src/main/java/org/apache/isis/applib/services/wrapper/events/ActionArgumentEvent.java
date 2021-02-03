@@ -53,8 +53,6 @@ public class ActionArgumentEvent extends ValidityEvent {
 
     /**
      * The position (0-based) of the invalid argument.
-     *
-     * @return
      */
     public int getPosition() {
         return position;

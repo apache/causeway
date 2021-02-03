@@ -62,8 +62,6 @@ public abstract class InteractionEvent extends EventObjectBase<Object> {
      * Will be consistent with the subclass of {@link InteractionEvent}. So for
      * example a {@link PropertyModifyEvent} will have an {@link Identifier}
      * that identifies the property being modified.
-     *
-     * @return
      */
     public Identifier getIdentifier() {
         return identifier;
@@ -126,8 +124,6 @@ public abstract class InteractionEvent extends EventObjectBase<Object> {
      * <p>
      * Intended to be {@link #setExecuteIn(String) set} as a result of consulting
      * one of the facets.
-     *
-     * @return
      */
     public String getReason() {
         return reason;
@@ -139,8 +135,6 @@ public abstract class InteractionEvent extends EventObjectBase<Object> {
      *
      * <p>
      * This message should be overridden by subclasses for containing the Reason, the Identifier and any other relevant context information.
-     *
-     * @return
      */
     public String getReasonMessage() {
         if (this.getIdentifier() != null) {
@@ -154,8 +148,6 @@ public abstract class InteractionEvent extends EventObjectBase<Object> {
      * The class of the (first) advisor, if any, that provided the
      * {@link #getReason() reason} that this interaction is {@link #isVeto()
      * vetoed}.
-     *
-     * @return
      */
     public Class<?> getAdvisorClass() {
         return advisorClass;

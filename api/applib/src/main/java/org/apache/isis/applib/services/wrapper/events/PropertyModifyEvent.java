@@ -41,8 +41,6 @@ public class PropertyModifyEvent extends ValidityEvent {
 
     /**
      * If <tt>null</tt>, then the property was cleared.
-     *
-     * @return
      */
     @Override
     public Object getProposed() {

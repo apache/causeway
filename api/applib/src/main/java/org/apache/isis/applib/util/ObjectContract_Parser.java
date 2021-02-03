@@ -49,7 +49,6 @@ class ObjectContract_Parser<T> {
      * Parsing stringified property name lists like <pre>"invoice desc, productCode, quantity"</pre>.
      * @param cls
      * @param propertyNames
-     * @return
      */
     @SuppressWarnings("unchecked")
     public static <T> ObjectContract<T> parse(Class<T> cls, @Nullable final String propertyNames) {

@@ -33,19 +33,16 @@ public interface WicketViewerSettings extends Serializable {
 
     /**
      * as per {@link IsisConfiguration.Viewer.Wicket#setMaxTitleLengthInParentedTables(int)}
-     * @return
      */
     int getMaxTitleLengthInParentedTables();
 
     /**
      * As per {@link IsisConfiguration.Viewer.Wicket#setDatePattern(String)}
-     * @return
      */
     String getDatePattern();
 
     /**
      * As per {@link IsisConfiguration.Viewer.Wicket#setDateTimePattern(String)}
-     * @return
      */
     String getDateTimePattern();
 

@@ -72,8 +72,6 @@ public class CommandRetrievalService {
      *
      * @param uniqueId - to search from.  This transactionId will <i>not</i> be included in the response.
      * @param batchSize - the maximum number of commands to return.  If not specified, all found will be returned.
-     *
-     * @return
      * @throws NotFoundException - if the command with specified transaction cannot be found.
      */
     @Action(domainEvent = FindCommandsOnPrimaryFromDomainEvent.class, semantics = SemanticsOf.SAFE)

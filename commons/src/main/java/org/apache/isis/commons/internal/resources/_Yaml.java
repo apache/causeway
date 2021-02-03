@@ -58,7 +58,6 @@ public class _Yaml {
      * @param <T>
      * @param clazz
      * @param content
-     * @return
      */
     public static <T> Result<T> readYaml(final Class<T> clazz, InputStream content) {
         return Result.of(()->_readYaml(clazz, content));
@@ -77,7 +76,6 @@ public class _Yaml {
      * @param <T>
      * @param clazz
      * @param content
-     * @return
      */
     public static <T> Result<T> readYaml(final Class<T> clazz, String content) {
         return Result.of(()->_readYaml(clazz, content));
@@ -98,7 +96,6 @@ public class _Yaml {
      * @param <T>
      * @param clazz
      * @param content
-     * @return
      */
     public static <T> Result<T> readYaml(final Class<T> clazz, File content) {
         return Result.of(()->_readYaml(clazz, content));
@@ -119,7 +116,6 @@ public class _Yaml {
      * @param <T>
      * @param clazz
      * @param content
-     * @return
      */
     public static <T> Result<T> readYaml(final Class<T> clazz, byte[] content) {
         return Result.of(()->_readYaml(clazz, content));

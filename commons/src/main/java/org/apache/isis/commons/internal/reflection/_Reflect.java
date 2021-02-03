@@ -98,7 +98,6 @@ public final class _Reflect {
     /**
      * Whether member name equals given {@code memberName}
      * @param memberName
-     * @return
      */
     public static <T extends Member> Predicate<T> withName(final String memberName) {
         _With.requires(memberName, "memberName");
@@ -108,7 +107,6 @@ public final class _Reflect {
     /**
      * Whether member name starts with given {@code prefix}
      * @param prefix
-     * @return
      */
     public static <T extends Member> Predicate<T> withPrefix(final String prefix) {
         _With.requires(prefix, "prefix");
@@ -118,7 +116,6 @@ public final class _Reflect {
     /**
      * Whether method parameters count equal to given {@code count}
      * @param count
-     * @return
      */
     public static Predicate<Method> withMethodParametersCount(final int count) {
         return (Method m) -> m != null && m.getParameterTypes().length == count;
@@ -127,7 +124,6 @@ public final class _Reflect {
     /**
      * Whether field type is assignable to given {@code type}
      * @param type
-     * @return
      */
     public static <T> Predicate<Field> withTypeAssignableTo(final Class<T> type) {
         _With.requires(type, "type");
@@ -140,7 +136,6 @@ public final class _Reflect {
      * Stream fields of given {@code type}
      * @param type (nullable)
      * @param ignoreAccess - whether to include non-public members
-     * @return
      */
     public static Stream<Field> streamFields(
             @Nullable Class<?> type,
@@ -159,7 +154,6 @@ public final class _Reflect {
      * Stream all fields of given {@code type}, up the super class hierarchy.
      * @param type (nullable)
      * @param ignoreAccess - whether to include non-public members
-     * @return
      */
     public static Stream<Field> streamAllFields(
             @Nullable Class<?> type,

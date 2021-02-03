@@ -91,7 +91,6 @@ public interface ComponentFactory extends Serializable {
      * {@link #getComponentType() component type} for this factory.
      *
      * @param model
-     * @return
      */
     Component createComponent(IModel<?> model);
 

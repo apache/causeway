@@ -77,7 +77,6 @@ public final class _Maps {
          * @param key
          * @param aliases
          * @param value
-         * @return
          * @throws IllegalArgumentException if there is an alias-key collision
          */
         public V put(K key, Can<K> aliases, V value);
@@ -87,7 +86,6 @@ public final class _Maps {
          * @param key
          * @param aliases
          * @param value
-         * @return
          */
         public V remap(K key, Can<K> aliases, V value);
         
@@ -166,7 +164,7 @@ public final class _Maps {
      * If this is an add operation, then given {@code value} is associated with the {@code key}. 
      * @param <K>
      * @param <V>
-     * @param input
+     * @param map
      * @param key
      * @param value
      * @return whether given map contains the {@code key} after the operation

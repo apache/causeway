@@ -68,8 +68,6 @@ public class CollectionMethodEvent extends AccessEvent {
     /**
      * The name of the method invoked on this collection, for example
      * <tt>isEmpty</tt>.
-     *
-     * @return
      */
     public String getMethodName() {
         return methodName;

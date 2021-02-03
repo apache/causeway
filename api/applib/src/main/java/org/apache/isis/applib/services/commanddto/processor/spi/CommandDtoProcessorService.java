@@ -37,7 +37,6 @@ public interface CommandDtoProcessorService {
      *                       {@link CommandDto}.
      * @param commandDto - is either <code>null</code>, or is passed from a
      *                     previous implementation for further refinement.
-     * @return
      */
     CommandDto process(final Object domainObject, @Nullable final CommandDto commandDto);
 

@@ -177,7 +177,6 @@ public final class _Context {
      * which could be null.
      * @param type non-null
      * @param fallback non-null
-     * @return
      */
     public static <T> T getOrElse(Class<? super T> type, Supplier<T> fallback) {
         _With.requires(fallback, "fallback");
@@ -189,7 +188,6 @@ public final class _Context {
      * otherwise throws the {@code onNotFound}'s result.
      * @param type non-null
      * @param onNotFound non-null
-     * @return
      * @throws Exception
      */
     public static <T, E extends Exception> T getElseThrow (
@@ -206,7 +204,6 @@ public final class _Context {
      * Gets a singleton instance of {@code type} if there is any,
      * otherwise throws a NoSuchElementException.
      * @param type non-null
-     * @return
      */
     public static <T> T getElseFail(Class<? super T> type) {
         return _With.ifPresentElseThrow(getIfAny(type), ()->
@@ -272,7 +269,6 @@ public final class _Context {
      * Looks up current thread's values for any instances that match the given type, as previously stored 
      * with {@link _Context#threadLocalPut(Class, Object)}.
      * @param type - the key into the thread-local store
-     * @return
      */
     public static <T> Can<T> threadLocalGet(Class<? super T> type) {
         return _Context_ThreadLocal.get(type);
@@ -283,7 +279,6 @@ public final class _Context {
      * with {@link _Context#threadLocalPut(Class, Object)}.
      * @param type - the key into the thread-local store
      * @param requiredType - the required type of the elements in the returned bin
-     * @return
      */
     public static <T> Can<T> threadLocalSelect(Class<? super T> type, Class<? super T> requiredType) {
         return _Context_ThreadLocal.select(type, requiredType);
@@ -342,7 +337,6 @@ public final class _Context {
      * <b>Initialize</b> the class, that is, all static initializers will be run. <br/>
      * (For details on initialize see Section 12.4 of The Java Language Specification)
      * @param className
-     * @return
      * @throws ClassNotFoundException
      */
     public static Class<?> loadClassAndInitialize(String className) throws ClassNotFoundException{
@@ -372,10 +366,6 @@ public final class _Context {
             }
         }
     }
-
-
-
-
 
 
 }

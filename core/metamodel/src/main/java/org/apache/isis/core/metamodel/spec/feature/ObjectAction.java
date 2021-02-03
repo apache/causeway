@@ -203,8 +203,6 @@ public interface ObjectAction extends ObjectMember {
      *
      * <p>
      * Implementations may build this array lazily or eagerly as required.
-     *
-     * @return
      */
     Can<ObjectActionParameter> getParameters();
 
@@ -215,8 +213,6 @@ public interface ObjectAction extends ObjectMember {
 
     /**
      * Returns set of parameter information matching the supplied filter.
-     *
-     * @return
      */
     Can<ObjectActionParameter> getParameters(Predicate<ObjectActionParameter> predicate);
 

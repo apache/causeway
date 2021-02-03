@@ -133,8 +133,6 @@ extends DelegatingInvocationHandlerDefault<T> {
      * @param proxyObjectUnused - not used.
      * @param method - the method invoked on the proxy
      * @param args - the args to the method invoked on the proxy
-     *
-     * @return
      * @throws Throwable
      */
     @Override

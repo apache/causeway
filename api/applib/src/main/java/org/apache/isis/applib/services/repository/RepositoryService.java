@@ -117,7 +117,6 @@ public interface RepositoryService {
      * @param start
      * @param count
      * @param <T>
-     * @return
      */
     <T> List<T> allInstances(
             Class<T> ofType,
@@ -155,7 +154,6 @@ public interface RepositoryService {
      * @param start
      * @param count
      * @param <T>
-     * @return
      */
     <T> List<T> allMatches(
             Class<T> ofType,

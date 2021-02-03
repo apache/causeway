@@ -61,7 +61,6 @@ public interface ChainOfResponsibility<X, R> {
      * @param <X>
      * @param <R>
      * @param chainOfHandlers
-     * @return
      */
     static <X, R> ChainOfResponsibility<X, R> 
     of(

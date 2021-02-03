@@ -121,7 +121,6 @@ public final class ObjectContracts {
          * @param propertyLabel a label to use for property to string output
          * @param getter function extracting the property value of an object
          * @param valueComparator
-         * @return
          */
         public <U> ObjectContract<T> thenUse(
                 String propertyLabel,
@@ -134,7 +133,6 @@ public final class ObjectContracts {
          *
          * @param propertyLabel a label to use for property to string output
          * @param getter function extracting the property value of an object
-         * @return
          */
         public default <U extends Comparable<? super U>> ObjectContract<T> thenUse(
                 String propertyLabel,

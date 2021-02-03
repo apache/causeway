@@ -78,7 +78,7 @@ public final class _Strings {
 
     /**
      * Convenient e.g. for toArray conversions
-     * (a duplicate of in {@link _Constants.emptyStringArray} )
+     * (a duplicate of in {@link _Constants#emptyStringArray} )
      */
     public static final String[] emptyArray = new String[0];
 
@@ -122,7 +122,7 @@ public final class _Strings {
      * @param a
      * @param b
      * @return {@code -1} if {@code a < b}, {@code 1} if {@code a > b} else {@code 0}
-     * @see {@link String#compareTo(String)} 
+     * @see String#compareTo(String) 
      */
     public static int compareNullsFirst(final @Nullable String a, final @Nullable String b) {
         if(Objects.equals(a, b)) {
@@ -147,7 +147,7 @@ public final class _Strings {
      * @param a
      * @param b
      * @return {@code -1} if {@code a < b}, {@code 1} if {@code a > b} else {@code 0}
-     * @see {@link String#compareTo(String)} 
+     * @see String#compareTo(String) 
      */
     public static int compareNullsLast(final @Nullable String a, final @Nullable String b) {
         if(Objects.equals(a, b)) {
@@ -375,7 +375,6 @@ public final class _Strings {
      * @param str
      * @param minLength
      * @param c
-     * @return
      */
     public static String padStart(@Nullable String str, int minLength, char c) {
         if(minLength<=0) {
@@ -395,9 +394,8 @@ public final class _Strings {
      * Returns a string, of length at least minLength, consisting of string appended with as many copies
      * of padChar as are necessary to reach that length.
      * @param str
-     * @param padTo
+     * @param minLength
      * @param c
-     * @return
      */
     public static String padEnd(@Nullable String str, int minLength, char c) {
         if(minLength<=0) {
@@ -428,7 +426,7 @@ public final class _Strings {
      * @param input
      * @param separator non-empty string
      * @return empty stream if {@code input} is null
-     * @throws {@link IllegalArgumentException} if {@code separator} is empty
+     * @throws IllegalArgumentException if {@code separator} is empty
      */
     public static Stream<String> splitThenStream(@Nullable final String input, final String separator) {
         if(isEmpty(separator)) {
@@ -450,7 +448,6 @@ public final class _Strings {
      * Creates a stream from the given input sequence around matches of {@code delimiterPattern}. 
      * @param input
      * @param delimiterPattern
-     * @return
      */
     public static Stream<String> splitThenStream(@Nullable final CharSequence input, Pattern delimiterPattern) {
         if(isEmpty(input)) {
@@ -643,8 +640,7 @@ public final class _Strings {
     }
 
     /**
-     * Returns a monadic StringOperator that allows composition of unary string operators
-     * @return
+     * Returns a StringOperator that allows composition of unary string operators
      */
     public static StringOperator operator() {
         return new StringOperator(UnaryOperator.identity());

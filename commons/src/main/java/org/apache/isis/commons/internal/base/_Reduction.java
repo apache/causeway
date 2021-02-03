@@ -55,7 +55,6 @@ public final class _Reduction<T> implements Consumer<T> {
      * Inspired by {@link Stream#reduce(Object, BinaryOperator)}
      * @param identity
      * @param accumulator
-     * @return
      */
     public static <T> _Reduction<T> of(@Nullable T identity, BinaryOperator<T> accumulator){
         return new _Reduction<T>(identity, accumulator, true);
@@ -64,7 +63,6 @@ public final class _Reduction<T> implements Consumer<T> {
     /**
      * Inspired by {@link Stream#reduce(BinaryOperator)}
      * @param accumulator
-     * @return
      */
     public static <T> _Reduction<T> of(BinaryOperator<T> accumulator){
         return new _Reduction<T>(null, accumulator, false);

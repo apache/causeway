@@ -44,7 +44,6 @@ public class MarkupVariableResolverService {
     /**
      * For the given {@code input} replaces '${var-name}' with the variable's value.
      * @param input
-     * @return
      */
     public String resolveVariables(String input) {
         val stringRef = _Refs.objectRef(input);

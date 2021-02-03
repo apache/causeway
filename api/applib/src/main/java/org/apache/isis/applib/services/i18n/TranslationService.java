@@ -35,7 +35,6 @@ public interface TranslationService {
      *
      * @param context
      * @param text
-     * @return
      */
     String translate(
             final String context,
@@ -53,7 +52,6 @@ public interface TranslationService {
      * @param singularText
      * @param pluralText
      * @param num - whether to return the translation of the singular (if =1) or of the plural (if != 1)
-     * @return
      */
     String translate(
             final String context,

@@ -32,7 +32,6 @@ public interface HasUsername {
 
     /**
      * The user that created this object.
-     * @return
      */
     String getUsername();
 

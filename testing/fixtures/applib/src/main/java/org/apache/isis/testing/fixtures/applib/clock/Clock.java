@@ -57,8 +57,6 @@ public abstract class Clock {
      * Unless it has been otherwise created, will lazily instantiate an
      * implementation that just delegate to the computer's own system clock (as
      * per {@link System#currentTimeMillis()}.
-     *
-     * @return
      */
     public static final Clock getInstance() {
         if (!isInitialized()) {

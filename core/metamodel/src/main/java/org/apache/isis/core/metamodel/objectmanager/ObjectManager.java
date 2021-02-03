@@ -61,7 +61,6 @@ public interface ObjectManager {
     /**
      * Creates and initializes an instance conforming to given request parameters.
      * @param objectCreateRequest
-     * @return
      */
     public default ManagedObject createObject(ObjectCreator.Request objectCreateRequest) {
         return getObjectCreator().createObject(objectCreateRequest);
@@ -70,7 +69,6 @@ public interface ObjectManager {
     /**
      * Loads an instance identified with given request parameters.
      * @param objectLoadRequest
-     * @return
      */
     public default ManagedObject loadObject(ObjectLoader.Request objectLoadRequest) {
         return getObjectLoader().loadObject(objectLoadRequest);
@@ -83,7 +81,6 @@ public interface ObjectManager {
     /**
      * Returns an object identifier for the instance.
      * @param managedObject
-     * @return
      */
     public default RootOid identifyObject(ManagedObject managedObject) {
         return getObjectIdentifier().identifyObject(managedObject);

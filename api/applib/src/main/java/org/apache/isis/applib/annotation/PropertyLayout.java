@@ -89,8 +89,6 @@ public @interface PropertyLayout {
      * <p>
      *     Only one property can be annotated as such per domain class.
      * </p>
-     *
-     * @return
      */
     Navigable navigable()
             default Navigable.NOT_SPECIFIED;

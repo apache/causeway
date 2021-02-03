@@ -83,8 +83,6 @@ public @interface Collection {
 
     /**
      * The type-of the elements held within the collection.
-     *
-     * @return
      */
     Class<?> typeOf()
             default Object.class;

@@ -43,7 +43,6 @@ public interface MenuBarsService {
 
     /**
      * Returns {@link #menuBars()} with a type of {@link Type#DEFAULT}.
-     * @return
      */
     default MenuBars menuBars() {
         return menuBars(Type.DEFAULT);

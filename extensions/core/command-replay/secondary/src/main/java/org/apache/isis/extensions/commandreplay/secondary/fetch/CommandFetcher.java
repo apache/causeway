@@ -64,7 +64,6 @@ public class CommandFetcher {
      * Replicates a single command.
      *
      * @param previousHwmIfAny
-     * @return
      * @throws StatusException
      */
     public List<CommandDto> fetchCommand(
@@ -81,8 +80,8 @@ public class CommandFetcher {
 
     /**
      * @return - the commands, or <tt>null</tt> if none were found
-     * @throws StatusException
      * @param previousHwmIfAny
+     * @throws StatusException
      */
     private CommandsDto fetchCommands(final CommandJdo previousHwmIfAny)
             throws StatusException {

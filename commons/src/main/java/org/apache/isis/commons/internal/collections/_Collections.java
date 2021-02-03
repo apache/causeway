@@ -118,7 +118,6 @@ public final class _Collections {
      * Same as {@link Collections#unmodifiableList(List)}.
      *
      * @param list
-     * @return
      */
     public static <T> List<T> asUnmodifiableList(@Nullable final List<T> list) {
         if(list==null) {

@@ -44,8 +44,6 @@ public class CollectionAddToEvent extends ValidityEvent {
 
     /**
      * The object that is being added.
-     *
-     * @return
      */
     @Override
     public Object getProposed() {

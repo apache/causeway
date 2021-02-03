@@ -59,7 +59,6 @@ public class ResponseDigest<T> {
      * @param <T>
      * @param response
      * @param entityType
-     * @return
      */
     public static <T> ResponseDigest<T> of(
             @NonNull final Response response,
@@ -74,7 +73,6 @@ public class ResponseDigest<T> {
      * @param response
      * @param entityType
      * @param genericType
-     * @return
      */
     public static <T> ResponseDigest<T> ofList(
             @NonNull final Response response,

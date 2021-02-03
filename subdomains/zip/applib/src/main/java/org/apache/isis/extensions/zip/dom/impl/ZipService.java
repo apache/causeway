@@ -90,7 +90,6 @@ public class ZipService {
      * Similar to {@link #zipNamedFiles(List)}, but uses simple byte[] as the input, rather than files.
      *
      * @param bytesAndNameList
-     * @return
      */
     public byte[] zipNamedBytes(final List<BytesAndName> bytesAndNameList) {
 

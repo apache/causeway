@@ -30,9 +30,11 @@ import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.commanddto.conmap.ContentMappingServiceForCommandDto;
 import org.apache.isis.applib.services.commanddto.conmap.ContentMappingServiceForCommandsDto;
 import org.apache.isis.applib.services.commanddto.processor.CommandDtoProcessor;
-import org.apache.isis.applib.services.iactn.Interaction;
+import org.apache.isis.applib.services.iactn.Interaction.Execution;
 import org.apache.isis.applib.services.publishing.spi.CommandSubscriber;
 import org.apache.isis.applib.services.publishing.spi.ExecutionSubscriber;
+import org.apache.isis.applib.value.Blob;
+import org.apache.isis.applib.value.Clob;
 
 /**
  * Domain semantics for domain object collection.
@@ -129,7 +131,7 @@ public @interface Action {
             default ActionDomainEvent.Default.class;
 
     /**
-     * Whether {@link Interaction.Execution}s (triggered by action invocations), should
+     * Whether {@link Execution}s (triggered by action invocations), should
      * be published to {@link ExecutionSubscriber}s.
      */
     Publishing executionPublishing()
@@ -171,7 +173,6 @@ public @interface Action {
 
     /**
      * The type-of the elements returned by the action.
-     * @return
      */
     Class<?> typeOf()
             default Object.class;

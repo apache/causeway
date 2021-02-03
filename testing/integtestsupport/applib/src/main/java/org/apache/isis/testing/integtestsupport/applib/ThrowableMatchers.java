@@ -35,7 +35,6 @@ public class ThrowableMatchers {
     /**
      * Matches when the exception's causal chain contains the given {@code type}
      * @param type
-     * @return
      */
     public static TypeSafeMatcher<Throwable> causedBy(final Class<? extends Throwable> type) {
         return new TypeSafeMatcher<Throwable>() {

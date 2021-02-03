@@ -187,7 +187,6 @@ public final class TranslatableString {
      * either the single or plural form as per {@link #getPattern()}.
      * @param translationService
      * @param context
-     * @return
      */
     public String translate(final TranslationService translationService, final String context) {
 

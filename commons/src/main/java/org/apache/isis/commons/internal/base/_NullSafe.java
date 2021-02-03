@@ -321,7 +321,6 @@ public final class _NullSafe {
      * @param <K>
      * @param <V>
      * @param map
-     * @return
      */
     public static <K, V> Set<Map.Entry<K, V>> entrySet(final @Nullable Map<K, V> map) {
         return map==null

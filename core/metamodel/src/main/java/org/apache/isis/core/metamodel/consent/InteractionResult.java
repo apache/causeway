@@ -60,8 +60,6 @@ public class InteractionResult {
      * That is, if still {@link State#ADVISING advising}, then copies over the
      * details from this result into the contained {@link InteractionEvent}, and
      * flips into {@link State#ADVISED advised (done)}.
-     *
-     * @return
      */
     public InteractionEvent getInteractionEvent() {
         if (state == State.ADVISING) {

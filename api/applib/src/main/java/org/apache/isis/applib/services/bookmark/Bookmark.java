@@ -67,7 +67,6 @@ public class Bookmark implements Serializable {
 
     /**
      * Round-trip with {@link #toString()} representation.
-     * @return
      */
     public static Optional<Bookmark> parse(@Nullable String str) {
 

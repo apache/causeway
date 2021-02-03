@@ -52,8 +52,6 @@ public class ActionArgumentVisibilityEvent extends VisibilityEvent {
 
     /**
      * The position (0-based) of the hidden parameter.
-     * 
-     * @return
      */
     public int getPosition() {
         return position;

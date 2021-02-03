@@ -380,7 +380,6 @@ public class FixtureScripts {
      * Runs the builderScript within its own transactional boundary.
      * @param <T>
      * @param builderScript
-     * @return
      */
     @Programmatic
     public <T> T runBuilder(final BuilderScriptAbstract<T> builderScript) {
@@ -398,7 +397,6 @@ public class FixtureScripts {
      * The caller is responsible to provide a transactional context/boundary.
      * @param <T>
      * @param builderScript
-     * @return
      */
     @Programmatic
     public <T> T runBuilderScriptNonTransactional(final BuilderScriptAbstract<T> builderScript) {

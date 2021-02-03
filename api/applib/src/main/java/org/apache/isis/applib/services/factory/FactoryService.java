@@ -44,7 +44,6 @@ public interface FactoryService {
      *
      * @param <T>
      * @param requiredType
-     * @return
      * @throws NoSuchElementException if result is empty
      * @throws UnrecoverableException if instance creation failed
      * @throws IllegalArgumentException if requiredType is not recognized by the meta-model
@@ -78,7 +77,6 @@ public interface FactoryService {
      *
      * @param <T>
      * @param domainClass - only applicable to entity types
-     * @return
      * @throws IllegalArgumentException if domainClass is not an entity type
      * @apiNote forces the domainClass to be added to the meta-model if not already
      * @since 2.0
@@ -90,7 +88,6 @@ public interface FactoryService {
      *
      * @param <T>
      * @param entity - most likely just new-ed up, without injection points resolved
-     * @return
      * @throws IllegalArgumentException if domainClass is not an entity type
      * @apiNote forces the domainClass to be added to the meta-model if not already
      * @since 2.0
@@ -103,7 +100,6 @@ public interface FactoryService {
      * @param <T>
      * @param mixinClass
      * @param mixedIn
-     * @return
      * @throws IllegalArgumentException if mixinClass is not a mixin type
      * @apiNote forces the mixinClass to be added to the meta-model if not already
      */

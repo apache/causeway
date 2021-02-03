@@ -134,7 +134,6 @@ public final class _Arrays {
      * Known-size Collector.
      * @param componentType
      * @param length
-     * @return
      */
     public static <T> Collector<T,?,T[]> toArray(final Class<T> componentType, final int length){
         _With.requires(componentType, "componentType");
@@ -144,7 +143,6 @@ public final class _Arrays {
     /**
      * Unknown-size Collector.
      * @param componentType
-     * @return
      */
     public static <T> Collector<T,?,T[]> toArray(final Class<T> componentType){
         _With.requires(componentType, "componentType");
@@ -256,7 +254,6 @@ public final class _Arrays {
      * @param <T>
      * @param array
      * @param index
-     * @return
      */
     public static <T> T[] removeByIndex(T[] array, int index) {
         if(array==null || array.length<1) {
@@ -451,7 +448,6 @@ public final class _Arrays {
      * to each element of {@code collection}. 
      * Returns {@code null} if {@code collection} is {@code null};  
      * @param <T>
-     * @param <R>
      * @param collection
      * @param mapper
      * @return nullable

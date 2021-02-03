@@ -31,7 +31,6 @@ public interface HasPersistenceManager {
      * Not type safe. For type-safe queries use <br/><br/> {@code pm().newNamedQuery(cls, queryName)}
      * @param cls
      * @param queryName
-     * @return
      */
     default <T> javax.jdo.Query<T> newJdoNamedQuery(Class<T> cls, String queryName){
         return getPersistenceManager().newNamedQuery(cls, queryName);
@@ -40,7 +39,6 @@ public interface HasPersistenceManager {
     /**
      * Not type safe. For type-safe queries use <br/><br/> {@code pm().newQuery(cls, queryName)}
      * @param cls
-     * @return
      */
     default <T> javax.jdo.Query<T> newJdoQuery(Class<T> cls){
         return getPersistenceManager().newQuery(cls);
@@ -50,7 +48,6 @@ public interface HasPersistenceManager {
      * Not type safe. For type-safe queries use <br/><br/> {@code pm().newQuery(cls, filter)}
      * @param cls
      * @param filter
-     * @return
      */
     default <T> javax.jdo.Query<T> newJdoQuery(Class<T> cls, String filter){
         return getPersistenceManager().newQuery(cls, filter);

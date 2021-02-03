@@ -186,8 +186,6 @@ public class Identifier implements Comparable<Identifier> {
 
     /**
      * Convenience method.
-     *
-     * @return
      */
     public boolean isPropertyOrCollection() {
         return type == Type.PROPERTY_OR_COLLECTION;

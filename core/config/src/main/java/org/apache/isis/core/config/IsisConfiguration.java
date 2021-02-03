@@ -2517,7 +2517,6 @@ public class IsisConfiguration {
 
                 /**
                  * Whether enough information has been defined for the credit to be appear.
-                 * @return
                  */
                 public boolean isDefined() { return (name != null || image != null) && url != null; }
             }

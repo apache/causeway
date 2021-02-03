@@ -32,7 +32,6 @@ extends UiComponentFactory.Handler<Node> {
      * Converts given {@code bindingConverter} to {@link StringConverter} from JavaFX Universe 
      * @param <T>
      * @param bindingConverter
-     * @return
      */
     default <T> StringConverter<T> toJavaFxStringConverter(
             final @NonNull BindingConverter<T> bindingConverter) {
