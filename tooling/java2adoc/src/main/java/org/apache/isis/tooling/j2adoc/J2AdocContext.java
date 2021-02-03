@@ -247,8 +247,7 @@ public class J2AdocContext {
         if(units.isEmpty()) {
             System.out.printf("%s yielded no match %n", doingWhat);
         } else if(units.isCardinalityMultiple()) {
-            System.err.printf("%s was ambiguous, "
-                    + "%s was ambiguous with results: %n", doingWhat);
+            System.err.printf("%s was ambiguous with results: %n", doingWhat);
             units.forEach(unit->System.err.printf("\t%s%n", unit.toString()));
         }
     }
