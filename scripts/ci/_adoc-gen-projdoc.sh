@@ -34,7 +34,7 @@ if [ -z "$REVISION" ]; then
 fi
 
 
-MODE=$1
+MODE=projdoc
 
 
 ##
@@ -48,7 +48,7 @@ echo ""
 
 # for now meant to run with nightly builds only
 if [ -z "${JAVA_CMD}" ]; then
-  echo "tooling gen: no java, skipping"
+  echo "projdoc gen: no java, skipping"
 else
   java -jar "${PROJECT_ROOT_PATH}/tooling/cli/target/isis-tooling-cli.jar" -p "${PROJECT_ROOT_PATH}" -o "${PROJECT_ROOT_PATH}/antora/components/system/modules/generated" $MODE
 fi
