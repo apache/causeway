@@ -348,7 +348,7 @@ public class Identifier implements Comparable<Identifier> {
     /**
      * Factory method.
      *
-     * @see #toIdentityString(int)
+     * @see #toIdentityString(Depth)
      */
     public static Identifier fromIdentityString(final String asString) {
         if (asString == null) {

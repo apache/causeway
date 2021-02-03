@@ -39,7 +39,7 @@ public interface ObjectMemento extends Serializable {
 
     /**
      * Returns a bookmark only if 
-     * {@link org.apache.isis.core.runtimeservices.memento.ObjectMementoLegacy.RecreateStrategy#LOOKUP} and
+     * {@link org.apache.isis.viewer.wicket.viewer.services.mementos.ObjectMementoWkt.RecreateStrategy#LOOKUP} and
      * {@link #getCardinality() sort} is {@link Cardinality#SCALAR scalar}.
      * Returns {@code null} otherwise. 
      */
@@ -47,7 +47,7 @@ public interface ObjectMemento extends Serializable {
 
     /**
      * Returns a bookmark only if 
-     * {@link org.apache.isis.core.runtimeservices.memento.ObjectMementoLegacy.RecreateStrategy#LOOKUP} and
+     * {@link org.apache.isis.viewer.wicket.viewer.services.mementos.ObjectMementoWkt.RecreateStrategy#LOOKUP} and
      * {@link #getCardinality() sort} is {@link Cardinality#SCALAR scalar}.
      * Returns {@code null} otherwise. 
      */

@@ -65,7 +65,6 @@ public abstract class MemberInteraction<T extends ManagedMember, H extends Membe
     
     /**
      * Only check usability if intent is {@code MUTATE}. 
-     * @param where
      * @param intent
      * @return self
      */

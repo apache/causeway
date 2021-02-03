@@ -19,6 +19,8 @@
 
 package org.apache.isis.legacy.applib.filter;
 
+import java.util.function.Predicate;
+
 /**
  * For use by repository implementations to allow a set of objects returned by a
  * back-end objectstore to be filtered before being returned to the caller.
@@ -43,6 +45,6 @@ public interface Filter<T> {
      * @return <tt>true</tt> if this pojo is acceptable, <tt>false</tt>
      *         otherwise.
      */
-    public boolean accept(T t);
+    public boolean accept(T pojo);
 
 }

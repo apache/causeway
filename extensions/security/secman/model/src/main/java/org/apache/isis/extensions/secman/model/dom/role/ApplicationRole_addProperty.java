@@ -51,7 +51,7 @@ public class ApplicationRole_addProperty {
     // -- addProperty (action)
     
     /**
-     * Adds a {@link org.apache.isis.extensions.secman.jdo.dom.permission.ApplicationPermission permission} for this role to a
+     * Adds a {@link ApplicationPermission permission} for this role to a
      * {@link ApplicationMemberType#PROPERTY property}
      * {@link ApplicationFeatureType#MEMBER member}
      * {@link ApplicationFeature feature}.

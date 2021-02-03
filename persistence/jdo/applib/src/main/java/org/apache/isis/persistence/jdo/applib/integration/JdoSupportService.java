@@ -163,7 +163,6 @@ public interface JdoSupportService {
 
     /**
      * Fetch Optimization
-     * @see {@link IsisJdoSupport_v3_2#disableMultivaluedFetch(JDOQLTypedQuery)}
      * @param query
      */
     default void disableMultivaluedFetch(Query<?> query) {

@@ -140,8 +140,7 @@ implements ScalarModelSubscriber {
     
     /**
      *
-     * @param actionModel - the action being invoked
-     *
+     * @param argsAndConsents - the action being invoked
      * @param target - in case there's more to be repainted...
      *
      * @return - true if changed as a result of these pending arguments.

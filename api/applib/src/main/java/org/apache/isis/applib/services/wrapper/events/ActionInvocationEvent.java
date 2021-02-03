@@ -20,6 +20,7 @@
 package org.apache.isis.applib.services.wrapper.events;
 
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.services.wrapper.WrapperFactory;
 
 /**
  * <i>Supported only by {@link WrapperFactory} service, </i> represents a check 

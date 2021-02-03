@@ -24,8 +24,8 @@ import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldParseableAbstract;
 
 /**
- * Panel for rendering scalars of type {@link Percentage Isis'
- * applib.Percentage}.
+ * Panel for rendering scalars of type {@link Percentage} Isis'
+ * applib.Percentage.
  */
 public class IsisPercentagePanel extends ScalarPanelTextFieldParseableAbstract {
 

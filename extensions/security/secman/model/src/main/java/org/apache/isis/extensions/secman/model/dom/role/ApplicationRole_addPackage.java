@@ -46,7 +46,7 @@ public class ApplicationRole_addPackage {
     private final ApplicationRole holder;
     
     /**
-     * Adds a {@link org.apache.isis.extensions.secman.jdo.dom.permission.ApplicationPermission permission}
+     * Adds a {@link ApplicationPermission permission}
      * for this role to a
      * {@link ApplicationFeatureType#PACKAGE package}
      * {@link ApplicationFeature feature}.

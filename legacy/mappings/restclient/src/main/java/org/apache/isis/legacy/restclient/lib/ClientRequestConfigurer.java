@@ -38,9 +38,9 @@ import lombok.val;
  * <p>
  * Needed because, unfortunately, {@link ClientRequest} does not seem to allow
  * the query string to be set directly (only
- * {@link ClientRequest#getQueryParameters() query parameters}). Instead, it is
- * necessary to {@link ResteasyUriBuilder#replaceQuery(String) use} its underlying
- * {@link ResteasyUriBuilder}.
+ * {@literal ClientRequest#getQueryParameters() query parameters}). Instead, it is
+ * necessary to {@literal ResteasyUriBuilder#replaceQuery(String) use} its underlying
+ * {@literal ResteasyUriBuilder}.
  */
 public class ClientRequestConfigurer {
 
@@ -93,7 +93,7 @@ public class ClientRequestConfigurer {
      * <ul>
      * <li> RestfulClient#createRequest(RestfulHttpMethod, String)
      * <li> {@link RestfulRequest#withArg(RequestParameter, Object)} for each arg
-     * <li> {@link RestfulRequest#execute()} - which calls this method.
+     * <li> {@literal RestfulRequest#execute()} - which calls this method.
      * </ul>
      */
     public ClientRequestConfigurer configureArgs(final Map<RequestParameter<?>, Object> args) {
@@ -130,7 +130,7 @@ public class ClientRequestConfigurer {
 
     /**
      * Called back from
-     * {@link RestfulHttpMethod#setUpArgs(ClientRequestConfigurer, JsonRepresentation)}
+     * {@literal RestfulHttpMethod#setUpArgs(ClientRequestConfigurer, JsonRepresentation)}
      */
     public ClientRequestConfigurer body(final JsonRepresentation requestArgs) {
         clientRequest.jsonPayload(requestArgs.toString());
@@ -139,7 +139,7 @@ public class ClientRequestConfigurer {
 
     /**
      * Called back from
-     * {@link RestfulHttpMethod#setUpArgs(ClientRequestConfigurer, JsonRepresentation)}
+     * {@literal RestfulHttpMethod#setUpArgs(ClientRequestConfigurer, JsonRepresentation)}
      */
     public ClientRequestConfigurer queryString(final JsonRepresentation requestArgs) {
         if (requestArgs.size() == 0) {
@@ -152,7 +152,7 @@ public class ClientRequestConfigurer {
 
     /**
      * Called back from
-     * {@link RestfulHttpMethod#setUpArgs(ClientRequestConfigurer, JsonRepresentation)}
+     * {@literal RestfulHttpMethod#setUpArgs(ClientRequestConfigurer, JsonRepresentation)}
      */
     public ClientRequestConfigurer queryArgs(final JsonRepresentation requestArgs) {
 

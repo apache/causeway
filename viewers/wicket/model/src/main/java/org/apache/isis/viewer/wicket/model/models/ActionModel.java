@@ -50,6 +50,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet;
 import org.apache.isis.core.metamodel.facets.object.promptStyle.PromptStyleFacet;
 import org.apache.isis.core.metamodel.interactions.InteractionHead;
+import org.apache.isis.core.metamodel.interactions.managed.ActionInteractionHead;
 import org.apache.isis.core.metamodel.interactions.managed.ParameterNegotiationModel;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
@@ -226,7 +227,7 @@ implements FormUiModel, FormExecutorContext, BookmarkableModel {
 
 
     /** Resets arguments to their fixed point default values
-     * @see PendingParameterModelHead#defaults()
+     * @see ActionInteractionHead#defaults()
      */
     public void clearArguments() {
 

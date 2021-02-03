@@ -42,9 +42,8 @@ public interface ValidatingInteractionAdvisor extends InteractionAdvisorFacet, V
      * <p>
      * Implementations should use the provided {@link ValidityContext} to
      * determine whether they declare the interaction invalid. They must however
-     * guard against a <tt>null</tt> {@link ValidityContext#getTarget() target}
-     * and {@link ValidityContext#getSession() session} - neither are guaranteed
-     * to be populated.
+     * guard against a <tt>null</tt> {@link ValidityContext#getTarget() target} 
+     * is not guaranteed to be populated.
      */
     String invalidates(ValidityContext ic);
 }

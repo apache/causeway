@@ -79,7 +79,7 @@ public abstract class CustomFieldFx<T> extends Pane {
      * It can also be use to show the value to the user in some way, 
      * like placing it in an element contained on the field.
      *
-     * @param newPresentationValue The new presentation value.
+     * @param value - the new presentation value.
      */
     protected abstract void setPresentationValue(T value);
     

@@ -61,7 +61,7 @@ enum RestfulHttpMethodHelper {
     }
 
     /**
-     * It's a bit nasty that we need to ask for the {@link org.jboss.resteasy.specimpl.ResteasyUriBuilder} as
+     * It's a bit nasty that we need to ask for the {@code org.jboss.resteasy.specimpl.ResteasyUriBuilder} as
      * well as the {@link ClientRequest}, but that's because the
      * {@link ClientRequest} does not allow us to setup raw query strings (only
      * query name/arg pairs)

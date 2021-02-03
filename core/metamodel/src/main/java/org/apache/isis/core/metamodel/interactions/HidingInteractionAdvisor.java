@@ -38,8 +38,7 @@ public interface HidingInteractionAdvisor extends InteractionAdvisorFacet, Hidin
      * Implementations should use the provided {@link InteractionContext} to
      * determine whether they declare the object/member is hidden. They must
      * however guard against a <tt>null</tt>
-     * {@link InteractionContext#getTarget() target} and
-     * {@link InteractionContext#getSession() session} - neither are guaranteed
+     * {@link InteractionContext#getTarget() target} is not guaranteed
      * to be populated.
      */
     String hides(VisibilityContext ic);

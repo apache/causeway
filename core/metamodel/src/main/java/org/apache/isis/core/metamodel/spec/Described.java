@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.metamodel.spec;
 
+import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
+
 /**
  * Anything in the metamodel that has a description.
  */
@@ -28,7 +30,7 @@ public interface Described {
      * Returns a description of how the member is used - this complements the
      * help text.
      *
-     * @see #getHelp()
+     * @see ObjectMember#getHelp()
      */
     String getDescription();
 

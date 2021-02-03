@@ -21,11 +21,13 @@ package org.apache.isis.applib.services;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.commons.having.HasUniqueId;
 import org.apache.isis.schema.ixn.v2.InteractionDto;
+import org.apache.isis.schema.ixn.v2.MemberExecutionDto;
 
 /**
  * Extends {@link HasUniqueId}, where the {@link HasUniqueId#getUniqueId()} is interpreted as an
  * interaction (cf {@link InteractionDto}) that has at least one member execution (cf
- * {@link org.apache.isis.schema.ixn.v1.MemberExecutionDto}) and may (by way of {@link WrapperFactory}) contain
+ * {@link MemberExecutionDto}) 
+ * and may (by way of {@link WrapperFactory}) contain
  * several.
  *
  * <p>

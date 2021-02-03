@@ -142,13 +142,10 @@ public @interface Action {
      *
      * <p>
      * It is also possible to suppress an action's visibility using {@link ActionLayout#hidden()}.
-     * </p>
      *
      * <p>
-     *     For {@link DomainService domain service} actions, the action's visibility is dependent upon its
-     *     {@link DomainService#nature() nature} and for contributed actions on how it is
-     *     {@link ActionLayout#contributed()}.
-     * </p>
+     * For {@link DomainService domain service} actions, the action's visibility is dependent upon its
+     * {@link DomainService#nature() nature}.
      */
     Where hidden()
             default Where.NOT_SPECIFIED;

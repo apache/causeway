@@ -48,7 +48,7 @@ import lombok.NonNull;
  * Value type representing a package, class or member.
  * <p>
  * This value is {@link Comparable}, the implementation of which considers 
- * {@link #getType() (feature) type}, {@link #getPackageName() package name}, 
+ * {@link #getType() (feature) type}, {@link #getNamespace() logical package name}, 
  * {@link #getTypeSimpleName() class name} and {@link #getMemberName() member name}.
  */
 @Value

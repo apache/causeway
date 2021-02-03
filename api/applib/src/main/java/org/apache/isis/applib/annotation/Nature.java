@@ -27,10 +27,6 @@ import org.apache.isis.applib.ViewModel;
 /**
  * The different sorts of domain objects recognized by Isis.
  *
- * <p>
- *     Note that {@link #EXTERNAL_ENTITY} and {@link #VIEW_MODEL} are implemented identically internally; the
- *     difference is one of intent.
- * </p>
  * @since 1.x {@index}
  */
 public enum Nature {
@@ -57,17 +53,14 @@ public enum Nature {
      * is aggregate of one or more domain entity.
      *
      * <p>
-     *     The identity of a view model is determined solely by the state of object's properties (that have
-     *     not been set to be ignored using {@link org.apache.isis.applib.annotation.Property#notPersisted()}).
-     *     Using this nature should be considered exactly equivalent to annotating with {@link ViewModel}.
-     * </p>
-     *
+     * The identity of a view model is determined solely by the state of object's properties.
+     * Using this nature should be considered exactly equivalent to annotating with {@link ViewModel}.
+     *     
      * <p>
-     *     Note that collections are ignored; if their state is required to fully identify the view model, define the
-     *     view model using the JAXB {@link XmlRootElement} annotation instead (where the object's state is serialized
-     *     to an arbitrarily deep graph of data, with references to persistent entities transparently resolved to
-     *     <code>&lt;oid-dto&gt;</code> elements).
-     * </p>
+     * Note that collections are ignored; if their state is required to fully identify the view model, define the
+     * view model using the JAXB {@link XmlRootElement} annotation instead (where the object's state is serialized
+     * to an arbitrarily deep graph of data, with references to persistent entities transparently resolved to
+     * <code>&lt;oid-dto&gt;</code> elements).
      *
      * @see ViewModel
      */

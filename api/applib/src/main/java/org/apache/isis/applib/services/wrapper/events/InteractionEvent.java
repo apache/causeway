@@ -111,7 +111,7 @@ public abstract class InteractionEvent extends EventObjectBase<Object> {
     }
 
     /**
-     * As per {@link #getMemberParameterName()}, but naturalized.
+     * As per {@link #getMemberParameterNames()}, but naturalized.
      */
     public List<String> getMemberParameterNaturalNames() {
         return identifier.getMemberParameterNaturalNames();
@@ -122,7 +122,7 @@ public abstract class InteractionEvent extends EventObjectBase<Object> {
      * otherwise disallowed.
      *
      * <p>
-     * Intended to be {@link #setExecuteIn(String) set} as a result of consulting
+     * Intended to be {@link #advised(String, Class) set} as a result of consulting
      * one of the facets.
      */
     public String getReason() {

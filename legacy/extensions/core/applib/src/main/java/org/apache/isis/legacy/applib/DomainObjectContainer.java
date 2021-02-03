@@ -33,6 +33,8 @@ import org.springframework.objenesis.instantiator.util.ClassUtils;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.ViewModel;
+import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.query.Query;
@@ -110,7 +112,7 @@ public class DomainObjectContainer {
      *     that original functionality is performed automatically by the framework.
      * </p>
      *
-     * @deprecated - equivalent to {@link IsisJdoSupport#refresh(Object)}.
+     * @deprecated - equivalent to {@link JdoSupportService#refresh(Object)}.
      */
     @Programmatic
     @Deprecated
@@ -127,7 +129,7 @@ public class DomainObjectContainer {
      *     that original functionality is performed automatically by the framework.
      * </p>
      *
-     * @deprecated - equivalent to {@link IsisJdoSupport#refresh(Object)}.
+     * @deprecated - equivalent to {@link JdoSupportService#refresh(Object)}.
      */
     @Programmatic
     @Deprecated
@@ -201,7 +203,7 @@ public class DomainObjectContainer {
      *
      * <p>
      *     Rather than use this constructor it is generally preferable to simply instantiate a
-     *     class annotated with {@link org.apache.isis.applib.annotation.ViewModel annotation}.
+     *     class annotated with {@link DomainObject} using nature {@link Nature#VIEW_MODEL}.
      *     If services need injecting into it, use {@link #injectServicesInto(Object)}.
      * </p>
      */

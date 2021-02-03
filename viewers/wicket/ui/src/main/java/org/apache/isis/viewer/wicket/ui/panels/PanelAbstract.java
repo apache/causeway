@@ -30,7 +30,7 @@ import org.apache.isis.viewer.wicket.ui.util.Components;
 
 /**
  * Convenience adapter for {@link Panel}s built up using {@link ComponentType}s.
- * @param <M>
+ * @param <T>
  * @apiNote using raw-types here, to not further complicate generic type constraints on PanelAbstract
  */
 @SuppressWarnings("rawtypes")

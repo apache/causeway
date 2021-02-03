@@ -30,9 +30,6 @@ package org.apache.isis.applib.adapters;
  * for itself. The framework will instantiate an instance, invoke the
  * appropriate method method, and use the returned object. The instantiated
  * instance itself will be discarded.</li>
- * <li>Alternatively, an implementor of this interface can be nominated in the
- * {@link org.apache.isis.applib.annotations.Defaulted} annotation, allowing a
- * class that needs to have a default to indicate where its default comes from.</li>
  *
  * <p>
  * Whatever the class that implements this interface, it must also expose either

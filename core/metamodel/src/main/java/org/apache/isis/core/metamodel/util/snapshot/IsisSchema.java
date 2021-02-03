@@ -31,7 +31,7 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 final class IsisSchema {
 
     /**
-     * The generated XML schema references the NOF metamodel schema. This is the
+     * The generated XML schema references the <i>Apache Isis</i> metamodel schema. This is the
      * default location for this schema.
      */
     public static final String DEFAULT_LOCATION = "isis.xsd";
@@ -60,7 +60,7 @@ final class IsisSchema {
      */
     public static final String FEATURE_VALUE = "value";
     /**
-     * Namespace prefix for {@link NS_URI}.
+     * Namespace prefix for {@link #NS_URI}.
      *
      * The NamespaceManager will not allow any namespace to use this prefix.
      */

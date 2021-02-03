@@ -22,7 +22,8 @@ import org.apache.isis.core.metamodel.commons.StringExtensions;
 
 /**
  * Whether the user's account is local enabled (user/password) or
- * delegated (eg LDAP), as per {@link IsisModuleSecurityRealm#setDelegateAuthenticationRealm(org.apache.shiro.realm.AuthenticatingRealm)}.
+ * delegated (eg LDAP), as per 
+ * {@code org.apache.isis.extensions.secman.shiro.IsisModuleExtSecmanShiroRealm#setDelegateAuthenticationRealm(org.apache.shiro.realm.AuthenticatingRealm)}.
  *
  * @since 2.0 {@index}
  */

@@ -33,7 +33,7 @@ public enum ApplicationPermissionMode {
      *
      * <p>
      * The {@link ApplicationPermissionRule rule} of the
-     * {@link org.apache.isis.extensions.security.manager.jdo.dom.permission.ApplicationPermission} indicates whether access is being
+     * {@link ApplicationPermission} indicates whether access is being
      * granted or denied.
      * </p>
      */
@@ -48,7 +48,7 @@ public enum ApplicationPermissionMode {
      *
      * <p>
      * The {@link ApplicationPermissionRule rule} of the
-     * {@link org.apache.isis.extensions.security.manager.jdo.dom.permission.ApplicationPermission} indicates whether access is being
+     * {@link ApplicationPermission} indicates whether access is being
      * granted or denied.
      * </p>
      *

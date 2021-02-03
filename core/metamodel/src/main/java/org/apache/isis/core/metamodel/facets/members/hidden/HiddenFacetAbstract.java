@@ -19,12 +19,9 @@
 
 package org.apache.isis.core.metamodel.facets.members.hidden;
 
-import java.util.function.Predicate;
-
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facets.WhereValueFacetAbstract;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.interactions.HidingInteractionAdvisor;
@@ -42,11 +39,6 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
  *     <li>that there is nevertheless always at least one facet that is registered under <tt>HiddenFacet.class</tt>;
  *     this is used by the {@link org.apache.isis.core.metamodel.layoutmetadata.json.LayoutMetadataReaderFromJson} exporter</li>
  * </ul>
- * <p>
- *     Note that the {@link FacetUtil#getFacets(java.util.Map, Predicate)}
- *     (which among other things is used to return all facets matching a particular facet type) ensures that the list
- *     of facets returned contains no duplicates.
- * </p>
  */
 public abstract class HiddenFacetAbstract extends WhereValueFacetAbstract implements HiddenFacet {
 

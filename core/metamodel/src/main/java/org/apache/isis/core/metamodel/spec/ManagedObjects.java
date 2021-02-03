@@ -704,7 +704,7 @@ public final class ManagedObjects {
         }
     
         /**
-         * same as {@link #invokeAutofit(Method, ManagedObject, List, List)} w/o additionalArgValues
+         * same as {@link #invokeAutofit(Method, ManagedObject, Can, List)} w/o additionalArgValues
          */
         public static Object invokeAutofit(
                 final Method method, 

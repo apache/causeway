@@ -47,7 +47,7 @@ enum ThreadPoolExecutionMode {
     ;
 
     /**
-     * {@link ThreadPoolSupport.HIGHEST_CONCURRENCY_EXECUTION_MODE_ALLOWED} acts as an upper bound for the 
+     * {@link ThreadPoolSupport#HIGHEST_CONCURRENCY_EXECUTION_MODE_ALLOWED} acts as an upper bound for the 
      * concurrency level supported.
      * @param proposedExecutionMode
      * @return proposedExecutionMode or the highest possible concurrent execution mode allowed, if 

@@ -29,7 +29,7 @@ import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureId;
 
 /**
  * A serializable value object representing an (anonymized)
- * {@link org.apache.isis.extensions.security.manager.jdo.dom.permission.ApplicationPermission}.
+ * {@link ApplicationPermission}.
  *
  * <p>
  *     Intended for value type arithmetic and also for caching.  No user/role information is held because that information

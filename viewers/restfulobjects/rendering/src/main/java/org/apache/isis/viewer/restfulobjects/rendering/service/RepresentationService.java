@@ -40,7 +40,7 @@ import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndAc
 public interface RepresentationService {
 
     /**
-     * As returned by {@link resourceContext6#getIntent()}, applies only to the representation of
+     * As returned by {@link IResourceContext#getIntent()}, applies only to the representation of
      * domain objects.
      */
     enum Intent {

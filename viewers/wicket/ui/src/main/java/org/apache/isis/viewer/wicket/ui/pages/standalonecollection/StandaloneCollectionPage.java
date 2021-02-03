@@ -37,7 +37,7 @@ public class StandaloneCollectionPage extends PageAbstract {
     private static final long serialVersionUID = 1L;
 
     /**
-     * For use with {@link Component#setResponsePage(org.apache.wicket.Page)}
+     * For use with {@link Component#setResponsePage(org.apache.wicket.request.component.IRequestablePage)}
      */
     public StandaloneCollectionPage(final EntityCollectionModel model) {
         super(PageParametersUtils.newPageParameters(), actionNameFrom(model), ComponentType.STANDALONE_COLLECTION);

@@ -25,6 +25,7 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.core.metamodel.interactions.managed.ActionInteractionHead;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -37,10 +38,12 @@ public interface FormUiModel extends HasTitle {
 
     ObjectAction getMetaModel();
     
-    /** action's owner
+    /** 
+     * Action's owner.
+     * 
      * @apiNote for mixins this is not the target to use on mixin actions
      * instead the logic of resolving the target for action invocation is 
-     * encapsulated within the {@link PendingParameterModelHead}
+     * encapsulated within the {@link ActionInteractionHead}
      */
     ManagedObject getOwner();
     

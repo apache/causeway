@@ -52,7 +52,7 @@ public class JarManifestModel extends ModelAbstract<JarManifestModel> {
 
     /**
      * @param commonContext 
-     * @param metaInfManifestIs provide using <tt>getServletContext().getResourceAsStream("/META-INF/MANIFEST.MF")</tt>
+     * @param metaInfManifestProvider provide using <tt>getServletContext().getResourceAsStream("/META-INF/MANIFEST.MF")</tt>
      */
     public JarManifestModel(
             IsisAppCommonContext commonContext, 

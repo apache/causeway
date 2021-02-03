@@ -32,10 +32,10 @@ public interface AuthenticationContext {
 
     /**
      * Optionally provides the current thread's {@link Authentication}, based
-     * on whether there is an open {@link InteractionSession}.
+     * on whether there is an open {@link org.apache.isis.core.interaction.session.InteractionSession}.
      * <p>
      * That is the {@link Authentication} that sits at the top of 
-     * the current thread's {@link InteractionSession}'s 
+     * the current thread's {@link org.apache.isis.core.interaction.session.InteractionSession}'s 
      * authentication layer stack.  
      */
     Optional<Authentication> currentAuthentication();

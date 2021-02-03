@@ -71,7 +71,8 @@ public class ZipService {
     }
 
     /**
-     * As per {@link #zip(List)}, but using each file's name as the zip entry (rather than providing it).
+     * As per {@link #zipNamedFiles(List)}, 
+     * but using each file's name as the zip entry (rather than providing it).
      */
     public byte[] zipFiles(final List<File> fileList) {
         return zipNamedFiles(fileList.stream()

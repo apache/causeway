@@ -27,19 +27,23 @@ import org.apache.isis.applib.util.Enums;
  * Represents the location in the user interface where a class member is to be rendered.
  *
  * <p>
- * Used to control visibility (eg using the {@link Hidden} annotation) and enablement
- * (eg using the {@link Disabled} annotation) in different regions of the user interface.
+ * Used to control visibility (eg using the {@link Property#hidden()} annotation) and 
+ * enablement (eg using the {@link Property#editing()} annotation) in different regions 
+ * of the user interface. 
  *
  * <p>
  * The application programmer may use any of the values of this enum.  Some represent
  * concrete locations (eg {@link #OBJECT_FORMS}, {@link #PARENTED_TABLES}), whereas some
  * represent a combination of locations (eg {@link #ALL_TABLES}, {@link #ANYWHERE}).
  *
- * <h4>Framework Implementation Notes</h4>
- * <p>
- * This enum is also used internally within the framework.  When rendering an element,
- * the framework developer should only use those values that represent concrete locations.
+ * @see Action
+ * @see Collection
+ * @see Property
+ * 
  * @since 1.x {@index}
+ * 
+ * @implNote This enum is also used internally within the framework. When rendering an element,
+ * the framework developer should only use those values that represent concrete locations.
  */
 @XmlType(
         namespace = "http://isis.apache.org/applib/layout/component"

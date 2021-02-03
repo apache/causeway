@@ -35,8 +35,8 @@ public class BrandName extends LabelBase {
     /**
      * Constructor.
      *
-     * @param id The component id
-     * @param placement
+     * @param id - The component id
+     * @param branding
      */
     public BrandName(final String id, final BrandingUiModel branding) {
         super(id);

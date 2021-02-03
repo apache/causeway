@@ -24,7 +24,7 @@ import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldParseableAbstract;
 
 /**
- * Panel for rendering scalars of type {@link Money Isis' applib.Money}.
+ * Panel for rendering scalars of type {@link Money} Isis' applib.Money.
  */
 public class IsisMoneyPanel extends ScalarPanelTextFieldParseableAbstract {
 

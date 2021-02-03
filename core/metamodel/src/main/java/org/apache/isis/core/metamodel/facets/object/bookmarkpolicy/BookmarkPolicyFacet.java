@@ -19,12 +19,18 @@
 package org.apache.isis.core.metamodel.facets.object.bookmarkpolicy;
 
 
+import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.BookmarkPolicy;
+import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.core.metamodel.facets.SingleValueFacet;
 
 
 /**
- * Corresponds to annotating the class or an action with the {@link Bookmarkable} annotation.
+ * Corresponds to annotating the class with {@link DomainObjectLayout#bookmarking()}. 
+ * or an action with {@link ActionLayout#bookmarking()}.
+ * 
+ * @see ActionLayout
+ * @see DomainObjectLayout
  */
 public interface BookmarkPolicyFacet extends SingleValueFacet<BookmarkPolicy> {
 

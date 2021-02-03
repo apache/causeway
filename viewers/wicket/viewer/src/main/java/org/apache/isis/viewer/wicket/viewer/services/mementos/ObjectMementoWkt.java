@@ -168,7 +168,7 @@ final class ObjectMementoWkt implements Serializable {
 
     private enum RecreateStrategy {
         /**
-         * The {@link ObjectAdapter} that this is the memento for, directly has
+         * The {@link ManagedObject} that this is the memento for, directly has
          * an {@link EncodableFacet} (it is almost certainly a value), and so is
          * stored directly.
          */
@@ -210,7 +210,7 @@ final class ObjectMementoWkt implements Serializable {
             }
         },
         /**
-         * The {@link ObjectAdapter} that this is for, is already known by its
+         * The {@link ManagedObject} that this is for, is already known by its
          * (persistent) {@link Oid}.
          */
         LOOKUP {

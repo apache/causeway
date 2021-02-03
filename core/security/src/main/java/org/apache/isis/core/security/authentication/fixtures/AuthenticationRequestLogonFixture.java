@@ -27,7 +27,7 @@ import org.apache.isis.core.security.authentication.AuthenticationRequestAbstrac
 import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
 
 /**
- * For testing purposes, request corresponding to a {@link LogonFixture}.
+ * For testing purposes.
  *
  * <p>
  * Understood directly by {@link AuthenticationManager}.
@@ -37,8 +37,8 @@ public class AuthenticationRequestLogonFixture extends AuthenticationRequestAbst
     public static AuthenticationRequestLogonFixture of(final String name, final String ... roles) {
         return new AuthenticationRequestLogonFixture(name, 
                 roles == null 
-                ? Collections.emptyList()
-                        : _Lists.of(roles));
+                    ? Collections.emptyList()
+                    : _Lists.of(roles));
     }
 
     public AuthenticationRequestLogonFixture(final String name, final Collection<String> roles) {

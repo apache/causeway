@@ -36,9 +36,9 @@ import org.springframework.stereotype.Service;
  * Also indicates whether the domain service acts as a repository for an entity, and menu ordering UI hints.
  * </p>
  * 
- * @apiNote Meta annotation {@link Service} allows for the Spring framework to pick up (discover) the 
+ * @implNote Meta annotation {@link Service} allows for the Spring framework to pick up (discover) the 
  * annotated type. 
- * For more details see {@link org.apache.isis.core.config.beans.IsisBeanFactoryPostProcessorForSpring}.
+ * For more details see {@code org.apache.isis.core.config.beans.IsisBeanFactoryPostProcessorForSpring}.
  * 
  * @since 1.x {@index}
  */

@@ -81,7 +81,6 @@ public class ActionParameterMemento implements Serializable {
 
     /**
      * Convenience.
-     * @param specificationLoader
      */
     public ObjectSpecification getSpecification(final Supplier<SpecificationLoader> specLoader) {
         return getActionParameter(specLoader).getSpecification();

@@ -47,7 +47,7 @@ public class ApplicationRole_addAction {
     private final ApplicationRole holder;
 
     /**
-     * Adds a {@link org.apache.isis.extensions.secman.jdo.dom.permission.ApplicationPermission permission} for this role to a
+     * Adds a {@link ApplicationPermission permission} for this role to a
      * {@link ApplicationMemberType#ACTION action}
      * {@link ApplicationFeatureType#MEMBER member}
      * {@link ApplicationFeature feature}.

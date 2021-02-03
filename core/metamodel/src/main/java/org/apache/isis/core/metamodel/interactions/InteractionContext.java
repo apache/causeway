@@ -53,8 +53,9 @@ import lombok.Getter;
  * public API.
  *
  * <p>
- * The class is generic so that the {@link #createInteractionEvent() factory
- * method} can return the correct subclass without having to downcast.
+ * The class is generic so that the 
+ * {@link InteractionEventSupplier#createInteractionEvent() factory method} 
+ * can return the correct subclass without having to downcast.
  */
 public abstract class InteractionContext {
 

@@ -83,9 +83,9 @@ public class TableViewFx extends VBox {
 
     /**
      * Constructs a (page-able) {@link Grid} from given {@code managedCollection}   
+     * @param uiContext
      * @param managedCollection
      * @param where 
-     * @param collectionData 
      */
     public static TableViewFx forManagedCollection(
             final @NonNull UiContextFx uiContext, 

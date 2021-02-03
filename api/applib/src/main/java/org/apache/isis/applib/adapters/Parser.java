@@ -41,14 +41,10 @@ package org.apache.isis.applib.adapters;
  * than having the framework do this).
  *
  * <p>
- * Similarly, the ability to return a typical length also overlaps with the
- * {@link TypicalLength} annotation; which is why {@link TypicalLength} cannot
- * be applied to types, only to properties and parameters.
- *
- * <p>
- * For third-party value types, eg {@see http://timeandmoney.sourceforge.net/
- * Time-and-Money} there is no ability to write <tt>title()</tt> methods or
- * annotated with {@link TypicalLength}; so this is the main reason that this
+ * For third-party value types, 
+ * eg see <a href="http://timeandmoney.sourceforge.net/">Time-and-Money</a> 
+ * there is no ability to write <tt>title()</tt> methods; 
+ * so this is the main reason that this
  * interface has to deal with titles and lengths.
  *
  * <p>
@@ -59,9 +55,6 @@ package org.apache.isis.applib.adapters;
  * The framework will instantiate an instance, invoke the appropriate method
  * method, and use the returned object. The instantiated instance itself will be
  * discarded.</li>
- * <li>Alternatively, an implementor of this interface can be nominated in the
- * {@link org.apache.isis.applib.annotation.Parseable} annotation, allowing a
- * class that needs to be parseable to indicate how it can be parsed.</li>
  *
  * <p>
  * Whatever the class that implements this interface, it must also expose either

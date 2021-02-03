@@ -70,7 +70,8 @@ public interface TransactionalProcessor {
      * Runs given {@code runnable} with a transactional boundary, where the detailed transactional behavior
      * is governed by given {@link Propagation} {@code propagation}.
      * <p>
-     * More fine grained control is given via {@link #runTransactional(TransactionDefinition, Callable)}
+     * More fine grained control is given via 
+     * {@link #runTransactional(TransactionDefinition, ThrowingRunnable)}
      */
     default Result<Void> runTransactional(Propagation propagation, ThrowingRunnable runnable) {
         return callTransactional(propagation, ThrowingRunnable.toCallable(runnable));

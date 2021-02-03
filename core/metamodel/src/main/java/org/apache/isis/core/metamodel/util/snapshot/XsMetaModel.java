@@ -39,7 +39,7 @@ final class XsMetaModel {
      */
     public static final String W3_ORG_XMLNS_URI = "http://www.w3.org/2000/xmlns/";
     /**
-     * Namespace prefix for {@link W3_ORG_XMLNS_URI}.
+     * Namespace prefix for {@link #W3_ORG_XMLNS_URI}.
      *
      * The NamespaceManager will not allow any namespace to use this prefix.
      */
@@ -49,7 +49,7 @@ final class XsMetaModel {
      */
     public static final String W3_ORG_XS_URI = "http://www.w3.org/2001/XMLSchema";
     /**
-     * Namespace prefix for {@link W3_ORG_XS_URI}.
+     * Namespace prefix for {@link #W3_ORG_XS_URI}.
      *
      * The NamespaceManager will not allow any namespace to use this prefix.
      */
@@ -59,7 +59,7 @@ final class XsMetaModel {
      */
     public static final String W3_ORG_XSI_URI = "http://www.w3.org/2001/XMLSchema-instance";
     /**
-     * Namespace prefix for {@link W3_ORG_XSI_URI}.
+     * Namespace prefix for {@link #W3_ORG_XSI_URI}.
      *
      * The NamespaceManager will not allow any namespace to use this prefix.
      */
@@ -79,8 +79,8 @@ final class XsMetaModel {
      * In addition:
      * <ul>
      * <li>the elementFormDefault is set
-     * <li>the NOF namespace is set
-     * <li>the <code>xs:import</code> element referencing the NOF namespace is
+     * <li>the <i>Apache Isis</i> namespace is set
+     * <li>the <code>xs:import</code> element referencing the <i>Apache Isis</i> namespace is
      * added as a child
      * </ul>
      */

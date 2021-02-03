@@ -96,7 +96,7 @@ public abstract class ClassSubstitutorAbstract implements ClassSubstitutor {
 
 
     /**
-     * For any classes registered as ignored, {@link #getClass(Class)} will
+     * For any classes registered as ignored, {@link #getReplacement(Class)} will
      * return <tt>null</tt>.
      */
     protected void ignoreClass(final String className) {

@@ -97,7 +97,7 @@ public class InteractionResult {
     }
 
     /**
-     * Returns the first of the {@link #getAdvisors()} that has been
+     * Returns the first of the {@link #getAdvisorFacets()} that has been
      * {@link #advise(String, InteractionAdvisor) advised} , or <tt>null</tt> if
      * none yet.
      *

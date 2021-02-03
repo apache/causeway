@@ -38,7 +38,8 @@ public enum ExecutionMode {
      * Skip actual execution.
      *
      * <p>
-     * This is not supported for {@link WrapperFactory#asyncWrap(Object, AsyncControl)}; instead just invoke {@link WrapperFactory#wrap(Object, ImmutableEnumSet)}.
+     * This is not supported for {@link WrapperFactory#asyncWrap(Object, AsyncControl)}; 
+     * instead just invoke {@link WrapperFactory#wrap(Object, SyncControl)}.
      */
     SKIP_EXECUTION,
 }

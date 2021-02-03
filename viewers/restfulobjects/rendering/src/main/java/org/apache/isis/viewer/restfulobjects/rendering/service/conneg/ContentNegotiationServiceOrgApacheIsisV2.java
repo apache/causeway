@@ -51,7 +51,6 @@ import org.apache.isis.viewer.restfulobjects.rendering.IResourceContext;
 import org.apache.isis.viewer.restfulobjects.rendering.Responses;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndActionInvocation;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectPropertyReprRenderer;
-import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationService;
 
 import lombok.val;
 
@@ -183,9 +182,9 @@ public class ContentNegotiationServiceOrgApacheIsisV2 extends ContentNegotiation
      * (ie invocations returning void or scalar value are not supported).
      *
      * Action invocations returning a domain object will be rendered as a map with the RO v1.0 representation as a
-     * '$$ro' property within (same as {@link #buildResponse(RepresentationService.Context2, ManagedObject)}), while
+     * '$$ro' property within (same as {@link #buildResponse(IResourceContext, ManagedObject)}), while
      * action invocations returning a list will be rendered as a list with the RO v1.0 representation as a map object
-     * with a single '$$ro' property (similar to {@link #buildResponse(RepresentationService.Context2, ObjectAndCollection)})
+     * with a single '$$ro' property (similar to {@link #buildResponse(IResourceContext, ManagedCollection)})
      */
     @Override
     public Response.ResponseBuilder buildResponse(

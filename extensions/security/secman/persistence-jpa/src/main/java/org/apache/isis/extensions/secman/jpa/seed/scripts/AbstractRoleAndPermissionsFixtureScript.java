@@ -62,7 +62,7 @@ public abstract class AbstractRoleAndPermissionsFixtureScript extends FixtureScr
     // -- newPackagePermissions, newClassPermissions, newMemberPermissions
 
     /**
-     * For subclasses to call in {@link #execute(org.apache.isis.applib.fixturescripts.FixtureScript.ExecutionContext)}.
+     * For subclasses to call in {@link #execute(FixtureScript.ExecutionContext)}.
      */
     protected void newPackagePermissions(
             final ApplicationPermissionRule rule,
@@ -73,7 +73,7 @@ public abstract class AbstractRoleAndPermissionsFixtureScript extends FixtureScr
     }
 
     /**
-     * For subclasses to call in {@link #execute(org.apache.isis.applib.fixturescripts.FixtureScript.ExecutionContext)}.
+     * For subclasses to call in {@link #execute(FixtureScript.ExecutionContext)}.
      */
     protected void newClassPermissions(
             final ApplicationPermissionRule rule,
@@ -85,7 +85,7 @@ public abstract class AbstractRoleAndPermissionsFixtureScript extends FixtureScr
 
 
     /**
-     * For subclasses to call in {@link #execute(org.apache.isis.applib.fixturescripts.FixtureScript.ExecutionContext)}.
+     * For subclasses to call in {@link #execute(FixtureScript.ExecutionContext)}.
      */
     protected void newMemberPermissions(
             final ApplicationPermissionRule rule,

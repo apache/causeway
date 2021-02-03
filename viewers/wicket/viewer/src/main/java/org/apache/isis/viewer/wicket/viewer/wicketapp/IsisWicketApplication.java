@@ -122,18 +122,18 @@ import net.ftlines.wicketsource.WicketSource;
  *
  * <p>
  * New {@link ComponentFactory}s can be specified in two ways. The preferred
- * approach is to use the have the IoC container discover the ComponentFactory.
+ * approach is to have the IoC container discover the ComponentFactory.
  * See <tt>asciidoc</tt> extension for an example of this.
  *
- * <p>
- * Alternatively, {@link ComponentFactory}s can be specified by overriding {@link #newIsisWicketModule()}.
- * This mechanism allows a number of other aspects to be customized.
  */
 @Log4j2
 public class IsisWicketApplication
 extends AuthenticatedWebApplication
-implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketViewerSettingsAccessor,
-IsisAppCommonContext.Provider {
+implements 
+    ComponentFactoryRegistryAccessor, 
+    PageClassRegistryAccessor, 
+    WicketViewerSettingsAccessor,
+    IsisAppCommonContext.Provider {
 
     private static final long serialVersionUID = 1L;
 

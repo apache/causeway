@@ -36,7 +36,7 @@ import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
  * indicating which.
  *
  * <p>
- * Used by the Java5 Reflector's <tt>ProgrammingModel</tt> to determine which
+ * Used by the Java 8 Reflector's <tt>ProgrammingModel</tt> to determine which
  * facet factories to ask whether a {@link Method} represents a property or a
  * collection.
  *
@@ -46,8 +46,8 @@ public interface PropertyOrCollectionIdentifyingFacetFactory extends FacetFactor
     /**
      * Whether (this facet is able to determine that) the supplied
      * {@link Method} possibly represents the accessor of either a
-     * {@link ValueAssociation value property}, {@link OneToOneAssociation
-     * reference property} or a {@link OneToManyAssociation collection}.
+     * {@link OneToOneAssociation reference property} 
+     * or a {@link OneToManyAssociation collection}.
      *
      * <p>
      * For example, if a method name has a prefix of <tt>get</tt> or
@@ -58,8 +58,8 @@ public interface PropertyOrCollectionIdentifyingFacetFactory extends FacetFactor
 
     /**
      * Whether (this facet is able to determine that) the supplied
-     * {@link Method} represents <i>either</i> a {@link ValueAssociation value
-     * property} or a {@link OneToOneAssociation reference property}.
+     * {@link Method} represents <i>either</i> a 
+     * {@link OneToOneAssociation reference property}.
      */
     public boolean isPropertyAccessor(Method method);
 

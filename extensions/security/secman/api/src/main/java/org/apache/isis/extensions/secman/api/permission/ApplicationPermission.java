@@ -27,6 +27,7 @@ import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeature;
 import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureType;
 import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
@@ -36,11 +37,12 @@ import lombok.val;
 
 /**
  * Specifies how a particular {@link #getRole() application role} may interact with a specific
- * {@link #getFeature() application feature}.
+ * {@link ApplicationFeature application feature}.
  *
  * <p>
  *     Each permission has a {@link #getRule() rule} and a {@link #getMode() mode}.  The
- *     {@link ApplicationPermissionRule rule} determines whether the permission {@link ApplicationPermissionRule#ALLOW grants}
+ *     {@link ApplicationPermissionRule rule} determines whether the permission 
+ *     {@link ApplicationPermissionRule#ALLOW grants}
  *     access to the feature or {@link ApplicationPermissionRule#VETO veto}es access
  *     to it.  The {@link ApplicationPermissionMode mode} indicates whether
  *     the role can {@link ApplicationPermissionMode#VIEWING view} the feature

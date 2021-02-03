@@ -49,7 +49,6 @@ implements ImperativeFacet {
      * @param method
      * @param paramNum - which parameter this facet relates to.
      * @param holder
-     * @param adapterManager
      */
     public ActionParameterDefaultsFacetViaMethod(
             final Method method,

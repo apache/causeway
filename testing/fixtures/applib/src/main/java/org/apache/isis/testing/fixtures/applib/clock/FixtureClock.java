@@ -91,7 +91,7 @@ public class FixtureClock extends Clock {
     // //////////////////////////////////////////////////
 
     /**
-     * Access via {@link Clock#getTime()}.
+     * Access via {@link Clock#getInstance()}.
      *
      * <p>
      * Will just return the system time until {@link #setDate(int, int, int)} or

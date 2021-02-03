@@ -46,7 +46,7 @@ public class ExceptionRecognizerForType extends ExceptionRecognizerAbstract {
     }
 
     /**
-     * A {@link Predicate} that {@link Predicate#apply(Object) applies} only if the message(s)
+     * A {@link Predicate} that {@link Predicate#test(Object) applies} only if the message(s)
      * supplied do <i>NOT</i> appear in the {@link Throwable} or any of its {@link Throwable#getCause() cause}s
      * (recursively).
      *
@@ -70,7 +70,7 @@ public class ExceptionRecognizerForType extends ExceptionRecognizerAbstract {
 
 
     /**
-     * A {@link Predicate} that {@link Predicate#apply(Object) applies} only if at least one of the message(s)
+     * A {@link Predicate} that {@link Predicate#test(Object) applies} only if at least one of the message(s)
      * supplied <i>DO</i> appear in the {@link Throwable} or any of its {@link Throwable#getCause() cause}s
      * (recursively).
      *

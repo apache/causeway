@@ -22,10 +22,8 @@ package org.apache.isis.viewer.wicket.ui.components.scalars.bookmark;
 import org.apache.wicket.Component;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.core.metamodel.facets.objectvalue.multiline.MultiLineFacet;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ComponentFactoryScalarAbstract;
-import org.apache.isis.viewer.wicket.ui.components.scalars.string.MultiLineStringPanel;
 
 public class BookmarkPanelFactory extends ComponentFactoryScalarAbstract {
 
