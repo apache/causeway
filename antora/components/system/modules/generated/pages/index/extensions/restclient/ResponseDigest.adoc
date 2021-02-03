@@ -46,8 +46,8 @@ a-synchronous response failure processing
 <.> `[teal]#*isSuccess*#()` : `boolean`
 <.> `[teal]#*isFailure*#()` : `boolean`
 <.> `[teal]#*getEntity*#()` : `Optional<T>`
-<.> `[teal]#*getEntities*#()` : `Can<T>`
+<.> `[teal]#*getEntities*#()` : `xref:system:generated:index/commons/collections/Can.adoc[Can]<T>`
 <.> `[teal]#*getFailureCause*#()` : `Exception`
 <.> `[teal]#*singletonOrElseMapFailure*#(Function<Exception, T> failureMapper)` : `T`
-<.> `[teal]#*multipleOrElseMapFailure*#(Function<Exception, Can<T>> failureMapper)` : `Can<T>`
+<.> `[teal]#*multipleOrElseMapFailure*#(Function<Exception, xref:system:generated:index/commons/collections/Can.adoc[Can]<T>> failureMapper)` : `xref:system:generated:index/commons/collections/Can.adoc[Can]<T>`
 

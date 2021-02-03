@@ -87,7 +87,7 @@ This subclass must provide a no-arg constructor; the fields are set reflectively
 <.> `[teal]#*_executionPublishing_*#` : `xref:system:generated:index/applib/annotation/Publishing.adoc[Publishing]`
 +
 --
-Whether _Interaction.Execution_ s (triggered by action invocations), should be published to xref:system:generated:index/applib/services/publishing/spi/ExecutionSubscriber.adoc[ExecutionSubscriber] s.
+Whether _Execution_ s (triggered by action invocations), should be published to xref:system:generated:index/applib/services/publishing/spi/ExecutionSubscriber.adoc[ExecutionSubscriber] s.
 --
 <.> `[teal]#*_hidden_*#` : `xref:system:generated:index/applib/annotation/Where.adoc[Where]`
 +
@@ -96,7 +96,7 @@ Indicates where (in the UI) the action is not visible to the user.
 
 It is also possible to suppress an action's visibility using _ActionLayout#hidden()_ .
 
-For xref:system:generated:index/applib/annotation/DomainService.adoc[DomainService] actions, the action's visibility is dependent upon its _DomainService#nature() nature_ and for contributed actions on how it is _ActionLayout#contributed()_ .
+For xref:system:generated:index/applib/annotation/DomainService.adoc[DomainService] actions, the action's visibility is dependent upon its _DomainService#nature() nature_ .
 --
 <.> `[teal]#*_restrictTo_*#` : `xref:system:generated:index/applib/annotation/RestrictTo.adoc[RestrictTo]`
 +
@@ -118,7 +118,7 @@ The type-of the elements returned by the action.
 <.> `[teal]#*_fileAccept_*#` : `String`
 +
 --
-For downloading _Blob_ or _Clob_ , optionally restrict the files accepted (eg `.xslx` ).
+For downloading xref:system:generated:index/applib/value/Blob.adoc[Blob] or xref:system:generated:index/applib/value/Clob.adoc[Clob] , optionally restrict the files accepted (eg `.xslx` ).
 
 The value should be of the form "file_extension|audio/*|video/*|image/*|media_type".
 --

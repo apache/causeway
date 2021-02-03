@@ -42,7 +42,7 @@ More fine grained control is given via _#callTransactional(TransactionDefinition
 --
 Runs given _runnable_ with a transactional boundary, where the detailed transactional behavior is governed by given _Propagation_ _propagation_ .
 
-More fine grained control is given via _#runTransactional(TransactionDefinition, Callable)_
+More fine grained control is given via _#runTransactional(TransactionDefinition, ThrowingRunnable)_
 --
 <.> `[teal]#*callWithinCurrentTransactionElseCreateNew*#<T>(Callable<T> callable)` : `xref:system:generated:index/commons/functional/Result.adoc[Result]<T>`
 +

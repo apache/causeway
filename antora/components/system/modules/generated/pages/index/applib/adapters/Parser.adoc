@@ -11,14 +11,11 @@ Specifically, this interface embodies three related capabilities:
 
 For custom-written (as opposed to third-party) value types, the ability for the xref:system:generated:index/applib/adapters/Parser.adoc[Parser] to provide a title responsibilities overlap with other conventions for domain objects. Specifically, normally we write a `title()` method to return a title. In such cases a typical implementation of xref:system:generated:index/applib/adapters/Parser.adoc[Parser] would just delegate to the value type itself to obtain the title (ie invoking the `title()` method directly rather than having the framework do this).
 
-Similarly, the ability to return a typical length also overlaps with the _TypicalLength_ annotation; which is why _TypicalLength_ cannot be applied to types, only to properties and parameters.
-
-For third-party value types, eg _http://timeandmoney.sourceforge.net/ Time-and-Money_ there is no ability to write `title()` methods or annotated with _TypicalLength_ ; so this is the main reason that this interface has to deal with titles and lengths.
+For third-party value types, eg seeTime-and-Moneythere is no ability to write `title()` methods; so this is the main reason that this interface has to deal with titles and lengths.
 
 This interface is used in two complementary ways:
 
 * As one option, it allows objects to take control of their own parsing, by implementing directly. However, the instance is used as a factory for itself. The framework will instantiate an instance, invoke the appropriate method method, and use the returned object. The instantiated instance itself will be discarded.
-* Alternatively, an implementor of this interface can be nominated in the _org.apache.isis.applib.annotation.Parseable_ annotation, allowing a class that needs to be parseable to indicate how it can be parsed.
 
 Whatever the class that implements this interface, it must also expose either a `public` no-arg constructor, or (for implementations that also are `Facet` s) a `public` constructor that accepts a single `FacetHolder` . This constructor allows the framework to instantiate the object reflectively.
 

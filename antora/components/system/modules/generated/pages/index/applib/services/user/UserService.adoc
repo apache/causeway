@@ -3,7 +3,7 @@
 
 The xref:system:generated:index/applib/services/user/UserService.adoc[UserService] allows the domain object to obtain the identity of the user interacting with said object.
 
-If _SudoService_ has been used to temporarily override the user and/or roles, then this service will report the overridden values instead.
+If xref:system:generated:index/applib/services/sudo/SudoService.adoc[SudoService] has been used to temporarily override the user and/or roles, then this service will report the overridden values instead.
 
 .Java Sources
 [source,java]

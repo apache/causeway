@@ -37,8 +37,6 @@ NOTE: domain classes may not have a method with this name. The `__isis_` prefix 
 <.> `[teal]#*__isis_executionModes*#()` : `ImmutableEnumSet<xref:system:generated:index/applib/services/wrapper/control/ExecutionMode.adoc[ExecutionMode]>`
 +
 --
-The _EnumSetexecution modes_ inferred from the _SyncControl_ with which this wrapper was _WrapperFactory#wrap(Object, SyncControl) created_ .
-
-NOTE: domain classes may not have a method with this name. The `__isis_` prefix is intended to reduce the risk of a collision.
+The _EnumSetexecution modes_ inferred from the xref:system:generated:index/applib/services/wrapper/control/SyncControl.adoc[SyncControl] with which this wrapper was _WrapperFactory#wrap(Object, SyncControl) created_ .
 --
 

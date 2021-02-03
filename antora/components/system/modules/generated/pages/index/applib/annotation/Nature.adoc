@@ -3,8 +3,6 @@
 
 The different sorts of domain objects recognized by Isis.
 
-Note that _#EXTERNAL_ENTITY_ and _#VIEW_MODEL_ are implemented identically internally; the difference is one of intent.
-
 .Java Sources
 [source,java]
 ----
@@ -43,7 +41,7 @@ Currently implies no additional semantics other than documentation.
 --
 An object that is conceptually part of the application layer, and which surfaces behavior and/or state that is aggregate of one or more domain entity.
 
-The identity of a view model is determined solely by the state of object's properties (that have not been set to be ignored using _org.apache.isis.applib.annotation.Property#notPersisted()_ ). Using this nature should be considered exactly equivalent to annotating with xref:system:generated:index/applib/ViewModel.adoc[ViewModel] .
+The identity of a view model is determined solely by the state of object's properties. Using this nature should be considered exactly equivalent to annotating with xref:system:generated:index/applib/ViewModel.adoc[ViewModel] .
 
 Note that collections are ignored; if their state is required to fully identify the view model, define the view model using the JAXB _XmlRootElement_ annotation instead (where the object's state is serialized to an arbitrarily deep graph of data, with references to persistent entities transparently resolved to<oid-dto>elements).
 --

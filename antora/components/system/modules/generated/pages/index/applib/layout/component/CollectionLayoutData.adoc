@@ -3,8 +3,6 @@
 
 Describes the layout of a single collection, broadly corresponds to the _org.apache.isis.applib.annotation.CollectionLayout_ annotation.
 
-Note that _org.apache.isis.applib.annotation.CollectionLayout#render()_ is omitted because _#defaultView_ is its replacement.
-
 .Java Sources
 [source,java]
 ----

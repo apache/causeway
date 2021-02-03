@@ -68,14 +68,14 @@ Creates a new, empty, xref:system:generated:index/applib/util/TitleBuffer.adoc[T
 --
 Creates a new xref:system:generated:index/applib/util/TitleBuffer.adoc[TitleBuffer] , containing the title of the specified object.
 
-Note: this method only obtains the title using either `title()` or `toString()` ; it doesn't honour other mechanisms for specifying the title, such as _org.apache.isis.applib.annotation.Title_ annotation. If that functionality is required, first call _org.apache.isis.applib.DomainObjectContainer#titleOf(Object)_ on the object and pass in the resultant string.
+Note: this method only obtains the title using either `title()` or `toString()` ; it doesn't honour other mechanisms for specifying the title, such as _org.apache.isis.applib.annotation.Title_ annotation. If that functionality is required, first call _TitleService#titleOf(Object)_ on the object and pass in the resultant string.
 --
 <.> `[teal]#*TitleBuffer*#(Object object, String defaultTitle)`
 +
 --
 Creates a new title object, containing the title of the specified object.
 
-Note: this method only obtains the title using either `title()` or `toString()` ; it doesn't honour other mechanisms for specifying the title, such as _org.apache.isis.applib.annotation.Title_ annotation. If that functionality is required, first call _org.apache.isis.applib.DomainObjectContainer#titleOf(Object)_ on the object and pass in the resultant string.
+Note: this method only obtains the title using either `title()` or `toString()` ; it doesn't honour other mechanisms for specifying the title, such as _org.apache.isis.applib.annotation.Title_ annotation. If that functionality is required, first call _TitleService#titleOf(Object)_ on the object and pass in the resultant string.
 --
 <.> `[teal]#*TitleBuffer*#(String text)`
 +
@@ -87,7 +87,7 @@ Creates a new title object, containing the specified text.
 --
 Determines if the specified object's title is empty (or null).
 
-Note: this method only obtains the title using either `title()` or `toString()` ; it doesn't honour other mechanisms for specifying the title, such as _org.apache.isis.applib.annotation.Title_ annotation. If that functionality is required, first call _org.apache.isis.applib.DomainObjectContainer#titleOf(Object)_ on the object and pass in the resultant string.
+Note: this method only obtains the title using either `title()` or `toString()` ; it doesn't honour other mechanisms for specifying the title, such as _org.apache.isis.applib.annotation.Title_ annotation. If that functionality is required, first call _TitleService#titleOf(Object)_ on the object and pass in the resultant string.
 --
 <.> `[teal]#*_isEmpty_*#(String text)` : `boolean`
 +
@@ -100,14 +100,14 @@ Determines if the specified text is empty. Will return true if either: the speci
 --
 Append the title of the specified object to this xref:system:generated:index/applib/util/TitleBuffer.adoc[TitleBuffer] .
 
-Note: this method only obtains the title using either `title()` or `toString()` ; it doesn't honour other mechanisms for specifying the title, such as _org.apache.isis.applib.annotation.Title_ annotation. If that functionality is required, first call _org.apache.isis.applib.DomainObjectContainer#titleOf(Object)_ on the object and pass in the resultant string.
+Note: this method only obtains the title using either `title()` or `toString()` ; it doesn't honour other mechanisms for specifying the title, such as _org.apache.isis.applib.annotation.Title_ annotation. If that functionality is required, first call _TitleService#titleOf(Object)_ on the object and pass in the resultant string.
 --
 <.> `[teal]#*append*#(Object object, String defaultValue)` : `xref:system:generated:index/applib/util/TitleBuffer.adoc[TitleBuffer]`
 +
 --
 Appends the title of the specified object, or the specified text if the objects title is null or empty. Prepends a space if there is already some text in this title object.
 
-Note: this method only obtains the title using either `title()` or `toString()` ; it doesn't honour other mechanisms for specifying the title, such as _org.apache.isis.applib.annotation.Title_ annotation. If that functionality is required, first call _org.apache.isis.applib.DomainObjectContainer#titleOf(Object)_ on the object and pass in the resultant string.
+Note: this method only obtains the title using either `title()` or `toString()` ; it doesn't honour other mechanisms for specifying the title, such as _org.apache.isis.applib.annotation.Title_ annotation. If that functionality is required, first call _TitleService#titleOf(Object)_ on the object and pass in the resultant string.
 --
 <.> `[teal]#*append*#(String text)` : `xref:system:generated:index/applib/util/TitleBuffer.adoc[TitleBuffer]`
 +
@@ -119,14 +119,14 @@ Appends a space (if there is already some text in this title object) and then th
 --
 Appends the joining string and the title of the specified object. If the object is empty then nothing will be appended.
 
-Note: this method only obtains the title using either `title()` or `toString()` ; it doesn't honour other mechanisms for specifying the title, such as _org.apache.isis.applib.annotation.Title_ annotation. If that functionality is required, first call _org.apache.isis.applib.DomainObjectContainer#titleOf(Object)_ on the object and pass in the resultant string.
+Note: this method only obtains the title using either `title()` or `toString()` ; it doesn't honour other mechanisms for specifying the title, such as _org.apache.isis.applib.annotation.Title_ annotation. If that functionality is required, first call _TitleService#titleOf(Object)_ on the object and pass in the resultant string.
 --
 <.> `[teal]#*append*#(String joiner, Object object, String defaultTitle)` : `xref:system:generated:index/applib/util/TitleBuffer.adoc[TitleBuffer]`
 +
 --
 Append thejoinertext, a space, and the title of the specified object to the text of this xref:system:generated:index/applib/util/TitleBuffer.adoc[TitleBuffer] . If the title of the specified object is null then use thedefaultValuetext. If both the objects title and the default value are null or equate to a zero-length string then no text will be appended ; not even the joiner text.
 
-Note: this method only obtains the title using either `title()` or `toString()` ; it doesn't honour other mechanisms for specifying the title, such as _org.apache.isis.applib.annotation.Title_ annotation. If that functionality is required, first call _org.apache.isis.applib.DomainObjectContainer#titleOf(Object)_ on the object and pass in the resultant string.
+Note: this method only obtains the title using either `title()` or `toString()` ; it doesn't honour other mechanisms for specifying the title, such as _org.apache.isis.applib.annotation.Title_ annotation. If that functionality is required, first call _TitleService#titleOf(Object)_ on the object and pass in the resultant string.
 --
 <.> `[teal]#*append*#(String joiner, String text)` : `xref:system:generated:index/applib/util/TitleBuffer.adoc[TitleBuffer]`
 +
@@ -148,7 +148,7 @@ Concatenate the the title value (the result of calling an objects label() method
 --
 Concatenate the title of the object value or the specified default value if the title is equal to null or is empty, to this xref:system:generated:index/applib/util/TitleBuffer.adoc[TitleBuffer] .
 
-Note: this method only obtains the title using either `title()` or `toString()` ; it doesn't honour other mechanisms for specifying the title, such as _org.apache.isis.applib.annotation.Title_ annotation. If that functionality is required, first call _org.apache.isis.applib.DomainObjectContainer#titleOf(Object)_ on the object and pass in the resultant string.
+Note: this method only obtains the title using either `title()` or `toString()` ; it doesn't honour other mechanisms for specifying the title, such as _org.apache.isis.applib.annotation.Title_ annotation. If that functionality is required, first call _TitleService#titleOf(Object)_ on the object and pass in the resultant string.
 --
 <.> `[teal]#*concat*#(String text)` : `xref:system:generated:index/applib/util/TitleBuffer.adoc[TitleBuffer]`
 +
@@ -165,14 +165,14 @@ Concatenate the joiner text and the text to the text of this xref:system:generat
 --
 Concatenate the joiner text and the title of the object to the text of this xref:system:generated:index/applib/util/TitleBuffer.adoc[TitleBuffer] . If no object yet exists in the object then the joiner text is omitted.
 
-Note: this method only obtains the title using either `title()` or `toString()` ; it doesn't honour other mechanisms for specifying the title, such as _org.apache.isis.applib.annotation.Title_ annotation. If that functionality is required, first call _org.apache.isis.applib.DomainObjectContainer#titleOf(Object)_ on the object and pass in the resultant string.
+Note: this method only obtains the title using either `title()` or `toString()` ; it doesn't honour other mechanisms for specifying the title, such as _org.apache.isis.applib.annotation.Title_ annotation. If that functionality is required, first call _TitleService#titleOf(Object)_ on the object and pass in the resultant string.
 --
 <.> `[teal]#*concat*#(String joiner, Object object, String defaultValue)` : `xref:system:generated:index/applib/util/TitleBuffer.adoc[TitleBuffer]`
 +
 --
 Concatenate the joiner text and the title of the object to the text of this xref:system:generated:index/applib/util/TitleBuffer.adoc[TitleBuffer] object. If no object yet exists in the object then defaultValue is used instead.
 
-Note: this method only obtains the title using either `title()` or `toString()` ; it doesn't honour other mechanisms for specifying the title, such as _org.apache.isis.applib.annotation.Title_ annotation. If that functionality is required, first call _org.apache.isis.applib.DomainObjectContainer#titleOf(Object)_ on the object and pass in the resultant string.
+Note: this method only obtains the title using either `title()` or `toString()` ; it doesn't honour other mechanisms for specifying the title, such as _org.apache.isis.applib.annotation.Title_ annotation. If that functionality is required, first call _TitleService#titleOf(Object)_ on the object and pass in the resultant string.
 --
 <.> `[teal]#*toString*#()` : `String`
 +

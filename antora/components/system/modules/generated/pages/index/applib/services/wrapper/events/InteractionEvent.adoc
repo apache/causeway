@@ -80,14 +80,14 @@ Convenience method that returns the _Identifier#getClassName() class name_ of th
 <.> `[teal]#*getMemberParameterNaturalNames*#()` : `List<String>`
 +
 --
-As per _#getMemberParameterName()_ , but naturalized.
+As per _#getMemberParameterNames()_ , but naturalized.
 --
 <.> `[teal]#*getReason*#()` : `String`
 +
 --
 The reason, if any, that this interaction may have been vetoed or otherwise disallowed.
 
-Intended to be _#setExecuteIn(String) set_ as a result of consulting one of the facets.
+Intended to be _#advised(String, Class) set_ as a result of consulting one of the facets.
 --
 <.> `[teal]#*getReasonMessage*#()` : `String`
 +

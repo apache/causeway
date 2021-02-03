@@ -6,7 +6,6 @@ Provides a mechanism for encoding/decoding objects.
 This interface is used in two complementary ways:
 
 * As one option, it allows objects to take control of their own encoding/decoding, by implementing directly. However, the instance is used as a factory for itself. The framework will instantiate an instance, invoke the appropriate method method, and use the returned object. The instantiated instance itself will be discarded.
-* Alternatively, an implementor of this interface can be nominated in the _org.apache.isis.applib.annotation.Encodable_ annotation, allowing a class that needs to be encodeable to indicate how it can be encoded/decoded.
 
 Whatever the class that implements this interface, it must also expose either a `public` no-arg constructor, or (for implementations that also are `Facet` s) a `public` constructor that accepts a single `FacetHolder` . This constructor allows the framework to instantiate the object reflectively.
 
