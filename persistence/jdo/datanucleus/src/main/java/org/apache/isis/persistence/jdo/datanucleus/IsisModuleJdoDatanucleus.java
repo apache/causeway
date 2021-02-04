@@ -45,7 +45,6 @@ import org.apache.isis.persistence.jdo.datanucleus.mixins.Persistable_datanucleu
 import org.apache.isis.persistence.jdo.datanucleus.mixins.Persistable_datanucleusVersionLong;
 import org.apache.isis.persistence.jdo.datanucleus.mixins.Persistable_datanucleusVersionTimestamp;
 import org.apache.isis.persistence.jdo.datanucleus.mixins.Persistable_downloadJdoMetadata;
-import org.apache.isis.persistence.jdo.datanucleus.schema.JdoSchemaService;
 import org.apache.isis.persistence.jdo.integration.IsisModuleJdoIntegration;
 import org.apache.isis.persistence.jdo.spring.integration.JdoTransactionManager;
 import org.apache.isis.persistence.jdo.spring.integration.LocalPersistenceManagerFactoryBean;
@@ -76,7 +75,7 @@ import lombok.extern.log4j.Log4j2;
 
     // @Service's
     JdoSupportServiceDefault.class,
-    JdoSchemaService.class,
+
 })
 @EnableConfigurationProperties(DnSettings.class)
 @Log4j2
