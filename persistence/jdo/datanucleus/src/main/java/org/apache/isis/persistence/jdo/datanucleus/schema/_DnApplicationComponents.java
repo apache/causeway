@@ -43,6 +43,7 @@ import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.factory._InstanceUtil;
 import org.apache.isis.core.config.IsisConfiguration;
+import org.apache.isis.core.config.JdoDatanucleus;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.persistence.jdo.datanucleus.config.DataNucleusPropertiesAware;
@@ -220,10 +221,11 @@ final class _DnApplicationComponents {
     }
 
     private MetaDataListener createMetaDataListener() {
-        final String classMetadataListenerClassName = configuration.getPersistence().getJdoDatanucleus().getClassMetadataLoadedListener();
+        final String classMetadataListenerClassName = 
+                new JdoDatanucleus().getClassMetadataLoadedListener();
         return classMetadataListenerClassName != null
                 ? _InstanceUtil.createInstance(classMetadataListenerClassName, MetaDataListener.class)
-                        : null;
+                : null;
     }
 
 

@@ -30,12 +30,14 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Configuration
-@ConfigurationProperties(prefix = "isis.persistence.jdo-datanucleus")
+@ConfigurationProperties(prefix = "")
 @Named("jdo-settings")
 public class JdoSettingsBean {
 
     @Getter @Setter 
-    private Map<String, String> impl; //mapped by "isis.persistence.jdo-datanucleus.impl"
+    private Map<String, String> datanucleus; //mapped by "datanucleus"
+    @Getter @Setter 
+    private Map<String, String> javax; //mapped by "javax" filtered later for "javax.jdo"
     
     private final Object lock = new Object();
     private Map<String, Object> properties;
@@ -44,7 +46,13 @@ public class JdoSettingsBean {
         synchronized(lock) {
             if(properties==null) {
                 properties = new HashMap<>();
-                properties.putAll(impl);
+                
+                datanucleus.forEach((k, v)->properties.put("datanucleus." + k, v));
+                
+                javax.entrySet().stream()
+                .filter(e->e.getKey().startsWith("jdo."))
+                .forEach(e->properties.put("javax." + e.getKey(), e.getValue()));
+                
                 amendProperties(properties);
             }
         }
