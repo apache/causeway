@@ -99,14 +99,14 @@ groups+= new PropertyGroup() {{
 }}
 
 groups+= new PropertyGroup() {{
-    prefix = "isis.persistence.jdo-datanucleus"
+    prefix = "datanucleus"
     name = "JDO DataNucleus"
     properties: []
     searchOrder = 510
 }}
 
 groups+= new PropertyGroup() {{
-    prefix = "isis.persistence.jdo-datanucleus.impl"
+    prefix = "datanucleus-conf"
     name = "DataNucleus Configuration"
     properties: []
     searchOrder = 100

@@ -17,17 +17,15 @@ For example:
 
 [source,ini]
 ----
-isis.persistence.jdo-datanucleus.impl.javax.jdo.option.ConnectionDriverName=net.sf.log4jdbc.DriverSpy
-isis.persistence.jdo-datanucleus.impl.javax.jdo.option.ConnectionURL=jdbc:log4jdbc:hsqldb:mem:test
-isis.persistence.jdo-datanucleus.impl.javax.jdo.option.ConnectionUserName=sa
-isis.persistence.jdo-datanucleus.impl.javax.jdo.option.ConnectionPassword=
+javax.jdo.option.ConnectionDriverName=net.sf.log4jdbc.DriverSpy
+javax.jdo.option.ConnectionURL=jdbc:log4jdbc:hsqldb:mem:test
+javax.jdo.option.ConnectionUserName=sa
+javax.jdo.option.ConnectionPassword=
 ----
 
-Those configuration properties that start with the prefix `isis.persistence.jdo-datanucleus.impl.` are passed through directly to DataNucleus (with the prefix removed).
 
-It is also possible to specify the `
-datanucleus.ConnectionPasswordDecrypter
-` property; see the link:http://www.datanucleus.org/products/accessplatform_4_1/persistence_properties.html#ConnectionPasswordDecrypter[DataNucleus documentation] for further details.
+It is also possible to specify the `datanucleus.ConnectionPasswordDecrypter` property; 
+see the link:http://www.datanucleus.org/products/accessplatform_4_1/persistence_properties.html#ConnectionPasswordDecrypter[DataNucleus documentation] for further details.
 
 
 
@@ -38,7 +36,7 @@ Using a datasource managed by the servlet container requires three separate bits
 
 Firstly, specify the name of the datasource in the `WEB-INF\persistor_datanucleus.properties` file. For example:
 
-If connection pool settings are also present in this file, they will simply be ignored. Any other configuration properties that start with the prefix `isis.persistence.jdo-datanucleus.impl.` are passed through directly to DataNucleus (with the prefix removed).
+If connection pool settings are also present in this file, they will simply be ignored. Any other configuration properties are passed through directly to DataNucleus.
 
 Secondly, in the `WEB-INF/web.xml`, declare the resource reference:
 

@@ -4,7 +4,7 @@
 
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
-include::../section-hooks/isis.persistence.jdo-datanucleus.impl~pre.adoc[]
+include::../section-hooks/jdo-datanucleus-conf~pre.adoc[]
 
 [cols="3a,2a,5a", options="header"]
 |===
@@ -12,9 +12,8 @@ include::../section-hooks/isis.persistence.jdo-datanucleus.impl~pre.adoc[]
 |Default
 |Description
 |
-[[isis.persistence.jdo-datanucleus.impl.datanucleus.ConnectionFactory2Name]]
-isis.persistence.jdo-datanucleus. +
-impl.datanucleus. +
+[[datanucleus.ConnectionFactory2Name]]
+datanucleus. +
 ConnectionFactory2Name
 
 | 
@@ -22,9 +21,8 @@ ConnectionFactory2Name
 
 
 |
-[[isis.persistence.jdo-datanucleus.impl.datanucleus.ConnectionFactoryName]]
-isis.persistence.jdo-datanucleus. +
-impl.datanucleus. +
+[[datanucleus.ConnectionFactoryName]]
+datanucleus. +
 ConnectionFactoryName
 
 | 
@@ -32,9 +30,8 @@ ConnectionFactoryName
 
 
 |
-[[isis.persistence.jdo-datanucleus.impl.datanucleus.ConnectionPasswordDecrypter]]
-isis.persistence.jdo-datanucleus. +
-impl.datanucleus. +
+[[datanucleus.ConnectionPasswordDecrypter]]
+datanucleus. +
 ConnectionPasswordDecrypter
 
 | 
@@ -42,9 +39,8 @@ ConnectionPasswordDecrypter
 
 
 |
-[[isis.persistence.jdo-datanucleus.impl.datanucleus.PersistenceUnitLoadClasses]]
-isis.persistence.jdo-datanucleus. +
-impl.datanucleus. +
+[[datanucleus.PersistenceUnitLoadClasses]]
+datanucleus. +
 PersistenceUnitLoadClasses
 
 | 
@@ -52,18 +48,16 @@ PersistenceUnitLoadClasses
 
 
 |
-[[isis.persistence.jdo-datanucleus.impl.datanucleus.cache.level2.mode]]
-isis.persistence.jdo-datanucleus. +
-impl.datanucleus.cache.level2.mode
+[[datanucleus.cache.level2.mode]]
+datanucleus.cache.level2.mode
 
 | 
 | Values of javax.persistence.SharedCacheMode, capitalized
 
 
 |
-[[isis.persistence.jdo-datanucleus.impl.datanucleus.cache.level2.type]]
-isis.persistence.jdo-datanucleus. +
-impl.datanucleus.cache.level2.type
+[[datanucleus.cache.level2.type]]
+datanucleus.cache.level2.type
 
 |  none
 | Name of the type of Level 2 Cache to use.
@@ -76,9 +70,8 @@ NOTE: this config property isn't used by the framework, but is provided as a con
 
 
 |
-[[isis.persistence.jdo-datanucleus.impl.datanucleus.connection-factory-name]]
-isis.persistence.jdo-datanucleus. +
-impl.datanucleus. +
+[[datanucleus.connection-factory-name]]
+datanucleus. +
 connection-factory-name
 
 | 
@@ -92,9 +85,8 @@ NOTE: this config property isn't used by the framework, but is provided as a con
 
 
 |
-[[isis.persistence.jdo-datanucleus.impl.datanucleus.connection-factory2-name]]
-isis.persistence.jdo-datanucleus. +
-impl.datanucleus. +
+[[datanucleus.connection-factory2-name]]
+datanucleus. +
 connection-factory2-name
 
 | 
@@ -108,9 +100,8 @@ NOTE: this config property isn't used by the framework, but is provided as a con
 
 
 |
-[[isis.persistence.jdo-datanucleus.impl.datanucleus.connection-password-decrypter]]
-isis.persistence.jdo-datanucleus. +
-impl.datanucleus. +
+[[datanucleus.connection-password-decrypter]]
+datanucleus. +
 connection-password-decrypter
 
 | 
@@ -122,18 +113,16 @@ NOTE: this config property isn't used by the framework, but is provided as a con
 
 
 |
-[[isis.persistence.jdo-datanucleus.impl.datanucleus.identifier.case]]
-isis.persistence.jdo-datanucleus. +
-impl.datanucleus.identifier.case
+[[datanucleus.identifier.case]]
+datanucleus.identifier.case
 
 | 
 | null
 
 
 |
-[[isis.persistence.jdo-datanucleus.impl.datanucleus.persistence-unit-load-classes]]
-isis.persistence.jdo-datanucleus. +
-impl.datanucleus. +
+[[datanucleus.persistence-unit-load-classes]]
+datanucleus. +
 persistence-unit-load-classes
 
 |  true
@@ -147,9 +136,8 @@ NOTE: this config property isn't used by the framework, but is provided as a con
 
 
 |
-[[isis.persistence.jdo-datanucleus.impl.datanucleus.persistenceByReachabilityAtCommit]]
-isis.persistence.jdo-datanucleus. +
-impl.datanucleus. +
+[[datanucleus.persistenceByReachabilityAtCommit]]
+datanucleus. +
 persistenceByReachabilityAtCommit
 
 | 
@@ -157,9 +145,8 @@ persistenceByReachabilityAtCommit
 
 
 |
-[[isis.persistence.jdo-datanucleus.impl.datanucleus.schema.auto-create-all]]
-isis.persistence.jdo-datanucleus. +
-impl.datanucleus.schema. +
+[[datanucleus.schema.auto-create-all]]
+datanucleus.schema. +
 auto-create-all
 
 | 
@@ -173,9 +160,8 @@ NOTE: this config property isn't used by the core framework, but is used by one 
 
 
 |
-[[isis.persistence.jdo-datanucleus.impl.datanucleus.schema.auto-create-database]]
-isis.persistence.jdo-datanucleus. +
-impl.datanucleus.schema. +
+[[datanucleus.schema.auto-create-database]]
+datanucleus.schema. +
 auto-create-database
 
 | 
@@ -187,9 +173,8 @@ NOTE: this config property isn't used by the framework, but is provided as a con
 
 
 |
-[[isis.persistence.jdo-datanucleus.impl.datanucleus.schema.autoCreateAll]]
-isis.persistence.jdo-datanucleus. +
-impl.datanucleus.schema. +
+[[datanucleus.schema.autoCreateAll]]
+datanucleus.schema. +
 autoCreateAll
 
 | 
@@ -197,9 +182,8 @@ autoCreateAll
 
 
 |
-[[isis.persistence.jdo-datanucleus.impl.datanucleus.schema.autoCreateDatabase]]
-isis.persistence.jdo-datanucleus. +
-impl.datanucleus.schema. +
+[[datanucleus.schema.autoCreateDatabase]]
+datanucleus.schema. +
 autoCreateDatabase
 
 | 
@@ -207,9 +191,8 @@ autoCreateDatabase
 
 
 |
-[[isis.persistence.jdo-datanucleus.impl.datanucleus.schema.validate-all]]
-isis.persistence.jdo-datanucleus. +
-impl.datanucleus.schema. +
+[[datanucleus.schema.validate-all]]
+datanucleus.schema. +
 validate-all
 
 |  true
@@ -219,9 +202,8 @@ NOTE: this config property isn't used by the framework, but is provided as a con
 
 
 |
-[[isis.persistence.jdo-datanucleus.impl.datanucleus.schema.validateAll]]
-isis.persistence.jdo-datanucleus. +
-impl.datanucleus.schema. +
+[[datanucleus.schema.validateAll]]
+datanucleus.schema. +
 validateAll
 
 | 
@@ -229,9 +211,8 @@ validateAll
 
 
 |
-[[isis.persistence.jdo-datanucleus.impl.datanucleus.schema.validateConstraints]]
-isis.persistence.jdo-datanucleus. +
-impl.datanucleus.schema. +
+[[datanucleus.schema.validateConstraints]]
+datanucleus.schema. +
 validateConstraints
 
 | 
@@ -239,9 +220,8 @@ validateConstraints
 
 
 |
-[[isis.persistence.jdo-datanucleus.impl.datanucleus.schema.validateTables]]
-isis.persistence.jdo-datanucleus. +
-impl.datanucleus.schema. +
+[[datanucleus.schema.validateTables]]
+datanucleus.schema. +
 validateTables
 
 | 
@@ -249,9 +229,8 @@ validateTables
 
 
 |
-[[isis.persistence.jdo-datanucleus.impl.datanucleus.transaction-type]]
-isis.persistence.jdo-datanucleus. +
-impl.datanucleus.transaction-type
+[[datanucleus.transaction-type]]
+datanucleus.transaction-type
 
 | 
 | Type of transaction to use.
@@ -264,9 +243,8 @@ NOTE: this config property isn't used by the framework, but is provided as a con
 
 
 |
-[[isis.persistence.jdo-datanucleus.impl.javax.jdo.PersistenceManagerFactoryClass]]
-isis.persistence.jdo-datanucleus. +
-impl.javax.jdo. +
+[[javax.jdo.PersistenceManagerFactoryClass]]
+javax.jdo. +
 PersistenceManagerFactoryClass
 
 | 
@@ -274,9 +252,8 @@ PersistenceManagerFactoryClass
 
 
 |
-[[isis.persistence.jdo-datanucleus.impl.javax.jdo.option.ConnectionDriverName]]
-isis.persistence.jdo-datanucleus. +
-impl.javax.jdo.option. +
+[[javax.jdo.option.ConnectionDriverName]]
+javax.jdo.option. +
 ConnectionDriverName
 
 | 
@@ -284,9 +261,8 @@ ConnectionDriverName
 
 
 |
-[[isis.persistence.jdo-datanucleus.impl.javax.jdo.option.ConnectionPassword]]
-isis.persistence.jdo-datanucleus. +
-impl.javax.jdo.option. +
+[[javax.jdo.option.ConnectionPassword]]
+javax.jdo.option. +
 ConnectionPassword
 
 | 
@@ -294,9 +270,8 @@ ConnectionPassword
 
 
 |
-[[isis.persistence.jdo-datanucleus.impl.javax.jdo.option.ConnectionURL]]
-isis.persistence.jdo-datanucleus. +
-impl.javax.jdo.option. +
+[[javax.jdo.option.ConnectionURL]]
+javax.jdo.option. +
 ConnectionURL
 
 | 
@@ -304,9 +279,8 @@ ConnectionURL
 
 
 |
-[[isis.persistence.jdo-datanucleus.impl.javax.jdo.option.ConnectionUserName]]
-isis.persistence.jdo-datanucleus. +
-impl.javax.jdo.option. +
+[[javax.jdo.option.ConnectionUserName]]
+javax.jdo.option. +
 ConnectionUserName
 
 | 
@@ -316,4 +290,4 @@ ConnectionUserName
 
 |===
 
-include::../section-hooks/isis.persistence.jdo-datanucleus.impl~post.adoc[]
+include::../section-hooks/jdo-datanucleus-conf~post.adoc[]

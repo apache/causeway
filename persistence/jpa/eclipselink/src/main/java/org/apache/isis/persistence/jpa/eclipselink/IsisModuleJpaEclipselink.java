@@ -104,14 +104,14 @@ public class IsisModuleJpaEclipselink extends JpaBaseConfiguration {
     }
 
     /**
-     * integrates with settings from isis.persistence.jpa.*
+     * integrates with settings from isis.persistence.schema.*
      */
     @SneakyThrows
     protected static DataSource autoCreateSchemas(
             final DataSource dataSource,
             final IsisConfiguration isisConfiguration) {
 
-        val persistenceSchemaConf = isisConfiguration.getPersistence().getJpa();
+        val persistenceSchemaConf = isisConfiguration.getPersistence().getSchema();
 
         if(!persistenceSchemaConf.getAutoCreateSchemas().isEmpty()) {
 
@@ -132,13 +132,13 @@ public class IsisModuleJpaEclipselink extends JpaBaseConfiguration {
     }
 
     /**
-     * integrates with settings from isis.persistence.jpa.*
+     * integrates with settings from isis.persistence.schema.*
      */
     protected static JpaProperties addAdditionalOrmFiles(
             JpaProperties properties,
             IsisConfiguration isisConfiguration) {
 
-        val persistenceSchemaConf = isisConfiguration.getPersistence().getJpa();
+        val persistenceSchemaConf = isisConfiguration.getPersistence().getSchema();
 
         persistenceSchemaConf.getAdditionalOrmFiles()
         .forEach(schema->properties.getMappingResources()

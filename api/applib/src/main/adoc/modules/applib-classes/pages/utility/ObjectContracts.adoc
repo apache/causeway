@@ -55,12 +55,12 @@ public class ToDoItem implements Comparable<ToDoItem> {
 `ObjectContracts` implementation can cause DataNucleus to recursively rehydrate a larger number of associated entities (More detail below).
 
 We therefore recommend that you disable
-xref:refguide:config:sections/isis.persistence.jdo-datanucleus.impl.adoc#isis.persistence.jdo-datanucleus.impl.datanucleus.persistenceByReachabilityAtCommit[persistence-by-reachability] by adding:
+xref:refguide:config:sections/jdo-datanucleus-conf.adoc#datanucleus.persistenceByReachabilityAtCommit[persistence-by-reachability] by adding:
 
 [source,ini]
 .persistor_datanucleus.properties
 ----
-isis.persistence.jdo-datanucleus.impl.datanucleus.persistenceByReachabilityAtCommit=false
+datanucleus.persistenceByReachabilityAtCommit=false
 ----
 
 [plantuml]

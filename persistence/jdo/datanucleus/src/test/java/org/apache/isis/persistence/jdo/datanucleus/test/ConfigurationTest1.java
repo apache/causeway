@@ -26,20 +26,20 @@ import org.springframework.boot.test.context.SpringBootTest;
                 ConfigurationExample1.class
         },
         properties = {
-                "isis.persistence.jdo-datanucleus.impl.datanucleus.cache.level2.mode=ENABLE_SELECTIVE",
-                "isis.persistence.jdo-datanucleus.impl.datanucleus.cache.level2.type=none",
-                "isis.persistence.jdo-datanucleus.impl.datanucleus.identifier.case=MixedCase",
-                "isis.persistence.jdo-datanucleus.impl.datanucleus.persistenceByReachabilityAtCommit=false",
-                "isis.persistence.jdo-datanucleus.impl.datanucleus.schema.autoCreateAll=true",
-                "isis.persistence.jdo-datanucleus.impl.datanucleus.schema.validateAll=false",
-                "isis.persistence.jdo-datanucleus.impl.datanucleus.schema.validateConstraints=true",
-                "isis.persistence.jdo-datanucleus.impl.datanucleus.schema.validateTables=true",
+                "datanucleus.cache.level2.mode=ENABLE_SELECTIVE",
+                "datanucleus.cache.level2.type=none",
+                "datanucleus.identifier.case=MixedCase",
+                "datanucleus.persistenceByReachabilityAtCommit=false",
+                "datanucleus.schema.autoCreateAll=true",
+                "datanucleus.schema.validateAll=false",
+                "datanucleus.schema.validateConstraints=true",
+                "datanucleus.schema.validateTables=true",
                 
-                "isis.persistence.jdo-datanucleus.impl.javax.jdo.PersistenceManagerFactoryClass=org.datanucleus.api.jdo.JDOPersistenceManagerFactory",
-                "isis.persistence.jdo-datanucleus.impl.javax.jdo.option.ConnectionDriverName=org.h2.Driver",
-                "isis.persistence.jdo-datanucleus.impl.javax.jdo.option.ConnectionPassword=",
-                "isis.persistence.jdo-datanucleus.impl.javax.jdo.option.ConnectionURL=jdbc:h2:mem:test",
-                "isis.persistence.jdo-datanucleus.impl.javax.jdo.option.ConnectionUserName=sa",
+                "javax.jdo.PersistenceManagerFactoryClass=org.datanucleus.api.jdo.JDOPersistenceManagerFactory",
+                "javax.jdo.option.ConnectionDriverName=org.h2.Driver",
+                "javax.jdo.option.ConnectionPassword=",
+                "javax.jdo.option.ConnectionURL=jdbc:h2:mem:test",
+                "javax.jdo.option.ConnectionUserName=sa",
        }
 )
 class ConfigurationTest1 {

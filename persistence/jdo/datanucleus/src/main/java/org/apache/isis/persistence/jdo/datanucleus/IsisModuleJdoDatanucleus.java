@@ -18,20 +18,21 @@
  */
 package org.apache.isis.persistence.jdo.datanucleus;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.inject.Named;
 import javax.inject.Provider;
 import javax.jdo.PersistenceManagerFactory;
+import javax.sql.DataSource;
 
-import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.datanucleus.api.jdo.JDOPersistenceManagerFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Primary;
 
 import org.apache.isis.applib.services.eventbus.EventBusService;
+import org.apache.isis.commons.internal.assertions._Assert;
+import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.transaction.changetracking.EntityChangeTracker;
 import org.apache.isis.persistence.jdo.datanucleus.changetracking.JdoLifecycleListener;
@@ -44,16 +45,17 @@ import org.apache.isis.persistence.jdo.datanucleus.mixins.Persistable_datanucleu
 import org.apache.isis.persistence.jdo.datanucleus.mixins.Persistable_datanucleusVersionLong;
 import org.apache.isis.persistence.jdo.datanucleus.mixins.Persistable_datanucleusVersionTimestamp;
 import org.apache.isis.persistence.jdo.datanucleus.mixins.Persistable_downloadJdoMetadata;
-import org.apache.isis.persistence.jdo.datanucleus.schema.JdoSchemaService;
 import org.apache.isis.persistence.jdo.integration.IsisModuleJdoIntegration;
 import org.apache.isis.persistence.jdo.spring.integration.JdoTransactionManager;
 import org.apache.isis.persistence.jdo.spring.integration.LocalPersistenceManagerFactoryBean;
 import org.apache.isis.persistence.jdo.spring.integration.TransactionAwarePersistenceManagerFactoryProxy;
 
+import lombok.SneakyThrows;
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 /**
- * @since 1.x {@index}
+ * @since 2.0 {@index}
  */
 @Configuration
 @Import({
@@ -72,28 +74,51 @@ import lombok.val;
     Persistable_downloadJdoMetadata.class,
 
     // @Service's
-    DnSettings.class,
     JdoSupportServiceDefault.class,
-    JdoSchemaService.class,
+
 })
+@EnableConfigurationProperties(DnSettings.class)
+@Log4j2
 public class IsisModuleJdoDatanucleus {
+    
+    @Qualifier("local-pmf-proxy")
+    @Bean 
+    public LocalPersistenceManagerFactoryBean getLocalPersistenceManagerFactoryBean(
+            final IsisConfiguration isisConfiguration,
+            final DataSource dataSource,
+            final MetaModelContext metaModelContext,
+            final EventBusService eventBusService,
+            final Provider<EntityChangeTracker> entityChangeTrackerProvider,
+            final DnSettings dnSettings) {
+        
+        _Assert.assertNotNull(dataSource, "a datasource is required");
+        
+        autoCreateSchemas(dataSource, isisConfiguration);
 
-    // reserved for datanucleus' own config props
-    @ConfigurationProperties(prefix = "isis.persistence.jdo-datanucleus.impl")
-    @Bean("dn-settings")
-    public Map<String, String> getAsMap() {
-        return new HashMap<>();
+        val lpmfBean = new LocalPersistenceManagerFactoryBean() {
+            @Override
+            protected PersistenceManagerFactory newPersistenceManagerFactory(java.util.Map<?,?> props) {
+                val pmf = new JDOPersistenceManagerFactory(props);
+                pmf.setConnectionFactory(dataSource);
+                integrateWithApplicationLayer(metaModelContext, eventBusService, entityChangeTrackerProvider, pmf);
+                return pmf;
+            }
+            @Override
+            protected PersistenceManagerFactory newPersistenceManagerFactory(String name) {
+                val pmf = super.newPersistenceManagerFactory(name);
+                pmf.setConnectionFactory(dataSource); //might be too late, anyway, not sure if this is ever called
+                integrateWithApplicationLayer(metaModelContext, eventBusService, entityChangeTrackerProvider, pmf);
+                return pmf;
+            }
+        };
+        lpmfBean.setJdoPropertyMap(dnSettings.getAsProperties());
+        return lpmfBean;
     }
-
-    /**
-     * {@link TransactionAwarePersistenceManagerFactoryProxy} was retired by the Spring Framework, recommended usage is still online [1].
-     * Sources have been recovered from [2].
-     * @see <a href="https://docs.spring.io/spring-framework/docs/3.0.0.RC2/reference/html/ch13s04.html">[1] docs.spring.io</a>
-     * @see <a href="https://github.com/spring-projects/spring-framework/tree/2b3445df8134e2b0c4e4a4c4136cbaf9d58b7fc4/spring-orm/src/main/java/org/springframework/orm/jdo">[2] github.com/spring-projects</a>
-     */
-    @Bean @Primary @Named("transaction-aware-pmf-proxy")
+    
+    @Qualifier("transaction-aware-pmf-proxy")
+    @Bean @Primary 
     public TransactionAwarePersistenceManagerFactoryProxy getTransactionAwarePersistenceManagerFactoryProxy(
-            final LocalPersistenceManagerFactoryBean localPmfBean) {
+            final @Qualifier("local-pmf-proxy") LocalPersistenceManagerFactoryBean localPmfBean) {
 
         val pmf = localPmfBean.getObject(); // created once per application lifecycle
 
@@ -103,43 +128,46 @@ public class IsisModuleJdoDatanucleus {
         return tapmfProxy;
     }
 
-    @Bean @Named("local-pmf-proxy")
-    public LocalPersistenceManagerFactoryBean getLocalPersistenceManagerFactoryBean(
-            final MetaModelContext metaModelContext,
-            final EventBusService eventBusService,
-            final Provider<EntityChangeTracker> entityChangeTrackerProvider,
-            final DnSettings dnSettings) {
-
-        val lpmfBean = new LocalPersistenceManagerFactoryBean() {
-            @Override
-            protected PersistenceManagerFactory newPersistenceManagerFactory(java.util.Map<?,?> props) {
-                val pmf = super.newPersistenceManagerFactory(props);
-                integrateWithApplicationLayer(metaModelContext, eventBusService, entityChangeTrackerProvider, pmf);
-                return pmf;
-            }
-            @Override
-            protected PersistenceManagerFactory newPersistenceManagerFactory(String name) {
-                val pmf = super.newPersistenceManagerFactory(name);
-                integrateWithApplicationLayer(metaModelContext, eventBusService, entityChangeTrackerProvider, pmf);
-                return pmf;
-            }
-        };
-        lpmfBean.setJdoPropertyMap(dnSettings.getAsProperties());
-        return lpmfBean;
-    }
-
+    @Qualifier("jdo-platform-transaction-manager")
     @Bean @Primary
-    @Named("jdo-platform-transaction-manager")
     public JdoTransactionManager getTransactionManager(
-            LocalPersistenceManagerFactoryBean localPmfBean) {
+            final @Qualifier("local-pmf-proxy") LocalPersistenceManagerFactoryBean localPmfBean) {
 
         val pmf = localPmfBean.getObject(); // created once per application lifecycle
-
         return new JdoTransactionManager(pmf);
     }
 
+
     // -- HELPER
 
+    /**
+     * integrates with settings from isis.persistence.schema.*
+     */
+    @SneakyThrows
+    private static DataSource autoCreateSchemas(
+            final DataSource dataSource,
+            final IsisConfiguration isisConfiguration) {
+
+        val persistenceSchemaConf = isisConfiguration.getPersistence().getSchema();
+
+        if(!persistenceSchemaConf.getAutoCreateSchemas().isEmpty()) {
+
+            log.info("about to create db schema(s) {}", persistenceSchemaConf.getAutoCreateSchemas());
+
+            try(val con = dataSource.getConnection()){
+
+                val s = con.createStatement();
+
+                for(val schema : persistenceSchemaConf.getAutoCreateSchemas()) {
+                    s.execute(String.format(persistenceSchemaConf.getCreateSchemaSqlTemplate(), schema));
+                }
+
+            }
+        }
+
+        return dataSource;
+    }
+    
     private static void integrateWithApplicationLayer(
             final MetaModelContext metaModelContext,
             final EventBusService eventBusService,
@@ -148,7 +176,8 @@ public class IsisModuleJdoDatanucleus {
 
         // install JDO specific entity change listeners ...
 
-        val jdoLifecycleListener = new JdoLifecycleListener(metaModelContext, eventBusService, entityChangeTrackerProvider);
+        val jdoLifecycleListener = 
+                new JdoLifecycleListener(metaModelContext, eventBusService, entityChangeTrackerProvider);
         pmf.addInstanceLifecycleListener(jdoLifecycleListener, (Class[]) null);
 
     }

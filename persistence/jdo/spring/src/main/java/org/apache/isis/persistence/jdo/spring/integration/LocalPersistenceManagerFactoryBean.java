@@ -118,7 +118,7 @@ public class LocalPersistenceManagerFactoryBean implements FactoryBean<Persisten
 
 	private final Map<String, Object> jdoPropertyMap = new HashMap<String, Object>();
 
-	private ClassLoader beanClassLoader;
+	protected ClassLoader beanClassLoader;
 
 	private PersistenceManagerFactory persistenceManagerFactory;
 

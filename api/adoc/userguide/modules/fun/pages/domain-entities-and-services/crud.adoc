@@ -118,12 +118,12 @@ When an object is persisted the framework will emit `ObjectPersistingEvent` and 
 It is also possible to configure ORM to automatically persist domain entities if they are associated with other already-persistent entities.
 This avoid the need to explicitly call "persist".
 
-If using xref:pjdo:ROOT:about.adoc[JDO/DataNucleus], this is done using xref:refguide:config:sections/isis.persistence.jdo-datanucleus.impl.adoc#isis.persistence.jdo-datanucleus.impl.datanucleus.persistenceByReachabilityAtCommit[persistence-by-reachability] configuration property:
+If using xref:pjdo:ROOT:about.adoc[JDO/DataNucleus], this is done using xref:refguide:config:sections/jdo-datanucleus-conf.adoc#datanucleus.persistenceByReachabilityAtCommit[persistence-by-reachability] configuration property:
 
 [source,ini]
 .application.properties
 ----
-isis.persistence.jdo-datanucleus.impl.datanucleus.persistenceByReachabilityAtCommit=true
+datanucleus.persistenceByReachabilityAtCommit=true
 ----
 
 One downside is that the code is arguably less easy to debug.

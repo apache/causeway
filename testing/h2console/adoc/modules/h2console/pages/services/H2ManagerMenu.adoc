@@ -42,10 +42,8 @@ The following additional configuration is also required (all of this is present 
 [source,ini]
 .application.properties
 ----
-isis.persistence.jdo-datanucleus.impl.javax.jdo.option.ConnectionDriverName=org.h2.Driver
-isis.persistence.jdo-datanucleus.impl.javax.jdo.option.ConnectionURL=jdbc:h2:mem:test
-isis.persistence.jdo-datanucleus.impl.javax.jdo.option.ConnectionUserName=sa
-isis.persistence.jdo-datanucleus.impl.javax.jdo.option.ConnectionPassword=
+spring.datasource.platform=h2
+spring.datasource.url=jdbc:h2:mem
 ----
 
 * finally, and most importantly, the h2 console servlet must be configured in `web.xml`, and must be mapped to `/db`:

@@ -21,19 +21,16 @@ package org.apache.isis.persistence.jdo.datanucleus.config;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.datanucleus.PropertyNames;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
-import org.springframework.core.annotation.Order;
 
-import org.apache.isis.applib.annotation.OrderPrecedence;
-import org.apache.isis.commons.internal.collections._Maps;
-
-import lombok.val;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -41,37 +38,44 @@ import lombok.extern.log4j.Log4j2;
  */
 @Configuration
 @Named("isis.persistence.jdo.DnSettings")
-@Order(OrderPrecedence.EARLY)
 @Primary
-@Qualifier("Default")
+@Qualifier("Dn5")
+@ConfigurationProperties(prefix = "")
 @Log4j2
 public class DnSettings {
 
-    @Inject @Named("dn-settings") 
-    private Map<String, String> dnSettings;
+    @Getter @Setter 
+    private Map<String, String> datanucleus; //mapped by "datanucleus"
+    @Getter @Setter 
+    private Map<String, String> javax; //mapped by "javax" filtered later for "javax.jdo"
     
     private final Object lock = new Object();
-    private boolean amended = false;
-    
-    public Map<String, String> getAsMap() {
+    private Map<String, Object> properties;
+
+    public Map<String, Object> getAsProperties() {
         synchronized(lock) {
-            if(!amended) {
-                addDataNucleusPropertiesAsRequired();
-                amended = true;
+            if(properties==null) {
+                properties = new HashMap<>();
+                
+                if(datanucleus!=null) {
+                    datanucleus.forEach((k, v)->properties.put("datanucleus." + k, v));
+                }
+                
+                if(javax!=null) {
+                    javax.entrySet().stream()
+                    .filter(e->e.getKey().startsWith("jdo."))
+                    .forEach(e->properties.put("javax." + e.getKey(), e.getValue()));
+                }
+                
+                amendProperties(properties);
             }
         }
-        return dnSettings;
+        return properties;
     }
     
-    public Map<String, Object> getAsProperties() {
-        return _Maps.mapValues(getAsMap(), HashMap::new, Object.class::cast);
-    }
-    
-    // -- HELPER
-    
-    private void addDataNucleusPropertiesAsRequired() {
+    private void amendProperties(final Map<String, Object> props) {
         
-        val props = dnSettings;
+        // add optional defaults if needed
 
         String connectionFactoryName = (String) props.get(PropertyNames.PROPERTY_CONNECTION_FACTORY_NAME);
         if(connectionFactoryName != null) {
@@ -96,29 +100,29 @@ public class DnSettings {
         } else {
             // use JDBC connection properties; put if not present
 
-            putIfNotPresent(props, "javax.jdo.option.ConnectionDriverName", "org.hsqldb.jdbcDriver");
-            putIfNotPresent(props, "javax.jdo.option.ConnectionURL", "jdbc:hsqldb:mem:test");
-            putIfNotPresent(props, "javax.jdo.option.ConnectionUserName", "sa");
-            putIfNotPresent(props, "javax.jdo.option.ConnectionPassword", "");
-
-            if(log.isInfoEnabled()) {
-                log.info("using JDBC connection '{}'", 
-                        props.get("javax.jdo.option.ConnectionURL"));
-            }
+//XXX let Spring handle datasources instead            
+//            putIfNotPresent(props, "javax.jdo.option.ConnectionDriverName", "org.hsqldb.jdbcDriver");
+//            putIfNotPresent(props, "javax.jdo.option.ConnectionURL", "jdbc:hsqldb:mem:test");
+//            putIfNotPresent(props, "javax.jdo.option.ConnectionUserName", "sa");
+//            putIfNotPresent(props, "javax.jdo.option.ConnectionPassword", "");
+//
+//            if(log.isInfoEnabled()) {
+//                log.info("using JDBC connection '{}'", 
+//                        props.get("javax.jdo.option.ConnectionURL"));
+//            }
         }
         
     }
 
-    private static void putIfNotPresent(
-            final Map<String, String> props,
-            final String key,
-            final String value) {
-        
-        if(!props.containsKey(key)) {
-            props.put(key, value);
-        }
-    }
-
-
+//    private static void putIfNotPresent(
+//            final Map<String, Object> props,
+//            final String key,
+//            final String value) {
+//        
+//        if(!props.containsKey(key)) {
+//            props.put(key, value);
+//        }
+//    }
+    
     
 }

@@ -21,16 +21,7 @@
   ],
   "hints": [
     {
-      "name": "isis.persistence.jdo-datanucleus.impl.datanucleus.ConnectionPasswordDecrypter",
-      "providers": [{
-        "name": "class-reference",
-        "parameters": {
-          "target": "org.datanucleus.store.connection.DecryptionProvider"
-        }
-      }]
-    },
-    {
-      "name": "isis.persistence.jdo-datanucleus.impl.javax.jdo.PersistenceManagerFactoryClass",
+      "name": "javax.jdo.PersistenceManagerFactoryClass",
       "providers": [{
         "name": "class-reference",
         "parameters": {
@@ -39,7 +30,7 @@
       }]
     },
     {
-      "name": "isis.persistence.jdo-datanucleus.impl.datanucleus.objectProvider.className",
+      "name": "datanucleus.objectProvider.className",
       "providers": [{
         "name": "class-reference",
         "parameters": {
