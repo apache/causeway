@@ -40,10 +40,12 @@ import lombok.Value;
 import lombok.extern.log4j.Log4j2;
 
 /**
- * For a given <i>Spring</i> context, provides utilities to introspect the list of 
- * configured data-sources.
+ * For a given <i>Spring</i> context, makes information about configured data-sources available.
+ * 
+ * @apiNote The {@link DataSourceInfo} value type can be extended as needed.
  *  
  * @since 2.0 {@index}
+ * @see <a href="https://stackoverflow.com/questions/44446597/where-does-the-default-datasource-url-for-h2-come-from-on-spring-boot">stackoverflow.com</a>
  */
 @Service
 @Named("isis.config.DataSourceIntrospectionService")
