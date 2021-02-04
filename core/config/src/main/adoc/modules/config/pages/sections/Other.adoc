@@ -20,8 +20,8 @@ isis.as-map
 
 
 |
-[[isis.persistence.jpa.additional-orm-files]]
-isis.persistence.jpa. +
+[[isis.persistence.schema.additional-orm-files]]
+isis.persistence.schema. +
 additional-orm-files
 
 | 
@@ -29,8 +29,8 @@ additional-orm-files
 
 
 |
-[[isis.persistence.jpa.auto-create-schemas]]
-isis.persistence.jpa. +
+[[isis.persistence.schema.auto-create-schemas]]
+isis.persistence.schema. +
 auto-create-schemas
 
 | 
@@ -42,8 +42,8 @@ This configuration mechanism does not consider any schema-auto-creation configur
 
 
 |
-[[isis.persistence.jpa.create-schema-sql-template]]
-isis.persistence.jpa. +
+[[isis.persistence.schema.create-schema-sql-template]]
+isis.persistence.schema. +
 create-schema-sql-template
 
 |  CREATE SCHEMA IF NOT EXISTS %S
