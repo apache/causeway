@@ -18,11 +18,17 @@
  */
 package org.apache.isis.persistence.jdo.datanucleus.schema;
 
+import java.util.Set;
+
 import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.config.beans.IsisBeanTypeRegistry;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.persistence.jdo.datanucleus.config.DnConfigurationBean;
+import org.apache.isis.core.metamodel.spec.ObjectSpecId;
+import org.apache.isis.persistence.jdo.datanucleus.config.DnSettings;
 import org.apache.isis.persistence.jdo.datanucleus.config.JdoEntityTypeRegistry;
+import org.apache.isis.persistence.jdo.provider.metamodel.facets.object.query.JdoNamedQuery;
+import org.apache.isis.persistence.jdo.provider.metamodel.facets.object.query.JdoQueryFacet;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
@@ -30,29 +36,23 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class _DnApplication {
 
-    private _DnApplicationComponents dnApplicationComponents;
     private final JdoEntityTypeRegistry jdoEntityTypeRegistry = new JdoEntityTypeRegistry();
 
     public _DnApplication(
             final MetaModelContext metaModelContext,
-            final DnConfigurationBean dnSettings) {
+            final DnSettings dnSettings) {
 
-        dnApplicationComponents = createDataNucleusApplicationComponents(
+        createDataNucleusApplicationComponents(
                 metaModelContext,
                 dnSettings);
     }
 
-    public void shutdown() {
-        dnApplicationComponents.shutdown();
-    }
-
     // -- HELPER
 
-    private _DnApplicationComponents createDataNucleusApplicationComponents(
+    private void createDataNucleusApplicationComponents(
             final MetaModelContext metaModelContext,
-            final DnConfigurationBean dnSettings) {
+            final DnSettings dnSettings) {
 
-        val configuration = metaModelContext.getConfiguration();
         val isisBeanTypeRegistry = metaModelContext.getServiceRegistry()
                 .lookupServiceElseFail(IsisBeanTypeRegistry.class);
 
@@ -64,14 +64,26 @@ public class _DnApplication {
                 .forEach(entityClassName->log.debug(" - {}", entityClassName));
         }
 
-        val dataNucleusApplicationComponents = new _DnApplicationComponents(
-                configuration,
-                dnSettings.getAsProperties(),
-                classesToBePersisted);
+        catalogNamedQueries(metaModelContext, classesToBePersisted);
 
-        _DnApplicationComponents.catalogNamedQueries(metaModelContext, classesToBePersisted);
-
-        return dataNucleusApplicationComponents;
     }
 
+    static void catalogNamedQueries(
+            final MetaModelContext metaModelContext,
+            final Set<String> persistableClassNames) {
+
+        val namedQueryByName = _Maps.<String, JdoNamedQuery>newHashMap();
+        for (val persistableClassName: persistableClassNames) {
+            val spec = metaModelContext.getSpecificationLoader()
+                    .loadSpecification(ObjectSpecId.of(persistableClassName));
+            val jdoQueryFacet = spec.getFacet(JdoQueryFacet.class);
+            if (jdoQueryFacet == null) {
+                continue;
+            }
+            for (val namedQuery : jdoQueryFacet.getNamedQueries()) {
+                namedQueryByName.put(namedQuery.getName(), namedQuery);
+            }
+        }
+    }
+    
 }

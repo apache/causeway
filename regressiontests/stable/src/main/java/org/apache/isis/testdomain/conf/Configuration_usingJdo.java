@@ -49,8 +49,9 @@ import org.apache.isis.testing.fixtures.applib.IsisModuleTestingFixturesApplib;
 @PropertySources({
     @PropertySource(IsisPresets.NoTranslations),
     @PropertySource(IsisPresets.DatanucleusAutocreateNoValidate),
+    @PropertySource(IsisPresets.H2InMemory_withUniqueSchema),
 })
 public class Configuration_usingJdo {
+   
     
-
 }

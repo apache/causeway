@@ -25,7 +25,7 @@ import lombok.Data;
 
 @Data
 @Deprecated // no longer used, but could resurrected as a configuration bean if that makes sense
-public class JdoDatanucleus {
+class JdoDatanucleus {
 
     private String classMetadataLoadedListener = "org.apache.isis.persistence.jdo.datanucleus.config.CreateSchemaObjectFromClassMetadata";
     

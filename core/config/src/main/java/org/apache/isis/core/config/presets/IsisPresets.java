@@ -56,6 +56,7 @@ public final class IsisPresets  {
     public static final String SilenceWicket = "classpath:/org/apache/isis/core/config/presets/SilenceWicket.properties";
     public static final String UseLog4j2Test = "classpath:/org/apache/isis/core/config/presets/UseLog4j2Test.properties";
 
+    public static final String H2InMemory_withUniqueSchema = "classpath:/org/apache/isis/core/config/presets/H2InMemory_withUniqueSchema.properties";
 
     /**
      * Use PROTOTYPING mode as the default. Does not override if the system-property 

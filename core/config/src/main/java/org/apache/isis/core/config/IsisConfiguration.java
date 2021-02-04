@@ -1671,13 +1671,15 @@ public class IsisConfiguration {
             private final List<String> additionalOrmFiles = new ArrayList<>();
             
             /**
-             * SQL syntax to create a DB schema.
+             * Vendor specific SQL syntax to create a DB schema.
              * <p>
              * This template is passed through {@link String#format(String, schemaName)} to 
              * make the actual SQL statement thats to be used against the configured data-source.
              * <p>
              * Default template is {@literal CREATE SCHEMA IF NOT EXISTS %S} with the schema name 
-             * converted to upper-case.  
+             * converted to upper-case.
+             * <p>  
+             * For MYSQL/MARIADB use escape like {@code `%S`}
              */
             private String createSchemaSqlTemplate = "CREATE SCHEMA IF NOT EXISTS %S";
         
