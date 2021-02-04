@@ -5,7 +5,7 @@
 
 WARNING: TODO: this content has not yet been reviewed/updated for v2.0
 
-The xref:refguide:config:about.adoc[Configuration Guide] includes a xref:refguide:config:sections/isis.persistence.jdo-datanucleus.adoc[section] for JDO/Persistence object store, and another xref:refguide:config:sections/isis.persistence.jdo-datanucleus.impl.adoc[section] for configuration that is passed through to DataNucleus unchanged.
+The xref:refguide:config:about.adoc[Configuration Guide] includes a xref:refguide:config:sections/isis.persistence.jdo-datanucleus.adoc[section] for JDO/Persistence object store, and another xref:refguide:config:sections/jdo-datanucleus-conf.adoc[section] for configuration that is passed through to DataNucleus unchanged.
 
 //WARNING: TODO - v2 - detail on original config properties (not yet reviewed) currently commented out.
 

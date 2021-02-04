@@ -118,7 +118,7 @@ WARNING: TODO - v2 - reference flyway here also.
 //
 //An alternative implementation can be registered and used through the
 //
-//xref:refguide:config:sections/isis.persistence.jdo-datanucleus.impl.adoc#class
+//xref:refguide:config:sections/jdo-datanucleus-conf.adoc#class
 //
 //configuration property:
 //

@@ -75,7 +75,7 @@ This is done using the pass-thru `datanucleus.Mapping` configuration property:
 [source,ini]
 .application.properties
 ----
-isis.persistence.jdo-datanucleus.impl.datanucleus.Mapping=sqlserver
+datanucleus.Mapping=sqlserver
 ----
 
 

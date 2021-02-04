@@ -35,12 +35,9 @@ Also configure Flyway connection parameters to use those of JDO JDO/DataNucleus 
 [source,properties]
 .application.properties
 ----
-spring.flyway.url=\
-  ${isis.persistence.jdo-datanucleus.impl.javax.jdo.option.ConnectionURL}
-spring.flyway.user=\
-  ${isis.persistence.jdo-datanucleus.impl.javax.jdo.option.ConnectionUserName}
-spring.flyway.password=\
-  ${isis.persistence.jdo-datanucleus.impl.javax.jdo.option.ConnectionPassword}
+spring.flyway.url=...
+spring.flyway.user=...
+spring.flyway.password=...
 ----
 
 If Flyway is enabled, then `autoCreateAll` should also be disabled:
@@ -49,7 +46,7 @@ If Flyway is enabled, then `autoCreateAll` should also be disabled:
 .application.properties
 ----
 spring.flyway.enabled=true
-isis.persistence.jdo-datanucleus.impl.datanucleus.schema.autoCreateAll=false
+datanucleus.schema.autoCreateAll=false
 ----
 
 
