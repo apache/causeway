@@ -49,10 +49,9 @@ import org.apache.isis.testing.fixtures.applib.IsisModuleTestingFixturesApplib;
 
 })
 @PropertySources({
-    @PropertySource(IsisPresets.H2InMemory),
     @PropertySource(IsisPresets.NoTranslations),
     @PropertySource(IsisPresets.SilenceWicket),
-    @PropertySource(IsisPresets.DataNucleusAutoCreate),
+    @PropertySource(IsisPresets.DatanucleusAutocreateNoValidate),
 })
 @ComponentScan(
         basePackageClasses= {

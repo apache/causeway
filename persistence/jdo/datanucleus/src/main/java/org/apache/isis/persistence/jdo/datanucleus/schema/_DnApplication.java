@@ -21,7 +21,7 @@ package org.apache.isis.persistence.jdo.datanucleus.schema;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.core.config.beans.IsisBeanTypeRegistry;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.persistence.jdo.datanucleus.config.DnSettings;
+import org.apache.isis.persistence.jdo.datanucleus.config.DnConfigurationBean;
 import org.apache.isis.persistence.jdo.datanucleus.config.JdoEntityTypeRegistry;
 
 import lombok.val;
@@ -35,7 +35,7 @@ public class _DnApplication {
 
     public _DnApplication(
             final MetaModelContext metaModelContext,
-            final DnSettings dnSettings) {
+            final DnConfigurationBean dnSettings) {
 
         dnApplicationComponents = createDataNucleusApplicationComponents(
                 metaModelContext,
@@ -50,7 +50,7 @@ public class _DnApplication {
 
     private _DnApplicationComponents createDataNucleusApplicationComponents(
             final MetaModelContext metaModelContext,
-            final DnSettings dnSettings) {
+            final DnConfigurationBean dnSettings) {
 
         val configuration = metaModelContext.getConfiguration();
         val isisBeanTypeRegistry = metaModelContext.getServiceRegistry()

@@ -19,7 +19,6 @@
 #
 isis:
 
-
   applib:
     annotation:
       action:
@@ -101,24 +100,24 @@ isis:
       dialog-mode: sidebar
       dialog-mode-for-menu: modal
 
-  persistence:
-    jdo-datanucleus:
-      impl:
-        # note that properties under 'isis.persistor.datanucleus.impl' are passed through directly
-        # to DataNucleus, and must use camelCase rather than kebab-case
-        datanucleus:
-          schema:
-            validateTables: true
-            validateConstraints: true
+# schema auto creation etc. ...
+#  persistence:
 
-          persistenceByReachabilityAtCommit: false
-          identifier:
-            case: MixedCase
+    
+# note that properties under 'datanucleus' must use camelCase rather than kebab-case
+datanucleus:
+  schema:
+    validateTables: true
+    validateConstraints: true
 
-          cache:
-            level2:
-              type: none
-              mode: ENABLE_SELECTIVE
+  persistenceByReachabilityAtCommit: false
+  identifier:
+    case: MixedCase
+
+  cache:
+    level2:
+      type: none
+      mode: ENABLE_SELECTIVE
 
 resteasy:
   jaxrs:

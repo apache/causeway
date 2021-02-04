@@ -18,14 +18,11 @@
  */
 package org.apache.isis.persistence.jdo.datanucleus;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import javax.inject.Named;
 import javax.inject.Provider;
 import javax.jdo.PersistenceManagerFactory;
 
-import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -35,8 +32,8 @@ import org.apache.isis.applib.services.eventbus.EventBusService;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.transaction.changetracking.EntityChangeTracker;
 import org.apache.isis.persistence.jdo.datanucleus.changetracking.JdoLifecycleListener;
+import org.apache.isis.persistence.jdo.datanucleus.config.DnConfigurationBean;
 import org.apache.isis.persistence.jdo.datanucleus.config.DnEntityDiscoveryListener;
-import org.apache.isis.persistence.jdo.datanucleus.config.DnSettings;
 import org.apache.isis.persistence.jdo.datanucleus.entities.DnEntityStateProvider;
 import org.apache.isis.persistence.jdo.datanucleus.jdosupport.JdoSupportServiceDefault;
 import org.apache.isis.persistence.jdo.datanucleus.metamodel.JdoDataNucleusProgrammingModel;
@@ -53,7 +50,7 @@ import org.apache.isis.persistence.jdo.spring.integration.TransactionAwarePersis
 import lombok.val;
 
 /**
- * @since 1.x {@index}
+ * @since 2.0 {@index}
  */
 @Configuration
 @Import({
@@ -72,18 +69,11 @@ import lombok.val;
     Persistable_downloadJdoMetadata.class,
 
     // @Service's
-    DnSettings.class,
     JdoSupportServiceDefault.class,
     JdoSchemaService.class,
 })
+@EnableConfigurationProperties(DnConfigurationBean.class)
 public class IsisModuleJdoDatanucleus {
-
-    // reserved for datanucleus' own config props
-    @ConfigurationProperties(prefix = "isis.persistence.jdo-datanucleus.impl")
-    @Bean("dn-settings")
-    public Map<String, String> getAsMap() {
-        return new HashMap<>();
-    }
 
     /**
      * {@link TransactionAwarePersistenceManagerFactoryProxy} was retired by the Spring Framework, recommended usage is still online [1].
@@ -108,7 +98,7 @@ public class IsisModuleJdoDatanucleus {
             final MetaModelContext metaModelContext,
             final EventBusService eventBusService,
             final Provider<EntityChangeTracker> entityChangeTrackerProvider,
-            final DnSettings dnSettings) {
+            final DnConfigurationBean dnSettings) {
 
         val lpmfBean = new LocalPersistenceManagerFactoryBean() {
             @Override

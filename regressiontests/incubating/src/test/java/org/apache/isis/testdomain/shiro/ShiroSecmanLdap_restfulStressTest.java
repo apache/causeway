@@ -28,6 +28,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.PropertySources;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -58,8 +60,6 @@ import lombok.val;
         properties = {
                 //"logging.config=log4j2-test.xml",
                 "logging.config=log4j2-debug-persistence.xml",
-                IsisPresets.DataNucleusAutoCreate,
-                "datanucleus.schema.autoCreateDatabase=true",
                 "server.servlet.session.persistent=false", // defaults to false
         },
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -77,6 +77,9 @@ import lombok.val;
     IsisModuleExtSecmanRealmShiro.class,
     IsisModuleExtSecmanPersistenceJdo.class,
     IsisModuleExtSecmanEncryptionJbcrypt.class,
+})
+@PropertySources({
+    @PropertySource(IsisPresets.DatanucleusAutocreateNoValidate)
 })
 //XXX "does not work, when executed in sequence with other regressiontests
 class ShiroSecmanLdap_restfulStressTest extends AbstractShiroTest {

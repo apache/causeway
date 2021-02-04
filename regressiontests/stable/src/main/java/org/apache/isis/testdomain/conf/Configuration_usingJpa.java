@@ -51,9 +51,8 @@ import org.apache.isis.testing.fixtures.applib.IsisModuleTestingFixturesApplib;
     ,KVStoreForTesting.class, // Helper for JUnit Tests
 })
 @PropertySources({
-    //@PropertySource("classpath:/org/apache/isis/testdomain/jdo/isis-persistence.properties"),
-    @PropertySource(IsisPresets.H2InMemory_withUniqueSchema),
     @PropertySource(IsisPresets.NoTranslations),
+    @PropertySource(IsisPresets.DatanucleusAutocreateNoValidate),
 })
 public class Configuration_usingJpa {
     

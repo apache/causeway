@@ -46,9 +46,8 @@ public abstract class FakeDataModuleIntegTestAbstract extends IsisIntegrationTes
 
         @Configuration
         @PropertySources({
-                @PropertySource(IsisPresets.H2InMemory_withUniqueSchema),
                 @PropertySource(IsisPresets.NoTranslations),
-                @PropertySource(IsisPresets.DataNucleusAutoCreate),
+                @PropertySource(IsisPresets.DatanucleusAutocreateNoValidate),
         })
         @Import({
                 IsisModuleCoreRuntimeServices.class,

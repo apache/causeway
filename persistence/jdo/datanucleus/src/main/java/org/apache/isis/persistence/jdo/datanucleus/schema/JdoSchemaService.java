@@ -34,7 +34,7 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.config.beans.IsisBeanTypeRegistry;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.events.MetamodelEvent;
-import org.apache.isis.persistence.jdo.datanucleus.config.DnSettings;
+import org.apache.isis.persistence.jdo.datanucleus.config.DnConfigurationBean;
 import org.apache.isis.persistence.jdo.spring.integration.TransactionAwarePersistenceManagerFactoryProxy;
 
 import lombok.extern.log4j.Log4j2;
@@ -60,7 +60,7 @@ public class JdoSchemaService {
     @Inject PlatformTransactionManager txManager;
 
     @Inject IsisBeanTypeRegistry isisBeanTypeRegistry;
-    @Inject DnSettings dnSettings;
+    @Inject DnConfigurationBean dnSettings;
 
     @PostConstruct
     public void init() {

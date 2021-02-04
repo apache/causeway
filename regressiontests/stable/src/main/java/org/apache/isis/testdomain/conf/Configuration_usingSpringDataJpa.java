@@ -48,8 +48,8 @@ import org.apache.isis.testing.fixtures.applib.IsisModuleTestingFixturesApplib;
     ,KVStoreForTesting.class, // Helper for JUnit Tests
 })
 @PropertySources({
-    @PropertySource(IsisPresets.H2InMemory_withUniqueSchema),
     @PropertySource(IsisPresets.NoTranslations),
+    @PropertySource(IsisPresets.DatanucleusAutocreateNoValidate),
 })
 public class Configuration_usingSpringDataJpa {
     
