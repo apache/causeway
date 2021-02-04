@@ -75,6 +75,21 @@
 			<artifactId>isis-persistence-jdo-integration</artifactId>
 		</dependency>
 
+		<!-- not required by JDO the integration modules, but enables 
+			Spring Boot DataSource Auto-configuration -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-jdbc</artifactId>
+			<scope>runtime</scope>
+			<exclusions>
+				<exclusion>
+					<!-- we use log4j-2 instead -->
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-starter-logging</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
 		<!-- TESTING -->
 
 		<dependency>

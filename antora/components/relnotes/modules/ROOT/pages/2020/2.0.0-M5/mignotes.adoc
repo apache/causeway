@@ -90,7 +90,7 @@ VIEW_CONTRIBUTIONS_ONLY,
 [source]
 ----
 spring.datasource.platform=h2
-spring.datasource.url=jdbc:h2:mem
+spring.datasource.url=jdbc:h2:mem:...
 ----
 configure Datanucleus settings using 
 [source]
