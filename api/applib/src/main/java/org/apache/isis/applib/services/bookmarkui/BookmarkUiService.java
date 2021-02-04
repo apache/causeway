@@ -20,9 +20,14 @@
 package org.apache.isis.applib.services.bookmarkui;
 
 /**
- * 
+ * Provides the ability to programmatically interact with bookmarked pages
+ * and breadcrumbs, as rendered by the Wicket viewer.
+ *
  * @since 1.x {@index}
  */
 public interface BookmarkUiService {
+    /**
+     * Simply clears the current list of breadcrumbs and bookmarks.
+     */
     void clear();
 }

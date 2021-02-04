@@ -4,7 +4,7 @@
 :page-partial:
 
 
-The `AcceptHeaderService` domain service is a xref:refguide:applib-ant:IsisSessionScope.adoc[`@IsisSessionScope`]'d service that simply exposes the HTTP `Accept` header to the domain.
+The `AcceptHeaderService` domain service is a xref:refguide:applib-ant:InteractionScope.adoc[`@IsisSessionScope`]'d service that simply exposes the HTTP `Accept` header to the domain.
 Its intended use is to support multiple versions of a REST API, where the responsibility for content negotiation (determining which version of the REST API is to be used) is managed by logic in the domain objects themselves.
 
 [TIP]
@@ -16,28 +16,6 @@ As an alternative to performing content negotiation within the domain classes, t
 
 include::system:generated:page$index/applib/services/acceptheader/AcceptHeaderService.adoc[leveloffset=+2]
 
-TODO example migration
-
-.Deprecated Docs
-[WARNING]
-================================
-
-== API
-
-The API defined by the service is:
-
-[source,java]
-----
-include::refguide:applib-svc:example$services/acceptheader/AcceptHeaderService.java[tags=refguide]
-----
-
-<.> returns the list of media types found in the HTTP Accept header.
-
-The intention is that this service only returns a list when the request is initiated through the xref:vro:ROOT:about.adoc[Restful Objects viewer].
-Otherwise the service will likely return `null`.
-
-
-================================
 
 == Implementation
 

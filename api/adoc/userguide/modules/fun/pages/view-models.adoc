@@ -138,7 +138,6 @@ public class CompareCustomers {
 }
 ----
 
-// This capability is particularly useful when the JAXB view model is being used as a xref:userguide:fun:view-models.adoc#dto[DTO].
 
 [[joda-datatypes]]
 === JODA Time Datatypes

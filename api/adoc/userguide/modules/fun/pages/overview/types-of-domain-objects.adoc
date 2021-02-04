@@ -209,10 +209,6 @@ Almost all of these recommend exposing only DTOs (which is to say view models), 
 To support this use case, a view model can be defined such that it can act as a DTO.
 This is done by annotating the class using JAXB annotations; this allows the consumer to obtain the DTO in XML format along with a corresponding XSD schema describing the structure of that XML.
 
-//[TIP]
-//====
-//Details of how to consume such DTOs, eg within an ESB such as link:http://camel.apache.org[Apache Camel(TM)], can be found xref:userguide:fun:view-models.adoc#dto-consumers[here].
-//====
 
 These DTOs are still usable as "regular" view models; they will render in the xref:vw:ROOT:about.adoc[Wicket viewer] just like any other.
 In fact (as the xref:userguide:fun:view-models.adoc#jaxb[programming model] section below makes clear), these JAXB-annotated view models are in many regards the most powerful of all the alternative ways of writing view models.

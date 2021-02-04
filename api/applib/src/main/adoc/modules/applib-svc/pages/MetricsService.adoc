@@ -6,7 +6,7 @@
 
 WARNING: TODO: this content has not yet been reviewed/updated for v2.0
 
-The `MetricsService` is an xref:refguide:applib-ant:IsisSessionScope.adoc[`IsisSessionScope`]d domain service that hooks into the JDO/DataNucleus ObjectStore to provide a number of counters relating to numbers of object loaded, dirtied etc.
+The `MetricsService` is an xref:refguide:applib-ant:InteractionScope.adoc[`IsisSessionScope`]d domain service that hooks into the JDO/DataNucleus ObjectStore to provide a number of counters relating to numbers of object loaded, dirtied etc.
 
 The service tracks entity change metrics for those entities that have `entityChangePublishing` enabled.
 

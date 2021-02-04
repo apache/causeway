@@ -25,8 +25,14 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * A title annotation used to annotate methods used to construct the title of a
- * domain object instance. It is used as a marker.
+ * Used to indicate which property or properties make up the object title.
+ *
+ * <p>
+ * If more than one property is used, the order can be specified (using the
+ * same Dewey-decimal notation as used by `@MemberOrder`) and the string to
+ * use between the components can also be specified.
+ * </p>
+ *
  * @since 1.x {@index}
  */
 @Retention(RetentionPolicy.RUNTIME)

@@ -37,7 +37,9 @@ import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.Clob;
 
 /**
- * Domain semantics for domain object property.
+ * Collects together all the domain semantics for the property of a domain
+ * object.
+ *
  * @since 1.x {@index}
  */
 @Inherited
@@ -109,7 +111,7 @@ public @interface Property {
             default "";
 
     /**
-     * Whether 
+     * Whether
      * {@link org.apache.isis.applib.services.iactn.Interaction.Execution}s
      * (triggered property edits), should be dispatched to
      * {@link ExecutionSubscriber}s.

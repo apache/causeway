@@ -26,7 +26,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Layout hints for properties.
+ * Collects together all layout hints for a property of a domain object.
  *
  * @since 1.x {@index}
  * @see org.apache.isis.applib.annotation.ParameterLayout

@@ -1,25 +1,21 @@
-[#MemberOrder]
-= `@MemberOrder`
 
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
+[#MemberOrder]
+include::system:generated:page$index/applib/annotation/MemberOrder.adoc[]
 
-// TODO: v2: replace @MemberOrder#name() with @PropertyLayout#group(); replace @MemberOrder#sequence() with @PropertyLayout#sequence().
 
-The `@MemberOrder` annotation is used to specify the relative order of domain object pathsToInclude, that is: properties, collections and actions.
 
-[source,java]
-----
-include::refguide:applib-ant:example$annotation/MemberOrder.java[tags="refguide"]
-----
-<.> xref:refguide:applib-ant:MemberOrder.adoc#name[`name()`]
-+
-Names a group of (property) pathsToInclude.
-All properties with this name will be grouped together.
+// TODO - v2 to reconcile with .java (or maybe just delete)
 
-<.> xref:refguide:applib-ant:MemberOrder.adoc#sequence[`sequence()`]
-+
-Defines an ordering for pathsToInclude, within their container.
+//<.> xref:refguide:applib-ant:MemberOrder.adoc#name[`name()`]
+//+
+//Names a group of (property) pathsToInclude.
+//All properties with this name will be grouped together.
+//
+//<.> xref:refguide:applib-ant:MemberOrder.adoc#sequence[`sequence()`]
+//+
+//Defines an ordering for pathsToInclude, within their container.
 
 As this is an important topic, there is xref:userguide:fun:ui.adoc#object-layout[chapter] in the user guide that discusses object layout in full.
 
@@ -31,6 +27,8 @@ The annotation is one of a handful (others including xref:refguide:applib-ant:Co
 ====
 
 
-include::MemberOrder/name.adoc[leveloffset=+1]
-include::MemberOrder/sequence.adoc[leveloffset=+1]
+// TODO - to review for v2 (perhaps move into javadoc and make 'projdoc' more sophisticated).
+
+//include::MemberOrder/name.adoc[leveloffset=+1]
+//include::MemberOrder/sequence.adoc[leveloffset=+1]
 

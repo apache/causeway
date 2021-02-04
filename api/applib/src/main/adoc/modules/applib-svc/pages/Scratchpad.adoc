@@ -36,7 +36,7 @@ The key values should obey the general contract for hash maps.
 == Implementation
 
 This framework provides a default implementation of `o.a.i.core.runtimeservices.scratchpad.ScratchpadDefault`.
-This is just an xref:refguide:applib-ant:IsisSessionScope.adoc[`@IsisSessionScope`]'d wrapper around a `java.util.Map`.
+This is just an xref:refguide:applib-ant:InteractionScope.adoc[`@IsisSessionScope`]'d wrapper around a `java.util.Map`.
 
 
 == Usage

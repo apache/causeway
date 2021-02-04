@@ -4,10 +4,7 @@
 :page-partial:
 
 
-Apache Isis uses an ORM for persistence, specifically xref:pjdo:ROOT:about.adoc[JDO/DataNucleus].
-It infers some of its own metadata from the ORM annotations.
-
-The table below lists the JDO annotations currently recognized by Apache Isis.
+The table below lists the xref:pjdo:ROOT:about.adoc[JDO/DataNucleus] annotations currently recognized by Apache Isis.
 
 
 .JDO Annotations

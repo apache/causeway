@@ -37,7 +37,9 @@ import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.Clob;
 
 /**
- * Domain semantics for domain object collection.
+ * Groups together all domain-specific metadata for an invokable action on a
+ * domain object or domain service.
+ *
  * @since 1.x {@index}
  */
 @Inherited
@@ -136,7 +138,7 @@ public @interface Action {
      */
     Publishing executionPublishing()
             default Publishing.NOT_SPECIFIED;
-    
+
     /**
      * Indicates where (in the UI) the action is not visible to the user.
      *

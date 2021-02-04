@@ -23,25 +23,9 @@ Apache Isis provides such a facade through the `ClockService`.
 
 include::system:generated:page$index/applib/services/clock/ClockService.adoc[leveloffset=+2]
 
-TODO example migration
-
-.Deprecated Docs
-[WARNING]
-================================
-
-== API
-
-The API defined by `ClockService` is:
-
-[source,java]
-----
-include::refguide:applib-svc:example$services/clock/ClockService.java[tags="refguide"]
-----
 
 Note that this domain service is also used by the framework itself to obtain the time, so it acts as an SPI as well.
 
-
-================================
 
 == Implementation
 

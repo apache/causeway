@@ -1,26 +1,21 @@
-[#DomainService]
-= `@DomainService`
 
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
+[#DomainService]
+include::system:generated:page$index/applib/annotation/DomainService.adoc[]
 
 
-The `@DomainService` annotation indicates that the (concrete) class should be automatically instantiated as a domain service.
+// TODO - v2 to reconcile with .java (or maybe just delete)
 
-[source,java]
-----
-include::refguide:applib-ant:example$annotation/DomainService.java[tags="refguide"]
-----
-
-<.> xref:refguide:applib-ant:DomainService.adoc#nature[`nature()`]
-+
-Whether the actions of this domain service should be rendered in UI menus only, or the xref:vro:ROOT:about.adoc[RestfulObjects] REST API only, or both
-
-<.> xref:refguide:applib-ant:DomainService.adoc#objectType[`objectType()`]
-+
-Equivalent to xref:refguide:applib-ant:DomainObject.adoc#objectType[`@DomainObject#objectType()`], specifies the objectType of the service.
-+
-The instanceId for services is always "1".
+//<.> xref:refguide:applib-ant:DomainService.adoc#nature[`nature()`]
+//+
+//Whether the actions of this domain service should be rendered in UI menus only, or the xref:vro:ROOT:about.adoc[RestfulObjects] REST API only, or both
+//
+//<.> xref:refguide:applib-ant:DomainService.adoc#objectType[`objectType()`]
+//+
+//Equivalent to xref:refguide:applib-ant:DomainObject.adoc#objectType[`@DomainObject#objectType()`], specifies the objectType of the service.
+//+
+//The instanceId for services is always "1".
 
 
 For example:
@@ -37,6 +32,9 @@ public class LoanRepository {
 }
 ----
 
-include::DomainService/nature.adoc[leveloffset=+1]
-include::DomainService/objectType.adoc[leveloffset=+1]
+
+// TODO - to review for v2 (perhaps move into javadoc and make 'projdoc' more sophisticated).
+
+//include::DomainService/nature.adoc[leveloffset=+1]
+//include::DomainService/objectType.adoc[leveloffset=+1]
 

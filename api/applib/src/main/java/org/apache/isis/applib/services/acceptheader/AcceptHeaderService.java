@@ -26,5 +26,13 @@ import javax.ws.rs.core.MediaType;
  * @since 1.x {@index}
  */
 public interface AcceptHeaderService {
+    /**
+     * The intention is that this service only returns a list when the request
+     * is initiated through the _Restful Objects viewer_.
+     *
+     * <p>
+     * Otherwise the service will likely return `null`.
+     * </p>
+     */
     List<MediaType> getAcceptableMediaTypes();
 }

@@ -7,30 +7,10 @@
 The `BookmarkUiService` provides the ability to programmatically interact with bookmarked pages and breadcrumbs, as rendered by the Wicket viewer.
 
 
-
 == API
 
 include::system:generated:page$index/applib/services/bookmarkui/BookmarkUiService.adoc[leveloffset=+2]
 
-TODO example migration
-
-.Deprecated Docs
-[WARNING]
-================================
-
-== API
-
-The API defined by `BookmarkUiService` is:
-
-[source,java]
-----
-include::refguide:applib-svc:example$services/bookmarkui/BookmarkUiService.java[tags="refguide"]
-----
-<.> Simply clears the current list of breadcrumbs and bookmarks.
-
-
-
-================================
 
 == Implementation
 

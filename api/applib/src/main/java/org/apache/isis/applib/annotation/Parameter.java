@@ -30,7 +30,9 @@ import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.Clob;
 
 /**
- * Domain semantics for domain object collection.
+ * Collects together all domain semantics of an action parameter within a
+ * single annotation.
+ *
  * @since 1.x {@index}
  */
 @Inherited

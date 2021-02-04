@@ -23,71 +23,17 @@ Serialized form of bookmarks also appear within  xref:refguide:schema:about.adoc
 
 include::system:generated:page$index/applib/services/bookmark/BookmarkService.adoc[leveloffset=+2]
 
-TODO example migration
-
-.Deprecated Docs
-[WARNING]
-================================
-
-== API
-
-The API defined by `BookmarkService` is:
-
-[source,java]
-----
-include::refguide:applib-svc:example$services/bookmark/BookmarkService.java[tags="refguide"]
-----
-
-
-================================
-
-== API
 
 include::system:generated:page$index/applib/services/bookmark/Bookmark.adoc[leveloffset=+2]
 
-TODO example migration
-
-.Deprecated Docs
-[WARNING]
-================================
-
-=== `Bookmark`
-
-The `Bookmark` type is:
-
-[source,java]
-----
-include::refguide:applib-svc:example$services/bookmark/Bookmark.java[tags="refguide"]
-----
-
-
-
-================================
 
 == Implementation
 
 The core framework (xref:core:runtime-services:about.adoc[Runtime Services] module) provides a default implementation of this API, namely `o.a.i.core.runtimeservices.bookmarks.BookmarkServiceDefault`.
 
 
-== API
+include::system:generated:page$index/applib/services/bookmark/BookmarkHolder.adoc[leveloffset=+1]
 
-include::system:generated:page$index/applib/services/bookmark/BookmarkHolder.adoc[leveloffset=+2]
-
-TODO example migration
-
-.Deprecated Docs
-[WARNING]
-================================
-
-== Related Mixins
-
-The `BookmarkHolder` interface is intended to be implemented by domain objects that use a `Bookmark` to reference a (single) domain object; an example might be a class such as the audit entry, mentioned above.
-The interface is simply:
-
-[source,java]
-----
-include::refguide:applib-svc:example$services/bookmark/BookmarkHolder.java[tags="refguide"]
-----
 
 There are two mixins that will contribute to this interface:
 
@@ -101,7 +47,5 @@ which contributes instead an `object` property, being the referenced object.
 
 Either of these can be suppressed, if required, using a vetoing subscriber that listens to the action or property domain event in order to hide the member.
 
-
-================================
 
 

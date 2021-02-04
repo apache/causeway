@@ -11,32 +11,19 @@ The `ApplicationFeatureRepository` provides the access to string representations
 
 include::system:generated:page$index/applib/services/appfeat/ApplicationMemberType.adoc[leveloffset=+2]
 
-TODO example migration
 
-.Deprecated Docs
-[WARNING]
-================================
+// TODO - v2 to reconcile with .java (or maybe just delete)
 
-== API
-
-The API defined by the service is:
-
-[source,java]
-----
-include::refguide:applib-svc:example$services/appfeat/ApplicationFeatureRepository.java[tags=refguide]
-----
-
-where `ApplicationMemberType` in turn is:
-
-[source,java]
-----
-include::refguide:applib-svc:example$services/appfeat/ApplicationMemberType.java[tags=refguide]
-----
-
-These methods are designed primarily to return lists of strings for use in drop-downs.
+//where `ApplicationMemberType` in turn is:
+//
+//[source,java]
+//----
+//include::refguide:applib-svc:example$services/appfeat/ApplicationMemberType.java[tags=refguide]
+//----
+//
+//These methods are designed primarily to return lists of strings for use in drop-downs.
 
 
-================================
 
 == Implementation
 
