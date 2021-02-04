@@ -18,10 +18,10 @@
  */
 package org.apache.isis.core.config.datasources;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.stream.Stream;
 
-import javax.inject.Inject;
 import javax.inject.Named;
 import javax.sql.DataSource;
 
@@ -32,16 +32,12 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
-import org.apache.isis.commons.functional.Result;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.base._Strings;
 
-import lombok.SneakyThrows;
 import lombok.Value;
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
-
-import bsh.EvalError;
 
 /**
  * For a given <i>Spring</i> context, provides utilities to introspect the list of 
@@ -65,37 +61,20 @@ public class DataSourceIntrospectionService {
         private final String jdbcUrl; 
     }
     
-    @SneakyThrows
     public Stream<DataSourceInfo> streamDataSourceInfos() {
         
-        log.info("about to introspect data-sources: {}", 
-                _NullSafe.stream(dataSources).map(ds->ds.getClass().getName()));
-        
-        bsh.Capabilities.setAccessibility(true); // allows us to access private fields
-        val shell = new bsh.Interpreter();  // construct a new bean-shell interpreter
+        log.debug("about to introspect data-sources: {}", 
+                ()->Can.ofCollection(dataSources).map(ds->ds.getClass().getName()));
         
         return _NullSafe.stream(dataSources)
         .map(dataSource->{
             try {
-                shell.set("ds", dataSource);
-            } catch (EvalError e) { 
+                return dataSource.getConnection().getMetaData().getURL();
+            } catch (SQLException e) { 
                 // unexpected
                 e.printStackTrace();
                 return (String) null;
             }
-            val dsClassName = dataSource.getClass().getName();
-            if("org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseFactory$EmbeddedDataSourceProxy"
-                    .equals(dsClassName)) {
-                return (String) Result.of(()->shell.eval("ds.dataSource.url")).nullableOrElse(null);
-            }
-            if("com.zaxxer.hikari.HikariDataSource"
-                    .equals(dsClassName)) {
-                return (String) Result.of(()->shell.eval("ds.getJdbcUrl()")).nullableOrElse(null);
-            }
-            log.warn("don't know how to extract the jdbc url from datasource of type {}; "
-                    + "ignoring it as a h2 candidate", 
-                    dsClassName);
-            return (String) null;
         })
         .filter(_Strings::isNotEmpty)
         .map(DataSourceInfo::new);
