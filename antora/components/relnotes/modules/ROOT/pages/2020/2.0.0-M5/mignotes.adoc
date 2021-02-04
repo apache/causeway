@@ -85,8 +85,19 @@ VIEW_CONTRIBUTIONS_ONLY,
 | was
 | new
 
-| isis.persistence.jdo-datanucleus.impl.javax
-| removed, instead configure datasources the Spring way
+| isis.persistence.jdo-datanucleus.impl
+| removed, instead configure datasources the Spring way (eg. by providing a DataSource factory) or properties like:
+[source]
+----
+spring.datasource.platform=h2
+spring.datasource.url=jdbc:h2:mem
+----
+configure Datanucleus settings using 
+[source]
+----
+datanucleus. ...
+javax.jdo. ...
+----
 
 | isis.core.runtimeservices.exception-recognizer.jdo
 | isis.core.runtimeservices.exception-recognizer.dae

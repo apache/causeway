@@ -1647,9 +1647,9 @@ public class IsisConfiguration {
     @Data
     public static class Persistence {
         
-        private final Jpa jpa = new Jpa();
+        private final Schema schema = new Schema();
         @Data
-        public static class Jpa {
+        public static class Schema {
             
             /**
              * List of additional schemas to be auto-created.
@@ -1666,7 +1666,8 @@ public class IsisConfiguration {
             /**
              * Does lookup additional "mapping-files" in META-INF/orm-<i>name</i>.xml
              * (equivalent to "mapping-file" entries in persistence.xml) and adds these 
-             * to those that are already configured the <i>Spring Data</i> way (if any). 
+             * to those that are already configured the <i>Spring Data</i> way (if any).
+             * @implNote not implemented for JDO 
              */
             private final List<String> additionalOrmFiles = new ArrayList<>();
             
