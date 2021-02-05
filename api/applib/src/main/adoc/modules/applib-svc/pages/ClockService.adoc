@@ -24,11 +24,9 @@ Apache Isis provides such a facade through the `ClockService`.
 include::system:generated:page$index/applib/services/clock/ClockService.adoc[leveloffset=+2]
 
 
+include::system:generated:page$index/applib/clock/VirtualClock.adoc[leveloffset=+2]
+
 Note that this domain service is also used by the framework itself to obtain the time, so it acts as an SPI as well.
 
 
-== Implementation
-
-This class (`o.a.i.applib.services.clock.ClockService`) is also the default implementation.
-The time provided by this default implementation is based on the system clock.
 
