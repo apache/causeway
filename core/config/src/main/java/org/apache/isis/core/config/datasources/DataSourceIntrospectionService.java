@@ -73,8 +73,8 @@ public class DataSourceIntrospectionService {
             try {
                 return dataSource.getConnection().getMetaData().getURL();
             } catch (SQLException e) { 
-                // unexpected
-                e.printStackTrace();
+                log.warn("failed to get metadata from SQL connection using datasource of type {}", 
+                        dataSource.getClass());
                 return (String) null;
             }
         })

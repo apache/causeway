@@ -50,8 +50,10 @@ public class SecmanConfiguration {
     @Getter @Builder.Default @NonNull
     final String adminUserName = "secman-admin";
 
+    // sonar-ignore-on (detects potential security risk, which we are aware of)
     @Getter @Builder.Default @NonNull
     final String adminPassword = "pass";
+    // sonar-ignore-off
 
     /**
      * cannot be removed via user interface

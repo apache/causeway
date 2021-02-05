@@ -75,7 +75,7 @@
 			<artifactId>isis-persistence-jdo-integration</artifactId>
 		</dependency>
 
-		<!-- not required by JDO the integration modules, but enables 
+		<!-- not required by the JDO integration modules, but enables 
 			Spring Boot DataSource Auto-configuration -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
