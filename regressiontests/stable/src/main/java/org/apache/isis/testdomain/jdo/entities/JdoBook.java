@@ -44,7 +44,10 @@ import lombok.extern.log4j.Log4j2;
 @DomainObject(
         objectType = "testdomain.jdo.Book",
         entityChangePublishing = Publishing.ENABLED)
-
+@javax.jdo.annotations.Uniques({
+    @javax.jdo.annotations.Unique(
+            name = "JdoBook_isbn_UNQ", members = { "isbn" })
+})
 //@NamedQuery(
 //name = "JdoInventory.findAffordableProducts", 
 //query = "SELECT p FROM JdoInventory i, IN(i.products) p WHERE p.price <= :priceUpperBound")

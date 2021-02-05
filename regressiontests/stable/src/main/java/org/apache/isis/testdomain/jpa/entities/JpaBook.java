@@ -87,8 +87,8 @@ public class JpaBook extends JpaProduct {
     @Getter @Setter @Column(nullable = true)
     private String author;
 
-    @Property
-    @Getter @Setter @Column(nullable = true)
+    @Property 
+    @Getter @Setter @Column(nullable = false, unique = true)
     private String isbn;
 
     @Property

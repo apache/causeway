@@ -18,16 +18,7 @@
  */
 package org.apache.isis.testdomain.persistence.jdo;
 
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import java.sql.SQLException;
-import java.util.Collection;
-import java.util.SortedSet;
-import java.util.TreeSet;
-
-import javax.inject.Inject;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Disabled;
@@ -39,15 +30,19 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Transactional;
 
+import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import org.apache.isis.applib.query.Query;
-import org.apache.isis.applib.services.repository.RepositoryService;
-import org.apache.isis.commons.internal.primitives._Ints;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.testdomain.conf.Configuration_usingJdo;
 import org.apache.isis.testdomain.jdo.entities.JdoBook;
 import org.apache.isis.testdomain.jdo.entities.JdoInventory;
 import org.apache.isis.testdomain.jdo.entities.JdoProduct;
 import org.apache.isis.testing.integtestsupport.applib.IsisIntegrationTestAbstract;
+
+import static org.apache.isis.testdomain.persistence.jdo._TestFixtures.assertInventoryHasBooks;
+import static org.apache.isis.testdomain.persistence.jdo._TestFixtures.setUp3Books;
 
 import lombok.val;
 
@@ -59,7 +54,6 @@ import lombok.val;
 @Transactional @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class JdoQueryTest extends IsisIntegrationTestAbstract {
 
-    @Inject private RepositoryService repository;
  //   @Inject private JdoSupportService jdoSupport;
 
     @BeforeAll
@@ -71,11 +65,11 @@ class JdoQueryTest extends IsisIntegrationTestAbstract {
     @Test @Order(1) 
     void sampleInventory_shouldBeSetUpWith3Books() {
 
-        setUp3Books();
+        setUp3Books(repositoryService);
 
         // when
         
-        val inventories = repository.allInstances(JdoInventory.class);
+        val inventories = repositoryService.allInstances(JdoInventory.class);
 
         // then - expected post condition: ONE inventory with 3 books
         
@@ -92,13 +86,13 @@ class JdoQueryTest extends IsisIntegrationTestAbstract {
     @Test @Order(2) @Disabled("broken won't fix")
     void sampleInventory_shouldSupportQueryCount() {
 
-        setUp3Books();
+        setUp3Books(repositoryService);
         
-        assertInventoryHasBooks(repository
+        assertInventoryHasBooks(repositoryService
                 .allMatches(Query.allInstances(JdoBook.class)), 
                 1, 2, 3);
         
-        assertInventoryHasBooks(repository
+        assertInventoryHasBooks(repositoryService
                 .allMatches(Query.allInstances(JdoBook.class)
                         .withLimit(2)), 
                 1, 2);
@@ -107,14 +101,14 @@ class JdoQueryTest extends IsisIntegrationTestAbstract {
     @Test @Order(3) @Disabled("start not supported, should throw unsupported exception maybe?") 
     void sampleInventory_shouldSupportQueryStart() {
         
-        setUp3Books();
+        setUp3Books(repositoryService);
         
-        assertInventoryHasBooks(repository
+        assertInventoryHasBooks(repositoryService
                 .allMatches(Query.allInstances(JdoBook.class)
                         .withStart(1)), 
                 2, 3);
         
-        assertInventoryHasBooks(repository
+        assertInventoryHasBooks(repositoryService
                 .allMatches(Query.allInstances(JdoBook.class)
                         .withRange(1, 1)), 
                 2);
@@ -123,12 +117,12 @@ class JdoQueryTest extends IsisIntegrationTestAbstract {
     @Test @Order(4) @Disabled("broken won't fix")
     void sampleInventory_shouldSupportNamedQueriesThroughApplib() {
         
-        setUp3Books();
+        setUp3Books(repositoryService);
         
         val query = Query.named(JdoBook.class, "findAffordableBooks")
                 .withParameter("priceUpperBound", 60.);
         
-        val affordableBooks = repository.allMatches(query);
+        val affordableBooks = repositoryService.allMatches(query);
         assertInventoryHasBooks(affordableBooks, 1, 2);
     }
     
@@ -163,47 +157,9 @@ class JdoQueryTest extends IsisIntegrationTestAbstract {
     
     @Test @Order(99) @Disabled("broken won't fix")
     void previousTest_shouldHaveRolledBack() {
-        assertEquals(0, repository.allInstances(JdoInventory.class).size());
-        assertEquals(0, repository.allInstances(JdoProduct.class).size());
-    }
-    
-    // -- HELPER 
-    
-    private void cleanUp() {
-        repository.allInstances(JdoInventory.class).forEach(repository::remove);
-        repository.allInstances(JdoProduct.class).forEach(repository::remove);
+        assertEquals(0, repositoryService.allInstances(JdoInventory.class).size());
+        assertEquals(0, repositoryService.allInstances(JdoProduct.class).size());
     }
 
-    private void setUp3Books() {
-
-        cleanUp();
-        // given - expected pre condition: no inventories
-        assertEquals(0, repository.allInstances(JdoInventory.class).size());
-        
-        // setup sample Inventory with 3 Books
-        SortedSet<JdoProduct> products = new TreeSet<>();
-
-        products.add(JdoBook.of("Sample Book-1", "A sample book for testing.", 39., "Sample Author", "ISBN-A",
-                "Sample Publisher"));
-
-        products.add(JdoBook.of("Sample Book-2", "A sample book for testing.", 29., "Sample Author", "ISBN-B",
-                "Sample Publisher"));
-        
-        products.add(JdoBook.of("Sample Book-3", "A sample book for testing.", 99., "Sample Author", "ISBN-C",
-                "Sample Publisher"));
-        
-        val inventory = JdoInventory.of("Sample Inventory", products);
-        repository.persistAndFlush(inventory);
-    }
-    
-    private void assertInventoryHasBooks(Collection<? extends JdoProduct> products, int...expectedBookIndices) {
-        val actualBookIndices = products.stream()
-                .map(JdoProduct::getName)
-                .map(name->name.substring(name.length()-1))
-                .mapToInt(index->_Ints.parseInt(index, 10).orElse(-1))
-                .sorted()
-                .toArray();
-        assertArrayEquals(expectedBookIndices, actualBookIndices);
-    }
 
 }
