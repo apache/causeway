@@ -47,12 +47,12 @@ public class OptionHandlerAppManifest extends OptionHandlerAbstract {
     @Override
     @SuppressWarnings("static-access")
     public void addOption(final Options options) {
-        final Option option = OptionBuilder
-                                    .withArgName("app manifest").hasArg()
-                                    .withLongOpt(APP_MANIFEST_LONG_OPT)
-                                    .withDescription("fully qualified AppManifest class")
-                                    .create(APP_MANIFEST_OPT);
-        options.addOption(option);
+//        final Option option = OptionBuilder
+//                                    .withArgName("app manifest").hasArg()
+//                                    .withLongOpt(APP_MANIFEST_LONG_OPT)
+//                                    .withDescription("fully qualified AppManifest class")
+//                                    .create(APP_MANIFEST_OPT);
+        //options.addOption(option);
     }
 
     @Override

@@ -43,7 +43,9 @@ public final class ParserUtil {
     public static Class<? extends Parser<?>> parserOrNull(final Class<?> candidateClass, final String classCandidateName) {
         @SuppressWarnings("rawtypes")
         final Class type = candidateClass != null ? ClassUtil.implementingClassOrNull(candidateClass.getName(), Parser.class, FacetHolder.class) : null;
-        return type != null ? type : ClassUtil.implementingClassOrNull(classCandidateName, Parser.class, FacetHolder.class);
+        return type != null 
+        		? type 
+				: (Class) ClassUtil.implementingClassOrNull(classCandidateName, Parser.class, FacetHolder.class);
     }
 
 }

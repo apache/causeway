@@ -42,12 +42,12 @@ public class OptionHandlerFixture extends OptionHandlerFixtureAbstract {
     @Override
     @SuppressWarnings("static-access")
     public void addOption(final Options options) {
-        final Option option = OptionBuilder
-                                    .withArgName("class name").hasArg()
-                                    .withLongOpt(FIXTURE_LONG_OPT)
-                                    .withDescription("fully qualified fixture class")
-                                    .create(FIXTURE_OPT);
-        options.addOption(option);
+//        final Option option = OptionBuilder
+//                                    .withArgName("class name").hasArg()
+//                                    .withLongOpt(FIXTURE_LONG_OPT)
+//                                    .withDescription("fully qualified fixture class")
+//                                    .create(FIXTURE_OPT);
+//        options.addOption(option);
     }
 
     @Override

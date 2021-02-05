@@ -41,6 +41,7 @@ import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
+
 public class ObjectActionParameterAbstractTest_getId_and_getName {
 
     @Rule
@@ -164,7 +165,7 @@ public class ObjectActionParameterAbstractTest_getId_and_getName {
                 one(actionParamPeer).getFacet(NamedFacet.class);
                 will(returnValue(null));
 
-                one(parentAction).getParameters((Filter<ObjectActionParameter>) with(anything()));
+                one(parentAction).getParameters(with(Expectations.<Filter<ObjectActionParameter>>anything()));
                 will(returnValue(Lists.newArrayList(objectActionParameter)));
             }
         });
@@ -181,9 +182,9 @@ public class ObjectActionParameterAbstractTest_getId_and_getName {
         context.checking(new Expectations() {
             {
                 one(actionParamPeer).getFacet(NamedFacet.class);
-                will(returnValue(null));
+                will(returnValue(null)); 
 
-                one(parentAction).getParameters((Filter<ObjectActionParameter>) with(anything()));
+                one(parentAction).getParameters(with(Expectations.<Filter<ObjectActionParameter>>anything()));
                 will(returnValue(Lists.newArrayList(stubObjectActionParameterString, objectActionParameter, stubObjectActionParameterString2)));
             }
         });
@@ -202,7 +203,7 @@ public class ObjectActionParameterAbstractTest_getId_and_getName {
                 one(actionParamPeer).getFacet(NamedFacet.class);
                 will(returnValue(null));
 
-                one(parentAction).getParameters((Filter<ObjectActionParameter>) with(anything()));
+                one(parentAction).getParameters(with(Expectations.<Filter<ObjectActionParameter>>anything()));
                 will(returnValue(Lists.newArrayList(stubObjectActionParameterString, objectActionParameter, stubObjectActionParameterString2)));
             }
         });
