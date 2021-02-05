@@ -145,7 +145,7 @@
 		<jquery-ui.version>1.12.1</jquery-ui.version>
 
 		<jsr305.version>3.0.2</jsr305.version>
-		<junit-platform.version>1.7.0</junit-platform.version>
+		<junit-platform.version>1.7.1</junit-platform.version>
 
 		<log4jdbc-remix.version>0.2.7</log4jdbc-remix.version>
 
