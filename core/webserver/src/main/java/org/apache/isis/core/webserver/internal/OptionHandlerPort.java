@@ -45,9 +45,9 @@ public final class OptionHandlerPort implements OptionHandler {
     @Override
     @SuppressWarnings("static-access")
     public void addOption(final Options options) {
-        OptionBuilder.withArgName("port");
-        final Option option = OptionBuilder.hasArg().withLongOpt(OptionHandlerPort.PORT_LONG_OPT).withDescription("port to listen on").create(OptionHandlerPort.PORT_OPT);
-        options.addOption(option);
+//        OptionBuilder.withArgName("port");
+//        final Option option = OptionBuilder.hasArg().withLongOpt(OptionHandlerPort.PORT_LONG_OPT).withDescription("port to listen on").create(OptionHandlerPort.PORT_OPT);
+//        options.addOption(option);
     }
 
     @Override

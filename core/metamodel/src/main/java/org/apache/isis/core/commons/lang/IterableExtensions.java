@@ -28,7 +28,7 @@ public final class IterableExtensions {
     private IterableExtensions() {
     }
 
-    public final static <T> T fold(Iterable<T> list, Closure<T> closure) {
+    public final static <T> T fold(Iterable<? extends T> list, Closure<T> closure) {
         T result = null;
         for (T t : list) {
         result = closure.execute(t);

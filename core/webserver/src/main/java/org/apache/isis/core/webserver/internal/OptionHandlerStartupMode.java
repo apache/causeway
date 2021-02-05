@@ -45,8 +45,8 @@ public final class OptionHandlerStartupMode implements OptionHandler {
     @Override
     @SuppressWarnings("static-access")
     public void addOption(final Options options) {
-        final Option option = OptionBuilder.withArgName("startup mode").hasArg().withLongOpt(OptionHandlerStartupMode.STARTUP_MODE_LONG_OPT).withDescription("start in foreground (sync) or background (async)").create(OptionHandlerStartupMode.STARTUP_MODE_BASE_OPT);
-        options.addOption(option);
+//        final Option option = OptionBuilder.withArgName("startup mode").hasArg().withLongOpt(OptionHandlerStartupMode.STARTUP_MODE_LONG_OPT).withDescription("start in foreground (sync) or background (async)").create(OptionHandlerStartupMode.STARTUP_MODE_BASE_OPT);
+//        options.addOption(option);
     }
 
     @Override
