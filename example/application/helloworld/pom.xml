@@ -29,7 +29,7 @@
 
     <groupId>org.apache.isis.example.application</groupId>
     <artifactId>helloworld</artifactId>
-    <version>${revision}</version>
+    <version>1.0.0-SNAPSHOT</version>
 
     <name>Apache Isis App - HelloWorld</name>
 
@@ -37,7 +37,7 @@
 
     <properties>
         <revision>1.0.0-SNAPSHOT</revision>
-        <isis.version>${revision}</isis.version>
+        <isis.version>1.0.0-SNAPSHOT</isis.version>
 
         <compiler-plugin.source>1.8</compiler-plugin.source>
         <compiler-plugin.target>1.8</compiler-plugin.target>

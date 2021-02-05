@@ -35,7 +35,7 @@
 
     <properties>
         <revision>1.17.0</revision>
-        <isis.version>${revision}</isis.version>
+        <isis.version>1.0.0-SNAPSHOT</isis.version>
 
         <compiler-plugin.source>1.8</compiler-plugin.source>
         <compiler-plugin.target>1.8</compiler-plugin.target>

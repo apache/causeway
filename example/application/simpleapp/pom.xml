@@ -29,7 +29,7 @@
 
     <groupId>org.apache.isis.example.application</groupId>
     <artifactId>simpleapp</artifactId>
-    <version>${revision}</version>
+    <version>1.0.0-SNAPSHOT</version>
 
     <name>Apache Isis App - SimpleApp Parent</name>
 
@@ -37,7 +37,7 @@
 
     <properties>
         <revision>1.0.0-SNAPSHOT</revision>
-        <isis.version>${revision}</isis.version>
+        <isis.version>1.0.0-SNAPSHOT</isis.version>
 
         <!-- bumping to 1.18.4 causes a conflict with DataNucleus' annotation processor. -->
         <lombok.version>1.18.2</lombok.version>

@@ -35,7 +35,7 @@
 
     <properties>
         <revision>1.17.0</revision>
-        <isis.version>${revision}</isis.version>
+        <isis.version>1.0.0-SNAPSHOT</isis.version>
 
         <!-- bumping to 1.18.4 causes a conflict with DataNucleus' annotation processor. -->
         <lombok.version>1.18.2</lombok.version>

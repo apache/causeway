@@ -23,7 +23,7 @@
     <parent>
         <groupId>org.apache.isis.core</groupId>
         <artifactId>isis</artifactId>
-        <version>${revision}</version>
+        <version>1.0.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>isis-core-schema</artifactId>
@@ -44,6 +44,13 @@
             <groupId>joda-time</groupId>
             <artifactId>joda-time</artifactId>
         </dependency>
+        
+        <dependency>
+		    <groupId>javax.xml.bind</groupId>
+		    <artifactId>jaxb-api</artifactId>
+		    <version>2.3.1</version>
+		</dependency>
+        
     </dependencies>
 
     <profiles>
@@ -61,7 +68,7 @@
                         <plugin>
                             <groupId>org.jvnet.jaxb2.maven2</groupId>
                             <artifactId>maven-jaxb2-plugin</artifactId>
-                            <version>0.13.1</version>
+                            <version>0.14.0</version>
                             <configuration>
                                 <removeOldOutput>true</removeOldOutput>
                                 <episode>true</episode>
@@ -109,9 +116,9 @@
                         </dependencies>
                     </plugin>
                     <plugin>
-                        <groupId>org.codehaus.mojo</groupId>
-                        <artifactId>build-helper-maven-plugin</artifactId>
-                        <version>1.9.1</version>
+					    <groupId>org.codehaus.mojo</groupId>
+					    <artifactId>build-helper-maven-plugin</artifactId>
+					    <version>3.2.0</version>
                         <executions>
                             <execution>
                                 <id>add-source</id>

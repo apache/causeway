@@ -24,7 +24,7 @@
     <parent>
         <groupId>org.apache.isis.core</groupId>
         <artifactId>isis</artifactId>
-        <version>${revision}</version>
+        <version>1.0.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>isis-webdocker</artifactId>
@@ -36,7 +36,7 @@
 
     <properties>
 
-        <assembly-plugin.finalName>core-${revision}</assembly-plugin.finalName>
+        <assembly-plugin.finalName>core-1.0.0-SNAPSHOT</assembly-plugin.finalName>
 
         <docker-plugin.imageName>apacheisis/core</docker-plugin.imageName>
         <docker-plugin.imageTag>${project.version}</docker-plugin.imageTag>

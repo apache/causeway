@@ -29,7 +29,7 @@
 
     <groupId>org.apache.isis.core</groupId>
     <artifactId>isis</artifactId>
-    <version>${revision}</version>
+    <version>1.0.0-SNAPSHOT</version>
     
     <packaging>pom</packaging>
 
@@ -47,7 +47,7 @@
 
     <properties>
         <revision>1.0.0-SNAPSHOT</revision>
-        <isis.version>${revision}</isis.version>
+        <isis.version>1.0.0-SNAPSHOT</isis.version>
 
         <isis.skipTests>false</isis.skipTests>
         <maven.test.skip>${isis.skipTests}</maven.test.skip>
@@ -62,8 +62,8 @@
         <testsToExclude>**/*IntegrationTest.java</testsToExclude>
 
         <!-- remaining properties should not need to be overridden -->
-        <compileSource>1.7</compileSource>
-        <compileTarget>1.7</compileTarget>
+        <compileSource>1.8</compileSource>
+        <compileTarget>1.8</compileTarget>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <surefire-plugin.argLine>-Xms1024m -Xmx1024m</surefire-plugin.argLine>
@@ -967,7 +967,7 @@
                                 <version>[1.8.0,)</version>
                             </requireJavaVersion>
                             <!--
-                            seemingly not compatible with use of ${revision} placeholders
+                            seemingly not compatible with use of 1.0.0-SNAPSHOT placeholders
                             <requirePluginVersions>
                                 <message>All plugin versions must be
                                     defined!</message>
