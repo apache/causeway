@@ -23,15 +23,14 @@ import java.sql.SQLException;
 import javax.inject.Inject;
 import javax.jdo.JDOException;
 
+import org.datanucleus.api.jdo.NucleusJDOHelper;
+import org.datanucleus.exceptions.NucleusException;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataAccessException;
-import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.TestPropertySources;
-import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.Propagation;
 
 import static org.junit.Assert.assertNotNull;
@@ -74,7 +73,7 @@ class JdoExceptionRecognizerTest
         // Util_H2Console.main(null);
     }
 
-    @Test @Disabled("yet does not throw") //TODO 
+    @Test 
     void booksUniqueByIsbn_whenViolated_shouldThrowRecognizedException() {
 
         
@@ -90,15 +89,11 @@ class JdoExceptionRecognizerTest
         });
         
         // when adding a book for which one with same ISBN already exists in the database,
-        // we should expect to see a Spring recognized DataAccessException been thrown 
+        // we expect to see a Spring recognized DataAccessException been thrown 
         
         assertThrows(DataAccessException.class, ()->{
         
             try {
-            
-                //FIXME does not throw instead just shows warning
-                // WARN 4664 --- [           main] D.D.Persist                              : Insert of object "org.apache.isis.testdomain.jdo.entities.JdoBook@224f90eb" using statement "INSERT INTO "testdomain"."JdoProduct" ("id","description","name","price","author","isbn","publisher","DISCRIMINATOR","products_id_OID") VALUES (?,?,?,?,?,?,?,?,?)" failed : Unique index or primary key violation: "testdomain.JdoBook_isbn_UNQ_INDEX_E ON testdomain.JdoProduct(isbn) VALUES -1"; SQL statement:
-                // INSERT INTO "testdomain"."JdoProduct" ("id","description","name","price","author","isbn","publisher","DISCRIMINATOR","products_id_OID") VALUES (?,?,?,?,?,?,?,?,?) [23505-200]
 
                 transactionService.runTransactional(Propagation.REQUIRES_NEW, ()->{
                     
@@ -118,13 +113,24 @@ class JdoExceptionRecognizerTest
                     
                     });
         
-                });
+                })
+                .nullableOrElseFail();
                 
             } catch (RuntimeException ex) {
                 
                 // TODO this catch and throw logic should be done by the TransactionService instead
                 val translatedEx = 
                         _Exceptions.streamCausalChain(ex)
+                        
+                        // translate from Datanucleus to JDO standard
+                        .<Throwable>map(e->{
+                            if(e instanceof NucleusException) {
+                                return NucleusJDOHelper
+                                        .getJDOExceptionForNucleusException((NucleusException)e);
+                            }
+                            return e;
+                        })
+                        
                         .filter(e->e instanceof JDOException)
                         .map(JDOException.class::cast)
                         // call Spring's exception translation mechanism (thats our fork)
