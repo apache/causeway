@@ -112,7 +112,7 @@ class JpaExceptionRecognizerTest
                     });
         
                 })
-                .orElseFail();
+                .nullableOrElseFail();
                 
             } catch (RuntimeException ex) {
                 

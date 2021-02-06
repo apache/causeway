@@ -22,7 +22,6 @@ import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.api.extension.TestExecutionExceptionHandler;
 
 import org.apache.isis.applib.exceptions.RecoverableException;
-import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerService;
 
 import lombok.val;
 
@@ -36,20 +35,17 @@ public class ExceptionRecognizerTranslate implements TestExecutionExceptionHandl
             final ExtensionContext extensionContext, 
             final Throwable throwable) throws Throwable {
 
-        val recognition = _Helper.getServiceRegistry(extensionContext)
-        .flatMap(reg->reg.lookupService(ExceptionRecognizerService.class))
-        .flatMap(rec->rec.recognize(throwable))
-        .orElse(null);
-        
-        if(recognition!=null) {
-            
-            val msg = String.format("%s: %s", 
-                    recognition.getCategory().getFriendlyName(), recognition.getReason());
-            
-            throw new RecoverableException(msg, throwable);
-            
-        }
-        throw throwable;
+        val translatedException = _Helper.getExceptionRecognizerService(extensionContext)
+        .flatMap(recService->recService.recognize(throwable))
+        .<Throwable>map(recognition->new RecoverableException(
+                String.format("%s: %s", 
+                        recognition.getCategory().getFriendlyName(), 
+                        recognition.getReason()
+                ),
+                throwable))
+        .orElse(throwable);
+
+        throw translatedException;
     }
 
 }

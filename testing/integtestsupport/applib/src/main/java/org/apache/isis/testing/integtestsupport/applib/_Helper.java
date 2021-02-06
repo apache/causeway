@@ -22,9 +22,8 @@ import java.util.Optional;
 
 import org.junit.jupiter.api.extension.ExtensionContext;
 
-import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
+import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
-import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.interaction.session.InteractionFactory;
 
 class _Helper {
@@ -43,10 +42,10 @@ class _Helper {
         .flatMap(serviceRegistry->serviceRegistry.lookupService(InteractionFactory.class));
     }
     
-    static Can<ExceptionRecognizer> getExceptionRecognizers(final ExtensionContext extensionContext) {
+    static Optional<ExceptionRecognizerService> getExceptionRecognizerService(
+            final ExtensionContext extensionContext) {
         return getServiceRegistry(extensionContext)
-        .map(serviceRegistry->serviceRegistry.select(ExceptionRecognizer.class))
-        .orElse(Can.empty());
+        .flatMap(serviceRegistry->serviceRegistry.lookupService(ExceptionRecognizerService.class));
     }
     
 }
