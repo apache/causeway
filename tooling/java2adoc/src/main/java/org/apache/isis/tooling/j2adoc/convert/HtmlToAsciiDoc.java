@@ -113,6 +113,7 @@ final class HtmlToAsciiDoc {
                     helper.blockAppend("* ");
                     return;
                 case "tt":
+                case "code":
                     helper.blockAppend("` ");
                     return;
                 case "i":
