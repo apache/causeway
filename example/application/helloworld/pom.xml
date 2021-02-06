@@ -39,6 +39,10 @@
         <revision>1.0.0-SNAPSHOT</revision>
         <isis.version>1.0.0-SNAPSHOT</isis.version>
 
+		<maven.compiler.release>1.8</maven.compiler.release>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
+
         <compiler-plugin.source>1.8</compiler-plugin.source>
         <compiler-plugin.target>1.8</compiler-plugin.target>
         <compiler-plugin.compilerArgument>-parameters</compiler-plugin.compilerArgument>
