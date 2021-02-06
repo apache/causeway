@@ -50,6 +50,9 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
+		<!-- override version from mixin -->
+		<jetty-maven-plugin.version>9.4.36.v20210114</jetty-maven-plugin.version>
+
         <maven-war-plugin.warName>${project.artifactId}</maven-war-plugin.warName>
     </properties>
 
