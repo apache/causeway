@@ -39,3 +39,5 @@ pom.xml.versionsBackup
 
 rebel.xml
 translations.pot
+/.apt_generated_tests/
+/.factorypath
