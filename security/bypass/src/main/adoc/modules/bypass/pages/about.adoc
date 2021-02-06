@@ -13,7 +13,7 @@ This is typically used for integration tests or for prototyping.
 
 The bypass security component consists of an implementation of both the `AuthenticationManager` and `AuthorizationManager` APIs, and are intended for prototyping use only.
 
-The authentication manager allows access with any credentials (in a sense, "bypassing" authentication), while the authorization manager provides access to all class pathsToInclude (in a sense, "bypassing" authorization).
+The authentication manager allows access with any credentials (in a sense, "bypassing" authentication), while the authorization manager provides access to all class members (in a sense, "bypassing" authorization).
 
 
 
