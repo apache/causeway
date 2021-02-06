@@ -92,7 +92,7 @@ public final class OrphanedIncludeStatementFixer {
                     val includeLineShouldBe = expected.toAdocAsString();
 
                     if(!includeLineShouldBe.equals(include.getMatchingLine())) {
-                        System.out.printf("mismatch\n %s\n %s\n", includeLineShouldBe, include.getMatchingLine());
+                        log.warn("mismatch\n {}\n {}\n", includeLineShouldBe, include.getMatchingLine());
                         correctedIncludeStatement.setValue(expected);
                         fixedCounter.inc();
                     }

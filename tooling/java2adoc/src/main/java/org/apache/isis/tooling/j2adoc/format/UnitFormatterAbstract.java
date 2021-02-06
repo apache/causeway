@@ -19,11 +19,18 @@
 package org.apache.isis.tooling.j2adoc.format;
 
 import java.util.Optional;
+import java.util.function.Function;
+
+import com.github.javaparser.ast.body.BodyDeclaration;
+import com.github.javaparser.ast.body.EnumConstantDeclaration;
+import com.github.javaparser.ast.body.FieldDeclaration;
+import com.github.javaparser.ast.nodeTypes.NodeWithJavadoc;
 
 import org.asciidoctor.ast.Document;
 import org.asciidoctor.ast.List;
 import org.asciidoctor.ast.StructuralNode;
 
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.tooling.j2adoc.J2AdocContext;
 import org.apache.isis.tooling.j2adoc.J2AdocUnit;
@@ -81,13 +88,23 @@ implements UnitFormatter {
 
     protected Optional<String> title(final J2AdocUnit unit) {
         return Optional.of(
-                String.format("%s : _%s_",
-                        unit.getFriendlyName(),
-                        unit.getDeclarationKeywordFriendlyName().toLowerCase()));
+                String.format(formatFor(unit),
+                        unit.getFriendlyName()));
+    }
+
+    private static String formatFor(J2AdocUnit unit) {
+        switch (unit.getTypeDeclaration().getKind()) {
+            case ANNOTATION: return "@%s";
+            case CLASS: return "%s";
+            case ENUM: return "%s _(enum)_";
+            case INTERFACE: return "%s _(interface)_";
+            default:
+                throw new IllegalArgumentException(String.format(
+                    "unknown kind: %s", unit.getTypeDeclaration().getKind()));
+        }
     }
 
     protected void intro(final J2AdocUnit unit, final StructuralNode parent) {
-
         unit.getJavadoc()
         .filter(javadoc->!Javadocs.hasHidden(javadoc))
         .map(javadoc->getConverter().javadoc(javadoc, unit))
@@ -107,74 +124,49 @@ implements UnitFormatter {
         javaDocBlock.getBlocks().addAll(javadoc.getBlocks());
     }
 
-    protected void memberDescriptions(final J2AdocUnit unit, final StructuralNode parent) {
+    protected void memberDescriptions(final J2AdocUnit unit, final StructuralNode doc) {
 
-        val ul = getMemberDescriptionContainer(parent);
+        val ul = getMemberDescriptionContainer(doc);
 
-        unit.getTypeDeclaration().getEnumConstantDeclarations().stream()
+        appendMemberDescriptions(ul, unit,
+                unit.getTypeDeclaration().getEnumConstantDeclarations(),
+                decl -> getConverter().enumConstantDeclaration(decl));
+
+        appendMemberDescriptions(ul, unit,
+                unit.getTypeDeclaration().getPublicFieldDeclarations(),
+                decl -> getConverter().fieldDeclaration(decl, unit));
+
+        appendMemberDescriptions(ul, unit,
+                unit.getTypeDeclaration().getAnnotationMemberDeclarations(),
+                decl -> getConverter().annotationMemberDeclaration(decl, unit));
+
+        appendMemberDescriptions(ul, unit,
+                unit.getTypeDeclaration().getPublicConstructorDeclarations(),
+                decl -> getConverter().constructorDeclaration(decl, unit));
+
+        appendMemberDescriptions(ul, unit,
+                unit.getTypeDeclaration().getPublicMethodDeclarations(),
+                decl -> getConverter().methodDeclaration(decl, unit));
+
+        val titleBlock = block(doc);
+        titleBlock.setSource("== Members");
+    }
+
+    private <T extends NodeWithJavadoc<?>> void appendMemberDescriptions(
+            final StructuralNode container,
+            final J2AdocUnit unit,
+            final Can<T> declarations,
+            final Function<T, String> memberDescriber) {
+
+        declarations.stream()
         .filter(Javadocs::presentAndNotHidden)
-        .forEach(ecd->{
-            ecd.getJavadoc()
+        .forEach(nwj->{
+            nwj.getJavadoc()
             .ifPresent(javadoc->{
-
-                appendMemberDescription(ul,
-                                getConverter().enumConstantDeclaration(ecd),
+                appendMemberDescription(container,
+                                memberDescriber.apply(nwj),
                                 getConverter().javadoc(javadoc, unit));
             });
-        });
-
-        unit.getTypeDeclaration().getPublicFieldDeclarations().stream()
-        .filter(Javadocs::presentAndNotHidden)
-        .forEach(fd->{
-
-            fd.getJavadoc()
-            .ifPresent(javadoc->{
-
-                appendMemberDescription(ul,
-                        getConverter().fieldDeclaration(fd, unit),
-                        getConverter().javadoc(javadoc, unit));
-            });
-
-        });
-
-        unit.getTypeDeclaration().getAnnotationMemberDeclarations().stream()
-        .filter(Javadocs::presentAndNotHidden)
-        .forEach(ecd->{
-            ecd.getJavadoc()
-            .ifPresent(javadoc->{
-
-                appendMemberDescription(ul,
-                                getConverter().annotationMemberDeclaration(ecd, unit),
-                                getConverter().javadoc(javadoc, unit));
-            });
-        });
-
-        unit.getTypeDeclaration().getPublicConstructorDeclarations().stream()
-        .filter(Javadocs::presentAndNotHidden)
-        .forEach(cd->{
-
-            cd.getJavadoc()
-            .ifPresent(javadoc->{
-
-                appendMemberDescription(ul,
-                        getConverter().constructorDeclaration(cd, unit),
-                        getConverter().javadoc(javadoc, unit));
-            });
-
-        });
-
-        unit.getTypeDeclaration().getPublicMethodDeclarations().stream()
-        .filter(Javadocs::presentAndNotHidden)
-        .forEach(md->{
-
-            md.getJavadoc()
-            .ifPresent(javadoc->{
-
-                appendMemberDescription(ul,
-                        getConverter().methodDeclaration(md, unit),
-                        getConverter().javadoc(javadoc, unit));
-            });
-
         });
     }
 
@@ -190,7 +182,6 @@ implements UnitFormatter {
         val doc = AsciiDocFactory.doc();
 
         // -- title
-
         if(!j2aContext.isSkipTitleHeader()) {
             title(unit)
             .ifPresent(doc::setTitle);
@@ -201,9 +192,14 @@ implements UnitFormatter {
         _Strings.nonEmpty(getContext().getLicenseHeader())
         .ifPresent(notice->AsciiDocFactory.attrNotice(doc, notice));
 
+
         // -- intro
 
         intro(unit, doc);
+
+        // == API
+        val titleBlock = block(doc);
+        titleBlock.setSource("== API");
 
         // -- java source
 
