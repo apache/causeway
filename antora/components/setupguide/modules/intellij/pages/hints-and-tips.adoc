@@ -49,8 +49,8 @@ Navigating around:
 * find superclasses/interface/declaration: `ctrl-B`
 
 Viewing the structure (ie outline) of a class
-* `ctrl-F12` will pop-up a dialog showing all pathsToInclude
-** hit `ctrl-F12` again to also see inherited pathsToInclude
+* `ctrl-F12` will pop-up a dialog showing all members
+** hit `ctrl-F12` again to also see inherited members
 
 == Editing
 

@@ -91,7 +91,7 @@ Using xref:testing:fixtures:about.adoc[fixture scripts] to initialize the databa
 
 
 |link:https://www.youtube.com/watch?v=dXtmxmYxa30[006^] +
-Implementing xref:userguide:fun:business-rules.adoc[business rules]for domain object pathsToInclude, using supporting methods ("see it, use it, do it")
+Implementing xref:userguide:fun:business-rules.adoc[business rules]for domain object members, using supporting methods ("see it, use it, do it")
 |x||||||||||
 
 |link:https://www.youtube.com/watch?v=imHfxQGUgV8[007^] +

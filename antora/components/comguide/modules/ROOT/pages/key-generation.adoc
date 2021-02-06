@@ -9,7 +9,7 @@
 
 
 
-In order that a contributor can make a release it is necessary for them to have generated a key and had that key recognized by other pathsToInclude of the Apache Software Foundation.
+In order that a contributor can make a release it is necessary for them to have generated a key and had that key recognized by other members of the Apache Software Foundation.
 
 For further background information on this topic, see the http://www.apache.org/dev/release-signing.html[release signing page] and the http://www.apache.org/dev/openpgp.html#generate-key[openpgp page] on the Apache wiki.
 
@@ -540,7 +540,7 @@ Log onto `id.apache.org` and ensure that the finger print of your public key is 
 
 == Attend Key Signing Party (Apache web of trust)
 
-It is strongly advised that the contributor attend a key signing party at an Apache event, in order that other Apache committers/pathsToInclude can in person verify their identity against the key.
+It is strongly advised that the contributor attend a key signing party at an Apache event, in order that other Apache committers/members can in person verify their identity against the key.
 The process for this is described http://www.apache.org/dev/release-signing.html#key-signing-party[here] and http://wiki.apache.org/apachecon/PgpKeySigning[here].
 
 == Update Maven Settings file (`~/.m2/settings.xml`)

@@ -7,11 +7,11 @@ The release process consists of:
 
 * the release manager xref:comguide:ROOT:cutting-a-release.adoc[cutting the release]
 
-* pathsToInclude of the Apache Isis PMC xref:comguide:ROOT:verifying-releases.adoc[verifying] and voting on the release
+* members of the Apache Isis PMC xref:comguide:ROOT:verifying-releases.adoc[verifying] and voting on the release
 
 * the release manager performing post-release tasks, for either a successful or an xref:comguide:ROOT:post-release-unsuccessful.adoc[unsuccessful] vote (former documented below)
 
-For a vote to succeed, there must be +3 votes from PMC pathsToInclude, and the vote must have been open at least 72 hours.
+For a vote to succeed, there must be +3 votes from PMC members, and the vote must have been open at least 72 hours.
 If there are not +3 votes after this time then it is perfectly permissible to keep the vote open longer.
 
 This section describes the steps to perform if the vote has been successful.

@@ -28,7 +28,7 @@ isis.core.metaModel.validator.mixins-only=true        // <.>
 ----
 <.> `@DomainService(natureOfService=VIEW/REST)` is now solely used for UI menu action providers and REST end-points.
 There is no longer the need to validate uses of `natureOfService=DOMAIN` as this option was removed.
-<.> Support for services that contribute pathsToInclude to other `DomainObjects` was removed. Use `Mixins` instead.
+<.> Support for services that contribute members to other `DomainObjects` was removed. Use `Mixins` instead.
 
 See the former java-doc for hints on how to migrate the previous options.
 
@@ -92,7 +92,7 @@ VIEW_CONTRIBUTIONS_ONLY,
 spring.datasource.platform=h2
 spring.datasource.url=jdbc:h2:mem:...
 ----
-configure Datanucleus settings using 
+configure Datanucleus settings using
 [source]
 ----
 datanucleus. ...
