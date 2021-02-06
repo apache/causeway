@@ -133,25 +133,40 @@ implements
     public void nextTransaction() {
         
         val txManager = singletonTransactionManagerElseFail(); 
-        
-        val txTemplate = new TransactionTemplate(txManager);
-        txTemplate.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
 
-        // either reuse existing or create new
-        val txStatus = txManager.getTransaction(txTemplate);
-        if(txStatus.isNewTransaction()) {
-            // we have created a new transaction, so we are done
-            return;
-        }
-        // we are reusing an exiting transaction, so end it and create a new one afterwards
-        if(txStatus.isRollbackOnly()) {
-            txManager.rollback(txStatus);
-        } else {
-            txManager.commit(txStatus);
-        }
+        try {
         
-        // begin a new transaction
-        txManager.getTransaction(txTemplate);
+            val txTemplate = new TransactionTemplate(txManager);
+            txTemplate.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
+    
+            // either reuse existing or create new
+            val txStatus = txManager.getTransaction(txTemplate);
+            if(txStatus.isNewTransaction()) {
+                // we have created a new transaction, so we are done
+                return;
+            }
+            // we are reusing an exiting transaction, so end it and create a new one afterwards
+            if(txStatus.isRollbackOnly()) {
+                txManager.rollback(txStatus);
+            } else {
+                txManager.commit(txStatus);
+            }
+            
+            // begin a new transaction
+            txManager.getTransaction(txTemplate);
+            
+        } catch (Throwable ex) {
+            
+            val translatedEx = translateExceptionIfPossible(ex, txManager);
+            
+            if(translatedEx instanceof RuntimeException) {
+                throw ex;
+            }
+            
+            throw new RuntimeException(ex);
+            
+        }
+            
     }
     
     @Override

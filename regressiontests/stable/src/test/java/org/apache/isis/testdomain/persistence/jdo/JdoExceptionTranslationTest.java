@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.testdomain.persistence.jpa;
+package org.apache.isis.testdomain.persistence.jdo;
 
 import java.sql.SQLException;
 
@@ -38,29 +38,28 @@ import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.core.interaction.session.InteractionFactory;
-import org.apache.isis.testdomain.conf.Configuration_usingJpa;
-import org.apache.isis.testdomain.jpa.entities.JpaInventory;
+import org.apache.isis.testdomain.conf.Configuration_usingJdo;
+import org.apache.isis.testdomain.jdo.entities.JdoInventory;
 
 import lombok.val;
 
 @SpringBootTest(
         classes = { 
-                Configuration_usingJpa.class,
+                Configuration_usingJdo.class,
         })
 @TestPropertySources({
     @TestPropertySource(IsisPresets.UseLog4j2Test)    
 })
 //@Transactional ... we manage transaction ourselves
-class JpaExceptionRecognizerTest 
-//extends IsisIntegrationTestAbstract ... we manage interactions ourselves
+class JdoExceptionTranslationTest
 {
 
-    // @Inject private JpaSupportService jpaSupport;
+    // @Inject private JdoSupportService JdoSupport;
     
     @Inject private TransactionService transactionService;
     @Inject private RepositoryService repositoryService;
     @Inject private InteractionFactory interactionFactory;
-    //@Inject private JpaTransactionManager txManager;
+    //@Inject private JdoTransactionManager txManager;
 
     @BeforeAll
     static void beforeAll() throws SQLException {
@@ -87,14 +86,14 @@ class JpaExceptionRecognizerTest
         // we expect to see a Spring recognized DataAccessException been thrown 
         
         assertThrows(DataAccessException.class, ()->{
-        
+
             transactionService.runTransactional(Propagation.REQUIRES_NEW, ()->{
                 
                 interactionFactory.runAnonymous(()->{
                 
                     // given
                     
-                    val inventories = repositoryService.allInstances(JpaInventory.class);
+                    val inventories = repositoryService.allInstances(JdoInventory.class);
                     assertEquals(1, inventories.size());
                     
                     val inventory = inventories.get(0);
@@ -108,7 +107,7 @@ class JpaExceptionRecognizerTest
     
             })
             .nullableOrElseFail();
-           
+            
         });
         
         // expected post condition: ONE inventory with 3 books
@@ -117,7 +116,7 @@ class JpaExceptionRecognizerTest
             
             interactionFactory.runAnonymous(()->{
             
-                val inventories = repositoryService.allInstances(JpaInventory.class);
+                val inventories = repositoryService.allInstances(JdoInventory.class);
                 assertEquals(1, inventories.size());
                 
                 val inventory = inventories.get(0);
@@ -135,6 +134,5 @@ class JpaExceptionRecognizerTest
         });
 
         
-    }
-    
+    }    
 }
