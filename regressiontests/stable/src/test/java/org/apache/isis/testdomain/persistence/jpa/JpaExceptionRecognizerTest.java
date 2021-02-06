@@ -26,8 +26,6 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataAccessException;
-import org.springframework.dao.support.DataAccessUtils;
-import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.TestPropertySources;
 import org.springframework.transaction.annotation.Propagation;
@@ -38,7 +36,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.xactn.TransactionService;
-import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.core.interaction.session.InteractionFactory;
 import org.apache.isis.testdomain.conf.Configuration_usingJpa;
@@ -63,7 +60,7 @@ class JpaExceptionRecognizerTest
     @Inject private TransactionService transactionService;
     @Inject private RepositoryService repositoryService;
     @Inject private InteractionFactory interactionFactory;
-    @Inject private JpaTransactionManager txManager;
+    //@Inject private JpaTransactionManager txManager;
 
     @BeforeAll
     static void beforeAll() throws SQLException {
@@ -91,45 +88,27 @@ class JpaExceptionRecognizerTest
         
         assertThrows(DataAccessException.class, ()->{
         
-            try {
-            
-                transactionService.runTransactional(Propagation.REQUIRES_NEW, ()->{
+            transactionService.runTransactional(Propagation.REQUIRES_NEW, ()->{
+                
+                interactionFactory.runAnonymous(()->{
+                
+                    // given
                     
-                    interactionFactory.runAnonymous(()->{
+                    val inventories = repositoryService.allInstances(JpaInventory.class);
+                    assertEquals(1, inventories.size());
                     
-                        // given
-                        
-                        val inventories = repositoryService.allInstances(JpaInventory.class);
-                        assertEquals(1, inventories.size());
-                        
-                        val inventory = inventories.get(0);
-                        assertNotNull(inventory);
-                        
-                        
-                        // add a conflicting book (unique ISBN violation)
-                        _TestFixtures.addABookTo(inventory);
+                    val inventory = inventories.get(0);
+                    assertNotNull(inventory);
                     
-                    });
-        
-                })
-                .nullableOrElseFail();
+                    
+                    // add a conflicting book (unique ISBN violation)
+                    _TestFixtures.addABookTo(inventory);
                 
-            } catch (RuntimeException ex) {
-                
-                // TODO this catch and throw logic should be done by the TransactionService instead
-                val translatedEx = _Exceptions.streamCausalChain(ex)
-                        .filter(e->e instanceof RuntimeException)
-                        .map(RuntimeException.class::cast)
-                        // call Spring's exception translation mechanism
-                        .map(nextEx->DataAccessUtils.translateIfNecessary(nextEx, txManager.getJpaDialect()))
-                        .filter(nextEx -> nextEx instanceof DataAccessException)
-                        .findFirst()
-                        .orElse(ex);
-                
-                throw translatedEx;
-                
-            }
-            
+                });
+    
+            })
+            .nullableOrElseFail();
+           
         });
         
         // expected post condition: ONE inventory with 3 books

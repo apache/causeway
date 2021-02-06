@@ -105,11 +105,26 @@ implements
         val result = Result.ofNullable(callable)
                 .mapFailure(ex->translateExceptionIfPossible(ex, txManager));
         
-        if(result.isFailure()) {
-            txManager.rollback(tx);
-        } else {
-            txManager.commit(tx);
-        }
+        try {
+        
+            if(result.isFailure()) {
+                txManager.rollback(tx);
+            } else {
+                txManager.commit(tx);
+            }
+            
+        } catch (Exception ex) {
+            
+            return result.isFailure()
+                    
+                    // return the original failure cause (originating from calling the callable)
+                    // (so we don't shadow the original failure) 
+                    ? result
+                            
+                    // return the failure we just catched                            
+                    : Result.failure(translateExceptionIfPossible(ex, txManager));
+            
+        }  
 
         return result;
     }
