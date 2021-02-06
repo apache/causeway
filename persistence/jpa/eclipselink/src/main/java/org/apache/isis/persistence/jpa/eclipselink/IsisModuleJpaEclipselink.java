@@ -20,6 +20,8 @@ package org.apache.isis.persistence.jpa.eclipselink;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -32,13 +34,17 @@ import org.springframework.boot.autoconfigure.orm.jpa.JpaProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.dao.DataAccessException;
 import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
+import org.springframework.orm.jpa.JpaSystemException;
 import org.springframework.orm.jpa.vendor.AbstractJpaVendorAdapter;
 import org.springframework.orm.jpa.vendor.EclipseLinkJpaDialect;
 import org.springframework.orm.jpa.vendor.EclipseLinkJpaVendorAdapter;
 import org.springframework.transaction.jta.JtaTransactionManager;
 
 import org.apache.isis.applib.services.inject.ServiceInjector;
+import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.persistence.jpa.eclipselink.inject.BeanManagerForEntityListeners;
 import org.apache.isis.persistence.jpa.integration.IsisModuleJpaIntegration;
@@ -68,13 +74,53 @@ public class IsisModuleJpaEclipselink extends JpaBaseConfiguration {
 
     @Bean
     public EclipseLinkJpaDialect eclipselinkJpaDialect() {
-        return new EclipseLinkJpaDialect();
+        return new EclipseLinkJpaDialect() 
+//        {
+//            private static final long serialVersionUID = 1L;
+//
+//            @Override
+//            public DataAccessException translateExceptionIfPossible(RuntimeException ex) {
+//                
+//                // search the causal chain for the best (most specific) translation
+//                
+//                val translatedExceptionsBestFirst = _Exceptions.getCausalChain(ex)
+//                .stream()
+//                .filter(nextEx -> nextEx instanceof RuntimeException)
+//                .map(RuntimeException.class::cast)
+//                .map(super::translateExceptionIfPossible)
+//                .filter(_NullSafe::isPresent)
+//                .peek(nextEx->System.err.printf("!!!!!!!!!!!!!!!!!!! %s", nextEx.getClass()))
+//                .collect(Collectors.toCollection(()->new TreeSet<DataAccessException>((a, b)->{
+//                    
+//                    // anything is better than the most generic JpaSystemException
+//                    
+//                    int aScore = (a instanceof JpaSystemException)
+//                            ? 0
+//                            : 1;
+//                    
+//                    int bScore = (b instanceof JpaSystemException)
+//                            ? 0
+//                            : 1;
+//                    
+//                    return Integer.compare(bScore, aScore);
+//                    
+//                    }))
+//                );
+//                
+//                return translatedExceptionsBestFirst.isEmpty()
+//                        ? null
+//                        : translatedExceptionsBestFirst.iterator().next();
+//
+//                //return super.translateExceptionIfPossible(ex);
+//            }  
+//        }
+        ;
     }
 
-    @Bean
-    public PersistenceExceptionTranslationPostProcessor persistenceExceptionTranslationPostProcessor(){
-        return new PersistenceExceptionTranslationPostProcessor();
-    }
+//    @Bean
+//    public PersistenceExceptionTranslationPostProcessor persistenceExceptionTranslationPostProcessor(){
+//        return new PersistenceExceptionTranslationPostProcessor();
+//    }
 
     protected IsisModuleJpaEclipselink(
             IsisConfiguration isisConfiguration,
@@ -90,7 +136,14 @@ public class IsisModuleJpaEclipselink extends JpaBaseConfiguration {
 
     @Override
     protected AbstractJpaVendorAdapter createJpaVendorAdapter() {
-        return new EclipseLinkJpaVendorAdapter();
+        return new EclipseLinkJpaVendorAdapter() 
+//        {
+//            @Override
+//            public EclipseLinkJpaDialect getJpaDialect() {
+//                return eclipselinkJpaDialect();
+//            }
+//        }
+        ;
     }
 
     @Override

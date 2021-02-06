@@ -86,6 +86,8 @@ public class IsisModuleJdoDatanucleus {
     
     /**
      * Conveniently registers this dialect as a {@link PersistenceExceptionTranslator} with <i>Spring</i>.
+     * @see PersistenceExceptionTranslator
+     * @see JdoDialect
      */
     @Qualifier("jdo-dialect")
     @Bean

@@ -68,7 +68,7 @@ class JdoExceptionTranslationTest
     }
 
     @Test 
-    void booksUniqueByIsbn_whenViolated_shouldThrowRecognizedException() {
+    void booksUniqueByIsbn_whenViolated_shouldThrowTranslatedException() {
 
         
         transactionService.runTransactional(Propagation.REQUIRES_NEW, ()->{

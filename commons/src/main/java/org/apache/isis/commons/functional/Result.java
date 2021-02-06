@@ -69,6 +69,10 @@ public final class Result<L> {
         }
     }
     
+    public static Result<Void> ofVoid(final @NonNull ThrowingRunnable runnable) {
+        return ofNullable(ThrowingRunnable.toCallable(runnable));
+    }
+    
     public static <L> Result<L> success(final @NonNull L value) {
         return of(value, null, true);
     }
