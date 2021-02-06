@@ -24,9 +24,7 @@ import static org.apache.isis.core.runtime.runner.Constants.USER_OPT;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Option;
-import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
-
 import org.apache.isis.core.commons.configbuilder.IsisConfigurationBuilder;
 import org.apache.isis.core.runtime.optionhandler.BootPrinter;
 import org.apache.isis.core.runtime.optionhandler.OptionHandlerAbstract;
@@ -42,10 +40,16 @@ public class OptionHandlerUser extends OptionHandlerAbstract {
     }
 
     @Override
-    @SuppressWarnings("static-access")
     public void addOption(final Options options) {
-//        final Option option = OptionBuilder.withArgName("user name").hasArg().withLongOpt(USER_LONG_OPT).withDescription("user name to log in with").create(USER_OPT);
-//        options.addOption(option);
+    	
+    	Option option = Option.builder(USER_OPT)
+    	.argName("user name")
+    	.hasArg()
+    	.longOpt(USER_LONG_OPT)
+    	.desc("user name to log in with")
+    	.build();
+    	
+        options.addOption(option);
 
     }
 

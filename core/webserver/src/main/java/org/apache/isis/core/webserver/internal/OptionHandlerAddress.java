@@ -24,9 +24,7 @@ package org.apache.isis.core.webserver.internal;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Option;
-import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
-
 import org.apache.isis.core.commons.configbuilder.IsisConfigurationBuilder;
 import org.apache.isis.core.runtime.optionhandler.BootPrinter;
 import org.apache.isis.core.runtime.optionhandler.OptionHandler;
@@ -42,9 +40,14 @@ public final class OptionHandlerAddress implements OptionHandler {
     static final String ADDRESS_LONG_OPT = "address";
 
     @Override
-    @SuppressWarnings("static-access")
     public void addOption(final Options options) {
-        final Option option = OptionBuilder.withArgName("address").hasArg().withLongOpt(OptionHandlerAddress.ADDRESS_LONG_OPT).withDescription("address to listen on").create(OptionHandlerAddress.ADDRESS_OPT);
+    	Option option = Option.builder(OptionHandlerAddress.ADDRESS_OPT)
+    	.argName("address")
+    	.hasArg()
+    	.longOpt(OptionHandlerAddress.ADDRESS_LONG_OPT)
+    	.desc("address to listen on")
+    	.build();
+    	
         options.addOption(option);
     }
 

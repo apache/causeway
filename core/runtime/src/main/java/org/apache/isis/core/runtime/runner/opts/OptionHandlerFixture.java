@@ -19,17 +19,16 @@
 
 package org.apache.isis.core.runtime.runner.opts;
 
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.Option;
-import org.apache.commons.cli.OptionBuilder;
-import org.apache.commons.cli.Options;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.apache.isis.core.runtime.optionhandler.BootPrinter;
-import org.apache.isis.core.runtime.runner.Constants;
-
 import static org.apache.isis.core.runtime.runner.Constants.FIXTURE_LONG_OPT;
 import static org.apache.isis.core.runtime.runner.Constants.FIXTURE_OPT;
+
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.Option;
+import org.apache.commons.cli.Options;
+import org.apache.isis.core.runtime.optionhandler.BootPrinter;
+import org.apache.isis.core.runtime.runner.Constants;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class OptionHandlerFixture extends OptionHandlerFixtureAbstract {
 
@@ -40,14 +39,16 @@ public class OptionHandlerFixture extends OptionHandlerFixtureAbstract {
     }
 
     @Override
-    @SuppressWarnings("static-access")
     public void addOption(final Options options) {
-//        final Option option = OptionBuilder
-//                                    .withArgName("class name").hasArg()
-//                                    .withLongOpt(FIXTURE_LONG_OPT)
-//                                    .withDescription("fully qualified fixture class")
-//                                    .create(FIXTURE_OPT);
-//        options.addOption(option);
+    	
+    	Option option = Option.builder(FIXTURE_OPT)
+    	.argName("class name")
+    	.hasArg()
+    	.longOpt(FIXTURE_LONG_OPT)
+    	.desc("fully qualified fixture class")
+    	.build();
+
+        options.addOption(option);
     }
 
     @Override

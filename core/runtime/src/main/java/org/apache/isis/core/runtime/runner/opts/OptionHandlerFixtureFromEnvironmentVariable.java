@@ -33,7 +33,6 @@ public class OptionHandlerFixtureFromEnvironmentVariable extends OptionHandlerFi
 
 
     @Override
-    @SuppressWarnings("static-access")
     public void addOption(final Options options) {
         // no-op
     }

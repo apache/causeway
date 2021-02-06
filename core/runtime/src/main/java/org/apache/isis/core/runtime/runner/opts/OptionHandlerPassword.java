@@ -24,9 +24,7 @@ import static org.apache.isis.core.runtime.runner.Constants.PASSWORD_OPT;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Option;
-import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
-
 import org.apache.isis.core.commons.configbuilder.IsisConfigurationBuilder;
 import org.apache.isis.core.runtime.optionhandler.BootPrinter;
 import org.apache.isis.core.runtime.optionhandler.OptionHandlerAbstract;
@@ -42,10 +40,16 @@ public class OptionHandlerPassword extends OptionHandlerAbstract {
     }
 
     @Override
-    @SuppressWarnings("static-access")
     public void addOption(final Options options) {
-//        final Option option = OptionBuilder.withArgName("password").hasArg().withLongOpt(PASSWORD_LONG_OPT).withDescription("password to automatically log in with").create(PASSWORD_OPT);
-//        options.addOption(option);
+    	
+    	Option option = Option.builder(PASSWORD_OPT)
+    	.argName("password")
+    	.hasArg()
+    	.longOpt(PASSWORD_LONG_OPT)
+    	.desc("password to automatically log in with")
+    	.build();
+    	
+        options.addOption(option);
     }
 
     @Override

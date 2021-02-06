@@ -24,12 +24,10 @@ import static org.apache.isis.core.runtime.runner.Constants.CONFIGURATION_OPT;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Option;
-import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
-
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
-import org.apache.isis.core.commons.configbuilder.IsisConfigurationBuilder;
 import org.apache.isis.core.commons.config.NotFoundPolicy;
+import org.apache.isis.core.commons.configbuilder.IsisConfigurationBuilder;
 import org.apache.isis.core.runtime.optionhandler.BootPrinter;
 import org.apache.isis.core.runtime.optionhandler.OptionHandlerAbstract;
 import org.apache.isis.core.runtime.runner.Constants;
@@ -39,10 +37,16 @@ public class OptionHandlerConfiguration extends OptionHandlerAbstract {
     private String configurationResource;
 
     @Override
-    @SuppressWarnings("static-access")
     public void addOption(final Options options) {
-//        final Option option = OptionBuilder.withArgName("config file").hasArg().withLongOpt(CONFIGURATION_LONG_OPT).withDescription("read in configuration file (as well as isis.properties)").create(CONFIGURATION_OPT);
-//        options.addOption(option);
+    	
+    	Option option = Option.builder(CONFIGURATION_OPT)
+    	.argName("config file")
+    	.hasArg()
+    	.longOpt(CONFIGURATION_LONG_OPT)
+    	.desc("read in configuration file (as well as isis.properties)")
+    	.build();
+    	
+        options.addOption(option);
     }
 
     @Override

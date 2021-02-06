@@ -21,9 +21,7 @@ package org.apache.isis.core.webserver.internal;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Option;
-import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
-
 import org.apache.isis.core.commons.configbuilder.IsisConfigurationBuilder;
 import org.apache.isis.core.commons.lang.ArrayExtensions;
 import org.apache.isis.core.runtime.optionhandler.BootPrinter;
@@ -43,10 +41,16 @@ public final class OptionHandlerStartupMode implements OptionHandler {
     private StartupMode startupMode;
 
     @Override
-    @SuppressWarnings("static-access")
     public void addOption(final Options options) {
-//        final Option option = OptionBuilder.withArgName("startup mode").hasArg().withLongOpt(OptionHandlerStartupMode.STARTUP_MODE_LONG_OPT).withDescription("start in foreground (sync) or background (async)").create(OptionHandlerStartupMode.STARTUP_MODE_BASE_OPT);
-//        options.addOption(option);
+    	
+    	Option option = Option.builder(OptionHandlerStartupMode.STARTUP_MODE_BASE_OPT)
+    	.argName("startup mode")
+    	.hasArg()
+    	.longOpt(OptionHandlerStartupMode.STARTUP_MODE_LONG_OPT)
+    	.desc("start in foreground (sync) or background (async)")
+    	.build();
+    	
+        options.addOption(option);
     }
 
     @Override

@@ -37,7 +37,6 @@ public class OptionHandlerSystemProperties extends OptionHandlerAbstract {
     private Map<String,String> additionalProperties;
 
     @Override
-    @SuppressWarnings("static-access")
     public void addOption(final Options options) {
         // no-op
     }

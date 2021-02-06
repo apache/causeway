@@ -24,9 +24,7 @@ package org.apache.isis.core.webserver.internal;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Option;
-import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
-
 import org.apache.isis.core.commons.configbuilder.IsisConfigurationBuilder;
 import org.apache.isis.core.commons.lang.ArrayExtensions;
 import org.apache.isis.core.runtime.optionhandler.BootPrinter;
@@ -43,11 +41,16 @@ public final class OptionHandlerPort implements OptionHandler {
     }
 
     @Override
-    @SuppressWarnings("static-access")
     public void addOption(final Options options) {
-//        OptionBuilder.withArgName("port");
-//        final Option option = OptionBuilder.hasArg().withLongOpt(OptionHandlerPort.PORT_LONG_OPT).withDescription("port to listen on").create(OptionHandlerPort.PORT_OPT);
-//        options.addOption(option);
+    	
+    	Option option = Option.builder(OptionHandlerPort.PORT_OPT)
+    	.argName("port")
+    	.hasArg()
+    	.longOpt(OptionHandlerPort.PORT_LONG_OPT)
+    	.desc("port to listen on")
+    	.build();
+    	
+        options.addOption(option);
     }
 
     @Override

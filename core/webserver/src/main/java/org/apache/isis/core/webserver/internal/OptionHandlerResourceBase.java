@@ -21,9 +21,7 @@ package org.apache.isis.core.webserver.internal;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Option;
-import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
-
 import org.apache.isis.core.commons.configbuilder.IsisConfigurationBuilder;
 import org.apache.isis.core.runtime.optionhandler.BootPrinter;
 import org.apache.isis.core.runtime.optionhandler.OptionHandler;
@@ -39,9 +37,15 @@ public final class OptionHandlerResourceBase implements OptionHandler {
     static final String RESOURCE_BASE_OPT = "w";
 
     @Override
-    @SuppressWarnings("static-access")
     public void addOption(final Options options) {
-        final Option option = OptionBuilder.withArgName("webapp directory").hasArg().withLongOpt(OptionHandlerResourceBase.RESOURCE_BASE_LONG_OPT).withDescription("directory holding webapp").create(OptionHandlerResourceBase.RESOURCE_BASE_OPT);
+    	
+    	Option option = Option.builder(OptionHandlerResourceBase.RESOURCE_BASE_OPT)
+    	.argName("webapp directory")
+    	.hasArg()
+    	.longOpt(OptionHandlerResourceBase.RESOURCE_BASE_LONG_OPT)
+    	.desc("directory holding webapp")
+    	.build();
+    	
         options.addOption(option);
     }
 

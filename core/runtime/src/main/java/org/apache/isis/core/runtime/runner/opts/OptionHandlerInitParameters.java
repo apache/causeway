@@ -43,7 +43,6 @@ public class OptionHandlerInitParameters extends OptionHandlerAbstract {
     }
 
     @Override
-    @SuppressWarnings("static-access")
     public void addOption(final Options options) {
         // no-op
     }

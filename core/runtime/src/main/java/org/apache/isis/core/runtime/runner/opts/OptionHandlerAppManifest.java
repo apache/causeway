@@ -19,21 +19,19 @@
 
 package org.apache.isis.core.runtime.runner.opts;
 
+import static org.apache.isis.core.runtime.runner.Constants.APP_MANIFEST_LONG_OPT;
+import static org.apache.isis.core.runtime.runner.Constants.APP_MANIFEST_OPT;
+
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Option;
-import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.apache.isis.core.commons.configbuilder.IsisConfigurationBuilder;
 import org.apache.isis.core.runtime.optionhandler.BootPrinter;
 import org.apache.isis.core.runtime.optionhandler.OptionHandlerAbstract;
 import org.apache.isis.core.runtime.runner.Constants;
 import org.apache.isis.core.runtime.system.SystemConstants;
-
-import static org.apache.isis.core.runtime.runner.Constants.APP_MANIFEST_LONG_OPT;
-import static org.apache.isis.core.runtime.runner.Constants.APP_MANIFEST_OPT;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class OptionHandlerAppManifest extends OptionHandlerAbstract {
 
@@ -45,14 +43,16 @@ public class OptionHandlerAppManifest extends OptionHandlerAbstract {
     }
 
     @Override
-    @SuppressWarnings("static-access")
     public void addOption(final Options options) {
-//        final Option option = OptionBuilder
-//                                    .withArgName("app manifest").hasArg()
-//                                    .withLongOpt(APP_MANIFEST_LONG_OPT)
-//                                    .withDescription("fully qualified AppManifest class")
-//                                    .create(APP_MANIFEST_OPT);
-        //options.addOption(option);
+    	
+    	Option option = Option.builder(APP_MANIFEST_OPT)
+    	.argName("app manifest")
+    	.hasArg()
+    	.longOpt(APP_MANIFEST_LONG_OPT)
+    	.desc("fully qualified AppManifest class")
+    	.build();
+    	
+        options.addOption(option);
     }
 
     @Override

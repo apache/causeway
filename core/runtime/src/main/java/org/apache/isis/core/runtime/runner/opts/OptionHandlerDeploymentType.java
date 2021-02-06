@@ -19,11 +19,12 @@
 
 package org.apache.isis.core.runtime.runner.opts;
 
+import static org.apache.isis.core.runtime.runner.Constants.TYPE_LONG_OPT;
+import static org.apache.isis.core.runtime.runner.Constants.TYPE_OPT;
+
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Option;
-import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
-
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.commons.config.NotFoundPolicy;
 import org.apache.isis.core.commons.configbuilder.IsisConfigurationBuilder;
@@ -32,9 +33,6 @@ import org.apache.isis.core.runtime.optionhandler.OptionHandlerAbstract;
 import org.apache.isis.core.runtime.runner.Constants;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.SystemConstants;
-
-import static org.apache.isis.core.runtime.runner.Constants.TYPE_LONG_OPT;
-import static org.apache.isis.core.runtime.runner.Constants.TYPE_OPT;
 
 public abstract class OptionHandlerDeploymentType extends OptionHandlerAbstract {
 
@@ -49,10 +47,16 @@ public abstract class OptionHandlerDeploymentType extends OptionHandlerAbstract 
     }
 
     @Override
-    @SuppressWarnings("static-access")
     public void addOption(final Options options) {
-//        final Option option = OptionBuilder.withArgName("name").hasArg().withLongOpt(TYPE_LONG_OPT).withDescription("deployment type: " + types).create(TYPE_OPT);
-//        options.addOption(option);
+    	
+    	Option option = Option.builder(TYPE_OPT)
+    	.argName("name")
+    	.hasArg()
+    	.longOpt(TYPE_LONG_OPT)
+    	.desc("deployment type: " + types)
+    	.build();
+
+        options.addOption(option);
     }
 
     @Override

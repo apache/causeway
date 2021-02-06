@@ -25,9 +25,7 @@ import java.util.List;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Option;
-import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
-
 import org.apache.isis.core.commons.configbuilder.IsisConfigurationBuilder;
 import org.apache.isis.core.runtime.optionhandler.BootPrinter;
 import org.apache.isis.core.runtime.optionhandler.OptionHandlerAbstract;
@@ -38,11 +36,17 @@ public class OptionHandlerAdditionalProperty extends OptionHandlerAbstract {
     private List<String> additionalProperties;
 
     @Override
-    @SuppressWarnings("static-access")
     public void addOption(final Options options) {
-//        final Option option = OptionBuilder.withArgName("property=value").hasArg().withValueSeparator().withDescription("use value for given property").create(ADDITIONAL_PROPERTY);
-//        option.setArgs(Option.UNLIMITED_VALUES);
-//        options.addOption(option);
+    	
+    	Option option = Option.builder(ADDITIONAL_PROPERTY)
+    	.argName("property=value")
+    	.hasArg()
+    	.valueSeparator()
+    	.desc("use value for given property")
+    	.build();
+    	
+        option.setArgs(Option.UNLIMITED_VALUES);
+        options.addOption(option);
     }
 
     @Override
