@@ -6,7 +6,7 @@
 
 One use case that Apache Isis supports is that of a domain object with a lifecycle whereby at some stage it should become immutable: all its properties/collections should be disabled, and/or its actions become not invokable.
 
-It would be painful to have to write a separate xref:refguide:applib-methods:prefixes.adoc#disable[`disable...()`] method for each and every member, so instead Isis allows a single `disable...(...)` method to be implemented that is applied to all pathsToInclude.
+It would be painful to have to write a separate xref:refguide:applib-methods:prefixes.adoc#disable[`disable...()`] method for each and every member, so instead Isis allows a single `disable...(...)` method to be implemented that is applied to all members.
 
 The signature of the method is:
 
@@ -30,7 +30,7 @@ public String disabled(Identifier.Type identifierType) {
 }
 ----
 
-See also the similar methods to xref:refguide:applib-methods:prefixes.adoc#hide[`hide()`] object pathsToInclude en-masse.
+See also the similar methods to xref:refguide:applib-methods:prefixes.adoc#hide[`hide()`] object members en-masse.
 
 
 == Alternatives

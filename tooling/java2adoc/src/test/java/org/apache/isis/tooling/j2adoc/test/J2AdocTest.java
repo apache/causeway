@@ -45,17 +45,18 @@ class J2AdocTest {
 
     @Test @Disabled
     void testJavaDoc2AsciiDoc() {
-        
+
         val analyzerConfig = AnalyzerConfigFactory
                 .maven(ProjectSampler.apacheIsisApplib(), Language.JAVA)
                 .main();
 
         val j2aContext = J2AdocContext
-                .javaSourceWithFootnotesFormat()
+                .builder()
+//                .javaSourceWithFootnotesFormat()
                 //.compactFormat()
                 .xrefPageIdFormat("system:generated:index/%s.adoc")
                 .build();
-        
+
         analyzerConfig.getSources(JAVA)
         .stream()
         //.filter(source->source.toString().contains("ExecutionMode"))
@@ -65,43 +66,43 @@ class J2AdocTest {
         .filter(source->source.toString().contains("NonRecoverableException"))
         //.peek(source->System.out.println("parsing source: " + source))
         .forEach(j2aContext::add);
-        
+
         j2aContext.streamUnits()
         //.peek(unit->System.err.println("namespace "+unit.getNamespace()))
         .map(unit->unit.toAsciiDoc(j2aContext))
         .forEach(adoc->{
-            
+
             //System.out.println(adoc);
-            
+
             AsciiDocWriter.print(adoc);
             System.out.println();
 
         });
     }
-    
+
     @Test// @Disabled
     void adocDocMining() throws IOException {
-        
+
         val adocFiles = ProjectSampler.adocFiles(ProjectSampler.apacheIsisRoot());
-     
+
         val names = _Sets.<String>newTreeSet();
-        
+
         Can.ofCollection(adocFiles)
         .stream()
-        
+
         .filter(source->!source.toString().contains("\\generated\\"))
-        
+
         //.filter(source->source.toString().contains("XmlSnapshotService"))
         .forEach(file->parseAdoc(file, names::add));
-        
+
         names.forEach(System.out::println);
     }
-    
+
     private void parseAdoc(final @NonNull File file, Consumer<String> onName) {
         val lines = _Text.readLinesFromFile(file, StandardCharsets.UTF_8);
-        
+
         ExampleReferenceFinder.find(
-                lines, 
+                lines,
                 line->line.contains("system:generated:page$")
 //               line->line.startsWith("include::")
 //                    && line.contains("[tags=")
@@ -110,32 +111,32 @@ class J2AdocTest {
             onName.accept(String.format("%s in %s", exRef.name, exRef.matchingLine));
         });
     }
-    
+
     @Test @Disabled("DANGER!")
     void removeAdocExampleTags() throws IOException {
-        
+
         val analyzerConfig = AnalyzerConfigFactory
                 .maven(ProjectSampler.apacheIsisApplib(), Language.JAVA)
                 .main();
-        
+
         analyzerConfig.getSources(JAVA)
         .stream()
         .peek(source->System.out.println("parsing source: " + source))
         .filter(source->source.toString().contains("\\isis\\applib\\"))
         .forEach(AsciiDocIncludeTagFilter::removeAdocExampleTags);
-        
+
     }
-    
+
     @Test @Disabled("DANGER!")
     void adocExampleProcessing() throws IOException {
-        
+
         val adocFiles = ProjectSampler.adocFiles(ProjectSampler.apacheIsisRoot());
-     
+
         Can.ofCollection(adocFiles)
         .stream()
         //.filter(source->source.toString().contains("FactoryService"))
         .forEach(ExampleReferenceRewriter::processAdocExampleReferences);
     }
-    
-    
+
+
 }

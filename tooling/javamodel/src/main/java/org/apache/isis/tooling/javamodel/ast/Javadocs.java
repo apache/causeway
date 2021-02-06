@@ -58,27 +58,12 @@ public final class Javadocs {
         return presentAndNotHidden(nwj.getJavadoc());
     }
 
-    public static boolean presentAndNotHidden(final @NonNull AnnotationMemberDeclaration amd) {
-        return presentAndNotHidden(amd.getJavadoc());
-    }
-
-    public static boolean presentAndNotHidden(final @NonNull FieldDeclaration fd) {
-        return presentAndNotHidden(fd.getJavadoc());
-    }
-
-    public static boolean presentAndNotHidden(final @NonNull EnumConstantDeclaration ecd) {
-        return presentAndNotHidden(ecd.getJavadoc());
-    }
-
-    public static boolean presentAndNotHidden(final @NonNull ConstructorDeclaration cd) {
-        return presentAndNotHidden(cd.getJavadoc());
-    }
-
-    public static boolean presentAndNotHidden(final @NonNull MethodDeclaration md) {
-        return presentAndNotHidden(md.getJavadoc());
-    }
 
     // -- PREDICATES FOR STREAMS (NOT EXPLICITLY HIDDEN)
+
+    public static boolean notExplicitlyHidden(final @NonNull NodeWithJavadoc<?> nwj) {
+        return !hasHidden(nwj.getJavadoc());
+    }
 
     public static boolean notExplicitlyHidden(final @NonNull AnnotationMemberDeclaration amd) {
         return !hasHidden(amd.getJavadoc());

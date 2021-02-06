@@ -65,7 +65,7 @@ datanucleus.persistenceByReachabilityAtCommit=false
 
 [plantuml]
 ----
-hide empty pathsToInclude
+hide empty members
 
 class Party
 class AgreementRole

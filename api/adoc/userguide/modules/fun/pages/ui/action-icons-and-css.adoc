@@ -7,7 +7,7 @@
 Apache Isis allows link:http://fortawesome.github.io/Font-Awesome/icons/[font awesome] icons to be associated with each action, and for link:http://getbootstrap.com/css/#buttons[Bootstrap CSS] to be applied to action rendered as buttons.
 These UI hints can be applied either to individual actions, or can be applied en-masse using pattern matching.
 
-It is also possible to specify additional CSS for an object's pathsToInclude (not just actions).
+It is also possible to specify additional CSS for an object's members (not just actions).
 
 
 == Icons
@@ -59,12 +59,12 @@ Here:
 * the key is a regex matching action names (eg `create.*`), and
 * the value is a link:http://fortawesome.github.io/Font-Awesome/icons/[font-awesome] icon name
 
-For example, "fa-plus" is applied to all action pathsToInclude called "newXxx"
+For example, "fa-plus" is applied to all action members called "newXxx"
 
 
 == CSS
 
-Similarly, a CSS class can be specified for object pathsToInclude:
+Similarly, a CSS class can be specified for object members:
 
 * xref:refguide:applib-ant:ActionLayout.adoc#cssClass[`@ActionLayout#cssClass`] for actions
 

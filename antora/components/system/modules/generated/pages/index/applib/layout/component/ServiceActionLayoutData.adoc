@@ -1,63 +1,38 @@
-= ServiceActionLayoutData : _class_
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
 Describes the layout of a single action, broadly corresponding to _org.apache.isis.applib.annotation.ActionLayout_ .
 
-.Java Sources
+== API
+
+.ServiceActionLayoutData.java
 [source,java]
 ----
 class ServiceActionLayoutData {
-
   ServiceActionLayoutData()
-
   ServiceActionLayoutData(final String objectType, final String id)
-
   String getObjectType()
-
   void setObjectType(final String objectType)
-
-  String getId() // <.>
-
+  String getId()     // <.>
   void setId(String id)
-
   BookmarkPolicy getBookmarking()
-
   void setBookmarking(BookmarkPolicy bookmarking)
-
   String getCssClass()
-
   void setCssClass(String cssClass)
-
   String getCssClassFa()
-
   void setCssClassFa(String cssClassFa)
-
   String getDescribedAs()
-
   void setDescribedAs(String describedAs)
-
   String getNamed()
-
   void setNamed(String named)
-
   Boolean getNamedEscaped()
-
   void setNamedEscaped(Boolean namedEscaped)
-
-  ServiceActionLayoutDataOwner getOwner() // <.>
-
+  ServiceActionLayoutDataOwner getOwner()     // <.>
   void setOwner(final ServiceActionLayoutDataOwner owner)
-
-  String getMetadataError() // <.>
-
+  String getMetadataError()     // <.>
   void setMetadataError(final String metadataError)
-
-  Link getLink() // <.>
-
+  Link getLink()     // <.>
   void setLink(final Link link)
-
   String getObjectTypeAndId()
-
   String toString()
 }
 ----

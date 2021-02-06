@@ -47,6 +47,7 @@ import org.apache.isis.tooling.c4.C4;
 import org.apache.isis.tooling.cli.CliConfig;
 import org.apache.isis.tooling.cli.adocfix.OrphanedIncludeStatementFixer;
 import org.apache.isis.tooling.j2adoc.J2AdocContext;
+import org.apache.isis.tooling.j2adoc.format.UnitFormatterWithSourceAndFootNotes;
 import org.apache.isis.tooling.javamodel.AnalyzerConfigFactory;
 import org.apache.isis.tooling.javamodel.ast.CodeClasses;
 import org.apache.isis.tooling.model4adoc.AsciiDocFactory;
@@ -102,13 +103,15 @@ public class ProjectDocModel {
 
         final SortedSet<File> asciiDocFiles = new TreeSet<>();
 
-        val j2aContext = J2AdocContext
+        val j2aContext = J2AdocContext.builder()
                 //.compactFormat()
-                .javaSourceWithFootnotesFormat()
+//                .javaSourceWithFootnotesFormat()
+                .formatterFactory(UnitFormatterWithSourceAndFootNotes::new)
                 .licenseHeader(cliConfig.getGlobal().getLicenseHeader())
                 .xrefPageIdFormat(cliConfig.getCommands().getIndex().getDocumentGlobalIndexXrefPageIdFormat())
                 .namespacePartsSkipCount(cliConfig.getGlobal().getNamespacePartsSkipCount())
                 .skipTitleHeader(cliConfig.getCommands().getIndex().isSkipTitleHeader())
+                .memberSections(cliConfig.getCommands().getIndex().isMemberSections())
                 .build();
 
         val doc = doc();
@@ -150,9 +153,7 @@ public class ProjectDocModel {
         // now generate the overview or index
         writeSections(sections, doc, j2aContext, mode, asciiDocFiles::add);
 
-        if (mode.includeOverview()) {
-            ProjectDocWriter.write(cliConfig, doc, j2aContext, mode);
-        }
+        ProjectDocWriter.write(cliConfig, doc, j2aContext, mode);
 
         // update include statements ...
         OrphanedIncludeStatementFixer.fixIncludeStatements(asciiDocFiles, cliConfig, j2aContext);

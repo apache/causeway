@@ -1,91 +1,51 @@
-= RepresentationType : _enum_
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
-.Java Sources
+== API
+
+.RepresentationType.java
 [source,java]
 ----
 enum RepresentationType {
-
   HOME_PAGE
-
   USER
-
   VERSION
-
   HEALTH
-
   LIST
-
   DOMAIN_OBJECT
-
   OBJECT_PROPERTY
-
   OBJECT_COLLECTION
-
   OBJECT_ACTION
-
   ACTION_RESULT
-
   TYPE_LIST
-
   DOMAIN_TYPE
-
   LAYOUT
-
   OBJECT_LAYOUT
-
   OBJECT_IMAGE
-
   MENUBARS
-
   PROPERTY_DESCRIPTION
-
   COLLECTION_DESCRIPTION
-
   ACTION_DESCRIPTION
-
   ACTION_PARAMETER_DESCRIPTION
-
   TYPE_ACTION_RESULT
-
   ERROR
-
   GENERIC
-
   String getName()
-
-  MediaType getMediaType() // <.>
-
+  MediaType getMediaType()     // <.>
   MediaType getJsonMediaType()
-
   MediaType getXmlMediaType()
-
   MediaType getJsonElseXmlMediaType()
-
-  MediaType getMediaType(String parameter, String paramValue) // <.>
-
+  MediaType getMediaType(String parameter, String paramValue)     // <.>
   MediaType getJsonMediaType(Map<String, String> mediaTypeParams)
-
   MediaType getXmlMediaType(Map<String, String> mediaTypeParams)
-
   String getMediaTypeProfile()
-
   Class<? extends JsonRepresentation> getRepresentationClass()
-
   RepresentationType lookup(final String name)
-
   RepresentationType lookup(final MediaType mediaType)
-
   boolean matches(final MediaType mediaType)
-
   boolean matchesXmlProfile(final MediaType mediaType)
-
   boolean matchesJsonProfile(final MediaType mediaType)
-
-  MediaType matchesXmlProfileWithParameter(final List<MediaType> mediaTypes, final String parameterKey) // <.>
-
-  MediaType matchesJsonProfileWithParameter(final List<MediaType> mediaTypes, final String parameterKey) // <.>
-
+  MediaType matchesXmlProfileWithParameter(final List<MediaType> mediaTypes, final String parameterKey)     // <.>
+  MediaType matchesJsonProfileWithParameter(final List<MediaType> mediaTypes, final String parameterKey)     // <.>
   Parser<RepresentationType> parser()
 }
 ----

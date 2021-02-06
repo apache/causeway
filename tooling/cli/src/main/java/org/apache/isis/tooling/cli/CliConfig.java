@@ -92,6 +92,7 @@ public class CliConfig {
 
             private boolean fixOrphanedAdocIncludeStatements = false;
             private boolean skipTitleHeader = false;
+            private boolean memberSections = false;
 
             public File getDocumentIndexFolder(File outputRootFolder) {
                 return Optional.ofNullable(outputRootFolder)

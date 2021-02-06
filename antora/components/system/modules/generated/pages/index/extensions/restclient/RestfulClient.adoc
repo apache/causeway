@@ -1,4 +1,3 @@
-= RestfulClient : _class_
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
 Setup the Restful Client with Basic-Auth:Synchronous example:Asynchronous example:Maven Setup:
@@ -64,31 +63,22 @@ if(digest.isSuccess()) {
  _org.apache.isis.coreisis-core-applib2.0.0-M2-SNAPSHOTorg.glassfish.jersey.extjersey-spring52.29.1org.glassfishjavax.json1.1.4org.eclipse.persistenceorg.eclipse.persistence.moxy2.7.5_ 
 ----
 
-.Java Sources
+== API
+
+.RestfulClient.java
 [source,java]
 ----
 class RestfulClient {
-
   RestfulClient ofConfig(RestfulClientConfig clientConfig)
-
   void init(RestfulClientConfig clientConfig)
-
   RestfulClientConfig getConfig()
-
   Client getJaxRsClient()
-
   Builder request(String path, SuppressionType... suppressionTypes)
-
   Builder request(String path, EnumSet<SuppressionType> suppressionTypes)
-
   ActionParameterListBuilder arguments()
-
   ResponseDigest<T> digest(Response response, Class<T> entityType)
-
   ResponseDigest<T> digestList(Response response, Class<T> entityType, GenericType<List<T>> genericType)
-
   CompletableFuture<ResponseDigest<T>> digest(final Future<Response> asyncResponse, final Class<T> entityType)
-
   CompletableFuture<ResponseDigest<T>> digestList(final Future<Response> asyncResponse, final Class<T> entityType, GenericType<List<T>> genericType)
 }
 ----

@@ -19,12 +19,11 @@
 package org.apache.isis.tooling.j2adoc.format;
 
 import java.util.Optional;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 
-import com.github.javaparser.ast.body.BodyDeclaration;
-import com.github.javaparser.ast.body.EnumConstantDeclaration;
-import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.nodeTypes.NodeWithJavadoc;
+import com.github.javaparser.javadoc.Javadoc;
 
 import org.asciidoctor.ast.Document;
 import org.asciidoctor.ast.List;
@@ -35,6 +34,7 @@ import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.tooling.j2adoc.J2AdocContext;
 import org.apache.isis.tooling.j2adoc.J2AdocUnit;
 import org.apache.isis.tooling.j2adoc.convert.J2AdocConverter;
+import org.apache.isis.tooling.j2adoc.convert.J2AdocConverterDefault;
 import org.apache.isis.tooling.javamodel.ast.Javadocs;
 import org.apache.isis.tooling.model4adoc.AsciiDocFactory;
 
@@ -105,9 +105,11 @@ implements UnitFormatter {
     }
 
     protected void intro(final J2AdocUnit unit, final StructuralNode parent) {
+        J2AdocConverter converter = J2AdocConverterDefault.of(j2aContext);
+
         unit.getJavadoc()
         .filter(javadoc->!Javadocs.hasHidden(javadoc))
-        .map(javadoc->getConverter().javadoc(javadoc, unit))
+        .map(javadoc->converter.javadoc(javadoc, unit))
         .ifPresent(doc->parent.getBlocks().addAll(doc.getBlocks()));
     }
 
@@ -128,35 +130,105 @@ implements UnitFormatter {
 
         val ul = getMemberDescriptionContainer(doc);
 
-        appendMemberDescriptions(ul, unit,
-                unit.getTypeDeclaration().getEnumConstantDeclarations(),
-                decl -> getConverter().enumConstantDeclaration(decl));
+        if(! j2aContext.isMemberSections() || true) {
 
-        appendMemberDescriptions(ul, unit,
-                unit.getTypeDeclaration().getPublicFieldDeclarations(),
-                decl -> getConverter().fieldDeclaration(decl, unit));
+            val converter = J2AdocConverterDefault.of(j2aContext);
+            appendMemberDescriptions(ul, unit,
+                    unit.getTypeDeclaration().getEnumConstantDeclarations(),
+                    decl -> converter.enumConstantDeclaration(decl),
+                    (javadoc, j2Unit) -> converter.javadoc(javadoc, unit)
+            );
 
-        appendMemberDescriptions(ul, unit,
-                unit.getTypeDeclaration().getAnnotationMemberDeclarations(),
-                decl -> getConverter().annotationMemberDeclaration(decl, unit));
+            appendMemberDescriptions(ul, unit,
+                    unit.getTypeDeclaration().getPublicFieldDeclarations(),
+                    decl -> converter.fieldDeclaration(decl, unit),
+                    (javadoc, j2Unit) -> converter.javadoc(javadoc, unit));
 
-        appendMemberDescriptions(ul, unit,
-                unit.getTypeDeclaration().getPublicConstructorDeclarations(),
-                decl -> getConverter().constructorDeclaration(decl, unit));
+            appendMemberDescriptions(ul, unit,
+                    unit.getTypeDeclaration().getAnnotationMemberDeclarations(),
+                    decl -> converter.annotationMemberDeclaration(decl, unit),
+                    (javadoc, j2Unit) -> converter.javadoc(javadoc, unit));
 
-        appendMemberDescriptions(ul, unit,
-                unit.getTypeDeclaration().getPublicMethodDeclarations(),
-                decl -> getConverter().methodDeclaration(decl, unit));
+            appendMemberDescriptions(ul, unit,
+                    unit.getTypeDeclaration().getPublicConstructorDeclarations(),
+                    decl -> converter.constructorDeclaration(decl, unit),
+                    (javadoc, j2Unit) -> converter.javadoc(javadoc, unit));
 
-        val titleBlock = block(doc);
-        titleBlock.setSource("== Members");
+            appendMemberDescriptions(ul, unit,
+                    unit.getTypeDeclaration().getPublicMethodDeclarations(),
+                    decl -> converter.methodDeclaration(decl, unit),
+                    (javadoc, j2Unit) -> converter.javadoc(javadoc, unit));
+
+        } else {
+
+//            var converter = J2AdocConverterDefault.of(j2aContext);
+//            appendMemberDescriptions(ul, unit,
+//                    unit.getTypeDeclaration().getEnumConstantDeclarations(),
+//                    decl -> converter.enumConstantDeclaration(decl),
+//                    (javadoc, j2Unit) -> converter.javadoc(javadoc, unit)
+//            );
+//
+//            appendMemberDescriptions(ul, unit,
+//                    unit.getTypeDeclaration().getPublicFieldDeclarations(),
+//                    decl -> converter.fieldDeclaration(decl, unit),
+//                    (javadoc, j2Unit) -> converter.javadoc(javadoc, unit));
+//
+//            appendMemberDescriptions(ul, unit,
+//                    unit.getTypeDeclaration().getAnnotationMemberDeclarations(),
+//                    decl -> converter.annotationMemberDeclaration(decl, unit),
+//                    (javadoc, j2Unit) -> converter.javadoc(javadoc, unit));
+//
+//            appendMemberDescriptions(ul, unit,
+//                    unit.getTypeDeclaration().getPublicConstructorDeclarations(),
+//                    decl -> converter.constructorDeclaration(decl, unit),
+//                    (javadoc, j2Unit) -> converter.javadoc(javadoc, unit));
+//
+//            appendMemberDescriptions(ul, unit,
+//                    unit.getTypeDeclaration().getPublicMethodDeclarations(),
+//                    decl -> converter.methodDeclaration(decl, unit),
+//                    (javadoc, j2Unit) -> converter.javadoc(javadoc, unit));
+
+            val titleBlock = block(doc);
+             titleBlock.setSource("== Members");
+
+//            val converter = J2AdocConverterDefault.of(j2aContext);
+//            appendMemberDescriptions(ul, unit,
+//                    unit.getTypeDeclaration().getEnumConstantDeclarations(),
+//                    decl -> converter.enumConstantDeclaration(decl),
+//                    (javadoc, j2Unit) -> converter.javadoc(javadoc, unit)
+//            );
+//
+//            appendMemberDescriptions(ul, unit,
+//                    unit.getTypeDeclaration().getPublicFieldDeclarations(),
+//                    decl -> converter.fieldDeclaration(decl, unit),
+//                    (javadoc, j2Unit) -> converter.javadoc(javadoc, unit));
+//
+//            appendMemberDescriptions(ul, unit,
+//                    unit.getTypeDeclaration().getAnnotationMemberDeclarations(),
+//                    decl -> converter.annotationMemberDeclaration(decl, unit),
+//                    (javadoc, j2Unit) -> converter.javadoc(javadoc, unit));
+//
+//            appendMemberDescriptions(ul, unit,
+//                    unit.getTypeDeclaration().getPublicConstructorDeclarations(),
+//                    decl -> converter.constructorDeclaration(decl, unit),
+//                    (javadoc, j2Unit) -> converter.javadoc(javadoc, unit));
+//
+//            appendMemberDescriptions(ul, unit,
+//                    unit.getTypeDeclaration().getPublicMethodDeclarations(),
+//                    decl -> converter.methodDeclaration(decl, unit),
+//                    (javadoc, j2Unit) -> converter.javadoc(javadoc, unit));
+
+
+        }
+
     }
 
     private <T extends NodeWithJavadoc<?>> void appendMemberDescriptions(
             final StructuralNode container,
             final J2AdocUnit unit,
             final Can<T> declarations,
-            final Function<T, String> memberDescriber) {
+            final Function<T, String> memberDescriber,
+            final BiFunction<Javadoc, J2AdocUnit, Document> javadoc2Asciidocker) {
 
         declarations.stream()
         .filter(Javadocs::presentAndNotHidden)
@@ -165,7 +237,7 @@ implements UnitFormatter {
             .ifPresent(javadoc->{
                 appendMemberDescription(container,
                                 memberDescriber.apply(nwj),
-                                getConverter().javadoc(javadoc, unit));
+                                javadoc2Asciidocker.apply(javadoc, unit));
             });
         });
     }
@@ -224,9 +296,9 @@ implements UnitFormatter {
         return j2aContext;
     }
 
-    protected final J2AdocConverter getConverter() {
-        return j2aContext.getConverter();
-    }
+//    protected final J2AdocConverter getConverter() {
+//        return j2aContext.getConverter();
+//    }
 
 
 }

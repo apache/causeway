@@ -1,11 +1,12 @@
-= `ApplicationFeatureRepository`
+[#]ApplicationFeatureRepository]
+= ApplicationFeatureRepository
 
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :page-partial:
 
 
 
-The `ApplicationFeatureRepository` provides the access to string representations of the packages, classes and class pathsToInclude (collectively: "application features") of the domain classes within the Apache Isis' internal metamodel.
+Provides the access to string representations of the packages, classes and class members (collectively: "application features") of the domain classes within the framework's internal metamodel.
 
 == API
 
@@ -27,15 +28,10 @@ include::system:generated:page$index/applib/services/appfeat/ApplicationMemberTy
 
 == Implementation
 
-The core framework (xref:core:metamodel:about.adoc[MetaModel] module) provides a default implementation, `o.a.i.core.metamodel.services.appfeat.ApplicationFeatureRepositoryDefault`.
-
-This implementation supports the following configuration properties:
-
-* xref:refguide:config:sections/isis.core.runtime-services.adoc#isis.core.runtime-services.application-features.init[`isis.core.runtime-services.application-features.init`]
+include::ApplicationFeatureRepository/implementation.adoc[]
 
 
-== Related Services
+== See Also
 
-The default implementation of this service uses the internal xref:core:runtime-services:ApplicationFeatureFactory.adoc[`ApplicationFeatureFactory`] service to instantiate `ApplicationFeature` instances.
-
+include::ApplicationFeatureRepository/hooks/see_also.adoc[]
 

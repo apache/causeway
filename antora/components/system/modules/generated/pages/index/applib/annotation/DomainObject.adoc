@@ -1,57 +1,39 @@
-= DomainObject : _annotation_
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
 Domain semantics for domain objects (entities and view models; for services see xref:system:generated:index/applib/annotation/DomainService.adoc[DomainService] ).
 
-.Java Sources
+== API
+
+.DomainObject.java
 [source,java]
 ----
 @interface DomainObject {
-
-  Class<?> autoCompleteRepository() default Object.class; // <.>
-
-  String autoCompleteAction() default "autoComplete"; // <.>
-
-  Bounding bounding() default Bounding.NOT_SPECIFIED; // <.>
-
-  Editing editing() default Editing.NOT_SPECIFIED; // <.>
-
-  String editingDisabledReason() default "Disabled"; // <.>
-
-  Publishing entityChangePublishing() default Publishing.NOT_SPECIFIED; // <.>
-
-  String mixinMethod() default "$$"; // <.>
-
-  Nature nature() default Nature.NOT_SPECIFIED; // <.>
-
-  String objectType() default ""; // <.>
-
-  Class<? extends ObjectCreatedEvent<?>> createdLifecycleEvent() default ObjectCreatedEvent.Default.class; // <.>
-
-  Class<? extends ObjectPersistingEvent<?>> persistingLifecycleEvent() default ObjectPersistingEvent.Default.class; // <.>
-
-  Class<? extends ObjectPersistedEvent<?>> persistedLifecycleEvent() default ObjectPersistedEvent.Default.class; // <.>
-
-  Class<? extends ObjectLoadedEvent<?>> loadedLifecycleEvent() default ObjectLoadedEvent.Default.class; // <.>
-
-  Class<? extends ObjectUpdatingEvent<?>> updatingLifecycleEvent() default ObjectUpdatingEvent.Default.class; // <.>
-
-  Class<? extends ObjectUpdatedEvent<?>> updatedLifecycleEvent() default ObjectUpdatedEvent.Default.class; // <.>
-
-  Class<? extends ObjectRemovingEvent<?>> removingLifecycleEvent() default ObjectRemovingEvent.Default.class; // <.>
-
-  Class<? extends ActionDomainEvent<?>> actionDomainEvent() default ActionDomainEvent.Default.class; // <.>
-
-  Class<? extends PropertyDomainEvent<?, ?>> propertyDomainEvent() default PropertyDomainEvent.Default.class; // <.>
-
-  Class<? extends CollectionDomainEvent<?, ?>> collectionDomainEvent() default CollectionDomainEvent.Default.class; // <.>
+  Class<?> autoCompleteRepository() default Object.class;     // <.>
+  String autoCompleteAction() default "autoComplete";     // <.>
+  Bounding bounding() default Bounding.NOT_SPECIFIED;     // <.>
+  Editing editing() default Editing.NOT_SPECIFIED;     // <.>
+  String editingDisabledReason() default "Disabled";     // <.>
+  Publishing entityChangePublishing() default Publishing.NOT_SPECIFIED;     // <.>
+  String mixinMethod() default "$$";     // <.>
+  Nature nature() default Nature.NOT_SPECIFIED;     // <.>
+  String objectType() default "";     // <.>
+  Class<? extends ObjectCreatedEvent<?>> createdLifecycleEvent() default ObjectCreatedEvent.Default.class;     // <.>
+  Class<? extends ObjectPersistingEvent<?>> persistingLifecycleEvent() default ObjectPersistingEvent.Default.class;     // <.>
+  Class<? extends ObjectPersistedEvent<?>> persistedLifecycleEvent() default ObjectPersistedEvent.Default.class;     // <.>
+  Class<? extends ObjectLoadedEvent<?>> loadedLifecycleEvent() default ObjectLoadedEvent.Default.class;     // <.>
+  Class<? extends ObjectUpdatingEvent<?>> updatingLifecycleEvent() default ObjectUpdatingEvent.Default.class;     // <.>
+  Class<? extends ObjectUpdatedEvent<?>> updatedLifecycleEvent() default ObjectUpdatedEvent.Default.class;     // <.>
+  Class<? extends ObjectRemovingEvent<?>> removingLifecycleEvent() default ObjectRemovingEvent.Default.class;     // <.>
+  Class<? extends ActionDomainEvent<?>> actionDomainEvent() default ActionDomainEvent.Default.class;     // <.>
+  Class<? extends PropertyDomainEvent<?, ?>> propertyDomainEvent() default PropertyDomainEvent.Default.class;     // <.>
+  Class<? extends CollectionDomainEvent<?, ?>> collectionDomainEvent() default CollectionDomainEvent.Default.class;     // <.>
 }
 ----
 
 <.> `[teal]#*_autoCompleteRepository_*#` : `Class<?>`
 +
 --
-The class of the domain service that provides anautoComplete(String)method.
+The class of the domain service that provides an `autoComplete(String)method.
 
 It is sufficient to specify an interface rather than a concrete type.
 --

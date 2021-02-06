@@ -1,4 +1,3 @@
-= Can : _interface_
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
 Immutable _Iterable_ , that can specifically represent 3 possible variants of xref:system:generated:index/commons/collections/Cardinality.adoc[Cardinality] .
@@ -9,106 +8,60 @@ Same idiomatic convention applies: References to xref:system:generated:index/com
 
 A xref:system:generated:index/commons/collections/Can.adoc[Can] must not contain elements equal to _null_ .
 
-.Java Sources
+== API
+
+.Can.java
 [source,java]
 ----
 interface Can {
-
-  Cardinality getCardinality() // <.>
-
-  int size() // <.>
-
-  Optional<T> get(int elementIndex) // <.>
-
-  T getElseFail(final int elementIndex) // <.>
-
-  int compareTo(final Can<T> o) // <.>
-
-  Stream<T> stream() // <.>
-
-  Stream<T> parallelStream() // <.>
-
-  Optional<T> getFirst() // <.>
-
-  T getFirstOrFail() // <.>
-
-  Optional<T> getSingleton() // <.>
-
-  T getSingletonOrFail() // <.>
-
-  boolean contains(T element) // <.>
-
-  Can<T> empty() // <.>
-
-  Can<T> ofNullable(T element) // <.>
-
-  Can<T> ofSingleton(T element) // <.>
-
+  Cardinality getCardinality()     // <.>
+  int size()     // <.>
+  Optional<T> get(int elementIndex)     // <.>
+  T getElseFail(final int elementIndex)     // <.>
+  int compareTo(final Can<T> o)     // <.>
+  Stream<T> stream()     // <.>
+  Stream<T> parallelStream()     // <.>
+  Optional<T> getFirst()     // <.>
+  T getFirstOrFail()     // <.>
+  Optional<T> getSingleton()     // <.>
+  T getSingletonOrFail()     // <.>
+  boolean contains(T element)     // <.>
+  Can<T> empty()     // <.>
+  Can<T> ofNullable(T element)     // <.>
+  Can<T> ofSingleton(T element)     // <.>
   Can<T> of(T... array)
-
   Can<T> ofArray(T[] array)
-
-  Can<T> ofCollection(Collection<T> collection) // <.>
-
+  Can<T> ofCollection(Collection<T> collection)     // <.>
   Can<T> ofIterable(Iterable<T> iterable)
-
-  Can<T> ofStream(Stream<T> stream) // <.>
-
-  Can<T> ofInstance(Instance<T> instance) // <.>
-
-  Can<T> reverse() // <.>
-
-  Can<T> filter(Predicate<? super T> predicate) // <.>
-
-  Can<R> map(Function<? super T, R> mapper) // <.>
-
-  Can<T> concat(Can<T> can, T element) // <.>
-
+  Can<T> ofStream(Stream<T> stream)     // <.>
+  Can<T> ofInstance(Instance<T> instance)     // <.>
+  Can<T> reverse()     // <.>
+  Can<T> filter(Predicate<? super T> predicate)     // <.>
+  Can<R> map(Function<? super T, R> mapper)     // <.>
+  Can<T> concat(Can<T> can, T element)     // <.>
   Iterator<T> reverseIterator()
-
   void forEach(Consumer<? super T> action)
-
-  void zip(Iterable<R> zippedIn, BiConsumer<? super T, ? super R> action) // <.>
-
-  Can<R> zipMap(Iterable<Z> zippedIn, BiFunction<? super T, ? super Z, R> mapper) // <.>
-
+  void zip(Iterable<R> zippedIn, BiConsumer<? super T, ? super R> action)     // <.>
+  Can<R> zipMap(Iterable<Z> zippedIn, BiFunction<? super T, ? super Z, R> mapper)     // <.>
   Can<T> add(T element)
-
   Can<T> addAll(Can<T> other)
-
-  Can<T> add(int index, T element) // <.>
-
+  Can<T> add(int index, T element)     // <.>
   Can<T> replace(int index, T element)
-
-  Can<T> remove(int index) // <.>
-
+  Can<T> remove(int index)     // <.>
   Can<T> remove(T element)
-
-  int indexOf(T element) // <.>
-
-  boolean isEqualTo(final Can<?> other) // <.>
-
-  boolean startsWith(final Can<?> other) // <.>
-
-  boolean endsWith(final Can<?> other) // <.>
-
+  int indexOf(T element)     // <.>
+  boolean isEqualTo(final Can<?> other)     // <.>
+  boolean startsWith(final Can<?> other)     // <.>
+  boolean endsWith(final Can<?> other)     // <.>
   boolean isEmpty()
-
   boolean isNotEmpty()
-
   boolean isCardinalityOne()
-
   boolean isCardinalityMultiple()
-
   Collector<T, ?, Can<T>> toCan()
-
-  List<T> toList() // <.>
-
-  C toCollection(Supplier<C> collectionFactory) // <.>
-
-  T[] toArray(T[] a) // <.>
-
-  T[] toArray(Class<T> elementType) // <.>
+  List<T> toList()     // <.>
+  C toCollection(Supplier<C> collectionFactory)     // <.>
+  T[] toArray(T[] a)     // <.>
+  T[] toArray(Class<T> elementType)     // <.>
 }
 ----
 

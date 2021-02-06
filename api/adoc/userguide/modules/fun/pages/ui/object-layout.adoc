@@ -10,7 +10,7 @@ File-based layouts offer a number of benefits:
 
 * Probably most significantly, the layout can be updated without requiring a recompile of the code and redeploy of the app; fine-tuning the layout with your end users is easy to do
 
-* Many developers also find it easier to rationalize about layout when all the hints are collated together in a single place (rather than scattered across the class pathsToInclude as annotations).
+* Many developers also find it easier to rationalize about layout when all the hints are collated together in a single place (rather than scattered across the class members as annotations).
 
 * UI hints can be provided for xref:userguide:fun:mixins.adoc[mixin] contributions that are synthesised at runtime.
 
@@ -112,7 +112,7 @@ This corresponds to the following XML:
 ----
 
 You will notice that one of the ``col``umns has an ``unreferencedActions`` attribute, while one of the ``tabGroup``s has a similar ``unreferencedCollections`` attribute.
-This topic is discussed in more detail xref:#unreferenced-pathsToInclude[below].
+This topic is discussed in more detail xref:#unreferenced-members[below].
 
 === Fieldsets
 
@@ -156,7 +156,7 @@ Notice how actions - such as `duplicate` and `delete` - can be associated with t
 Thereafter the fieldset lists the properties in order.
 Actions can be associated with properties too; here they are rendered underneath or to the right of the field.
 
-Note also the `unreferencedProperties` attribute for the fieldset; this topic is discussed in more detail xref:#unreferenced-pathsToInclude[below].
+Note also the `unreferencedProperties` attribute for the fieldset; this topic is discussed in more detail xref:#unreferenced-members[below].
 
 
 [NOTE]
@@ -195,7 +195,7 @@ This corresponds to the following XML:
 
 As with properties, actions can be associated with collections; this indicates that they should be rendered in the collection's header.
 
-[#unreferenced-pathsToInclude]
+[#unreferenced-members]
 == Unreferenced Members
 
 As noted in the preceding discussion, several of the grid's regions have either an ``unreferencedActions``, ``unreferencedCollections`` or ``unreferencedProperties`` attribute.
@@ -214,8 +214,8 @@ If specified on a tab group, then a separate tab will be created for each collec
 
 * `unreferencedProperties` attribute can be specified only on a fieldset.
 
-The purpose of these attributes is to indicate where in the layout any unreferenced pathsToInclude should be rendered.
-Every grid _must_ nominate one region for each of these three member types, the reason being that to ensure that the layout can be used even if it is incomplete with respect to the object pathsToInclude inferred from the Java source code.
+The purpose of these attributes is to indicate where in the layout any unreferenced members should be rendered.
+Every grid _must_ nominate one region for each of these three member types, the reason being that to ensure that the layout can be used even if it is incomplete with respect to the object members inferred from the Java source code.
 This might be because the developer forgot to update the layout, or it might be because of a new mixin (property, collection or action) contributed to many objects.
 
 The framework ensures that in any given grid exactly one region is specified for each of the three `unreferenced...` attributes.
@@ -273,11 +273,11 @@ As a developer, you can therefore select the layout file which maps to your pref
 * if you want all layout metadata to be read from the `.layout.xml` file, then download the "complete" version, and copy the file alongside the domain class.
 You can then remove all `@MemberOrder`, `@ActionLayout`, `@PropertyLayout` and `@CollectionLayout` annotations from the source code of the domain class.
 
-* if you want to use layout XML file to describe the grid (columns, tabs etc) and specify which object pathsToInclude are associated with those regions of the grid, then download the "normalized" version.
+* if you want to use layout XML file to describe the grid (columns, tabs etc) and specify which object members are associated with those regions of the grid, then download the "normalized" version.
 You can then remove the `@MemberOrder` and `@Action#associateWith` annotations from the source code of the domain class, but retain the `@ActionLayout`, `@PropertyLayout` and `@CollectionLayout` annotations.
 
 * if you want to use layout XML file ONLY to describe the grid, then download the "minimal" version.
-The grid regions will be empty in this version, and the framework will use the `@MemberOrder` and `@Action#associateWith` annotations to bind object pathsToInclude to those regions.
+The grid regions will be empty in this version, and the framework will use the `@MemberOrder` and `@Action#associateWith` annotations to bind object members to those regions.
 
 If you want to adjust the layout XML for a single domain object, then you can use the xref:refguide:applib-cm:roles-mixins-contributees/mixins.adoc#downloadlayoutxml[mixin action] (contributed to every domain object).
 

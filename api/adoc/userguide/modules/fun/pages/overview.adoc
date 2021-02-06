@@ -7,7 +7,7 @@ In this section we run through the main building blocks that make up an Apache I
 
 include::overview/types-of-domain-objects.adoc[leveloffset=+1]
 include::overview/identifiers.adoc[leveloffset=+1]
-include::overview/object-pathsToInclude.adoc[leveloffset=+1]
+include::overview/object-members.adoc[leveloffset=+1]
 include::overview/business-rules.adoc[leveloffset=+1]
 include::overview/events.adoc[leveloffset=+1]
 include::overview/modules.adoc[leveloffset=+1]

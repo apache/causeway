@@ -94,8 +94,9 @@ final class ProjectDocWriter {
 
                     log.info("writing file: {}", adocIndexFile.getName());
 
+                    final Document asciiDoc = unit.toAsciiDoc(j2aContext);
                     docWriter.accept(
-                            unit.toAsciiDoc(j2aContext),
+                            asciiDoc,
                             adocIndexFile);
 
                     ++writeCount;

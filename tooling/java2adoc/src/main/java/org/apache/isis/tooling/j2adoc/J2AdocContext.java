@@ -61,6 +61,9 @@ public class J2AdocContext {
     private final boolean skipTitleHeader = false;
 
     @Builder.Default
+    private final boolean memberSections = false;
+
+    @Builder.Default
     private final @NonNull String memberNameFormat = "[teal]#*%s*#";
 
     @Builder.Default
@@ -71,13 +74,6 @@ public class J2AdocContext {
 
     @Builder.Default
     private final @NonNull String deprecatedStaticMemberNameFormat = "[line-through gray]#*_%s_*#";
-
-    // -- CONVERTER
-
-    private final @NonNull Function<J2AdocContext, J2AdocConverter> converterFactory;
-
-    @Getter(lazy=true)
-    private final J2AdocConverter converter = getConverterFactory().apply(this);
 
     // -- FORMATTER
 
@@ -252,20 +248,37 @@ public class J2AdocContext {
         return Optional.ofNullable(unitIndex.get(key));
     }
 
-    // -- PREDEFINED FORMATS
+//    // -- PREDEFINED FORMATS
+//
+//    public static J2AdocContextBuilder javaSourceWithFootnotesFormat() {
+//        return J2AdocContext.builder()
+//                .converterFactory(J2AdocConverter::createDefault)
+//                .formatterFactory(UnitFormatterWithSourceAndFootNotes::new)
+//                ;
+//    }
+//
+//    public static J2AdocContextBuilder compactFormat() {
+//        return J2AdocContext.builder()
+//                .converterFactory(J2AdocConverter::createDefault)
+//                .formatterFactory(UnitFormatterCompact::new)
+//                ;
+//    }
 
-    public static J2AdocContextBuilder javaSourceWithFootnotesFormat() {
-        return J2AdocContext.builder()
-                .converterFactory(J2AdocConverter::createDefault)
-                .formatterFactory(UnitFormatterWithSourceAndFootNotes::new)
-                ;
-    }
+    public String xref(final @NonNull J2AdocUnit unit) {
 
-    public static J2AdocContextBuilder compactFormat() {
-        return J2AdocContext.builder()
-                .converterFactory(J2AdocConverter::createDefault)
-                .formatterFactory(UnitFormatterCompact::new)
-                ;
+        val xrefCoordinates = unit.getNamespace()
+                .stream()
+                .skip(getNamespacePartsSkipCount())
+                .collect(Can.toCan())
+                .add(unit.getCanonicalName())
+                .stream()
+                .collect(Collectors.joining("/"));
+
+        val xref = String.format("xref:%s[%s]",
+                String.format(getXrefPageIdFormat(), xrefCoordinates),
+                unit.getFriendlyName());
+
+        return xref;
     }
 
     // -- LOG

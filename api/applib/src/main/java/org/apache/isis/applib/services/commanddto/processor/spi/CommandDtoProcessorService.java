@@ -20,14 +20,23 @@ package org.apache.isis.applib.services.commanddto.processor.spi;
 
 import javax.annotation.Nullable;
 
+import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.services.commanddto.conmap.ContentMappingServiceForCommandDto;
 import org.apache.isis.applib.services.commanddto.processor.CommandDtoProcessor;
 import org.apache.isis.schema.cmd.v2.CommandDto;
 
 /**
- * Optional SPI called by {@link ContentMappingServiceForCommandDto}.
+ * Service used to convert a domain object into a {@link CommandDto}, called by
+ * {@link ContentMappingServiceForCommandDto}.
  *
- * Similar to {@link CommandDtoProcessor}, but applied to all {@link CommandDto}s globally.
+ * <p>
+ *     The service is used as a fallback if an {@link CommandDtoProcessor},
+ *     hasn't been explicitly specified using
+ *     {@link Action#commandDtoProcessor()} or
+ *     {@link Property#commandDtoProcessor()}.
+ * </p>
+ *
  * @since 1.x {@index}
  */
 public interface CommandDtoProcessorService {

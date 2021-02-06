@@ -1,273 +1,143 @@
-= JsonRepresentation : _class_
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
 A wrapper around _JsonNode_ that provides some additional helper methods.
 
-.Java Sources
+== API
+
+.JsonRepresentation.java
 [source,java]
 ----
 class JsonRepresentation {
-
   public static final DateTimeFormatter yyyyMMdd;
-
   public static final DateTimeFormatter yyyyMMddTHHmmssZ;
-
   public static final DateTimeFormatter _HHmmss;
-
   JsonRepresentation(final JsonNode jsonNode)
-
   JsonRepresentation newMap(final String... keyValuePairs)
-
   JsonRepresentation newArray()
-
   JsonRepresentation newArray(final int initialSize)
-
   JsonNode asJsonNode()
-
   int size()
-
-  boolean isValue() // <.>
-
+  boolean isValue()     // <.>
   JsonRepresentation getRepresentation(final String pathTemplate, final Object... args)
-
   boolean isArray(final String path)
-
   boolean isArray()
-
   JsonRepresentation getArray(final String path)
-
   JsonRepresentation asArray()
-
   JsonRepresentation getArrayEnsured(final String path)
-
   boolean isMap(final String path)
-
   boolean isMap()
-
   JsonRepresentation getMap(final String path)
-
   JsonRepresentation asMap()
-
   boolean isNumber(final String path)
-
   boolean isNumber()
-
   Number asNumber()
-
-  boolean isIntegralNumber(final String path) // <.>
-
-  boolean isIntegralNumber() // <.>
-
+  boolean isIntegralNumber(final String path)     // <.>
+  boolean isIntegralNumber()     // <.>
   java.util.Date getDate(final String path)
-
   java.util.Date asDate()
-
   java.util.Date getDateTime(final String path)
-
   java.util.Date asDateTime()
-
   java.util.Date getTime(final String path)
-
   java.util.Date asTime()
-
   boolean isBoolean(final String path)
-
   boolean isBoolean()
-
-  Boolean getBoolean(final String path) // <.>
-
-  Boolean asBoolean() // <.>
-
-  Byte getByte(final String path) // <.>
-
-  Byte asByte() // <.>
-
-  Short getShort(final String path) // <.>
-
-  Short asShort() // <.>
-
-  Character getChar(final String path) // <.>
-
-  Character asChar() // <.>
-
+  Boolean getBoolean(final String path)     // <.>
+  Boolean asBoolean()     // <.>
+  Byte getByte(final String path)     // <.>
+  Byte asByte()     // <.>
+  Short getShort(final String path)     // <.>
+  Short asShort()     // <.>
+  Character getChar(final String path)     // <.>
+  Character asChar()     // <.>
   boolean isInt(final String path)
-
   boolean isInt()
-
-  Integer getInt(final String path) // <.>
-
-  Integer asInt() // <.>
-
+  Integer getInt(final String path)     // <.>
+  Integer asInt()     // <.>
   boolean isLong(final String path)
-
   boolean isLong()
-
-  Long getLong(final String path) // <.>
-
-  Long asLong() // <.>
-
-  Float getFloat(final String path) // <.>
-
-  Float asFloat() // <.>
-
+  Long getLong(final String path)     // <.>
+  Long asLong()     // <.>
+  Float getFloat(final String path)     // <.>
+  Float asFloat()     // <.>
   boolean isDecimal(final String path)
-
   boolean isDecimal()
-
-  boolean isDouble(final String path) // <.>
-
-  boolean isDouble() // <.>
-
-  Double getDouble(final String path) // <.>
-
-  Double asDouble() // <.>
-
+  boolean isDouble(final String path)     // <.>
+  boolean isDouble()     // <.>
+  Double getDouble(final String path)     // <.>
+  Double asDouble()     // <.>
   boolean isBigInteger(final String path)
-
   boolean isBigInteger()
-
-  BigInteger getBigInteger(final String path) // <.>
-
-  BigInteger getBigInteger(final String path, final String formatRequested) // <.>
-
-  BigInteger asBigInteger() // <.>
-
+  BigInteger getBigInteger(final String path)     // <.>
+  BigInteger getBigInteger(final String path, final String formatRequested)     // <.>
+  BigInteger asBigInteger()     // <.>
   BigInteger asBigInteger(final String format)
-
   boolean isBigDecimal(final String path)
-
   boolean isBigDecimal()
-
-  BigDecimal getBigDecimal(final String path) // <.>
-
-  BigDecimal getBigDecimal(final String path, final String formatRequested) // <.>
-
-  BigDecimal asBigDecimal() // <.>
-
-  BigDecimal asBigDecimal(String format) // <.>
-
+  BigDecimal getBigDecimal(final String path)     // <.>
+  BigDecimal getBigDecimal(final String path, final String formatRequested)     // <.>
+  BigDecimal asBigDecimal()     // <.>
+  BigDecimal asBigDecimal(String format)     // <.>
   boolean isString(final String path)
-
   boolean isString()
-
-  String getString(final String path) // <.>
-
-  String asString() // <.>
-
+  String getString(final String path)     // <.>
+  String asString()     // <.>
   String asArg()
-
   boolean isLink()
-
   boolean isLink(final String path)
-
   boolean isLink(final JsonNode node)
-
-  LinkRepresentation getLink(final String path) // <.>
-
-  LinkRepresentation asLink() // <.>
-
+  LinkRepresentation getLink(final String path)     // <.>
+  LinkRepresentation asLink()     // <.>
   boolean isNull()
-
-  Boolean isNull(final String path) // <.>
-
-  JsonRepresentation getNull(final String path) // <.>
-
-  JsonRepresentation asNull() // <.>
-
-  LinkRepresentation mapValueAsLink() // <.>
-
+  Boolean isNull(final String path)     // <.>
+  JsonRepresentation getNull(final String path)     // <.>
+  JsonRepresentation asNull()     // <.>
+  LinkRepresentation mapValueAsLink()     // <.>
   InputStream asInputStream()
-
-  T as(final Class<T> cls) // <.>
-
+  T as(final Class<T> cls)     // <.>
   String asUrlEncoded()
-
   JsonRepresentation arrayAdd(final Object value)
-
   JsonRepresentation arrayAdd(final JsonRepresentation value)
-
   JsonRepresentation arrayAdd(final String value)
-
   JsonRepresentation arrayAdd(final JsonNode value)
-
   JsonRepresentation arrayAdd(final long value)
-
   JsonRepresentation arrayAdd(final int value)
-
   JsonRepresentation arrayAdd(final double value)
-
   JsonRepresentation arrayAdd(final float value)
-
   JsonRepresentation arrayAdd(final boolean value)
-
   Stream<JsonRepresentation> streamArrayElements()
-
   Stream<T> streamArrayElements(final Class<T> requiredType)
-
   JsonRepresentation arrayGet(final int i)
-
   JsonRepresentation arraySetElementAt(final int i, final JsonRepresentation objectRepr)
-
   boolean mapHas(final String key)
-
   JsonRepresentation mapPut(final String key, final List<Object> value)
-
   JsonRepresentation mapPut(final String key, final Object value)
-
   JsonRepresentation mapPut(final String key, final JsonRepresentation value)
-
   JsonRepresentation mapPut(final String key, final String value)
-
   JsonRepresentation mapPut(final String key, final JsonNode value)
-
   JsonRepresentation mapPut(final String key, final byte value)
-
   JsonRepresentation mapPut(final String key, final Byte value)
-
   JsonRepresentation mapPut(final String key, final short value)
-
   JsonRepresentation mapPut(final String key, final Short value)
-
   JsonRepresentation mapPut(final String key, final int value)
-
   JsonRepresentation mapPut(final String key, final Integer value)
-
   JsonRepresentation mapPut(final String key, final long value)
-
   JsonRepresentation mapPut(final String key, final Long value)
-
   JsonRepresentation mapPut(final String key, final float value)
-
   JsonRepresentation mapPut(final String key, final Float value)
-
   JsonRepresentation mapPut(final String key, final double value)
-
   JsonRepresentation mapPut(final String key, final Double value)
-
   JsonRepresentation mapPut(final String key, final boolean value)
-
   JsonRepresentation mapPut(final String key, final Boolean value)
-
   JsonRepresentation mapPut(final String key, final char value)
-
   JsonRepresentation mapPut(final String key, final Character value)
-
   JsonRepresentation mapPut(final String key, final BigInteger value)
-
   JsonRepresentation mapPut(Iterable<Entry<String, JsonRepresentation>> entries)
-
   JsonRepresentation mapPut(Entry<String, JsonRepresentation> entry)
-
   JsonRepresentation mapPut(final String key, final BigDecimal value)
-
   Stream<Map.Entry<String, JsonRepresentation>> streamMapEntries()
-
-  JsonRepresentation ensureArray() // <.>
-
+  JsonRepresentation ensureArray()     // <.>
   int hashCode()
-
   boolean equals(Object obj)
-
   String toString()
 }
 ----

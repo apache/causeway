@@ -7,7 +7,7 @@
 
 // TODO: v2: replace @MemberOrder#sequence() with @PropertyLayout#sequence().
 
-The `sequence` attribute orders pathsToInclude that have been grouped together.
+The `sequence` attribute orders members that have been grouped together.
 
 * For properties, this means ordering properties within a property group (fieldset)
 

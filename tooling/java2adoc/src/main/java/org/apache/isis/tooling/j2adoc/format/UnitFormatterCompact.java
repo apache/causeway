@@ -21,21 +21,22 @@ package org.apache.isis.tooling.j2adoc.format;
 import org.asciidoctor.ast.StructuralNode;
 
 import org.apache.isis.tooling.j2adoc.J2AdocContext;
+import org.apache.isis.tooling.j2adoc.convert.J2AdocConverter;
 import org.apache.isis.tooling.model4adoc.AsciiDocFactory;
 
+import lombok.NonNull;
 import lombok.val;
 
-public class UnitFormatterCompact 
+public class UnitFormatterCompact
 extends UnitFormatterAbstract {
 
-    public UnitFormatterCompact(J2AdocContext j2aContext) {
+    public UnitFormatterCompact(final @NonNull J2AdocContext j2aContext) {
         super(j2aContext);
     }
 
     @Override
     protected StructuralNode getMemberDescriptionContainer(StructuralNode parent) {
-        val ul = AsciiDocFactory.list(parent);
-        return ul;
+        return AsciiDocFactory.list(parent);
     }
 
 }

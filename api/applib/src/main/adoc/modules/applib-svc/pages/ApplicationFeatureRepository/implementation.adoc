@@ -3,3 +3,8 @@
 
 
 
+The core framework (xref:core:metamodel:about.adoc[MetaModel] module) provides a default implementation, `o.a.i.core.metamodel.services.appfeat.ApplicationFeatureRepositoryDefault`.
+
+This implementation supports the following configuration properties:
+
+* xref:refguide:config:sections/isis.core.runtime-services.adoc#isis.core.runtime-services.application-features.init[`isis.core.runtime-services.application-features.init`]

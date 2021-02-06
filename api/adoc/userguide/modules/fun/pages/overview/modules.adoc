@@ -47,7 +47,7 @@ A common technique is to factor out from domain objects into mixins and then gen
 * the internal xref:refguide:applib-svc:EventBusService.adoc[event bus] allows modules to influence other modules.
 +
 A subscriber in one module can subscribe to events emitted by domain objects in another module.
-These events can affect both the UI (eg hiding or disabling xref:overview.adoc#object-pathsToInclude[object pathsToInclude], or allowing or vetoing interactions).
+These events can affect both the UI (eg hiding or disabling xref:overview.adoc#object-members[object members], or allowing or vetoing interactions).
 
 A good example of this last is supporting (what in an RDBMS we would call) referential integrity.
 Suppose the `customers` module has a `Customer` object and a `EmailAddress` object, with a customer having a collection of email addresses.

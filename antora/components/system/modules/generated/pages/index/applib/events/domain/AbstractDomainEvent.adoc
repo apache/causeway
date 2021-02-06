@@ -1,45 +1,28 @@
-= AbstractDomainEvent : _class_
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
-.Java Sources
+== API
+
+.AbstractDomainEvent.java
 [source,java]
 ----
 class AbstractDomainEvent {
-
-  AbstractDomainEvent() // <.>
-
+  AbstractDomainEvent()     // <.>
   AbstractDomainEvent(final S source, final Identifier identifier)
-
-  void setMixedIn(final Object mixedIn) // <.>
-
-  Object getSubject() // <.>
-
-  void setEventPhase(Phase phase) // <.>
-
-  void setIdentifier(final Identifier identifier) // <.>
-
-  void hide() // <.>
-
+  void setMixedIn(final Object mixedIn)     // <.>
+  Object getSubject()     // <.>
+  void setEventPhase(Phase phase)     // <.>
+  void setIdentifier(final Identifier identifier)     // <.>
+  void hide()     // <.>
   boolean isDisabled()
-
-  void disable(final String reason) // <.>
-
-  void disable(final TranslatableString reason) // <.>
-
+  void disable(final String reason)     // <.>
+  void disable(final TranslatableString reason)     // <.>
   boolean isInvalid()
-
-  void invalidate(final String reason) // <.>
-
-  void invalidate(final TranslatableString reason) // <.>
-
-  void veto(final String reason, final Object... args) // <.>
-
-  void veto(final TranslatableString translatableReason) // <.>
-
-  Object get(Object key) // <.>
-
-  void put(Object key, Object value) // <.>
-
+  void invalidate(final String reason)     // <.>
+  void invalidate(final TranslatableString reason)     // <.>
+  void veto(final String reason, final Object... args)     // <.>
+  void veto(final TranslatableString translatableReason)     // <.>
+  Object get(Object key)     // <.>
+  void put(Object key, Object value)     // <.>
   String toString()
 }
 ----

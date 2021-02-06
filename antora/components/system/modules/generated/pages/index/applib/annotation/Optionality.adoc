@@ -1,20 +1,17 @@
-= Optionality : _enum_
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
 Whether the property or parameter is optional or is required (aka mandatory).
 
-.Java Sources
+== API
+
+.Optionality.java
 [source,java]
 ----
 enum Optionality {
-
-  DEFAULT // <.>
-
-  OPTIONAL // <.>
-
-  MANDATORY // <.>
-
-  NOT_SPECIFIED // <.>
+  DEFAULT     // <.>
+  OPTIONAL     // <.>
+  MANDATORY     // <.>
+  NOT_SPECIFIED     // <.>
 }
 ----
 
@@ -23,7 +20,7 @@ enum Optionality {
 --
 Default, usually meaning mandatory for properties and always meaning mandatory for parameters.
 
-For properties, will be false unless JDOjavax.jdo.annotations.Columnhas also specified withjavax.jdo.annotations.Column#allowsNull()set totrue.
+For properties, will be false unless JDO `javax.jdo.annotations.Columnhas also specified with `javax.jdo.annotations.Column#allowsNull()set to `true.
 --
 <.> `[teal]#*_OPTIONAL_*#`
 +
@@ -33,9 +30,9 @@ Indicates that the property or parameter is not required.
 <.> `[teal]#*_MANDATORY_*#`
 +
 --
-Indicates that the property is required (even if the JDOjavax.jdo.annotations.Columnannotation says otherwise).
+Indicates that the property is required (even if the JDO `javax.jdo.annotations.Columnannotation says otherwise).
 
-When using the JDO/DataNucleus objectstore, it is sometimes necessary to annotate a property as optional (usingjavax.jdo.annotations.Column#allowsNull()set totrue), even if the property is logically mandatory. For example, this can occur when the property is in a subtype class that has been "rolled up" to the superclass table usingjavax.jdo.annotations.Inheritance> with thejavax.jdo.annotations.InheritanceStrategy#SUPERCLASS_TABLEsuperclass strategy.
+When using the JDO/DataNucleus objectstore, it is sometimes necessary to annotate a property as optional (using `javax.jdo.annotations.Column#allowsNull()set to `true), even if the property is logically mandatory. For example, this can occur when the property is in a subtype class that has been "rolled up" to the superclass table using `javax.jdo.annotations.Inheritance> with the `javax.jdo.annotations.InheritanceStrategy#SUPERCLASS_TABLEsuperclass strategy.
 
 This annotation, therefore, is intended to override any objectstore-specific annotation, so that Isis can apply the constraint even though the objectstore is unable to do so.
 --

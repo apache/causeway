@@ -27,8 +27,9 @@ import static org.apache.isis.commons.internal.base._With.requires;
 import lombok.val;
 
 /**
- * This service enables a serializable 'bookmark' to be created for an entity.
- * 
+ * This service provides a serializable 'bookmark' for any entity, and
+ * conversely to lookup an entity from a bookmark.
+ *
  * @since 1.x {@index}
  */
 public interface BookmarkService {

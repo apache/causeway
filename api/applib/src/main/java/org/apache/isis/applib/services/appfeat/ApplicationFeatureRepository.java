@@ -21,11 +21,14 @@ package org.apache.isis.applib.services.appfeat;
 import java.util.SortedSet;
 
 /**
- * 
+ * Provides the access to string representations of the packages, classes and
+ * class members (collectively: "application features") of the domain classes
+ * within the framework's internal metamodel.
+ *
  * @since 1.x {@index}
  */
 public interface ApplicationFeatureRepository  {
-    
+
     SortedSet<String> packageNames();
 
     SortedSet<String> packageNamesContainingClasses(

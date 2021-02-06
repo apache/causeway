@@ -1,38 +1,27 @@
-= CommandReplayOnPrimaryService : _class_
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
-.Java Sources
+== API
+
+.CommandReplayOnPrimaryService.java
 [source,java]
 ----
 class CommandReplayOnPrimaryService {
-
   @Inject
 final CommandJdoRepository commandServiceRepository;
-
   @Inject
 final JaxbService jaxbService;
-
   @Inject
 final MessageService messageService;
-
   @Inject
 final ContentMappingServiceForCommandsDto contentMappingServiceForCommandsDto;
-
   @Inject
 final CommandRetrievalService commandRetrievalService;
-
-  List<CommandJdo> findCommands(final UUID uniqueId, final Integer batchSize) // <.>
-
+  List<CommandJdo> findCommands(final UUID uniqueId, final Integer batchSize)     // <.>
   Integer default1FindCommandsOnPrimaryFrom()
-
-  Clob downloadCommands(final UUID uniqueId, final Integer batchSize, final String filenamePrefix) // <.>
-
+  Clob downloadCommands(final UUID uniqueId, final Integer batchSize, final String filenamePrefix)     // <.>
   Integer default1DownloadCommands()
-
   String default2DownloadCommands()
-
-  Clob downloadCommandById(final UUID uniqueId, final String filenamePrefix) // <.>
-
+  Clob downloadCommandById(final UUID uniqueId, final String filenamePrefix)     // <.>
   String default1DownloadCommandById()
 }
 ----
@@ -40,16 +29,16 @@ final CommandRetrievalService commandRetrievalService;
 <.> `[teal]#*findCommands*#(UUID uniqueId, Integer batchSize)` : `List<CommandJdo>`
 +
 --
-These actions should be called with HTTP Accept Header set to:application/xml;profile="urn:org.restfulobjects:repr-types/action-result";x-ro-domain-type="org.apache.isis.schema.cmd.v1.CommandsDto"
+These actions should be called with HTTP Accept Header set to: `application/xml;profile="urn:org.restfulobjects:repr-types/action-result";x-ro-domain-type="org.apache.isis.schema.cmd.v1.CommandsDto"
 --
 <.> `[teal]#*downloadCommands*#(UUID uniqueId, Integer batchSize, String filenamePrefix)` : `xref:system:generated:index/applib/value/Clob.adoc[Clob]`
 +
 --
-These actions should be called with HTTP Accept Header set to:application/xml;profile="urn:org.restfulobjects:repr-types/action-result";x-ro-domain-type="org.apache.isis.schema.cmd.v1.CommandsDto"
+These actions should be called with HTTP Accept Header set to: `application/xml;profile="urn:org.restfulobjects:repr-types/action-result";x-ro-domain-type="org.apache.isis.schema.cmd.v1.CommandsDto"
 --
 <.> `[teal]#*downloadCommandById*#(UUID uniqueId, String filenamePrefix)` : `xref:system:generated:index/applib/value/Clob.adoc[Clob]`
 +
 --
-This action should be called with HTTP Accept Header set to:application/xml;profile="urn:org.restfulobjects:repr-types/action-result";x-ro-domain-type="org.apache.isis.schema.cmd.v1.CommandDto"
+This action should be called with HTTP Accept Header set to: `application/xml;profile="urn:org.restfulobjects:repr-types/action-result";x-ro-domain-type="org.apache.isis.schema.cmd.v1.CommandDto"
 --
 

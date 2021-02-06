@@ -1,44 +1,29 @@
-= Property : _annotation_
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
-Domain semantics for domain object property.
+Collects together all the domain semantics for the property of a domain object.
 
-.Java Sources
+== API
+
+.Property.java
 [source,java]
 ----
 @interface Property {
-
-  Class<? extends CommandDtoProcessor> commandDtoProcessor() default CommandDtoProcessor.class; // <.>
-
-  Publishing commandPublishing() default Publishing.NOT_SPECIFIED; // <.>
-
-  Class<? extends PropertyDomainEvent<?, ?>> domainEvent() default PropertyDomainEvent.Default.class; // <.>
-
-  Editing editing() default Editing.NOT_SPECIFIED; // <.>
-
-  String editingDisabledReason() default ""; // <.>
-
-  Publishing executionPublishing() default Publishing.NOT_SPECIFIED; // <.>
-
-  String fileAccept() default ""; // <.>
-
-  Where hidden() default Where.NOT_SPECIFIED; // <.>
-
-  int maxLength() default -1; // <.>
-
-  Snapshot snapshot() default Snapshot.NOT_SPECIFIED; // <.>
-
-  Class<? extends Specification>[] mustSatisfy() default {}; // <.>
-
-  Optionality optionality() default Optionality.NOT_SPECIFIED; // <.>
-
-  Projecting projecting() default Projecting.NOT_SPECIFIED; // <.>
-
-  String regexPattern() default ""; // <.>
-
-  int regexPatternFlags() default 0; // <.>
-
-  String regexPatternReplacement() default "Doesn't match pattern"; // <.>
+  Class<? extends CommandDtoProcessor> commandDtoProcessor() default CommandDtoProcessor.class;     // <.>
+  Publishing commandPublishing() default Publishing.NOT_SPECIFIED;     // <.>
+  Class<? extends PropertyDomainEvent<?, ?>> domainEvent() default PropertyDomainEvent.Default.class;     // <.>
+  Editing editing() default Editing.NOT_SPECIFIED;     // <.>
+  String editingDisabledReason() default "";     // <.>
+  Publishing executionPublishing() default Publishing.NOT_SPECIFIED;     // <.>
+  String fileAccept() default "";     // <.>
+  Where hidden() default Where.NOT_SPECIFIED;     // <.>
+  int maxLength() default -1;     // <.>
+  Snapshot snapshot() default Snapshot.NOT_SPECIFIED;     // <.>
+  Class<? extends Specification>[] mustSatisfy() default {};     // <.>
+  Optionality optionality() default Optionality.NOT_SPECIFIED;     // <.>
+  Projecting projecting() default Projecting.NOT_SPECIFIED;     // <.>
+  String regexPattern() default "";     // <.>
+  int regexPatternFlags() default 0;     // <.>
+  String regexPatternReplacement() default "Doesn't match pattern";     // <.>
 }
 ----
 
@@ -105,14 +90,14 @@ Indicates where the property is not visible to the user.
 --
 The maximum entry length of a field.
 
-The default value (-1) indicates that no maxLength has been specified.
+The default value ( `-1) indicates that no maxLength has been specified.
 --
 <.> `[teal]#*_snapshot_*#` : `xref:system:generated:index/applib/annotation/Snapshot.adoc[Snapshot]`
 +
 --
 Indicates whether the property should be included or excluded from mementos.
 
-To ensure that the property is actually not persisted in the objectstore, also annotate with the JDO annotationjavax.jdo.annotations.NotPersistent
+To ensure that the property is actually not persisted in the objectstore, also annotate with the JDO annotation `javax.jdo.annotations.NotPersistent
 --
 <.> `[teal]#*_mustSatisfy_*#` : `Class<? extends Specification>[]`
 +
@@ -126,7 +111,7 @@ If more than one is provided, then all must be satisfied (in effect "AND"ed toge
 --
 Whether this property is optional or is mandatory (ie required).
 
-For properties the default value, _org.apache.isis.applib.annotation.Optionality#DEFAULT_ , usually means that the property is required unless it has been overridden byjavax.jdo.annotations.Columnwith itsjavax.jdo.annotations.Column#allowsNull()attribute set to true.
+For properties the default value, _org.apache.isis.applib.annotation.Optionality#DEFAULT_ , usually means that the property is required unless it has been overridden by `javax.jdo.annotations.Columnwith its `javax.jdo.annotations.Column#allowsNull()attribute set to true.
 --
 <.> `[teal]#*_projecting_*#` : `xref:system:generated:index/applib/annotation/Projecting.adoc[Projecting]`
 +
@@ -147,7 +132,7 @@ Regular expression pattern that a value should conform to, and can be formatted 
 --
 Pattern flags, as per _java.util.regex.Pattern#compile(String, int)_ .
 
-The default value,0, means that no flags have been specified.
+The default value, `0, means that no flags have been specified.
 --
 <.> `[teal]#*_regexPatternReplacement_*#` : `String`
 +

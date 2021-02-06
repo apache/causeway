@@ -37,22 +37,22 @@ public interface J2AdocConverter {
     Document javadoc(Javadoc javadoc, J2AdocUnit unit);
 
     String annotationMemberDeclaration(AnnotationMemberDeclaration amd, J2AdocUnit unit);
-    
+
     String enumConstantDeclaration(EnumConstantDeclaration ecd);
-    
+
     String fieldDeclaration(FieldDeclaration fd, J2AdocUnit unit);
-    
+
     String constructorDeclaration(ConstructorDeclaration cd, J2AdocUnit unit);
 
     String methodDeclaration(MethodDeclaration md, J2AdocUnit unit);
-    
-    String xref(@NonNull J2AdocUnit unit);
-    
+
+//    String xref(@NonNull J2AdocUnit unit);
+
     // -- FACTORIES
-    
+
     public static J2AdocConverter createDefault(final @NonNull J2AdocContext context) {
         return J2AdocConverterDefault.of(context);
     }
-    
+
 
 }

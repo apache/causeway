@@ -1,33 +1,24 @@
-= ApplicationPermissionValue : _class_
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
 A serializable value object representing an (anonymized) xref:system:generated:index/extensions/secman/api/permission/ApplicationPermission.adoc[ApplicationPermission] .
 
 Intended for value type arithmetic and also for caching. No user/role information is held because that information is not required to perform the arithmetic.
 
-.Java Sources
+== API
+
+.ApplicationPermissionValue.java
 [source,java]
 ----
 class ApplicationPermissionValue {
-
   ApplicationPermissionValue(final ApplicationFeatureId featureId, final ApplicationPermissionRule rule, final ApplicationPermissionMode mode)
-
   ApplicationFeatureId getFeatureId()
-
   ApplicationPermissionRule getRule()
-
   ApplicationPermissionMode getMode()
-
   boolean implies(final ApplicationFeatureId featureId, final ApplicationPermissionMode mode)
-
   boolean refutes(final ApplicationFeatureId featureId, final ApplicationPermissionMode mode)
-
   int compareTo(final ApplicationPermissionValue o)
-
   boolean equals(final Object o)
-
   int hashCode()
-
   String toString()
 }
 ----

@@ -1,4 +1,3 @@
-= TitleBuffer : _class_
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
 Title buffer is a utility class to help produce titles for objects without having to add lots of guard code.
@@ -7,54 +6,34 @@ It provides two basic method: one to concatenate a title to the buffer; another 
 
 The benefits of using this class is that null references are safely ignored (rather than appearing as 'null'), and joiners (a space by default) are only added when needed.
 
-.Java Sources
+== API
+
+.TitleBuffer.java
 [source,java]
 ----
 class TitleBuffer {
-
-  TitleBuffer() // <.>
-
-  TitleBuffer(final Object object) // <.>
-
-  TitleBuffer(final Object object, final String defaultTitle) // <.>
-
-  TitleBuffer(final String text) // <.>
-
-  boolean isEmpty(final Object object) // <.>
-
-  boolean isEmpty(final String text) // <.>
-
-  TitleBuffer append(final int number) // <.>
-
-  TitleBuffer append(final Object object) // <.>
-
-  TitleBuffer append(final Object object, final String defaultValue) // <.>
-
-  TitleBuffer append(final String text) // <.>
-
-  TitleBuffer append(final String joiner, final Object object) // <.>
-
-  TitleBuffer append(final String joiner, final Object object, final String defaultTitle) // <.>
-
-  TitleBuffer append(final String joiner, final String text) // <.>
-
-  TitleBuffer appendSpace() // <.>
-
-  TitleBuffer concat(final Object object) // <.>
-
-  TitleBuffer concat(final Object object, final String defaultValue) // <.>
-
-  TitleBuffer concat(final String text) // <.>
-
-  TitleBuffer concat(final String joiner, final String text) // <.>
-
-  TitleBuffer concat(final String joiner, final Object object) // <.>
-
-  TitleBuffer concat(final String joiner, final Object object, final String defaultValue) // <.>
-
-  String toString() // <.>
-
-  TitleBuffer truncate(final int noWords) // <.>
+  TitleBuffer()     // <.>
+  TitleBuffer(final Object object)     // <.>
+  TitleBuffer(final Object object, final String defaultTitle)     // <.>
+  TitleBuffer(final String text)     // <.>
+  boolean isEmpty(final Object object)     // <.>
+  boolean isEmpty(final String text)     // <.>
+  TitleBuffer append(final int number)     // <.>
+  TitleBuffer append(final Object object)     // <.>
+  TitleBuffer append(final Object object, final String defaultValue)     // <.>
+  TitleBuffer append(final String text)     // <.>
+  TitleBuffer append(final String joiner, final Object object)     // <.>
+  TitleBuffer append(final String joiner, final Object object, final String defaultTitle)     // <.>
+  TitleBuffer append(final String joiner, final String text)     // <.>
+  TitleBuffer appendSpace()     // <.>
+  TitleBuffer concat(final Object object)     // <.>
+  TitleBuffer concat(final Object object, final String defaultValue)     // <.>
+  TitleBuffer concat(final String text)     // <.>
+  TitleBuffer concat(final String joiner, final String text)     // <.>
+  TitleBuffer concat(final String joiner, final Object object)     // <.>
+  TitleBuffer concat(final String joiner, final Object object, final String defaultValue)     // <.>
+  String toString()     // <.>
+  TitleBuffer truncate(final int noWords)     // <.>
 }
 ----
 
@@ -124,7 +103,7 @@ Note: this method only obtains the title using either `title()` or `toString()` 
 <.> `[teal]#*append*#(String joiner, Object object, String defaultTitle)` : `xref:system:generated:index/applib/util/TitleBuffer.adoc[TitleBuffer]`
 +
 --
-Append thejoinertext, a space, and the title of the specified object to the text of this xref:system:generated:index/applib/util/TitleBuffer.adoc[TitleBuffer] . If the title of the specified object is null then use thedefaultValuetext. If both the objects title and the default value are null or equate to a zero-length string then no text will be appended ; not even the joiner text.
+Append the `joinertext, a space, and the title of the specified object to the text of this xref:system:generated:index/applib/util/TitleBuffer.adoc[TitleBuffer] . If the title of the specified object is null then use the `defaultValuetext. If both the objects title and the default value are null or equate to a zero-length string then no text will be appended ; not even the joiner text.
 
 Note: this method only obtains the title using either `title()` or `toString()` ; it doesn't honour other mechanisms for specifying the title, such as _org.apache.isis.applib.annotation.Title_ annotation. If that functionality is required, first call _TitleService#titleOf(Object)_ on the object and pass in the resultant string.
 --

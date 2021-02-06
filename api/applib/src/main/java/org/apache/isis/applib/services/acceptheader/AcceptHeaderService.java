@@ -23,6 +23,15 @@ import java.util.List;
 import javax.ws.rs.core.MediaType;
 
 /**
+ * This service simply exposes the HTTP `Accept` header to the domain.
+ *
+ * <p>
+ * Its intended use is to support multiple versions of a REST API, where the
+ * responsibility for content negotiation (determining which version of the
+ * REST API is to be used) is managed by logic in the domain objects themselves.
+ *
+ * </p>
+ *
  * @since 1.x {@index}
  */
 public interface AcceptHeaderService {

@@ -5,10 +5,10 @@
 
 
 
-One use case that Apache Isis supports is that of a domain object with a lifecycle whereby at some stage some number of the object's pathsToInclude should be hidden.
+One use case that Apache Isis supports is that of a domain object with a lifecycle whereby at some stage some number of the object's members should be hidden.
 For example, for an object that at some stage is logically immutable, we might want to make all its properties/collections unmodifiable and hide all its actions.
 
-While we could write a separate xref:refguide:applib-methods:prefixes.adoc#hide[`hide...()`] method for each and every action, this could become painful.  So instead Isis allows a single `hide...(...)` method to be implemented that is applied to all pathsToInclude.
+While we could write a separate xref:refguide:applib-methods:prefixes.adoc#hide[`hide...()`] method for each and every action, this could become painful.  So instead Isis allows a single `hide...(...)` method to be implemented that is applied to all members.
 
 The signature of the method is:
 
@@ -28,7 +28,7 @@ public boolean hide(Identifier.Type identifierType) {
 }
 ----
 
-See also the similar method to xref:refguide:applib-methods:prefixes.adoc#disable[`disable()`] object pathsToInclude en-masse.
+See also the similar method to xref:refguide:applib-methods:prefixes.adoc#disable[`disable()`] object members en-masse.
 
 
 == Alternatives

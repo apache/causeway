@@ -3,24 +3,15 @@
 :page-partial:
 
 
-The intended use of this service is where there are multiple concurrent versions of a REST API, for backward compatibility of existing clients.
-The `AcceptHeaderService` allows the responsibility for content negotiation (determining which version of the REST API is to be used) to be performed by logic in the domain objects themselves.
+There are two mixins that will contribute to this interface:
 
-The diagram below illustrated this:
+* xref:system:generated:index/applib/services/bookmark/BookmarkHolder_lookup.adoc[BookmarkHolder_lookup]
++
+which contributes a `lookup` action to return the referenced object
 
-image::reference-services-api/acceptheaderservice.png[width="700px"]
+* xref:system:generated:index/applib/services/bookmark/BookmarkHolder_object.adoc[BookmarkHolder_object]
++
+which contributes instead an `object` property, being the referenced object.
 
-The REST request is submitted to a domain service with a xref:refguide:applib-ant:DomainService.adoc#nature[nature] of `VIEW_REST_ONLY` (`MyRestApi` in the diagram).
-This uses the `AcceptHeaderService` to obtain the values of the HTTP `Accept` header.
-Based on this it delegates to the appropriate underlying domain service (with a nature of `DOMAIN` so that they are not exposed in the REST API at all).
-
-[TIP]
-====
-The service does not define any conventions as to the format of the media types.
-The option is to use the media type's type/subtype, eg `application/vnd.myrestapi-v1+json`; an alternative is to use a media type parameter as a hint, eg `application/json;x-my-rest-api-version=1` (where `x-my-rest-api-version` is the media type parameter).
-
-The Restful Objects specification does this something similar with its own `x-ro-domain-type` media type parameter; this is used by the xref:refguide:applib-svc:ContentMappingService.adoc[`ContentMappingService`] to determine how to map domain objects to view models/DTOs.
-====
-
-
+Either of these can be suppressed, if required, using a vetoing subscriber that listens to the action or property domain event in order to hide the member.
 

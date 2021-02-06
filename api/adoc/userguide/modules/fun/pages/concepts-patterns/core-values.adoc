@@ -134,7 +134,7 @@ If the model is clumsy, then the application will be clumsy too, and so the team
 If we are using code as the primary means of expressing the model, then we need to find a way to make this model understandable to the business.
 
 We could generate UML diagrams and the like from code.
-That will work for some pathsToInclude of the business community, but not for everyone.
+That will work for some members of the business community, but not for everyone.
 Or we could generate a PDF document from Javadoc comments, but comments aren't code and so the document may be inaccurate.
 Anyway, even if we do create such a document, not everyone will read it.
 

@@ -1,45 +1,29 @@
-= BeanSort : _enum_
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
 Top level object classification.
 
-.Java Sources
+== API
+
+.BeanSort.java
 [source,java]
 ----
 enum BeanSort {
-
-  VIEW_MODEL // <.>
-
-  ENTITY // <.>
-
-  MANAGED_BEAN_CONTRIBUTING // <.>
-
-  MANAGED_BEAN_NOT_CONTRIBUTING // <.>
-
-  MIXIN // <.>
-
-  VALUE // <.>
-
-  COLLECTION // <.>
-
+  VIEW_MODEL     // <.>
+  ENTITY     // <.>
+  MANAGED_BEAN_CONTRIBUTING     // <.>
+  MANAGED_BEAN_NOT_CONTRIBUTING     // <.>
+  MIXIN     // <.>
+  VALUE     // <.>
+  COLLECTION     // <.>
   UNKNOWN
-
   boolean isManagedBean()
-
   boolean isMixin()
-
   boolean isViewModel()
-
   boolean isValue()
-
   boolean isCollection()
-
   boolean isEntity()
-
   boolean isUnknown()
-
   boolean isToBeIntrospected()
-
   boolean isWrappingSupported()
 }
 ----
