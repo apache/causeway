@@ -24,7 +24,6 @@ import java.util.concurrent.Callable;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.tooling.cli.projdoc.ProjectDocModel;
-import org.apache.isis.tooling.projectmodel.ProjectNodeFactory;
 
 import lombok.val;
 
@@ -90,16 +89,10 @@ class Cli implements Callable<Integer> {
 
         @Override
         public Integer call() throws Exception {
-
-            if(getOutputPath()!=null) {
-                getConfig().getGlobal().setOutputRootFolder(getOutputPath());
-            }
-
-            val projTree = ProjectNodeFactory.maven(getProjectRoot());
-            val projectDocModel = new ProjectDocModel(projTree);
-            projectDocModel.generateAsciiDoc(getConfig(), ProjectDocModel.Mode.OVERVIEW);
+            generateAsciidoc(ProjectDocModel.Mode.OVERVIEW);
             return 0;
         }
+
     }
 
     @Command(
@@ -107,19 +100,12 @@ class Cli implements Callable<Integer> {
             description = "Writes a Global Index (AsciiDoc) to given output.")
     static class GlobalIndexCommand extends CliCommandAbstract {
 
-
         @Override
         public Integer call() throws Exception {
-
-            if(getOutputPath() != null) {
-                getConfig().getGlobal().setOutputRootFolder(getOutputPath());
-            }
-
-            val projTree = ProjectNodeFactory.maven(getProjectRoot());
-            val projectDocModel = new ProjectDocModel(projTree);
-            projectDocModel.generateAsciiDoc(getConfig(), ProjectDocModel.Mode.INDEX);
+            generateAsciidoc(ProjectDocModel.Mode.INDEX);
             return 0;
         }
+
     }
 
     @Command(
@@ -129,16 +115,10 @@ class Cli implements Callable<Integer> {
 
         @Override
         public Integer call() throws Exception {
-
-            if(getOutputPath() != null) {
-                getConfig().getGlobal().setOutputRootFolder(getOutputPath());
-            }
-
-            val projTree = ProjectNodeFactory.maven(getProjectRoot());
-            val projectDocModel = new ProjectDocModel(projTree);
-            projectDocModel.generateAsciiDoc(getConfig(), ProjectDocModel.Mode.ALL);
+            generateAsciidoc(ProjectDocModel.Mode.ALL);
             return 0;
         }
+
     }
 
 

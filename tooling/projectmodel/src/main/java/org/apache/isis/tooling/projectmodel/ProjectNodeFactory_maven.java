@@ -45,7 +45,7 @@ class ProjectNodeFactory_maven {
         val rootModel = modelResolver.getRootModel();
         val interpolate = false; //XXX interpolation is experimental
         val projTree = visitMavenProject(null, rootModel, modelResolver, interpolate);
-        
+
         postProcessDependencyLocation(projTree);
         postProcessDependencyVersion(projTree);
         return projTree;
@@ -60,21 +60,21 @@ class ProjectNodeFactory_maven {
         projTree.depthFirst(projModel->{
             localArtifacts.add(projModel.getArtifactCoordinates().toStringWithGroupAndId());
         });
-        
+
         projTree.depthFirst(projModel->{
             projModel.getDependencies().stream()
             .filter(dep->localArtifacts.contains(dep.getArtifactCoordinates().toStringWithGroupAndId()))
             .forEach(localDep->localDep.setLocation(Location.LOCAL));
         });
     }
-    
+
     private static void postProcessDependencyVersion(final @NonNull ProjectNode projTree) {
-        
+
         // first pass: collect external artifacts, that provide a non-empty version
         // second pass: update all external dependencies' versions
         val externalVersionByArtifact = new HashMap<String, String>();
         projTree.depthFirst(projModel->{
-            
+
             projModel.getDependencies().stream()
             .filter(dependency->dependency.getLocation().isExternal())
             .map(Dependency::getArtifactCoordinates)
@@ -84,20 +84,20 @@ class ProjectNodeFactory_maven {
                         coors.toStringWithGroupAndId(),
                         coors.getVersion());
             });
-            
+
         });
 
-        System.out.println("externalVersionbyArtifact " + externalVersionByArtifact);
+        // log.debug("externalVersionbyArtifact {}",  externalVersionByArtifact);
 
     }
-    
+
     private static ProjectNode visitMavenProject(
-            final @Nullable ProjectNode parent, 
-            final @NonNull Model mavenProj, 
+            final @Nullable ProjectNode parent,
+            final @NonNull Model mavenProj,
             final @NonNull SimpleModelResolver modelResolver,
             boolean interpolate) {
-        
-        val interpolatedProj = interpolate 
+
+        val interpolatedProj = interpolate
                 ? MavenModelFactory.interpolateModel(mavenProj, modelResolver)
                 : mavenProj;
         val projNode = toProjectNode(parent, interpolatedProj);
@@ -106,9 +106,9 @@ class ProjectNodeFactory_maven {
         }
         return projNode;
     }
-    
+
     private static ProjectNode toProjectNode(
-            final @Nullable ProjectNode parent, 
+            final @Nullable ProjectNode parent,
             final @NonNull Model mavenProj) {
         val projNode = ProjectNode.builder()
                 .parent(parent)
@@ -117,34 +117,34 @@ class ProjectNodeFactory_maven {
                 .description(_Strings.nullToEmpty(mavenProj.getDescription()))
                 .projectDirectory(mavenProj.getProjectDirectory())
                 .build();
-        
+
         mavenProj.getDependencies()
         .stream()
         .map(ProjectNodeFactory_maven::toDependency)
         .forEach(projNode.getDependencies()::add);
-        
+
         if(parent!=null) {
             parent.getChildren().add(projNode);
         }
 
         return projNode;
     }
-    
+
     private static Dependency toDependency(final @NonNull org.apache.maven.model.Dependency dependency) {
         val artifactCoordinates = ArtifactCoordinates.of(
-                dependency.getGroupId(), 
+                dependency.getGroupId(),
                 dependency.getArtifactId(),
                 dependency.getType(),
                 Optional.ofNullable(dependency.getVersion()).orElse(ArtifactCoordinates.MANAGED_VERSION) //TODO to resolve this requires interpolation
                 );
-        
+
         return Dependency.builder()
                 .artifactCoordinates(artifactCoordinates)
                 .location(Location.EXTERNAL) // just priming here to be overwritten in post-processing if required
                 .shortName(ArtifactShortNameFactory.toShortName(artifactCoordinates))
                 .build();
     }
-    
+
     static ArtifactCoordinates artifactCoordinatesOf(final @NonNull Model mavenProj) {
         val groupId = MavenModelFactory.getGroupId(mavenProj);
         val artifactId = mavenProj.getArtifactId();
@@ -152,11 +152,11 @@ class ProjectNodeFactory_maven {
         val version = MavenModelFactory.getVersion(mavenProj);
         return ArtifactCoordinates.of(groupId, artifactId, type, version);
     }
-    
+
     private static Iterable<Model> childrenOf(
-            final @NonNull Model mavenProj, 
+            final @NonNull Model mavenProj,
             final @NonNull SimpleModelResolver modelResolver) {
-        
+
         return Stream.<String>concat(
                 mavenProj.getProfiles().stream().flatMap(profile->profile.getModules().stream()),
                 mavenProj.getModules().stream())
@@ -165,8 +165,8 @@ class ProjectNodeFactory_maven {
         .filter(Objects::nonNull)
         .collect(Collectors.toList());
     }
-    
-    
 
-    
+
+
+
 }

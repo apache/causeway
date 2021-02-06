@@ -39,31 +39,31 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
-public abstract class UnitFormatterAbstract 
+public abstract class UnitFormatterAbstract
 implements UnitFormatter {
-    
+
     private final @NonNull J2AdocContext j2aContext;
-    
+
     @Override
     public String getEnumConstantFormat() {
         return "`%s`";
     }
-    
+
     @Override
     public String getAnnotationMemberFormat() {
         return "`%2$s` : `%1$s`";
     }
-    
+
     @Override
     public String getFieldFormat() {
         return "`%2$s` : `%1$s`";
     }
-    
+
     @Override
     public String getConstructorFormat() {
         return "`%1$s(%2$s)`";
     }
-    
+
     @Override
     public String getGenericConstructorFormat() {
         return "`%2$s%1$s(%3$s)`";
@@ -78,14 +78,14 @@ implements UnitFormatter {
     public String getGenericMethodFormat() {
         return "`%3$s%1$s(%4$s)` : `%2$s`";
     }
-    
+
     protected Optional<String> title(final J2AdocUnit unit) {
         return Optional.of(
-                String.format("%s : _%s_", 
+                String.format("%s : _%s_",
                         unit.getFriendlyName(),
                         unit.getDeclarationKeywordFriendlyName().toLowerCase()));
     }
-    
+
     protected void intro(final J2AdocUnit unit, final StructuralNode parent) {
 
         unit.getJavadoc()
@@ -93,139 +93,141 @@ implements UnitFormatter {
         .map(javadoc->getConverter().javadoc(javadoc, unit))
         .ifPresent(doc->parent.getBlocks().addAll(doc.getBlocks()));
     }
-    
+
     protected Optional<String> javaSource(final J2AdocUnit unit) {
         return Optional.empty();
     }
-    
+
     protected abstract StructuralNode getMemberDescriptionContainer(StructuralNode parent);
-    
+
     protected void appendMemberDescription(StructuralNode ul, String member, Document javadoc) {
         val li = AsciiDocFactory.listItem((List) ul, member);
         val openBlock = AsciiDocFactory.openBlock(li);
         val javaDocBlock = AsciiDocFactory.block(openBlock);
         javaDocBlock.getBlocks().addAll(javadoc.getBlocks());
     }
-    
+
     protected void memberDescriptions(final J2AdocUnit unit, final StructuralNode parent) {
-        
+
         val ul = getMemberDescriptionContainer(parent);
-        
+
         unit.getTypeDeclaration().getEnumConstantDeclarations().stream()
         .filter(Javadocs::presentAndNotHidden)
         .forEach(ecd->{
             ecd.getJavadoc()
             .ifPresent(javadoc->{
-                
-                appendMemberDescription(ul, 
+
+                appendMemberDescription(ul,
                                 getConverter().enumConstantDeclaration(ecd),
                                 getConverter().javadoc(javadoc, unit));
             });
         });
-        
+
         unit.getTypeDeclaration().getPublicFieldDeclarations().stream()
         .filter(Javadocs::presentAndNotHidden)
         .forEach(fd->{
-            
+
             fd.getJavadoc()
             .ifPresent(javadoc->{
-                
+
                 appendMemberDescription(ul,
                         getConverter().fieldDeclaration(fd, unit),
                         getConverter().javadoc(javadoc, unit));
             });
-            
+
         });
-        
+
         unit.getTypeDeclaration().getAnnotationMemberDeclarations().stream()
         .filter(Javadocs::presentAndNotHidden)
         .forEach(ecd->{
             ecd.getJavadoc()
             .ifPresent(javadoc->{
-                
-                appendMemberDescription(ul, 
+
+                appendMemberDescription(ul,
                                 getConverter().annotationMemberDeclaration(ecd, unit),
                                 getConverter().javadoc(javadoc, unit));
             });
         });
-        
+
         unit.getTypeDeclaration().getPublicConstructorDeclarations().stream()
         .filter(Javadocs::presentAndNotHidden)
         .forEach(cd->{
-            
+
             cd.getJavadoc()
             .ifPresent(javadoc->{
-                
+
                 appendMemberDescription(ul,
                         getConverter().constructorDeclaration(cd, unit),
                         getConverter().javadoc(javadoc, unit));
             });
-            
+
         });
-        
+
         unit.getTypeDeclaration().getPublicMethodDeclarations().stream()
         .filter(Javadocs::presentAndNotHidden)
         .forEach(md->{
-            
+
             md.getJavadoc()
             .ifPresent(javadoc->{
-                
+
                 appendMemberDescription(ul,
                         getConverter().methodDeclaration(md, unit),
                         getConverter().javadoc(javadoc, unit));
             });
-            
+
         });
     }
-    
+
 
     protected Optional<String> outro(final J2AdocUnit unit) {
         return Optional.empty();
     }
-    
+
 
     @Override
     public Document apply(final J2AdocUnit unit) {
-        
+
         val doc = AsciiDocFactory.doc();
-        
+
         // -- title
-        
-        title(unit)
-        .ifPresent(doc::setTitle);
-        
+
+        if(!j2aContext.isSkipTitleHeader()) {
+            title(unit)
+            .ifPresent(doc::setTitle);
+        }
+
         // -- license
-        
+
         _Strings.nonEmpty(getContext().getLicenseHeader())
         .ifPresent(notice->AsciiDocFactory.attrNotice(doc, notice));
 
         // -- intro
-        
+
         intro(unit, doc);
-        
+
         // -- java source
-        
+
         javaSource(unit)
         .ifPresent(block(doc)::setSource);
-            
+
         // -- member descriptions
-        
+
         memberDescriptions(unit, doc);
-        
+
         // -- outro
-        
+
         outro(unit)
         .ifPresent(block(doc)::setSource);
-        
+
         return doc;
     }
-    
+
     // -- DEPENDENCIES
-    
+
     protected final J2AdocContext getContext() {
         return j2aContext;
     }
-    
+
     protected final J2AdocConverter getConverter() {
         return j2aContext.getConverter();
     }
