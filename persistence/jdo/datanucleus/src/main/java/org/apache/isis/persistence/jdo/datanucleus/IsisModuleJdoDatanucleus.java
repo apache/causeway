@@ -38,6 +38,7 @@ import org.apache.isis.core.transaction.changetracking.EntityChangeTracker;
 import org.apache.isis.persistence.jdo.datanucleus.changetracking.JdoLifecycleListener;
 import org.apache.isis.persistence.jdo.datanucleus.config.DnEntityDiscoveryListener;
 import org.apache.isis.persistence.jdo.datanucleus.config.DnSettings;
+import org.apache.isis.persistence.jdo.datanucleus.dialect.DnJdoDialect;
 import org.apache.isis.persistence.jdo.datanucleus.entities.DnEntityStateProvider;
 import org.apache.isis.persistence.jdo.datanucleus.jdosupport.JdoSupportServiceDefault;
 import org.apache.isis.persistence.jdo.datanucleus.metamodel.JdoDataNucleusProgrammingModel;
@@ -134,7 +135,9 @@ public class IsisModuleJdoDatanucleus {
             final @Qualifier("local-pmf-proxy") LocalPersistenceManagerFactoryBean localPmfBean) {
 
         val pmf = localPmfBean.getObject(); // created once per application lifecycle
-        return new JdoTransactionManager(pmf);
+        val txManager = new JdoTransactionManager(pmf);
+        txManager.setJdoDialect(new DnJdoDialect());
+        return txManager;
     }
 
 

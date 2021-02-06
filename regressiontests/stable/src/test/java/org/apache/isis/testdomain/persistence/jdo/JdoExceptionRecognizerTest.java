@@ -29,6 +29,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataAccessException;
+import org.springframework.dao.support.PersistenceExceptionTranslator;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.TestPropertySources;
 import org.springframework.transaction.annotation.Propagation;
@@ -122,19 +123,16 @@ class JdoExceptionRecognizerTest
                 val translatedEx = 
                         _Exceptions.streamCausalChain(ex)
                         
-                        // translate from Datanucleus to JDO standard
-                        .<Throwable>map(e->{
-                            if(e instanceof NucleusException) {
-                                return NucleusJDOHelper
-                                        .getJDOExceptionForNucleusException((NucleusException)e);
-                            }
-                            return e;
-                        })
-                        
-                        .filter(e->e instanceof JDOException)
-                        .map(JDOException.class::cast)
+                        .filter(e->e instanceof RuntimeException)
+                        .map(RuntimeException.class::cast)
                         // call Spring's exception translation mechanism (thats our fork)
-                        .<RuntimeException>map(nextEx->txManager.getJdoDialect().translateException(nextEx))
+                        .<RuntimeException>map(nextEx->
+                            ((PersistenceExceptionTranslator)(
+                            txManager.getJdoDialect())).translateExceptionIfPossible(nextEx))
+                        
+                        //.<RuntimeException>map(nextEx->txManager.getJdoDialect().translateExceptionI (nextEx))
+                        
+                        
                         .filter(nextEx -> nextEx instanceof DataAccessException)
                         .findFirst()
                         .orElse(ex);
