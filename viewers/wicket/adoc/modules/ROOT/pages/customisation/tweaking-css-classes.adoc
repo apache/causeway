@@ -18,7 +18,7 @@ This would be done using:
 
 These customizations should generally be added to xref:refguide:config:application-specific/application-css.adoc[`application.css]`; this file is included by default in every webpage served up by the Wicket viewer.
 
-== Individual pathsToInclude
+== Individual members
 
 For example, the `ToDoItem` object of the example https://github.com/apache/isis-app-todoapp/[TodoApp] has a `notes` property.
 The HTML for this will be something like:
@@ -58,7 +58,7 @@ You can use a similar approach for collections and actions.
 
 == Custom CSS styles
 
-The above technique works well if you know the class member to target, but you might instead want to apply a custom style to a set of pathsToInclude.
+The above technique works well if you know the class member to target, but you might instead want to apply a custom style to a set of members.
 For this, you can use the `@PropertyLayout(cssClass=...)`.
 
 For example, in the `ToDoItem` class the following annotation (indicating that this is a key, important, property) :
