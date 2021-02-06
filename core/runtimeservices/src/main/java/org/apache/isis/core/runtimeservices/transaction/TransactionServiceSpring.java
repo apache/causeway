@@ -30,6 +30,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.context.event.EventListener;
 import org.springframework.core.annotation.Order;
+import org.springframework.dao.DataAccessException;
+import org.springframework.dao.support.PersistenceExceptionTranslator;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionDefinition;
@@ -43,6 +45,7 @@ import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.applib.services.xactn.TransactionState;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.functional.Result;
+import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.interaction.scope.InteractionScopeAware;
 import org.apache.isis.core.interaction.session.InteractionSession;
@@ -73,14 +76,19 @@ implements
 
     private final Can<PlatformTransactionManager> platformTransactionManagers;
     private final InteractionTracker interactionTracker;
+    private final Can<PersistenceExceptionTranslator> persistenceExceptionTranslators;
 
     @Inject
     public TransactionServiceSpring(
             final List<PlatformTransactionManager> platformTransactionManagers,
+            final List<PersistenceExceptionTranslator> persistenceExceptionTranslators,
             final InteractionTracker interactionTracker) {
         
         this.platformTransactionManagers = Can.ofCollection(platformTransactionManagers);
         log.info("PlatformTransactionManagers: {}", platformTransactionManagers);
+        
+        this.persistenceExceptionTranslators = Can.ofCollection(persistenceExceptionTranslators);
+        log.info("PersistenceExceptionTranslators: {}", persistenceExceptionTranslators);
         
         this.interactionTracker = interactionTracker;
     }
@@ -94,7 +102,8 @@ implements
         
         val tx = txManager.getTransaction(def);
 
-        val result = Result.ofNullable(callable);
+        val result = Result.ofNullable(callable)
+                .mapFailure(ex->translateExceptionIfPossible(ex, txManager));
         
         if(result.isFailure()) {
             txManager.rollback(tx);
@@ -233,6 +242,32 @@ implements
                 txManager.getTransaction(txTemplate))
                 .value();
         
+    }
+    
+    private Throwable translateExceptionIfPossible(Throwable ex, PlatformTransactionManager txManager) {
+        
+        val translatedEx = 
+        _Exceptions.streamCausalChain(ex)
+        
+        .filter(e->e instanceof RuntimeException)
+        .map(RuntimeException.class::cast)
+        
+        // call Spring's exception translation mechanism
+        .<Throwable>map(nextEx->
+            
+            persistenceExceptionTranslators.stream()
+            .map(translator->translator.translateExceptionIfPossible(nextEx))
+            .filter(_NullSafe::isPresent)
+            .findFirst()
+            .orElse(null)
+                
+        )
+        .filter(_NullSafe::isPresent)
+        .filter(nextEx -> nextEx instanceof DataAccessException)
+        .findFirst()
+        .orElse(ex);
+        
+        return translatedEx;
     }
 
 

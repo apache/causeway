@@ -21,15 +21,11 @@ package org.apache.isis.testdomain.persistence.jdo;
 import java.sql.SQLException;
 
 import javax.inject.Inject;
-import javax.jdo.JDOException;
 
-import org.datanucleus.api.jdo.NucleusJDOHelper;
-import org.datanucleus.exceptions.NucleusException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataAccessException;
-import org.springframework.dao.support.PersistenceExceptionTranslator;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.TestPropertySources;
 import org.springframework.transaction.annotation.Propagation;
@@ -40,10 +36,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.xactn.TransactionService;
-import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.core.interaction.session.InteractionFactory;
-import org.apache.isis.persistence.jdo.spring.integration.JdoTransactionManager;
 import org.apache.isis.testdomain.conf.Configuration_usingJdo;
 import org.apache.isis.testdomain.jdo.entities.JdoInventory;
 
@@ -66,7 +60,7 @@ class JdoExceptionRecognizerTest
     @Inject private TransactionService transactionService;
     @Inject private RepositoryService repositoryService;
     @Inject private InteractionFactory interactionFactory;
-    @Inject private JdoTransactionManager txManager;
+    //@Inject private JdoTransactionManager txManager;
 
     @BeforeAll
     static void beforeAll() throws SQLException {
@@ -93,53 +87,27 @@ class JdoExceptionRecognizerTest
         // we expect to see a Spring recognized DataAccessException been thrown 
         
         assertThrows(DataAccessException.class, ()->{
-        
-            try {
 
-                transactionService.runTransactional(Propagation.REQUIRES_NEW, ()->{
+            transactionService.runTransactional(Propagation.REQUIRES_NEW, ()->{
+                
+                interactionFactory.runAnonymous(()->{
+                
+                    // given
                     
-                    interactionFactory.runAnonymous(()->{
+                    val inventories = repositoryService.allInstances(JdoInventory.class);
+                    assertEquals(1, inventories.size());
                     
-                        // given
-                        
-                        val inventories = repositoryService.allInstances(JdoInventory.class);
-                        assertEquals(1, inventories.size());
-                        
-                        val inventory = inventories.get(0);
-                        assertNotNull(inventory);
-                        
-                        
-                        // add a conflicting book (unique ISBN violation)
-                        _TestFixtures.addABookTo(inventory);
+                    val inventory = inventories.get(0);
+                    assertNotNull(inventory);
                     
-                    });
-        
-                })
-                .nullableOrElseFail();
+                    
+                    // add a conflicting book (unique ISBN violation)
+                    _TestFixtures.addABookTo(inventory);
                 
-            } catch (RuntimeException ex) {
-                
-                // TODO this catch and throw logic should be done by the TransactionService instead
-                val translatedEx = 
-                        _Exceptions.streamCausalChain(ex)
-                        
-                        .filter(e->e instanceof RuntimeException)
-                        .map(RuntimeException.class::cast)
-                        // call Spring's exception translation mechanism (thats our fork)
-                        .<RuntimeException>map(nextEx->
-                            ((PersistenceExceptionTranslator)(
-                            txManager.getJdoDialect())).translateExceptionIfPossible(nextEx))
-                        
-                        //.<RuntimeException>map(nextEx->txManager.getJdoDialect().translateExceptionI (nextEx))
-                        
-                        
-                        .filter(nextEx -> nextEx instanceof DataAccessException)
-                        .findFirst()
-                        .orElse(ex);
-                
-                throw translatedEx;
-                
-            }
+                });
+    
+            })
+            .nullableOrElseFail();
             
         });
         
