@@ -29,6 +29,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Primary;
+import org.springframework.dao.support.PersistenceExceptionTranslator;
 
 import org.apache.isis.applib.services.eventbus.EventBusService;
 import org.apache.isis.commons.internal.assertions._Assert;
@@ -38,6 +39,7 @@ import org.apache.isis.core.transaction.changetracking.EntityChangeTracker;
 import org.apache.isis.persistence.jdo.datanucleus.changetracking.JdoLifecycleListener;
 import org.apache.isis.persistence.jdo.datanucleus.config.DnEntityDiscoveryListener;
 import org.apache.isis.persistence.jdo.datanucleus.config.DnSettings;
+import org.apache.isis.persistence.jdo.datanucleus.dialect.DnJdoDialect;
 import org.apache.isis.persistence.jdo.datanucleus.entities.DnEntityStateProvider;
 import org.apache.isis.persistence.jdo.datanucleus.jdosupport.JdoSupportServiceDefault;
 import org.apache.isis.persistence.jdo.datanucleus.metamodel.JdoDataNucleusProgrammingModel;
@@ -46,6 +48,7 @@ import org.apache.isis.persistence.jdo.datanucleus.mixins.Persistable_datanucleu
 import org.apache.isis.persistence.jdo.datanucleus.mixins.Persistable_datanucleusVersionTimestamp;
 import org.apache.isis.persistence.jdo.datanucleus.mixins.Persistable_downloadJdoMetadata;
 import org.apache.isis.persistence.jdo.integration.IsisModuleJdoIntegration;
+import org.apache.isis.persistence.jdo.spring.integration.JdoDialect;
 import org.apache.isis.persistence.jdo.spring.integration.JdoTransactionManager;
 import org.apache.isis.persistence.jdo.spring.integration.LocalPersistenceManagerFactoryBean;
 import org.apache.isis.persistence.jdo.spring.integration.TransactionAwarePersistenceManagerFactoryProxy;
@@ -80,6 +83,17 @@ import lombok.extern.log4j.Log4j2;
 @EnableConfigurationProperties(DnSettings.class)
 @Log4j2
 public class IsisModuleJdoDatanucleus {
+    
+    /**
+     * Conveniently registers this dialect as a {@link PersistenceExceptionTranslator} with <i>Spring</i>.
+     * @see PersistenceExceptionTranslator
+     * @see JdoDialect
+     */
+    @Qualifier("jdo-dialect")
+    @Bean
+    public DnJdoDialect getDnJdoDialect() {
+        return new DnJdoDialect();
+    }
     
     @Qualifier("local-pmf-proxy")
     @Bean 
@@ -131,10 +145,13 @@ public class IsisModuleJdoDatanucleus {
     @Qualifier("jdo-platform-transaction-manager")
     @Bean @Primary
     public JdoTransactionManager getTransactionManager(
+            final @Qualifier("jdo-dialect") JdoDialect jdoDialect,
             final @Qualifier("local-pmf-proxy") LocalPersistenceManagerFactoryBean localPmfBean) {
 
         val pmf = localPmfBean.getObject(); // created once per application lifecycle
-        return new JdoTransactionManager(pmf);
+        val txManager = new JdoTransactionManager(pmf);
+        txManager.setJdoDialect(jdoDialect);
+        return txManager;
     }
 
 

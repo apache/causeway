@@ -18,11 +18,6 @@
  */
 package org.apache.isis.testdomain.persistence.jpa;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import java.sql.SQLException;
 import java.util.Optional;
 import java.util.SortedSet;
@@ -43,7 +38,11 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 
-import org.apache.isis.applib.services.repository.RepositoryService;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.core.metamodel.facets.object.entity.EntityFacet;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
@@ -64,9 +63,7 @@ import lombok.val;
 class JpaBootstrappingTest extends IsisIntegrationTestAbstract {
 
     @Inject private Optional<PlatformTransactionManager> platformTransactionManager; 
-    @Inject private RepositoryService repository;
     @Inject private SpecificationLoader specLoader;
-    //@Inject private TransactionService transactionService;
 
     @BeforeAll
     static void beforeAll() throws SQLException {
@@ -79,9 +76,9 @@ class JpaBootstrappingTest extends IsisIntegrationTestAbstract {
     }
 
     void cleanUp() {
-        repository.allInstances(JpaInventory.class).forEach(repository::remove);
-        repository.allInstances(JpaBook.class).forEach(repository::remove);
-        repository.allInstances(JpaProduct.class).forEach(repository::remove);
+        repositoryService.allInstances(JpaInventory.class).forEach(repositoryService::remove);
+        repositoryService.allInstances(JpaBook.class).forEach(repositoryService::remove);
+        repositoryService.allInstances(JpaProduct.class).forEach(repositoryService::remove);
     }
 
     void setUp() {
@@ -93,7 +90,7 @@ class JpaBootstrappingTest extends IsisIntegrationTestAbstract {
                 "Sample Publisher"));
 
         val inventory = new JpaInventory("Sample Inventory", products);
-        repository.persistAndFlush(inventory);
+        repositoryService.persistAndFlush(inventory);
     }
 
     @Test @Order(0) 
@@ -137,7 +134,7 @@ class JpaBootstrappingTest extends IsisIntegrationTestAbstract {
         // given - expected pre condition: no inventories
 
         cleanUp();
-        assertEquals(0, repository.allInstances(JpaInventory.class).size());
+        assertEquals(0, repositoryService.allInstances(JpaInventory.class).size());
 
         // when
 
@@ -145,7 +142,7 @@ class JpaBootstrappingTest extends IsisIntegrationTestAbstract {
 
         // then - expected post condition: ONE inventory
 
-        val inventories = repository.allInstances(JpaInventory.class);
+        val inventories = repositoryService.allInstances(JpaInventory.class);
         assertEquals(1, inventories.size());
 
         val inventory = inventories.get(0);

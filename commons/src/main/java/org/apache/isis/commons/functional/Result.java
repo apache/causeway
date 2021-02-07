@@ -61,19 +61,11 @@ public final class Result<L> {
         }
     }
     
-    public static <L> Result<L> ofNullable(final @NonNull Callable<L> callable) {
-        try {
-            return successNullable(callable.call());
-        } catch (Throwable e) {
-            return failure(e);
-        }
+    public static Result<Void> ofVoid(final @NonNull ThrowingRunnable runnable) {
+        return of(ThrowingRunnable.toCallable(runnable));
     }
     
-    public static <L> Result<L> success(final @NonNull L value) {
-        return of(value, null, true);
-    }
-
-    public static <L> Result<L> successNullable(final @Nullable L value) {
+    public static <L> Result<L> success(final @Nullable L value) {
         return of(value, null, true);
     }
     
@@ -84,11 +76,11 @@ public final class Result<L> {
     // -- FACTORY SHORTCUTS
     
     public static <L> Result<L> failure(final @NonNull String message) {
-        return failure(new Error(message));
+        return failure(new RuntimeException(message));
     }
     
     public static <L> Result<L> failure(final @NonNull String message, final @NonNull Throwable cause) {
-        return failure(new Error(message, cause));
+        return failure(new RuntimeException(message, cause));
     }
     
     // -- PREDICATES
@@ -103,21 +95,13 @@ public final class Result<L> {
     
     // -- ACCESSORS
     
-    public Optional<L> value() {
+    public Optional<L> getValue() {
         return Optional.ofNullable(value); 
     }
 
-    public Optional<Throwable> failure() {
+    public Optional<Throwable> getFailure() {
         return Optional.ofNullable(throwable); 
     }
-
-//    public L valueIfAny() {
-//        return value; 
-//    }
-//
-//    public Throwable exceptionIfAny() {
-//        return exception; 
-//    }
     
     // -- PEEKING
     
@@ -128,11 +112,30 @@ public final class Result<L> {
         return this;
     }
     
+    public Result<L> ifSuccessAndValuePresent(final @NonNull Consumer<L> valueConsumer){
+        getValue().ifPresent(valueConsumer::accept);
+        return this;
+    }
+    
     public Result<L> ifFailure(final @NonNull Consumer<Throwable> exceptionConsumer){
         if(isFailure()) {
             exceptionConsumer.accept(throwable);
         }
         return this;
+    }
+    
+    // -- MAP NULL TO FAILURE
+    
+    public <E extends Throwable> Result<L> mapSuccessWithEmptyValueToFailure(
+            final @NonNull Supplier<E> onNullValue){
+        return isSuccess()
+                && value==null
+                ? Result.failure(onNullValue.get())
+                : this;
+    }
+    
+    public <E extends Throwable> Result<L> mapSuccessWithEmptyValueToNoSuchElement(){
+        return mapSuccessWithEmptyValueToFailure(NoSuchElementException::new);
     }
     
     // -- MAPPING
@@ -167,7 +170,7 @@ public final class Result<L> {
     // -- EXTRACTION
     
     @SneakyThrows
-    public L orElseFail() {
+    public L presentElseFail() {
         if (isSuccess()) {
             if(value==null) {
                 throw new NoSuchElementException();
@@ -178,15 +181,15 @@ public final class Result<L> {
     }
     
     @SneakyThrows
-    public @Nullable L nullableOrElseFail() {
+    public Optional<L> optionalElseFail() {
         if (isSuccess()) {
-            return value;
+            return getValue();
         }
         throw throwable;
     }
     
     @SneakyThrows
-    public L orElseThrow(final @NonNull UnaryOperator<Throwable> toThrowable) {
+    public L presentElseThrow(final @NonNull UnaryOperator<Throwable> toThrowable) {
         if (isSuccess()) {
             if(value==null) {
                 throw toThrowable.apply(new NoSuchElementException());
@@ -197,14 +200,14 @@ public final class Result<L> {
     }
     
     @SneakyThrows
-    public @Nullable L nullableOrElseThrow(final @NonNull UnaryOperator<Throwable> toThrowable) {
+    public Optional<L> optionalElseThrow(final @NonNull UnaryOperator<Throwable> toThrowable) {
         if (isSuccess()) {
-            return value;
+            return getValue();
         }
         throw toThrowable.apply(throwable);
     }
     
-    public L orElse(final @NonNull L defaultValue) {
+    public L presentElse(final @NonNull L defaultValue) {
         if (isSuccess()) {
             if(value!=null) {
                 return value;
@@ -213,14 +216,7 @@ public final class Result<L> {
         return defaultValue;
     }
     
-    public @Nullable L nullableOrElse(final @Nullable L defaultValue) {
-        if (isSuccess()) {
-            return value;
-        }
-        return defaultValue;
-    }
-    
-    public L orElseGet(final @NonNull Supplier<L> defaultValueSupplier) {
+    public L presentElseGet(final @NonNull Supplier<L> defaultValueSupplier) {
         if (isSuccess()) {
             if(value!=null) {
                 return value;
@@ -232,12 +228,6 @@ public final class Result<L> {
         }
         throw new NoSuchElementException();
     }
-    
-    public @Nullable L nullableOrElseGet(final @NonNull Supplier<L> defaultValueSupplier) {
-        if (isSuccess()) {
-            return value;
-        }
-        return defaultValueSupplier.get();
-    }
+
     
 }

@@ -470,7 +470,7 @@ public final class _Reflect {
             final Object... args) {
         
         /*sonar-ignore-on*/
-        return Result.ofNullable(()->{
+        return Result.of(()->{
             if(method.isAccessible()) {
                 return method.invoke(target, args);
             }

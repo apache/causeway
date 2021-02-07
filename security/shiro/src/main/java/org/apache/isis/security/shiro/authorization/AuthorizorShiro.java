@@ -146,7 +146,7 @@ public class AuthorizorShiro implements Authorizor {
         val className = identifier.getClassName();
         return Result.of(()->_Context.loadClass(className))
                 .<String>mapSuccess(this::asFeatureFqns)
-                .orElse(className);
+                .presentElse(className);
     }
 
     private String asFeatureFqns(Class<?> cls) {

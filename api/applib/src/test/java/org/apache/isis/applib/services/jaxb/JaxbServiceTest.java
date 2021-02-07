@@ -55,7 +55,7 @@ class JaxbServiceTest {
     @Test
     void clone_usingUtility() {
         val dto = getSample();
-        assertDtoEquals(dto, _Xml.clone(dto).orElseFail());
+        assertDtoEquals(dto, _Xml.clone(dto).presentElseFail());
     }
     
     // -- HELPER

@@ -111,7 +111,8 @@ public class ReplicateAndRunCommands implements Callable<SecondaryStatus> {
                         .map(dto ->
                                 transactionService.callWithinCurrentTransactionElseCreateNew(
                                     () -> commandJdoRepository.saveForReplay(dto))
-                                .nullableOrElseFail()
+                                .optionalElseFail()
+                                .orElse(null)
                         ).collect(Collectors.toList());
 
                 if(commandsToReplay.isEmpty()) {
@@ -151,7 +152,8 @@ public class ReplicateAndRunCommands implements Callable<SecondaryStatus> {
             val childCommands =
                     transactionService.callWithinCurrentTransactionElseCreateNew(
                             () -> commandJdoRepository.findByParent(parent))
-                    .nullableOrElseFail();
+                    .optionalElseFail()
+                    .orElse(null);
             for (val childCommand : childCommands) {
                 val childReplayState = executeCommandInTranAndAnalyse(childCommand);
                 if(childReplayState.isFailed()) {
@@ -184,7 +186,8 @@ public class ReplicateAndRunCommands implements Callable<SecondaryStatus> {
         return controller
                 .map( control -> transactionService
                         .callWithinCurrentTransactionElseCreateNew(control::getState)
-                        .nullableOrElseFail())
+                        .optionalElseFail()
+                        .orElse(null))
                 .map(state -> state == ReplayCommandExecutionController.State.RUNNING)
             // if no controller implementation provided, then just continue
             .orElse(true);

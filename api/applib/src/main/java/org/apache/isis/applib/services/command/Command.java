@@ -312,8 +312,8 @@ public class Command implements HasUniqueId, HasUsername, HasCommandDto {
          */
         @Override
         public void setResult(final Result<Bookmark> resultBookmark) {
-            Command.this.result = resultBookmark.value().orElse(null);
-            Command.this.exception = resultBookmark.failure().orElse(null);
+            Command.this.result = resultBookmark.getValue().orElse(null);
+            Command.this.exception = resultBookmark.getFailure().orElse(null);
         }
 
         /**

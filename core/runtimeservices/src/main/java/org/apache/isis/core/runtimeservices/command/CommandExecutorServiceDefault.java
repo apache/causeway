@@ -287,7 +287,7 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
             outcomeHandler.setCompletedAt(completedAt);
         }
 
-        return result.value().orElse(null);
+        return result.getValue().orElse(null);
     }
 
     // //////////////////////////////////////

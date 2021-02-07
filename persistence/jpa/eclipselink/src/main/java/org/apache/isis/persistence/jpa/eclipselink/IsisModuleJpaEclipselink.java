@@ -32,7 +32,6 @@ import org.springframework.boot.autoconfigure.orm.jpa.JpaProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
 import org.springframework.orm.jpa.vendor.AbstractJpaVendorAdapter;
 import org.springframework.orm.jpa.vendor.EclipseLinkJpaDialect;
 import org.springframework.orm.jpa.vendor.EclipseLinkJpaVendorAdapter;
@@ -68,12 +67,8 @@ public class IsisModuleJpaEclipselink extends JpaBaseConfiguration {
 
     @Bean
     public EclipseLinkJpaDialect eclipselinkJpaDialect() {
+        //XXX already provided by EclipseLinkJpaVendorAdapter, might be redundant
         return new EclipseLinkJpaDialect();
-    }
-
-    @Bean
-    public PersistenceExceptionTranslationPostProcessor persistenceExceptionTranslationPostProcessor(){
-        return new PersistenceExceptionTranslationPostProcessor();
     }
 
     protected IsisModuleJpaEclipselink(
@@ -90,7 +85,7 @@ public class IsisModuleJpaEclipselink extends JpaBaseConfiguration {
 
     @Override
     protected AbstractJpaVendorAdapter createJpaVendorAdapter() {
-        return new EclipseLinkJpaVendorAdapter();
+        return new EclipseLinkJpaVendorAdapter(); 
     }
 
     @Override

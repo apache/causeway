@@ -18,8 +18,6 @@
  */
 package org.apache.isis.testing.integtestsupport.applib;
 
-import java.util.Optional;
-
 import org.junit.jupiter.api.extension.AfterEachCallback;
 import org.junit.jupiter.api.extension.BeforeEachCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
@@ -37,7 +35,7 @@ public class IsisInteractionHandler implements BeforeEachCallback, AfterEachCall
 
         _Probe.errOut("before interaction in");
 
-        isisInteractionFactory(extensionContext)
+        _Helper.getInteractionFactory(extensionContext)
         .ifPresent(isisInteractionFactory->isisInteractionFactory.openInteraction());
 
         _Probe.errOut("before interaction out");
@@ -48,20 +46,11 @@ public class IsisInteractionHandler implements BeforeEachCallback, AfterEachCall
 
         _Probe.errOut("after interaction in");
 
-        isisInteractionFactory(extensionContext)
+        _Helper.getInteractionFactory(extensionContext)
         .ifPresent(InteractionFactory::closeSessionStack);
 
         _Probe.errOut("after interaction out");
     }
 
-    // -- HELPER
-
-    private Optional<InteractionFactory> isisInteractionFactory(ExtensionContext extensionContext) {
-        return extensionContext.getTestInstance()
-        .filter(IsisIntegrationTestAbstract.class::isInstance)
-        .map(IsisIntegrationTestAbstract.class::cast)
-        .map(IsisIntegrationTestAbstract::getServiceRegistry)
-        .flatMap(serviceRegistry->serviceRegistry.lookupService(InteractionFactory.class));
-    }
 
 }

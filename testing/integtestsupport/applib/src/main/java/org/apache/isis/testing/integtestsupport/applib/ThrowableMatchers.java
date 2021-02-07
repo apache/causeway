@@ -18,8 +18,6 @@
  */
 package org.apache.isis.testing.integtestsupport.applib;
 
-import java.util.List;
-
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeMatcher;
 
@@ -38,15 +36,19 @@ public class ThrowableMatchers {
      */
     public static TypeSafeMatcher<Throwable> causedBy(final Class<? extends Throwable> type) {
         return new TypeSafeMatcher<Throwable>() {
+            
             @Override
             protected boolean matchesSafely(final Throwable throwable) {
-                final List<Throwable> causalChain = _Exceptions.getCausalChain(throwable); // non null result
-                return causalChain.stream().filter(t->t.getClass().equals(type)).findAny().isPresent();
+                return _Exceptions.getCausalChain(throwable) // non null result
+                .stream()
+                .anyMatch(t->t.getClass().equals(type));
             }
 
-            @Override public void describeTo(final Description description) {
+            @Override 
+            public void describeTo(final Description description) {
                 description.appendText("Caused by " + type.getName());
             }
+            
         };
     }
 

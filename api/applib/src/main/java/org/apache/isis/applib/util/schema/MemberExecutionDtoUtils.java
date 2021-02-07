@@ -39,7 +39,7 @@ public final class MemberExecutionDtoUtils {
 
     public static <T extends MemberExecutionDto> T clone(final T dto) {
         return _Xml.clone(dto)
-                .orElseFail();
+                .presentElseFail();
     }
 
     public static MetricsDto metricsFor(final MemberExecutionDto executionDto) {
@@ -88,7 +88,7 @@ public final class MemberExecutionDtoUtils {
 
     public static <T extends MemberExecutionDto> String toXml(final @NonNull T dto) {
         return _Xml.writeXml(dto, writeOptions())
-                .orElseFail();
+                .presentElseFail();
     }
 
     public static <T extends MemberExecutionDto> void toXml(

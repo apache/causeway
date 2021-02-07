@@ -47,7 +47,7 @@ public enum SerializationStrategy {
                     .disable(SerializationFeature.WRITE_EMPTY_JSON_ARRAYS);
             
             return _Json.toString(objectMapper, jaxbAnnotatedObject)
-                    .orElseFail();
+                    .presentElseFail();
         }
 
     },
@@ -62,7 +62,7 @@ public enum SerializationStrategy {
                     .disable(SerializationFeature.WRITE_EMPTY_JSON_ARRAYS);
             
             return _Json.toString(objectMapper, jaxbAnnotatedObject)
-                    .orElseFail();
+                    .presentElseFail();
         }
 
     },

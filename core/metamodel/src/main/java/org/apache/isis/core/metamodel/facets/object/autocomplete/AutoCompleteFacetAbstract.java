@@ -78,7 +78,7 @@ implements AutoCompleteFacet {
         .withPublishingSuppressed(()->{
                 final Object list = _Reflect.invokeMethodOn(repositoryMethod, getRepository(), search)
                         .ifFailure(e->log.warn("failure while executing auto-complete", e))
-                        .orElseGet(Collections::emptyList);
+                        .presentElseGet(Collections::emptyList);
                 return getObjectManager().adapt(list);
         });
 
