@@ -216,14 +216,6 @@ public final class Result<L> {
         return defaultValue;
     }
     
-//    @Deprecated
-//    public @Nullable L optionalElse(final @Nullable L defaultValue) {
-//        if (isSuccess()) {
-//            return value;
-//        }
-//        return defaultValue;
-//    }
-    
     public L presentElseGet(final @NonNull Supplier<L> defaultValueSupplier) {
         if (isSuccess()) {
             if(value!=null) {
@@ -236,13 +228,6 @@ public final class Result<L> {
         }
         throw new NoSuchElementException();
     }
-    
-//    @Deprecated
-//    public @Nullable L nullableOrElseGet(final @NonNull Supplier<L> defaultValueSupplier) {
-//        if (isSuccess()) {
-//            return value;
-//        }
-//        return defaultValueSupplier.get();
-//    }
+
     
 }

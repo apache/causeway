@@ -18,6 +18,9 @@
  */
 package org.apache.isis.commons.functions;
 
+import java.util.NoSuchElementException;
+import java.util.Optional;
+
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -69,70 +72,73 @@ class ResultTest {
     void hello_happy_case() {
         
         val result = Result.<String>of(this::hello_happy);
-        
         assertTrue(result.isSuccess());
         assertFalse(result.isFailure());
-        
         assertEquals("hello", result.presentElse(""));
         assertEquals("hello", result.getValue().orElse(null));
         assertEquals("hello", result.presentElseFail());
         
-        //non-evaluated code-path
+        // non-evaluated code-path
         result.presentElseGet(()->fail("unexpected code reach"));
         
+        // default value is not allowed to be null
         assertThrows(NullPointerException.class, ()->result.presentElse(null));
+        
+        val mandatory = result.mapSuccessWithEmptyValueToNoSuchElement();
+        assertTrue(mandatory.isSuccess());
+        assertEquals("hello", mandatory.presentElse(""));
         
     }
     
-//    @Test
-//    void hello_nullable_case() {
-//        
-//        val result = Result.<String>of(this::hello_nullable);
-//        
-//        assertTrue(result.isSuccess());
-//        assertFalse(result.isFailure());
-//        
-//        assertEquals("no value", result.getValue().orElse("no value"));
-//        assertEquals(null, result.orElseFail());
-//        assertEquals(null, result.orElse(null));
-//        
-//    }
-//    
-//    @Test
-//    void hello_throwing_uncatched_case() {
-//        
-//        val result = Result.<String>of(this::hello_throwing_uncatched);
-//        
-//        assertFalse(result.isSuccess());
-//        assertTrue(result.isFailure());
-//        
-//        assertEquals("hello failed", result.getFailure().get().getMessage());
-//        
-//        assertEquals("it failed", result.orElse("it failed"));
-//        assertEquals("it failed", result.orElseGet(()->"it failed"));
-//        assertThrows(RuntimeException.class, ()->result.orElseFail());
-//        
-//        assertThrows(NullPointerException.class, ()->result.orElse(null));
-//        assertThrows(IllegalArgumentException.class, ()->result.orElseGet(()->null));
-//        
-//    }
-//    
-//    @Test
-//    void hello_throwing_catched_case() {
-//        
-//        val result = Result.<String>of(this::hello_throwing_catched);
-//        
-//        assertFalse(result.isSuccess());
-//        assertTrue(result.isFailure());
-//        
-//        assertEquals("it failed", result.orElse("it failed"));
-//        assertEquals("it failed", result.orElseGet(()->"it failed"));
-//        assertThrows(Exception.class, ()->result.orElseFail());
-//        
-//        assertThrows(NullPointerException.class, ()->result.orElse(null));
-//        assertThrows(IllegalArgumentException.class, ()->result.orElseGet(()->null));
-//        
-//    }
-//    
+    @Test
+    void hello_nullable_case() {
+        
+        val result = Result.<String>of(this::hello_nullable);
+        assertTrue(result.isSuccess());
+        assertFalse(result.isFailure());
+        assertEquals("no value", result.getValue().orElse("no value"));
+        assertThrows(NoSuchElementException.class, ()->result.presentElseFail());
+        assertEquals(Optional.empty(), result.optionalElseFail());
+        
+        val mandatory = result.mapSuccessWithEmptyValueToNoSuchElement();
+        assertTrue(mandatory.isFailure());
+        assertThrows(NoSuchElementException.class, ()->mandatory.optionalElseFail());
+        
+    }
+    
+    @Test
+    void hello_throwing_uncatched_case() {
+        
+        val result = Result.<String>of(this::hello_throwing_uncatched);
+        assertFalse(result.isSuccess());
+        assertTrue(result.isFailure());
+        assertEquals("hello failed", result.getFailure().get().getMessage());
+        assertEquals("it failed", result.presentElse("it failed"));
+        assertEquals("it failed", result.presentElseGet(()->"it failed"));
+        assertThrows(RuntimeException.class, ()->result.presentElseFail());
+        assertEquals(Optional.empty(), result.getValue());
+        
+        val mandatory = result.mapSuccessWithEmptyValueToNoSuchElement();
+        assertTrue(mandatory.isFailure());
+        
+    }
+    
+    @Test
+    void hello_throwing_catched_case() {
+        
+        val result = Result.<String>of(this::hello_throwing_catched);
+        assertFalse(result.isSuccess());
+        assertTrue(result.isFailure());
+        assertEquals("hello failed", result.getFailure().get().getMessage());
+        assertEquals("it failed", result.presentElse("it failed"));
+        assertEquals("it failed", result.presentElseGet(()->"it failed"));
+        assertThrows(Exception.class, ()->result.presentElseFail());
+        assertEquals(Optional.empty(), result.getValue());
+        
+        val mandatory = result.mapSuccessWithEmptyValueToNoSuchElement();
+        assertTrue(mandatory.isFailure());
+        
+    }
+    
     
 }
