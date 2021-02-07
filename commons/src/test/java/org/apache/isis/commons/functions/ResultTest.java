@@ -141,6 +141,22 @@ class ResultTest {
     }
     
     @Test
+    void void_happy_case() {
+        
+        val result = Result.ofVoid(this::void_happy);
+        assertTrue(result.isSuccess());
+        assertFalse(result.isFailure());
+        assertEquals(null, result.getValue().orElse(null));
+        
+        assertThrows(NoSuchElementException.class, ()->result.presentElseFail());
+        
+        // default value is not allowed to be null
+        assertThrows(NullPointerException.class, ()->result.presentElse(null));
+        
+    }
+    
+    
+    @Test
     void void_throwing_uncatched_case() {
         
         val result = Result.ofVoid(this::void_throwing_uncatched);
