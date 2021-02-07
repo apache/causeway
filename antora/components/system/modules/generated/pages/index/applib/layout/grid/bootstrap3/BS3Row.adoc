@@ -23,21 +23,38 @@ class BS3Row {
 }
 ----
 
-<.> `[teal]#*getId*#()` : `String`
+<.> xref:#getId[getId]
 +
 --
 As per <div id="...">...</div> : must be unique across entire page.
 --
-<.> `[teal]#*getMetadataError*#()` : `String`
+<.> xref:#getMetadataError[getMetadataError]
 +
 --
 For diagnostics; populated by the framework if and only if a metadata error.
 --
-<.> `[teal]#*getOwner*#()` : `xref:system:generated:index/applib/layout/grid/bootstrap3/BS3RowOwner.adoc[BS3RowOwner]`
+<.> xref:#getOwner[getOwner]
 +
 --
 Owner.
+--
+
+== Members
+
+[#getId]
+=== getId
+
+As per <div id="...">...</div> : must be unique across entire page.
+
+[#getMetadataError]
+=== getMetadataError
+
+For diagnostics; populated by the framework if and only if a metadata error.
+
+[#getOwner]
+=== getOwner
+
+Owner.
 
 Set programmatically by framework after reading in from XML.
---
 

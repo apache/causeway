@@ -16,34 +16,66 @@ enum SuppressionType {
 }
 ----
 
-<.> `[teal]#*_RO_*#`
+<.> xref:#RO[RO]
 +
 --
 suppress '$$RO', RO Spec representation
 --
-<.> `[teal]#*_HREF_*#`
+<.> xref:#HREF[HREF]
 +
 --
 suppress '$$href', hyperlink to the representation
 --
-<.> `[teal]#*_ID_*#`
+<.> xref:#ID[ID]
 +
 --
 suppress '$$instanceId', instance id of the domain object
 --
-<.> `[teal]#*_DOMAIN_TYPE_*#`
+<.> xref:#DOMAIN_TYPE[DOMAIN_TYPE]
 +
 --
 suppress '$$domainType', object spec of the domain object
 --
-<.> `[teal]#*_TITLE_*#`
+<.> xref:#TITLE[TITLE]
 +
 --
 suppress '$$title', title of the domain object
 --
-<.> `[teal]#*_ALL_*#`
+<.> xref:#ALL[ALL]
 +
 --
 suppress all '$$...' entries
 --
+
+== Members
+
+[#RO]
+=== RO
+
+suppress '$$RO', RO Spec representation
+
+[#HREF]
+=== HREF
+
+suppress '$$href', hyperlink to the representation
+
+[#ID]
+=== ID
+
+suppress '$$instanceId', instance id of the domain object
+
+[#DOMAIN_TYPE]
+=== DOMAIN_TYPE
+
+suppress '$$domainType', object spec of the domain object
+
+[#TITLE]
+=== TITLE
+
+suppress '$$title', title of the domain object
+
+[#ALL]
+=== ALL
+
+suppress all '$$...' entries
 

@@ -28,34 +28,66 @@ class AbstractInterval {
 }
 ----
 
-<.> `[teal]#*contains*#(LocalDate date)` : `boolean`
+<.> xref:#contains[contains]
 +
 --
 Does this date contain the specified time interval.
 --
-<.> `[teal]#*contains*#(T localDateInterval)` : `boolean`
+<.> xref:#contains[contains]
 +
 --
 Does this time interval contain the specified time interval.
 --
-<.> `[teal]#*days*#()` : `int`
+<.> xref:#days[days]
 +
 --
 The duration in days
 --
-<.> `[teal]#*overlap*#(T otherInterval)` : `T`
+<.> xref:#overlap[overlap]
 +
 --
 Gets the overlap between this interval and another interval.
 --
-<.> `[teal]#*overlaps*#(T interval)` : `boolean`
+<.> xref:#overlaps[overlaps]
 +
 --
 Does this time interval contain the specified time interval.
 --
-<.> `[teal]#*within*#(T interval)` : `boolean`
+<.> xref:#within[within]
 +
 --
 Does this interval is within the specified interval
 --
+
+== Members
+
+[#contains]
+=== contains
+
+Does this date contain the specified time interval.
+
+[#contains]
+=== contains
+
+Does this time interval contain the specified time interval.
+
+[#days]
+=== days
+
+The duration in days
+
+[#overlap]
+=== overlap
+
+Gets the overlap between this interval and another interval.
+
+[#overlaps]
+=== overlaps
+
+Does this time interval contain the specified time interval.
+
+[#within]
+=== within
+
+Does this interval is within the specified interval
 

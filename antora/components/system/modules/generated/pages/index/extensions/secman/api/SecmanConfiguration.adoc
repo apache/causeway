@@ -41,18 +41,30 @@ final boolean autoEnableIfDelegatedAndAuthenticated;     // <.>
 }
 ----
 
-<.> `[teal]#*adminStickyNamespacePermissions*#` : `String[]`
+<.> xref:#adminStickyNamespacePermissions[adminStickyNamespacePermissions]
 +
 --
 cannot be removed via user interface
 --
-<.> `[teal]#*autoEnableIfDelegatedAndAuthenticated*#` : `boolean`
+<.> xref:#autoEnableIfDelegatedAndAuthenticated[autoEnableIfDelegatedAndAuthenticated]
 +
 --
+Delegated users, on first successful logon, are auto-created but disabled (by default).
+--
+
+== Members
+
+[#adminStickyNamespacePermissions]
+=== adminStickyNamespacePermissions
+
+cannot be removed via user interface
+
+[#autoEnableIfDelegatedAndAuthenticated]
+=== autoEnableIfDelegatedAndAuthenticated
+
 Delegated users, on first successful logon, are auto-created but disabled (by default).
 
 This option allows to override this behavior, such that authenticated users are also auto-enabled.
 
 default: false
---
 

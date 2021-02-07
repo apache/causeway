@@ -26,10 +26,20 @@ interface ApplicationUserRepository {
 }
 ----
 
-<.> `[teal]#*newApplicationUser*#()` : `U`
-<.> `[teal]#*findMatching*#(String search)` : `Collection<U>`
+<.> xref:#newApplicationUser[newApplicationUser]
+<.> xref:#findMatching[findMatching]
 +
 --
 auto-complete support
 --
+
+== Members
+
+[#newApplicationUser]
+=== newApplicationUser
+
+[#findMatching]
+=== findMatching
+
+auto-complete support
 

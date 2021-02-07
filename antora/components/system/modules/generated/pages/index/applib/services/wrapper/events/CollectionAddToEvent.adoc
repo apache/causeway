@@ -15,9 +15,16 @@ class CollectionAddToEvent {
 }
 ----
 
-<.> `[teal]#*getProposed*#()` : `Object`
+<.> xref:#getProposed[getProposed]
 +
 --
 The object that is being added.
 --
+
+== Members
+
+[#getProposed]
+=== getProposed
+
+The object that is being added.
 

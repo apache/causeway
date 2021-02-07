@@ -14,21 +14,38 @@ enum Redirect {
 }
 ----
 
-<.> `[teal]#*_AS_CONFIGURED_*#`
+<.> xref:#AS_CONFIGURED[AS_CONFIGURED]
 +
 --
-As defined by configuration property `isis.viewer.wicket.redirectEvenIfSameObject
+As defined by configuration property `isis.viewer.wicket.redirectEvenIfSameObject` 
 --
-<.> `[teal]#*_EVEN_IF_SAME_*#`
+<.> xref:#EVEN_IF_SAME[EVEN_IF_SAME]
 +
 --
 Redirect (meaning render a new page) even if the result of the action is the same as the target.
 --
-<.> `[teal]#*_ONLY_IF_DIFFERS_*#`
+<.> xref:#ONLY_IF_DIFFERS[ONLY_IF_DIFFERS]
 +
 --
 Don't redirect if the result is the same as the target, instead just update the existing page.
+--
+
+== Members
+
+[#AS_CONFIGURED]
+=== AS_CONFIGURED
+
+As defined by configuration property `isis.viewer.wicket.redirectEvenIfSameObject` 
+
+[#EVEN_IF_SAME]
+=== EVEN_IF_SAME
+
+Redirect (meaning render a new page) even if the result of the action is the same as the target.
+
+[#ONLY_IF_DIFFERS]
+=== ONLY_IF_DIFFERS
+
+Don't redirect if the result is the same as the target, instead just update the existing page.
 
 Of course, a redirect is still performed if the result of the action is different from the target.
---
 

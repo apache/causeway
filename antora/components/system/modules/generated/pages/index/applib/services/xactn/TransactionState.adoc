@@ -20,53 +20,96 @@ enum TransactionState {
 }
 ----
 
-<.> `[teal]#*_NONE_*#`
+<.> xref:#NONE[NONE]
 +
 --
 No transaction exists.
 --
-<.> `[teal]#*_IN_PROGRESS_*#`
+<.> xref:#IN_PROGRESS[IN_PROGRESS]
 +
 --
 Started, still in progress.May flush, commit or abort.
-
 --
-<.> `[teal]#*_MUST_ABORT_*#`
+<.> xref:#MUST_ABORT[MUST_ABORT]
 +
 --
 Started, but has hit an exception.May not flush or commit (will throw an _IllegalStateException_ ), can only abort.Similar to `setRollbackOnly` in EJBs.
-
 --
-<.> `[teal]#*_COMMITTED_*#`
+<.> xref:#COMMITTED[COMMITTED]
 +
 --
 Completed, having successfully committed.May not flush or abort or commit (will throw _IllegalStateException_ ).
-
 --
-<.> `[teal]#*_ABORTED_*#`
+<.> xref:#ABORTED[ABORTED]
 +
 --
 Completed, having aborted.May not flush, commit or abort (will throw _IllegalStateException_ ).
-
 --
-<.> `[teal]#*canFlush*#()` : `boolean`
+<.> xref:#canFlush[canFlush]
 +
 --
 Whether it is valid to flush the transaction.
 --
-<.> `[teal]#*canCommit*#()` : `boolean`
+<.> xref:#canCommit[canCommit]
 +
 --
 Whether it is valid to commit the transaction.
 --
-<.> `[teal]#*canAbort*#()` : `boolean`
+<.> xref:#canAbort[canAbort]
 +
 --
 Whether it is valid to mark as aborted this transaction}.
 --
-<.> `[teal]#*isComplete*#()` : `boolean`
+<.> xref:#isComplete[isComplete]
 +
 --
 Whether the transaction is complete (and so a new one can be started).
 --
+
+== Members
+
+[#NONE]
+=== NONE
+
+No transaction exists.
+
+[#IN_PROGRESS]
+=== IN_PROGRESS
+
+Started, still in progress.May flush, commit or abort.
+
+[#MUST_ABORT]
+=== MUST_ABORT
+
+Started, but has hit an exception.May not flush or commit (will throw an _IllegalStateException_ ), can only abort.Similar to `setRollbackOnly` in EJBs.
+
+[#COMMITTED]
+=== COMMITTED
+
+Completed, having successfully committed.May not flush or abort or commit (will throw _IllegalStateException_ ).
+
+[#ABORTED]
+=== ABORTED
+
+Completed, having aborted.May not flush, commit or abort (will throw _IllegalStateException_ ).
+
+[#canFlush]
+=== canFlush
+
+Whether it is valid to flush the transaction.
+
+[#canCommit]
+=== canCommit
+
+Whether it is valid to commit the transaction.
+
+[#canAbort]
+=== canAbort
+
+Whether it is valid to mark as aborted this transaction}.
+
+[#isComplete]
+=== isComplete
+
+Whether the transaction is complete (and so a new one can be started).
 

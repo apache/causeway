@@ -13,9 +13,16 @@ interface CommandExecutorService {
 }
 ----
 
-<.> `[teal]#*executeCommand*#(SudoPolicy sudoPolicy, xref:system:generated:index/applib/services/command/Command.adoc[Command] command)` : `xref:system:generated:index/applib/services/bookmark/Bookmark.adoc[Bookmark]`
+<.> xref:#executeCommand[executeCommand]
 +
 --
 Executes the specified command.
 --
+
+== Members
+
+[#executeCommand]
+=== executeCommand
+
+Executes the specified command.
 

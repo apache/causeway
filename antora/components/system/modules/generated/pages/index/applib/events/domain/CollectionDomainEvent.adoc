@@ -13,21 +13,38 @@ class CollectionDomainEvent {
 }
 ----
 
-<.> `[teal]#*CollectionDomainEvent*#()`
+<.> xref:#CollectionDomainEvent[CollectionDomainEvent]
 +
 --
 If used then the framework will set state via (non-API) setters.
-
-Recommended because it reduces the amount of boilerplate in the domain object classes.
 --
-<.> `[teal]#*setValue*#(T value)` : `void`
+<.> xref:#setValue[setValue]
 +
 --
 Not API, set by the framework.
 --
-<.> `[teal]#*setOf*#(Of of)` : `void`
+<.> xref:#setOf[setOf]
 +
 --
 Not API; updates from _Of#ACCESS_ to either _Of#ADD_TO_ or _Of#REMOVE_FROM_ when hits the _AbstractDomainEvent.Phase#VALIDATE validation phase_ .
 --
+
+== Members
+
+[#CollectionDomainEvent]
+=== CollectionDomainEvent
+
+If used then the framework will set state via (non-API) setters.
+
+Recommended because it reduces the amount of boilerplate in the domain object classes.
+
+[#setValue]
+=== setValue
+
+Not API, set by the framework.
+
+[#setOf]
+=== setOf
+
+Not API; updates from _Of#ACCESS_ to either _Of#ADD_TO_ or _Of#REMOVE_FROM_ when hits the _AbstractDomainEvent.Phase#VALIDATE validation phase_ .
 

@@ -11,13 +11,20 @@ interface CalendarEventable {
 }
 ----
 
-<.> `[teal]#*getCalendarName*#()` : `String`
+<.> xref:#getCalendarName[getCalendarName]
 +
 --
 The name of the calendar to which this event belongs.
+--
 
-For example, an `Employeemight provide have a `employedOn, so the calendar name would be "employedOn"
+== Members
+
+[#getCalendarName]
+=== getCalendarName
+
+The name of the calendar to which this event belongs.
+
+For example, an `Employee` might provide have a `employedOn` , so the calendar name would be "employedOn"
 
 If there is possibly more than one date associated with the entity, then use xref:system:generated:index/extensions/fullcalendar/applib/Calendarable.adoc[Calendarable] instead.
---
 

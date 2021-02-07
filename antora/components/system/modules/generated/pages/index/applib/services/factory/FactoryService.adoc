@@ -19,56 +19,116 @@ interface FactoryService {
 }
 ----
 
-<.> `[teal]#*getOrCreate*#<T>(Class<T> requiredType)` : `T`
+<.> xref:#getOrCreate[getOrCreate]
 +
 --
 General purpose factory method, to automatically get or create an instance of _requiredType_ .
-
-Maps onto one of the specialized factory methods _#get(Class)_ or _#create(Class)_ based on the type's meta-data.
 --
-<.> `[teal]#*get*#<T>(Class<T> requiredType)` : `T`
+<.> xref:#get[get]
 +
 --
 Gets an instance (possibly shared or independent) of the specified _requiredType_ , with injection points resolved and any life-cycle callback processed.
 --
-<.> `[teal]#*detachedEntity*#<T>(Class<T> domainClass)` : `T`
+<.> xref:#detachedEntity[detachedEntity]
 +
 --
 Creates a new detached entity instance, with injection points resolved and defaults applied.
 --
-<.> `[teal]#*detachedEntity*#<T>(T entity)` : `T`
+<.> xref:#detachedEntity[detachedEntity]
 +
 --
 Creates a new detached entity instance, with injection points resolved.
 --
-<.> `[teal]#*mixin*#<T>(Class<T> mixinClass, Object mixedIn)` : `T`
+<.> xref:#mixin[mixin]
 +
 --
 Creates a new Mixin instance, with injection points resolved.
 --
-<.> `[teal]#*viewModel*#<T>(Class<T> viewModelClass, String mementoStr)` : `T`
+<.> xref:#viewModel[viewModel]
 +
 --
 Creates a new ViewModel instance, with injection points resolved, and initialized according to the given _mementoStr_
 --
-<.> `[teal]#*viewModel*#<T>(Class<T> viewModelClass)` : `T`
+<.> xref:#viewModel[viewModel]
 +
 --
 Creates a new ViewModel instance, with injection points resolved and defaults applied.
 --
-<.> `[teal]#*viewModel*#<T>(T viewModel)` : `T`
+<.> xref:#viewModel[viewModel]
 +
 --
 Resolves injection points for given ViewModel instance.
 --
-<.> `[teal]#*create*#<T>(Class<T> domainClass)` : `T`
+<.> xref:#create[create]
 +
 --
 Creates a new instance of the specified class, with injection points resolved and defaults applied.
 --
-<.> `[line-through gray]#*instantiate*#<T>(Class<T> domainClass)` : `T`
+<.> xref:#instantiate[instantiate]
 +
 --
+[WARNING]
+====
+[red]#_deprecated:_#
+
+with semantic changes since 2.0 previous behavior is no longer guaranteed, instead consider use of @ _#detachedEntity(Class)_ or _#getOrCreate(Class)_ if applicable
+====
+
+Creates a new instance of the specified class, but does not persist it.
+--
+
+== Members
+
+[#getOrCreate]
+=== getOrCreate
+
+General purpose factory method, to automatically get or create an instance of _requiredType_ .
+
+Maps onto one of the specialized factory methods _#get(Class)_ or _#create(Class)_ based on the type's meta-data.
+
+[#get]
+=== get
+
+Gets an instance (possibly shared or independent) of the specified _requiredType_ , with injection points resolved and any life-cycle callback processed.
+
+[#detachedEntity]
+=== detachedEntity
+
+Creates a new detached entity instance, with injection points resolved and defaults applied.
+
+[#detachedEntity]
+=== detachedEntity
+
+Creates a new detached entity instance, with injection points resolved.
+
+[#mixin]
+=== mixin
+
+Creates a new Mixin instance, with injection points resolved.
+
+[#viewModel]
+=== viewModel
+
+Creates a new ViewModel instance, with injection points resolved, and initialized according to the given _mementoStr_
+
+[#viewModel]
+=== viewModel
+
+Creates a new ViewModel instance, with injection points resolved and defaults applied.
+
+[#viewModel]
+=== viewModel
+
+Resolves injection points for given ViewModel instance.
+
+[#create]
+=== create
+
+Creates a new instance of the specified class, with injection points resolved and defaults applied.
+
+[#instantiate]
+=== instantiate
+
 [WARNING]
 ====
 [red]#_deprecated:_#
@@ -85,5 +145,4 @@ It is recommended that the object be initially instantiated using this method, t
 * the `created()` callback will not be called.
 
 The corollary is: if your code never uses `default _Xxx_ ()` supporting methods or the `created()` callback, then you can alternatively just _new()_ up the object rather than call this method.
---
 

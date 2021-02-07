@@ -18,41 +18,78 @@ interface ServiceRegistry {
 }
 ----
 
-<.> `[teal]#*select*#<T>(Class<T> type, Annotation[] qualifiers)` : `xref:system:generated:index/commons/collections/Can.adoc[Can]<T>`
+<.> xref:#select[select]
 +
 --
 Obtains a xref:system:generated:index/commons/collections/Can.adoc[Can] container containing any matching instances for the given required type and additional required qualifiers.
 --
-<.> `[teal]#*select*#<T>(Class<T> type)` : `xref:system:generated:index/commons/collections/Can.adoc[Can]<T>`
+<.> xref:#select[select]
 +
 --
 Obtains a xref:system:generated:index/commons/collections/Can.adoc[Can] container containing any matching instances for the given required type.
 --
-<.> `[teal]#*streamRegisteredBeansOfType*#(Class<?> requiredType)` : `Stream<_ManagedBeanAdapter>`
+<.> xref:#streamRegisteredBeansOfType[streamRegisteredBeansOfType]
 +
 --
 Streams all registered bean adapters implementing the requested type.
 --
-<.> `[teal]#*streamRegisteredBeans*#()` : `Stream<_ManagedBeanAdapter>`
+<.> xref:#streamRegisteredBeans[streamRegisteredBeans]
 +
 --
 Returns all bean adapters that have been registered.
 --
-<.> `[teal]#*lookupRegisteredBeanById*#(String id)` : `Optional<_ManagedBeanAdapter>`
+<.> xref:#lookupRegisteredBeanById[lookupRegisteredBeanById]
 +
 --
 Returns a registered bean of given _name_ .
 --
-<.> `[teal]#*lookupRegisteredBeanByIdElseFail*#(String id)` : `_ManagedBeanAdapter`
+<.> xref:#lookupRegisteredBeanByIdElseFail[lookupRegisteredBeanByIdElseFail]
 +
 --
 Returns a registered bean of given _name_ , or throws when no such bean.
 --
-<.> `[teal]#*lookupService*#<T>(Class<T> serviceClass)` : `Optional<T>`
+<.> xref:#lookupService[lookupService]
 +
 --
 Returns a domain service implementing the requested type.
+--
+
+== Members
+
+[#select]
+=== select
+
+Obtains a xref:system:generated:index/commons/collections/Can.adoc[Can] container containing any matching instances for the given required type and additional required qualifiers.
+
+[#select]
+=== select
+
+Obtains a xref:system:generated:index/commons/collections/Can.adoc[Can] container containing any matching instances for the given required type.
+
+[#streamRegisteredBeansOfType]
+=== streamRegisteredBeansOfType
+
+Streams all registered bean adapters implementing the requested type.
+
+[#streamRegisteredBeans]
+=== streamRegisteredBeans
+
+Returns all bean adapters that have been registered.
+
+[#lookupRegisteredBeanById]
+=== lookupRegisteredBeanById
+
+Returns a registered bean of given _name_ .
+
+[#lookupRegisteredBeanByIdElseFail]
+=== lookupRegisteredBeanByIdElseFail
+
+Returns a registered bean of given _name_ , or throws when no such bean.
+
+[#lookupService]
+=== lookupService
+
+Returns a domain service implementing the requested type.
 
 If this lookup is ambiguous, the service annotated with highest priority is returned. see _Priority_
---
 

@@ -18,55 +18,102 @@ interface MessageService {
 }
 ----
 
-<.> `[teal]#*informUser*#(String message)` : `void`
+<.> xref:#informUser[informUser]
 +
 --
 Make the specified message available to the user. Note this will probably be displayed in transitory fashion, so is only suitable for useful but optional information.
 --
-<.> `[teal]#*informUser*#(xref:system:generated:index/applib/services/i18n/TranslatableString.adoc[TranslatableString] message, Class<?> contextClass, String contextMethod)` : `String`
+<.> xref:#informUser[informUser]
 +
 --
 Make the specified message available to the user, translated (if possible) to user's locale.
-
-More precisely, the locale is as provided by the configured _org.apache.isis.applib.services.i18n.LocaleProvider_ service. This will most commonly be the locale of the current request (ie the current user's locale).
 --
-<.> `[teal]#*informUser*#(xref:system:generated:index/applib/services/i18n/TranslatableString.adoc[TranslatableString] message, String translationContext)` : `String`
+<.> xref:#informUser[informUser]
 +
 --
 Override of _MessageService#informUser(TranslatableString, Class, String)_ , but with last two parameters combined into a context string.
 --
-<.> `[teal]#*warnUser*#(String message)` : `void`
+<.> xref:#warnUser[warnUser]
 +
 --
 Warn the user about a situation with the specified message. The container should guarantee to display this warning to the user, and will typically require acknowledgement.
 --
-<.> `[teal]#*warnUser*#(xref:system:generated:index/applib/services/i18n/TranslatableString.adoc[TranslatableString] message, Class<?> contextClass, String contextMethod)` : `String`
+<.> xref:#warnUser[warnUser]
 +
 --
 Warn the user about a situation with the specified message, translated (if possible) to user's locale.
-
-More precisely, the locale is as provided by the configured _org.apache.isis.applib.services.i18n.LocaleProvider_ service. This will most commonly be the locale of the current request (ie the current user's locale).
 --
-<.> `[teal]#*warnUser*#(xref:system:generated:index/applib/services/i18n/TranslatableString.adoc[TranslatableString] message, String translationContext)` : `String`
+<.> xref:#warnUser[warnUser]
 +
 --
 Override of _MessageService#warnUser(TranslatableString, Class, String)_ , but with last two parameters combined into a context string.
 --
-<.> `[teal]#*raiseError*#(String message)` : `void`
+<.> xref:#raiseError[raiseError]
 +
 --
 Notify the user of an application error with the specified message. Note this will probably be displayed in an alarming fashion, so is only suitable for errors. The user will typically be required to perform additional steps after the error (eg to inform the helpdesk).
 --
-<.> `[teal]#*raiseError*#(xref:system:generated:index/applib/services/i18n/TranslatableString.adoc[TranslatableString] message, Class<?> contextClass, String contextMethod)` : `String`
+<.> xref:#raiseError[raiseError]
 +
 --
 Notify the user of an application error with the specified message, translated (if possible) to user's locale.
-
-More precisely, the locale is as provided by the configured _org.apache.isis.applib.services.i18n.LocaleProvider_ service. This will most commonly be the locale of the current request (ie the current user's locale).
 --
-<.> `[teal]#*raiseError*#(xref:system:generated:index/applib/services/i18n/TranslatableString.adoc[TranslatableString] message, String translationContext)` : `String`
+<.> xref:#raiseError[raiseError]
 +
 --
 Override of _MessageService#raiseError(TranslatableString, Class, String)_ , but with last two parameters combined into a context string.
 --
+
+== Members
+
+[#informUser]
+=== informUser
+
+Make the specified message available to the user. Note this will probably be displayed in transitory fashion, so is only suitable for useful but optional information.
+
+[#informUser]
+=== informUser
+
+Make the specified message available to the user, translated (if possible) to user's locale.
+
+More precisely, the locale is as provided by the configured _org.apache.isis.applib.services.i18n.LocaleProvider_ service. This will most commonly be the locale of the current request (ie the current user's locale).
+
+[#informUser]
+=== informUser
+
+Override of _MessageService#informUser(TranslatableString, Class, String)_ , but with last two parameters combined into a context string.
+
+[#warnUser]
+=== warnUser
+
+Warn the user about a situation with the specified message. The container should guarantee to display this warning to the user, and will typically require acknowledgement.
+
+[#warnUser]
+=== warnUser
+
+Warn the user about a situation with the specified message, translated (if possible) to user's locale.
+
+More precisely, the locale is as provided by the configured _org.apache.isis.applib.services.i18n.LocaleProvider_ service. This will most commonly be the locale of the current request (ie the current user's locale).
+
+[#warnUser]
+=== warnUser
+
+Override of _MessageService#warnUser(TranslatableString, Class, String)_ , but with last two parameters combined into a context string.
+
+[#raiseError]
+=== raiseError
+
+Notify the user of an application error with the specified message. Note this will probably be displayed in an alarming fashion, so is only suitable for errors. The user will typically be required to perform additional steps after the error (eg to inform the helpdesk).
+
+[#raiseError]
+=== raiseError
+
+Notify the user of an application error with the specified message, translated (if possible) to user's locale.
+
+More precisely, the locale is as provided by the configured _org.apache.isis.applib.services.i18n.LocaleProvider_ service. This will most commonly be the locale of the current request (ie the current user's locale).
+
+[#raiseError]
+=== raiseError
+
+Override of _MessageService#raiseError(TranslatableString, Class, String)_ , but with last two parameters combined into a context string.
 

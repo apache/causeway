@@ -20,11 +20,18 @@ class BS3Menu {
 }
 ----
 
-<.> `[teal]#*isUnreferencedActions*#()` : `Boolean`
+<.> xref:#isUnreferencedActions[isUnreferencedActions]
 +
 --
 Whether this menu should be used to hold any unreferenced actions.
+--
+
+== Members
+
+[#isUnreferencedActions]
+=== isUnreferencedActions
+
+Whether this menu should be used to hold any unreferenced actions.
 
 Any menubars layout must have precisely one menu that has this attribute set.
---
 

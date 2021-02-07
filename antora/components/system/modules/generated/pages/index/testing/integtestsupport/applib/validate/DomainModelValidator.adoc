@@ -17,19 +17,36 @@ class DomainModelValidator {
 }
 ----
 
-<.> `[teal]#*assertValid*#()` : `void`
+<.> xref:#assertValid[assertValid]
 +
 --
 Typical usage in integration tests.
 --
-<.> `[teal]#*throwIfInvalid*#()` : `void`
+<.> xref:#throwIfInvalid[throwIfInvalid]
 +
 --
 Alternative way of checking
 --
-<.> `[teal]#*anyMatchesContaining*#(Class<?> cls, String messageSnippet)` : `boolean`
+<.> xref:#anyMatchesContaining[anyMatchesContaining]
 +
 --
 primarily used for testing
 --
+
+== Members
+
+[#assertValid]
+=== assertValid
+
+Typical usage in integration tests.
+
+[#throwIfInvalid]
+=== throwIfInvalid
+
+Alternative way of checking
+
+[#anyMatchesContaining]
+=== anyMatchesContaining
+
+primarily used for testing
 

@@ -14,9 +14,16 @@ interface DeepLinkService {
 }
 ----
 
-<.> `[teal]#*deepLinkFor*#(Object domainObject)` : `URI`
+<.> xref:#deepLinkFor[deepLinkFor]
 +
 --
 Creates a URI that can be used to obtain a representation of the provided domain object in one of the Isis viewers.
 --
+
+== Members
+
+[#deepLinkFor]
+=== deepLinkFor
+
+Creates a URI that can be used to obtain a representation of the provided domain object in one of the Isis viewers.
 

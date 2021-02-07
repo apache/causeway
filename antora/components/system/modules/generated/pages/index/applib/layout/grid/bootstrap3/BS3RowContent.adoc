@@ -18,16 +18,28 @@ class BS3RowContent {
 }
 ----
 
-<.> `[teal]#*getSize*#()` : `xref:system:generated:index/applib/layout/grid/bootstrap3/Size.adoc[Size]`
+<.> xref:#getSize[getSize]
 +
 --
 Default if not specified is _Size#MD_ .
 --
-<.> `[teal]#*getOwner*#()` : `xref:system:generated:index/applib/layout/grid/bootstrap3/BS3RowContentOwner.adoc[BS3RowContentOwner]`
+<.> xref:#getOwner[getOwner]
 +
 --
 Owner.
+--
+
+== Members
+
+[#getSize]
+=== getSize
+
+Default if not specified is _Size#MD_ .
+
+[#getOwner]
+=== getOwner
+
+Owner.
 
 Set programmatically by framework after reading in from XML.
---
 

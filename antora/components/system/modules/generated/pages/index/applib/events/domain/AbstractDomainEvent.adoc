@@ -27,60 +27,122 @@ class AbstractDomainEvent {
 }
 ----
 
-<.> `[teal]#*AbstractDomainEvent*#()`
+<.> xref:#AbstractDomainEvent[AbstractDomainEvent]
 +
 --
 If used then the framework will set state via (non-API) setters.
-
-Because the xref:system:generated:index/applib/events/EventObjectBase.adoc[EventObjectBase] superclass prohibits a null source, a dummy value is temporarily used.
 --
-<.> `[teal]#*setMixedIn*#(Object mixedIn)` : `void`
+<.> xref:#setMixedIn[setMixedIn]
 +
 --
 Not API - set by the framework.
 --
-<.> `[teal]#*getSubject*#()` : `Object`
+<.> xref:#getSubject[getSubject]
 +
 --
 The subject of the event, which will be either the _#getSource() source_ for a regular action, or the _#getMixedIn() mixed-in_ domain object for a mixin.
 --
-<.> `[teal]#*setEventPhase*#(Phase phase)` : `void`
+<.> xref:#setEventPhase[setEventPhase]
 +
 --
 Not API, set by the framework.
 --
-<.> `[teal]#*setIdentifier*#(xref:system:generated:index/applib/Identifier.adoc[Identifier] identifier)` : `void`
+<.> xref:#setIdentifier[setIdentifier]
 +
 --
 Not API, set by the framework if the no-arg constructor is used.
 --
-<.> `[teal]#*hide*#()` : `void`
-<.> `[teal]#*disable*#(String reason)` : `void`
-<.> `[teal]#*disable*#(xref:system:generated:index/applib/services/i18n/TranslatableString.adoc[TranslatableString] reason)` : `void`
-<.> `[teal]#*invalidate*#(String reason)` : `void`
-<.> `[teal]#*invalidate*#(xref:system:generated:index/applib/services/i18n/TranslatableString.adoc[TranslatableString] reason)` : `void`
-<.> `[teal]#*veto*#(String reason, Object... args)` : `void`
+<.> xref:#hide[hide]
+<.> xref:#disable[disable]
+<.> xref:#disable[disable]
+<.> xref:#invalidate[invalidate]
+<.> xref:#invalidate[invalidate]
+<.> xref:#veto[veto]
 +
 --
 Use instead of _#hide()_ , _#disable(String)_ and _#invalidate(String)_ ; just delegates to appropriate vetoing method based upon the _#getEventPhase() phase_ .
-
-If hiding, just pass `null` for the parameter.
 --
-<.> `[teal]#*veto*#(xref:system:generated:index/applib/services/i18n/TranslatableString.adoc[TranslatableString] translatableReason)` : `void`
+<.> xref:#veto[veto]
 +
 --
 Use instead of _#hide()_ , _#disable(org.apache.isis.applib.services.i18n.TranslatableString)_ and _#invalidate(org.apache.isis.applib.services.i18n.TranslatableString)_ ; just delegates to appropriate vetoing method based upon the _#getEventPhase() phase_ .
-
-If hiding, just pass `null` for the parameter.
 --
-<.> `[teal]#*get*#(Object key)` : `Object`
+<.> xref:#get[get]
 +
 --
 Obtain user-data, as set by a previous _#getEventPhase() phase_ .
 --
-<.> `[teal]#*put*#(Object key, Object value)` : `void`
+<.> xref:#put[put]
 +
 --
 Set user-data, for the use of a subsequent _#getEventPhase() phase_ .
 --
+
+== Members
+
+[#AbstractDomainEvent]
+=== AbstractDomainEvent
+
+If used then the framework will set state via (non-API) setters.
+
+Because the xref:system:generated:index/applib/events/EventObjectBase.adoc[EventObjectBase] superclass prohibits a null source, a dummy value is temporarily used.
+
+[#setMixedIn]
+=== setMixedIn
+
+Not API - set by the framework.
+
+[#getSubject]
+=== getSubject
+
+The subject of the event, which will be either the _#getSource() source_ for a regular action, or the _#getMixedIn() mixed-in_ domain object for a mixin.
+
+[#setEventPhase]
+=== setEventPhase
+
+Not API, set by the framework.
+
+[#setIdentifier]
+=== setIdentifier
+
+Not API, set by the framework if the no-arg constructor is used.
+
+[#hide]
+=== hide
+
+[#disable]
+=== disable
+
+[#disable]
+=== disable
+
+[#invalidate]
+=== invalidate
+
+[#invalidate]
+=== invalidate
+
+[#veto]
+=== veto
+
+Use instead of _#hide()_ , _#disable(String)_ and _#invalidate(String)_ ; just delegates to appropriate vetoing method based upon the _#getEventPhase() phase_ .
+
+If hiding, just pass `null` for the parameter.
+
+[#veto]
+=== veto
+
+Use instead of _#hide()_ , _#disable(org.apache.isis.applib.services.i18n.TranslatableString)_ and _#invalidate(org.apache.isis.applib.services.i18n.TranslatableString)_ ; just delegates to appropriate vetoing method based upon the _#getEventPhase() phase_ .
+
+If hiding, just pass `null` for the parameter.
+
+[#get]
+=== get
+
+Obtain user-data, as set by a previous _#getEventPhase() phase_ .
+
+[#put]
+=== put
+
+Set user-data, for the use of a subsequent _#getEventPhase() phase_ .
 

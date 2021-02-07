@@ -15,21 +15,38 @@ class IconUiEvent {
 }
 ----
 
-<.> `[teal]#*IconUiEvent*#()`
+<.> xref:#IconUiEvent[IconUiEvent]
 +
 --
 If used then the framework will set state via (non-API) setters.
-
-Because the _EventObject_ superclass prohibits a null source, a dummy value is temporarily used.
 --
-<.> `[teal]#*getIconName*#()` : `String`
+<.> xref:#getIconName[getIconName]
 +
 --
 The icon name as provided by a subscriber using _#setIconName(String)_ .
 --
-<.> `[teal]#*setIconName*#(String iconName)` : `void`
+<.> xref:#setIconName[setIconName]
 +
 --
 For subscribers to call to provide an icon name for this object.
 --
+
+== Members
+
+[#IconUiEvent]
+=== IconUiEvent
+
+If used then the framework will set state via (non-API) setters.
+
+Because the _EventObject_ superclass prohibits a null source, a dummy value is temporarily used.
+
+[#getIconName]
+=== getIconName
+
+The icon name as provided by a subscriber using _#setIconName(String)_ .
+
+[#setIconName]
+=== setIconName
+
+For subscribers to call to provide an icon name for this object.
 

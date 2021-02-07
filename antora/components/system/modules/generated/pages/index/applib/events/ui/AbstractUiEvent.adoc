@@ -13,19 +13,36 @@ class AbstractUiEvent {
 }
 ----
 
-<.> `[teal]#*AbstractUiEvent*#()`
+<.> xref:#AbstractUiEvent[AbstractUiEvent]
 +
 --
 If used then the framework will set state via (non-API) setters.
 --
-<.> `[teal]#*get*#(Object key)` : `Object`
+<.> xref:#get[get]
 +
 --
 Obtain user-data, as set by any other subscribers.
 --
-<.> `[teal]#*put*#(Object key, Object value)` : `void`
+<.> xref:#put[put]
 +
 --
 Set user-data, for the use of other subscribers.
 --
+
+== Members
+
+[#AbstractUiEvent]
+=== AbstractUiEvent
+
+If used then the framework will set state via (non-API) setters.
+
+[#get]
+=== get
+
+Obtain user-data, as set by any other subscribers.
+
+[#put]
+=== put
+
+Set user-data, for the use of other subscribers.
 

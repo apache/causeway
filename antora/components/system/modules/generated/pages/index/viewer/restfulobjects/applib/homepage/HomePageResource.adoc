@@ -14,9 +14,16 @@ interface HomePageResource {
 }
 ----
 
-<.> `[teal]#*notAuthenticated*#()` : `Response`
+<.> xref:#notAuthenticated[notAuthenticated]
 +
 --
 Not part of the RO spec; this resource always returns 401, and is intended to be redirected to if credentials cannot be obtained.
 --
+
+== Members
+
+[#notAuthenticated]
+=== notAuthenticated
+
+Not part of the RO spec; this resource always returns 401, and is intended to be redirected to if credentials cannot be obtained.
 

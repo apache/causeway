@@ -44,30 +44,52 @@ class ActionLayoutData {
 }
 ----
 
-<.> `[teal]#*getId*#()` : `String`
+<.> xref:#getId[getId]
 +
 --
 Method name.
-
-Overloaded methods are not supported.
 --
-<.> `[teal]#*getOwner*#()` : `xref:system:generated:index/applib/layout/component/ActionLayoutDataOwner.adoc[ActionLayoutDataOwner]`
+<.> xref:#getOwner[getOwner]
 +
 --
 Owner.
-
-Set programmatically by framework after reading in from XML.
 --
-<.> `[teal]#*getMetadataError*#()` : `String`
+<.> xref:#getMetadataError[getMetadataError]
 +
 --
 For diagnostics; populated by the framework if and only if a metadata error.
 --
-<.> `[teal]#*getLink*#()` : `xref:system:generated:index/applib/layout/links/Link.adoc[Link]`
+<.> xref:#getLink[getLink]
 +
 --
 The link to access this resource from the REST API (Restful Objects viewer).
+--
+
+== Members
+
+[#getId]
+=== getId
+
+Method name.
+
+Overloaded methods are not supported.
+
+[#getOwner]
+=== getOwner
+
+Owner.
+
+Set programmatically by framework after reading in from XML.
+
+[#getMetadataError]
+=== getMetadataError
+
+For diagnostics; populated by the framework if and only if a metadata error.
+
+[#getLink]
+=== getLink
+
+The link to access this resource from the REST API (Restful Objects viewer).
 
 Populated by the framework automatically.
---
 

@@ -15,24 +15,46 @@ interface XmlService {
 }
 ----
 
-<.> `[teal]#*asDocument*#(String xmlStr)` : `Document`
+<.> xref:#asDocument[asDocument]
 +
 --
 Converts xml string into an _Document W3C Document_ .
 --
-<.> `[teal]#*asString*#(Document doc)` : `String`
+<.> xref:#asString[asString]
 +
 --
 Serializes a _Document W3C Document_ back into a string.
 --
-<.> `[teal]#*getChildElement*#(Element el, String tagname)` : `Element`
+<.> xref:#getChildElement[getChildElement]
 +
 --
 Convenience method to walk XML document.
 --
-<.> `[teal]#*getChildTextValue*#(Element el)` : `String`
+<.> xref:#getChildTextValue[getChildTextValue]
 +
 --
 Convenience method to obtain value of child text node.
 --
+
+== Members
+
+[#asDocument]
+=== asDocument
+
+Converts xml string into an _Document W3C Document_ .
+
+[#asString]
+=== asString
+
+Serializes a _Document W3C Document_ back into a string.
+
+[#getChildElement]
+=== getChildElement
+
+Convenience method to walk XML document.
+
+[#getChildTextValue]
+=== getChildTextValue
+
+Convenience method to obtain value of child text node.
 

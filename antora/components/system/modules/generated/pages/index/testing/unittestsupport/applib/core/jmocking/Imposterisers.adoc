@@ -10,5 +10,10 @@ class Imposterisers {
 }
 ----
 
-<.> `[teal]#*_getDefault_*#()` : `Imposteriser`
+<.> xref:#getDefault[getDefault]
+
+== Members
+
+[#getDefault]
+=== getDefault
 

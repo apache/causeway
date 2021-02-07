@@ -12,19 +12,36 @@ interface Builder {
 }
 ----
 
-<.> `[teal]#*includePath*#(String path)` : `void`
+<.> xref:#includePath[includePath]
 +
 --
 Enrich the snapshot to include the state of these referenced objects
 --
-<.> `[teal]#*includePathAndAnnotation*#(String path, String annotation)` : `void`
+<.> xref:#includePathAndAnnotation[includePathAndAnnotation]
 +
 --
 Ditto, but add an XML annotation attribute to the included element(s).
 --
-<.> `[teal]#*build*#()` : `Snapshot`
+<.> xref:#build[build]
 +
 --
 Builds the Snapshot.
 --
+
+== Members
+
+[#includePath]
+=== includePath
+
+Enrich the snapshot to include the state of these referenced objects
+
+[#includePathAndAnnotation]
+=== includePathAndAnnotation
+
+Ditto, but add an XML annotation attribute to the included element(s).
+
+[#build]
+=== build
+
+Builds the Snapshot.
 

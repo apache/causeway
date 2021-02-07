@@ -20,9 +20,16 @@ class AbstractSpecification2 {
 }
 ----
 
-<.> `[teal]#*satisfiesTranslatable*#(Object obj)` : `xref:system:generated:index/applib/services/i18n/TranslatableString.adoc[TranslatableString]`
+<.> xref:#satisfiesTranslatable[satisfiesTranslatable]
 +
 --
 Checks not null and is correct type, and delegates to _#satisfiesTranslatableSafely(Object)_ .
 --
+
+== Members
+
+[#satisfiesTranslatable]
+=== satisfiesTranslatable
+
+Checks not null and is correct type, and delegates to _#satisfiesTranslatableSafely(Object)_ .
 

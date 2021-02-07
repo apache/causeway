@@ -34,7 +34,12 @@ import lombok.NonNull;
 
 public interface J2AdocConverter {
 
-    Document javadoc(Javadoc javadoc, J2AdocUnit unit);
+    public enum Mode {
+        FIRST_PARA_ONLY,
+        ALL
+    }
+
+    Document javadoc(Javadoc javadoc, J2AdocUnit unit, Mode mode);
 
     String annotationMemberDeclaration(AnnotationMemberDeclaration amd, J2AdocUnit unit);
 

@@ -10,9 +10,16 @@ interface HasCssId {
 }
 ----
 
-<.> `[teal]#*getId*#()` : `String`
+<.> xref:#getId[getId]
 +
 --
 As per <div id="...">...</div> : must be unique across entire page.
 --
+
+== Members
+
+[#getId]
+=== getId
+
+As per <div id="...">...</div> : must be unique across entire page.
 

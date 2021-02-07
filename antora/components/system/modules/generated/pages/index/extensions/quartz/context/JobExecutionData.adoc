@@ -13,14 +13,26 @@ class JobExecutionData {
 }
 ----
 
-<.> `[teal]#*getString*#(String key, String defaultValue)` : `String`
+<.> xref:#getString[getString]
 +
 --
 Lookup property from the job detail.
 --
-<.> `[teal]#*setString*#(String key, String value)` : `void`
+<.> xref:#setString[setString]
 +
 --
 Save key into the job detail obtained from context.
 --
+
+== Members
+
+[#getString]
+=== getString
+
+Lookup property from the job detail.
+
+[#setString]
+=== setString
+
+Save key into the job detail obtained from context.
 

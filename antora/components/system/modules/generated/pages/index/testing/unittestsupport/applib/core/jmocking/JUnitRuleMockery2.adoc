@@ -33,34 +33,66 @@ class JUnitRuleMockery2 {
 }
 ----
 
-<.> `[teal]#*_createFor_*#(Mode mode)` : `xref:system:generated:index/testing/unittestsupport/applib/core/jmocking/JUnitRuleMockery2.adoc[JUnitRuleMockery2]`
+<.> xref:#createFor[createFor]
 +
 --
 Factory method.
 --
-<.> `[teal]#*ignoring*#<T>(T mock)` : `T`
+<.> xref:#ignoring[ignoring]
 +
 --
 Ignoring any interaction with the mock; an allowing/ignoring mock will be returned in turn.
 --
-<.> `[teal]#*allowing*#<T>(T mock)` : `T`
+<.> xref:#allowing[allowing]
 +
 --
 Allow any interaction with the mock; an allowing mock will be returned in turn.
 --
-<.> `[teal]#*never*#<T>(T mock)` : `T`
+<.> xref:#never[never]
 +
 --
 Prohibit any interaction with the mock.
 --
-<.> `[teal]#*ignoring*#(Object... mocks)` : `void`
+<.> xref:#ignoring[ignoring]
 +
 --
 Ignore a set of mocks.
 --
-<.> `[teal]#*oneOf*#(Object mock)` : `Object`
+<.> xref:#oneOf[oneOf]
 +
 --
 Require one interaction
 --
+
+== Members
+
+[#createFor]
+=== createFor
+
+Factory method.
+
+[#ignoring]
+=== ignoring
+
+Ignoring any interaction with the mock; an allowing/ignoring mock will be returned in turn.
+
+[#allowing]
+=== allowing
+
+Allow any interaction with the mock; an allowing mock will be returned in turn.
+
+[#never]
+=== never
+
+Prohibit any interaction with the mock.
+
+[#ignoring]
+=== ignoring
+
+Ignore a set of mocks.
+
+[#oneOf]
+=== oneOf
+
+Require one interaction
 

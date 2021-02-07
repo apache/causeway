@@ -53,9 +53,16 @@ enum Rel {
 }
 ----
 
-<.> `[teal]#*andParam*#(String paramName, String paramValue)` : `String`
+<.> xref:#andParam[andParam]
 +
 --
 For those xref:system:generated:index/viewer/restfulobjects/applib/Rel.adoc[Rel] s that also take a param
 --
+
+== Members
+
+[#andParam]
+=== andParam
+
+For those xref:system:generated:index/viewer/restfulobjects/applib/Rel.adoc[Rel] s that also take a param
 

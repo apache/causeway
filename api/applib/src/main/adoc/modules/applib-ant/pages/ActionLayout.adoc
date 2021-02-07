@@ -7,73 +7,11 @@
 include::system:generated:page$index/applib/annotation/ActionLayout.adoc[]
 
 
-// TODO - v2 to reconcile with .java (or maybe just delete)
-
-//<.> xref:refguide:applib-ant:ActionLayout.adoc#named[`named()`]
-//+
-//To override the name inferred from the action's name in code. +
-//A typical use case is if the desired name is a reserved Java keyword, such as `default` or `package`.
-//
-//<.> xref:refguide:applib-ant:ActionLayout.adoc#position[`position()`]
-//+
-//For actions associated (using xref:refguide:applib-ant:MemberOrder.adoc[`@MemberOrder#named`]) with properties, the positioning of the action's button with respect to the property
-//
-//<.> `promptStyle()`
-//+
-//How to render the action prompt / property edit form : inline, dialog, sidebar etc.
-//
-//<.> `redirectPolicy()`
-//+
-//For the xref:vw:ROOT:about.adoc[Wicket viewer], whether to re-render the page after invoking this action, even if the result is the same.
-//+
-//Not re-rendering can provide a smoother UI experience.
-
-// TODO: v2 - missing subpages for `promptStyle` and `redirectPolicy`
-
-For example:
-
-[source,java]
-----
-public class ToDoItems {
-    @Action(semantics=SemanticsOf.SAFE)             // <1>
-    @ActionLayout(
-        bookmarking=BookmarkPolicy.AS_ROOT,
-        cssClass="x-key",
-        cssClassFa="fa-checkbox",
-        describedAs="Mark the todo item as not complete after all",
-        hidden=Where.NOWHERE                        // <2>
-    )
-    @MemberOrder(sequence = "1")
-    public List<ToDoItem> notYetComplete() {
-        ...
-    }
-}
-----
-<1> required for bookmarkable actions
-<2> default value, so could be omitted
-
-
-[TIP]
-====
-As an alternative to using the `@ActionLayout` annotation, a xref:userguide:fun:ui.adoc#object-layout[file-based layout] can be used (and is generally to be preferred since it is more flexible/powerful).
-====
 
 
 
 
+include::ActionLayout/hooks/examples-and-usage.adoc[]
 
 
 
-
-
-// TODO - to review for v2 (perhaps move into javadoc and make 'projdoc' more sophisticated).
-
-
-//include::ActionLayout/bookmarking.adoc[leveloffset=+1]
-//include::ActionLayout/contributedAs.adoc[leveloffset=+1]
-//include::ActionLayout/cssClass.adoc[leveloffset=+1]
-//include::ActionLayout/cssClassFa.adoc[leveloffset=+1]
-//include::ActionLayout/describedAs.adoc[leveloffset=+1]
-//include::ActionLayout/hidden.adoc[leveloffset=+1]
-//include::ActionLayout/named.adoc[leveloffset=+1]
-//include::ActionLayout/position.adoc[leveloffset=+1]

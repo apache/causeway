@@ -16,11 +16,18 @@ class RepresentationServiceContentNegotiator {
 }
 ----
 
-<.> `[teal]#*buildResponse*#(Function<xref:system:generated:index/viewer/restfulobjects/rendering/service/conneg/ContentNegotiationService.adoc[ContentNegotiationService], ResponseBuilder> connegServiceBuildResponse)` : `ResponseBuilder`
+<.> xref:#buildResponse[buildResponse]
 +
 --
 Iterates over all _#contentNegotiationServices injected_ xref:system:generated:index/viewer/restfulobjects/rendering/service/conneg/ContentNegotiationService.adoc[ContentNegotiationService] s to find one that returns a _ResponseBuilder_ using the provided function.
+--
+
+== Members
+
+[#buildResponse]
+=== buildResponse
+
+Iterates over all _#contentNegotiationServices injected_ xref:system:generated:index/viewer/restfulobjects/rendering/service/conneg/ContentNegotiationService.adoc[ContentNegotiationService] s to find one that returns a _ResponseBuilder_ using the provided function.
 
 There will always be at least one such service, namely the xref:system:generated:index/viewer/restfulobjects/rendering/service/conneg/ContentNegotiationServiceForRestfulObjectsV1_0.adoc[ContentNegotiationServiceForRestfulObjectsV1_0] .
---
 

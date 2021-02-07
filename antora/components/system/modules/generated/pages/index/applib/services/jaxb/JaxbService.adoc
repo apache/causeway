@@ -16,14 +16,26 @@ interface JaxbService {
 }
 ----
 
-<.> `[teal]#*fromXml*#<T>(Class<T> domainClass, String xml)` : `T`
+<.> xref:#fromXml[fromXml]
 +
 --
 As _#fromXml(JAXBContext, String)_ , but downcast to a specific type.
 --
-<.> `[teal]#*fromXml*#<T>(Class<T> domainClass, String xml, Map<String, Object> unmarshallerProperties)` : `T`
+<.> xref:#fromXml[fromXml]
 +
 --
 As _#fromXml(JAXBContext, String, Map)_ , but downcast to a specific type.
 --
+
+== Members
+
+[#fromXml]
+=== fromXml
+
+As _#fromXml(JAXBContext, String)_ , but downcast to a specific type.
+
+[#fromXml]
+=== fromXml
+
+As _#fromXml(JAXBContext, String, Map)_ , but downcast to a specific type.
 

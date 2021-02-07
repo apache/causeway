@@ -10,11 +10,18 @@ class MediaTypes {
 }
 ----
 
-<.> `[teal]#*_parse_*#(String type)` : `MediaType`
+<.> xref:#parse[parse]
 +
 --
 Same as _MediaType.valueOf(type)_ , but with fallback in case _MediaType.valueOf(type)_ throws an IllegalArgumentException.
+--
+
+== Members
+
+[#parse]
+=== parse
+
+Same as _MediaType.valueOf(type)_ , but with fallback in case _MediaType.valueOf(type)_ throws an IllegalArgumentException.
 
 The fallback is to retry with some special characters replaces in String _type_ .
---
 

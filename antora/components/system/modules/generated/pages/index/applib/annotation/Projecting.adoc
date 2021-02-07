@@ -11,14 +11,26 @@ enum Projecting {
 }
 ----
 
-<.> `[teal]#*_PROJECTED_*#`
+<.> xref:#PROJECTED[PROJECTED]
 +
 --
 The property holds the underlying domain object of which this (view model) object is a projection.
 --
-<.> `[teal]#*_NOT_SPECIFIED_*#`
+<.> xref:#NOT_SPECIFIED[NOT_SPECIFIED]
 +
 --
 The property
 --
+
+== Members
+
+[#PROJECTED]
+=== PROJECTED
+
+The property holds the underlying domain object of which this (view model) object is a projection.
+
+[#NOT_SPECIFIED]
+=== NOT_SPECIFIED
+
+The property
 

@@ -24,34 +24,66 @@ interface QueryRange {
 }
 ----
 
-<.> `[teal]#*getStart*#()` : `long`
+<.> xref:#getStart[getStart]
 +
 --
 The start index into the set table. (non-negative)
 --
-<.> `[teal]#*getLimit*#()` : `long`
+<.> xref:#getLimit[getLimit]
 +
 --
 The maximum number of items to return, starting at _#getStart()_ (non-negative)
 --
-<.> `[teal]#*getEnd*#()` : `long`
+<.> xref:#getEnd[getEnd]
 +
 --
 The end index into the set table. Overflow is ignored. (non-negative)
 --
-<.> `[teal]#*getStartAsInt*#()` : `int`
+<.> xref:#getStartAsInt[getStartAsInt]
 +
 --
 The start index into the set table (as java int primitive)
 --
-<.> `[teal]#*getLimitAsInt*#()` : `int`
+<.> xref:#getLimitAsInt[getLimitAsInt]
 +
 --
 The maximum number of items to return (as java int primitive) if _limit_ overflows an int, _Integer#MAX_VALUE_ is returned.
 --
-<.> `[teal]#*getEndAsInt*#()` : `int`
+<.> xref:#getEndAsInt[getEndAsInt]
 +
 --
 The end index into the set table. Overflow is ignored. (as java int primitive) if _end_ overflows an int, _Integer#MAX_VALUE_ is returned.
 --
+
+== Members
+
+[#getStart]
+=== getStart
+
+The start index into the set table. (non-negative)
+
+[#getLimit]
+=== getLimit
+
+The maximum number of items to return, starting at _#getStart()_ (non-negative)
+
+[#getEnd]
+=== getEnd
+
+The end index into the set table. Overflow is ignored. (non-negative)
+
+[#getStartAsInt]
+=== getStartAsInt
+
+The start index into the set table (as java int primitive)
+
+[#getLimitAsInt]
+=== getLimitAsInt
+
+The maximum number of items to return (as java int primitive) if _limit_ overflows an int, _Integer#MAX_VALUE_ is returned.
+
+[#getEndAsInt]
+=== getEndAsInt
+
+The end index into the set table. Overflow is ignored. (as java int primitive) if _end_ overflows an int, _Integer#MAX_VALUE_ is returned.
 

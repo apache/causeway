@@ -16,9 +16,16 @@ class JsonMapper {
 }
 ----
 
-<.> `[teal]#*_instance_*#()` : `xref:system:generated:index/viewer/restfulobjects/applib/util/JsonMapper.adoc[JsonMapper]`
+<.> xref:#instance[instance]
 +
 --
 Returns a _org.apache.isis.viewer.restfulobjects.applib.util.JsonMapper.PrettyPrinting#ENABLE pretty-printing enabled_ JSON mapper.
 --
+
+== Members
+
+[#instance]
+=== instance
+
+Returns a _org.apache.isis.viewer.restfulobjects.applib.util.JsonMapper.PrettyPrinting#ENABLE pretty-printing enabled_ JSON mapper.
 

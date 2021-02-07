@@ -23,9 +23,16 @@ class BS3Grid {
 }
 ----
 
-<.> `[teal]#*getMetadataErrors*#()` : `List<String>`
+<.> xref:#getMetadataErrors[getMetadataErrors]
 +
 --
 For diagnostics; populated by the framework if and only if a metadata error.
 --
+
+== Members
+
+[#getMetadataErrors]
+=== getMetadataErrors
+
+For diagnostics; populated by the framework if and only if a metadata error.
 

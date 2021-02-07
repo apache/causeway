@@ -26,19 +26,36 @@ final CommandRetrievalService commandRetrievalService;
 }
 ----
 
-<.> `[teal]#*findCommands*#(UUID uniqueId, Integer batchSize)` : `List<CommandJdo>`
+<.> xref:#findCommands[findCommands]
 +
 --
-These actions should be called with HTTP Accept Header set to: `application/xml;profile="urn:org.restfulobjects:repr-types/action-result";x-ro-domain-type="org.apache.isis.schema.cmd.v1.CommandsDto"
+These actions should be called with HTTP Accept Header set to: `application/xml;profile="urn:org.restfulobjects:repr-types/action-result";x-ro-domain-type="org.apache.isis.schema.cmd.v1.CommandsDto"` 
 --
-<.> `[teal]#*downloadCommands*#(UUID uniqueId, Integer batchSize, String filenamePrefix)` : `xref:system:generated:index/applib/value/Clob.adoc[Clob]`
+<.> xref:#downloadCommands[downloadCommands]
 +
 --
-These actions should be called with HTTP Accept Header set to: `application/xml;profile="urn:org.restfulobjects:repr-types/action-result";x-ro-domain-type="org.apache.isis.schema.cmd.v1.CommandsDto"
+These actions should be called with HTTP Accept Header set to: `application/xml;profile="urn:org.restfulobjects:repr-types/action-result";x-ro-domain-type="org.apache.isis.schema.cmd.v1.CommandsDto"` 
 --
-<.> `[teal]#*downloadCommandById*#(UUID uniqueId, String filenamePrefix)` : `xref:system:generated:index/applib/value/Clob.adoc[Clob]`
+<.> xref:#downloadCommandById[downloadCommandById]
 +
 --
-This action should be called with HTTP Accept Header set to: `application/xml;profile="urn:org.restfulobjects:repr-types/action-result";x-ro-domain-type="org.apache.isis.schema.cmd.v1.CommandDto"
+This action should be called with HTTP Accept Header set to: `application/xml;profile="urn:org.restfulobjects:repr-types/action-result";x-ro-domain-type="org.apache.isis.schema.cmd.v1.CommandDto"` 
 --
+
+== Members
+
+[#findCommands]
+=== findCommands
+
+These actions should be called with HTTP Accept Header set to: `application/xml;profile="urn:org.restfulobjects:repr-types/action-result";x-ro-domain-type="org.apache.isis.schema.cmd.v1.CommandsDto"` 
+
+[#downloadCommands]
+=== downloadCommands
+
+These actions should be called with HTTP Accept Header set to: `application/xml;profile="urn:org.restfulobjects:repr-types/action-result";x-ro-domain-type="org.apache.isis.schema.cmd.v1.CommandsDto"` 
+
+[#downloadCommandById]
+=== downloadCommandById
+
+This action should be called with HTTP Accept Header set to: `application/xml;profile="urn:org.restfulobjects:repr-types/action-result";x-ro-domain-type="org.apache.isis.schema.cmd.v1.CommandDto"` 
 

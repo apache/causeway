@@ -1,0 +1,23 @@
+== Examples
+
+For example:
+
+[source,java]
+----
+public class ToDoItem {
+    public static class CompletedEvent extends ActionDomainEvent<ToDoItem> { }
+    @Action(
+        commandPublishing=Publishing.ENABLED,
+        commandExecuteIn=CommandExecuteIn.FOREGROUND,          // <.>
+        commandPersistence=CommandPersistence.NOT_PERSISTED,   // <.>
+        domainEvent=CompletedEvent.class,
+        hidden = Where.NOWHERE,                                // <.>
+        executionPublishing = Publishing.ENABLED,
+        semantics = SemanticsOf.IDEMPOTENT
+    )
+    public ToDoItem completed() { /* ... */ }
+}
+----
+<.> default value, so could be omitted
+<.> default value, so could be omitted
+<.> default value, so could be omitted

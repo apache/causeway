@@ -1,0 +1,3 @@
+== Notes
+
+`FacetFactory` is an important internal API that is used by Apache Isis to build the metamodel.

@@ -12,19 +12,36 @@ interface LayoutService {
 }
 ----
 
-<.> `[teal]#*toXml*#(Class<?> domainClass, Style style)` : `String`
+<.> xref:#toXml[toXml]
 +
 --
 Obtains the serialized XML form of the layout (grid) for the specified domain class.
 --
-<.> `[teal]#*toZip*#(Style style)` : `byte[]`
+<.> xref:#toZip[toZip]
 +
 --
 Obtains a zip file of the serialized XML of the layouts (grids) of all domain entities and view models.
 --
-<.> `[teal]#*toMenuBarsXml*#(Type type)` : `String`
+<.> xref:#toMenuBarsXml[toMenuBarsXml]
 +
 --
 Obtains the serialized XML form of the menu bars layout ( xref:system:generated:index/applib/services/menu/MenuBarsService.adoc[MenuBarsService] ).
 --
+
+== Members
+
+[#toXml]
+=== toXml
+
+Obtains the serialized XML form of the layout (grid) for the specified domain class.
+
+[#toZip]
+=== toZip
+
+Obtains a zip file of the serialized XML of the layouts (grids) of all domain entities and view models.
+
+[#toMenuBarsXml]
+=== toMenuBarsXml
+
+Obtains the serialized XML form of the menu bars layout ( xref:system:generated:index/applib/services/menu/MenuBarsService.adoc[MenuBarsService] ).
 

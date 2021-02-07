@@ -14,5 +14,10 @@ interface PermissionsEvaluationService {
 }
 ----
 
-<.> `[teal]#*evaluate*#(ApplicationFeatureId targetMemberId, xref:system:generated:index/extensions/secman/api/permission/ApplicationPermissionMode.adoc[ApplicationPermissionMode] mode, Collection<xref:system:generated:index/extensions/secman/api/permission/ApplicationPermissionValue.adoc[ApplicationPermissionValue]> permissionValues)` : `Evaluation`
+<.> xref:#evaluate[evaluate]
+
+== Members
+
+[#evaluate]
+=== evaluate
 

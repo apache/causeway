@@ -24,34 +24,66 @@ class ReasonBuffer2 {
 }
 ----
 
-<.> `[teal]#*append*#(String reason)` : `xref:system:generated:index/applib/util/ReasonBuffer2.adoc[ReasonBuffer2]`
+<.> xref:#append[append]
 +
 --
 Append a reason to the list of existing reasons.
 --
-<.> `[teal]#*append*#(boolean condition, String reason)` : `xref:system:generated:index/applib/util/ReasonBuffer2.adoc[ReasonBuffer2]`
+<.> xref:#append[append]
 +
 --
 Append a reason to the list of existing reasons if the condition flag is true.
 --
-<.> `[teal]#*append*#(Condition condition, String reason)` : `xref:system:generated:index/applib/util/ReasonBuffer2.adoc[ReasonBuffer2]`
+<.> xref:#append[append]
 +
 --
 Append a reason to the list of existing reasons if the condition flag is true.
 --
-<.> `[teal]#*getReason*#()` : `String`
+<.> xref:#getReason[getReason]
 +
 --
-Return the combined set of reasons, or `nullif there are none.
+Return the combined set of reasons, or `null` if there are none.
 --
-<.> `[teal]#*appendReason*#(StringBuilder buf)` : `String`
+<.> xref:#appendReason[appendReason]
 +
 --
 Appends reasons.
 --
-<.> `[teal]#*plus*#(xref:system:generated:index/applib/util/ReasonBuffer2.adoc[ReasonBuffer2] other)` : `xref:system:generated:index/applib/util/ReasonBuffer2.adoc[ReasonBuffer2]`
+<.> xref:#plus[plus]
 +
 --
 Combines sets of reasons from another.
 --
+
+== Members
+
+[#append]
+=== append
+
+Append a reason to the list of existing reasons.
+
+[#append]
+=== append
+
+Append a reason to the list of existing reasons if the condition flag is true.
+
+[#append]
+=== append
+
+Append a reason to the list of existing reasons if the condition flag is true.
+
+[#getReason]
+=== getReason
+
+Return the combined set of reasons, or `null` if there are none.
+
+[#appendReason]
+=== appendReason
+
+Appends reasons.
+
+[#plus]
+=== plus
+
+Combines sets of reasons from another.
 

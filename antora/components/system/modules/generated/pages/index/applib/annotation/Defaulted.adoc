@@ -15,20 +15,32 @@ This possibly seems a little tortuous. The more obvious means to provide a defau
 }
 ----
 
-<.> `[teal]#*_defaultsProviderName_*#` : `String`
+<.> xref:#defaultsProviderName[defaultsProviderName]
 +
 --
+The fully qualified name of a class that implements the xref:system:generated:index/applib/adapters/DefaultsProvider.adoc[DefaultsProvider] interface.
+--
+<.> xref:#defaultsProviderClass[defaultsProviderClass]
++
+--
+As per _#defaultsProviderName()_ , but specifying a class literal rather than a fully qualified class name.
+--
+
+== Members
+
+[#defaultsProviderName]
+=== defaultsProviderName
+
 The fully qualified name of a class that implements the xref:system:generated:index/applib/adapters/DefaultsProvider.adoc[DefaultsProvider] interface.
 
 This is optional because some implementations may pick up the defaults provider via a configuration file, or via the equivalent _#defaultsProviderClass()_ .
 
 Implementation note: the default value provided here is simply an empty string because `null` is not a valid default.
---
-<.> `[teal]#*_defaultsProviderClass_*#` : `Class<?>`
-+
---
+
+[#defaultsProviderClass]
+=== defaultsProviderClass
+
 As per _#defaultsProviderName()_ , but specifying a class literal rather than a fully qualified class name.
 
 Implementation note: the default value provided here is simply the xref:system:generated:index/applib/annotation/Defaulted.adoc[Defaulted] 's own class, because `null` is not a valid default.
---
 

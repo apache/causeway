@@ -21,9 +21,16 @@ interface QueryResultsCache {
 }
 ----
 
-<.> `[teal]#*onTransactionEnded*#()` : `void`
+<.> xref:#onTransactionEnded[onTransactionEnded]
 +
 --
 Not API, for framework use only.
 --
+
+== Members
+
+[#onTransactionEnded]
+=== onTransactionEnded
+
+Not API, for framework use only.
 

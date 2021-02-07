@@ -18,19 +18,36 @@ class ContentNegotiationServiceForRestfulObjectsV1_0 {
 }
 ----
 
-<.> `[teal]#*buildResponseTo*#(IResourceContext resourceContext, ManagedObject objectAdapter, xref:system:generated:index/viewer/restfulobjects/applib/JsonRepresentation.adoc[JsonRepresentation] representationIfAnyRequired, xref:system:generated:index/viewer/restfulobjects/applib/JsonRepresentation.adoc[JsonRepresentation] rootRepresentation)` : `ResponseBuilder`
+<.> xref:#buildResponseTo[buildResponseTo]
 +
 --
 Not API
 --
-<.> `[teal]#*buildResponseTo*#(IResourceContext resourceContext, ManagedCollection objectAndCollection, xref:system:generated:index/viewer/restfulobjects/applib/JsonRepresentation.adoc[JsonRepresentation] representation, xref:system:generated:index/viewer/restfulobjects/applib/JsonRepresentation.adoc[JsonRepresentation] rootRepresentation)` : `ResponseBuilder`
+<.> xref:#buildResponseTo[buildResponseTo]
 +
 --
 Not API
 --
-<.> `[teal]#*buildResponseTo*#(IResourceContext resourceContext, ObjectAndActionInvocation objectAndActionInvocation, xref:system:generated:index/viewer/restfulobjects/applib/JsonRepresentation.adoc[JsonRepresentation] representation, xref:system:generated:index/viewer/restfulobjects/applib/JsonRepresentation.adoc[JsonRepresentation] rootRepresentation)` : `ResponseBuilder`
+<.> xref:#buildResponseTo[buildResponseTo]
 +
 --
 Not API
 --
+
+== Members
+
+[#buildResponseTo]
+=== buildResponseTo
+
+Not API
+
+[#buildResponseTo]
+=== buildResponseTo
+
+Not API
+
+[#buildResponseTo]
+=== buildResponseTo
+
+Not API
 

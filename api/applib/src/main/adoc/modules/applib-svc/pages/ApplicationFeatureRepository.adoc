@@ -13,7 +13,7 @@ Provides the access to string representations of the packages, classes and class
 include::system:generated:page$index/applib/services/appfeat/ApplicationMemberType.adoc[leveloffset=+2]
 
 
-// TODO - v2 to reconcile with .java (or maybe just delete)
+// TODO - v2 (reconcile/move into javadoc).
 
 //where `ApplicationMemberType` in turn is:
 //

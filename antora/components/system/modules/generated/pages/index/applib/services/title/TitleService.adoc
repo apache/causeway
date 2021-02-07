@@ -11,14 +11,26 @@ interface TitleService {
 }
 ----
 
-<.> `[teal]#*titleOf*#(Object domainObject)` : `String`
+<.> xref:#titleOf[titleOf]
 +
 --
 Return the title of the object, as rendered in the UI by the Isis viewers.
 --
-<.> `[teal]#*iconNameOf*#(Object domainObject)` : `String`
+<.> xref:#iconNameOf[iconNameOf]
 +
 --
 Return the icon name of the object, as rendered in the UI by the Isis viewers.
 --
+
+== Members
+
+[#titleOf]
+=== titleOf
+
+Return the title of the object, as rendered in the UI by the Isis viewers.
+
+[#iconNameOf]
+=== iconNameOf
+
+Return the icon name of the object, as rendered in the UI by the Isis viewers.
 

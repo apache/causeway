@@ -13,9 +13,16 @@ class BS3ElementAbstract {
 }
 ----
 
-<.> `[teal]#*getCssClass*#()` : `String`
+<.> xref:#getCssClass[getCssClass]
 +
 --
 Any additional CSS classes to render on the page element corresponding to this object, eg as per theBootstrap mixinsor just for custom styling.
 --
+
+== Members
+
+[#getCssClass]
+=== getCssClass
+
+Any additional CSS classes to render on the page element corresponding to this object, eg as per theBootstrap mixinsor just for custom styling.
 

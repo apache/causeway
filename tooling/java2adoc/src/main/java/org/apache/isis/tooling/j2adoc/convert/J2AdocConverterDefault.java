@@ -18,6 +18,9 @@
  */
 package org.apache.isis.tooling.j2adoc.convert;
 
+import java.util.Collections;
+import java.util.List;
+
 import com.github.javaparser.ast.body.AnnotationMemberDeclaration;
 import com.github.javaparser.ast.body.ConstructorDeclaration;
 import com.github.javaparser.ast.body.EnumConstantDeclaration;
@@ -27,11 +30,13 @@ import com.github.javaparser.javadoc.Javadoc;
 import com.github.javaparser.javadoc.description.JavadocInlineTag;
 
 import org.asciidoctor.ast.Document;
+import org.asciidoctor.ast.StructuralNode;
 
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal._Constants;
 import org.apache.isis.tooling.j2adoc.J2AdocContext;
 import org.apache.isis.tooling.j2adoc.J2AdocUnit;
+import org.apache.isis.tooling.j2adoc.format.MemberFormatter;
 import org.apache.isis.tooling.javamodel.ast.AnnotationMemberDeclarations;
 import org.apache.isis.tooling.javamodel.ast.ConstructorDeclarations;
 import org.apache.isis.tooling.javamodel.ast.EnumConstantDeclarations;
@@ -39,6 +44,7 @@ import org.apache.isis.tooling.javamodel.ast.FieldDeclarations;
 import org.apache.isis.tooling.javamodel.ast.Javadocs;
 import org.apache.isis.tooling.javamodel.ast.MethodDeclarations;
 import org.apache.isis.tooling.model4adoc.AsciiDocFactory;
+import org.apache.isis.tooling.model4adoc.ast.SimpleBlock;
 
 import lombok.NonNull;
 import lombok.val;
@@ -66,7 +72,7 @@ public final class J2AdocConverterDefault extends J2AdocConverterAbstract {
                 ? j2aContext.getDeprecatedStaticMemberNameFormat()
                 : j2aContext.getStaticMemberNameFormat();
 
-        val annotMemberFormat =  j2aContext.getFormatter().getAnnotationMemberFormat();
+        val annotMemberFormat =  new MemberFormatter(){}.getAnnotationMemberFormat();
 
         return String.format(annotMemberFormat,
                 type(amd.getType(), unit),
@@ -85,7 +91,7 @@ public final class J2AdocConverterDefault extends J2AdocConverterAbstract {
                 ? j2aContext.getDeprecatedStaticMemberNameFormat()
                 : j2aContext.getStaticMemberNameFormat();
 
-        val enumConstFormat =  j2aContext.getFormatter().getEnumConstantFormat();
+        val enumConstFormat =  new MemberFormatter(){}.getEnumConstantFormat();
 
         return String.format(enumConstFormat,
                 String.format(memberNameFormat, EnumConstantDeclarations.asNormalized(ecd)));
@@ -110,7 +116,7 @@ public final class J2AdocConverterDefault extends J2AdocConverterAbstract {
                         ? j2aContext.getStaticMemberNameFormat()
                         : j2aContext.getMemberNameFormat();
 
-        val fieldFormat =  j2aContext.getFormatter().getFieldFormat();
+        val fieldFormat =  new MemberFormatter(){}.getFieldFormat();
 
         return String.format(fieldFormat,
                 type(fd.getCommonType(), unit),
@@ -141,8 +147,8 @@ public final class J2AdocConverterDefault extends J2AdocConverterAbstract {
         val isGenericMember = !typeParams.isEmpty();
 
         val constructorFormat = isGenericMember
-                ? j2aContext.getFormatter().getGenericConstructorFormat()
-                : j2aContext.getFormatter().getConstructorFormat();
+                ? new MemberFormatter(){}.getGenericConstructorFormat()
+                : new MemberFormatter(){}.getConstructorFormat();
 
         val args = Can.<Object>of(
                 isGenericMember ? typeParameters(typeParams) : null,  // Cans do ignored null
@@ -177,8 +183,8 @@ public final class J2AdocConverterDefault extends J2AdocConverterAbstract {
         val isGenericMember = !typeParams.isEmpty();
 
         val methodFormat = isGenericMember
-                ? j2aContext.getFormatter().getGenericMethodFormat()
-                : j2aContext.getFormatter().getMethodFormat();
+                ? new MemberFormatter(){}.getGenericMethodFormat()
+                : new MemberFormatter(){}.getMethodFormat();
 
         val args = Can.<Object>of(
                 isGenericMember ? typeParameters(typeParams) : null,  // Cans do ignored null
@@ -194,7 +200,8 @@ public final class J2AdocConverterDefault extends J2AdocConverterAbstract {
     @Override
     public Document javadoc(
             final @NonNull Javadoc javadoc,
-            final @NonNull J2AdocUnit unit) {
+            final @NonNull J2AdocUnit unit,
+            final @NonNull Mode mode) {
 
         val doc = AsciiDocFactory.doc();
 
@@ -210,9 +217,30 @@ public final class J2AdocConverterDefault extends J2AdocConverterAbstract {
 
         val descriptionAdoc = javadocDescription(javadoc.getDescription(), unit);
 
-        doc.getBlocks().addAll(descriptionAdoc.getBlocks());
+        val blocks = descriptionAdoc.getBlocks();
+        appendBlocks(mode, doc, blocks);
 
         return doc;
+    }
+
+    private void appendBlocks(Mode mode, Document doc, List<StructuralNode> blocks) {
+        if (blocks.isEmpty()) {
+            return;
+        }
+        final StructuralNode block = blocks.get(0);
+
+        if (mode == Mode.FIRST_PARA_ONLY) {
+            if (block instanceof SimpleBlock) {
+                final SimpleBlock simpleBlock = (SimpleBlock) block;
+                final List<String> lines = simpleBlock.getLines();
+                if (!lines.isEmpty()) {
+                    AsciiDocFactory.block(doc).setLines(Collections.singletonList(lines.get(0)));
+                    return;
+                }
+            }
+        }
+
+        doc.getBlocks().addAll(blocks);
     }
 
     protected String inlineTag(

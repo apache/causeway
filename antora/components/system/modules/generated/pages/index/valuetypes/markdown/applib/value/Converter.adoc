@@ -10,9 +10,17 @@ class Converter {
 }
 ----
 
-<.> `[teal]#*_mdToHtml_*#(String markdown)` : `String`
+<.> xref:#mdToHtml[mdToHtml]
 +
 --
+For syntax highlighting to work, the client/browser needs to load specific java-script and css.
+--
+
+== Members
+
+[#mdToHtml]
+=== mdToHtml
+
 For syntax highlighting to work, the client/browser needs to load specific java-script and css.
 
 1) In your web-app's _scripts/application.js_ include the bundled _src/main/resources/prism1.14.js_ .
@@ -35,5 +43,4 @@ includeJs("/scripts/prism1.14.js");
 
  _@import "prism.css"_ .
 ----
---
 

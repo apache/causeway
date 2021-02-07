@@ -26,34 +26,66 @@ final String typeLiteral;
 }
 ----
 
-<.> `[teal]#*_OBJECT_*#`
+<.> xref:#OBJECT[OBJECT]
 +
 --
 The media type used as content-Type header when a domain object is rendered.
 --
-<.> `[teal]#*_OBJECT_COLLECTION_*#`
+<.> xref:#OBJECT_COLLECTION[OBJECT_COLLECTION]
 +
 --
 The media type used as content-Type header when a parented collection is rendered.
 --
-<.> `[teal]#*_LIST_*#`
+<.> xref:#LIST[LIST]
 +
 --
 The media type used as content-Type header when a standalone collection is rendered.
 --
-<.> `[teal]#*_VALUE_*#`
+<.> xref:#VALUE[VALUE]
 +
 --
 The media type used as content-Type header when a single (nullable) value is rendered.
 --
-<.> `[teal]#*_VALUES_*#`
+<.> xref:#VALUES[VALUES]
 +
 --
 The media type used as content-Type header when a list of values is rendered.
 --
-<.> `[teal]#*_VOID_*#`
+<.> xref:#VOID[VOID]
 +
 --
 The media type used as content-Type header when a void action result is rendered.
 --
+
+== Members
+
+[#OBJECT]
+=== OBJECT
+
+The media type used as content-Type header when a domain object is rendered.
+
+[#OBJECT_COLLECTION]
+=== OBJECT_COLLECTION
+
+The media type used as content-Type header when a parented collection is rendered.
+
+[#LIST]
+=== LIST
+
+The media type used as content-Type header when a standalone collection is rendered.
+
+[#VALUE]
+=== VALUE
+
+The media type used as content-Type header when a single (nullable) value is rendered.
+
+[#VALUES]
+=== VALUES
+
+The media type used as content-Type header when a list of values is rendered.
+
+[#VOID]
+=== VOID
+
+The media type used as content-Type header when a void action result is rendered.
 

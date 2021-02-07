@@ -12,9 +12,16 @@ interface BookmarkUiService {
 }
 ----
 
-<.> `[teal]#*clear*#()` : `void`
+<.> xref:#clear[clear]
 +
 --
 Simply clears the current list of breadcrumbs and bookmarks.
 --
+
+== Members
+
+[#clear]
+=== clear
+
+Simply clears the current list of breadcrumbs and bookmarks.
 

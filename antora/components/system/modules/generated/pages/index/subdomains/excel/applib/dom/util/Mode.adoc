@@ -11,14 +11,26 @@ enum Mode {
 }
 ----
 
-<.> `[teal]#*_STRICT_*#`
+<.> xref:#STRICT[STRICT]
 +
 --
 All cells must be well formed and with valid data
 --
-<.> `[teal]#*_RELAXED_*#`
+<.> xref:#RELAXED[RELAXED]
 +
 --
 Ignore any cells that cannot be interpreted.
 --
+
+== Members
+
+[#STRICT]
+=== STRICT
+
+All cells must be well formed and with valid data
+
+[#RELAXED]
+=== RELAXED
+
+Ignore any cells that cannot be interpreted.
 

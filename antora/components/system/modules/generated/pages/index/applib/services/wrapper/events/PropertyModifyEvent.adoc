@@ -15,9 +15,16 @@ class PropertyModifyEvent {
 }
 ----
 
-<.> `[teal]#*getProposed*#()` : `Object`
+<.> xref:#getProposed[getProposed]
 +
 --
 If `null` , then the property was cleared.
 --
+
+== Members
+
+[#getProposed]
+=== getProposed
+
+If `null` , then the property was cleared.
 

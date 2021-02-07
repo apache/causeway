@@ -28,51 +28,88 @@ enum BeanSort {
 }
 ----
 
-<.> `[teal]#*_VIEW_MODEL_*#`
+<.> xref:#VIEW_MODEL[VIEW_MODEL]
 +
 --
+Stateful object, with a state that can be marshaled and unmarshaled.
+--
+<.> xref:#ENTITY[ENTITY]
++
+--
+Persistable object, associated with a persistence layer/context.
+--
+<.> xref:#MANAGED_BEAN_CONTRIBUTING[MANAGED_BEAN_CONTRIBUTING]
++
+--
+Injectable object, associated with a lifecycle context (application-scoped, request-scoped, ...).
+--
+<.> xref:#MANAGED_BEAN_NOT_CONTRIBUTING[MANAGED_BEAN_NOT_CONTRIBUTING]
++
+--
+Injectable object, associated with a lifecycle context (application-scoped, request-scoped, ...).
+--
+<.> xref:#MIXIN[MIXIN]
++
+--
+Object associated with an 'entity' or 'bean' to act as contributer of domain actions or properties. Might also be stateful similar to VIEW_MODEL.
+--
+<.> xref:#VALUE[VALUE]
++
+--
+Immutable, serializable object.
+--
+<.> xref:#COLLECTION[COLLECTION]
++
+--
+Container of objects.
+--
+
+== Members
+
+[#VIEW_MODEL]
+=== VIEW_MODEL
+
 Stateful object, with a state that can be marshaled and unmarshaled.
 
 Includes classes annotated with _@DomainObject_ , when *not* associated with a persistence layer.
 
 see also _#ENTITY_
---
-<.> `[teal]#*_ENTITY_*#`
-+
---
+
+[#ENTITY]
+=== ENTITY
+
 Persistable object, associated with a persistence layer/context.
 
 Includes classes annotated with _@DomainObject_ , when associated with a persistence layer.
 
 see also _#VIEW_MODEL_
---
-<.> `[teal]#*_MANAGED_BEAN_CONTRIBUTING_*#`
-+
---
+
+[#MANAGED_BEAN_CONTRIBUTING]
+=== MANAGED_BEAN_CONTRIBUTING
+
 Injectable object, associated with a lifecycle context (application-scoped, request-scoped, ...).
 
 to be introspected: YES
---
-<.> `[teal]#*_MANAGED_BEAN_NOT_CONTRIBUTING_*#`
-+
---
+
+[#MANAGED_BEAN_NOT_CONTRIBUTING]
+=== MANAGED_BEAN_NOT_CONTRIBUTING
+
 Injectable object, associated with a lifecycle context (application-scoped, request-scoped, ...).
 
 to be introspected: NO
---
-<.> `[teal]#*_MIXIN_*#`
-+
---
+
+[#MIXIN]
+=== MIXIN
+
 Object associated with an 'entity' or 'bean' to act as contributer of domain actions or properties. Might also be stateful similar to VIEW_MODEL.
---
-<.> `[teal]#*_VALUE_*#`
-+
---
+
+[#VALUE]
+=== VALUE
+
 Immutable, serializable object.
---
-<.> `[teal]#*_COLLECTION_*#`
-+
---
+
+[#COLLECTION]
+=== COLLECTION
+
 Container of objects.
---
 

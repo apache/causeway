@@ -23,13 +23,20 @@ class Clob {
 }
 ----
 
-<.> `[teal]#*_of_*#(String name, CommonMimeType mimeType, CharSequence content)` : `xref:system:generated:index/applib/value/Clob.adoc[Clob]`
+<.> xref:#of[of]
 +
 --
+Returns a new xref:system:generated:index/applib/value/Clob.adoc[Clob] of given _name_ , _mimeType_ and _content_ .
+--
+
+== Members
+
+[#of]
+=== of
+
 Returns a new xref:system:generated:index/applib/value/Clob.adoc[Clob] of given _name_ , _mimeType_ and _content_ .
 
 _name_ may or may not include the desired filename extension, it is guaranteed, that the resulting xref:system:generated:index/applib/value/Clob.adoc[Clob] has the appropriate extension as constraint by the given _mimeType_ .
 
 For more fine-grained control use one of the xref:system:generated:index/applib/value/Clob.adoc[Clob] constructors directly.
---
 

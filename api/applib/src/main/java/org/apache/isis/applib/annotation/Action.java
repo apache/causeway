@@ -83,7 +83,10 @@ public @interface Action {
      * </p>
      *
      * <p>
-     *     For example <code>@Action(associateWith="items", associateWithSequence="2.1")</code>
+     *     For example:
+     *     <pre>
+     *         @Action(associateWith="items", associateWithSequence="2.1")
+ *         </pre>
      * </p>
      */
     String associateWithSequence()
@@ -109,7 +112,7 @@ public @interface Action {
 
     /**
      * Indicates that an invocation of the action should be posted to the
-     * {@link org.apache.isis.applib.services.eventbus.EventBusService event bus} using a custom (subclass of)
+     * {@link org.apache.isis.applib.services.eventbus.EventBusService} using a custom (subclass of)
      * {@link org.apache.isis.applib.events.domain.ActionDomainEvent}.
      *
      * <p>For example:

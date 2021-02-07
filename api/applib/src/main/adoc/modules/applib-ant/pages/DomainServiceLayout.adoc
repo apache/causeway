@@ -6,20 +6,6 @@
 include::system:generated:page$index/applib/annotation/DomainServiceLayout.adoc[]
 
 
-// TODO - v2 to reconcile with .java (or maybe just delete)
-
-//<.> xref:refguide:applib-ant:DomainServiceLayout.adoc#menuBar[`menuBar()`]
-//+
-//The menubar in which the menu that holds this service's actions should reside:
-//+
-//[source,java]
-//----
-//include::refguide:applib-ant:example$annotation/DomainServiceLayout.java[tags="refguide-menu-bar",indent=0]
-//----
-//
-//<.> xref:refguide:applib-ant:DomainServiceLayout.adoc#named[`named()`]
-//+
-//Name of this class (overriding the name derived from its name in code)
 
 
 For example:
@@ -43,7 +29,3 @@ You will also find some additional material in the xref:userguide:fun:ui.adoc#me
 ====
 
 
-// TODO - to review for v2 (perhaps move into javadoc and make 'projdoc' more sophisticated).
-
-//include::DomainServiceLayout/menuBar.adoc[leveloffset=+1]
-//include::DomainServiceLayout/named.adoc[leveloffset=+1]

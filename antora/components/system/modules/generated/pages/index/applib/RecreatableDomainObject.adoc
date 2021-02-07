@@ -15,18 +15,30 @@ interface RecreatableDomainObject {
 }
 ----
 
-<.> `[teal]#*__isis_memento*#()` : `String`
+<.> xref:#__isis_memento[__isis_memento]
 +
 --
+Obtain a memento of the recreatable object.
+--
+<.> xref:#__isis_recreate[__isis_recreate]
++
+--
+Used to recreate a recreatable object with a memento obtained from _#__isis_recreate(String)_ .
+--
+
+== Members
+
+[#__isis_memento]
+=== __isis_memento
+
 Obtain a memento of the recreatable object.
 
 Typically this will be the identifier of a backing domain entity, but it could also be an arbitrary string, for example a bunch of JSON.
 
 This method is called by the framework in order that the view model may be recreated subsequently through _#__isis_recreate(String)_ .
---
-<.> `[teal]#*__isis_recreate*#(String memento)` : `void`
-+
---
+
+[#__isis_recreate]
+=== __isis_recreate
+
 Used to recreate a recreatable object with a memento obtained from _#__isis_recreate(String)_ .
---
 

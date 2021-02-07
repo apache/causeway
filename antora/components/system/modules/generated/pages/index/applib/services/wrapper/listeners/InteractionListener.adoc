@@ -25,102 +25,184 @@ interface InteractionListener {
 }
 ----
 
-<.> `[teal]#*objectTitleRead*#(xref:system:generated:index/applib/services/wrapper/events/ObjectTitleEvent.adoc[ObjectTitleEvent] ev)` : `void`
+<.> xref:#objectTitleRead[objectTitleRead]
 +
 --
 The title was read.
 --
-<.> `[teal]#*objectPersisted*#(xref:system:generated:index/applib/services/wrapper/events/ObjectValidityEvent.adoc[ObjectValidityEvent] ev)` : `void`
+<.> xref:#objectPersisted[objectPersisted]
 +
 --
 The object was persisted (or an attempt to persist it was made).
 --
-<.> `[teal]#*propertyVisible*#(xref:system:generated:index/applib/services/wrapper/events/PropertyVisibilityEvent.adoc[PropertyVisibilityEvent] ev)` : `void`
+<.> xref:#propertyVisible[propertyVisible]
 +
 --
 A check was made to determine if a property was visible.
 --
-<.> `[teal]#*propertyUsable*#(xref:system:generated:index/applib/services/wrapper/events/PropertyUsabilityEvent.adoc[PropertyUsabilityEvent] ev)` : `void`
+<.> xref:#propertyUsable[propertyUsable]
 +
 --
 A check was made to determine if a property was usable.
 --
-<.> `[teal]#*propertyAccessed*#(xref:system:generated:index/applib/services/wrapper/events/PropertyAccessEvent.adoc[PropertyAccessEvent] ev)` : `void`
+<.> xref:#propertyAccessed[propertyAccessed]
 +
 --
 A property was read.
-
-Unlike most other events, a xref:system:generated:index/applib/services/wrapper/events/PropertyAccessEvent.adoc[PropertyAccessEvent] will never have been vetoed (that is, _PropertyAccessEvent#isVeto()_ will always be `false` ).
 --
-<.> `[teal]#*propertyModified*#(xref:system:generated:index/applib/services/wrapper/events/PropertyModifyEvent.adoc[PropertyModifyEvent] ev)` : `void`
+<.> xref:#propertyModified[propertyModified]
 +
 --
 A property was modified (or an attempt to modify it was made)
-
-Use _PropertyModifyEvent#getProposed()_ to determine whether the property was being set or cleared.
 --
-<.> `[teal]#*collectionVisible*#(CollectionVisibilityEvent ev)` : `void`
+<.> xref:#collectionVisible[collectionVisible]
 +
 --
 A check was made to determine if a collection was visible.
-
-Will be fired prior to _#collectionUsable(CollectionUsabilityEvent)_ .
 --
-<.> `[teal]#*collectionUsable*#(xref:system:generated:index/applib/services/wrapper/events/CollectionUsabilityEvent.adoc[CollectionUsabilityEvent] ev)` : `void`
+<.> xref:#collectionUsable[collectionUsable]
 +
 --
 A check was made to determine if a collection was usable.
-
-Will be fired prior to either _#collectionAccessed(CollectionAccessEvent)_ or _#collectionAddedTo(CollectionAddToEvent)_ or _#collectionRemovedFrom(CollectionRemoveFromEvent)_ .
 --
-<.> `[teal]#*collectionAccessed*#(xref:system:generated:index/applib/services/wrapper/events/CollectionAccessEvent.adoc[CollectionAccessEvent] ev)` : `void`
+<.> xref:#collectionAccessed[collectionAccessed]
 +
 --
 A collection was read.
-
-Unlike most other events, a xref:system:generated:index/applib/services/wrapper/events/CollectionAccessEvent.adoc[CollectionAccessEvent] will never have been vetoed (that is, _CollectionAccessEvent#isVeto()_ will always be `false` ).
 --
-<.> `[teal]#*collectionAddedTo*#(xref:system:generated:index/applib/services/wrapper/events/CollectionAddToEvent.adoc[CollectionAddToEvent] ev)` : `void`
+<.> xref:#collectionAddedTo[collectionAddedTo]
 +
 --
 An object was added to the collection (or an attempt to add it was made).
 --
-<.> `[teal]#*collectionRemovedFrom*#(xref:system:generated:index/applib/services/wrapper/events/CollectionRemoveFromEvent.adoc[CollectionRemoveFromEvent] ev)` : `void`
+<.> xref:#collectionRemovedFrom[collectionRemovedFrom]
 +
 --
 An object was removed from the collection (or an attempt to remove it was made).
 --
-<.> `[teal]#*collectionMethodInvoked*#(xref:system:generated:index/applib/services/wrapper/events/CollectionMethodEvent.adoc[CollectionMethodEvent] interactionEvent)` : `void`
+<.> xref:#collectionMethodInvoked[collectionMethodInvoked]
 +
 --
 A method of a collection (such as `isEmpty()` or `size()` ) has been invoked.
-
-Unlike the other methods in this interface, the source of these events will be an instance of a Collection (such as `java.util.List` ) rather than the domain object. (The domain object is _CollectionMethodEvent#getDomainObject()_ still available, however).
 --
-<.> `[teal]#*actionVisible*#(xref:system:generated:index/applib/services/wrapper/events/ActionVisibilityEvent.adoc[ActionVisibilityEvent] interactionEvent)` : `void`
+<.> xref:#actionVisible[actionVisible]
 +
 --
 A check was made to determine if an action was visible.
-
-Will be fired prior to _#actionUsable(ActionUsabilityEvent)_ .
 --
-<.> `[teal]#*actionUsable*#(xref:system:generated:index/applib/services/wrapper/events/ActionUsabilityEvent.adoc[ActionUsabilityEvent] ev)` : `void`
+<.> xref:#actionUsable[actionUsable]
 +
 --
 A check was made to determine if an action was usable.
-
-Will be fired prior to _#actionArgument(ActionArgumentEvent)_ .
 --
-<.> `[teal]#*actionArgument*#(xref:system:generated:index/applib/services/wrapper/events/ActionArgumentEvent.adoc[ActionArgumentEvent] ev)` : `void`
+<.> xref:#actionArgument[actionArgument]
 +
 --
 A check was made as to whether an argument proposed for an action was valid.
-
-Will be fired prior to _#actionInvoked(ActionInvocationEvent)_ .
 --
-<.> `[teal]#*actionInvoked*#(xref:system:generated:index/applib/services/wrapper/events/ActionInvocationEvent.adoc[ActionInvocationEvent] ev)` : `void`
+<.> xref:#actionInvoked[actionInvoked]
 +
 --
 An action was invoked (or an attempt to invoke it was made).
 --
+
+== Members
+
+[#objectTitleRead]
+=== objectTitleRead
+
+The title was read.
+
+[#objectPersisted]
+=== objectPersisted
+
+The object was persisted (or an attempt to persist it was made).
+
+[#propertyVisible]
+=== propertyVisible
+
+A check was made to determine if a property was visible.
+
+[#propertyUsable]
+=== propertyUsable
+
+A check was made to determine if a property was usable.
+
+[#propertyAccessed]
+=== propertyAccessed
+
+A property was read.
+
+Unlike most other events, a xref:system:generated:index/applib/services/wrapper/events/PropertyAccessEvent.adoc[PropertyAccessEvent] will never have been vetoed (that is, _PropertyAccessEvent#isVeto()_ will always be `false` ).
+
+[#propertyModified]
+=== propertyModified
+
+A property was modified (or an attempt to modify it was made)
+
+Use _PropertyModifyEvent#getProposed()_ to determine whether the property was being set or cleared.
+
+[#collectionVisible]
+=== collectionVisible
+
+A check was made to determine if a collection was visible.
+
+Will be fired prior to _#collectionUsable(CollectionUsabilityEvent)_ .
+
+[#collectionUsable]
+=== collectionUsable
+
+A check was made to determine if a collection was usable.
+
+Will be fired prior to either _#collectionAccessed(CollectionAccessEvent)_ or _#collectionAddedTo(CollectionAddToEvent)_ or _#collectionRemovedFrom(CollectionRemoveFromEvent)_ .
+
+[#collectionAccessed]
+=== collectionAccessed
+
+A collection was read.
+
+Unlike most other events, a xref:system:generated:index/applib/services/wrapper/events/CollectionAccessEvent.adoc[CollectionAccessEvent] will never have been vetoed (that is, _CollectionAccessEvent#isVeto()_ will always be `false` ).
+
+[#collectionAddedTo]
+=== collectionAddedTo
+
+An object was added to the collection (or an attempt to add it was made).
+
+[#collectionRemovedFrom]
+=== collectionRemovedFrom
+
+An object was removed from the collection (or an attempt to remove it was made).
+
+[#collectionMethodInvoked]
+=== collectionMethodInvoked
+
+A method of a collection (such as `isEmpty()` or `size()` ) has been invoked.
+
+Unlike the other methods in this interface, the source of these events will be an instance of a Collection (such as `java.util.List` ) rather than the domain object. (The domain object is _CollectionMethodEvent#getDomainObject()_ still available, however).
+
+[#actionVisible]
+=== actionVisible
+
+A check was made to determine if an action was visible.
+
+Will be fired prior to _#actionUsable(ActionUsabilityEvent)_ .
+
+[#actionUsable]
+=== actionUsable
+
+A check was made to determine if an action was usable.
+
+Will be fired prior to _#actionArgument(ActionArgumentEvent)_ .
+
+[#actionArgument]
+=== actionArgument
+
+A check was made as to whether an argument proposed for an action was valid.
+
+Will be fired prior to _#actionInvoked(ActionInvocationEvent)_ .
+
+[#actionInvoked]
+=== actionInvoked
+
+An action was invoked (or an attempt to invoke it was made).
 

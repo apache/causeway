@@ -30,40 +30,72 @@ class FieldSet {
 }
 ----
 
-<.> `[teal]#*getId*#()` : `String`
+<.> xref:#getId[getId]
 +
 --
 As per <div id="...">...</div> : must be unique across entire page.
 --
-<.> `[teal]#*isUnreferencedActions*#()` : `Boolean`
+<.> xref:#isUnreferencedActions[isUnreferencedActions]
 +
 --
 Whether this fieldset should be used to hold any unreferenced actions (contributed or "native").
-
-Any layout must have precisely one fieldset or xref:system:generated:index/applib/layout/grid/bootstrap3/BS3Col.adoc[BS3Col] that has this attribute set.
 --
-<.> `[teal]#*isUnreferencedProperties*#()` : `Boolean`
+<.> xref:#isUnreferencedProperties[isUnreferencedProperties]
 +
 --
 Whether this fieldset should be used to hold any unreferenced properties (contributed or "native").
-
-Any grid layout must have precisely one fieldset that has this attribute set.
 --
-<.> `[teal]#*getName*#()` : `String`
+<.> xref:#getName[getName]
 +
 --
 Corresponds to the _MemberOrder#name()_ (when applied to properties).
 --
-<.> `[teal]#*getOwner*#()` : `xref:system:generated:index/applib/layout/component/FieldSetOwner.adoc[FieldSetOwner]`
+<.> xref:#getOwner[getOwner]
 +
 --
 Owner.
-
-Set programmatically by framework after reading in from XML.
 --
-<.> `[teal]#*getMetadataError*#()` : `String`
+<.> xref:#getMetadataError[getMetadataError]
 +
 --
 For diagnostics; populated by the framework if and only if a metadata error.
 --
+
+== Members
+
+[#getId]
+=== getId
+
+As per <div id="...">...</div> : must be unique across entire page.
+
+[#isUnreferencedActions]
+=== isUnreferencedActions
+
+Whether this fieldset should be used to hold any unreferenced actions (contributed or "native").
+
+Any layout must have precisely one fieldset or xref:system:generated:index/applib/layout/grid/bootstrap3/BS3Col.adoc[BS3Col] that has this attribute set.
+
+[#isUnreferencedProperties]
+=== isUnreferencedProperties
+
+Whether this fieldset should be used to hold any unreferenced properties (contributed or "native").
+
+Any grid layout must have precisely one fieldset that has this attribute set.
+
+[#getName]
+=== getName
+
+Corresponds to the _MemberOrder#name()_ (when applied to properties).
+
+[#getOwner]
+=== getOwner
+
+Owner.
+
+Set programmatically by framework after reading in from XML.
+
+[#getMetadataError]
+=== getMetadataError
+
+For diagnostics; populated by the framework if and only if a metadata error.
 

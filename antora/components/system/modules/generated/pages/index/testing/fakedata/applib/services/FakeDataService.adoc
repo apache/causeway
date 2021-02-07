@@ -55,9 +55,16 @@ RepositoryService repositoryService;
 }
 ----
 
-<.> `[teal]#*javaFaker*#()` : `Faker`
+<.> xref:#javaFaker[javaFaker]
 +
 --
 Access to the full API of the underlying javafaker library.
 --
+
+== Members
+
+[#javaFaker]
+=== javaFaker
+
+Access to the full API of the underlying javafaker library.
 

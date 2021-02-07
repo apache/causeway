@@ -15,21 +15,38 @@ class TitleUiEvent {
 }
 ----
 
-<.> `[teal]#*TitleUiEvent*#()`
+<.> xref:#TitleUiEvent[TitleUiEvent]
 +
 --
 If used then the framework will set state via (non-API) setters.
-
-Because the _EventObject_ superclass prohibits a null source, a dummy value is temporarily used.
 --
-<.> `[teal]#*setTitle*#(String title)` : `void`
+<.> xref:#setTitle[setTitle]
 +
 --
 For subscribers to call to provide a (non-translated) title for this object.
 --
-<.> `[teal]#*setTranslatableTitle*#(xref:system:generated:index/applib/services/i18n/TranslatableString.adoc[TranslatableString] translatableTitle)` : `void`
+<.> xref:#setTranslatableTitle[setTranslatableTitle]
 +
 --
 For subscribers to call to provide a translatable (i18n) title for this object.
 --
+
+== Members
+
+[#TitleUiEvent]
+=== TitleUiEvent
+
+If used then the framework will set state via (non-API) setters.
+
+Because the _EventObject_ superclass prohibits a null source, a dummy value is temporarily used.
+
+[#setTitle]
+=== setTitle
+
+For subscribers to call to provide a (non-translated) title for this object.
+
+[#setTranslatableTitle]
+=== setTranslatableTitle
+
+For subscribers to call to provide a translatable (i18n) title for this object.
 

@@ -6,60 +6,8 @@
 include::system:generated:page$index/applib/annotation/Collection.adoc[]
 
 
-// TODO - v2 to reconcile with .java (or maybe just delete)
-
-//<.> xref:refguide:applib-ant:Collection.adoc#domainEvent[`domainEvent()`]
-//+
-//The event type to be posted to the xref:refguide:applib-svc:EventBusService.adoc[`EventBusService`] to broadcast the collection's business rule checking (hide, disable, validate) and its modification (before and after).
-//
-//<.> xref:refguide:applib-ant:Collection.adoc#hidden[`hidden()`]
-//+
-//Indicates where (in the UI) the collection should be hidden from the user.
-//
-//<.> xref:refguide:applib-ant:Collection.adoc#typeOf[`typeOf()`]
-//+
-//Hints as to the run-time type of the objects within that collection (as a fallback)
 
 
-For example:
-
-[source,java]
-----
-public class ToDoItem {
-    public static class DependenciesChangedEvent
-            extends CollectionDomainEvent<ToDoItem, ToDoItem> { } // <1>
-    @Collection(
-        domainEvent=DependenciesChangedEvent.class,
-        editing = Editing.ENABLED,
-        hidden = Where.NOWHERE,                                   // <2>
-        notPersisted = false,                                     // <3>
-        typeOf = ToDoItem.class                                   // <4>
-    )
-    public SortedSet<ToDoItem> getDependencies() { /* ... */ }
-    ...
-}
-----
-<1> can use no-arg constructor.
-<2> default value, so could be omitted
-<3> default value, so could be omitted
-<4> default value, so could be omitted
+include::Collection/hooks/examples-and-usage.adoc[]
 
 
-
-
-[TIP]
-====
-The annotation is one of a handful (others including xref:refguide:applib-ant:CollectionLayout.adoc[`@CollectionLayout`], xref:refguide:applib-ant:Property.adoc[`@Property`] and xref:refguide:applib-ant:PropertyLayout.adoc[`@PropertyLayout`]) that can also be applied to the field, rather than the getter method.
-This is so that boilerplate-busting tools such as link:https://projectlombok.org/[Project Lombok] can be used.
-====
-
-
-
-
-
-
-// TODO - to review for v2 (perhaps move into javadoc and make 'projdoc' more sophisticated).
-
-//include::Collection/domainEvent.adoc[leveloffset=+1]
-//include::Collection/hidden.adoc[leveloffset=+1]
-//include::Collection/typeOf.adoc[leveloffset=+1]

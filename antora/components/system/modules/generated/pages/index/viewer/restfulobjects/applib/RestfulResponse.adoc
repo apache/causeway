@@ -16,11 +16,18 @@ class RestfulResponse {
 }
 ----
 
-<.> `[teal]#*wraps*#<Q>(Class<Q> cls)` : `xref:system:generated:index/viewer/restfulobjects/applib/RestfulResponse.adoc[RestfulResponse]<Q>`
+<.> xref:#wraps[wraps]
 +
 --
 Convenience that recasts this response as wrapping some other representation.
+--
+
+== Members
+
+[#wraps]
+=== wraps
+
+Convenience that recasts this response as wrapping some other representation.
 
 This would typically be as the results of a content type being an error rather than a representation returned on success.
---
 

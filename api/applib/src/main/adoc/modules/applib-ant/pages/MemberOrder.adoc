@@ -6,30 +6,5 @@
 include::system:generated:page$index/applib/annotation/MemberOrder.adoc[]
 
 
-
-// TODO - v2 to reconcile with .java (or maybe just delete)
-
-//<.> xref:refguide:applib-ant:MemberOrder.adoc#name[`name()`]
-//+
-//Names a group of (property) members.
-//All properties with this name will be grouped together.
-//
-//<.> xref:refguide:applib-ant:MemberOrder.adoc#sequence[`sequence()`]
-//+
-//Defines an ordering for members, within their container.
-
-As this is an important topic, there is xref:userguide:fun:ui.adoc#object-layout[chapter] in the user guide that discusses object layout in full.
-
-
-[TIP]
-====
-The annotation is one of a handful (others including xref:refguide:applib-ant:Collection.adoc[`@Collection`], xref:refguide:applib-ant:CollectionLayout.adoc[`@CollectionLayout`], xref:refguide:applib-ant:Property.adoc[`@Property`]) and xref:refguide:applib-ant:PropertyLayout.adoc[`@PropertyLayout`] that can also be applied to the field, rather than the getter method.
- This is specifically so that boilerplate-busting tools such as link:https://projectlombok.org/[Project Lombok] can be used.
-====
-
-
-// TODO - to review for v2 (perhaps move into javadoc and make 'projdoc' more sophisticated).
-
-//include::MemberOrder/name.adoc[leveloffset=+1]
-//include::MemberOrder/sequence.adoc[leveloffset=+1]
+include::MemberOrder/hooks/examples-and-usage.adoc[]
 

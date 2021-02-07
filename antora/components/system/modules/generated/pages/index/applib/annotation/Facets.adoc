@@ -15,18 +15,30 @@ At least one named factory (as per _#facetFactoryNames()_ ) or one class factory
 }
 ----
 
-<.> `[teal]#*_facetFactoryNames_*#` : `String[]`
+<.> xref:#facetFactoryNames[facetFactoryNames]
 +
 --
 Array of fully qualified names of classes each implementing `org.apache.isis.core.metamodel.facets.FacetFactory` .
-
-Either the array provided by this method or by _#facetFactoryClasses()_ should be non-empty.
 --
-<.> `[teal]#*_facetFactoryClasses_*#` : `Class<?>[]`
+<.> xref:#facetFactoryClasses[facetFactoryClasses]
 +
 --
 Array of _Class_ s, each indicating a class implementing `org.apache.isis.core.metamodel.facets.FacetFactory` .
+--
+
+== Members
+
+[#facetFactoryNames]
+=== facetFactoryNames
+
+Array of fully qualified names of classes each implementing `org.apache.isis.core.metamodel.facets.FacetFactory` .
+
+Either the array provided by this method or by _#facetFactoryClasses()_ should be non-empty.
+
+[#facetFactoryClasses]
+=== facetFactoryClasses
+
+Array of _Class_ s, each indicating a class implementing `org.apache.isis.core.metamodel.facets.FacetFactory` .
 
 Either the array provided by this method or by _#facetFactoryNames()_ should be non-empty.
---
 

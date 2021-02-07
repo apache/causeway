@@ -25,49 +25,96 @@ class IndentPrinter {
 }
 ----
 
-<.> `[teal]#*IndentPrinter*#()`
+<.> xref:#IndentPrinter[IndentPrinter]
 +
 --
 Creates an IndentPrinter backed by a PrintWriter pointing to System.out, with an indent of two spaces.
 --
-<.> `[teal]#*IndentPrinter*#(Writer out)`
+<.> xref:#IndentPrinter[IndentPrinter]
 +
 --
 Creates an IndentPrinter backed by the supplied Writer, with an indent of two spaces.
 --
-<.> `[teal]#*IndentPrinter*#(Writer out, String indent)`
+<.> xref:#IndentPrinter[IndentPrinter]
 +
 --
 Creates an IndentPrinter backed by the supplied Writer, with a user-supplied String to be used for indenting.
 --
-<.> `[teal]#*IndentPrinter*#(Writer out, String indent, boolean addNewlines)`
+<.> xref:#IndentPrinter[IndentPrinter]
 +
 --
 Creates an IndentPrinter backed by the supplied Writer, with a user-supplied String to be used for indenting and the ability to override newline handling.
 --
-<.> `[teal]#*println*#(String text)` : `void`
+<.> xref:#println[println]
 +
 --
 Prints a string followed by an end of line character.
 --
-<.> `[teal]#*print*#(String text)` : `void`
+<.> xref:#print[print]
 +
 --
 Prints a string.
 --
-<.> `[teal]#*print*#(char c)` : `void`
+<.> xref:#print[print]
 +
 --
 Prints a character.
 --
-<.> `[teal]#*printIndent*#()` : `void`
+<.> xref:#printIndent[printIndent]
 +
 --
 Prints the current indent level.
 --
-<.> `[teal]#*println*#()` : `void`
+<.> xref:#println[println]
 +
 --
 Prints an end-of-line character (if enabled via addNewLines property). Defaults to outputting a single '\n' character but by using a custom Writer, e.g. PlatformLineWriter, you can get platform-specific end-of-line characters.
 --
+
+== Members
+
+[#IndentPrinter]
+=== IndentPrinter
+
+Creates an IndentPrinter backed by a PrintWriter pointing to System.out, with an indent of two spaces.
+
+[#IndentPrinter]
+=== IndentPrinter
+
+Creates an IndentPrinter backed by the supplied Writer, with an indent of two spaces.
+
+[#IndentPrinter]
+=== IndentPrinter
+
+Creates an IndentPrinter backed by the supplied Writer, with a user-supplied String to be used for indenting.
+
+[#IndentPrinter]
+=== IndentPrinter
+
+Creates an IndentPrinter backed by the supplied Writer, with a user-supplied String to be used for indenting and the ability to override newline handling.
+
+[#println]
+=== println
+
+Prints a string followed by an end of line character.
+
+[#print]
+=== print
+
+Prints a string.
+
+[#print]
+=== print
+
+Prints a character.
+
+[#printIndent]
+=== printIndent
+
+Prints the current indent level.
+
+[#println]
+=== println
+
+Prints an end-of-line character (if enabled via addNewLines property). Defaults to outputting a single '\n' character but by using a custom Writer, e.g. PlatformLineWriter, you can get platform-specific end-of-line characters.
 

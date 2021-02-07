@@ -18,5 +18,10 @@ interface ApplicationPermissionRepository {
 }
 ----
 
-<.> `[teal]#*newApplicationPermission*#()` : `P`
+<.> xref:#newApplicationPermission[newApplicationPermission]
+
+== Members
+
+[#newApplicationPermission]
+=== newApplicationPermission
 

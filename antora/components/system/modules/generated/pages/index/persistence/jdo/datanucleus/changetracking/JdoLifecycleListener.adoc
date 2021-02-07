@@ -30,14 +30,26 @@ class JdoLifecycleListener {
 }
 ----
 
-<.> `[teal]#*preClear*#(InstanceLifecycleEvent event)` : `void`
+<.> xref:#preClear[preClear]
 +
 --
 Does nothing, not important event for Isis to track.
 --
-<.> `[teal]#*postClear*#(InstanceLifecycleEvent event)` : `void`
+<.> xref:#postClear[postClear]
 +
 --
 Does nothing, not important event for Isis to track.
 --
+
+== Members
+
+[#preClear]
+=== preClear
+
+Does nothing, not important event for Isis to track.
+
+[#postClear]
+=== postClear
+
+Does nothing, not important event for Isis to track.
 

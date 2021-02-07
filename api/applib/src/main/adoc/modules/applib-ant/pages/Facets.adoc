@@ -7,4 +7,4 @@
 include::system:generated:page$index/applib/annotation/Facets.adoc[]
 
 
-`FacetFactory` is an important internal API that is used by Apache Isis to build the metamodel.
+include::Facets/hooks/examples-and-usage.adoc[]

@@ -1,0 +1,30 @@
+== Examples
+
+For example:
+
+[source,java]
+----
+public class Customer {
+    public static class EmailSpecification extends AbstractSpecification<String> {
+        public String satisfiesSafely(String proposed) {
+            return EmailUtil.ensureValidEmail(proposed);    // <.>
+        }
+    }
+    @Action(semantics=SemanticsOf.IDEMPOTENT)
+    public Customer updateEmail(
+        @Parameter(
+            maxLength=30,
+            mustSatisfy=EmailSpecification.class,
+            optionality=Optionality.OPTIONAL,
+            regexPattern = "(\\w+\\.)*\\w+@(\\w+\\.)+[A-Za-z]+",
+            regexPatternFlags=Pattern.CASE_INSENSITIVE
+        )
+        @ParameterLayout(named="New Email Address")
+        final String newEmailAddress
+        ...
+    }
+}
+----
+<.> the (fictitious) `EmailUtil.ensureValid(...)` (omitted for brevity) returns a string explaining if an email is invalid
+
+

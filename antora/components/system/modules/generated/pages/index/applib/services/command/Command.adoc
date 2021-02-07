@@ -24,33 +24,60 @@ class Command {
 }
 ----
 
-<.> `[teal]#*getUsername*#()` : `String`
+<.> xref:#getUsername[getUsername]
 +
 --
 The user that created the command.
-
-Derived from _#getCommandDto()_ 's _CommandDto#getUser()_
 --
-<.> `[teal]#*getTimestamp*#()` : `Timestamp`
+<.> xref:#getTimestamp[getTimestamp]
 +
 --
 The date/time at which this command was created.
-
-Derived from _#getCommandDto()_ 's _CommandDto#getTimestamp()_ .
 --
-<.> `[teal]#*getTarget*#()` : `xref:system:generated:index/applib/services/bookmark/Bookmark.adoc[Bookmark]`
+<.> xref:#getTarget[getTarget]
 +
 --
 Derived from _#getCommandDto()_ , is the xref:system:generated:index/applib/services/bookmark/Bookmark.adoc[Bookmark] of the target object (entity or service) on which this action/edit was performed.
 --
-<.> `[teal]#*getLogicalMemberIdentifier*#()` : `String`
+<.> xref:#getLogicalMemberIdentifier[getLogicalMemberIdentifier]
 +
 --
 Derived from _#getCommandDto()_ , holds a string representation of the invoked action, or the edited property.
 --
-<.> `[teal]#*updater*#()` : `Updater`
+<.> xref:#updater[updater]
 +
 --
  *NOT API* : intended to be called only by the framework.
 --
+
+== Members
+
+[#getUsername]
+=== getUsername
+
+The user that created the command.
+
+Derived from _#getCommandDto()_ 's _CommandDto#getUser()_
+
+[#getTimestamp]
+=== getTimestamp
+
+The date/time at which this command was created.
+
+Derived from _#getCommandDto()_ 's _CommandDto#getTimestamp()_ .
+
+[#getTarget]
+=== getTarget
+
+Derived from _#getCommandDto()_ , is the xref:system:generated:index/applib/services/bookmark/Bookmark.adoc[Bookmark] of the target object (entity or service) on which this action/edit was performed.
+
+[#getLogicalMemberIdentifier]
+=== getLogicalMemberIdentifier
+
+Derived from _#getCommandDto()_ , holds a string representation of the invoked action, or the edited property.
+
+[#updater]
+=== updater
+
+ *NOT API* : intended to be called only by the framework.
 

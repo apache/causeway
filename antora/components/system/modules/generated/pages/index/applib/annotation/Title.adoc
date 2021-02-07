@@ -17,24 +17,46 @@ If more than one property is used, the order can be specified (using the same De
 }
 ----
 
-<.> `[teal]#*_sequence_*#` : `String`
+<.> xref:#sequence[sequence]
 +
 --
 The order (in Dewey decimal notation) that the property annotated with xref:system:generated:index/applib/annotation/Title.adoc[Title] appears with respect to other properties also annotated with xref:system:generated:index/applib/annotation/Title.adoc[Title] .
 --
-<.> `[teal]#*_prepend_*#` : `String`
+<.> xref:#prepend[prepend]
 +
 --
 The string to use to separate this property from any preceding properties in the title.
 --
-<.> `[teal]#*_append_*#` : `String`
+<.> xref:#append[append]
 +
 --
 The string to append to this property if non-empty.
 --
-<.> `[teal]#*_abbreviatedTo_*#` : `int`
+<.> xref:#abbreviatedTo[abbreviatedTo]
 +
 --
 The length to abbreviate this title element to.
 --
+
+== Members
+
+[#sequence]
+=== sequence
+
+The order (in Dewey decimal notation) that the property annotated with xref:system:generated:index/applib/annotation/Title.adoc[Title] appears with respect to other properties also annotated with xref:system:generated:index/applib/annotation/Title.adoc[Title] .
+
+[#prepend]
+=== prepend
+
+The string to use to separate this property from any preceding properties in the title.
+
+[#append]
+=== append
+
+The string to append to this property if non-empty.
+
+[#abbreviatedTo]
+=== abbreviatedTo
+
+The length to abbreviate this title element to.
 

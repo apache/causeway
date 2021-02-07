@@ -2,7 +2,7 @@
 
 Indicates the position a method should be placed in.
 
-An alternative is to use the `Xxx.layout.xmlfile, where `Xxxis the domain object name.
+An alternative is to use the `Xxx.layout.xml` file, where `Xxx` is the domain object name.
 
 == API
 
@@ -15,18 +15,30 @@ An alternative is to use the `Xxx.layout.xmlfile, where `Xxxis the domain object
 }
 ----
 
-<.> `[teal]#*_name_*#` : `String`
+<.> xref:#name[name]
 +
 --
+Groups or associate members with each other.
+--
+<.> xref:#sequence[sequence]
++
+--
+The order of this member relative to other members in the same group, in Dewey-decimal notation. For collections this is relative to each other (collections aren't grouped).
+--
+
+== Members
+
+[#name]
+=== name
+
 Groups or associate members with each other.
 
 * For actions, indicates the property or collection to associate.
 * For properties, indicates the property group
 * For collections, currently has no meaning
---
-<.> `[teal]#*_sequence_*#` : `String`
-+
---
+
+[#sequence]
+=== sequence
+
 The order of this member relative to other members in the same group, in Dewey-decimal notation. For collections this is relative to each other (collections aren't grouped).
---
 

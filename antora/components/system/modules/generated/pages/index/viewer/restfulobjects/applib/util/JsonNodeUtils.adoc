@@ -12,9 +12,17 @@ class JsonNodeUtils {
 }
 ----
 
-<.> `[teal]#*_walkNodeUpTo_*#(ObjectNode node, List<String> keys)` : `ObjectNode`
+<.> xref:#walkNodeUpTo[walkNodeUpTo]
 +
 --
+Walks the path, ensuring keys exist and are maps, or creating required maps as it goes.
+--
+
+== Members
+
+[#walkNodeUpTo]
+=== walkNodeUpTo
+
 Walks the path, ensuring keys exist and are maps, or creating required maps as it goes.
 
 For example, if given a list ("a", "b", "c") and starting with an empty map, then will create:
@@ -30,5 +38,4 @@ For example, if given a list ("a", "b", "c") and starting with an empty map, the
   }
 }
 ----
---
 

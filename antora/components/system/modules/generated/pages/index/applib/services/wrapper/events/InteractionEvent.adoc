@@ -27,75 +27,143 @@ class InteractionEvent {
 }
 ----
 
-<.> `[teal]#*getSource*#()` : `Object`
+<.> xref:#getSource[getSource]
 +
 --
 The domain object (pojo) against which the interaction occurred.
 --
-<.> `[teal]#*getIdentifier*#()` : `xref:system:generated:index/applib/Identifier.adoc[Identifier]`
+<.> xref:#getIdentifier[getIdentifier]
 +
 --
 The xref:system:generated:index/applib/Identifier.adoc[Identifier] of the feature of the object being interacted with.
-
-Will be consistent with the subclass of xref:system:generated:index/applib/services/wrapper/events/InteractionEvent.adoc[InteractionEvent] . So for example a xref:system:generated:index/applib/services/wrapper/events/PropertyModifyEvent.adoc[PropertyModifyEvent] will have an xref:system:generated:index/applib/Identifier.adoc[Identifier] that identifies the property being modified.
 --
-<.> `[teal]#*getClassName*#()` : `String`
+<.> xref:#getClassName[getClassName]
 +
 --
 As per _#getClassName()_ , but naturalized.
 --
-<.> `[teal]#*getClassNaturalName*#()` : `String`
+<.> xref:#getClassNaturalName[getClassNaturalName]
 +
 --
 Convenience method that returns the _Identifier#getClassNaturalName() natural class name_ of the _#getIdentifier() identifier_ .
 --
-<.> `[teal]#*getMemberName*#()` : `String`
+<.> xref:#getMemberName[getMemberName]
 +
 --
 Convenience method that returns the _Identifier#getMemberName() member name_ of the _#getIdentifier() identifier_ .
 --
-<.> `[teal]#*getMemberNaturalName*#()` : `String`
+<.> xref:#getMemberNaturalName[getMemberNaturalName]
 +
 --
 As per _#getMemberName()_ , but naturalized.
 --
-<.> `[teal]#*getMemberParameterNames*#()` : `List<String>`
+<.> xref:#getMemberParameterNames[getMemberParameterNames]
 +
 --
 Convenience method that returns the _Identifier#getClassName() class name_ of the _#getIdentifier() identifier_ .
 --
-<.> `[teal]#*getMemberParameterNaturalNames*#()` : `List<String>`
+<.> xref:#getMemberParameterNaturalNames[getMemberParameterNaturalNames]
 +
 --
 As per _#getMemberParameterNames()_ , but naturalized.
 --
-<.> `[teal]#*getReason*#()` : `String`
+<.> xref:#getReason[getReason]
 +
 --
 The reason, if any, that this interaction may have been vetoed or otherwise disallowed.
-
-Intended to be _#advised(String, Class) set_ as a result of consulting one of the facets.
 --
-<.> `[teal]#*getReasonMessage*#()` : `String`
+<.> xref:#getReasonMessage[getReasonMessage]
 +
 --
 The reason message, if any, that this interaction may have been vetoed or otherwise disallowed.
-
-This message should be overridden by subclasses for containing the Reason, the Identifier and any other relevant context information.
 --
-<.> `[teal]#*getAdvisorClass*#()` : `Class<?>`
+<.> xref:#getAdvisorClass[getAdvisorClass]
 +
 --
 The class of the (first) advisor, if any, that provided the _#getReason() reason_ that this interaction is _#isVeto() vetoed_ .
 --
-<.> `[teal]#*advised*#(String reason, Class<?> advisorClass)` : `void`
+<.> xref:#advised[advised]
 +
 --
 Specify the _#getReason() reason_ that this interaction has been vetoed and the _#getAdvisorClass() class of the advisor_ that did the veto.
 --
-<.> `[teal]#*isVeto*#()` : `boolean`
+<.> xref:#isVeto[isVeto]
 +
 --
+Whether this interaction has been vetoed (meaning that _#getReason()_ and _#getAdvisorClass()_ will both be non- `null` and the _#getReason() reason_ non-empty.)
+--
+
+== Members
+
+[#getSource]
+=== getSource
+
+The domain object (pojo) against which the interaction occurred.
+
+[#getIdentifier]
+=== getIdentifier
+
+The xref:system:generated:index/applib/Identifier.adoc[Identifier] of the feature of the object being interacted with.
+
+Will be consistent with the subclass of xref:system:generated:index/applib/services/wrapper/events/InteractionEvent.adoc[InteractionEvent] . So for example a xref:system:generated:index/applib/services/wrapper/events/PropertyModifyEvent.adoc[PropertyModifyEvent] will have an xref:system:generated:index/applib/Identifier.adoc[Identifier] that identifies the property being modified.
+
+[#getClassName]
+=== getClassName
+
+As per _#getClassName()_ , but naturalized.
+
+[#getClassNaturalName]
+=== getClassNaturalName
+
+Convenience method that returns the _Identifier#getClassNaturalName() natural class name_ of the _#getIdentifier() identifier_ .
+
+[#getMemberName]
+=== getMemberName
+
+Convenience method that returns the _Identifier#getMemberName() member name_ of the _#getIdentifier() identifier_ .
+
+[#getMemberNaturalName]
+=== getMemberNaturalName
+
+As per _#getMemberName()_ , but naturalized.
+
+[#getMemberParameterNames]
+=== getMemberParameterNames
+
+Convenience method that returns the _Identifier#getClassName() class name_ of the _#getIdentifier() identifier_ .
+
+[#getMemberParameterNaturalNames]
+=== getMemberParameterNaturalNames
+
+As per _#getMemberParameterNames()_ , but naturalized.
+
+[#getReason]
+=== getReason
+
+The reason, if any, that this interaction may have been vetoed or otherwise disallowed.
+
+Intended to be _#advised(String, Class) set_ as a result of consulting one of the facets.
+
+[#getReasonMessage]
+=== getReasonMessage
+
+The reason message, if any, that this interaction may have been vetoed or otherwise disallowed.
+
+This message should be overridden by subclasses for containing the Reason, the Identifier and any other relevant context information.
+
+[#getAdvisorClass]
+=== getAdvisorClass
+
+The class of the (first) advisor, if any, that provided the _#getReason() reason_ that this interaction is _#isVeto() vetoed_ .
+
+[#advised]
+=== advised
+
+Specify the _#getReason() reason_ that this interaction has been vetoed and the _#getAdvisorClass() class of the advisor_ that did the veto.
+
+[#isVeto]
+=== isVeto
+
 Whether this interaction has been vetoed (meaning that _#getReason()_ and _#getAdvisorClass()_ will both be non- `null` and the _#getReason() reason_ non-empty.)
 
 The interpretation of this depends on the subclass:
@@ -103,5 +171,4 @@ The interpretation of this depends on the subclass:
 * for xref:system:generated:index/applib/services/wrapper/events/VisibilityEvent.adoc[VisibilityEvent] , a veto means that the feature (property, collection, action) is hidden
 * for xref:system:generated:index/applib/services/wrapper/events/UsabilityEvent.adoc[UsabilityEvent] , a veto means that the feature is disabled
 * for xref:system:generated:index/applib/services/wrapper/events/ValidityEvent.adoc[ValidityEvent] , a veto means that the proposed modification (property value, object added/removed, action argument) is invalid
---
 

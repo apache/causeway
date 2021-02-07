@@ -12,9 +12,16 @@ class ExecutionContext {
 }
 ----
 
-<.> `[teal]#*_ofUserWithSystemDefaults_*#(xref:system:generated:index/applib/services/user/UserMemento.adoc[UserMemento] user)` : `xref:system:generated:index/applib/services/iactn/ExecutionContext.adoc[ExecutionContext]`
+<.> xref:#ofUserWithSystemDefaults[ofUserWithSystemDefaults]
 +
 --
 Creates a new xref:system:generated:index/applib/services/iactn/ExecutionContext.adoc[ExecutionContext] with the specified user and system defaults for clock, locale and time-zone.
 --
+
+== Members
+
+[#ofUserWithSystemDefaults]
+=== ofUserWithSystemDefaults
+
+Creates a new xref:system:generated:index/applib/services/iactn/ExecutionContext.adoc[ExecutionContext] with the specified user and system defaults for clock, locale and time-zone.
 

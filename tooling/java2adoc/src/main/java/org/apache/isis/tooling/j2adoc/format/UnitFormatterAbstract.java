@@ -51,42 +51,6 @@ implements UnitFormatter {
 
     protected final @NonNull J2AdocContext j2aContext;
 
-    @Override
-    public String getEnumConstantFormat() {
-        return "`%s`";
-    }
-
-    @Override
-    public String getAnnotationMemberFormat() {
-        return "`%2$s` : `%1$s`";
-    }
-
-    @Override
-    public String getFieldFormat() {
-        return "`%2$s` : `%1$s`";
-    }
-
-    @Override
-    public String getConstructorFormat() {
-        return "`%1$s(%2$s)`";
-    }
-
-    @Override
-    public String getGenericConstructorFormat() {
-        return "`%2$s%1$s(%3$s)`";
-    }
-
-    @Override
-    public String getMethodFormat() {
-        return "`%2$s(%3$s)` : `%1$s`";
-    }
-
-    @Override
-    public String getGenericMethodFormat() {
-        return "`%3$s%1$s(%4$s)` : `%2$s`";
-    }
-
-
     /**
      * Main algorithm for laying out a unit.
      *
@@ -160,7 +124,7 @@ implements UnitFormatter {
 
         unit.getJavadoc()
                 .filter(javadoc->!Javadocs.hasHidden(javadoc))
-                .map(javadoc->converter.javadoc(javadoc, unit))
+                .map(javadoc->converter.javadoc(javadoc, unit, J2AdocConverter.Mode.ALL))
                 .ifPresent(doc->parent.getBlocks().addAll(doc.getBlocks()));
     }
 
@@ -218,6 +182,7 @@ implements UnitFormatter {
         val javaDocBlock = AsciiDocFactory.block(openBlock);
         javaDocBlock.getBlocks().addAll(listItemParagraphs.getBlocks());
     }
+
 
     /**
      * Hook method (with empty default implementation)

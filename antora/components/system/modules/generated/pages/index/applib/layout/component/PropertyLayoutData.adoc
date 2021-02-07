@@ -46,28 +46,50 @@ class PropertyLayoutData {
 }
 ----
 
-<.> `[teal]#*getId*#()` : `String`
+<.> xref:#getId[getId]
 +
 --
 Property identifier, being the getter method without "get" or "is" prefix, first letter lower cased.
 --
-<.> `[teal]#*getOwner*#()` : `xref:system:generated:index/applib/layout/component/FieldSet.adoc[FieldSet]`
+<.> xref:#getOwner[getOwner]
 +
 --
 Owner.
-
-Set programmatically by framework after reading in from XML.
 --
-<.> `[teal]#*getMetadataError*#()` : `String`
+<.> xref:#getMetadataError[getMetadataError]
 +
 --
 For diagnostics; populated by the framework if and only if a metadata error.
 --
-<.> `[teal]#*getLink*#()` : `xref:system:generated:index/applib/layout/links/Link.adoc[Link]`
+<.> xref:#getLink[getLink]
 +
 --
 The link to access this resource from the REST API (Restful Objects viewer).
+--
+
+== Members
+
+[#getId]
+=== getId
+
+Property identifier, being the getter method without "get" or "is" prefix, first letter lower cased.
+
+[#getOwner]
+=== getOwner
+
+Owner.
+
+Set programmatically by framework after reading in from XML.
+
+[#getMetadataError]
+=== getMetadataError
+
+For diagnostics; populated by the framework if and only if a metadata error.
+
+[#getLink]
+=== getLink
+
+The link to access this resource from the REST API (Restful Objects viewer).
 
 Populated by the framework automatically.
---
 

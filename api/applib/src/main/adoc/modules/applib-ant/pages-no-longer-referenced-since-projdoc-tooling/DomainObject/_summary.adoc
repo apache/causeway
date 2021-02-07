@@ -1,0 +1,6 @@
+// TODO - v2 (reconcile/move into javadoc).
+
+// TODO: v2 - previously we split out the discussion of the attributes into separate groups.
+// the global index doesn't suport this, though.
+
+

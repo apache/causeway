@@ -47,19 +47,36 @@ class Identifier {
 }
 ----
 
-<.> `[teal]#*isPropertyOrCollection*#()` : `boolean`
+<.> xref:#isPropertyOrCollection[isPropertyOrCollection]
 +
 --
 Convenience method.
 --
-<.> `[teal]#*equals*#(Object obj)` : `boolean`
+<.> xref:#equals[equals]
 +
 --
 REVIEW: why not just compare the _#toString()_ representations?
 --
-<.> `[teal]#*_fromIdentityString_*#(String asString)` : `xref:system:generated:index/applib/Identifier.adoc[Identifier]`
+<.> xref:#fromIdentityString[fromIdentityString]
 +
 --
 Factory method.
 --
+
+== Members
+
+[#isPropertyOrCollection]
+=== isPropertyOrCollection
+
+Convenience method.
+
+[#equals]
+=== equals
+
+REVIEW: why not just compare the _#toString()_ representations?
+
+[#fromIdentityString]
+=== fromIdentityString
+
+Factory method.
 

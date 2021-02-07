@@ -34,23 +34,40 @@ class DomainObjectLayoutData {
 }
 ----
 
-<.> `[teal]#*getMetadataError*#()` : `String`
+<.> xref:#getMetadataError[getMetadataError]
 +
 --
 For diagnostics; populated by the framework if and only if a metadata error.
 --
-<.> `[teal]#*getOwner*#()` : `xref:system:generated:index/applib/layout/component/DomainObjectLayoutDataOwner.adoc[DomainObjectLayoutDataOwner]`
+<.> xref:#getOwner[getOwner]
 +
 --
 Owner.
-
-Set programmatically by framework after reading in from XML.
 --
-<.> `[teal]#*getLink*#()` : `xref:system:generated:index/applib/layout/links/Link.adoc[Link]`
+<.> xref:#getLink[getLink]
 +
 --
 The link to access this resource from the REST API (Restful Objects viewer).
+--
+
+== Members
+
+[#getMetadataError]
+=== getMetadataError
+
+For diagnostics; populated by the framework if and only if a metadata error.
+
+[#getOwner]
+=== getOwner
+
+Owner.
+
+Set programmatically by framework after reading in from XML.
+
+[#getLink]
+=== getLink
+
+The link to access this resource from the REST API (Restful Objects viewer).
 
 Populated by the framework automatically.
---
 

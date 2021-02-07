@@ -12,19 +12,36 @@ class EventObjectBase {
 }
 ----
 
-<.> `[teal]#*getSource*#()` : `T`
+<.> xref:#getSource[getSource]
 +
 --
 The object on which the Event initially occurred.
 --
-<.> `[teal]#*initSource*#(T source)` : `void`
+<.> xref:#initSource[initSource]
 +
 --
 A one-shot function. Only allowed to be called if a source has not already been set.
 --
-<.> `[teal]#*toString*#()` : `String`
+<.> xref:#toString[toString]
 +
 --
 Returns a String representation of this EventObject.
 --
+
+== Members
+
+[#getSource]
+=== getSource
+
+The object on which the Event initially occurred.
+
+[#initSource]
+=== initSource
+
+A one-shot function. Only allowed to be called if a source has not already been set.
+
+[#toString]
+=== toString
+
+Returns a String representation of this EventObject.
 

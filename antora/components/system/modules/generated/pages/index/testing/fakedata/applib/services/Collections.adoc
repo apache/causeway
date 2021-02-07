@@ -39,7 +39,7 @@ class Collections {
 }
 ----
 
-<.> `[line-through gray]#*randomEnum*#<E>(Class<E> enumType)` : `E`
+<.> xref:#randomEnum[randomEnum]
 +
 --
 [WARNING]
@@ -49,7 +49,7 @@ class Collections {
 - renamed to _#anyEnum(Class)_ .
 ====
 --
-<.> `[line-through gray]#*randomBounded*#<T>(Class<T> cls)` : `T`
+<.> xref:#randomBounded[randomBounded]
 +
 --
 [WARNING]
@@ -59,4 +59,26 @@ class Collections {
 - renamed to _#anyBounded(Class)_ .
 ====
 --
+
+== Members
+
+[#randomEnum]
+=== randomEnum
+
+[WARNING]
+====
+[red]#_deprecated:_#
+
+- renamed to _#anyEnum(Class)_ .
+====
+
+[#randomBounded]
+=== randomBounded
+
+[WARNING]
+====
+[red]#_deprecated:_#
+
+- renamed to _#anyBounded(Class)_ .
+====
 

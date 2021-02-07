@@ -18,55 +18,102 @@ interface GridService {
 }
 ----
 
-<.> `[teal]#*supportsReloading*#()` : `boolean`
+<.> xref:#supportsReloading[supportsReloading]
 +
 --
 Whether dynamic reloading of layouts is enabled.
 --
-<.> `[teal]#*remove*#(Class<?> domainClass)` : `void`
+<.> xref:#remove[remove]
 +
 --
 To support metamodel invalidation/rebuilding of spec.
 --
-<.> `[teal]#*existsFor*#(Class<?> domainClass)` : `boolean`
+<.> xref:#existsFor[existsFor]
 +
 --
-Whether any persisted layout metadata (eg a `.layout.xmlfile) exists for this domain class.
+Whether any persisted layout metadata (eg a `.layout.xml` file) exists for this domain class.
 --
-<.> `[teal]#*load*#(Class<?> domainClass)` : `xref:system:generated:index/applib/layout/grid/Grid.adoc[Grid]`
+<.> xref:#load[load]
 +
 --
-Returns a new instance of a xref:system:generated:index/applib/layout/grid/Grid.adoc[Grid] for the specified domain class, eg from a `layout.xmlfile, else `null.
+Returns a new instance of a xref:system:generated:index/applib/layout/grid/Grid.adoc[Grid] for the specified domain class, eg from a `layout.xml` file, else `null` .
 --
-<.> `[teal]#*load*#(Class<?> domainClass, String layout)` : `xref:system:generated:index/applib/layout/grid/Grid.adoc[Grid]`
+<.> xref:#load[load]
 +
 --
-Returns a new instance of a xref:system:generated:index/applib/layout/grid/Grid.adoc[Grid] for the specified domain class, eg from a `[domainClass].layout.[layout].xmlfile, else `null.
+Returns a new instance of a xref:system:generated:index/applib/layout/grid/Grid.adoc[Grid] for the specified domain class, eg from a `[domainClass].layout.[layout].xml` file, else `null` .
 --
-<.> `[teal]#*defaultGridFor*#(Class<?> domainClass)` : `xref:system:generated:index/applib/layout/grid/Grid.adoc[Grid]`
+<.> xref:#defaultGridFor[defaultGridFor]
 +
 --
 Returns a default grid; eg where none can be loaded using _#load(Class)_ .
 --
-<.> `[teal]#*normalize*#(xref:system:generated:index/applib/layout/grid/Grid.adoc[Grid] grid)` : `xref:system:generated:index/applib/layout/grid/Grid.adoc[Grid]`
+<.> xref:#normalize[normalize]
 +
 --
 Returns a normalized grid for the domain class obtained previously using _#load(Class)_ .
-
-If a "normalized" grid is persisted as the `layout.xml, then the expectation is that the xref:system:generated:index/applib/annotation/MemberOrder.adoc[MemberOrder] annotation can be removed from the domain class because the binding of properties/collections/actions will be within the XML. However, the layout annotations ( xref:system:generated:index/applib/annotation/DomainObjectLayout.adoc[DomainObjectLayout] , xref:system:generated:index/applib/annotation/ActionLayout.adoc[ActionLayout] , xref:system:generated:index/applib/annotation/PropertyLayout.adoc[PropertyLayout] and xref:system:generated:index/applib/annotation/CollectionLayout.adoc[CollectionLayout] ) (if present) will continue to be used to provide additional layout metadata. Of course, there is nothing to prevent the developer from extending the layout XML to also include the layout XML (in other words moving towards a _#complete(Grid) complete_ grid. Metadata within the `layout.xmlfile takes precedence over any annotations.
 --
-<.> `[teal]#*complete*#(xref:system:generated:index/applib/layout/grid/Grid.adoc[Grid] grid)` : `xref:system:generated:index/applib/layout/grid/Grid.adoc[Grid]`
+<.> xref:#complete[complete]
 +
 --
 Modifies the provided xref:system:generated:index/applib/layout/grid/Grid.adoc[Grid] with additional metadata, broadly speaking corresponding to the xref:system:generated:index/applib/annotation/DomainObjectLayout.adoc[DomainObjectLayout] , xref:system:generated:index/applib/annotation/ActionLayout.adoc[ActionLayout] , xref:system:generated:index/applib/annotation/PropertyLayout.adoc[PropertyLayout] and xref:system:generated:index/applib/annotation/CollectionLayout.adoc[CollectionLayout] .
-
-If a "completed" grid is persisted as the `layout.xml, then there should be no need for any of the layout annotations, nor the xref:system:generated:index/applib/annotation/MemberOrder.adoc[MemberOrder] annotations, to be required in the domain class itself.
 --
-<.> `[teal]#*minimal*#(xref:system:generated:index/applib/layout/grid/Grid.adoc[Grid] grid)` : `xref:system:generated:index/applib/layout/grid/Grid.adoc[Grid]`
+<.> xref:#minimal[minimal]
 +
 --
 Modifies the provided xref:system:generated:index/applib/layout/grid/Grid.adoc[Grid] , removing all metadata except the basic grid structure.
-
-If a "minimal" grid is persisted as the `layout.xml, then the expectation is that most of the layout annotations ( xref:system:generated:index/applib/annotation/DomainObjectLayout.adoc[DomainObjectLayout] , xref:system:generated:index/applib/annotation/ActionLayout.adoc[ActionLayout] , xref:system:generated:index/applib/annotation/PropertyLayout.adoc[PropertyLayout] , xref:system:generated:index/applib/annotation/CollectionLayout.adoc[CollectionLayout] , but also xref:system:generated:index/applib/annotation/MemberOrder.adoc[MemberOrder] ) will still be retained in the domain class code.
 --
+
+== Members
+
+[#supportsReloading]
+=== supportsReloading
+
+Whether dynamic reloading of layouts is enabled.
+
+[#remove]
+=== remove
+
+To support metamodel invalidation/rebuilding of spec.
+
+[#existsFor]
+=== existsFor
+
+Whether any persisted layout metadata (eg a `.layout.xml` file) exists for this domain class.
+
+[#load]
+=== load
+
+Returns a new instance of a xref:system:generated:index/applib/layout/grid/Grid.adoc[Grid] for the specified domain class, eg from a `layout.xml` file, else `null` .
+
+[#load]
+=== load
+
+Returns a new instance of a xref:system:generated:index/applib/layout/grid/Grid.adoc[Grid] for the specified domain class, eg from a `[domainClass].layout.[layout].xml` file, else `null` .
+
+[#defaultGridFor]
+=== defaultGridFor
+
+Returns a default grid; eg where none can be loaded using _#load(Class)_ .
+
+[#normalize]
+=== normalize
+
+Returns a normalized grid for the domain class obtained previously using _#load(Class)_ .
+
+If a "normalized" grid is persisted as the `layout.xml` , then the expectation is that the xref:system:generated:index/applib/annotation/MemberOrder.adoc[MemberOrder] annotation can be removed from the domain class because the binding of properties/collections/actions will be within the XML. However, the layout annotations ( xref:system:generated:index/applib/annotation/DomainObjectLayout.adoc[DomainObjectLayout] , xref:system:generated:index/applib/annotation/ActionLayout.adoc[ActionLayout] , xref:system:generated:index/applib/annotation/PropertyLayout.adoc[PropertyLayout] and xref:system:generated:index/applib/annotation/CollectionLayout.adoc[CollectionLayout] ) (if present) will continue to be used to provide additional layout metadata. Of course, there is nothing to prevent the developer from extending the layout XML to also include the layout XML (in other words moving towards a _#complete(Grid) complete_ grid. Metadata within the `layout.xml` file takes precedence over any annotations.
+
+[#complete]
+=== complete
+
+Modifies the provided xref:system:generated:index/applib/layout/grid/Grid.adoc[Grid] with additional metadata, broadly speaking corresponding to the xref:system:generated:index/applib/annotation/DomainObjectLayout.adoc[DomainObjectLayout] , xref:system:generated:index/applib/annotation/ActionLayout.adoc[ActionLayout] , xref:system:generated:index/applib/annotation/PropertyLayout.adoc[PropertyLayout] and xref:system:generated:index/applib/annotation/CollectionLayout.adoc[CollectionLayout] .
+
+If a "completed" grid is persisted as the `layout.xml` , then there should be no need for any of the layout annotations, nor the xref:system:generated:index/applib/annotation/MemberOrder.adoc[MemberOrder] annotations, to be required in the domain class itself.
+
+[#minimal]
+=== minimal
+
+Modifies the provided xref:system:generated:index/applib/layout/grid/Grid.adoc[Grid] , removing all metadata except the basic grid structure.
+
+If a "minimal" grid is persisted as the `layout.xml` , then the expectation is that most of the layout annotations ( xref:system:generated:index/applib/annotation/DomainObjectLayout.adoc[DomainObjectLayout] , xref:system:generated:index/applib/annotation/ActionLayout.adoc[ActionLayout] , xref:system:generated:index/applib/annotation/PropertyLayout.adoc[PropertyLayout] , xref:system:generated:index/applib/annotation/CollectionLayout.adoc[CollectionLayout] , but also xref:system:generated:index/applib/annotation/MemberOrder.adoc[MemberOrder] ) will still be retained in the domain class code.
 

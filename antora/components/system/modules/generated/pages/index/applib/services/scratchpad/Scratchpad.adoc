@@ -15,14 +15,26 @@ interface Scratchpad {
 }
 ----
 
-<.> `[teal]#*get*#(Object key)` : `Object`
+<.> xref:#get[get]
 +
 --
 Obtain user-data, as set by a previous object being acted upon.
 --
-<.> `[teal]#*put*#(Object key, Object value)` : `void`
+<.> xref:#put[put]
 +
 --
 Set user-data, for the use of a subsequent object being acted upon.
 --
+
+== Members
+
+[#get]
+=== get
+
+Obtain user-data, as set by a previous object being acted upon.
+
+[#put]
+=== put
+
+Set user-data, for the use of a subsequent object being acted upon.
 

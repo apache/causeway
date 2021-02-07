@@ -11,9 +11,16 @@ class ThrowableMatchers {
 }
 ----
 
-<.> `[teal]#*_causedBy_*#(Class<? extends Throwable> type)` : `TypeSafeMatcher<Throwable>`
+<.> xref:#causedBy[causedBy]
 +
 --
 Matches when the exception's causal chain contains the given _type_
 --
+
+== Members
+
+[#causedBy]
+=== causedBy
+
+Matches when the exception's causal chain contains the given _type_
 

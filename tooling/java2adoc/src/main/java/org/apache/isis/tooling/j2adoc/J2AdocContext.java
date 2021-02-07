@@ -58,9 +58,6 @@ public class J2AdocContext {
     private final boolean skipTitleHeader = false;
 
     @Builder.Default
-    private final boolean memberSections = false;
-
-    @Builder.Default
     private final @NonNull String memberNameFormat = "[teal]#*%s*#";
 
     @Builder.Default

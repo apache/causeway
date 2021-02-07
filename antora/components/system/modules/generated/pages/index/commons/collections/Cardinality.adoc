@@ -15,19 +15,36 @@ enum Cardinality {
 }
 ----
 
-<.> `[teal]#*_ZERO_*#`
+<.> xref:#ZERO[ZERO]
 +
 --
 The container is empty.
 --
-<.> `[teal]#*_ONE_*#`
+<.> xref:#ONE[ONE]
 +
 --
 The container has exactly one element.
 --
-<.> `[teal]#*_MULTIPLE_*#`
+<.> xref:#MULTIPLE[MULTIPLE]
 +
 --
 The container has at least two elements.
 --
+
+== Members
+
+[#ZERO]
+=== ZERO
+
+The container is empty.
+
+[#ONE]
+=== ONE
+
+The container has exactly one element.
+
+[#MULTIPLE]
+=== MULTIPLE
+
+The container has at least two elements.
 

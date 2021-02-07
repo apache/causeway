@@ -16,19 +16,36 @@ enum TransactionAfterCompletionEvent {
 }
 ----
 
-<.> `[teal]#*_COMMITTED_*#`
+<.> xref:#COMMITTED[COMMITTED]
 +
 --
 Completion status in case of proper commit.
 --
-<.> `[teal]#*_ROLLED_BACK_*#`
+<.> xref:#ROLLED_BACK[ROLLED_BACK]
 +
 --
 Completion status in case of proper rollback.
 --
-<.> `[teal]#*_UNKNOWN_*#`
+<.> xref:#UNKNOWN[UNKNOWN]
 +
 --
 Completion status in case of heuristic mixed completion or system errors.
 --
+
+== Members
+
+[#COMMITTED]
+=== COMMITTED
+
+Completion status in case of proper commit.
+
+[#ROLLED_BACK]
+=== ROLLED_BACK
+
+Completion status in case of proper rollback.
+
+[#UNKNOWN]
+=== UNKNOWN
+
+Completion status in case of heuristic mixed completion or system errors.
 

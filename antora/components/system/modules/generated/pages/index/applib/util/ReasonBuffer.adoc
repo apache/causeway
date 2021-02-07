@@ -2,7 +2,7 @@
 
 Helper class to create properly concatenated reason string for use in method that return _String_ s with reasons.
 
-If no reasons are specified _#getReason()_ will return `null, otherwise it will return a _String_ with all the valid reasons concatenated with a semi-colon separating each one.
+If no reasons are specified _#getReason()_ will return `null` , otherwise it will return a _String_ with all the valid reasons concatenated with a semi-colon separating each one.
 
 An alternative is to use the xref:system:generated:index/applib/util/Reasons.adoc[Reasons] class.
 
@@ -19,19 +19,36 @@ class ReasonBuffer {
 }
 ----
 
-<.> `[teal]#*append*#(String reason)` : `void`
+<.> xref:#append[append]
 +
 --
 Append a reason to the list of existing reasons.
 --
-<.> `[teal]#*appendOnCondition*#(boolean condition, String reason)` : `void`
+<.> xref:#appendOnCondition[appendOnCondition]
 +
 --
 Append a reason to the list of existing reasons if the condition flag is true.
 --
-<.> `[teal]#*getReason*#()` : `String`
+<.> xref:#getReason[getReason]
 +
 --
-Return the combined set of reasons, or `nullif there are none.
+Return the combined set of reasons, or `null` if there are none.
 --
+
+== Members
+
+[#append]
+=== append
+
+Append a reason to the list of existing reasons.
+
+[#appendOnCondition]
+=== appendOnCondition
+
+Append a reason to the list of existing reasons if the condition flag is true.
+
+[#getReason]
+=== getReason
+
+Return the combined set of reasons, or `null` if there are none.
 

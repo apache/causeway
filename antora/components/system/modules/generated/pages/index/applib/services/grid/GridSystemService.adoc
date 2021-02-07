@@ -18,14 +18,26 @@ interface GridSystemService {
 }
 ----
 
-<.> `[teal]#*gridImplementation*#()` : `Class<G>`
+<.> xref:#gridImplementation[gridImplementation]
 +
 --
 Which grid (implementation) is defined by this service.
 --
-<.> `[teal]#*normalize*#(G grid, Class<?> domainClass)` : `void`
+<.> xref:#normalize[normalize]
 +
 --
 Validate the grid, derive any missing object members, and overwrite any facets in the metamodel based on the layout.
 --
+
+== Members
+
+[#gridImplementation]
+=== gridImplementation
+
+Which grid (implementation) is defined by this service.
+
+[#normalize]
+=== normalize
+
+Validate the grid, derive any missing object members, and overwrite any facets in the metamodel based on the layout.
 

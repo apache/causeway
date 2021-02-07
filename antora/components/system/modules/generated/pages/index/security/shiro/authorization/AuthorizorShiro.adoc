@@ -17,14 +17,26 @@ class AuthorizorShiro {
 }
 ----
 
-<.> `[teal]#*isVisibleInRole*#(String role, xref:system:generated:index/applib/Identifier.adoc[Identifier] identifier)` : `boolean`
+<.> xref:#isVisibleInRole[isVisibleInRole]
 +
 --
 Returns `false` because the checking across all roles is done in _#isVisibleInAnyRole(Identifier)_ , which is always called prior to this.
 --
-<.> `[teal]#*isUsableInRole*#(String role, xref:system:generated:index/applib/Identifier.adoc[Identifier] identifier)` : `boolean`
+<.> xref:#isUsableInRole[isUsableInRole]
 +
 --
 Returns `false` because the checking across all roles is done in _#isUsableInAnyRole(Identifier)_ , which is always called prior to this.
 --
+
+== Members
+
+[#isVisibleInRole]
+=== isVisibleInRole
+
+Returns `false` because the checking across all roles is done in _#isVisibleInAnyRole(Identifier)_ , which is always called prior to this.
+
+[#isUsableInRole]
+=== isUsableInRole
+
+Returns `false` because the checking across all roles is done in _#isUsableInAnyRole(Identifier)_ , which is always called prior to this.
 

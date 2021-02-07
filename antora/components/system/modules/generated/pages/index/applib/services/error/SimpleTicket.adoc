@@ -28,11 +28,18 @@ class SimpleTicket {
 }
 ----
 
-<.> `[teal]#*getKittenUrl*#()` : `String`
+<.> xref:#getKittenUrl[getKittenUrl]
 +
 --
 If specified, is the external URL of an image to display to the end user.
+--
+
+== Members
+
+[#getKittenUrl]
+=== getKittenUrl
+
+If specified, is the external URL of an image to display to the end user.
 
 Not necessarily of a kitten, but something by way of an apology.
---
 

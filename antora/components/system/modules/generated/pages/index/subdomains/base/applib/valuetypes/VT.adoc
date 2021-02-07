@@ -41,5 +41,10 @@ class VT {
 }
 ----
 
-<.> `[teal]#*_ld_*#(String dateStr)` : `LocalDate`
+<.> xref:#ld[ld]
+
+== Members
+
+[#ld]
+=== ld
 

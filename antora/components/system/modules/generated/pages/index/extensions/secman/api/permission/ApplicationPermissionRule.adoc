@@ -14,18 +14,30 @@ enum ApplicationPermissionRule {
 }
 ----
 
-<.> `[teal]#*_ALLOW_*#`
+<.> xref:#ALLOW[ALLOW]
 +
 --
 The permission grants the ability to view/use the _ApplicationFeature_ .
-
-The xref:system:generated:index/extensions/secman/api/permission/ApplicationPermissionMode.adoc[ApplicationPermissionMode] determines whether the permission is to only view or also to use the _ApplicationFeature_ .
 --
-<.> `[teal]#*_VETO_*#`
+<.> xref:#VETO[VETO]
 +
 --
 The permission prevents the ability to view/use the _ApplicationFeature_ .
+--
+
+== Members
+
+[#ALLOW]
+=== ALLOW
+
+The permission grants the ability to view/use the _ApplicationFeature_ .
 
 The xref:system:generated:index/extensions/secman/api/permission/ApplicationPermissionMode.adoc[ApplicationPermissionMode] determines whether the permission is to only view or also to use the _ApplicationFeature_ .
---
+
+[#VETO]
+=== VETO
+
+The permission prevents the ability to view/use the _ApplicationFeature_ .
+
+The xref:system:generated:index/extensions/secman/api/permission/ApplicationPermissionMode.adoc[ApplicationPermissionMode] determines whether the permission is to only view or also to use the _ApplicationFeature_ .
 

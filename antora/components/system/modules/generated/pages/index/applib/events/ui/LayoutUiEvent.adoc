@@ -14,16 +14,28 @@ class LayoutUiEvent {
 }
 ----
 
-<.> `[teal]#*LayoutUiEvent*#()`
+<.> xref:#LayoutUiEvent[LayoutUiEvent]
 +
 --
 If used then the framework will set state via (non-API) setters.
-
-Because the _EventObject_ superclass prohibits a null source, a dummy value is temporarily used.
 --
-<.> `[teal]#*setLayout*#(String layout)` : `void`
+<.> xref:#setLayout[setLayout]
 +
 --
 For subscribers to call to provide a layout for this object.
 --
+
+== Members
+
+[#LayoutUiEvent]
+=== LayoutUiEvent
+
+If used then the framework will set state via (non-API) setters.
+
+Because the _EventObject_ superclass prohibits a null source, a dummy value is temporarily used.
+
+[#setLayout]
+=== setLayout
+
+For subscribers to call to provide a layout for this object.
 

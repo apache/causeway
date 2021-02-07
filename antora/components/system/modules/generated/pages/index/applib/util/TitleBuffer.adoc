@@ -37,130 +37,240 @@ class TitleBuffer {
 }
 ----
 
-<.> `[teal]#*TitleBuffer*#()`
+<.> xref:#TitleBuffer[TitleBuffer]
 +
 --
 Creates a new, empty, xref:system:generated:index/applib/util/TitleBuffer.adoc[TitleBuffer] .
 --
-<.> `[teal]#*TitleBuffer*#(Object object)`
+<.> xref:#TitleBuffer[TitleBuffer]
 +
 --
 Creates a new xref:system:generated:index/applib/util/TitleBuffer.adoc[TitleBuffer] , containing the title of the specified object.
-
-Note: this method only obtains the title using either `title()` or `toString()` ; it doesn't honour other mechanisms for specifying the title, such as _org.apache.isis.applib.annotation.Title_ annotation. If that functionality is required, first call _TitleService#titleOf(Object)_ on the object and pass in the resultant string.
 --
-<.> `[teal]#*TitleBuffer*#(Object object, String defaultTitle)`
+<.> xref:#TitleBuffer[TitleBuffer]
 +
 --
 Creates a new title object, containing the title of the specified object.
-
-Note: this method only obtains the title using either `title()` or `toString()` ; it doesn't honour other mechanisms for specifying the title, such as _org.apache.isis.applib.annotation.Title_ annotation. If that functionality is required, first call _TitleService#titleOf(Object)_ on the object and pass in the resultant string.
 --
-<.> `[teal]#*TitleBuffer*#(String text)`
+<.> xref:#TitleBuffer[TitleBuffer]
 +
 --
 Creates a new title object, containing the specified text.
 --
-<.> `[teal]#*_isEmpty_*#(Object object)` : `boolean`
+<.> xref:#isEmpty[isEmpty]
 +
 --
 Determines if the specified object's title is empty (or null).
-
-Note: this method only obtains the title using either `title()` or `toString()` ; it doesn't honour other mechanisms for specifying the title, such as _org.apache.isis.applib.annotation.Title_ annotation. If that functionality is required, first call _TitleService#titleOf(Object)_ on the object and pass in the resultant string.
 --
-<.> `[teal]#*_isEmpty_*#(String text)` : `boolean`
+<.> xref:#isEmpty[isEmpty]
 +
 --
 Determines if the specified text is empty. Will return true if either: the specified reference is null; or if the reference is an empty string.
 --
-<.> `[teal]#*append*#(int number)` : `xref:system:generated:index/applib/util/TitleBuffer.adoc[TitleBuffer]`
-<.> `[teal]#*append*#(Object object)` : `xref:system:generated:index/applib/util/TitleBuffer.adoc[TitleBuffer]`
+<.> xref:#append[append]
+<.> xref:#append[append]
 +
 --
 Append the title of the specified object to this xref:system:generated:index/applib/util/TitleBuffer.adoc[TitleBuffer] .
-
-Note: this method only obtains the title using either `title()` or `toString()` ; it doesn't honour other mechanisms for specifying the title, such as _org.apache.isis.applib.annotation.Title_ annotation. If that functionality is required, first call _TitleService#titleOf(Object)_ on the object and pass in the resultant string.
 --
-<.> `[teal]#*append*#(Object object, String defaultValue)` : `xref:system:generated:index/applib/util/TitleBuffer.adoc[TitleBuffer]`
+<.> xref:#append[append]
 +
 --
 Appends the title of the specified object, or the specified text if the objects title is null or empty. Prepends a space if there is already some text in this title object.
-
-Note: this method only obtains the title using either `title()` or `toString()` ; it doesn't honour other mechanisms for specifying the title, such as _org.apache.isis.applib.annotation.Title_ annotation. If that functionality is required, first call _TitleService#titleOf(Object)_ on the object and pass in the resultant string.
 --
-<.> `[teal]#*append*#(String text)` : `xref:system:generated:index/applib/util/TitleBuffer.adoc[TitleBuffer]`
+<.> xref:#append[append]
 +
 --
 Appends a space (if there is already some text in this title object) and then the specified text.
 --
-<.> `[teal]#*append*#(String joiner, Object object)` : `xref:system:generated:index/applib/util/TitleBuffer.adoc[TitleBuffer]`
+<.> xref:#append[append]
 +
 --
 Appends the joining string and the title of the specified object. If the object is empty then nothing will be appended.
-
-Note: this method only obtains the title using either `title()` or `toString()` ; it doesn't honour other mechanisms for specifying the title, such as _org.apache.isis.applib.annotation.Title_ annotation. If that functionality is required, first call _TitleService#titleOf(Object)_ on the object and pass in the resultant string.
 --
-<.> `[teal]#*append*#(String joiner, Object object, String defaultTitle)` : `xref:system:generated:index/applib/util/TitleBuffer.adoc[TitleBuffer]`
+<.> xref:#append[append]
 +
 --
-Append the `joinertext, a space, and the title of the specified object to the text of this xref:system:generated:index/applib/util/TitleBuffer.adoc[TitleBuffer] . If the title of the specified object is null then use the `defaultValuetext. If both the objects title and the default value are null or equate to a zero-length string then no text will be appended ; not even the joiner text.
-
-Note: this method only obtains the title using either `title()` or `toString()` ; it doesn't honour other mechanisms for specifying the title, such as _org.apache.isis.applib.annotation.Title_ annotation. If that functionality is required, first call _TitleService#titleOf(Object)_ on the object and pass in the resultant string.
+Append the `joiner` text, a space, and the title of the specified object to the text of this xref:system:generated:index/applib/util/TitleBuffer.adoc[TitleBuffer] . If the title of the specified object is null then use the `defaultValue` text. If both the objects title and the default value are null or equate to a zero-length string then no text will be appended ; not even the joiner text.
 --
-<.> `[teal]#*append*#(String joiner, String text)` : `xref:system:generated:index/applib/util/TitleBuffer.adoc[TitleBuffer]`
+<.> xref:#append[append]
 +
 --
 Appends the joiner text, a space, and the text to the text of this xref:system:generated:index/applib/util/TitleBuffer.adoc[TitleBuffer] . If no text yet exists in the object then the joiner text and space are omitted.
 --
-<.> `[teal]#*appendSpace*#()` : `xref:system:generated:index/applib/util/TitleBuffer.adoc[TitleBuffer]`
+<.> xref:#appendSpace[appendSpace]
 +
 --
 Append a space to the text of this TitleString object if, and only if, there is some existing text i.e., a space is only added to existing text and will not create a text entry consisting of only one space.
 --
-<.> `[teal]#*concat*#(Object object)` : `xref:system:generated:index/applib/util/TitleBuffer.adoc[TitleBuffer]`
+<.> xref:#concat[concat]
 +
 --
 Concatenate the the title value (the result of calling an objects label() method) to this TitleString object. If the value is null the no text is added.
 --
-<.> `[teal]#*concat*#(Object object, String defaultValue)` : `xref:system:generated:index/applib/util/TitleBuffer.adoc[TitleBuffer]`
+<.> xref:#concat[concat]
 +
 --
 Concatenate the title of the object value or the specified default value if the title is equal to null or is empty, to this xref:system:generated:index/applib/util/TitleBuffer.adoc[TitleBuffer] .
-
-Note: this method only obtains the title using either `title()` or `toString()` ; it doesn't honour other mechanisms for specifying the title, such as _org.apache.isis.applib.annotation.Title_ annotation. If that functionality is required, first call _TitleService#titleOf(Object)_ on the object and pass in the resultant string.
 --
-<.> `[teal]#*concat*#(String text)` : `xref:system:generated:index/applib/util/TitleBuffer.adoc[TitleBuffer]`
+<.> xref:#concat[concat]
 +
 --
 Concatenate the specified text on to the end of the text of this xref:system:generated:index/applib/util/TitleBuffer.adoc[TitleBuffer] .
 --
-<.> `[teal]#*concat*#(String joiner, String text)` : `xref:system:generated:index/applib/util/TitleBuffer.adoc[TitleBuffer]`
+<.> xref:#concat[concat]
 +
 --
 Concatenate the joiner text and the text to the text of this xref:system:generated:index/applib/util/TitleBuffer.adoc[TitleBuffer] object. If no text yet exists in the object then the joiner text is omitted.
 --
-<.> `[teal]#*concat*#(String joiner, Object object)` : `xref:system:generated:index/applib/util/TitleBuffer.adoc[TitleBuffer]`
+<.> xref:#concat[concat]
 +
 --
 Concatenate the joiner text and the title of the object to the text of this xref:system:generated:index/applib/util/TitleBuffer.adoc[TitleBuffer] . If no object yet exists in the object then the joiner text is omitted.
-
-Note: this method only obtains the title using either `title()` or `toString()` ; it doesn't honour other mechanisms for specifying the title, such as _org.apache.isis.applib.annotation.Title_ annotation. If that functionality is required, first call _TitleService#titleOf(Object)_ on the object and pass in the resultant string.
 --
-<.> `[teal]#*concat*#(String joiner, Object object, String defaultValue)` : `xref:system:generated:index/applib/util/TitleBuffer.adoc[TitleBuffer]`
+<.> xref:#concat[concat]
 +
 --
 Concatenate the joiner text and the title of the object to the text of this xref:system:generated:index/applib/util/TitleBuffer.adoc[TitleBuffer] object. If no object yet exists in the object then defaultValue is used instead.
-
-Note: this method only obtains the title using either `title()` or `toString()` ; it doesn't honour other mechanisms for specifying the title, such as _org.apache.isis.applib.annotation.Title_ annotation. If that functionality is required, first call _TitleService#titleOf(Object)_ on the object and pass in the resultant string.
 --
-<.> `[teal]#*toString*#()` : `String`
+<.> xref:#toString[toString]
 +
 --
 Returns a String that represents the value of this object.
 --
-<.> `[teal]#*truncate*#(int noWords)` : `xref:system:generated:index/applib/util/TitleBuffer.adoc[TitleBuffer]`
+<.> xref:#truncate[truncate]
 +
 --
 Truncates this title so it has a maximum number of words. Spaces are used to determine words, thus two spaces in a title will cause two words to be mistakenly identified.
 --
+
+== Members
+
+[#TitleBuffer]
+=== TitleBuffer
+
+Creates a new, empty, xref:system:generated:index/applib/util/TitleBuffer.adoc[TitleBuffer] .
+
+[#TitleBuffer]
+=== TitleBuffer
+
+Creates a new xref:system:generated:index/applib/util/TitleBuffer.adoc[TitleBuffer] , containing the title of the specified object.
+
+Note: this method only obtains the title using either `title()` or `toString()` ; it doesn't honour other mechanisms for specifying the title, such as _org.apache.isis.applib.annotation.Title_ annotation. If that functionality is required, first call _TitleService#titleOf(Object)_ on the object and pass in the resultant string.
+
+[#TitleBuffer]
+=== TitleBuffer
+
+Creates a new title object, containing the title of the specified object.
+
+Note: this method only obtains the title using either `title()` or `toString()` ; it doesn't honour other mechanisms for specifying the title, such as _org.apache.isis.applib.annotation.Title_ annotation. If that functionality is required, first call _TitleService#titleOf(Object)_ on the object and pass in the resultant string.
+
+[#TitleBuffer]
+=== TitleBuffer
+
+Creates a new title object, containing the specified text.
+
+[#isEmpty]
+=== isEmpty
+
+Determines if the specified object's title is empty (or null).
+
+Note: this method only obtains the title using either `title()` or `toString()` ; it doesn't honour other mechanisms for specifying the title, such as _org.apache.isis.applib.annotation.Title_ annotation. If that functionality is required, first call _TitleService#titleOf(Object)_ on the object and pass in the resultant string.
+
+[#isEmpty]
+=== isEmpty
+
+Determines if the specified text is empty. Will return true if either: the specified reference is null; or if the reference is an empty string.
+
+[#append]
+=== append
+
+[#append]
+=== append
+
+Append the title of the specified object to this xref:system:generated:index/applib/util/TitleBuffer.adoc[TitleBuffer] .
+
+Note: this method only obtains the title using either `title()` or `toString()` ; it doesn't honour other mechanisms for specifying the title, such as _org.apache.isis.applib.annotation.Title_ annotation. If that functionality is required, first call _TitleService#titleOf(Object)_ on the object and pass in the resultant string.
+
+[#append]
+=== append
+
+Appends the title of the specified object, or the specified text if the objects title is null or empty. Prepends a space if there is already some text in this title object.
+
+Note: this method only obtains the title using either `title()` or `toString()` ; it doesn't honour other mechanisms for specifying the title, such as _org.apache.isis.applib.annotation.Title_ annotation. If that functionality is required, first call _TitleService#titleOf(Object)_ on the object and pass in the resultant string.
+
+[#append]
+=== append
+
+Appends a space (if there is already some text in this title object) and then the specified text.
+
+[#append]
+=== append
+
+Appends the joining string and the title of the specified object. If the object is empty then nothing will be appended.
+
+Note: this method only obtains the title using either `title()` or `toString()` ; it doesn't honour other mechanisms for specifying the title, such as _org.apache.isis.applib.annotation.Title_ annotation. If that functionality is required, first call _TitleService#titleOf(Object)_ on the object and pass in the resultant string.
+
+[#append]
+=== append
+
+Append the `joiner` text, a space, and the title of the specified object to the text of this xref:system:generated:index/applib/util/TitleBuffer.adoc[TitleBuffer] . If the title of the specified object is null then use the `defaultValue` text. If both the objects title and the default value are null or equate to a zero-length string then no text will be appended ; not even the joiner text.
+
+Note: this method only obtains the title using either `title()` or `toString()` ; it doesn't honour other mechanisms for specifying the title, such as _org.apache.isis.applib.annotation.Title_ annotation. If that functionality is required, first call _TitleService#titleOf(Object)_ on the object and pass in the resultant string.
+
+[#append]
+=== append
+
+Appends the joiner text, a space, and the text to the text of this xref:system:generated:index/applib/util/TitleBuffer.adoc[TitleBuffer] . If no text yet exists in the object then the joiner text and space are omitted.
+
+[#appendSpace]
+=== appendSpace
+
+Append a space to the text of this TitleString object if, and only if, there is some existing text i.e., a space is only added to existing text and will not create a text entry consisting of only one space.
+
+[#concat]
+=== concat
+
+Concatenate the the title value (the result of calling an objects label() method) to this TitleString object. If the value is null the no text is added.
+
+[#concat]
+=== concat
+
+Concatenate the title of the object value or the specified default value if the title is equal to null or is empty, to this xref:system:generated:index/applib/util/TitleBuffer.adoc[TitleBuffer] .
+
+Note: this method only obtains the title using either `title()` or `toString()` ; it doesn't honour other mechanisms for specifying the title, such as _org.apache.isis.applib.annotation.Title_ annotation. If that functionality is required, first call _TitleService#titleOf(Object)_ on the object and pass in the resultant string.
+
+[#concat]
+=== concat
+
+Concatenate the specified text on to the end of the text of this xref:system:generated:index/applib/util/TitleBuffer.adoc[TitleBuffer] .
+
+[#concat]
+=== concat
+
+Concatenate the joiner text and the text to the text of this xref:system:generated:index/applib/util/TitleBuffer.adoc[TitleBuffer] object. If no text yet exists in the object then the joiner text is omitted.
+
+[#concat]
+=== concat
+
+Concatenate the joiner text and the title of the object to the text of this xref:system:generated:index/applib/util/TitleBuffer.adoc[TitleBuffer] . If no object yet exists in the object then the joiner text is omitted.
+
+Note: this method only obtains the title using either `title()` or `toString()` ; it doesn't honour other mechanisms for specifying the title, such as _org.apache.isis.applib.annotation.Title_ annotation. If that functionality is required, first call _TitleService#titleOf(Object)_ on the object and pass in the resultant string.
+
+[#concat]
+=== concat
+
+Concatenate the joiner text and the title of the object to the text of this xref:system:generated:index/applib/util/TitleBuffer.adoc[TitleBuffer] object. If no object yet exists in the object then defaultValue is used instead.
+
+Note: this method only obtains the title using either `title()` or `toString()` ; it doesn't honour other mechanisms for specifying the title, such as _org.apache.isis.applib.annotation.Title_ annotation. If that functionality is required, first call _TitleService#titleOf(Object)_ on the object and pass in the resultant string.
+
+[#toString]
+=== toString
+
+Returns a String that represents the value of this object.
+
+[#truncate]
+=== truncate
+
+Truncates this title so it has a maximum number of words. Spaces are used to determine words, thus two spaces in a title will cause two words to be mistakenly identified.
 

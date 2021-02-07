@@ -29,79 +29,136 @@ enum Where {
 }
 ----
 
-<.> `[teal]#*_EVERYWHERE_*#`
+<.> xref:#EVERYWHERE[EVERYWHERE]
 +
 --
 The member should be disabled/hidden everywhere.
-
-Synonym for _#ANYWHERE_ .
 --
-<.> `[teal]#*_ANYWHERE_*#`
+<.> xref:#ANYWHERE[ANYWHERE]
 +
 --
 The member should be disabled/hidden everywhere.
-
-Synonym for _#EVERYWHERE_ .
 --
-<.> `[teal]#*_OBJECT_FORMS_*#`
+<.> xref:#OBJECT_FORMS[OBJECT_FORMS]
 +
 --
 The member should be disabled/hidden when displayed within an object form.
-
-For most viewers, this applies to property and collection members, not actions.
 --
-<.> `[teal]#*_REFERENCES_PARENT_*#`
+<.> xref:#REFERENCES_PARENT[REFERENCES_PARENT]
 +
 --
 The member should be disabled/hidden when displayed as a column of a table within parent object's collection, and references that parent.
-
-For most (all?) viewers, this will have meaning only if applied to a property member.
 --
-<.> `[teal]#*_PARENTED_TABLES_*#`
+<.> xref:#PARENTED_TABLES[PARENTED_TABLES]
 +
 --
 The member should be disabled/hidden when displayed as a column of a table within a parent object's collection.
-
-For most (all?) viewers, this will have meaning only if applied to a property member.
 --
-<.> `[teal]#*_STANDALONE_TABLES_*#`
+<.> xref:#STANDALONE_TABLES[STANDALONE_TABLES]
 +
 --
 The member should be disabled/hidden when displayed as a column of a table showing a standalone list of objects, for example as returned by a repository query.
-
-For most (all?) viewers, this will have meaning only if applied to a property member.
 --
-<.> `[teal]#*_ALL_TABLES_*#`
+<.> xref:#ALL_TABLES[ALL_TABLES]
 +
 --
 The member should be disabled/hidden when displayed as a column of a table, either an object's collection or a standalone list.
-
-This combines _#PARENTED_TABLES_ and _#STANDALONE_TABLES_ .
 --
-<.> `[teal]#*_ALL_EXCEPT_STANDALONE_TABLES_*#`
+<.> xref:#ALL_EXCEPT_STANDALONE_TABLES[ALL_EXCEPT_STANDALONE_TABLES]
 +
 --
 The member should be disabled/hidden except when displayed as a column of a standalone table.
-
-This is the inverse of _#STANDALONE_TABLES_ .
 --
-<.> `[teal]#*_NOWHERE_*#`
+<.> xref:#NOWHERE[NOWHERE]
 +
 --
 To act as an override if a member would normally be hidden as a result of some other convention.
-
-For example, if a property is annotated with `@Title` , then normally this should be hidden from all tables. Additionally annotating with `@Hidden(where=Where.NOWHERE)` overrides this.
 --
-<.> `[teal]#*_NOT_SPECIFIED_*#`
+<.> xref:#NOT_SPECIFIED[NOT_SPECIFIED]
 +
 --
 Acts as the default no-op value for _PropertyLayout#hidden()_ , _CollectionLayout#hidden()_ and _ActionLayout#hidden()_ .
 --
-<.> `[teal]#*includes*#(xref:system:generated:index/applib/annotation/Where.adoc[Where] context)` : `boolean`
+<.> xref:#includes[includes]
 +
 --
 Whether this `Where` is a superset of the context `Where` provided.
+--
+
+== Members
+
+[#EVERYWHERE]
+=== EVERYWHERE
+
+The member should be disabled/hidden everywhere.
+
+Synonym for _#ANYWHERE_ .
+
+[#ANYWHERE]
+=== ANYWHERE
+
+The member should be disabled/hidden everywhere.
+
+Synonym for _#EVERYWHERE_ .
+
+[#OBJECT_FORMS]
+=== OBJECT_FORMS
+
+The member should be disabled/hidden when displayed within an object form.
+
+For most viewers, this applies to property and collection members, not actions.
+
+[#REFERENCES_PARENT]
+=== REFERENCES_PARENT
+
+The member should be disabled/hidden when displayed as a column of a table within parent object's collection, and references that parent.
+
+For most (all?) viewers, this will have meaning only if applied to a property member.
+
+[#PARENTED_TABLES]
+=== PARENTED_TABLES
+
+The member should be disabled/hidden when displayed as a column of a table within a parent object's collection.
+
+For most (all?) viewers, this will have meaning only if applied to a property member.
+
+[#STANDALONE_TABLES]
+=== STANDALONE_TABLES
+
+The member should be disabled/hidden when displayed as a column of a table showing a standalone list of objects, for example as returned by a repository query.
+
+For most (all?) viewers, this will have meaning only if applied to a property member.
+
+[#ALL_TABLES]
+=== ALL_TABLES
+
+The member should be disabled/hidden when displayed as a column of a table, either an object's collection or a standalone list.
+
+This combines _#PARENTED_TABLES_ and _#STANDALONE_TABLES_ .
+
+[#ALL_EXCEPT_STANDALONE_TABLES]
+=== ALL_EXCEPT_STANDALONE_TABLES
+
+The member should be disabled/hidden except when displayed as a column of a standalone table.
+
+This is the inverse of _#STANDALONE_TABLES_ .
+
+[#NOWHERE]
+=== NOWHERE
+
+To act as an override if a member would normally be hidden as a result of some other convention.
+
+For example, if a property is annotated with `@Title` , then normally this should be hidden from all tables. Additionally annotating with `@Hidden(where=Where.NOWHERE)` overrides this.
+
+[#NOT_SPECIFIED]
+=== NOT_SPECIFIED
+
+Acts as the default no-op value for _PropertyLayout#hidden()_ , _CollectionLayout#hidden()_ and _ActionLayout#hidden()_ .
+
+[#includes]
+=== includes
+
+Whether this `Where` is a superset of the context `Where` provided.
 
 For example, _#ALL_TABLES_ includes _#STANDALONE_TABLES_ ; _#ANYWHERE_ includes all others.
---
 

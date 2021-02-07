@@ -40,33 +40,60 @@ class CollectionLayoutData {
 }
 ----
 
-<.> `[teal]#*getId*#()` : `String`
+<.> xref:#getId[getId]
 +
 --
 Collection identifier, being the getter method without "get" prefix, first letter lower cased.
 --
-<.> `[teal]#*getDefaultView*#()` : `String`
+<.> xref:#getDefaultView[getDefaultView]
 +
 --
-Typically `tableor `hidden, but could be any other named view that is configured and appropriate, eg `gmap3or `fullcalendar2.
+Typically `table` or `hidden` , but could be any other named view that is configured and appropriate, eg `gmap3` or `fullcalendar2` .
 --
-<.> `[teal]#*getOwner*#()` : `xref:system:generated:index/applib/layout/component/CollectionLayoutDataOwner.adoc[CollectionLayoutDataOwner]`
+<.> xref:#getOwner[getOwner]
 +
 --
 Owner.
-
-Set programmatically by framework after reading in from XML.
 --
-<.> `[teal]#*getMetadataError*#()` : `String`
+<.> xref:#getMetadataError[getMetadataError]
 +
 --
 For diagnostics; populated by the framework if and only if a metadata error.
 --
-<.> `[teal]#*getLink*#()` : `xref:system:generated:index/applib/layout/links/Link.adoc[Link]`
+<.> xref:#getLink[getLink]
 +
 --
 The link to access this resource from the REST API (Restful Objects viewer).
+--
+
+== Members
+
+[#getId]
+=== getId
+
+Collection identifier, being the getter method without "get" prefix, first letter lower cased.
+
+[#getDefaultView]
+=== getDefaultView
+
+Typically `table` or `hidden` , but could be any other named view that is configured and appropriate, eg `gmap3` or `fullcalendar2` .
+
+[#getOwner]
+=== getOwner
+
+Owner.
+
+Set programmatically by framework after reading in from XML.
+
+[#getMetadataError]
+=== getMetadataError
+
+For diagnostics; populated by the framework if and only if a metadata error.
+
+[#getLink]
+=== getLink
+
+The link to access this resource from the REST API (Restful Objects viewer).
 
 Populated by the framework automatically.
---
 

@@ -13,9 +13,16 @@ CommandJdoRepository commandServiceRepository;
 }
 ----
 
-<.> `[teal]#*findCommandsOnPrimaryFrom*#(UUID uniqueId, Integer batchSize)` : `List<CommandJdo>`
+<.> xref:#findCommandsOnPrimaryFrom[findCommandsOnPrimaryFrom]
 +
 --
-These actions should be called with HTTP Accept Header set to: `application/xml;profile="urn:org.restfulobjects:repr-types/action-result";x-ro-domain-type="org.apache.isis.schema.cmd.v1.CommandsDto"
+These actions should be called with HTTP Accept Header set to: `application/xml;profile="urn:org.restfulobjects:repr-types/action-result";x-ro-domain-type="org.apache.isis.schema.cmd.v1.CommandsDto"` 
 --
+
+== Members
+
+[#findCommandsOnPrimaryFrom]
+=== findCommandsOnPrimaryFrom
+
+These actions should be called with HTTP Accept Header set to: `application/xml;profile="urn:org.restfulobjects:repr-types/action-result";x-ro-domain-type="org.apache.isis.schema.cmd.v1.CommandsDto"` 
 

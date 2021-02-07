@@ -20,11 +20,11 @@ package org.apache.isis.tooling.j2adoc.format;
 
 import java.util.Optional;
 
-import org.asciidoctor.ast.List;
 import org.asciidoctor.ast.StructuralNode;
 
 import org.apache.isis.tooling.j2adoc.J2AdocContext;
 import org.apache.isis.tooling.j2adoc.J2AdocUnit;
+import org.apache.isis.tooling.j2adoc.convert.J2AdocConverter;
 import org.apache.isis.tooling.j2adoc.convert.J2AdocConverterDefault;
 import org.apache.isis.tooling.model4adoc.AsciiDocFactory;
 
@@ -54,28 +54,28 @@ extends UnitFormatterAbstract {
         appendMembersToList(ul, unit,
                 unit.getTypeDeclaration().getEnumConstantDeclarations(),
                 decl -> converter.enumConstantDeclaration(decl),
-                (javadoc, j2Unit) -> converter.javadoc(javadoc, unit)
+                (javadoc, j2Unit) -> converter.javadoc(javadoc, unit, J2AdocConverter.Mode.ALL)
         );
 
         appendMembersToList(ul, unit,
                 unit.getTypeDeclaration().getPublicFieldDeclarations(),
                 decl -> converter.fieldDeclaration(decl, unit),
-                (javadoc, j2Unit) -> converter.javadoc(javadoc, unit));
+                (javadoc, j2Unit) -> converter.javadoc(javadoc, unit, J2AdocConverter.Mode.ALL));
 
         appendMembersToList(ul, unit,
                 unit.getTypeDeclaration().getAnnotationMemberDeclarations(),
                 decl -> converter.annotationMemberDeclaration(decl, unit),
-                (javadoc, j2Unit) -> converter.javadoc(javadoc, unit));
+                (javadoc, j2Unit) -> converter.javadoc(javadoc, unit, J2AdocConverter.Mode.ALL));
 
         appendMembersToList(ul, unit,
                 unit.getTypeDeclaration().getPublicConstructorDeclarations(),
                 decl -> converter.constructorDeclaration(decl, unit),
-                (javadoc, j2Unit) -> converter.javadoc(javadoc, unit));
+                (javadoc, j2Unit) -> converter.javadoc(javadoc, unit, J2AdocConverter.Mode.ALL));
 
         appendMembersToList(ul, unit,
                 unit.getTypeDeclaration().getPublicMethodDeclarations(),
                 decl -> converter.methodDeclaration(decl, unit),
-                (javadoc, j2Unit) -> converter.javadoc(javadoc, unit));
+                (javadoc, j2Unit) -> converter.javadoc(javadoc, unit, J2AdocConverter.Mode.ALL));
 
     }
 

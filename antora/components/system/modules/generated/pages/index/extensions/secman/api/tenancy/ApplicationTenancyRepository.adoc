@@ -19,10 +19,20 @@ interface ApplicationTenancyRepository {
 }
 ----
 
-<.> `[teal]#*newApplicationTenancy*#()` : `T`
-<.> `[teal]#*findMatching*#(String search)` : `Collection<T>`
+<.> xref:#newApplicationTenancy[newApplicationTenancy]
+<.> xref:#findMatching[findMatching]
 +
 --
 auto-complete support
 --
+
+== Members
+
+[#newApplicationTenancy]
+=== newApplicationTenancy
+
+[#findMatching]
+=== findMatching
+
+auto-complete support
 

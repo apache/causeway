@@ -12,11 +12,18 @@ interface CommandSubscriber {
 }
 ----
 
-<.> `[teal]#*onCompleted*#(xref:system:generated:index/applib/services/command/Command.adoc[Command] command)` : `void`
+<.> xref:#onCompleted[onCompleted]
 +
 --
 Notifies that the command has completed.
+--
+
+== Members
+
+[#onCompleted]
+=== onCompleted
+
+Notifies that the command has completed.
 
 This is an opportunity for implementations to process the command, for example to persist a representation of it.
---
 

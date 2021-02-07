@@ -19,26 +19,64 @@ class ResponseDigest {
 }
 ----
 
-<.> `[teal]#*_of_*#<T>(Response response, Class<T> entityType)` : `xref:system:generated:index/extensions/restclient/ResponseDigest.adoc[ResponseDigest]<T>`
+<.> xref:#of[of]
 +
 --
 synchronous response processing (single entity)
 --
-<.> `[teal]#*_ofList_*#<T>(Response response, Class<T> entityType, GenericType<List<T>> genericType)` : `xref:system:generated:index/extensions/restclient/ResponseDigest.adoc[ResponseDigest]<T>`
+<.> xref:#ofList[ofList]
 +
 --
 synchronous response processing (list of entities)
 --
-<.> `[teal]#*_ofAsyncFailure_*#<T>(Future<Response> asyncResponse, Class<T> entityType, Exception failure)` : `xref:system:generated:index/extensions/restclient/ResponseDigest.adoc[ResponseDigest]<T>`
+<.> xref:#ofAsyncFailure[ofAsyncFailure]
 +
 --
 a-synchronous response failure processing
 --
-<.> `[teal]#*isSuccess*#()` : `boolean`
-<.> `[teal]#*isFailure*#()` : `boolean`
-<.> `[teal]#*getEntity*#()` : `Optional<T>`
-<.> `[teal]#*getEntities*#()` : `xref:system:generated:index/commons/collections/Can.adoc[Can]<T>`
-<.> `[teal]#*getFailureCause*#()` : `Exception`
-<.> `[teal]#*singletonOrElseMapFailure*#(Function<Exception, T> failureMapper)` : `T`
-<.> `[teal]#*multipleOrElseMapFailure*#(Function<Exception, xref:system:generated:index/commons/collections/Can.adoc[Can]<T>> failureMapper)` : `xref:system:generated:index/commons/collections/Can.adoc[Can]<T>`
+<.> xref:#isSuccess[isSuccess]
+<.> xref:#isFailure[isFailure]
+<.> xref:#getEntity[getEntity]
+<.> xref:#getEntities[getEntities]
+<.> xref:#getFailureCause[getFailureCause]
+<.> xref:#singletonOrElseMapFailure[singletonOrElseMapFailure]
+<.> xref:#multipleOrElseMapFailure[multipleOrElseMapFailure]
+
+== Members
+
+[#of]
+=== of
+
+synchronous response processing (single entity)
+
+[#ofList]
+=== ofList
+
+synchronous response processing (list of entities)
+
+[#ofAsyncFailure]
+=== ofAsyncFailure
+
+a-synchronous response failure processing
+
+[#isSuccess]
+=== isSuccess
+
+[#isFailure]
+=== isFailure
+
+[#getEntity]
+=== getEntity
+
+[#getEntities]
+=== getEntities
+
+[#getFailureCause]
+=== getFailureCause
+
+[#singletonOrElseMapFailure]
+=== singletonOrElseMapFailure
+
+[#multipleOrElseMapFailure]
+=== multipleOrElseMapFailure
 

@@ -2,7 +2,7 @@
 
 Represents an area on the page containing one or several related members.
 
-Implementations include a `FieldSet(containing a number of properties and their actions), and a `CollectionLayoutData(containing a single collection and associated actions)
+Implementations include a `FieldSet` (containing a number of properties and their actions), and a `CollectionLayoutData` (containing a single collection and associated actions)
 
 == API
 

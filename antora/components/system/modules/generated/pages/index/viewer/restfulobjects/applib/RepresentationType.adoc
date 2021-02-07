@@ -50,7 +50,7 @@ enum RepresentationType {
 }
 ----
 
-<.> `[line-through gray]#*getMediaType*#()` : `MediaType`
+<.> xref:#getMediaType[getMediaType]
 +
 --
 [WARNING]
@@ -60,19 +60,46 @@ enum RepresentationType {
 - use _#getJsonMediaType()_ instead.
 ====
 --
-<.> `[teal]#*getMediaType*#(String parameter, String paramValue)` : `MediaType`
+<.> xref:#getMediaType[getMediaType]
 +
 --
 Clones the (immutable) _#getMediaType() media type_ , adding in one additional parameter value.
 --
-<.> `[teal]#*matchesXmlProfileWithParameter*#(List<MediaType> mediaTypes, String parameterKey)` : `MediaType`
+<.> xref:#matchesXmlProfileWithParameter[matchesXmlProfileWithParameter]
 +
 --
 whether any of the xref:system:generated:index/viewer/restfulobjects/applib/RepresentationType.adoc[RepresentationType] s matches any (accept header) XML _MediaType_ with specified parameter.
 --
-<.> `[teal]#*matchesJsonProfileWithParameter*#(List<MediaType> mediaTypes, String parameterKey)` : `MediaType`
+<.> xref:#matchesJsonProfileWithParameter[matchesJsonProfileWithParameter]
 +
 --
 whether any of the xref:system:generated:index/viewer/restfulobjects/applib/RepresentationType.adoc[RepresentationType] s matches any (accept header) JSON _MediaType_ with specified parameter.
 --
+
+== Members
+
+[#getMediaType]
+=== getMediaType
+
+[WARNING]
+====
+[red]#_deprecated:_#
+
+- use _#getJsonMediaType()_ instead.
+====
+
+[#getMediaType]
+=== getMediaType
+
+Clones the (immutable) _#getMediaType() media type_ , adding in one additional parameter value.
+
+[#matchesXmlProfileWithParameter]
+=== matchesXmlProfileWithParameter
+
+whether any of the xref:system:generated:index/viewer/restfulobjects/applib/RepresentationType.adoc[RepresentationType] s matches any (accept header) XML _MediaType_ with specified parameter.
+
+[#matchesJsonProfileWithParameter]
+=== matchesJsonProfileWithParameter
+
+whether any of the xref:system:generated:index/viewer/restfulobjects/applib/RepresentationType.adoc[RepresentationType] s matches any (accept header) JSON _MediaType_ with specified parameter.
 

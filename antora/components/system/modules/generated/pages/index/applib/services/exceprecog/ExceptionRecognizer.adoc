@@ -20,9 +20,16 @@ interface ExceptionRecognizer {
 }
 ----
 
-<.> `[teal]#*recognize*#(Throwable ex)` : `Optional<Recognition>`
+<.> xref:#recognize[recognize]
 +
 --
 (Attempt to) recognize the exception and return a user-friendly message to render instead.
 --
+
+== Members
+
+[#recognize]
+=== recognize
+
+(Attempt to) recognize the exception and return a user-friendly message to render instead.
 

@@ -22,43 +22,80 @@ class TranslatableString {
 }
 ----
 
-<.> `[teal]#*_tr_*#(String pattern, Object... paramArgs)` : `xref:system:generated:index/applib/services/i18n/TranslatableString.adoc[TranslatableString]`
+<.> xref:#tr[tr]
 +
 --
 A translatable string with a single pattern for both singular and plural forms.
 --
-<.> `[teal]#*_trn_*#(String singularPattern, String pluralPattern, int number, Object... paramArgs)` : `xref:system:generated:index/applib/services/i18n/TranslatableString.adoc[TranslatableString]`
+<.> xref:#trn[trn]
 +
 --
 A translatable string with different patterns for singular and plural forms, selected automatically by the number
 --
-<.> `[teal]#*getSingularText*#()` : `String`
+<.> xref:#getSingularText[getSingularText]
 +
 --
-The text as provided in (either of the _#tr(String, Object...) factory_ _#trn(String, String, int, Object...) method_ s, with placeholders rather than substituted arguments; if _#isPluralForm()_ is `truethen used only for the singular form.
+The text as provided in (either of the _#tr(String, Object...) factory_ _#trn(String, String, int, Object...) method_ s, with placeholders rather than substituted arguments; if _#isPluralForm()_ is `true` then used only for the singular form.
 --
-<.> `[teal]#*getPluralText*#()` : `String`
+<.> xref:#getPluralText[getPluralText]
 +
 --
-The plural text as provided in the _#trn(String, String, int, Object...) factory method_ , with placeholders rather than substituted arguments; but will be `nullif _#isPluralForm()_ is `false.
+The plural text as provided in the _#trn(String, String, int, Object...) factory method_ , with placeholders rather than substituted arguments; but will be `null` if _#isPluralForm()_ is `false` .
 --
-<.> `[teal]#*getArgumentsByParameterName*#()` : `Map<String, Object>`
+<.> xref:#getArgumentsByParameterName[getArgumentsByParameterName]
 +
 --
 The arguments; excluded from _#equals(Object)_ comparison.
 --
-<.> `[teal]#*translate*#(xref:system:generated:index/applib/services/i18n/TranslationService.adoc[TranslationService] translationService, String context)` : `String`
+<.> xref:#translate[translate]
 +
 --
 Translates this string using the provided xref:system:generated:index/applib/services/i18n/TranslationService.adoc[TranslationService] , selecting either the single or plural form as per _#getPattern()_ .
 --
-<.> `[teal]#*getPattern*#()` : `String`
+<.> xref:#getPattern[getPattern]
 +
 --
+The text to be translated; depends on whether _#isPluralForm()_ and whether to be translated.
+--
+
+== Members
+
+[#tr]
+=== tr
+
+A translatable string with a single pattern for both singular and plural forms.
+
+[#trn]
+=== trn
+
+A translatable string with different patterns for singular and plural forms, selected automatically by the number
+
+[#getSingularText]
+=== getSingularText
+
+The text as provided in (either of the _#tr(String, Object...) factory_ _#trn(String, String, int, Object...) method_ s, with placeholders rather than substituted arguments; if _#isPluralForm()_ is `true` then used only for the singular form.
+
+[#getPluralText]
+=== getPluralText
+
+The plural text as provided in the _#trn(String, String, int, Object...) factory method_ , with placeholders rather than substituted arguments; but will be `null` if _#isPluralForm()_ is `false` .
+
+[#getArgumentsByParameterName]
+=== getArgumentsByParameterName
+
+The arguments; excluded from _#equals(Object)_ comparison.
+
+[#translate]
+=== translate
+
+Translates this string using the provided xref:system:generated:index/applib/services/i18n/TranslationService.adoc[TranslationService] , selecting either the single or plural form as per _#getPattern()_ .
+
+[#getPattern]
+=== getPattern
+
 The text to be translated; depends on whether _#isPluralForm()_ and whether to be translated.
 
 Any placeholders will _not_ have been replaced.
 
 NB: this method is exposed only so that implementations of _org.apache.isis.applib.exceptions.TranslatableException_ can return a non-null _Exception#getMessage() message_ when only a translatable message has been provided.
---
 

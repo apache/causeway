@@ -13,14 +13,26 @@ interface JpaSupportService {
 }
 ----
 
-<.> `[teal]#*getEntityManager*#(Class<?> entityType)` : `xref:system:generated:index/commons/functional/Result.adoc[Result]<EntityManager>`
+<.> xref:#getEntityManager[getEntityManager]
 +
 --
 Optionally returns the current interaction's _EntityManager_ , that is bound to given _entityClass_ , based on whether an open interaction is available and a persistence layer is configured in support of JPA.
 --
-<.> `[teal]#*getEntityManagerElseFail*#(Class<?> entityType)` : `EntityManager`
+<.> xref:#getEntityManagerElseFail[getEntityManagerElseFail]
 +
 --
 Returns the current interaction's _EntityManager_ that is managing the given domain type _entityType_ .
 --
+
+== Members
+
+[#getEntityManager]
+=== getEntityManager
+
+Optionally returns the current interaction's _EntityManager_ , that is bound to given _entityClass_ , based on whether an open interaction is available and a persistence layer is configured in support of JPA.
+
+[#getEntityManagerElseFail]
+=== getEntityManagerElseFail
+
+Returns the current interaction's _EntityManager_ that is managing the given domain type _entityType_ .
 

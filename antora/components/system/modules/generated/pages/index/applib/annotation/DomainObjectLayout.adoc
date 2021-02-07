@@ -23,78 +23,140 @@ Layout hints for domain objects.
 }
 ----
 
-<.> `[teal]#*_bookmarking_*#` : `xref:system:generated:index/applib/annotation/BookmarkPolicy.adoc[BookmarkPolicy]`
+<.> xref:#bookmarking[bookmarking]
 +
 --
 Whether (and how) this domain object can be bookmarked in the UI.
 --
-<.> `[teal]#*_cssClass_*#` : `String`
+<.> xref:#cssClass[cssClass]
 +
 --
 Indicates the css class that a domain class (type) should have.
 --
-<.> `[teal]#*_cssClassFa_*#` : `String`
+<.> xref:#cssClassFa[cssClassFa]
 +
 --
 Indicates theFont AwesomeCSS class to decorate an domain object.
 --
-<.> `[teal]#*_cssClassFaPosition_*#` : `xref:system:generated:index/applib/layout/component/CssClassFaPosition.adoc[CssClassFaPosition]`
+<.> xref:#cssClassFaPosition[cssClassFaPosition]
 +
 --
 Indicates the position of theFont Awesomeicon. The icon could be rendered on the left or the right of the object's title.
-
-This attribute is currently ignored by Isis viewers.
 --
-<.> `[teal]#*_describedAs_*#` : `String`
+<.> xref:#describedAs[describedAs]
 +
 --
 Description of this class, eg to be rendered in a tooltip.
 --
-<.> `[teal]#*_named_*#` : `String`
+<.> xref:#named[named]
 +
 --
 Name of this class (overriding the name derived from its name in code).
 --
-<.> `[teal]#*_paged_*#` : `int`
+<.> xref:#paged[paged]
 +
 --
+The page size for instances of this class when rendered within a table.
+--
+<.> xref:#plural[plural]
++
+--
+The plural name of the class.
+--
+<.> xref:#cssClassUiEvent[cssClassUiEvent]
++
+--
+Which subclass of xref:system:generated:index/applib/events/ui/CssClassUiEvent.adoc[CssClassUiEvent] should be used to obtain a CSS class.
+--
+<.> xref:#iconUiEvent[iconUiEvent]
++
+--
+Which subclass of xref:system:generated:index/applib/events/ui/IconUiEvent.adoc[IconUiEvent] should be used to obtain an icon.
+--
+<.> xref:#layoutUiEvent[layoutUiEvent]
++
+--
+Which subclass of xref:system:generated:index/applib/events/ui/LayoutUiEvent.adoc[LayoutUiEvent] should be used to obtain a layout.
+--
+<.> xref:#titleUiEvent[titleUiEvent]
++
+--
+Which subclass of xref:system:generated:index/applib/events/ui/TitleUiEvent.adoc[TitleUiEvent] should be used to obtain a title.
+--
+
+== Members
+
+[#bookmarking]
+=== bookmarking
+
+Whether (and how) this domain object can be bookmarked in the UI.
+
+[#cssClass]
+=== cssClass
+
+Indicates the css class that a domain class (type) should have.
+
+[#cssClassFa]
+=== cssClassFa
+
+Indicates theFont AwesomeCSS class to decorate an domain object.
+
+[#cssClassFaPosition]
+=== cssClassFaPosition
+
+Indicates the position of theFont Awesomeicon. The icon could be rendered on the left or the right of the object's title.
+
+This attribute is currently ignored by Isis viewers.
+
+[#describedAs]
+=== describedAs
+
+Description of this class, eg to be rendered in a tooltip.
+
+[#named]
+=== named
+
+Name of this class (overriding the name derived from its name in code).
+
+[#paged]
+=== paged
+
 The page size for instances of this class when rendered within a table.
 
 If annotated on a collection, then the page size refers to parented collections (eg `Order#lineItems` ).
 
 If annotated on a type, then the page size refers to standalone collections (eg as returned from a repository query).
---
-<.> `[teal]#*_plural_*#` : `String`
-+
---
+
+[#plural]
+=== plural
+
 The plural name of the class.
---
-<.> `[teal]#*_cssClassUiEvent_*#` : `Class<? extends CssClassUiEvent<?>>`
-+
---
+
+[#cssClassUiEvent]
+=== cssClassUiEvent
+
 Which subclass of xref:system:generated:index/applib/events/ui/CssClassUiEvent.adoc[CssClassUiEvent] should be used to obtain a CSS class.
 
 This subclass must provide a no-arg constructor; the fields are set reflectively.
---
-<.> `[teal]#*_iconUiEvent_*#` : `Class<? extends IconUiEvent<?>>`
-+
---
+
+[#iconUiEvent]
+=== iconUiEvent
+
 Which subclass of xref:system:generated:index/applib/events/ui/IconUiEvent.adoc[IconUiEvent] should be used to obtain an icon.
 
 This subclass must provide a no-arg constructor; the fields are set reflectively.
---
-<.> `[teal]#*_layoutUiEvent_*#` : `Class<? extends LayoutUiEvent<?>>`
-+
---
+
+[#layoutUiEvent]
+=== layoutUiEvent
+
 Which subclass of xref:system:generated:index/applib/events/ui/LayoutUiEvent.adoc[LayoutUiEvent] should be used to obtain a layout.
 
 This subclass must provide a no-arg constructor; the fields are set reflectively.
---
-<.> `[teal]#*_titleUiEvent_*#` : `Class<? extends TitleUiEvent<?>>`
-+
---
+
+[#titleUiEvent]
+=== titleUiEvent
+
 Which subclass of xref:system:generated:index/applib/events/ui/TitleUiEvent.adoc[TitleUiEvent] should be used to obtain a title.
 
 This subclass must provide a no-arg constructor; the fields are set reflectively.
---
 

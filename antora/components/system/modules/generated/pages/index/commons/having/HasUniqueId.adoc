@@ -10,9 +10,16 @@ interface HasUniqueId {
 }
 ----
 
-<.> `[teal]#*getUniqueId*#()` : `UUID`
+<.> xref:#getUniqueId[getUniqueId]
 +
 --
 A unique identifier (a GUID).
 --
+
+== Members
+
+[#getUniqueId]
+=== getUniqueId
+
+A unique identifier (a GUID).
 

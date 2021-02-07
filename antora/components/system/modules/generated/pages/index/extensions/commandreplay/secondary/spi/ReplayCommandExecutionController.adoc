@@ -14,9 +14,16 @@ interface ReplayCommandExecutionController {
 }
 ----
 
-<.> `[teal]#*getState*#()` : `State`
+<.> xref:#getState[getState]
 +
 --
 The current state, or `null` if the service implementing this SPI has not yet been initialized.
 --
+
+== Members
+
+[#getState]
+=== getState
+
+The current state, or `null` if the service implementing this SPI has not yet been initialized.
 

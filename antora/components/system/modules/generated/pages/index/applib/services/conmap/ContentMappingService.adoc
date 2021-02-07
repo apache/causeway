@@ -10,9 +10,16 @@ interface ContentMappingService {
 }
 ----
 
-<.> `[teal]#*map*#(Object object, List<MediaType> acceptableMediaTypes)` : `Object`
+<.> xref:#map[map]
 +
 --
 Typically for mapping from a domain object to a DTO.
 --
+
+== Members
+
+[#map]
+=== map
+
+Typically for mapping from a domain object to a DTO.
 

@@ -20,16 +20,28 @@ class Bookmark {
 }
 ----
 
-<.> `[teal]#*_parse_*#(String str)` : `Optional<xref:system:generated:index/applib/services/bookmark/Bookmark.adoc[Bookmark]>`
+<.> xref:#parse[parse]
 +
 --
 Round-trip with _#toString()_ representation.
 --
-<.> `[teal]#*toString*#()` : `String`
+<.> xref:#toString[toString]
 +
 --
 The canonical form of the xref:system:generated:index/applib/services/bookmark/Bookmark.adoc[Bookmark] , that is " _#getObjectType() objectType_ _#SEPARATOR_ _#getIdentifier()_ ".
+--
+
+== Members
+
+[#parse]
+=== parse
+
+Round-trip with _#toString()_ representation.
+
+[#toString]
+=== toString
+
+The canonical form of the xref:system:generated:index/applib/services/bookmark/Bookmark.adoc[Bookmark] , that is " _#getObjectType() objectType_ _#SEPARATOR_ _#getIdentifier()_ ".
 
 This is parseable by the _#parse(String)_ .
---
 

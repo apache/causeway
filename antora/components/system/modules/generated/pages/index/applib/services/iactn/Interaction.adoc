@@ -21,19 +21,36 @@ interface Interaction {
 }
 ----
 
-<.> `[teal]#*getCurrentExecution*#()` : `Execution<?, ?>`
+<.> xref:#getCurrentExecution[getCurrentExecution]
 +
 --
 The current (most recently pushed) _Execution_ .
 --
-<.> `[teal]#*getPriorExecution*#()` : `Execution<?, ?>`
+<.> xref:#getPriorExecution[getPriorExecution]
 +
 --
 The execution that preceded the current one.
 --
-<.> `[teal]#*next*#(String sequenceId)` : `int`
+<.> xref:#next[next]
 +
 --
 Generates numbers in a named sequence. The name of the sequence can be arbitrary, though note that the framework also uses this capability to generate sequence numbers corresponding to the sequences enumerated by the _Sequence_ enum.
 --
+
+== Members
+
+[#getCurrentExecution]
+=== getCurrentExecution
+
+The current (most recently pushed) _Execution_ .
+
+[#getPriorExecution]
+=== getPriorExecution
+
+The execution that preceded the current one.
+
+[#next]
+=== next
+
+Generates numbers in a named sequence. The name of the sequence can be arbitrary, though note that the framework also uses this capability to generate sequence numbers corresponding to the sequences enumerated by the _Sequence_ enum.
 

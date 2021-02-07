@@ -19,5 +19,10 @@ class Files {
 }
 ----
 
-<.> `[teal]#*_deleteFilesWithPrefix_*#(String directoryName, String filePrefix, Recursion recursion)` : `void`
+<.> xref:#deleteFilesWithPrefix[deleteFilesWithPrefix]
+
+== Members
+
+[#deleteFilesWithPrefix]
+=== deleteFilesWithPrefix
 

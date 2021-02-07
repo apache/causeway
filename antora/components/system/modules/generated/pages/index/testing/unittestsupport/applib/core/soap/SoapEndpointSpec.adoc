@@ -18,9 +18,16 @@ class SoapEndpointSpec {
 }
 ----
 
-<.> `[teal]#*setEndpointAddress*#(String endpointAddress)` : `void`
+<.> xref:#setEndpointAddress[setEndpointAddress]
 +
 --
 Populated when published if not otherwise.
 --
+
+== Members
+
+[#setEndpointAddress]
+=== setEndpointAddress
+
+Populated when published if not otherwise.
 

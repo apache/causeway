@@ -16,36 +16,68 @@ class ActionDomainEvent {
 }
 ----
 
-<.> `[teal]#*ActionDomainEvent*#()`
+<.> xref:#ActionDomainEvent[ActionDomainEvent]
 +
 --
 If used then the framework will set state via (non-API) setters.
-
-Recommended because it reduces the amount of boilerplate in the domain object classes.
 --
-<.> `[teal]#*setReturnValue*#(Object returnValue)` : `void`
+<.> xref:#setReturnValue[setReturnValue]
 +
 --
 Set by the framework. Event subscribers can replace the value with some other value if they wish, though only in the _AbstractDomainEvent.Phase#EXECUTED_ phase.
 --
-<.> `[teal]#*setSemantics*#(xref:system:generated:index/applib/annotation/SemanticsOf.adoc[SemanticsOf] semantics)` : `void`
+<.> xref:#setSemantics[setSemantics]
 +
 --
 Not API - set by the framework.
 --
-<.> `[teal]#*setParameterNames*#(List<String> parameterNames)` : `void`
+<.> xref:#setParameterNames[setParameterNames]
 +
 --
 Not API - set by the framework.
 --
-<.> `[teal]#*setParameterTypes*#(List<Class<?>> parameterTypes)` : `void`
+<.> xref:#setParameterTypes[setParameterTypes]
 +
 --
 Not API - set by the framework.
 --
-<.> `[teal]#*setMixedIn*#(Object mixedIn)` : `void`
+<.> xref:#setMixedIn[setMixedIn]
 +
 --
 Not API - set by the framework.
 --
+
+== Members
+
+[#ActionDomainEvent]
+=== ActionDomainEvent
+
+If used then the framework will set state via (non-API) setters.
+
+Recommended because it reduces the amount of boilerplate in the domain object classes.
+
+[#setReturnValue]
+=== setReturnValue
+
+Set by the framework. Event subscribers can replace the value with some other value if they wish, though only in the _AbstractDomainEvent.Phase#EXECUTED_ phase.
+
+[#setSemantics]
+=== setSemantics
+
+Not API - set by the framework.
+
+[#setParameterNames]
+=== setParameterNames
+
+Not API - set by the framework.
+
+[#setParameterTypes]
+=== setParameterTypes
+
+Not API - set by the framework.
+
+[#setMixedIn]
+=== setMixedIn
+
+Not API - set by the framework.
 

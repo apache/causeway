@@ -20,55 +20,102 @@ interface DomainChangeRecord {
 }
 ----
 
-<.> `[teal]#*getType*#()` : `ChangeType`
+<.> xref:#getType[getType]
 +
 --
 Distinguishes commands from audit entries from published events/interactions (when these are shown mixed together in a (standalone) table).
 --
-<.> `[teal]#*getUniqueId*#()` : `UUID`
+<.> xref:#getUniqueId[getUniqueId]
 +
 --
 The unique identifier (a GUID) of the transaction in which this change occurred.
 --
-<.> `[teal]#*getUsername*#()` : `String`
+<.> xref:#getUsername[getUsername]
 +
 --
 The user that caused the change.
 --
-<.> `[teal]#*getTimestamp*#()` : `Timestamp`
+<.> xref:#getTimestamp[getTimestamp]
 +
 --
 The time that the change occurred.
 --
-<.> `[teal]#*getTargetObjectType*#()` : `String`
+<.> xref:#getTargetObjectType[getTargetObjectType]
 +
 --
 The object type of the domain object being changed.
 --
-<.> `[teal]#*getTarget*#()` : `xref:system:generated:index/applib/services/bookmark/Bookmark.adoc[Bookmark]`
+<.> xref:#getTarget[getTarget]
 +
 --
 The xref:system:generated:index/applib/services/bookmark/Bookmark.adoc[Bookmark] identifying the domain object that has changed.
 --
-<.> `[teal]#*getTargetMember*#()` : `String`
+<.> xref:#getTargetMember[getTargetMember]
 +
 --
 The member interaction (ie action invocation or property edit) which caused the domain object to be changed.
-
-Populated for commands and for published events that represent action invocations or property edits.
 --
-<.> `[teal]#*getPreValue*#()` : `String`
+<.> xref:#getPreValue[getPreValue]
 +
 --
 The value of the property prior to it being changed.
-
-Populated only for audit entries.
 --
-<.> `[teal]#*getPostValue*#()` : `String`
+<.> xref:#getPostValue[getPostValue]
 +
 --
 The value of the property after it has changed.
+--
+
+== Members
+
+[#getType]
+=== getType
+
+Distinguishes commands from audit entries from published events/interactions (when these are shown mixed together in a (standalone) table).
+
+[#getUniqueId]
+=== getUniqueId
+
+The unique identifier (a GUID) of the transaction in which this change occurred.
+
+[#getUsername]
+=== getUsername
+
+The user that caused the change.
+
+[#getTimestamp]
+=== getTimestamp
+
+The time that the change occurred.
+
+[#getTargetObjectType]
+=== getTargetObjectType
+
+The object type of the domain object being changed.
+
+[#getTarget]
+=== getTarget
+
+The xref:system:generated:index/applib/services/bookmark/Bookmark.adoc[Bookmark] identifying the domain object that has changed.
+
+[#getTargetMember]
+=== getTargetMember
+
+The member interaction (ie action invocation or property edit) which caused the domain object to be changed.
+
+Populated for commands and for published events that represent action invocations or property edits.
+
+[#getPreValue]
+=== getPreValue
+
+The value of the property prior to it being changed.
 
 Populated only for audit entries.
---
+
+[#getPostValue]
+=== getPostValue
+
+The value of the property after it has changed.
+
+Populated only for audit entries.
 

@@ -20,9 +20,16 @@ ExcelService excelService;
 }
 ----
 
-<.> `[teal]#*matcher*#` : `Matcher`
+<.> xref:#matcher[matcher]
 +
 --
 Input, mandatory ... how to process each sheet of the workbook.
 --
+
+== Members
+
+[#matcher]
+=== matcher
+
+Input, mandatory ... how to process each sheet of the workbook.
 

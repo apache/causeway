@@ -18,19 +18,36 @@ class TransactionServiceSpring {
 }
 ----
 
-<.> `[teal]#*beforeEnteringTransactionalBoundary*#(InteractionSession interactionSession)` : `void`
+<.> xref:#beforeEnteringTransactionalBoundary[beforeEnteringTransactionalBoundary]
 +
 --
 INTERACTION BEGIN BOUNDARY
 --
-<.> `[teal]#*onTransactionEnded*#(xref:system:generated:index/core/transaction/events/TransactionAfterCompletionEvent.adoc[TransactionAfterCompletionEvent] event)` : `void`
+<.> xref:#onTransactionEnded[onTransactionEnded]
 +
 --
 TRANSACTION END BOUNDARY
 --
-<.> `[teal]#*afterLeavingTransactionalBoundary*#(InteractionSession interactionSession)` : `void`
+<.> xref:#afterLeavingTransactionalBoundary[afterLeavingTransactionalBoundary]
 +
 --
 INTERACTION END BOUNDARY
 --
+
+== Members
+
+[#beforeEnteringTransactionalBoundary]
+=== beforeEnteringTransactionalBoundary
+
+INTERACTION BEGIN BOUNDARY
+
+[#onTransactionEnded]
+=== onTransactionEnded
+
+TRANSACTION END BOUNDARY
+
+[#afterLeavingTransactionalBoundary]
+=== afterLeavingTransactionalBoundary
+
+INTERACTION END BOUNDARY
 

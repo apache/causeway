@@ -23,9 +23,16 @@ class EntityChangeTrackerDefault {
 }
 ----
 
-<.> `[teal]#*onPreCommit*#(TransactionBeforeCompletionEvent event)` : `void`
+<.> xref:#onPreCommit[onPreCommit]
 +
 --
 TRANSACTION END BOUNDARY
 --
+
+== Members
+
+[#onPreCommit]
+=== onPreCommit
+
+TRANSACTION END BOUNDARY
 

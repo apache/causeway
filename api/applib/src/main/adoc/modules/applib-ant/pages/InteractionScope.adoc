@@ -5,25 +5,5 @@
 
 include::system:generated:page$index/applib/annotation/InteractionScope.adoc[]
 
+include::InteractionScope/hooks/examples-and-usage.adoc[]
 
-
-// TODO: v2 - this may no longer be true.
-
-//A number of the built-in domain services uses this annotation, including xref:refguide:applib-svc:Scratchpad.adoc[`Scratchpad`] and
-//xref:refguide:applib-svc:QueryResultsCache.adoc[`QueryResultsCache`].
-//
-//One small wrinkle: these session-scoped services must be injected using the `Provider` idiom, not directly.
-//For example:
-//
-//[source,java]
-//----
-//@DomainService
-//public class SomeRepository {
-//    // ...
-//    @Inject
-//    Provider<QueryResultsCache> queryResultsCacheProvider;
-//}
-//----
-//
-//If the session-scoped service is accidentally injected directly, then the framework will fail-fast with a suitable error message.
-//

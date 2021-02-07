@@ -15,18 +15,30 @@ interface ViewModel {
 }
 ----
 
-<.> `[teal]#*viewModelMemento*#()` : `String`
+<.> xref:#viewModelMemento[viewModelMemento]
 +
 --
+Obtain a memento of the view model.
+--
+<.> xref:#viewModelInit[viewModelInit]
++
+--
+Used to re-initialize a view model with a memento obtained from _#viewModelMemento()_ .
+--
+
+== Members
+
+[#viewModelMemento]
+=== viewModelMemento
+
 Obtain a memento of the view model.
 
 Typically this will be the identifier of a backing domain entity, but it could also be an arbitrary string, for example a bunch of JSON.
 
 This method is called by the framework in order that the view model may be recreated subsequently through _#viewModelInit(String)_ .
---
-<.> `[teal]#*viewModelInit*#(String memento)` : `void`
-+
---
+
+[#viewModelInit]
+=== viewModelInit
+
 Used to re-initialize a view model with a memento obtained from _#viewModelMemento()_ .
---
 

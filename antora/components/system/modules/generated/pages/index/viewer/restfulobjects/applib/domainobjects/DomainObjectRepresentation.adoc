@@ -23,29 +23,56 @@ class DomainObjectRepresentation {
 }
 ----
 
-<.> `[teal]#*getDomainType*#()` : `String`
+<.> xref:#getDomainType[getDomainType]
 +
 --
 Populated only for domain objects, not for domain services.
 --
-<.> `[teal]#*getInstanceId*#()` : `String`
+<.> xref:#getInstanceId[getInstanceId]
 +
 --
 Populated only for domain objects, not for domain services.
 --
-<.> `[teal]#*getServiceId*#()` : `String`
+<.> xref:#getServiceId[getServiceId]
 +
 --
 Populated only for domain services, not for domain objects.
 --
-<.> `[teal]#*getPersistLink*#()` : `xref:system:generated:index/viewer/restfulobjects/applib/LinkRepresentation.adoc[LinkRepresentation]`
+<.> xref:#getPersistLink[getPersistLink]
 +
 --
 Only for transient, persistable, objects
 --
-<.> `[teal]#*getOid*#()` : `String`
+<.> xref:#getOid[getOid]
 +
 --
 Isis extension.
 --
+
+== Members
+
+[#getDomainType]
+=== getDomainType
+
+Populated only for domain objects, not for domain services.
+
+[#getInstanceId]
+=== getInstanceId
+
+Populated only for domain objects, not for domain services.
+
+[#getServiceId]
+=== getServiceId
+
+Populated only for domain services, not for domain objects.
+
+[#getPersistLink]
+=== getPersistLink
+
+Only for transient, persistable, objects
+
+[#getOid]
+=== getOid
+
+Isis extension.
 

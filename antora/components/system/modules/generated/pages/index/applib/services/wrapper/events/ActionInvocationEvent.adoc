@@ -19,9 +19,16 @@ class ActionInvocationEvent {
 }
 ----
 
-<.> `[teal]#*getProposed*#()` : `Object`
+<.> xref:#getProposed[getProposed]
 +
 --
 Does not apply
 --
+
+== Members
+
+[#getProposed]
+=== getProposed
+
+Does not apply
 

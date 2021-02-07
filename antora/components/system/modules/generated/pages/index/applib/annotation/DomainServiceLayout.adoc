@@ -15,14 +15,26 @@ Also indicates the name, and menu ordering UI hints.
 }
 ----
 
-<.> `[teal]#*_menuBar_*#` : `MenuBar`
+<.> xref:#menuBar[menuBar]
 +
 --
 The menubar in which the menu that holds this service's actions should reside.
 --
-<.> `[teal]#*_named_*#` : `String`
+<.> xref:#named[named]
 +
 --
 Name of this class (overriding the name derived from its name in code).
 --
+
+== Members
+
+[#menuBar]
+=== menuBar
+
+The menubar in which the menu that holds this service's actions should reside.
+
+[#named]
+=== named
+
+Name of this class (overriding the name derived from its name in code).
 

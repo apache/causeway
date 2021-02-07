@@ -14,19 +14,36 @@ interface SudoService {
 }
 ----
 
-<.> `[teal]#*ACCESS_ALL_ROLE*#` : `xref:system:generated:index/applib/services/user/RoleMemento.adoc[RoleMemento]`
+<.> xref:#ACCESS_ALL_ROLE[ACCESS_ALL_ROLE]
 +
 --
 If included in the list of roles, then will disable security checks (can view and use all object members).
 --
-<.> `[teal]#*call*#<T>(UnaryOperator<xref:system:generated:index/applib/services/iactn/ExecutionContext.adoc[ExecutionContext]> sudoMapper, Callable<T> supplier)` : `T`
+<.> xref:#call[call]
 +
 --
 Executes the supplied block, with the xref:system:generated:index/applib/services/user/UserService.adoc[UserService] returning the specified user.
 --
-<.> `[teal]#*run*#(UnaryOperator<xref:system:generated:index/applib/services/iactn/ExecutionContext.adoc[ExecutionContext]> sudoMapper, ThrowingRunnable runnable)` : `void`
+<.> xref:#run[run]
 +
 --
 Executes the supplied block, with the xref:system:generated:index/applib/services/user/UserService.adoc[UserService] returning the specified user.
 --
+
+== Members
+
+[#ACCESS_ALL_ROLE]
+=== ACCESS_ALL_ROLE
+
+If included in the list of roles, then will disable security checks (can view and use all object members).
+
+[#call]
+=== call
+
+Executes the supplied block, with the xref:system:generated:index/applib/services/user/UserService.adoc[UserService] returning the specified user.
+
+[#run]
+=== run
+
+Executes the supplied block, with the xref:system:generated:index/applib/services/user/UserService.adoc[UserService] returning the specified user.
 

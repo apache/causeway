@@ -30,115 +30,213 @@ Domain semantics for domain objects (entities and view models; for services see 
 }
 ----
 
-<.> `[teal]#*_autoCompleteRepository_*#` : `Class<?>`
+<.> xref:#autoCompleteRepository[autoCompleteRepository]
 +
 --
-The class of the domain service that provides an `autoComplete(String)method.
-
-It is sufficient to specify an interface rather than a concrete type.
+The class of the domain service that provides an `autoComplete(String)` method.
 --
-<.> `[teal]#*_autoCompleteAction_*#` : `String`
+<.> xref:#autoCompleteAction[autoCompleteAction]
 +
 --
 The method (despite its name, not necessarily an action) to use in order to perform the auto-complete search (defaults to "autoComplete").
-
-The method is required to accept a single string parameter, and must return a list of the domain type.
 --
-<.> `[teal]#*_bounding_*#` : `xref:system:generated:index/applib/annotation/Bounding.adoc[Bounding]`
+<.> xref:#bounding[bounding]
 +
 --
+Indicates that the class has a bounded, or finite, set of instances.
+--
+<.> xref:#editing[editing]
++
+--
+Whether the properties of this domain object can be edited, or collections of this object be added to/removed from.
+--
+<.> xref:#editingDisabledReason[editingDisabledReason]
++
+--
+If _#editing()_ is set to _Editing#DISABLED_ , then the reason to provide to the user as to why the object's properties cannot be edited/collections modified.
+--
+<.> xref:#entityChangePublishing[entityChangePublishing]
++
+--
+Whether entity changes should be published to _org.apache.isis.applib.services.publishing.spi.EntityPropertyChangeSubscriber_ s and whether entity changes, captured as _org.apache.isis.applib.services.publishing.spi.EntityChanges_ , should be dispatched to _org.apache.isis.applib.services.publishing.spi.EntityChangesSubscriber_ s.
+--
+<.> xref:#mixinMethod[mixinMethod]
++
+--
+Applicable only if _#nature()_ is _Nature#MIXIN_ .
+--
+<.> xref:#nature[nature]
++
+--
+The nature of this domain object.
+--
+<.> xref:#objectType[objectType]
++
+--
+Provides a unique abbreviation for the object type, eg "customer.Customer" for Customer.
+--
+<.> xref:#createdLifecycleEvent[createdLifecycleEvent]
++
+--
+Indicates that the loading of the domain object should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService event bus_ using a custom (subclass of) xref:system:generated:index/applib/events/lifecycle/ObjectCreatedEvent.adoc[ObjectCreatedEvent] .
+--
+<.> xref:#persistingLifecycleEvent[persistingLifecycleEvent]
++
+--
+Indicates that the loading of the domain object should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService event bus_ using a custom (subclass of) xref:system:generated:index/applib/events/lifecycle/ObjectPersistingEvent.adoc[ObjectPersistingEvent] .
+--
+<.> xref:#persistedLifecycleEvent[persistedLifecycleEvent]
++
+--
+Indicates that the loading of the domain object should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService event bus_ using a custom (subclass of) xref:system:generated:index/applib/events/lifecycle/ObjectPersistedEvent.adoc[ObjectPersistedEvent] .
+--
+<.> xref:#loadedLifecycleEvent[loadedLifecycleEvent]
++
+--
+Indicates that the loading of the domain object should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService event bus_ using a custom (subclass of) xref:system:generated:index/applib/events/lifecycle/ObjectLoadedEvent.adoc[ObjectLoadedEvent] .
+--
+<.> xref:#updatingLifecycleEvent[updatingLifecycleEvent]
++
+--
+Indicates that the loading of the domain object should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService event bus_ using a custom (subclass of) xref:system:generated:index/applib/events/lifecycle/ObjectUpdatingEvent.adoc[ObjectUpdatingEvent] .
+--
+<.> xref:#updatedLifecycleEvent[updatedLifecycleEvent]
++
+--
+Indicates that the loading of the domain object should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService event bus_ using a custom (subclass of) xref:system:generated:index/applib/events/lifecycle/ObjectUpdatedEvent.adoc[ObjectUpdatedEvent] .
+--
+<.> xref:#removingLifecycleEvent[removingLifecycleEvent]
++
+--
+Indicates that the loading of the domain object should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService event bus_ using a custom (subclass of) xref:system:generated:index/applib/events/lifecycle/ObjectRemovingEvent.adoc[ObjectRemovingEvent] .
+--
+<.> xref:#actionDomainEvent[actionDomainEvent]
++
+--
+Indicates that an invocation of _any_ action of the domain object (that do not themselves specify their own `@Action(domainEvent=...)` should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService event bus_ using the specified custom (subclass of) xref:system:generated:index/applib/events/domain/ActionDomainEvent.adoc[ActionDomainEvent] .
+--
+<.> xref:#propertyDomainEvent[propertyDomainEvent]
++
+--
+Indicates that changes to _any_ property of the domain object (that do not themselves specify their own `@Property(domainEvent=...)` should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService event bus_ using the specified custom (subclass of) xref:system:generated:index/applib/events/domain/PropertyDomainEvent.adoc[PropertyDomainEvent] .
+--
+<.> xref:#collectionDomainEvent[collectionDomainEvent]
++
+--
+Indicates that changes to _any_ collection of the domain object (that do not themselves specify their own `@Collection(domainEvent=...)` should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService event bus_ using a custom (subclass of) xref:system:generated:index/applib/events/domain/CollectionDomainEvent.adoc[CollectionDomainEvent] .
+--
+
+== Members
+
+[#autoCompleteRepository]
+=== autoCompleteRepository
+
+The class of the domain service that provides an `autoComplete(String)` method.
+
+It is sufficient to specify an interface rather than a concrete type.
+
+[#autoCompleteAction]
+=== autoCompleteAction
+
+The method (despite its name, not necessarily an action) to use in order to perform the auto-complete search (defaults to "autoComplete").
+
+The method is required to accept a single string parameter, and must return a list of the domain type.
+
+[#bounding]
+=== bounding
+
 Indicates that the class has a bounded, or finite, set of instances.
 
 Takes precedence over auto-complete.
 
 Note: this replaces bounded=true|false prior to v2.x
---
-<.> `[teal]#*_editing_*#` : `xref:system:generated:index/applib/annotation/Editing.adoc[Editing]`
-+
---
+
+[#editing]
+=== editing
+
 Whether the properties of this domain object can be edited, or collections of this object be added to/removed from.
 
 Note that non-editable objects can nevertheless have actions invoked upon them.
---
-<.> `[teal]#*_editingDisabledReason_*#` : `String`
-+
---
+
+[#editingDisabledReason]
+=== editingDisabledReason
+
 If _#editing()_ is set to _Editing#DISABLED_ , then the reason to provide to the user as to why the object's properties cannot be edited/collections modified.
---
-<.> `[teal]#*_entityChangePublishing_*#` : `xref:system:generated:index/applib/annotation/Publishing.adoc[Publishing]`
-+
---
+
+[#entityChangePublishing]
+=== entityChangePublishing
+
 Whether entity changes should be published to _org.apache.isis.applib.services.publishing.spi.EntityPropertyChangeSubscriber_ s and whether entity changes, captured as _org.apache.isis.applib.services.publishing.spi.EntityChanges_ , should be dispatched to _org.apache.isis.applib.services.publishing.spi.EntityChangesSubscriber_ s.
---
-<.> `[teal]#*_mixinMethod_*#` : `String`
-+
---
+
+[#mixinMethod]
+=== mixinMethod
+
 Applicable only if _#nature()_ is _Nature#MIXIN_ .
---
-<.> `[teal]#*_nature_*#` : `xref:system:generated:index/applib/annotation/Nature.adoc[Nature]`
-+
---
+
+[#nature]
+=== nature
+
 The nature of this domain object.
---
-<.> `[teal]#*_objectType_*#` : `String`
-+
---
+
+[#objectType]
+=== objectType
+
 Provides a unique abbreviation for the object type, eg "customer.Customer" for Customer.
 
 This value, if specified, is used in the serialized form of the object's OID. An OID is used by the framework to unique identify an object over time (same concept as a URN).
---
-<.> `[teal]#*_createdLifecycleEvent_*#` : `Class<? extends ObjectCreatedEvent<?>>`
-+
---
+
+[#createdLifecycleEvent]
+=== createdLifecycleEvent
+
 Indicates that the loading of the domain object should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService event bus_ using a custom (subclass of) xref:system:generated:index/applib/events/lifecycle/ObjectCreatedEvent.adoc[ObjectCreatedEvent] .
 
 This subclass must provide a no-arg constructor; the fields are set reflectively.
---
-<.> `[teal]#*_persistingLifecycleEvent_*#` : `Class<? extends ObjectPersistingEvent<?>>`
-+
---
+
+[#persistingLifecycleEvent]
+=== persistingLifecycleEvent
+
 Indicates that the loading of the domain object should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService event bus_ using a custom (subclass of) xref:system:generated:index/applib/events/lifecycle/ObjectPersistingEvent.adoc[ObjectPersistingEvent] .
 
 This subclass must provide a no-arg constructor; the fields are set reflectively.
---
-<.> `[teal]#*_persistedLifecycleEvent_*#` : `Class<? extends ObjectPersistedEvent<?>>`
-+
---
+
+[#persistedLifecycleEvent]
+=== persistedLifecycleEvent
+
 Indicates that the loading of the domain object should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService event bus_ using a custom (subclass of) xref:system:generated:index/applib/events/lifecycle/ObjectPersistedEvent.adoc[ObjectPersistedEvent] .
 
 This subclass must provide a no-arg constructor; the fields are set reflectively.
---
-<.> `[teal]#*_loadedLifecycleEvent_*#` : `Class<? extends ObjectLoadedEvent<?>>`
-+
---
+
+[#loadedLifecycleEvent]
+=== loadedLifecycleEvent
+
 Indicates that the loading of the domain object should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService event bus_ using a custom (subclass of) xref:system:generated:index/applib/events/lifecycle/ObjectLoadedEvent.adoc[ObjectLoadedEvent] .
 
 This subclass must provide a no-arg constructor; the fields are set reflectively.
---
-<.> `[teal]#*_updatingLifecycleEvent_*#` : `Class<? extends ObjectUpdatingEvent<?>>`
-+
---
+
+[#updatingLifecycleEvent]
+=== updatingLifecycleEvent
+
 Indicates that the loading of the domain object should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService event bus_ using a custom (subclass of) xref:system:generated:index/applib/events/lifecycle/ObjectUpdatingEvent.adoc[ObjectUpdatingEvent] .
 
 This subclass must provide a no-arg constructor; the fields are set reflectively.
---
-<.> `[teal]#*_updatedLifecycleEvent_*#` : `Class<? extends ObjectUpdatedEvent<?>>`
-+
---
+
+[#updatedLifecycleEvent]
+=== updatedLifecycleEvent
+
 Indicates that the loading of the domain object should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService event bus_ using a custom (subclass of) xref:system:generated:index/applib/events/lifecycle/ObjectUpdatedEvent.adoc[ObjectUpdatedEvent] .
 
 This subclass must provide a no-arg constructor; the fields are set reflectively.
---
-<.> `[teal]#*_removingLifecycleEvent_*#` : `Class<? extends ObjectRemovingEvent<?>>`
-+
---
+
+[#removingLifecycleEvent]
+=== removingLifecycleEvent
+
 Indicates that the loading of the domain object should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService event bus_ using a custom (subclass of) xref:system:generated:index/applib/events/lifecycle/ObjectRemovingEvent.adoc[ObjectRemovingEvent] .
 
 This subclass must provide a no-arg constructor; the fields are set reflectively.
---
-<.> `[teal]#*_actionDomainEvent_*#` : `Class<? extends ActionDomainEvent<?>>`
-+
---
+
+[#actionDomainEvent]
+=== actionDomainEvent
+
 Indicates that an invocation of _any_ action of the domain object (that do not themselves specify their own `@Action(domainEvent=...)` should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService event bus_ using the specified custom (subclass of) xref:system:generated:index/applib/events/domain/ActionDomainEvent.adoc[ActionDomainEvent] .
 
 For example:
@@ -157,10 +255,10 @@ public class SomeObject{
 This will result in all actions as a more specific type to use) to emit this event.
 
 This subclass must provide a no-arg constructor; the fields are set reflectively. It must also use `Object` as its generic type. This is to allow mixins to also emit the same event.
---
-<.> `[teal]#*_propertyDomainEvent_*#` : `Class<? extends PropertyDomainEvent<?,?>>`
-+
---
+
+[#propertyDomainEvent]
+=== propertyDomainEvent
+
 Indicates that changes to _any_ property of the domain object (that do not themselves specify their own `@Property(domainEvent=...)` should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService event bus_ using the specified custom (subclass of) xref:system:generated:index/applib/events/domain/PropertyDomainEvent.adoc[PropertyDomainEvent] .
 
 For example:
@@ -175,10 +273,10 @@ public class SomeObject{
 ----
 
 This subclass must provide a no-arg constructor; the fields are set reflectively. It must also use `Object` as its generic type. This is to allow mixins to also emit the same event.
---
-<.> `[teal]#*_collectionDomainEvent_*#` : `Class<? extends CollectionDomainEvent<?,?>>`
-+
---
+
+[#collectionDomainEvent]
+=== collectionDomainEvent
+
 Indicates that changes to _any_ collection of the domain object (that do not themselves specify their own `@Collection(domainEvent=...)` should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService event bus_ using a custom (subclass of) xref:system:generated:index/applib/events/domain/CollectionDomainEvent.adoc[CollectionDomainEvent] .
 
 For example:
@@ -193,5 +291,4 @@ public class Order {
 ----
 
 This subclass must provide a no-arg constructor; the fields are set reflectively. It must also use `Object` as its generic type. This is to allow mixins to also emit the same event.
---
 

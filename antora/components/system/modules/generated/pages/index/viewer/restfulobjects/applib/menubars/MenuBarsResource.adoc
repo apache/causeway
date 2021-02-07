@@ -15,24 +15,46 @@ interface MenuBarsResource {
 }
 ----
 
-<.> `[teal]#*menuBars*#()` : `Response`
+<.> xref:#menuBars[menuBars]
 +
 --
 Not part of the Restful Objects spec.
 --
-<.> `[teal]#*deleteMenuBarsNotAllowed*#()` : `Response`
+<.> xref:#deleteMenuBarsNotAllowed[deleteMenuBarsNotAllowed]
 +
 --
 Not part of the Restful Objects spec.
 --
-<.> `[teal]#*putMenuBarsNotAllowed*#()` : `Response`
+<.> xref:#putMenuBarsNotAllowed[putMenuBarsNotAllowed]
 +
 --
 Not part of the Restful Objects spec.
 --
-<.> `[teal]#*postMenuBarsNotAllowed*#()` : `Response`
+<.> xref:#postMenuBarsNotAllowed[postMenuBarsNotAllowed]
 +
 --
 Not part of the Restful Objects spec.
 --
+
+== Members
+
+[#menuBars]
+=== menuBars
+
+Not part of the Restful Objects spec.
+
+[#deleteMenuBarsNotAllowed]
+=== deleteMenuBarsNotAllowed
+
+Not part of the Restful Objects spec.
+
+[#putMenuBarsNotAllowed]
+=== putMenuBarsNotAllowed
+
+Not part of the Restful Objects spec.
+
+[#postMenuBarsNotAllowed]
+=== postMenuBarsNotAllowed
+
+Not part of the Restful Objects spec.
 

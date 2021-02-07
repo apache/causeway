@@ -33,38 +33,70 @@ interface Parser {
 }
 ----
 
-<.> `[teal]#*parseTextEntry*#(Object contextPojo, String entry)` : `T`
+<.> xref:#parseTextEntry[parseTextEntry]
 +
 --
 Parses a string to an instance of the object.
-
-Note that here the implementing class is acting as a factory for itself.
 --
-<.> `[teal]#*typicalLength*#()` : `int`
+<.> xref:#typicalLength[typicalLength]
 +
 --
 The typical length of objects that can be parsed.
 --
-<.> `[teal]#*displayTitleOf*#(T object)` : `String`
+<.> xref:#displayTitleOf[displayTitleOf]
 +
 --
 The title of the object.
 --
-<.> `[teal]#*displayTitleOf*#(T object, String usingMask)` : `String`
+<.> xref:#displayTitleOf[displayTitleOf]
 +
 --
 The title of the object using a mask.
 --
-<.> `[teal]#*parseableTitleOf*#(T existing)` : `String`
+<.> xref:#parseableTitleOf[parseableTitleOf]
 +
 --
-A title for the object that is valid but which may be easier to edit than the title provided by a `TitleFacet.
-
-The idea here is that the viewer can display a parseable title for an existing object when, for example, the user initially clicks in the field. So, a date might be rendered via a `TitleFacetas `May 2, 2007` , but its editable form might be `20070502` .
+A title for the object that is valid but which may be easier to edit than the title provided by a `TitleFacet` .
 --
-<.> `[teal]#*maxLength*#()` : `int`
+<.> xref:#maxLength[maxLength]
 +
 --
 The max length of objects that can be parsed (if any). A return type of -1 corresponds to unlimited.
 --
+
+== Members
+
+[#parseTextEntry]
+=== parseTextEntry
+
+Parses a string to an instance of the object.
+
+Note that here the implementing class is acting as a factory for itself.
+
+[#typicalLength]
+=== typicalLength
+
+The typical length of objects that can be parsed.
+
+[#displayTitleOf]
+=== displayTitleOf
+
+The title of the object.
+
+[#displayTitleOf]
+=== displayTitleOf
+
+The title of the object using a mask.
+
+[#parseableTitleOf]
+=== parseableTitleOf
+
+A title for the object that is valid but which may be easier to edit than the title provided by a `TitleFacet` .
+
+The idea here is that the viewer can display a parseable title for an existing object when, for example, the user initially clicks in the field. So, a date might be rendered via a `TitleFacet` as `May 2, 2007` , but its editable form might be `20070502` .
+
+[#maxLength]
+=== maxLength
+
+The max length of objects that can be parsed (if any). A return type of -1 corresponds to unlimited.
 

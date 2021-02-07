@@ -26,19 +26,36 @@ interface Query {
 }
 ----
 
-<.> `[teal]#*getResultType*#()` : `Class<T>`
+<.> xref:#getResultType[getResultType]
 +
 --
 The _Class_ of the objects returned by this query.
 --
-<.> `[teal]#*getDescription*#()` : `String`
+<.> xref:#getDescription[getDescription]
 +
 --
 A human-readable representation of this query and its values.
 --
-<.> `[teal]#*getRange*#()` : `xref:system:generated:index/applib/query/QueryRange.adoc[QueryRange]`
+<.> xref:#getRange[getRange]
 +
 --
 Returns a model with start index into the set table and maximal number of items to return.
 --
+
+== Members
+
+[#getResultType]
+=== getResultType
+
+The _Class_ of the objects returned by this query.
+
+[#getDescription]
+=== getDescription
+
+A human-readable representation of this query and its values.
+
+[#getRange]
+=== getRange
+
+Returns a model with start index into the set table and maximal number of items to return.
 

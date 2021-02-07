@@ -13,16 +13,28 @@ enum ExecutionMode {
 }
 ----
 
-<.> `[teal]#*_SKIP_RULE_VALIDATION_*#`
+<.> xref:#SKIP_RULE_VALIDATION[SKIP_RULE_VALIDATION]
 +
 --
 Skip all business rules.
 --
-<.> `[teal]#*_SKIP_EXECUTION_*#`
+<.> xref:#SKIP_EXECUTION[SKIP_EXECUTION]
 +
 --
 Skip actual execution.
+--
+
+== Members
+
+[#SKIP_RULE_VALIDATION]
+=== SKIP_RULE_VALIDATION
+
+Skip all business rules.
+
+[#SKIP_EXECUTION]
+=== SKIP_EXECUTION
+
+Skip actual execution.
 
 This is not supported for _WrapperFactory#asyncWrap(Object, AsyncControl)_ ; instead just invoke _WrapperFactory#wrap(Object, SyncControl)_ .
---
 

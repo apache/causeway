@@ -14,9 +14,16 @@ interface HasUsername {
 }
 ----
 
-<.> `[teal]#*getUsername*#()` : `String`
+<.> xref:#getUsername[getUsername]
 +
 --
 The user that created this object.
 --
+
+== Members
+
+[#getUsername]
+=== getUsername
+
+The user that created this object.
 

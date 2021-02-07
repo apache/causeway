@@ -12,15 +12,30 @@ interface ExceptionRecognizerService {
 }
 ----
 
-<.> `[teal]#*getExceptionRecognizers*#()` : `xref:system:generated:index/commons/collections/Can.adoc[Can]<xref:system:generated:index/applib/services/exceprecog/ExceptionRecognizer.adoc[ExceptionRecognizer]>`
-<.> `[teal]#*recognize*#(Throwable ex)` : `Optional<Recognition>`
+<.> xref:#getExceptionRecognizers[getExceptionRecognizers]
+<.> xref:#recognize[recognize]
 +
 --
 Takes into consideration ExceptionRecognizers as given by _#getExceptionRecognizers()_ .
 --
-<.> `[teal]#*recognizeFromSelected*#(xref:system:generated:index/commons/collections/Can.adoc[Can]<xref:system:generated:index/applib/services/exceprecog/ExceptionRecognizer.adoc[ExceptionRecognizer]> recognizers, Throwable ex)` : `Optional<Recognition>`
+<.> xref:#recognizeFromSelected[recognizeFromSelected]
 +
 --
 Takes into consideration ExceptionRecognizers as given by _recognizers_ .
 --
+
+== Members
+
+[#getExceptionRecognizers]
+=== getExceptionRecognizers
+
+[#recognize]
+=== recognize
+
+Takes into consideration ExceptionRecognizers as given by _#getExceptionRecognizers()_ .
+
+[#recognizeFromSelected]
+=== recognizeFromSelected
+
+Takes into consideration ExceptionRecognizers as given by _recognizers_ .
 

@@ -14,11 +14,18 @@ interface UserProfileService {
 }
 ----
 
-<.> `[teal]#*userProfileName*#()` : `String`
+<.> xref:#userProfileName[userProfileName]
 +
 --
 Used as the menu name of the _org.apache.isis.applib.annotation.DomainServiceLayout.MenuBar#TERTIARY tertiary_ "Me" menu bar.
+--
+
+== Members
+
+[#userProfileName]
+=== userProfileName
+
+Used as the menu name of the _org.apache.isis.applib.annotation.DomainServiceLayout.MenuBar#TERTIARY tertiary_ "Me" menu bar.
 
 If returns `null` , then the current user name is used instead.
---
 

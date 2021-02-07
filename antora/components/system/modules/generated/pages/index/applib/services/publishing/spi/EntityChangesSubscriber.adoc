@@ -12,9 +12,16 @@ interface EntityChangesSubscriber {
 }
 ----
 
-<.> `[teal]#*onChanging*#(xref:system:generated:index/applib/services/publishing/spi/EntityChanges.adoc[EntityChanges] entityChanges)` : `void`
+<.> xref:#onChanging[onChanging]
 +
 --
 Receives all changing entities (with publishing enabled) at then end of the a transaction during the pre-commit phase.
 --
+
+== Members
+
+[#onChanging]
+=== onChanging
+
+Receives all changing entities (with publishing enabled) at then end of the a transaction during the pre-commit phase.
 

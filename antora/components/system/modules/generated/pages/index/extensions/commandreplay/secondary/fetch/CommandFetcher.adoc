@@ -13,9 +13,16 @@ SecondaryConfig secondaryConfig;
 }
 ----
 
-<.> `[teal]#*fetchCommand*#(CommandJdo previousHwmIfAny)` : `List<CommandDto>`
+<.> xref:#fetchCommand[fetchCommand]
 +
 --
 Replicates a single command.
 --
+
+== Members
+
+[#fetchCommand]
+=== fetchCommand
+
+Replicates a single command.
 

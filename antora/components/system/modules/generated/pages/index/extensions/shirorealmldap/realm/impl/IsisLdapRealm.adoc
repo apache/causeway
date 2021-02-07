@@ -96,9 +96,22 @@ class IsisLdapRealm {
 }
 ----
 
-<.> `[teal]#*setResourcePath*#(String resourcePath)` : `void`
+<.> xref:#setResourcePath[setResourcePath]
 +
 --
+
+--
+<.> xref:#setPermissionsByRole[setPermissionsByRole]
++
+--
+Specify permissions for each role using a formatted string.
+--
+
+== Members
+
+[#setResourcePath]
+=== setResourcePath
+
 ----
 
 ldapRealm.resourcePath=classpath:webapp/myroles.ini
@@ -115,10 +128,9 @@ self-install_role = *:ToDoItemsFixturesService:install:*
 admin_role = *
 ----
 
---
-<.> `[line-through gray]#*setPermissionsByRole*#(String permissionsByRoleStr)` : `void`
-+
---
+[#setPermissionsByRole]
+=== setPermissionsByRole
+
 Specify permissions for each role using a formatted string.
 
 ----
@@ -129,5 +141,4 @@ ldapRealm.permissionsByRole=\
    self-install_role = *:ToDoItemsFixturesService:install:* ; \
    admin_role = *
 ----
---
 

@@ -28,26 +28,48 @@ enum Publishing {
 }
 ----
 
-<.> `[teal]#*_AS_CONFIGURED_*#`
+<.> xref:#AS_CONFIGURED[AS_CONFIGURED]
 +
 --
 Publishing of data triggered by interaction with this object should be handled as per the default publishing policy configured in `application.properties` .
-
-If no publishing policy is configured, then publishing is disabled.
 --
-<.> `[teal]#*_ENABLED_*#`
+<.> xref:#ENABLED[ENABLED]
 +
 --
 Do publish data triggered by interaction with this object.
 --
-<.> `[teal]#*_DISABLED_*#`
+<.> xref:#DISABLED[DISABLED]
 +
 --
 Do *not* publish data triggered by interaction with this object (even if otherwise configured to enable publishing).
 --
-<.> `[teal]#*_NOT_SPECIFIED_*#`
+<.> xref:#NOT_SPECIFIED[NOT_SPECIFIED]
 +
 --
 Ignore the value provided by this annotation (meaning that the framework will keep searching, in meta annotations or super-classes/interfaces).
 --
+
+== Members
+
+[#AS_CONFIGURED]
+=== AS_CONFIGURED
+
+Publishing of data triggered by interaction with this object should be handled as per the default publishing policy configured in `application.properties` .
+
+If no publishing policy is configured, then publishing is disabled.
+
+[#ENABLED]
+=== ENABLED
+
+Do publish data triggered by interaction with this object.
+
+[#DISABLED]
+=== DISABLED
+
+Do *not* publish data triggered by interaction with this object (even if otherwise configured to enable publishing).
+
+[#NOT_SPECIFIED]
+=== NOT_SPECIFIED
+
+Ignore the value provided by this annotation (meaning that the framework will keep searching, in meta annotations or super-classes/interfaces).
 

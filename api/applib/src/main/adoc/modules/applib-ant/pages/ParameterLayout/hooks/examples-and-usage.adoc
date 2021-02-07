@@ -1,0 +1,30 @@
+== Examples
+
+For example:
+
+[source,java]
+----
+public class ToDoItem {
+    public ToDoItem updateDescription(
+                        @ParameterLayout(
+                            cssClass="x-key",
+                            describedAs="What needs to be done",
+                            labelPosition=LabelPosition.LEFT,
+                            named="Description of this <i>item</i>",
+                            namedEscaped=false,
+                            typicalLength=80)
+                        final String description) {
+        setDescription(description);
+        return this;
+    }
+    ...
+}
+----
+
+
+
+[NOTE]
+====
+Note that there is (currently) no support for specifying UI hints for domain services through the dynamic xref:userguide:fun:ui.adoc#object-layout[`.layout.xml`] file (only for properties, collections and actions are supported).
+====
+

@@ -12,9 +12,16 @@ interface Specification {
 }
 ----
 
-<.> `[teal]#*satisfies*#(Object obj)` : `String`
+<.> xref:#satisfies[satisfies]
 +
 --
 If `null` then satisfied, otherwise is reason why the specification is not satisfied.
 --
+
+== Members
+
+[#satisfies]
+=== satisfies
+
+If `null` then satisfied, otherwise is reason why the specification is not satisfied.
 

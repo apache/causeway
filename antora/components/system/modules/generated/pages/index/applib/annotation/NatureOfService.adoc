@@ -15,24 +15,46 @@ enum NatureOfService {
 }
 ----
 
-<.> `[teal]#*_VIEW_*#`
+<.> xref:#VIEW[VIEW]
 +
 --
 The service's actions appear in the REST API and in 'viewers', eg. in the menu bar.
 --
-<.> `[teal]#*_REST_*#`
+<.> xref:#REST[REST]
 +
 --
 The service's actions should only be visible in the REST API exposed by the Restful Objects viewer.
 --
-<.> `[teal]#*isView*#()` : `boolean`
+<.> xref:#isView[isView]
 +
 --
 Whether a service contributes its actions to viewers and to the REST API.
 --
-<.> `[teal]#*isRestOnly*#()` : `boolean`
+<.> xref:#isRestOnly[isRestOnly]
 +
 --
 Whether a service contributes its actions exclusively to the REST API.
 --
+
+== Members
+
+[#VIEW]
+=== VIEW
+
+The service's actions appear in the REST API and in 'viewers', eg. in the menu bar.
+
+[#REST]
+=== REST
+
+The service's actions should only be visible in the REST API exposed by the Restful Objects viewer.
+
+[#isView]
+=== isView
+
+Whether a service contributes its actions to viewers and to the REST API.
+
+[#isRestOnly]
+=== isRestOnly
+
+Whether a service contributes its actions exclusively to the REST API.
 

@@ -34,15 +34,30 @@ class InteractionDtoUtils {
 }
 ----
 
-<.> `[teal]#*_newInteractionDto_*#(Execution<?, ?> execution)` : `InteractionDto`
+<.> xref:#newInteractionDto[newInteractionDto]
 +
 --
 Creates a _InteractionDto_ (serializable to XML) for the provided _org.apache.isis.applib.services.iactn.Interaction.Execution_ (the applib object).
 --
-<.> `[teal]#*_newInteractionDto_*#(Execution<?, ?> execution, Strategy strategy)` : `InteractionDto`
+<.> xref:#newInteractionDto[newInteractionDto]
 +
 --
 Creates a _InteractionDto_ (serializable to XML) for the provided _org.apache.isis.applib.services.iactn.Interaction.Execution_ (the applib object).
 --
-<.> `[teal]#*_addReturn_*#(ActionInvocationDto invocationDto, Class<?> returnType, Object result, xref:system:generated:index/applib/services/bookmark/BookmarkService.adoc[BookmarkService] bookmarkService)` : `void`
+<.> xref:#addReturn[addReturn]
+
+== Members
+
+[#newInteractionDto]
+=== newInteractionDto
+
+Creates a _InteractionDto_ (serializable to XML) for the provided _org.apache.isis.applib.services.iactn.Interaction.Execution_ (the applib object).
+
+[#newInteractionDto]
+=== newInteractionDto
+
+Creates a _InteractionDto_ (serializable to XML) for the provided _org.apache.isis.applib.services.iactn.Interaction.Execution_ (the applib object).
+
+[#addReturn]
+=== addReturn
 

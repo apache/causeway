@@ -21,14 +21,26 @@ class LocalDateInterval {
 }
 ----
 
-<.> `[teal]#*_parseString_*#(String input)` : `xref:system:generated:index/subdomains/base/applib/valuetypes/LocalDateInterval.adoc[LocalDateInterval]`
+<.> xref:#parseString[parseString]
 +
 --
 Parse a string representation of a LocalDateInterval Since this method is only used for testing it's not heavily guarded against illegal arguments
 --
-<.> `[teal]#*_endDateFromStartDate_*#(LocalDate date)` : `LocalDate`
+<.> xref:#endDateFromStartDate[endDateFromStartDate]
 +
 --
 Returns an end date given the start date of the next adjoining interval
 --
+
+== Members
+
+[#parseString]
+=== parseString
+
+Parse a string representation of a LocalDateInterval Since this method is only used for testing it's not heavily guarded against illegal arguments
+
+[#endDateFromStartDate]
+=== endDateFromStartDate
+
+Returns an end date given the start date of the next adjoining interval
 

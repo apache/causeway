@@ -14,14 +14,26 @@ class CssClassUiEvent {
 }
 ----
 
-<.> `[teal]#*CssClassUiEvent*#()`
+<.> xref:#CssClassUiEvent[CssClassUiEvent]
 +
 --
 If used then the framework will set state via (non-API) setters.
 --
-<.> `[teal]#*setCssClass*#(String cssClass)` : `void`
+<.> xref:#setCssClass[setCssClass]
 +
 --
 For subscribers to call to provide a CSS class for this object.
 --
+
+== Members
+
+[#CssClassUiEvent]
+=== CssClassUiEvent
+
+If used then the framework will set state via (non-API) setters.
+
+[#setCssClass]
+=== setCssClass
+
+For subscribers to call to provide a CSS class for this object.
 

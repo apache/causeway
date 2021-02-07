@@ -16,19 +16,36 @@ interface XmlSnapshotService {
 }
 ----
 
-<.> `[teal]#*snapshotFor*#(Object domainObject)` : `Snapshot`
+<.> xref:#snapshotFor[snapshotFor]
 +
 --
 Exports the state of a domain object into a Snapshot (which can then be converted into XML, for example).
 --
-<.> `[teal]#*builderFor*#(Object domainObject)` : `Builder`
+<.> xref:#builderFor[builderFor]
 +
 --
 Creates a Snapshot.Builder that allows the contents of the snapshot to include other related state.
 --
-<.> `[teal]#*getChildElementValue*#<T>(Element el, String tagname, Class<T> expectedCls)` : `T`
+<.> xref:#getChildElementValue[getChildElementValue]
 +
 --
 Convenience method to extract value of an XML element, based on its type.
 --
+
+== Members
+
+[#snapshotFor]
+=== snapshotFor
+
+Exports the state of a domain object into a Snapshot (which can then be converted into XML, for example).
+
+[#builderFor]
+=== builderFor
+
+Creates a Snapshot.Builder that allows the contents of the snapshot to include other related state.
+
+[#getChildElementValue]
+=== getChildElementValue
+
+Convenience method to extract value of an XML element, based on its type.
 

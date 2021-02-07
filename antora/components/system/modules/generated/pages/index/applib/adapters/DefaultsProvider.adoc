@@ -18,9 +18,16 @@ interface DefaultsProvider {
 }
 ----
 
-<.> `[teal]#*getDefaultValue*#()` : `T`
+<.> xref:#getDefaultValue[getDefaultValue]
 +
 --
 The default, if any (as a pojo).
 --
+
+== Members
+
+[#getDefaultValue]
+=== getDefaultValue
+
+The default, if any (as a pojo).
 

@@ -18,7 +18,7 @@ class TitleBuilder {
 }
 ----
 
-<.> `[line-through gray]#*withTupleElement*#(Object object)` : `xref:system:generated:index/subdomains/base/applib/utils/TitleBuilder.adoc[TitleBuilder]`
+<.> xref:#withTupleElement[withTupleElement]
 +
 --
 [WARNING]
@@ -28,4 +28,16 @@ class TitleBuilder {
 - this method does nothing...
 ====
 --
+
+== Members
+
+[#withTupleElement]
+=== withTupleElement
+
+[WARNING]
+====
+[red]#_deprecated:_#
+
+- this method does nothing...
+====
 

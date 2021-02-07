@@ -12,9 +12,16 @@ List<CommandReplayAnalyser> analysers;
 }
 ----
 
-<.> `[teal]#*analyse*#(CommandJdo commandJdo)` : `void`
+<.> xref:#analyse[analyse]
 +
 --
 if hit an issue with the command having been replayed, then mark this as in error. This will effectively block the running of any further commands until the adminstrator fixes the issue.
 --
+
+== Members
+
+[#analyse]
+=== analyse
+
+if hit an issue with the command having been replayed, then mark this as in error. This will effectively block the running of any further commands until the adminstrator fixes the issue.
 

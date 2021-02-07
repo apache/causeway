@@ -21,10 +21,20 @@ interface ApplicationRoleRepository {
 }
 ----
 
-<.> `[teal]#*newApplicationRole*#()` : `R`
-<.> `[teal]#*findMatching*#(String search)` : `Collection<R>`
+<.> xref:#newApplicationRole[newApplicationRole]
+<.> xref:#findMatching[findMatching]
 +
 --
 auto-complete support
 --
+
+== Members
+
+[#newApplicationRole]
+=== newApplicationRole
+
+[#findMatching]
+=== findMatching
+
+auto-complete support
 

@@ -12,14 +12,26 @@ class ComparableContractTester {
 }
 ----
 
-<.> `[teal]#*ComparableContractTester*#(List<List<T>> orderedTuples)`
+<.> xref:#ComparableContractTester[ComparableContractTester]
 +
 --
 Provide an array of tuples; each tuple should consist of 4 elements, whereby item0 < item1 = item2 < item3 Typically item0 should be null valued (if supported by the impl).
 --
-<.> `[teal]#*_listOf_*#<E>(E... elements)` : `List<E>`
+<.> xref:#listOf[listOf]
 +
 --
 Syntax sugar to remove boilerplate from subclasses.
 --
+
+== Members
+
+[#ComparableContractTester]
+=== ComparableContractTester
+
+Provide an array of tuples; each tuple should consist of 4 elements, whereby item0 < item1 = item2 < item3 Typically item0 should be null valued (if supported by the impl).
+
+[#listOf]
+=== listOf
+
+Syntax sugar to remove boilerplate from subclasses.
 

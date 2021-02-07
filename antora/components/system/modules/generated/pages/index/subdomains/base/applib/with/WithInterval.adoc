@@ -16,18 +16,30 @@ interface WithInterval {
 }
 ----
 
-<.> `[teal]#*getStartDate*#()` : `LocalDate`
+<.> xref:#getStartDate[getStartDate]
 +
 --
 The start date of the interval.
-
-A value of `null` implies that the parent's start date should be used. If that is `null` , then implies 'the beginning of time'.
 --
-<.> `[teal]#*getEndDate*#()` : `LocalDate`
+<.> xref:#getEndDate[getEndDate]
 +
 --
 The end date of the interval.
+--
+
+== Members
+
+[#getStartDate]
+=== getStartDate
+
+The start date of the interval.
+
+A value of `null` implies that the parent's start date should be used. If that is `null` , then implies 'the beginning of time'.
+
+[#getEndDate]
+=== getEndDate
+
+The end date of the interval.
 
 A value of `null` implies that the parent's end date should be used. If that is `null` , then implies 'the end of time'.
---
 

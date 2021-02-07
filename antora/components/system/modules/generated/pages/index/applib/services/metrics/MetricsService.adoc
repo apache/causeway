@@ -11,22 +11,34 @@ interface MetricsService {
 }
 ----
 
-<.> `[teal]#*numberEntitiesLoaded*#()` : `int`
+<.> xref:#numberEntitiesLoaded[numberEntitiesLoaded]
 +
 --
 The number of entities that have, so far in this request, been loaded from the database.
-
-Corresponds to the number of times that `javax.jdo.listener.LoadLifecycleListener#postLoad(InstanceLifecycleEvent)(or equivalent) is fired.
-
-Is captured within _MemberExecutionDto#getMetrics()_ (accessible from _InteractionContext#currentInteraction()_ ).
 --
-<.> `[teal]#*numberEntitiesDirtied*#()` : `int`
+<.> xref:#numberEntitiesDirtied[numberEntitiesDirtied]
 +
 --
 The number of objects that have, so far in this request, been dirtied/will need updating in the database); a good measure of the footprint of the interaction.
+--
 
-Corresponds to the number of times that `javax.jdo.listener.DirtyLifecycleListener#preDirty(InstanceLifecycleEvent)(or equivalent) callback is fired.
+== Members
+
+[#numberEntitiesLoaded]
+=== numberEntitiesLoaded
+
+The number of entities that have, so far in this request, been loaded from the database.
+
+Corresponds to the number of times that `javax.jdo.listener.LoadLifecycleListener#postLoad(InstanceLifecycleEvent)` (or equivalent) is fired.
+
+Is captured within _MemberExecutionDto#getMetrics()_ (accessible from _InteractionContext#currentInteraction()_ ).
+
+[#numberEntitiesDirtied]
+=== numberEntitiesDirtied
+
+The number of objects that have, so far in this request, been dirtied/will need updating in the database); a good measure of the footprint of the interaction.
+
+Corresponds to the number of times that `javax.jdo.listener.DirtyLifecycleListener#preDirty(InstanceLifecycleEvent)` (or equivalent) callback is fired.
 
 Is captured within _MemberExecutionDto#getMetrics()_ (accessible from _InteractionContext#currentInteraction()_ .
---
 

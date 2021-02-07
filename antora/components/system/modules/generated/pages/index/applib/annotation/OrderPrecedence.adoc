@@ -14,29 +14,56 @@ class OrderPrecedence {
 }
 ----
 
-<.> `[teal]#*_FIRST_*#` : `int`
+<.> xref:#FIRST[FIRST]
 +
 --
 For domain services with the highest precedence value. No framework services use this constant, but some very fundamental services (eg for security) that are not expected to be overridden use a value that is only a little after this first value.
 --
-<.> `[teal]#*_EARLY_*#` : `int`
+<.> xref:#EARLY[EARLY]
 +
 --
 For framework for services that are unlikely to be overridden by application code.
 --
-<.> `[teal]#*_MIDPOINT_*#` : `int`
+<.> xref:#MIDPOINT[MIDPOINT]
 +
 --
 For framework for services that could be overridden by application code (though not commonly).
 --
-<.> `[teal]#*_LATE_*#` : `int`
+<.> xref:#LATE[LATE]
 +
 --
 For framework services that are expected to be overridden by application code, or that act as a fallback.
 --
-<.> `[teal]#*_LAST_*#` : `int`
+<.> xref:#LAST[LAST]
 +
 --
 For domain services that act as a fallback, and which will typically be overridden.
 --
+
+== Members
+
+[#FIRST]
+=== FIRST
+
+For domain services with the highest precedence value. No framework services use this constant, but some very fundamental services (eg for security) that are not expected to be overridden use a value that is only a little after this first value.
+
+[#EARLY]
+=== EARLY
+
+For framework for services that are unlikely to be overridden by application code.
+
+[#MIDPOINT]
+=== MIDPOINT
+
+For framework for services that could be overridden by application code (though not commonly).
+
+[#LATE]
+=== LATE
+
+For framework services that are expected to be overridden by application code, or that act as a fallback.
+
+[#LAST]
+=== LAST
+
+For domain services that act as a fallback, and which will typically be overridden.
 

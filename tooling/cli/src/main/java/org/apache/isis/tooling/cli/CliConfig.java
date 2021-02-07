@@ -97,7 +97,6 @@ public class CliConfig {
 
             private boolean fixOrphanedAdocIncludeStatements = false;
             private boolean skipTitleHeader = false;
-            private boolean memberSections = false;
 
             public enum Formatter {
                 COMPACT(UnitFormatterCompact.class),

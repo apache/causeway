@@ -21,19 +21,34 @@ class Blob {
 }
 ----
 
-<.> `[teal]#*_of_*#(String name, CommonMimeType mimeType, byte[] content)` : `xref:system:generated:index/applib/value/Blob.adoc[Blob]`
+<.> xref:#of[of]
 +
 --
+Returns a new xref:system:generated:index/applib/value/Blob.adoc[Blob] of given _name_ , _mimeType_ and _content_ .
+--
+<.> xref:#writeBytesTo[writeBytesTo]
++
+--
+Does not close the OutputStream.
+--
+<.> xref:#asImage[asImage]
+
+== Members
+
+[#of]
+=== of
+
 Returns a new xref:system:generated:index/applib/value/Blob.adoc[Blob] of given _name_ , _mimeType_ and _content_ .
 
 _name_ may or may not include the desired filename extension, it is guaranteed, that the resulting xref:system:generated:index/applib/value/Blob.adoc[Blob] has the appropriate extension as constraint by the given _mimeType_ .
 
 For more fine-grained control use one of the xref:system:generated:index/applib/value/Blob.adoc[Blob] constructors directly.
---
-<.> `[teal]#*writeBytesTo*#(OutputStream os)` : `void`
-+
---
+
+[#writeBytesTo]
+=== writeBytesTo
+
 Does not close the OutputStream.
---
-<.> `[teal]#*asImage*#()` : `Optional<BufferedImage>`
+
+[#asImage]
+=== asImage
 

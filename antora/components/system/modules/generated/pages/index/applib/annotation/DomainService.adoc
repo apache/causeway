@@ -15,16 +15,28 @@ Also indicates whether the domain service acts as a repository for an entity, an
 }
 ----
 
-<.> `[teal]#*_nature_*#` : `xref:system:generated:index/applib/annotation/NatureOfService.adoc[NatureOfService]`
+<.> xref:#nature[nature]
 +
 --
 The nature of this service, eg for menus, contributed actions, repository.
 --
-<.> `[teal]#*_objectType_*#` : `String`
+<.> xref:#objectType[objectType]
 +
 --
 Provides the (first part of the) unique identifier (OID) for the service (the instanceId is always "1").
+--
+
+== Members
+
+[#nature]
+=== nature
+
+The nature of this service, eg for menus, contributed actions, repository.
+
+[#objectType]
+=== objectType
+
+Provides the (first part of the) unique identifier (OID) for the service (the instanceId is always "1").
 
 If not specified then either the optional "getId()" is used, otherwise the class' name.
---
 

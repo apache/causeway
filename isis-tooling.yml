@@ -101,5 +101,5 @@ commands:
   index:
     fixOrphanedAdocIncludeStatements: false
     skipTitleHeader: true
-    memberSections: true
+    formatter: JAVA_SOURCES_WITH_SECTIONS
 

@@ -21,11 +21,18 @@ class BS3Tab {
 }
 ----
 
-<.> `[teal]#*getOwner*#()` : `xref:system:generated:index/applib/layout/grid/bootstrap3/BS3TabOwner.adoc[BS3TabOwner]`
+<.> xref:#getOwner[getOwner]
 +
 --
 Owner.
+--
+
+== Members
+
+[#getOwner]
+=== getOwner
+
+Owner.
 
 Set programmatically by framework after reading in from XML.
---
 

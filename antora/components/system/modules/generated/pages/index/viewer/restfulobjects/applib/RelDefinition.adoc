@@ -16,19 +16,36 @@ enum RelDefinition {
 }
 ----
 
-<.> `[teal]#*_IANA_*#`
+<.> xref:#IANA[IANA]
 +
 --
 xref:system:generated:index/viewer/restfulobjects/applib/Rel.adoc[Rel] defined by IANA.
 --
-<.> `[teal]#*_RO_SPEC_*#`
+<.> xref:#RO_SPEC[RO_SPEC]
 +
 --
 xref:system:generated:index/viewer/restfulobjects/applib/Rel.adoc[Rel] defined by the Restful Objects spec.
 --
-<.> `[teal]#*_IMPL_*#`
+<.> xref:#IMPL[IMPL]
 +
 --
 Proprietary rel defined by implementation.
 --
+
+== Members
+
+[#IANA]
+=== IANA
+
+xref:system:generated:index/viewer/restfulobjects/applib/Rel.adoc[Rel] defined by IANA.
+
+[#RO_SPEC]
+=== RO_SPEC
+
+xref:system:generated:index/viewer/restfulobjects/applib/Rel.adoc[Rel] defined by the Restful Objects spec.
+
+[#IMPL]
+=== IMPL
+
+Proprietary rel defined by implementation.
 

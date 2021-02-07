@@ -10,5 +10,10 @@ interface CommandReplayAnalyser {
 }
 ----
 
-<.> `[teal]#*analyzeReplay*#(CommandJdo commandJdo)` : `String`
+<.> xref:#analyzeReplay[analyzeReplay]
+
+== Members
+
+[#analyzeReplay]
+=== analyzeReplay
 

@@ -12,9 +12,16 @@ interface SnapshottableWithInclusions {
 }
 ----
 
-<.> `[teal]#*snapshotInclusions*#()` : `List<String>`
+<.> xref:#snapshotInclusions[snapshotInclusions]
 +
 --
 Paths to include in the snapshot.
 --
+
+== Members
+
+[#snapshotInclusions]
+=== snapshotInclusions
+
+Paths to include in the snapshot.
 

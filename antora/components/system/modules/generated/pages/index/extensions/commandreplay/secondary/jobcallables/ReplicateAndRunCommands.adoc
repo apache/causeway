@@ -2,7 +2,7 @@
 
 Encodes the algorithm for fetching commands from the primary, and replaying on the secondary.
 
-This class is instantiated each time the Quartz job ( `_org.apache.isis.extensions.commandreplay.secondary.job.ReplicateAndReplayJob_) files.
+This class is instantiated each time the Quartz job ( `_org.apache.isis.extensions.commandreplay.secondary.job.ReplicateAndReplayJob_` ) files.
 
 == API
 

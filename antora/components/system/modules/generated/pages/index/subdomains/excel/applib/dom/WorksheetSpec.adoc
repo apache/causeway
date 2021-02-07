@@ -19,5 +19,10 @@ class WorksheetSpec {
 }
 ----
 
-<.> `[teal]#*WorksheetSpec*#<T>(Class<T> viewModelClass, String sheetName)`
+<.> xref:#WorksheetSpec[WorksheetSpec]
+
+== Members
+
+[#WorksheetSpec]
+=== WorksheetSpec
 

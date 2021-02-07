@@ -13,9 +13,16 @@ interface InteractionContext {
 }
 ----
 
-<.> `[teal]#*currentInteraction*#()` : `Optional<xref:system:generated:index/applib/services/iactn/Interaction.adoc[Interaction]>`
+<.> xref:#currentInteraction[currentInteraction]
 +
 --
 Optionally, the currently active xref:system:generated:index/applib/services/iactn/Interaction.adoc[Interaction] for the calling thread.
 --
+
+== Members
+
+[#currentInteraction]
+=== currentInteraction
+
+Optionally, the currently active xref:system:generated:index/applib/services/iactn/Interaction.adoc[Interaction] for the calling thread.
 

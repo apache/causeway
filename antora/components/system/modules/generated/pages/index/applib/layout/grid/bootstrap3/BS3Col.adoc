@@ -41,33 +41,60 @@ class BS3Col {
 }
 ----
 
-<.> `[teal]#*getId*#()` : `String`
+<.> xref:#getId[getId]
 +
 --
 As per <div id="...">...</div> : must be unique across entire page.
 --
-<.> `[teal]#*isUnreferencedActions*#()` : `Boolean`
+<.> xref:#isUnreferencedActions[isUnreferencedActions]
 +
 --
 Whether this column should be used to hold any unreferenced actions (contributed or "native").
-
-Any layout must have precisely one column or xref:system:generated:index/applib/layout/component/FieldSet.adoc[FieldSet] that has this attribute set.
 --
-<.> `[teal]#*isUnreferencedCollections*#()` : `Boolean`
+<.> xref:#isUnreferencedCollections[isUnreferencedCollections]
 +
 --
 Whether this column should be used to hold any unreferenced collections (contributed or "native").
-
-Any layout must have precisely one column or xref:system:generated:index/applib/layout/grid/bootstrap3/BS3TabGroup.adoc[BS3TabGroup] that has this attribute set.
 --
-<.> `[teal]#*getDomainObject*#()` : `xref:system:generated:index/applib/layout/component/DomainObjectLayoutData.adoc[DomainObjectLayoutData]`
+<.> xref:#getDomainObject[getDomainObject]
 +
 --
 Whether to show the object's icon and title.
 --
-<.> `[teal]#*getMetadataError*#()` : `String`
+<.> xref:#getMetadataError[getMetadataError]
 +
 --
 For diagnostics; populated by the framework if and only if a metadata error.
 --
+
+== Members
+
+[#getId]
+=== getId
+
+As per <div id="...">...</div> : must be unique across entire page.
+
+[#isUnreferencedActions]
+=== isUnreferencedActions
+
+Whether this column should be used to hold any unreferenced actions (contributed or "native").
+
+Any layout must have precisely one column or xref:system:generated:index/applib/layout/component/FieldSet.adoc[FieldSet] that has this attribute set.
+
+[#isUnreferencedCollections]
+=== isUnreferencedCollections
+
+Whether this column should be used to hold any unreferenced collections (contributed or "native").
+
+Any layout must have precisely one column or xref:system:generated:index/applib/layout/grid/bootstrap3/BS3TabGroup.adoc[BS3TabGroup] that has this attribute set.
+
+[#getDomainObject]
+=== getDomainObject
+
+Whether to show the object's icon and title.
+
+[#getMetadataError]
+=== getMetadataError
+
+For diagnostics; populated by the framework if and only if a metadata error.
 

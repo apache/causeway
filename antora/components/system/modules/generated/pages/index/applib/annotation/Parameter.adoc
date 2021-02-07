@@ -18,49 +18,86 @@ Collects together all domain semantics of an action parameter within a single an
 }
 ----
 
-<.> `[teal]#*_fileAccept_*#` : `String`
+<.> xref:#fileAccept[fileAccept]
 +
 --
 For uploading xref:system:generated:index/applib/value/Blob.adoc[Blob] or xref:system:generated:index/applib/value/Clob.adoc[Clob] , optionally restrict the files accepted (eg `.xslx` ).
-
-The value should be of the form "file_extension|audio/*|video/*|image/*|media_type".
 --
-<.> `[teal]#*_maxLength_*#` : `int`
+<.> xref:#maxLength[maxLength]
 +
 --
 The maximum entry length of a field.
-
-The default value ( `-1) indicates that no maxLength has been specified.
 --
-<.> `[teal]#*_mustSatisfy_*#` : `Class<? extends Specification>[]`
+<.> xref:#mustSatisfy[mustSatisfy]
 +
 --
 The xref:system:generated:index/applib/spec/Specification.adoc[Specification] (s) to be satisfied by this parameter.
-
-If more than one is provided, then all must be satisfied (in effect "AND"ed together).
 --
-<.> `[teal]#*_optionality_*#` : `xref:system:generated:index/applib/annotation/Optionality.adoc[Optionality]`
+<.> xref:#optionality[optionality]
 +
 --
 Whether this parameter is optional or is mandatory (ie required).
-
-For parameters the default value, _org.apache.isis.applib.annotation.Optionality#DEFAULT_ , is taken to mean that the parameter is required.
 --
-<.> `[teal]#*_regexPattern_*#` : `String`
+<.> xref:#regexPattern[regexPattern]
 +
 --
 Regular expression pattern that a value should conform to, and can be formatted as.
 --
-<.> `[teal]#*_regexPatternFlags_*#` : `int`
+<.> xref:#regexPatternFlags[regexPatternFlags]
 +
 --
 Pattern flags, as per _java.util.regex.Pattern#compile(String, int)_ .
-
-The default value, `0, means that no flags have been specified.
 --
-<.> `[teal]#*_regexPatternReplacement_*#` : `String`
+<.> xref:#regexPatternReplacement[regexPatternReplacement]
 +
 --
 Replacement text for the pattern in generated error message.
 --
+
+== Members
+
+[#fileAccept]
+=== fileAccept
+
+For uploading xref:system:generated:index/applib/value/Blob.adoc[Blob] or xref:system:generated:index/applib/value/Clob.adoc[Clob] , optionally restrict the files accepted (eg `.xslx` ).
+
+The value should be of the form "file_extension|audio/*|video/*|image/*|media_type".
+
+[#maxLength]
+=== maxLength
+
+The maximum entry length of a field.
+
+The default value ( `-1` ) indicates that no maxLength has been specified.
+
+[#mustSatisfy]
+=== mustSatisfy
+
+The xref:system:generated:index/applib/spec/Specification.adoc[Specification] (s) to be satisfied by this parameter.
+
+If more than one is provided, then all must be satisfied (in effect "AND"ed together).
+
+[#optionality]
+=== optionality
+
+Whether this parameter is optional or is mandatory (ie required).
+
+For parameters the default value, _org.apache.isis.applib.annotation.Optionality#DEFAULT_ , is taken to mean that the parameter is required.
+
+[#regexPattern]
+=== regexPattern
+
+Regular expression pattern that a value should conform to, and can be formatted as.
+
+[#regexPatternFlags]
+=== regexPatternFlags
+
+Pattern flags, as per _java.util.regex.Pattern#compile(String, int)_ .
+
+The default value, `0` , means that no flags have been specified.
+
+[#regexPatternReplacement]
+=== regexPatternReplacement
+
+Replacement text for the pattern in generated error message.
 

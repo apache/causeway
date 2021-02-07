@@ -23,37 +23,64 @@ interface Ticket {
 }
 ----
 
-<.> `[teal]#*getReference*#()` : `String`
+<.> xref:#getReference[getReference]
 +
 --
 A unique identifier that the end-user can use to track any follow-up from this error.
-
-For example, an implementation might automatically log an issue in a bug tracking system such as JIRA, in which case the _#getReference() reference_ would be the JIRA issue number `XXX-1234` .
 --
-<.> `[teal]#*getUserMessage*#()` : `String`
+<.> xref:#getUserMessage[getUserMessage]
 +
 --
 Message to display to the user.
-
-Typically this message should be short, one line long.
 --
-<.> `[teal]#*getDetails*#()` : `String`
+<.> xref:#getDetails[getDetails]
 +
 --
 Optional additional details to show to the end-user.
-
-For example, these might include text on how to recover from the error, or workarounds, or just further details on contacting the help desk if the issue is severe and requires immediate attention.
 --
-<.> `[teal]#*getStackTracePolicy*#()` : `StackTracePolicy`
+<.> xref:#getStackTracePolicy[getStackTracePolicy]
 +
 --
 Whether the stack trace for the exception should be displayed or be hidden.
-
-The default is to hide it on the basis that the reporting service will have reported the stack trace to the support team, meaning there's no need to expose this info to the end-user.
 --
-<.> `[teal]#*getMarkup*#()` : `String`
+<.> xref:#getMarkup[getMarkup]
 +
 --
 Returns a Html representation of this ticket.
 --
+
+== Members
+
+[#getReference]
+=== getReference
+
+A unique identifier that the end-user can use to track any follow-up from this error.
+
+For example, an implementation might automatically log an issue in a bug tracking system such as JIRA, in which case the _#getReference() reference_ would be the JIRA issue number `XXX-1234` .
+
+[#getUserMessage]
+=== getUserMessage
+
+Message to display to the user.
+
+Typically this message should be short, one line long.
+
+[#getDetails]
+=== getDetails
+
+Optional additional details to show to the end-user.
+
+For example, these might include text on how to recover from the error, or workarounds, or just further details on contacting the help desk if the issue is severe and requires immediate attention.
+
+[#getStackTracePolicy]
+=== getStackTracePolicy
+
+Whether the stack trace for the exception should be displayed or be hidden.
+
+The default is to hide it on the basis that the reporting service will have reported the stack trace to the support team, meaning there's no need to expose this info to the end-user.
+
+[#getMarkup]
+=== getMarkup
+
+Returns a Html representation of this ticket.
 

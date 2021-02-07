@@ -14,5 +14,10 @@ interface CommandDtoProcessorService {
 }
 ----
 
-<.> `[teal]#*process*#(Object domainObject, CommandDto commandDto)` : `CommandDto`
+<.> xref:#process[process]
+
+== Members
+
+[#process]
+=== process
 

@@ -18,21 +18,38 @@ class DomainObjectMemberRepresentation {
 }
 ----
 
-<.> `[teal]#*getMemberType*#()` : `String`
+<.> xref:#getMemberType[getMemberType]
 +
 --
 Whether this is a `property` , `collection` or `action` .
 --
-<.> `[teal]#*getDisabledReason*#()` : `String`
+<.> xref:#getDisabledReason[getDisabledReason]
 +
 --
 The reason this member cannot be modified (if property or collection) or invoked (if action).
-
-If null, then is not disabled.
 --
-<.> `[teal]#*getXIsisFormat*#()` : `String`
+<.> xref:#getXIsisFormat[getXIsisFormat]
 +
 --
 Isis-specific extension; not part of the RO API;
 --
+
+== Members
+
+[#getMemberType]
+=== getMemberType
+
+Whether this is a `property` , `collection` or `action` .
+
+[#getDisabledReason]
+=== getDisabledReason
+
+The reason this member cannot be modified (if property or collection) or invoked (if action).
+
+If null, then is not disabled.
+
+[#getXIsisFormat]
+=== getXIsisFormat
+
+Isis-specific extension; not part of the RO API;
 

@@ -8,52 +8,5 @@
 include::system:generated:page$index/applib/annotation/Title.adoc[]
 
 
-For example:
+include::Title/hooks/examples-and-usage.adoc[]
 
-[source,java]
-----
-public void Customer {
-    @Title(sequence="1.0")
-    public String getLastName() { /* ... */ }     // <1>
-    ...
-    @Title(sequence="1.5", prepend=", ")
-    public String getFirstName() { /* ... */ }
-    ...
-    @Title(sequence="1.7", append=".")
-    public String getMidInitial() { /* ... */ }
-    ...
-}
-----
-<1> backing field and setters omitted
-
-could be used to create names of the style "Bloggs, Joe K."
-
-It is also possible to annotate reference properties; in this case the title will return the title of the referenced object (rather than, say, its string representation).
-
-An additional convention for `@Title` properties is that they are hidden in tables (in other words, it implies `@Property(where=Where.ALL_TABLES)`.
-For viewers that support this annotation (for example, the Wicket viewer), this convention excludes any properties whose value is already present in the title column.
-This convention can be overridden using `@Property(where=Where.NOWHERE)`.
-
-
-== Lombok support
-
-If xref:setupguide:hints-and-tips:about.adoc#project-lombok.adoc[Project Lombok] is being used, then `@Title` can be specified on the backing field.
-
-For example:
-
-[source,java]
-----
-public void Customer {
-    @Title(sequence="1.0")
-    @Getter @Setter
-    private String name;
-
-    @Title(sequence="1.5", prepend=", ")
-    @Getter @Setter
-    private String firstName;
-
-    @Title(sequence="1.7", append=".")
-    @Getter @Setter
-    private String midInitial;
-}
-----

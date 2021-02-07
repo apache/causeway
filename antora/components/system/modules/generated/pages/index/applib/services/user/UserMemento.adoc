@@ -25,40 +25,76 @@ class UserMemento {
 }
 ----
 
-<.> `[teal]#*UserMemento*#(String name, Stream<xref:system:generated:index/applib/services/user/RoleMemento.adoc[RoleMemento]> roles)`
+<.> xref:#UserMemento[UserMemento]
 +
 --
 Creates a new user with the specified name and assigned roles.
 --
-<.> `[teal]#*_system_*#()` : `xref:system:generated:index/applib/services/user/UserMemento.adoc[UserMemento]`
+<.> xref:#system[system]
 +
 --
 The framework's internal user with unrestricted privileges.
 --
-<.> `[teal]#*_ofName_*#(String name)` : `xref:system:generated:index/applib/services/user/UserMemento.adoc[UserMemento]`
+<.> xref:#ofName[ofName]
 +
 --
 Creates a new user with the specified name and no roles.
 --
-<.> `[teal]#*_ofNameAndRoles_*#(String name, xref:system:generated:index/applib/services/user/RoleMemento.adoc[RoleMemento]... roles)` : `xref:system:generated:index/applib/services/user/UserMemento.adoc[UserMemento]`
+<.> xref:#ofNameAndRoles[ofNameAndRoles]
 +
 --
 Creates a new user with the specified name and assigned roles.
 --
-<.> `[teal]#*_ofNameAndRoleNames_*#(String name, String... roleNames)` : `xref:system:generated:index/applib/services/user/UserMemento.adoc[UserMemento]`
+<.> xref:#ofNameAndRoleNames[ofNameAndRoleNames]
 +
 --
 Creates a new user with the specified name and assigned role names.
 --
-<.> `[teal]#*_ofNameAndRoleNames_*#(String name, Stream<String> roleNames)` : `xref:system:generated:index/applib/services/user/UserMemento.adoc[UserMemento]`
+<.> xref:#ofNameAndRoleNames[ofNameAndRoleNames]
 +
 --
 Creates a new user with the specified name and assigned role names.
 --
-<.> `[teal]#*isCurrentUser*#(String userName)` : `boolean`
+<.> xref:#isCurrentUser[isCurrentUser]
 +
 --
 Determine if the specified name is this user.
-
 --
+
+== Members
+
+[#UserMemento]
+=== UserMemento
+
+Creates a new user with the specified name and assigned roles.
+
+[#system]
+=== system
+
+The framework's internal user with unrestricted privileges.
+
+[#ofName]
+=== ofName
+
+Creates a new user with the specified name and no roles.
+
+[#ofNameAndRoles]
+=== ofNameAndRoles
+
+Creates a new user with the specified name and assigned roles.
+
+[#ofNameAndRoleNames]
+=== ofNameAndRoleNames
+
+Creates a new user with the specified name and assigned role names.
+
+[#ofNameAndRoleNames]
+=== ofNameAndRoleNames
+
+Creates a new user with the specified name and assigned role names.
+
+[#isCurrentUser]
+=== isCurrentUser
+
+Determine if the specified name is this user.
 

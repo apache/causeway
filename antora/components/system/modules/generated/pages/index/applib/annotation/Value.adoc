@@ -24,9 +24,22 @@ Note also that though a value is conceptually not shared, if it is also immutabl
 }
 ----
 
-<.> `[teal]#*_semanticsProviderName_*#` : `String`
+<.> xref:#semanticsProviderName[semanticsProviderName]
 +
 --
+The fully qualified name of a class that implements the xref:system:generated:index/applib/adapters/ValueSemanticsProvider.adoc[ValueSemanticsProvider] interface.
+--
+<.> xref:#semanticsProviderClass[semanticsProviderClass]
++
+--
+As per _#semanticsProviderName()_ , but specifying a class literal rather than a fully qualified class name.
+--
+
+== Members
+
+[#semanticsProviderName]
+=== semanticsProviderName
+
 The fully qualified name of a class that implements the xref:system:generated:index/applib/adapters/ValueSemanticsProvider.adoc[ValueSemanticsProvider] interface.
 
 This is optional because some implementations may pick up encodeability via a configuration file, or via the equivalent _#semanticsProviderClass()_ .
@@ -34,12 +47,11 @@ This is optional because some implementations may pick up encodeability via a co
 It is possible for value classes to act as their own semantics providers, and may in particular implement the xref:system:generated:index/applib/adapters/EncoderDecoder.adoc[EncoderDecoder] interface. The framework requires that the nominated class provides a `public` no-arg constructor on the class, and will instantiates an instance of the class to interact with it. In the case of encoding, the framework uses the result of discards the instantiated object. What that means in particular is that a self-encoding class shouldn't encode its own state, it should encode the state of the object passed to it.
 
 Implementation note: the default value provided here is simply an empty string because `null` is not a valid default.
---
-<.> `[teal]#*_semanticsProviderClass_*#` : `Class<?>`
-+
---
+
+[#semanticsProviderClass]
+=== semanticsProviderClass
+
 As per _#semanticsProviderName()_ , but specifying a class literal rather than a fully qualified class name.
 
 Implementation note: the default value provided here is simply the xref:system:generated:index/applib/annotation/Value.adoc[Value] 's own class, because `null` is not a valid default.
---
 

@@ -19,41 +19,84 @@ Collects together all layout hints for action parameters in a single annotation.
 }
 ----
 
-<.> `[teal]#*_cssClass_*#` : `String`
+<.> xref:#cssClass[cssClass]
 +
 --
 Indicates the css class that a parameter should have.
 --
-<.> `[teal]#*_describedAs_*#` : `String`
+<.> xref:#describedAs[describedAs]
 +
 --
 Description of this property, eg to be rendered in a tooltip.
 --
-<.> `[teal]#*_labelPosition_*#` : `xref:system:generated:index/applib/annotation/LabelPosition.adoc[LabelPosition]`
+<.> xref:#labelPosition[labelPosition]
 +
 --
 In forms, positioning of the label (left, top or none) relative to the parameter value.
-
-If not specified, the default depends upon the parameter value's datatype.
 --
-<.> `[teal]#*_named_*#` : `String`
+<.> xref:#named[named]
 +
 --
 Name of this action parameter.
 --
-<.> `[teal]#*_namedEscaped_*#` : `boolean`
+<.> xref:#namedEscaped[namedEscaped]
 +
 --
 A flag indicating whether the value of _#named()_ should be HTML escaped or not.
 --
-<.> `[teal]#*_multiLine_*#` : `int`
+<.> xref:#multiLine[multiLine]
 +
 --
 For string parameters (and properties), whether to render as a text area over multiple lines.
 --
-<.> `[teal]#*_renderDay_*#` : `xref:system:generated:index/applib/annotation/RenderDay.adoc[RenderDay]`
+<.> xref:#renderDay[renderDay]
 +
 --
+For date parameters (and properties) only, instructs the viewer that the date should be rendered as one day prior to the actually stored date.
+--
+<.> xref:#typicalLength[typicalLength]
++
+--
+The typical entry length of a field, use to determine the optimum width for display
+--
+
+== Members
+
+[#cssClass]
+=== cssClass
+
+Indicates the css class that a parameter should have.
+
+[#describedAs]
+=== describedAs
+
+Description of this property, eg to be rendered in a tooltip.
+
+[#labelPosition]
+=== labelPosition
+
+In forms, positioning of the label (left, top or none) relative to the parameter value.
+
+If not specified, the default depends upon the parameter value's datatype.
+
+[#named]
+=== named
+
+Name of this action parameter.
+
+[#namedEscaped]
+=== namedEscaped
+
+A flag indicating whether the value of _#named()_ should be HTML escaped or not.
+
+[#multiLine]
+=== multiLine
+
+For string parameters (and properties), whether to render as a text area over multiple lines.
+
+[#renderDay]
+=== renderDay
+
 For date parameters (and properties) only, instructs the viewer that the date should be rendered as one day prior to the actually stored date.
 
 This is intended to be used so that an exclusive end date of an interval can be rendered as 1 day before the actual value stored.
@@ -68,10 +111,9 @@ public void updateDates(
 ----
 
 Here, the interval of the [1-may-2013,1-jun-2013) would be rendered as the dates 1-may-2013 for the start date but using 31-may-2013 (the day before) for the end date. What is stored In the domain object, itself, however, the value stored is 1-jun-2013.
---
-<.> `[teal]#*_typicalLength_*#` : `int`
-+
---
+
+[#typicalLength]
+=== typicalLength
+
 The typical entry length of a field, use to determine the optimum width for display
---
 

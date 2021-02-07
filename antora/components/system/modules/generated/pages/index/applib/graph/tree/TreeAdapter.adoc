@@ -14,7 +14,18 @@ interface TreeAdapter {
 }
 ----
 
-<.> `[teal]#*parentOf*#(T value)` : `Optional<T>`
-<.> `[teal]#*childCountOf*#(T value)` : `int`
-<.> `[teal]#*childrenOf*#(T value)` : `Stream<T>`
+<.> xref:#parentOf[parentOf]
+<.> xref:#childCountOf[childCountOf]
+<.> xref:#childrenOf[childrenOf]
+
+== Members
+
+[#parentOf]
+=== parentOf
+
+[#childCountOf]
+=== childCountOf
+
+[#childrenOf]
+=== childrenOf
 

@@ -18,21 +18,38 @@ interface ValueSemanticsProvider {
 }
 ----
 
-<.> `[teal]#*getParser*#()` : `xref:system:generated:index/applib/adapters/Parser.adoc[Parser]<T>`
+<.> xref:#getParser[getParser]
 +
 --
 The xref:system:generated:index/applib/adapters/Parser.adoc[Parser] , if any.
 --
-<.> `[teal]#*getEncoderDecoder*#()` : `xref:system:generated:index/applib/adapters/EncoderDecoder.adoc[EncoderDecoder]<T>`
+<.> xref:#getEncoderDecoder[getEncoderDecoder]
 +
 --
 The xref:system:generated:index/applib/adapters/EncoderDecoder.adoc[EncoderDecoder] , if any.
 --
-<.> `[teal]#*getDefaultsProvider*#()` : `xref:system:generated:index/applib/adapters/DefaultsProvider.adoc[DefaultsProvider]<T>`
+<.> xref:#getDefaultsProvider[getDefaultsProvider]
 +
 --
 The xref:system:generated:index/applib/adapters/DefaultsProvider.adoc[DefaultsProvider] , if any.
+--
+
+== Members
+
+[#getParser]
+=== getParser
+
+The xref:system:generated:index/applib/adapters/Parser.adoc[Parser] , if any.
+
+[#getEncoderDecoder]
+=== getEncoderDecoder
+
+The xref:system:generated:index/applib/adapters/EncoderDecoder.adoc[EncoderDecoder] , if any.
+
+[#getDefaultsProvider]
+=== getDefaultsProvider
+
+The xref:system:generated:index/applib/adapters/DefaultsProvider.adoc[DefaultsProvider] , if any.
 
 If not `null` , implies that the value has (or may have) a default.
---
 

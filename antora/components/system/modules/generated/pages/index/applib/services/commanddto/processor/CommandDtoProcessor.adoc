@@ -12,11 +12,18 @@ interface CommandDtoProcessor {
 }
 ----
 
-<.> `[teal]#*process*#(CommandDto commandDto)` : `CommandDto`
+<.> xref:#process[process]
 +
 --
 The implementation can if necessary refine or alter the _CommandDto_ to be replicated from primary to secondary.
-
-That said, the most common use case is to return `null, which results in the command effectively being ignore.
 --
+
+== Members
+
+[#process]
+=== process
+
+The implementation can if necessary refine or alter the _CommandDto_ to be replicated from primary to secondary.
+
+That said, the most common use case is to return `null` , which results in the command effectively being ignore.
 

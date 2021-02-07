@@ -12,9 +12,16 @@ class InjectIntoJMockAction {
 }
 ----
 
-<.> `[teal]#*_injectInto_*#()` : `Action`
+<.> xref:#injectInto[injectInto]
 +
 --
 Factory
 --
+
+== Members
+
+[#injectInto]
+=== injectInto
+
+Factory
 

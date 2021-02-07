@@ -14,9 +14,16 @@ interface UserResource {
 }
 ----
 
-<.> `[teal]#*logout*#()` : `Response`
+<.> xref:#logout[logout]
 +
 --
 Not part of the Restful Objects spec.
 --
+
+== Members
+
+[#logout]
+=== logout
+
+Not part of the Restful Objects spec.
 

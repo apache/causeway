@@ -15,9 +15,32 @@ Domain semantics for domain object collection.
 }
 ----
 
-<.> `[teal]#*_domainEvent_*#` : `Class<? extends CollectionDomainEvent<?,?>>`
+<.> xref:#domainEvent[domainEvent]
 +
 --
+Indicates that changes to the collection that should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService event bus_ using a custom (subclass of) xref:system:generated:index/applib/events/domain/CollectionDomainEvent.adoc[CollectionDomainEvent] .
+--
+<.> xref:#editing[editing]
++
+--
+Whether the properties of this domain object can be edited, or collections of this object be added to/removed from.
+--
+<.> xref:#hidden[hidden]
++
+--
+Indicates when the collection is not visible to the user.
+--
+<.> xref:#typeOf[typeOf]
++
+--
+The type-of the elements held within the collection.
+--
+
+== Members
+
+[#domainEvent]
+=== domainEvent
+
 Indicates that changes to the collection that should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService event bus_ using a custom (subclass of) xref:system:generated:index/applib/events/domain/CollectionDomainEvent.adoc[CollectionDomainEvent] .
 
 For example:
@@ -33,22 +56,21 @@ public class Order {
 ----
 
 This subclass must provide a no-arg constructor; the fields are set reflectively.
---
-<.> `[teal]#*_editing_*#` : `xref:system:generated:index/applib/annotation/Editing.adoc[Editing]`
-+
---
+
+[#editing]
+=== editing
+
 Whether the properties of this domain object can be edited, or collections of this object be added to/removed from.
 
 Note that non-editable objects can nevertheless have actions invoked upon them.
---
-<.> `[teal]#*_hidden_*#` : `xref:system:generated:index/applib/annotation/Where.adoc[Where]`
-+
---
+
+[#hidden]
+=== hidden
+
 Indicates when the collection is not visible to the user.
---
-<.> `[teal]#*_typeOf_*#` : `Class<?>`
-+
---
+
+[#typeOf]
+=== typeOf
+
 The type-of the elements held within the collection.
---
 

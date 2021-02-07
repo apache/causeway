@@ -14,14 +14,26 @@ class RoleMemento {
 }
 ----
 
-<.> `[teal]#*RoleMemento*#(String name)`
+<.> xref:#RoleMemento[RoleMemento]
 +
 --
 Creates a new role with the specified name. Description is left blank.
 --
-<.> `[teal]#*RoleMemento*#(String name, String description)`
+<.> xref:#RoleMemento[RoleMemento]
 +
 --
 Creates a new role with the specified name and description.
 --
+
+== Members
+
+[#RoleMemento]
+=== RoleMemento
+
+Creates a new role with the specified name. Description is left blank.
+
+[#RoleMemento]
+=== RoleMemento
+
+Creates a new role with the specified name and description.
 

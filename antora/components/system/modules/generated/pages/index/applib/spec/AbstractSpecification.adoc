@@ -19,9 +19,16 @@ class AbstractSpecification {
 }
 ----
 
-<.> `[teal]#*satisfies*#(Object obj)` : `String`
+<.> xref:#satisfies[satisfies]
 +
 --
 Checks not null and is correct type, and delegates to _#satisfiesSafely(Object)_ .
 --
+
+== Members
+
+[#satisfies]
+=== satisfies
+
+Checks not null and is correct type, and delegates to _#satisfiesSafely(Object)_ .
 

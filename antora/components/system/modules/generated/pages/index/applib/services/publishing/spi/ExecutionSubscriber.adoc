@@ -12,11 +12,18 @@ interface ExecutionSubscriber {
 }
 ----
 
-<.> `[teal]#*onExecution*#(Execution<?, ?> execution)` : `void`
+<.> xref:#onExecution[onExecution]
 +
 --
 Publish each _org.apache.isis.applib.services.iactn.Interaction.Execution_ immediately after it completes.
+--
+
+== Members
+
+[#onExecution]
+=== onExecution
+
+Publish each _org.apache.isis.applib.services.iactn.Interaction.Execution_ immediately after it completes.
 
 Most implementations are expected to use _org.apache.isis.applib.services.iactn.Interaction.Execution#getDto()_ to create a serializable XML representation of the execution. The easiest way to do this is using _InteractionDtoUtils#newInteractionDto(Interaction.Execution)_ . There is some flexibility here, though.
---
 

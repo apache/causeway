@@ -26,11 +26,18 @@ class LinkRepresentation {
 }
 ----
 
-<.> `[teal]#*getArguments*#()` : `xref:system:generated:index/viewer/restfulobjects/applib/JsonRepresentation.adoc[JsonRepresentation]`
+<.> xref:#getArguments[getArguments]
 +
 --
 Returns the "arguments" json-property of the link (a map).
+--
+
+== Members
+
+[#getArguments]
+=== getArguments
+
+Returns the "arguments" json-property of the link (a map).
 
 If there is no "arguments" node, then as a convenience will return an empty map.
---
 

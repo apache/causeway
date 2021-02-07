@@ -16,7 +16,7 @@ class CalendarService {
 }
 ----
 
-<.> `[line-through gray]#*timestamp*#()` : `long`
+<.> xref:#timestamp[timestamp]
 +
 --
 [WARNING]
@@ -26,4 +26,16 @@ class CalendarService {
 - use _ClockService#getClock()_ .getEpochMillis()
 ====
 --
+
+== Members
+
+[#timestamp]
+=== timestamp
+
+[WARNING]
+====
+[red]#_deprecated:_#
+
+- use _ClockService#getClock()_ .getEpochMillis()
+====
 
