@@ -140,5 +140,41 @@ class ResultTest {
         
     }
     
+    @Test
+    void void_throwing_uncatched_case() {
+        
+        val result = Result.ofVoid(this::void_throwing_uncatched);
+        assertFalse(result.isSuccess());
+        assertTrue(result.isFailure());
+        assertEquals("void failed", result.getFailure().get().getMessage());
+        
+        // default value is not allowed to be null
+        assertThrows(NullPointerException.class, ()->result.presentElse(null));
+        assertThrows(NoSuchElementException.class, ()->result.presentElseGet(()->null));
+        assertThrows(Exception.class, ()->result.presentElseFail());
+        assertEquals(Optional.empty(), result.getValue());
+        
+        val mandatory = result.mapSuccessWithEmptyValueToNoSuchElement();
+        assertTrue(mandatory.isFailure());
+    }
+    
+    @Test
+    void void_throwing_catched_case() {
+        
+        val result = Result.ofVoid(this::void_throwing_catched);
+        assertFalse(result.isSuccess());
+        assertTrue(result.isFailure());
+        assertEquals("void failed", result.getFailure().get().getMessage());
+        
+        // default value is not allowed to be null
+        assertThrows(NullPointerException.class, ()->result.presentElse(null));
+        assertThrows(NoSuchElementException.class, ()->result.presentElseGet(()->null));
+        assertThrows(Exception.class, ()->result.presentElseFail());
+        assertEquals(Optional.empty(), result.getValue());
+        
+        val mandatory = result.mapSuccessWithEmptyValueToNoSuchElement();
+        assertTrue(mandatory.isFailure());
+    }
+    
     
 }
