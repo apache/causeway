@@ -248,7 +248,8 @@ implements EntityFacet {
 
         getTransactionalProcessor()
         .runWithinCurrentTransactionElseCreateNew(()->pm.makePersistent(pojo))
-        .nullableOrElseFail();
+        .optionalElseFail()
+        .orElse(null);
 
         //TODO integrate with entity change tracking
     }
@@ -270,7 +271,8 @@ implements EntityFacet {
 
         getTransactionalProcessor()
         .runWithinCurrentTransactionElseCreateNew(()->pm.deletePersistent(pojo))
-        .nullableOrElseFail();
+        .optionalElseFail()
+        .orElse(null);
 
         //TODO integrate with entity change tracking
     }
@@ -290,7 +292,8 @@ implements EntityFacet {
 
         getTransactionalProcessor()
         .runWithinCurrentTransactionElseCreateNew(()->pm.refresh(pojo))
-        .nullableOrElseFail();
+        .optionalElseFail()
+        .orElse(null);
 
         //TODO integrate with entity change tracking
     }
@@ -354,7 +357,7 @@ implements EntityFacet {
                 ()->_NullSafe.stream(fetcher.get())
                     .map(fetchedObject->adopt(entityChangeTracker, fetchedObject))
                     .collect(Can.toCan()))
-                .orElseFail();
+                .presentElseFail();
     }
 
     private ManagedObject adopt(final EntityChangeTracker entityChangeTracker, final Object fetchedObject) {

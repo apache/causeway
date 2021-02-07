@@ -391,7 +391,7 @@ public class ApplicationLayerTestFactory {
         return transactionService.callTransactional(Propagation.REQUIRES_NEW, ()->{
             return repository.allInstances(JdoBook.class).listIterator().next();
         })
-        .orElseFail();
+        .presentElseFail();
         
     }
     

@@ -45,7 +45,7 @@ class CliConfigTest {
     void loadConfigFromYaml() {
         val config = _Yaml.readYaml(CliConfig.class, this.getClass().getResourceAsStream("isis-tooling.yml"))
                 .ifFailure(System.err::println)
-                .nullableOrElse(null);
+                .getValue().orElse(null);
         assertConfigIsPopulated(config);
     }
 

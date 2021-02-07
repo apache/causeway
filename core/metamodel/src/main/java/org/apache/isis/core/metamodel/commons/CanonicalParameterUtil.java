@@ -57,7 +57,7 @@ public final class CanonicalParameterUtil {
         // supports effective private constructors as well
         return _Reflect.invokeConstructor(constructor, adaptedExecutionParameters)
         .mapFailure(ex->toVerboseException(constructor.getParameterTypes(), adaptedExecutionParameters, ex))
-        .orElseFail();
+        .presentElseFail();
     }
 
     public static Object invoke(Method method, Object targetPojo, Object[] executionParameters)
@@ -68,7 +68,8 @@ public final class CanonicalParameterUtil {
         // supports effective private methods as well
         return _Reflect.invokeMethodOn(method, targetPojo, adaptedExecutionParameters)
         .mapFailure(ex->toVerboseException(method.getParameterTypes(), adaptedExecutionParameters, ex))
-        .nullableOrElseFail();
+        .optionalElseFail()
+        .orElse(null);
     }
 
     private static Object[] preprocess(Executable executable, Object[] executionParameters) {

@@ -107,7 +107,7 @@ public class CliConfig {
         .ifFailure(e->{
             System.err.println(String.format("config file '%s' not readable, using defaults", file.getAbsolutePath()));
         })
-        .orElseGet(CliConfig::new);
+        .presentElseGet(CliConfig::new);
     }
 
 

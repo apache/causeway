@@ -53,14 +53,14 @@ class JsonYamlReaderTest {
     @Test
     void loadCustomerFromJson() throws JsonParseException, JsonMappingException, IOException {
         val customer = _Json.readJson(Customer.class, this.getClass().getResourceAsStream("customer.json"))
-                .nullableOrElse(null);
+                .getValue().orElse(null);
         assertCustomerIsJohnDoe(customer);
     }
 
     @Test
     void loadCustomerFromYaml() {
         val customer = _Yaml.readYaml(Customer.class, this.getClass().getResourceAsStream("customer.yml"))
-                .nullableOrElse(null);
+                .getValue().orElse(null);
         assertCustomerIsJohnDoe(customer);
     }
     

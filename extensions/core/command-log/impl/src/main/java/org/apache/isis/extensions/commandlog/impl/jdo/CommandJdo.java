@@ -628,8 +628,8 @@ public class CommandJdo
 
             @Override
             public void setResult(final Result<Bookmark> resultBookmark) {
-                CommandJdo.this.setResult(resultBookmark.value().orElse(null));
-                CommandJdo.this.setException(resultBookmark.failure().orElse(null));
+                CommandJdo.this.setResult(resultBookmark.getValue().orElse(null));
+                CommandJdo.this.setException(resultBookmark.getFailure().orElse(null));
             }
             
         };

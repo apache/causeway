@@ -180,6 +180,6 @@ implements MixinFacet {
             }
         }
 
-        return holderPojoGetterResult.nullableOrElse(null);
+        return holderPojoGetterResult.getValue().orElse(null);
     }
 }

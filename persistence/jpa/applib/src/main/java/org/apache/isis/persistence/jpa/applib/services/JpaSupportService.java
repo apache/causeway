@@ -53,7 +53,7 @@ public interface JpaSupportService {
     default EntityManager getEntityManagerElseFail(final @NonNull Class<?> entityType) {
         
         return getEntityManager(entityType)
-                .orElseThrow(cause->new IllegalStateException(
+                .presentElseThrow(cause->new IllegalStateException(
                         String.format(
                         "Current thread either has no open interaction"
                         + " or no unique EntityManager managing type %s can be resolved.", entityType), cause));

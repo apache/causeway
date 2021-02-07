@@ -106,7 +106,8 @@ class JdoExceptionTranslationTest
                 });
     
             })
-            .nullableOrElseFail();
+            .optionalElseFail()
+            .orElse(null);
             
         });
         

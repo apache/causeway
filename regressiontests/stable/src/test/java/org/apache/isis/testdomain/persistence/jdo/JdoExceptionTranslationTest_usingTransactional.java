@@ -138,7 +138,8 @@ class JdoExceptionTranslationTest_usingTransactional
                         ? new DefaultJdoDialect().translateException((JDOException)ex)
                         : ex)
                 
-                .nullableOrElseFail();
+                .optionalElseFail()
+                .orElse(null);
             
             });
         

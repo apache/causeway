@@ -128,7 +128,8 @@ class JpaExceptionTranslationTest_usingTransactional
                         .findFirst()
                         .orElseGet(()->new RuntimeException(ex)))
                 
-                .nullableOrElseFail();
+                .optionalElseFail()
+                .orElse(null);
             
             });
         

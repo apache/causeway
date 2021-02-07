@@ -102,7 +102,7 @@ implements
         
         val tx = txManager.getTransaction(def);
 
-        val result = Result.ofNullable(callable)
+        val result = Result.of(callable)
                 .mapFailure(ex->translateExceptionIfPossible(ex, txManager));
         
         try {
@@ -270,7 +270,7 @@ implements
         return Result.of(()->
                 //XXX creating stack-traces is expensive
                 txManager.getTransaction(txTemplate))
-                .value();
+                .getValue();
         
     }
     

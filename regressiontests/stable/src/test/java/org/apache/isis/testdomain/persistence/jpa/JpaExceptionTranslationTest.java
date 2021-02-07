@@ -106,7 +106,8 @@ class JpaExceptionTranslationTest
                 });
     
             })
-            .nullableOrElseFail();
+            .optionalElseFail()
+            .orElse(null);
            
         });
         

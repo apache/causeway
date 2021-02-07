@@ -155,7 +155,7 @@ class JdoEntityPropertyChangePublishingTest2 extends IsisIntegrationTestAbstract
             val pm = pmf.getPersistenceManager();
             return pm.getObjectById(JdoBook.class, -1L);
         })
-        .orElseFail();
+        .presentElseFail();
         
         //return repositoryService.allInstances(JdoBook.class).listIterator().next();
     }
