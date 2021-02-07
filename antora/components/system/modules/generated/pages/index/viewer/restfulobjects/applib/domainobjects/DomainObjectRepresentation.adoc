@@ -1,64 +1,78 @@
-= DomainObjectRepresentation : _class_
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
-.Java Sources
+== API
+
+.DomainObjectRepresentation.java
 [source,java]
 ----
 class DomainObjectRepresentation {
-
   DomainObjectRepresentation(final JsonNode jsonNode)
-
   String getTitle()
-
-  String getDomainType() // <.>
-
-  String getInstanceId() // <.>
-
-  String getServiceId() // <.>
-
+  String getDomainType()     // <.>
+  String getInstanceId()     // <.>
+  String getServiceId()     // <.>
   JsonRepresentation getMembers()
-
   DomainObjectMemberRepresentation getProperty(final String id)
-
   JsonRepresentation getProperties()
-
   DomainObjectMemberRepresentation getCollection(final String id)
-
   JsonRepresentation getCollections()
-
   DomainObjectMemberRepresentation getAction(final String id)
-
   JsonRepresentation getActions()
-
-  LinkRepresentation getPersistLink() // <.>
-
-  String getOid() // <.>
+  LinkRepresentation getPersistLink()     // <.>
+  String getOid()     // <.>
 }
 ----
 
-<.> `[teal]#*getDomainType*#()` : `String`
+<.> xref:#getDomainType[getDomainType]
 +
 --
 Populated only for domain objects, not for domain services.
 --
-<.> `[teal]#*getInstanceId*#()` : `String`
+<.> xref:#getInstanceId[getInstanceId]
 +
 --
 Populated only for domain objects, not for domain services.
 --
-<.> `[teal]#*getServiceId*#()` : `String`
+<.> xref:#getServiceId[getServiceId]
 +
 --
 Populated only for domain services, not for domain objects.
 --
-<.> `[teal]#*getPersistLink*#()` : `xref:system:generated:index/viewer/restfulobjects/applib/LinkRepresentation.adoc[LinkRepresentation]`
+<.> xref:#getPersistLink[getPersistLink]
 +
 --
 Only for transient, persistable, objects
 --
-<.> `[teal]#*getOid*#()` : `String`
+<.> xref:#getOid[getOid]
 +
 --
 Isis extension.
 --
+
+== Members
+
+[#getDomainType]
+=== getDomainType
+
+Populated only for domain objects, not for domain services.
+
+[#getInstanceId]
+=== getInstanceId
+
+Populated only for domain objects, not for domain services.
+
+[#getServiceId]
+=== getServiceId
+
+Populated only for domain services, not for domain objects.
+
+[#getPersistLink]
+=== getPersistLink
+
+Only for transient, persistable, objects
+
+[#getOid]
+=== getOid
+
+Isis extension.
 

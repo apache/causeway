@@ -1,66 +1,13 @@
 [#Collection]
-= `@Collection`
+= @Collection
 
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
-
-The `@Collection` annotation applies to collections collecting together all domain semantics within a single annotation.
-
-[source,java]
-----
-include::refguide:applib-ant:example$annotation/Collection.java[tags="refguide"]
-----
-<.> xref:refguide:applib-ant:Collection.adoc#domainEvent[`domainEvent()`]
-+
-The event type to be posted to the xref:refguide:applib-svc:EventBusService.adoc[`EventBusService`] to broadcast the collection's business rule checking (hide, disable, validate) and its modification (before and after).
-
-<.> xref:refguide:applib-ant:Collection.adoc#hidden[`hidden()`]
-+
-Indicates where (in the UI) the collection should be hidden from the user.
-
-<.> xref:refguide:applib-ant:Collection.adoc#typeOf[`typeOf()`]
-+
-Hints as to the run-time type of the objects within that collection (as a fallback)
-
-
-For example:
-
-[source,java]
-----
-public class ToDoItem {
-    public static class DependenciesChangedEvent
-            extends CollectionDomainEvent<ToDoItem, ToDoItem> { } // <1>
-    @Collection(
-        domainEvent=DependenciesChangedEvent.class,
-        editing = Editing.ENABLED,
-        hidden = Where.NOWHERE,                                   // <2>
-        notPersisted = false,                                     // <3>
-        typeOf = ToDoItem.class                                   // <4>
-    )
-    public SortedSet<ToDoItem> getDependencies() { /* ... */ }
-    ...
-}
-----
-<1> can use no-arg constructor.
-<2> default value, so could be omitted
-<3> default value, so could be omitted
-<4> default value, so could be omitted
+include::system:generated:page$index/applib/annotation/Collection.adoc[]
 
 
 
 
-[TIP]
-====
-The annotation is one of a handful (others including xref:refguide:applib-ant:CollectionLayout.adoc[`@CollectionLayout`], xref:refguide:applib-ant:Property.adoc[`@Property`] and xref:refguide:applib-ant:PropertyLayout.adoc[`@PropertyLayout`]) that can also be applied to the field, rather than the getter method.  This is specifically
-so that boilerplate-busting tools such as link:https://projectlombok.org/[Project Lombok] can be used.
-====
+include::Collection/hooks/examples-and-usage.adoc[]
 
 
-
-
-
-
-
-include::Collection/domainEvent.adoc[leveloffset=+1]
-include::Collection/hidden.adoc[leveloffset=+1]
-include::Collection/typeOf.adoc[leveloffset=+1]

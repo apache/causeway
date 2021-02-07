@@ -248,7 +248,7 @@ The representation returned by this resource is essentially exactly the same as 
 
 The xref:vro:ROOT:layout-resources.adoc#menu-layout[menu layout] representation includes all possible domain services; it does not follow that the current user has access to all of these actions (some may be hidden or disabled).
 
-Similarly, the xref:vro:ROOT:layout-resources.adoc#domain-object-layout[domain object layout] representation include all _possible_ properties, collections and actions of the domain object; again, the current user may not have access to all of these pathsToInclude.
-It is also often the case that the domain object's internal state will determine which pathsToInclude to make available (eg, show only one of "lock" and "unlock" actions at any given time).
+Similarly, the xref:vro:ROOT:layout-resources.adoc#domain-object-layout[domain object layout] representation include all _possible_ properties, collections and actions of the domain object; again, the current user may not have access to all of these members.
+It is also often the case that the domain object's internal state will determine which members to make available (eg, show only one of "lock" and "unlock" actions at any given time).
 
 To determine what should actually be rendered, the REST client should follow the links to the standard Restful Objects resources.

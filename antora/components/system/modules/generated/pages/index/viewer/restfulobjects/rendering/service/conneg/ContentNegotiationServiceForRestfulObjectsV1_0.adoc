@@ -1,44 +1,53 @@
-= ContentNegotiationServiceForRestfulObjectsV1_0 : _class_
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
-.Java Sources
+== API
+
+.ContentNegotiationServiceForRestfulObjectsV1_0.java
 [source,java]
 ----
 class ContentNegotiationServiceForRestfulObjectsV1_0 {
-
   ContentNegotiationServiceForRestfulObjectsV1_0(final IsisConfiguration configuration, final SpecificationLoader specificationLoader)
-
   ResponseBuilder buildResponse(final IResourceContext resourceContext, final ManagedObject objectAdapter)
-
-  ResponseBuilder buildResponseTo(final IResourceContext resourceContext, final ManagedObject objectAdapter, final JsonRepresentation representationIfAnyRequired, final JsonRepresentation rootRepresentation) // <.>
-
+  ResponseBuilder buildResponseTo(final IResourceContext resourceContext, final ManagedObject objectAdapter, final JsonRepresentation representationIfAnyRequired, final JsonRepresentation rootRepresentation)     // <.>
   ResponseBuilder buildResponse(final IResourceContext resourceContext, final ManagedProperty objectAndProperty)
-
   ResponseBuilder buildResponse(final IResourceContext resourceContext, final ManagedCollection objectAndCollection)
-
-  ResponseBuilder buildResponseTo(final IResourceContext resourceContext, final ManagedCollection objectAndCollection, final JsonRepresentation representation, final JsonRepresentation rootRepresentation) // <.>
-
+  ResponseBuilder buildResponseTo(final IResourceContext resourceContext, final ManagedCollection objectAndCollection, final JsonRepresentation representation, final JsonRepresentation rootRepresentation)     // <.>
   ResponseBuilder buildResponse(final IResourceContext resourceContext, final ManagedAction objectAndAction)
-
   ResponseBuilder buildResponse(final IResourceContext resourceContext, final ObjectAndActionInvocation objectAndActionInvocation)
-
-  ResponseBuilder buildResponseTo(final IResourceContext resourceContext, final ObjectAndActionInvocation objectAndActionInvocation, final JsonRepresentation representation, final JsonRepresentation rootRepresentation) // <.>
+  ResponseBuilder buildResponseTo(final IResourceContext resourceContext, final ObjectAndActionInvocation objectAndActionInvocation, final JsonRepresentation representation, final JsonRepresentation rootRepresentation)     // <.>
 }
 ----
 
-<.> `[teal]#*buildResponseTo*#(IResourceContext resourceContext, ManagedObject objectAdapter, xref:system:generated:index/viewer/restfulobjects/applib/JsonRepresentation.adoc[JsonRepresentation] representationIfAnyRequired, xref:system:generated:index/viewer/restfulobjects/applib/JsonRepresentation.adoc[JsonRepresentation] rootRepresentation)` : `ResponseBuilder`
+<.> xref:#buildResponseTo[buildResponseTo]
 +
 --
 Not API
 --
-<.> `[teal]#*buildResponseTo*#(IResourceContext resourceContext, ManagedCollection objectAndCollection, xref:system:generated:index/viewer/restfulobjects/applib/JsonRepresentation.adoc[JsonRepresentation] representation, xref:system:generated:index/viewer/restfulobjects/applib/JsonRepresentation.adoc[JsonRepresentation] rootRepresentation)` : `ResponseBuilder`
+<.> xref:#buildResponseTo[buildResponseTo]
 +
 --
 Not API
 --
-<.> `[teal]#*buildResponseTo*#(IResourceContext resourceContext, ObjectAndActionInvocation objectAndActionInvocation, xref:system:generated:index/viewer/restfulobjects/applib/JsonRepresentation.adoc[JsonRepresentation] representation, xref:system:generated:index/viewer/restfulobjects/applib/JsonRepresentation.adoc[JsonRepresentation] rootRepresentation)` : `ResponseBuilder`
+<.> xref:#buildResponseTo[buildResponseTo]
 +
 --
 Not API
 --
+
+== Members
+
+[#buildResponseTo]
+=== buildResponseTo
+
+Not API
+
+[#buildResponseTo]
+=== buildResponseTo
+
+Not API
+
+[#buildResponseTo]
+=== buildResponseTo
+
+Not API
 

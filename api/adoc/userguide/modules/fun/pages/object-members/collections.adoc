@@ -26,8 +26,8 @@ Other annotations can be used to specify if the association is bidirectional, an
 
 Apache Isis may recognise some of these annotations from the persistence layer infers some domain semantics from them.
 
-Unlike xref:userguide:fun:object-pathsToInclude.adoc#properties[properties], the framework does not allow collections to be "edited".
-Instead, xref:userguide:fun:object-pathsToInclude.adoc#actions[action]s can be written that will modify the contents of the collection as a side-effect.
+Unlike xref:userguide:fun:object-members.adoc#properties[properties], the framework does not allow collections to be "edited".
+Instead, xref:userguide:fun:object-members.adoc#actions[action]s can be written that will modify the contents of the collection as a side-effect.
 For example, a `placeOrder(...)` action will likely add an `Order` to the `Customer#orders` collection.
 
 Since writing getter and setter methods adds quite a bit of boilerplate, it's common to use link:https://projectlombok.org/[Project Lombok] to code generate these methods at compile time (using Java's annotation processor) simply by adding the `@lombok.Getter` and `@lombok.Setter` annotations to the field.

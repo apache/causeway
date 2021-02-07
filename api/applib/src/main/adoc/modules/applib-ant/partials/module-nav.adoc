@@ -29,7 +29,7 @@
 ** xref:refguide:applib-ant:Programmatic.adoc[Programmatic]
 ** xref:refguide:applib-ant:Property.adoc[Property]
 ** xref:refguide:applib-ant:PropertyLayout.adoc[PropertyLayout]
-** xref:refguide:applib-ant:IsisSessionScope.adoc[RequestScoped]
+** xref:refguide:applib-ant:InteractionScope.adoc[RequestScoped]
 ** xref:refguide:applib-ant:Title.adoc[Title]
 ** xref:refguide:applib-ant:ViewModel.adoc[ViewModel]
 ** xref:refguide:applib-ant:XmlJavaTypeAdapter.adoc[XmlJavaTypeAdapter]

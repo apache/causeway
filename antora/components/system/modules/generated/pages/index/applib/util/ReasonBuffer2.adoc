@@ -1,69 +1,89 @@
-= ReasonBuffer2 : _class_
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
 Extension to applib's xref:system:generated:index/applib/util/ReasonBuffer.adoc[ReasonBuffer] .
 
-.Java Sources
+== API
+
+.ReasonBuffer2.java
 [source,java]
 ----
 class ReasonBuffer2 {
-
   ReasonBuffer2Builder builder()
-
   ReasonBuffer2 forAll()
-
   ReasonBuffer2 forSingle()
-
   ReasonBuffer2 forAll(final String prefix)
-
   ReasonBuffer2 forSingle(final String prefix)
-
   ReasonBuffer2 append(final LazyReason lazyReason)
-
   void appendIfNotPresent(final Optional<?> optional, final String reason)
-
-  ReasonBuffer2 append(final String reason) // <.>
-
-  ReasonBuffer2 append(final boolean condition, final String reason) // <.>
-
-  ReasonBuffer2 append(final Condition condition, final String reason) // <.>
-
-  String getReason() // <.>
-
-  String appendReason(final StringBuilder buf) // <.>
-
-  ReasonBuffer2 plus(final ReasonBuffer2 other) // <.>
+  ReasonBuffer2 append(final String reason)     // <.>
+  ReasonBuffer2 append(final boolean condition, final String reason)     // <.>
+  ReasonBuffer2 append(final Condition condition, final String reason)     // <.>
+  String getReason()     // <.>
+  String appendReason(final StringBuilder buf)     // <.>
+  ReasonBuffer2 plus(final ReasonBuffer2 other)     // <.>
 }
 ----
 
-<.> `[teal]#*append*#(String reason)` : `xref:system:generated:index/applib/util/ReasonBuffer2.adoc[ReasonBuffer2]`
+<.> xref:#append[append]
 +
 --
 Append a reason to the list of existing reasons.
 --
-<.> `[teal]#*append*#(boolean condition, String reason)` : `xref:system:generated:index/applib/util/ReasonBuffer2.adoc[ReasonBuffer2]`
+<.> xref:#append[append]
 +
 --
 Append a reason to the list of existing reasons if the condition flag is true.
 --
-<.> `[teal]#*append*#(Condition condition, String reason)` : `xref:system:generated:index/applib/util/ReasonBuffer2.adoc[ReasonBuffer2]`
+<.> xref:#append[append]
 +
 --
 Append a reason to the list of existing reasons if the condition flag is true.
 --
-<.> `[teal]#*getReason*#()` : `String`
+<.> xref:#getReason[getReason]
 +
 --
-Return the combined set of reasons, ornullif there are none.
+Return the combined set of reasons, or `null` if there are none.
 --
-<.> `[teal]#*appendReason*#(StringBuilder buf)` : `String`
+<.> xref:#appendReason[appendReason]
 +
 --
 Appends reasons.
 --
-<.> `[teal]#*plus*#(xref:system:generated:index/applib/util/ReasonBuffer2.adoc[ReasonBuffer2] other)` : `xref:system:generated:index/applib/util/ReasonBuffer2.adoc[ReasonBuffer2]`
+<.> xref:#plus[plus]
 +
 --
 Combines sets of reasons from another.
 --
+
+== Members
+
+[#append]
+=== append
+
+Append a reason to the list of existing reasons.
+
+[#append]
+=== append
+
+Append a reason to the list of existing reasons if the condition flag is true.
+
+[#append]
+=== append
+
+Append a reason to the list of existing reasons if the condition flag is true.
+
+[#getReason]
+=== getReason
+
+Return the combined set of reasons, or `null` if there are none.
+
+[#appendReason]
+=== appendReason
+
+Appends reasons.
+
+[#plus]
+=== plus
+
+Combines sets of reasons from another.
 

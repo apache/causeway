@@ -451,7 +451,7 @@ We're not sure that's any easier (in fact we're certain it looks rather obscure)
 
 === Using the wrapper
 
-As the wrapper is intended to simulate the UI, only those methods that correspond to the "primary" methods of the domain object's pathsToInclude are allowed to be called.
+As the wrapper is intended to simulate the UI, only those methods that correspond to the "primary" methods of the domain object's members are allowed to be called.
 That means:
 
 * for *_object properties_* the test can call the getter or setter method

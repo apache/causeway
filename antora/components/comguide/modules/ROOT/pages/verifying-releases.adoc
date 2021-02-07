@@ -9,15 +9,15 @@
 The release process consists of:
 
 * the release manager xref:comguide:ROOT:cutting-a-release.adoc[cutting the release]
-* pathsToInclude of the Apache Isis PMC verifying and voting on the release (documented below)
+* members of the Apache Isis PMC verifying and voting on the release (documented below)
 * the release manager performing post-release tasks, for either a xref:comguide:ROOT:post-release-successful.adoc[successful] or an xref:comguide:ROOT:post-release-unsuccessful.adoc[unsuccessful] vote.
 
-This section describes some guidance on what a voter (pathsToInclude of the Apache Isis PMC and anyone else who wishes) is expected to do before casting their vote in order to verify a release.
+This section describes some guidance on what a voter (members of the Apache Isis PMC and anyone else who wishes) is expected to do before casting their vote in order to verify a release.
 
 == Background
 
 Whenever a release manager announces a vote on a release (as per the [release process]) on the xref:docs:support:mailing-list.adoc#mailing-lists[dev mailing list], it is the responsibility of the project's PMC to cast their vote on the release.
-Anyone else can also vote, but only pathsToInclude of the Apache Isis PMC's vote are binding.
+Anyone else can also vote, but only members of the Apache Isis PMC's vote are binding.
 
 Per this http://www.apache.org/dev/release.html[ASF documentation], the legal requirements for an ASF release are:
 

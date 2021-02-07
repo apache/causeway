@@ -2,7 +2,7 @@
 * xref:userguide:fun:concepts-patterns.adoc[Concepts & Patterns]
 * xref:userguide:fun:overview.adoc[Overview]
 * xref:userguide:fun:domain-entities-and-services.adoc[Domain Entities & Services]
-* xref:userguide:fun:object-pathsToInclude.adoc[Object Members]
+* xref:userguide:fun:object-members.adoc[Object Members]
 * xref:userguide:fun:ui.adoc[UI Layout & Hints]
 * xref:userguide:fun:business-rules.adoc[Business Rules]
 * xref:userguide:fun:drop-downs-and-defaults.adoc[Drop downs and Defaults]

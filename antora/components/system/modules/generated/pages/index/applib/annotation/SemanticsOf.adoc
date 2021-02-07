@@ -1,117 +1,74 @@
-= SemanticsOf : _enum_
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
-.Java Sources
+== API
+
+.SemanticsOf.java
 [source,java]
 ----
 enum SemanticsOf {
-
-  SAFE_AND_REQUEST_CACHEABLE // <.>
-
-  SAFE // <.>
-
-  IDEMPOTENT // <.>
-
-  NON_IDEMPOTENT // <.>
-
-  IDEMPOTENT_ARE_YOU_SURE // <.>
-
-  NON_IDEMPOTENT_ARE_YOU_SURE // <.>
-
-  NOT_SPECIFIED // <.>
-
+  SAFE_AND_REQUEST_CACHEABLE     // <.>
+  SAFE     // <.>
+  IDEMPOTENT     // <.>
+  NON_IDEMPOTENT     // <.>
+  IDEMPOTENT_ARE_YOU_SURE     // <.>
+  NON_IDEMPOTENT_ARE_YOU_SURE     // <.>
+  NOT_SPECIFIED     // <.>
   String getFriendlyName()
-
   String getCamelCaseName()
-
-  boolean isIdempotentInNature() // <.>
-
-  boolean isSafeInNature() // <.>
-
-  boolean isSafe() // <.>
-
+  boolean isIdempotentInNature()     // <.>
+  boolean isSafeInNature()     // <.>
+  boolean isSafe()     // <.>
   boolean isSafeAndRequestCacheable()
-
   boolean isAreYouSure()
 }
 ----
 
-<.> `[teal]#*_SAFE_AND_REQUEST_CACHEABLE_*#`
+<.> xref:#SAFE_AND_REQUEST_CACHEABLE[SAFE_AND_REQUEST_CACHEABLE]
 +
 --
 Safe, with no side effects, and caching the returned value when invoked multiple times in the same request.
-
-* Changes state: *No*
-* HTTP verb: *GET*
-* Effect of multiple calls: Will *always return the same result* each time invoked (within a given request scope).
 --
-<.> `[teal]#*_SAFE_*#`
+<.> xref:#SAFE[SAFE]
 +
 --
 Safe, with no side-effects. In other words, a query-only action.
-
-* Changes state: *No*
-* HTTP verb: *GET*
-* Effect of multiple calls: Might result in *different results each invocation* (within a given request scope).
 --
-<.> `[teal]#*_IDEMPOTENT_*#`
+<.> xref:#IDEMPOTENT[IDEMPOTENT]
 +
 --
 Post-conditions are always the same, irrespective as to how many times called.
-
-* Changes state: *Yes*
-* HTTP verb: *PUT*
-* Effect of multiple calls: Will make *no further changes* if called multiple times (eg sets a property or adds of same item to a Set).
 --
-<.> `[teal]#*_NON_IDEMPOTENT_*#`
+<.> xref:#NON_IDEMPOTENT[NON_IDEMPOTENT]
 +
 --
 Neither safe nor idempotent; every invocation is likely to change the state of the object.
-
-* Changes state: *Yes*
-* HTTP verb: *POST*
-* Effect of multiple calls: Might *change the state* of the system each time called (eg increments a counter or adds to a List).
-* Example: Increasing the quantity of a line item in an Order by 1.
 --
-<.> `[teal]#*_IDEMPOTENT_ARE_YOU_SURE_*#`
+<.> xref:#IDEMPOTENT_ARE_YOU_SURE[IDEMPOTENT_ARE_YOU_SURE]
 +
 --
 Post-conditions are always the same, irrespective as to how many times called.
-
-If supported the UI viewer will show a confirmation dialog before executing the action.
-
-* Changes state: *Yes*
-* HTTP verb: *PUT*
-* Effect of multiple calls: Will make *no further changes* if called multiple times (eg sets a property or adds of same item to a Set).
 --
-<.> `[teal]#*_NON_IDEMPOTENT_ARE_YOU_SURE_*#`
+<.> xref:#NON_IDEMPOTENT_ARE_YOU_SURE[NON_IDEMPOTENT_ARE_YOU_SURE]
 +
 --
 Neither safe nor idempotent; every invocation is likely to change the state of the object.
-
-If supported the UI viewer will show a confirmation dialog before executing the action.
-
-* Changes state: *Yes*
-* HTTP verb: *POST*
-* Effect of multiple calls: Might *change the state* of the system each time called (eg increments a counter or adds to a List).
-* Example: Increasing the quantity of a line item in an Order by 1.
 --
-<.> `[teal]#*_NOT_SPECIFIED_*#`
+<.> xref:#NOT_SPECIFIED[NOT_SPECIFIED]
 +
 --
 Ignore the value provided by this annotation (meaning that the framework will keep searching, in meta annotations or superclasses/interfaces).
 --
-<.> `[teal]#*isIdempotentInNature*#()` : `boolean`
+<.> xref:#isIdempotentInNature[isIdempotentInNature]
 +
 --
 Any of _#SAFE_ , _#SAFE_AND_REQUEST_CACHEABLE_ or (obviously) _#IDEMPOTENT_ .
 --
-<.> `[teal]#*isSafeInNature*#()` : `boolean`
+<.> xref:#isSafeInNature[isSafeInNature]
 +
 --
 Either of _#SAFE_ or _#SAFE_AND_REQUEST_CACHEABLE_ .
 --
-<.> `[line-through gray]#*isSafe*#()` : `boolean`
+<.> xref:#isSafe[isSafe]
 +
 --
 [WARNING]
@@ -121,4 +78,91 @@ Either of _#SAFE_ or _#SAFE_AND_REQUEST_CACHEABLE_ .
 - use _#isSafeInNature()_ instead (avoid any ambiguity).
 ====
 --
+
+== Members
+
+[#SAFE_AND_REQUEST_CACHEABLE]
+=== SAFE_AND_REQUEST_CACHEABLE
+
+Safe, with no side effects, and caching the returned value when invoked multiple times in the same request.
+
+* Changes state: *No*
+* HTTP verb: *GET*
+* Effect of multiple calls: Will *always return the same result* each time invoked (within a given request scope).
+
+[#SAFE]
+=== SAFE
+
+Safe, with no side-effects. In other words, a query-only action.
+
+* Changes state: *No*
+* HTTP verb: *GET*
+* Effect of multiple calls: Might result in *different results each invocation* (within a given request scope).
+
+[#IDEMPOTENT]
+=== IDEMPOTENT
+
+Post-conditions are always the same, irrespective as to how many times called.
+
+* Changes state: *Yes*
+* HTTP verb: *PUT*
+* Effect of multiple calls: Will make *no further changes* if called multiple times (eg sets a property or adds of same item to a Set).
+
+[#NON_IDEMPOTENT]
+=== NON_IDEMPOTENT
+
+Neither safe nor idempotent; every invocation is likely to change the state of the object.
+
+* Changes state: *Yes*
+* HTTP verb: *POST*
+* Effect of multiple calls: Might *change the state* of the system each time called (eg increments a counter or adds to a List).
+* Example: Increasing the quantity of a line item in an Order by 1.
+
+[#IDEMPOTENT_ARE_YOU_SURE]
+=== IDEMPOTENT_ARE_YOU_SURE
+
+Post-conditions are always the same, irrespective as to how many times called.
+
+If supported the UI viewer will show a confirmation dialog before executing the action.
+
+* Changes state: *Yes*
+* HTTP verb: *PUT*
+* Effect of multiple calls: Will make *no further changes* if called multiple times (eg sets a property or adds of same item to a Set).
+
+[#NON_IDEMPOTENT_ARE_YOU_SURE]
+=== NON_IDEMPOTENT_ARE_YOU_SURE
+
+Neither safe nor idempotent; every invocation is likely to change the state of the object.
+
+If supported the UI viewer will show a confirmation dialog before executing the action.
+
+* Changes state: *Yes*
+* HTTP verb: *POST*
+* Effect of multiple calls: Might *change the state* of the system each time called (eg increments a counter or adds to a List).
+* Example: Increasing the quantity of a line item in an Order by 1.
+
+[#NOT_SPECIFIED]
+=== NOT_SPECIFIED
+
+Ignore the value provided by this annotation (meaning that the framework will keep searching, in meta annotations or superclasses/interfaces).
+
+[#isIdempotentInNature]
+=== isIdempotentInNature
+
+Any of _#SAFE_ , _#SAFE_AND_REQUEST_CACHEABLE_ or (obviously) _#IDEMPOTENT_ .
+
+[#isSafeInNature]
+=== isSafeInNature
+
+Either of _#SAFE_ or _#SAFE_AND_REQUEST_CACHEABLE_ .
+
+[#isSafe]
+=== isSafe
+
+[WARNING]
+====
+[red]#_deprecated:_#
+
+- use _#isSafeInNature()_ instead (avoid any ambiguity).
+====
 

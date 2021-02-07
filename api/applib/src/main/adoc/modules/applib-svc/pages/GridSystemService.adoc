@@ -1,4 +1,5 @@
-= `GridSystemService`
+[#GridSystemService]
+= GridSystemService
 
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :page-partial:
@@ -8,7 +9,7 @@ WARNING: TODO: this content has not yet been reviewed/updated for v2.0
 
 The `GridSystemService` encapsulates a single layout grid system which can be used to customize the layout
 of domain objects.  In particular this means being able to return a "normalized" form (validating and associating
-domain object pathsToInclude into the various regions of the grid) and in providing a default grid if there is no other
+domain object members into the various regions of the grid) and in providing a default grid if there is no other
 metadata available.
 
 The framework provides a single such grid implementation, namely for Bootstrap3.
@@ -50,15 +51,15 @@ As is normal practice, these are ordered as per the Spring link:https://docs.spr
 
 <.> a default grid, eg two columns in ratio 4:8.  Used when no existing grid layout exists for a domain class.
 
-<.> Validates and normalizes a grid, modifying the grid so that all of the domain object's pathsToInclude (properties, collections, actions) are bound to regions of the grid.  This is done using existing metadata, most notably that of the xref:refguide:applib-ant:MemberOrder.adoc[`@MemberOrder`] annotation.
+<.> Validates and normalizes a grid, modifying the grid so that all of the domain object's members (properties, collections, actions) are bound to regions of the grid.  This is done using existing metadata, most notably that of the xref:refguide:applib-ant:MemberOrder.adoc[`@MemberOrder`] annotation.
 Such a grid, if persisted as the layout XML file for the domain class, allows the
  `@MemberOrder` annotation to be removed from the source code of the domain class (but other annotations must be retained).
 
 <.> Takes a normalized grid and enriches it with additional metadata (taken from Apache Isis' internal metadata) that can be represented in the layout XML.
 Such a grid, if persisted as the layout XML file for the domain class, allows all layout annotations (xref:refguide:applib-ant:ActionLayout.adoc[`@ActionLayout`], xref:refguide:applib-ant:PropertyLayout.adoc[`@PropertyLayout`] and xref:refguide:applib-ant:CollectionLayout.adoc[`@CollectionLayout`]) to be removed from the source code of the domain class.
 
-<.> Takes a normalized grid and strips out removes all pathsToInclude, leaving only the grid structure.
-Such a grid, if persisted as the layout XML file for the domain class, requires that the xref:refguide:applib-ant:MemberOrder.adoc[`@MemberOrder`] annotation is retained in the source code of said class in order to bind pathsToInclude to the regions of the grid.
+<.> Takes a normalized grid and strips out removes all members, leaving only the grid structure.
+Such a grid, if persisted as the layout XML file for the domain class, requires that the xref:refguide:applib-ant:MemberOrder.adoc[`@MemberOrder`] annotation is retained in the source code of said class in order to bind members to the regions of the grid.
 
 
 

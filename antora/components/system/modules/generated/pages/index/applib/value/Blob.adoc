@@ -1,50 +1,54 @@
-= Blob : _class_
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
-.Java Sources
+== API
+
+.Blob.java
 [source,java]
 ----
 class Blob {
-
   Blob(String name, String primaryType, String subtype, byte[] bytes)
-
   Blob(String name, String mimeTypeBase, byte[] bytes)
-
   Blob(String name, MimeType mimeType, byte[] bytes)
-
-  Blob of(String name, CommonMimeType mimeType, byte[] content) // <.>
-
+  Blob of(String name, CommonMimeType mimeType, byte[] content)     // <.>
   String getName()
-
   MimeType getMimeType()
-
   byte[] getBytes()
-
-  void writeBytesTo(final OutputStream os) // <.>
-
+  void writeBytesTo(final OutputStream os)     // <.>
   boolean equals(final Object o)
-
   int hashCode()
-
   String toString()
-
-  Optional<BufferedImage> asImage() // <.>
+  Optional<BufferedImage> asImage()     // <.>
 }
 ----
 
-<.> `[teal]#*_of_*#(String name, CommonMimeType mimeType, byte[] content)` : `xref:system:generated:index/applib/value/Blob.adoc[Blob]`
+<.> xref:#of[of]
 +
 --
+Returns a new xref:system:generated:index/applib/value/Blob.adoc[Blob] of given _name_ , _mimeType_ and _content_ .
+--
+<.> xref:#writeBytesTo[writeBytesTo]
++
+--
+Does not close the OutputStream.
+--
+<.> xref:#asImage[asImage]
+
+== Members
+
+[#of]
+=== of
+
 Returns a new xref:system:generated:index/applib/value/Blob.adoc[Blob] of given _name_ , _mimeType_ and _content_ .
 
 _name_ may or may not include the desired filename extension, it is guaranteed, that the resulting xref:system:generated:index/applib/value/Blob.adoc[Blob] has the appropriate extension as constraint by the given _mimeType_ .
 
 For more fine-grained control use one of the xref:system:generated:index/applib/value/Blob.adoc[Blob] constructors directly.
---
-<.> `[teal]#*writeBytesTo*#(OutputStream os)` : `void`
-+
---
+
+[#writeBytesTo]
+=== writeBytesTo
+
 Does not close the OutputStream.
---
-<.> `[teal]#*asImage*#()` : `Optional<BufferedImage>`
+
+[#asImage]
+=== asImage
 

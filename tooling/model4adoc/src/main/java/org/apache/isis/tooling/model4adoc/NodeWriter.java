@@ -70,7 +70,7 @@ final class NodeWriter implements StructuralNodeVisitor {
                 .ifPresent(attrValue->printfln(":%s: %s", knownAttrKey, attrValue));
             }
         }
-        
+
         return true; // continue visit
     }
 
@@ -117,7 +117,7 @@ final class NodeWriter implements StructuralNodeVisitor {
     @Override
     public boolean blockHead(Block block, int depth) {
 
-        val style = Style.parse(block);        
+        val style = Style.parse(block);
 
         if(style.isOpenBlock()) {
             pushNewWriter(); // write the open block to a StringWriter, such that can handle empty blocks
@@ -129,13 +129,13 @@ final class NodeWriter implements StructuralNodeVisitor {
         } else if(!isContinuation) {
             if(newLineCount<=1) {
                 printNewLine();
-            }    
+            }
         }
 
         if(style.isAdmonition()) {
             if(block.getBlocks().size()>0) {
                 printfln("[%s]", block.getStyle());
-                println("====");    
+                println("====");
                 isContinuation = true; // set continuation flag, so other blocks don't add newlines
             } else {
                 printf("%s: ", block.getStyle());
@@ -162,14 +162,14 @@ final class NodeWriter implements StructuralNodeVisitor {
             bulletCount = bulletCountStack.pop();
         } else if(style.isAdmonition()){
             if(block.getBlocks().size()>0) {
-                println("====");    
+                println("====");
             }
         } else if(style.isListingBlock()) {
             println("----");
         }
     }
 
-    // -_ LIST 
+    // -_ LIST
 
     @Override
     public boolean listHead(org.asciidoctor.ast.List list, int depth) {
@@ -182,7 +182,7 @@ final class NodeWriter implements StructuralNodeVisitor {
 
         _Strings.nonEmpty(list.getTitle())
         .ifPresent(this::printBlockTitle);
-        
+
         return true; // continue visit
     }
 
@@ -195,7 +195,7 @@ final class NodeWriter implements StructuralNodeVisitor {
     public boolean listItemHead(ListItem listItem, int depth) {
 
         val isFootnoteStyle = Style.parse((org.asciidoctor.ast.List)(listItem.getParent()))
-                .isFootnoteList(); 
+                .isFootnoteList();
 
         val bullets = isFootnoteStyle
                 ? "<.>"
@@ -206,19 +206,19 @@ final class NodeWriter implements StructuralNodeVisitor {
             printfln("%s %s", bullets, listItemSource);
             return true; // continue visit
         }
-        
+
         if(_NullSafe.isEmpty(listItem.getBlocks())) {
             printfln("%s _missing listitem text_", bullets);
             return true; // continue visit
         }
-        
+
         //there is a special case, if source is blank
         //the first block replaces the source
-        
+
         //find the first block that has a source, use it and blank it out, so is not written twice
-        
-        val isFixed = _Refs.booleanRef(false); 
-        
+
+        val isFixed = _Refs.booleanRef(false);
+
         StructuralNodeTraversor.depthFirst(new BlockVisitor(block->{
             val blockSource = _Strings.nullToEmpty(block.getSource()).trim();
             if(!blockSource.isEmpty()) {
@@ -229,7 +229,7 @@ final class NodeWriter implements StructuralNodeVisitor {
             }
             return true; // continue the visit
         }), listItem);
-        
+
         if(isFixed.isFalse()) {
             printfln("%s _missing listitem text_", bullets);
         }
@@ -245,7 +245,7 @@ final class NodeWriter implements StructuralNodeVisitor {
 
     //  [cols="3m,2a", options="header"]
     //  |===
-    //  |Name of Column 1 |Name of Column 2 |Name of Column 3 
+    //  |Name of Column 1 |Name of Column 2 |Name of Column 3
     //
     //  |Cell in column 1, row 1
     //  |Cell in column 2, row 1
@@ -269,7 +269,7 @@ final class NodeWriter implements StructuralNodeVisitor {
 
         for(val headRow : table.getHeader()) {
             for(val cell : headRow.getCells()) {
-                printf("|%s ", cell.getSource());    
+                printf("|%s ", cell.getSource());
             }
             printNewLine();
         }
@@ -278,12 +278,12 @@ final class NodeWriter implements StructuralNodeVisitor {
             printNewLine(); // empty line before each row
             for(val cell : row.getCells()) {
                 //bypass newline tracking
-                printfln("|%s", cell.getSource());    
+                printfln("|%s", cell.getSource());
             }
         }
 
         println("|===");
-        
+
         return true; // continue visit
     }
 
@@ -341,15 +341,15 @@ final class NodeWriter implements StructuralNodeVisitor {
 
     private boolean hasWrittenAnythingYet = false;
     private boolean isContinuation = false;
-    private Stack<Integer> bulletCountStack = new Stack<>();
+    private final Stack<Integer> bulletCountStack = new Stack<>();
 
-    
+
     // -- EMPTY CONTINUATION BLOCK HANDLING
 
     private final static int EMPTY_CONTINUATION_BLOCK_SIZE = 8;
-    
-    private Stack<StringWriter> stringWriterStack = new Stack<>();
-    
+
+    private final Stack<StringWriter> stringWriterStack = new Stack<>();
+
     private Writer currentWriter;
     private Writer currentWriter() {
         if(currentWriter == null) {
@@ -370,7 +370,7 @@ final class NodeWriter implements StructuralNodeVisitor {
                 : stringWriterStack.peek();
         val continuationBlockAsString = sw.toString();
         if(continuationBlockAsString.length()>EMPTY_CONTINUATION_BLOCK_SIZE) {
-            writer.append(continuationBlockAsString); // write directly to the current writer, no side-effects wanted    
+            writer.append(continuationBlockAsString); // write directly to the current writer, no side-effects wanted
         }
     }
 
@@ -391,7 +391,7 @@ final class NodeWriter implements StructuralNodeVisitor {
         if(line.contains("\n")) {
             val lineIter = _Text.normalize(_Text.getLines(line)).iterator();
             while(lineIter.hasNext()) {
-                val nextLine = lineIter.next(); 
+                val nextLine = lineIter.next();
                 currentWriter().append(nextLine);
                 if(!nextLine.isEmpty()) {
                     hasWrittenAnythingYet = true;

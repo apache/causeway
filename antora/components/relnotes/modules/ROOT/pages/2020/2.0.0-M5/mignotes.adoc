@@ -28,7 +28,7 @@ isis.core.metaModel.validator.mixins-only=true        // <.>
 ----
 <.> `@DomainService(natureOfService=VIEW/REST)` is now solely used for UI menu action providers and REST end-points.
 There is no longer the need to validate uses of `natureOfService=DOMAIN` as this option was removed.
-<.> Support for services that contribute pathsToInclude to other `DomainObjects` was removed. Use `Mixins` instead.
+<.> Support for services that contribute members to other `DomainObjects` was removed. Use `Mixins` instead.
 
 See the former java-doc for hints on how to migrate the previous options.
 
@@ -92,7 +92,7 @@ VIEW_CONTRIBUTIONS_ONLY,
 spring.datasource.platform=h2
 spring.datasource.url=jdbc:h2:mem:...
 ----
-configure Datanucleus settings using 
+configure Datanucleus settings using
 [source]
 ----
 datanucleus. ...
@@ -216,7 +216,7 @@ CommandServiceInternal -> CommandPublisher
 * Interaction related classes have been moved to module `core/interaction`.
 * Transaction related classes have been moved to module `core/transaction`.
 * JDO classes have been split up into several modules under `persistence/jdo/`.
-* Multiple `Exception` classes have been relocated at `org.apache.isis.applib.exceptions`  
+* Multiple `Exception` classes have been relocated at `org.apache.isis.applib.exceptions`
 
 [cols="3m,3m", options="header"]
 
@@ -225,7 +225,7 @@ CommandServiceInternal -> CommandPublisher
 | was
 | new
 
-| ApplicationException (removed) 
+| ApplicationException (removed)
 | removed, adds no new semantics compared to the already existing RecoverableException
 
 | AuthenticationSession
@@ -234,10 +234,10 @@ CommandServiceInternal -> CommandPublisher
 | AuthenticationSessionStrategy
 | AuthenticationStrategy
 
-| AuthenticationSessionStrategyBasicAuth (*1*)
+| AuthenticationSessionStrategyBasicAuth.footnote:[These might be in use with configuration files, check yours!]
 | AuthenticationStrategyBasicAuth
 
-| AuthenticationSessionStrategyDefault (*1*)
+| AuthenticationSessionStrategyDefault.footnote:[These might be in use with configuration files, check yours!]
 | AuthenticationStrategyDefault
 
 | AuthenticationSessionTracker#getInteraction : Interaction
@@ -246,12 +246,12 @@ CommandServiceInternal -> CommandPublisher
 | Clock (moved from applib module to fixture-applib module)
 | VirtualClock (introduced)
 
-| FatalException (removed) 
+| FatalException (removed)
 | removed, adds no new semantics compared to the already existing UnrecoverableException
 
 | HoldsUpdatedBy, HoldsUpdatedAt, Timestampable
 | moved to 'commons' and renamed:
- HasUpdatedBy, 
+ HasUpdatedBy,
  HasUpdatedAt,
  HasUpdatedByAndAt
 
@@ -262,7 +262,7 @@ CommandServiceInternal -> CommandPublisher
 | removed, use IsisModuleJdoDatanucleus instead (symmetry with JPA/IsisModuleJpaEclipselink)
 
 | IsisJdoSupport, IsisJdoSupport_v3_2
-| removed, use JdoSupportService instead (symmetry with JPA/JpaSupportService) 
+| removed, use JdoSupportService instead (symmetry with JPA/JpaSupportService)
 
 | InteractionClosure
 | AuthenticationLayer
@@ -317,7 +317,6 @@ Query.named(CommandJdo.class, "findByParent") +
 
 |===
 
-<1> These might be in use with configuration files, check yours!
 
 == Deprecations
 
@@ -332,7 +331,7 @@ validity of the used constructor rather than doing construction reflective at ru
 
 == Extensions
 
-Object type namespaces have been renamed. 
+Object type namespaces have been renamed.
 
 WARNING: check menubars.layout.xml for any occurrences
 
@@ -365,7 +364,7 @@ WARNING: check menubars.layout.xml for any occurrences
 
 === SecMan (Extension)
 
-Permission are now matched against logical packages, logical object types or logical object member names and use the former fully qualified names only as fallback. 
+Permission are now matched against logical packages, logical object types or logical object member names and use the former fully qualified names only as fallback.
 
 [cols="3m,3m,3a", options="header"]
 |===
@@ -381,26 +380,26 @@ Permission are now matched against logical packages, logical object types or log
 WARNING: check menubars.layout.xml for any occurrences
 
 | Default Regular User Role Name
-| isis-module-security-regular-user 
+| isis-module-security-regular-user
 | secman-regular-user
 
-| Default Fixture Role Name 
-| isis-module-security-fixtures 
+| Default Fixture Role Name
+| isis-module-security-fixtures
 | secman-fixtures
 
 | Default Admin Role Name
-| isis-module-security-admin 
+| isis-module-security-admin
 | secman-admin
 
 | Default Admin User Name
-| isis-module-security-admin 
+| isis-module-security-admin
 | secman-admin
 
-| Class 
-| SecurityModuleConfig 
+| Class
+| SecurityModuleConfig
 | SecmanConfiguration
 
-| Option 
+| Option
 | SecurityModuleConfig#adminAdditionalPackagePermission
 | SecmanConfiguration#adminAdditionalNamespacePermission
 

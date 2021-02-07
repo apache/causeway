@@ -1,0 +1,13 @@
+// TODO - v2 (reconcile/move into javadoc).
+
+//<.> xref:refguide:applib-ant:Collection.adoc#domainEvent[`domainEvent()`]
+//+
+//The event type to be posted to the xref:refguide:applib-svc:EventBusService.adoc[`EventBusService`] to broadcast the collection's business rule checking (hide, disable, validate) and its modification (before and after).
+//
+//<.> xref:refguide:applib-ant:Collection.adoc#hidden[`hidden()`]
+//+
+//Indicates where (in the UI) the collection should be hidden from the user.
+//
+//<.> xref:refguide:applib-ant:Collection.adoc#typeOf[`typeOf()`]
+//+
+//Hints as to the run-time type of the objects within that collection (as a fallback)

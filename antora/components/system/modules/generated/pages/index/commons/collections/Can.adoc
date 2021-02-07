@@ -1,4 +1,3 @@
-= Can : _interface_
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
 Immutable _Iterable_ , that can specifically represent 3 possible variants of xref:system:generated:index/commons/collections/Cardinality.adoc[Cardinality] .
@@ -9,231 +8,333 @@ Same idiomatic convention applies: References to xref:system:generated:index/com
 
 A xref:system:generated:index/commons/collections/Can.adoc[Can] must not contain elements equal to _null_ .
 
-.Java Sources
+== API
+
+.Can.java
 [source,java]
 ----
 interface Can {
-
-  Cardinality getCardinality() // <.>
-
-  int size() // <.>
-
-  Optional<T> get(int elementIndex) // <.>
-
-  T getElseFail(final int elementIndex) // <.>
-
-  int compareTo(final Can<T> o) // <.>
-
-  Stream<T> stream() // <.>
-
-  Stream<T> parallelStream() // <.>
-
-  Optional<T> getFirst() // <.>
-
-  T getFirstOrFail() // <.>
-
-  Optional<T> getSingleton() // <.>
-
-  T getSingletonOrFail() // <.>
-
-  boolean contains(T element) // <.>
-
-  Can<T> empty() // <.>
-
-  Can<T> ofNullable(T element) // <.>
-
-  Can<T> ofSingleton(T element) // <.>
-
+  Cardinality getCardinality()     // <.>
+  int size()     // <.>
+  Optional<T> get(int elementIndex)     // <.>
+  T getElseFail(final int elementIndex)     // <.>
+  int compareTo(final Can<T> o)     // <.>
+  Stream<T> stream()     // <.>
+  Stream<T> parallelStream()     // <.>
+  Optional<T> getFirst()     // <.>
+  T getFirstOrFail()     // <.>
+  Optional<T> getSingleton()     // <.>
+  T getSingletonOrFail()     // <.>
+  boolean contains(T element)     // <.>
+  Can<T> empty()     // <.>
+  Can<T> ofNullable(T element)     // <.>
+  Can<T> ofSingleton(T element)     // <.>
   Can<T> of(T... array)
-
   Can<T> ofArray(T[] array)
-
-  Can<T> ofCollection(Collection<T> collection) // <.>
-
+  Can<T> ofCollection(Collection<T> collection)     // <.>
   Can<T> ofIterable(Iterable<T> iterable)
-
-  Can<T> ofStream(Stream<T> stream) // <.>
-
-  Can<T> ofInstance(Instance<T> instance) // <.>
-
-  Can<T> reverse() // <.>
-
-  Can<T> filter(Predicate<? super T> predicate) // <.>
-
-  Can<R> map(Function<? super T, R> mapper) // <.>
-
-  Can<T> concat(Can<T> can, T element) // <.>
-
+  Can<T> ofStream(Stream<T> stream)     // <.>
+  Can<T> ofInstance(Instance<T> instance)     // <.>
+  Can<T> reverse()     // <.>
+  Can<T> filter(Predicate<? super T> predicate)     // <.>
+  Can<R> map(Function<? super T, R> mapper)     // <.>
+  Can<T> concat(Can<T> can, T element)     // <.>
   Iterator<T> reverseIterator()
-
   void forEach(Consumer<? super T> action)
-
-  void zip(Iterable<R> zippedIn, BiConsumer<? super T, ? super R> action) // <.>
-
-  Can<R> zipMap(Iterable<Z> zippedIn, BiFunction<? super T, ? super Z, R> mapper) // <.>
-
+  void zip(Iterable<R> zippedIn, BiConsumer<? super T, ? super R> action)     // <.>
+  Can<R> zipMap(Iterable<Z> zippedIn, BiFunction<? super T, ? super Z, R> mapper)     // <.>
   Can<T> add(T element)
-
   Can<T> addAll(Can<T> other)
-
-  Can<T> add(int index, T element) // <.>
-
+  Can<T> add(int index, T element)     // <.>
   Can<T> replace(int index, T element)
-
-  Can<T> remove(int index) // <.>
-
+  Can<T> remove(int index)     // <.>
   Can<T> remove(T element)
-
-  int indexOf(T element) // <.>
-
-  boolean isEqualTo(final Can<?> other) // <.>
-
-  boolean startsWith(final Can<?> other) // <.>
-
-  boolean endsWith(final Can<?> other) // <.>
-
+  int indexOf(T element)     // <.>
+  boolean isEqualTo(final Can<?> other)     // <.>
+  boolean startsWith(final Can<?> other)     // <.>
+  boolean endsWith(final Can<?> other)     // <.>
   boolean isEmpty()
-
   boolean isNotEmpty()
-
   boolean isCardinalityOne()
-
   boolean isCardinalityMultiple()
-
   Collector<T, ?, Can<T>> toCan()
-
-  List<T> toList() // <.>
-
-  C toCollection(Supplier<C> collectionFactory) // <.>
-
-  T[] toArray(T[] a) // <.>
-
-  T[] toArray(Class<T> elementType) // <.>
+  List<T> toList()     // <.>
+  C toCollection(Supplier<C> collectionFactory)     // <.>
+  T[] toArray(T[] a)     // <.>
+  T[] toArray(Class<T> elementType)     // <.>
 }
 ----
 
-<.> `[teal]#*getCardinality*#()` : `xref:system:generated:index/commons/collections/Cardinality.adoc[Cardinality]`
-<.> `[teal]#*size*#()` : `int`
-<.> `[teal]#*get*#(int elementIndex)` : `Optional<T>`
+<.> xref:#getCardinality[getCardinality]
+<.> xref:#size[size]
+<.> xref:#get[get]
 +
 --
 Will only ever return an empty Optional, if the elementIndex is out of bounds.
 --
-<.> `[teal]#*getElseFail*#(int elementIndex)` : `T`
+<.> xref:#getElseFail[getElseFail]
 +
 --
 Shortcut to _get(elementIndex).orElseThrow(...)_
-
-Will only ever throw, if the elementIndex is out of bounds.
 --
-<.> `[teal]#*compareTo*#(xref:system:generated:index/commons/collections/Can.adoc[Can]<T> o)` : `int`
+<.> xref:#compareTo[compareTo]
 +
 --
 For convenience allows the argument to be _null_ treating _null_ equivalent to _Can#empty()_ .
 --
-<.> `[teal]#*stream*#()` : `Stream<T>`
-<.> `[teal]#*parallelStream*#()` : `Stream<T>`
-<.> `[teal]#*getFirst*#()` : `Optional<T>`
-<.> `[teal]#*getFirstOrFail*#()` : `T`
+<.> xref:#stream[stream]
+<.> xref:#parallelStream[parallelStream]
+<.> xref:#getFirst[getFirst]
+<.> xref:#getFirstOrFail[getFirstOrFail]
 +
 --
 Shortcut for _getFirst().orElseThrow(_Exceptions::noSuchElement)_
 --
-<.> `[teal]#*getSingleton*#()` : `Optional<T>`
-<.> `[teal]#*getSingletonOrFail*#()` : `T`
+<.> xref:#getSingleton[getSingleton]
+<.> xref:#getSingletonOrFail[getSingletonOrFail]
 +
 --
 Shortcut for _getSingleton().orElseThrow(_Exceptions::noSuchElement)_
 --
-<.> `[teal]#*contains*#(T element)` : `boolean`
-<.> `[teal]#*_empty_*#<T>()` : `xref:system:generated:index/commons/collections/Can.adoc[Can]<T>`
+<.> xref:#contains[contains]
+<.> xref:#empty[empty]
 +
 --
 Returns an empty _Can_ .
 --
-<.> `[teal]#*_ofNullable_*#<T>(T element)` : `xref:system:generated:index/commons/collections/Can.adoc[Can]<T>`
+<.> xref:#ofNullable[ofNullable]
 +
 --
 Returns either a _Can_ with the given _element_ or an empty _Can_ if the _element_ is _null_ .
 --
-<.> `[teal]#*_ofSingleton_*#<T>(T element)` : `xref:system:generated:index/commons/collections/Can.adoc[Can]<T>`
+<.> xref:#ofSingleton[ofSingleton]
 +
 --
 Returns either a _Can_ with the given _element_ or throws if the _element_ is _null_ .
 --
-<.> `[teal]#*_ofCollection_*#<T>(Collection<T> collection)` : `xref:system:generated:index/commons/collections/Can.adoc[Can]<T>`
+<.> xref:#ofCollection[ofCollection]
 +
 --
 Returns either a _Can_ with all the elements from given _collection_ or an empty _Can_ if the _collection_ is _null_ . Any elements equal to _null_ are ignored and will not be contained in the resulting _Can_ .
 --
-<.> `[teal]#*_ofStream_*#<T>(Stream<T> stream)` : `xref:system:generated:index/commons/collections/Can.adoc[Can]<T>`
+<.> xref:#ofStream[ofStream]
 +
 --
 Returns either a _Can_ with all the elements from given _stream_ or an empty _Can_ if the _stream_ is _null_ . Any elements equal to _null_ are ignored and will not be contained in the resulting _Can_ .
 --
-<.> `[teal]#*_ofInstance_*#<T>(Instance<T> instance)` : `xref:system:generated:index/commons/collections/Can.adoc[Can]<T>`
+<.> xref:#ofInstance[ofInstance]
 +
 --
 Returns either a _Can_ with all the elements from given _instance_ or an empty _Can_ if the _instance_ is _null_ . Any elements equal to _null_ are ignored and will not be contained in the resulting _Can_ .
 --
-<.> `[teal]#*reverse*#()` : `xref:system:generated:index/commons/collections/Can.adoc[Can]<T>`
+<.> xref:#reverse[reverse]
 +
 --
 Returns a _Can_ with all the elements from this _Can_ but contained in reversed order.
 --
-<.> `[teal]#*filter*#(Predicate<? super T> predicate)` : `xref:system:generated:index/commons/collections/Can.adoc[Can]<T>`
+<.> xref:#filter[filter]
 +
 --
 Returns a _Can_ with all the elements from this _Can_ , that are accepted by the given _predicate_ . If _predicate_ is _null_ *all* elements are accepted.
 --
-<.> `[teal]#*map*#<R>(Function<? super T, R> mapper)` : `xref:system:generated:index/commons/collections/Can.adoc[Can]<R>`
+<.> xref:#map[map]
 +
 --
 Returns a _Can_ with all the elements from this _Can_ 'transformed' by the given _mapper_ function. Any resulting elements equal to _null_ are ignored and will not be contained in the resulting _Can_ .
 --
-<.> `[teal]#*_concat_*#<T>(xref:system:generated:index/commons/collections/Can.adoc[Can]<T> can, T element)` : `xref:system:generated:index/commons/collections/Can.adoc[Can]<T>`
+<.> xref:#concat[concat]
 +
 --
 Returns a _Can_ with all the elements from given _can_ joined by the given _element_ . If any of given _can_ or _element_ are _null_ these do not contribute any elements and are ignored.
 --
-<.> `[teal]#*zip*#<R>(Iterable<R> zippedIn, BiConsumer<? super T, ? super R> action)` : `void`
+<.> xref:#zip[zip]
 +
 --
 Similar to _#forEach(Consumer)_ , but zipps in _zippedIn_ to iterate through its elements and passes them over as the second argument to the _action_ .
 --
-<.> `[teal]#*zipMap*#<R, Z>(Iterable<Z> zippedIn, BiFunction<? super T, ? super Z, R> mapper)` : `xref:system:generated:index/commons/collections/Can.adoc[Can]<R>`
+<.> xref:#zipMap[zipMap]
 +
 --
 Similar to _#map(Function)_ , but zipps in _zippedIn_ to iterate through its elements and passes them over as the second argument to the _mapper_ .
 --
-<.> `[teal]#*add*#(int index, T element)` : `xref:system:generated:index/commons/collections/Can.adoc[Can]<T>`
+<.> xref:#add[add]
 +
 --
 Inserts the specified element at the specified position in this list (optional operation). Shifts the element currently at that position (if any) and any subsequent elements to the right (adds one to their indices).
 --
-<.> `[teal]#*remove*#(int index)` : `xref:system:generated:index/commons/collections/Can.adoc[Can]<T>`
+<.> xref:#remove[remove]
 +
 --
 Removes the element at the specified position in this list (optional operation). Shifts any subsequent elements to the left (subtracts one from their indices). Returns the element that was removed from the list.
 --
-<.> `[teal]#*indexOf*#(T element)` : `int`
+<.> xref:#indexOf[indexOf]
 +
 --
 Returns the index of the first occurrence of the specified element in this list, or -1 if this list does not contain the element. More formally, returns the lowest index `i` such that `(o==null ? get(i)==null : o.equals(get(i)))` , or -1 if there is no such index.
 --
-<.> `[teal]#*isEqualTo*#(xref:system:generated:index/commons/collections/Can.adoc[Can]<?> other)` : `boolean`
-<.> `[teal]#*startsWith*#(xref:system:generated:index/commons/collections/Can.adoc[Can]<?> other)` : `boolean`
+<.> xref:#isEqualTo[isEqualTo]
+<.> xref:#startsWith[startsWith]
 +
 --
 Let _n_ be the number of elements in _other_ . Returns whether the first _n_ elements of this _Can_ are element-wise equal to _other_ .
 --
-<.> `[teal]#*endsWith*#(xref:system:generated:index/commons/collections/Can.adoc[Can]<?> other)` : `boolean`
+<.> xref:#endsWith[endsWith]
 +
 --
 Let _n_ be the number of elements in _other_ . Returns whether the last _n_ elements of this _Can_ are element-wise equal to _other_ .
 --
-<.> `[teal]#*toList*#()` : `List<T>`
-<.> `[teal]#*toCollection*#<C>(Supplier<C> collectionFactory)` : `C`
-<.> `[teal]#*toArray*#(T[] a)` : `T[]`
-<.> `[teal]#*toArray*#(Class<T> elementType)` : `T[]`
+<.> xref:#toList[toList]
+<.> xref:#toCollection[toCollection]
+<.> xref:#toArray[toArray]
+<.> xref:#toArray[toArray]
+
+== Members
+
+[#getCardinality]
+=== getCardinality
+
+[#size]
+=== size
+
+[#get]
+=== get
+
+Will only ever return an empty Optional, if the elementIndex is out of bounds.
+
+[#getElseFail]
+=== getElseFail
+
+Shortcut to _get(elementIndex).orElseThrow(...)_
+
+Will only ever throw, if the elementIndex is out of bounds.
+
+[#compareTo]
+=== compareTo
+
+For convenience allows the argument to be _null_ treating _null_ equivalent to _Can#empty()_ .
+
+[#stream]
+=== stream
+
+[#parallelStream]
+=== parallelStream
+
+[#getFirst]
+=== getFirst
+
+[#getFirstOrFail]
+=== getFirstOrFail
+
+Shortcut for _getFirst().orElseThrow(_Exceptions::noSuchElement)_
+
+[#getSingleton]
+=== getSingleton
+
+[#getSingletonOrFail]
+=== getSingletonOrFail
+
+Shortcut for _getSingleton().orElseThrow(_Exceptions::noSuchElement)_
+
+[#contains]
+=== contains
+
+[#empty]
+=== empty
+
+Returns an empty _Can_ .
+
+[#ofNullable]
+=== ofNullable
+
+Returns either a _Can_ with the given _element_ or an empty _Can_ if the _element_ is _null_ .
+
+[#ofSingleton]
+=== ofSingleton
+
+Returns either a _Can_ with the given _element_ or throws if the _element_ is _null_ .
+
+[#ofCollection]
+=== ofCollection
+
+Returns either a _Can_ with all the elements from given _collection_ or an empty _Can_ if the _collection_ is _null_ . Any elements equal to _null_ are ignored and will not be contained in the resulting _Can_ .
+
+[#ofStream]
+=== ofStream
+
+Returns either a _Can_ with all the elements from given _stream_ or an empty _Can_ if the _stream_ is _null_ . Any elements equal to _null_ are ignored and will not be contained in the resulting _Can_ .
+
+[#ofInstance]
+=== ofInstance
+
+Returns either a _Can_ with all the elements from given _instance_ or an empty _Can_ if the _instance_ is _null_ . Any elements equal to _null_ are ignored and will not be contained in the resulting _Can_ .
+
+[#reverse]
+=== reverse
+
+Returns a _Can_ with all the elements from this _Can_ but contained in reversed order.
+
+[#filter]
+=== filter
+
+Returns a _Can_ with all the elements from this _Can_ , that are accepted by the given _predicate_ . If _predicate_ is _null_ *all* elements are accepted.
+
+[#map]
+=== map
+
+Returns a _Can_ with all the elements from this _Can_ 'transformed' by the given _mapper_ function. Any resulting elements equal to _null_ are ignored and will not be contained in the resulting _Can_ .
+
+[#concat]
+=== concat
+
+Returns a _Can_ with all the elements from given _can_ joined by the given _element_ . If any of given _can_ or _element_ are _null_ these do not contribute any elements and are ignored.
+
+[#zip]
+=== zip
+
+Similar to _#forEach(Consumer)_ , but zipps in _zippedIn_ to iterate through its elements and passes them over as the second argument to the _action_ .
+
+[#zipMap]
+=== zipMap
+
+Similar to _#map(Function)_ , but zipps in _zippedIn_ to iterate through its elements and passes them over as the second argument to the _mapper_ .
+
+[#add]
+=== add
+
+Inserts the specified element at the specified position in this list (optional operation). Shifts the element currently at that position (if any) and any subsequent elements to the right (adds one to their indices).
+
+[#remove]
+=== remove
+
+Removes the element at the specified position in this list (optional operation). Shifts any subsequent elements to the left (subtracts one from their indices). Returns the element that was removed from the list.
+
+[#indexOf]
+=== indexOf
+
+Returns the index of the first occurrence of the specified element in this list, or -1 if this list does not contain the element. More formally, returns the lowest index `i` such that `(o==null ? get(i)==null : o.equals(get(i)))` , or -1 if there is no such index.
+
+[#isEqualTo]
+=== isEqualTo
+
+[#startsWith]
+=== startsWith
+
+Let _n_ be the number of elements in _other_ . Returns whether the first _n_ elements of this _Can_ are element-wise equal to _other_ .
+
+[#endsWith]
+=== endsWith
+
+Let _n_ be the number of elements in _other_ . Returns whether the last _n_ elements of this _Can_ are element-wise equal to _other_ .
+
+[#toList]
+=== toList
+
+[#toCollection]
+=== toCollection
+
+[#toArray]
+=== toArray
+
+[#toArray]
+=== toArray
 

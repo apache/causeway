@@ -1,27 +1,37 @@
-= ComparableContractTester : _class_
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
-.Java Sources
+== API
+
+.ComparableContractTester.java
 [source,java]
 ----
 class ComparableContractTester {
-
-  ComparableContractTester(List<List<T>> orderedTuples) // <.>
-
+  ComparableContractTester(List<List<T>> orderedTuples)     // <.>
   void test()
-
-  List<E> listOf(E... elements) // <.>
+  List<E> listOf(E... elements)     // <.>
 }
 ----
 
-<.> `[teal]#*ComparableContractTester*#(List<List<T>> orderedTuples)`
+<.> xref:#ComparableContractTester[ComparableContractTester]
 +
 --
 Provide an array of tuples; each tuple should consist of 4 elements, whereby item0 < item1 = item2 < item3 Typically item0 should be null valued (if supported by the impl).
 --
-<.> `[teal]#*_listOf_*#<E>(E... elements)` : `List<E>`
+<.> xref:#listOf[listOf]
 +
 --
 Syntax sugar to remove boilerplate from subclasses.
 --
+
+== Members
+
+[#ComparableContractTester]
+=== ComparableContractTester
+
+Provide an array of tuples; each tuple should consist of 4 elements, whereby item0 < item1 = item2 < item3 Typically item0 should be null valued (if supported by the impl).
+
+[#listOf]
+=== listOf
+
+Syntax sugar to remove boilerplate from subclasses.
 

@@ -18,24 +18,67 @@
  */
 package org.apache.isis.tooling.j2adoc.format;
 
+import java.util.Optional;
+
 import org.asciidoctor.ast.StructuralNode;
 
 import org.apache.isis.tooling.j2adoc.J2AdocContext;
+import org.apache.isis.tooling.j2adoc.J2AdocUnit;
+import org.apache.isis.tooling.j2adoc.convert.J2AdocConverter;
+import org.apache.isis.tooling.j2adoc.convert.J2AdocConverterDefault;
 import org.apache.isis.tooling.model4adoc.AsciiDocFactory;
 
+import static org.apache.isis.tooling.model4adoc.AsciiDocFactory.block;
+
+import lombok.NonNull;
 import lombok.val;
 
-public class UnitFormatterCompact 
+public class UnitFormatterCompact
 extends UnitFormatterAbstract {
 
-    public UnitFormatterCompact(J2AdocContext j2aContext) {
+    public UnitFormatterCompact(final @NonNull J2AdocContext j2aContext) {
         super(j2aContext);
     }
 
     @Override
-    protected StructuralNode getMemberDescriptionContainer(StructuralNode parent) {
-        val ul = AsciiDocFactory.list(parent);
-        return ul;
+    protected Optional<String> javaSource(final J2AdocUnit unit) {
+        return Optional.empty();
     }
+
+    @Override
+    protected void memberDescriptions(final J2AdocUnit unit, final StructuralNode doc) {
+
+        val ul = AsciiDocFactory.list(doc);
+
+        val converter = J2AdocConverterDefault.of(j2aContext);
+        appendMembersToList(ul, unit,
+                unit.getTypeDeclaration().getEnumConstantDeclarations(),
+                decl -> converter.enumConstantDeclaration(decl),
+                (javadoc, j2Unit) -> converter.javadoc(javadoc, unit, J2AdocConverter.Mode.ALL)
+        );
+
+        appendMembersToList(ul, unit,
+                unit.getTypeDeclaration().getPublicFieldDeclarations(),
+                decl -> converter.fieldDeclaration(decl, unit),
+                (javadoc, j2Unit) -> converter.javadoc(javadoc, unit, J2AdocConverter.Mode.ALL));
+
+        appendMembersToList(ul, unit,
+                unit.getTypeDeclaration().getAnnotationMemberDeclarations(),
+                decl -> converter.annotationMemberDeclaration(decl, unit),
+                (javadoc, j2Unit) -> converter.javadoc(javadoc, unit, J2AdocConverter.Mode.ALL));
+
+        appendMembersToList(ul, unit,
+                unit.getTypeDeclaration().getPublicConstructorDeclarations(),
+                decl -> converter.constructorDeclaration(decl, unit),
+                (javadoc, j2Unit) -> converter.javadoc(javadoc, unit, J2AdocConverter.Mode.ALL));
+
+        appendMembersToList(ul, unit,
+                unit.getTypeDeclaration().getPublicMethodDeclarations(),
+                decl -> converter.methodDeclaration(decl, unit),
+                (javadoc, j2Unit) -> converter.javadoc(javadoc, unit, J2AdocConverter.Mode.ALL));
+
+    }
+
+
 
 }

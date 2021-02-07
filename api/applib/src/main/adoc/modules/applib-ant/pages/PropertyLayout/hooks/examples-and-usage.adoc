@@ -1,0 +1,37 @@
+== Examples
+
+
+For example:
+
+[source,java]
+----
+public class ToDoItem {
+    @PropertyLayout(
+        cssClass="x-key",
+        named="Description of this <i>item</i>",
+        namedEscaped=false,
+        describedAs="What needs to be done",
+        labelPosition=LabelPosition.LEFT,
+        typicalLength=80
+    )
+    public String getDescription() { /* ... */ }
+    ...
+}
+----
+
+
+[TIP]
+====
+As an alternative to using the `@PropertyLayout` annotation, a xref:userguide:fun:ui.adoc#object-layout[file-based layout] can be used (and is generally to be preferred since it is more flexible/powerful).
+====
+
+
+
+
+
+[TIP]
+====
+The annotation is one of a handful (others including xref:refguide:applib-ant:Collection.adoc[`@Collection`], xref:refguide:applib-ant:CollectionLayout.adoc[`@CollectionLayout`] and xref:refguide:applib-ant:Property.adoc[`@Property`]) that can also be applied to the field, rather than the getter method.  This is specifically
+so that boilerplate-busting tools such as link:https://projectlombok.org/[Project Lombok] can be used.
+====
+

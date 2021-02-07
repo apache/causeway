@@ -1,29 +1,39 @@
-= RoleMemento : _class_
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
 Immutable serializable value held by xref:system:generated:index/applib/services/user/UserMemento.adoc[UserMemento] .
 
-.Java Sources
+== API
+
+.RoleMemento.java
 [source,java]
 ----
 class RoleMemento {
-
-  RoleMemento(final String name) // <.>
-
-  RoleMemento(final String name, final String description) // <.>
-
+  RoleMemento(final String name)     // <.>
+  RoleMemento(final String name, final String description)     // <.>
   String title()
 }
 ----
 
-<.> `[teal]#*RoleMemento*#(String name)`
+<.> xref:#RoleMemento[RoleMemento]
 +
 --
 Creates a new role with the specified name. Description is left blank.
 --
-<.> `[teal]#*RoleMemento*#(String name, String description)`
+<.> xref:#RoleMemento[RoleMemento]
 +
 --
 Creates a new role with the specified name and description.
 --
+
+== Members
+
+[#RoleMemento]
+=== RoleMemento
+
+Creates a new role with the specified name. Description is left blank.
+
+[#RoleMemento]
+=== RoleMemento
+
+Creates a new role with the specified name and description.
 

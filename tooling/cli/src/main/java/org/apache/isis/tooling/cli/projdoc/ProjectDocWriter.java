@@ -33,7 +33,9 @@ import org.apache.isis.tooling.model4adoc.AsciiDocWriter;
 import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
+@Log4j2
 final class ProjectDocWriter {
 
     @SneakyThrows
@@ -64,7 +66,7 @@ final class ProjectDocWriter {
 
                 // write system overview
                 val overviewFile = new File(pagesFolder, overview.getSystemOverviewFilename());
-                System.out.printf("writing system overview: %s%n", overviewFile.getName());
+                log.info("writing system overview: {}", overviewFile.getName());
                 docWriter.accept(systemSummaryAdoc, overviewFile);
                 ++writeCount;
             }
@@ -78,7 +80,7 @@ final class ProjectDocWriter {
                            !fileName.equals(overview.getSystemOverviewFilename());
                 })
                 .stream()
-                .peek(adocFile->System.out.printf("deleting file: %s%n", adocFile.getName()))
+                .peek(adocFile->log.debug("deleting file: {}", adocFile.getName()))
                 .peek(__->deleteCount.inc())
                 .forEach(_Files::deleteFile);
 
@@ -90,18 +92,19 @@ final class ProjectDocWriter {
 
                     val adocIndexFile = adocDestinationFileForUnit(unit, global, overview, index);
 
-                    System.out.printf("writing file: %s%n", adocIndexFile.getName());
+                    log.info("writing file: {}", adocIndexFile.getName());
 
+                    final Document asciiDoc = unit.toAsciiDoc(j2aContext);
                     docWriter.accept(
-                            unit.toAsciiDoc(j2aContext),
+                            asciiDoc,
                             adocIndexFile);
 
                     ++writeCount;
                 }
 
                 // summary
-                System.out.printf(
-                        "ProjectDocWriter: all done. (deleted: %d, written: %d)%n",
+                log.info(
+                        "ProjectDocWriter: all done. (deleted: {}, written: {})",
                         deleteCount.getValue(), writeCount);
             }
 

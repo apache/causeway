@@ -1,0 +1,34 @@
+// TODO - v2 (reconcile/move into javadoc).
+
+//<.> xref:refguide:applib-ant:CollectionLayout.adoc#cssClass[`cssClass()`]
+//+
+//The css class that a collection should have, to allow more targetted styling in xref:refguide:config:application-specific/application-css.adoc[`application.css`]
+//
+//<.> xref:refguide:applib-ant:CollectionLayout.adoc#defaultView[`defaultView()`]
+//+
+//Which view is selected by default, if multiple views are available.
+//
+//<.> xref:refguide:applib-ant:CollectionLayout.adoc#describedAs[`describedAs()`]
+//+
+//Description of this collection, eg to be rendered in a tooltip.
+//
+//<.> xref:refguide:applib-ant:CollectionLayout.adoc#hidden[`hidden()`]
+//+
+//Indicates where (in the UI) the collection should be hidden from the user.
+//
+//<.> xref:refguide:applib-ant:CollectionLayout.adoc#named[`named()`]
+//+
+//To override the name inferred from the collection's name in code. +
+//A typical use case is if the desired name is a reserved Java keyword, such as `default` or `package`.
+//
+//<.> `namedEscaped()`
+//+
+//Whether to HTML escape the name of this property.
+//
+//<.> xref:refguide:applib-ant:CollectionLayout.adoc#paged[`paged()`]
+//+
+//The page size for instances of this class when rendered within a table.
+//
+//<.> xref:refguide:applib-ant:CollectionLayout.adoc#sortedBy[`sortedBy()`]
+//+
+//Indicates that the elements in the `java.util.SortedSet` collection should be sorted according to a specified `Comparator` rather than their natural sort order.

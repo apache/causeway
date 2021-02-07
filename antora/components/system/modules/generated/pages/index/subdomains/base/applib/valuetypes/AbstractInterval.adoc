@@ -1,79 +1,93 @@
-= AbstractInterval : _class_
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
-.Java Sources
+== API
+
+.AbstractInterval.java
 [source,java]
 ----
 class AbstractInterval {
-
   AbstractInterval()
-
   AbstractInterval(final Interval interval)
-
   AbstractInterval(final LocalDate startDate, final LocalDate endDate)
-
   AbstractInterval(final LocalDate startDate, final LocalDate endDate, final IntervalEnding ending)
-
   Interval asInterval()
-
-  boolean contains(final LocalDate date) // <.>
-
-  boolean contains(final T localDateInterval) // <.>
-
-  int days() // <.>
-
+  boolean contains(final LocalDate date)     // <.>
+  boolean contains(final T localDateInterval)     // <.>
+  int days()     // <.>
   LocalDate endDate()
-
   LocalDate endDate(final IntervalEnding ending)
-
   LocalDate endDateExcluding()
-
   LocalDate endDateFromStartDate()
-
   boolean isValid()
-
-  T overlap(final T otherInterval) // <.>
-
-  boolean overlaps(final T interval) // <.>
-
+  T overlap(final T otherInterval)     // <.>
+  boolean overlaps(final T interval)     // <.>
   LocalDate startDate()
-
-  boolean within(final T interval) // <.>
-
+  boolean within(final T interval)     // <.>
   boolean isInfinite()
-
   boolean isOpenEnded()
 }
 ----
 
-<.> `[teal]#*contains*#(LocalDate date)` : `boolean`
+<.> xref:#contains[contains]
 +
 --
 Does this date contain the specified time interval.
 --
-<.> `[teal]#*contains*#(T localDateInterval)` : `boolean`
+<.> xref:#contains[contains]
 +
 --
 Does this time interval contain the specified time interval.
 --
-<.> `[teal]#*days*#()` : `int`
+<.> xref:#days[days]
 +
 --
 The duration in days
 --
-<.> `[teal]#*overlap*#(T otherInterval)` : `T`
+<.> xref:#overlap[overlap]
 +
 --
 Gets the overlap between this interval and another interval.
 --
-<.> `[teal]#*overlaps*#(T interval)` : `boolean`
+<.> xref:#overlaps[overlaps]
 +
 --
 Does this time interval contain the specified time interval.
 --
-<.> `[teal]#*within*#(T interval)` : `boolean`
+<.> xref:#within[within]
 +
 --
 Does this interval is within the specified interval
 --
+
+== Members
+
+[#contains]
+=== contains
+
+Does this date contain the specified time interval.
+
+[#contains]
+=== contains
+
+Does this time interval contain the specified time interval.
+
+[#days]
+=== days
+
+The duration in days
+
+[#overlap]
+=== overlap
+
+Gets the overlap between this interval and another interval.
+
+[#overlaps]
+=== overlaps
+
+Does this time interval contain the specified time interval.
+
+[#within]
+=== within
+
+Does this interval is within the specified interval
 

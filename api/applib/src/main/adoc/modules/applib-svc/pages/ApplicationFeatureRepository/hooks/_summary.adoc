@@ -1,0 +1,11 @@
+// TODO - v2 (reconcile/move into javadoc).
+
+//where `ApplicationMemberType` in turn is:
+//
+//[source,java]
+//----
+//include::refguide:applib-svc:example$services/appfeat/ApplicationMemberType.java[tags=refguide]
+//----
+//
+//These methods are designed primarily to return lists of strings for use in drop-downs.
+

@@ -23,7 +23,7 @@ This section looks at the programming model for writing your own domain services
 == Nature of Service
 
 Apache Isis uses Spring Boot to instantiate and manage the dependency injection of domain services.
-The vast majority of these are singleton (application) scoped; a smaller number are request scoped (using the xref:refguide:applib-ant:IsisSessionScope.adoc[`@IsisSessionScope`] annotation).
+The vast majority of these are singleton (application) scoped; a smaller number are request scoped (using the xref:refguide:applib-ant:InteractionScope.adoc[`@IsisSessionScope`] annotation).
 
 Accordingly, all domain services are annotated or meta-annotated using Spring's link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/stereotype/Component.html[`@Component`] annotation.
 
@@ -198,7 +198,7 @@ Sometimes though a service's lifetime is applicable only to a single (http) requ
 The framework has a number of such services, including a xref:refguide:applib-svc:Scratchpad.adoc[`Scratchpad`] service (to share adhoc data between methods), and xref:refguide:applib-svc:QueryResultsCache.adoc[`QueryResultsCache`], which as its name suggests will cache query results.
 Such services _do_ hold state, but that state is scoped per (possibly concurrent) request and should be removed afterwards.
 
-The requirement for request-scoped services is supported using Apache Isis' own xref:refguide:applib-ant:IsisSessionScope.adoc[`@IsisSessionScope`] annotation (named because a short-lived `IsisSession` is created for each request).
+The requirement for request-scoped services is supported using Apache Isis' own xref:refguide:applib-ant:InteractionScope.adoc[`@IsisSessionScope`] annotation (named because a short-lived `IsisSession` is created for each request).
 This is used by the framework services and can also be used for user-defined services.
 
 For example:

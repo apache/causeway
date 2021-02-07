@@ -1,41 +1,60 @@
-= XmlService : _interface_
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
 This service provides a number of utility services for interacting with XML _Document_ s
 
-.Java Sources
+== API
+
+.XmlService.java
 [source,java]
 ----
 interface XmlService {
-
-  Document asDocument(String xmlStr) // <.>
-
-  String asString(final Document doc) // <.>
-
-  Element getChildElement(final Element el, final String tagname) // <.>
-
-  String getChildTextValue(final Element el) // <.>
+  Document asDocument(String xmlStr)     // <.>
+  String asString(final Document doc)     // <.>
+  Element getChildElement(final Element el, final String tagname)     // <.>
+  String getChildTextValue(final Element el)     // <.>
 }
 ----
 
-<.> `[teal]#*asDocument*#(String xmlStr)` : `Document`
+<.> xref:#asDocument[asDocument]
 +
 --
 Converts xml string into an _Document W3C Document_ .
 --
-<.> `[teal]#*asString*#(Document doc)` : `String`
+<.> xref:#asString[asString]
 +
 --
 Serializes a _Document W3C Document_ back into a string.
 --
-<.> `[teal]#*getChildElement*#(Element el, String tagname)` : `Element`
+<.> xref:#getChildElement[getChildElement]
 +
 --
 Convenience method to walk XML document.
 --
-<.> `[teal]#*getChildTextValue*#(Element el)` : `String`
+<.> xref:#getChildTextValue[getChildTextValue]
 +
 --
 Convenience method to obtain value of child text node.
 --
+
+== Members
+
+[#asDocument]
+=== asDocument
+
+Converts xml string into an _Document W3C Document_ .
+
+[#asString]
+=== asString
+
+Serializes a _Document W3C Document_ back into a string.
+
+[#getChildElement]
+=== getChildElement
+
+Convenience method to walk XML document.
+
+[#getChildTextValue]
+=== getChildTextValue
+
+Convenience method to obtain value of child text node.
 

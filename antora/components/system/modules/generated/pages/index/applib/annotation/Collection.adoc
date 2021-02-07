@@ -1,26 +1,46 @@
-= Collection : _annotation_
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
 Domain semantics for domain object collection.
 
-.Java Sources
+== API
+
+.Collection.java
 [source,java]
 ----
 @interface Collection {
-
-  Class<? extends CollectionDomainEvent<?, ?>> domainEvent() default CollectionDomainEvent.Default.class; // <.>
-
-  Editing editing() default Editing.NOT_SPECIFIED; // <.>
-
-  Where hidden() default Where.NOT_SPECIFIED; // <.>
-
-  Class<?> typeOf() default Object.class; // <.>
+  Class<? extends CollectionDomainEvent<?, ?>> domainEvent() default CollectionDomainEvent.Default.class;     // <.>
+  Editing editing() default Editing.NOT_SPECIFIED;     // <.>
+  Where hidden() default Where.NOT_SPECIFIED;     // <.>
+  Class<?> typeOf() default Object.class;     // <.>
 }
 ----
 
-<.> `[teal]#*_domainEvent_*#` : `Class<? extends CollectionDomainEvent<?,?>>`
+<.> xref:#domainEvent[domainEvent]
 +
 --
+Indicates that changes to the collection that should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService event bus_ using a custom (subclass of) xref:system:generated:index/applib/events/domain/CollectionDomainEvent.adoc[CollectionDomainEvent] .
+--
+<.> xref:#editing[editing]
++
+--
+Whether the properties of this domain object can be edited, or collections of this object be added to/removed from.
+--
+<.> xref:#hidden[hidden]
++
+--
+Indicates when the collection is not visible to the user.
+--
+<.> xref:#typeOf[typeOf]
++
+--
+The type-of the elements held within the collection.
+--
+
+== Members
+
+[#domainEvent]
+=== domainEvent
+
 Indicates that changes to the collection that should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService event bus_ using a custom (subclass of) xref:system:generated:index/applib/events/domain/CollectionDomainEvent.adoc[CollectionDomainEvent] .
 
 For example:
@@ -36,22 +56,21 @@ public class Order {
 ----
 
 This subclass must provide a no-arg constructor; the fields are set reflectively.
---
-<.> `[teal]#*_editing_*#` : `xref:system:generated:index/applib/annotation/Editing.adoc[Editing]`
-+
---
+
+[#editing]
+=== editing
+
 Whether the properties of this domain object can be edited, or collections of this object be added to/removed from.
 
 Note that non-editable objects can nevertheless have actions invoked upon them.
---
-<.> `[teal]#*_hidden_*#` : `xref:system:generated:index/applib/annotation/Where.adoc[Where]`
-+
---
+
+[#hidden]
+=== hidden
+
 Indicates when the collection is not visible to the user.
---
-<.> `[teal]#*_typeOf_*#` : `Class<?>`
-+
---
+
+[#typeOf]
+=== typeOf
+
 The type-of the elements held within the collection.
---
 

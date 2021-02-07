@@ -4,7 +4,7 @@
 :page-partial:
 
 
-The name of classes and class pathsToInclude are usually inferred from the Java source code directly.
+The name of classes and class members are usually inferred from the Java source code directly.
 For example, an action method called `placeOrder` will be rendered as "Place Order", and a collection called `orderItems` is rendered as "Order Items".
 The same is true for action parameter names also, though note that the code must be compiled with the `--parameters` flag (to javac).
 

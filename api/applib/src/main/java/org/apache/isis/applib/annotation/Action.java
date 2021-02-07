@@ -37,7 +37,9 @@ import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.Clob;
 
 /**
- * Domain semantics for domain object collection.
+ * Groups together all domain-specific metadata for an invokable action on a
+ * domain object or domain service.
+ *
  * @since 1.x {@index}
  */
 @Inherited
@@ -81,7 +83,10 @@ public @interface Action {
      * </p>
      *
      * <p>
-     *     For example <code>@Action(associateWith="items", associateWithSequence="2.1")</code>
+     *     For example:
+     *     <pre>
+     *         @Action(associateWith="items", associateWithSequence="2.1")
+ *         </pre>
      * </p>
      */
     String associateWithSequence()
@@ -107,7 +112,7 @@ public @interface Action {
 
     /**
      * Indicates that an invocation of the action should be posted to the
-     * {@link org.apache.isis.applib.services.eventbus.EventBusService event bus} using a custom (subclass of)
+     * {@link org.apache.isis.applib.services.eventbus.EventBusService} using a custom (subclass of)
      * {@link org.apache.isis.applib.events.domain.ActionDomainEvent}.
      *
      * <p>For example:
@@ -136,7 +141,7 @@ public @interface Action {
      */
     Publishing executionPublishing()
             default Publishing.NOT_SPECIFIED;
-    
+
     /**
      * Indicates where (in the UI) the action is not visible to the user.
      *

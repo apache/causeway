@@ -19,15 +19,22 @@
 package org.apache.isis.tooling.j2adoc.format;
 
 import java.util.Optional;
+import java.util.function.BiFunction;
+import java.util.function.Function;
+
+import com.github.javaparser.ast.nodeTypes.NodeWithJavadoc;
+import com.github.javaparser.javadoc.Javadoc;
 
 import org.asciidoctor.ast.Document;
 import org.asciidoctor.ast.List;
 import org.asciidoctor.ast.StructuralNode;
 
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.tooling.j2adoc.J2AdocContext;
 import org.apache.isis.tooling.j2adoc.J2AdocUnit;
 import org.apache.isis.tooling.j2adoc.convert.J2AdocConverter;
+import org.apache.isis.tooling.j2adoc.convert.J2AdocConverterDefault;
 import org.apache.isis.tooling.javamodel.ast.Javadocs;
 import org.apache.isis.tooling.model4adoc.AsciiDocFactory;
 
@@ -39,196 +46,151 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
-public abstract class UnitFormatterAbstract 
+public abstract class UnitFormatterAbstract
 implements UnitFormatter {
-    
-    private final @NonNull J2AdocContext j2aContext;
-    
+
+    protected final @NonNull J2AdocContext j2aContext;
+
+    /**
+     * Main algorithm for laying out a unit.
+     *
+     * @param unit
+     * @return
+     */
     @Override
-    public String getEnumConstantFormat() {
-        return "`%s`";
-    }
-    
-    @Override
-    public String getAnnotationMemberFormat() {
-        return "`%2$s` : `%1$s`";
-    }
-    
-    @Override
-    public String getFieldFormat() {
-        return "`%2$s` : `%1$s`";
-    }
-    
-    @Override
-    public String getConstructorFormat() {
-        return "`%1$s(%2$s)`";
-    }
-    
-    @Override
-    public String getGenericConstructorFormat() {
-        return "`%2$s%1$s(%3$s)`";
+    public Document apply(final J2AdocUnit unit) {
+
+        val doc = AsciiDocFactory.doc();
+
+        // -- title
+        if(!j2aContext.isSkipTitleHeader()) {
+            title(unit)
+            .ifPresent(doc::setTitle);
+        }
+
+        // -- license
+
+        _Strings.nonEmpty(j2aContext.getLicenseHeader())
+        .ifPresent(notice->AsciiDocFactory.attrNotice(doc, notice));
+
+
+        // -- intro
+
+        intro(unit, doc);
+
+        // == API
+        val titleBlock = block(doc);
+        titleBlock.setSource("== API");
+
+        // -- java source
+
+        javaSource(unit)
+        .ifPresent(block(doc)::setSource);
+
+        // -- member descriptions
+
+        memberDescriptions(unit, doc);
+
+        // -- outro
+
+        outro(unit)
+        .ifPresent(block(doc)::setSource);
+
+        return doc;
     }
 
-    @Override
-    public String getMethodFormat() {
-        return "`%2$s(%3$s)` : `%1$s`";
-    }
+    /**
+     * Mandatory hook method to return a representation of the java source (if any)
+     *
+     * @param unit
+     * @return
+     */
+    protected abstract Optional<String> javaSource(final J2AdocUnit unit);
 
-    @Override
-    public String getGenericMethodFormat() {
-        return "`%3$s%1$s(%4$s)` : `%2$s`";
-    }
-    
+    /**
+     * Mandatory hook method to append representation of the members of the unit.
+     *
+     * @param unit
+     * @param doc
+     */
+    protected abstract void memberDescriptions(final J2AdocUnit unit, final StructuralNode doc);
+
     protected Optional<String> title(final J2AdocUnit unit) {
-        return Optional.of(
-                String.format("%s : _%s_", 
-                        unit.getFriendlyName(),
-                        unit.getDeclarationKeywordFriendlyName().toLowerCase()));
+        return Optional.of(Snippets.title(unit));
     }
-    
+
     protected void intro(final J2AdocUnit unit, final StructuralNode parent) {
+        J2AdocConverter converter = J2AdocConverterDefault.of(j2aContext);
 
         unit.getJavadoc()
-        .filter(javadoc->!Javadocs.hasHidden(javadoc))
-        .map(javadoc->getConverter().javadoc(javadoc, unit))
-        .ifPresent(doc->parent.getBlocks().addAll(doc.getBlocks()));
+                .filter(javadoc->!Javadocs.hasHidden(javadoc))
+                .map(javadoc->converter.javadoc(javadoc, unit, J2AdocConverter.Mode.ALL))
+                .ifPresent(doc->parent.getBlocks().addAll(doc.getBlocks()));
     }
-    
-    protected Optional<String> javaSource(final J2AdocUnit unit) {
-        return Optional.empty();
+
+    /**
+     * Helper method for use by subclasses; calls
+     * {@link #appendMemberToList(List, String, Document)}
+     * for all provided {@link NodeWithJavadoc declarations}, using the
+     * provided memberRepresenter and the provided strategy for converting the
+     * javadoc into Asciidoc.
+     *
+     * @param ul - the List within the Asciidoc document to append to.
+     * @param unit - the containing java unit
+     * @param declarations - the collection of {@link NodeWithJavadoc declarations} to process
+     * @param memberRepresenter - encodes which parts of the member are to be pulled out into a representation
+     * @param javadoc2Asciidocker - strategy for converting each node's javadoc into some Asciidoc
+     *
+     * @param <T> - the specific subtype of {@link NodeWithJavadoc}
+     */
+    protected <T extends NodeWithJavadoc<?>> void appendMembersToList(
+            final List ul,
+            final J2AdocUnit unit,
+            final Can<T> declarations,
+            final Function<T, String> memberRepresenter,
+            final BiFunction<Javadoc, J2AdocUnit, Document> javadoc2Asciidocker) {
+
+        declarations.stream()
+                .filter(Javadocs::presentAndNotHidden)
+                .forEach(nwj->{
+                    nwj.getJavadoc()
+                            .ifPresent(javadoc-> {
+                                final String memberRepresentation = memberRepresenter.apply(nwj);
+                                final Document asciidoc = javadoc2Asciidocker.apply(javadoc, unit);
+                                appendMemberToList(ul,
+                                        memberRepresentation,
+                                        asciidoc);
+                            });
+                });
     }
-    
-    protected abstract StructuralNode getMemberDescriptionContainer(StructuralNode parent);
-    
-    protected void appendMemberDescription(StructuralNode ul, String member, Document javadoc) {
-        val li = AsciiDocFactory.listItem((List) ul, member);
+
+
+    /**
+     * Helper method called by {@link #appendMembersToList(List, J2AdocUnit, Can, Function, BiFunction)}.
+     *
+     * @param ul
+     * @param listItemText
+     * @param listItemParagraphs
+     */
+    private static void appendMemberToList(
+            final List ul,
+            final String listItemText,
+            final Document listItemParagraphs) {
+
+        val li = AsciiDocFactory.listItem(ul, listItemText);
         val openBlock = AsciiDocFactory.openBlock(li);
         val javaDocBlock = AsciiDocFactory.block(openBlock);
-        javaDocBlock.getBlocks().addAll(javadoc.getBlocks());
+        javaDocBlock.getBlocks().addAll(listItemParagraphs.getBlocks());
     }
-    
-    protected void memberDescriptions(final J2AdocUnit unit, final StructuralNode parent) {
-        
-        val ul = getMemberDescriptionContainer(parent);
-        
-        unit.getTypeDeclaration().getEnumConstantDeclarations().stream()
-        .filter(Javadocs::presentAndNotHidden)
-        .forEach(ecd->{
-            ecd.getJavadoc()
-            .ifPresent(javadoc->{
-                
-                appendMemberDescription(ul, 
-                                getConverter().enumConstantDeclaration(ecd),
-                                getConverter().javadoc(javadoc, unit));
-            });
-        });
-        
-        unit.getTypeDeclaration().getPublicFieldDeclarations().stream()
-        .filter(Javadocs::presentAndNotHidden)
-        .forEach(fd->{
-            
-            fd.getJavadoc()
-            .ifPresent(javadoc->{
-                
-                appendMemberDescription(ul,
-                        getConverter().fieldDeclaration(fd, unit),
-                        getConverter().javadoc(javadoc, unit));
-            });
-            
-        });
-        
-        unit.getTypeDeclaration().getAnnotationMemberDeclarations().stream()
-        .filter(Javadocs::presentAndNotHidden)
-        .forEach(ecd->{
-            ecd.getJavadoc()
-            .ifPresent(javadoc->{
-                
-                appendMemberDescription(ul, 
-                                getConverter().annotationMemberDeclaration(ecd, unit),
-                                getConverter().javadoc(javadoc, unit));
-            });
-        });
-        
-        unit.getTypeDeclaration().getPublicConstructorDeclarations().stream()
-        .filter(Javadocs::presentAndNotHidden)
-        .forEach(cd->{
-            
-            cd.getJavadoc()
-            .ifPresent(javadoc->{
-                
-                appendMemberDescription(ul,
-                        getConverter().constructorDeclaration(cd, unit),
-                        getConverter().javadoc(javadoc, unit));
-            });
-            
-        });
-        
-        unit.getTypeDeclaration().getPublicMethodDeclarations().stream()
-        .filter(Javadocs::presentAndNotHidden)
-        .forEach(md->{
-            
-            md.getJavadoc()
-            .ifPresent(javadoc->{
-                
-                appendMemberDescription(ul,
-                        getConverter().methodDeclaration(md, unit),
-                        getConverter().javadoc(javadoc, unit));
-            });
-            
-        });
-    }
-    
 
+
+    /**
+     * Hook method (with empty default implementation)
+     * @param unit
+     * @return
+     */
     protected Optional<String> outro(final J2AdocUnit unit) {
         return Optional.empty();
     }
-    
-
-    @Override
-    public Document apply(final J2AdocUnit unit) {
-        
-        val doc = AsciiDocFactory.doc();
-        
-        // -- title
-        
-        title(unit)
-        .ifPresent(doc::setTitle);
-        
-        // -- license
-        
-        _Strings.nonEmpty(getContext().getLicenseHeader())
-        .ifPresent(notice->AsciiDocFactory.attrNotice(doc, notice));
-
-        // -- intro
-        
-        intro(unit, doc);
-        
-        // -- java source
-        
-        javaSource(unit)
-        .ifPresent(block(doc)::setSource);
-            
-        // -- member descriptions
-        
-        memberDescriptions(unit, doc);
-        
-        // -- outro
-        
-        outro(unit)
-        .ifPresent(block(doc)::setSource);
-        
-        return doc;
-    }
-    
-    // -- DEPENDENCIES
-    
-    protected final J2AdocContext getContext() {
-        return j2aContext;
-    }
-    
-    protected final J2AdocConverter getConverter() {
-        return j2aContext.getConverter();
-    }
-
 
 }

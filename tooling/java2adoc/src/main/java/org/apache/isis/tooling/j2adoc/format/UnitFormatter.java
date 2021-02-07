@@ -24,43 +24,7 @@ import org.asciidoctor.ast.Document;
 
 import org.apache.isis.tooling.j2adoc.J2AdocUnit;
 
-public interface UnitFormatter 
+public interface UnitFormatter
 extends Function<J2AdocUnit, Document> {
 
-    /**
-     * name
-     */
-    String getEnumConstantFormat();
-    
-    /**
-     * type | name
-     */
-    String getAnnotationMemberFormat();
-    
-    /**
-     * type | name
-     */
-    String getFieldFormat();
-    
-    /**
-     * name | param-list
-     */
-    String getConstructorFormat();
-    
-    /**
-     * constructor-generic-type | name | param-list
-     */
-    String getGenericConstructorFormat(); 
-    
-    /**
-     * return-type | name | param-list
-     */
-    String getMethodFormat();
-    
-    /**
-     * method-generic-type | return-type | name | param-list
-     */
-    String getGenericMethodFormat();
-
-    
 }

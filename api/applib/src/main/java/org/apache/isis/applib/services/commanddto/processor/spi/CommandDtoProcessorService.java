@@ -20,19 +20,38 @@ package org.apache.isis.applib.services.commanddto.processor.spi;
 
 import javax.annotation.Nullable;
 
+import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.services.commanddto.conmap.ContentMappingServiceForCommandDto;
 import org.apache.isis.applib.services.commanddto.processor.CommandDtoProcessor;
 import org.apache.isis.schema.cmd.v2.CommandDto;
 
 /**
- * Optional SPI called by {@link ContentMappingServiceForCommandDto}.
+ * Service used to convert a domain object into a {@link CommandDto}, called by
+ * {@link ContentMappingServiceForCommandDto}.
  *
- * Similar to {@link CommandDtoProcessor}, but applied to all {@link CommandDto}s globally.
+ * <p>
+ *     The service is used as a fallback if an {@link CommandDtoProcessor},
+ *     hasn't been explicitly specified using
+ *     {@link Action#commandDtoProcessor()} or
+ *     {@link Property#commandDtoProcessor()}.
+ * </p>
+ *
  * @since 1.x {@index}
  */
 public interface CommandDtoProcessorService {
 
     /**
+     * Converts the domain object (acting as the source) into a {@link CommandDto}.
+     *
+     * <p>
+     *     The {@link CommandDto} that is also passed into the method will be
+     *     from a default implementation provided by the framework.  Most
+     *     implementations will typically refine this provided DTO and return,
+     *     for example adding additional user metadata to
+     *     {@link CommandDto#getUserData()}.
+     * </p>
+     *
      * @param domainObject - is the target that acts as the source of the
      *                       {@link CommandDto}.
      * @param commandDto - is either <code>null</code>, or is passed from a

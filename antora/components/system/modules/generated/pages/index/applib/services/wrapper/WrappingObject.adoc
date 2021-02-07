@@ -1,31 +1,47 @@
-= WrappingObject : _interface_
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
 Implemented by all objects that have been viewed as per _WrapperFactory#wrap(Object)_ .
 
-.Java Sources
+== API
+
+.WrappingObject.java
 [source,java]
 ----
 interface WrappingObject {
-
-  void __isis_save() // <.>
-
-  Object __isis_wrapped() // <.>
-
-  ImmutableEnumSet<ExecutionMode> __isis_executionModes() // <.>
+  void __isis_save()     // <.>
+  Object __isis_wrapped()     // <.>
+  ImmutableEnumSet<ExecutionMode> __isis_executionModes()     // <.>
 }
 ----
 
-<.> `[teal]#*__isis_save*#()` : `void`
+<.> xref:#__isis_save[__isis_save]
 +
 --
 Programmatic equivalent of invoking save for a transient object .
-
-NOTE: domain classes may not have a method with this name. The `__isis_` prefix is intended to reduce the risk of a collision.
 --
-<.> `[teal]#*__isis_wrapped*#()` : `Object`
+<.> xref:#__isis_wrapped[__isis_wrapped]
 +
 --
+Provide access to the underlying, wrapped object.
+--
+<.> xref:#__isis_executionModes[__isis_executionModes]
++
+--
+The _EnumSetexecution modes_ inferred from the xref:system:generated:index/applib/services/wrapper/control/SyncControl.adoc[SyncControl] with which this wrapper was _WrapperFactory#wrap(Object, SyncControl) created_ .
+--
+
+== Members
+
+[#__isis_save]
+=== __isis_save
+
+Programmatic equivalent of invoking save for a transient object .
+
+NOTE: domain classes may not have a method with this name. The `__isis_` prefix is intended to reduce the risk of a collision.
+
+[#__isis_wrapped]
+=== __isis_wrapped
+
 Provide access to the underlying, wrapped object.
 
 Used to unwrap objects used as arguments to actions (otherwise, end up creating a `ObjectSpecification` for the Javassist-enhanced class, not the original class).
@@ -33,10 +49,9 @@ Used to unwrap objects used as arguments to actions (otherwise, end up creating 
 NOTE: domain classes may not have a method with this name. The `__isis_` prefix is intended to reduce the risk of a collision.
 
  *NOTE: there is a string-literal reference to this name `DomainObjectInvocationHandler` , so it should not be changed.* .
---
-<.> `[teal]#*__isis_executionModes*#()` : `ImmutableEnumSet<xref:system:generated:index/applib/services/wrapper/control/ExecutionMode.adoc[ExecutionMode]>`
-+
---
+
+[#__isis_executionModes]
+=== __isis_executionModes
+
 The _EnumSetexecution modes_ inferred from the xref:system:generated:index/applib/services/wrapper/control/SyncControl.adoc[SyncControl] with which this wrapper was _WrapperFactory#wrap(Object, SyncControl) created_ .
---
 

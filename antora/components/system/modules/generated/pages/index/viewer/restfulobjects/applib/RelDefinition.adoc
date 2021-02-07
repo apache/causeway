@@ -1,38 +1,51 @@
-= RelDefinition : _enum_
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
 Enumerates the organization that defined a xref:system:generated:index/viewer/restfulobjects/applib/Rel.adoc[Rel] .
 
-.Java Sources
+== API
+
+.RelDefinition.java
 [source,java]
 ----
 enum RelDefinition {
-
-  IANA // <.>
-
-  RO_SPEC // <.>
-
-  IMPL // <.>
-
+  IANA     // <.>
+  RO_SPEC     // <.>
+  IMPL     // <.>
   String nameOf(String relSuffix)
-
   boolean canAddParams()
 }
 ----
 
-<.> `[teal]#*_IANA_*#`
+<.> xref:#IANA[IANA]
 +
 --
 xref:system:generated:index/viewer/restfulobjects/applib/Rel.adoc[Rel] defined by IANA.
 --
-<.> `[teal]#*_RO_SPEC_*#`
+<.> xref:#RO_SPEC[RO_SPEC]
 +
 --
 xref:system:generated:index/viewer/restfulobjects/applib/Rel.adoc[Rel] defined by the Restful Objects spec.
 --
-<.> `[teal]#*_IMPL_*#`
+<.> xref:#IMPL[IMPL]
 +
 --
 Proprietary rel defined by implementation.
 --
+
+== Members
+
+[#IANA]
+=== IANA
+
+xref:system:generated:index/viewer/restfulobjects/applib/Rel.adoc[Rel] defined by IANA.
+
+[#RO_SPEC]
+=== RO_SPEC
+
+xref:system:generated:index/viewer/restfulobjects/applib/Rel.adoc[Rel] defined by the Restful Objects spec.
+
+[#IMPL]
+=== IMPL
+
+Proprietary rel defined by implementation.
 

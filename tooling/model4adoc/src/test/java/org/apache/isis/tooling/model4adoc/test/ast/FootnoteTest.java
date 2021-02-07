@@ -41,7 +41,7 @@ class FootnoteTest extends AbstractAsciiDocWriterTest {
         super.debugEnabled = false;
     }
 
-    
+
     //<.> fn-1
     //+
     //--
@@ -63,30 +63,30 @@ class FootnoteTest extends AbstractAsciiDocWriterTest {
     //--
     @Test
     void testFootnote() throws IOException {
-        
-        val footnotes = AsciiDocFactory.footnotes(doc);
-        val footnoteLI = AsciiDocFactory.footnote(footnotes, "fn-1");
+
+        val footnotes = AsciiDocFactory.callouts(doc);
+        val footnoteLI = AsciiDocFactory.callout(footnotes, "fn-1");
         val footnote = AsciiDocFactory.openBlock(footnoteLI);
-        
-        
+
+
         val note = AsciiDocFactory.warning(footnote);
         AsciiDocFactory.block(note, "warn-1");
         AsciiDocFactory.block(note, "warn-2");
-        
+
         AsciiDocFactory.block(footnote, "para-1");
         AsciiDocFactory.block(footnote, "para-2");
-        
+
         val nestedList = AsciiDocFactory.list(footnote);
         AsciiDocFactory.listItem(nestedList, "li-1");
         AsciiDocFactory.listItem(nestedList, "li-2");
-        
+
         AsciiDocFactory.block(footnote, "para-3");
-        
+
         AsciiDocFactory.tip(doc, "Here's something worth knowing...");
-        
+
         assertDocumentIsCorrectlyWritten(doc);
     }
-    
+
 
 
 }

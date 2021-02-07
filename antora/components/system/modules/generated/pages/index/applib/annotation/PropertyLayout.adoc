@@ -1,91 +1,143 @@
-= PropertyLayout : _annotation_
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
-Layout hints for properties.
+Collects together all layout hints for a property of a domain object.
 
-.Java Sources
+== API
+
+.PropertyLayout.java
 [source,java]
 ----
 @interface PropertyLayout {
-
-  String cssClass() default ""; // <.>
-
-  String describedAs() default ""; // <.>
-
-  Where hidden() default Where.NOT_SPECIFIED; // <.>
-
-  LabelPosition labelPosition() default LabelPosition.NOT_SPECIFIED; // <.>
-
-  int multiLine() default -1; // <.>
-
-  String named() default ""; // <.>
-
-  boolean namedEscaped() default true; // <.>
-
-  Navigable navigable() default Navigable.NOT_SPECIFIED; // <.>
-
-  PromptStyle promptStyle() default PromptStyle.NOT_SPECIFIED; // <.>
-
-  RenderDay renderDay() default RenderDay.NOT_SPECIFIED; // <.>
-
-  Repainting repainting() default Repainting.NOT_SPECIFIED; // <.>
-
-  int typicalLength() default -1; // <.>
+  String cssClass() default "";     // <.>
+  String describedAs() default "";     // <.>
+  Where hidden() default Where.NOT_SPECIFIED;     // <.>
+  LabelPosition labelPosition() default LabelPosition.NOT_SPECIFIED;     // <.>
+  int multiLine() default -1;     // <.>
+  String named() default "";     // <.>
+  boolean namedEscaped() default true;     // <.>
+  Navigable navigable() default Navigable.NOT_SPECIFIED;     // <.>
+  PromptStyle promptStyle() default PromptStyle.NOT_SPECIFIED;     // <.>
+  RenderDay renderDay() default RenderDay.NOT_SPECIFIED;     // <.>
+  Repainting repainting() default Repainting.NOT_SPECIFIED;     // <.>
+  int typicalLength() default -1;     // <.>
 }
 ----
 
-<.> `[teal]#*_cssClass_*#` : `String`
+<.> xref:#cssClass[cssClass]
 +
 --
 Indicates the css class that a property should have.
 --
-<.> `[teal]#*_describedAs_*#` : `String`
+<.> xref:#describedAs[describedAs]
 +
 --
 Description of this property, eg to be rendered in a tooltip.
 --
-<.> `[teal]#*_hidden_*#` : `xref:system:generated:index/applib/annotation/Where.adoc[Where]`
+<.> xref:#hidden[hidden]
 +
 --
 Indicates where in the UI the property should _not_ not be visible.
 --
-<.> `[teal]#*_labelPosition_*#` : `xref:system:generated:index/applib/annotation/LabelPosition.adoc[LabelPosition]`
+<.> xref:#labelPosition[labelPosition]
 +
 --
 In forms, positioning of the label (left, top or none) relative to the property value.
-
-If not specified, the default depends upon the property value's datatype.
 --
-<.> `[teal]#*_multiLine_*#` : `int`
+<.> xref:#multiLine[multiLine]
 +
 --
 For string properties (and parameters), render as a text area over specified number of lines.
 --
-<.> `[teal]#*_named_*#` : `String`
+<.> xref:#named[named]
 +
 --
 Name of this property (overriding the name derived from its name in code).
 --
-<.> `[teal]#*_namedEscaped_*#` : `boolean`
+<.> xref:#namedEscaped[namedEscaped]
 +
 --
 A flag indicating whether the value of _#named()_ should be HTML escaped or not.
 --
-<.> `[teal]#*_navigable_*#` : `xref:system:generated:index/applib/annotation/Navigable.adoc[Navigable]`
+<.> xref:#navigable[navigable]
 +
 --
 Whether this property should be used to construct the navigable chain of breadcrumbs in the UI.
-
-Only one property can be annotated as such per domain class.
 --
-<.> `[teal]#*_promptStyle_*#` : `xref:system:generated:index/applib/annotation/PromptStyle.adoc[PromptStyle]`
+<.> xref:#promptStyle[promptStyle]
 +
 --
 How the properties of this domain object are be edited, either _PromptStyle#DIALOG dialog_ or _PromptStyle#INLINE inline_ .
 --
-<.> `[teal]#*_renderDay_*#` : `xref:system:generated:index/applib/annotation/RenderDay.adoc[RenderDay]`
+<.> xref:#renderDay[renderDay]
 +
 --
+For date properties (and parameters) only, instructs the viewer that the date should be rendered as one day prior to the actually stored date.
+--
+<.> xref:#repainting[repainting]
++
+--
+Indicates that the value held by the property never changes over time, even when other properties of the object do change.
+--
+<.> xref:#typicalLength[typicalLength]
++
+--
+The typical entry length of a field, use to determine the optimum width for display
+--
+
+== Members
+
+[#cssClass]
+=== cssClass
+
+Indicates the css class that a property should have.
+
+[#describedAs]
+=== describedAs
+
+Description of this property, eg to be rendered in a tooltip.
+
+[#hidden]
+=== hidden
+
+Indicates where in the UI the property should _not_ not be visible.
+
+[#labelPosition]
+=== labelPosition
+
+In forms, positioning of the label (left, top or none) relative to the property value.
+
+If not specified, the default depends upon the property value's datatype.
+
+[#multiLine]
+=== multiLine
+
+For string properties (and parameters), render as a text area over specified number of lines.
+
+[#named]
+=== named
+
+Name of this property (overriding the name derived from its name in code).
+
+[#namedEscaped]
+=== namedEscaped
+
+A flag indicating whether the value of _#named()_ should be HTML escaped or not.
+
+[#navigable]
+=== navigable
+
+Whether this property should be used to construct the navigable chain of breadcrumbs in the UI.
+
+Only one property can be annotated as such per domain class.
+
+[#promptStyle]
+=== promptStyle
+
+How the properties of this domain object are be edited, either _PromptStyle#DIALOG dialog_ or _PromptStyle#INLINE inline_ .
+
+[#renderDay]
+=== renderDay
+
 For date properties (and parameters) only, instructs the viewer that the date should be rendered as one day prior to the actually stored date.
 
 This is intended to be used so that an exclusive end date of an interval can be rendered as 1 day before the actual value stored.
@@ -101,10 +153,10 @@ public LocalDate getEndDate() { ... }
 ----
 
 Here, the interval of the [1-may-2013,1-jun-2013) would be rendered as the dates 1-may-2013 for the start date but using 31-may-2013 (the day before) for the end date. What is stored In the domain object, itself, however, the value stored is 1-jun-2013.
---
-<.> `[teal]#*_repainting_*#` : `xref:system:generated:index/applib/annotation/Repainting.adoc[Repainting]`
-+
---
+
+[#repainting]
+=== repainting
+
 Indicates that the value held by the property never changes over time, even when other properties of the object do change.
 
 Setting this attribute to `RepaintPolicy.NO_REPAINT` is used as a hint to the viewer to not repaint the property after an AJAX update of some other property/ies of the object have changed. This is primarily for performance, eg can improve the user experience when rendering PDFs/blobs.
@@ -112,10 +164,9 @@ Setting this attribute to `RepaintPolicy.NO_REPAINT` is used as a hint to the vi
 Note that for this to work, the viewer will also ensure that none of the property's parent component (such as a tab group panel) are re-rendered.
 
 Design note: we considered implementing this an "immutable" flag on the xref:system:generated:index/applib/annotation/Property.adoc[Property] annotation (because this flag is typically appropriate for immutable/unchanging properties of a domain object). However, we decided not to do that, on the basis that it might be interpreted as having a deeper impact within the framework than simply a hint for rendering.
---
-<.> `[teal]#*_typicalLength_*#` : `int`
-+
---
+
+[#typicalLength]
+=== typicalLength
+
 The typical entry length of a field, use to determine the optimum width for display
---
 

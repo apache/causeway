@@ -1,36 +1,51 @@
-= XmlSnapshotService : _interface_
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
 This service allows an XML document to be generated capturing the data of a root entity and specified related entities. This XML can be used for various purposes, such as mail merge/reporting, or adhoc auditing.
 
 The framework provides an implementation of this service ( `XmlSnapshotServiceDefault` ) which is automatically registered and available for use; no further configuration is required.
 
-.Java Sources
+== API
+
+.XmlSnapshotService.java
 [source,java]
 ----
 interface XmlSnapshotService {
-
-  XmlSnapshotService.Snapshot snapshotFor(final Object domainObject) // <.>
-
-  XmlSnapshotService.Snapshot.Builder builderFor(final Object domainObject) // <.>
-
-  T getChildElementValue(final Element el, final String tagname, final Class<T> expectedCls) // <.>
+  XmlSnapshotService.Snapshot snapshotFor(final Object domainObject)     // <.>
+  XmlSnapshotService.Snapshot.Builder builderFor(final Object domainObject)     // <.>
+  T getChildElementValue(final Element el, final String tagname, final Class<T> expectedCls)     // <.>
 }
 ----
 
-<.> `[teal]#*snapshotFor*#(Object domainObject)` : `Snapshot`
+<.> xref:#snapshotFor[snapshotFor]
 +
 --
 Exports the state of a domain object into a Snapshot (which can then be converted into XML, for example).
 --
-<.> `[teal]#*builderFor*#(Object domainObject)` : `Builder`
+<.> xref:#builderFor[builderFor]
 +
 --
 Creates a Snapshot.Builder that allows the contents of the snapshot to include other related state.
 --
-<.> `[teal]#*getChildElementValue*#<T>(Element el, String tagname, Class<T> expectedCls)` : `T`
+<.> xref:#getChildElementValue[getChildElementValue]
 +
 --
 Convenience method to extract value of an XML element, based on its type.
 --
+
+== Members
+
+[#snapshotFor]
+=== snapshotFor
+
+Exports the state of a domain object into a Snapshot (which can then be converted into XML, for example).
+
+[#builderFor]
+=== builderFor
+
+Creates a Snapshot.Builder that allows the contents of the snapshot to include other related state.
+
+[#getChildElementValue]
+=== getChildElementValue
+
+Convenience method to extract value of an XML element, based on its type.
 

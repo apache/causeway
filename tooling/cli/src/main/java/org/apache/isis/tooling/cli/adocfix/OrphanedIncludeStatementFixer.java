@@ -32,7 +32,9 @@ import org.apache.isis.tooling.model4adoc.include.IncludeStatements;
 
 import lombok.NonNull;
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
+@Log4j2
 public final class OrphanedIncludeStatementFixer {
 
     public static void fixIncludeStatements(
@@ -41,16 +43,16 @@ public final class OrphanedIncludeStatementFixer {
             final @NonNull J2AdocContext j2aContext) {
 
         if(cliConfig.getGlobal().isDryRun()) {
-            System.out.println("IncludeStatementFixer: skip (dry-run)");
+            log.debug("IncludeStatementFixer: skip (dry-run)");
             return;
         }
 
         if(!cliConfig.getCommands().getIndex().isFixOrphanedAdocIncludeStatements()) {
-            System.out.println("IncludeStatementFixer: skip (disabled via config, fixOrphandedAdocIncludeStatements=false)");
+            log.debug("IncludeStatementFixer: skip (disabled via config, fixOrphandedAdocIncludeStatements=false)");
             return;
         }
 
-        System.out.println(String.format("IncludeStatementFixer: about to process %d adoc files", adocFiles.size()));
+        log.debug("IncludeStatementFixer: about to process {} adoc files", adocFiles.size());
 
         val totalFixed = _Refs.intRef(0);
 
@@ -90,13 +92,13 @@ public final class OrphanedIncludeStatementFixer {
                     val includeLineShouldBe = expected.toAdocAsString();
 
                     if(!includeLineShouldBe.equals(include.getMatchingLine())) {
-                        System.out.printf("mismatch\n %s\n %s\n", includeLineShouldBe, include.getMatchingLine());
+                        log.warn("mismatch\n {}\n {}\n", includeLineShouldBe, include.getMatchingLine());
                         correctedIncludeStatement.setValue(expected);
                         fixedCounter.inc();
                     }
 
                 });
-                
+
                 return correctedIncludeStatement
                         .getValue()
                         .orElse(null); // keep original line, don't mangle
@@ -113,7 +115,7 @@ public final class OrphanedIncludeStatementFixer {
 
         });
 
-        System.out.println(String.format("IncludeStatementFixer: all done. (%d orphanded inlcudes fixed)", totalFixed.getValue()));
+        log.debug("IncludeStatementFixer: all done. ({} orphanded inlcudes fixed)", totalFixed.getValue());
 
     }
 

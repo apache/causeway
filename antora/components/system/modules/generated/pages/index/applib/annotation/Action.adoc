@@ -1,73 +1,125 @@
-= Action : _annotation_
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
-Domain semantics for domain object collection.
+Groups together all domain-specific metadata for an invokable action on a domain object or domain service.
 
-.Java Sources
+== API
+
+.Action.java
 [source,java]
 ----
 @interface Action {
-
-  String associateWith() default ""; // <.>
-
-  String associateWithSequence() default "1"; // <.>
-
-  Class<? extends CommandDtoProcessor> commandDtoProcessor() default CommandDtoProcessor.class; // <.>
-
-  Publishing commandPublishing() default Publishing.NOT_SPECIFIED; // <.>
-
-  Class<? extends ActionDomainEvent<?>> domainEvent() default ActionDomainEvent.Default.class; // <.>
-
-  Publishing executionPublishing() default Publishing.NOT_SPECIFIED; // <.>
-
-  Where hidden() default Where.NOT_SPECIFIED; // <.>
-
-  RestrictTo restrictTo() default RestrictTo.NOT_SPECIFIED; // <.>
-
-  SemanticsOf semantics() default SemanticsOf.NOT_SPECIFIED; // <.>
-
-  Class<?> typeOf() default Object.class; // <.>
-
-  String fileAccept() default ""; // <.>
+  String associateWith() default "";     // <.>
+  String associateWithSequence() default "1";     // <.>
+  Class<? extends CommandDtoProcessor> commandDtoProcessor() default CommandDtoProcessor.class;     // <.>
+  Publishing commandPublishing() default Publishing.NOT_SPECIFIED;     // <.>
+  Class<? extends ActionDomainEvent<?>> domainEvent() default ActionDomainEvent.Default.class;     // <.>
+  Publishing executionPublishing() default Publishing.NOT_SPECIFIED;     // <.>
+  Where hidden() default Where.NOT_SPECIFIED;     // <.>
+  RestrictTo restrictTo() default RestrictTo.NOT_SPECIFIED;     // <.>
+  SemanticsOf semantics() default SemanticsOf.NOT_SPECIFIED;     // <.>
+  Class<?> typeOf() default Object.class;     // <.>
+  String fileAccept() default "";     // <.>
 }
 ----
 
-<.> `[teal]#*_associateWith_*#` : `String`
+<.> xref:#associateWith[associateWith]
 +
 --
 Associates this action with a property or collection, specifying its id.
-
-This is an alternative to using _MemberOrder#name()_ . To specify the order (equivalent to _MemberOrder#sequence()_ }), use _#associateWithSequence()_ .
-
-For example@Action(associateWith="items", associateWithSequence="2.1")
-
-If an action is associated with a collection, then any matching parameters will have their choices automatically inferred from the collection (if not otherwise specified) and any collection parameter defaults can be specified using checkboxes (in the Wicket UI, at least).
 --
-<.> `[teal]#*_associateWithSequence_*#` : `String`
+<.> xref:#associateWithSequence[associateWithSequence]
 +
 --
 Specifies the sequence/order in the UI for an action that's been associated with a property or collection.
-
-This is an alternative to using _MemberOrder#sequence()_ , but is ignored if _Action#associateWith()_ isn't also specified.
-
-For example@Action(associateWith="items", associateWithSequence="2.1")
 --
-<.> `[teal]#*_commandDtoProcessor_*#` : `Class<? extends CommandDtoProcessor>`
+<.> xref:#commandDtoProcessor[commandDtoProcessor]
 +
 --
 The xref:system:generated:index/applib/services/commanddto/processor/CommandDtoProcessor.adoc[CommandDtoProcessor] to process this command's DTO.
-
-The processor itself is used by xref:system:generated:index/applib/services/commanddto/conmap/ContentMappingServiceForCommandDto.adoc[ContentMappingServiceForCommandDto] and xref:system:generated:index/applib/services/commanddto/conmap/ContentMappingServiceForCommandsDto.adoc[ContentMappingServiceForCommandsDto] to dynamically transform the DTOs.
 --
-<.> `[teal]#*_commandPublishing_*#` : `xref:system:generated:index/applib/annotation/Publishing.adoc[Publishing]`
+<.> xref:#commandPublishing[commandPublishing]
 +
 --
 Whether action invocations, captured as xref:system:generated:index/applib/services/command/Command.adoc[Command] s, should be published to xref:system:generated:index/applib/services/publishing/spi/CommandSubscriber.adoc[CommandSubscriber] s.
 --
-<.> `[teal]#*_domainEvent_*#` : `Class<? extends ActionDomainEvent<?>>`
+<.> xref:#domainEvent[domainEvent]
 +
 --
-Indicates that an invocation of the action should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService event bus_ using a custom (subclass of) xref:system:generated:index/applib/events/domain/ActionDomainEvent.adoc[ActionDomainEvent] .
+Indicates that an invocation of the action should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService_ using a custom (subclass of) xref:system:generated:index/applib/events/domain/ActionDomainEvent.adoc[ActionDomainEvent] .
+--
+<.> xref:#executionPublishing[executionPublishing]
++
+--
+Whether _Execution_ s (triggered by action invocations), should be published to xref:system:generated:index/applib/services/publishing/spi/ExecutionSubscriber.adoc[ExecutionSubscriber] s.
+--
+<.> xref:#hidden[hidden]
++
+--
+Indicates where (in the UI) the action is not visible to the user.
+--
+<.> xref:#restrictTo[restrictTo]
++
+--
+Whether the action is restricted to prototyping.
+--
+<.> xref:#semantics[semantics]
++
+--
+The action semantics, either _SemanticsOf#SAFE_AND_REQUEST_CACHEABLE cached_ , _SemanticsOf#SAFE safe_ (query-only), _SemanticsOf#IDEMPOTENT idempotent_ or _SemanticsOf#NON_IDEMPOTENT non-idempotent_ .
+--
+<.> xref:#typeOf[typeOf]
++
+--
+The type-of the elements returned by the action.
+--
+<.> xref:#fileAccept[fileAccept]
++
+--
+For downloading xref:system:generated:index/applib/value/Blob.adoc[Blob] or xref:system:generated:index/applib/value/Clob.adoc[Clob] , optionally restrict the files accepted (eg `.xslx` ).
+--
+
+== Members
+
+[#associateWith]
+=== associateWith
+
+Associates this action with a property or collection, specifying its id.
+
+This is an alternative to using _MemberOrder#name()_ . To specify the order (equivalent to _MemberOrder#sequence()_ }), use _#associateWithSequence()_ .
+
+For example `@Action(associateWith="items", associateWithSequence="2.1")` 
+
+If an action is associated with a collection, then any matching parameters will have their choices automatically inferred from the collection (if not otherwise specified) and any collection parameter defaults can be specified using checkboxes (in the Wicket UI, at least).
+
+[#associateWithSequence]
+=== associateWithSequence
+
+Specifies the sequence/order in the UI for an action that's been associated with a property or collection.
+
+This is an alternative to using _MemberOrder#sequence()_ , but is ignored if _Action#associateWith()_ isn't also specified.
+
+For example:
+
+----
+
+----
+
+[#commandDtoProcessor]
+=== commandDtoProcessor
+
+The xref:system:generated:index/applib/services/commanddto/processor/CommandDtoProcessor.adoc[CommandDtoProcessor] to process this command's DTO.
+
+The processor itself is used by xref:system:generated:index/applib/services/commanddto/conmap/ContentMappingServiceForCommandDto.adoc[ContentMappingServiceForCommandDto] and xref:system:generated:index/applib/services/commanddto/conmap/ContentMappingServiceForCommandsDto.adoc[ContentMappingServiceForCommandsDto] to dynamically transform the DTOs.
+
+[#commandPublishing]
+=== commandPublishing
+
+Whether action invocations, captured as xref:system:generated:index/applib/services/command/Command.adoc[Command] s, should be published to xref:system:generated:index/applib/services/publishing/spi/CommandSubscriber.adoc[CommandSubscriber] s.
+
+[#domainEvent]
+=== domainEvent
+
+Indicates that an invocation of the action should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService_ using a custom (subclass of) xref:system:generated:index/applib/events/domain/ActionDomainEvent.adoc[ActionDomainEvent] .
 
 For example:
 
@@ -83,43 +135,42 @@ public class SomeObject{
 ----
 
 This subclass must provide a no-arg constructor; the fields are set reflectively.
---
-<.> `[teal]#*_executionPublishing_*#` : `xref:system:generated:index/applib/annotation/Publishing.adoc[Publishing]`
-+
---
+
+[#executionPublishing]
+=== executionPublishing
+
 Whether _Execution_ s (triggered by action invocations), should be published to xref:system:generated:index/applib/services/publishing/spi/ExecutionSubscriber.adoc[ExecutionSubscriber] s.
---
-<.> `[teal]#*_hidden_*#` : `xref:system:generated:index/applib/annotation/Where.adoc[Where]`
-+
---
+
+[#hidden]
+=== hidden
+
 Indicates where (in the UI) the action is not visible to the user.
 
 It is also possible to suppress an action's visibility using _ActionLayout#hidden()_ .
 
 For xref:system:generated:index/applib/annotation/DomainService.adoc[DomainService] actions, the action's visibility is dependent upon its _DomainService#nature() nature_ .
---
-<.> `[teal]#*_restrictTo_*#` : `xref:system:generated:index/applib/annotation/RestrictTo.adoc[RestrictTo]`
-+
---
+
+[#restrictTo]
+=== restrictTo
+
 Whether the action is restricted to prototyping.
 
 By default there are no restrictions, with the action being available in all environments.
---
-<.> `[teal]#*_semantics_*#` : `xref:system:generated:index/applib/annotation/SemanticsOf.adoc[SemanticsOf]`
-+
---
+
+[#semantics]
+=== semantics
+
 The action semantics, either _SemanticsOf#SAFE_AND_REQUEST_CACHEABLE cached_ , _SemanticsOf#SAFE safe_ (query-only), _SemanticsOf#IDEMPOTENT idempotent_ or _SemanticsOf#NON_IDEMPOTENT non-idempotent_ .
---
-<.> `[teal]#*_typeOf_*#` : `Class<?>`
-+
---
+
+[#typeOf]
+=== typeOf
+
 The type-of the elements returned by the action.
---
-<.> `[teal]#*_fileAccept_*#` : `String`
-+
---
+
+[#fileAccept]
+=== fileAccept
+
 For downloading xref:system:generated:index/applib/value/Blob.adoc[Blob] or xref:system:generated:index/applib/value/Clob.adoc[Clob] , optionally restrict the files accepted (eg `.xslx` ).
 
 The value should be of the form "file_extension|audio/*|video/*|image/*|media_type".
---
 

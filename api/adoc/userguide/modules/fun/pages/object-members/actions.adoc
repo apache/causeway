@@ -15,7 +15,7 @@ There are three operations here: set the end date of the original lease term, cr
 Instead, all of these operations can be combined into a single action, "renew".
 Through such means the xref:concepts-patterns.adoc#ubiquitous-language[ubiquitous language] grows.
 
-TIP: This is the reason why Apache Isis' default is xref:object-pathsToInclude.adoc#editable-properties[non-editable properties]: to encourage this sort of "knowledge crunching".
+TIP: This is the reason why Apache Isis' default is xref:object-members.adoc#editable-properties[non-editable properties]: to encourage this sort of "knowledge crunching".
 
 You can find further discussion on when and why you should write actions xref:overview.adoc#actions[earlier].
 
@@ -164,7 +164,7 @@ public List<Product> autoComplete0AddToBasket(              // <.>
 }
 ----
 
-As the example suggests, any collection parameter type must provide a way to select items, either by way of a "choices" or "autoComplete" supporting method or alternatively defined globally using xref:refguide:applib-ant:DomainObject.adoc[`@DomainObject`] on the referenced type (described xref:userguide:fun:object-pathsToInclude.adoc#reference-parameter-types[above]).
+As the example suggests, any collection parameter type must provide a way to select items, either by way of a "choices" or "autoComplete" supporting method or alternatively defined globally using xref:refguide:applib-ant:DomainObject.adoc[`@DomainObject`] on the referenced type (described xref:userguide:fun:object-members.adoc#reference-parameter-types[above]).
 
 
 == Optional Parameters

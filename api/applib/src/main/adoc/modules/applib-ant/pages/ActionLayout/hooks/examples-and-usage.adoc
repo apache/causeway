@@ -1,0 +1,29 @@
+== Examples
+
+For example:
+
+[source,java]
+----
+public class ToDoItems {
+    @Action(semantics=SemanticsOf.SAFE)             // <1>
+    @ActionLayout(
+        bookmarking=BookmarkPolicy.AS_ROOT,
+        cssClass="x-key",
+        cssClassFa="fa-checkbox",
+        describedAs="Mark the todo item as not complete after all",
+        hidden=Where.NOWHERE                        // <2>
+    )
+    @MemberOrder(sequence = "1")
+    public List<ToDoItem> notYetComplete() {
+        ...
+    }
+}
+----
+<1> required for bookmarkable actions
+<2> default value, so could be omitted
+
+
+[TIP]
+====
+As an alternative to using the `@ActionLayout` annotation, a xref:userguide:fun:ui.adoc#object-layout[file-based layout] can be used (and is generally to be preferred since it is more flexible/powerful).
+====

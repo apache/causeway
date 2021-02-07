@@ -9,7 +9,7 @@ The `Dto` role interface is intended to be implemented by JAXB-annotated view mo
 xref:refguide:applib-ant:XmlRootElement.adoc[`@XmlRootElement`].
 It enables the ability to download the XML and XSD schema of those objects using two xref:userguide:fun:overview.adoc#mixins[mixins], `Dto_downloadXml` and `Dto_downloadXsd`.
 
-The interface is just a marker interface (with no pathsToInclude), and is defined as:
+The interface is just a marker interface (with no members), and is defined as:
 
 [source,java]
 ----

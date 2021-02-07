@@ -19,6 +19,7 @@
 package org.apache.isis.tooling.cli.projdoc;
 
 import java.io.File;
+import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -28,6 +29,7 @@ import java.util.Optional;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -47,6 +49,8 @@ import org.apache.isis.tooling.c4.C4;
 import org.apache.isis.tooling.cli.CliConfig;
 import org.apache.isis.tooling.cli.adocfix.OrphanedIncludeStatementFixer;
 import org.apache.isis.tooling.j2adoc.J2AdocContext;
+import org.apache.isis.tooling.j2adoc.format.UnitFormatter;
+import org.apache.isis.tooling.j2adoc.format.UnitFormatterWithSourceAndCallouts;
 import org.apache.isis.tooling.javamodel.AnalyzerConfigFactory;
 import org.apache.isis.tooling.javamodel.ast.CodeClasses;
 import org.apache.isis.tooling.model4adoc.AsciiDocFactory;
@@ -65,6 +69,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.val;
 
 import guru.nidi.codeassert.config.Language;
@@ -102,12 +107,23 @@ public class ProjectDocModel {
 
         final SortedSet<File> asciiDocFiles = new TreeSet<>();
 
-        val j2aContext = J2AdocContext
+        val j2aContext = J2AdocContext.builder()
                 //.compactFormat()
-                .javaSourceWithFootnotesFormat()
+//                .javaSourceWithFootnotesFormat()
+                .formatterFactory(new Function<J2AdocContext, UnitFormatter>() {
+                    @SneakyThrows
+                    @Override
+                    public UnitFormatter apply(J2AdocContext j2AdocContext) {
+                        final CliConfig.Commands.Index.Formatter formatter = cliConfig.getCommands().getIndex().getFormatter();
+                        final Class<? extends UnitFormatter> clz = formatter.getUnitFormatterClass();
+                        final Constructor<? extends UnitFormatter> constructor = clz.getConstructor(J2AdocContext.class);
+                        return constructor.newInstance(j2AdocContext);
+                    }
+                })
                 .licenseHeader(cliConfig.getGlobal().getLicenseHeader())
                 .xrefPageIdFormat(cliConfig.getCommands().getIndex().getDocumentGlobalIndexXrefPageIdFormat())
                 .namespacePartsSkipCount(cliConfig.getGlobal().getNamespacePartsSkipCount())
+                .skipTitleHeader(cliConfig.getCommands().getIndex().isSkipTitleHeader())
                 .build();
 
         val doc = doc();
@@ -149,9 +165,7 @@ public class ProjectDocModel {
         // now generate the overview or index
         writeSections(sections, doc, j2aContext, mode, asciiDocFiles::add);
 
-        if (mode.includeOverview()) {
-            ProjectDocWriter.write(cliConfig, doc, j2aContext, mode);
-        }
+        ProjectDocWriter.write(cliConfig, doc, j2aContext, mode);
 
         // update include statements ...
         OrphanedIncludeStatementFixer.fixIncludeStatements(asciiDocFiles, cliConfig, j2aContext);

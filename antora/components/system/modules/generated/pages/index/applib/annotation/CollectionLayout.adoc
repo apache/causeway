@@ -1,78 +1,114 @@
-= CollectionLayout : _annotation_
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
 Layout hints for collections.
 
-.Java Sources
+== API
+
+.CollectionLayout.java
 [source,java]
 ----
 @interface CollectionLayout {
-
-  String cssClass() default ""; // <.>
-
-  String defaultView() default ""; // <.>
-
-  String describedAs() default ""; // <.>
-
-  Where hidden() default Where.NOT_SPECIFIED; // <.>
-
-  String named() default ""; // <.>
-
-  boolean namedEscaped() default true; // <.>
-
-  int paged() default -1; // <.>
-
+  String cssClass() default "";     // <.>
+  String defaultView() default "";     // <.>
+  String describedAs() default "";     // <.>
+  Where hidden() default Where.NOT_SPECIFIED;     // <.>
+  String named() default "";     // <.>
+  boolean namedEscaped() default true;     // <.>
+  int paged() default -1;     // <.>
   @SuppressWarnings("rawtypes")
-Class sortedBy() default Comparator.class; // <.>
+Class sortedBy() default Comparator.class;     // <.>
 }
 ----
 
-<.> `[teal]#*_cssClass_*#` : `String`
+<.> xref:#cssClass[cssClass]
 +
 --
 Indicates the css class that a collection should have.
 --
-<.> `[teal]#*_defaultView_*#` : `String`
+<.> xref:#defaultView[defaultView]
 +
 --
 Indicates which view is used by default to render the collection.
-
-The only view available within the core framework is "table". However, other views can be added as extensions. Examples are those provided by the (non-ASF)Isis addons, eg "excel", "calendar" and "map".
 --
-<.> `[teal]#*_describedAs_*#` : `String`
+<.> xref:#describedAs[describedAs]
 +
 --
 Description of this collection, eg to be rendered in a tooltip.
 --
-<.> `[teal]#*_hidden_*#` : `xref:system:generated:index/applib/annotation/Where.adoc[Where]`
+<.> xref:#hidden[hidden]
 +
 --
 Indicates where in the UI the collection should _not_ not be visible.
-
-Only _Where#NOWHERE NOWHERE_ or _Where#EVERYWHERE EVERYWHERE_ / _Where#ANYWHERE ANYWHERE_ apply for collections.
 --
-<.> `[teal]#*_named_*#` : `String`
+<.> xref:#named[named]
 +
 --
 Name of this collection (overriding the name derived from its name in code).
 --
-<.> `[teal]#*_namedEscaped_*#` : `boolean`
+<.> xref:#namedEscaped[namedEscaped]
 +
 --
 A flag indicating whether the value of _#named()_ should be HTML escaped or not.
 --
-<.> `[teal]#*_paged_*#` : `int`
+<.> xref:#paged[paged]
 +
 --
+The page size for instances of this class when rendered within a table.
+--
+<.> xref:#sortedBy[sortedBy]
++
+--
+Indicates that the elements in a ( _java.util.SortedSet_ ) collection should be sorted according to a different order than the natural sort order, as defined by the specified _java.util.Comparator_ .
+--
+
+== Members
+
+[#cssClass]
+=== cssClass
+
+Indicates the css class that a collection should have.
+
+[#defaultView]
+=== defaultView
+
+Indicates which view is used by default to render the collection.
+
+The only view available within the core framework is "table". However, other views can be added as extensions. Examples are those provided by the (non-ASF)Isis addons, eg "excel", "calendar" and "map".
+
+[#describedAs]
+=== describedAs
+
+Description of this collection, eg to be rendered in a tooltip.
+
+[#hidden]
+=== hidden
+
+Indicates where in the UI the collection should _not_ not be visible.
+
+Only _Where#NOWHERE NOWHERE_ or _Where#EVERYWHERE EVERYWHERE_ / _Where#ANYWHERE ANYWHERE_ apply for collections.
+
+[#named]
+=== named
+
+Name of this collection (overriding the name derived from its name in code).
+
+[#namedEscaped]
+=== namedEscaped
+
+A flag indicating whether the value of _#named()_ should be HTML escaped or not.
+
+[#paged]
+=== paged
+
 The page size for instances of this class when rendered within a table.
 
 If annotated on a collection, then the page size refers to parented collections (eg `Order#lineItems` ).
 
 If annotated on a type, then the page size refers to standalone collections (eg as returned from a repository query).
---
-<.> `[teal]#*_sortedBy_*#` : `Class`
-+
---
+
+[#sortedBy]
+=== sortedBy
+
 Indicates that the elements in a ( _java.util.SortedSet_ ) collection should be sorted according to a different order than the natural sort order, as defined by the specified _java.util.Comparator_ .
 
 Whenever there is a collection of type _java.util.SortedSet_ , the domain entity referenced is expected to implement _Comparable_ , ie to have a natural ordering. In effect tis means that all domain entities should provide a natural ordering.
@@ -80,5 +116,4 @@ Whenever there is a collection of type _java.util.SortedSet_ , the domain entity
 However, in some circumstances the ordering of collection may be different to the entity's natural ordering. For example, the entity may represent an interval of time sorted by its _startDate_ ascending, but the collection may wish to sort by _startDate_ .
 
 The purpose of this annotation is to provide a _java.util.Comparator_ such that the collection may be sorted in an order more suitable to the context.
---
 

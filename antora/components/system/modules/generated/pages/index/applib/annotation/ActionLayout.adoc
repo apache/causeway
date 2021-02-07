@@ -1,89 +1,132 @@
-= ActionLayout : _annotation_
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
 Layout hints for actions.
 
-.Java Sources
+== API
+
+.ActionLayout.java
 [source,java]
 ----
 @interface ActionLayout {
-
-  BookmarkPolicy bookmarking() default BookmarkPolicy.NOT_SPECIFIED; // <.>
-
-  String cssClass() default ""; // <.>
-
-  String cssClassFa() default ""; // <.>
-
-  CssClassFaPosition cssClassFaPosition() default CssClassFaPosition.LEFT; // <.>
-
-  String describedAs() default ""; // <.>
-
-  Where hidden() default Where.NOT_SPECIFIED; // <.>
-
-  String named() default ""; // <.>
-
-  Position position() default Position.NOT_SPECIFIED; // <.>
-
-  PromptStyle promptStyle() default PromptStyle.AS_CONFIGURED; // <.>
-
-  Redirect redirectPolicy() default Redirect.AS_CONFIGURED; // <.>
+  BookmarkPolicy bookmarking() default BookmarkPolicy.NOT_SPECIFIED;     // <.>
+  String cssClass() default "";     // <.>
+  String cssClassFa() default "";     // <.>
+  CssClassFaPosition cssClassFaPosition() default CssClassFaPosition.LEFT;     // <.>
+  String describedAs() default "";     // <.>
+  Where hidden() default Where.NOT_SPECIFIED;     // <.>
+  String named() default "";     // <.>
+  Position position() default Position.NOT_SPECIFIED;     // <.>
+  PromptStyle promptStyle() default PromptStyle.AS_CONFIGURED;     // <.>
+  Redirect redirectPolicy() default Redirect.AS_CONFIGURED;     // <.>
 }
 ----
 
-<.> `[teal]#*_bookmarking_*#` : `xref:system:generated:index/applib/annotation/BookmarkPolicy.adoc[BookmarkPolicy]`
+<.> xref:#bookmarking[bookmarking]
 +
 --
 Whether (and how) this action can be bookmarked in the UI.
-
-For bookmarkable actions, either _org.apache.isis.applib.annotation.BookmarkPolicy#AS_ROOT_ and _org.apache.isis.applib.annotation.BookmarkPolicy#AS_CHILD_ can be used (they are treated identically).
 --
-<.> `[teal]#*_cssClass_*#` : `String`
+<.> xref:#cssClass[cssClass]
 +
 --
 Indicates the css class that an action should have.
-
-For the Wicket viewer, this can be a bootstrap class such asbtn-info.
 --
-<.> `[teal]#*_cssClassFa_*#` : `String`
+<.> xref:#cssClassFa[cssClassFa]
 +
 --
 Indicates theFont AwesomeCSS class to decorate an action (button or menu item).
 --
-<.> `[teal]#*_cssClassFaPosition_*#` : `xref:system:generated:index/applib/layout/component/CssClassFaPosition.adoc[CssClassFaPosition]`
+<.> xref:#cssClassFaPosition[cssClassFaPosition]
 +
 --
 Indicates the position of theFont Awesomeicon. The icon could be rendered on the left or the right of the action button
 --
-<.> `[teal]#*_describedAs_*#` : `String`
+<.> xref:#describedAs[describedAs]
 +
 --
 Description of this action, eg to be rendered in a tooltip.
 --
-<.> `[teal]#*_hidden_*#` : `xref:system:generated:index/applib/annotation/Where.adoc[Where]`
+<.> xref:#hidden[hidden]
 +
 --
 Indicates where in the UI the action should _not_ not be visible.
 --
-<.> `[teal]#*_named_*#` : `String`
+<.> xref:#named[named]
 +
 --
 Name of this action (overriding the name derived from its name in code).
 --
-<.> `[teal]#*_position_*#` : `Position`
+<.> xref:#position[position]
 +
 --
 For actions that are associated with a property, indicates the positioning of the action's button relative to the property.
-
-Ignored if the action has not been associated with a property.
 --
-<.> `[teal]#*_promptStyle_*#` : `xref:system:generated:index/applib/annotation/PromptStyle.adoc[PromptStyle]`
+<.> xref:#promptStyle[promptStyle]
 +
 --
 How this parameters for this action are prompted, either _PromptStyle#DIALOG dialog_ or _PromptStyle#INLINE inline_ .
 --
-<.> `[teal]#*_redirectPolicy_*#` : `xref:system:generated:index/applib/annotation/Redirect.adoc[Redirect]`
+<.> xref:#redirectPolicy[redirectPolicy]
 +
 --
 If the action returns its target, then determines whether to update the page or instead to redirect (forcing a re-rendering of a new page).
 --
+
+== Members
+
+[#bookmarking]
+=== bookmarking
+
+Whether (and how) this action can be bookmarked in the UI.
+
+For bookmarkable actions, either _org.apache.isis.applib.annotation.BookmarkPolicy#AS_ROOT_ and _org.apache.isis.applib.annotation.BookmarkPolicy#AS_CHILD_ can be used (they are treated identically).
+
+[#cssClass]
+=== cssClass
+
+Indicates the css class that an action should have.
+
+For the Wicket viewer, this can be a bootstrap class such as `btn-info` .
+
+[#cssClassFa]
+=== cssClassFa
+
+Indicates theFont AwesomeCSS class to decorate an action (button or menu item).
+
+[#cssClassFaPosition]
+=== cssClassFaPosition
+
+Indicates the position of theFont Awesomeicon. The icon could be rendered on the left or the right of the action button
+
+[#describedAs]
+=== describedAs
+
+Description of this action, eg to be rendered in a tooltip.
+
+[#hidden]
+=== hidden
+
+Indicates where in the UI the action should _not_ not be visible.
+
+[#named]
+=== named
+
+Name of this action (overriding the name derived from its name in code).
+
+[#position]
+=== position
+
+For actions that are associated with a property, indicates the positioning of the action's button relative to the property.
+
+Ignored if the action has not been associated with a property.
+
+[#promptStyle]
+=== promptStyle
+
+How this parameters for this action are prompted, either _PromptStyle#DIALOG dialog_ or _PromptStyle#INLINE inline_ .
+
+[#redirectPolicy]
+=== redirectPolicy
+
+If the action returns its target, then determines whether to update the page or instead to redirect (forcing a re-rendering of a new page).
 

@@ -1,19 +1,19 @@
-= HasAtPath : _interface_
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
 Role interface for domain objects to implement, indicating that these are characteristics of the entity that can be used to determine its visibility/editability.object's tenancyuser's tenancyaccessnullnulleditablenullnon-nulleditable//editable//itvisible//it/carvisible//it/iglvisible//frvisible/nullnot visible/it/editable/it/iteditable/it/it/carvisible/it/it/iglvisible/it/frnot visible/itnullnot visible/it/car/editable/it/car/iteditable/it/car/it/careditable/it/car/it/iglnot visible/it/car/frnot visible/it/carnullnot visible
 
-Previously theatPathwould have corresponded to the unique path of some particular xref:system:generated:index/extensions/secman/api/tenancy/ApplicationTenancy.adoc[ApplicationTenancy] instance. However, this has now been generalized; the atPath is simply a string whose interpretation is application-specific (in particular by the xref:system:generated:index/extensions/secman/api/tenancy/ApplicationTenancyEvaluator.adoc[ApplicationTenancyEvaluator] SPI).
+Previously the `atPath` would have corresponded to the unique path of some particular xref:system:generated:index/extensions/secman/api/tenancy/ApplicationTenancy.adoc[ApplicationTenancy] instance. However, this has now been generalized; the atPath is simply a string whose interpretation is application-specific (in particular by the xref:system:generated:index/extensions/secman/api/tenancy/ApplicationTenancyEvaluator.adoc[ApplicationTenancyEvaluator] SPI).
 
-For applications that still wish to follow the original more specific design (that theatPathcorresponds to a single xref:system:generated:index/extensions/secman/api/tenancy/ApplicationTenancy.adoc[ApplicationTenancy] ), then the path can be interpreted according to the following table:
+For applications that still wish to follow the original more specific design (that the `atPath` corresponds to a single xref:system:generated:index/extensions/secman/api/tenancy/ApplicationTenancy.adoc[ApplicationTenancy] ), then the path can be interpreted according to the following table:
 
 any object that is not tenanted (that is, its class does not implement xref:system:generated:index/extensions/secman/api/tenancy/HasAtPath.adoc[HasAtPath] is accessible by any user (usual permission rules apply).
 
-.Java Sources
+== API
+
+.HasAtPath.java
 [source,java]
 ----
 interface HasAtPath {
-
   String getAtPath()
 }
 ----

@@ -1,32 +1,33 @@
-= RepresentationServiceContentNegotiator : _class_
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
-.Java Sources
+== API
+
+.RepresentationServiceContentNegotiator.java
 [source,java]
 ----
 class RepresentationServiceContentNegotiator {
-
   Response objectRepresentation(final IResourceContext renderContext, final ManagedObject objectAdapter)
-
   Response propertyDetails(final IResourceContext renderContext, final ManagedProperty objectAndProperty)
-
   Response collectionDetails(final IResourceContext renderContext, final ManagedCollection objectAndCollection)
-
   Response actionPrompt(final IResourceContext renderContext, final ManagedAction objectAndAction)
-
   Response actionResult(final IResourceContext renderContext, final ObjectAndActionInvocation objectAndActionInvocation)
-
   void assertContentNegotiationServiceHandled(final ResponseBuilder responseBuilder)
-
-  ResponseBuilder buildResponse(Function<ContentNegotiationService, ResponseBuilder> connegServiceBuildResponse) // <.>
+  ResponseBuilder buildResponse(Function<ContentNegotiationService, ResponseBuilder> connegServiceBuildResponse)     // <.>
 }
 ----
 
-<.> `[teal]#*buildResponse*#(Function<xref:system:generated:index/viewer/restfulobjects/rendering/service/conneg/ContentNegotiationService.adoc[ContentNegotiationService], ResponseBuilder> connegServiceBuildResponse)` : `ResponseBuilder`
+<.> xref:#buildResponse[buildResponse]
 +
 --
 Iterates over all _#contentNegotiationServices injected_ xref:system:generated:index/viewer/restfulobjects/rendering/service/conneg/ContentNegotiationService.adoc[ContentNegotiationService] s to find one that returns a _ResponseBuilder_ using the provided function.
+--
+
+== Members
+
+[#buildResponse]
+=== buildResponse
+
+Iterates over all _#contentNegotiationServices injected_ xref:system:generated:index/viewer/restfulobjects/rendering/service/conneg/ContentNegotiationService.adoc[ContentNegotiationService] s to find one that returns a _ResponseBuilder_ using the provided function.
 
 There will always be at least one such service, namely the xref:system:generated:index/viewer/restfulobjects/rendering/service/conneg/ContentNegotiationServiceForRestfulObjectsV1_0.adoc[ContentNegotiationServiceForRestfulObjectsV1_0] .
---
 

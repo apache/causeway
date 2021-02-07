@@ -26,8 +26,9 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Layout hints for action parameters.
- * 
+ * Collects together all layout hints for action parameters in a single
+ * annotation.
+ *
  * @since 1.x {@index}
  * @see org.apache.isis.applib.annotation.PropertyLayout
  */

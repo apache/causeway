@@ -1,42 +1,55 @@
-= DomainObjectMemberRepresentation : _class_
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
 Represents the members within the xref:system:generated:index/viewer/restfulobjects/applib/domainobjects/DomainObjectRepresentation.adoc[DomainObjectRepresentation] 's `members` map.
 
 Do not confuse with the subclasses of xref:system:generated:index/viewer/restfulobjects/applib/domainobjects/AbstractObjectMemberRepresentation.adoc[AbstractObjectMemberRepresentation] , which are standalone representations in their own right.
 
-.Java Sources
+== API
+
+.DomainObjectMemberRepresentation.java
 [source,java]
 ----
 class DomainObjectMemberRepresentation {
-
   DomainObjectMemberRepresentation(final JsonNode jsonNode)
-
-  String getMemberType() // <.>
-
-  String getDisabledReason() // <.>
-
+  String getMemberType()     // <.>
+  String getDisabledReason()     // <.>
   String getFormat()
-
-  String getXIsisFormat() // <.>
+  String getXIsisFormat()     // <.>
 }
 ----
 
-<.> `[teal]#*getMemberType*#()` : `String`
+<.> xref:#getMemberType[getMemberType]
 +
 --
 Whether this is a `property` , `collection` or `action` .
 --
-<.> `[teal]#*getDisabledReason*#()` : `String`
+<.> xref:#getDisabledReason[getDisabledReason]
 +
 --
 The reason this member cannot be modified (if property or collection) or invoked (if action).
-
-If null, then is not disabled.
 --
-<.> `[teal]#*getXIsisFormat*#()` : `String`
+<.> xref:#getXIsisFormat[getXIsisFormat]
 +
 --
 Isis-specific extension; not part of the RO API;
 --
+
+== Members
+
+[#getMemberType]
+=== getMemberType
+
+Whether this is a `property` , `collection` or `action` .
+
+[#getDisabledReason]
+=== getDisabledReason
+
+The reason this member cannot be modified (if property or collection) or invoked (if action).
+
+If null, then is not disabled.
+
+[#getXIsisFormat]
+=== getXIsisFormat
+
+Isis-specific extension; not part of the RO API;
 

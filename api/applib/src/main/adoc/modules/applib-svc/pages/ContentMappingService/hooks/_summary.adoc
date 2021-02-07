@@ -1,0 +1,5 @@
+// TODO - v2 (reconcile/move into javadoc).
+
+//
+//<.> typically the input is a domain object (whose structure might change over time), and the output is a DTO (whose structure is guaranteed to be preserved over time)
+//<.> as per the caller's HTTP `Accept` header

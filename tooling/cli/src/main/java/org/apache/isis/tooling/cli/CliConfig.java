@@ -22,9 +22,16 @@ import java.io.File;
 import java.util.LinkedHashMap;
 import java.util.Optional;
 
+import org.yaml.snakeyaml.constructor.ConstructorException;
+
 import org.apache.isis.commons.internal.resources._Yaml;
+import org.apache.isis.tooling.j2adoc.format.UnitFormatter;
+import org.apache.isis.tooling.j2adoc.format.UnitFormatterCompact;
+import org.apache.isis.tooling.j2adoc.format.UnitFormatterWithSourceAndCallouts;
+import org.apache.isis.tooling.j2adoc.format.UnitFormatterWithSourceAndSections;
 
 import lombok.Data;
+import lombok.Getter;
 import lombok.NonNull;
 
 @Data
@@ -89,6 +96,22 @@ public class CliConfig {
             private String documentGlobalIndexXrefPageIdFormat = "system:generated:index/%s.adoc";
 
             private boolean fixOrphanedAdocIncludeStatements = false;
+            private boolean skipTitleHeader = false;
+
+            public enum Formatter {
+                COMPACT(UnitFormatterCompact.class),
+                JAVA_SOURCES_WITH_CALLOUTS(UnitFormatterWithSourceAndCallouts.class),
+                JAVA_SOURCES_WITH_SECTIONS(UnitFormatterWithSourceAndSections.class),
+                ;
+
+                @Getter
+                private final Class<? extends UnitFormatter> unitFormatterClass;
+                Formatter(Class<? extends UnitFormatter> unitFormatterClass) {
+                    this.unitFormatterClass = unitFormatterClass;
+                }
+            }
+
+            private Formatter formatter = Formatter.JAVA_SOURCES_WITH_SECTIONS;
 
             public File getDocumentIndexFolder(File outputRootFolder) {
                 return Optional.ofNullable(outputRootFolder)
@@ -105,7 +128,12 @@ public class CliConfig {
     public static CliConfig read(final @NonNull File file) {
         return _Yaml.readYaml(CliConfig.class, file)
         .ifFailure(e->{
-            System.err.println(String.format("config file '%s' not readable, using defaults", file.getAbsolutePath()));
+            if(e instanceof ConstructorException) {
+                final ConstructorException ce = (ConstructorException) e;
+                throw new RuntimeException(String.format("config file '%s' not readable\n%s", file.getAbsolutePath(), ce.getProblem()));
+            } else {
+                throw new RuntimeException(String.format("config file '%s' not readable\n%s", file.getAbsolutePath(), e));
+            }
         })
         .presentElseGet(CliConfig::new);
     }

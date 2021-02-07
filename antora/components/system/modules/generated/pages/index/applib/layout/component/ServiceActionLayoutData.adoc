@@ -1,91 +1,88 @@
-= ServiceActionLayoutData : _class_
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
 Describes the layout of a single action, broadly corresponding to _org.apache.isis.applib.annotation.ActionLayout_ .
 
-.Java Sources
+== API
+
+.ServiceActionLayoutData.java
 [source,java]
 ----
 class ServiceActionLayoutData {
-
   ServiceActionLayoutData()
-
   ServiceActionLayoutData(final String objectType, final String id)
-
   String getObjectType()
-
   void setObjectType(final String objectType)
-
-  String getId() // <.>
-
+  String getId()     // <.>
   void setId(String id)
-
   BookmarkPolicy getBookmarking()
-
   void setBookmarking(BookmarkPolicy bookmarking)
-
   String getCssClass()
-
   void setCssClass(String cssClass)
-
   String getCssClassFa()
-
   void setCssClassFa(String cssClassFa)
-
   String getDescribedAs()
-
   void setDescribedAs(String describedAs)
-
   String getNamed()
-
   void setNamed(String named)
-
   Boolean getNamedEscaped()
-
   void setNamedEscaped(Boolean namedEscaped)
-
-  ServiceActionLayoutDataOwner getOwner() // <.>
-
+  ServiceActionLayoutDataOwner getOwner()     // <.>
   void setOwner(final ServiceActionLayoutDataOwner owner)
-
-  String getMetadataError() // <.>
-
+  String getMetadataError()     // <.>
   void setMetadataError(final String metadataError)
-
-  Link getLink() // <.>
-
+  Link getLink()     // <.>
   void setLink(final Link link)
-
   String getObjectTypeAndId()
-
   String toString()
 }
 ----
 
-<.> `[teal]#*getId*#()` : `String`
+<.> xref:#getId[getId]
 +
 --
 Method name.
-
-Overloaded methods are not supported.
 --
-<.> `[teal]#*getOwner*#()` : `xref:system:generated:index/applib/layout/component/ServiceActionLayoutDataOwner.adoc[ServiceActionLayoutDataOwner]`
+<.> xref:#getOwner[getOwner]
 +
 --
 Owner.
-
-Set programmatically by framework after reading in from XML.
 --
-<.> `[teal]#*getMetadataError*#()` : `String`
+<.> xref:#getMetadataError[getMetadataError]
 +
 --
 For diagnostics; populated by the framework if and only if a metadata error.
 --
-<.> `[teal]#*getLink*#()` : `xref:system:generated:index/applib/layout/links/Link.adoc[Link]`
+<.> xref:#getLink[getLink]
 +
 --
 The link to access this resource from the REST API (Restful Objects viewer).
+--
+
+== Members
+
+[#getId]
+=== getId
+
+Method name.
+
+Overloaded methods are not supported.
+
+[#getOwner]
+=== getOwner
+
+Owner.
+
+Set programmatically by framework after reading in from XML.
+
+[#getMetadataError]
+=== getMetadataError
+
+For diagnostics; populated by the framework if and only if a metadata error.
+
+[#getLink]
+=== getLink
+
+The link to access this resource from the REST API (Restful Objects viewer).
 
 Populated by the framework automatically.
---
 

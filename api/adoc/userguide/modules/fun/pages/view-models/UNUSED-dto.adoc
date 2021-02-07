@@ -156,7 +156,7 @@ public class ToDoItemV1_2 implements Dto {
 }
 ----
 
-Obviously, only changes made must be backward compatible, eg new pathsToInclude must be optional.
+Obviously, only changes made must be backward compatible, eg new members must be optional.
 
 Alternatively, you might also consider simply editing the source file, ie renaming the class and bumping up the value returned by `getMinorVersion()`.
 

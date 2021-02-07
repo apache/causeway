@@ -1,59 +1,86 @@
-= TransactionalProcessor : _interface_
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
-.Java Sources
+== API
+
+.TransactionalProcessor.java
 [source,java]
 ----
 interface TransactionalProcessor {
-
-  Result<T> callTransactional(TransactionDefinition def, Callable<T> callable) // <.>
-
-  Result<Void> runTransactional(TransactionDefinition def, ThrowingRunnable runnable) // <.>
-
-  Result<T> callTransactional(Propagation propagation, Callable<T> callable) // <.>
-
-  Result<Void> runTransactional(Propagation propagation, ThrowingRunnable runnable) // <.>
-
-  Result<T> callWithinCurrentTransactionElseCreateNew(Callable<T> callable) // <.>
-
-  Result<Void> runWithinCurrentTransactionElseCreateNew(ThrowingRunnable runnable) // <.>
+  Result<T> callTransactional(TransactionDefinition def, Callable<T> callable)     // <.>
+  Result<Void> runTransactional(TransactionDefinition def, ThrowingRunnable runnable)     // <.>
+  Result<T> callTransactional(Propagation propagation, Callable<T> callable)     // <.>
+  Result<Void> runTransactional(Propagation propagation, ThrowingRunnable runnable)     // <.>
+  Result<T> callWithinCurrentTransactionElseCreateNew(Callable<T> callable)     // <.>
+  Result<Void> runWithinCurrentTransactionElseCreateNew(ThrowingRunnable runnable)     // <.>
 }
 ----
 
-<.> `[teal]#*callTransactional*#<T>(TransactionDefinition def, Callable<T> callable)` : `xref:system:generated:index/commons/functional/Result.adoc[Result]<T>`
+<.> xref:#callTransactional[callTransactional]
 +
 --
 Runs given _callable_ with a transactional boundary, where the detailed transactional behavior is governed by given _TransactionDefinition_ _def_ .
 --
-<.> `[teal]#*runTransactional*#(TransactionDefinition def, ThrowingRunnable runnable)` : `xref:system:generated:index/commons/functional/Result.adoc[Result]<Void>`
+<.> xref:#runTransactional[runTransactional]
 +
 --
 Runs given _runnable_ with a transactional boundary, where the detailed transactional behavior is governed by given _TransactionDefinition_ _def_ .
 --
-<.> `[teal]#*callTransactional*#<T>(Propagation propagation, Callable<T> callable)` : `xref:system:generated:index/commons/functional/Result.adoc[Result]<T>`
+<.> xref:#callTransactional[callTransactional]
 +
 --
 Runs given _callable_ with a transactional boundary, where the detailed transactional behavior is governed by given _Propagation_ _propagation_ .
-
-More fine grained control is given via _#callTransactional(TransactionDefinition, Callable)_
 --
-<.> `[teal]#*runTransactional*#(Propagation propagation, ThrowingRunnable runnable)` : `xref:system:generated:index/commons/functional/Result.adoc[Result]<Void>`
+<.> xref:#runTransactional[runTransactional]
 +
 --
 Runs given _runnable_ with a transactional boundary, where the detailed transactional behavior is governed by given _Propagation_ _propagation_ .
-
-More fine grained control is given via _#runTransactional(TransactionDefinition, ThrowingRunnable)_
 --
-<.> `[teal]#*callWithinCurrentTransactionElseCreateNew*#<T>(Callable<T> callable)` : `xref:system:generated:index/commons/functional/Result.adoc[Result]<T>`
+<.> xref:#callWithinCurrentTransactionElseCreateNew[callWithinCurrentTransactionElseCreateNew]
 +
 --
 Runs given _callable_ within an existing transactional boundary, or in the absence of such a boundary, creates a new one.
-
-In other words, support a current transaction, create a new one if none exists.
 --
-<.> `[teal]#*runWithinCurrentTransactionElseCreateNew*#(ThrowingRunnable runnable)` : `xref:system:generated:index/commons/functional/Result.adoc[Result]<Void>`
+<.> xref:#runWithinCurrentTransactionElseCreateNew[runWithinCurrentTransactionElseCreateNew]
 +
 --
 Runs given _runnable_ within an existing transactional boundary, or in the absence of such a boundary creates a new one.
 --
+
+== Members
+
+[#callTransactional]
+=== callTransactional
+
+Runs given _callable_ with a transactional boundary, where the detailed transactional behavior is governed by given _TransactionDefinition_ _def_ .
+
+[#runTransactional]
+=== runTransactional
+
+Runs given _runnable_ with a transactional boundary, where the detailed transactional behavior is governed by given _TransactionDefinition_ _def_ .
+
+[#callTransactional]
+=== callTransactional
+
+Runs given _callable_ with a transactional boundary, where the detailed transactional behavior is governed by given _Propagation_ _propagation_ .
+
+More fine grained control is given via _#callTransactional(TransactionDefinition, Callable)_
+
+[#runTransactional]
+=== runTransactional
+
+Runs given _runnable_ with a transactional boundary, where the detailed transactional behavior is governed by given _Propagation_ _propagation_ .
+
+More fine grained control is given via _#runTransactional(TransactionDefinition, ThrowingRunnable)_
+
+[#callWithinCurrentTransactionElseCreateNew]
+=== callWithinCurrentTransactionElseCreateNew
+
+Runs given _callable_ within an existing transactional boundary, or in the absence of such a boundary, creates a new one.
+
+In other words, support a current transaction, create a new one if none exists.
+
+[#runWithinCurrentTransactionElseCreateNew]
+=== runWithinCurrentTransactionElseCreateNew
+
+Runs given _runnable_ within an existing transactional boundary, or in the absence of such a boundary creates a new one.
 

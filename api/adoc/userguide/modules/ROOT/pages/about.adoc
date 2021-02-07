@@ -6,7 +6,7 @@
 
 This guide introduces the xref:userguide:fun:concepts-patterns.adoc[core concepts] and then an xref:userguide:fun:overview.adoc[overview] of the building blocks of Apache Isis applications.
 
-It next describes the basics of the Apache Isis' programming model: xref:userguide:fun:domain-entities-and-services.adoc[domain entities and services], xref:userguide:fun:object-pathsToInclude.adoc[object pathsToInclude], xref:userguide:fun:ui.adoc[UI layout and hints], xref:userguide:fun:business-rules.adoc[business rules] and xref:userguide:fun:drop-downs-and-defaults.adoc[drop downs and defaults].
+It next describes the basics of the Apache Isis' programming model: xref:userguide:fun:domain-entities-and-services.adoc[domain entities and services], xref:userguide:fun:object-members.adoc[object members], xref:userguide:fun:ui.adoc[UI layout and hints], xref:userguide:fun:business-rules.adoc[business rules] and xref:userguide:fun:drop-downs-and-defaults.adoc[drop downs and defaults].
 
 It then moves on to discuss some slightly more advanced areas of the programming model: xref:userguide:fun:meta-annotations.adoc[meta-annotations], xref:userguide:fun:view-models.adoc[view models] and xref:userguide:fun:mixins.adoc[mixins].
 These all allow you to develop more sophisticated applications, while remaining maintainable and elegant.

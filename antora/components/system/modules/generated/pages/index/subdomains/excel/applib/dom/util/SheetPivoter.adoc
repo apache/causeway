@@ -1,28 +1,31 @@
-= SheetPivoter : _class_
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
-.Java Sources
+== API
+
+.SheetPivoter.java
 [source,java]
 ----
 class SheetPivoter {
-
   int columnLabelOffsetX;
-
   int valueRowOffsetY;
-
   int decoRowOffsetX;
-
   int valuesStartAtRownumber;
-
-  void pivot(final Sheet pivotSourceSheet, final Sheet pivotTargetSheet) // <.>
-
+  void pivot(final Sheet pivotSourceSheet, final Sheet pivotTargetSheet)     // <.>
   List<Cell> getDistinctValuesInSourceSheetColumn(Sheet sourceSheet, Integer columnNumber)
 }
 ----
 
-<.> `[teal]#*pivot*#(Sheet pivotSourceSheet, Sheet pivotTargetSheet)` : `void`
+<.> xref:#pivot[pivot]
 +
 --
+Takes the values of the source sheet and creates a pivot in the target sheet based on the information of the first couple of rows. Only cells of type CELL_TYPE_NUMERIC will be handled and summed in the pivot.
+--
+
+== Members
+
+[#pivot]
+=== pivot
+
 Takes the values of the source sheet and creates a pivot in the target sheet based on the information of the first couple of rows. Only cells of type CELL_TYPE_NUMERIC will be handled and summed in the pivot.
 
 The source sheet has to honour the following conventions for pivot to be successful and meaningful:
@@ -36,5 +39,4 @@ The source sheet has to honour the following conventions for pivot to be success
 * All other _Row_ 's, if present, contain the data for the pivot. Only numeric values in the column(s) annoted "value" will be summed.
 
 The pivot will use the distinct values of the first column marked "row" (left-to-right) as row labels. The distinct values of the columns marked as "column" as column labels (in the order of the specified order - if present. Otherwise in the order in which they appear in _Row_ (0) left-to-right.) The values of the pivot are taken from the column(s) marked "value" (in the order of the specified order - if present. Otherwise in the order in which they appear in _Row_ (0) left-to-right.) They have to be of type CELL_TYPE_NUMERIC and will me ignored otherwise. The values found in the column(s) marked "deco" are put in the column(s) 1 .. following the row label and are meant as decoration. Since the assumption is that every distinct row label has the same decoration(s) only the first found value for each row will be added.
---
 

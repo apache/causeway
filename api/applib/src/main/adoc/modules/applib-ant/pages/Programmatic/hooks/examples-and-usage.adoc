@@ -1,0 +1,20 @@
+== Examples
+
+A common use-case is to ignore implementation-level artifacts.
+For example:
+
+[source,java]
+----
+public class Customer implements Comparable<Customer> {
+    ...
+    @Programmatic
+    public int compareTo(Customer c) {
+        return getSalary() - c.getSalary();
+    }
+    ...
+}
+----
+
+Note that `@Programmatic` is not the same as `@Action(hidden=Where.EVERYWHERE)` or `@Property(hidden=Where.EVERYWHERE)` etc; it actually means that the class member will not be part of the Apache Isis metamodel.
+
+

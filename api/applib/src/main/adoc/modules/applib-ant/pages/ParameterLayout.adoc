@@ -1,97 +1,13 @@
 [#ParameterLayout]
-= `@ParameterLayout`
+= @ParameterLayout
 
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
 
 
-The `@ParameterLayout` annotation applies to action parameters, collecting together all UI hints within a single annotation.
-
-[source,java]
-----
-include::refguide:applib-ant:example$annotation/ParameterLayout.java[tags="refguide"]
-----
-<.> xref:refguide:applib-ant:ParameterLayout.adoc#cssClass[`cssClass()`]
-+The css class that a parameter should have, to allow more targetted styling in xref:refguide:config:application-specific/application-css.adoc[`application.css`]
-
-<.> xref:refguide:applib-ant:ParameterLayout.adoc#describedAs[`describedAs()`]
-+
-Description of this parameter, eg to be rendered in a tooltip.
-
-<.> xref:refguide:applib-ant:ParameterLayout.adoc#labelPosition[`labelPosition()`]
-In forms, the positioning of the label relative to the property value. +
-=
-Default is `LEFT`, unless xref:refguide:applib-ant:ParameterLayout.adoc#multiLine[`multiLine`] in which case `TOP`.
-The value `RIGHT` is only supported for boolean parameters.
-
-<.> xref:refguide:applib-ant:ParameterLayout.adoc#multiLine[`multiLine()`]
-+
-For string parameters, render as a text area over specified number of lines.
-+
-If set > 1, then then xref:refguide:applib-ant:ParameterLayout.adoc#labelPosition[`labelPosition`] defaults to `TOP`.
-
-<.> xref:refguide:applib-ant:ParameterLayout.adoc#named[`named()`]
-+
-The name of this parameter.
-+
-[TIP]
-====
-There's no need to name the action parameters if the code is compiled using the `-parameters` flag to the Java compiler (javac); the framework will then use the name of the parameter itself.
-
-The only reason then to name the parameter is if the desired name is a reserved Java keyword, such as `default` or `package`.
-====
-
-<.> `namedEscaped()`
-+
-Whether to HTML escape the name of this parameter.
-
-<.> xref:refguide:applib-ant:ParameterLayout.adoc#renderDay[`renderDay()`]
-+
-For date parameters only, render the date as one day prior to the actually stored date (eg the end date of an open interval into a closed interval)
-
-<.> xref:refguide:applib-ant:ParameterLayout.adoc#typicalLength[`typicalLength()`]
-+
-The typical entry length of a field, use to determine the optimum width for display
+include::system:generated:page$index/applib/annotation/ParameterLayout.adoc[]
 
 
 
+include::ParameterLayout/hooks/examples-and-usage.adoc[]
 
-For example:
-
-[source,java]
-----
-public class ToDoItem {
-    public ToDoItem updateDescription(
-                        @ParameterLayout(
-                            cssClass="x-key",
-                            describedAs="What needs to be done",
-                            labelPosition=LabelPosition.LEFT,
-                            named="Description of this <i>item</i>",
-                            namedEscaped=false,
-                            typicalLength=80)
-                        final String description) {
-        setDescription(description);
-        return this;
-    }
-    ...
-}
-----
-
-
-
-[NOTE]
-====
-Note that there is (currently) no support for specifying UI hints for domain services through the dynamic xref:userguide:fun:ui.adoc#object-layout[`.layout.xml`] file (only for properties, collections and actions are supported).
-====
-
-
-
-
-
-include::ParameterLayout/cssClass.adoc[leveloffset=+1]
-include::ParameterLayout/describedAs.adoc[leveloffset=+1]
-include::ParameterLayout/labelPosition.adoc[leveloffset=+1]
-include::ParameterLayout/multiLine.adoc[leveloffset=+1]
-include::ParameterLayout/named.adoc[leveloffset=+1]
-include::ParameterLayout/renderDay.adoc[leveloffset=+1]
-include::ParameterLayout/typicalLength.adoc[leveloffset=+1]
