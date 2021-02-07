@@ -53,6 +53,7 @@ import org.apache.isis.core.runtimeservices.queryresultscache.QueryResultsCacheD
 import org.apache.isis.core.runtimeservices.recognizer.ExceptionRecognizerServiceDefault;
 import org.apache.isis.core.runtimeservices.recognizer.dae.impl.ExceptionRecognizerForDataAlreadyExists;
 import org.apache.isis.core.runtimeservices.recognizer.dae.impl.ExceptionRecognizerForObjectNotFound;
+import org.apache.isis.core.runtimeservices.recognizer.dae.impl.ExceptionRecognizerForOtherDataAccessProblem;
 import org.apache.isis.core.runtimeservices.recognizer.dae.impl.ExceptionRecognizerForRelatedDataExists;
 import org.apache.isis.core.runtimeservices.recognizer.dae.impl.ExceptionRecognizerForUnableToSaveData;
 import org.apache.isis.core.runtimeservices.repository.RepositoryServiceDefault;
@@ -124,6 +125,7 @@ import org.apache.isis.core.runtimeservices.xmlsnapshot.XmlSnapshotServiceDefaul
         ExceptionRecognizerForObjectNotFound.class,
         ExceptionRecognizerForRelatedDataExists.class,
         ExceptionRecognizerForUnableToSaveData.class,
+        ExceptionRecognizerForOtherDataAccessProblem.class,
 
 })
 public class IsisModuleCoreRuntimeServices {

@@ -20,7 +20,7 @@
 package org.apache.isis.applib.services.exceprecog;
 
 import java.util.Optional;
-import java.util.function.UnaryOperator;
+import java.util.function.Function;
 
 import org.junit.Test;
 
@@ -45,7 +45,7 @@ public class ExceptionRecognizerForTypeTest {
         }
     }
 
-    private UnaryOperator<String> prepend = $ -> "pre: " + $;
+    private Function<Throwable, String> rootCauseMessageFormatter = ex -> "pre: " + ex.getMessage();
 
     @Test
     public void whenRecognized() {
@@ -61,7 +61,7 @@ public class ExceptionRecognizerForTypeTest {
 
     @Test
     public void whenRecognizedWithMessageParser() {
-        ersForType = new ExceptionRecognizerForType(FooException.class, prepend);
+        ersForType = new ExceptionRecognizerForType(FooException.class, rootCauseMessageFormatter);
         assertThat(ersForType.recognize(new FooException()).get().getReason(), is("pre: foo"));
     }
 

@@ -18,6 +18,8 @@
  */
 package org.apache.isis.core.runtimeservices.recognizer.dae.impl;
 
+import java.util.stream.Collectors;
+
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -27,8 +29,11 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.runtimeservices.recognizer.dae.ExceptionRecognizerForDataAccessException;
+
+import lombok.val;
 
 /**
  * Recognizes exceptions of type {@link DataAccessException} if no one else does (fallback). 
@@ -49,7 +54,28 @@ extends ExceptionRecognizerForDataAccessException {
         super(conf,
                 Category.OTHER,
                 ofType(org.springframework.dao.DataAccessException.class),
-                prefix("An unrecognized data access problem has occurred: ")); 
+                rootCause->toMessage(rootCause)); 
     }
 
+    private static String toMessage(Throwable rootCause) {
+        
+        val causalInfo = _Exceptions.getCausalChain(rootCause)
+        .stream()
+        .skip(1L)
+        .map(ex->String.format("%s: %s", ex.getClass().getSimpleName(), ex.getMessage()))
+        .collect(Collectors.joining(", "));
+        
+        return causalInfo.isEmpty()
+                ? String.format(
+                        "An unrecognized data access problem has occurred: %s\ncaused by %s",
+                        rootCause.getMessage(),
+                        rootCause.getClass().getSimpleName()
+                        )
+                : String.format(
+                        "An unrecognized data access problem has occurred: %s\ncausal chain: %s",
+                        rootCause.getMessage(),
+                        causalInfo);
+    }
+    
+    
 }

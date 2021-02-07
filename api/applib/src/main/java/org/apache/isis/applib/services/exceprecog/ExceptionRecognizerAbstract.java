@@ -22,7 +22,6 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Predicate;
-import java.util.function.UnaryOperator;
 
 import javax.inject.Inject;
 
@@ -66,32 +65,42 @@ public abstract class ExceptionRecognizerAbstract implements ExceptionRecognizer
      * Convenience for subclass implementations that always prefixes the exception message
      * with the supplied text
      */
-    protected static UnaryOperator<String> prefix(final String prefix) {
-        return $->prefix + ": " + $;
+    protected static Function<Throwable, String> prefix(final String prefix) {
+        return rootCause->prefix + ": " + rootCause.getMessage();
     }
 
     private final Category category;
     private final Predicate<Throwable> predicate;
-    private final Function<String,String> messageParser;
+    private final Function<Throwable, String> rootCauseMessageFormatter;
 
     protected boolean logRecognizedExceptions;
 
-    public ExceptionRecognizerAbstract(final Category category, Predicate<Throwable> predicate, final Function<String,String> messageParser) {
+    public ExceptionRecognizerAbstract(
+            final Category category, 
+            final Predicate<Throwable> predicate, 
+            final Function<Throwable, String> rootCauseMessageFormatter) {
         Objects.requireNonNull(predicate);
         this.category = category;
         this.predicate = predicate;
-        this.messageParser = messageParser != null ? messageParser : Function.identity();
+        this.rootCauseMessageFormatter = rootCauseMessageFormatter != null 
+                ? rootCauseMessageFormatter 
+                : Throwable::getMessage;
     }
 
-    public ExceptionRecognizerAbstract(Predicate<Throwable> predicate, final Function<String,String> messageParser) {
-        this(Category.OTHER, predicate, messageParser);
+    public ExceptionRecognizerAbstract(
+            final Predicate<Throwable> predicate, 
+            final Function<Throwable, String> rootCauseMessageFormatter) {
+        this(Category.OTHER, predicate, rootCauseMessageFormatter);
     }
 
-    public ExceptionRecognizerAbstract(Category category, Predicate<Throwable> predicate) {
+    public ExceptionRecognizerAbstract(
+            final Category category, 
+            final Predicate<Throwable> predicate) {
         this(category, predicate, null);
     }
 
-    public ExceptionRecognizerAbstract(Predicate<Throwable> predicate) {
+    public ExceptionRecognizerAbstract(
+            final Predicate<Throwable> predicate) {
         this(Category.OTHER, predicate);
     }
 
@@ -114,9 +123,8 @@ public abstract class ExceptionRecognizerAbstract implements ExceptionRecognizer
                 }
             }
             final Throwable rootCause = _Exceptions.getRootCause(throwable);
-            final String rootCauseMessage = rootCause.getMessage();
-            final String parsedMessage = messageParser.apply(rootCauseMessage);
-            return parsedMessage;
+            final String formattedMessage = rootCauseMessageFormatter.apply(rootCause);
+            return formattedMessage;
         })
         .filter(_NullSafe::isPresent)
         .findFirst();

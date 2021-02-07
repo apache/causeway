@@ -20,7 +20,6 @@ package org.apache.isis.applib.services.exceprecog;
 
 import java.util.function.Function;
 import java.util.function.Predicate;
-import java.util.function.UnaryOperator;
 
 import static org.apache.isis.commons.internal.exceptions._Exceptions.containsAnyOfTheseMessages;
 import static org.apache.isis.commons.internal.exceptions._Exceptions.getCausalChain;
@@ -95,15 +94,15 @@ public class ExceptionRecognizerForType extends ExceptionRecognizerAbstract {
     public ExceptionRecognizerForType(
             final Category category,
             final Class<? extends Exception> exceptionType,
-            final UnaryOperator<String> messageParser) {
-        this(category, ofType(exceptionType), messageParser);
+            final Function<Throwable, String> rootCauseMessageFormatter) {
+        this(category, ofType(exceptionType), rootCauseMessageFormatter);
     }
 
     public ExceptionRecognizerForType(
             final Category category,
             final Predicate<Throwable> predicate,
-            final UnaryOperator<String> messageParser) {
-        super(category, predicate, messageParser);
+            final Function<Throwable, String> rootCauseMessageFormatter) {
+        super(category, predicate, rootCauseMessageFormatter);
     }
 
     public ExceptionRecognizerForType(
@@ -114,14 +113,14 @@ public class ExceptionRecognizerForType extends ExceptionRecognizerAbstract {
 
     public ExceptionRecognizerForType(
             final Class<? extends Exception> exceptionType,
-            final UnaryOperator<String> messageParser) {
-        this(Category.OTHER, exceptionType, messageParser);
+            final Function<Throwable, String> rootCauseMessageFormatter) {
+        this(Category.OTHER, exceptionType, rootCauseMessageFormatter);
     }
 
     public ExceptionRecognizerForType(
             final Predicate<Throwable> predicate,
-            final UnaryOperator<String> messageParser) {
-        this(Category.OTHER, predicate, messageParser);
+            final Function<Throwable, String> rootCauseMessageFormatter) {
+        this(Category.OTHER, predicate, rootCauseMessageFormatter);
     }
 
     public ExceptionRecognizerForType(Class<? extends Exception> exceptionType) {

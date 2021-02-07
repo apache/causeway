@@ -18,8 +18,8 @@
  */
 package org.apache.isis.core.runtimeservices.recognizer.dae;
 
+import java.util.function.Function;
 import java.util.function.Predicate;
-import java.util.function.UnaryOperator;
 
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerForType;
 import org.apache.isis.core.config.IsisConfiguration;
@@ -34,8 +34,8 @@ extends ExceptionRecognizerForType {
             final IsisConfiguration isisConfiguration,
             final Category category,
             final Predicate<Throwable> predicate,
-            final UnaryOperator<String> messageParser) {
-        super(category, predicate, messageParser);
+            final Function<Throwable, String> rootCauseMessageFormatter) {
+        super(category, predicate, rootCauseMessageFormatter);
         
         super.setDisabled(
                 isisConfiguration.getCore().getRuntimeServices()
@@ -46,8 +46,8 @@ extends ExceptionRecognizerForType {
             final IsisConfiguration isisConfiguration,
             final Category category,
             final Class<? extends Exception> exceptionType,
-            final UnaryOperator<String> messageParser) {
-        this(isisConfiguration, category, ofType(exceptionType), messageParser);
+            final Function<Throwable, String> rootCauseMessageFormatter) {
+        this(isisConfiguration, category, ofType(exceptionType), rootCauseMessageFormatter);
     }
 
 }

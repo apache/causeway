@@ -41,7 +41,6 @@ import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerService;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
-import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.commons.functional.Result;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.core.interaction.session.InteractionFactory;
@@ -90,7 +89,8 @@ implements FormExecutor {
      * @param feedbackFormIfAny
      * @param withinPrompt
      *
-     * @return <tt>false</tt> - if invalid args; if concurrency exception; <tt>true</tt> if redirecting to new page, or repainting all components
+     * @return <tt>false</tt> - if invalid args; 
+     * <tt>true</tt> if redirecting to new page, or repainting all components
      */
     @Override
     public boolean executeAndProcessResults(
@@ -119,6 +119,7 @@ implements FormExecutor {
                 return false;
             }
 
+            val commonContext = targetEntityModel.getCommonContext();
 
             //
             // the following line will (attempt to) invoke the action, and will in turn either:
@@ -128,29 +129,22 @@ implements FormExecutor {
             // 2. return a null result (from a successful action returning void)
             //
             // 3. throws a RuntimeException, either:
-            //    a) as result of application throwing RecoverableException/ApplicationException (DN xactn still intact)
-            //    b) as result of DB exception, eg uniqueness constraint violation (DN xactn marked to abort)
-            //    Either way, as a side-effect the Isis transaction will be set to MUST_ABORT (IsisTransactionManager does this)
+            //    a) as result of application throwing RecoverableException (DN transaction still intact)
+            //    b) as result of DB exception, eg uniqueness constraint violation (DN transaction marked to abort)
             //
             // (The DB exception might actually be thrown by the flush() that follows.
             //
             val resultAdapter = obtainResultAdapter();
             // flush any queued changes; any concurrency or violation exceptions will actually be thrown here
-            {
-                val commonContext = targetEntityModel.getCommonContext();
-                commonContext.getInteractionTracker().currentInteractionSession()
-                .ifPresent(interaction->{
-                    commonContext.lookupServiceElseFail(TransactionService.class)
-                    .flushTransaction();
-                });
-            }
+            if(commonContext.getInteractionTracker().isInInteractionSession()) {
+                commonContext.getTransactionService().flushTransaction();
 
-            // update target, since version updated (concurrency checks)
-            targetAdapter = targetEntityModel.getManagedObject();
-            if(!EntityUtil.isDestroyed(targetAdapter)) {
-                targetEntityModel.resetPropertyModels();
+                // update target, since version updated
+                targetAdapter = targetEntityModel.getManagedObject();
+                if(!EntityUtil.isDestroyed(targetAdapter)) {
+                    targetEntityModel.resetPropertyModels();
+                }
             }
-
 
             // hook to close prompt etc.
             onExecuteAndProcessResults(targetIfAny);
