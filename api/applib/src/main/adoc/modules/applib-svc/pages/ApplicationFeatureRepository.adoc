@@ -1,37 +1,12 @@
-[#]ApplicationFeatureRepository]
+[#ApplicationFeatureRepository]
 = ApplicationFeatureRepository
 
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
-:page-partial:
 
 
+include::system:generated:page$index/applib/services/appfeat/ApplicationFeatureRepository.adoc[]
 
-Provides the access to string representations of the packages, classes and class members (collectively: "application features") of the domain classes within the framework's internal metamodel.
+include::ApplicationFeatureRepository/hooks/implementation.adoc[]
 
-== API
-
-include::system:generated:page$index/applib/services/appfeat/ApplicationMemberType.adoc[leveloffset=+2]
-
-
-// TODO - v2 (reconcile/move into javadoc).
-
-//where `ApplicationMemberType` in turn is:
-//
-//[source,java]
-//----
-//include::refguide:applib-svc:example$services/appfeat/ApplicationMemberType.java[tags=refguide]
-//----
-//
-//These methods are designed primarily to return lists of strings for use in drop-downs.
-
-
-
-== Implementation
-
-include::ApplicationFeatureRepository/implementation.adoc[]
-
-
-== See Also
-
-include::ApplicationFeatureRepository/hooks/see_also.adoc[]
+include::ApplicationFeatureRepository/hooks/examples_and_usage.adoc[]
 

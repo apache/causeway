@@ -1,0 +1,20 @@
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+
+== Usage
+
+// TODO: v2: this is an SPI, so maybe restfulobjects should define an "spi" module for this.
+
+The `ContentMappingService` supports the (default implementation of the) internal xref:core:runtime-services:ContentNegotiationService.adoc[`ContentNegotiationService`] SPI enabling the xref:vro:ROOT:about.adoc[RestfulObjects viewer] to represent domain objects in some other format as specified by the HTTP `Accept` header.
+
+For its part, the (default implementation of the) `ContentNegotiationService` will check _all_ available implementations of `ContentMappingService` to convert the domain object to the requested media type, rather than merely the first implementation found; in other words it uses the link:https://en.wikipedia.org/wiki/Chain-of-responsibility_pattern[chain-of-responsibility] pattern.
+Services are checked in the ordering defined by the Spring link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/core/annotation/Order.html[`@Order`] annotation.
+The mapped object used will be the first non-`null` result returned by an implementation.
+
+
+== Related Services
+
+This service is a companion to the default implementation of the xref:core:runtime-services:ContentNegotiationService.adoc[`ContentNegotiationService`].
+
+The framework implementations of `ContentMappingService` use the xref:refguide:applib-svc:MetamodelService.adoc[`MetaModelService`] to lookup any custom implementations of `CommandDtoProcessor`.

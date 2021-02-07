@@ -2,50 +2,11 @@
 = CommandExecutorService
 
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
-:page-partial:
 
 
+include::system:generated:page$index/applib/services/command/CommandExecutorService.adoc[]
 
-The `CommandExecutorService` domain service is provides the ability to execute a specified `Command`, optionally running the command with the identity of the user captured in that `Command`.
+include::CommandExecutorService/hooks/implementation.adoc[]
 
-In fact, the service requires that the implementation of the `Command` being executed implements the `CommandWithDto` sub-interface.
-This allows the xref:refguide:schema:cmd.adoc[`CommandDto`] memento to be extracted, from which the action can be invoked/property edited.
+include::CommandExecutorService/hooks/examples_and_usage.adoc[]
 
-The primary use case for this service is to allow the replay of commands, eg for regression testing.
-This is implemented by the (non-ASF) link:https://platform.incode.org/modules/spi/command/spi-command-replay.html[command replay module].
-(The command replay module also provides a decorator implementation of this service that allows the command to be re-executed at the same _time_ as the original command, leveraging the `TickingClock` implementation provided by the framework).
-
-
-== API
-
-The `CommandExecutorService` defines the following API:
-
-[source,java]
-----
-public interface CommandExecutorService {
-    enum SudoPolicy {
-        NO_SWITCH,
-        SWITCH,
-    }
-    void executeCommand(
-            SudoPolicy sudoPolicy,          // <.>
-            CommandWithDto commandWithDto); // <.>
-}
-----
-<.> whether to switch the effective user for the duration of executing the `Command`.
-Behind the scenes this uses the xref:refguide:applib-svc:SudoService.adoc[`SudoService`].
-<.> provided `Command` must implement `CommandDto`.
-
-When the `Command` is executed, it can also be accessed from the `Interaction` obtained by  xref:refguide:applib-svc:InteractionContext.adoc[`InteractionContext`].
-Any associated objects that implement `HasUniqueId` (audit entries and the like) will therefore have the correct uniqueId and will correctly be associated with the `Command` being executed.
-
-== Implementation
-
-The framework provides a default implementation of this service,
-`o.a.i.core.runtime.services.background.CommandExecutorServiceDefault`
-
-
-
-== Related Services
-
-WARNING: TODO v2

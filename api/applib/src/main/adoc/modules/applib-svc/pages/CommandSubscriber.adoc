@@ -5,5 +5,8 @@
 :page-partial:
 
 
-CAUTION: TODO - v2 - to update, has been simplified.
+include::system:generated:page$index/applib/services/publishing/spi/CommandSubscriber.adoc[]
 
+include::CommandSubscriber/hooks/implementation.adoc[]
+
+include::CommandSubscriber/hooks/examples_and_usage.adoc[]

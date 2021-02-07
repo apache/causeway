@@ -2,32 +2,13 @@
 = ConfigurationMenu
 
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
-:page-partial:
-
-The `ConfigurationMenu` service simply provides a UI in order to access the configuration properties available from  xref:refguide:applib-svc:ConfigurationViewService.adoc[`ConfigurationViewService`].
-
-== API
-
-include::system:generated:page$index/ConfigurationMenu.adoc[leveloffset=+2]
-
-TODO example migration
-
-.Deprecated Docs
-[WARNING]
-================================
-
-== Implementation
-
-The `ConfigurationMenu` implementation is very simple (annotations omitted):
-
-[source,java]
-----
-include::refguide:applib-svc:example$services/confview/ConfigurationMenu.java[tags="refguide"]
-----
 
 
-================================
 
-== Related Services
+include::system:generated:page$index/applib/services/confview/ConfigurationMenu.adoc[]
 
-This service is the front-end UI (and delegates to) xref:refguide:applib-svc:ConfigurationViewService.adoc[`ConfigurationViewService`].
+include::ConfigurationMenu/hooks/implementation.adoc[]
+
+include::ConfigurationMenu/hooks/examples_and_usage.adoc[]
+
+

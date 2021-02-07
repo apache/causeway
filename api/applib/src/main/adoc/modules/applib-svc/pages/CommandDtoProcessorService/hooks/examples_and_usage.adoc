@@ -1,0 +1,19 @@
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+
+== Usage
+
+Having a DTO representation of ``Command``s (or more precisely, any object implementing `HasCommandDto` offers the ability to move or copy it across the network, for example to support replay scenarios.
+This is used for example by xref:extensions:command-log:about.adoc[Command Log] extension to return persisted representations of commands.
+The conversion is performed by an in-built implementation of the xref:refguide:applib-svc:ContentMappingService.adoc[`ContentMappingService`] SPI.
+
+The `CommandDtoProcessorService` SPI provides a mechanism to post-process the `CommandDto` of any objects being serialized across the network.
+
+For example, the xref:extensions:command-replay:about.adoc[Command Replay] extension provides an implementation in order to copy information about the outcome of each command on the primary system into the `userData` map of `CommandDto`.
+Another use case is to strip out large blobs for performance reasons.
+
+
+== See also
+
+* xref:system:generated:index/applib/services/commanddto/processor/CommandDtoProcessor.adoc[CommandDtoProcessor]

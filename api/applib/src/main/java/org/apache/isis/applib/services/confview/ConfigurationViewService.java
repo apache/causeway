@@ -22,6 +22,14 @@ package org.apache.isis.applib.services.confview;
 import java.util.Set;
 
 /**
+ * Returns the configuration properties (as view models) such that they can
+ * be rendered into the UI (in the Wicket Viewer, under the "Configuration"
+ * menu).
+ *
+ * <p>
+ *     This is the backing service used by {@link ConfigurationMenu}.
+ * </p>
+ *
  * @since 2.0 {@index}
  */
 public interface ConfigurationViewService {

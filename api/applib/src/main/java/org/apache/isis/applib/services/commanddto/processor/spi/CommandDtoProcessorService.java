@@ -42,6 +42,16 @@ import org.apache.isis.schema.cmd.v2.CommandDto;
 public interface CommandDtoProcessorService {
 
     /**
+     * Converts the domain object (acting as the source) into a {@link CommandDto}.
+     *
+     * <p>
+     *     The {@link CommandDto} that is also passed into the method will be
+     *     from a default implementation provided by the framework.  Most
+     *     implementations will typically refine this provided DTO and return,
+     *     for example adding additional user metadata to
+     *     {@link CommandDto#getUserData()}.
+     * </p>
+     *
      * @param domainObject - is the target that acts as the source of the
      *                       {@link CommandDto}.
      * @param commandDto - is either <code>null</code>, or is passed from a
