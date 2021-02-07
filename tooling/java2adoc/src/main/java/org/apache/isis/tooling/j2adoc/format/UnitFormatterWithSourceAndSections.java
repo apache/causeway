@@ -19,8 +19,11 @@
 package org.apache.isis.tooling.j2adoc.format;
 
 import java.util.Optional;
+import java.util.function.BiFunction;
 
-import org.asciidoctor.ast.List;
+import com.github.javaparser.javadoc.Javadoc;
+
+import org.asciidoctor.ast.Document;
 import org.asciidoctor.ast.StructuralNode;
 
 import org.apache.isis.tooling.j2adoc.J2AdocContext;
@@ -28,57 +31,68 @@ import org.apache.isis.tooling.j2adoc.J2AdocUnit;
 import org.apache.isis.tooling.j2adoc.convert.J2AdocConverterDefault;
 import org.apache.isis.tooling.model4adoc.AsciiDocFactory;
 
-import static org.apache.isis.tooling.model4adoc.AsciiDocFactory.block;
-
 import lombok.NonNull;
 import lombok.val;
 
-public class UnitFormatterCompact
+public class UnitFormatterWithSourceAndSections
 extends UnitFormatterAbstract {
 
-    public UnitFormatterCompact(final @NonNull J2AdocContext j2aContext) {
+    public UnitFormatterWithSourceAndSections(final @NonNull J2AdocContext j2aContext) {
         super(j2aContext);
     }
 
-    @Override
     protected Optional<String> javaSource(final J2AdocUnit unit) {
-        return Optional.empty();
+
+        final String javaSource = Snippets.javaSourceFor(unit);
+        return Optional.of(
+                AsciiDocFactory.SourceFactory.java(javaSource, unit.getCanonicalName() + ".java"));
     }
 
     @Override
     protected void memberDescriptions(final J2AdocUnit unit, final StructuralNode doc) {
 
-        val ul = AsciiDocFactory.list(doc);
+        val ul = AsciiDocFactory.callouts(doc);
 
-        val converter = J2AdocConverterDefault.of(j2aContext);
+        var converter = J2AdocConverterDefault.of(j2aContext);
+        val strategy = new BiFunction<Javadoc, J2AdocUnit, Document>() {
+            @Override
+            public Document apply(Javadoc javadoc, J2AdocUnit j2Unit) {
+                return converter.javadoc(javadoc, unit);
+            }
+        };
+
         appendMembersToList(ul, unit,
                 unit.getTypeDeclaration().getEnumConstantDeclarations(),
                 decl -> converter.enumConstantDeclaration(decl),
-                (javadoc, j2Unit) -> converter.javadoc(javadoc, unit)
+                strategy
         );
 
         appendMembersToList(ul, unit,
                 unit.getTypeDeclaration().getPublicFieldDeclarations(),
                 decl -> converter.fieldDeclaration(decl, unit),
-                (javadoc, j2Unit) -> converter.javadoc(javadoc, unit));
+                strategy);
 
         appendMembersToList(ul, unit,
                 unit.getTypeDeclaration().getAnnotationMemberDeclarations(),
                 decl -> converter.annotationMemberDeclaration(decl, unit),
-                (javadoc, j2Unit) -> converter.javadoc(javadoc, unit));
+                strategy);
 
         appendMembersToList(ul, unit,
                 unit.getTypeDeclaration().getPublicConstructorDeclarations(),
                 decl -> converter.constructorDeclaration(decl, unit),
-                (javadoc, j2Unit) -> converter.javadoc(javadoc, unit));
+                strategy);
 
         appendMembersToList(ul, unit,
                 unit.getTypeDeclaration().getPublicMethodDeclarations(),
                 decl -> converter.methodDeclaration(decl, unit),
-                (javadoc, j2Unit) -> converter.javadoc(javadoc, unit));
+                strategy);
+
+
+        val titleBlock = AsciiDocFactory.block(doc);
+        titleBlock.setSource("== Members");
+
+
 
     }
-
-
 
 }

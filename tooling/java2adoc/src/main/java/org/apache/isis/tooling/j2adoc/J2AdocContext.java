@@ -35,10 +35,7 @@ import org.apache.isis.commons.internal.collections._Multimaps;
 import org.apache.isis.commons.internal.collections._Multimaps.ListMultimap;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.tooling.j2adoc.J2AdocUnit.LookupKey;
-import org.apache.isis.tooling.j2adoc.convert.J2AdocConverter;
 import org.apache.isis.tooling.j2adoc.format.UnitFormatter;
-import org.apache.isis.tooling.j2adoc.format.UnitFormatterCompact;
-import org.apache.isis.tooling.j2adoc.format.UnitFormatterWithSourceAndFootNotes;
 import org.apache.isis.tooling.javamodel.ast.ImportDeclarations;
 
 import lombok.Builder;
@@ -253,7 +250,7 @@ public class J2AdocContext {
 //    public static J2AdocContextBuilder javaSourceWithFootnotesFormat() {
 //        return J2AdocContext.builder()
 //                .converterFactory(J2AdocConverter::createDefault)
-//                .formatterFactory(UnitFormatterWithSourceAndFootNotes::new)
+//                .formatterFactory(UnitFormatterWithSourceAndCallouts::new)
 //                ;
 //    }
 //

@@ -23,17 +23,11 @@ import java.util.stream.Stream;
 
 import javax.annotation.Nullable;
 
-import com.github.javaparser.ast.body.AnnotationMemberDeclaration;
-import com.github.javaparser.ast.body.ConstructorDeclaration;
-import com.github.javaparser.ast.body.EnumConstantDeclaration;
-import com.github.javaparser.ast.body.FieldDeclaration;
-import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.type.TypeParameter;
-import com.github.javaparser.javadoc.Javadoc;
 import com.github.javaparser.javadoc.description.JavadocDescription;
 import com.github.javaparser.javadoc.description.JavadocInlineTag;
 import com.github.javaparser.javadoc.description.JavadocSnippet;
@@ -42,16 +36,8 @@ import org.asciidoctor.ast.Document;
 import org.jsoup.Jsoup;
 
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.internal._Constants;
 import org.apache.isis.tooling.j2adoc.J2AdocContext;
 import org.apache.isis.tooling.j2adoc.J2AdocUnit;
-import org.apache.isis.tooling.javamodel.ast.AnnotationMemberDeclarations;
-import org.apache.isis.tooling.javamodel.ast.ConstructorDeclarations;
-import org.apache.isis.tooling.javamodel.ast.EnumConstantDeclarations;
-import org.apache.isis.tooling.javamodel.ast.FieldDeclarations;
-import org.apache.isis.tooling.javamodel.ast.Javadocs;
-import org.apache.isis.tooling.javamodel.ast.MethodDeclarations;
-import org.apache.isis.tooling.model4adoc.AsciiDocFactory;
 
 import lombok.NonNull;
 import lombok.val;
@@ -63,7 +49,6 @@ public abstract class J2AdocConverterAbstract implements J2AdocConverter {
     protected J2AdocConverterAbstract(J2AdocContext j2aContext) {
         this.j2aContext = j2aContext;
     }
-
 
     protected String parameters(
             final @NonNull Stream<Parameter> parameterStream,
@@ -152,7 +137,7 @@ public abstract class J2AdocConverterAbstract implements J2AdocConverter {
                 .orElse(typeSimpleName);
     }
 
-    private String javadocSnippet(final @NonNull JavadocSnippet snippet) {
+    private static String javadocSnippet(final @NonNull JavadocSnippet snippet) {
         return snippet.toText();
     }
 

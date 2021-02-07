@@ -20,7 +20,6 @@ package org.apache.isis.tooling.j2adoc.format;
 
 import java.util.Optional;
 
-import org.asciidoctor.ast.List;
 import org.asciidoctor.ast.StructuralNode;
 
 import org.apache.isis.tooling.j2adoc.J2AdocContext;
@@ -33,22 +32,24 @@ import static org.apache.isis.tooling.model4adoc.AsciiDocFactory.block;
 import lombok.NonNull;
 import lombok.val;
 
-public class UnitFormatterCompact
+public class UnitFormatterWithSourceAndCallouts
 extends UnitFormatterAbstract {
 
-    public UnitFormatterCompact(final @NonNull J2AdocContext j2aContext) {
+    public UnitFormatterWithSourceAndCallouts(final @NonNull J2AdocContext j2aContext) {
         super(j2aContext);
     }
 
-    @Override
     protected Optional<String> javaSource(final J2AdocUnit unit) {
-        return Optional.empty();
+
+        final String javaSource = Snippets.javaSourceFor(unit);
+        return Optional.of(
+                AsciiDocFactory.SourceFactory.java(javaSource, unit.getCanonicalName() + ".java"));
     }
 
     @Override
     protected void memberDescriptions(final J2AdocUnit unit, final StructuralNode doc) {
 
-        val ul = AsciiDocFactory.list(doc);
+        val ul = AsciiDocFactory.callouts(doc);
 
         val converter = J2AdocConverterDefault.of(j2aContext);
         appendMembersToList(ul, unit,
@@ -79,6 +80,36 @@ extends UnitFormatterAbstract {
 
     }
 
-
+    //XXX java language syntax (for footnote text), but not used any more
+//
+//    @Override
+//    public String getEnumConstantFormat() {
+//        return "`%s`";
+//    }
+//
+//    @Override
+//    public String getFieldFormat() {
+//        return "`%s %s`";
+//    }
+//
+//    @Override
+//    public String getConstructorFormat() {
+//        return "`%s(%s)`";
+//    }
+//
+//    @Override
+//    public String getGenericConstructorFormat() {
+//        return "`%s %s(%s)`";
+//    }
+//
+//    @Override
+//    public String getMethodFormat() {
+//        return "`%s %s(%s)`";
+//    }
+//
+//    @Override
+//    public String getGenericMethodFormat() {
+//        return "`%s %s %s(%s)`";
+//    }
 
 }

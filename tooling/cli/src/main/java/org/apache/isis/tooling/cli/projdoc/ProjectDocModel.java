@@ -47,7 +47,7 @@ import org.apache.isis.tooling.c4.C4;
 import org.apache.isis.tooling.cli.CliConfig;
 import org.apache.isis.tooling.cli.adocfix.OrphanedIncludeStatementFixer;
 import org.apache.isis.tooling.j2adoc.J2AdocContext;
-import org.apache.isis.tooling.j2adoc.format.UnitFormatterWithSourceAndFootNotes;
+import org.apache.isis.tooling.j2adoc.format.UnitFormatterWithSourceAndCallouts;
 import org.apache.isis.tooling.javamodel.AnalyzerConfigFactory;
 import org.apache.isis.tooling.javamodel.ast.CodeClasses;
 import org.apache.isis.tooling.model4adoc.AsciiDocFactory;
@@ -106,7 +106,7 @@ public class ProjectDocModel {
         val j2aContext = J2AdocContext.builder()
                 //.compactFormat()
 //                .javaSourceWithFootnotesFormat()
-                .formatterFactory(UnitFormatterWithSourceAndFootNotes::new)
+                .formatterFactory(UnitFormatterWithSourceAndCallouts::new)
                 .licenseHeader(cliConfig.getGlobal().getLicenseHeader())
                 .xrefPageIdFormat(cliConfig.getCommands().getIndex().getDocumentGlobalIndexXrefPageIdFormat())
                 .namespacePartsSkipCount(cliConfig.getGlobal().getNamespacePartsSkipCount())

@@ -148,13 +148,13 @@ public class AsciiDocFactory {
 
     // -- FOOTNOTES
 
-    public static org.asciidoctor.ast.List footnotes(StructuralNode parent) {
+    public static org.asciidoctor.ast.List callouts(StructuralNode parent) {
         val footnoteList = list(parent);
         footnoteList.setStyle("arabic");
         return footnoteList;
     }
 
-    public static ListItem footnote(org.asciidoctor.ast.List parent, @NonNull String source) {
+    public static ListItem callout(org.asciidoctor.ast.List parent, @NonNull String source) {
         return listItem(parent, source);
     }
 

@@ -28,6 +28,8 @@ import org.asciidoctor.ast.StructuralNode;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.tooling.j2adoc.J2AdocContext;
 import org.apache.isis.tooling.j2adoc.J2AdocUnit;
+import org.apache.isis.tooling.j2adoc.convert.J2AdocConverter;
+import org.apache.isis.tooling.j2adoc.convert.J2AdocConverterDefault;
 import org.apache.isis.tooling.javamodel.ast.AnnotationMemberDeclarations;
 import org.apache.isis.tooling.javamodel.ast.ConstructorDeclarations;
 import org.apache.isis.tooling.javamodel.ast.EnumConstantDeclarations;
@@ -38,49 +40,62 @@ import org.apache.isis.tooling.model4adoc.AsciiDocFactory;
 
 import lombok.NonNull;
 import lombok.val;
+import lombok.experimental.UtilityClass;
 
-public class UnitFormatterWithSourceAndFootNotes
-extends UnitFormatterAbstract {
+@UtilityClass
+public class Snippets {
 
-    public UnitFormatterWithSourceAndFootNotes(final @NonNull J2AdocContext j2aContext) {
-        super(j2aContext);
+    public static String title(final J2AdocUnit unit) {
+        final String format = formatFor(unit);
+        return String.format(format,
+                        unit.getFriendlyName());
     }
 
-    protected Optional<String> javaSource(final J2AdocUnit unit) {
+    private static String formatFor(J2AdocUnit unit) {
+        switch (unit.getTypeDeclaration().getKind()) {
+            case ANNOTATION: return "@%s";
+            case CLASS: return "%s";
+            case ENUM: return "%s _(enum)_";
+            case INTERFACE: return "%s _(interface)_";
+            default:
+                throw new IllegalArgumentException(String.format(
+                        "unknown kind: %s", unit.getTypeDeclaration().getKind()));
+        }
+    }
 
-        val java = new StringBuilder();
+    public static String javaSourceFor(J2AdocUnit unit) {
+        val buf = new StringBuilder();
 
-        java.append(String.format("%s %s {\n",
+        buf.append(String.format("%s %s {\n",
                 unit.getDeclarationKeyword(),
                 unit.getSimpleName()));
 
-        appendJavaSourceMemberFormat(java,
+        appendJavaSourceMemberFormat(buf,
                 unit.getTypeDeclaration().getEnumConstantDeclarations(),
                 EnumConstantDeclarations::asNormalized);
 
-        appendJavaSourceMemberFormat(java,
+        appendJavaSourceMemberFormat(buf,
                 unit.getTypeDeclaration().getPublicFieldDeclarations(),
                 FieldDeclarations::asNormalized);
 
-        appendJavaSourceMemberFormat(java,
+        appendJavaSourceMemberFormat(buf,
                 unit.getTypeDeclaration().getAnnotationMemberDeclarations(),
                 AnnotationMemberDeclarations::asNormalized);
 
-        appendJavaSourceMemberFormat(java,
+        appendJavaSourceMemberFormat(buf,
                 unit.getTypeDeclaration().getPublicConstructorDeclarations(),
                 ConstructorDeclarations::asNormalized);
 
-        appendJavaSourceMemberFormat(java,
+        appendJavaSourceMemberFormat(buf,
                 unit.getTypeDeclaration().getPublicMethodDeclarations(),
                 MethodDeclarations::asNormalized);
 
-        java.append("}\n");
+        buf.append("}\n");
 
-        return Optional.of(
-                AsciiDocFactory.SourceFactory.java(java.toString(), unit.getCanonicalName() + ".java"));
+        return buf.toString();
     }
 
-    private <T extends NodeWithJavadoc<?>> void appendJavaSourceMemberFormat(
+    private static<T extends NodeWithJavadoc<?>> void appendJavaSourceMemberFormat(
             final StringBuilder java,
             final Can<T> declarations,
             final Function<T, String> normalizer) {
@@ -92,51 +107,12 @@ extends UnitFormatterAbstract {
         });
     }
 
-//XXX java language syntax (for footnote text), but not used any more
-//
-//    @Override
-//    public String getEnumConstantFormat() {
-//        return "`%s`";
-//    }
-//
-//    @Override
-//    public String getFieldFormat() {
-//        return "`%s %s`";
-//    }
-//
-//    @Override
-//    public String getConstructorFormat() {
-//        return "`%s(%s)`";
-//    }
-//
-//    @Override
-//    public String getGenericConstructorFormat() {
-//        return "`%s %s(%s)`";
-//    }
-//
-//    @Override
-//    public String getMethodFormat() {
-//        return "`%s %s(%s)`";
-//    }
-//
-//    @Override
-//    public String getGenericMethodFormat() {
-//        return "`%s %s %s(%s)`";
-//    }
-
-    @Override
-    protected StructuralNode getMemberDescriptionContainer(StructuralNode parent) {
-        return AsciiDocFactory.footnotes(parent);
-    }
-
-    // -- HELPER
-
     enum Callout { INCLUDE, EXCLUDE;
         public static Callout when(boolean javadocPresent) {
             return javadocPresent ? INCLUDE : EXCLUDE;
         }
     }
-    private String javaSourceMemberFormat(final Callout callout) {
+    private static String javaSourceMemberFormat(final Callout callout) {
         return callout == Callout.INCLUDE
                 ? "  %s     // <.>\n"
                 : "  %s\n";
