@@ -48,7 +48,12 @@ public final class TypeDeclarations {
     }
     
     public static Can<TypeParameter> getTypeParameters(final @NonNull TypeDeclaration<?> td) {
-        return Can.ofCollection(td.findAll(TypeParameter.class));
+        
+        return Can.ofStream(td.getChildNodes()
+                .stream()
+                .filter(tp->TypeParameter.class.isAssignableFrom(tp.getClass()))
+                .map(TypeParameter.class::cast)
+                );
     }
     
 }
