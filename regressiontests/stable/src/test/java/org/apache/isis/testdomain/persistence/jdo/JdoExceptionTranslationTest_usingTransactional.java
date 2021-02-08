@@ -33,11 +33,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataAccessException;
-import org.springframework.stereotype.Component;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.TestPropertySources;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import static org.junit.Assert.assertNotNull;
@@ -50,6 +48,7 @@ import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.core.interaction.session.InteractionFactory;
 import org.apache.isis.persistence.jdo.spring.integration.DefaultJdoDialect;
 import org.apache.isis.testdomain.conf.Configuration_usingJdo;
+import org.apache.isis.testdomain.jdo.JdoInventoryDao;
 import org.apache.isis.testdomain.jdo.entities.JdoInventory;
 
 import lombok.val;
@@ -57,7 +56,7 @@ import lombok.val;
 @SpringBootTest(
         classes = { 
                 Configuration_usingJdo.class,
-                JdoExceptionTranslationTest_usingTransactional.UniqueConstraintViolator.class,
+                JdoInventoryDao.class,
         })
 @TestPropertySources({
     @TestPropertySource(IsisPresets.UseLog4j2Test)    
@@ -70,7 +69,7 @@ class JdoExceptionTranslationTest_usingTransactional
     //@Inject private TransactionService transactionService;
     @Inject private RepositoryService repositoryService;
     @Inject private InteractionFactory interactionFactory;
-    @Inject private Provider<UniqueConstraintViolator> uniqueConstraintViolator;
+    @Inject private Provider<JdoInventoryDao> uniqueConstraintViolator;
     //@Inject private JdoTransactionManager txManager;
 
     @BeforeAll
@@ -88,37 +87,18 @@ class JdoExceptionTranslationTest_usingTransactional
         });
     }
 
-    @Component
-    public static class UniqueConstraintViolator {
-        
-        @Inject private RepositoryService repositoryService;    
-        
-        @Transactional(propagation = Propagation.REQUIRES_NEW)
-        public void addABook() {
-            val inventories = repositoryService.allInstances(JdoInventory.class);
-            assertEquals(1, inventories.size());
-            
-            val inventory = inventories.get(0);
-            assertNotNull(inventory);
-            
-            // add a conflicting book (unique ISBN violation)
-            _TestFixtures.addABookTo(inventory);
-        }
-        
-    }
-    
-    
     @Test @Order(2) @Rollback(false)
     void booksUniqueByIsbn_whenViolated_shouldThrowTranslatedException() {
 
         // when adding a book for which one with same ISBN already exists in the database,
         // we expect to see a Spring recognized DataAccessException been thrown 
                 
+        //FIXME we expect to see a more specific ex. : DataIntegrityViolationException
         assertThrows(DataAccessException.class, ()->{
         
             interactionFactory.runAnonymous(()->{
             
-                Result.ofVoid(()->uniqueConstraintViolator.get().addABook())
+                Result.ofVoid(()->uniqueConstraintViolator.get().addBookHavingIsbnA())
                 
                 //XXX seems like a bug in DN, why do we need to unwrap this?
                 .mapFailure(ex->ex instanceof IllegalArgumentException

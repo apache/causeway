@@ -30,13 +30,12 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataAccessException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.orm.jpa.JpaTransactionManager;
-import org.springframework.stereotype.Component;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.TestPropertySources;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import static org.junit.Assert.assertNotNull;
@@ -49,6 +48,7 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.core.interaction.session.InteractionFactory;
 import org.apache.isis.testdomain.conf.Configuration_usingJpa;
+import org.apache.isis.testdomain.jpa.JpaInventoryDao;
 import org.apache.isis.testdomain.jpa.entities.JpaInventory;
 
 import lombok.val;
@@ -56,7 +56,7 @@ import lombok.val;
 @SpringBootTest(
         classes = { 
                 Configuration_usingJpa.class,
-                JpaExceptionTranslationTest_usingTransactional.UniqueConstraintViolator.class
+                JpaInventoryDao.class
         })
 @TestPropertySources({
     @TestPropertySource(IsisPresets.UseLog4j2Test)    
@@ -69,7 +69,7 @@ class JpaExceptionTranslationTest_usingTransactional
     //@Inject private TransactionService transactionService;
     @Inject private RepositoryService repositoryService;
     @Inject private InteractionFactory interactionFactory;
-    @Inject private Provider<UniqueConstraintViolator> uniqueConstraintViolator;
+    @Inject private Provider<JpaInventoryDao> uniqueConstraintViolator;
     @Inject private JpaTransactionManager txManager;
 
     @BeforeAll
@@ -87,36 +87,17 @@ class JpaExceptionTranslationTest_usingTransactional
         });
     }
     
-    @Component
-    public static class UniqueConstraintViolator {
-        
-        @Inject private RepositoryService repositoryService;    
-        
-        @Transactional(propagation = Propagation.REQUIRES_NEW)
-        public void addABook() {
-            val inventories = repositoryService.allInstances(JpaInventory.class);
-            assertEquals(1, inventories.size());
-            
-            val inventory = inventories.get(0);
-            assertNotNull(inventory);
-            
-            // add a conflicting book (unique ISBN violation)
-            _TestFixtures.addABookTo(inventory);
-        }
-        
-    }
-
     @Test @Order(2) @Rollback(false)
     void booksUniqueByIsbn_whenViolated_shouldThrowTranslatedException() {
 
         // when adding a book for which one with same ISBN already exists in the database,
         // we expect to see a Spring recognized DataAccessException been thrown 
                 
-        assertThrows(DataAccessException.class, ()->{
+        assertThrows(DataIntegrityViolationException.class, ()->{
         
             interactionFactory.runAnonymous(()->{
                 
-                Result.ofVoid(()->uniqueConstraintViolator.get().addABook())
+                Result.ofVoid(()->uniqueConstraintViolator.get().addBookHavingIsbnA())
                 
                 //XXX this part of the translation is not done by Spring!?
                 .mapFailure(ex-> _Exceptions.streamCausalChain(ex)

@@ -18,6 +18,7 @@
  */
 package org.apache.isis.persistence.jpa.eclipselink;
 
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -26,12 +27,14 @@ import javax.inject.Provider;
 import javax.sql.DataSource;
 
 import org.eclipse.persistence.config.PersistenceUnitProperties;
+import org.eclipse.persistence.exceptions.DatabaseException;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration;
 import org.springframework.boot.autoconfigure.orm.jpa.JpaProperties;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.dao.DataAccessException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.orm.jpa.vendor.AbstractJpaVendorAdapter;
 import org.springframework.orm.jpa.vendor.EclipseLinkJpaDialect;
 import org.springframework.orm.jpa.vendor.EclipseLinkJpaVendorAdapter;
@@ -65,12 +68,6 @@ public class IsisModuleJpaEclipselink extends JpaBaseConfiguration {
 
     @Inject private Provider<ServiceInjector> serviceInjectorProvider;
 
-    @Bean
-    public EclipseLinkJpaDialect eclipselinkJpaDialect() {
-        //XXX already provided by EclipseLinkJpaVendorAdapter, might be redundant
-        return new EclipseLinkJpaDialect();
-    }
-
     protected IsisModuleJpaEclipselink(
             IsisConfiguration isisConfiguration,
             DataSource dataSource,
@@ -85,7 +82,15 @@ public class IsisModuleJpaEclipselink extends JpaBaseConfiguration {
 
     @Override
     protected AbstractJpaVendorAdapter createJpaVendorAdapter() {
-        return new EclipseLinkJpaVendorAdapter(); 
+        return new EclipseLinkJpaVendorAdapter() {
+            
+            private final EclipseLinkJpaDialect jpaDialect = eclipselinkJpaDialect();
+            
+            @Override
+            public EclipseLinkJpaDialect getJpaDialect() {
+                return jpaDialect;
+            }
+        };
     }
 
     @Override
@@ -145,5 +150,64 @@ public class IsisModuleJpaEclipselink extends JpaBaseConfiguration {
 
         return properties;
     }
+    
+    // -- 
+    
+    private EclipseLinkJpaDialect eclipselinkJpaDialect() {
+        
+        return new EclipseLinkJpaDialect() {
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public DataAccessException translateExceptionIfPossible(RuntimeException ex) {
+                
+                if(ex instanceof DataAccessException) {
+                    return (DataAccessException)ex; // has already been translated to Spring's hierarchy before
+                }
+
+                if(ex instanceof DatabaseException
+                        && ex.getCause() instanceof SQLIntegrityConstraintViolationException) {
+                    
+                    return new DataIntegrityViolationException(ex.getCause().getMessage(), ex.getCause());
+                }
+                
+                return super.translateExceptionIfPossible(ex);
+                
+//TODO remove once ISIS-2502 got sorted out        
+                // search the causal chain for the best (most specific) translation
+                
+//                val translatedExceptionsBestFirst = _Exceptions.getCausalChain(ex)
+//                .stream()
+//                .filter(nextEx -> nextEx instanceof RuntimeException)
+//                .map(RuntimeException.class::cast)
+//                .map(super::translateExceptionIfPossible)
+//                .filter(_NullSafe::isPresent)
+//                .peek(nextEx->System.err.printf("!!!!!!!!!!!!!!!!!!! %s", nextEx.getClass()))
+//                .collect(Collectors.toCollection(()->new TreeSet<DataAccessException>((a, b)->{
+//                    
+//                    // anything is better than the most generic JpaSystemException
+//                    
+//                    int aScore = (a instanceof JpaSystemException)
+//                            ? 0
+//                            : 1;
+//                    
+//                    int bScore = (b instanceof JpaSystemException)
+//                            ? 0
+//                            : 1;
+//                    
+//                    return Integer.compare(bScore, aScore);
+//                    
+//                    }))
+//                );
+//                
+//                return translatedExceptionsBestFirst.isEmpty()
+//                        ? null
+//                        : translatedExceptionsBestFirst.iterator().next();
+                
+            }  
+        }
+        ;
+    }
+    
 
 }
