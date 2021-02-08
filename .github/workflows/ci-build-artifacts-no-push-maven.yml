@@ -39,7 +39,7 @@ jobs:
       run: mvn --version
       
     - name: Activate Cache for Maven Downloads
-      uses: actions/cache@v2
+      uses: actions/cache@v2.1.4
       env:
         cache-name: cache-maven-modules
       with:
