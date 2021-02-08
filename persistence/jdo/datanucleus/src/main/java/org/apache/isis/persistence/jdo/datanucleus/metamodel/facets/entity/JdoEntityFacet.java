@@ -248,8 +248,7 @@ implements EntityFacet {
 
         getTransactionalProcessor()
         .runWithinCurrentTransactionElseCreateNew(()->pm.makePersistent(pojo))
-        .optionalElseFail()
-        .orElse(null);
+        .optionalElseFail();
 
         //TODO integrate with entity change tracking
     }
@@ -271,8 +270,7 @@ implements EntityFacet {
 
         getTransactionalProcessor()
         .runWithinCurrentTransactionElseCreateNew(()->pm.deletePersistent(pojo))
-        .optionalElseFail()
-        .orElse(null);
+        .optionalElseFail();
 
         //TODO integrate with entity change tracking
     }
@@ -292,8 +290,7 @@ implements EntityFacet {
 
         getTransactionalProcessor()
         .runWithinCurrentTransactionElseCreateNew(()->pm.refresh(pojo))
-        .optionalElseFail()
-        .orElse(null);
+        .optionalElseFail();
 
         //TODO integrate with entity change tracking
     }
