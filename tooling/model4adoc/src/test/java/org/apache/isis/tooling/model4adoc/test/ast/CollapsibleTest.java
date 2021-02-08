@@ -38,7 +38,7 @@ class CollapsibleTest extends AbstractAsciiDocWriterTest {
     void setUp() throws Exception {
         doc = doc();
         super.adocSourceResourceLocation = "collapsible.adoc";
-        super.debugEnabled = true;
+        //super.debugEnabled = true;
         super.skipAsciidocjComplianceTest = true;
     }
 

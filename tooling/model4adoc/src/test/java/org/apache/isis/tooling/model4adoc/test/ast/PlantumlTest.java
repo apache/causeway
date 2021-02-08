@@ -39,7 +39,7 @@ class PlantumlTest extends AbstractAsciiDocWriterTest {
     void setUp() throws Exception {
         doc = doc();
         super.adocSourceResourceLocation = "plantuml-svg.adoc";
-        super.debugEnabled = true;
+        //super.debugEnabled = true;
         super.skipAsciidocjComplianceTest = true;
     }
 
@@ -51,7 +51,7 @@ class PlantumlTest extends AbstractAsciiDocWriterTest {
     // Bob->Alice : hello
     // ----
     @Test
-    void testSourceBlock() throws IOException {
+    void testDiagramBlock() throws IOException {
         
         doc.setTitle("Plantuml");
         
@@ -66,7 +66,7 @@ class PlantumlTest extends AbstractAsciiDocWriterTest {
     }
     
     @Test
-    void testSourceFactory() throws IOException {
+    void testDiagramFactory() throws IOException {
         
         doc.setTitle("Plantuml");
         

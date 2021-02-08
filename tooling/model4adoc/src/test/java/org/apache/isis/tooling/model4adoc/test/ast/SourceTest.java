@@ -38,7 +38,7 @@ class SourceTest extends AbstractAsciiDocWriterTest {
     void setUp() throws Exception {
         doc = doc();
         super.adocSourceResourceLocation = "source.adoc";
-        super.debugEnabled = true;
+        //super.debugEnabled = true;
         super.skipAsciidocjComplianceTest = true;
     }
 
