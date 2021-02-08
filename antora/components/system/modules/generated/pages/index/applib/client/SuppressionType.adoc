@@ -2,8 +2,8 @@
 
 == API
 
-.SuppressionType.java
 [source,java]
+.SuppressionType.java
 ----
 enum SuppressionType {
   RO     // <.>

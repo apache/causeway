@@ -4,8 +4,8 @@ Optional interface for domain objects with which an snapshot is to be created us
 
 == API
 
-.SnapshottableWithInclusions.java
 [source,java]
+.SnapshottableWithInclusions.java
 ----
 interface SnapshottableWithInclusions {
   List<String> snapshotInclusions()     // <.>

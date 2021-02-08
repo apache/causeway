@@ -2,8 +2,8 @@
 
 == API
 
-.UnknownTypeException.java
 [source,java]
+.UnknownTypeException.java
 ----
 class UnknownTypeException {
   UnknownTypeException(final String message)

@@ -4,8 +4,8 @@ Specify the minimum number of characters for an autocomplete search argument.
 
 == API
 
-.MinLength.java
 [source,java]
+.MinLength.java
 ----
 @interface MinLength {
   int value();

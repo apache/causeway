@@ -2,8 +2,8 @@
 
 == API
 
-.HasHtml.java
 [source,java]
+.HasHtml.java
 ----
 interface HasHtml {
   String asHtml()

@@ -4,8 +4,8 @@ Collects together all layout hints for action parameters in a single annotation.
 
 == API
 
-.ParameterLayout.java
 [source,java]
+.ParameterLayout.java
 ----
 @interface ParameterLayout {
   String cssClass() default "";     // <.>

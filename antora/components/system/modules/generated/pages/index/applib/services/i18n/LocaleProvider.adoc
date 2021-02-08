@@ -2,8 +2,8 @@
 
 == API
 
-.LocaleProvider.java
 [source,java]
+.LocaleProvider.java
 ----
 interface LocaleProvider {
   Locale getLocale()

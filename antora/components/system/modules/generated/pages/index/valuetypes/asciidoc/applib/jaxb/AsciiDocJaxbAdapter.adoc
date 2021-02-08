@@ -2,8 +2,8 @@
 
 == API
 
-.AsciiDocJaxbAdapter.java
 [source,java]
+.AsciiDocJaxbAdapter.java
 ----
 class AsciiDocJaxbAdapter {
   AsciiDoc unmarshal(String v)

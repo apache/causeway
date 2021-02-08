@@ -2,8 +2,8 @@
 
 == API
 
-.SecmanConfiguration.java
 [source,java]
+.SecmanConfiguration.java
 ----
 class SecmanConfiguration {
   @Getter

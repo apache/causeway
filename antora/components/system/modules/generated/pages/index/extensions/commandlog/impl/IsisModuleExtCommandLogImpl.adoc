@@ -2,8 +2,8 @@
 
 == API
 
-.IsisModuleExtCommandLogImpl.java
 [source,java]
+.IsisModuleExtCommandLogImpl.java
 ----
 class IsisModuleExtCommandLogImpl {
   FixtureScript getTeardownFixture()

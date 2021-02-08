@@ -6,8 +6,8 @@ This implementation has no UI and there is only one implementation (this class) 
 
 == API
 
-.QueryResultsCache.java
 [source,java]
+.QueryResultsCache.java
 ----
 interface QueryResultsCache {
   T execute(Callable<T> callable, Class<?> callingClass, String methodName, Object... keys)

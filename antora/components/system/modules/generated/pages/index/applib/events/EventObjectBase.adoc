@@ -2,8 +2,8 @@
 
 == API
 
-.EventObjectBase.java
 [source,java]
+.EventObjectBase.java
 ----
 class EventObjectBase {
   T getSource()     // <.>

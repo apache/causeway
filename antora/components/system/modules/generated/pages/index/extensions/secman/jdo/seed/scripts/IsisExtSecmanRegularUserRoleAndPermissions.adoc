@@ -4,8 +4,8 @@ Role for regular users of the security module, providing the ability to lookup t
 
 == API
 
-.IsisExtSecmanRegularUserRoleAndPermissions.java
 [source,java]
+.IsisExtSecmanRegularUserRoleAndPermissions.java
 ----
 class IsisExtSecmanRegularUserRoleAndPermissions {
   IsisExtSecmanRegularUserRoleAndPermissions(SecmanConfiguration configBean)

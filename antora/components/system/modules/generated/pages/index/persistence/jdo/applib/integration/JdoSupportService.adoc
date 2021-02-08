@@ -4,8 +4,8 @@ Primarily provides access to the current thread's _PersistenceManagerFactory_ an
 
 == API
 
-.JdoSupportService.java
 [source,java]
+.JdoSupportService.java
 ----
 interface JdoSupportService {
   PersistenceManagerFactory getPersistenceManagerFactory()

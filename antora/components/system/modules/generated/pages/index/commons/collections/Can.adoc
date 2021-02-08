@@ -10,8 +10,8 @@ A xref:system:generated:index/commons/collections/Can.adoc[Can] must not contain
 
 == API
 
-.Can.java
 [source,java]
+.Can.java
 ----
 interface Can {
   Cardinality getCardinality()     // <.>

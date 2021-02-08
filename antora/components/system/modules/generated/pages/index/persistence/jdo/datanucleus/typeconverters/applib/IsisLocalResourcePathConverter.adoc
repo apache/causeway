@@ -2,8 +2,8 @@
 
 == API
 
-.IsisLocalResourcePathConverter.java
 [source,java]
+.IsisLocalResourcePathConverter.java
 ----
 class IsisLocalResourcePathConverter {
   String toDatastoreType(final LocalResourcePath memberValue)

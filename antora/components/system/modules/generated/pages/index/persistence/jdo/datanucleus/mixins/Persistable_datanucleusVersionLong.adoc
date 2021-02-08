@@ -2,8 +2,8 @@
 
 == API
 
-.Persistable_datanucleusVersionLong.java
 [source,java]
+.Persistable_datanucleusVersionLong.java
 ----
 class Persistable_datanucleusVersionLong {
   Long prop()

@@ -2,8 +2,8 @@
 
 == API
 
-.HomePageResource.java
 [source,java]
+.HomePageResource.java
 ----
 interface HomePageResource {
   Response homePage()

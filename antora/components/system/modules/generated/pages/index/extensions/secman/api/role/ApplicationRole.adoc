@@ -2,8 +2,8 @@
 
 == API
 
-.ApplicationRole.java
 [source,java]
+.ApplicationRole.java
 ----
 interface ApplicationRole {
   public static final int MAX_LENGTH_NAME;

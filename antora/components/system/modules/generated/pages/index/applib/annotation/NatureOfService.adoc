@@ -4,8 +4,8 @@ The different sorts of domain services recognized by Isis, as specified in _Doma
 
 == API
 
-.NatureOfService.java
 [source,java]
+.NatureOfService.java
 ----
 enum NatureOfService {
   VIEW     // <.>

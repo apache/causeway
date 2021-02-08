@@ -2,8 +2,8 @@
 
 == API
 
-.Booleans.java
 [source,java]
+.Booleans.java
 ----
 class Booleans {
   Booleans(final FakeDataService fakeDataService)

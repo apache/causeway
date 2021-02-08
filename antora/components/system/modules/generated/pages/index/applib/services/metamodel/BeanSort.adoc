@@ -4,8 +4,8 @@ Top level object classification.
 
 == API
 
-.BeanSort.java
 [source,java]
+.BeanSort.java
 ----
 enum BeanSort {
   VIEW_MODEL     // <.>

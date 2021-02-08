@@ -2,8 +2,8 @@
 
 == API
 
-.HsqlDbManagerMenu.java
 [source,java]
+.HsqlDbManagerMenu.java
 ----
 class HsqlDbManagerMenu {
   HsqlDbManagerMenu(DataSourceIntrospectionService datasourceIntrospector)

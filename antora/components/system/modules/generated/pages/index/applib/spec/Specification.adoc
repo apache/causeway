@@ -4,8 +4,8 @@ An implementation of the _Specification_ pattern, as described in Eric Evans' _D
 
 == API
 
-.Specification.java
 [source,java]
+.Specification.java
 ----
 interface Specification {
   String satisfies(Object obj)     // <.>

@@ -2,8 +2,8 @@
 
 == API
 
-.NotesType.java
 [source,java]
+.NotesType.java
 ----
 class NotesType {
 }

@@ -2,8 +2,8 @@
 
 == API
 
-.Files.java
 [source,java]
+.Files.java
 ----
 class Files {
   void deleteFilesWithPrefix(final String directoryName, final String filePrefix, Recursion recursion)     // <.>

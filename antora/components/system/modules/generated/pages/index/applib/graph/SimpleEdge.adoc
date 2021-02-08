@@ -4,8 +4,8 @@ Fundamental building block for graph structures.
 
 == API
 
-.SimpleEdge.java
 [source,java]
+.SimpleEdge.java
 ----
 class SimpleEdge {
   Vertex<T> from;

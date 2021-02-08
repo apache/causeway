@@ -4,8 +4,8 @@ Similar to the _org.apache.isis.applib.services.publishing.spi.EntityPropertyCha
 
 == API
 
-.SessionLoggingService.java
 [source,java]
+.SessionLoggingService.java
 ----
 interface SessionLoggingService {
   void log(Type type, String username, Date date, CausedBy causedBy, String sessionId)

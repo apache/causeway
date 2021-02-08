@@ -2,8 +2,8 @@
 
 == API
 
-.LocalDateInterval.java
 [source,java]
+.LocalDateInterval.java
 ----
 class LocalDateInterval {
   LocalDateInterval()

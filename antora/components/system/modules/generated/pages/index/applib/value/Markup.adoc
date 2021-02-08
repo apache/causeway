@@ -4,8 +4,8 @@ Immutable value type holding pre-rendered HTML.
 
 == API
 
-.Markup.java
 [source,java]
+.Markup.java
 ----
 class Markup {
   Markup()

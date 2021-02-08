@@ -2,8 +2,8 @@
 
 == API
 
-.FixtureDatumFactoriesForAnyPojo.java
 [source,java]
+.FixtureDatumFactoriesForAnyPojo.java
 ----
 class FixtureDatumFactoriesForAnyPojo {
   PojoTester.FixtureDatumFactory<T> pojos(Class<T> compileTimeType, Class<? extends T> runtimeType)

@@ -2,8 +2,8 @@
 
 == API
 
-.CommandReplayAnalyser.java
 [source,java]
+.CommandReplayAnalyser.java
 ----
 interface CommandReplayAnalyser {
   String analyzeReplay(final CommandJdo commandJdo)     // <.>

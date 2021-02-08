@@ -4,8 +4,8 @@ Whether the property is included if the domain object graph is serialized into a
 
 == API
 
-.Snapshot.java
 [source,java]
+.Snapshot.java
 ----
 enum Snapshot {
   INCLUDED     // <.>

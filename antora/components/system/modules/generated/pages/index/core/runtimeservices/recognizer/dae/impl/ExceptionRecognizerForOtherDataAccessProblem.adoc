@@ -4,8 +4,8 @@ Recognizes exceptions of type _DataAccessException_ if no one else does (fallbac
 
 == API
 
-.ExceptionRecognizerForOtherDataAccessProblem.java
 [source,java]
+.ExceptionRecognizerForOtherDataAccessProblem.java
 ----
 class ExceptionRecognizerForOtherDataAccessProblem {
   ExceptionRecognizerForOtherDataAccessProblem(IsisConfiguration conf)

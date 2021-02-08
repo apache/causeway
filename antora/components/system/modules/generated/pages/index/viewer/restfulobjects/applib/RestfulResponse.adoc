@@ -2,8 +2,8 @@
 
 == API
 
-.RestfulResponse.java
 [source,java]
+.RestfulResponse.java
 ----
 class RestfulResponse {
   RestfulResponse<JsonRepresentation> of(final Response response)

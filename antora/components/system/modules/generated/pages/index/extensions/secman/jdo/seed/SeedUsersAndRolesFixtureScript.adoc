@@ -4,8 +4,8 @@ This fixture script will be run automatically on start-up by virtue of the fact 
 
 == API
 
-.SeedUsersAndRolesFixtureScript.java
 [source,java]
+.SeedUsersAndRolesFixtureScript.java
 ----
 class SeedUsersAndRolesFixtureScript {
 }

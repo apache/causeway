@@ -2,8 +2,8 @@
 
 == API
 
-.Chained.java
 [source,java]
+.Chained.java
 ----
 interface Chained {
   T getPrevious()     // <.>

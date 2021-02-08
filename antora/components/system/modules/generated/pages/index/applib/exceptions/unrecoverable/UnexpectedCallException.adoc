@@ -4,8 +4,8 @@ Indicates that a call was made to a method (normally an overridden one) that was
 
 == API
 
-.UnexpectedCallException.java
 [source,java]
+.UnexpectedCallException.java
 ----
 class UnexpectedCallException {
   UnexpectedCallException()

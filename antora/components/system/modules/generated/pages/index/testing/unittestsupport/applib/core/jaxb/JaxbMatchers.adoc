@@ -2,8 +2,8 @@
 
 == API
 
-.JaxbMatchers.java
 [source,java]
+.JaxbMatchers.java
 ----
 class JaxbMatchers {
   Matcher<? super T> isEquivalentTo(final T expected)     // <.>

@@ -4,8 +4,8 @@ Provides the access to string representations of the packages, classes and class
 
 == API
 
-.ApplicationFeatureRepository.java
 [source,java]
+.ApplicationFeatureRepository.java
 ----
 interface ApplicationFeatureRepository {
   SortedSet<String> packageNames()

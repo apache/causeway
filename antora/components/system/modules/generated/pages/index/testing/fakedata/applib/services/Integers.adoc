@@ -2,8 +2,8 @@
 
 == API
 
-.Integers.java
 [source,java]
+.Integers.java
 ----
 class Integers {
   Integers(final FakeDataService fakeDataService)

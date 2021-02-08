@@ -2,8 +2,8 @@
 
 == API
 
-.AbstractTypeMemberRepresentation.java
 [source,java]
+.AbstractTypeMemberRepresentation.java
 ----
 class AbstractTypeMemberRepresentation {
   AbstractTypeMemberRepresentation(final JsonNode jsonNode)

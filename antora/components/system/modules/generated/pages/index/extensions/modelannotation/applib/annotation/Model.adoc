@@ -6,8 +6,8 @@ By placing the xref:system:generated:index/extensions/modelannotation/applib/ann
 
 == API
 
-.Model.java
 [source,java]
+.Model.java
 ----
 @interface Model {
 }

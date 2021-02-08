@@ -4,8 +4,8 @@ Domain semantics for domain object collection.
 
 == API
 
-.Collection.java
 [source,java]
+.Collection.java
 ----
 @interface Collection {
   Class<? extends CollectionDomainEvent<?, ?>> domainEvent() default CollectionDomainEvent.Default.class;     // <.>

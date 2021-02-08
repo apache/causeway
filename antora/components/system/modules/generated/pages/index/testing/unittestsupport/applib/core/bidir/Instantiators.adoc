@@ -2,8 +2,8 @@
 
 == API
 
-.Instantiators.java
 [source,java]
+.Instantiators.java
 ----
 interface Instantiators {
   Object newInstance(Class<?> entityType)

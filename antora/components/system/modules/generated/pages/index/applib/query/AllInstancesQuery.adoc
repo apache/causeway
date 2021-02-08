@@ -2,8 +2,8 @@
 
 == API
 
-.AllInstancesQuery.java
 [source,java]
+.AllInstancesQuery.java
 ----
 interface AllInstancesQuery {
 }

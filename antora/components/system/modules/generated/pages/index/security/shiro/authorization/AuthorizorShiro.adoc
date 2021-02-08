@@ -6,8 +6,8 @@ However, although there are two objects, they are set up to share the same _Secu
 
 == API
 
-.AuthorizorShiro.java
 [source,java]
+.AuthorizorShiro.java
 ----
 class AuthorizorShiro {
   boolean isVisibleInAnyRole(Identifier identifier)

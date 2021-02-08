@@ -2,8 +2,8 @@
 
 == API
 
-.AbstractUiEvent.java
 [source,java]
+.AbstractUiEvent.java
 ----
 class AbstractUiEvent {
   AbstractUiEvent()     // <.>

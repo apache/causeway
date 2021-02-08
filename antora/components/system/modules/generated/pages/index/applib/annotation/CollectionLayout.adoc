@@ -4,8 +4,8 @@ Layout hints for collections.
 
 == API
 
-.CollectionLayout.java
 [source,java]
+.CollectionLayout.java
 ----
 @interface CollectionLayout {
   String cssClass() default "";     // <.>

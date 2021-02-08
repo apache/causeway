@@ -2,8 +2,8 @@
 
 == API
 
-.TitleType.java
 [source,java]
+.TitleType.java
 ----
 class TitleType {
 }

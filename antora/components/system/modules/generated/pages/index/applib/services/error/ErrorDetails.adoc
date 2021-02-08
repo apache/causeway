@@ -6,8 +6,8 @@ Implementation note: a class has been used here so that additional fields might 
 
 == API
 
-.ErrorDetails.java
 [source,java]
+.ErrorDetails.java
 ----
 class ErrorDetails {
 }

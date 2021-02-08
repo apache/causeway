@@ -2,8 +2,8 @@
 
 == API
 
-.IsisModuleValAsciidocMetaModel.java
 [source,java]
+.IsisModuleValAsciidocMetaModel.java
 ----
 class IsisModuleValAsciidocMetaModel {
 }

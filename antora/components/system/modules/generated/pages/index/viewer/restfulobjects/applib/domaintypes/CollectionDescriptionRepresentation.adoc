@@ -2,8 +2,8 @@
 
 == API
 
-.CollectionDescriptionRepresentation.java
 [source,java]
+.CollectionDescriptionRepresentation.java
 ----
 class CollectionDescriptionRepresentation {
   CollectionDescriptionRepresentation(final JsonNode jsonNode)

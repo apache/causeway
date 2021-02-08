@@ -4,8 +4,8 @@ Collects together all layout hints for a property of a domain object.
 
 == API
 
-.PropertyLayout.java
 [source,java]
+.PropertyLayout.java
 ----
 @interface PropertyLayout {
   String cssClass() default "";     // <.>

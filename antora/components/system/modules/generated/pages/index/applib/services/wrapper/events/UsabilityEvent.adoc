@@ -6,8 +6,8 @@ If _#getReason()_ is `null` , then is usable; otherwise is disabled.
 
 == API
 
-.UsabilityEvent.java
 [source,java]
+.UsabilityEvent.java
 ----
 class UsabilityEvent {
   UsabilityEvent(final Object source, final Identifier identifier)

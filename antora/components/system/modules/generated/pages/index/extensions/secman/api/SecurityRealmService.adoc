@@ -2,8 +2,8 @@
 
 == API
 
-.SecurityRealmService.java
 [source,java]
+.SecurityRealmService.java
 ----
 interface SecurityRealmService {
   SecurityRealm getCurrentRealm()

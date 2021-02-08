@@ -19,8 +19,8 @@ public class NoSugarThanksSpec extends SpecificationNot {
 
 == API
 
-.SpecificationNot.java
 [source,java]
+.SpecificationNot.java
 ----
 class SpecificationNot {
   SpecificationNot(final Specification specification)

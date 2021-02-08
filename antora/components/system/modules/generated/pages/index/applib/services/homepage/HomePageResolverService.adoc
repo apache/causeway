@@ -4,8 +4,8 @@ Returns a view model annotated with xref:system:generated:index/applib/annotatio
 
 == API
 
-.HomePageResolverService.java
 [source,java]
+.HomePageResolverService.java
 ----
 interface HomePageResolverService {
   Object getHomePage()

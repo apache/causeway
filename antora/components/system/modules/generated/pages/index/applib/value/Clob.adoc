@@ -2,8 +2,8 @@
 
 == API
 
-.Clob.java
 [source,java]
+.Clob.java
 ----
 class Clob {
   Clob(String name, String primaryType, String subType, char[] chars)

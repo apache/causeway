@@ -8,8 +8,8 @@ The particular persistence layer implementation in use needs to be configured, w
 
 == API
 
-.JpaEntityInjectionPointResolver.java
 [source,java]
+.JpaEntityInjectionPointResolver.java
 ----
 class JpaEntityInjectionPointResolver {
 }

@@ -6,16 +6,26 @@ The framework provides a default implementation which in turn uses the _org.apac
 
 == API
 
-.EmailNotificationService.java
 [source,java]
+.EmailNotificationService.java
 ----
 interface EmailNotificationService {
-  boolean send(EmailRegistrationEvent ev)
-  boolean send(PasswordResetEvent ev)
+  boolean send(EmailRegistrationEvent ev)     // <.>
+  boolean send(PasswordResetEvent ev)     // <.>
   boolean isConfigured()     // <.>
 }
 ----
 
+<.> xref:#send[send]
++
+--
+Sends an email to verify an email address as part of the initial user registration
+--
+<.> xref:#send[send]
++
+--
+Sends an email to reset a password for an already-registered user
+--
 <.> xref:#isConfigured[isConfigured]
 +
 --
@@ -24,8 +34,20 @@ Whether this service has been configured and thus available for use.
 
 == Members
 
+[#send]
+=== send
+
+Sends an email to verify an email address as part of the initial user registration
+
+[#send]
+=== send
+
+Sends an email to reset a password for an already-registered user
+
 [#isConfigured]
 === isConfigured
 
 Whether this service has been configured and thus available for use.
+
+If this returns false then it is _not_ valid to call _#send(EmailRegistrationEvent)_ (and doing so will result in an _IllegalStateException_ being thrown).
 

@@ -2,8 +2,8 @@
 
 == API
 
-.IsisExtFixturesFixtureResultsRoleAndPermissions.java
 [source,java]
+.IsisExtFixturesFixtureResultsRoleAndPermissions.java
 ----
 class IsisExtFixturesFixtureResultsRoleAndPermissions {
   public static final String ROLE_NAME;

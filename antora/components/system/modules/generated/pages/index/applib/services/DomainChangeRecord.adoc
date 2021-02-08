@@ -4,8 +4,8 @@ An abstraction of some sort of recorded change to a domain object: commands, aud
 
 == API
 
-.DomainChangeRecord.java
 [source,java]
+.DomainChangeRecord.java
 ----
 interface DomainChangeRecord {
   ChangeType getType()     // <.>

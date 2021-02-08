@@ -4,8 +4,8 @@ Whether the user's account is enabled or disabled.
 
 == API
 
-.ApplicationUserStatus.java
 [source,java]
+.ApplicationUserStatus.java
 ----
 enum ApplicationUserStatus {
   ENABLED

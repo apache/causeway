@@ -6,8 +6,8 @@ Analogous to xref:system:generated:index/applib/services/wrapper/events/Property
 
 == API
 
-.PropertyAccessEvent.java
 [source,java]
+.PropertyAccessEvent.java
 ----
 class PropertyAccessEvent {
   PropertyAccessEvent(final Object source, final Identifier propertyIdentifier, final Object value)

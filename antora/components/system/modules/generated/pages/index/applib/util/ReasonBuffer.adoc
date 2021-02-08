@@ -8,8 +8,8 @@ An alternative is to use the xref:system:generated:index/applib/util/Reasons.ado
 
 == API
 
-.ReasonBuffer.java
 [source,java]
+.ReasonBuffer.java
 ----
 class ReasonBuffer {
   StringBuffer reasonBuffer;

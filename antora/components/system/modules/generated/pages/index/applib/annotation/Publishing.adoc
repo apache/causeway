@@ -17,8 +17,8 @@ The available policies as to whether data should be published to corresponding s
 
 == API
 
-.Publishing.java
 [source,java]
+.Publishing.java
 ----
 enum Publishing {
   AS_CONFIGURED     // <.>

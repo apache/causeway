@@ -2,8 +2,8 @@
 
 == API
 
-.PrimaryConfig.java
 [source,java]
+.PrimaryConfig.java
 ----
 class PrimaryConfig {
   @Getter

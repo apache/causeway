@@ -2,8 +2,8 @@
 
 == API
 
-.SupportingMethodValidatorRefinerFactory.java
 [source,java]
+.SupportingMethodValidatorRefinerFactory.java
 ----
 class SupportingMethodValidatorRefinerFactory {
   SupportingMethodValidatorRefinerFactory()

@@ -2,8 +2,8 @@
 
 == API
 
-.UrlEncodingServiceUsingBaseEncodingAbstract.java
 [source,java]
+.UrlEncodingServiceUsingBaseEncodingAbstract.java
 ----
 class UrlEncodingServiceUsingBaseEncodingAbstract {
   String encode(final byte[] bytes)

@@ -6,8 +6,8 @@ If _#getReason()_ is not `null` then provides the reason why the action is invis
 
 == API
 
-.ActionVisibilityEvent.java
 [source,java]
+.ActionVisibilityEvent.java
 ----
 class ActionVisibilityEvent {
   ActionVisibilityEvent(final Object source, final Identifier actionIdentifier)

@@ -2,8 +2,8 @@
 
 == API
 
-.Chars.java
 [source,java]
+.Chars.java
 ----
 class Chars {
   Chars(final FakeDataService fakeDataService)

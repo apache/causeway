@@ -2,8 +2,8 @@
 
 == API
 
-.SemanticsOf.java
 [source,java]
+.SemanticsOf.java
 ----
 enum SemanticsOf {
   SAFE_AND_REQUEST_CACHEABLE     // <.>

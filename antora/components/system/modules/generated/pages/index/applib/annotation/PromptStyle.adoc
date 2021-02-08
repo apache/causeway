@@ -4,8 +4,8 @@ How prompting for new values of a property/arguments for an action should be per
 
 == API
 
-.PromptStyle.java
 [source,java]
+.PromptStyle.java
 ----
 enum PromptStyle {
   AS_CONFIGURED     // <.>

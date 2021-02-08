@@ -2,8 +2,8 @@
 
 == API
 
-.PropertyDomainEvent.java
 [source,java]
+.PropertyDomainEvent.java
 ----
 class PropertyDomainEvent {
   PropertyDomainEvent()     // <.>

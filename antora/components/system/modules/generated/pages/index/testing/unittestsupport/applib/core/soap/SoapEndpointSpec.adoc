@@ -2,8 +2,8 @@
 
 == API
 
-.SoapEndpointSpec.java
 [source,java]
+.SoapEndpointSpec.java
 ----
 class SoapEndpointSpec {
   SoapEndpointSpec(final Class<?> endpointClass)

@@ -4,8 +4,8 @@ Keys used in _CommandDto#getUserData()_ to marshall the command's results
 
 == API
 
-.UserDataKeys.java
 [source,java]
+.UserDataKeys.java
 ----
 class UserDataKeys {
   public static String RESULT;

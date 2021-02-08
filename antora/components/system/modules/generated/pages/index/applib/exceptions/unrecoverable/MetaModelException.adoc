@@ -2,8 +2,8 @@
 
 == API
 
-.MetaModelException.java
 [source,java]
+.MetaModelException.java
 ----
 class MetaModelException {
   MetaModelException(final String message)

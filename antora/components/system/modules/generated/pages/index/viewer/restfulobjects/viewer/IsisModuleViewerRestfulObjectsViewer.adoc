@@ -2,8 +2,8 @@
 
 == API
 
-.IsisModuleViewerRestfulObjectsViewer.java
 [source,java]
+.IsisModuleViewerRestfulObjectsViewer.java
 ----
 class IsisModuleViewerRestfulObjectsViewer {
 }

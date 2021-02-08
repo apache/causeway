@@ -4,8 +4,8 @@ Objects implementing this interface will be processed automatically by _org.apac
 
 == API
 
-.HasCommandDto.java
 [source,java]
+.HasCommandDto.java
 ----
 interface HasCommandDto {
   CommandDto getCommandDto()

@@ -2,8 +2,8 @@
 
 == API
 
-.WithNameComparable.java
 [source,java]
+.WithNameComparable.java
 ----
 interface WithNameComparable {
   void setName(String name)

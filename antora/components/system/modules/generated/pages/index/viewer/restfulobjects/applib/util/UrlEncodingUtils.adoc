@@ -2,8 +2,8 @@
 
 == API
 
-.UrlEncodingUtils.java
 [source,java]
+.UrlEncodingUtils.java
 ----
 class UrlEncodingUtils {
   public static final Function<String, String> FUNCTION;

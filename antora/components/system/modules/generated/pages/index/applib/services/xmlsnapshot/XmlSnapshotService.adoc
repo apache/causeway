@@ -6,8 +6,8 @@ The framework provides an implementation of this service ( `XmlSnapshotServiceDe
 
 == API
 
-.XmlSnapshotService.java
 [source,java]
+.XmlSnapshotService.java
 ----
 interface XmlSnapshotService {
   XmlSnapshotService.Snapshot snapshotFor(final Object domainObject)     // <.>

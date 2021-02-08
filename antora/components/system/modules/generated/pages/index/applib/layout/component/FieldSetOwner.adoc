@@ -2,8 +2,8 @@
 
 == API
 
-.FieldSetOwner.java
 [source,java]
+.FieldSetOwner.java
 ----
 interface FieldSetOwner {
   List<FieldSet> getFieldSets()

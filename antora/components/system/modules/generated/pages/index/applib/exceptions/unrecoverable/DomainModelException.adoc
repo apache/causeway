@@ -4,8 +4,8 @@ Thrown when a problem is found with the domain model, and Isis cannot proceed.
 
 == API
 
-.DomainModelException.java
 [source,java]
+.DomainModelException.java
 ----
 class DomainModelException {
   DomainModelException(final String message)

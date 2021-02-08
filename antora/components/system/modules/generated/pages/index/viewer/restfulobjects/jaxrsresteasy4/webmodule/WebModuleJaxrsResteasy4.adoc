@@ -4,8 +4,8 @@ WebModule that provides the RestfulObjects Viewer.
 
 == API
 
-.WebModuleJaxrsResteasy4.java
 [source,java]
+.WebModuleJaxrsResteasy4.java
 ----
 class WebModuleJaxrsResteasy4 {
   WebModuleJaxrsResteasy4(final RestEasyConfiguration restEasyConfiguration, final ServiceInjector serviceInjector)

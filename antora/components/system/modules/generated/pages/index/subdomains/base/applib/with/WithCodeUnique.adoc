@@ -2,8 +2,8 @@
 
 == API
 
-.WithCodeUnique.java
 [source,java]
+.WithCodeUnique.java
 ----
 interface WithCodeUnique {
 }

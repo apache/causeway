@@ -2,8 +2,8 @@
 
 == API
 
-.NamedWithMimeType.java
 [source,java]
+.NamedWithMimeType.java
 ----
 interface NamedWithMimeType {
   String getName()

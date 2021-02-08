@@ -17,8 +17,8 @@ public class MilkAndSugarSpec extends SpecificationAnd {
 
 == API
 
-.SpecificationAnd.java
 [source,java]
+.SpecificationAnd.java
 ----
 class SpecificationAnd {
   SpecificationAnd(final Specification... specifications)

@@ -6,8 +6,8 @@ Throwing this exception will (dependent on the viewer) result in some sort of an
 
 == API
 
-.UnrecoverableException.java
 [source,java]
+.UnrecoverableException.java
 ----
 class UnrecoverableException {
   UnrecoverableException(final String msg)

@@ -6,8 +6,8 @@ It is rendered as a (eg) <div class="clearfix hidden-xs ...">
 
 == API
 
-.BS3ClearFixHidden.java
 [source,java]
+.BS3ClearFixHidden.java
 ----
 class BS3ClearFixHidden {
   String toCssClass()

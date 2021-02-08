@@ -2,8 +2,8 @@
 
 == API
 
-.RowHandler.java
 [source,java]
+.RowHandler.java
 ----
 interface RowHandler {
   void handleRow(T previousRow)

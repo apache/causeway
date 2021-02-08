@@ -21,8 +21,8 @@ If the object has (see _#isWrapper(Object)_ already been wrapped), then should j
 
 == API
 
-.WrapperFactory.java
 [source,java]
+.WrapperFactory.java
 ----
 interface WrapperFactory {
   T wrap(T domainObject, SyncControl syncControl)     // <.>

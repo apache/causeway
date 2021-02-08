@@ -2,8 +2,8 @@
 
 == API
 
-.Parser.java
 [source,java]
+.Parser.java
 ----
 class Parser {
   T valueOf(final List<String> str)

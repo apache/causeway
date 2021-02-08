@@ -2,8 +2,8 @@
 
 == API
 
-.Shorts.java
 [source,java]
+.Shorts.java
 ----
 class Shorts {
   Shorts(final FakeDataService fakeDataService)

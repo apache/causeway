@@ -2,8 +2,8 @@
 
 == API
 
-.ObjectPersistenceException.java
 [source,java]
+.ObjectPersistenceException.java
 ----
 class ObjectPersistenceException {
   ObjectPersistenceException(final String message)

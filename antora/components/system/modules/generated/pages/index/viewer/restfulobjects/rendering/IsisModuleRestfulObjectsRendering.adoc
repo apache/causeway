@@ -2,8 +2,8 @@
 
 == API
 
-.IsisModuleRestfulObjectsRendering.java
 [source,java]
+.IsisModuleRestfulObjectsRendering.java
 ----
 class IsisModuleRestfulObjectsRendering {
 }

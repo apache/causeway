@@ -6,14 +6,14 @@ If a messaging-parsing _Function_ is provided through the constructor, then the 
 
 == API
 
-.ExceptionRecognizerAbstract.java
 [source,java]
+.ExceptionRecognizerAbstract.java
 ----
 class ExceptionRecognizerAbstract {
-  ExceptionRecognizerAbstract(final Category category, Predicate<Throwable> predicate, final Function<String, String> messageParser)
-  ExceptionRecognizerAbstract(Predicate<Throwable> predicate, final Function<String, String> messageParser)
-  ExceptionRecognizerAbstract(Category category, Predicate<Throwable> predicate)
-  ExceptionRecognizerAbstract(Predicate<Throwable> predicate)
+  ExceptionRecognizerAbstract(final Category category, final Predicate<Throwable> predicate, final Function<Throwable, String> rootCauseMessageFormatter)
+  ExceptionRecognizerAbstract(final Predicate<Throwable> predicate, final Function<Throwable, String> rootCauseMessageFormatter)
+  ExceptionRecognizerAbstract(final Category category, final Predicate<Throwable> predicate)
+  ExceptionRecognizerAbstract(final Predicate<Throwable> predicate)
   Optional<Recognition> recognize(Throwable ex)
 }
 ----

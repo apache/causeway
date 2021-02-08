@@ -2,8 +2,8 @@
 
 == API
 
-.XmlSnapshotService~Snapshot~Builder.java
 [source,java]
+.XmlSnapshotService~Snapshot~Builder.java
 ----
 interface Builder {
   void includePath(final String path)     // <.>

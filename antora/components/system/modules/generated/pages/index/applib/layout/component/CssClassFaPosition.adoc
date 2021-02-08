@@ -2,8 +2,8 @@
 
 == API
 
-.CssClassFaPosition.java
 [source,java]
+.CssClassFaPosition.java
 ----
 enum CssClassFaPosition {
   LEFT

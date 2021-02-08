@@ -2,8 +2,8 @@
 
 == API
 
-.HasUpdatedBy.java
 [source,java]
+.HasUpdatedBy.java
 ----
 interface HasUpdatedBy {
   void setUpdatedBy(String updatedBy)

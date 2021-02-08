@@ -10,8 +10,8 @@ Whatever the class that implements this interface, it must also expose either a 
 
 == API
 
-.EncoderDecoder.java
 [source,java]
+.EncoderDecoder.java
 ----
 interface EncoderDecoder {
   String toEncodedString(T toEncode)     // <.>

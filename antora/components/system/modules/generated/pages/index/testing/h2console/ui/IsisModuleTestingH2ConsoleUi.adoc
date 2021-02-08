@@ -2,8 +2,8 @@
 
 == API
 
-.IsisModuleTestingH2ConsoleUi.java
 [source,java]
+.IsisModuleTestingH2ConsoleUi.java
 ----
 class IsisModuleTestingH2ConsoleUi {
 }

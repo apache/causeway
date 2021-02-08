@@ -4,8 +4,8 @@ Factory methods for value types
 
 == API
 
-.VT.java
 [source,java]
+.VT.java
 ----
 class VT {
   LocalDateInterval ldi(String intervalStr)

@@ -11,8 +11,8 @@ so that it can be stored by the Wicket viewer as a Wicket model.
 
 == API
 
-.Ticket.java
 [source,java]
+.Ticket.java
 ----
 interface Ticket {
   String getReference()     // <.>
@@ -31,7 +31,7 @@ A unique identifier that the end-user can use to track any follow-up from this e
 <.> xref:#getUserMessage[getUserMessage]
 +
 --
-Message to display to the user.
+A short, jargon-free message to display to the user.
 --
 <.> xref:#getDetails[getDetails]
 +
@@ -61,7 +61,7 @@ For example, an implementation might automatically log an issue in a bug trackin
 [#getUserMessage]
 === getUserMessage
 
-Message to display to the user.
+A short, jargon-free message to display to the user.
 
 Typically this message should be short, one line long.
 

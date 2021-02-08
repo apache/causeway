@@ -2,8 +2,8 @@
 
 == API
 
-.IsisActions.java
 [source,java]
+.IsisActions.java
 ----
 class IsisActions {
   Action injectInto()

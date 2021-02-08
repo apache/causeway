@@ -4,8 +4,8 @@ Convenience adapter for command processors for property edits.
 
 == API
 
-.CommandDtoProcessorForPropertyAbstract.java
 [source,java]
+.CommandDtoProcessorForPropertyAbstract.java
 ----
 class CommandDtoProcessorForPropertyAbstract {
 }

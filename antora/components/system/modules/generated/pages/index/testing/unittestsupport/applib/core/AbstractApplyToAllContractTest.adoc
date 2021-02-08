@@ -4,8 +4,8 @@ Provides some basic infrastructure to iterate over all entity types and apply so
 
 == API
 
-.AbstractApplyToAllContractTest.java
 [source,java]
+.AbstractApplyToAllContractTest.java
 ----
 class AbstractApplyToAllContractTest {
   AbstractApplyToAllContractTest withLoggingTo(Writer out)

@@ -2,8 +2,8 @@
 
 == API
 
-.ProperNameType.java
 [source,java]
+.ProperNameType.java
 ----
 class ProperNameType {
 }

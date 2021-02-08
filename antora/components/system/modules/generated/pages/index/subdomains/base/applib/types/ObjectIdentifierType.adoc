@@ -2,8 +2,8 @@
 
 == API
 
-.ObjectIdentifierType.java
 [source,java]
+.ObjectIdentifierType.java
 ----
 class ObjectIdentifierType {
 }

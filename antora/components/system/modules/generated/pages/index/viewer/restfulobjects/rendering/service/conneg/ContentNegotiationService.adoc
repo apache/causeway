@@ -2,8 +2,8 @@
 
 == API
 
-.ContentNegotiationService.java
 [source,java]
+.ContentNegotiationService.java
 ----
 interface ContentNegotiationService {
   Response.ResponseBuilder buildResponse(IResourceContext renderContext, ManagedObject objectAdapter)

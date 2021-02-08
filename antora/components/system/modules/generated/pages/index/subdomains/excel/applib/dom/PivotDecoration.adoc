@@ -2,8 +2,8 @@
 
 == API
 
-.PivotDecoration.java
 [source,java]
+.PivotDecoration.java
 ----
 @interface PivotDecoration {
   int order();

@@ -2,8 +2,8 @@
 
 == API
 
-.ClientConversationFilter.java
 [source,java]
+.ClientConversationFilter.java
 ----
 interface ClientConversationFilter {
   void onRequest(String endpoint, String method, String acceptHeaderParsing, Map<String, List<String>> headers, String body)

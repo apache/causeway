@@ -2,8 +2,8 @@
 
 == API
 
-.HasHidden.java
 [source,java]
+.HasHidden.java
 ----
 interface HasHidden {
   Where getHidden()

@@ -4,8 +4,8 @@ The available policies for rendering the next page if the result is the same as 
 
 == API
 
-.Redirect.java
 [source,java]
+.Redirect.java
 ----
 enum Redirect {
   AS_CONFIGURED     // <.>

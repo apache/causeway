@@ -2,8 +2,8 @@
 
 == API
 
-.PojoTester.java
 [source,java]
+.PojoTester.java
 ----
 class PojoTester {
   PojoTester strict()

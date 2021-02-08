@@ -4,8 +4,8 @@ For a given _Spring_ context, makes information about configured data-sources av
 
 == API
 
-.DataSourceIntrospectionService.java
 [source,java]
+.DataSourceIntrospectionService.java
 ----
 class DataSourceIntrospectionService {
   Stream<DataSourceInfo> streamDataSourceInfos()

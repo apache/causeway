@@ -2,8 +2,8 @@
 
 == API
 
-.Owned.java
 [source,java]
+.Owned.java
 ----
 interface Owned {
   T getOwner()

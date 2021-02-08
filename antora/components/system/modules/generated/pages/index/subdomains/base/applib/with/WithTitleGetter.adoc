@@ -4,8 +4,8 @@ Indicates that the implementing class has a _#getTitle() title_ .
 
 == API
 
-.WithTitleGetter.java
 [source,java]
+.WithTitleGetter.java
 ----
 interface WithTitleGetter {
   String getTitle()

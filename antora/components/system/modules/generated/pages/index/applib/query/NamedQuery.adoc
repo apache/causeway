@@ -2,8 +2,8 @@
 
 == API
 
-.NamedQuery.java
 [source,java]
+.NamedQuery.java
 ----
 interface NamedQuery {
   String getName()

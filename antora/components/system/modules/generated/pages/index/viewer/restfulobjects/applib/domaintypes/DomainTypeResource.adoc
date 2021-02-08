@@ -2,8 +2,8 @@
 
 == API
 
-.DomainTypeResource.java
 [source,java]
+.DomainTypeResource.java
 ----
 interface DomainTypeResource {
   Response domainTypes()

@@ -2,8 +2,8 @@
 
 == API
 
-.PathNode.java
 [source,java]
+.PathNode.java
 ----
 class PathNode {
   public static final PathNode NULL;

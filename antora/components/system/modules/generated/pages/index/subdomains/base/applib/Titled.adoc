@@ -2,8 +2,8 @@
 
 == API
 
-.Titled.java
 [source,java]
+.Titled.java
 ----
 interface Titled {
   String title()

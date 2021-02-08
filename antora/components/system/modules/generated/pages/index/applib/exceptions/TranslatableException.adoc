@@ -6,8 +6,8 @@ The _org.apache.isis.applib.services.exceprecog.ExceptionRecognizer_ will automa
 
 == API
 
-.TranslatableException.java
 [source,java]
+.TranslatableException.java
 ----
 interface TranslatableException {
   TranslatableString getTranslatableMessage()     // <.>

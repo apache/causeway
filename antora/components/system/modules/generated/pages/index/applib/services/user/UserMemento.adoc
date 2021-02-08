@@ -4,8 +4,8 @@ Immutable serializable value holding details about a user and its roles.
 
 == API
 
-.UserMemento.java
 [source,java]
+.UserMemento.java
 ----
 class UserMemento {
   UserMemento(final String name, final Stream<RoleMemento> roles)     // <.>

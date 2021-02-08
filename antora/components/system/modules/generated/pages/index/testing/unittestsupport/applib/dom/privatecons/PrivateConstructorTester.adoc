@@ -2,8 +2,8 @@
 
 == API
 
-.PrivateConstructorTester.java
 [source,java]
+.PrivateConstructorTester.java
 ----
 class PrivateConstructorTester {
   PrivateConstructorTester(Class<?> cls)

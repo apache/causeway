@@ -2,8 +2,8 @@
 
 == API
 
-.VersionResource.java
 [source,java]
+.VersionResource.java
 ----
 interface VersionResource {
   Response version()

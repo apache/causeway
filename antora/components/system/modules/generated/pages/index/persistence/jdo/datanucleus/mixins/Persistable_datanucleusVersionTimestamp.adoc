@@ -2,8 +2,8 @@
 
 == API
 
-.Persistable_datanucleusVersionTimestamp.java
 [source,java]
+.Persistable_datanucleusVersionTimestamp.java
 ----
 class Persistable_datanucleusVersionTimestamp {
   java.sql.Timestamp prop()

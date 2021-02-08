@@ -6,8 +6,8 @@ Objects that are part of the domain object layer should instead implement xref:s
 
 == API
 
-.ViewModel.java
 [source,java]
+.ViewModel.java
 ----
 interface ViewModel {
   String viewModelMemento()     // <.>

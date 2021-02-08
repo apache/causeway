@@ -2,8 +2,8 @@
 
 == API
 
-.ObjectFactoryForIntegration.java
 [source,java]
+.ObjectFactoryForIntegration.java
 ----
 class ObjectFactoryForIntegration {
   void start()

@@ -2,8 +2,8 @@
 
 == API
 
-.IsisAsciiDocConverter.java
 [source,java]
+.IsisAsciiDocConverter.java
 ----
 class IsisAsciiDocConverter {
   String toDatastoreType(final AsciiDoc memberValue)

@@ -2,8 +2,8 @@
 
 == API
 
-.TransactionState.java
 [source,java]
+.TransactionState.java
 ----
 enum TransactionState {
   NONE     // <.>

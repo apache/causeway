@@ -6,8 +6,8 @@ Implementations include a `FieldSet` (containing a number of properties and thei
 
 == API
 
-.MemberRegion.java
 [source,java]
+.MemberRegion.java
 ----
 interface MemberRegion {
 }

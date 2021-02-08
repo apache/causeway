@@ -2,8 +2,8 @@
 
 == API
 
-.CollectionDomainEvent.java
 [source,java]
+.CollectionDomainEvent.java
 ----
 class CollectionDomainEvent {
   CollectionDomainEvent()     // <.>

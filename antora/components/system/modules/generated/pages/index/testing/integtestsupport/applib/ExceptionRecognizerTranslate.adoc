@@ -2,11 +2,11 @@
 
 == API
 
-.ExceptionRecognizerTranslate.java
 [source,java]
+.ExceptionRecognizerTranslate.java
 ----
 class ExceptionRecognizerTranslate {
-  void handleTestExecutionException(ExtensionContext extensionContext, Throwable throwable)
+  void handleTestExecutionException(final ExtensionContext extensionContext, final Throwable throwable)
 }
 ----
 

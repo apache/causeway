@@ -2,8 +2,8 @@
 
 == API
 
-.ChangesDtoUtils.java
 [source,java]
+.ChangesDtoUtils.java
 ----
 class ChangesDtoUtils {
   static JAXBContext jaxbContext;

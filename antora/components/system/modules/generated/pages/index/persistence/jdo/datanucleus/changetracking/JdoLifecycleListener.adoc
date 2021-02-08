@@ -9,8 +9,8 @@
 
 == API
 
-.JdoLifecycleListener.java
 [source,java]
+.JdoLifecycleListener.java
 ----
 class JdoLifecycleListener {
   void postCreate(final InstanceLifecycleEvent event)

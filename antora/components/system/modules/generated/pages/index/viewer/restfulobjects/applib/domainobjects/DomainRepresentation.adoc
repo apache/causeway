@@ -2,8 +2,8 @@
 
 == API
 
-.DomainRepresentation.java
 [source,java]
+.DomainRepresentation.java
 ----
 class DomainRepresentation {
   DomainRepresentation(final JsonNode jsonNode)

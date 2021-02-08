@@ -2,8 +2,8 @@
 
 == API
 
-.JaxRsClient.java
 [source,java]
+.JaxRsClient.java
 ----
 interface JaxRsClient {
   JaxRsResponse get(URI uri, Class<?> dtoClass, ReprType reprType, String username, String password)

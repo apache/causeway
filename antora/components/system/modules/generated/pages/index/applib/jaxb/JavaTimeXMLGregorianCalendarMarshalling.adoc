@@ -2,8 +2,8 @@
 
 == API
 
-.JavaTimeXMLGregorianCalendarMarshalling.java
 [source,java]
+.JavaTimeXMLGregorianCalendarMarshalling.java
 ----
 class JavaTimeXMLGregorianCalendarMarshalling {
   LocalDate toLocalDate(XMLGregorianCalendar cal)

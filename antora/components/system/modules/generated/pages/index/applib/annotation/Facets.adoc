@@ -6,8 +6,8 @@ At least one named factory (as per _#facetFactoryNames()_ ) or one class factory
 
 == API
 
-.Facets.java
 [source,java]
+.Facets.java
 ----
 @interface Facets {
   String[] facetFactoryNames() default {};     // <.>

@@ -2,8 +2,8 @@
 
 == API
 
-.Object_downloadLayoutXml.java
 [source,java]
+.Object_downloadLayoutXml.java
 ----
 class Object_downloadLayoutXml {
   @Inject

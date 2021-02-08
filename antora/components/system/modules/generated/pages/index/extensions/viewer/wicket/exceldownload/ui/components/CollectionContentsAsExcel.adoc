@@ -4,8 +4,8 @@ _PanelAbstract Panel_ that represents a _EntityCollectionModel collection of ent
 
 == API
 
-.CollectionContentsAsExcel.java
 [source,java]
+.CollectionContentsAsExcel.java
 ----
 class CollectionContentsAsExcel {
   CollectionContentsAsExcel(final String id, final EntityCollectionModel model)

@@ -2,8 +2,8 @@
 
 == API
 
-.Object_rebuildMetamodel.java
 [source,java]
+.Object_rebuildMetamodel.java
 ----
 class Object_rebuildMetamodel {
   @Inject

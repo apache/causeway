@@ -2,8 +2,8 @@
 
 == API
 
-.EntityChangesLogger.java
 [source,java]
+.EntityChangesLogger.java
 ----
 class EntityChangesLogger {
   boolean isEnabled()

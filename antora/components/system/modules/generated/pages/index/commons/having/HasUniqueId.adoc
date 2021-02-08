@@ -2,8 +2,8 @@
 
 == API
 
-.HasUniqueId.java
 [source,java]
+.HasUniqueId.java
 ----
 interface HasUniqueId {
   UUID getUniqueId()     // <.>

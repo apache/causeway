@@ -2,8 +2,8 @@
 
 == API
 
-.TreeState.java
 [source,java]
+.TreeState.java
 ----
 interface TreeState {
   TreeState rootCollapsed()

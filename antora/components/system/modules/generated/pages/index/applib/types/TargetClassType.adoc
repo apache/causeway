@@ -4,8 +4,8 @@ A user-friendly name of a class, as per _Command#getTargetClass()_ , _org.apache
 
 == API
 
-.TargetClassType.java
 [source,java]
+.TargetClassType.java
 ----
 class TargetClassType {
 }

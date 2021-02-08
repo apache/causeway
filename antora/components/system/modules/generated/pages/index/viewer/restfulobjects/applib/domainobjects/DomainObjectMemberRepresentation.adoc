@@ -6,8 +6,8 @@ Do not confuse with the subclasses of xref:system:generated:index/viewer/restful
 
 == API
 
-.DomainObjectMemberRepresentation.java
 [source,java]
+.DomainObjectMemberRepresentation.java
 ----
 class DomainObjectMemberRepresentation {
   DomainObjectMemberRepresentation(final JsonNode jsonNode)

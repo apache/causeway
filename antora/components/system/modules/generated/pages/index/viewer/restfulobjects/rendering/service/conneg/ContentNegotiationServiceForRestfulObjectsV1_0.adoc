@@ -2,8 +2,8 @@
 
 == API
 
-.ContentNegotiationServiceForRestfulObjectsV1_0.java
 [source,java]
+.ContentNegotiationServiceForRestfulObjectsV1_0.java
 ----
 class ContentNegotiationServiceForRestfulObjectsV1_0 {
   ContentNegotiationServiceForRestfulObjectsV1_0(final IsisConfiguration configuration, final SpecificationLoader specificationLoader)

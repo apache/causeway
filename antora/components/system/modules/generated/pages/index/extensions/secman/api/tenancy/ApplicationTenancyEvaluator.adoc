@@ -4,8 +4,8 @@ Optional SPI interface to be implemented by a domain service, providing an alter
 
 == API
 
-.ApplicationTenancyEvaluator.java
 [source,java]
+.ApplicationTenancyEvaluator.java
 ----
 interface ApplicationTenancyEvaluator {
   boolean handles(Class<?> cls)     // <.>

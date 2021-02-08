@@ -74,8 +74,8 @@ Alternatively, permissions can be extracted from the base itself with the parame
 
 == API
 
-.IsisLdapRealm.java
 [source,java]
+.IsisLdapRealm.java
 ----
 class IsisLdapRealm {
   IsisLdapRealm()

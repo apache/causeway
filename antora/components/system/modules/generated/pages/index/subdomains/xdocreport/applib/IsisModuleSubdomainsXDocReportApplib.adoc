@@ -2,8 +2,8 @@
 
 == API
 
-.IsisModuleSubdomainsXDocReportApplib.java
 [source,java]
+.IsisModuleSubdomainsXDocReportApplib.java
 ----
 class IsisModuleSubdomainsXDocReportApplib {
 }

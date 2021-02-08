@@ -2,8 +2,8 @@
 
 == API
 
-.SoapEndpointPublishingRule.java
 [source,java]
+.SoapEndpointPublishingRule.java
 ----
 class SoapEndpointPublishingRule {
   static final int INITIAL_PORT;     // <.>

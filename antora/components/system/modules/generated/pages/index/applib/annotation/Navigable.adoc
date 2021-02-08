@@ -4,8 +4,8 @@ Tells the framework which method or field to use in order to construct a navigab
 
 == API
 
-.Navigable.java
 [source,java]
+.Navigable.java
 ----
 enum Navigable {
   NOT_SPECIFIED

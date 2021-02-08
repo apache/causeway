@@ -4,8 +4,8 @@ Superclass of exceptions which indicate an attempt to interact with an object or
 
 == API
 
-.InvalidException.java
 [source,java]
+.InvalidException.java
 ----
 class InvalidException {
   InvalidException(final InteractionEvent interactionEvent)

@@ -4,8 +4,8 @@ Part of the _Publishing SPI_ . A component to receive the entire set of entities
 
 == API
 
-.EntityChangesSubscriber.java
 [source,java]
+.EntityChangesSubscriber.java
 ----
 interface EntityChangesSubscriber {
   void onChanging(EntityChanges entityChanges)     // <.>

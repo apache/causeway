@@ -4,8 +4,8 @@ Collects together all domain semantics of an action parameter within a single an
 
 == API
 
-.Parameter.java
 [source,java]
+.Parameter.java
 ----
 @interface Parameter {
   String fileAccept() default "";     // <.>

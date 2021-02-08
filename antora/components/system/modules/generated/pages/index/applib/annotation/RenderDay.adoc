@@ -4,8 +4,8 @@ How to render days.
 
 == API
 
-.RenderDay.java
 [source,java]
+.RenderDay.java
 ----
 enum RenderDay {
   AS_DAY

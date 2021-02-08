@@ -2,8 +2,8 @@
 
 == API
 
-.IsisModuleValMarkdownMetaModel.java
 [source,java]
+.IsisModuleValMarkdownMetaModel.java
 ----
 class IsisModuleValMarkdownMetaModel {
 }

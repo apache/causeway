@@ -2,8 +2,8 @@
 
 == API
 
-.Dto.java
 [source,java]
+.Dto.java
 ----
 interface Dto {
 }

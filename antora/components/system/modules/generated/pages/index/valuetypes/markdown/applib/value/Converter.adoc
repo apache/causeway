@@ -2,8 +2,8 @@
 
 == API
 
-.Converter.java
 [source,java]
+.Converter.java
 ----
 class Converter {
   String mdToHtml(String markdown)     // <.>

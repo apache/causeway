@@ -6,8 +6,8 @@ If _#getReason()_ is not `null` then provides the reason why the object is inval
 
 == API
 
-.CollectionAddToEvent.java
 [source,java]
+.CollectionAddToEvent.java
 ----
 class CollectionAddToEvent {
   CollectionAddToEvent(final Object source, final Identifier collectionIdentifier, final Object proposed)

@@ -2,8 +2,8 @@
 
 == API
 
-.ContentMappingServiceForCommandDto.java
 [source,java]
+.ContentMappingServiceForCommandDto.java
 ----
 class ContentMappingServiceForCommandDto {
   @Inject

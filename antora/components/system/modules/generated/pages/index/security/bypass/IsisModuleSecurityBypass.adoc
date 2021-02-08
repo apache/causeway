@@ -4,8 +4,8 @@ Auth/bypass for eg. Integration Testing
 
 == API
 
-.IsisModuleSecurityBypass.java
 [source,java]
+.IsisModuleSecurityBypass.java
 ----
 class IsisModuleSecurityBypass {
 }

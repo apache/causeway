@@ -2,8 +2,8 @@
 
 == API
 
-.ObjectPropertyRepresentation.java
 [source,java]
+.ObjectPropertyRepresentation.java
 ----
 class ObjectPropertyRepresentation {
   ObjectPropertyRepresentation(final JsonNode jsonNode)

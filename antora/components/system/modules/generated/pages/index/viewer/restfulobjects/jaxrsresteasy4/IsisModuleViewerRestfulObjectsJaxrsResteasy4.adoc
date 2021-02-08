@@ -2,8 +2,8 @@
 
 == API
 
-.IsisModuleViewerRestfulObjectsJaxrsResteasy4.java
 [source,java]
+.IsisModuleViewerRestfulObjectsJaxrsResteasy4.java
 ----
 class IsisModuleViewerRestfulObjectsJaxrsResteasy4 {
 }

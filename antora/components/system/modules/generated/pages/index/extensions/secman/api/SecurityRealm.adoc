@@ -2,8 +2,8 @@
 
 == API
 
-.SecurityRealm.java
 [source,java]
+.SecurityRealm.java
 ----
 interface SecurityRealm {
   EnumSet<SecurityRealmCharacteristic> getCharacteristics()

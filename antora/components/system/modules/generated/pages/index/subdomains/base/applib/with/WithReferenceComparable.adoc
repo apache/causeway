@@ -2,8 +2,8 @@
 
 == API
 
-.WithReferenceComparable.java
 [source,java]
+.WithReferenceComparable.java
 ----
 interface WithReferenceComparable {
   void setReference(String reference)

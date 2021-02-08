@@ -2,8 +2,8 @@
 
 == API
 
-.HasCssClassFa.java
 [source,java]
+.HasCssClassFa.java
 ----
 interface HasCssClassFa {
   String getCssClassFa()

@@ -12,8 +12,8 @@ Initially introduced for the Wicket viewer; check the documentation of other vie
 
 == API
 
-.ExceptionRecognizer.java
 [source,java]
+.ExceptionRecognizer.java
 ----
 interface ExceptionRecognizer {
   Optional<Recognition> recognize(Throwable ex)     // <.>

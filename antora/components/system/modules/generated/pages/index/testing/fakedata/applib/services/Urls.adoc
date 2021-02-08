@@ -2,8 +2,8 @@
 
 == API
 
-.Urls.java
 [source,java]
+.Urls.java
 ----
 class Urls {
   Urls(final FakeDataService fakeDataService)

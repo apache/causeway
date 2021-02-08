@@ -4,8 +4,8 @@ Intended only for use by fixture scripts and integration tests, allows a block o
 
 == API
 
-.SudoService.java
 [source,java]
+.SudoService.java
 ----
 interface SudoService {
   RoleMemento ACCESS_ALL_ROLE;     // <.>

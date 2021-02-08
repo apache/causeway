@@ -6,8 +6,8 @@ This exception is intended to represent an unexpected and non-recoverable condit
 
 == API
 
-.RepositoryException.java
 [source,java]
+.RepositoryException.java
 ----
 class RepositoryException {
   RepositoryException(final String msg)

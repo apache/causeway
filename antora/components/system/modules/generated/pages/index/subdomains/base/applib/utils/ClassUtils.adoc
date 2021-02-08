@@ -2,8 +2,8 @@
 
 == API
 
-.ClassUtils.java
 [source,java]
+.ClassUtils.java
 ----
 class ClassUtils {
   Class<? extends T> load(final String clsName, final Class<T> cls)

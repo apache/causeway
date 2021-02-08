@@ -4,8 +4,8 @@ Whether the property or parameter is optional or is required (aka mandatory).
 
 == API
 
-.Optionality.java
 [source,java]
+.Optionality.java
 ----
 enum Optionality {
   DEFAULT     // <.>

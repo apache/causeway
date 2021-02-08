@@ -10,8 +10,8 @@ By default any xref:system:generated:index/applib/annotation/Value.adoc[Value] t
 
 == API
 
-.EqualByContent.java
 [source,java]
+.EqualByContent.java
 ----
 @interface EqualByContent {
 }

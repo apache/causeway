@@ -2,8 +2,8 @@
 
 == API
 
-.MediaTypes.java
 [source,java]
+.MediaTypes.java
 ----
 class MediaTypes {
   MediaType parse(String type)     // <.>

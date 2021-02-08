@@ -2,8 +2,8 @@
 
 == API
 
-.Health.java
 [source,java]
+.Health.java
 ----
 class Health {
   Health ok()

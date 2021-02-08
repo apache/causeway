@@ -2,8 +2,8 @@
 
 == API
 
-.IsisModuleExtCommandReplaySecondary.java
 [source,java]
+.IsisModuleExtCommandReplaySecondary.java
 ----
 class IsisModuleExtCommandReplaySecondary {
   @Inject

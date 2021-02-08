@@ -2,8 +2,8 @@
 
 == API
 
-.PdfJsConfig.java
 [source,java]
+.PdfJsConfig.java
 ----
 class PdfJsConfig {
   PdfJsConfig withInitialPage(int initialPage)

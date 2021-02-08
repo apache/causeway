@@ -6,8 +6,8 @@ This implementation has only one implementation (this class) in applib, so it is
 
 == API
 
-.Scratchpad.java
 [source,java]
+.Scratchpad.java
 ----
 interface Scratchpad {
   Object get(Object key)     // <.>

@@ -65,8 +65,8 @@ if(digest.isSuccess()) {
 
 == API
 
-.RestfulClient.java
 [source,java]
+.RestfulClient.java
 ----
 class RestfulClient {
   RestfulClient ofConfig(RestfulClientConfig clientConfig)

@@ -2,8 +2,8 @@
 
 == API
 
-.FqcnType.java
 [source,java]
+.FqcnType.java
 ----
 class FqcnType {
 }

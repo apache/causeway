@@ -2,8 +2,8 @@
 
 == API
 
-.CommandReplayAnalysisService.java
 [source,java]
+.CommandReplayAnalysisService.java
 ----
 class CommandReplayAnalysisService {
   @Inject

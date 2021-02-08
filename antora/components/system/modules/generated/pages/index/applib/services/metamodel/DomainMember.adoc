@@ -2,8 +2,8 @@
 
 == API
 
-.DomainMember.java
 [source,java]
+.DomainMember.java
 ----
 interface DomainMember {
   String getClassType()

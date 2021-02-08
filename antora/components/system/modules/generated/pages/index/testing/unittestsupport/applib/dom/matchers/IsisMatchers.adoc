@@ -4,8 +4,8 @@ Hamcrest _org.hamcrest.Matcher_ implementations.
 
 == API
 
-.IsisMatchers.java
 [source,java]
+.IsisMatchers.java
 ----
 class IsisMatchers {
   Matcher<T> anInstanceOf(final Class<T> expected)

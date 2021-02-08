@@ -2,8 +2,8 @@
 
 == API
 
-.IsisModuleExtRestClient.java
 [source,java]
+.IsisModuleExtRestClient.java
 ----
 class IsisModuleExtRestClient {
 }

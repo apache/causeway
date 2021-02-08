@@ -2,8 +2,8 @@
 
 == API
 
-.PostponedAction.java
 [source,java]
+.PostponedAction.java
 ----
 class PostponedAction {
   Object invoke(Invocation invocation)

@@ -2,8 +2,8 @@
 
 == API
 
-.WithTitleComparable.java
 [source,java]
+.WithTitleComparable.java
 ----
 interface WithTitleComparable {
   void setTitle(String title)

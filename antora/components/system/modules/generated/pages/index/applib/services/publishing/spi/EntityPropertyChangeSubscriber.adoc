@@ -4,8 +4,8 @@ Part of the _Publishing SPI_ . A component to receive pre-post property values f
 
 == API
 
-.EntityPropertyChangeSubscriber.java
 [source,java]
+.EntityPropertyChangeSubscriber.java
 ----
 interface EntityPropertyChangeSubscriber {
   void onChanging(EntityPropertyChange entityPropertyChange)     // <.>

@@ -2,8 +2,8 @@
 
 == API
 
-.BS3ClearFix.java
 [source,java]
+.BS3ClearFix.java
 ----
 class BS3ClearFix {
 }

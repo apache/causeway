@@ -2,8 +2,8 @@
 
 == API
 
-.JodaTimeXMLGregorianCalendarMarshalling.java
 [source,java]
+.JodaTimeXMLGregorianCalendarMarshalling.java
 ----
 class JodaTimeXMLGregorianCalendarMarshalling {
   DateTime toDateTime(final XMLGregorianCalendar xgc)

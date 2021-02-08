@@ -2,8 +2,8 @@
 
 == API
 
-.Imposterisers.java
 [source,java]
+.Imposterisers.java
 ----
 class Imposterisers {
   Imposteriser getDefault()     // <.>

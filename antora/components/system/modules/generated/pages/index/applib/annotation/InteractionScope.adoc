@@ -8,8 +8,8 @@ _@InteractionScope_ may be used as a meta-annotation to create custom composed a
 
 == API
 
-.InteractionScope.java
 [source,java]
+.InteractionScope.java
 ----
 @interface InteractionScope {
 }

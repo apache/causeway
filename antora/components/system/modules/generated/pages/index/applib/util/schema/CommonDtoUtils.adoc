@@ -2,8 +2,8 @@
 
 == API
 
-.CommonDtoUtils.java
 [source,java]
+.CommonDtoUtils.java
 ----
 class CommonDtoUtils {
   public static final Function<ParamDto, String> PARAM_DTO_TO_NAME;

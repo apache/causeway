@@ -2,8 +2,8 @@
 
 == API
 
-.MessageUtils.java
 [source,java]
+.MessageUtils.java
 ----
 class MessageUtils {
   String normalize(final Exception ex)

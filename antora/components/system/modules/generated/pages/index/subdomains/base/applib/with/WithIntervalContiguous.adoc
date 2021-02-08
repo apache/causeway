@@ -2,8 +2,8 @@
 
 == API
 
-.WithIntervalContiguous.java
 [source,java]
+.WithIntervalContiguous.java
 ----
 interface WithIntervalContiguous {
   T getPredecessor()     // <.>

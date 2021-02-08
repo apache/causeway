@@ -2,8 +2,8 @@
 
 == API
 
-.ReflectUtils.java
 [source,java]
+.ReflectUtils.java
 ----
 class ReflectUtils {
   public static final Predicate<? super Field> persistentMappedBy;

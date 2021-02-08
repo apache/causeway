@@ -4,8 +4,8 @@ Named after UNIX modes ( `chmod` etc), determines that nature of access (of deni
 
 == API
 
-.ApplicationPermissionMode.java
 [source,java]
+.ApplicationPermissionMode.java
 ----
 enum ApplicationPermissionMode {
   VIEWING     // <.>

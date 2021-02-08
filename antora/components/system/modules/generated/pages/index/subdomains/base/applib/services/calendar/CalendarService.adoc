@@ -2,8 +2,8 @@
 
 == API
 
-.CalendarService.java
 [source,java]
+.CalendarService.java
 ----
 class CalendarService {
   CalendarService(ClockService clockService)

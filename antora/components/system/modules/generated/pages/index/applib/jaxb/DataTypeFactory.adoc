@@ -2,8 +2,8 @@
 
 == API
 
-.DataTypeFactory.java
 [source,java]
+.DataTypeFactory.java
 ----
 class DataTypeFactory {
   XMLGregorianCalendar withTypeFactoryDo(Function<DatatypeFactory, XMLGregorianCalendar> factory)

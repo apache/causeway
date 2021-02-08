@@ -2,8 +2,8 @@
 
 == API
 
-.Longs.java
 [source,java]
+.Longs.java
 ----
 class Longs {
   Longs(final FakeDataService fakeDataService)

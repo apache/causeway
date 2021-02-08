@@ -6,8 +6,8 @@ It is rendered as a <div class="row ...">
 
 == API
 
-.BS3Row.java
 [source,java]
+.BS3Row.java
 ----
 class BS3Row {
   String getId()     // <.>

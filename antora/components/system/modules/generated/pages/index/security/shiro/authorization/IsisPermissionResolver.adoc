@@ -2,8 +2,8 @@
 
 == API
 
-.IsisPermissionResolver.java
 [source,java]
+.IsisPermissionResolver.java
 ----
 class IsisPermissionResolver {
   IsisPermissionResolver()

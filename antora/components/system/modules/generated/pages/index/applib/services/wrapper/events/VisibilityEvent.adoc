@@ -6,8 +6,8 @@ If _#getReason()_ is `null` , then is usable; otherwise is invisible.
 
 == API
 
-.VisibilityEvent.java
 [source,java]
+.VisibilityEvent.java
 ----
 class VisibilityEvent {
   VisibilityEvent(final Object source, final Identifier identifier)

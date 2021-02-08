@@ -4,8 +4,8 @@ Fluent Object Equality Composition.
 
 == API
 
-.Equality.java
 [source,java]
+.Equality.java
 ----
 class Equality {
   Equality<T> checkEquals(Function<? super T, ?> getter)

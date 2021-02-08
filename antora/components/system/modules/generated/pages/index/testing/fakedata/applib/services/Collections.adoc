@@ -2,8 +2,8 @@
 
 == API
 
-.Collections.java
 [source,java]
+.Collections.java
 ----
 class Collections {
   Collections(final FakeDataService fakeDataService)

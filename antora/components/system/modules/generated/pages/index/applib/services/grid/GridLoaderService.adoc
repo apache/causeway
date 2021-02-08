@@ -2,8 +2,8 @@
 
 == API
 
-.GridLoaderService.java
 [source,java]
+.GridLoaderService.java
 ----
 interface GridLoaderService {
   boolean supportsReloading()     // <.>

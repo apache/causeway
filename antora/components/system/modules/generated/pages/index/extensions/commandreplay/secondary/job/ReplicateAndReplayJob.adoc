@@ -2,8 +2,8 @@
 
 == API
 
-.ReplicateAndReplayJob.java
 [source,java]
+.ReplicateAndReplayJob.java
 ----
 class ReplicateAndReplayJob {
   @Inject

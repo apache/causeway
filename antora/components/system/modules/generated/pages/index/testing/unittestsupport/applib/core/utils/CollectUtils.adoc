@@ -2,8 +2,8 @@
 
 == API
 
-.CollectUtils.java
 [source,java]
+.CollectUtils.java
 ----
 class CollectUtils {
   T firstIn(final Set<T> set)

@@ -2,8 +2,8 @@
 
 == API
 
-.StringUtils.java
 [source,java]
+.StringUtils.java
 ----
 class StringUtils {
   String capitalize(final String str)

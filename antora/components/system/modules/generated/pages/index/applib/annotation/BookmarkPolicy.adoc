@@ -2,8 +2,8 @@
 
 == API
 
-.BookmarkPolicy.java
 [source,java]
+.BookmarkPolicy.java
 ----
 enum BookmarkPolicy {
   AS_ROOT     // <.>

@@ -2,8 +2,8 @@
 
 == API
 
-.UserNameType.java
 [source,java]
+.UserNameType.java
 ----
 class UserNameType {
 }

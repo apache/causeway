@@ -2,8 +2,8 @@
 
 == API
 
-.ByteArrayBlobRdbmsMapping.java
 [source,java]
+.ByteArrayBlobRdbmsMapping.java
 ----
 class ByteArrayBlobRdbmsMapping {
   ByteArrayBlobRdbmsMapping(JavaTypeMapping mapping, RDBMSStoreManager storeMgr, Column col)

@@ -4,8 +4,8 @@
 
 == API
 
-.ProposedHolderEvent.java
 [source,java]
+.ProposedHolderEvent.java
 ----
 interface ProposedHolderEvent {
   Object getProposed()

@@ -2,8 +2,8 @@
 
 == API
 
-.Projecting.java
 [source,java]
+.Projecting.java
 ----
 enum Projecting {
   PROJECTED     // <.>

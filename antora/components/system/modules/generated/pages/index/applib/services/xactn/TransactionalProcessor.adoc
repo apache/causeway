@@ -2,8 +2,8 @@
 
 == API
 
-.TransactionalProcessor.java
 [source,java]
+.TransactionalProcessor.java
 ----
 interface TransactionalProcessor {
   Result<T> callTransactional(TransactionDefinition def, Callable<T> callable)     // <.>

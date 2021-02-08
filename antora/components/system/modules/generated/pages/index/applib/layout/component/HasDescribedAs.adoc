@@ -2,8 +2,8 @@
 
 == API
 
-.HasDescribedAs.java
 [source,java]
+.HasDescribedAs.java
 ----
 interface HasDescribedAs {
   String getDescribedAs()

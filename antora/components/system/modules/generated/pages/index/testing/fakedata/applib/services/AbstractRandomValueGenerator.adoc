@@ -2,8 +2,8 @@
 
 == API
 
-.AbstractRandomValueGenerator.java
 [source,java]
+.AbstractRandomValueGenerator.java
 ----
 class AbstractRandomValueGenerator {
   final FakeDataService fake;

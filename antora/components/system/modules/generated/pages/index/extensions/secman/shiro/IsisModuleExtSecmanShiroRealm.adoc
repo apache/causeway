@@ -2,8 +2,8 @@
 
 == API
 
-.IsisModuleExtSecmanShiroRealm.java
 [source,java]
+.IsisModuleExtSecmanShiroRealm.java
 ----
 class IsisModuleExtSecmanShiroRealm {
   IsisModuleExtSecmanShiroRealm()     // <.>

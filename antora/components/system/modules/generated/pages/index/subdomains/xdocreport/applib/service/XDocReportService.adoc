@@ -2,8 +2,8 @@
 
 == API
 
-.XDocReportService.java
 [source,java]
+.XDocReportService.java
 ----
 class XDocReportService {
   PdfOptions pdfOptions;

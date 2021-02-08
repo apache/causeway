@@ -2,8 +2,8 @@
 
 == API
 
-.MeService.java
 [source,java]
+.MeService.java
 ----
 class MeService {
   String iconName()

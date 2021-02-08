@@ -8,8 +8,8 @@ It can also be added to a type, meaning that the type is ignored from the metamo
 
 == API
 
-.Programmatic.java
 [source,java]
+.Programmatic.java
 ----
 @interface Programmatic {
 }

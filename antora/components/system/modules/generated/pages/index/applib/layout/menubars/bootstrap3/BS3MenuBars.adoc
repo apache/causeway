@@ -4,8 +4,8 @@ Describes the collection of domain services into menubars, broadly corresponding
 
 == API
 
-.BS3MenuBars.java
 [source,java]
+.BS3MenuBars.java
 ----
 class BS3MenuBars {
   BS3MenuBars()

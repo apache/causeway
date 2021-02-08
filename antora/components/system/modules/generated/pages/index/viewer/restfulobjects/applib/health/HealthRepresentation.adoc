@@ -2,8 +2,8 @@
 
 == API
 
-.HealthRepresentation.java
 [source,java]
+.HealthRepresentation.java
 ----
 class HealthRepresentation {
   HealthRepresentation(final JsonNode jsonNode)

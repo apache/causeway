@@ -2,8 +2,8 @@
 
 == API
 
-.FactoryService.java
 [source,java]
+.FactoryService.java
 ----
 interface FactoryService {
   T getOrCreate(Class<T> requiredType)     // <.>

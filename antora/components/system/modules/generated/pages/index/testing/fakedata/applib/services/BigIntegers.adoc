@@ -2,8 +2,8 @@
 
 == API
 
-.BigIntegers.java
 [source,java]
+.BigIntegers.java
 ----
 class BigIntegers {
   BigIntegers(final FakeDataService fakeDataService)

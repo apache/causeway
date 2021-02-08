@@ -2,8 +2,8 @@
 
 == API
 
-.IsisMarkupConverter.java
 [source,java]
+.IsisMarkupConverter.java
 ----
 class IsisMarkupConverter {
   String toDatastoreType(final Markup memberValue)

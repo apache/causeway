@@ -2,8 +2,8 @@
 
 == API
 
-.IsisExtSecmanAdminRoleAndPermissions.java
 [source,java]
+.IsisExtSecmanAdminRoleAndPermissions.java
 ----
 class IsisExtSecmanAdminRoleAndPermissions {
   IsisExtSecmanAdminRoleAndPermissions(SecmanConfiguration configBean)

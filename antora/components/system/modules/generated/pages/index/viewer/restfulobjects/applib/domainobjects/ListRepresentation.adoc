@@ -2,8 +2,8 @@
 
 == API
 
-.ListRepresentation.java
 [source,java]
+.ListRepresentation.java
 ----
 class ListRepresentation {
   ListRepresentation(final JsonNode jsonNode)

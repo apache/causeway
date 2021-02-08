@@ -4,8 +4,8 @@ SPI that allows individual interactions (action invocations or property edits) t
 
 == API
 
-.ExecutionSubscriber.java
 [source,java]
+.ExecutionSubscriber.java
 ----
 interface ExecutionSubscriber {
   void onExecution(Interaction.Execution<?, ?> execution)     // <.>

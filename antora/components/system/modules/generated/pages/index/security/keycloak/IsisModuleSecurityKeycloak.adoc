@@ -4,8 +4,8 @@ Configuration Bean to support Isis Security using Shiro.
 
 == API
 
-.IsisModuleSecurityKeycloak.java
 [source,java]
+.IsisModuleSecurityKeycloak.java
 ----
 class IsisModuleSecurityKeycloak {
 }

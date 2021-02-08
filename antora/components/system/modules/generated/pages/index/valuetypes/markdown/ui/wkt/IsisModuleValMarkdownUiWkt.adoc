@@ -2,8 +2,8 @@
 
 == API
 
-.IsisModuleValMarkdownUiWkt.java
 [source,java]
+.IsisModuleValMarkdownUiWkt.java
 ----
 class IsisModuleValMarkdownUiWkt {
 }

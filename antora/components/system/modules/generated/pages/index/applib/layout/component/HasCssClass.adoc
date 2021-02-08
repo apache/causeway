@@ -2,8 +2,8 @@
 
 == API
 
-.HasCssClass.java
 [source,java]
+.HasCssClass.java
 ----
 interface HasCssClass {
   String getCssClass()

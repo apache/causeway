@@ -2,8 +2,8 @@
 
 == API
 
-.Comms.java
 [source,java]
+.Comms.java
 ----
 class Comms {
   final com.github.javafaker.Internet javaFakerInternet;

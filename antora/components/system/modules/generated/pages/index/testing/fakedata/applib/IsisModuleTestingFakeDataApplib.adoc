@@ -2,8 +2,8 @@
 
 == API
 
-.IsisModuleTestingFakeDataApplib.java
 [source,java]
+.IsisModuleTestingFakeDataApplib.java
 ----
 class IsisModuleTestingFakeDataApplib {
 }

@@ -4,8 +4,8 @@ As per _Command#getLogicalMemberIdentifier()_ and _org.apache.isis.applib.servic
 
 == API
 
-.MemberIdentifierType.java
 [source,java]
+.MemberIdentifierType.java
 ----
 class MemberIdentifierType {
 }

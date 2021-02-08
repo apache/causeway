@@ -2,8 +2,8 @@
 
 == API
 
-.EntityChanges.java
 [source,java]
+.EntityChanges.java
 ----
 interface EntityChanges {
   Timestamp getCompletedAt()

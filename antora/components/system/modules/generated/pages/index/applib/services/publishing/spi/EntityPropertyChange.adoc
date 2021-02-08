@@ -4,8 +4,8 @@ Immutable data record for xref:system:generated:index/applib/services/publishing
 
 == API
 
-.EntityPropertyChange.java
 [source,java]
+.EntityPropertyChange.java
 ----
 class EntityPropertyChange {
   String toString()

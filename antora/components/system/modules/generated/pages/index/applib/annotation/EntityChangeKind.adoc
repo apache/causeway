@@ -2,8 +2,8 @@
 
 == API
 
-.EntityChangeKind.java
 [source,java]
+.EntityChangeKind.java
 ----
 enum EntityChangeKind {
   CREATE

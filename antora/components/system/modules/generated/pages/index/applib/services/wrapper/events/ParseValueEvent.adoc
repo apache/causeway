@@ -6,8 +6,8 @@ If _#getReason()_ is not `null` then provides the reason why the proposed value 
 
 == API
 
-.ParseValueEvent.java
 [source,java]
+.ParseValueEvent.java
 ----
 class ParseValueEvent {
   ParseValueEvent(final Object source, final Identifier classIdentifier, final String proposed)

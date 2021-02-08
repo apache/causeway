@@ -2,8 +2,8 @@
 
 == API
 
-.AutowiringSpringBeanJobFactory.java
 [source,java]
+.AutowiringSpringBeanJobFactory.java
 ----
 class AutowiringSpringBeanJobFactory {
   void setApplicationContext(final ApplicationContext context)

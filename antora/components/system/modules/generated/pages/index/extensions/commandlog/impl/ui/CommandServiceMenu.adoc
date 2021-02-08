@@ -2,8 +2,8 @@
 
 == API
 
-.CommandServiceMenu.java
 [source,java]
+.CommandServiceMenu.java
 ----
 class CommandServiceMenu {
   final CommandJdoRepository commandServiceRepository;

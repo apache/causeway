@@ -2,8 +2,8 @@
 
 == API
 
-.ThrowableMatchers.java
 [source,java]
+.ThrowableMatchers.java
 ----
 class ThrowableMatchers {
   ThrowableMatchers()

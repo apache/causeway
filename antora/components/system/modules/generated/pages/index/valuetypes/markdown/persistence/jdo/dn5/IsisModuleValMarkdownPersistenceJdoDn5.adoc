@@ -2,8 +2,8 @@
 
 == API
 
-.IsisModuleValMarkdownPersistenceJdoDn5.java
 [source,java]
+.IsisModuleValMarkdownPersistenceJdoDn5.java
 ----
 class IsisModuleValMarkdownPersistenceJdoDn5 {
 }

@@ -2,8 +2,8 @@
 
 == API
 
-.JsonNodeUtils.java
 [source,java]
+.JsonNodeUtils.java
 ----
 class JsonNodeUtils {
   InputStream asInputStream(final JsonNode jsonNode)

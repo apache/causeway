@@ -4,8 +4,8 @@ The xref:system:generated:index/applib/services/swagger/SwaggerService.adoc[Swag
 
 == API
 
-.SwaggerService.java
 [source,java]
+.SwaggerService.java
 ----
 interface SwaggerService {
   String generateSwaggerSpec(final Visibility visibility, final Format format)

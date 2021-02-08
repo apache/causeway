@@ -2,8 +2,8 @@
 
 == API
 
-.ObjectUpdatingEvent.java
 [source,java]
+.ObjectUpdatingEvent.java
 ----
 class ObjectUpdatingEvent {
   ObjectUpdatingEvent()

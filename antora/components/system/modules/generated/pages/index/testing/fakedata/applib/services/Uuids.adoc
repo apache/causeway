@@ -2,8 +2,8 @@
 
 == API
 
-.Uuids.java
 [source,java]
+.Uuids.java
 ----
 class Uuids {
   Uuids(final FakeDataService fakeDataService)

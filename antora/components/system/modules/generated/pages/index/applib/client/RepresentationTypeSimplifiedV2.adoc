@@ -2,8 +2,8 @@
 
 == API
 
-.RepresentationTypeSimplifiedV2.java
 [source,java]
+.RepresentationTypeSimplifiedV2.java
 ----
 enum RepresentationTypeSimplifiedV2 {
   OBJECT     // <.>

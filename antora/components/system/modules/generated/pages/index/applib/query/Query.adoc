@@ -10,8 +10,8 @@ Implementations are expected to implement the _#getRange()_ method, which is use
 
 == API
 
-.Query.java
 [source,java]
+.Query.java
 ----
 interface Query {
   Class<T> getResultType()     // <.>

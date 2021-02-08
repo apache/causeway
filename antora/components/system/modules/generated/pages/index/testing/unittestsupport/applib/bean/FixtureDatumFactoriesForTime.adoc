@@ -2,8 +2,8 @@
 
 == API
 
-.FixtureDatumFactoriesForTime.java
 [source,java]
+.FixtureDatumFactoriesForTime.java
 ----
 class FixtureDatumFactoriesForTime {
   PojoTester.FixtureDatumFactory<LocalTime> localTimes()

@@ -2,8 +2,8 @@
 
 == API
 
-.IsisCommandDtoConverter.java
 [source,java]
+.IsisCommandDtoConverter.java
 ----
 class IsisCommandDtoConverter {
   String toDatastoreType(final CommandDto memberValue)

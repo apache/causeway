@@ -2,8 +2,8 @@
 
 == API
 
-.SheetPivoter.java
 [source,java]
+.SheetPivoter.java
 ----
 class SheetPivoter {
   int columnLabelOffsetX;

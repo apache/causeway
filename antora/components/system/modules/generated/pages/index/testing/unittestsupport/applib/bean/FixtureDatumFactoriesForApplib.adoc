@@ -2,8 +2,8 @@
 
 == API
 
-.FixtureDatumFactoriesForApplib.java
 [source,java]
+.FixtureDatumFactoriesForApplib.java
 ----
 class FixtureDatumFactoriesForApplib {
   PojoTester.FixtureDatumFactory<Blob> blobs()

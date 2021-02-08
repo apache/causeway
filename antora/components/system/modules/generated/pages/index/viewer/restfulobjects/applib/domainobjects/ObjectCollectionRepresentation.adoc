@@ -2,8 +2,8 @@
 
 == API
 
-.ObjectCollectionRepresentation.java
 [source,java]
+.ObjectCollectionRepresentation.java
 ----
 class ObjectCollectionRepresentation {
   ObjectCollectionRepresentation(final JsonNode jsonNode)

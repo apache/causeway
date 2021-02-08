@@ -2,8 +2,8 @@
 
 == API
 
-.JavaAwtBufferedImageByteArrayConverter.java
 [source,java]
+.JavaAwtBufferedImageByteArrayConverter.java
 ----
 class JavaAwtBufferedImageByteArrayConverter {
   byte[] toDatastoreType(BufferedImage memberValue)

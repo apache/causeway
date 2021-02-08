@@ -2,8 +2,8 @@
 
 == API
 
-.ApplicationRoleRepository.java
 [source,java]
+.ApplicationRoleRepository.java
 ----
 interface ApplicationRoleRepository {
   R newApplicationRole()     // <.>

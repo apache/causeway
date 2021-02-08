@@ -2,8 +2,8 @@
 
 == API
 
-.ActionLayoutDataOwner.java
 [source,java]
+.ActionLayoutDataOwner.java
 ----
 interface ActionLayoutDataOwner {
   List<ActionLayoutData> getActions()

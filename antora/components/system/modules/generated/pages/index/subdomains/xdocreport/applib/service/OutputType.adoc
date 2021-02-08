@@ -2,8 +2,8 @@
 
 == API
 
-.OutputType.java
 [source,java]
+.OutputType.java
 ----
 enum OutputType {
   DOCX

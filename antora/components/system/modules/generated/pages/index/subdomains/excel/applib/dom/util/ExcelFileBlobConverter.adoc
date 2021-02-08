@@ -2,8 +2,8 @@
 
 == API
 
-.ExcelFileBlobConverter.java
 [source,java]
+.ExcelFileBlobConverter.java
 ----
 class ExcelFileBlobConverter {
   Blob toBlob(final String name, final File file)

@@ -4,8 +4,8 @@ This service allows an application to be decoupled from the system time. The mos
 
 == API
 
-.ClockService.java
 [source,java]
+.ClockService.java
 ----
 interface ClockService {
   VirtualClock getClock()

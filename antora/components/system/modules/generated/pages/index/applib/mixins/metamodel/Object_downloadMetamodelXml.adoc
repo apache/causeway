@@ -2,8 +2,8 @@
 
 == API
 
-.Object_downloadMetamodelXml.java
 [source,java]
+.Object_downloadMetamodelXml.java
 ----
 class Object_downloadMetamodelXml {
   @Inject

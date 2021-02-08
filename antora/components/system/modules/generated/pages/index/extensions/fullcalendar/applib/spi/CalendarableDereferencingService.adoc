@@ -6,8 +6,8 @@ For example, the `incode-module-commchannel` 's `Note` implements `CalendarEvent
 
 == API
 
-.CalendarableDereferencingService.java
 [source,java]
+.CalendarableDereferencingService.java
 ----
 interface CalendarableDereferencingService {
   Object dereference(final Object calendarableOrCalendarEventable)

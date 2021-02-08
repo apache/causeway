@@ -2,8 +2,8 @@
 
 == API
 
-.CommandReplayAnalyserException.java
 [source,java]
+.CommandReplayAnalyserException.java
 ----
 class CommandReplayAnalyserException {
   void init()

@@ -4,8 +4,8 @@ An alternative to xref:system:generated:index/applib/util/ReasonBuffer.adoc[Reas
 
 == API
 
-.Reasons.java
 [source,java]
+.Reasons.java
 ----
 class Reasons {
   String coalesce(final String... reasons)

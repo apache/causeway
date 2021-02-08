@@ -2,8 +2,8 @@
 
 == API
 
-.ActionResultRepresentation.java
 [source,java]
+.ActionResultRepresentation.java
 ----
 class ActionResultRepresentation {
   ActionResultRepresentation(final JsonNode jsonNode)

@@ -4,8 +4,8 @@ Describes the layout of a single action, broadly corresponding to _org.apache.is
 
 == API
 
-.ServiceActionLayoutData.java
 [source,java]
+.ServiceActionLayoutData.java
 ----
 class ServiceActionLayoutData {
   ServiceActionLayoutData()

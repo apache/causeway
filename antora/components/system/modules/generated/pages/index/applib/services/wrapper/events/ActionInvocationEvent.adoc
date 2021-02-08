@@ -8,8 +8,8 @@ Called after each of the xref:system:generated:index/applib/services/wrapper/eve
 
 == API
 
-.ActionInvocationEvent.java
 [source,java]
+.ActionInvocationEvent.java
 ----
 class ActionInvocationEvent {
   ActionInvocationEvent(final Object source, final Identifier actionIdentifier, final Object[] args)

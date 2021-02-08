@@ -2,8 +2,8 @@
 
 == API
 
-.IsisModuleValAsciidocPersistenceJdoDn5.java
 [source,java]
+.IsisModuleValAsciidocPersistenceJdoDn5.java
 ----
 class IsisModuleValAsciidocPersistenceJdoDn5 {
 }

@@ -2,8 +2,8 @@
 
 == API
 
-.ContentMappingService.java
 [source,java]
+.ContentMappingService.java
 ----
 interface ContentMappingService {
   Object map(Object object, final List<MediaType> acceptableMediaTypes)     // <.>

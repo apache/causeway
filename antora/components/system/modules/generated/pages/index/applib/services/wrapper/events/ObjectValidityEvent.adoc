@@ -6,8 +6,8 @@ If _#getReason()_ is not `null` then provides the reason why the object is inval
 
 == API
 
-.ObjectValidityEvent.java
 [source,java]
+.ObjectValidityEvent.java
 ----
 class ObjectValidityEvent {
   ObjectValidityEvent(final Object source, final Identifier classIdentifier)

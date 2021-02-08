@@ -4,8 +4,8 @@ Provides the parent/child relationship information between pojos to derive a tre
 
 == API
 
-.TreeAdapter.java
 [source,java]
+.TreeAdapter.java
 ----
 interface TreeAdapter {
   Optional<T> parentOf(T value)     // <.>

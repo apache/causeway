@@ -2,8 +2,8 @@
 
 == API
 
-.ExceptionHandlerAbstract.java
 [source,java]
+.ExceptionHandlerAbstract.java
 ----
 class ExceptionHandlerAbstract {
   Logger getLog()

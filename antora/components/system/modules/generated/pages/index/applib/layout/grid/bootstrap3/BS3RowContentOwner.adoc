@@ -2,8 +2,8 @@
 
 == API
 
-.BS3RowContentOwner.java
 [source,java]
+.BS3RowContentOwner.java
 ----
 interface BS3RowContentOwner {
 }

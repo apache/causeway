@@ -2,8 +2,8 @@
 
 == API
 
-.J8Periods.java
 [source,java]
+.J8Periods.java
 ----
 class J8Periods {
   J8Periods(final FakeDataService fakeDataService)

@@ -6,8 +6,8 @@ Because these values are used in the `@Produces` annotation on the jax-rs resour
 
 == API
 
-.RestfulMediaType.java
 [source,java]
+.RestfulMediaType.java
 ----
 class RestfulMediaType {
   public static final String APPLICATION_JSON_HOME_PAGE;

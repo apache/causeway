@@ -2,8 +2,8 @@
 
 == API
 
-.ServiceActionLayoutDataOwner.java
 [source,java]
+.ServiceActionLayoutDataOwner.java
 ----
 interface ServiceActionLayoutDataOwner {
   List<ServiceActionLayoutData> getServiceActions()

@@ -4,8 +4,8 @@ Value type representing an event on a calendar.
 
 == API
 
-.CalendarEvent.java
 [source,java]
+.CalendarEvent.java
 ----
 class CalendarEvent {
   // no default

@@ -8,8 +8,8 @@ It is rendered as a (eg) <div class="col-md-4 ...">
 
 == API
 
-.BS3Col.java
 [source,java]
+.BS3Col.java
 ----
 class BS3Col {
   String getId()     // <.>

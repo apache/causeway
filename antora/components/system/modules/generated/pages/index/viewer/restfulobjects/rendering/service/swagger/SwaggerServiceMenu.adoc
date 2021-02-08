@@ -2,8 +2,8 @@
 
 == API
 
-.SwaggerServiceMenu.java
 [source,java]
+.SwaggerServiceMenu.java
 ----
 class SwaggerServiceMenu {
   SwaggerServiceMenu(final SwaggerService swaggerService, final ServiceRegistry serviceRegistry, final RestEasyConfiguration restEasyConfiguration)

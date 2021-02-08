@@ -2,8 +2,8 @@
 
 == API
 
-.JavaSqlTimestamps.java
 [source,java]
+.JavaSqlTimestamps.java
 ----
 class JavaSqlTimestamps {
   JavaSqlTimestamps(final FakeDataService fakeDataService)

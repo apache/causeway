@@ -4,8 +4,8 @@ A xref:system:generated:index/applib/layout/component/MemberRegion.adoc[MemberRe
 
 == API
 
-.FieldSet.java
 [source,java]
+.FieldSet.java
 ----
 class FieldSet {
   FieldSet()

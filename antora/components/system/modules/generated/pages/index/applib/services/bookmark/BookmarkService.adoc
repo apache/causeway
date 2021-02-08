@@ -4,8 +4,8 @@ This service provides a serializable 'bookmark' for any entity, and conversely t
 
 == API
 
-.BookmarkService.java
 [source,java]
+.BookmarkService.java
 ----
 interface BookmarkService {
   Bookmark bookmarkFor(Object domainObject)     // <.>

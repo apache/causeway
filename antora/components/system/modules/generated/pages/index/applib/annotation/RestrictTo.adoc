@@ -4,8 +4,8 @@ Whether an action is restricted to development mode, or available in all.
 
 == API
 
-.RestrictTo.java
 [source,java]
+.RestrictTo.java
 ----
 enum RestrictTo {
   PROTOTYPING

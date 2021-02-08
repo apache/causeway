@@ -4,8 +4,8 @@ Emitted for subscribers to obtain a layout hint (equivalent to the `layout()` su
 
 == API
 
-.LayoutUiEvent.java
 [source,java]
+.LayoutUiEvent.java
 ----
 class LayoutUiEvent {
   LayoutUiEvent()     // <.>

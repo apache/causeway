@@ -2,8 +2,8 @@
 
 == API
 
-.WithInterval.java
 [source,java]
+.WithInterval.java
 ----
 interface WithInterval {
   LocalDate getStartDate()     // <.>

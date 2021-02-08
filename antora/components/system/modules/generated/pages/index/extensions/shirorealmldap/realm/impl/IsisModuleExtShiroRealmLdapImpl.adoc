@@ -2,8 +2,8 @@
 
 == API
 
-.IsisModuleExtShiroRealmLdapImpl.java
 [source,java]
+.IsisModuleExtShiroRealmLdapImpl.java
 ----
 class IsisModuleExtShiroRealmLdapImpl {
 }

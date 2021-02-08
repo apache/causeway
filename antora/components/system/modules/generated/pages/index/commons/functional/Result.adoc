@@ -4,34 +4,34 @@ The xref:system:generated:index/commons/functional/Result.adoc[Result] type repr
 
 == API
 
-.Result.java
 [source,java]
+.Result.java
 ----
 class Result {
   Result<L> of(final Callable<L> callable)
-  Result<L> ofNullable(final Callable<L> callable)
+  Result<Void> ofVoid(final ThrowingRunnable runnable)
   Result<L> success(final L value)
-  Result<L> successNullable(final L value)
   Result<L> failure(final Throwable throwable)
   Result<L> failure(final String message)
   Result<L> failure(final String message, final Throwable cause)
   boolean isSuccess()
   boolean isFailure()
-  Optional<L> value()
-  Optional<Throwable> failure()
+  Optional<L> getValue()
+  Optional<Throwable> getFailure()
   Result<L> ifSuccess(final Consumer<L> valueConsumer)
+  Result<L> ifSuccessAndValuePresent(final Consumer<L> valueConsumer)
   Result<L> ifFailure(final Consumer<Throwable> exceptionConsumer)
+  Result<L> mapSuccessWithEmptyValueToFailure(final Supplier<E> onNullValue)
+  Result<L> mapSuccessWithEmptyValueToNoSuchElement()
   Result<T> mapSuccess(final Function<L, T> successMapper)
   Result<L> mapFailure(final UnaryOperator<Throwable> failureMapper)
   T fold(final Function<L, T> successMapper, final Function<Throwable, T> failureMapper)
-  L orElseFail()
-  L nullableOrElseFail()
-  L orElseThrow(final UnaryOperator<Throwable> toThrowable)
-  L nullableOrElseThrow(final UnaryOperator<Throwable> toThrowable)
-  L orElse(final L defaultValue)
-  L nullableOrElse(final L defaultValue)
-  L orElseGet(final Supplier<L> defaultValueSupplier)
-  L nullableOrElseGet(final Supplier<L> defaultValueSupplier)
+  L presentElseFail()
+  Optional<L> optionalElseFail()
+  L presentElseThrow(final UnaryOperator<Throwable> toThrowable)
+  Optional<L> optionalElseThrow(final UnaryOperator<Throwable> toThrowable)
+  L presentElse(final L defaultValue)
+  L presentElseGet(final Supplier<L> defaultValueSupplier)
 }
 ----
 

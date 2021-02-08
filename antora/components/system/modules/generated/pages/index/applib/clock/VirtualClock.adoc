@@ -4,8 +4,8 @@ Works in connection with _org.apache.isis.core.interaction.session.InteractionFa
 
 == API
 
-.VirtualClock.java
 [source,java]
+.VirtualClock.java
 ----
 interface VirtualClock {
   Instant now()     // <.>

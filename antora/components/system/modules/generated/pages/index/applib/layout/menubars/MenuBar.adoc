@@ -2,8 +2,8 @@
 
 == API
 
-.MenuBar.java
 [source,java]
+.MenuBar.java
 ----
 interface MenuBar {
 }

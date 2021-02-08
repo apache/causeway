@@ -4,8 +4,8 @@ Indicates that the implementing class has a _#getName() name_ .
 
 == API
 
-.WithNameGetter.java
 [source,java]
+.WithNameGetter.java
 ----
 interface WithNameGetter {
   String getName()

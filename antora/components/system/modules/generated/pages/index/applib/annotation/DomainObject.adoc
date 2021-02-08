@@ -4,8 +4,8 @@ Domain semantics for domain objects (entities and view models; for services see 
 
 == API
 
-.DomainObject.java
 [source,java]
+.DomainObject.java
 ----
 @interface DomainObject {
   Class<?> autoCompleteRepository() default Object.class;     // <.>

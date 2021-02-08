@@ -6,8 +6,8 @@ If _#getReason()_ is not `null` then provides the reason why the collection is d
 
 == API
 
-.CollectionUsabilityEvent.java
 [source,java]
+.CollectionUsabilityEvent.java
 ----
 class CollectionUsabilityEvent {
   CollectionUsabilityEvent(final Object source, final Identifier identifier)

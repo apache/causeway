@@ -4,8 +4,8 @@ This service provides a number of utility services for interacting with XML _Doc
 
 == API
 
-.XmlService.java
 [source,java]
+.XmlService.java
 ----
 interface XmlService {
   Document asDocument(String xmlStr)     // <.>

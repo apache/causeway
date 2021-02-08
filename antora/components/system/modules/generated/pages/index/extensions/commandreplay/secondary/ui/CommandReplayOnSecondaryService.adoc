@@ -2,8 +2,8 @@
 
 == API
 
-.CommandReplayOnSecondaryService.java
 [source,java]
+.CommandReplayOnSecondaryService.java
 ----
 class CommandReplayOnSecondaryService {
   @Inject

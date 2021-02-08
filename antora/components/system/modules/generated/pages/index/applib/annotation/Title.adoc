@@ -6,8 +6,8 @@ If more than one property is used, the order can be specified (using the same De
 
 == API
 
-.Title.java
 [source,java]
+.Title.java
 ----
 @interface Title {
   String sequence() default "1.0";     // <.>

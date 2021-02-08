@@ -2,8 +2,8 @@
 
 == API
 
-.WebModuleH2Console.java
 [source,java]
+.WebModuleH2Console.java
 ----
 class WebModuleH2Console {
   WebModuleH2Console(final DataSourceIntrospectionService datasourceIntrospector, final IsisSystemEnvironment isisSystemEnvironment, final ServiceInjector serviceInjector)

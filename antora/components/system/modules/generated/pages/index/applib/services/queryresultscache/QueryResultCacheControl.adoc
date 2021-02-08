@@ -2,8 +2,8 @@
 
 == API
 
-.QueryResultCacheControl.java
 [source,java]
+.QueryResultCacheControl.java
 ----
 interface QueryResultCacheControl {
   boolean isIgnoreCache()

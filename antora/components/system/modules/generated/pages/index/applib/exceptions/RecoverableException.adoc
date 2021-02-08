@@ -10,8 +10,8 @@ The framework attempts to apply some heuristics; if the underlying Isis transact
 
 == API
 
-.RecoverableException.java
 [source,java]
+.RecoverableException.java
 ----
 class RecoverableException {
   RecoverableException(final String msg)

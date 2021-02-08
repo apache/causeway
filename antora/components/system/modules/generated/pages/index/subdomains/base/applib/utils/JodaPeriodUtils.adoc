@@ -4,8 +4,8 @@ Utilities for manipulating parsing JODA _Period_ s.
 
 == API
 
-.JodaPeriodUtils.java
 [source,java]
+.JodaPeriodUtils.java
 ----
 class JodaPeriodUtils {
   Period asPeriod(final String inputStr)

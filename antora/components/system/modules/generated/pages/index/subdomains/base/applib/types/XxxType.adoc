@@ -2,8 +2,8 @@
 
 == API
 
-.XxxType.java
 [source,java]
+.XxxType.java
 ----
 class XxxType {
 }

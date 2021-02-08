@@ -2,8 +2,8 @@
 
 == API
 
-.HealthCheckService.java
 [source,java]
+.HealthCheckService.java
 ----
 interface HealthCheckService {
   Health check()

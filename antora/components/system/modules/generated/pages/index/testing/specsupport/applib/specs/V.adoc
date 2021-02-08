@@ -4,8 +4,8 @@ A set of converters for built-in value types; for use in Cucumber step definitio
 
 == API
 
-.V.java
 [source,java]
+.V.java
 ----
 class V {
 }

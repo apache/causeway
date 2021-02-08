@@ -2,8 +2,8 @@
 
 == API
 
-.HasUpdatedAt.java
 [source,java]
+.HasUpdatedAt.java
 ----
 interface HasUpdatedAt {
   void setUpdatedAt(java.sql.Timestamp updatedAt)

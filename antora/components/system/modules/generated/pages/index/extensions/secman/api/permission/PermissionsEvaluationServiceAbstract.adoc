@@ -2,8 +2,8 @@
 
 == API
 
-.PermissionsEvaluationServiceAbstract.java
 [source,java]
+.PermissionsEvaluationServiceAbstract.java
 ----
 class PermissionsEvaluationServiceAbstract {
   ApplicationPermissionValueSet.Evaluation evaluate(final ApplicationFeatureId targetMemberId, final ApplicationPermissionMode mode, final Collection<ApplicationPermissionValue> permissionValues)

@@ -12,8 +12,8 @@ That said, if the sub-action is invoked asynchronously (using _WrapperFactory#as
 
 == API
 
-.Command.java
 [source,java]
+.Command.java
 ----
 class Command {
   String getUsername()     // <.>

@@ -2,8 +2,8 @@
 
 == API
 
-.WithReferenceUnique.java
 [source,java]
+.WithReferenceUnique.java
 ----
 interface WithReferenceUnique {
 }

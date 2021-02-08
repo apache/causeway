@@ -2,8 +2,8 @@
 
 == API
 
-.Scale.java
 [source,java]
+.Scale.java
 ----
 enum Scale {
   AUTOMATIC

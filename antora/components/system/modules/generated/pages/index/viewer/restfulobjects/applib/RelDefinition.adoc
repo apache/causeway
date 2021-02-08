@@ -4,8 +4,8 @@ Enumerates the organization that defined a xref:system:generated:index/viewer/re
 
 == API
 
-.RelDefinition.java
 [source,java]
+.RelDefinition.java
 ----
 enum RelDefinition {
   IANA     // <.>

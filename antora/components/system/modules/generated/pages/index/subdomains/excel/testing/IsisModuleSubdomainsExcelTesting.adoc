@@ -2,8 +2,8 @@
 
 == API
 
-.IsisModuleSubdomainsExcelTesting.java
 [source,java]
+.IsisModuleSubdomainsExcelTesting.java
 ----
 class IsisModuleSubdomainsExcelTesting {
 }

@@ -2,8 +2,8 @@
 
 == API
 
-.ApplicationTenancy.java
 [source,java]
+.ApplicationTenancy.java
 ----
 interface ApplicationTenancy {
   public static final int MAX_LENGTH_PATH;

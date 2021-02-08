@@ -2,8 +2,8 @@
 
 == API
 
-.XDocReportModel.java
 [source,java]
+.XDocReportModel.java
 ----
 interface XDocReportModel {
   Map<String, Data> getContextData()

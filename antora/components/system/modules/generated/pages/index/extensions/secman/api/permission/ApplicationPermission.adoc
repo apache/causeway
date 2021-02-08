@@ -11,8 +11,8 @@ For a given permission, there is an interaction between the xref:system:generate
 
 == API
 
-.ApplicationPermission.java
 [source,java]
+.ApplicationPermission.java
 ----
 interface ApplicationPermission {
   String title()     // <.>

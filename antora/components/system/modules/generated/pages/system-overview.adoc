@@ -212,7 +212,6 @@ _Components_
 * o.a.i.core.config.beans.IsisBeanFactoryPostProcessorForSpring
 * o.a.i.core.config.beans.IsisBeanTypeRegistryDefault
 * o.a.i.core.config.converters.PatternsConverter
-* o.a.i.core.config.datasources.DataSourceIntrospectionService
 * o.a.i.core.config.environment.IsisLocaleInitializer
 * o.a.i.core.config.environment.IsisSystemEnvironment
 * o.a.i.core.config.environment.IsisTimeZoneInitializer
@@ -344,7 +343,7 @@ Folder: \core\runtime
 
 _Components_
 
-* o.a.i.core.runtime.events.MetamodelEventService
+* o.a.i.core.runtime.events.AppLifecycleEventService
 * o.a.i.core.runtime.events.TransactionEventEmitter
 
 _Dependencies_
@@ -373,11 +372,12 @@ _Components_
 * o.a.i.core.runtimeservices.confmenu.ConfigurationViewServiceDefault
 * o.a.i.core.runtimeservices.email.EmailServiceDefault
 * o.a.i.core.runtimeservices.eventbus.EventBusServiceSpring
+* o.a.i.core.runtimeservices.exceprecog.ExceptionRecognizerServiceDefault
 * o.a.i.core.runtimeservices.executor.MemberExecutorServiceDefault
 * o.a.i.core.runtimeservices.factory.FactoryServiceDefault
 * o.a.i.core.runtimeservices.homepage.HomePageResolverServiceDefault
 * o.a.i.core.runtimeservices.i18n.po.TranslationServicePo
-* o.a.i.core.runtimeservices.interaction.InteractionDtoServiceInternalDefault
+* o.a.i.core.runtimeservices.ixn.InteractionDtoServiceInternalDefault
 * o.a.i.core.runtimeservices.jaxb.JaxbServiceDefault
 * o.a.i.core.runtimeservices.menubars.MenuBarsLoaderServiceDefault
 * o.a.i.core.runtimeservices.menubars.bootstrap3.MenuBarsServiceBS3
@@ -387,23 +387,17 @@ _Components_
 * o.a.i.core.runtimeservices.publish.EntityPropertyChangePublisherDefault
 * o.a.i.core.runtimeservices.publish.ExecutionPublisherDefault
 * o.a.i.core.runtimeservices.queryresultscache.QueryResultsCacheDefault
-* o.a.i.core.runtimeservices.recognizer.ExceptionRecognizerServiceDefault
-* o.a.i.core.runtimeservices.recognizer.dae.impl.ExceptionRecognizerForDataAlreadyExists
-* o.a.i.core.runtimeservices.recognizer.dae.impl.ExceptionRecognizerForObjectNotFound
-* o.a.i.core.runtimeservices.recognizer.dae.impl.ExceptionRecognizerForOtherDataAccessProblem
-* o.a.i.core.runtimeservices.recognizer.dae.impl.ExceptionRecognizerForRelatedDataExists
-* o.a.i.core.runtimeservices.recognizer.dae.impl.ExceptionRecognizerForUnableToSaveData
 * o.a.i.core.runtimeservices.repository.RepositoryServiceDefault
 * o.a.i.core.runtimeservices.routing.RoutingServiceDefault
 * o.a.i.core.runtimeservices.scratchpad.ScratchpadDefault
 * o.a.i.core.runtimeservices.session.InteractionFactoryDefault
 * o.a.i.core.runtimeservices.sudo.SudoServiceDefault
-* o.a.i.core.runtimeservices.transaction.TransactionServiceSpring
 * o.a.i.core.runtimeservices.urlencoding.UrlEncodingServiceWithCompression
 * o.a.i.core.runtimeservices.user.UserServiceDefault
 * o.a.i.core.runtimeservices.userprof.UserProfileServiceDefault
 * o.a.i.core.runtimeservices.userreg.EmailNotificationServiceDefault
 * o.a.i.core.runtimeservices.wrapper.WrapperFactoryDefault
+* o.a.i.core.runtimeservices.xactn.TransactionServiceSpring
 * o.a.i.core.runtimeservices.xml.XmlServiceDefault
 * o.a.i.core.runtimeservices.xmlsnapshot.XmlSnapshotServiceDefault
 
@@ -612,22 +606,22 @@ skinparam rectangle<<117>> {
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<118>> {
-  BackgroundColor #438dd5
-  FontColor #fffffe
-  BorderColor #2E6295
-}
 skinparam rectangle<<91>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<92>> {
+skinparam rectangle<<118>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
 }
 skinparam rectangle<<119>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<92>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
@@ -667,12 +661,12 @@ skinparam rectangle<<98>> {
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<11>> {
+skinparam rectangle<<99>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<99>> {
+skinparam rectangle<<11>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
@@ -752,12 +746,12 @@ skinparam rectangle<<3>> {
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<125>> {
+skinparam rectangle<<4>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<4>> {
+skinparam rectangle<<125>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
@@ -772,22 +766,22 @@ skinparam rectangle<<126>> {
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<6>> {
-  BackgroundColor #438dd5
-  FontColor #fffffe
-  BorderColor #2E6295
-}
 skinparam rectangle<<127>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<128>> {
+skinparam rectangle<<6>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
 }
 skinparam rectangle<<7>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<128>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
@@ -1342,12 +1336,12 @@ skinparam rectangle<<106>> {
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<80>> {
+skinparam rectangle<<107>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<107>> {
+skinparam rectangle<<80>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
@@ -1362,12 +1356,12 @@ skinparam rectangle<<108>> {
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<82>> {
+skinparam rectangle<<109>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<109>> {
+skinparam rectangle<<82>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
@@ -2623,15 +2617,7 @@ Artifact: isis-extensions-secman-persistence-jpa
 Type: jar
 Folder: \extensions\security\secman\persistence-jpa
 ----
-|_Components_
-
-* o.a.i.extensions.secman.jpa.dom.permission.ApplicationPermissionRepository
-* o.a.i.extensions.secman.jpa.dom.role.ApplicationRoleRepository
-* o.a.i.extensions.secman.jpa.dom.tenancy.ApplicationTenancyRepository
-* o.a.i.extensions.secman.jpa.dom.user.ApplicationUserRepository
-* o.a.i.extensions.secman.jpa.seed.SeedSecurityModuleService
-
-_Dependencies_
+|_Dependencies_
 
 * org.apache.isis.core:isis-core-runtime:jar:<managed>
 * org.apache.isis.extensions:isis-extensions-secman-api:jar:<managed>
@@ -3232,10 +3218,12 @@ Folder: \persistence\jdo\datanucleus
 _Components_
 
 * o.a.i.persistence.jdo.datanucleus.config.DnEntityDiscoveryListener
+* o.a.i.persistence.jdo.datanucleus.config.DnSettings
 * o.a.i.persistence.jdo.datanucleus.entities.DnEntityStateProvider
-* o.a.i.persistence.jdo.datanucleus.jdosupport.JdoSupportServiceDefault
-* o.a.i.persistence.jdo.datanucleus.metamodel.JdoDataNucleusProgrammingModel
-* o.a.i.persistence.jdo.datanucleus.schema.JdoSchemaService
+* o.a.i.persistence.jdo.datanucleus.exceptions.recognizers.ExceptionRecognizerForJDODataStoreException
+* o.a.i.persistence.jdo.datanucleus.exceptions.recognizers.ExceptionRecognizerForJDODataStoreExceptionIntegrityConstraintViolationForeignKeyNoActionException
+* o.a.i.persistence.jdo.datanucleus.exceptions.recognizers.ExceptionRecognizerForJDOObjectNotFoundException
+* o.a.i.persistence.jdo.datanucleus.exceptions.recognizers.ExceptionRecognizerForSQLIntegrityConstraintViolationUniqueOrIndexException
 
 _Dependencies_
 
@@ -3254,7 +3242,7 @@ _Dependencies_
 
 _Document Index Entries_
 
-xref:system:generated:index/persistence/jdo/datanucleus/IsisModuleJdoDatanucleus.adoc[IsisModuleJdoDatanucleus], xref:system:generated:index/persistence/jdo/datanucleus/changetracking/JdoLifecycleListener.adoc[JdoLifecycleListener], xref:system:generated:index/persistence/jdo/datanucleus/mixins/Persistable_datanucleusIdLong.adoc[Persistable_datanucleusIdLong], xref:system:generated:index/persistence/jdo/datanucleus/mixins/Persistable_datanucleusVersionLong.adoc[Persistable_datanucleusVersionLong], xref:system:generated:index/persistence/jdo/datanucleus/mixins/Persistable_datanucleusVersionTimestamp.adoc[Persistable_datanucleusVersionTimestamp], xref:system:generated:index/persistence/jdo/datanucleus/mixins/Persistable_downloadJdoMetadata.adoc[Persistable_downloadJdoMetadata], xref:system:generated:index/persistence/jdo/datanucleus/typeconverters/applib/IsisBookmarkConverter.adoc[IsisBookmarkConverter], xref:system:generated:index/persistence/jdo/datanucleus/typeconverters/applib/IsisLocalResourcePathConverter.adoc[IsisLocalResourcePathConverter], xref:system:generated:index/persistence/jdo/datanucleus/typeconverters/applib/IsisMarkupConverter.adoc[IsisMarkupConverter], xref:system:generated:index/persistence/jdo/datanucleus/typeconverters/applib/IsisPasswordConverter.adoc[IsisPasswordConverter], xref:system:generated:index/persistence/jdo/datanucleus/typeconverters/image/JavaAwtBufferedImageByteArrayConverter.adoc[JavaAwtBufferedImageByteArrayConverter], xref:system:generated:index/persistence/jdo/datanucleus/typeconverters/schema/v2/IsisChangesDtoConverter.adoc[IsisChangesDtoConverter], xref:system:generated:index/persistence/jdo/datanucleus/typeconverters/schema/v2/IsisCommandDtoConverter.adoc[IsisCommandDtoConverter], xref:system:generated:index/persistence/jdo/datanucleus/typeconverters/schema/v2/IsisInteractionDtoConverter.adoc[IsisInteractionDtoConverter], xref:system:generated:index/persistence/jdo/datanucleus/typeconverters/schema/v2/IsisOidDtoConverter.adoc[IsisOidDtoConverter], xref:system:generated:index/persistence/jdo/datanucleus/typeconverters/time/IsoOffsetTimeConverter.adoc[IsoOffsetTimeConverter], xref:system:generated:index/persistence/jdo/datanucleus/typeconverters/time/IsoZonedDateTimeConverter.adoc[IsoZonedDateTimeConverter], xref:system:generated:index/persistence/jdo/datanucleus/valuemappings/applib/ByteArrayBlobRdbmsMapping.adoc[ByteArrayBlobRdbmsMapping], xref:system:generated:index/persistence/jdo/datanucleus/valuetypes/applib/IsisBlobMapping.adoc[IsisBlobMapping], xref:system:generated:index/persistence/jdo/datanucleus/valuetypes/applib/IsisClobMapping.adoc[IsisClobMapping]
+xref:system:generated:index/persistence/jdo/datanucleus/IsisModuleJdoDatanucleus.adoc[IsisModuleJdoDatanucleus], xref:system:generated:index/persistence/jdo/datanucleus/changetracking/JdoLifecycleListener.adoc[JdoLifecycleListener], xref:system:generated:index/persistence/jdo/datanucleus/dialect/DnJdoDialect.adoc[DnJdoDialect], xref:system:generated:index/persistence/jdo/datanucleus/mixins/Persistable_datanucleusIdLong.adoc[Persistable_datanucleusIdLong], xref:system:generated:index/persistence/jdo/datanucleus/mixins/Persistable_datanucleusVersionLong.adoc[Persistable_datanucleusVersionLong], xref:system:generated:index/persistence/jdo/datanucleus/mixins/Persistable_datanucleusVersionTimestamp.adoc[Persistable_datanucleusVersionTimestamp], xref:system:generated:index/persistence/jdo/datanucleus/mixins/Persistable_downloadJdoMetadata.adoc[Persistable_downloadJdoMetadata], xref:system:generated:index/persistence/jdo/datanucleus/typeconverters/applib/IsisBookmarkConverter.adoc[IsisBookmarkConverter], xref:system:generated:index/persistence/jdo/datanucleus/typeconverters/applib/IsisLocalResourcePathConverter.adoc[IsisLocalResourcePathConverter], xref:system:generated:index/persistence/jdo/datanucleus/typeconverters/applib/IsisMarkupConverter.adoc[IsisMarkupConverter], xref:system:generated:index/persistence/jdo/datanucleus/typeconverters/applib/IsisPasswordConverter.adoc[IsisPasswordConverter], xref:system:generated:index/persistence/jdo/datanucleus/typeconverters/image/JavaAwtBufferedImageByteArrayConverter.adoc[JavaAwtBufferedImageByteArrayConverter], xref:system:generated:index/persistence/jdo/datanucleus/typeconverters/schema/v2/IsisChangesDtoConverter.adoc[IsisChangesDtoConverter], xref:system:generated:index/persistence/jdo/datanucleus/typeconverters/schema/v2/IsisCommandDtoConverter.adoc[IsisCommandDtoConverter], xref:system:generated:index/persistence/jdo/datanucleus/typeconverters/schema/v2/IsisInteractionDtoConverter.adoc[IsisInteractionDtoConverter], xref:system:generated:index/persistence/jdo/datanucleus/typeconverters/schema/v2/IsisOidDtoConverter.adoc[IsisOidDtoConverter], xref:system:generated:index/persistence/jdo/datanucleus/typeconverters/time/IsoOffsetTimeConverter.adoc[IsoOffsetTimeConverter], xref:system:generated:index/persistence/jdo/datanucleus/typeconverters/time/IsoZonedDateTimeConverter.adoc[IsoZonedDateTimeConverter], xref:system:generated:index/persistence/jdo/datanucleus/valuemappings/applib/ByteArrayBlobRdbmsMapping.adoc[ByteArrayBlobRdbmsMapping], xref:system:generated:index/persistence/jdo/datanucleus/valuetypes/applib/IsisBlobMapping.adoc[IsisBlobMapping], xref:system:generated:index/persistence/jdo/datanucleus/valuetypes/applib/IsisClobMapping.adoc[IsisClobMapping]
 
 |Apache Isis Persistence - JDO (integration)
 [source,yaml]
@@ -3265,6 +3253,12 @@ Type: jar
 Folder: \persistence\jdo\integration
 ----
 |JDO Integration (powered by DataNucleus)
+
+_Components_
+
+* o.a.i.persistence.jdo.integration.jdosupport.IsisJdoSupportDN5
+* o.a.i.persistence.jdo.integration.metamodel.JdoIntegrationProgrammingModel
+* o.a.i.persistence.jdo.integration.schema.JdoSchemaService
 
 _Dependencies_
 
@@ -3423,10 +3417,6 @@ Type: jar
 Folder: \persistence\jpa\metamodel
 ----
 |JPA Metamodel Facets / Programming Model
-
-_Components_
-
-* o.a.i.persistence.jpa.metamodel.JpaProgrammingModel
 
 _Dependencies_
 

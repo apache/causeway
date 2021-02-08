@@ -4,8 +4,8 @@ Provides the ability to programmatically interact with bookmarked pages and brea
 
 == API
 
-.BookmarkUiService.java
 [source,java]
+.BookmarkUiService.java
 ----
 interface BookmarkUiService {
   void clear()     // <.>

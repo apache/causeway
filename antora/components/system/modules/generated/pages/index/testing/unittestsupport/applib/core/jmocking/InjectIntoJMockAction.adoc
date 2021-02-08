@@ -2,8 +2,8 @@
 
 == API
 
-.InjectIntoJMockAction.java
 [source,java]
+.InjectIntoJMockAction.java
 ----
 class InjectIntoJMockAction {
   void describeTo(final Description description)

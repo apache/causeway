@@ -2,8 +2,8 @@
 
 == API
 
-.SessionLoggingServiceLogging.java
 [source,java]
+.SessionLoggingServiceLogging.java
 ----
 class SessionLoggingServiceLogging {
   void log(final Type type, final String username, final Date date, final CausedBy causedBy, final String sessionId)

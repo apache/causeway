@@ -2,8 +2,8 @@
 
 == API
 
-.ReflectUtils.java
 [source,java]
+.ReflectUtils.java
 ----
 class ReflectUtils {
   void inject(final Object target, final String fieldName, final Object toInject)

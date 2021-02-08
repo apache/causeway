@@ -4,8 +4,8 @@ Provides utilities to access active transactions associated with the current thr
 
 == API
 
-.TransactionService.java
 [source,java]
+.TransactionService.java
 ----
 interface TransactionService {
   Optional<TransactionId> currentTransactionId()     // <.>

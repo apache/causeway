@@ -2,8 +2,8 @@
 
 == API
 
-.MarkdownJaxbAdapter.java
 [source,java]
+.MarkdownJaxbAdapter.java
 ----
 class MarkdownJaxbAdapter {
   Markdown unmarshal(String v)

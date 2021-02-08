@@ -14,8 +14,8 @@ If _#getReason()_ is `null` , then is usable; otherwise is disabled.
 
 == API
 
-.ValidityEvent.java
 [source,java]
+.ValidityEvent.java
 ----
 class ValidityEvent {
   ValidityEvent(final Object source, final Identifier identifier)

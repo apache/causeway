@@ -2,8 +2,8 @@
 
 == API
 
-.IsisModuleSchema.java
 [source,java]
+.IsisModuleSchema.java
 ----
 class IsisModuleSchema {
 }

@@ -2,8 +2,8 @@
 
 == API
 
-.TranslatableString.java
 [source,java]
+.TranslatableString.java
 ----
 class TranslatableString {
   TranslatableString tr(final String pattern, final Object... paramArgs)     // <.>

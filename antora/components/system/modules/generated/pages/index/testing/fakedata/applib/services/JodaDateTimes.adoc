@@ -2,8 +2,8 @@
 
 == API
 
-.JodaDateTimes.java
 [source,java]
+.JodaDateTimes.java
 ----
 class JodaDateTimes {
   JodaDateTimes(final FakeDataService fakeDataService)

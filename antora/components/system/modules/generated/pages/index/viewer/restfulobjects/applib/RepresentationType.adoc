@@ -2,8 +2,8 @@
 
 == API
 
-.RepresentationType.java
 [source,java]
+.RepresentationType.java
 ----
 enum RepresentationType {
   HOME_PAGE

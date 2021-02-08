@@ -2,8 +2,8 @@
 
 == API
 
-.Cardinality.java
 [source,java]
+.Cardinality.java
 ----
 enum Cardinality {
   ZERO     // <.>

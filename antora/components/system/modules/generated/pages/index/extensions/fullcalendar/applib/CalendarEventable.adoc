@@ -2,8 +2,8 @@
 
 == API
 
-.CalendarEventable.java
 [source,java]
+.CalendarEventable.java
 ----
 interface CalendarEventable {
   String getCalendarName()     // <.>

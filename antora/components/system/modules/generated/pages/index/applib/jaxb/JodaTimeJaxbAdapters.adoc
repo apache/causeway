@@ -2,8 +2,8 @@
 
 == API
 
-.JodaTimeJaxbAdapters.java
 [source,java]
+.JodaTimeJaxbAdapters.java
 ----
 class JodaTimeJaxbAdapters {
 }

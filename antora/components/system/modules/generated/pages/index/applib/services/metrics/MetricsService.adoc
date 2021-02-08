@@ -2,8 +2,8 @@
 
 == API
 
-.MetricsService.java
 [source,java]
+.MetricsService.java
 ----
 interface MetricsService {
   int numberEntitiesLoaded()     // <.>

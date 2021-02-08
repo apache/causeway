@@ -2,8 +2,8 @@
 
 == API
 
-.TitleBufferException.java
 [source,java]
+.TitleBufferException.java
 ----
 class TitleBufferException {
   TitleBufferException()

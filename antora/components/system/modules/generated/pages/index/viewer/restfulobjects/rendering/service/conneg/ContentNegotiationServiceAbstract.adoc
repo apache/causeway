@@ -2,8 +2,8 @@
 
 == API
 
-.ContentNegotiationServiceAbstract.java
 [source,java]
+.ContentNegotiationServiceAbstract.java
 ----
 class ContentNegotiationServiceAbstract {
   Response.ResponseBuilder buildResponse(final IResourceContext renderContext2, final ManagedObject objectAdapter)

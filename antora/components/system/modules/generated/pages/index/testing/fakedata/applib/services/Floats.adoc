@@ -2,8 +2,8 @@
 
 == API
 
-.Floats.java
 [source,java]
+.Floats.java
 ----
 class Floats {
   Floats(final FakeDataService fakeDataService)

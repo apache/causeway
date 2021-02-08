@@ -2,8 +2,8 @@
 
 == API
 
-.ControlAbstract.java
 [source,java]
+.ControlAbstract.java
 ----
 class ControlAbstract {
   T withCheckRules()

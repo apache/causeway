@@ -2,8 +2,8 @@
 
 == API
 
-.Enums.java
 [source,java]
+.Enums.java
 ----
 class Enums {
   String getFriendlyNameOf(Enum<?> anEnum)

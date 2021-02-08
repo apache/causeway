@@ -2,8 +2,8 @@
 
 == API
 
-.IsisModuleValSseUiWkt.java
 [source,java]
+.IsisModuleValSseUiWkt.java
 ----
 class IsisModuleValSseUiWkt {
 }

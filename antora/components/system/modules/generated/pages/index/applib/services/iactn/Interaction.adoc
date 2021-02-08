@@ -10,8 +10,8 @@ NOTE: you could also think of this interface as being analogous to the (database
 
 == API
 
-.Interaction.java
 [source,java]
+.Interaction.java
 ----
 interface Interaction {
   Command getCommand()

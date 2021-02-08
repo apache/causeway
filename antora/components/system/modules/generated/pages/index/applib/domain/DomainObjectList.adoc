@@ -10,8 +10,8 @@ Thus, the RO client then only ever needs to know how to render an object, in all
 
 == API
 
-.DomainObjectList.java
 [source,java]
+.DomainObjectList.java
 ----
 class DomainObjectList {
   DomainObjectList()

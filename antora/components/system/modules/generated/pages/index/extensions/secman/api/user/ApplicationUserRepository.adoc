@@ -2,8 +2,8 @@
 
 == API
 
-.ApplicationUserRepository.java
 [source,java]
+.ApplicationUserRepository.java
 ----
 interface ApplicationUserRepository {
   U newApplicationUser()     // <.>

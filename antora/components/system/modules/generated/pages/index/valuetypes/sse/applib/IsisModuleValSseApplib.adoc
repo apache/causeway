@@ -2,8 +2,8 @@
 
 == API
 
-.IsisModuleValSseApplib.java
 [source,java]
+.IsisModuleValSseApplib.java
 ----
 class IsisModuleValSseApplib {
 }

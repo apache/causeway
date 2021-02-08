@@ -2,8 +2,8 @@
 
 == API
 
-.AbstractLifecycleEvent.java
 [source,java]
+.AbstractLifecycleEvent.java
 ----
 class AbstractLifecycleEvent {
   AbstractLifecycleEvent()

@@ -2,8 +2,8 @@
 
 == API
 
-.ObjectRemovingEvent.java
 [source,java]
+.ObjectRemovingEvent.java
 ----
 class ObjectRemovingEvent {
   ObjectRemovingEvent()

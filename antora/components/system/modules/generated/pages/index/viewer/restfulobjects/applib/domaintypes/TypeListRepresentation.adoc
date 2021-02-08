@@ -2,8 +2,8 @@
 
 == API
 
-.TypeListRepresentation.java
 [source,java]
+.TypeListRepresentation.java
 ----
 class TypeListRepresentation {
   TypeListRepresentation(final JsonNode jsonNode)

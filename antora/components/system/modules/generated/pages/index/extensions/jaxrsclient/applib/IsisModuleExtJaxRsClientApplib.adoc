@@ -2,8 +2,8 @@
 
 == API
 
-.IsisModuleExtJaxRsClientApplib.java
 [source,java]
+.IsisModuleExtJaxRsClientApplib.java
 ----
 class IsisModuleExtJaxRsClientApplib {
 }

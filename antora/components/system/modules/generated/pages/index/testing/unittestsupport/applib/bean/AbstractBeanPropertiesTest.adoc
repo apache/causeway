@@ -2,8 +2,8 @@
 
 == API
 
-.AbstractBeanPropertiesTest.java
 [source,java]
+.AbstractBeanPropertiesTest.java
 ----
 class AbstractBeanPropertiesTest {
   @Rule

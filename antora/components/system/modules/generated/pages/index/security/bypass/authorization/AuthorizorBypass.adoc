@@ -2,8 +2,8 @@
 
 == API
 
-.AuthorizorBypass.java
 [source,java]
+.AuthorizorBypass.java
 ----
 class AuthorizorBypass {
   boolean isUsableInRole(final String role, final Identifier identifier)

@@ -2,8 +2,8 @@
 
 == API
 
-.IsisModuleExtExcelDownloadUi.java
 [source,java]
+.IsisModuleExtExcelDownloadUi.java
 ----
 class IsisModuleExtExcelDownloadUi {
 }

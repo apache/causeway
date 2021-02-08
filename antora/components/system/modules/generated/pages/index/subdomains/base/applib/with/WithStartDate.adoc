@@ -2,8 +2,8 @@
 
 == API
 
-.WithStartDate.java
 [source,java]
+.WithStartDate.java
 ----
 interface WithStartDate {
   LocalDate getStartDate()

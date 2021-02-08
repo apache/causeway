@@ -2,8 +2,8 @@
 
 == API
 
-.CommandFetcher.java
 [source,java]
+.CommandFetcher.java
 ----
 class CommandFetcher {
   static final String URL_SUFFIX;

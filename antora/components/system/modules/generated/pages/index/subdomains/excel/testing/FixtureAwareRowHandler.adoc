@@ -2,8 +2,8 @@
 
 == API
 
-.FixtureAwareRowHandler.java
 [source,java]
+.FixtureAwareRowHandler.java
 ----
 interface FixtureAwareRowHandler {
   void setExecutionContext(FixtureScript.ExecutionContext ec)

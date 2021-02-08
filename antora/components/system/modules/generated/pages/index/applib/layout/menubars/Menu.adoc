@@ -2,8 +2,8 @@
 
 == API
 
-.Menu.java
 [source,java]
+.Menu.java
 ----
 interface Menu {
 }

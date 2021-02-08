@@ -4,8 +4,8 @@ Provides the ability to return (and therefore have rendered) an alternative obje
 
 == API
 
-.RoutingService.java
 [source,java]
+.RoutingService.java
 ----
 interface RoutingService {
   boolean canRoute(Object original)

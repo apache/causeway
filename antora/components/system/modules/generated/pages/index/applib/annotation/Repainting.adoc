@@ -4,8 +4,8 @@ Whether a component is unchanging and so does not require repainting.
 
 == API
 
-.Repainting.java
 [source,java]
+.Repainting.java
 ----
 enum Repainting {
   REPAINT

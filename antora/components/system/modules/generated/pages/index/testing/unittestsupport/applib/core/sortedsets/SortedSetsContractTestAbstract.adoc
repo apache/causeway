@@ -2,8 +2,8 @@
 
 == API
 
-.SortedSetsContractTestAbstract.java
 [source,java]
+.SortedSetsContractTestAbstract.java
 ----
 class SortedSetsContractTestAbstract {
 }

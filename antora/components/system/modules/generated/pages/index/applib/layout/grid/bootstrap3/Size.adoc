@@ -4,8 +4,8 @@ As pergrid options, also used inresponsive utilityclasses.
 
 == API
 
-.Size.java
 [source,java]
+.Size.java
 ----
 enum Size {
   XS

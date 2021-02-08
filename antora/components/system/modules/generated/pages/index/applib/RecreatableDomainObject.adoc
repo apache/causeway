@@ -6,8 +6,8 @@ Objects that are view models (logically belonging to the UI/application layer) s
 
 == API
 
-.RecreatableDomainObject.java
 [source,java]
+.RecreatableDomainObject.java
 ----
 interface RecreatableDomainObject {
   String __isis_memento()     // <.>

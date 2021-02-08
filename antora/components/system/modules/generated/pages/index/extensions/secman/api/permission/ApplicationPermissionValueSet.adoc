@@ -6,8 +6,8 @@ Intended for value type arithmetic and also for caching.
 
 == API
 
-.ApplicationPermissionValueSet.java
 [source,java]
+.ApplicationPermissionValueSet.java
 ----
 class ApplicationPermissionValueSet {
   ApplicationPermissionValueSet(final List<ApplicationPermissionValue> permissionValues, final PermissionsEvaluationService permissionsEvaluationService)

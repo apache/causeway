@@ -2,8 +2,8 @@
 
 == API
 
-.CommandReplayAnalyserResult.java
 [source,java]
+.CommandReplayAnalyserResult.java
 ----
 class CommandReplayAnalyserResult {
   void init()

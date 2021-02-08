@@ -2,8 +2,8 @@
 
 == API
 
-.SizeSpan.java
 [source,java]
+.SizeSpan.java
 ----
 class SizeSpan {
   SizeSpan with(final Size size, final int span)

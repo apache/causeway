@@ -2,8 +2,8 @@
 
 == API
 
-.AbstractValueSemanticsProvider.java
 [source,java]
+.AbstractValueSemanticsProvider.java
 ----
 class AbstractValueSemanticsProvider {
   EncoderDecoder<T> getEncoderDecoder()

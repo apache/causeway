@@ -2,8 +2,8 @@
 
 == API
 
-.JaxbService.java
 [source,java]
+.JaxbService.java
 ----
 interface JaxbService {
   Object fromXml(JAXBContext jaxbContext, String xml)

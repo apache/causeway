@@ -2,8 +2,8 @@
 
 == API
 
-.MoneyType.java
 [source,java]
+.MoneyType.java
 ----
 class MoneyType {
 }

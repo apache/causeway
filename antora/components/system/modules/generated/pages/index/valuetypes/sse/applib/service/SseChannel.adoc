@@ -4,8 +4,8 @@ Server-sent events.
 
 == API
 
-.SseChannel.java
 [source,java]
+.SseChannel.java
 ----
 interface SseChannel {
   UUID getId()

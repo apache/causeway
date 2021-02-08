@@ -2,8 +2,8 @@
 
 == API
 
-.SecondaryConfig.java
 [source,java]
+.SecondaryConfig.java
 ----
 class SecondaryConfig {
   @Getter

@@ -2,8 +2,8 @@
 
 == API
 
-.QueryRange.java
 [source,java]
+.QueryRange.java
 ----
 interface QueryRange {
   boolean isUnconstrained()

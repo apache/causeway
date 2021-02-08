@@ -6,8 +6,8 @@ If _#getReason()_ is not `null` then provides the reason why the object is invis
 
 == API
 
-.ObjectVisibilityEvent.java
 [source,java]
+.ObjectVisibilityEvent.java
 ----
 class ObjectVisibilityEvent {
   ObjectVisibilityEvent(final Object source, final Identifier classIdentifier)

@@ -4,8 +4,8 @@ Borrowed from BeansEndpoint.
 
 == API
 
-.SpringBeansService.java
 [source,java]
+.SpringBeansService.java
 ----
 class SpringBeansService {
   SpringBeansService(final ConfigurableApplicationContext context)

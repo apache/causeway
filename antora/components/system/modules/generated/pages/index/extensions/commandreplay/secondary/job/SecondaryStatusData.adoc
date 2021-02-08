@@ -2,8 +2,8 @@
 
 == API
 
-.SecondaryStatusData.java
 [source,java]
+.SecondaryStatusData.java
 ----
 class SecondaryStatusData {
   SecondaryStatusData(final JobExecutionContext jobExecutionContext)

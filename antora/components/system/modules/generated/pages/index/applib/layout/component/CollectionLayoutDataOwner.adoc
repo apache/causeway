@@ -2,8 +2,8 @@
 
 == API
 
-.CollectionLayoutDataOwner.java
 [source,java]
+.CollectionLayoutDataOwner.java
 ----
 interface CollectionLayoutDataOwner {
   List<CollectionLayoutData> getCollections()

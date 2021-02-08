@@ -6,8 +6,8 @@ Can be customized via static _WebModuleShiro#setShiroEnvironmentClass(Class)_
 
 == API
 
-.WebModuleShiro.java
 [source,java]
+.WebModuleShiro.java
 ----
 class WebModuleShiro {
   WebModuleShiro(final ServiceInjector serviceInjector)

@@ -2,8 +2,8 @@
 
 == API
 
-.ExceptionHandler.java
 [source,java]
+.ExceptionHandler.java
 ----
 interface ExceptionHandler {
   Object handle(Exception ex)     // <.>

@@ -2,8 +2,8 @@
 
 == API
 
-.ApplicationPermissionRepository.java
 [source,java]
+.ApplicationPermissionRepository.java
 ----
 interface ApplicationPermissionRepository {
   Optional<P> findByUserAndPermissionValue(String username, ApplicationPermissionValue changingPermissionValue)

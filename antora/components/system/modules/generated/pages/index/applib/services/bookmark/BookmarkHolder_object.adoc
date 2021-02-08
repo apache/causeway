@@ -2,8 +2,8 @@
 
 == API
 
-.BookmarkHolder_object.java
 [source,java]
+.BookmarkHolder_object.java
 ----
 class BookmarkHolder_object {
   Object prop()

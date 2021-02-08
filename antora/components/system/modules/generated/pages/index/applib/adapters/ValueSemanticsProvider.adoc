@@ -8,8 +8,8 @@ Whatever the class that implements this interface, it must also expose either a 
 
 == API
 
-.ValueSemanticsProvider.java
 [source,java]
+.ValueSemanticsProvider.java
 ----
 interface ValueSemanticsProvider {
   Parser<T> getParser()     // <.>

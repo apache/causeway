@@ -4,8 +4,8 @@ Extension to applib's xref:system:generated:index/applib/util/ReasonBuffer.adoc[
 
 == API
 
-.ReasonBuffer2.java
 [source,java]
+.ReasonBuffer2.java
 ----
 class ReasonBuffer2 {
   ReasonBuffer2Builder builder()

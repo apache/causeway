@@ -2,8 +2,8 @@
 
 == API
 
-.IsisModuleExtHsqldbMgr.java
 [source,java]
+.IsisModuleExtHsqldbMgr.java
 ----
 class IsisModuleExtHsqldbMgr {
 }

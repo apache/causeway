@@ -2,8 +2,8 @@
 
 == API
 
-.BookmarkHolder.java
 [source,java]
+.BookmarkHolder.java
 ----
 interface BookmarkHolder {
   Bookmark bookmark()

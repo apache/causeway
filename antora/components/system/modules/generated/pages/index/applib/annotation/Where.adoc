@@ -8,8 +8,8 @@ The application programmer may use any of the values of this enum. Some represen
 
 == API
 
-.Where.java
 [source,java]
+.Where.java
 ----
 enum Where {
   EVERYWHERE     // <.>

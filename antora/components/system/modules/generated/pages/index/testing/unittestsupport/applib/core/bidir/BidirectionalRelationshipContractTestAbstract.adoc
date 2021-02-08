@@ -2,8 +2,8 @@
 
 == API
 
-.BidirectionalRelationshipContractTestAbstract.java
 [source,java]
+.BidirectionalRelationshipContractTestAbstract.java
 ----
 class BidirectionalRelationshipContractTestAbstract {
   Object newInstance(final Class<?> entityType)

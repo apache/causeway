@@ -2,8 +2,8 @@
 
 == API
 
-.ActionDomainEvent.java
 [source,java]
+.ActionDomainEvent.java
 ----
 class ActionDomainEvent {
   ActionDomainEvent()     // <.>

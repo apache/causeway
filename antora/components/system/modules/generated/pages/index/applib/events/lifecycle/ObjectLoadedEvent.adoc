@@ -2,8 +2,8 @@
 
 == API
 
-.ObjectLoadedEvent.java
 [source,java]
+.ObjectLoadedEvent.java
 ----
 class ObjectLoadedEvent {
   ObjectLoadedEvent()

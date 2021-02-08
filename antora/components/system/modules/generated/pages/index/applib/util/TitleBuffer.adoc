@@ -8,8 +8,8 @@ The benefits of using this class is that null references are safely ignored (rat
 
 == API
 
-.TitleBuffer.java
 [source,java]
+.TitleBuffer.java
 ----
 class TitleBuffer {
   TitleBuffer()     // <.>

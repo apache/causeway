@@ -4,8 +4,8 @@ Provides the current thread's xref:system:generated:index/applib/services/iactn/
 
 == API
 
-.InteractionContext.java
 [source,java]
+.InteractionContext.java
 ----
 interface InteractionContext {
   Optional<Interaction> currentInteraction()     // <.>

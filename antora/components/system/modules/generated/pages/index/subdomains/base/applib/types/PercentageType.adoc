@@ -2,8 +2,8 @@
 
 == API
 
-.PercentageType.java
 [source,java]
+.PercentageType.java
 ----
 class PercentageType {
 }

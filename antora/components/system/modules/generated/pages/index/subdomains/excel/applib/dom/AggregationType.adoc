@@ -2,8 +2,8 @@
 
 == API
 
-.AggregationType.java
 [source,java]
+.AggregationType.java
 ----
 enum AggregationType {
   SUM

@@ -2,8 +2,8 @@
 
 == API
 
-.AuthenticatorKeycloak.java
 [source,java]
+.AuthenticatorKeycloak.java
 ----
 class AuthenticatorKeycloak {
   boolean canAuthenticate(final Class<? extends AuthenticationRequest> authenticationRequestClass)

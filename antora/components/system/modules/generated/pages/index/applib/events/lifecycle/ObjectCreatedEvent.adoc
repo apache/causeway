@@ -2,8 +2,8 @@
 
 == API
 
-.ObjectCreatedEvent.java
 [source,java]
+.ObjectCreatedEvent.java
 ----
 class ObjectCreatedEvent {
   ObjectCreatedEvent()

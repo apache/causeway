@@ -4,8 +4,8 @@ A user-friendly name of an action, as per _Command#getTargetAction()_ , _org.apa
 
 == API
 
-.TargetActionType.java
 [source,java]
+.TargetActionType.java
 ----
 class TargetActionType {
 }

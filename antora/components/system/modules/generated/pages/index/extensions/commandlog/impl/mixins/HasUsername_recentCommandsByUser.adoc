@@ -2,8 +2,8 @@
 
 == API
 
-.HasUsername_recentCommandsByUser.java
 [source,java]
+.HasUsername_recentCommandsByUser.java
 ----
 class HasUsername_recentCommandsByUser {
   @Inject

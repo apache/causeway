@@ -2,8 +2,8 @@
 
 == API
 
-.JMockActions.java
 [source,java]
+.JMockActions.java
 ----
 class JMockActions {
   Action returnEach(final T... values)

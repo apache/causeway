@@ -6,8 +6,8 @@ The element is rendered as a <div class="...">
 
 == API
 
-.BS3Grid.java
 [source,java]
+.BS3Grid.java
 ----
 class BS3Grid {
   String getCssClass()

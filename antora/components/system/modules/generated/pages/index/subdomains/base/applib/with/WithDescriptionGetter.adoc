@@ -4,8 +4,8 @@ Indicates that the implementing class has a _#getDescription() description_ .
 
 == API
 
-.WithDescriptionGetter.java
 [source,java]
+.WithDescriptionGetter.java
 ----
 interface WithDescriptionGetter {
   String getDescription()

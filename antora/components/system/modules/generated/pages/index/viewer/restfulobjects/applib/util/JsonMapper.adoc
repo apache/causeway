@@ -2,8 +2,8 @@
 
 == API
 
-.JsonMapper.java
 [source,java]
+.JsonMapper.java
 ----
 class JsonMapper {
   String getEntityAsStringFrom(Response response)

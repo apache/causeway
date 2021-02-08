@@ -4,8 +4,8 @@ A model object for the signup page
 
 == API
 
-.UserDetails.java
 [source,java]
+.UserDetails.java
 ----
 class UserDetails {
 }

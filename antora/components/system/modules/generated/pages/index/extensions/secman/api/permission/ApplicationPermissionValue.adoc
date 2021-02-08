@@ -6,8 +6,8 @@ Intended for value type arithmetic and also for caching. No user/role informatio
 
 == API
 
-.ApplicationPermissionValue.java
 [source,java]
+.ApplicationPermissionValue.java
 ----
 class ApplicationPermissionValue {
   ApplicationPermissionValue(final ApplicationFeatureId featureId, final ApplicationPermissionRule rule, final ApplicationPermissionMode mode)

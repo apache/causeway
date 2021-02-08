@@ -4,8 +4,8 @@ Represents a nullable scalar value, as used by ContentNegotiationServiceOrgApach
 
 == API
 
-.ScalarValueDtoV2.java
 [source,java]
+.ScalarValueDtoV2.java
 ----
 class ScalarValueDtoV2 {
   ScalarValueDtoV2 forNull(Class<?> type)

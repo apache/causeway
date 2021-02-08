@@ -2,8 +2,8 @@
 
 == API
 
-.HintStore.java
 [source,java]
+.HintStore.java
 ----
 interface HintStore {
   String get(final Bookmark bookmark, String hintKey)

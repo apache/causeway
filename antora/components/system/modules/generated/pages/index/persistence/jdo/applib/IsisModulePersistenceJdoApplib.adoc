@@ -2,8 +2,8 @@
 
 == API
 
-.IsisModulePersistenceJdoApplib.java
 [source,java]
+.IsisModulePersistenceJdoApplib.java
 ----
 class IsisModulePersistenceJdoApplib {
 }

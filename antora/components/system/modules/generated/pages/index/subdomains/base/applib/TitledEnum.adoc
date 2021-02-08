@@ -4,8 +4,8 @@ An enum that implements xref:system:generated:index/subdomains/base/applib/Title
 
 == API
 
-.TitledEnum.java
 [source,java]
+.TitledEnum.java
 ----
 interface TitledEnum {
 }

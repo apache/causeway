@@ -2,8 +2,8 @@
 
 == API
 
-.JavaUtilDates.java
 [source,java]
+.JavaUtilDates.java
 ----
 class JavaUtilDates {
   JavaUtilDates(final FakeDataService fakeDataService)

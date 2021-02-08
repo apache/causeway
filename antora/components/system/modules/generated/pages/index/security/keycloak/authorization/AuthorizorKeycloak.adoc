@@ -2,8 +2,8 @@
 
 == API
 
-.AuthorizorKeycloak.java
 [source,java]
+.AuthorizorKeycloak.java
 ----
 class AuthorizorKeycloak {
   boolean isVisibleInRole(String role, Identifier identifier)

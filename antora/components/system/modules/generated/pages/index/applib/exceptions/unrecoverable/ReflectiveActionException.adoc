@@ -2,8 +2,8 @@
 
 == API
 
-.ReflectiveActionException.java
 [source,java]
+.ReflectiveActionException.java
 ----
 class ReflectiveActionException {
   ReflectiveActionException(final String msg)

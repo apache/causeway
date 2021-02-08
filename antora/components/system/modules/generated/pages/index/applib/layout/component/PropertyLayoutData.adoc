@@ -4,8 +4,8 @@ Describes the layout of a single property, broadly corresponds to the _org.apach
 
 == API
 
-.PropertyLayoutData.java
 [source,java]
+.PropertyLayoutData.java
 ----
 class PropertyLayoutData {
   PropertyLayoutData()

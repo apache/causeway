@@ -2,8 +2,8 @@
 
 == API
 
-.IsoZonedDateTimeConverter.java
 [source,java]
+.IsoZonedDateTimeConverter.java
 ----
 class IsoZonedDateTimeConverter {
   String toDatastoreType(final ZonedDateTime offsetTime)

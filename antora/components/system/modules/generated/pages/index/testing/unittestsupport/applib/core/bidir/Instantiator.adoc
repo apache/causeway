@@ -2,8 +2,8 @@
 
 == API
 
-.Instantiator.java
 [source,java]
+.Instantiator.java
 ----
 interface Instantiator {
   Instantiator NOOP;

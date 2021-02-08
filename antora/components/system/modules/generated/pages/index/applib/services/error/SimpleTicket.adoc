@@ -11,8 +11,8 @@ so that it can be stored by the Wicket viewer as a Wicket model.
 
 == API
 
-.SimpleTicket.java
 [source,java]
+.SimpleTicket.java
 ----
 class SimpleTicket {
   SimpleTicket(final String reference, final String userMessage, final String details)

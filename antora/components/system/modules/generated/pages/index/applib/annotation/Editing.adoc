@@ -4,8 +4,8 @@ The available policies for editing properties and collections.
 
 == API
 
-.Editing.java
 [source,java]
+.Editing.java
 ----
 enum Editing {
   AS_CONFIGURED     // <.>

@@ -2,8 +2,8 @@
 
 == API
 
-.Rel.java
 [source,java]
+.Rel.java
 ----
 enum Rel {
   SELF

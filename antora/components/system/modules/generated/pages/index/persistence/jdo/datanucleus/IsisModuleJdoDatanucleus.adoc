@@ -2,13 +2,27 @@
 
 == API
 
-.IsisModuleJdoDatanucleus.java
 [source,java]
+.IsisModuleJdoDatanucleus.java
 ----
 class IsisModuleJdoDatanucleus {
+  DnJdoDialect getDnJdoDialect()     // <.>
   LocalPersistenceManagerFactoryBean getLocalPersistenceManagerFactoryBean(final IsisConfiguration isisConfiguration, final DataSource dataSource, final MetaModelContext metaModelContext, final EventBusService eventBusService, final Provider<EntityChangeTracker> entityChangeTrackerProvider, final DnSettings dnSettings)
   TransactionAwarePersistenceManagerFactoryProxy getTransactionAwarePersistenceManagerFactoryProxy(final LocalPersistenceManagerFactoryBean localPmfBean)
-  JdoTransactionManager getTransactionManager(final LocalPersistenceManagerFactoryBean localPmfBean)
+  JdoTransactionManager getTransactionManager(final JdoDialect jdoDialect, final LocalPersistenceManagerFactoryBean localPmfBean)
 }
 ----
+
+<.> xref:#getDnJdoDialect[getDnJdoDialect]
++
+--
+Conveniently registers this dialect as a _PersistenceExceptionTranslator_ with _Spring_ .
+--
+
+== Members
+
+[#getDnJdoDialect]
+=== getDnJdoDialect
+
+Conveniently registers this dialect as a _PersistenceExceptionTranslator_ with _Spring_ .
 

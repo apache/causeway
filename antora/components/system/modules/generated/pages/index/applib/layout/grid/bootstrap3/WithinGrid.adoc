@@ -2,8 +2,8 @@
 
 == API
 
-.WithinGrid.java
 [source,java]
+.WithinGrid.java
 ----
 interface WithinGrid {
   BS3Grid getGrid()

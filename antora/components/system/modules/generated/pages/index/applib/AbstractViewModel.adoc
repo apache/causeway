@@ -6,8 +6,8 @@ Subclassing is NOT mandatory; the methods in this superclass can be pushed down 
 
 == API
 
-.AbstractViewModel.java
 [source,java]
+.AbstractViewModel.java
 ----
 class AbstractViewModel {
 }

@@ -4,8 +4,8 @@ For `enum` s that act as powertypes, in other words acting as a factory for subt
 
 == API
 
-.PowerType.java
 [source,java]
+.PowerType.java
 ----
 interface PowerType {
   T create(FactoryService factoryService)

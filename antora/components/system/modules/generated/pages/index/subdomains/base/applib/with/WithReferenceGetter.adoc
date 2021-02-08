@@ -4,8 +4,8 @@ Indicates that the implementing class has a _#getReference() reference_ .
 
 == API
 
-.WithReferenceGetter.java
 [source,java]
+.WithReferenceGetter.java
 ----
 interface WithReferenceGetter {
   String getReference()

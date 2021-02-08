@@ -2,8 +2,8 @@
 
 == API
 
-.MethodReferences.java
 [source,java]
+.MethodReferences.java
 ----
 class MethodReferences {
 }

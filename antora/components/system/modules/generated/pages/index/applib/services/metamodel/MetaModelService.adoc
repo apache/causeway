@@ -6,8 +6,8 @@ This API is currently extremely limited, but the intention is to extend it gradu
 
 == API
 
-.MetaModelService.java
 [source,java]
+.MetaModelService.java
 ----
 interface MetaModelService {
   Class<?> fromObjectType(final String objectType)     // <.>

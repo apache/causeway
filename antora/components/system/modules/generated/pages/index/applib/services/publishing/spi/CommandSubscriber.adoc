@@ -4,8 +4,8 @@ Part of the _Publishing SPI_ . A component to receive xref:system:generated:inde
 
 == API
 
-.CommandSubscriber.java
 [source,java]
+.CommandSubscriber.java
 ----
 interface CommandSubscriber {
   void onCompleted(Command command)     // <.>

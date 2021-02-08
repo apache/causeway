@@ -2,8 +2,8 @@
 
 == API
 
-.ResourceCoordinates.java
 [source,java]
+.ResourceCoordinates.java
 ----
 class ResourceCoordinates {
   ResourceCoordinates fromFile(final File file)

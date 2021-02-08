@@ -4,8 +4,8 @@ Whether the user's account is local enabled (user/password) or delegated (eg LDA
 
 == API
 
-.AccountType.java
 [source,java]
+.AccountType.java
 ----
 enum AccountType {
   LOCAL

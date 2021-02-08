@@ -2,8 +2,8 @@
 
 == API
 
-.CommandOutcomeHandler.java
 [source,java]
+.CommandOutcomeHandler.java
 ----
 interface CommandOutcomeHandler {
   CommandOutcomeHandler NULL;

@@ -6,8 +6,8 @@ The view model is instantiated through a no-arg constructor, so must in effect b
 
 == API
 
-.HomePage.java
 [source,java]
+.HomePage.java
 ----
 @interface HomePage {
 }

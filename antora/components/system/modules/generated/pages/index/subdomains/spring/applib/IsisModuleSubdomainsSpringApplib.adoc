@@ -2,8 +2,8 @@
 
 == API
 
-.IsisModuleSubdomainsSpringApplib.java
 [source,java]
+.IsisModuleSubdomainsSpringApplib.java
 ----
 class IsisModuleSubdomainsSpringApplib {
 }

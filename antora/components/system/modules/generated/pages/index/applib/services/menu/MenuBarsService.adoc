@@ -2,8 +2,8 @@
 
 == API
 
-.MenuBarsService.java
 [source,java]
+.MenuBarsService.java
 ----
 interface MenuBarsService {
   MenuBars menuBars()     // <.>

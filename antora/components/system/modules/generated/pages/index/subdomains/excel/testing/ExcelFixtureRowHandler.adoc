@@ -2,8 +2,8 @@
 
 == API
 
-.ExcelFixtureRowHandler.java
 [source,java]
+.ExcelFixtureRowHandler.java
 ----
 interface ExcelFixtureRowHandler {
   List<Object> handleRow(final FixtureScript.ExecutionContext executionContext, final ExcelFixture excelFixture, final Object previousRow)

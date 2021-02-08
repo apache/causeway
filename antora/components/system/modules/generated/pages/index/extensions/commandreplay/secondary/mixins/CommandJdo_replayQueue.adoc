@@ -2,8 +2,8 @@
 
 == API
 
-.CommandJdo_replayQueue.java
 [source,java]
+.CommandJdo_replayQueue.java
 ----
 class CommandJdo_replayQueue {
   final CommandJdo commandJdo;

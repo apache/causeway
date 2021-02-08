@@ -4,8 +4,8 @@ Describes the layout of a single collection, broadly corresponds to the _org.apa
 
 == API
 
-.CollectionLayoutData.java
 [source,java]
+.CollectionLayoutData.java
 ----
 class CollectionLayoutData {
   CollectionLayoutData()

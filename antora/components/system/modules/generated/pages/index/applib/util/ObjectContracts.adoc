@@ -38,8 +38,8 @@ public int compareTo(final ApplicationFeature other) {
 
 == API
 
-.ObjectContracts.java
 [source,java]
+.ObjectContracts.java
 ----
 class ObjectContracts {
   ToString<T> toString(String name, Function<T, ?> getter)

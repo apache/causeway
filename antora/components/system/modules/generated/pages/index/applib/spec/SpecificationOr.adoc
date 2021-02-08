@@ -17,8 +17,8 @@ public class TeaOrCoffeeSpec extends SpecificationOr {
 
 == API
 
-.SpecificationOr.java
 [source,java]
+.SpecificationOr.java
 ----
 class SpecificationOr {
   SpecificationOr(final Specification... specifications)

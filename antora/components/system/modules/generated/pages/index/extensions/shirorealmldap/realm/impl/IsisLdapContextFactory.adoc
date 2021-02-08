@@ -6,8 +6,8 @@ See xref:system:generated:index/extensions/shirorealmldap/realm/impl/IsisLdapRea
 
 == API
 
-.IsisLdapContextFactory.java
 [source,java]
+.IsisLdapContextFactory.java
 ----
 class IsisLdapContextFactory {
   String getSystemAuthenticationMechanism()

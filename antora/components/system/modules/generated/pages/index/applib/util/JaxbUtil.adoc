@@ -6,8 +6,8 @@ For example usage, seeIsis addons' publishmq module(non-ASF)
 
 == API
 
-.JaxbUtil.java
 [source,java]
+.JaxbUtil.java
 ----
 class JaxbUtil {
   Result<T> fromXml(final Reader reader, final Class<T> dtoClass)

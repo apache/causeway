@@ -2,8 +2,8 @@
 
 == API
 
-.OrderPrecedence.java
 [source,java]
+.OrderPrecedence.java
 ----
 class OrderPrecedence {
   public static final int FIRST;     // <.>

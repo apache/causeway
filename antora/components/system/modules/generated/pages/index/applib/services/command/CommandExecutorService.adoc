@@ -2,8 +2,8 @@
 
 == API
 
-.CommandExecutorService.java
 [source,java]
+.CommandExecutorService.java
 ----
 interface CommandExecutorService {
   Bookmark executeCommand(SudoPolicy sudoPolicy, Command command)     // <.>

@@ -2,8 +2,8 @@
 
 == API
 
-.Addresses.java
 [source,java]
+.Addresses.java
 ----
 class Addresses {
   com.github.javafaker.Address javaFakerAddress;

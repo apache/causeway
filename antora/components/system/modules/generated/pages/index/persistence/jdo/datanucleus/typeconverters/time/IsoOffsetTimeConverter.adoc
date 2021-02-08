@@ -2,8 +2,8 @@
 
 == API
 
-.IsoOffsetTimeConverter.java
 [source,java]
+.IsoOffsetTimeConverter.java
 ----
 class IsoOffsetTimeConverter {
   String toDatastoreType(final OffsetTime offsetTime)

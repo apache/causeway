@@ -4,8 +4,8 @@ An event send to all services interested in user registration
 
 == API
 
-.EmailRegistrationEvent.java
 [source,java]
+.EmailRegistrationEvent.java
 ----
 class EmailRegistrationEvent {
   EmailRegistrationEvent(final String email, final String confirmationUrl, final String applicationName)

@@ -2,8 +2,8 @@
 
 == API
 
-.RestfulClientException.java
 [source,java]
+.RestfulClientException.java
 ----
 class RestfulClientException {
   RestfulClientException()

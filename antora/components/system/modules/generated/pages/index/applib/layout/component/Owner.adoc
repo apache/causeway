@@ -2,8 +2,8 @@
 
 == API
 
-.Owner.java
 [source,java]
+.Owner.java
 ----
 interface Owner {
 }

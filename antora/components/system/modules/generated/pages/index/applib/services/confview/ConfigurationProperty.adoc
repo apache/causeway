@@ -2,8 +2,8 @@
 
 == API
 
-.ConfigurationProperty.java
 [source,java]
+.ConfigurationProperty.java
 ----
 class ConfigurationProperty {
   ConfigurationProperty(final String key, final String value)

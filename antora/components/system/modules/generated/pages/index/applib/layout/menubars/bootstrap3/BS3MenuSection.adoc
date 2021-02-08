@@ -4,8 +4,8 @@ Corresponds to a domain service that contributes its serviceActions under a part
 
 == API
 
-.BS3MenuSection.java
 [source,java]
+.BS3MenuSection.java
 ----
 class BS3MenuSection {
   BS3MenuSection()

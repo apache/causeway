@@ -2,8 +2,8 @@
 
 == API
 
-.Object_openOnPrimary.java
 [source,java]
+.Object_openOnPrimary.java
 ----
 class Object_openOnPrimary {
   final Object object;

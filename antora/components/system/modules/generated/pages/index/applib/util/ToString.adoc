@@ -4,8 +4,8 @@ Fluent Object to String Composition.
 
 == API
 
-.ToString.java
 [source,java]
+.ToString.java
 ----
 class ToString {
   ToString<T> toString(String name, Function<? super T, ?> getter)

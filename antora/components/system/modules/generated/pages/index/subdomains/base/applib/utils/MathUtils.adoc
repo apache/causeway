@@ -4,8 +4,8 @@ General-purpose math utilities.
 
 == API
 
-.MathUtils.java
 [source,java]
+.MathUtils.java
 ----
 class MathUtils {
   BigDecimal round(final BigDecimal input, final int precision)

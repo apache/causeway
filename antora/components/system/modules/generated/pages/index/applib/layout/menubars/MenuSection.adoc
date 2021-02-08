@@ -2,8 +2,8 @@
 
 == API
 
-.MenuSection.java
 [source,java]
+.MenuSection.java
 ----
 interface MenuSection {
   List<ServiceActionLayoutData> getServiceActions()

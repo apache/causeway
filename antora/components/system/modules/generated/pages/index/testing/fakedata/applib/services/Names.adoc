@@ -2,8 +2,8 @@
 
 == API
 
-.Names.java
 [source,java]
+.Names.java
 ----
 class Names {
   com.github.javafaker.Name javaFakerName;

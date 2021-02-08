@@ -2,8 +2,8 @@
 
 == API
 
-.ExcelMetaDataEnabled.java
 [source,java]
+.ExcelMetaDataEnabled.java
 ----
 interface ExcelMetaDataEnabled {
   void setExcelSheetName(final String sheetName)

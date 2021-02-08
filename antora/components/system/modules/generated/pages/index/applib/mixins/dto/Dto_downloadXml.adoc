@@ -2,8 +2,8 @@
 
 == API
 
-.Dto_downloadXml.java
 [source,java]
+.Dto_downloadXml.java
 ----
 class Dto_downloadXml {
   @Inject

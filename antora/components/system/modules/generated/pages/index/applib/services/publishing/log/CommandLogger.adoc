@@ -2,8 +2,8 @@
 
 == API
 
-.CommandLogger.java
 [source,java]
+.CommandLogger.java
 ----
 class CommandLogger {
   boolean isEnabled()

@@ -2,8 +2,8 @@
 
 == API
 
-.DomainServiceResource.java
 [source,java]
+.DomainServiceResource.java
 ----
 interface DomainServiceResource {
   Response services()

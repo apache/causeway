@@ -4,8 +4,8 @@ Superclass of exceptions which indicate an attempt to interact with a class memb
 
 == API
 
-.DisabledException.java
 [source,java]
+.DisabledException.java
 ----
 class DisabledException {
   DisabledException(final InteractionEvent interactionEvent)

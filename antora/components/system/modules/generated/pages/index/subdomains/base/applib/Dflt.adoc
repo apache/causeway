@@ -2,8 +2,8 @@
 
 == API
 
-.Dflt.java
 [source,java]
+.Dflt.java
 ----
 class Dflt {
   T of(final Collection<T> choices)

@@ -2,8 +2,8 @@
 
 == API
 
-.BeanDescriptor.java
 [source,java]
+.BeanDescriptor.java
 ----
 class BeanDescriptor {
   BeanDescriptor(final String beanName, final ConfigurableApplicationContext context)

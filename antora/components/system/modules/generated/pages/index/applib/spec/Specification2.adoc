@@ -6,8 +6,8 @@ If implemented, then the _#satisfies(Object)_ inherited from xref:system:generat
 
 == API
 
-.Specification2.java
 [source,java]
+.Specification2.java
 ----
 interface Specification2 {
   TranslatableString satisfiesTranslatable(Object obj)     // <.>

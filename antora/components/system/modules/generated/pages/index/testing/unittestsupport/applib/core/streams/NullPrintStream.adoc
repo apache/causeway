@@ -2,8 +2,8 @@
 
 == API
 
-.NullPrintStream.java
 [source,java]
+.NullPrintStream.java
 ----
 class NullPrintStream {
   NullPrintStream()

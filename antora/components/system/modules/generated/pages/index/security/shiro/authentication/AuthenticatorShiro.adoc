@@ -6,8 +6,8 @@ However, although there are two objects, they are set up to share the same _Secu
 
 == API
 
-.AuthenticatorShiro.java
 [source,java]
+.AuthenticatorShiro.java
 ----
 class AuthenticatorShiro {
   AuthenticatorShiro(IsisConfiguration configuration)

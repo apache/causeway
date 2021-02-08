@@ -2,8 +2,8 @@
 
 == API
 
-.IsisExtSecmanAdminUser.java
 [source,java]
+.IsisExtSecmanAdminUser.java
 ----
 class IsisExtSecmanAdminUser {
   IsisExtSecmanAdminUser(SecmanConfiguration configBean)

@@ -2,8 +2,8 @@
 
 == API
 
-.IsisModuleExtSecmanApi.java
 [source,java]
+.IsisModuleExtSecmanApi.java
 ----
 class IsisModuleExtSecmanApi {
 }

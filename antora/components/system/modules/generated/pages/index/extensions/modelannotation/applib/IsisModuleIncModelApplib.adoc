@@ -2,8 +2,8 @@
 
 == API
 
-.IsisModuleIncModelApplib.java
 [source,java]
+.IsisModuleIncModelApplib.java
 ----
 class IsisModuleIncModelApplib {
 }

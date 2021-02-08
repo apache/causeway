@@ -4,8 +4,8 @@ _ComponentFactory_ for xref:system:generated:index/extensions/viewer/wicket/exce
 
 == API
 
-.CollectionContentsAsExcelFactory.java
 [source,java]
+.CollectionContentsAsExcelFactory.java
 ----
 class CollectionContentsAsExcelFactory {
   CollectionContentsAsExcelFactory()

@@ -15,8 +15,8 @@ Note also that though a value is conceptually not shared, if it is also immutabl
 
 == API
 
-.Value.java
 [source,java]
+.Value.java
 ----
 @interface Value {
   String semanticsProviderName() default "";     // <.>

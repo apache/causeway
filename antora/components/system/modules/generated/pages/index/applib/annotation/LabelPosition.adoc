@@ -4,8 +4,8 @@ The positioning of a label for a property or action parameter.
 
 == API
 
-.LabelPosition.java
 [source,java]
+.LabelPosition.java
 ----
 enum LabelPosition {
   DEFAULT

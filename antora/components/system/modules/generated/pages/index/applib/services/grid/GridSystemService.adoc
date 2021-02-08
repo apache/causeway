@@ -4,8 +4,8 @@ Provides an implementation of xref:system:generated:index/applib/layout/grid/Gri
 
 == API
 
-.GridSystemService.java
 [source,java]
+.GridSystemService.java
 ----
 interface GridSystemService {
   Class<G> gridImplementation()     // <.>

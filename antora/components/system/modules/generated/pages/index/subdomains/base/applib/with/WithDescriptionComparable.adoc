@@ -2,8 +2,8 @@
 
 == API
 
-.WithDescriptionComparable.java
 [source,java]
+.WithDescriptionComparable.java
 ----
 interface WithDescriptionComparable {
   void setDescription(String description)

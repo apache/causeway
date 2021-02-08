@@ -2,8 +2,8 @@
 
 == API
 
-.IsisBookmarkConverter.java
 [source,java]
+.IsisBookmarkConverter.java
 ----
 class IsisBookmarkConverter {
   String toDatastoreType(final Bookmark memberValue)

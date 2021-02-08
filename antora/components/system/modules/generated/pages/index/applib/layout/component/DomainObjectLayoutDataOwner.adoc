@@ -2,8 +2,8 @@
 
 == API
 
-.DomainObjectLayoutDataOwner.java
 [source,java]
+.DomainObjectLayoutDataOwner.java
 ----
 interface DomainObjectLayoutDataOwner {
   DomainObjectLayoutData getDomainObject()

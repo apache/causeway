@@ -2,8 +2,8 @@
 
 == API
 
-.IsisModuleExtCommandReplayPrimary.java
 [source,java]
+.IsisModuleExtCommandReplayPrimary.java
 ----
 class IsisModuleExtCommandReplayPrimary {
 }

@@ -2,8 +2,8 @@
 
 == API
 
-.CommandRetrievalService.java
 [source,java]
+.CommandRetrievalService.java
 ----
 class CommandRetrievalService {
   @Inject

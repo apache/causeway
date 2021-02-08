@@ -2,8 +2,8 @@
 
 == API
 
-.UserResource.java
 [source,java]
+.UserResource.java
 ----
 interface UserResource {
   Response user()

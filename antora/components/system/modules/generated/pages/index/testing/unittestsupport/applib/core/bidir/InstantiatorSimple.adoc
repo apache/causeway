@@ -2,8 +2,8 @@
 
 == API
 
-.InstantiatorSimple.java
 [source,java]
+.InstantiatorSimple.java
 ----
 class InstantiatorSimple {
   public final Class<?> cls;

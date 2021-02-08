@@ -6,8 +6,8 @@ This interface is EXPERIMENTAL and may change in the future.
 
 == API
 
-.RepresentationService.java
 [source,java]
+.RepresentationService.java
 ----
 interface RepresentationService {
   Response objectRepresentation(IResourceContext resourceContext, ManagedObject objectAdapter)

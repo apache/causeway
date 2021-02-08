@@ -2,8 +2,8 @@
 
 == API
 
-.Object_openOnSecondary.java
 [source,java]
+.Object_openOnSecondary.java
 ----
 class Object_openOnSecondary {
   final Object object;

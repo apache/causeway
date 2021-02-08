@@ -2,8 +2,8 @@
 
 == API
 
-.IsisModuleValAsciidocApplib.java
 [source,java]
+.IsisModuleValAsciidocApplib.java
 ----
 class IsisModuleValAsciidocApplib {
 }

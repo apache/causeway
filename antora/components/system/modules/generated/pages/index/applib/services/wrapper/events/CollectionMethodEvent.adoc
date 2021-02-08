@@ -4,8 +4,8 @@
 
 == API
 
-.CollectionMethodEvent.java
 [source,java]
+.CollectionMethodEvent.java
 ----
 class CollectionMethodEvent {
   CollectionMethodEvent(final Object source, final Identifier collectionIdentifier, final Object domainObject, final String methodName, final Object[] args, final Object returnValue)

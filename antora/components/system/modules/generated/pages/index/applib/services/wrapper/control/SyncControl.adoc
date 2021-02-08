@@ -2,8 +2,8 @@
 
 == API
 
-.SyncControl.java
 [source,java]
+.SyncControl.java
 ----
 class SyncControl {
   SyncControl control()

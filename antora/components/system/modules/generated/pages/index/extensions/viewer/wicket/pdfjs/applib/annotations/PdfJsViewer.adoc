@@ -4,8 +4,8 @@ An annotation that could be applied on a property or parameter of type _org.apac
 
 == API
 
-.PdfJsViewer.java
 [source,java]
+.PdfJsViewer.java
 ----
 @interface PdfJsViewer {
   int initialPageNum() default 1;

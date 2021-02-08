@@ -2,8 +2,8 @@
 
 == API
 
-.DomainModelValidator.java
 [source,java]
+.DomainModelValidator.java
 ----
 class DomainModelValidator {
   DomainModelValidator(ServiceRegistry registry)

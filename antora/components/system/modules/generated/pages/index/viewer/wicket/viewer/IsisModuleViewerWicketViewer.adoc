@@ -2,8 +2,8 @@
 
 == API
 
-.IsisModuleViewerWicketViewer.java
 [source,java]
+.IsisModuleViewerWicketViewer.java
 ----
 class IsisModuleViewerWicketViewer {
 }

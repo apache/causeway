@@ -16,8 +16,8 @@ The class also adds some convenience methods, and uses a factory method to make 
 
 == API
 
-.JUnitRuleMockery2.java
 [source,java]
+.JUnitRuleMockery2.java
 ----
 class JUnitRuleMockery2 {
   JUnitRuleMockery2 createFor(final Mode mode)     // <.>

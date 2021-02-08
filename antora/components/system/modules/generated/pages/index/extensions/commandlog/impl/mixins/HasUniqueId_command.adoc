@@ -4,8 +4,8 @@ This mixin contributes a `command` action to any (non-command) implementation of
 
 == API
 
-.HasUniqueId_command.java
 [source,java]
+.HasUniqueId_command.java
 ----
 class HasUniqueId_command {
   @Inject

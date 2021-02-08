@@ -2,8 +2,8 @@
 
 == API
 
-.BigDecimals.java
 [source,java]
+.BigDecimals.java
 ----
 class BigDecimals {
   BigDecimals(final FakeDataService fakeDataService)

@@ -2,8 +2,8 @@
 
 == API
 
-.ResponseDigest.java
 [source,java]
+.ResponseDigest.java
 ----
 class ResponseDigest {
   ResponseDigest<T> of(final Response response, final Class<T> entityType)     // <.>

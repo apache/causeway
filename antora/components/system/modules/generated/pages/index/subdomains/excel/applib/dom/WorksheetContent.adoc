@@ -2,8 +2,8 @@
 
 == API
 
-.WorksheetContent.java
 [source,java]
+.WorksheetContent.java
 ----
 class WorksheetContent {
   WorksheetContent(final List<T> domainObjects, final WorksheetSpec spec)

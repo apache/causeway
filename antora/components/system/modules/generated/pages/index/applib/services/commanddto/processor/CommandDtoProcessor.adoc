@@ -4,8 +4,8 @@ Refine (or possibly ignore) a command when replicating from primary to secondary
 
 == API
 
-.CommandDtoProcessor.java
 [source,java]
+.CommandDtoProcessor.java
 ----
 interface CommandDtoProcessor {
   CommandDto process(CommandDto commandDto)     // <.>

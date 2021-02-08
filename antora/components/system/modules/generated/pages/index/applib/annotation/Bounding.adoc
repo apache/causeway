@@ -4,8 +4,8 @@ Whether the set of instances of a domain object is bounded or not.
 
 == API
 
-.Bounding.java
 [source,java]
+.Bounding.java
 ----
 enum Bounding {
   BOUNDED

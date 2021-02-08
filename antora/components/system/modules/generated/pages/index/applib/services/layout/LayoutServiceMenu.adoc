@@ -2,8 +2,8 @@
 
 == API
 
-.LayoutServiceMenu.java
 [source,java]
+.LayoutServiceMenu.java
 ----
 class LayoutServiceMenu {
   @Inject

@@ -6,8 +6,8 @@ Implementation must be thread-safe.
 
 == API
 
-.ServiceInjector.java
 [source,java]
+.ServiceInjector.java
 ----
 interface ServiceInjector {
   T injectServicesInto(final T domainObject, Consumer<InjectionPoint> onNotResolvable)

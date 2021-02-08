@@ -6,8 +6,8 @@ Analogous to the `RootOid` .
 
 == API
 
-.Bookmark.java
 [source,java]
+.Bookmark.java
 ----
 class Bookmark {
   Bookmark of(String objectType, String identifier)

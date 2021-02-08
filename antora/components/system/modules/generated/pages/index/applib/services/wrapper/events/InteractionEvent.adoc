@@ -6,8 +6,8 @@ Many of the interactions are checks for xref:system:generated:index/applib/servi
 
 == API
 
-.InteractionEvent.java
 [source,java]
+.InteractionEvent.java
 ----
 class InteractionEvent {
   InteractionEvent(final Object source, final Identifier identifier)

@@ -2,8 +2,8 @@
 
 == API
 
-.InteractionDtoUtils.java
 [source,java]
+.InteractionDtoUtils.java
 ----
 class InteractionDtoUtils {
   static JAXBContext jaxbContext;

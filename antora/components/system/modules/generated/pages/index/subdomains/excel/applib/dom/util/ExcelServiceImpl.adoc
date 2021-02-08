@@ -2,8 +2,8 @@
 
 == API
 
-.ExcelServiceImpl.java
 [source,java]
+.ExcelServiceImpl.java
 ----
 class ExcelServiceImpl {
   @javax.inject.Inject

@@ -2,8 +2,8 @@
 
 == API
 
-.ObjectPersistedEvent.java
 [source,java]
+.ObjectPersistedEvent.java
 ----
 class ObjectPersistedEvent {
   ObjectPersistedEvent()

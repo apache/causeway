@@ -4,8 +4,8 @@ Contract test for value types ( _#equals(Object) equals_ and _#hashCode() hashCo
 
 == API
 
-.ValueTypeContractTestAbstract.java
 [source,java]
+.ValueTypeContractTestAbstract.java
 ----
 class ValueTypeContractTestAbstract {
   void setUp()

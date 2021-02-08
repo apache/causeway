@@ -2,8 +2,8 @@
 
 == API
 
-.MenuBarsLoaderService.java
 [source,java]
+.MenuBarsLoaderService.java
 ----
 interface MenuBarsLoaderService {
   boolean supportsReloading()     // <.>

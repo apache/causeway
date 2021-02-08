@@ -2,8 +2,8 @@
 
 == API
 
-.HomePageRepresentation.java
 [source,java]
+.HomePageRepresentation.java
 ----
 class HomePageRepresentation {
   HomePageRepresentation(final JsonNode jsonNode)

@@ -2,8 +2,8 @@
 
 == API
 
-.MemberExecutionDtoUtils.java
 [source,java]
+.MemberExecutionDtoUtils.java
 ----
 class MemberExecutionDtoUtils {
   T clone(final T dto)

@@ -6,8 +6,8 @@ Other services can then use this username as a means to contributed actions/coll
 
 == API
 
-.HasUsername.java
 [source,java]
+.HasUsername.java
 ----
 interface HasUsername {
   String getUsername()     // <.>

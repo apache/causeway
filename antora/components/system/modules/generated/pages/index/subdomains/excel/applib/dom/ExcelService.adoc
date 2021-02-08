@@ -2,8 +2,8 @@
 
 == API
 
-.ExcelService.java
 [source,java]
+.ExcelService.java
 ----
 class ExcelService {
   public static final String XSLX_MIME_TYPE;

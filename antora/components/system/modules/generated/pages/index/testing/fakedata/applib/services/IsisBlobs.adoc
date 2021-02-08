@@ -2,8 +2,8 @@
 
 == API
 
-.IsisBlobs.java
 [source,java]
+.IsisBlobs.java
 ----
 class IsisBlobs {
   IsisBlobs(final FakeDataService fakeDataService)

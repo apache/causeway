@@ -2,8 +2,8 @@
 
 == API
 
-.TransactionAfterCompletionEvent.java
 [source,java]
+.TransactionAfterCompletionEvent.java
 ----
 enum TransactionAfterCompletionEvent {
   COMMITTED     // <.>

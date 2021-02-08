@@ -6,8 +6,8 @@ Most commonly the content of a row is xref:system:generated:index/applib/layout/
 
 == API
 
-.BS3RowContent.java
 [source,java]
+.BS3RowContent.java
 ----
 class BS3RowContent {
   Size getSize()     // <.>

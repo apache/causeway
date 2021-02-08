@@ -6,8 +6,8 @@ This class is instantiated each time the Quartz job ( `_org.apache.isis.extensio
 
 == API
 
-.ReplicateAndRunCommands.java
 [source,java]
+.ReplicateAndRunCommands.java
 ----
 class ReplicateAndRunCommands {
   @Inject

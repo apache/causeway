@@ -2,8 +2,8 @@
 
 == API
 
-.AcceptHeaderServiceForRest.java
 [source,java]
+.AcceptHeaderServiceForRest.java
 ----
 class AcceptHeaderServiceForRest {
   List<MediaType> getAcceptableMediaTypes()

@@ -2,8 +2,8 @@
 
 == API
 
-.IsisChangesDtoConverter.java
 [source,java]
+.IsisChangesDtoConverter.java
 ----
 class IsisChangesDtoConverter {
   String toDatastoreType(final ChangesDto memberValue)

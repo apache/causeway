@@ -2,8 +2,8 @@
 
 == API
 
-.HasBookmarking.java
 [source,java]
+.HasBookmarking.java
 ----
 interface HasBookmarking {
   BookmarkPolicy getBookmarking()

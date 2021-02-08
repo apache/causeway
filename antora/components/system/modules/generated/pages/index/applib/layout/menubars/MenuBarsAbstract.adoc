@@ -2,8 +2,8 @@
 
 == API
 
-.MenuBarsAbstract.java
 [source,java]
+.MenuBarsAbstract.java
 ----
 class MenuBarsAbstract {
   String getTnsAndSchemaLocation()

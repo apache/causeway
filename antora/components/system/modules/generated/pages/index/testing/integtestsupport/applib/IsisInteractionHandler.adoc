@@ -2,8 +2,8 @@
 
 == API
 
-.IsisInteractionHandler.java
 [source,java]
+.IsisInteractionHandler.java
 ----
 class IsisInteractionHandler {
   void beforeEach(ExtensionContext extensionContext)

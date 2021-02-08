@@ -12,8 +12,8 @@ Example:
 
 == API
 
-.JavaTimeJaxbAdapters.java
 [source,java]
+.JavaTimeJaxbAdapters.java
 ----
 class JavaTimeJaxbAdapters {
 }

@@ -2,8 +2,8 @@
 
 == API
 
-.MixinConstants.java
 [source,java]
+.MixinConstants.java
 ----
 class MixinConstants {
   public static final String METADATA_LAYOUT_GROUPNAME;

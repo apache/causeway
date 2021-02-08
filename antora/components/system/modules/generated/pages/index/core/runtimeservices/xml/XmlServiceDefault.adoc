@@ -2,8 +2,8 @@
 
 == API
 
-.XmlServiceDefault.java
 [source,java]
+.XmlServiceDefault.java
 ----
 class XmlServiceDefault {
   Document asDocument(String xmlStr)

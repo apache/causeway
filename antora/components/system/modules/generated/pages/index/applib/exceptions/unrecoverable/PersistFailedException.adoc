@@ -6,8 +6,8 @@ This exception is intended to represent an unexpected and non-recoverable condit
 
 == API
 
-.PersistFailedException.java
 [source,java]
+.PersistFailedException.java
 ----
 class PersistFailedException {
   PersistFailedException(final String msg)

@@ -2,8 +2,8 @@
 
 == API
 
-.RestfulObjectsJaxbWriterForXml.java
 [source,java]
+.RestfulObjectsJaxbWriterForXml.java
 ----
 class RestfulObjectsJaxbWriterForXml {
 }

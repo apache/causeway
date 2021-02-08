@@ -2,8 +2,8 @@
 
 == API
 
-.ScalarValueRepresentation.java
 [source,java]
+.ScalarValueRepresentation.java
 ----
 class ScalarValueRepresentation {
   ScalarValueRepresentation(final JsonNode jsonNode)

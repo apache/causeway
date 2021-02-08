@@ -2,8 +2,8 @@
 
 == API
 
-.FakeDataService.java
 [source,java]
+.FakeDataService.java
 ----
 class FakeDataService {
   final RandomService randomService;

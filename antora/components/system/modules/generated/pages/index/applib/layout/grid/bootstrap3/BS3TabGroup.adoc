@@ -4,8 +4,8 @@ Represents a tab group containing one or more xref:system:generated:index/applib
 
 == API
 
-.BS3TabGroup.java
 [source,java]
+.BS3TabGroup.java
 ----
 class BS3TabGroup {
   Boolean isUnreferencedCollections()     // <.>

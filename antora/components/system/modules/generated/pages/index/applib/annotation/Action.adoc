@@ -4,8 +4,8 @@ Groups together all domain-specific metadata for an invokable action on a domain
 
 == API
 
-.Action.java
 [source,java]
+.Action.java
 ----
 @interface Action {
   String associateWith() default "";     // <.>

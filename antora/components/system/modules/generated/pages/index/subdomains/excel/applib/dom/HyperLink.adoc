@@ -2,8 +2,8 @@
 
 == API
 
-.HyperLink.java
 [source,java]
+.HyperLink.java
 ----
 @interface HyperLink {
 }

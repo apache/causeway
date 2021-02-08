@@ -2,8 +2,8 @@
 
 == API
 
-.CommandSubscriberForJdo.java
 [source,java]
+.CommandSubscriberForJdo.java
 ----
 class CommandSubscriberForJdo {
   @Inject

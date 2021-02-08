@@ -2,8 +2,8 @@
 
 == API
 
-.RestfulClientConfig.java
 [source,java]
+.RestfulClientConfig.java
 ----
 class RestfulClientConfig {
 }

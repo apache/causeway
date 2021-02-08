@@ -2,8 +2,8 @@
 
 == API
 
-.ServerSentEvents.java
 [source,java]
+.ServerSentEvents.java
 ----
 @interface ServerSentEvents {
   Class<? extends SseSource> observe() default SseSource.Noop.class;

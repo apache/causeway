@@ -6,8 +6,8 @@ User registration also requires that the xref:system:generated:index/applib/serv
 
 == API
 
-.UserRegistrationService.java
 [source,java]
+.UserRegistrationService.java
 ----
 interface UserRegistrationService {
   boolean usernameExists(String username)

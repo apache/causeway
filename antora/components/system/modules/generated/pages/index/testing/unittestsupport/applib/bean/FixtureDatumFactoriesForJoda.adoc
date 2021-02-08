@@ -2,8 +2,8 @@
 
 == API
 
-.FixtureDatumFactoriesForJoda.java
 [source,java]
+.FixtureDatumFactoriesForJoda.java
 ----
 class FixtureDatumFactoriesForJoda {
   PojoTester.FixtureDatumFactory<LocalDate> dates()

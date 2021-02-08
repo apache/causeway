@@ -2,8 +2,8 @@
 
 == API
 
-.IsisModuleExtFullCalendarUi.java
 [source,java]
+.IsisModuleExtFullCalendarUi.java
 ----
 class IsisModuleExtFullCalendarUi {
 }

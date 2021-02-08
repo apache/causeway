@@ -2,8 +2,8 @@
 
 == API
 
-.ReferenceType.java
 [source,java]
+.ReferenceType.java
 ----
 class ReferenceType {
 }

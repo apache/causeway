@@ -6,8 +6,8 @@ It is used by the xref:system:generated:index/applib/services/layout/LayoutServi
 
 == API
 
-.GridAbstract.java
 [source,java]
+.GridAbstract.java
 ----
 class GridAbstract {
   Class<?> getDomainClass()

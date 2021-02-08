@@ -2,8 +2,8 @@
 
 == API
 
-.BS3RowOwner.java
 [source,java]
+.BS3RowOwner.java
 ----
 interface BS3RowOwner {
   List<BS3Row> getRows()

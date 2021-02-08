@@ -2,8 +2,8 @@
 
 == API
 
-.ContentNegotiationServiceOrgApacheIsisV1.java
 [source,java]
+.ContentNegotiationServiceOrgApacheIsisV1.java
 ----
 class ContentNegotiationServiceOrgApacheIsisV1 {
   public static final String ACCEPT_PROFILE;

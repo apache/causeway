@@ -2,8 +2,8 @@
 
 == API
 
-.Doubles.java
 [source,java]
+.Doubles.java
 ----
 class Doubles {
   Doubles(final FakeDataService fakeDataService)

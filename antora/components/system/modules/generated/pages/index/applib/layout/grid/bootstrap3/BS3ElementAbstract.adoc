@@ -4,8 +4,8 @@ Superclass for all layout classes, factoring out the common _#getCssClass()_ att
 
 == API
 
-.BS3ElementAbstract.java
 [source,java]
+.BS3ElementAbstract.java
 ----
 class BS3ElementAbstract {
   String getCssClass()     // <.>

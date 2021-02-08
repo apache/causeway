@@ -4,8 +4,8 @@ Configuration Bean to support Isis Security using Shiro.
 
 == API
 
-.IsisModuleSecurityShiro.java
 [source,java]
+.IsisModuleSecurityShiro.java
 ----
 class IsisModuleSecurityShiro {
 }

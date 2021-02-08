@@ -2,8 +2,8 @@
 
 == API
 
-.HasCssId.java
 [source,java]
+.HasCssId.java
 ----
 interface HasCssId {
   String getId()     // <.>

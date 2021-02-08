@@ -2,8 +2,8 @@
 
 == API
 
-.RepositoryService.java
 [source,java]
+.RepositoryService.java
 ----
 interface RepositoryService {
   EntityState getEntityState(Object object)     // <.>

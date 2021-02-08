@@ -8,8 +8,8 @@ Provides an unambiguous way to address nodes by position within a tree-structure
 
 == API
 
-.TreePath.java
 [source,java]
+.TreePath.java
 ----
 interface TreePath {
   TreePath append(int indexWithinSiblings)     // <.>

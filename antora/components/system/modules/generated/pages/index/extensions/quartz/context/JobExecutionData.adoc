@@ -4,8 +4,8 @@ Requires that the job is annotated with the _org.quartz.PersistJobDataAfterExecu
 
 == API
 
-.JobExecutionData.java
 [source,java]
+.JobExecutionData.java
 ----
 class JobExecutionData {
   String getString(String key, final String defaultValue)     // <.>

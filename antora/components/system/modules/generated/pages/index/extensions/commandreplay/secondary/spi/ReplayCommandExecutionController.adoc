@@ -6,8 +6,8 @@ If no implementation is configured, then replication/replay will continue withou
 
 == API
 
-.ReplayCommandExecutionController.java
 [source,java]
+.ReplayCommandExecutionController.java
 ----
 interface ReplayCommandExecutionController {
   State getState()     // <.>

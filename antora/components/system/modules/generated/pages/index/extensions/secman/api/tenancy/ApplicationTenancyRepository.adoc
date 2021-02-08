@@ -2,8 +2,8 @@
 
 == API
 
-.ApplicationTenancyRepository.java
 [source,java]
+.ApplicationTenancyRepository.java
 ----
 interface ApplicationTenancyRepository {
   T newApplicationTenancy()     // <.>

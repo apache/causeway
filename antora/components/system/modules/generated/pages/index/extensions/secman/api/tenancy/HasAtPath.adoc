@@ -10,8 +10,8 @@ any object that is not tenanted (that is, its class does not implement xref:syst
 
 == API
 
-.HasAtPath.java
 [source,java]
+.HasAtPath.java
 ----
 interface HasAtPath {
   String getAtPath()

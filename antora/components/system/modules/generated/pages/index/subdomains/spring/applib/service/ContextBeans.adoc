@@ -2,8 +2,8 @@
 
 == API
 
-.ContextBeans.java
 [source,java]
+.ContextBeans.java
 ----
 class ContextBeans {
   ContextBeans describing(final ConfigurableApplicationContext context)

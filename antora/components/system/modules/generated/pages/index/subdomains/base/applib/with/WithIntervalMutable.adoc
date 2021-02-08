@@ -2,8 +2,8 @@
 
 == API
 
-.WithIntervalMutable.java
 [source,java]
+.WithIntervalMutable.java
 ----
 interface WithIntervalMutable {
   T changeDates(final LocalDate startDate, final LocalDate endDate)

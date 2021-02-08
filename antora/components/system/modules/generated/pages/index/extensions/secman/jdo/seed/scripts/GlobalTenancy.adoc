@@ -2,8 +2,8 @@
 
 == API
 
-.GlobalTenancy.java
 [source,java]
+.GlobalTenancy.java
 ----
 class GlobalTenancy {
   public static final String TENANCY_NAME;

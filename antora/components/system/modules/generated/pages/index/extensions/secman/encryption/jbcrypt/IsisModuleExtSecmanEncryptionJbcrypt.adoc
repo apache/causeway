@@ -2,8 +2,8 @@
 
 == API
 
-.IsisModuleExtSecmanEncryptionJbcrypt.java
 [source,java]
+.IsisModuleExtSecmanEncryptionJbcrypt.java
 ----
 class IsisModuleExtSecmanEncryptionJbcrypt {
 }

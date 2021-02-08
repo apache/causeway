@@ -4,8 +4,8 @@ Server-sent events.
 
 == API
 
-.SseServiceDefault.java
 [source,java]
+.SseServiceDefault.java
 ----
 class SseServiceDefault {
   Optional<SseChannel> lookupByType(Class<?> sourceType)

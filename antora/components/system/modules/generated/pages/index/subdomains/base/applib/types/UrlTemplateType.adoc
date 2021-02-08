@@ -2,8 +2,8 @@
 
 == API
 
-.UrlTemplateType.java
 [source,java]
+.UrlTemplateType.java
 ----
 class UrlTemplateType {
 }

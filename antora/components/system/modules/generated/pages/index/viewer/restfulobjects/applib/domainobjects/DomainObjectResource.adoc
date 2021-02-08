@@ -2,8 +2,8 @@
 
 == API
 
-.DomainObjectResource.java
 [source,java]
+.DomainObjectResource.java
 ----
 interface DomainObjectResource {
   Response persist(String domainType, final InputStream object)

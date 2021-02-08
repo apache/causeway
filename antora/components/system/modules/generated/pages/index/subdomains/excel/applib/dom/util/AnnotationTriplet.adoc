@@ -2,8 +2,8 @@
 
 == API
 
-.AnnotationTriplet.java
 [source,java]
+.AnnotationTriplet.java
 ----
 class AnnotationTriplet {
   AnnotationTriplet(final String annotation, final Integer colNumber, final Integer order)

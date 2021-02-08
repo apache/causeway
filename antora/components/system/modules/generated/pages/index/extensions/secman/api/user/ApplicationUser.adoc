@@ -2,8 +2,8 @@
 
 == API
 
-.ApplicationUser.java
 [source,java]
+.ApplicationUser.java
 ----
 interface ApplicationUser {
   public static final int MAX_LENGTH_USERNAME;

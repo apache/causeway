@@ -2,8 +2,8 @@
 
 == API
 
-.AsyncControl.java
 [source,java]
+.AsyncControl.java
 ----
 class AsyncControl {
   AsyncControl<Void> returningVoid()

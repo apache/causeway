@@ -4,8 +4,8 @@ Server-sent events.
 
 == API
 
-.SseSource.java
 [source,java]
+.SseSource.java
 ----
 interface SseSource {
   void run(SseChannel channel)

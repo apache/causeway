@@ -4,8 +4,8 @@ Indicates that encoding or decoding has failed.
 
 == API
 
-.EncodingException.java
 [source,java]
+.EncodingException.java
 ----
 class EncodingException {
   EncodingException()

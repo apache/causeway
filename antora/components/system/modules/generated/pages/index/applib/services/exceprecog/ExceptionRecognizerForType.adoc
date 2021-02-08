@@ -6,15 +6,15 @@ If a messaging-parsing _Function_ is provided through the constructor, then the 
 
 == API
 
-.ExceptionRecognizerForType.java
 [source,java]
+.ExceptionRecognizerForType.java
 ----
 class ExceptionRecognizerForType {
-  ExceptionRecognizerForType(final Category category, final Class<? extends Exception> exceptionType, final UnaryOperator<String> messageParser)
-  ExceptionRecognizerForType(final Category category, final Predicate<Throwable> predicate, final UnaryOperator<String> messageParser)
+  ExceptionRecognizerForType(final Category category, final Class<? extends Exception> exceptionType, final Function<Throwable, String> rootCauseMessageFormatter)
+  ExceptionRecognizerForType(final Category category, final Predicate<Throwable> predicate, final Function<Throwable, String> rootCauseMessageFormatter)
   ExceptionRecognizerForType(final Category category, final Class<? extends Exception> exceptionType)
-  ExceptionRecognizerForType(final Class<? extends Exception> exceptionType, final UnaryOperator<String> messageParser)
-  ExceptionRecognizerForType(final Predicate<Throwable> predicate, final UnaryOperator<String> messageParser)
+  ExceptionRecognizerForType(final Class<? extends Exception> exceptionType, final Function<Throwable, String> rootCauseMessageFormatter)
+  ExceptionRecognizerForType(final Predicate<Throwable> predicate, final Function<Throwable, String> rootCauseMessageFormatter)
   ExceptionRecognizerForType(Class<? extends Exception> exceptionType)
 }
 ----

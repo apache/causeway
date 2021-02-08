@@ -6,8 +6,8 @@ Also indicates the name, and menu ordering UI hints.
 
 == API
 
-.DomainServiceLayout.java
 [source,java]
+.DomainServiceLayout.java
 ----
 @interface DomainServiceLayout {
   MenuBar menuBar() default MenuBar.NOT_SPECIFIED;     // <.>

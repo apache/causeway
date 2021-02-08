@@ -2,8 +2,8 @@
 
 == API
 
-.IsisModuleValMarkdownApplib.java
 [source,java]
+.IsisModuleValMarkdownApplib.java
 ----
 class IsisModuleValMarkdownApplib {
 }

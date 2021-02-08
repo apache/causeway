@@ -2,8 +2,8 @@
 
 == API
 
-.IsisInteractionDtoConverter.java
 [source,java]
+.IsisInteractionDtoConverter.java
 ----
 class IsisInteractionDtoConverter {
   String toDatastoreType(final InteractionDto memberValue)

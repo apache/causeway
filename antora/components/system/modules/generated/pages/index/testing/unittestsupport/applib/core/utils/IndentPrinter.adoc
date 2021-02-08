@@ -4,8 +4,8 @@ Adapted from `groovy.util.IndentPrinter` (published under ASL 2.0).
 
 == API
 
-.IndentPrinter.java
 [source,java]
+.IndentPrinter.java
 ----
 class IndentPrinter {
   IndentPrinter()     // <.>

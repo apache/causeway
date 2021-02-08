@@ -6,8 +6,8 @@ Also indicates whether the domain service acts as a repository for an entity, an
 
 == API
 
-.DomainService.java
 [source,java]
+.DomainService.java
 ----
 @interface DomainService {
   NatureOfService nature() default NatureOfService.VIEW;     // <.>

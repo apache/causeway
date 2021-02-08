@@ -2,8 +2,8 @@
 
 == API
 
-.Calendarable.java
 [source,java]
+.Calendarable.java
 ----
 interface Calendarable {
   Set<String> getCalendarNames()     // <.>

@@ -2,8 +2,8 @@
 
 == API
 
-.ExcelFixtureWorkbookHandler.java
 [source,java]
+.ExcelFixtureWorkbookHandler.java
 ----
 interface ExcelFixtureWorkbookHandler {
   void workbookHandled(final FixtureScript.ExecutionContext executionContext, final ExcelFixture2 excelFixture, List<List<?>> rows)

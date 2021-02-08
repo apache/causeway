@@ -4,8 +4,8 @@ This class should be executed using _org.apache.isis.testing.fixtures.applib.fix
 
 == API
 
-.ExcelFixture.java
 [source,java]
+.ExcelFixture.java
 ----
 class ExcelFixture {
   @Inject

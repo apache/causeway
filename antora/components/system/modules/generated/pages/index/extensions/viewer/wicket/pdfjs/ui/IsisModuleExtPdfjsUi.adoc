@@ -2,8 +2,8 @@
 
 == API
 
-.IsisModuleExtPdfjsUi.java
 [source,java]
+.IsisModuleExtPdfjsUi.java
 ----
 class IsisModuleExtPdfjsUi {
 }

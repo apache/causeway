@@ -8,8 +8,8 @@ Called once per argument, and before xref:system:generated:index/applib/services
 
 == API
 
-.ActionArgumentEvent.java
 [source,java]
+.ActionArgumentEvent.java
 ----
 class ActionArgumentEvent {
   ActionArgumentEvent(final Object source, final Identifier actionIdentifier, final Object[] args, final int position)

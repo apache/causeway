@@ -2,8 +2,8 @@
 
 == API
 
-.MemberRegionOwner.java
 [source,java]
+.MemberRegionOwner.java
 ----
 interface MemberRegionOwner {
 }

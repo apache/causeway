@@ -4,8 +4,8 @@ An abstract implementation of xref:system:generated:index/applib/services/userre
 
 == API
 
-.SecurityModuleAppUserRegistrationServiceAbstract.java
 [source,java]
+.SecurityModuleAppUserRegistrationServiceAbstract.java
 ----
 class SecurityModuleAppUserRegistrationServiceAbstract {
   boolean usernameExists(final String username)

@@ -4,8 +4,8 @@ SPI service interface.
 
 == API
 
-.PdfJsViewerAdvisor.java
 [source,java]
+.PdfJsViewerAdvisor.java
 ----
 interface PdfJsViewerAdvisor {
   Advice advise(final InstanceKey instanceKey)

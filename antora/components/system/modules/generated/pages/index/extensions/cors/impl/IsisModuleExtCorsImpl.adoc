@@ -2,8 +2,8 @@
 
 == API
 
-.IsisModuleExtCorsImpl.java
 [source,java]
+.IsisModuleExtCorsImpl.java
 ----
 class IsisModuleExtCorsImpl {
   FilterRegistrationBean<Filter> createCorsFilterRegistration(IsisConfiguration configuration)

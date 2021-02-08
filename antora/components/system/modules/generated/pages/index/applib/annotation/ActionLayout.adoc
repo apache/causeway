@@ -4,8 +4,8 @@ Layout hints for actions.
 
 == API
 
-.ActionLayout.java
 [source,java]
+.ActionLayout.java
 ----
 @interface ActionLayout {
   BookmarkPolicy bookmarking() default BookmarkPolicy.NOT_SPECIFIED;     // <.>

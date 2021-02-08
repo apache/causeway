@@ -2,8 +2,8 @@
 
 == API
 
-.MessageService.java
 [source,java]
+.MessageService.java
 ----
 interface MessageService {
   void informUser(String message)     // <.>

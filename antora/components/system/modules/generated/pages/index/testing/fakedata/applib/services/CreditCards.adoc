@@ -2,8 +2,8 @@
 
 == API
 
-.CreditCards.java
 [source,java]
+.CreditCards.java
 ----
 class CreditCards {
   final com.github.javafaker.Business javaFakerBusiness;

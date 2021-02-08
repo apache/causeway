@@ -2,8 +2,8 @@
 
 == API
 
-.ErrorRepresentation.java
 [source,java]
+.ErrorRepresentation.java
 ----
 class ErrorRepresentation {
   ErrorRepresentation(final JsonNode jsonNode)

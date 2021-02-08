@@ -2,8 +2,8 @@
 
 == API
 
-.CommandDtoUtils.java
 [source,java]
+.CommandDtoUtils.java
 ----
 class CommandDtoUtils {
   static JAXBContext jaxbContext;

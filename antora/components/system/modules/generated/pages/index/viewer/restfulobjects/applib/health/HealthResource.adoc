@@ -2,8 +2,8 @@
 
 == API
 
-.HealthResource.java
 [source,java]
+.HealthResource.java
 ----
 interface HealthResource {
   Response health()

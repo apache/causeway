@@ -4,8 +4,8 @@ WebModule providing support for Server Sent Events.
 
 == API
 
-.WebModuleServerSentEvents.java
 [source,java]
+.WebModuleServerSentEvents.java
 ----
 class WebModuleServerSentEvents {
   WebModuleServerSentEvents(ServiceInjector serviceInjector)

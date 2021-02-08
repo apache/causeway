@@ -2,8 +2,8 @@
 
 == API
 
-.Books.java
 [source,java]
+.Books.java
 ----
 class Books {
   com.github.javafaker.Code javaFakerCode;

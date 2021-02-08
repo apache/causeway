@@ -2,8 +2,8 @@
 
 == API
 
-.AbstractInterval.java
 [source,java]
+.AbstractInterval.java
 ----
 class AbstractInterval {
   AbstractInterval()

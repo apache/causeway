@@ -2,8 +2,8 @@
 
 == API
 
-.Persistable_downloadJdoMetadata.java
 [source,java]
+.Persistable_downloadJdoMetadata.java
 ----
 class Persistable_downloadJdoMetadata {
   @Inject

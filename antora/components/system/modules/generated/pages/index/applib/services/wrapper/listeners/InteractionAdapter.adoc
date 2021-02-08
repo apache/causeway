@@ -4,8 +4,8 @@ Provides no-op implementations of each of the methods within xref:system:generat
 
 == API
 
-.InteractionAdapter.java
 [source,java]
+.InteractionAdapter.java
 ----
 class InteractionAdapter {
   void propertyVisible(final PropertyVisibilityEvent ev)

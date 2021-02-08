@@ -2,8 +2,8 @@
 
 == API
 
-.SecurityRealmServiceUsingShiro.java
 [source,java]
+.SecurityRealmServiceUsingShiro.java
 ----
 class SecurityRealmServiceUsingShiro {
   SecurityRealm getCurrentRealm()

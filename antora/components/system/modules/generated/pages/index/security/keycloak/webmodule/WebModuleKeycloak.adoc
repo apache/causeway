@@ -4,8 +4,8 @@ WebModule to enable support for Keycloak.
 
 == API
 
-.WebModuleKeycloak.java
 [source,java]
+.WebModuleKeycloak.java
 ----
 class WebModuleKeycloak {
   WebModuleKeycloak(ServiceInjector serviceInjector)

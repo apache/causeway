@@ -2,8 +2,8 @@
 
 == API
 
-.ServiceRegistry.java
 [source,java]
+.ServiceRegistry.java
 ----
 interface ServiceRegistry {
   Can<T> select(Class<T> type, Annotation[] qualifiers)     // <.>

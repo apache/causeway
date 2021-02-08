@@ -4,8 +4,8 @@ Implemented by all objects that have been viewed as per _WrapperFactory#wrap(Obj
 
 == API
 
-.WrappingObject.java
 [source,java]
+.WrappingObject.java
 ----
 interface WrappingObject {
   void __isis_save()     // <.>

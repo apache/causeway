@@ -2,8 +2,8 @@
 
 == API
 
-.LayoutService.java
 [source,java]
+.LayoutService.java
 ----
 interface LayoutService {
   String toXml(Class<?> domainClass, Style style)     // <.>

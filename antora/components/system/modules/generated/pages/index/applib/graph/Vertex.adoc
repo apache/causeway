@@ -4,8 +4,8 @@ Fundamental building block for graph structures.
 
 == API
 
-.Vertex.java
 [source,java]
+.Vertex.java
 ----
 interface Vertex {
   T getValue()

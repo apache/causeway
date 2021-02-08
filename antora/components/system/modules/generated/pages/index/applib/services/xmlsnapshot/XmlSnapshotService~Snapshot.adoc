@@ -2,8 +2,8 @@
 
 == API
 
-.XmlSnapshotService~Snapshot.java
 [source,java]
+.XmlSnapshotService~Snapshot.java
 ----
 interface Snapshot {
   Document getXmlDocument()     // <.>

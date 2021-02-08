@@ -2,8 +2,8 @@
 
 == API
 
-.BasicAuthFilter.java
 [source,java]
+.BasicAuthFilter.java
 ----
 class BasicAuthFilter {
   BasicAuthFilter of(Credentials credentials)

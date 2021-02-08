@@ -4,8 +4,8 @@ Superclass of exceptions which indicate an attempt to interact with a class memb
 
 == API
 
-.HiddenException.java
 [source,java]
+.HiddenException.java
 ----
 class HiddenException {
   HiddenException(final InteractionEvent interactionEvent)

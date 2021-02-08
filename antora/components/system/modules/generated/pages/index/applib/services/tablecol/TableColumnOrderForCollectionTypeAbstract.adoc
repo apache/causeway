@@ -2,8 +2,8 @@
 
 == API
 
-.TableColumnOrderForCollectionTypeAbstract.java
 [source,java]
+.TableColumnOrderForCollectionTypeAbstract.java
 ----
 class TableColumnOrderForCollectionTypeAbstract {
   List<String> orderParented(final Object parent, final String collectionId, final Class<?> collectionType, final List<String> propertyIds)

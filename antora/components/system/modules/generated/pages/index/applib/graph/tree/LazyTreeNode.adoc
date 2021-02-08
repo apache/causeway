@@ -2,8 +2,8 @@
 
 == API
 
-.LazyTreeNode.java
 [source,java]
+.LazyTreeNode.java
 ----
 class LazyTreeNode {
   TreeNode<T> of(T value, Class<? extends TreeAdapter<T>> treeAdapterClass, TreeState sharedState)

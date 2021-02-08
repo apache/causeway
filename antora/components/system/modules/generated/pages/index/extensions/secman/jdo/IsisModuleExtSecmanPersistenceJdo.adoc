@@ -2,8 +2,8 @@
 
 == API
 
-.IsisModuleExtSecmanPersistenceJdo.java
 [source,java]
+.IsisModuleExtSecmanPersistenceJdo.java
 ----
 class IsisModuleExtSecmanPersistenceJdo {
 }

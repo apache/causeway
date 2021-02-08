@@ -2,8 +2,8 @@
 
 == API
 
-.J8LocalDates.java
 [source,java]
+.J8LocalDates.java
 ----
 class J8LocalDates {
   J8LocalDates(final FakeDataService fakeDataService)

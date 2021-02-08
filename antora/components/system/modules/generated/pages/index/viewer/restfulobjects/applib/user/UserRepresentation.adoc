@@ -2,8 +2,8 @@
 
 == API
 
-.UserRepresentation.java
 [source,java]
+.UserRepresentation.java
 ----
 class UserRepresentation {
   UserRepresentation(final JsonNode jsonNode)

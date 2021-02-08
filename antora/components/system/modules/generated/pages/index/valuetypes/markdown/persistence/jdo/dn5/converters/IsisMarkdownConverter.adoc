@@ -2,8 +2,8 @@
 
 == API
 
-.IsisMarkdownConverter.java
 [source,java]
+.IsisMarkdownConverter.java
 ----
 class IsisMarkdownConverter {
   String toDatastoreType(final Markdown memberValue)

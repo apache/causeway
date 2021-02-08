@@ -6,8 +6,8 @@ An alternative is to use the `Xxx.layout.xml` file, where `Xxx` is the domain ob
 
 == API
 
-.MemberOrder.java
 [source,java]
+.MemberOrder.java
 ----
 @interface MemberOrder {
   String name() default "";     // <.>

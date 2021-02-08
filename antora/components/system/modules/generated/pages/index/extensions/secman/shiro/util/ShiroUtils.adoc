@@ -2,8 +2,8 @@
 
 == API
 
-.ShiroUtils.java
 [source,java]
+.ShiroUtils.java
 ----
 class ShiroUtils {
   RealmSecurityManager getSecurityManager()

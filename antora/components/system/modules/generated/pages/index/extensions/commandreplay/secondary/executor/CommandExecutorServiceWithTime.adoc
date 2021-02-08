@@ -6,8 +6,8 @@ It then delegates down to the default implementation.
 
 == API
 
-.CommandExecutorServiceWithTime.java
 [source,java]
+.CommandExecutorServiceWithTime.java
 ----
 class CommandExecutorServiceWithTime {
   final CommandExecutorService delegate;

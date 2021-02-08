@@ -4,8 +4,8 @@ Collects together all the domain semantics for the property of a domain object.
 
 == API
 
-.Property.java
 [source,java]
+.Property.java
 ----
 @interface Property {
   Class<? extends CommandDtoProcessor> commandDtoProcessor() default CommandDtoProcessor.class;     // <.>

@@ -2,8 +2,8 @@
 
 == API
 
-.ComparableContractTester.java
 [source,java]
+.ComparableContractTester.java
 ----
 class ComparableContractTester {
   ComparableContractTester(List<List<T>> orderedTuples)     // <.>

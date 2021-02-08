@@ -6,8 +6,8 @@ They simply contain one or more xref:system:generated:index/applib/layout/grid/b
 
 == API
 
-.BS3Tab.java
 [source,java]
+.BS3Tab.java
 ----
 class BS3Tab {
   String getName()

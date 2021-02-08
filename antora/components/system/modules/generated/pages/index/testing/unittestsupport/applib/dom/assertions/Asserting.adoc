@@ -2,8 +2,8 @@
 
 == API
 
-.Asserting.java
 [source,java]
+.Asserting.java
 ----
 class Asserting {
   T assertType(Object o, Class<T> type)

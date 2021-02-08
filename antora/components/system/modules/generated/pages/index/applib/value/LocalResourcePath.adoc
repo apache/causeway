@@ -4,8 +4,8 @@ Represents a local resource path, typically a relative path originating at this 
 
 == API
 
-.LocalResourcePath.java
 [source,java]
+.LocalResourcePath.java
 ----
 class LocalResourcePath {
   LocalResourcePath(final String path)

@@ -2,8 +2,8 @@
 
 == API
 
-.SecondaryStatus.java
 [source,java]
+.SecondaryStatus.java
 ----
 enum SecondaryStatus {
   TICKING_CLOCK_STATUS_UNKNOWN

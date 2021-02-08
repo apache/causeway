@@ -2,8 +2,8 @@
 
 == API
 
-.IncubatorMetaModelPlugin.java
 [source,java]
+.IncubatorMetaModelPlugin.java
 ----
 class IncubatorMetaModelPlugin {
   void refineProgrammingModel(ProgrammingModel programmingModel)

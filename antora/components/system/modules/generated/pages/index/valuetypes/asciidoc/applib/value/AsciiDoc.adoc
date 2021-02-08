@@ -4,8 +4,8 @@ Immutable value type holding pre-rendered HTML.
 
 == API
 
-.AsciiDoc.java
 [source,java]
+.AsciiDoc.java
 ----
 class AsciiDoc {
   AsciiDoc()

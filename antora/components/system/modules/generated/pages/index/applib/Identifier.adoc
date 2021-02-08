@@ -2,8 +2,8 @@
 
 == API
 
-.Identifier.java
 [source,java]
+.Identifier.java
 ----
 class Identifier {
   public static final Depth CLASS;

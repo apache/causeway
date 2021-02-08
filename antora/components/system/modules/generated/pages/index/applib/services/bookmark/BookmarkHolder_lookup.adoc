@@ -2,8 +2,8 @@
 
 == API
 
-.BookmarkHolder_lookup.java
 [source,java]
+.BookmarkHolder_lookup.java
 ----
 class BookmarkHolder_lookup {
   Object act()

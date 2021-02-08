@@ -4,8 +4,8 @@ Fluent Object Hash Code Composition.
 
 == API
 
-.Hashing.java
 [source,java]
+.Hashing.java
 ----
 class Hashing {
   Hashing<T> hashing(Function<? super T, ?> getter)

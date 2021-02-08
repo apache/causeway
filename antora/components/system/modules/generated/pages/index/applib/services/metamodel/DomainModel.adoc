@@ -2,8 +2,8 @@
 
 == API
 
-.DomainModel.java
 [source,java]
+.DomainModel.java
 ----
 interface DomainModel {
   List<DomainMember> getDomainMembers()

@@ -2,8 +2,8 @@
 
 == API
 
-.VersionRepresentation.java
 [source,java]
+.VersionRepresentation.java
 ----
 class VersionRepresentation {
   VersionRepresentation(final JsonNode jsonNode)

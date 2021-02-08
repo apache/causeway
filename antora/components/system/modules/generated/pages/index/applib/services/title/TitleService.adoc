@@ -2,8 +2,8 @@
 
 == API
 
-.TitleService.java
 [source,java]
+.TitleService.java
 ----
 interface TitleService {
   String titleOf(Object domainObject)     // <.>

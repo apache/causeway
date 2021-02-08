@@ -2,8 +2,8 @@
 
 == API
 
-.AbstractDomainEvent.java
 [source,java]
+.AbstractDomainEvent.java
 ----
 class AbstractDomainEvent {
   AbstractDomainEvent()     // <.>

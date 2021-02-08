@@ -8,8 +8,8 @@ Also, a xref:system:generated:index/applib/annotation/Module.adoc[Module] also d
 
 == API
 
-.Module.java
 [source,java]
+.Module.java
 ----
 @interface Module {
 }

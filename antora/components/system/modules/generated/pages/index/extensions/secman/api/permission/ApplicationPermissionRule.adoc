@@ -4,8 +4,8 @@ Whether the permission _#ALLOW grants_ or _#VETO denies_ access to an _Applicati
 
 == API
 
-.ApplicationPermissionRule.java
 [source,java]
+.ApplicationPermissionRule.java
 ----
 enum ApplicationPermissionRule {
   ALLOW     // <.>

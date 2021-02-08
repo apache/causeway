@@ -6,8 +6,8 @@ If _#getReason()_ is not `null` then provides the reason why the value is invali
 
 == API
 
-.PropertyModifyEvent.java
 [source,java]
+.PropertyModifyEvent.java
 ----
 class PropertyModifyEvent {
   PropertyModifyEvent(final Object source, final Identifier propertyIdentifier, final Object proposed)

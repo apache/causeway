@@ -2,8 +2,8 @@
 
 == API
 
-.AnnotationList.java
 [source,java]
+.AnnotationList.java
 ----
 class AnnotationList {
   List<AnnotationTriplet> list;

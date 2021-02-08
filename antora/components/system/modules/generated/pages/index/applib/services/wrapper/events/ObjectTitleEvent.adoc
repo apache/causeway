@@ -6,8 +6,8 @@ The _#getReason()_ will always be `null` ; access is always allowed.
 
 == API
 
-.ObjectTitleEvent.java
 [source,java]
+.ObjectTitleEvent.java
 ----
 class ObjectTitleEvent {
   ObjectTitleEvent(final Object source, final Identifier classIdentifier, final String title)

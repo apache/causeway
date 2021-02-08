@@ -2,8 +2,8 @@
 
 == API
 
-.MetaModelServiceMenu.java
 [source,java]
+.MetaModelServiceMenu.java
 ----
 class MetaModelServiceMenu {
   final MimeType mimeTypeTextCsv;

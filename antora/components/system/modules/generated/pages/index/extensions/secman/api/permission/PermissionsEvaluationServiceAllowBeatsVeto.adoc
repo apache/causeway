@@ -4,8 +4,8 @@ An implementation whereby a VETO permission for a feature overrides an ALLOW (fo
 
 == API
 
-.PermissionsEvaluationServiceAllowBeatsVeto.java
 [source,java]
+.PermissionsEvaluationServiceAllowBeatsVeto.java
 ----
 class PermissionsEvaluationServiceAllowBeatsVeto {
 }

@@ -2,8 +2,8 @@
 
 == API
 
-.ObjectActionRepresentation.java
 [source,java]
+.ObjectActionRepresentation.java
 ----
 class ObjectActionRepresentation {
   ObjectActionRepresentation(final JsonNode jsonNode)

@@ -2,8 +2,8 @@
 
 == API
 
-.Lorem.java
 [source,java]
+.Lorem.java
 ----
 class Lorem {
   com.github.javafaker.Lorem javaFakerLorem;

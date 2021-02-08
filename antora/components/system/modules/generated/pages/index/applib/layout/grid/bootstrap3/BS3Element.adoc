@@ -2,8 +2,8 @@
 
 == API
 
-.BS3Element.java
 [source,java]
+.BS3Element.java
 ----
 interface BS3Element {
   String getCssClass()     // <.>

@@ -2,8 +2,8 @@
 
 == API
 
-.PivotUtils.java
 [source,java]
+.PivotUtils.java
 ----
 class PivotUtils {
   void createAnnotationRow(final Row annotationRow, final List<String> annotationList)

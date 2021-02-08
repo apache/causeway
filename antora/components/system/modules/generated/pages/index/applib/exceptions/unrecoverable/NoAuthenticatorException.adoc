@@ -4,8 +4,8 @@ Indicates that there is no Authenticator available to authenticate a user based 
 
 == API
 
-.NoAuthenticatorException.java
 [source,java]
+.NoAuthenticatorException.java
 ----
 class NoAuthenticatorException {
   NoAuthenticatorException(final String msg)

@@ -17,8 +17,8 @@ public class Listener {
 
 == API
 
-.UserCreatedEvent.java
 [source,java]
+.UserCreatedEvent.java
 ----
 class UserCreatedEvent {
   AccountType getAccountType()

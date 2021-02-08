@@ -2,8 +2,8 @@
 
 == API
 
-.PivotValue.java
 [source,java]
+.PivotValue.java
 ----
 @interface PivotValue {
   int order();

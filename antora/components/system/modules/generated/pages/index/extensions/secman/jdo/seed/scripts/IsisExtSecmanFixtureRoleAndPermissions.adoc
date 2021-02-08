@@ -4,8 +4,8 @@ Role to run in the prototype fixture scripts for the example webapp for the secu
 
 == API
 
-.IsisExtSecmanFixtureRoleAndPermissions.java
 [source,java]
+.IsisExtSecmanFixtureRoleAndPermissions.java
 ----
 class IsisExtSecmanFixtureRoleAndPermissions {
   IsisExtSecmanFixtureRoleAndPermissions(SecmanConfiguration configBean)

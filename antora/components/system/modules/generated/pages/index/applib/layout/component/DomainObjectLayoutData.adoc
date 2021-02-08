@@ -4,8 +4,8 @@ Describes the layout of the title and icon of a domain object, broadly correspon
 
 == API
 
-.DomainObjectLayoutData.java
 [source,java]
+.DomainObjectLayoutData.java
 ----
 class DomainObjectLayoutData {
   DomainObjectLayoutData()

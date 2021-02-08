@@ -2,8 +2,8 @@
 
 == API
 
-.WorksheetSpec.java
 [source,java]
+.WorksheetSpec.java
 ----
 class WorksheetSpec {
   WorksheetSpec(final Class<T> viewModelClass, String sheetName)     // <.>

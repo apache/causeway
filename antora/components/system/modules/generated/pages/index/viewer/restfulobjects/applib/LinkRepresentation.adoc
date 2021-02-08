@@ -2,8 +2,8 @@
 
 == API
 
-.LinkRepresentation.java
 [source,java]
+.LinkRepresentation.java
 ----
 class LinkRepresentation {
   LinkRepresentation()

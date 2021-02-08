@@ -2,8 +2,8 @@
 
 == API
 
-.ObjectPersistingEvent.java
 [source,java]
+.ObjectPersistingEvent.java
 ----
 class ObjectPersistingEvent {
   ObjectPersistingEvent()

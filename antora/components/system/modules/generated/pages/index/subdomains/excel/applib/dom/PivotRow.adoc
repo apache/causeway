@@ -2,8 +2,8 @@
 
 == API
 
-.PivotRow.java
 [source,java]
+.PivotRow.java
 ----
 @interface PivotRow {
 }

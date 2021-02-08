@@ -4,8 +4,8 @@ Fundamental building block of Tree structures.
 
 == API
 
-.TreeNode.java
 [source,java]
+.TreeNode.java
 ----
 interface TreeNode {
   int getIncomingCount()

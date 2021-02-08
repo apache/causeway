@@ -2,8 +2,8 @@
 
 == API
 
-.WithSequence.java
 [source,java]
+.WithSequence.java
 ----
 interface WithSequence {
   BigInteger getSequence()

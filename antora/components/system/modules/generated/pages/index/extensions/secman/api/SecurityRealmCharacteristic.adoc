@@ -2,8 +2,8 @@
 
 == API
 
-.SecurityRealmCharacteristic.java
 [source,java]
+.SecurityRealmCharacteristic.java
 ----
 enum SecurityRealmCharacteristic {
   DELEGATING

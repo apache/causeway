@@ -6,8 +6,8 @@ Examples could include SPI services that persist published events and status mes
 
 == API
 
-.RepresentsInteractionMemberExecution.java
 [source,java]
+.RepresentsInteractionMemberExecution.java
 ----
 interface RepresentsInteractionMemberExecution {
   int getSequence()

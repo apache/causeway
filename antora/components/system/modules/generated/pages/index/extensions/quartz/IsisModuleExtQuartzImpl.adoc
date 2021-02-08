@@ -2,8 +2,8 @@
 
 == API
 
-.IsisModuleExtQuartzImpl.java
 [source,java]
+.IsisModuleExtQuartzImpl.java
 ----
 class IsisModuleExtQuartzImpl {
 }

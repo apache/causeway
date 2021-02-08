@@ -4,8 +4,8 @@ At least one implementation is required.
 
 == API
 
-.CommandDtoProcessorServiceIdentity.java
 [source,java]
+.CommandDtoProcessorServiceIdentity.java
 ----
 class CommandDtoProcessorServiceIdentity {
   CommandDto process(final Object domainObject, final CommandDto commandDto)

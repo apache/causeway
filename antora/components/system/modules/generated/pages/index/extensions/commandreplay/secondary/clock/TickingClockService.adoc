@@ -8,8 +8,8 @@ IMPORTANT: the methods provided by this service are not thread-safe, because the
 
 == API
 
-.TickingClockService.java
 [source,java]
+.TickingClockService.java
 ----
 class TickingClockService {
   final IsisConfiguration isisConfiguration;

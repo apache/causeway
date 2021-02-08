@@ -6,8 +6,8 @@ If xref:system:generated:index/applib/services/sudo/SudoService.adoc[SudoService
 
 == API
 
-.UserService.java
 [source,java]
+.UserService.java
 ----
 interface UserService {
   Optional<UserMemento> currentUser()     // <.>

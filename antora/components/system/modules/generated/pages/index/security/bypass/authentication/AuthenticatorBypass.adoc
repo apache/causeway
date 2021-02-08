@@ -4,8 +4,8 @@ Implementation that bypasses authentication.
 
 == API
 
-.AuthenticatorBypass.java
 [source,java]
+.AuthenticatorBypass.java
 ----
 class AuthenticatorBypass {
   boolean isValid(final AuthenticationRequest request)

@@ -2,8 +2,8 @@
 
 == API
 
-.HasNamed.java
 [source,java]
+.HasNamed.java
 ----
 interface HasNamed {
   String getNamed()

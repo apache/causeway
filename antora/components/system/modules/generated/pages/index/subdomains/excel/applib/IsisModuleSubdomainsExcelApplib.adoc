@@ -2,8 +2,8 @@
 
 == API
 
-.IsisModuleSubdomainsExcelApplib.java
 [source,java]
+.IsisModuleSubdomainsExcelApplib.java
 ----
 class IsisModuleSubdomainsExcelApplib {
 }

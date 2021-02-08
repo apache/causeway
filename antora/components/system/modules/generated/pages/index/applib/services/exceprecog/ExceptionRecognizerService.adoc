@@ -2,8 +2,8 @@
 
 == API
 
-.ExceptionRecognizerService.java
 [source,java]
+.ExceptionRecognizerService.java
 ----
 interface ExceptionRecognizerService {
   Can<ExceptionRecognizer> getExceptionRecognizers()     // <.>

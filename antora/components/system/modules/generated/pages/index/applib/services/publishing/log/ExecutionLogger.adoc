@@ -2,8 +2,8 @@
 
 == API
 
-.ExecutionLogger.java
 [source,java]
+.ExecutionLogger.java
 ----
 class ExecutionLogger {
   boolean isEnabled()

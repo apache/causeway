@@ -2,8 +2,8 @@
 
 == API
 
-.Blob.java
 [source,java]
+.Blob.java
 ----
 class Blob {
   Blob(String name, String primaryType, String subtype, byte[] bytes)

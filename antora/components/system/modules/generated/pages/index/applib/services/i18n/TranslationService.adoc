@@ -2,8 +2,8 @@
 
 == API
 
-.TranslationService.java
 [source,java]
+.TranslationService.java
 ----
 interface TranslationService {
   String translate(final String context, final String text)     // <.>

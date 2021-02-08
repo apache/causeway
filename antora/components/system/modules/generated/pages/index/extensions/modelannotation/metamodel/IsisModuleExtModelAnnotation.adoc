@@ -2,8 +2,8 @@
 
 == API
 
-.IsisModuleExtModelAnnotation.java
 [source,java]
+.IsisModuleExtModelAnnotation.java
 ----
 class IsisModuleExtModelAnnotation {
 }

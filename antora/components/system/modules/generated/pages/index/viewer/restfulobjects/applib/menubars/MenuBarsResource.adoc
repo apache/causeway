@@ -4,8 +4,8 @@ Not part of the Restful Objects spec.
 
 == API
 
-.MenuBarsResource.java
 [source,java]
+.MenuBarsResource.java
 ----
 interface MenuBarsResource {
   Response menuBars()     // <.>

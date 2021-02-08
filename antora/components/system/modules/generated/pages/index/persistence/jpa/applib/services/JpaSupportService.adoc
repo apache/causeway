@@ -4,8 +4,8 @@ Provides access to the current interaction's _EntityManager_ (s)
 
 == API
 
-.JpaSupportService.java
 [source,java]
+.JpaSupportService.java
 ----
 interface JpaSupportService {
   Result<EntityManager> getEntityManager(Class<?> entityType)     // <.>

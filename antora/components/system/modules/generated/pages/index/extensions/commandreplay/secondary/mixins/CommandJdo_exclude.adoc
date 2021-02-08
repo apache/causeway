@@ -2,8 +2,8 @@
 
 == API
 
-.CommandJdo_exclude.java
 [source,java]
+.CommandJdo_exclude.java
 ----
 class CommandJdo_exclude {
   final CommandJdo commandJdo;

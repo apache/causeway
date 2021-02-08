@@ -2,8 +2,8 @@
 
 == API
 
-.SwaggerExporter.java
 [source,java]
+.SwaggerExporter.java
 ----
 class SwaggerExporter {
   SwaggerExporter(final ServiceRegistry registry)

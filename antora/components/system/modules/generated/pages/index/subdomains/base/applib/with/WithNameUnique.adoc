@@ -2,8 +2,8 @@
 
 == API
 
-.WithNameUnique.java
 [source,java]
+.WithNameUnique.java
 ----
 interface WithNameUnique {
 }

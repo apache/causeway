@@ -2,8 +2,8 @@
 
 == API
 
-.EntityChangeTrackerDefault.java
 [source,java]
+.EntityChangeTrackerDefault.java
 ----
 class EntityChangeTrackerDefault {
   void onPreCommit(TransactionBeforeCompletionEvent event)     // <.>

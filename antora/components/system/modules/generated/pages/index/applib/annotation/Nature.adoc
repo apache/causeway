@@ -4,8 +4,8 @@ The different sorts of domain objects recognized by Isis.
 
 == API
 
-.Nature.java
 [source,java]
+.Nature.java
 ----
 enum Nature {
   NOT_SPECIFIED     // <.>

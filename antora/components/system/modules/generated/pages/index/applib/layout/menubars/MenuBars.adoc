@@ -2,8 +2,8 @@
 
 == API
 
-.MenuBars.java
 [source,java]
+.MenuBars.java
 ----
 interface MenuBars {
   String getTnsAndSchemaLocation()

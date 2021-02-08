@@ -2,8 +2,8 @@
 
 == API
 
-.IsisOidDtoConverter.java
 [source,java]
+.IsisOidDtoConverter.java
 ----
 class IsisOidDtoConverter {
   String toDatastoreType(final OidDto memberValue)

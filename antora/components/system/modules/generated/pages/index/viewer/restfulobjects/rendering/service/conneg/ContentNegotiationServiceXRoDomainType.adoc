@@ -8,8 +8,8 @@ If the accept header specifies `application/xml` then the service additionally v
 
 == API
 
-.ContentNegotiationServiceXRoDomainType.java
 [source,java]
+.ContentNegotiationServiceXRoDomainType.java
 ----
 class ContentNegotiationServiceXRoDomainType {
   public static final String X_RO_DOMAIN_TYPE;

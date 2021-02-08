@@ -6,8 +6,8 @@ This possibly seems a little tortuous. The more obvious means to provide a defau
 
 == API
 
-.Defaulted.java
 [source,java]
+.Defaulted.java
 ----
 @interface Defaulted {
   String defaultsProviderName() default "";     // <.>

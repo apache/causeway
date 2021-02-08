@@ -2,8 +2,8 @@
 
 == API
 
-.PersistentEntityAdapter.java
 [source,java]
+.PersistentEntityAdapter.java
 ----
 class PersistentEntityAdapter {
   Object unmarshal(final OidDto oidDto)

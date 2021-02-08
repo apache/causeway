@@ -2,8 +2,8 @@
 
 == API
 
-.FinderInteraction.java
 [source,java]
+.FinderInteraction.java
 ----
 class FinderInteraction {
   FinderInteraction(Query<?> query, FinderInteraction.FinderMethod finderMethod)

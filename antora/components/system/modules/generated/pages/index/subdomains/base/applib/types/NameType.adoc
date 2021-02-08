@@ -2,8 +2,8 @@
 
 == API
 
-.NameType.java
 [source,java]
+.NameType.java
 ----
 class NameType {
 }

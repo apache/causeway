@@ -2,8 +2,8 @@
 
 == API
 
-.Bytes.java
 [source,java]
+.Bytes.java
 ----
 class Bytes {
   Bytes(final FakeDataService fakeDataService)

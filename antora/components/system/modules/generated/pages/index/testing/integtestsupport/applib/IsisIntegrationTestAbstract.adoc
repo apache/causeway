@@ -4,8 +4,8 @@ Convenient base class to extend for integration tests.
 
 == API
 
-.IsisIntegrationTestAbstract.java
 [source,java]
+.IsisIntegrationTestAbstract.java
 ----
 class IsisIntegrationTestAbstract {
 }

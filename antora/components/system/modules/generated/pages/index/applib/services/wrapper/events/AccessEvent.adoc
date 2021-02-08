@@ -6,8 +6,8 @@ Analogous to xref:system:generated:index/applib/services/wrapper/events/Validity
 
 == API
 
-.AccessEvent.java
 [source,java]
+.AccessEvent.java
 ----
 class AccessEvent {
   AccessEvent(final Object source, final Identifier identifier)

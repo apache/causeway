@@ -2,8 +2,8 @@
 
 == API
 
-.IsisClobMapping.java
 [source,java]
+.IsisClobMapping.java
 ----
 class IsisClobMapping {
   IsisClobMapping()

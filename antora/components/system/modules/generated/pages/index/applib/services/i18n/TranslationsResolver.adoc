@@ -2,8 +2,8 @@
 
 == API
 
-.TranslationsResolver.java
 [source,java]
+.TranslationsResolver.java
 ----
 interface TranslationsResolver {
   List<String> readLines(final String file)

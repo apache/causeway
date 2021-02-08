@@ -2,8 +2,8 @@
 
 == API
 
-.H2ManagerMenu.java
 [source,java]
+.H2ManagerMenu.java
 ----
 class H2ManagerMenu {
   H2ManagerMenu(final WebModuleH2Console webModule)

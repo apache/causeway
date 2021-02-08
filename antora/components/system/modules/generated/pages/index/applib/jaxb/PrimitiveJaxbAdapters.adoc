@@ -2,8 +2,8 @@
 
 == API
 
-.PrimitiveJaxbAdapters.java
 [source,java]
+.PrimitiveJaxbAdapters.java
 ----
 class PrimitiveJaxbAdapters {
 }

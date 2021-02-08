@@ -2,8 +2,8 @@
 
 == API
 
-.EntityState.java
 [source,java]
+.EntityState.java
 ----
 enum EntityState {
   NOT_PERSISTABLE

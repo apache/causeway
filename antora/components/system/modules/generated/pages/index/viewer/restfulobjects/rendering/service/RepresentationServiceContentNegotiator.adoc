@@ -2,8 +2,8 @@
 
 == API
 
-.RepresentationServiceContentNegotiator.java
 [source,java]
+.RepresentationServiceContentNegotiator.java
 ----
 class RepresentationServiceContentNegotiator {
   Response objectRepresentation(final IResourceContext renderContext, final ManagedObject objectAdapter)

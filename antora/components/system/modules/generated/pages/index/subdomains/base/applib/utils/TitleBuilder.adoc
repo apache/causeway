@@ -2,8 +2,8 @@
 
 == API
 
-.TitleBuilder.java
 [source,java]
+.TitleBuilder.java
 ----
 class TitleBuilder {
   public static final Class[] NO_PARAMETER_TYPES;

@@ -4,8 +4,8 @@ Provides the user and scenario specific environment for an _Interaction.Executio
 
 == API
 
-.ExecutionContext.java
 [source,java]
+.ExecutionContext.java
 ----
 class ExecutionContext {
   ExecutionContext ofUserWithSystemDefaults(final UserMemento user)     // <.>

@@ -2,8 +2,8 @@
 
 == API
 
-.InteractionListener.java
 [source,java]
+.InteractionListener.java
 ----
 interface InteractionListener {
   void objectTitleRead(ObjectTitleEvent ev)     // <.>

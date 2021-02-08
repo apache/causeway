@@ -2,8 +2,8 @@
 
 == API
 
-.JavaSqlXMLGregorianCalendarMarshalling.java
 [source,java]
+.JavaSqlXMLGregorianCalendarMarshalling.java
 ----
 class JavaSqlXMLGregorianCalendarMarshalling {
   static DatatypeFactory datatypeFactory;

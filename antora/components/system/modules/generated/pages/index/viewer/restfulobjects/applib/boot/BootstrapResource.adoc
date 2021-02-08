@@ -2,8 +2,8 @@
 
 == API
 
-.BootstrapResource.java
 [source,java]
+.BootstrapResource.java
 ----
 interface BootstrapResource {
   String bootstrap()

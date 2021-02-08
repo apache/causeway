@@ -2,8 +2,8 @@
 
 == API
 
-.BS3TabGroupOwner.java
 [source,java]
+.BS3TabGroupOwner.java
 ----
 interface BS3TabGroupOwner {
   List<BS3TabGroup> getTabGroups()

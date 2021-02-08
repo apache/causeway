@@ -2,8 +2,8 @@
 
 == API
 
-.Strings.java
 [source,java]
+.Strings.java
 ----
 class Strings {
   Strings(final FakeDataService fakeDataService)

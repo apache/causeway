@@ -6,8 +6,8 @@ If _#getReason()_ is not `null` then provides the reason why the property is inv
 
 == API
 
-.PropertyVisibilityEvent.java
 [source,java]
+.PropertyVisibilityEvent.java
 ----
 class PropertyVisibilityEvent {
   PropertyVisibilityEvent(final Object source, final Identifier propertyIdentifier)

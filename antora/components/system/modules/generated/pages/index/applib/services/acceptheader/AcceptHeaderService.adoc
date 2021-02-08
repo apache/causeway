@@ -6,8 +6,8 @@ Its intended use is to support multiple versions of a REST API, where the respon
 
 == API
 
-.AcceptHeaderService.java
 [source,java]
+.AcceptHeaderService.java
 ----
 interface AcceptHeaderService {
   List<MediaType> getAcceptableMediaTypes()     // <.>

@@ -2,8 +2,8 @@
 
 == API
 
-.Object_objectIdentifier.java
 [source,java]
+.Object_objectIdentifier.java
 ----
 class Object_objectIdentifier {
   String prop()

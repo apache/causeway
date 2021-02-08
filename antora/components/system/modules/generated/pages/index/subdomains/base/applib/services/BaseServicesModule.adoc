@@ -2,8 +2,8 @@
 
 == API
 
-.BaseServicesModule.java
 [source,java]
+.BaseServicesModule.java
 ----
 class BaseServicesModule {
 }

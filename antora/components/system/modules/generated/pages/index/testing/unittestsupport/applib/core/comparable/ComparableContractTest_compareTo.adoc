@@ -4,8 +4,8 @@ Used by core and domain apps.
 
 == API
 
-.ComparableContractTest_compareTo.java
 [source,java]
+.ComparableContractTest_compareTo.java
 ----
 class ComparableContractTest_compareTo {
   void compareAllOrderedTuples()

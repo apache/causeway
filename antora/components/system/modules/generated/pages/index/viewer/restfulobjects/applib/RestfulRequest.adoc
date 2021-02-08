@@ -2,8 +2,8 @@
 
 == API
 
-.RestfulRequest.java
 [source,java]
+.RestfulRequest.java
 ----
 class RestfulRequest {
   RestfulRequest withArg(final RestfulRequest.RequestParameter<Q> queryParam, final String argStrFormat, final Object... args)

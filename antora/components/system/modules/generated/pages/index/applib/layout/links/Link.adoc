@@ -2,8 +2,8 @@
 
 == API
 
-.Link.java
 [source,java]
+.Link.java
 ----
 class Link {
   Link()

@@ -2,8 +2,8 @@
 
 == API
 
-.TransactionId.java
 [source,java]
+.TransactionId.java
 ----
 class TransactionId {
   TransactionId empty()

@@ -2,8 +2,8 @@
 
 == API
 
-.Dto_downloadXsd.java
 [source,java]
+.Dto_downloadXsd.java
 ----
 class Dto_downloadXsd {
   @Inject

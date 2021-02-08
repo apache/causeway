@@ -2,8 +2,8 @@
 
 == API
 
-.WithCodeComparable.java
 [source,java]
+.WithCodeComparable.java
 ----
 interface WithCodeComparable {
   void setCode(String code)

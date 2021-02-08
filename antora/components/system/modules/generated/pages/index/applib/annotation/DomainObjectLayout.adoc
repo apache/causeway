@@ -4,8 +4,8 @@ Layout hints for domain objects.
 
 == API
 
-.DomainObjectLayout.java
 [source,java]
+.DomainObjectLayout.java
 ----
 @interface DomainObjectLayout {
   BookmarkPolicy bookmarking() default BookmarkPolicy.NOT_SPECIFIED;     // <.>

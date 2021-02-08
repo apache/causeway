@@ -2,8 +2,8 @@
 
 == API
 
-.RestfulHttpMethod.java
 [source,java]
+.RestfulHttpMethod.java
 ----
 enum RestfulHttpMethod {
   GET

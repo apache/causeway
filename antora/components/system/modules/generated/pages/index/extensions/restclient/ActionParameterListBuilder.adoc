@@ -2,8 +2,8 @@
 
 == API
 
-.ActionParameterListBuilder.java
 [source,java]
+.ActionParameterListBuilder.java
 ----
 class ActionParameterListBuilder {
   ActionParameterListBuilder addActionParameter(String parameterName, String parameterValue)

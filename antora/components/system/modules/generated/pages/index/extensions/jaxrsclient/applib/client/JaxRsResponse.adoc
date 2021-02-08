@@ -2,8 +2,8 @@
 
 == API
 
-.JaxRsResponse.java
 [source,java]
+.JaxRsResponse.java
 ----
 interface JaxRsResponse {
   int getStatus()

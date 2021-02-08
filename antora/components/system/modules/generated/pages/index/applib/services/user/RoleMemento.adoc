@@ -4,8 +4,8 @@ Immutable serializable value held by xref:system:generated:index/applib/services
 
 == API
 
-.RoleMemento.java
 [source,java]
+.RoleMemento.java
 ----
 class RoleMemento {
   RoleMemento(final String name)     // <.>

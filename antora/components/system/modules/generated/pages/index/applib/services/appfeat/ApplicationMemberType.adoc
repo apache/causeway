@@ -2,8 +2,8 @@
 
 == API
 
-.ApplicationMemberType.java
 [source,java]
+.ApplicationMemberType.java
 ----
 enum ApplicationMemberType {
   PROPERTY

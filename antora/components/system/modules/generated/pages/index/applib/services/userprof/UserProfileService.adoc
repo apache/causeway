@@ -6,8 +6,8 @@ Used by the Wicket viewer in its _org.apache.isis.applib.annotation.DomainServic
 
 == API
 
-.UserProfileService.java
 [source,java]
+.UserProfileService.java
 ----
 interface UserProfileService {
   String userProfileName()     // <.>

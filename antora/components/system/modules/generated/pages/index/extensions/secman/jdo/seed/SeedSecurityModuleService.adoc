@@ -2,8 +2,8 @@
 
 == API
 
-.SeedSecurityModuleService.java
 [source,java]
+.SeedSecurityModuleService.java
 ----
 class SeedSecurityModuleService {
   SeedSecurityModuleService(final FixtureScripts fixtureScripts)
