@@ -151,7 +151,6 @@ final class NodeWriter implements StructuralNodeVisitor {
             _Strings.nonEmpty(block.getTitle())
             .ifPresent(this::printBlockTitle);
             println("====");
-            isContinuation = true; // set continuation flag, so other blocks don't add newlines
         }
 
         for(val line : block.getLines()) {
