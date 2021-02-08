@@ -30,14 +30,14 @@ import static org.apache.isis.tooling.model4adoc.AsciiDocFactory.doc;
 
 import lombok.val;
 
-class FootnoteTest extends AbstractAsciiDocWriterTest {
+class CalloutTest extends AbstractAsciiDocWriterTest {
 
     private Document doc;
 
     @BeforeEach
     void setUp() throws Exception {
         doc = doc();
-        super.adocSourceResourceLocation = "footnote.adoc";
+        super.adocSourceResourceLocation = "callout.adoc";
         super.debugEnabled = false;
     }
 
@@ -64,23 +64,23 @@ class FootnoteTest extends AbstractAsciiDocWriterTest {
     @Test
     void testFootnote() throws IOException {
 
-        val footnotes = AsciiDocFactory.callouts(doc);
-        val footnoteLI = AsciiDocFactory.callout(footnotes, "fn-1");
-        val footnote = AsciiDocFactory.openBlock(footnoteLI);
+        val callouts = AsciiDocFactory.callouts(doc);
+        val calloutLI = AsciiDocFactory.callout(callouts, "fn-1");
+        val callout = AsciiDocFactory.openBlock(calloutLI);
 
 
-        val note = AsciiDocFactory.warning(footnote);
+        val note = AsciiDocFactory.warning(callout);
         AsciiDocFactory.block(note, "warn-1");
         AsciiDocFactory.block(note, "warn-2");
 
-        AsciiDocFactory.block(footnote, "para-1");
-        AsciiDocFactory.block(footnote, "para-2");
+        AsciiDocFactory.block(callout, "para-1");
+        AsciiDocFactory.block(callout, "para-2");
 
-        val nestedList = AsciiDocFactory.list(footnote);
+        val nestedList = AsciiDocFactory.list(callout);
         AsciiDocFactory.listItem(nestedList, "li-1");
         AsciiDocFactory.listItem(nestedList, "li-2");
 
-        AsciiDocFactory.block(footnote, "para-3");
+        AsciiDocFactory.block(callout, "para-3");
 
         AsciiDocFactory.tip(doc, "Here's something worth knowing...");
 

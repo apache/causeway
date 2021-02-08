@@ -81,7 +81,7 @@ extends UnitFormatterAbstract {
 
     }
 
-    //XXX java language syntax (for footnote text), but not used any more
+    //XXX java language syntax (for callout text), but not used any more
 //
 //    @Override
 //    public String getEnumConstantFormat() {

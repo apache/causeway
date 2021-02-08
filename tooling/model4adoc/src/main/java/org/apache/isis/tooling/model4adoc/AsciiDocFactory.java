@@ -149,9 +149,9 @@ public class AsciiDocFactory {
     // -- FOOTNOTES
 
     public static org.asciidoctor.ast.List callouts(StructuralNode parent) {
-        val footnoteList = list(parent);
-        footnoteList.setStyle("arabic");
-        return footnoteList;
+        val calloutList = list(parent);
+        calloutList.setStyle("arabic");
+        return calloutList;
     }
 
     public static ListItem callout(org.asciidoctor.ast.List parent, @NonNull String source) {
