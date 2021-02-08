@@ -28,66 +28,36 @@ import org.apache.isis.tooling.model4adoc.AsciiDocFactory;
 
 import static org.apache.isis.tooling.model4adoc.AsciiDocFactory.doc;
 
-import lombok.val;
-
-class CalloutTest extends AbstractAsciiDocWriterTest {
+class SourceTest extends AbstractAsciiDocWriterTest {
 
     private Document doc;
 
     @BeforeEach
     void setUp() throws Exception {
         doc = doc();
-        super.adocSourceResourceLocation = "callout.adoc";
-        super.debugEnabled = false;
+        super.adocSourceResourceLocation = "source.adoc";
+        super.debugEnabled = true;
+        super.skipAsciidocjComplianceTest = true;
     }
 
-
-    //<.> fn-1
-    //+
-    //--
-    //[WARNING]
-    //====
-    //warn-1
+    // = Source
     //
-    //warn-2
-    //====
-    //
-    //para-1
-    //
-    //para-2
-    //
-    //* li-1
-    //* li-2
-    //
-    //para-3
-    //--
+    // [source, java]
+    // .Java Example
+    // ----
+    // class Hello {
+    // }
+    // ----
     @Test
-    void testFootnote() throws IOException {
-
-        val callouts = AsciiDocFactory.callouts(doc);
-        val calloutLI = AsciiDocFactory.callout(callouts, "fn-1");
-        val callout = AsciiDocFactory.openBlock(calloutLI);
-
-
-        val note = AsciiDocFactory.warning(callout);
-        AsciiDocFactory.block(note, "warn-1");
-        AsciiDocFactory.block(note, "warn-2");
-
-        AsciiDocFactory.block(callout, "para-1");
-        AsciiDocFactory.block(callout, "para-2");
-
-        val nestedList = AsciiDocFactory.list(callout);
-        AsciiDocFactory.listItem(nestedList, "li-1");
-        AsciiDocFactory.listItem(nestedList, "li-2");
-
-        AsciiDocFactory.block(callout, "para-3");
-
-        AsciiDocFactory.tip(doc, "Here's something worth knowing...");
-
+    void testSourceFactory() throws IOException {
+        
+        doc.setTitle("Source");
+        
+        AsciiDocFactory.sourceBlock(doc, "java", AsciiDocFactory.SourceFactory
+                .java("class Hello {\n}", "Java Example"));
+        
         assertDocumentIsCorrectlyWritten(doc);
     }
-
-
+    
 
 }
-

@@ -84,7 +84,8 @@ final class NodeWriter implements StructuralNodeVisitor {
     private static enum Style {
         OPEN_BLOCK("open"::equals),
         LISTING_BLOCK("listing"::equals),
-        FOOTNOTE_LIST("arabic"::equals),
+        CALLOUT_LIST("arabic"::equals),
+        COLLAPSIBLE_BLOCK("example"::equals),
         ADMONITION_NOTE("NOTE"::equals),
         ADMONITION_TIP("TIP"::equals),
         ADMONITION_IMPORTANT("IMPORTANT"::equals),
@@ -106,8 +107,11 @@ final class NodeWriter implements StructuralNodeVisitor {
         public boolean isListingBlock() {
             return this==Style.LISTING_BLOCK;
         }
-        public boolean isFootnoteList() {
-            return this==Style.FOOTNOTE_LIST;
+        public boolean isCalloutList() {
+            return this==Style.CALLOUT_LIST;
+        }
+        public boolean isCollapsibleBlock() {
+            return this==Style.COLLAPSIBLE_BLOCK;
         }
         public boolean isAdmonition() {
             return name().startsWith("ADMONITION_");
@@ -142,6 +146,12 @@ final class NodeWriter implements StructuralNodeVisitor {
             }
         } else if(style.isListingBlock()) {
             println("----");
+        } else if(style.isCollapsibleBlock()) {
+            println("[%collapsible]");
+            _Strings.nonEmpty(block.getTitle())
+            .ifPresent(this::printBlockTitle);
+            println("====");
+            isContinuation = true; // set continuation flag, so other blocks don't add newlines
         }
 
         for(val line : block.getLines()) {
@@ -166,6 +176,8 @@ final class NodeWriter implements StructuralNodeVisitor {
             }
         } else if(style.isListingBlock()) {
             println("----");
+        } else if(style.isCollapsibleBlock()) {
+            println("====");
         }
     }
 
@@ -194,10 +206,10 @@ final class NodeWriter implements StructuralNodeVisitor {
     @Override
     public boolean listItemHead(ListItem listItem, int depth) {
 
-        val isFootnoteStyle = Style.parse((org.asciidoctor.ast.List)(listItem.getParent()))
-                .isFootnoteList();
+        val isCalloutStyle = Style.parse((org.asciidoctor.ast.List)(listItem.getParent()))
+                .isCalloutList();
 
-        val bullets = isFootnoteStyle
+        val bullets = isCalloutStyle
                 ? "<.>"
                 : _Strings.padEnd("", bulletCount, '*');
 

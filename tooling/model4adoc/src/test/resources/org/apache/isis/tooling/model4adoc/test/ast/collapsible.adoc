@@ -1,0 +1,7 @@
+= Collapse
+
+[%collapsible]
+.expand to see more details
+====
+Example block turns into collapsible summary/details.
+====

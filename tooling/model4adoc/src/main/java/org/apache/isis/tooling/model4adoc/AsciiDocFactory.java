@@ -145,8 +145,17 @@ public class AsciiDocFactory {
         listingBlock.setStyle("listing");
         return listingBlock;
     }
+    
+    public static Block sourceBlock(StructuralNode parent, @Nullable String language, @NonNull String source) {
+        val sourceBlock = block(parent, source);
+        sourceBlock.setStyle("source");
+        if(_Strings.isNotEmpty(language)) {
+            sourceBlock.setAttribute("language", language, true);
+        }
+        return sourceBlock;
+    }
 
-    // -- FOOTNOTES
+    // -- CALLOUTS
 
     public static org.asciidoctor.ast.List callouts(StructuralNode parent) {
         val calloutList = list(parent);
@@ -156,6 +165,15 @@ public class AsciiDocFactory {
 
     public static ListItem callout(org.asciidoctor.ast.List parent, @NonNull String source) {
         return listItem(parent, source);
+    }
+    
+    // -- COLLAPSIBLE
+    
+    public static Block collapsibleBlock(StructuralNode parent, @NonNull String source) {
+        val collapsibleBlock = block(parent, source);
+        collapsibleBlock.setStyle("example");
+        collapsibleBlock.setAttribute("collapsible-option", "1", true);
+        return collapsibleBlock;
     }
 
     // -- TABLE
@@ -249,15 +267,18 @@ public class AsciiDocFactory {
 
         public static String wrap(@NonNull String sourceType, @NonNull String source, @Nullable String title, Can<String> options) {
             val sb = new StringBuilder();
+            sb.append("[").append(sourceType);
+            options.stream().map(String::trim).filter(_Strings::isNotEmpty).map(s->","+s).forEach(sb::append);
+            sb.append("]\n");
+            
             if(_Strings.isNotEmpty(title)) {
                 val trimmedTitle = title.trim();
                 if(!trimmedTitle.isEmpty()) {
                     sb.append(".").append(trimmedTitle).append("\n");
                 }
             }
-            sb.append("[").append(sourceType);
-            options.stream().map(String::trim).filter(_Strings::isNotEmpty).map(s->","+s).forEach(sb::append);
-            sb.append("]\n").append("----\n");
+            
+            sb.append("----\n");
             _Text.normalize(_Text.getLines(source))
             .forEach(line->sb.append(line).append("\n"));
             sb.append("----\n");
@@ -345,8 +366,6 @@ public class AsciiDocFactory {
         admonition.setAttribute("name", label.toLowerCase(), true);
         return admonition;
     }
-
-
 
 
 }

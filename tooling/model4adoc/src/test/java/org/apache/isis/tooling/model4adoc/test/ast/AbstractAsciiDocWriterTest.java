@@ -36,6 +36,7 @@ abstract class AbstractAsciiDocWriterTest {
     
     protected String adocSourceResourceLocation;
     protected boolean debugEnabled;
+    protected boolean skipAsciidocjComplianceTest;
     
     protected void assertDocumentIsCorrectlyWritten(final Document documentUnderTest) {
         
@@ -58,12 +59,18 @@ abstract class AbstractAsciiDocWriterTest {
         val refDoc = asciidoctor.load(adocRef, new HashMap<String, Object>());
         
         if(debugEnabled) {
+            System.out.println("==========================================");
+            System.out.println("==  Adoc AST as read by Ref. Factory    ==");
+            System.out.println("==========================================");
             _Debug.debug(refDoc);
+            System.out.println("==========================================");
         }
         
         String actualAdoc = AsciiDocWriter.toString(refDoc);
         if(debugEnabled) {
+            System.out.println("==========================================");
             System.out.println("== Generated Adoc Source (Ref. Factory) ==");
+            System.out.println("==========================================");
             System.out.println(actualAdoc);
             System.out.println("==========================================");
         }
@@ -73,7 +80,11 @@ abstract class AbstractAsciiDocWriterTest {
     
     @Test
     void testReferenceDocumentIsCorrectlyWritten() throws IOException {
-        assertReferenceDocumentIsCorrectlyWritten();
+        if(!skipAsciidocjComplianceTest) {
+            assertReferenceDocumentIsCorrectlyWritten();
+        } else {
+            System.err.printf("warning: skipping asciidocj compliance test for %s%n", this.getClass().getName());
+        }
     }
    
     
