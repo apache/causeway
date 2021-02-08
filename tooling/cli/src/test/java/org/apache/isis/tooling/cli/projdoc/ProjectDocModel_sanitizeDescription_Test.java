@@ -3,10 +3,6 @@ package org.apache.isis.tooling.cli.projdoc;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-import org.apache.isis.tooling.projectmodel.ProjectNode;
-
 class ProjectDocModel_sanitizeDescription_Test {
 
     @Test

@@ -470,7 +470,12 @@ public class ProjectDocModel {
     }
 
     private static String toAdocSection(String title, String content) {
-        return String.format("_%s_\n\n%s\n\n", title, content);
+        
+        return AsciiDocFactory.toString(doc->{
+            val collapsibleBlock = AsciiDocFactory.collapsibleBlock(doc, content);
+            collapsibleBlock.setTitle(title);
+        });
+        //return String.format("_%s_\n\n%s\n\n", title, content);
     }
 
     private static String toAdocListItem(String element) {
