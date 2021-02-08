@@ -47,9 +47,9 @@ extends UnitFormatterAbstract {
     }
 
     @Override
-    protected void memberDescriptions(final J2AdocUnit unit, final StructuralNode doc) {
+    protected void memberDescriptions(final J2AdocUnit unit, final StructuralNode parent) {
 
-        val ul = AsciiDocFactory.callouts(doc);
+        val ul = AsciiDocFactory.callouts(parent);
 
         val converter = J2AdocConverterDefault.of(j2aContext);
         appendMembersToList(ul, unit,

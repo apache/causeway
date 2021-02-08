@@ -57,9 +57,9 @@ extends UnitFormatterAbstract {
     }
 
     @Override
-    protected void memberDescriptions(final J2AdocUnit unit, final StructuralNode doc) {
+    protected void memberDescriptions(final J2AdocUnit unit, final StructuralNode parent) {
 
-        val ul = AsciiDocFactory.callouts(doc);
+        val ul = AsciiDocFactory.callouts(parent);
 
         var converter = J2AdocConverterDefault.of(j2aContext);
         val firstParaOnly = new BiFunction<Javadoc, J2AdocUnit, Document>() {
@@ -146,10 +146,10 @@ extends UnitFormatterAbstract {
 
         if (!membersDoc.getBlocks().isEmpty()) {
 
-            val titleBlock = AsciiDocFactory.block(doc);
+            val titleBlock = AsciiDocFactory.block(parent);
             titleBlock.setSource("== Members");
 
-            doc.append(membersDoc);
+            parent.append(membersDoc);
         }
 
     }

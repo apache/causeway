@@ -54,8 +54,7 @@ implements UnitFormatter {
     /**
      * Main algorithm for laying out a unit.
      *
-     * @param unit
-     * @return
+     * @param unit - the containing java unit (java source code model)
      */
     @Override
     public Document apply(final J2AdocUnit unit) {
@@ -102,18 +101,17 @@ implements UnitFormatter {
     /**
      * Mandatory hook method to return a representation of the java source (if any)
      *
-     * @param unit
-     * @return
+     * @param unit - the containing java unit (java source code model)
      */
     protected abstract Optional<String> javaSource(final J2AdocUnit unit);
 
     /**
      * Mandatory hook method to append representation of the members of the unit.
      *
-     * @param unit
-     * @param doc
+     * @param unit - the containing java unit (java source code model)
+     * @param parent - target document node to which any generated blocks are added
      */
-    protected abstract void memberDescriptions(final J2AdocUnit unit, final StructuralNode doc);
+    protected abstract void memberDescriptions(final J2AdocUnit unit, final StructuralNode parent);
 
     protected Optional<String> title(final J2AdocUnit unit) {
         return Optional.of(Snippets.title(unit));
@@ -136,7 +134,7 @@ implements UnitFormatter {
      * javadoc into Asciidoc.
      *
      * @param ul - the List within the Asciidoc document to append to.
-     * @param unit - the containing java unit
+     * @param unit - the containing java unit (java source code model)
      * @param declarations - the collection of {@link NodeWithJavadoc declarations} to process
      * @param memberRepresenter - encodes which parts of the member are to be pulled out into a representation
      * @param javadoc2Asciidocker - strategy for converting each node's javadoc into some Asciidoc
@@ -151,17 +149,17 @@ implements UnitFormatter {
             final BiFunction<Javadoc, J2AdocUnit, Document> javadoc2Asciidocker) {
 
         declarations.stream()
-                .filter(Javadocs::presentAndNotHidden)
-                .forEach(nwj->{
-                    nwj.getJavadoc()
-                            .ifPresent(javadoc-> {
-                                final String memberRepresentation = memberRepresenter.apply(nwj);
-                                final Document asciidoc = javadoc2Asciidocker.apply(javadoc, unit);
-                                appendMemberToList(ul,
-                                        memberRepresentation,
-                                        asciidoc);
-                            });
-                });
+        .filter(Javadocs::presentAndNotHidden)
+        .forEach(nwj->{
+            nwj.getJavadoc()
+                    .ifPresent(javadoc-> {
+                        final String memberRepresentation = memberRepresenter.apply(nwj);
+                        final Document asciidoc = javadoc2Asciidocker.apply(javadoc, unit);
+                        appendMemberToList(ul,
+                                memberRepresentation,
+                                asciidoc);
+                    });
+        });
     }
 
 
@@ -187,7 +185,6 @@ implements UnitFormatter {
     /**
      * Hook method (with empty default implementation)
      * @param unit
-     * @return
      */
     protected Optional<String> outro(final J2AdocUnit unit) {
         return Optional.empty();

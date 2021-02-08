@@ -18,27 +18,19 @@
  */
 package org.apache.isis.tooling.j2adoc.format;
 
-import java.util.Optional;
 import java.util.function.Function;
 
 import com.github.javaparser.ast.nodeTypes.NodeWithJavadoc;
 
-import org.asciidoctor.ast.StructuralNode;
-
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.tooling.j2adoc.J2AdocContext;
 import org.apache.isis.tooling.j2adoc.J2AdocUnit;
-import org.apache.isis.tooling.j2adoc.convert.J2AdocConverter;
-import org.apache.isis.tooling.j2adoc.convert.J2AdocConverterDefault;
 import org.apache.isis.tooling.javamodel.ast.AnnotationMemberDeclarations;
 import org.apache.isis.tooling.javamodel.ast.ConstructorDeclarations;
 import org.apache.isis.tooling.javamodel.ast.EnumConstantDeclarations;
 import org.apache.isis.tooling.javamodel.ast.FieldDeclarations;
 import org.apache.isis.tooling.javamodel.ast.Javadocs;
 import org.apache.isis.tooling.javamodel.ast.MethodDeclarations;
-import org.apache.isis.tooling.model4adoc.AsciiDocFactory;
 
-import lombok.NonNull;
 import lombok.val;
 import lombok.experimental.UtilityClass;
 

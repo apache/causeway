@@ -28,8 +28,6 @@ import org.apache.isis.tooling.j2adoc.convert.J2AdocConverter;
 import org.apache.isis.tooling.j2adoc.convert.J2AdocConverterDefault;
 import org.apache.isis.tooling.model4adoc.AsciiDocFactory;
 
-import static org.apache.isis.tooling.model4adoc.AsciiDocFactory.block;
-
 import lombok.NonNull;
 import lombok.val;
 

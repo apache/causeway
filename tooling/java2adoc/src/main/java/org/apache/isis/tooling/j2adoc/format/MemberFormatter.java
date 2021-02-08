@@ -18,34 +18,6 @@
  */
 package org.apache.isis.tooling.j2adoc.format;
 
-import java.util.Optional;
-import java.util.function.BiFunction;
-import java.util.function.Function;
-
-import com.github.javaparser.ast.nodeTypes.NodeWithJavadoc;
-import com.github.javaparser.javadoc.Javadoc;
-
-import org.asciidoctor.ast.Document;
-import org.asciidoctor.ast.List;
-import org.asciidoctor.ast.StructuralNode;
-
-import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.tooling.j2adoc.J2AdocContext;
-import org.apache.isis.tooling.j2adoc.J2AdocUnit;
-import org.apache.isis.tooling.j2adoc.convert.J2AdocConverter;
-import org.apache.isis.tooling.j2adoc.convert.J2AdocConverterDefault;
-import org.apache.isis.tooling.javamodel.ast.Javadocs;
-import org.apache.isis.tooling.model4adoc.AsciiDocFactory;
-
-import static org.apache.isis.tooling.model4adoc.AsciiDocFactory.block;
-
-import lombok.AccessLevel;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import lombok.val;
-import lombok.experimental.UtilityClass;
-
 public interface MemberFormatter {
 
     public default String getEnumConstantFormat() {
