@@ -24,9 +24,11 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.Stack;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import org.asciidoctor.ast.Block;
@@ -41,6 +43,7 @@ import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.base._Text;
 import org.apache.isis.commons.internal.collections._Arrays;
 import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.collections._Sets;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -77,6 +80,39 @@ final class NodeWriter implements StructuralNodeVisitor {
 //    @Override
 //    public void documentTail(Document doc, int depth) {
 //    }
+    
+    // -- KNOWN DIAGRAM TYPES
+    
+    private static Set<String> KNOWN_DIAGRAM_TYPES = _Sets.of(
+        "a2s",
+        "actdiag",
+        "blockdiag",
+        "bpmn",
+        "bytefield",
+        "ditaa",
+        "dpic",
+        "erd",
+        "gnuplot",
+        "graphviz",
+        "meme",
+        "mermaid",
+        "msc",
+        "nomnoml",
+        "nwdiag",
+        "packetdiag",
+        "pikchr",
+        "plantuml",
+        "rackdiag",
+        "seqdiag",
+        "shaape",
+        "smcat",
+        "svgbob",
+        "symbolator",
+        "syntrax",
+        "umlet",
+        "vega",
+        "vegalite",
+        "wavedrom");
 
     // -- BLOCK
 
@@ -86,6 +122,8 @@ final class NodeWriter implements StructuralNodeVisitor {
         LISTING_BLOCK("listing"::equals),
         CALLOUT_LIST("arabic"::equals),
         COLLAPSIBLE_BLOCK("example"::equals),
+        SOURCE_BLOCK("source"::equals),
+        DIAGRAM_BLOCK(KNOWN_DIAGRAM_TYPES::contains),
         ADMONITION_NOTE("NOTE"::equals),
         ADMONITION_TIP("TIP"::equals),
         ADMONITION_IMPORTANT("IMPORTANT"::equals),
@@ -112,6 +150,12 @@ final class NodeWriter implements StructuralNodeVisitor {
         }
         public boolean isCollapsibleBlock() {
             return this==Style.COLLAPSIBLE_BLOCK;
+        }
+        public boolean isSourceBlock() {
+            return this==Style.SOURCE_BLOCK;
+        }
+        public boolean isDiagramBlock() {
+            return this==Style.DIAGRAM_BLOCK;
         }
         public boolean isAdmonition() {
             return name().startsWith("ADMONITION_");
@@ -149,8 +193,30 @@ final class NodeWriter implements StructuralNodeVisitor {
         } else if(style.isCollapsibleBlock()) {
             println("[%collapsible]");
             _Strings.nonEmpty(block.getTitle())
-            .ifPresent(this::printBlockTitle);
+                .ifPresent(this::printBlockTitle);
             println("====");
+        } else if(style.isSourceBlock()) {
+            val language = (String)block.getAttribute("language");
+            if(_Strings.isNotEmpty(language)) {
+                printfln("[source,%s]", language);    
+            } else {
+                printfln("[source]");
+            }
+            _Strings.nonEmpty(block.getTitle())
+                .ifPresent(this::printBlockTitle);
+            println("----");
+        } if(style.isDiagramBlock()) {
+            
+            val diagramTypeAndOptions = IntStream
+                    .iterate(1, index->block.getAttribute(""+index)!=null, index->index+1)
+                    .mapToObj(index->(String)block.getAttribute(""+index))
+                    .collect(Collectors.joining(","));
+                
+            printfln("[%s]", diagramTypeAndOptions);    
+            
+            _Strings.nonEmpty(block.getTitle())
+                .ifPresent(this::printBlockTitle);
+            println("----");
         }
 
         for(val line : block.getLines()) {
@@ -173,7 +239,9 @@ final class NodeWriter implements StructuralNodeVisitor {
             if(block.getBlocks().size()>0) {
                 println("====");
             }
-        } else if(style.isListingBlock()) {
+        } else if(style.isListingBlock()
+                || style.isSourceBlock()
+                || style.isDiagramBlock()) {
             println("----");
         } else if(style.isCollapsibleBlock()) {
             println("====");

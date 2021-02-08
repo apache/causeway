@@ -18,6 +18,9 @@
  */
 package org.apache.isis.tooling.model4adoc;
 
+import java.util.function.Consumer;
+import java.util.stream.Collectors;
+
 import javax.annotation.Nullable;
 
 import org.asciidoctor.ast.Block;
@@ -30,6 +33,7 @@ import org.asciidoctor.ast.StructuralNode;
 import org.asciidoctor.ast.Table;
 
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.base._Refs;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.base._Text;
 import org.apache.isis.tooling.model4adoc.ast.SimpleBlock;
@@ -63,6 +67,24 @@ public class AsciiDocFactory {
      */
     public static Document doc() {
         return new SimpleDocument();
+    }
+    
+    /**
+     * syntactic sugar
+     */
+    public static Document doc(Consumer<Document> documentBuilder) {
+        val doc = doc();
+        documentBuilder.accept(doc);
+        return doc;
+    }
+    
+    /**
+     * syntactic sugar
+     */
+    public static String toString(Consumer<Document> documentBuilder) {
+        val doc = doc();
+        documentBuilder.accept(doc);
+        return AsciiDocWriter.toString(doc);
     }
 
     // -- ATTRIBUTES
@@ -153,6 +175,29 @@ public class AsciiDocFactory {
             sourceBlock.setAttribute("language", language, true);
         }
         return sourceBlock;
+    }
+    
+    public static Block diagramBlock(
+            StructuralNode parent, 
+            @NonNull String diagramType, 
+            @NonNull Can<String> diagramOptions, 
+            @NonNull String source) {
+        
+        val diagramBlock = block(parent, source);
+        
+        _Strings.nonEmpty(diagramType)
+            .ifPresent(diagramBlock::setStyle);
+        
+        val attributes = diagramOptions.add(0, diagramType);
+        val attributeIndex = _Refs.intRef(1);
+        
+        // add options
+        attributes.forEach(opt->{
+            diagramBlock.setAttribute(""+attributeIndex.getValue(), opt, true);
+            attributeIndex.inc();
+        });
+
+        return diagramBlock;
     }
 
     // -- CALLOUTS
@@ -265,28 +310,29 @@ public class AsciiDocFactory {
 
     public static class SourceFactory {
 
-        public static String wrap(@NonNull String sourceType, @NonNull String source, @Nullable String title, Can<String> options) {
-            val sb = new StringBuilder();
-            sb.append("[").append(sourceType);
-            options.stream().map(String::trim).filter(_Strings::isNotEmpty).map(s->","+s).forEach(sb::append);
-            sb.append("]\n");
+        public static Block sourceBlock(
+                @NonNull Document doc,
+                @NonNull String languageAndOptions, 
+                @NonNull String source, 
+                @Nullable String title) {
             
-            if(_Strings.isNotEmpty(title)) {
-                val trimmedTitle = title.trim();
-                if(!trimmedTitle.isEmpty()) {
-                    sb.append(".").append(trimmedTitle).append("\n");
-                }
-            }
+            val sourceBlock = AsciiDocFactory.sourceBlock(doc,
+                    languageAndOptions,
+                    
+                    _Text.normalize(_Text.getLines(source))
+                    .stream()
+                    .collect(Collectors.joining("\n")));
             
-            sb.append("----\n");
-            _Text.normalize(_Text.getLines(source))
-            .forEach(line->sb.append(line).append("\n"));
-            sb.append("----\n");
-            return sb.toString();
-        }
+            _Strings.nonEmpty(title)
+                .ifPresent(sourceBlock::setTitle);
 
-        public static String xml(@NonNull String xmlSource, @Nullable String title) {
-            return wrap("source,xml", xmlSource, title, Can.empty());
+            return sourceBlock;
+        }
+        
+        public static String asAdocSource() {
+            
+            val doc = AsciiDocFactory.doc();
+            return AsciiDocWriter.toString(doc);
         }
 
 //        [source,java]
@@ -296,30 +342,82 @@ public class AsciiDocFactory {
 //            ...
 //        }
 //        ----
-        public static String java(@NonNull String javaSource, @Nullable String title) {
-            return wrap("source,java", javaSource, title, Can.empty());
+        public static Block java(
+                @NonNull Document doc,
+                @NonNull String javaSource, 
+                @Nullable String title) {
+            return sourceBlock(doc, "java", javaSource, title);
         }
 
-        public static String json(@NonNull String jsonSource, @Nullable String title) {
-            return wrap("source,json", jsonSource, title, Can.empty());
+        public static Block json(
+                @NonNull Document doc,
+                @NonNull String jsonSource, 
+                @Nullable String title) {
+            return sourceBlock(doc, "json", jsonSource, title);
         }
 
-        public static String yaml(@NonNull String yamlSource, @Nullable String title) {
-            return wrap("source,yaml", yamlSource, title, Can.empty());
+        public static Block xml(
+                @NonNull Document doc,
+                @NonNull String xmlSource, 
+                @Nullable String title) {
+            return sourceBlock(doc, "xml", xmlSource, title);
+        }
+        
+        public static Block yaml(
+                @NonNull Document doc,
+                @NonNull String yamlSource, 
+                @Nullable String title) {
+            return sourceBlock(doc, "yaml", yamlSource, title);
         }
 
+    }
+    
+    public static class DiagramFactory {
+        
+        public static Block diagramBlock(
+                @NonNull Document doc,
+                @NonNull String diagramType, 
+                @NonNull Can<String> diagramOptions,
+                @NonNull String source, 
+                @Nullable String title) {
+            
+            val sourceBlock = AsciiDocFactory.diagramBlock(doc,
+                    diagramType,
+                    diagramOptions,
+                    _Text.normalize(_Text.getLines(source))
+                    .stream()
+                    .collect(Collectors.joining("\n")));
+            
+            _Strings.nonEmpty(title)
+                .ifPresent(sourceBlock::setTitle);
+
+            return sourceBlock;
+        }
+        
 //      [plantuml,c4-demo,png]
 //      ----
 //      @startuml
 //      ...
 //      @enduml
 //      ----
-        public static String plantuml(@NonNull String plantumlSource, @NonNull String diagramKey, @Nullable String title) {
-            return wrap(String.format("plantuml,%s,png", diagramKey), plantumlSource, title, Can.of());
+        public static Block plantumlPng(
+                @NonNull Document doc,
+                @NonNull String plantumlSource,
+                @NonNull String diagramKey,
+                @Nullable String title) {
+            return diagramBlock(doc, "plantuml", Can.of(diagramKey, "png"), plantumlSource, title);
         }
-
-
+        
+        public static Block plantumlSvg(
+                @NonNull Document doc,
+                @NonNull String plantumlSource,
+                @NonNull String diagramKey,
+                @Nullable String title) {
+            return diagramBlock(doc, "plantuml", Can.of(diagramKey, "svg"), plantumlSource, title);
+        }
+        
     }
+
 
     // -- HELPER
 

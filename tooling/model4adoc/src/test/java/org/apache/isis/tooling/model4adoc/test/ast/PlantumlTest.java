@@ -24,40 +24,43 @@ import org.asciidoctor.ast.Document;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.tooling.model4adoc.AsciiDocFactory;
 
 import static org.apache.isis.tooling.model4adoc.AsciiDocFactory.doc;
 
 import lombok.val;
 
-class SourceTest extends AbstractAsciiDocWriterTest {
+class PlantumlTest extends AbstractAsciiDocWriterTest {
 
     private Document doc;
 
     @BeforeEach
     void setUp() throws Exception {
         doc = doc();
-        super.adocSourceResourceLocation = "source.adoc";
+        super.adocSourceResourceLocation = "plantuml-svg.adoc";
         super.debugEnabled = true;
         super.skipAsciidocjComplianceTest = true;
     }
 
-    // = Source
+    // = Plantuml
     //
-    // [source, java]
-    // .Java Example
+    // [plantuml,alice-and-bob,svg]
+    // .Alice and Bob
     // ----
-    // class Hello {
-    // }
+    // Bob->Alice : hello
     // ----
     @Test
     void testSourceBlock() throws IOException {
         
-        doc.setTitle("Source");
+        doc.setTitle("Plantuml");
         
-        val sourceBlock = AsciiDocFactory.sourceBlock(doc, "java", "class Hello {\n}");
+        val diagramBlock = AsciiDocFactory
+                .diagramBlock(doc, "plantuml", Can.of("alice-and-bob" ,"svg"), "Bob->Alice : hello");
         
-        sourceBlock.setTitle("Java Example");
+        diagramBlock.setTitle("Alice and Bob");
+        
+        _Debug.debug(doc);
         
         assertDocumentIsCorrectlyWritten(doc);
     }
@@ -65,13 +68,12 @@ class SourceTest extends AbstractAsciiDocWriterTest {
     @Test
     void testSourceFactory() throws IOException {
         
-        doc.setTitle("Source");
+        doc.setTitle("Plantuml");
         
-        AsciiDocFactory.SourceFactory
-                .java(doc, "class Hello {\n}", "Java Example");
+        AsciiDocFactory.DiagramFactory
+                .plantumlSvg(doc, "Bob->Alice : hello", "alice-and-bob", "Alice and Bob");
         
         assertDocumentIsCorrectlyWritten(doc);
     }
-   
 
 }

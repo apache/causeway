@@ -269,7 +269,8 @@ public class ProjectDocModel {
         public String toAsciiDoc(String softwareSystemName) {
             val key = c4.getWorkspaceName();
 
-            return AsciiDocFactory.SourceFactory.plantuml(toPlantUml(softwareSystemName), key, null);
+            return AsciiDocFactory.toString(doc->
+                        AsciiDocFactory.DiagramFactory.plantumlPng(doc, toPlantUml(softwareSystemName), key, null));
         }
     }
 
@@ -412,7 +413,8 @@ public class ProjectDocModel {
         appendKeyValue(coors, "Folder", projRelativePath);
         return String.format("%s\n%s",
                 module.getName(),
-                AsciiDocFactory.SourceFactory.yaml(coors.toString(), null));
+                AsciiDocFactory.toString(doc->
+                    AsciiDocFactory.SourceFactory.yaml(doc, coors.toString(), null)));
     }
 
     private void appendKeyValue(StringBuilder sb, String key, String value) {

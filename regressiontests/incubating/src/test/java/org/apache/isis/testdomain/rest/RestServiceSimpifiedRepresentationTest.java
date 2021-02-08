@@ -508,7 +508,8 @@ class RestServiceSimpifiedRepresentationTest {
         void next(String javaSource) {
             
             row = row(table);
-            cell(table, row, AsciiDocFactory.SourceFactory.java(javaSource, null));
+            cell(table, row, AsciiDocFactory.toString(doc->
+                AsciiDocFactory.SourceFactory.java(doc, javaSource, null)));
             requestAndResponseCellContent = new StringBuilder();
         }
         
@@ -517,7 +518,9 @@ class RestServiceSimpifiedRepresentationTest {
                 Map<String, List<String>> headers, String body) {
             
             requestAndResponseCellContent.append("==== REQUEST\n\n");
-            requestAndResponseCellContent.append(AsciiDocFactory.SourceFactory.json(body, null));
+            requestAndResponseCellContent.append(
+                    AsciiDocFactory.toString(doc->
+                        AsciiDocFactory.SourceFactory.json(doc, body, null)));
         }
 
         @Override
@@ -531,7 +534,8 @@ class RestServiceSimpifiedRepresentationTest {
             .append("\n==== RESPONSE\n\n")
             .append(String.format("- HTTP return code: %d\n", httpReturnCode)) 
             .append(String.format("- Representation Type: %s\n\n", reprType))
-            .append(AsciiDocFactory.SourceFactory.json(body, null));
+            .append(AsciiDocFactory.toString(doc->
+                AsciiDocFactory.SourceFactory.json(doc, body, null)));
             
             cell(table, row, requestAndResponseCellContent.toString());
         }

@@ -42,7 +42,8 @@ extends UnitFormatterAbstract {
 
         final String javaSource = Snippets.javaSourceFor(unit);
         return Optional.of(
-                AsciiDocFactory.SourceFactory.java(javaSource, unit.getCanonicalName() + ".java"));
+                AsciiDocFactory.toString(doc->
+                    AsciiDocFactory.SourceFactory.java(doc, javaSource, unit.getCanonicalName() + ".java")));
     }
 
     @Override

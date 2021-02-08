@@ -1,0 +1,7 @@
+= Plantuml
+
+[plantuml,alice-and-bob,svg]
+.Alice and Bob
+----
+Bob->Alice : hello
+----
