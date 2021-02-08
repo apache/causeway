@@ -184,7 +184,7 @@ implements UnitFormatter {
 
     /**
      * Hook method (with empty default implementation)
-     * @param unit
+     * @param unit - the containing java unit (java source code model)
      */
     protected Optional<String> outro(final J2AdocUnit unit) {
         return Optional.empty();

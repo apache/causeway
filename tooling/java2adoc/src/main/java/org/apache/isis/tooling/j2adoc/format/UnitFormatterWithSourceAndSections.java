@@ -162,7 +162,7 @@ extends UnitFormatterAbstract {
      * javadoc into Asciidoc.
      *
      * @param container - the List within the Asciidoc document to append to.
-     * @param unit - the containing java unit
+     * @param unit - the containing java unit (java source code model)
      * @param declarations - the collection of {@link NodeWithJavadoc declarations} to process
      * @param memberRepresenter - encodes which parts of the member are to be pulled out into a representation
      * @param javadoc2Asciidocker - strategy for converting each node's javadoc into some Asciidoc

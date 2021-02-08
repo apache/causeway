@@ -19,6 +19,7 @@
 package org.apache.isis.tooling.javamodel.ast;
 
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.ImportDeclaration;
@@ -34,6 +35,7 @@ import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.TypeDeclaration;
 import com.github.javaparser.ast.nodeTypes.NodeWithSimpleName;
+import com.github.javaparser.ast.type.TypeParameter;
 import com.github.javaparser.javadoc.Javadoc;
 
 import org.apache.isis.commons.collections.Can;
@@ -182,6 +184,19 @@ public final class AnyTypeDeclaration {
 
     public boolean hasIndexDirective() {
         return TypeDeclarations.hasIndexDirective(td);
+    }
+    
+    public Can<TypeParameter> getTypeParameters() {
+        return TypeDeclarations.getTypeParameters(td);
+    }
+    
+    public String getTypeParametersAsString() {
+        val typeParameters = getTypeParameters();
+        return typeParameters.isEmpty()
+                ? ""
+                : String.format("<%s>", typeParameters.stream()
+                        .map(tp->tp.getNameAsString())
+                        .collect(Collectors.joining(", ")));
     }
 
     /**

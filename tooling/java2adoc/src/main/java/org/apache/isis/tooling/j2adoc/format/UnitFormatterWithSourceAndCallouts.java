@@ -80,36 +80,5 @@ extends UnitFormatterAbstract {
 
     }
 
-    //XXX java language syntax (for callout text), but not used any more
-//
-//    @Override
-//    public String getEnumConstantFormat() {
-//        return "`%s`";
-//    }
-//
-//    @Override
-//    public String getFieldFormat() {
-//        return "`%s %s`";
-//    }
-//
-//    @Override
-//    public String getConstructorFormat() {
-//        return "`%s(%s)`";
-//    }
-//
-//    @Override
-//    public String getGenericConstructorFormat() {
-//        return "`%s %s(%s)`";
-//    }
-//
-//    @Override
-//    public String getMethodFormat() {
-//        return "`%s %s(%s)`";
-//    }
-//
-//    @Override
-//    public String getGenericMethodFormat() {
-//        return "`%s %s %s(%s)`";
-//    }
 
 }

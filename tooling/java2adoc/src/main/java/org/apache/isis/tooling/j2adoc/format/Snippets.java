@@ -58,9 +58,10 @@ public class Snippets {
     public static String javaSourceFor(J2AdocUnit unit) {
         val buf = new StringBuilder();
 
-        buf.append(String.format("%s %s {\n",
+        buf.append(String.format("%s %s%s {\n",
                 unit.getDeclarationKeyword(),
-                unit.getSimpleName()));
+                unit.getSimpleName(),
+                unit.getTypeDeclaration().getTypeParametersAsString()));
 
         appendJavaSourceMemberFormat(buf,
                 unit.getTypeDeclaration().getEnumConstantDeclarations(),
