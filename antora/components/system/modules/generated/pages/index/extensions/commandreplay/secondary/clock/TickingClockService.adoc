@@ -11,7 +11,7 @@ IMPORTANT: the methods provided by this service are not thread-safe, because the
 [source,java]
 .TickingClockService.java
 ----
-class TickingClockService {
+class TickingClockService<T> {
   final IsisConfiguration isisConfiguration;
   void init()
   boolean isInitialized()

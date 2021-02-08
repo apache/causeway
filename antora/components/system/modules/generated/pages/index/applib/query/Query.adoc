@@ -13,7 +13,7 @@ Implementations are expected to implement the _#getRange()_ method, which is use
 [source,java]
 .Query.java
 ----
-interface Query {
+interface Query<T, T, T> {
   Class<T> getResultType()     // <.>
   String getDescription()     // <.>
   QueryRange getRange()     // <.>

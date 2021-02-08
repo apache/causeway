@@ -5,7 +5,7 @@
 [source,java]
 .WithNameComparable.java
 ----
-interface WithNameComparable {
+interface WithNameComparable<T> {
   void setName(String name)
 }
 ----

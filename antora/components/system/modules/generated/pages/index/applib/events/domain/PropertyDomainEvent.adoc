@@ -5,7 +5,7 @@
 [source,java]
 .PropertyDomainEvent.java
 ----
-class PropertyDomainEvent {
+class PropertyDomainEvent<S, T> {
   PropertyDomainEvent()     // <.>
   String toString()
 }

@@ -5,7 +5,7 @@
 [source,java]
 .JsonMapper.java
 ----
-class JsonMapper {
+class JsonMapper<T, T> {
   String getEntityAsStringFrom(Response response)
   JsonMapper instance()     // <.>
   JsonMapper instance(final PrettyPrinting prettyPrinting)

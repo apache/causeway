@@ -13,7 +13,7 @@ A xref:system:generated:index/commons/collections/Can.adoc[Can] must not contain
 [source,java]
 .Can.java
 ----
-interface Can {
+interface Can<T, T, T, T, T, T, T, T, T, R, T, R, R, Z, T, C, T> {
   Cardinality getCardinality()     // <.>
   int size()     // <.>
   Optional<T> get(int elementIndex)     // <.>

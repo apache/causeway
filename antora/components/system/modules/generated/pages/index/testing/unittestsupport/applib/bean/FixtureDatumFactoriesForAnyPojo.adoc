@@ -5,7 +5,7 @@
 [source,java]
 .FixtureDatumFactoriesForAnyPojo.java
 ----
-class FixtureDatumFactoriesForAnyPojo {
+class FixtureDatumFactoriesForAnyPojo<T, T> {
   PojoTester.FixtureDatumFactory<T> pojos(Class<T> compileTimeType, Class<? extends T> runtimeType)
   PojoTester.FixtureDatumFactory<T> pojos(Class<T> type)
 }

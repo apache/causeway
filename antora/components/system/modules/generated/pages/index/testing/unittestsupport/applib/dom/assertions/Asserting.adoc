@@ -5,7 +5,7 @@
 [source,java]
 .Asserting.java
 ----
-class Asserting {
+class Asserting<T> {
   T assertType(Object o, Class<T> type)
 }
 ----

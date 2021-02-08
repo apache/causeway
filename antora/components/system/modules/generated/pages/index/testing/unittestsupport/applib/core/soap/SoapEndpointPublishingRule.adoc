@@ -5,7 +5,7 @@
 [source,java]
 .SoapEndpointPublishingRule.java
 ----
-class SoapEndpointPublishingRule {
+class SoapEndpointPublishingRule<T> {
   static final int INITIAL_PORT;     // <.>
   SoapEndpointPublishingRule(final Class<?> endpointClass, final String endpointAddress)
   SoapEndpointPublishingRule(Class<?>... endpointClasses)

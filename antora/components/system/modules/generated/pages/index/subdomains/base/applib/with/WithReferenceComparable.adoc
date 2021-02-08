@@ -5,7 +5,7 @@
 [source,java]
 .WithReferenceComparable.java
 ----
-interface WithReferenceComparable {
+interface WithReferenceComparable<T> {
   void setReference(String reference)
 }
 ----

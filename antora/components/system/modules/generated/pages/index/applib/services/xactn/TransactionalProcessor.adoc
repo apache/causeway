@@ -5,7 +5,7 @@
 [source,java]
 .TransactionalProcessor.java
 ----
-interface TransactionalProcessor {
+interface TransactionalProcessor<T, T, T> {
   Result<T> callTransactional(TransactionDefinition def, Callable<T> callable)     // <.>
   Result<Void> runTransactional(TransactionDefinition def, ThrowingRunnable runnable)     // <.>
   Result<T> callTransactional(Propagation propagation, Callable<T> callable)     // <.>

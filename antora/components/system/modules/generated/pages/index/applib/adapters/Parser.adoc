@@ -23,7 +23,7 @@ Whatever the class that implements this interface, it must also expose either a 
 [source,java]
 .Parser.java
 ----
-interface Parser {
+interface Parser<T> {
   T parseTextEntry(Object contextPojo, String entry)     // <.>
   int typicalLength()     // <.>
   String displayTitleOf(T object)     // <.>

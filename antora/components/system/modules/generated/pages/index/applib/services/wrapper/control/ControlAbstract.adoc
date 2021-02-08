@@ -5,7 +5,7 @@
 [source,java]
 .ControlAbstract.java
 ----
-class ControlAbstract {
+class ControlAbstract<T> {
   T withCheckRules()
   T withSkipRules()
   Optional<ExceptionHandler> getExceptionHandler()

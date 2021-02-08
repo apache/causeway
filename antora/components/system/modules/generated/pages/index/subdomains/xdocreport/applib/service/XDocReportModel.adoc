@@ -5,7 +5,7 @@
 [source,java]
 .XDocReportModel.java
 ----
-interface XDocReportModel {
+interface XDocReportModel<T, T> {
   Map<String, Data> getContextData()
 }
 ----

@@ -5,7 +5,7 @@
 [source,java]
 .ApplicationTenancyRepository.java
 ----
-interface ApplicationTenancyRepository {
+interface ApplicationTenancyRepository<T> {
   T newApplicationTenancy()     // <.>
   Collection<T> allTenancies()
   Collection<T> getChildren(ApplicationTenancy tenancy)

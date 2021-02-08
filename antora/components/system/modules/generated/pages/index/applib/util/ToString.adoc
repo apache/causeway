@@ -7,7 +7,7 @@ Fluent Object to String Composition.
 [source,java]
 .ToString.java
 ----
-class ToString {
+class ToString<T, T, T> {
   ToString<T> toString(String name, Function<? super T, ?> getter)
   ToString<T> toStringOmitIfAbsent(String name, Function<? super T, ?> getter)
   ToString<T> thenToString(String name, Function<? super T, ?> getter)

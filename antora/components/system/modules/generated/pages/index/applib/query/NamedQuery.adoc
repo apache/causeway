@@ -5,7 +5,7 @@
 [source,java]
 .NamedQuery.java
 ----
-interface NamedQuery {
+interface NamedQuery<T> {
   String getName()
   Map<String, Object> getParametersByName()
   NamedQuery<T> withRange(QueryRange range)

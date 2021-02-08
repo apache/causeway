@@ -7,7 +7,7 @@ Emitted for subscribers to obtain a cssClass hint (equivalent to the `iconName()
 [source,java]
 .IconUiEvent.java
 ----
-class IconUiEvent {
+class IconUiEvent<S> {
   IconUiEvent()     // <.>
   IconUiEvent(final S source)
   String getIconName()     // <.>

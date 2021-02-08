@@ -7,7 +7,7 @@ Convenient base class to extend for integration tests.
 [source,java]
 .IsisIntegrationTestAbstract.java
 ----
-class IsisIntegrationTestAbstract {
+class IsisIntegrationTestAbstract<T, T, T, T, T, T, T> {
 }
 ----
 

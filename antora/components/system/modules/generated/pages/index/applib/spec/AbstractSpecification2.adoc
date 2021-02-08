@@ -14,7 +14,7 @@ Implementation note: inspired by (borrowed code from) Hamcrest's `TypeSafeMatche
 [source,java]
 .AbstractSpecification2.java
 ----
-class AbstractSpecification2 {
+class AbstractSpecification2<T> {
   String satisfies(final Object obj)
   TranslatableString satisfiesTranslatable(final Object obj)     // <.>
 }

@@ -5,7 +5,7 @@
 [source,java]
 .WorksheetSpec.java
 ----
-class WorksheetSpec {
+class WorksheetSpec<T, Q, T, T, T, T> {
   WorksheetSpec(final Class<T> viewModelClass, String sheetName)     // <.>
   WorksheetSpec(final Class<T> viewModelClass, String sheetName, final Mode mode)
   WorksheetSpec(final RowFactory<T> factory, String sheetName, final Mode mode)

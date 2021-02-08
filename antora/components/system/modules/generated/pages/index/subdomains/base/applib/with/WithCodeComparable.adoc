@@ -5,7 +5,7 @@
 [source,java]
 .WithCodeComparable.java
 ----
-interface WithCodeComparable {
+interface WithCodeComparable<T> {
   void setCode(String code)
 }
 ----

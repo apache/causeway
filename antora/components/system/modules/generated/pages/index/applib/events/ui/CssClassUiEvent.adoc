@@ -7,7 +7,7 @@ Emitted for subscribers to obtain a cssClass hint (equivalent to the `cssClass()
 [source,java]
 .CssClassUiEvent.java
 ----
-class CssClassUiEvent {
+class CssClassUiEvent<S> {
   CssClassUiEvent()     // <.>
   CssClassUiEvent(final S source)
   void setCssClass(final String cssClass)     // <.>

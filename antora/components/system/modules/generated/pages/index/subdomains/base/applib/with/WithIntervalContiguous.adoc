@@ -5,7 +5,7 @@
 [source,java]
 .WithIntervalContiguous.java
 ----
-interface WithIntervalContiguous {
+interface WithIntervalContiguous<T, T, T> {
   T getPredecessor()     // <.>
   T getSuccessor()     // <.>
   SortedSet<T> getTimeline()     // <.>

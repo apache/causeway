@@ -5,7 +5,7 @@
 [source,java]
 .IsisModuleExtSecmanApi.java
 ----
-class IsisModuleExtSecmanApi {
+class IsisModuleExtSecmanApi<S, S, T, S, T> {
 }
 ----
 

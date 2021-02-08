@@ -9,7 +9,7 @@ This implementation has no UI and there is only one implementation (this class) 
 [source,java]
 .QueryResultsCache.java
 ----
-interface QueryResultsCache {
+interface QueryResultsCache<T, R, R, A0, R, A0, A1, R, A0, A1, A2, R, A0, A1, A2, A3, R, A0, A1, A2, A3, A4, T> {
   T execute(Callable<T> callable, Class<?> callingClass, String methodName, Object... keys)
   void onTransactionEnded()     // <.>
   R execute(MethodReferences.Call0<? extends R> action, Class<?> callingClass, String methodName)

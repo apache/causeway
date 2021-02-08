@@ -5,7 +5,7 @@
 [source,java]
 .EventObjectBase.java
 ----
-class EventObjectBase {
+class EventObjectBase<T> {
   T getSource()     // <.>
   void initSource(T source)     // <.>
   String toString()     // <.>

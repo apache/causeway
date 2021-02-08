@@ -5,7 +5,7 @@
 [source,java]
 .IsisModuleApplib.java
 ----
-class IsisModuleApplib {
+class IsisModuleApplib<S, S, S, S, S, S, T, S, T> {
 }
 ----
 

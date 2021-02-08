@@ -5,7 +5,7 @@
 [source,java]
 .ObjectPersistingEvent.java
 ----
-class ObjectPersistingEvent {
+class ObjectPersistingEvent<S> {
   ObjectPersistingEvent()
   ObjectPersistingEvent(final S source)
 }

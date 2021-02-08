@@ -5,7 +5,7 @@
 [source,java]
 .ObjectFactoryForIntegration.java
 ----
-class ObjectFactoryForIntegration {
+class ObjectFactoryForIntegration<T, T, T> {
   void start()
   void stop()
   boolean addClass(Class<?> clazz)

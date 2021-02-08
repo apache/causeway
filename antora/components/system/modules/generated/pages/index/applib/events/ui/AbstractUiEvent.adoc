@@ -5,7 +5,7 @@
 [source,java]
 .AbstractUiEvent.java
 ----
-class AbstractUiEvent {
+class AbstractUiEvent<S> {
   AbstractUiEvent()     // <.>
   AbstractUiEvent(final S source)
   Object get(Object key)     // <.>

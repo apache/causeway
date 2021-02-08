@@ -5,7 +5,7 @@
 [source,java]
 .ExcelService.java
 ----
-class ExcelService {
+class ExcelService<T, T, T, T, T, T, T, T, T, T> {
   public static final String XSLX_MIME_TYPE;
   ExcelService()
   void init()

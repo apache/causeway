@@ -7,7 +7,7 @@ Emitted for subscribers to obtain a layout hint (equivalent to the `layout()` su
 [source,java]
 .LayoutUiEvent.java
 ----
-class LayoutUiEvent {
+class LayoutUiEvent<S> {
   LayoutUiEvent()     // <.>
   LayoutUiEvent(final S source)
   void setLayout(final String layout)     // <.>

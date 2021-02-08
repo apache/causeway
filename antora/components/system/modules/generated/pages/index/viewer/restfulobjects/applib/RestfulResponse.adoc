@@ -5,7 +5,7 @@
 [source,java]
 .RestfulResponse.java
 ----
-class RestfulResponse {
+class RestfulResponse<X, T, V, V, Q, T> {
   RestfulResponse<JsonRepresentation> of(final Response response)
   RestfulResponse<T> ofT(final Response response)
   HttpStatusCode getStatus()

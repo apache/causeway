@@ -41,7 +41,7 @@ public int compareTo(final ApplicationFeature other) {
 [source,java]
 .ObjectContracts.java
 ----
-class ObjectContracts {
+class ObjectContracts<T, T, T, U, U, T, T, T, T, T, T, T> {
   ToString<T> toString(String name, Function<T, ?> getter)
   Equality<T> checkEquals(Function<T, ?> getter)
   Hashing<T> hashing(Function<T, ?> getter)

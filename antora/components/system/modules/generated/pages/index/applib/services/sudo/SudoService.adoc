@@ -7,7 +7,7 @@ Intended only for use by fixture scripts and integration tests, allows a block o
 [source,java]
 .SudoService.java
 ----
-interface SudoService {
+interface SudoService<T> {
   RoleMemento ACCESS_ALL_ROLE;     // <.>
   T call(UnaryOperator<ExecutionContext> sudoMapper, Callable<T> supplier)     // <.>
   void run(final UnaryOperator<ExecutionContext> sudoMapper, final ThrowingRunnable runnable)     // <.>

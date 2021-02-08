@@ -5,7 +5,7 @@
 [source,java]
 .ApplicationPermissionRepository.java
 ----
-interface ApplicationPermissionRepository {
+interface ApplicationPermissionRepository<P> {
   Optional<P> findByUserAndPermissionValue(String username, ApplicationPermissionValue changingPermissionValue)
   Optional<P> findByRoleAndRuleAndFeature(ApplicationRole holder, ApplicationPermissionRule rule, ApplicationFeatureType type, String featureFqn)
   Collection<P> allPermissions()

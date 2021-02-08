@@ -5,7 +5,7 @@
 [source,java]
 .ObjectRemovingEvent.java
 ----
-class ObjectRemovingEvent {
+class ObjectRemovingEvent<S> {
   ObjectRemovingEvent()
   ObjectRemovingEvent(final S source)
 }

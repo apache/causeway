@@ -5,7 +5,7 @@
 [source,java]
 .IsisModuleExtCommandReplaySecondary.java
 ----
-class IsisModuleExtCommandReplaySecondary {
+class IsisModuleExtCommandReplaySecondary<S, S, T, S, T> {
   @Inject
 ApplicationContext applicationContext;
   @Inject

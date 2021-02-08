@@ -5,7 +5,7 @@
 [source,java]
 .CollectionDomainEvent.java
 ----
-class CollectionDomainEvent {
+class CollectionDomainEvent<S, T> {
   CollectionDomainEvent()     // <.>
   void setValue(T value)     // <.>
   void setOf(Of of)     // <.>

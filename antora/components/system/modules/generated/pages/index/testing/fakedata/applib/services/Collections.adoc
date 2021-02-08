@@ -5,7 +5,7 @@
 [source,java]
 .Collections.java
 ----
-class Collections {
+class Collections<E, E, E, T, T, T, T, T, T, T, T, T, E> {
   Collections(final FakeDataService fakeDataService)
   E randomEnum(final Class<E> enumType)     // <.>
   E anyEnum(final Class<E> enumType)

@@ -5,7 +5,7 @@
 [source,java]
 .CollectUtils.java
 ----
-class CollectUtils {
+class CollectUtils<T> {
   T firstIn(final Set<T> set)
 }
 ----

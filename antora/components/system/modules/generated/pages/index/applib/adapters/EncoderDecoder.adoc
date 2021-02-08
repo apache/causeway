@@ -13,7 +13,7 @@ Whatever the class that implements this interface, it must also expose either a 
 [source,java]
 .EncoderDecoder.java
 ----
-interface EncoderDecoder {
+interface EncoderDecoder<T> {
   String toEncodedString(T toEncode)     // <.>
   T fromEncodedString(String encodedString)     // <.>
 }

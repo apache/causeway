@@ -9,7 +9,7 @@ Implementations include a `FieldSet` (containing a number of properties and thei
 [source,java]
 .MemberRegion.java
 ----
-interface MemberRegion {
+interface MemberRegion<T> {
 }
 ----
 

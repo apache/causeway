@@ -5,7 +5,7 @@
 [source,java]
 .WithTitleComparable.java
 ----
-interface WithTitleComparable {
+interface WithTitleComparable<T> {
   void setTitle(String title)
 }
 ----

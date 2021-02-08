@@ -7,7 +7,7 @@ Contract test for value types ( _#equals(Object) equals_ and _#hashCode() hashCo
 [source,java]
 .ValueTypeContractTestAbstract.java
 ----
-class ValueTypeContractTestAbstract {
+class ValueTypeContractTestAbstract<T> {
   void setUp()
   void notEqualToNull()
   void reflexiveAndSymmetric()

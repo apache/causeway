@@ -5,7 +5,7 @@
 [source,java]
 .RowHandler.java
 ----
-interface RowHandler {
+interface RowHandler<T> {
   void handleRow(T previousRow)
 }
 ----

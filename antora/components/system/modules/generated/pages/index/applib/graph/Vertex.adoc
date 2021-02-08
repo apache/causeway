@@ -7,7 +7,7 @@ Fundamental building block for graph structures.
 [source,java]
 .Vertex.java
 ----
-interface Vertex {
+interface Vertex<T> {
   T getValue()
   int getIncomingCount()
   int getOutgoingCount()

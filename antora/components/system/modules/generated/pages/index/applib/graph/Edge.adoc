@@ -7,7 +7,7 @@ Fundamental building block for graph structures.
 [source,java]
 .Edge.java
 ----
-interface Edge {
+interface Edge<T> {
   Vertex<T> getFrom()
   Vertex<T> getTo()
 }

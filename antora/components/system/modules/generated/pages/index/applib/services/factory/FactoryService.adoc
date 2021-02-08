@@ -5,7 +5,7 @@
 [source,java]
 .FactoryService.java
 ----
-interface FactoryService {
+interface FactoryService<T, T, T, T, T, T, T, T, T, T> {
   T getOrCreate(Class<T> requiredType)     // <.>
   T get(Class<T> requiredType)     // <.>
   T detachedEntity(Class<T> domainClass)     // <.>

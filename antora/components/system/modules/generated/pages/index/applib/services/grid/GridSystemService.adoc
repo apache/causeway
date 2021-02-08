@@ -7,7 +7,7 @@ Provides an implementation of xref:system:generated:index/applib/layout/grid/Gri
 [source,java]
 .GridSystemService.java
 ----
-interface GridSystemService {
+interface GridSystemService<G> {
   Class<G> gridImplementation()     // <.>
   String tns()
   String schemaLocation()

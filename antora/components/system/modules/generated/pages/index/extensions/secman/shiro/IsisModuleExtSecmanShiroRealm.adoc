@@ -5,7 +5,7 @@
 [source,java]
 .IsisModuleExtSecmanShiroRealm.java
 ----
-class IsisModuleExtSecmanShiroRealm {
+class IsisModuleExtSecmanShiroRealm<V, V> {
   IsisModuleExtSecmanShiroRealm()     // <.>
   EnumSet<SecurityRealmCharacteristic> getCharacteristics()
   V execute(final Supplier<V> closure)

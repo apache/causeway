@@ -11,7 +11,7 @@ Whatever the class that implements this interface, it must also expose either a 
 [source,java]
 .ValueSemanticsProvider.java
 ----
-interface ValueSemanticsProvider {
+interface ValueSemanticsProvider<T> {
   Parser<T> getParser()     // <.>
   EncoderDecoder<T> getEncoderDecoder()     // <.>
   DefaultsProvider<T> getDefaultsProvider()     // <.>

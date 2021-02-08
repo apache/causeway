@@ -5,7 +5,7 @@
 [source,java]
 .AbstractDomainEvent.java
 ----
-class AbstractDomainEvent {
+class AbstractDomainEvent<S> {
   AbstractDomainEvent()     // <.>
   AbstractDomainEvent(final S source, final Identifier identifier)
   void setMixedIn(final Object mixedIn)     // <.>

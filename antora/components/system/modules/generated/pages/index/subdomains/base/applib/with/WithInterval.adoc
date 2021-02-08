@@ -5,7 +5,7 @@
 [source,java]
 .WithInterval.java
 ----
-interface WithInterval {
+interface WithInterval<T, T, T> {
   LocalDate getStartDate()     // <.>
   void setStartDate(LocalDate startDate)
   LocalDate getEndDate()     // <.>

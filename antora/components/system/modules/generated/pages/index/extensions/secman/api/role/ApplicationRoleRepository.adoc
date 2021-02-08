@@ -5,7 +5,7 @@
 [source,java]
 .ApplicationRoleRepository.java
 ----
-interface ApplicationRoleRepository {
+interface ApplicationRoleRepository<R> {
   R newApplicationRole()     // <.>
   Collection<R> allRoles()
   R newRole(String name, String description)

@@ -7,7 +7,7 @@ For `enum` s that act as powertypes, in other words acting as a factory for subt
 [source,java]
 .PowerType.java
 ----
-interface PowerType {
+interface PowerType<T> {
   T create(FactoryService factoryService)
 }
 ----

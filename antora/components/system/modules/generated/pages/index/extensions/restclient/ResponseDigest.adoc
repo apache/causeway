@@ -5,7 +5,7 @@
 [source,java]
 .ResponseDigest.java
 ----
-class ResponseDigest {
+class ResponseDigest<T, T, T, T> {
   ResponseDigest<T> of(final Response response, final Class<T> entityType)     // <.>
   ResponseDigest<T> ofList(final Response response, final Class<T> entityType, final GenericType<List<T>> genericType)     // <.>
   ResponseDigest<T> ofAsyncFailure(final Future<Response> asyncResponse, final Class<T> entityType, final Exception failure)     // <.>

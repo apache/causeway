@@ -5,7 +5,7 @@
 [source,java]
 .AsyncControl.java
 ----
-class AsyncControl {
+class AsyncControl<X, R> {
   AsyncControl<Void> returningVoid()
   AsyncControl<X> returning(final Class<X> cls)
   AsyncControl<R> with(ExecutorService executorService)

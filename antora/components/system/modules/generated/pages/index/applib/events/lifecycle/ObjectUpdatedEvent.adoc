@@ -5,7 +5,7 @@
 [source,java]
 .ObjectUpdatedEvent.java
 ----
-class ObjectUpdatedEvent {
+class ObjectUpdatedEvent<S> {
   ObjectUpdatedEvent()
   ObjectUpdatedEvent(final S source)
 }

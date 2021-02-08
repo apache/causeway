@@ -5,7 +5,7 @@
 [source,java]
 .LazyTreeNode.java
 ----
-class LazyTreeNode {
+class LazyTreeNode<T, T> {
   TreeNode<T> of(T value, Class<? extends TreeAdapter<T>> treeAdapterClass, TreeState sharedState)
   T getValue()
   TreeNode<T> getParentIfAny()

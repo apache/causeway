@@ -7,7 +7,7 @@ This class should be executed using _org.apache.isis.testing.fixtures.applib.fix
 [source,java]
 .ExcelFixture2.java
 ----
-class ExcelFixture2 {
+class ExcelFixture2<T> {
   @Getter
 @Setter
 WorksheetSpec.Matcher matcher;     // <.>

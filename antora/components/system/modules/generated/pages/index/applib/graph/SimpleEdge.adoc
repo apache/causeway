@@ -7,7 +7,7 @@ Fundamental building block for graph structures.
 [source,java]
 .SimpleEdge.java
 ----
-class SimpleEdge {
+class SimpleEdge<T> {
   Vertex<T> from;
   Vertex<T> to;
 }

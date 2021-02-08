@@ -5,7 +5,7 @@
 [source,java]
 .AllInstancesQuery.java
 ----
-interface AllInstancesQuery {
+interface AllInstancesQuery<T> {
 }
 ----
 

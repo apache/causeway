@@ -5,7 +5,7 @@
 [source,java]
 .PojoTester.java
 ----
-class PojoTester {
+class PojoTester<T, T, T> {
   PojoTester strict()
   PojoTester relaxed()
   AtomicInteger getCounter()

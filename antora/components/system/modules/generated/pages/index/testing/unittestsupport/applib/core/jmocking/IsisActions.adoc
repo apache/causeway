@@ -5,7 +5,7 @@
 [source,java]
 .IsisActions.java
 ----
-class IsisActions {
+class IsisActions<T> {
   Action injectInto()
   Action returnEach(final T... values)
   Action returnArgument(final int i)

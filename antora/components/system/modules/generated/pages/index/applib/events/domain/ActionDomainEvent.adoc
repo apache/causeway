@@ -5,7 +5,7 @@
 [source,java]
 .ActionDomainEvent.java
 ----
-class ActionDomainEvent {
+class ActionDomainEvent<S> {
   ActionDomainEvent()     // <.>
   void setReturnValue(final Object returnValue)     // <.>
   void setSemantics(SemanticsOf semantics)     // <.>

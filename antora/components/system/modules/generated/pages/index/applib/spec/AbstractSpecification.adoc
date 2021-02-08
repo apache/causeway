@@ -14,7 +14,7 @@ Implementation note: inspired by (borrowed code from) Hamcrest's `TypeSafeMatche
 [source,java]
 .AbstractSpecification.java
 ----
-class AbstractSpecification {
+class AbstractSpecification<T> {
   String satisfies(final Object obj)     // <.>
 }
 ----

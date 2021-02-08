@@ -5,7 +5,7 @@
 [source,java]
 .WithDescriptionComparable.java
 ----
-interface WithDescriptionComparable {
+interface WithDescriptionComparable<T> {
   void setDescription(String description)
 }
 ----

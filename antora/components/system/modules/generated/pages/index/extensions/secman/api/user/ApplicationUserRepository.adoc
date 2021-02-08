@@ -5,7 +5,7 @@
 [source,java]
 .ApplicationUserRepository.java
 ----
-interface ApplicationUserRepository {
+interface ApplicationUserRepository<U> {
   U newApplicationUser()     // <.>
   Optional<U> findByUsername(String username)
   U findOrCreateUserByUsername(String username)

@@ -5,7 +5,7 @@
 [source,java]
 .Chained.java
 ----
-interface Chained {
+interface Chained<T> {
   T getPrevious()     // <.>
   T getNext()     // <.>
 }

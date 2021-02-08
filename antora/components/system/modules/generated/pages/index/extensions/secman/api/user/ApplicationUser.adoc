@@ -5,7 +5,7 @@
 [source,java]
 .ApplicationUser.java
 ----
-interface ApplicationUser {
+interface ApplicationUser<T, T> {
   public static final int MAX_LENGTH_USERNAME;
   public static final int MAX_LENGTH_FAMILY_NAME;
   public static final int MAX_LENGTH_GIVEN_NAME;

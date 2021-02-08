@@ -5,7 +5,7 @@
 [source,java]
 .JaxbMatchers.java
 ----
-class JaxbMatchers {
+class JaxbMatchers<T> {
   Matcher<? super T> isEquivalentTo(final T expected)     // <.>
 }
 ----

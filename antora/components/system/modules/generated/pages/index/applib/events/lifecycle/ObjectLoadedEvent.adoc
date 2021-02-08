@@ -5,7 +5,7 @@
 [source,java]
 .ObjectLoadedEvent.java
 ----
-class ObjectLoadedEvent {
+class ObjectLoadedEvent<S> {
   ObjectLoadedEvent()
   ObjectLoadedEvent(final S source)
 }

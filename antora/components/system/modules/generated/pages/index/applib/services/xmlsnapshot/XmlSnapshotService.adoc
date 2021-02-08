@@ -9,7 +9,7 @@ The framework provides an implementation of this service ( `XmlSnapshotServiceDe
 [source,java]
 .XmlSnapshotService.java
 ----
-interface XmlSnapshotService {
+interface XmlSnapshotService<T> {
   XmlSnapshotService.Snapshot snapshotFor(final Object domainObject)     // <.>
   XmlSnapshotService.Snapshot.Builder builderFor(final Object domainObject)     // <.>
   T getChildElementValue(final Element el, final String tagname, final Class<T> expectedCls)     // <.>

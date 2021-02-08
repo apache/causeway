@@ -5,7 +5,7 @@
 [source,java]
 .IsisModuleExtCommandReplayPrimary.java
 ----
-class IsisModuleExtCommandReplayPrimary {
+class IsisModuleExtCommandReplayPrimary<S, S, T, S, T> {
 }
 ----
 

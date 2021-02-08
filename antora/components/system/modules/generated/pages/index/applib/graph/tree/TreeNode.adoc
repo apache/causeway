@@ -7,7 +7,7 @@ Fundamental building block of Tree structures.
 [source,java]
 .TreeNode.java
 ----
-interface TreeNode {
+interface TreeNode<T, T> {
   int getIncomingCount()
   int getOutgoingCount()
   Stream<Edge<T>> streamIncoming()

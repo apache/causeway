@@ -14,7 +14,7 @@ For a given permission, there is an interaction between the xref:system:generate
 [source,java]
 .ApplicationPermission.java
 ----
-interface ApplicationPermission {
+interface ApplicationPermission<T, T> {
   String title()     // <.>
   ApplicationFeatureType getFeatureType()
   ApplicationRole getRole()

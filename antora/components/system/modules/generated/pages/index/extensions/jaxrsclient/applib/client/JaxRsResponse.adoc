@@ -5,7 +5,7 @@
 [source,java]
 .JaxRsResponse.java
 ----
-interface JaxRsResponse {
+interface JaxRsResponse<T> {
   int getStatus()
   T readEntity(final Class<T> entityType)
 }

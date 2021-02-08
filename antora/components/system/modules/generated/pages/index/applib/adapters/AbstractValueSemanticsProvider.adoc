@@ -5,7 +5,7 @@
 [source,java]
 .AbstractValueSemanticsProvider.java
 ----
-class AbstractValueSemanticsProvider {
+class AbstractValueSemanticsProvider<T> {
   EncoderDecoder<T> getEncoderDecoder()
   Parser<T> getParser()
   DefaultsProvider<T> getDefaultsProvider()

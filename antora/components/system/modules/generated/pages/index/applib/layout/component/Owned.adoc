@@ -5,7 +5,7 @@
 [source,java]
 .Owned.java
 ----
-interface Owned {
+interface Owned<T> {
   T getOwner()
 }
 ----

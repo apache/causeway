@@ -7,7 +7,7 @@ Primarily provides access to the current thread's _PersistenceManagerFactory_ an
 [source,java]
 .JdoSupportService.java
 ----
-interface JdoSupportService {
+interface JdoSupportService<T, T, T, T, T, T> {
   PersistenceManagerFactory getPersistenceManagerFactory()
   T refresh(T domainObject)     // <.>
   void ensureLoaded(Collection<?> collectionOfDomainObjects)

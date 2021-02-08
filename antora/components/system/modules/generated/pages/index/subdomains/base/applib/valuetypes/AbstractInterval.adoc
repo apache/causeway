@@ -5,7 +5,7 @@
 [source,java]
 .AbstractInterval.java
 ----
-class AbstractInterval {
+class AbstractInterval<T> {
   AbstractInterval()
   AbstractInterval(final Interval interval)
   AbstractInterval(final LocalDate startDate, final LocalDate endDate)

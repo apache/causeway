@@ -7,7 +7,7 @@ Provides the parent/child relationship information between pojos to derive a tre
 [source,java]
 .TreeAdapter.java
 ----
-interface TreeAdapter {
+interface TreeAdapter<T> {
   Optional<T> parentOf(T value)     // <.>
   int childCountOf(T value)     // <.>
   Stream<T> childrenOf(T value)     // <.>

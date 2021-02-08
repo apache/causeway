@@ -7,7 +7,7 @@ Used by core and domain apps.
 [source,java]
 .ComparableContractTest_compareTo.java
 ----
-class ComparableContractTest_compareTo {
+class ComparableContractTest_compareTo<E, T> {
   void compareAllOrderedTuples()
 }
 ----

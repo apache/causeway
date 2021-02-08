@@ -5,7 +5,7 @@
 [source,java]
 .WorksheetContent.java
 ----
-class WorksheetContent {
+class WorksheetContent<T> {
   WorksheetContent(final List<T> domainObjects, final WorksheetSpec spec)
   List<?> getDomainObjects()
   WorksheetSpec getSpec()

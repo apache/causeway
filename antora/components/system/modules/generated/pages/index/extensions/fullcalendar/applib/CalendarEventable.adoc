@@ -5,7 +5,7 @@
 [source,java]
 .CalendarEventable.java
 ----
-interface CalendarEventable {
+interface CalendarEventable<T, T> {
   String getCalendarName()     // <.>
   CalendarEvent toCalendarEvent()
 }

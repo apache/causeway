@@ -7,7 +7,7 @@ A set of converters for built-in value types; for use in Cucumber step definitio
 [source,java]
 .V.java
 ----
-class V {
+class V<T> {
 }
 ----
 

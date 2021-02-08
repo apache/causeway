@@ -5,7 +5,7 @@
 [source,java]
 .Parser.java
 ----
-class Parser {
+class Parser<T> {
   T valueOf(final List<String> str)
   T valueOf(final String[] str)
   T valueOf(final JsonRepresentation jsonRepresentation)

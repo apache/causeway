@@ -5,7 +5,7 @@
 [source,java]
 .AbstractLifecycleEvent.java
 ----
-class AbstractLifecycleEvent {
+class AbstractLifecycleEvent<S> {
   AbstractLifecycleEvent()
   AbstractLifecycleEvent(S source)
 }
