@@ -8,108 +8,65 @@ The persistence layer SPIs influence how the framework persists domain objects, 
 
 
 .Presentation Layer SPI
-[cols="2m,4a,2a",options="header"]
+[cols="2m,4a",options="header"]
 |===
 
 |SPI
 |Description
-|Implementation
 
 
 |xref:refguide:applib-svc:ContentMappingService.adoc[ContentMappingService]
 |(Attempt to) map the returned data into the representation required by the client's HTTP `Accept` header.
 
 The framework will call all available implementations until a mapping is made (chain of responsibility pattern).
-|
-* `ContentMappingServiceForCommandDto` and `ContentMappingServiceForCommandsDto` (in applib) provide support for commands.
-
 
 
 |xref:refguide:applib-svc:EmailNotificationService.adoc[EmailNotificationService]
 |Notify a user during xref:refguide:applib-svc:UserRegistrationService.adoc[self-registration] of users.
-|
-* xref:core:runtime-services:about.adoc[Core Runtime Services]
 
 
 |xref:refguide:applib-svc:ErrorReportingService.adoc[ErrorReportingService]
 |Record details of an error occurring in the system (eg in an external incident recording system such as JIRA), and return a more friendly (jargon-free) message to display to the end user, with optional reference (eg `XXX-1234`).
-|
-* No default implementation
 
 
 |xref:refguide:applib-svc:ExceptionRecognizer.adoc[ExceptionRecognizerService]
 |Convert certain exceptions (eg foreign or unique key violation in the database) into a format that can be rendered to the end-user.
-|
-* xref:core:runtime-services:about.adoc[Core Runtime Services]
-* xref:pjdo:ROOT:about.adoc[JDO/DataNucleus Persistence]
-
-+
-defines an SPI so that exceptions recognized is pluggable.
 
 
 |xref:refguide:applib-svc:ExceptionRecognizerService.adoc[ExceptionRecognizerService]
 |Convert certain exceptions (eg foreign or unique key violation in the database) into a format that can be rendered to the end-user.
-|
-* xref:core:runtime-services:about.adoc[Core Runtime Services]
-
-+
-defines an SPI so that exceptions recognized is pluggable.
 
 
 
 |xref:refguide:applib-svc:HintStore.adoc[HintStore]
 |Stores UI hints on a per-object basis.
 For example, the viewer remembers which tabs are selected, and for collections which view is selected (eg table or hidden), which page of a table to render, or whether "show all" (rows) is toggled.
-|
-* xref:vw:ROOT:about.adoc[Wicket viewer]
 
 
 |xref:refguide:applib-svc:LocaleProvider.adoc[LocaleProvider]
 |Request-scoped service to return the locale of the current user, in support of i18n (ie so that the app's UI, messages and exceptions can be translated to the required locale by the xref:refguide:applib-svc:TranslationService.adoc[`TranslationService`].
-|
-* xref:vw:ROOT:about.adoc[Wicket viewer]
 
 
 |xref:refguide:applib-svc:RoutingService.adoc[RoutingService]
 |Return an alternative object than that returned by an action.
-|
-* xref:core:runtime-services:about.adoc[Core Runtime Services]
-+
-will return the home page (per xref:refguide:applib-svc:HomePageResolverService.adoc[`HomePageResolverService`]) if a void or null is returned.
-+
-Used by the xref:vw:ROOT:about.adoc[Wicket viewer] only.
 
 
 
 |xref:refguide:applib-svc:TableColumnOrderService.adoc[TableColumnOrderService]
 |Allows the columns of a parented or standalone table to be reordered, based upon the parent object, collection id and type of object in the collection.
-|
-* xref:core:metamodel:about.adoc[Core MetaModel]
 
 
 |xref:refguide:applib-svc:TranslationService.adoc[TranslationService]
 |Translate an app's UI, messages and exceptions for the current user (as per the locale provided by xref:refguide:applib-svc:LocaleProvider.adoc[`LocalProvider`].
-|
-* xref:core:runtime-services:about.adoc[Core Runtime Services]
-+
-using gnu `.po` localization.
-
 
 
 |xref:refguide:applib-svc:UrlEncodingService.adoc[UrlEncodingService]
 |Converts strings into a form safe for use within a URL.
 Used to convert view models mementos into usable URL form.
 
-|
-* xref:core:runtime-services:about.adoc[Core Runtime Services]
-
-
 
 |xref:refguide:applib-svc:UserProfileService.adoc[UserProfileService]
 |Obtain an alternative (usually enriched/customized) name for the current user, to render in the UI.
-|
-* xref:core:runtime-services:about.adoc[Core Runtime Services]
-
 
 |===
 

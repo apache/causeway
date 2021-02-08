@@ -6,59 +6,43 @@
 The core/domain APIs provide general-purpose services to the domain objects, for example obtaining the current time or user, or instantiating domain objects.
 
 .Core/Domain Layer API
-[cols="2m,4a,2a",options="header"]
+[cols="2m,4a",options="header"]
 |===
 
 |API
 |Description
-|Implementation
 
 
 |xref:refguide:applib-svc:ClockService.adoc[ClockService]
 |Access the current time (and for testing, allow the time to be changed)
-|
-* API is also implementation (concrete class).
 
 
 |xref:refguide:applib-svc:ConfigurationViewService.adoc[ConfigurationViewService] & xref:refguide:applib-svc:ConfigurationMenu.adoc[ConfigurationMenu]
 |Backing service which creates the list of configuration properties for xref:refguide:applib-svc:ConfigurationMenu.adoc[ConfigurationMenu].
-|
-* xref:core:runtime-services:about.adoc[Core Runtime Service]
 
 
 |xref:refguide:applib-svc:EventBusService.adoc[EventBusService]
 |Programmatically post events to the internal event bus.  Also used by Apache Isis itself to broadcast domain, UI and lifecycle events.
-|
-* xref:core:runtime-services:about.adoc[Core Runtime Services]
+
 
 |xref:refguide:applib-svc:FactoryService.adoc[FactoryService]
 |Methods to instantiate and initialize domain objects
-|
-* xref:core:runtime-services:about.adoc[Core Runtime Services]
 
 
 |xref:refguide:applib-svc:Scratchpad.adoc[Scratchpad]
 |Request-scoped service for interchanging information between and aggregating over multiple method calls.
-|
-* API is also implementation (concrete class).
 
 
 |xref:refguide:applib-svc:ServiceInjector.adoc[ServiceInjector]
 |Programmatically inject services into arbitrary objects.
-|
-* xref:core:metamodel:about.adoc[Core MetaModel]
 
 
 |xref:refguide:applib-svc:ServiceRegistry.adoc[ServiceRegistry]
 |Registry of all domain services, for service locator pattern.
-|
-* xref:core:metamodel:about.adoc[Core MetaModel]
 
 
 |xref:refguide:applib-svc:UserService.adoc[UserService]
 |Methods to access the currently-logged on user.
-|
-* xref:core:metamodel:about.adoc[Core MetaModel]
 
 
 

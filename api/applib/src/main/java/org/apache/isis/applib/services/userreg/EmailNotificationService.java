@@ -35,12 +35,30 @@ import org.apache.isis.applib.services.userreg.events.PasswordResetEvent;
 public interface EmailNotificationService
         extends Serializable {
 
+    /**
+     * Sends an email to verify an email address as part of the initial user registration
+     *
+     * @param ev
+     * @return
+     */
     boolean send(EmailRegistrationEvent ev);
 
+    /**
+     * Sends an email to reset a password for an already-registered user
+     *
+     * @param ev
+     * @return
+     */
     boolean send(PasswordResetEvent ev);
 
     /**
      * Whether this service has been configured and thus available for use.
+     *
+     * <p>
+     *     If this returns false then it is _not_ valid to call
+     *     {@link #send(EmailRegistrationEvent)} (and doing so will result in
+     *     an {@link IllegalStateException} being thrown).
+     * </p>
      */
     boolean isConfigured();
 

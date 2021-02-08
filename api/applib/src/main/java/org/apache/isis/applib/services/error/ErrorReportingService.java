@@ -22,7 +22,30 @@ package org.apache.isis.applib.services.error;
  * Optional SPI service providing the ability to record errors occurring in the application into an external incident
  * recording system (such as JIRA) and to provide a user-friendly (jargon-free) error message to the end-user, along
  * with incident reference.
- * 
+ *
+ * <p>
+ * The `Ticket` object returned by this service contains a number of elements:
+ *
+ * <ul>
+ *     <li>
+ *          a user-friendly (jargon-free) error message to be returned and rendered to the end-user
+ *     </li>
+ *     <li>
+ *          an optional incident reference (eg a JIRA issue `XXX-1234`).
+ *     </li>
+ *          a URL for an external image.  For example, this could be to a
+ *          comic strip or (as a bit of fun) a picture of a random kitten.
+ *     </li>
+ *     <li>
+ * </ul>
+ * </p>
+ *
+ * <p>
+ *  The information this object can then be sed by the configured viewer,
+ *  rendered whenever an error occurs.  At the time of writing this is
+ *  supported by the Wicket viewer.
+ * </p>
+ *
  * @since 2.0 {@index}
  */
 public interface ErrorReportingService {

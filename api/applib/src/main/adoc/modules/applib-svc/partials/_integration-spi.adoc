@@ -8,42 +8,38 @@ The integration SPIs allow the framework to automate the exchange of data betwee
 TIP: see also the xref:mappings:ROOT:about.adoc[Bounded Context Mappings] catalogue.
 
 .Integration SPI
-[cols="2m,4a,2a",options="header"]
+[cols="2m,4a",options="header"]
 |===
 
 |API
 |Description
-|Implementation
 
 
 
 |xref:refguide:applib-svc:CommandDtoProcessorService.adoc.adoc[CommandDtoProcessorService]
 |SPI to support representation of commands as XML over REST, in particular to support master/slave replay of commands.
-|
-* xref:extensions:command-log:about.adoc[Command Log +
-(in Extensions catalog)]
 
 
-|xref:refguide:applib-svc:CommandExecutorService.adoc.adoc[CommandExecutorService]
-|Internal service used to execute commands.
+|xref:refguide:applib-svc:CommandExecutorService.adoc[CommandExecutorService]
+|Service used to execute commands.
 One use case is to replay commands from a primary onto a secondary (see xref:extensions:command-replay:about.adoc[Command Replay] ; another is in support of async commands (using
 xref:refguide:applib-svc:WrapperFactory.adoc[`WrapperFactory`] ).
-|
-* xref:core:runtime-services:about.adoc[Core Runtime Services]
 
 
-|xref:refguide:applib-svc:CommandServiceListener.adoc.adoc[CommandServiceListener]
+|xref:refguide:applib-svc:CommandSubscriber.adoc[CommandSubscriber]
 |SPI to allow commands to be processed on completion.
 The xref:extensions:command-log:about.adoc[Command Log] extension implements the SPI in order to persists commands for audit or replay.
-|
-* xref:core:runtime-services:about.adoc[Core Runtime Services]
 
 
-|xref:refguide:applib-svc:ExecutionSubscriber.adoc[PublisherService]
+|xref:refguide:applib-svc:EntityChangesSubscriber.adoc[EntityChangesSubscriber]
+|Summarises changes made to entities within an interaction.
+
+|xref:refguide:applib-svc:EntityPropertyChangeSubscriber.adoc[EntityPropertyChangeSubscriber]
+|Publish the changes to all changed properties of all domain object within an interaction.
+
+
+|xref:refguide:applib-svc:ExecutionSubscriber.adoc[ExecutionSubscriber]
 |Publish any action invocations/property edits and changed objects, typically for interchange with an external system in a different bounded context.
-|
-* `PublisherServiceLogging` (in applib)
-* xref:mappings:outbox-publisher:about.adoc[Outbox Publisher] (in Mappings catalogue)
 
 
 

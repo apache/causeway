@@ -6,17 +6,15 @@
 Domain service SPIs influence how the framework handles application layer concerns, for example which home page to render to the end-user.
 
 .Application Layer SPI
-[cols="2m,4a,2a",options="header"]
+[cols="2m,4a",options="header"]
 |===
 
 |API
 |Description
-|Implementation
 
 
 //|xref:refguide:applib-svc:BackgroundCommandService.adoc[BackgroundCommandService]
 //|Persisted a memento of an action invocation such that it can be executed asynchronously ("in the background") eg by a scheduler.
-//|
 //TODO: v2: probably in core extensions
 
 
@@ -24,23 +22,15 @@ Domain service SPIs influence how the framework handles application layer concer
 |xref:refguide:applib-svc:CommandServiceInternal.adoc[CommandService]
 |Service to act as a factory and repository (create and save) of command instances, ie representations of an action invocation.
 Used for command/auditing and background services.
-|
-* xref:core:runtime-services:about.adoc[Core Runtime Services]
 
-* xref:extensions:command-log:about.adoc[Command Log +
-(Extension Catalog)]
 
 
 |xref:refguide:applib-svc:HealthCheckService.adoc[HealthCheckService]
 |Performs a health check so that the runtime infrastructure can determine if the application is still healthy (and perform remedial action, such as restarting the app, if not).
-|
-* No default implementation.
 
 
 |xref:refguide:applib-svc:HomePageResolverService.adoc[HomePageResolverService]
 |Returns the home page object, if any is defined.
-|
-* xref:core:runtime-services:about.adoc[Core Runtime Services]
 
 
 

@@ -4,3 +4,12 @@
 
 
 == Implementation
+
+As noted in the introduction, the core framework provides a default implementation, `EmailServiceDefault`.
+This sends email as an HTML message, using an external SMTP provider.
+
+
+=== Configuration Properties
+
+The default implementation defines a number of xref:refguide:config:sections/isis.core.runtime-services.adoc[configuration properties], under the `isis.core.runtime-services.email` key.
+

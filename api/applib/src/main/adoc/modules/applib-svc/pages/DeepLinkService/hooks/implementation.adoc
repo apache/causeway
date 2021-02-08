@@ -4,3 +4,10 @@
 
 
 == Implementation
+
+The xref:vw:ROOT:about.adoc[Wicket viewer] provides an implementation of this service `o.a.i.viewer.wicket.viewer.services.DeepLinkServiceWicket`.
+
+There is no domain service to support deep links to the URLs of the xref:vro:ROOT:about.adoc[RestfulObjects viewer].
+However, a URL can be constructed easily enough according to the link:http://www.restfulobjects.org[Restful Objects spec] in conjunction with a `Bookmark` obtained via the xref:refguide:applib-svc:BookmarkService.adoc[`BookmarkService`].
+
+

@@ -8,19 +8,16 @@ These are generally of use to support development-time activities, for example c
 
 
 .Metadata API
-[cols="2m,4a,2a",options="header"]
+[cols="2m,4a",options="header"]
 |===
 
 |API
 |Description
-|Implementation
 
 
 |xref:refguide:applib-svc:ApplicationFeatureRepository.adoc[ApplicationFeatureRepository]
 |Provides access to string representations of the features (package, class, class members) of the domain classes
 within the metamodel.
-|
-* xref:core:metamodel:about.adoc[Core MetaModel]
 
 
 
@@ -28,32 +25,21 @@ within the metamodel.
 xref:refguide:applib-svc:LayoutServiceMenu.adoc[LayoutServiceMenu]
 |Use to obtain the resolved `Xxx.layout.xml` for a class, and the top-level `menubars.layout.xml` files.
 
-|
-* xref:core:metamodel:about.adoc[Core MetaModel]
-+
-Calls xref:refguide:applib-svc:MenuBarsService.adoc[MenuBarsService] and xref:refguide:applib-svc:GridService.adoc[GridService].
-
 
 
 
 
 |xref:refguide:applib-svc:MetamodelService.adoc[MetaModelService] & xref:refguide:applib-svc:MetaModelServiceMenu.adoc[MetaModelServiceMenu]
 |Access to certain information from the Apache Isis metamodel.
-|
-* xref:core:metamodel:about.adoc[Core MetaModel]
 
 
 |xref:refguide:applib-svc:ServiceRegistry.adoc[ServiceRegistry]
 |Methods to access and use other domain services.
-|
-* xref:core:metamodel:about.adoc[Core MetaModel]
 
 
 
 |xref:refguide:applib-svc:SwaggerService.adoc[SwaggerService]
 |Exports link:http://swagger.io/[Swagger] spec files, eg to generate link:http://swagger.io/swagger-codegen/[client-side stubs] for use in a custom REST client.
-|
-* xref:vro:ROOT:about.adoc[Restful Objects viewer]
 
 
 

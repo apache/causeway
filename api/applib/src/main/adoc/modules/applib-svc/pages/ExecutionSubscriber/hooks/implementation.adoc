@@ -4,3 +4,8 @@
 
 
 == Implementation
+
+This is an SPI, but the framework provides a simple implementation, `o.a.i.applib.services.publishing.log.ExecutionLogger`, that just logs events as they are received.
+
+
+

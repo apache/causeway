@@ -8,28 +8,22 @@ Domain service APIs for the presentation layer allow the domain objects to contr
 
 
 .Presentation Layer API
-[cols="2m,4a,2a",options="header"]
+[cols="2m,4a",options="header"]
 |===
 
 |API
 |Description
-|Implementation
+
 
 |xref:refguide:applib-svc:AcceptHeaderService.adoc[AcceptHeaderService]
 |Request-scoped access to HTTP Accept headers.
-|
-* xref:vro:ROOT:about.adoc[Restful Objects viewer]
 
 |xref:refguide:applib-svc:BookmarkUiService.adoc[BookmarkUiService]
 |Manage bookmarks and breadcrumbs.
-|
-* xref:vw:ROOT:about.adoc[Wicket viewer]
 
 
 |xref:refguide:applib-svc:DeepLinkService.adoc[DeepLinkService]
 |Obtain a URL to a domain object (eg for use within an email or report)
-|* xref:vw:ROOT:about.adoc[Wicket viewer]
-
 
 
 |===

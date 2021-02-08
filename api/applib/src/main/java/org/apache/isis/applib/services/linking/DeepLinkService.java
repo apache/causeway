@@ -20,12 +20,19 @@ package org.apache.isis.applib.services.linking;
 
 import java.net.URI;
 
+
 /**
- * A service that creates a web link to any domain object in one of the Isis viewers.
+ * A service that returns a web link (`java.net.URI`) to any domain object in
+ * one of the framework's viewers.
  *
  * <p>
- *     The implementation is specific to the viewer(s) configured for Isis.  At the time of writing only one
- *     implementation is available, for the Wicket viewer.
+ *     A typical use case is to generate a clickable link for rendering in an
+ *     email, PDF, tweet or other communication.
+ * </p>
+ *
+ * <p>
+ *     Note that the implementation is specific to the viewer(s).  At the time
+ *     of writing only one implementation is available, for the Wicket viewer.
  * </p>
  *
  * @since 1.x {@index}

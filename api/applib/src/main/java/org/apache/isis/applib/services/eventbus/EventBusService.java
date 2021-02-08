@@ -19,8 +19,13 @@
 package org.apache.isis.applib.services.eventbus;
 
 /**
- * A service implementing an Event Bus, allowing arbitrary events to be posted.
- * 
+ * A service implementing an Event Bus, allowing domain objects to emit
+ * arbitrary events on an in-memory event bus.
+ *
+ * <p>
+ * Events are delivered synchronously to event subscribers (domain services).
+ * </p>
+ *
  * @since 2.0 {@index}
  */
 public interface EventBusService {

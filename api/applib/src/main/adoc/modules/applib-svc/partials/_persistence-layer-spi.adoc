@@ -8,18 +8,15 @@ The persistence layer SPIs are to control persistence and caching of domain obje
 
 
 .Persistence Layer SPI
-[cols="2m,4a,2a",options="header"]
+[cols="2m,4a",options="header"]
 |===
 
 |API
 |Description
-|Implementation
 
 
 |xref:refguide:applib-svc:QueryResultsCacheControl.adoc[QueryResultsCacheControl]
 |Controls whether the xref:refguide:applib-svc:QueryResultsCache.adoc[QueryResultsCache] is enabled.
-|
-* xref:core:runtime-services:about.adoc[Core Runtime Services]
 
 
 

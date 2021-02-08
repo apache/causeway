@@ -10,22 +10,16 @@ TIP: see also the xref:security:ROOT:about.adoc[Security Guide].
 
 
 .Security SPI
-[cols="2m,4a,2a",options="header"]
+[cols="2m,4a",options="header"]
 |===
 
 |API
 |Description
-|Implementation
 
 
 
-|xref:refguide:applib-svc:AuditerService.adoc[AuditerService]
+|xref:refguide:applib-svc:EntityPropertyChangeSubscriber.adoc[EntityPropertyChangesSubscriber]
 |Create an audit record for every changed property of every changed object within a transaction.
-|
-* `AuditerServiceLogging` (in applib)
-
-* xref:security:audit-trail:about.adoc[Audit Trail +
-(Security Guide)]
 
 
 
@@ -37,11 +31,6 @@ TIP: see also the xref:security:ROOT:about.adoc[Security Guide].
 
 |xref:refguide:applib-svc:UserRegistrationService.adoc[UserRegistrationService]
 |Create a new user account with the configured security mechanism.
-|
-* xref:security:secman:about.adoc[SecMan +
-(Security Guide)]
-+
-This is a partial implementation.
 
 
 |===

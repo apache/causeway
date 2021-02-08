@@ -30,7 +30,7 @@ import java.io.Serializable;
  *         <li>the class is {@link Serializable}</li> so that it can be stored by the Wicket viewer as a Wicket model.
  *     </ul>
  * </p>
- * 
+ *
  * @since 2.0 {@index}
  */
 public interface Ticket extends Serializable {
@@ -51,7 +51,7 @@ public interface Ticket extends Serializable {
     String getReference();
 
     /**
-     * Message to display to the user.
+     * A short, jargon-free message to display to the user.
      *
      * <p>
      *     Typically this message should be short, one line long.

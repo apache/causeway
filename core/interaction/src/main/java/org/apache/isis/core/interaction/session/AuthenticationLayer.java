@@ -27,30 +27,30 @@ import lombok.NonNull;
 /**
  * Provides the environment for an (or parts of an) user interaction to be executed.
  * <p>
- * Can be nested by pushing onto the current thread's {@link InteractionTracker} Stack.  
- * 
+ * Can be nested by pushing onto the current thread's {@link InteractionTracker} Stack.
+ *
  * @since 2.0
  *
  */
-public class AuthenticationLayer /*extends RuntimeContextBase */{
+public class AuthenticationLayer {
 
 	@Getter private final InteractionSession interactionSession;
 	@Getter private final Authentication authentication;
-	
+
 	public AuthenticationLayer(
 			final @NonNull InteractionSession interactionSession,
 			final @NonNull Authentication authentication) {
 
 		//super(interactionSession.getMetaModelContext());
-		
-		// current thread's InteractionSession which this layer belongs to, 
-		// meaning the InteractionSession that holds the stack containing this layer 
+
+		// current thread's InteractionSession which this layer belongs to,
+		// meaning the InteractionSession that holds the stack containing this layer
 		this.interactionSession = interactionSession;
-		
-		// binds given authentication to this layer 
-		this.authentication = authentication; 
+
+		// binds given authentication to this layer
+		this.authentication = authentication;
 	}
-	
+
 	public ExecutionContext getExecutionContext() {
 	    return authentication.getExecutionContext();
 	}
