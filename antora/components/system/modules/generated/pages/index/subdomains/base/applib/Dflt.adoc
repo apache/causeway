@@ -5,7 +5,7 @@
 [source,java]
 .Dflt.java
 ----
-class Dflt<T> {
+class Dflt {
   T of(final Collection<T> choices)
 }
 ----

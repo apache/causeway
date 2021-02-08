@@ -13,7 +13,7 @@ NOTE: you could also think of this interface as being analogous to the (database
 [source,java]
 .Interaction.java
 ----
-interface Interaction<T, E> {
+interface Interaction {
   Command getCommand()
   Execution<?, ?> getCurrentExecution()     // <.>
   Execution<?, ?> getPriorExecution()     // <.>

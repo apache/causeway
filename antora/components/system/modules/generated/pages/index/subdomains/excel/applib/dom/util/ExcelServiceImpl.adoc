@@ -5,7 +5,7 @@
 [source,java]
 .ExcelServiceImpl.java
 ----
-class ExcelServiceImpl<T, T, T, T, T, T, T, T, T, T> {
+class ExcelServiceImpl {
   @javax.inject.Inject
 BookmarkService bookmarkService;
   @javax.inject.Inject

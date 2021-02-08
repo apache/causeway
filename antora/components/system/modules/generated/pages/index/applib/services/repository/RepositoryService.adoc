@@ -5,7 +5,7 @@
 [source,java]
 .RepositoryService.java
 ----
-interface RepositoryService<T, T, T, T, T, T, T, T, T, T, T, T, T, T, T, T, T> {
+interface RepositoryService {
   EntityState getEntityState(Object object)     // <.>
   T detachedEntity(T entity)     // <.>
   T persist(T domainObject)     // <.>

@@ -5,7 +5,7 @@
 [source,java]
 .MemberExecutionDtoUtils.java
 ----
-class MemberExecutionDtoUtils<T, T, T> {
+class MemberExecutionDtoUtils {
   T clone(final T dto)
   MetricsDto metricsFor(final MemberExecutionDto executionDto)
   PeriodDto timingsFor(final MetricsDto metricsDto)

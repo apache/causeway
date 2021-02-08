@@ -68,7 +68,7 @@ if(digest.isSuccess()) {
 [source,java]
 .RestfulClient.java
 ----
-class RestfulClient<T, T, T, T> {
+class RestfulClient {
   RestfulClient ofConfig(RestfulClientConfig clientConfig)
   void init(RestfulClientConfig clientConfig)
   RestfulClientConfig getConfig()

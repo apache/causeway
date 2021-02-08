@@ -5,7 +5,7 @@
 [source,java]
 .InteractionDtoUtils.java
 ----
-class InteractionDtoUtils<T> {
+class InteractionDtoUtils {
   static JAXBContext jaxbContext;
   void init()
   JAXBContext getJaxbContext()

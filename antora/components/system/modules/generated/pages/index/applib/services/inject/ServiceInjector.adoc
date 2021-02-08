@@ -9,7 +9,7 @@ Implementation must be thread-safe.
 [source,java]
 .ServiceInjector.java
 ----
-interface ServiceInjector<T, T> {
+interface ServiceInjector {
   T injectServicesInto(final T domainObject, Consumer<InjectionPoint> onNotResolvable)
   T injectServicesInto(final T domainObject)
 }

@@ -5,7 +5,7 @@
 [source,java]
 .ApplicationTenancy.java
 ----
-interface ApplicationTenancy<T, T> {
+interface ApplicationTenancy {
   public static final int MAX_LENGTH_PATH;
   public static final int MAX_LENGTH_NAME;
   public static final int TYPICAL_LENGTH_NAME;

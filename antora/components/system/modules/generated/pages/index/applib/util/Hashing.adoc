@@ -7,7 +7,7 @@ Fluent Object Hash Code Composition.
 [source,java]
 .Hashing.java
 ----
-class Hashing<T, T> {
+class Hashing<T> {
   Hashing<T> hashing(Function<? super T, ?> getter)
   Hashing<T> thenHashing(Function<? super T, ?> getter)
   int hashCode(T object)

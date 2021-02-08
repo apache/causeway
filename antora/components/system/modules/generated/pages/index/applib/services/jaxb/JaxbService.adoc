@@ -5,7 +5,7 @@
 [source,java]
 .JaxbService.java
 ----
-interface JaxbService<T, T, T> {
+interface JaxbService {
   Object fromXml(JAXBContext jaxbContext, String xml)
   Object fromXml(JAXBContext jaxbContext, String xml, Map<String, Object> unmarshallerProperties)
   T fromXml(Class<T> domainClass, String xml)     // <.>

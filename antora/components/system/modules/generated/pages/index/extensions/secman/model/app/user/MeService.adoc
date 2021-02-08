@@ -5,7 +5,7 @@
 [source,java]
 .MeService.java
 ----
-class MeService<T, T> {
+class MeService {
   String iconName()
   ApplicationUser me()
 }

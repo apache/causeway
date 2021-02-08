@@ -5,7 +5,7 @@
 [source,java]
 .NullPrintStream.java
 ----
-class NullPrintStream<T, T, T, T> {
+class NullPrintStream {
   NullPrintStream()
   void suppressingStdout(Runnable r)
   T suppressingStdout(Callable<T> c)

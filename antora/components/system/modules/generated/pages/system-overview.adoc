@@ -639,22 +639,22 @@ skinparam rectangle<<116>> {
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<117>> {
-  BackgroundColor #438dd5
-  FontColor #fffffe
-  BorderColor #2E6295
-}
 skinparam rectangle<<90>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<91>> {
+skinparam rectangle<<117>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
 }
 skinparam rectangle<<118>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<91>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
@@ -769,17 +769,12 @@ skinparam rectangle<<122>> {
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<123>> {
-  BackgroundColor #438dd5
-  FontColor #fffffe
-  BorderColor #2E6295
-}
 skinparam rectangle<<2>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<3>> {
+skinparam rectangle<<123>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
@@ -789,12 +784,17 @@ skinparam rectangle<<124>> {
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<4>> {
+skinparam rectangle<<3>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
 }
 skinparam rectangle<<125>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<4>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
@@ -809,12 +809,12 @@ skinparam rectangle<<126>> {
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<6>> {
+skinparam rectangle<<127>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<127>> {
+skinparam rectangle<<6>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
@@ -829,12 +829,12 @@ skinparam rectangle<<128>> {
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<8>> {
+skinparam rectangle<<129>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<129>> {
+skinparam rectangle<<8>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
@@ -1379,12 +1379,12 @@ skinparam rectangle<<106>> {
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<107>> {
+skinparam rectangle<<80>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<80>> {
+skinparam rectangle<<107>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295

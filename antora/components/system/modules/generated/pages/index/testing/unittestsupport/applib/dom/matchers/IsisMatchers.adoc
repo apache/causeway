@@ -7,7 +7,7 @@ Hamcrest _org.hamcrest.Matcher_ implementations.
 [source,java]
 .IsisMatchers.java
 ----
-class IsisMatchers<T, T, X, T, T, T> {
+class IsisMatchers {
   Matcher<T> anInstanceOf(final Class<T> expected)
   Matcher<String> nonEmptyString()
   Matcher<String> nonEmptyStringOrNull()

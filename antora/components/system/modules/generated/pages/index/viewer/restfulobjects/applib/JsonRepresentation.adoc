@@ -7,7 +7,7 @@ A wrapper around _JsonNode_ that provides some additional helper methods.
 [source,java]
 .JsonRepresentation.java
 ----
-class JsonRepresentation<T, T, T, T> {
+class JsonRepresentation {
   public static final DateTimeFormatter yyyyMMdd;
   public static final DateTimeFormatter yyyyMMddTHHmmssZ;
   public static final DateTimeFormatter _HHmmss;

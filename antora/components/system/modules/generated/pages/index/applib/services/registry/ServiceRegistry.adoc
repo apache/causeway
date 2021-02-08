@@ -5,7 +5,7 @@
 [source,java]
 .ServiceRegistry.java
 ----
-interface ServiceRegistry<T, T, T, T> {
+interface ServiceRegistry {
   Can<T> select(Class<T> type, Annotation[] qualifiers)     // <.>
   Can<T> select(final Class<T> type)     // <.>
   Stream<_ManagedBeanAdapter> streamRegisteredBeansOfType(Class<?> requiredType)     // <.>

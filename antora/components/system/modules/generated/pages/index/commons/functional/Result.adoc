@@ -7,7 +7,7 @@ The xref:system:generated:index/commons/functional/Result.adoc[Result] type repr
 [source,java]
 .Result.java
 ----
-class Result<L, L, L, L, L, E, E, T, T, L> {
+class Result<L> {
   Result<L> of(final Callable<L> callable)
   Result<Void> ofVoid(final ThrowingRunnable runnable)
   Result<L> success(final L value)

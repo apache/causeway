@@ -5,7 +5,7 @@
 [source,java]
 .CommandServiceMenu.java
 ----
-class CommandServiceMenu<T, T> {
+class CommandServiceMenu {
   final CommandJdoRepository commandServiceRepository;
   final ClockService clockService;
   List<CommandJdo> activeCommands()

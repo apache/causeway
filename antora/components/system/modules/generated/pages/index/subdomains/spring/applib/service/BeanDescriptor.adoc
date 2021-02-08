@@ -5,7 +5,7 @@
 [source,java]
 .BeanDescriptor.java
 ----
-class BeanDescriptor<T> {
+class BeanDescriptor {
   BeanDescriptor(final String beanName, final ConfigurableApplicationContext context)
   List<T> dependencies(Class<T> cls)
 }

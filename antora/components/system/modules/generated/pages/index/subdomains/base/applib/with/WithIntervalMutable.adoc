@@ -5,7 +5,7 @@
 [source,java]
 .WithIntervalMutable.java
 ----
-interface WithIntervalMutable<T, T> {
+interface WithIntervalMutable<T> {
   T changeDates(final LocalDate startDate, final LocalDate endDate)
   LocalDate default0ChangeDates()
   LocalDate default1ChangeDates()

@@ -7,7 +7,7 @@ This service provides a serializable 'bookmark' for any entity, and conversely t
 [source,java]
 .BookmarkService.java
 ----
-interface BookmarkService<T> {
+interface BookmarkService {
   Bookmark bookmarkFor(Object domainObject)     // <.>
   Bookmark bookmarkForElseThrow(Object domainObject)     // <.>
   Bookmark bookmarkFor(Class<?> cls, String identifier)     // <.>

@@ -5,7 +5,7 @@
 [source,java]
 .IsisModuleExtCommandLogImpl.java
 ----
-class IsisModuleExtCommandLogImpl<S, S, S, S, S, S, T, S, T> {
+class IsisModuleExtCommandLogImpl {
   FixtureScript getTeardownFixture()
   FixtureScript getTeardownFixtureWillDelete()     // <.>
 }

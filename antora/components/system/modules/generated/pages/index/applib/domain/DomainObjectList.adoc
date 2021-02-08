@@ -13,7 +13,7 @@ Thus, the RO client then only ever needs to know how to render an object, in all
 [source,java]
 .DomainObjectList.java
 ----
-class DomainObjectList<T, T> {
+class DomainObjectList {
   DomainObjectList()
   DomainObjectList(final String title, final String elementObjectType, final String actionOwningType, final String actionId, final String actionArguments)
   String title()

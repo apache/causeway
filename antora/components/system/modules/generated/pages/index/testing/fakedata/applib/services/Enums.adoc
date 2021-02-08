@@ -5,7 +5,7 @@
 [source,java]
 .Enums.java
 ----
-class Enums<T> {
+class Enums {
   Enums(final FakeDataService fakeDataService)
   T anyOf(Class<T> cls)
 }

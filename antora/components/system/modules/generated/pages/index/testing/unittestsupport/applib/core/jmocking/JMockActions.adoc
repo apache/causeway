@@ -5,7 +5,7 @@
 [source,java]
 .JMockActions.java
 ----
-class JMockActions<T, T> {
+class JMockActions {
   Action returnEach(final T... values)
   Action returnArgument(final int i)
 }

@@ -24,7 +24,7 @@ If the object has (see _#isWrapper(Object)_ already been wrapped), then should j
 [source,java]
 .WrapperFactory.java
 ----
-interface WrapperFactory<T, T, T, T, T, T, T, R, T, R> {
+interface WrapperFactory {
   T wrap(T domainObject, SyncControl syncControl)     // <.>
   T wrap(T domainObject)     // <.>
   T wrapMixin(Class<T> mixinClass, Object mixedIn, SyncControl syncControl)     // <.>

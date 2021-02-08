@@ -5,7 +5,7 @@
 [source,java]
 .AbstractBeanPropertiesTest.java
 ----
-class AbstractBeanPropertiesTest<T, T> {
+class AbstractBeanPropertiesTest {
   @Rule
 public JUnitRuleMockery2 context;
 }

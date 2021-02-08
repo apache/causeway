@@ -5,7 +5,7 @@
 [source,java]
 .ComparableContractTester.java
 ----
-class ComparableContractTester<E, T> {
+class ComparableContractTester<T> {
   ComparableContractTester(List<List<T>> orderedTuples)     // <.>
   void test()
   List<E> listOf(E... elements)     // <.>

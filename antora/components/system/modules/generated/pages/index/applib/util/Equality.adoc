@@ -7,7 +7,7 @@ Fluent Object Equality Composition.
 [source,java]
 .Equality.java
 ----
-class Equality<T, T> {
+class Equality<T> {
   Equality<T> checkEquals(Function<? super T, ?> getter)
   Equality<T> thenCheckEquals(Function<? super T, ?> getter)
   boolean equals(T target, Object other)

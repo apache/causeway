@@ -5,7 +5,7 @@
 [source,java]
 .CommonDtoUtils.java
 ----
-class CommonDtoUtils<T, T, T, T, T, T, T> {
+class CommonDtoUtils {
   public static final Function<ParamDto, String> PARAM_DTO_TO_NAME;
   public static final Function<ParamDto, ValueType> PARAM_DTO_TO_TYPE;
   public static final Map<Class<?>, ValueType> valueTypeByClass;

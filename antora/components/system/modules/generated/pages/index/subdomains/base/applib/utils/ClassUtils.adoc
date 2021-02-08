@@ -5,7 +5,7 @@
 [source,java]
 .ClassUtils.java
 ----
-class ClassUtils<T> {
+class ClassUtils {
   Class<? extends T> load(final String clsName, final Class<T> cls)
 }
 ----
