@@ -18,19 +18,33 @@
  */
 package org.apache.isis.applib.services.publishing.spi;
 
+import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.commons.having.HasEnabling;
 
 /**
- * Part of the <i>Publishing SPI</i>. A component to receive pre-post property values 
- * for each changed entity (with publishing enabled).
- *  
+ * SPI called for each pre-post change to a property of a domain entity during
+ * a result of the transaction.  The callback is therefore quite fine-grained
+ * and will be called  many (many) times for within any given transaction.
+ *
+ * <p>
+ *     Only those properties of entities that have publishing enabled (using
+ *  * {@link DomainObject#entityChangePublishing()}) are included.
+ * </p>
+ *
+ *
  * @since 2.0 {@index}
  */
 public interface EntityPropertyChangeSubscriber extends HasEnabling {
 
     /**
-     * Receives all pre-post property values for entities (with publishing enabled) 
-     * at then end of the transaction during the pre-commit phase.
+     * Receives a single property change event for changing entities (with
+     * publishing enabled using {@link DomainObject#entityChangePublishing()})
+     * as an instance of {@link EntityPropertyChange}.
+     *
+     * <p>
+     *     The callback is called (multiple times) at the end of the
+     *     transaction, during the pre-commit phase.
+     * </p>
      */
     void onChanging(EntityPropertyChange entityPropertyChange);
 

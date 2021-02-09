@@ -18,20 +18,31 @@
  */
 package org.apache.isis.applib.services.publishing.spi;
 
+import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.commons.having.HasEnabling;
 
 /**
- * Part of the <i>Publishing SPI</i>. A component to receive the entire set of entities 
- * (with publishing enabled) that are about to change, serializable as ChangesDto.
- *  
- * 
+ * SPI to receive the entire set of entities that are about to change as the
+ * result of a transaction.
+ *
+ * <p>
+ *     Only those entities that have publishing enabled (using
+ *  * {@link DomainObject#entityChangePublishing()}) are included.
+ * </p>
+ *
  * @since 2.0 {@index}
  */
 public interface EntityChangesSubscriber extends HasEnabling {
 
     /**
-     * Receives all changing entities (with publishing enabled) at then end of the a 
-     * transaction during the pre-commit phase.
+     * Receives all changing entities (with publishing enabled using
+     * {@link DomainObject#entityChangePublishing()}) as an instance of
+     * {@link EntityChanges}.
+     *
+     * <p>
+     *     The callback is called at the end of the transaction, during the
+     *     pre-commit phase.
+     * </p>
      */
     void onChanging(EntityChanges entityChanges);
 }

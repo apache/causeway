@@ -44,7 +44,7 @@ import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
-import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer.Recognition;
+import org.apache.isis.applib.services.exceprecog.Recognition;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerForType;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerService;
 import org.apache.isis.commons.collections.Can;
@@ -72,18 +72,18 @@ import lombok.extern.log4j.Log4j2;
  * Isis-specific implementation of the Wicket's {@link RequestCycle},
  * automatically opening a {@link InteractionSession} at the beginning of the request
  * and committing the transaction and closing the session at the end.
- * 
+ *
  * @since 2.0
  */
 @Log4j2
 public class WebRequestCycleForIsis implements IRequestCycleListener {
 
-    public static final MetaDataKey<IsisRequestCycle> REQ_CYCLE_HANDLE_KEY = 
+    public static final MetaDataKey<IsisRequestCycle> REQ_CYCLE_HANDLE_KEY =
             new MetaDataKey<IsisRequestCycle>() {private static final long serialVersionUID = 1L; };
-    
+
     private PageClassRegistry pageClassRegistry;
     private IsisAppCommonContext commonContext;
-    
+
     @Override
     public synchronized void onBeginRequest(RequestCycle requestCycle) {
 
@@ -97,8 +97,8 @@ public class WebRequestCycleForIsis implements IRequestCycleListener {
 
         val commonContext = getCommonContext();
         val authentication = AuthenticatedWebSessionForIsis.get().getAuthentication();
-        
-        
+
+
         if (authentication == null) {
             log.debug("onBeginRequest out - session was not opened (because no authentication)");
             return;
@@ -106,7 +106,7 @@ public class WebRequestCycleForIsis implements IRequestCycleListener {
 
         val isisRequestCycle = IsisRequestCycle.next(
                 commonContext.lookupServiceElseFail(InteractionFactory.class));
-        
+
         requestCycle.setMetaData(REQ_CYCLE_HANDLE_KEY, isisRequestCycle);
 
         isisRequestCycle.onBeginRequest(authentication);
@@ -120,9 +120,9 @@ public class WebRequestCycleForIsis implements IRequestCycleListener {
         log.debug("onRequestHandlerResolved in");
 
         if(handler instanceof RenderPageRequestHandler) {
-            
+
             val validationResult = getCommonContext().getSpecificationLoader().getValidationResult();
-            
+
             if(validationResult.hasFailures()) {
                 RenderPageRequestHandler requestHandler = (RenderPageRequestHandler) handler;
                 final IRequestablePage nextPage = requestHandler.getPage();
@@ -199,7 +199,7 @@ public class WebRequestCycleForIsis implements IRequestCycleListener {
     public IRequestHandler onException(RequestCycle cycle, Exception ex) {
 
         log.debug("onException");
-        
+
         val validationResult = getCommonContext().getSpecificationLoader().getValidationResult();
         if(validationResult.hasFailures()) {
             val mmvErrorPage = new MmvErrorPage(validationResult.getMessages("[%d] %s"));
@@ -268,16 +268,16 @@ public class WebRequestCycleForIsis implements IRequestCycleListener {
     }
 
     private void addTranslatedMessage(final String translatedSuffixIfAny) {
-        
+
         getMessageBroker().ifPresent(broker->{
-        
+
             final String translatedPrefix = translate("Action no longer available");
             final String message = translatedSuffixIfAny != null
                     ? String.format("%s (%s)", translatedPrefix, translatedSuffixIfAny)
                     : translatedPrefix;
-            
+
             broker.addMessage(message);
-            
+
         });
     }
 
@@ -300,21 +300,21 @@ public class WebRequestCycleForIsis implements IRequestCycleListener {
     protected IRequestablePage errorPageFor(Exception ex) {
 
         final Optional<Recognition> recognition;
-        
+
         if(isInInteraction()) {
             val exceptionRecognizerService = getCommonContext().getServiceRegistry()
             .lookupServiceElseFail(ExceptionRecognizerService.class);
-            
+
             recognition = exceptionRecognizerService
                     .recognizeFromSelected(
                             Can.<ExceptionRecognizer>ofSingleton(pageExpiredExceptionRecognizer)
                             .addAll(exceptionRecognizerService.getExceptionRecognizers()),
                             ex);
-            
+
         } else {
-            
+
             recognition = Optional.empty();
-            
+
             val validationResult = getCommonContext().getSpecificationLoader().getValidationResult();
             if(validationResult.hasFailures()) {
                 return new MmvErrorPage(validationResult.getMessages("[%d] %s"));
@@ -377,11 +377,11 @@ public class WebRequestCycleForIsis implements IRequestCycleListener {
     }
 
     // -- DEPENDENCIES
-    
+
     public IsisAppCommonContext getCommonContext() {
         return commonContext = CommonContextUtils.computeIfAbsent(commonContext);
     }
-    
+
     private ExceptionRecognizerService getExceptionRecognizerService() {
         return getCommonContext().getServiceRegistry().lookupServiceElseFail(ExceptionRecognizerService.class);
     }

@@ -20,7 +20,6 @@ package org.apache.isis.applib.services.exceprecog;
 
 import java.util.Optional;
 
-import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer.Recognition;
 import org.apache.isis.commons.collections.Can;
 
 /**

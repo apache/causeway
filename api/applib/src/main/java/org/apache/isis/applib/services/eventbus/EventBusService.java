@@ -30,6 +30,17 @@ package org.apache.isis.applib.services.eventbus;
  */
 public interface EventBusService {
 
+    /**
+     * Post an event (of any class) to the in-memory event bus.
+     *
+     * <p>
+     *     The event will be delivered synchronously (within the same
+     *     transactional boundary) to all subscribers of that event type
+     *     (with subscribers as domain services with public method annotated
+     *     using Spring's
+     *     {@link org.springframework.context.event.EventListener} annotation.
+     * </p>
+     */
     void post(Object event);
 
 }
