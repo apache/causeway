@@ -22,8 +22,14 @@ import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.commons.having.HasEnabling;
 
 /**
- * SPI to receive the entire set of entities that are about to change as the
- * result of a transaction.
+ * SPI to receive a summary of the number of entities that have changed as the
+ * result of an interaction (action invocation or property edit).
+ *
+ * <p>
+ * One use case is for performance profiling: to determine the
+ * &quot;footprint&quot; of an interaction, which will have a direct impact on
+ * the response time of that interaction.
+ * </p>
  *
  * <p>
  *     Only those entities that have publishing enabled (using

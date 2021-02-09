@@ -12,14 +12,14 @@ export ANTORA_TARGET_SITE=antora/target/site
 #
 PLAYBOOK_FILE=antora/playbooks/site.yml
 
-while getopts 'ECPAKSecpaksxyhf:' opt
+while getopts 'ECDAKSecdaksxyhf:' opt
 do
   case $opt in
     E) export SKIP_EXAMPLES=false
        forcing=true ;;
     C) export SKIP_CONFIGS=false
        forcing=true ;;
-    P) export SKIP_PROJDOC_GENERATION=false
+    D) export SKIP_PROJDOC_GENERATION=false
        forcing=true ;;
     A) export SKIP_ANTORA_GENERATION=false
        export SKIP_CLEAR_CACHE=false
@@ -32,7 +32,7 @@ do
 
     e) export SKIP_EXAMPLES=true ;;
     c) export SKIP_CONFIGS=true ;;
-    p) export SKIP_PROJDOC_GENERATION=true ;;
+    d) export SKIP_PROJDOC_GENERATION=true ;;
     a) export SKIP_ANTORA_GENERATION=true
        export SKIP_CLEAR_CACHE=true
        export SKIP_CLEAR_PREVIOUS=true
@@ -50,7 +50,7 @@ do
        echo "  -e skip examples"
        echo "  -k skip stale example check"
        echo "  -c skip config doc generation"
-       echo "  -w skip projdoc generation"
+       echo "  -d skip projdoc generation"
        echo "  -a skip Antora generation"
        echo "  -s skip serving generated site"
        echo ""
@@ -58,7 +58,7 @@ do
        echo "  -E force examples"
        echo "  -K force stale example check"
        echo "  -C force config doc generation"
-       echo "  -P force projdoc generation"
+       echo "  -D force projdoc generation"
        echo "  -A force Antora generation"
        echo "  -S force serving generated site"
        echo ""

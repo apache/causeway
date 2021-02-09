@@ -4,3 +4,5 @@
 
 
 == Implementation
+
+The framework provides a default implementation of this service, `o.a.i.core.runtimeservices.recognizer.ExceptionRecognizerServiceDefault`.

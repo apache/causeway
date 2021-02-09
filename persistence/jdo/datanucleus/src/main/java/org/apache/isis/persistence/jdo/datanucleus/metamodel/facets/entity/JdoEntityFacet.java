@@ -33,6 +33,7 @@ import org.apache.isis.applib.exceptions.unrecoverable.ObjectNotFoundException;
 import org.apache.isis.applib.query.AllInstancesQuery;
 import org.apache.isis.applib.query.NamedQuery;
 import org.apache.isis.applib.query.Query;
+import org.apache.isis.applib.services.exceprecog.Category;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerService;
 import org.apache.isis.applib.services.repository.EntityState;
@@ -137,7 +138,7 @@ implements EntityFacet {
 
             val recognition = exceptionRecognizerService.recognize(e);
             if(recognition.isPresent()) {
-                if(recognition.get().getCategory() == ExceptionRecognizer.Category.NOT_FOUND) {
+                if(recognition.get().getCategory() == Category.NOT_FOUND) {
                     throw new ObjectNotFoundException(""+rootOid, e);
                 }
             }

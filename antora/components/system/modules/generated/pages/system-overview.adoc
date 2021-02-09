@@ -222,6 +222,7 @@ Folder: \core\config
 * o.a.i.core.config.beans.IsisBeanFactoryPostProcessorForSpring
 * o.a.i.core.config.beans.IsisBeanTypeRegistryDefault
 * o.a.i.core.config.converters.PatternsConverter
+* o.a.i.core.config.datasources.DataSourceIntrospectionService
 * o.a.i.core.config.environment.IsisLocaleInitializer
 * o.a.i.core.config.environment.IsisSystemEnvironment
 * o.a.i.core.config.environment.IsisTimeZoneInitializer
@@ -365,7 +366,7 @@ Folder: \core\runtime
 [%collapsible]
 .Components
 ====
-* o.a.i.core.runtime.events.AppLifecycleEventService
+* o.a.i.core.runtime.events.MetamodelEventService
 * o.a.i.core.runtime.events.TransactionEventEmitter
 ====
 [%collapsible]
@@ -397,12 +398,11 @@ Folder: \core\runtimeservices
 * o.a.i.core.runtimeservices.confmenu.ConfigurationViewServiceDefault
 * o.a.i.core.runtimeservices.email.EmailServiceDefault
 * o.a.i.core.runtimeservices.eventbus.EventBusServiceSpring
-* o.a.i.core.runtimeservices.exceprecog.ExceptionRecognizerServiceDefault
 * o.a.i.core.runtimeservices.executor.MemberExecutorServiceDefault
 * o.a.i.core.runtimeservices.factory.FactoryServiceDefault
 * o.a.i.core.runtimeservices.homepage.HomePageResolverServiceDefault
 * o.a.i.core.runtimeservices.i18n.po.TranslationServicePo
-* o.a.i.core.runtimeservices.ixn.InteractionDtoServiceInternalDefault
+* o.a.i.core.runtimeservices.interaction.InteractionDtoServiceInternalDefault
 * o.a.i.core.runtimeservices.jaxb.JaxbServiceDefault
 * o.a.i.core.runtimeservices.menubars.MenuBarsLoaderServiceDefault
 * o.a.i.core.runtimeservices.menubars.bootstrap3.MenuBarsServiceBS3
@@ -412,17 +412,23 @@ Folder: \core\runtimeservices
 * o.a.i.core.runtimeservices.publish.EntityPropertyChangePublisherDefault
 * o.a.i.core.runtimeservices.publish.ExecutionPublisherDefault
 * o.a.i.core.runtimeservices.queryresultscache.QueryResultsCacheDefault
+* o.a.i.core.runtimeservices.recognizer.ExceptionRecognizerServiceDefault
+* o.a.i.core.runtimeservices.recognizer.dae.impl.ExceptionRecognizerForDataAlreadyExists
+* o.a.i.core.runtimeservices.recognizer.dae.impl.ExceptionRecognizerForObjectNotFound
+* o.a.i.core.runtimeservices.recognizer.dae.impl.ExceptionRecognizerForOtherDataAccessProblem
+* o.a.i.core.runtimeservices.recognizer.dae.impl.ExceptionRecognizerForRelatedDataExists
+* o.a.i.core.runtimeservices.recognizer.dae.impl.ExceptionRecognizerForUnableToSaveData
 * o.a.i.core.runtimeservices.repository.RepositoryServiceDefault
 * o.a.i.core.runtimeservices.routing.RoutingServiceDefault
 * o.a.i.core.runtimeservices.scratchpad.ScratchpadDefault
 * o.a.i.core.runtimeservices.session.InteractionFactoryDefault
 * o.a.i.core.runtimeservices.sudo.SudoServiceDefault
+* o.a.i.core.runtimeservices.transaction.TransactionServiceSpring
 * o.a.i.core.runtimeservices.urlencoding.UrlEncodingServiceWithCompression
 * o.a.i.core.runtimeservices.user.UserServiceDefault
 * o.a.i.core.runtimeservices.userprof.UserProfileServiceDefault
 * o.a.i.core.runtimeservices.userreg.EmailNotificationServiceDefault
 * o.a.i.core.runtimeservices.wrapper.WrapperFactoryDefault
-* o.a.i.core.runtimeservices.xactn.TransactionServiceSpring
 * o.a.i.core.runtimeservices.xml.XmlServiceDefault
 * o.a.i.core.runtimeservices.xmlsnapshot.XmlSnapshotServiceDefault
 ====
@@ -639,17 +645,12 @@ skinparam rectangle<<116>> {
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<90>> {
-  BackgroundColor #438dd5
-  FontColor #fffffe
-  BorderColor #2E6295
-}
 skinparam rectangle<<117>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<118>> {
+skinparam rectangle<<90>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
@@ -659,12 +660,17 @@ skinparam rectangle<<91>> {
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<92>> {
+skinparam rectangle<<118>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
 }
 skinparam rectangle<<119>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<92>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
@@ -799,12 +805,12 @@ skinparam rectangle<<4>> {
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<5>> {
+skinparam rectangle<<126>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<126>> {
+skinparam rectangle<<5>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
@@ -819,12 +825,12 @@ skinparam rectangle<<6>> {
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<7>> {
+skinparam rectangle<<128>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<128>> {
+skinparam rectangle<<7>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
@@ -1389,22 +1395,22 @@ skinparam rectangle<<107>> {
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<108>> {
-  BackgroundColor #438dd5
-  FontColor #fffffe
-  BorderColor #2E6295
-}
 skinparam rectangle<<81>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<109>> {
+skinparam rectangle<<108>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
 }
 skinparam rectangle<<82>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<109>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
@@ -1909,170 +1915,6 @@ Type: jar
 Folder: \examples\demo\domain
 ----
 |[%collapsible]
-.Components
-====
-* demoapp.dom.AppConfiguration
-* demoapp.dom._infra.DefaultTitleProvider
-* demoapp.dom._infra.LibraryPreloadingService
-* demoapp.dom._infra.fixtures.DemoFixtureScriptSpecificationProvider
-* demoapp.dom._infra.resources.AsciiDocConverterService
-* demoapp.dom._infra.resources.AsciiDocReaderService
-* demoapp.dom._infra.resources.MarkdownReaderService
-* demoapp.dom._infra.resources.MarkupReaderService
-* demoapp.dom._infra.resources.MarkupVariableResolverService
-* demoapp.dom._infra.resources.ResourceReaderService
-* demoapp.dom._infra.samples.NameSamples
-* demoapp.dom._infra.urlencoding.UrlEncodingServiceNaiveInMemory
-* demoapp.dom.domain._changes.EntityChangesSubscriberToCaptureChangesInMemory
-* demoapp.dom.domain._commands.ExposePersistedCommands$TableColumnOrderDefault
-* demoapp.dom.domain._interactions.ExecutionListenerToCaptureInteractionsInMemory
-* demoapp.dom.domain.actions.Action.commandPublishing.ActionCommandPublishingJdoEntities
-* demoapp.dom.domain.actions.Action.commandPublishing.ActionCommandPublishingJdoSeedService
-* demoapp.dom.domain.actions.Action.executionPublishing.ActionExecutionPublishingJdoEntities
-* demoapp.dom.domain.actions.Action.executionPublishing.ActionExecutionPublishingJdoSeedService
-* demoapp.dom.domain.objects.DomainObject.entityChangePublishing.annotated.disabled.DomainObjectEntityChangePublishingDisabledJdoEntities
-* demoapp.dom.domain.objects.DomainObject.entityChangePublishing.annotated.disabled.DomainObjectEntityChangePublishingDisabledJdoSeedService
-* demoapp.dom.domain.objects.DomainObject.entityChangePublishing.annotated.enabled.DomainObjectAuditingEnabledJdoEntities
-* demoapp.dom.domain.objects.DomainObject.entityChangePublishing.annotated.enabled.DomainObjectAuditingEnabledJdoSeedService
-* demoapp.dom.domain.objects.DomainObject.entityChangePublishing.metaAnnot.enabled.DomainObjectEntityChangePublishingEnabledMetaAnnotatedJdoEntities
-* demoapp.dom.domain.objects.DomainObject.entityChangePublishing.metaAnnot.enabled.DomainObjectEntityChangePublishingEnabledMetaAnnotatedJdoSeedService
-* demoapp.dom.domain.objects.DomainObject.entityChangePublishing.metaAnnotOverridden.enabled.DomainObjectEntityChangePublishingEnabledMetaAnnotOverriddenJdoEntities
-* demoapp.dom.domain.objects.DomainObject.entityChangePublishing.metaAnnotOverridden.enabled.DomainObjectEntityChangePublishingEnabledMetaAnnotOverriddenJdoSeedService
-* demoapp.dom.domain.objects.DomainObject.nature.viewmodels.jaxbrefentity.ChildJdoEntities
-* demoapp.dom.domain.objects.DomainObject.nature.viewmodels.jaxbrefentity.seed.ChildJdoSeedService
-* demoapp.dom.domain.objects.other.embedded.NumberConstantJdoRepository
-* demoapp.dom.domain.properties.Property.commandPublishing.PropertyCommandPublishingJdoEntities
-* demoapp.dom.domain.properties.Property.commandPublishing.PropertyCommandPublishingJdoSeedService
-* demoapp.dom.domain.properties.Property.executionPublishing.PropertyExecutionPublishingJdoEntities
-* demoapp.dom.domain.properties.Property.executionPublishing.PropertyExecutionPublishingJdoSeedService
-* demoapp.dom.domain.properties.Property.projecting.jdo.PropertyProjectingChildJdoEntities
-* demoapp.dom.domain.properties.Property.projecting.jdo.PropertyProjectingChildJdoSeedService
-* demoapp.dom.domain.properties.PropertyLayout.navigable.FileTreeNodeService
-* demoapp.dom.domain.properties.PropertyLayout.repainting.PdfJsViewerAdvisorFallback
-* demoapp.dom.featured.customui.geocoding.GeoapifyClient
-* demoapp.dom.services.core.errorreportingservice.ErrorReportingServiceDemoImplementation
-* demoapp.dom.services.core.eventbusservice.EventLogEntryJdoRepository
-* demoapp.dom.services.core.eventbusservice.EventSubscriberDemoImplementation
-* demoapp.dom.services.core.wrapperFactory.WrapperFactoryJdoEntities
-* demoapp.dom.services.core.wrapperFactory.WrapperFactoryJdoSeedService
-* demoapp.dom.services.extensions.secman.apptenancy.ApplicationTenancyEvaluatorForDemo
-* demoapp.dom.services.extensions.secman.apptenancy.entities.TenantedJdoEntities
-* demoapp.dom.services.extensions.secman.apptenancy.entities.seed.TenantedJdoSeedService
-* demoapp.dom.types.isis.blobs.jdo.IsisBlobJdoEntities
-* demoapp.dom.types.isis.blobs.jdo.IsisBlobJdoSeedService
-* demoapp.dom.types.isis.blobs.samples.IsisBlobsSamples
-* demoapp.dom.types.isis.clobs.jdo.IsisClobJdoEntities
-* demoapp.dom.types.isis.clobs.jdo.IsisClobJdoSeedService
-* demoapp.dom.types.isis.clobs.samples.IsisClobsSamples
-* demoapp.dom.types.isis.localresourcepaths.jdo.IsisLocalResourcePathJdoEntities
-* demoapp.dom.types.isis.localresourcepaths.jdo.IsisLocalResourcePathJdoSeedService
-* demoapp.dom.types.isis.localresourcepaths.samples.IsisLocalResourcePathsSamples
-* demoapp.dom.types.isis.markups.jdo.IsisMarkupJdoEntities
-* demoapp.dom.types.isis.markups.jdo.IsisMarkupJdoSeedService
-* demoapp.dom.types.isis.markups.samples.IsisMarkupSamples
-* demoapp.dom.types.isis.passwords.jdo.IsisPasswordJdoEntities
-* demoapp.dom.types.isis.passwords.jdo.IsisPasswordJdoSeedService
-* demoapp.dom.types.isis.passwords.samples.IsisPasswordsSamples
-* demoapp.dom.types.isisext.asciidocs.jdo.IsisAsciiDocJdoEntities
-* demoapp.dom.types.isisext.asciidocs.jdo.IsisAsciiDocJdoSeedService
-* demoapp.dom.types.isisext.asciidocs.samples.IsisAsciiDocSamples
-* demoapp.dom.types.isisext.markdowns.jdo.IsisMarkdownJdoEntities
-* demoapp.dom.types.isisext.markdowns.jdo.IsisMarkdownJdoSeedService
-* demoapp.dom.types.isisext.markdowns.samples.IsisMarkdownSamples
-* demoapp.dom.types.javaawt.images.jdo.JavaAwtImageJdoEntities
-* demoapp.dom.types.javaawt.images.jdo.JavaAwtImageJdoSeedService
-* demoapp.dom.types.javaawt.images.samples.JavaAwtImageService
-* demoapp.dom.types.javaawt.images.samples.JavaAwtImagesSamples
-* demoapp.dom.types.javalang.booleans.jdo.WrapperBooleanJdoEntities
-* demoapp.dom.types.javalang.booleans.jdo.WrapperBooleanJdoSeedService
-* demoapp.dom.types.javalang.booleans.samples.WrapperBooleanSamples
-* demoapp.dom.types.javalang.bytes.jdo.WrapperByteJdoEntities
-* demoapp.dom.types.javalang.bytes.jdo.WrapperByteJdoSeedService
-* demoapp.dom.types.javalang.bytes.samples.WrapperByteSamples
-* demoapp.dom.types.javalang.characters.jdo.WrapperCharacterJdoEntities
-* demoapp.dom.types.javalang.characters.jdo.WrapperCharacterJdoSeedService
-* demoapp.dom.types.javalang.characters.samples.WrapperCharacterSamples
-* demoapp.dom.types.javalang.doubles.jdo.WrapperDoubleJdoEntities
-* demoapp.dom.types.javalang.doubles.jdo.WrapperDoubleJdoSeedService
-* demoapp.dom.types.javalang.doubles.samples.WrapperDoubleSamples
-* demoapp.dom.types.javalang.floats.jdo.WrapperFloatJdoEntities
-* demoapp.dom.types.javalang.floats.jdo.WrapperFloatJdoSeedService
-* demoapp.dom.types.javalang.floats.samples.WrapperFloatSamples
-* demoapp.dom.types.javalang.integers.jdo.WrapperIntegerJdoEntities
-* demoapp.dom.types.javalang.integers.jdo.WrapperIntegerJdoSeedService
-* demoapp.dom.types.javalang.integers.samples.WrapperIntegerSamples
-* demoapp.dom.types.javalang.longs.jdo.WrapperLongJdoEntities
-* demoapp.dom.types.javalang.longs.jdo.WrapperLongJdoSeedService
-* demoapp.dom.types.javalang.longs.samples.WrapperLongSamples
-* demoapp.dom.types.javalang.shorts.jdo.WrapperShortJdoEntities
-* demoapp.dom.types.javalang.shorts.jdo.WrapperShortJdoSeedService
-* demoapp.dom.types.javalang.shorts.samples.WrapperShortSamples
-* demoapp.dom.types.javalang.strings.jdo.JavaLangStringJdoEntities
-* demoapp.dom.types.javalang.strings.jdo.JavaLangStringJdoSeedService
-* demoapp.dom.types.javalang.strings.samples.JavaLangStringSamples
-* demoapp.dom.types.javamath.bigdecimals.jdo.JavaMathBigDecimalJdoEntities
-* demoapp.dom.types.javamath.bigdecimals.jdo.JavaMathBigDecimalJdoSeedService
-* demoapp.dom.types.javamath.bigdecimals.samples.JavaMathBigDecimalSamples
-* demoapp.dom.types.javamath.bigintegers.jdo.JavaMathBigIntegerJdoEntities
-* demoapp.dom.types.javamath.bigintegers.jdo.JavaMathBigIntegerJdoSeedService
-* demoapp.dom.types.javamath.bigintegers.samples.JavaMathBigIntegerSamples
-* demoapp.dom.types.javanet.urls.jdo.JavaNetUrlJdoEntities
-* demoapp.dom.types.javanet.urls.jdo.JavaNetUrlJdoSeedService
-* demoapp.dom.types.javanet.urls.samples.JavaNetUrlSamples
-* demoapp.dom.types.javasql.javasqldate.jdo.JavaSqlDateJdoEntities
-* demoapp.dom.types.javasql.javasqldate.jdo.JavaSqlDateJdoSeedService
-* demoapp.dom.types.javasql.javasqldate.samples.JavaSqlDateSamples
-* demoapp.dom.types.javasql.javasqltimestamp.jdo.JavaSqlTimestampJdoEntities
-* demoapp.dom.types.javasql.javasqltimestamp.jdo.JavaSqlTimestampJdoSeedService
-* demoapp.dom.types.javasql.javasqltimestamp.samples.JavaSqlTimestampSamples
-* demoapp.dom.types.javatime.javatimelocaldate.jdo.JavaTimeLocalDateJdoEntities
-* demoapp.dom.types.javatime.javatimelocaldate.jdo.JavaTimeLocalDateJdoSeedService
-* demoapp.dom.types.javatime.javatimelocaldate.samples.JavaTimeLocalDateSamples
-* demoapp.dom.types.javatime.javatimelocaldatetime.jdo.JavaTimeLocalDateTimeJdoEntities
-* demoapp.dom.types.javatime.javatimelocaldatetime.jdo.JavaTimeLocalDateTimeJdoSeedService
-* demoapp.dom.types.javatime.javatimelocaldatetime.samples.JavaTimeLocalDateTimeSamples
-* demoapp.dom.types.javatime.javatimeoffsetdatetime.jdo.JavaTimeOffsetDateTimeJdoEntities
-* demoapp.dom.types.javatime.javatimeoffsetdatetime.jdo.JavaTimeOffsetDateTimeJdoSeedService
-* demoapp.dom.types.javatime.javatimeoffsetdatetime.samples.JavaTimeOffsetDateTimeSamples
-* demoapp.dom.types.javatime.javatimeoffsettime.jdo.JavaTimeOffsetTimeJdoEntities
-* demoapp.dom.types.javatime.javatimeoffsettime.jdo.JavaTimeOffsetTimeJdoSeedService
-* demoapp.dom.types.javatime.javatimeoffsettime.samples.JavaTimeOffsetTimeSamples
-* demoapp.dom.types.javatime.javatimezoneddatetime.jdo.JavaTimeZonedDateTimeJdoEntities
-* demoapp.dom.types.javatime.javatimezoneddatetime.jdo.JavaTimeZonedDateTimeJdoSeedService
-* demoapp.dom.types.javatime.javatimezoneddatetime.samples.JavaTimeZonedDateTimeSamples
-* demoapp.dom.types.javautil.javautildate.jdo.JavaUtilDateJdoEntities
-* demoapp.dom.types.javautil.javautildate.jdo.JavaUtilDateJdoSeedService
-* demoapp.dom.types.javautil.javautildate.samples.JavaUtilDateSamples
-* demoapp.dom.types.javautil.uuids.jdo.JavaUtilUuidJdoEntities
-* demoapp.dom.types.javautil.uuids.jdo.JavaUtilUuidJdoSeedService
-* demoapp.dom.types.javautil.uuids.samples.JavaUtilUuidSamples
-* demoapp.dom.types.jodatime.jodadatetime.jdo.JodaDateTimeJdoEntities
-* demoapp.dom.types.jodatime.jodadatetime.jdo.JodaDateTimeJdoSeedService
-* demoapp.dom.types.jodatime.jodadatetime.samples.JodaDateTimeSamples
-* demoapp.dom.types.jodatime.jodalocaldate.jdo.JodaLocalDateJdoEntities
-* demoapp.dom.types.jodatime.jodalocaldate.jdo.JodaLocalDateJdoSeedService
-* demoapp.dom.types.jodatime.jodalocaldate.samples.JodaLocalDateSamples
-* demoapp.dom.types.jodatime.jodalocaldatetime.jdo.JodaLocalDateTimeJdoEntities
-* demoapp.dom.types.jodatime.jodalocaldatetime.jdo.JodaLocalDateTimeJdoSeedService
-* demoapp.dom.types.jodatime.jodalocaldatetime.samples.JodaLocalDateTimeSamples
-* demoapp.dom.types.primitive.booleans.jdo.PrimitiveBooleanJdoEntities
-* demoapp.dom.types.primitive.booleans.jdo.PrimitiveBooleanJdoSeedService
-* demoapp.dom.types.primitive.bytes.jdo.PrimitiveByteJdoEntities
-* demoapp.dom.types.primitive.bytes.jdo.PrimitiveByteJdoSeedService
-* demoapp.dom.types.primitive.chars.jdo.PrimitiveCharJdoEntities
-* demoapp.dom.types.primitive.chars.jdo.PrimitiveCharJdoSeedService
-* demoapp.dom.types.primitive.doubles.jdo.PrimitiveDoubleJdoEntities
-* demoapp.dom.types.primitive.doubles.jdo.PrimitiveDoubleJdoSeedService
-* demoapp.dom.types.primitive.floats.jdo.PrimitiveFloatJdoEntities
-* demoapp.dom.types.primitive.floats.jdo.PrimitiveFloatJdoSeedService
-* demoapp.dom.types.primitive.ints.jdo.PrimitiveIntJdoEntities
-* demoapp.dom.types.primitive.ints.jdo.PrimitiveIntJdoSeedService
-* demoapp.dom.types.primitive.longs.jdo.PrimitiveLongJdoEntities
-* demoapp.dom.types.primitive.longs.jdo.PrimitiveLongJdoSeedService
-* demoapp.dom.types.primitive.shorts.jdo.PrimitiveShortJdoEntities
-* demoapp.dom.types.primitive.shorts.jdo.PrimitiveShortJdoSeedService
-====
-[%collapsible]
 .Dependencies
 ====
 * com.h2database:h2:jar:<managed>
@@ -2741,6 +2583,15 @@ Type: jar
 Folder: \extensions\security\secman\persistence-jpa
 ----
 |[%collapsible]
+.Components
+====
+* o.a.i.extensions.secman.jpa.dom.permission.ApplicationPermissionRepository
+* o.a.i.extensions.secman.jpa.dom.role.ApplicationRoleRepository
+* o.a.i.extensions.secman.jpa.dom.tenancy.ApplicationTenancyRepository
+* o.a.i.extensions.secman.jpa.dom.user.ApplicationUserRepository
+* o.a.i.extensions.secman.jpa.seed.SeedSecurityModuleService
+====
+[%collapsible]
 .Dependencies
 ====
 * org.apache.isis.core:isis-core-runtime:jar:<managed>
@@ -3406,12 +3257,9 @@ Folder: \persistence\jdo\datanucleus
 .Components
 ====
 * o.a.i.persistence.jdo.datanucleus.config.DnEntityDiscoveryListener
-* o.a.i.persistence.jdo.datanucleus.config.DnSettings
 * o.a.i.persistence.jdo.datanucleus.entities.DnEntityStateProvider
-* o.a.i.persistence.jdo.datanucleus.exceptions.recognizers.ExceptionRecognizerForJDODataStoreException
-* o.a.i.persistence.jdo.datanucleus.exceptions.recognizers.ExceptionRecognizerForJDODataStoreExceptionIntegrityConstraintViolationForeignKeyNoActionException
-* o.a.i.persistence.jdo.datanucleus.exceptions.recognizers.ExceptionRecognizerForJDOObjectNotFoundException
-* o.a.i.persistence.jdo.datanucleus.exceptions.recognizers.ExceptionRecognizerForSQLIntegrityConstraintViolationUniqueOrIndexException
+* o.a.i.persistence.jdo.datanucleus.jdosupport.JdoSupportServiceDefault
+* o.a.i.persistence.jdo.datanucleus.metamodel.JdoDataNucleusProgrammingModel
 ====
 [%collapsible]
 .Dependencies
@@ -3445,13 +3293,6 @@ Folder: \persistence\jdo\integration
 ----
 |JDO Integration (powered by DataNucleus)
 
-[%collapsible]
-.Components
-====
-* o.a.i.persistence.jdo.integration.jdosupport.IsisJdoSupportDN5
-* o.a.i.persistence.jdo.integration.metamodel.JdoIntegrationProgrammingModel
-* o.a.i.persistence.jdo.integration.schema.JdoSchemaService
-====
 [%collapsible]
 .Dependencies
 ====
@@ -3629,6 +3470,11 @@ Folder: \persistence\jpa\metamodel
 |JPA Metamodel Facets / Programming Model
 
 [%collapsible]
+.Components
+====
+* o.a.i.persistence.jpa.metamodel.JpaProgrammingModel
+====
+[%collapsible]
 .Dependencies
 ====
 * org.apache.isis.core:isis-core-internaltestsupport:jar:<managed>
@@ -3684,21 +3530,6 @@ Type: jar
 Folder: \regressiontests\stable
 ----
 |[%collapsible]
-.Components
-====
-* o.a.i.testdomain.applayer.ApplicationLayerTestFactory
-* o.a.i.testdomain.applayer.ApplicationLayerTestFactory$PreCommitListener
-* o.a.i.testdomain.applayer.publishing.CommandSubscriberForTesting
-* o.a.i.testdomain.applayer.publishing.EntityChangesSubscriberForTesting
-* o.a.i.testdomain.applayer.publishing.EntityPropertyChangeSubscriberForTesting
-* o.a.i.testdomain.applayer.publishing.ExecutionSubscriberForTesting
-* o.a.i.testdomain.conf.Configuration_headless$HeadlessCommandSupport
-* o.a.i.testdomain.jpa.springdata.EmployeeRepository
-* o.a.i.testdomain.util.interaction.InteractionBoundaryProbe
-* o.a.i.testdomain.util.kv.KVStoreForTesting
-* o.a.i.testdomain.util.rest.RestEndpointService
-====
-[%collapsible]
 .Dependencies
 ====
 * org.apache.isis.extensions:isis-extensions-cors-impl:jar:<managed>

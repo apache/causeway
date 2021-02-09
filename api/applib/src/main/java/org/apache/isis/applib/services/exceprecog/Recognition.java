@@ -41,6 +41,14 @@ public class Recognition {
      * Categorises the exception as per {@link Category}.
      *
      * <p>
+     * In essence, if an exception is recognized then it is also categorized.
+     * This lets the viewer act accordingly.
+     *
+     * If the implementation recognizes the exception then it returns a user-friendly message to be rendered (by the viewer) back to the user; otherwise it returns `null`.
+     * There is no need for the implementation to check for exception causes; the casual chain is unwrapped by Apache Isis core and each exception in the chain will also be passed through to the recognizer (from most specific to least).
+     * The recognizer implementation can therefore be as fine-grained or as coarse-grained as it wishes.
+     * </p>
+     * <p>
      *     This category can also optionally be used in the translation of the
      *     {@link #getReason() reason} for the exception.
      * </p>

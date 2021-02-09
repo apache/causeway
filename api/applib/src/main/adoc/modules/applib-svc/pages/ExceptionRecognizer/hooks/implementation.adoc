@@ -4,3 +4,54 @@
 
 
 == Implementation
+
+The framework provides a number of default implementations for JPA and JDO, to recognise:
+
+* data already exists (uniqueness constraints)
+* object not found
+* related data exists (foreign key constraints preventing change)
+* unable to save data (foreign key constraints not met)
+* other data access problem.
+
+
+// TODO: v2 - flesh this out once ISIS-2502 is complete.
+
+//=== Configuration Properties
+//
+//The following configuration properties are relevant:
+//
+//[cols="2a,1,3a", options="header"]
+//|===
+//|Property
+//|Value +
+//(default value)
+//|Description
+//
+//| `isis.services.` +
+//`exceprecog.` +
+//`logRecognized` +
+//`Exceptions` +
+//|`true`,`false` +
+//(`false`)
+//|whether recognized exceptions should also be logged. +
+//
+//Generally a recognized exception is one that is expected (for example a uniqueness constraint violated in the database) and which does not represent an error condition.
+//This property logs the exception anyway, useful for debugging.
+//
+//This is recognised by all implementations that subclass `ExceptionRecognizerAbstract`.
+//
+//| `isis.services.` +
+//`ExceptionRecognizer` +
+//`CompositeFor` +
+//`JdoObjectStore.` +
+//`disable` +
+//|`true`,`false` +
+//(`false`)
+//|whether to disable the default recognizers registered by `ExceptionRecognizerCompositeForJdoObjectStore`. +
+//
+//This implementation provides a default set of recognizers to convert RDBMS constraints into user-friendly messages.
+//In the (probably remote) chance that this functionality isn't required, they can be disabled through this flag.
+//
+//
+//|===
+

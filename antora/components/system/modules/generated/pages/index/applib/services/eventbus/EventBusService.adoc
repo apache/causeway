@@ -10,7 +10,22 @@ Events are delivered synchronously to event subscribers (domain services).
 .EventBusService.java
 ----
 interface EventBusService {
-  void post(Object event)
+  void post(Object event)     // <.>
 }
 ----
+
+<.> xref:#post[post]
++
+--
+Post an event (of any class) to the in-memory event bus.
+--
+
+== Members
+
+[#post]
+=== post
+
+Post an event (of any class) to the in-memory event bus.
+
+The event will be delivered synchronously (within the same transactional boundary) to all subscribers of that event type (with subscribers as domain services with public method annotated using Spring's _org.springframework.context.event.EventListener_ annotation.
 
