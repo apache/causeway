@@ -26,6 +26,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataAccessException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.TestPropertySources;
 import org.springframework.transaction.annotation.Propagation;
@@ -33,11 +34,14 @@ import org.springframework.transaction.annotation.Propagation;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.core.interaction.session.InteractionFactory;
+import org.apache.isis.persistence.jdo.spring.integration.JdoTransactionManager;
 import org.apache.isis.testdomain.conf.Configuration_usingJdo;
 import org.apache.isis.testdomain.jdo.entities.JdoInventory;
 
@@ -59,7 +63,7 @@ class JdoExceptionTranslationTest
     @Inject private TransactionService transactionService;
     @Inject private RepositoryService repositoryService;
     @Inject private InteractionFactory interactionFactory;
-    //@Inject private JdoTransactionManager txManager;
+    @Inject private JdoTransactionManager txManager;
 
     @BeforeAll
     static void beforeAll() throws SQLException {
@@ -106,8 +110,10 @@ class JdoExceptionTranslationTest
                 });
     
             })
-            .optionalElseFail()
-            .orElse(null);
+            .ifSuccess(__->fail("expected to fail, but did not"))
+            .mapFailure(ex->_JdoExceptionTranslator.translate(ex, txManager))
+            .ifFailure(ex->assertTrue(ex instanceof DataIntegrityViolationException))
+            .optionalElseFail();
             
         });
         

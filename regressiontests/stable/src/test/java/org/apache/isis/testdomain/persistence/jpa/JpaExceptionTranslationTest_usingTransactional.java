@@ -29,9 +29,7 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.TestPropertySource;
@@ -46,7 +44,6 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.commons.functional.Result;
-import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.core.interaction.session.InteractionFactory;
 import org.apache.isis.testdomain.conf.Configuration_usingJpa;
@@ -100,21 +97,9 @@ class JpaExceptionTranslationTest_usingTransactional
             interactionFactory.runAnonymous(()->{
                 
                 Result.ofVoid(()->uniqueConstraintViolator.get().addBookHavingIsbnA())
-                
                 .ifSuccess(__->fail("expected to fail, but did not"))
-                
-                //XXX this part of the translation is not done by Spring!?
-                .mapFailure(ex-> _Exceptions.streamCausalChain(ex)
-                        .filter(e->e instanceof RuntimeException)
-                        .map(RuntimeException.class::cast)
-                        // call Spring's exception translation mechanism
-                        .map(nextEx->DataAccessUtils.translateIfNecessary(nextEx, txManager.getJpaDialect()))
-                        .filter(nextEx -> nextEx instanceof DataAccessException)
-                        .findFirst()
-                        .orElseGet(()->new RuntimeException(ex)))
-                
+                .mapFailure(ex->_JpaExceptionTranslator.translate(ex, txManager)) 
                 .ifFailure(ex->assertTrue(ex instanceof DataIntegrityViolationException))
-                
                 .optionalElseFail();
             
             });

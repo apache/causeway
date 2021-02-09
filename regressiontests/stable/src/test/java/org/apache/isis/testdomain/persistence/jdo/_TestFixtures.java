@@ -33,7 +33,7 @@ import org.apache.isis.testdomain.jdo.entities.JdoProduct;
 
 import lombok.val;
 
-class _TestFixtures {
+final class _TestFixtures {
 
     static void cleanUp(RepositoryService repository) {
         repository.allInstances(JdoInventory.class).forEach(repository::remove);

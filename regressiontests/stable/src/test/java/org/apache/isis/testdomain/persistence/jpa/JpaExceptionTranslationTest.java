@@ -26,6 +26,8 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataAccessException;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.TestPropertySources;
 import org.springframework.transaction.annotation.Propagation;
@@ -33,6 +35,8 @@ import org.springframework.transaction.annotation.Propagation;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.xactn.TransactionService;
@@ -59,7 +63,7 @@ class JpaExceptionTranslationTest
     @Inject private TransactionService transactionService;
     @Inject private RepositoryService repositoryService;
     @Inject private InteractionFactory interactionFactory;
-    //@Inject private JpaTransactionManager txManager;
+    @Inject private JpaTransactionManager txManager;
 
     @BeforeAll
     static void beforeAll() throws SQLException {
@@ -106,8 +110,10 @@ class JpaExceptionTranslationTest
                 });
     
             })
-            .optionalElseFail()
-            .orElse(null);
+            .ifSuccess(__->fail("expected to fail, but did not"))
+            .mapFailure(ex->_JpaExceptionTranslator.translate(ex, txManager)) 
+            .ifFailure(ex->assertTrue(ex instanceof DataIntegrityViolationException))
+            .optionalElseFail();
            
         });
         

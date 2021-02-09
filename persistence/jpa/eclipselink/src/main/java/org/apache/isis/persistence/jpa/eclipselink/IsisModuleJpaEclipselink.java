@@ -165,6 +165,7 @@ public class IsisModuleJpaEclipselink extends JpaBaseConfiguration {
                     return (DataAccessException)ex; // has already been translated to Spring's hierarchy before
                 }
 
+                //FIXME somehow use Spring's SQLExceptionTranslator instead
                 if(ex instanceof DatabaseException
                         && ex.getCause() instanceof SQLIntegrityConstraintViolationException) {
                     

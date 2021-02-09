@@ -22,20 +22,14 @@ import java.sql.SQLException;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
-import javax.jdo.JDODataStoreException;
-import javax.jdo.JDOException;
 
-import org.datanucleus.api.jdo.NucleusJDOHelper;
-import org.datanucleus.exceptions.NucleusException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.TestPropertySources;
@@ -49,10 +43,8 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.commons.functional.Result;
-import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.core.interaction.session.InteractionFactory;
-import org.apache.isis.persistence.jdo.spring.integration.DefaultJdoDialect;
 import org.apache.isis.persistence.jdo.spring.integration.JdoTransactionManager;
 import org.apache.isis.testdomain.conf.Configuration_usingJdo;
 import org.apache.isis.testdomain.jdo.JdoInventoryDao;
@@ -105,35 +97,9 @@ class JdoExceptionTranslationTest_usingTransactional
             interactionFactory.runAnonymous(()->{
             
                 Result.ofVoid(()->uniqueConstraintViolator.get().addBookHavingIsbnA())
-                
                 .ifSuccess(__->fail("expected to fail, but did not"))
-                
-                //XXX seems like a bug in DN, why do we need to unwrap this?
-                .mapFailure(ex->ex instanceof IllegalArgumentException
-                        ? ((IllegalArgumentException)ex).getCause()
-                        : ex)
-                
-                // asserts we have a NucleusException
-                .ifFailure(ex->assertTrue(ex instanceof NucleusException))
-                
-                //XXX this part of the translation is not done by Spring!? 
-                // (converts to JDOException)
-                .mapFailure(ex->ex instanceof NucleusException
-                        ? NucleusJDOHelper
-                                .getJDOExceptionForNucleusException(((NucleusException)ex))
-                        : ex)
-                
-                // asserts translation to JDO standard
-                .ifFailure(ex->assertTrue(ex instanceof JDODataStoreException))
-                
-                //XXX this part of the translation is not done by Spring!?
-                // (converts to DataAccessException)
-                .mapFailure(ex->ex instanceof JDOException
-                        ? txManager.getJdoDialect().translateException((JDOException)ex)
-                        : ex)
-                
+                .mapFailure(ex->_JdoExceptionTranslator.translate(ex, txManager))
                 .ifFailure(ex->assertTrue(ex instanceof DataIntegrityViolationException))
-                
                 .optionalElseFail();
             
             });
