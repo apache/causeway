@@ -41,6 +41,8 @@ import org.springframework.transaction.annotation.Transactional;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.commons.functional.Result;
@@ -99,6 +101,8 @@ class JpaExceptionTranslationTest_usingTransactional
                 
                 Result.ofVoid(()->uniqueConstraintViolator.get().addBookHavingIsbnA())
                 
+                .ifSuccess(__->fail("expected to fail, but did not"))
+                
                 //XXX this part of the translation is not done by Spring!?
                 .mapFailure(ex-> _Exceptions.streamCausalChain(ex)
                         .filter(e->e instanceof RuntimeException)
@@ -109,8 +113,9 @@ class JpaExceptionTranslationTest_usingTransactional
                         .findFirst()
                         .orElseGet(()->new RuntimeException(ex)))
                 
-                .optionalElseFail()
-                .orElse(null);
+                .ifFailure(ex->assertTrue(ex instanceof DataIntegrityViolationException))
+                
+                .optionalElseFail();
             
             });
         

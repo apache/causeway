@@ -38,24 +38,29 @@ import lombok.val;
  */
 public class DnJdoDialect extends DefaultJdoDialect {
 
-    @Override
-    public DataAccessException translateExceptionIfPossible(RuntimeException ex) {
-        
-        // translate from Datanucleus to JDO standard
-        val translatedException = _Exceptions.streamCausalChain(ex)
-        .<RuntimeException>map(e->{
-            if(e instanceof NucleusException) {
-                return NucleusJDOHelper
-                        .getJDOExceptionForNucleusException((NucleusException)e);
-            }
-            return null;
-        })
-        .filter(_NullSafe::isPresent)
-        .findFirst()
-        .orElse(ex);
-        
-        // translate from JDO standard to Spring's DataAccessException
-        return super.translateExceptionIfPossible(translatedException);
+    public DnJdoDialect(Object connectionFactory) {
+        super(connectionFactory);
     }
+
+//TODO[2502] remove entire class if no longer need for ISIS-2502
+//    @Override
+//    public DataAccessException translateExceptionIfPossible(RuntimeException ex) {
+//        
+//        // translate from Datanucleus to JDO standard
+//        val translatedException = _Exceptions.streamCausalChain(ex)
+//        .<RuntimeException>map(e->{
+//            if(e instanceof NucleusException) {
+//                return NucleusJDOHelper
+//                        .getJDOExceptionForNucleusException((NucleusException)e);
+//            }
+//            return null;
+//        })
+//        .filter(_NullSafe::isPresent)
+//        .findFirst()
+//        .orElse(ex);
+//        
+//        // translate from JDO standard to Spring's DataAccessException
+//        return super.translateExceptionIfPossible(translatedException);
+//    }
     
 }

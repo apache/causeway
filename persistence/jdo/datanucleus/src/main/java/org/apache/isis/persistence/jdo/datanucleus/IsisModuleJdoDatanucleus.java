@@ -91,8 +91,8 @@ public class IsisModuleJdoDatanucleus {
      */
     @Qualifier("jdo-dialect")
     @Bean
-    public DnJdoDialect getDnJdoDialect() {
-        return new DnJdoDialect();
+    public DnJdoDialect getDnJdoDialect(final DataSource dataSource) {
+        return new DnJdoDialect(dataSource);
     }
     
     @Qualifier("local-pmf-proxy")
