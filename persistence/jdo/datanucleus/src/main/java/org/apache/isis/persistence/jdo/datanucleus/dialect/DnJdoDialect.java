@@ -18,12 +18,13 @@
  */
 package org.apache.isis.persistence.jdo.datanucleus.dialect;
 
+import java.util.Optional;
+
 import org.datanucleus.api.jdo.NucleusJDOHelper;
 import org.datanucleus.exceptions.NucleusException;
 import org.springframework.dao.DataAccessException;
 
-import org.apache.isis.commons.internal.base._NullSafe;
-import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.commons.functional.Result;
 import org.apache.isis.persistence.jdo.spring.integration.DefaultJdoDialect;
 import org.apache.isis.persistence.jdo.spring.integration.JdoDialect;
 
@@ -42,25 +43,35 @@ public class DnJdoDialect extends DefaultJdoDialect {
         super(connectionFactory);
     }
 
-//TODO[2502] remove entire class if no longer need for ISIS-2502
     @Override
-    public DataAccessException translateExceptionIfPossible(RuntimeException ex) {
+    public DataAccessException translateExceptionIfPossible(RuntimeException cause) {
         
-        // translate from Datanucleus to JDO standard
-        val translatedException = _Exceptions.streamCausalChain(ex)
-        .<RuntimeException>map(e->{
-            if(e instanceof NucleusException) {
-                return NucleusJDOHelper
-                        .getJDOExceptionForNucleusException((NucleusException)e);
-            }
-            return null;
-        })
-        .filter(_NullSafe::isPresent)
-        .findFirst()
-        .orElse(ex);
+        val translatedException = 
+                
+        Result.failure(cause)
+
+        //XXX seems like a bug in DN, why do we need to unwrap this?
+        .mapFailure(ex->ex instanceof IllegalArgumentException
+                ? ((IllegalArgumentException)ex).getCause()
+                : ex)
+
+        // converts to JDOException
+        .mapFailure(ex->ex instanceof NucleusException
+                ? NucleusJDOHelper
+                        .getJDOExceptionForNucleusException(((NucleusException)ex))
+                : ex)
+
+        // converts to Spring's DataAccessException
+        .mapFailure(ex->ex instanceof RuntimeException
+                ? Optional.<Throwable>ofNullable(super.translateExceptionIfPossible((RuntimeException)ex))
+                        .orElse(ex)
+                : ex)
+
+        .getFailure()
+        .orElse(null);
         
-        // translate from JDO standard to Spring's DataAccessException
-        return super.translateExceptionIfPossible(translatedException);
+        return (DataAccessException) translatedException;
+
     }
     
 }
