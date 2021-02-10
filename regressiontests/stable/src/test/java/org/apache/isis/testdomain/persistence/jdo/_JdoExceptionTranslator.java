@@ -16,62 +16,54 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.persistence.jdo.datanucleus.dialect;
+package org.apache.isis.testdomain.persistence.jdo;
 
-import java.util.Optional;
+import javax.jdo.JDODataStoreException;
+import javax.jdo.JDOException;
 
 import org.datanucleus.api.jdo.NucleusJDOHelper;
 import org.datanucleus.exceptions.NucleusException;
 import org.springframework.dao.DataAccessException;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import org.apache.isis.commons.functional.Result;
-import org.apache.isis.persistence.jdo.spring.integration.DefaultJdoDialect;
-import org.apache.isis.persistence.jdo.spring.integration.JdoDialect;
+import org.apache.isis.persistence.jdo.spring.integration.JdoTransactionManager;
 
-import lombok.val;
+final class _JdoExceptionTranslator {
 
-/**
- * Vendor (<i>Datanucleus</i>) specific implementation of <i>Spring's</i> {@link JdoDialect}
- * interface.
- * 
- * @since 2.0 {@index}
- * @see JdoDialect
- */
-public class DnJdoDialect extends DefaultJdoDialect {
-
-    public DnJdoDialect(Object connectionFactory) {
-        super(connectionFactory);
-    }
-
-    @Override
-    public DataAccessException translateExceptionIfPossible(RuntimeException cause) {
+    //TODO[2502] if only we found a way to have this code run at a lower level already 
+    static DataAccessException translate(Throwable failure, JdoTransactionManager txManager) {
         
-        val translatedException = 
-                
-        Result.failure(cause)
-
+        return (DataAccessException) Result.failure(failure)
+        
         //XXX seems like a bug in DN, why do we need to unwrap this?
         .mapFailure(ex->ex instanceof IllegalArgumentException
                 ? ((IllegalArgumentException)ex).getCause()
                 : ex)
-
+        
+        // asserts we have a NucleusException
+        .ifFailure(ex->assertTrue(ex instanceof NucleusException))
+        
         // converts to JDOException
         .mapFailure(ex->ex instanceof NucleusException
                 ? NucleusJDOHelper
                         .getJDOExceptionForNucleusException(((NucleusException)ex))
                 : ex)
-
-        // converts to Spring's DataAccessException
-        .mapFailure(ex->ex instanceof RuntimeException
-                ? Optional.<Throwable>ofNullable(super.translateExceptionIfPossible((RuntimeException)ex))
-                        .orElse(ex)
-                : ex)
-
-        .getFailure()
-        .orElse(null);
         
-        return (DataAccessException) translatedException;
+        // asserts translation to JDO standard
+        .ifFailure(ex->assertTrue(ex instanceof JDODataStoreException))
+        
+        // converts to Spring DataAccessException
+        .mapFailure(ex->ex instanceof JDOException
+                ? txManager.getJdoDialect().translateException((JDOException)ex)
+                : ex)
+        
+        .getFailure()
+        .orElseThrow();
 
     }
     
+     
+
 }

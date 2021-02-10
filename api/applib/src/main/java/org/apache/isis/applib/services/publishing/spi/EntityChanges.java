@@ -19,28 +19,87 @@
 package org.apache.isis.applib.services.publishing.spi;
 
 import java.sql.Timestamp;
+import java.util.UUID;
 
 import org.apache.isis.commons.having.HasUniqueId;
 import org.apache.isis.commons.having.HasUsername;
 import org.apache.isis.schema.chg.v2.ChangesDto;
 
 /**
- * 
+ * As used by {@link EntityChangesSubscriber}, provides metrics on the
+ * &quot;footprint&quot; of an interaction, in other words the number of
+ * objects accessed or changed.
+ *
+ * <p>
+ *  The numbers of objects loaded, created, updated or deleted and the number
+ *  of object properties modified (in other words the "size" or "weight" of the transaction).
+ * </p>
  * @since 2.0 {@index}
  */
 public interface EntityChanges
         extends HasUniqueId,
                 HasUsername {
 
+    /**
+     * inherited from {@link HasUniqueId}, correlates back to the unique
+     * identifier of the transaction in which these objects were changed.
+     */
+    @Override
+    UUID getUniqueId();
+
+    /**
+     * Inherited from {@link HasUsername}, is the user that initiated the
+     * transaction causing these objects to change.
+     * @return
+     */
+    @Override
+    String getUsername();
+
+    /**
+     * Time that the interaction execution completed
+     * @return
+     */
     Timestamp getCompletedAt();
 
+    /**
+     * Number of domain objects loaded in this interaction
+     * @return
+     */
     int getNumberLoaded();
+
+    /**
+     * Number of domain objects created in this interaction
+     * @return
+     */
     int getNumberCreated();
+
+    /**
+     * Number of domain objects updated in this interaction
+     * @return
+     */
     int getNumberUpdated();
+
+    /**
+     * Number of domain objects deleted in this interaction
+     * @return
+     */
     int getNumberDeleted();
 
+    /**
+     * Number of domain objects properties that were changed in this interaction
+     * @return
+     */
     int getNumberPropertiesModified();
 
+    /**
+     * Same details, but as an an instance of {@link ChangesDto}.
+     *
+     * <p>
+     * This can be converted into a serializable XML representation using the
+     * {@link org.apache.isis.applib.util.schema.ChangesDtoUtils} utility class.
+     * </p>
+     *
+     * @return
+     */
     ChangesDto getDto();
-
 }

@@ -29,6 +29,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.applib.services.exceprecog.Category;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.runtimeservices.recognizer.dae.ExceptionRecognizerForDataAccessException;
@@ -36,8 +37,8 @@ import org.apache.isis.core.runtimeservices.recognizer.dae.ExceptionRecognizerFo
 import lombok.val;
 
 /**
- * Recognizes exceptions of type {@link DataAccessException} if no one else does (fallback). 
- *  
+ * Recognizes exceptions of type {@link DataAccessException} if no one else does (fallback).
+ *
  * @since 2.0 {@index}
  */
 @Service
@@ -49,22 +50,22 @@ extends ExceptionRecognizerForDataAccessException {
 
     @Inject
     public ExceptionRecognizerForOtherDataAccessProblem(IsisConfiguration conf) {
-        //XXX used prefix could be made a config option 
-        // under isis.core.runtimeservices.exception-recognizers.dae 
+        //XXX used prefix could be made a config option
+        // under isis.core.runtimeservices.exception-recognizers.dae
         super(conf,
                 Category.OTHER,
                 ofType(org.springframework.dao.DataAccessException.class),
-                rootCause->toMessage(rootCause)); 
+                rootCause->toMessage(rootCause));
     }
 
     private static String toMessage(Throwable rootCause) {
-        
+
         val causalInfo = _Exceptions.getCausalChain(rootCause)
         .stream()
         .skip(1L)
         .map(ex->String.format("%s: %s", ex.getClass().getSimpleName(), ex.getMessage()))
         .collect(Collectors.joining(", "));
-        
+
         return causalInfo.isEmpty()
                 ? String.format(
                         "An unrecognized data access problem has occurred: %s\ncaused by %s",
@@ -76,6 +77,6 @@ extends ExceptionRecognizerForDataAccessException {
                         rootCause.getMessage(),
                         causalInfo);
     }
-    
-    
+
+
 }

@@ -26,6 +26,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.applib.services.exceprecog.Category;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.runtimeservices.recognizer.dae.ExceptionRecognizerForDataAccessException;
 
@@ -38,9 +39,9 @@ extends ExceptionRecognizerForDataAccessException {
 
     @Inject
     public ExceptionRecognizerForRelatedDataExists(final IsisConfiguration conf) {
-        //XXX used prefix could be made a config option 
+        //XXX used prefix could be made a config option
         // under isis.core.runtimeservices.exception-recognizers.dae
-        super(conf, 
+        super(conf,
                 Category.CONSTRAINT_VIOLATION,
                 ofType(org.springframework.dao.DataAccessException.class)
                 .and(including(

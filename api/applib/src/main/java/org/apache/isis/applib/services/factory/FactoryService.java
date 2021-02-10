@@ -29,6 +29,9 @@ import org.apache.isis.applib.services.repository.RepositoryService;
 import lombok.NonNull;
 
 /**
+ * Collects together methods for instantiating domain objects, also injecting
+ * them with any domain services and calling lifecycle methods if defined.
+ *
  * @since 1.x {@index}
  */
 public interface FactoryService {
@@ -50,6 +53,14 @@ public interface FactoryService {
      *
      * @since 2.0
      *
+     */
+
+    /**
+     * Gets an instance (possibly shared or independent) of the specified type, with injection points resolved and any
+     * life-cycle callback processed.
+     * @param requiredType
+     * @param <T>
+     * @return
      */
     <T> T getOrCreate(@NonNull Class<T> requiredType);
 
@@ -74,6 +85,10 @@ public interface FactoryService {
     /**
      * Creates a new detached entity instance, with injection points resolved
      * and defaults applied.
+     *
+     * <p>
+     *     The entity will be detacted, in other words not yet persisted.
+     * </p>
      *
      * @param <T>
      * @param domainClass - only applicable to entity types

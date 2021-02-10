@@ -19,6 +19,7 @@
 package org.apache.isis.persistence.jdo.datanucleus;
 
 import javax.inject.Provider;
+import javax.jdo.JDOException;
 import javax.jdo.PersistenceManagerFactory;
 import javax.sql.DataSource;
 
@@ -30,10 +31,12 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Primary;
 import org.springframework.dao.support.PersistenceExceptionTranslator;
+import org.springframework.transaction.interceptor.TransactionInterceptor;
 
 import org.apache.isis.applib.services.eventbus.EventBusService;
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.core.config.IsisConfiguration;
+import org.apache.isis.core.config.beans.aoppatch.TransactionInterceptorFactory;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.transaction.changetracking.EntityChangeTracker;
 import org.apache.isis.persistence.jdo.datanucleus.changetracking.JdoLifecycleListener;
@@ -91,8 +94,8 @@ public class IsisModuleJdoDatanucleus {
      */
     @Qualifier("jdo-dialect")
     @Bean
-    public DnJdoDialect getDnJdoDialect() {
-        return new DnJdoDialect();
+    public DnJdoDialect getDnJdoDialect(final DataSource dataSource) {
+        return new DnJdoDialect(dataSource);
     }
     
     @Qualifier("local-pmf-proxy")
@@ -154,7 +157,45 @@ public class IsisModuleJdoDatanucleus {
         return txManager;
     }
 
+    /**
+     * AOP PATCH
+     * @implNote works only with patch package 'org.apache.isis.core.config.beans.aoppatch'
+     */
+    @Bean @Primary
+    @SuppressWarnings("serial")
+    public TransactionInterceptorFactory getTransactionInterceptorFactory() {
+        return ()->new TransactionInterceptor() {
+            @Override @SneakyThrows
+            protected void completeTransactionAfterThrowing(TransactionInfo txInfo, Throwable ex) {
+                super.completeTransactionAfterThrowing(txInfo, ex);
 
+                if(ex instanceof RuntimeException) {
+                    val txManager = txInfo.getTransactionManager();
+                    if(txManager instanceof JdoTransactionManager) {
+                        val jdoDialect = ((JdoTransactionManager)txManager).getJdoDialect();
+                        if(jdoDialect instanceof PersistenceExceptionTranslator) {
+                            val translatedEx = ((PersistenceExceptionTranslator)jdoDialect)
+                                    .translateExceptionIfPossible((RuntimeException)ex);
+                            
+                            if(translatedEx!=null) {
+                                throw translatedEx;
+                            }
+                            
+                        }
+                        
+                        if(ex instanceof JDOException) {
+                            val translatedEx = jdoDialect.translateException((JDOException)ex);
+                            
+                            if(translatedEx!=null) {
+                                throw translatedEx;
+                            }
+                        }
+                    }
+                }
+            }
+        };
+    }
+    
     // -- HELPER
 
     /**

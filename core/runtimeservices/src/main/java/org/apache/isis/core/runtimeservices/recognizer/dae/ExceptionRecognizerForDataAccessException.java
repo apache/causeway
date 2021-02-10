@@ -21,13 +21,14 @@ package org.apache.isis.core.runtimeservices.recognizer.dae;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
+import org.apache.isis.applib.services.exceprecog.Category;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerForType;
 import org.apache.isis.core.config.IsisConfiguration;
 
 /**
  * Common to those that can be disabled via IsisConfiguration.
  */
-public abstract class ExceptionRecognizerForDataAccessException 
+public abstract class ExceptionRecognizerForDataAccessException
 extends ExceptionRecognizerForType {
 
     protected ExceptionRecognizerForDataAccessException(
@@ -36,7 +37,7 @@ extends ExceptionRecognizerForType {
             final Predicate<Throwable> predicate,
             final Function<Throwable, String> rootCauseMessageFormatter) {
         super(category, predicate, rootCauseMessageFormatter);
-        
+
         super.setDisabled(
                 isisConfiguration.getCore().getRuntimeServices()
                 .getExceptionRecognizer().getDae().isDisable());

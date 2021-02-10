@@ -28,12 +28,13 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.exceptions.RecoverableException;
+import org.apache.isis.applib.services.exceprecog.Category;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerForType;
 
 /**
  * Framework-provided implementation of {@link ExceptionRecognizer},
- * which will automatically recognize any 
+ * which will automatically recognize any
  * {@link org.apache.isis.applib.exceptions.RecoverableException}s.
  */
 @Service
@@ -42,7 +43,7 @@ import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerForType;
 @Primary
 @Qualifier("Default")
 public class ExceptionRecognizerForRecoverableException extends ExceptionRecognizerForType {
-    
+
     public ExceptionRecognizerForRecoverableException() {
         super(Category.CLIENT_ERROR, RecoverableException.class);
     }

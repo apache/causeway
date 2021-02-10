@@ -26,13 +26,14 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.applib.services.exceprecog.Category;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.runtimeservices.recognizer.dae.ExceptionRecognizerForDataAccessException;
 
 /**
- * Handles exceptions like {@literal org.springframework.dao.DataIntegrityViolationException: JDO operation: Insert of object "domainapp.modules.hello.dom.hwo.HelloWorldObject@6cad4834" using statement "INSERT INTO "hello"."HelloWorldObject" ("name","notes","version") VALUES (?,?,?)" failed : Unique index or primary key violation: "hello.HelloWorldObject_name_UNQ_INDEX_B ON hello.HelloWorldObject(name) VALUES 1"; SQL statement:} 
- * <p> 
- * TODO: should not be sensitive to 'NOT NULL check constraint' ... don't know whether this can ever happen 
+ * Handles exceptions like {@literal org.springframework.dao.DataIntegrityViolationException: JDO operation: Insert of object "domainapp.modules.hello.dom.hwo.HelloWorldObject@6cad4834" using statement "INSERT INTO "hello"."HelloWorldObject" ("name","notes","version") VALUES (?,?,?)" failed : Unique index or primary key violation: "hello.HelloWorldObject_name_UNQ_INDEX_B ON hello.HelloWorldObject(name) VALUES 1"; SQL statement:}
+ * <p>
+ * TODO: should not be sensitive to 'NOT NULL check constraint' ... don't know whether this can ever happen
  * @since 2.0
  */
 @Service
@@ -44,9 +45,9 @@ extends ExceptionRecognizerForDataAccessException {
 
     @Inject
     public ExceptionRecognizerForDataAlreadyExists(IsisConfiguration conf) {
-        //XXX used prefix could be made a config option 
+        //XXX used prefix could be made a config option
         // under isis.core.runtimeservices.exception-recognizers.dae
-        super(conf, 
+        super(conf,
                 Category.CONSTRAINT_VIOLATION,
                 ofType(org.springframework.dao.DataIntegrityViolationException.class)
                 .and(including("Unique index or primary key violation")),

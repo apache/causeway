@@ -25,11 +25,13 @@ import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Import;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.core.config.beans.aoppatch.AopPatch;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
@@ -47,6 +49,9 @@ import lombok.extern.log4j.Log4j2;
  */
 @Component
 @Named("isis.config.IsisBeanFactoryPostProcessorForSpring")
+@Import({
+    AopPatch.class
+})
 @Log4j2
 public class IsisBeanFactoryPostProcessorForSpring
 implements BeanFactoryPostProcessor {

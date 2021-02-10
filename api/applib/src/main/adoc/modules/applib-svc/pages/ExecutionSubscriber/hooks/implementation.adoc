@@ -5,7 +5,29 @@
 
 == Implementation
 
+The framework allows multiple implementations of this service to be registered; all will be called.
+
 This is an SPI, but the framework provides a simple implementation, `o.a.i.applib.services.publishing.log.ExecutionLogger`, that just logs events as they are received.
 
+It can be configured using:
 
+[source,xml]
+.log4j2-spring.xml
+----
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+  <Properties> ... </Properties>
+  <Appenders> ... </Appenders>
+  <Loggers>
+    ...
+    <logger
+      name="org.apache.isis.applib.services.publishing.log.ExecutionLogger"
+      level="debug"/>
+    ...
+  </Loggers>
+</Configuration>
+----
 
+See the `log4j2-spring.xml` file in xref:docs:starters:simpleapp.adoc[simpleapp] for the omitted detail.
+
+//* the xref:mappings:outbox-publisher:about.adoc[Outbox Publisher] in the xref:mappings:ROOT:about.adoc[Mappings catalog] persists each interaction into a link:https://microservices.io/patterns/data/transactional-outbox.html[outbox table] for subsequent processing.

@@ -16,32 +16,13 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.services.eventbus;
+package org.apache.isis.core.config.beans.aoppatch;
 
-/**
- * A service implementing an Event Bus, allowing domain objects to emit
- * arbitrary events on an in-memory event bus.
- *
- * <p>
- * Events are delivered synchronously to event subscribers (domain services).
- * </p>
- *
- * @since 2.0 {@index}
- */
-public interface EventBusService {
+import org.springframework.transaction.interceptor.TransactionInterceptor;
 
-    /**
-     * Post an event (of any class) to the in-memory event bus.
-     *
-     * <p>
-     *     The event will be delivered synchronously (within the same
-     *     transactional boundary) to all subscribers of that event type
-     *     (with subscribers as domain services with public method annotated
-     *     using Spring's
-     *     {@link org.springframework.context.event.EventListener} annotation.
-     * </p>
-     */
-    void post(Object event);
+@FunctionalInterface
+public interface TransactionInterceptorFactory {
 
+    TransactionInterceptor createTransactionInterceptor();
+    
 }
-

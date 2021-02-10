@@ -77,6 +77,7 @@ implements
     private final Can<PlatformTransactionManager> platformTransactionManagers;
     private final InteractionTracker interactionTracker;
     private final Can<PersistenceExceptionTranslator> persistenceExceptionTranslators;
+    
 
     @Inject
     public TransactionServiceSpring(
@@ -121,7 +122,7 @@ implements
                     // (so we don't shadow the original failure) 
                     ? result
                             
-                    // return the failure we just catched                            
+                    // return the failure we just catched
                     : Result.failure(translateExceptionIfPossible(ex, txManager));
             
         }  
@@ -154,7 +155,7 @@ implements
             
             // begin a new transaction
             txManager.getTransaction(txTemplate);
-            
+
         } catch (Throwable ex) {
             
             val translatedEx = translateExceptionIfPossible(ex, txManager);
@@ -273,32 +274,29 @@ implements
                 .getValue();
         
     }
-    
+
     private Throwable translateExceptionIfPossible(Throwable ex, PlatformTransactionManager txManager) {
         
-        val translatedEx = 
-        _Exceptions.streamCausalChain(ex)
+        if(ex instanceof DataAccessException) {
+            return ex; // nothing to do, already translated 
+        }
         
-        .filter(e->e instanceof RuntimeException)
-        .map(RuntimeException.class::cast)
-        
-        // call Spring's exception translation mechanism
-        .<Throwable>map(nextEx->
+        if(ex instanceof RuntimeException) {
             
-            persistenceExceptionTranslators.stream()
-            .map(translator->translator.translateExceptionIfPossible(nextEx))
+            val translatedEx = persistenceExceptionTranslators.stream()
+            //.peek(translator->System.out.printf("%s", translator.getClass().getName()))
+            .map(translator->translator.translateExceptionIfPossible((RuntimeException)ex))
             .filter(_NullSafe::isPresent)
             .findFirst()
-            .orElse(null)
-                
-        )
-        .filter(_NullSafe::isPresent)
-        .filter(nextEx -> nextEx instanceof DataAccessException)
-        .findFirst()
-        .orElse(ex);
+            .orElse(null);
+            
+            if(translatedEx!=null) {
+                return translatedEx;    
+            }
+            
+        }
         
-        return translatedEx;
+        return ex;
     }
-
 
 }

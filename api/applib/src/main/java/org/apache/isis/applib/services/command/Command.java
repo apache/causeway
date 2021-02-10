@@ -26,6 +26,7 @@ import org.apache.isis.applib.jaxb.JavaSqlXMLGregorianCalendarMarshalling;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.commanddto.HasCommandDto;
 import org.apache.isis.applib.services.iactn.Interaction;
+import org.apache.isis.applib.services.publishing.spi.CommandSubscriber;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.wrapper.control.AsyncControl;
 import org.apache.isis.commons.functional.Result;
@@ -70,7 +71,7 @@ import lombok.extern.log4j.Log4j2;
  *     is created, and the originating {@link Command} is set to be its
  *     {@link Command#getParent() parent}.
  * </p>
- * 
+ *
  * @since 1.x {@index}
  */
 @RequiredArgsConstructor
@@ -88,7 +89,7 @@ public class Command implements HasUniqueId, HasUsername, HasCommandDto {
     @Getter
         (onMethod_ = {@Override})
     private final UUID uniqueId;
-    
+
     /**
      * The user that created the command.
      *
@@ -244,7 +245,7 @@ public class Command implements HasUniqueId, HasUsername, HasCommandDto {
 
 
     /**
-     * Whether this command has been enabled for dispatching, 
+     * Whether this command has been enabled for dispatching,
      * that is {@link CommandSubscriber}s will be notified when this Command completes.
      */
     @Getter
@@ -263,17 +264,17 @@ public class Command implements HasUniqueId, HasUsername, HasCommandDto {
          */
         public void setCommandDto(final CommandDto commandDto) {
             Command.this.commandDto = commandDto;
-            
+
             // even though redundant, but must ensure commandUniqueId == dtoUniqueId
-            val commandUniqueId = Command.this.getUniqueId().toString(); 
+            val commandUniqueId = Command.this.getUniqueId().toString();
             val dtoUniqueId = commandDto.getTransactionId();
-            
+
             if(!commandUniqueId.equals(dtoUniqueId)) {
                 log.warn("setting CommandDto on a Command has side-effects when "
-                        + "both their UniqueIds don't match"); 
-                commandDto.setTransactionId(commandUniqueId);    
+                        + "both their UniqueIds don't match");
+                commandDto.setTransactionId(commandUniqueId);
             }
-            
+
         }
         /**
          * <b>NOT API</b>: intended to be called only by the framework.

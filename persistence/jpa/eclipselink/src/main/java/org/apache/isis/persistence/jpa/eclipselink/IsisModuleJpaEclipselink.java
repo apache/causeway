@@ -18,6 +18,7 @@
  */
 package org.apache.isis.persistence.jpa.eclipselink;
 
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -29,9 +30,12 @@ import org.eclipse.persistence.config.PersistenceUnitProperties;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration;
 import org.springframework.boot.autoconfigure.orm.jpa.JpaProperties;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.support.SQLErrorCodeSQLExceptionTranslator;
+import org.springframework.jdbc.support.SQLExceptionTranslator;
+import org.springframework.jdbc.support.SQLStateSQLExceptionTranslator;
 import org.springframework.orm.jpa.vendor.AbstractJpaVendorAdapter;
 import org.springframework.orm.jpa.vendor.EclipseLinkJpaDialect;
 import org.springframework.orm.jpa.vendor.EclipseLinkJpaVendorAdapter;
@@ -65,12 +69,6 @@ public class IsisModuleJpaEclipselink extends JpaBaseConfiguration {
 
     @Inject private Provider<ServiceInjector> serviceInjectorProvider;
 
-    @Bean
-    public EclipseLinkJpaDialect eclipselinkJpaDialect() {
-        //XXX already provided by EclipseLinkJpaVendorAdapter, might be redundant
-        return new EclipseLinkJpaDialect();
-    }
-
     protected IsisModuleJpaEclipselink(
             IsisConfiguration isisConfiguration,
             DataSource dataSource,
@@ -85,7 +83,15 @@ public class IsisModuleJpaEclipselink extends JpaBaseConfiguration {
 
     @Override
     protected AbstractJpaVendorAdapter createJpaVendorAdapter() {
-        return new EclipseLinkJpaVendorAdapter(); 
+        return new EclipseLinkJpaVendorAdapter() {
+            
+            private final EclipseLinkJpaDialect jpaDialect = eclipselinkJpaDialect();
+            
+            @Override
+            public EclipseLinkJpaDialect getJpaDialect() {
+                return jpaDialect;
+            }
+        };
     }
 
     @Override
@@ -144,6 +150,83 @@ public class IsisModuleJpaEclipselink extends JpaBaseConfiguration {
         }
 
         return properties;
+    }
+    
+    // -- 
+    
+    @SuppressWarnings("serial")
+    private EclipseLinkJpaDialect eclipselinkJpaDialect() {
+        
+        val jdbcExceptionTranslator = newJdbcExceptionTranslator(getDataSource());    
+        
+        return new EclipseLinkJpaDialect() {
+            
+            @Override
+            public DataAccessException translateExceptionIfPossible(RuntimeException ex) {
+                
+                if(ex instanceof DataAccessException) {
+                    return (DataAccessException)ex; // has already been translated to Spring's hierarchy
+                }
+
+                // if its eg. a DatabaseException, it might wrap a java.sql.SQLException
+                if(getJdbcExceptionTranslator() != null 
+                        && ex.getCause() instanceof SQLException) {
+                
+                    val translatedEx = getJdbcExceptionTranslator()
+                            .translate(
+                                    "JPA operation: " + ex.getMessage(),
+                                    extractSqlStringFromException(ex), 
+                                    (SQLException) ex.getCause());
+                    
+                    if(translatedEx!=null) {
+                        return translatedEx;
+                    }
+                    
+                }
+                
+                //converts javax.persistence exceptions to Spring's hierarchy
+                return super.translateExceptionIfPossible(ex);
+            }
+            
+            // -- HELPER 
+            
+            /*
+             * Template method for extracting a SQL String from the given exception.
+             * <p>Default implementation always returns {@code null}. Can be overridden in
+             * subclasses to extract SQL Strings for vendor-specific exception classes.
+             * @param ex the JDOException, containing a SQLException
+             * @return the SQL String, or {@code null} if none found
+             */
+            private String extractSqlStringFromException(Throwable ex) {
+                return null;
+            }
+
+            private SQLExceptionTranslator getJdbcExceptionTranslator() {
+                return jdbcExceptionTranslator;
+            }
+
+            
+        };
+    }
+    
+    /**
+     * Create an appropriate SQLExceptionTranslator for the given PersistenceManagerFactory.
+     * <p>If a DataSource is found, creates a SQLErrorCodeSQLExceptionTranslator for the
+     * DataSource; else, falls back to a SQLStateSQLExceptionTranslator.
+     * @param connectionFactory the connection factory of the EntityManagerFactory
+     * (may be {@code null})
+     * @return the SQLExceptionTranslator (never {@code null})
+     * @see org.springframework.jdbc.support.SQLErrorCodeSQLExceptionTranslator
+     * @see org.springframework.jdbc.support.SQLStateSQLExceptionTranslator
+     */
+    private static SQLExceptionTranslator newJdbcExceptionTranslator(Object connectionFactory) {
+        // Check for PersistenceManagerFactory's DataSource.
+        if (connectionFactory instanceof DataSource) {
+            return new SQLErrorCodeSQLExceptionTranslator((DataSource) connectionFactory);
+        }
+        else {
+            return new SQLStateSQLExceptionTranslator();
+        }
     }
 
 }

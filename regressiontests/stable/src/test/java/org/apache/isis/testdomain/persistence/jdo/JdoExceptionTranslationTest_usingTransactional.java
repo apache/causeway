@@ -22,34 +22,33 @@ import java.sql.SQLException;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
-import javax.jdo.JDOException;
 
-import org.datanucleus.api.jdo.NucleusJDOHelper;
-import org.datanucleus.exceptions.NucleusException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.dao.DataAccessException;
-import org.springframework.stereotype.Component;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.TestPropertySources;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.commons.functional.Result;
+import org.apache.isis.commons.functional.ThrowingRunnable;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.core.interaction.session.InteractionFactory;
-import org.apache.isis.persistence.jdo.spring.integration.DefaultJdoDialect;
+import org.apache.isis.persistence.jdo.spring.integration.JdoTransactionManager;
 import org.apache.isis.testdomain.conf.Configuration_usingJdo;
+import org.apache.isis.testdomain.jdo.JdoInventoryDao;
 import org.apache.isis.testdomain.jdo.entities.JdoInventory;
 
 import lombok.val;
@@ -57,12 +56,12 @@ import lombok.val;
 @SpringBootTest(
         classes = { 
                 Configuration_usingJdo.class,
-                JdoExceptionTranslationTest_usingTransactional.UniqueConstraintViolator.class,
+                JdoInventoryDao.class,
         })
 @TestPropertySources({
     @TestPropertySource(IsisPresets.UseLog4j2Test)    
 })
-@Transactional @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class JdoExceptionTranslationTest_usingTransactional
 {
 
@@ -70,8 +69,8 @@ class JdoExceptionTranslationTest_usingTransactional
     //@Inject private TransactionService transactionService;
     @Inject private RepositoryService repositoryService;
     @Inject private InteractionFactory interactionFactory;
-    @Inject private Provider<UniqueConstraintViolator> uniqueConstraintViolator;
-    //@Inject private JdoTransactionManager txManager;
+    @Inject private Provider<JdoInventoryDao> inventoryDao;
+    @Inject private JdoTransactionManager txManager;
 
     @BeforeAll
     static void beforeAll() throws SQLException {
@@ -79,7 +78,8 @@ class JdoExceptionTranslationTest_usingTransactional
         // Util_H2Console.main(null);
     }
     
-    @Test @Order(1) @Rollback(false)
+    @Test @Order(1) 
+    @Transactional @Rollback(false)
     void booksUniqueByIsbn_setupPhase() {
         interactionFactory.runAnonymous(()->{
             
@@ -88,58 +88,24 @@ class JdoExceptionTranslationTest_usingTransactional
         });
     }
 
-    @Component
-    public static class UniqueConstraintViolator {
-        
-        @Inject private RepositoryService repositoryService;    
-        
-        @Transactional(propagation = Propagation.REQUIRES_NEW)
-        public void addABook() {
-            val inventories = repositoryService.allInstances(JdoInventory.class);
-            assertEquals(1, inventories.size());
-            
-            val inventory = inventories.get(0);
-            assertNotNull(inventory);
-            
-            // add a conflicting book (unique ISBN violation)
-            _TestFixtures.addABookTo(inventory);
-        }
-        
-    }
-    
-    
-    @Test @Order(2) @Rollback(false)
+    @Test @Order(2) 
     void booksUniqueByIsbn_whenViolated_shouldThrowTranslatedException() {
 
         // when adding a book for which one with same ISBN already exists in the database,
-        // we expect to see a Spring recognized DataAccessException been thrown 
+        // we expect to see a Spring recognized DataAccessException been thrown
+        
+        final ThrowingRunnable uniqueConstraintViolator = 
+                ()->inventoryDao.get().addBook_havingIsbnA_usingRepositoryService();
                 
-        assertThrows(DataAccessException.class, ()->{
+        assertThrows(DataIntegrityViolationException.class, ()->{
         
             interactionFactory.runAnonymous(()->{
             
-                Result.ofVoid(()->uniqueConstraintViolator.get().addABook())
-                
-                //XXX seems like a bug in DN, why do we need to unwrap this?
-                .mapFailure(ex->ex instanceof IllegalArgumentException
-                        ? ((IllegalArgumentException)ex).getCause()
-                        : ex)
-                
-                //XXX this part of the translation is not done by Spring!? 
-                // (converts to JDOException)
-                .mapFailure(ex->ex instanceof NucleusException
-                        ? NucleusJDOHelper
-                                .getJDOExceptionForNucleusException(((NucleusException)ex))
-                        : ex)
-                
-                //XXX this part of the translation is not done by Spring!?
-                // (converts to DataAccessException)
-                .mapFailure(ex->ex instanceof JDOException
-                        ? new DefaultJdoDialect().translateException((JDOException)ex)
-                        : ex)
-                
-                .optionalElseFail()
-                .orElse(null);
+                Result.ofVoid(uniqueConstraintViolator)
+                .ifSuccess(__->fail("expected to fail, but did not"))
+                //.mapFailure(ex->_JdoExceptionTranslator.translate(ex, txManager))
+                .ifFailure(ex->assertTrue(ex instanceof DataIntegrityViolationException))
+                .optionalElseFail();
             
             });
         
@@ -147,7 +113,8 @@ class JdoExceptionTranslationTest_usingTransactional
         
     }    
     
-    @Test @Order(3) @Rollback(false)
+    @Test @Order(3) 
+    @Transactional @Rollback(false)
     void booksUniqueByIsbn_verifyPhase() {
 
         // expected post condition: ONE inventory with 3 books
@@ -170,7 +137,8 @@ class JdoExceptionTranslationTest_usingTransactional
         
     }
     
-    @Test @Order(4) @Rollback(false)
+    @Test @Order(4) 
+    @Transactional @Rollback(false)
     void booksUniqueByIsbn_cleanupPhase() {
 
         interactionFactory.runAnonymous(()->{

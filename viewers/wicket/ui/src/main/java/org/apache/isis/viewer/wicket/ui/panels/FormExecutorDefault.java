@@ -34,9 +34,8 @@ import org.apache.wicket.util.visit.IVisit;
 import org.apache.wicket.util.visit.IVisitor;
 
 import org.apache.isis.applib.services.command.Command;
-import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
-import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer.Category;
-import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer.Recognition;
+import org.apache.isis.applib.services.exceprecog.Category;
+import org.apache.isis.applib.services.exceprecog.Recognition;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerService;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.message.MessageService;
@@ -89,7 +88,7 @@ implements FormExecutor {
      * @param feedbackFormIfAny
      * @param withinPrompt
      *
-     * @return <tt>false</tt> - if invalid args; 
+     * @return <tt>false</tt> - if invalid args;
      * <tt>true</tt> if redirecting to new page, or repainting all components
      */
     @Override
@@ -156,8 +155,8 @@ implements FormExecutor {
                 redirectFacet = actionModel.getMetaModel().getFacet(RedirectFacet.class);
             }
 
-            if (shouldRedirect(targetAdapter, resultAdapter, redirectFacet) 
-                    || hasBlobsOrClobs(page)                                       
+            if (shouldRedirect(targetAdapter, resultAdapter, redirectFacet)
+                    || hasBlobsOrClobs(page)
                     || targetIfAny == null) {
 
                 redirectTo(resultAdapter, targetIfAny);
@@ -179,9 +178,9 @@ implements FormExecutor {
 
                 currentMessageBroker().ifPresent(messageBorker->{
                     final String jGrowlCalls = JGrowlUtil.asJGrowlCalls(messageBorker);
-                    targetIfAny.appendJavaScript(jGrowlCalls);    
+                    targetIfAny.appendJavaScript(jGrowlCalls);
                 });
-                
+
             }
 
             return true;
@@ -198,9 +197,9 @@ implements FormExecutor {
             // if we did recognize the message, and not inline prompt, then display to user as a growl pop-up
             if (messageWhenRecognized.isPresent() && !withinPrompt) {
                 // ... display as growl pop-up
-                
+
                 currentMessageBroker().ifPresent(messageBroker->{
-                    messageBroker.setApplicationError(messageWhenRecognized.get());    
+                    messageBroker.setApplicationError(messageWhenRecognized.get());
                 });
 
                 //TODO [2089] hotfix to render the error on the same page instead of redirecting;
@@ -214,9 +213,9 @@ implements FormExecutor {
 
                 //TODO (dead code) should happen at a more fundamental level
                 // should not be a responsibility of the viewer
-                
+
                 command.updater().setResult(Result.failure(ex));
-                
+
                 //XXX legacy of
                 //command.internal().setException(Throwables.getStackTraceAsString(ex));
             }
@@ -303,7 +302,7 @@ implements FormExecutor {
 //        // this will not preserve the URL (because pageParameters are not copied over)
 //        // but trying to preserve them seems to cause the 302 redirect to be swallowed somehow
 //        val entityPage = new EntityPage(model.getCommonContext() , targetAdapter);
-//        
+//
 //        // force any changes in state etc to happen now prior to the redirect;
 //        // in the case of an object being returned, this should cause our page mementos
 //        // (eg EntityModel) to hold the correct state.  I hope.
@@ -314,9 +313,9 @@ implements FormExecutor {
 //        requestCycle.setResponsePage(entityPage);
 //    }
 
-    
+
     private static boolean shouldRedraw(final Component component) {
-        
+
         // hmm... this doesn't work, because I think that the components
         // get removed after they've been added to target.
         // so.. still getting WARN log messages from XmlPartialPageUpdate
@@ -358,7 +357,7 @@ implements FormExecutor {
             component.visitParents(MarkupContainer.class, (parent, visit) -> {
                 componentsToRedraw.remove(parent); // no-op if not in that list
             });
-            
+
             if(component instanceof MarkupContainer) {
                 val containerNotToRedraw = (MarkupContainer) component;
                 containerNotToRedraw.visitChildren((child, visit) -> {
@@ -384,7 +383,7 @@ implements FormExecutor {
     }
 
     private void debug(
-            final String title, 
+            final String title,
             final Collection<Component> list) {
         log.debug(">>> {}:", title);
         for (Component component : list) {
@@ -397,10 +396,10 @@ implements FormExecutor {
     }
 
     private Optional<Recognition> recognizeException(
-            final Throwable ex, 
-            final AjaxRequestTarget target, 
+            final Throwable ex,
+            final AjaxRequestTarget target,
             final Form<?> feedbackForm) {
-        
+
         val recognition = getExceptionRecognizerService().recognize(ex);
         recognition.ifPresent(recog->raiseWarning(target, feedbackForm, recog));
         return recognition;
@@ -413,7 +412,7 @@ implements FormExecutor {
 
         if(targetIfAny != null && feedbackFormIfAny != null) {
             //[ISIS-2419] for a consistent user experience with action dialog validation messages,
-            //be less verbose (suppress the category) if its a Category.CONSTRAINT_VIOLATION. 
+            //be less verbose (suppress the category) if its a Category.CONSTRAINT_VIOLATION.
             val errorMsg = recognition.getCategory()==Category.CONSTRAINT_VIOLATION
                     ? recognition.toMessageNoCategory(getTranslationService())
                     : recognition.toMessage(getTranslationService());
@@ -425,7 +424,7 @@ implements FormExecutor {
         }
     }
 
-    // -- DEPENDENCIES 
+    // -- DEPENDENCIES
 
     private IsisAppCommonContext getCommonContext() {
         return model.getCommonContext();
@@ -434,15 +433,15 @@ implements FormExecutor {
     protected ExceptionRecognizerService getExceptionRecognizerService() {
         return getServiceRegistry().lookupServiceElseFail(ExceptionRecognizerService.class);
     }
-    
+
     protected TranslationService getTranslationService() {
         return getServiceRegistry().lookupServiceElseFail(TranslationService.class);
     }
-    
+
     protected MessageService getMessageService() {
         return getServiceRegistry().lookupServiceElseFail(MessageService.class);
     }
-    
+
     protected ServiceRegistry getServiceRegistry() {
         return getCommonContext().getServiceRegistry();
     }
@@ -470,9 +469,9 @@ implements FormExecutor {
     }
 
     private Optional<Recognition> getReasonInvalidIfAny() {
-        val reason = formExecutorStrategy.getReasonInvalidIfAny(); 
+        val reason = formExecutorStrategy.getReasonInvalidIfAny();
         val category = Category.CONSTRAINT_VIOLATION;
-        return ExceptionRecognizer.Recognition.of(category, reason);
+        return Recognition.of(category, reason);
     }
 
     private void onExecuteAndProcessResults(final AjaxRequestTarget target) {

@@ -29,26 +29,26 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.dao.DataAccessException;
-import org.springframework.dao.support.DataAccessUtils;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.orm.jpa.JpaTransactionManager;
-import org.springframework.stereotype.Component;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.TestPropertySources;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.commons.functional.Result;
-import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.commons.functional.ThrowingRunnable;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.core.interaction.session.InteractionFactory;
 import org.apache.isis.testdomain.conf.Configuration_usingJpa;
+import org.apache.isis.testdomain.jpa.JpaInventoryDao;
 import org.apache.isis.testdomain.jpa.entities.JpaInventory;
 
 import lombok.val;
@@ -56,12 +56,12 @@ import lombok.val;
 @SpringBootTest(
         classes = { 
                 Configuration_usingJpa.class,
-                JpaExceptionTranslationTest_usingTransactional.UniqueConstraintViolator.class
+                JpaInventoryDao.class
         })
 @TestPropertySources({
     @TestPropertySource(IsisPresets.UseLog4j2Test)    
 })
-@Transactional @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class JpaExceptionTranslationTest_usingTransactional
 {
 
@@ -69,7 +69,7 @@ class JpaExceptionTranslationTest_usingTransactional
     //@Inject private TransactionService transactionService;
     @Inject private RepositoryService repositoryService;
     @Inject private InteractionFactory interactionFactory;
-    @Inject private Provider<UniqueConstraintViolator> uniqueConstraintViolator;
+    @Inject private Provider<JpaInventoryDao> inventoryDao;
     @Inject private JpaTransactionManager txManager;
 
     @BeforeAll
@@ -78,7 +78,8 @@ class JpaExceptionTranslationTest_usingTransactional
         // Util_H2Console.main(null);
     }
     
-    @Test @Order(1) @Rollback(false)
+    @Test @Order(1) 
+    @Transactional @Rollback(false)
     void booksUniqueByIsbn_setupPhase() {
         interactionFactory.runAnonymous(()->{
             
@@ -87,49 +88,24 @@ class JpaExceptionTranslationTest_usingTransactional
         });
     }
     
-    @Component
-    public static class UniqueConstraintViolator {
-        
-        @Inject private RepositoryService repositoryService;    
-        
-        @Transactional(propagation = Propagation.REQUIRES_NEW)
-        public void addABook() {
-            val inventories = repositoryService.allInstances(JpaInventory.class);
-            assertEquals(1, inventories.size());
-            
-            val inventory = inventories.get(0);
-            assertNotNull(inventory);
-            
-            // add a conflicting book (unique ISBN violation)
-            _TestFixtures.addABookTo(inventory);
-        }
-        
-    }
-
-    @Test @Order(2) @Rollback(false)
+    @Test @Order(2)
     void booksUniqueByIsbn_whenViolated_shouldThrowTranslatedException() {
 
         // when adding a book for which one with same ISBN already exists in the database,
         // we expect to see a Spring recognized DataAccessException been thrown 
+        
+        final ThrowingRunnable uniqueConstraintViolator = 
+                ()->inventoryDao.get().addBook_havingIsbnA_usingRepositoryService();
                 
-        assertThrows(DataAccessException.class, ()->{
+        assertThrows(DataIntegrityViolationException.class, ()->{
         
             interactionFactory.runAnonymous(()->{
                 
-                Result.ofVoid(()->uniqueConstraintViolator.get().addABook())
-                
-                //XXX this part of the translation is not done by Spring!?
-                .mapFailure(ex-> _Exceptions.streamCausalChain(ex)
-                        .filter(e->e instanceof RuntimeException)
-                        .map(RuntimeException.class::cast)
-                        // call Spring's exception translation mechanism
-                        .map(nextEx->DataAccessUtils.translateIfNecessary(nextEx, txManager.getJpaDialect()))
-                        .filter(nextEx -> nextEx instanceof DataAccessException)
-                        .findFirst()
-                        .orElseGet(()->new RuntimeException(ex)))
-                
-                .optionalElseFail()
-                .orElse(null);
+                Result.ofVoid(uniqueConstraintViolator)
+                .ifSuccess(__->fail("expected to fail, but did not"))
+               // .mapFailure(ex->_JpaExceptionTranslator.translate(ex, txManager)) 
+                .ifFailure(ex->assertTrue(ex instanceof DataIntegrityViolationException))
+                .optionalElseFail();
             
             });
         
@@ -137,7 +113,8 @@ class JpaExceptionTranslationTest_usingTransactional
         
     }    
     
-    @Test @Order(3) @Rollback(false)
+    @Test @Order(3)
+    @Transactional @Rollback(false)
     void booksUniqueByIsbn_verifyPhase() {
 
         // expected post condition: ONE inventory with 3 books
@@ -160,7 +137,8 @@ class JpaExceptionTranslationTest_usingTransactional
         
     }
     
-    @Test @Order(4) @Rollback(false)
+    @Test @Order(4)
+    @Transactional @Rollback(false)
     void booksUniqueByIsbn_cleanupPhase() {
 
         interactionFactory.runAnonymous(()->{

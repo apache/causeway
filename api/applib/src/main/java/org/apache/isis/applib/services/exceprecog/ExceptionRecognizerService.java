@@ -20,10 +20,12 @@ package org.apache.isis.applib.services.exceprecog;
 
 import java.util.Optional;
 
-import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer.Recognition;
 import org.apache.isis.commons.collections.Can;
 
 /**
+ * Used by the framework to iterate over all registered
+ * {@link ExceptionRecognizer}s in the correct order.
+ *
  * @since 1.x {@index}
  */
 public interface ExceptionRecognizerService {

@@ -21,22 +21,38 @@ package org.apache.isis.applib.services.grid;
 import org.apache.isis.applib.layout.grid.Grid;
 
 /**
+ * Provides the ability to load the XML layout (grid) for a domain class.
+ *
  * @since 1.x {@index}
  */
 public interface GridLoaderService {
 
     /**
      * Whether dynamic reloading of layouts is enabled.
+     *
+     * <p>
+     *     The default implementation enables reloading for prototyping mode,
+     *     disables in production
+     * </p>
      */
     boolean supportsReloading();
 
     /**
      * To support metamodel invalidation/rebuilding of spec.
+     *
+     * <p>
+     *     This is called by the {@link org.apache.isis.applib.mixins.layout.Object_rebuildMetamodel} mixin action.
+     * </p>
      */
     void remove(Class<?> domainClass);
 
     /**
      * Whether any persisted layout metadata (eg a <code>.layout.xml</code> file) exists for this domain class.
+     *
+     * <p>
+     *     If none exists, will return null (and the calling {@link GridService}  will use {@link GridSystemService}
+     *     to obtain a default grid for the domain class).
+     * </p>
      */
     boolean existsFor(Class<?> domainClass);
 
@@ -49,8 +65,15 @@ public interface GridLoaderService {
     }
 
     /**
-     * Returns a new instance of a {@link Grid} for the specified domain class, eg from a
-     * <code>layout.xml</code> file, else <code>null</code>.
+     * Loads a specic alternative {@link Grid} layout for the specified domain
+     * class.
+     *
+     * <p>
+     *     The layout alternative will typically be specified through a
+     *     `layout()` method on the domain object, the value of which is used
+     *     for the suffix of the layout file (eg "Customer-layout.archived.xml"
+     *     to use a different layout for customers that have been archived).
+     * </p>
      */
     Grid load(
             final Class<?> domainClass,

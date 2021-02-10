@@ -19,9 +19,9 @@ For more on this topic, see xref:refguide:applib-ant:Action.adoc#domainEvent[`@A
 It is also possible for domain objects to programmatically generate domain events.
 However the events are published, the primary use case is to decoupling interactions from one module/package/namespace and another.
 
-== Annotating Members
+== Default Event Classes
 
-As discussed in the introduction, the framework will automatically emit domain events for all of the object members (actions, properties or collections) of an object whenever that object is rendered or (more generally) interacted with.
+The framework will automatically emit domain events for all of the object members (actions, properties or collections) of an object whenever that object is rendered or (more generally) interacted with.
 
 For example:
 
@@ -53,6 +53,8 @@ public class MySubscribingDomainService {
 }
 ----
 
+== Custom Event Classes
+
 More commonly though you will probably want to emit domain events of a specific subtype.
 As a slightly more interesting example, suppose in a library domain that a `LibraryMember` wants to leave the library.
 A letter should be sent out detailing any books that they still have out on loan:
@@ -82,7 +84,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class BookRepository {
 
-    @EventListener(LbraryMemberLeaveEvent.class)
+    @EventListener(LibraryMemberLeaveEvent.class)
     public void onLibraryMemberLeaving(LibraryMemberLeaveEvent e) {
         LibraryMember lm = e.getLibraryMember();
         List<Book> lentBooks = findBooksOnLoanFor(lm);
@@ -190,7 +192,7 @@ This then allows for other classes - in particular domain services contributing 
 
 == Programmatic posting
 
-To programmatically post an event, simply call `#post()`.
+To programmatically post an event, simply call xref:system:generated:index/applib/services/eventbus/EventBusService.adoc#post[EventBusService#post].
 
 The `LibraryMember` example described above could for example be rewritten into:
 
@@ -209,10 +211,14 @@ public class LibraryMember {
 
 In practice we suspect there will be few cases where the programmatic approach is required rather than the declarative approach afforded by xref:refguide:applib-ant:Action.adoc#domainEvent[`@Action#domainEvent()`] et al.
 
+
 == Using `WrapperFactory`
 
-An alternative way to cause events to be posted is through the xref:refguide:applib-svc:WrapperFactory.adoc[`WrapperFactory`].
-This is useful when you wish to enforce a (lack-of-) trust boundary between the caller and the callee.
+Using the declarative approach does require that the method to emit the event is an action called directly by the framework (rather than a helper method programmatically called by that action).
+However by using the xref:refguide:applib-svc:WrapperFactory.adoc[`WrapperFactory`] we can invoke that helper method "through" the framework, thereby allowing the framework to emit events.
+(It can also optionally perform validation checks and other concerns associated with the UI).
+
+Another use case for the `WrapperFactory` is when you wish to enforce a (lack-of-) trust boundary between the caller and the callee.
 
 For example, suppose that `Customer#placeOrder(...)` emits a `PlaceOrderEvent`, which is subscribed to by a `ReserveStockSubscriber`.
 This subscriber in turn calls `StockManagementService#reserveStock(...)`.

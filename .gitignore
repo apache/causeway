@@ -42,6 +42,7 @@ logs/
 .factorypath
 tmp/
 .temp-*
+*.stackdump
 
 JArchitectOut/
 *.jdproj

@@ -33,7 +33,7 @@ import org.apache.isis.testdomain.jpa.entities.JpaProduct;
 
 import lombok.val;
 
-class _TestFixtures {
+final class _TestFixtures {
 
     static void cleanUp(RepositoryService repository) {
         repository.allInstances(JpaInventory.class).forEach(repository::remove);
