@@ -37,6 +37,14 @@ import lombok.NonNull;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
+/**
+ * This component listens for Spring's {@link ApplicationContext} to become available,
+ * then allows for replacement of the built-in {@link TransactionInterceptor} via the 
+ * {@link TransactionInterceptorFactory}. If no such factory is registered with the 
+ * context, the default behavior is maintained.
+ * 
+ * @since 2.0
+ */
 @Configuration(proxyBeanMethods = false)
 @Role(BeanDefinition.ROLE_INFRASTRUCTURE)
 @Named("isis.config.AopPatch")
@@ -46,10 +54,16 @@ public class AopPatch implements ApplicationContextAware {
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         
+        if(!applicationContext.containsBean(TransactionManagementConfigUtils.TRANSACTION_ADVISOR_BEAN_NAME)) {
+            return;
+        }
+        
         val advisor = (BeanFactoryTransactionAttributeSourceAdvisor) 
                 applicationContext.getBean(TransactionManagementConfigUtils.TRANSACTION_ADVISOR_BEAN_NAME);
         
-        val attrSource = applicationContext.getBean(TransactionAttributeSource.class);
+        val attrSource = applicationContext
+                .getBeanProvider(TransactionAttributeSource.class, false)
+                .getIfAvailable();
         
         val transactionInterceptorFactory = applicationContext
                 .getBeanProvider(TransactionInterceptorFactory.class, false)
