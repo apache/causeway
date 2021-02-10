@@ -30,6 +30,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.context.event.EventListener;
 import org.springframework.core.annotation.Order;
+import org.springframework.dao.DataAccessException;
 import org.springframework.dao.support.PersistenceExceptionTranslator;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -44,6 +45,7 @@ import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.applib.services.xactn.TransactionState;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.functional.Result;
+import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.interaction.scope.InteractionScopeAware;
 import org.apache.isis.core.interaction.session.InteractionSession;
@@ -100,11 +102,8 @@ implements
         
         val tx = txManager.getTransaction(def);
 
-        val result = Result.of(callable);
-
-      //TODO[2502] remove when no longer needed        
-//        val result = Result.of(callable)
-//                .mapFailure(ex->translateExceptionIfPossible(ex, txManager));
+        val result = Result.of(callable)
+                .mapFailure(ex->translateExceptionIfPossible(ex, txManager));
         
         try {
         
@@ -123,10 +122,7 @@ implements
                     ? result
                             
                     // return the failure we just catched
-                    : Result.failure(ex);
-            
-                          //TODO[2502] remove when no longer needed                            
-//                    : Result.failure(translateExceptionIfPossible(ex, txManager));
+                    : Result.failure(translateExceptionIfPossible(ex, txManager));
             
         }  
 
@@ -138,7 +134,7 @@ implements
         
         val txManager = singletonTransactionManagerElseFail(); 
 
-//        try {
+        try {
         
             val txTemplate = new TransactionTemplate(txManager);
             txTemplate.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
@@ -159,18 +155,17 @@ implements
             // begin a new transaction
             txManager.getTransaction(txTemplate);
 
-          //TODO[2502] remove when no longer needed            
-//        } catch (Throwable ex) {
-//            
-//            val translatedEx = translateExceptionIfPossible(ex, txManager);
-//            
-//            if(translatedEx instanceof RuntimeException) {
-//                throw ex;
-//            }
-//            
-//            throw new RuntimeException(ex);
-//            
-//        }
+        } catch (Throwable ex) {
+            
+            val translatedEx = translateExceptionIfPossible(ex, txManager);
+            
+            if(translatedEx instanceof RuntimeException) {
+                throw ex;
+            }
+            
+            throw new RuntimeException(ex);
+            
+        }
             
     }
     
@@ -279,32 +274,32 @@ implements
         
     }
 
-//TODO[2502] remove when no longer needed    
-//    private Throwable translateExceptionIfPossible(Throwable ex, PlatformTransactionManager txManager) {
-//        
-//        val translatedEx = 
-//        _Exceptions.streamCausalChain(ex)
-//        
-//        .filter(e->e instanceof RuntimeException)
-//        .map(RuntimeException.class::cast)
-//        
-//        // call Spring's exception translation mechanism
-//        .<Throwable>map(nextEx->
-//            
-//            persistenceExceptionTranslators.stream()
-//            .map(translator->translator.translateExceptionIfPossible(nextEx))
-//            .filter(_NullSafe::isPresent)
-//            .findFirst()
-//            .orElse(null)
-//                
-//        )
-//        .filter(_NullSafe::isPresent)
-//        .filter(nextEx -> nextEx instanceof DataAccessException)
-//        .findFirst()
-//        .orElse(ex);
-//        
-//        return translatedEx;
-//    }
+    private Throwable translateExceptionIfPossible(Throwable ex, PlatformTransactionManager txManager) {
+        
+        val translatedEx = 
+        _Exceptions.streamCausalChain(ex)
+        
+        .filter(e->e instanceof RuntimeException)
+        .map(RuntimeException.class::cast)
+        
+        // call Spring's exception translation mechanism
+        .<Throwable>map(nextEx->
+            
+            persistenceExceptionTranslators.stream()
+            .peek(translator->System.out.printf("%s", translator.getClass().getName()))
+            .map(translator->translator.translateExceptionIfPossible(nextEx))
+            .filter(_NullSafe::isPresent)
+            .findFirst()
+            .orElse(null)
+                
+        )
+        .filter(_NullSafe::isPresent)
+        .filter(nextEx -> nextEx instanceof DataAccessException)
+        .findFirst()
+        .orElse(ex);
+        
+        return translatedEx;
+    }
 
 
 }

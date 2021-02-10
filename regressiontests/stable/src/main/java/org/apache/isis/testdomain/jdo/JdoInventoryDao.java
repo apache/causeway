@@ -39,7 +39,7 @@ public class JdoInventoryDao {
     @Inject private RepositoryService repositoryService;    
     
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public void addBookHavingIsbnA() {
+    public void addBook_havingIsbnA_usingRepositoryService() {
         val inventories = repositoryService.allInstances(JdoInventory.class);
         assertEquals(1, inventories.size());
         

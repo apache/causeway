@@ -166,11 +166,11 @@ public class IsisModuleJpaEclipselink extends JpaBaseConfiguration {
                 }
 
                 //FIXME somehow use Spring's SQLExceptionTranslator instead
-                if(ex instanceof DatabaseException
-                        && ex.getCause() instanceof SQLIntegrityConstraintViolationException) {
-                    
-                    return new DataIntegrityViolationException(ex.getCause().getMessage(), ex.getCause());
-                }
+//                if(ex instanceof DatabaseException
+//                        && ex.getCause() instanceof SQLIntegrityConstraintViolationException) {
+//                    
+//                    return new DataIntegrityViolationException(ex.getCause().getMessage(), ex.getCause());
+//                }
                 
                 return super.translateExceptionIfPossible(ex);
                 

@@ -44,6 +44,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.commons.functional.Result;
+import org.apache.isis.commons.functional.ThrowingRunnable;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.core.interaction.session.InteractionFactory;
 import org.apache.isis.testdomain.conf.Configuration_usingJpa;
@@ -60,7 +61,7 @@ import lombok.val;
 @TestPropertySources({
     @TestPropertySource(IsisPresets.UseLog4j2Test)    
 })
-@Transactional @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class JpaExceptionTranslationTest_usingTransactional
 {
 
@@ -68,7 +69,7 @@ class JpaExceptionTranslationTest_usingTransactional
     //@Inject private TransactionService transactionService;
     @Inject private RepositoryService repositoryService;
     @Inject private InteractionFactory interactionFactory;
-    @Inject private Provider<JpaInventoryDao> uniqueConstraintViolator;
+    @Inject private Provider<JpaInventoryDao> inventoryDao;
     @Inject private JpaTransactionManager txManager;
 
     @BeforeAll
@@ -77,7 +78,8 @@ class JpaExceptionTranslationTest_usingTransactional
         // Util_H2Console.main(null);
     }
     
-    @Test @Order(1) @Rollback(false)
+    @Test @Order(1) 
+    @Transactional @Rollback(false)
     void booksUniqueByIsbn_setupPhase() {
         interactionFactory.runAnonymous(()->{
             
@@ -86,19 +88,22 @@ class JpaExceptionTranslationTest_usingTransactional
         });
     }
     
-    @Test @Order(2) @Rollback(false)
+    @Test @Order(2)
     void booksUniqueByIsbn_whenViolated_shouldThrowTranslatedException() {
 
         // when adding a book for which one with same ISBN already exists in the database,
         // we expect to see a Spring recognized DataAccessException been thrown 
+        
+        final ThrowingRunnable uniqueConstraintViolator = 
+                ()->inventoryDao.get().addBook_havingIsbnA_usingRepositoryService();
                 
         assertThrows(DataIntegrityViolationException.class, ()->{
         
             interactionFactory.runAnonymous(()->{
                 
-                Result.ofVoid(()->uniqueConstraintViolator.get().addBookHavingIsbnA())
+                Result.ofVoid(uniqueConstraintViolator)
                 .ifSuccess(__->fail("expected to fail, but did not"))
-                .mapFailure(ex->_JpaExceptionTranslator.translate(ex, txManager)) 
+               // .mapFailure(ex->_JpaExceptionTranslator.translate(ex, txManager)) 
                 .ifFailure(ex->assertTrue(ex instanceof DataIntegrityViolationException))
                 .optionalElseFail();
             
@@ -108,7 +113,8 @@ class JpaExceptionTranslationTest_usingTransactional
         
     }    
     
-    @Test @Order(3) @Rollback(false)
+    @Test @Order(3)
+    @Transactional @Rollback(false)
     void booksUniqueByIsbn_verifyPhase() {
 
         // expected post condition: ONE inventory with 3 books
@@ -131,7 +137,8 @@ class JpaExceptionTranslationTest_usingTransactional
         
     }
     
-    @Test @Order(4) @Rollback(false)
+    @Test @Order(4)
+    @Transactional @Rollback(false)
     void booksUniqueByIsbn_cleanupPhase() {
 
         interactionFactory.runAnonymous(()->{
