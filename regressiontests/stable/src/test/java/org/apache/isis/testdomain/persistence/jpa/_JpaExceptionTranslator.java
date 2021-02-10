@@ -40,24 +40,6 @@ final class _JpaExceptionTranslator {
                 .filter(nextEx -> nextEx instanceof DataAccessException)
                 .findFirst()
                 .orElseGet(()->new RuntimeException(ex)))
-
-      //TODO[2502] do similar to JDO here, so we have a better understanding what's going on step by step        
-//        // asserts we have a NucleusException
-//        .ifFailure(ex->assertTrue(ex instanceof NucleusException))
-//        
-//        // converts to JDOException
-//        .mapFailure(ex->ex instanceof NucleusException
-//                ? NucleusJDOHelper
-//                        .getJDOExceptionForNucleusException(((NucleusException)ex))
-//                : ex)
-//        
-//        // asserts translation to JDO standard
-//        .ifFailure(ex->assertTrue(ex instanceof JDODataStoreException))
-//        
-//        // converts to Spring DataAccessException
-//        .mapFailure(ex->ex instanceof JDOException
-//                ? txManager.getJdoDialect().translateException((JDOException)ex)
-//                : ex)
         
         .getFailure()
         .orElseThrow();

@@ -18,7 +18,7 @@
  */
 package org.apache.isis.persistence.jpa.eclipselink;
 
-import java.sql.SQLIntegrityConstraintViolationException;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -27,14 +27,15 @@ import javax.inject.Provider;
 import javax.sql.DataSource;
 
 import org.eclipse.persistence.config.PersistenceUnitProperties;
-import org.eclipse.persistence.exceptions.DatabaseException;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration;
 import org.springframework.boot.autoconfigure.orm.jpa.JpaProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.dao.DataAccessException;
-import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.jdbc.support.SQLErrorCodeSQLExceptionTranslator;
+import org.springframework.jdbc.support.SQLExceptionTranslator;
+import org.springframework.jdbc.support.SQLStateSQLExceptionTranslator;
 import org.springframework.orm.jpa.vendor.AbstractJpaVendorAdapter;
 import org.springframework.orm.jpa.vendor.EclipseLinkJpaDialect;
 import org.springframework.orm.jpa.vendor.EclipseLinkJpaVendorAdapter;
@@ -153,62 +154,79 @@ public class IsisModuleJpaEclipselink extends JpaBaseConfiguration {
     
     // -- 
     
+    @SuppressWarnings("serial")
     private EclipseLinkJpaDialect eclipselinkJpaDialect() {
         
+        val jdbcExceptionTranslator = newJdbcExceptionTranslator(getDataSource());    
+        
         return new EclipseLinkJpaDialect() {
-            private static final long serialVersionUID = 1L;
-
+            
             @Override
             public DataAccessException translateExceptionIfPossible(RuntimeException ex) {
                 
                 if(ex instanceof DataAccessException) {
-                    return (DataAccessException)ex; // has already been translated to Spring's hierarchy before
+                    return (DataAccessException)ex; // has already been translated to Spring's hierarchy
                 }
 
-                //FIXME somehow use Spring's SQLExceptionTranslator instead
-//                if(ex instanceof DatabaseException
-//                        && ex.getCause() instanceof SQLIntegrityConstraintViolationException) {
-//                    
-//                    return new DataIntegrityViolationException(ex.getCause().getMessage(), ex.getCause());
-//                }
+                // if its eg. a DatabaseException, it might wrap a java.sql.SQLException
+                if(getJdbcExceptionTranslator() != null 
+                        && ex.getCause() instanceof SQLException) {
                 
+                    val translatedEx = getJdbcExceptionTranslator()
+                            .translate(
+                                    "JPA operation: " + ex.getMessage(),
+                                    extractSqlStringFromException(ex), 
+                                    (SQLException) ex.getCause());
+                    
+                    if(translatedEx!=null) {
+                        return translatedEx;
+                    }
+                    
+                }
+                
+                //converts javax.persistence exceptions to Spring's hierarchy
                 return super.translateExceptionIfPossible(ex);
-                
-//TODO remove once ISIS-2502 got sorted out        
-                // search the causal chain for the best (most specific) translation
-                
-//                val translatedExceptionsBestFirst = _Exceptions.getCausalChain(ex)
-//                .stream()
-//                .filter(nextEx -> nextEx instanceof RuntimeException)
-//                .map(RuntimeException.class::cast)
-//                .map(super::translateExceptionIfPossible)
-//                .filter(_NullSafe::isPresent)
-//                .peek(nextEx->System.err.printf("!!!!!!!!!!!!!!!!!!! %s", nextEx.getClass()))
-//                .collect(Collectors.toCollection(()->new TreeSet<DataAccessException>((a, b)->{
-//                    
-//                    // anything is better than the most generic JpaSystemException
-//                    
-//                    int aScore = (a instanceof JpaSystemException)
-//                            ? 0
-//                            : 1;
-//                    
-//                    int bScore = (b instanceof JpaSystemException)
-//                            ? 0
-//                            : 1;
-//                    
-//                    return Integer.compare(bScore, aScore);
-//                    
-//                    }))
-//                );
-//                
-//                return translatedExceptionsBestFirst.isEmpty()
-//                        ? null
-//                        : translatedExceptionsBestFirst.iterator().next();
-                
-            }  
-        }
-        ;
+            }
+            
+            // -- HELPER 
+            
+            /*
+             * Template method for extracting a SQL String from the given exception.
+             * <p>Default implementation always returns {@code null}. Can be overridden in
+             * subclasses to extract SQL Strings for vendor-specific exception classes.
+             * @param ex the JDOException, containing a SQLException
+             * @return the SQL String, or {@code null} if none found
+             */
+            private String extractSqlStringFromException(Throwable ex) {
+                return null;
+            }
+
+            private SQLExceptionTranslator getJdbcExceptionTranslator() {
+                return jdbcExceptionTranslator;
+            }
+
+            
+        };
     }
     
+    /**
+     * Create an appropriate SQLExceptionTranslator for the given PersistenceManagerFactory.
+     * <p>If a DataSource is found, creates a SQLErrorCodeSQLExceptionTranslator for the
+     * DataSource; else, falls back to a SQLStateSQLExceptionTranslator.
+     * @param connectionFactory the connection factory of the EntityManagerFactory
+     * (may be {@code null})
+     * @return the SQLExceptionTranslator (never {@code null})
+     * @see org.springframework.jdbc.support.SQLErrorCodeSQLExceptionTranslator
+     * @see org.springframework.jdbc.support.SQLStateSQLExceptionTranslator
+     */
+    private static SQLExceptionTranslator newJdbcExceptionTranslator(Object connectionFactory) {
+        // Check for PersistenceManagerFactory's DataSource.
+        if (connectionFactory instanceof DataSource) {
+            return new SQLErrorCodeSQLExceptionTranslator((DataSource) connectionFactory);
+        }
+        else {
+            return new SQLStateSQLExceptionTranslator();
+        }
+    }
 
 }
