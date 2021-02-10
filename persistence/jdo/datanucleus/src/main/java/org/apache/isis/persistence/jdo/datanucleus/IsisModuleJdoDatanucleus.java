@@ -19,10 +19,13 @@
 package org.apache.isis.persistence.jdo.datanucleus;
 
 import javax.inject.Provider;
+import javax.jdo.JDOException;
 import javax.jdo.PersistenceManagerFactory;
 import javax.sql.DataSource;
 
 import org.datanucleus.api.jdo.JDOPersistenceManagerFactory;
+import org.datanucleus.api.jdo.NucleusJDOHelper;
+import org.datanucleus.exceptions.NucleusException;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -30,10 +33,13 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Primary;
 import org.springframework.dao.support.PersistenceExceptionTranslator;
+import org.springframework.transaction.interceptor.TransactionInterceptor;
 
 import org.apache.isis.applib.services.eventbus.EventBusService;
+import org.apache.isis.commons.functional.Result;
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.core.config.IsisConfiguration;
+import org.apache.isis.core.config.beans.aoppatch.TransactionInterceptorFactory;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.transaction.changetracking.EntityChangeTracker;
 import org.apache.isis.persistence.jdo.datanucleus.changetracking.JdoLifecycleListener;
@@ -154,7 +160,46 @@ public class IsisModuleJdoDatanucleus {
         return txManager;
     }
 
+    /**
+     * AOP PATCH
+     * @implNote works only with patch package 'org.apache.isis.core.config.beans.aoppatch'
+     */
+    @Bean @Primary
+    @SuppressWarnings("serial")
+    public TransactionInterceptorFactory getTransactionInterceptorFactory() {
+        return ()->new TransactionInterceptor() {
+            @Override @SneakyThrows
+            protected void completeTransactionAfterThrowing(TransactionInfo txInfo, Throwable cause) {
+                super.completeTransactionAfterThrowing(txInfo, cause);
 
+                val txManager = txInfo.getTransactionManager();
+
+                Result.failure(cause)
+
+                //XXX seems like a bug in DN, why do we need to unwrap this?
+                .mapFailure(ex->ex instanceof IllegalArgumentException
+                        ? ((IllegalArgumentException)ex).getCause()
+                        : ex)
+
+                // converts to JDOException
+                .mapFailure(ex->ex instanceof NucleusException
+                        ? NucleusJDOHelper
+                                .getJDOExceptionForNucleusException(((NucleusException)ex))
+                        : ex)
+
+                // converts to Spring's DataAccessException
+                .mapFailure(ex->ex instanceof JDOException
+                        ? (txManager instanceof JdoTransactionManager)
+                                ? ((JdoTransactionManager)txManager).getJdoDialect().translateException((JDOException)ex)
+                                : ex
+                        : ex)
+
+                .optionalElseFail();
+
+            }
+        };
+    }
+    
     // -- HELPER
 
     /**
