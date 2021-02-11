@@ -84,7 +84,7 @@ public class AopPatch implements ApplicationContextAware {
     // -- HELPER
 
     private TransactionInterceptor patchedTransactionInterceptor(
-            final @NonNull  TransactionAttributeSource transactionAttributeSource,
+            final @Nullable TransactionAttributeSource transactionAttributeSource,
             final @Nullable TransactionInterceptorFactory transactionInterceptorFactory,
             final @NonNull  TransactionManager txManager) {
         

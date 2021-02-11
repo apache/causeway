@@ -34,7 +34,6 @@ import org.apache.isis.applib.query.AllInstancesQuery;
 import org.apache.isis.applib.query.NamedQuery;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.services.exceprecog.Category;
-import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerService;
 import org.apache.isis.applib.services.repository.EntityState;
 import org.apache.isis.applib.services.xactn.TransactionService;
