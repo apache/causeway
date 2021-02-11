@@ -156,7 +156,7 @@ implements
             // begin a new transaction
             txManager.getTransaction(txTemplate);
 
-        } catch (Throwable ex) {
+        } catch (RuntimeException ex) {
             
             val translatedEx = translateExceptionIfPossible(ex, txManager);
             
@@ -172,9 +172,27 @@ implements
     
     @Override
     public void flushTransaction() {
-        log.debug("about to flush tx");
-        currentTransactionStatus()
-            .ifPresent(TransactionStatus::flush);
+        
+        try {
+        
+            log.debug("about to flush tx");
+            
+            currentTransactionStatus()
+                .ifPresent(TransactionStatus::flush);
+
+        } catch (RuntimeException ex) {
+            
+            val txManager = singletonTransactionManagerElseFail();            
+
+            val translatedEx = translateExceptionIfPossible(ex, txManager);
+
+            if(translatedEx instanceof RuntimeException) {
+                throw ex;
+            }
+
+            throw new RuntimeException(ex);
+
+        }
     }
 
     
