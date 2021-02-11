@@ -36,12 +36,14 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.support.SQLErrorCodeSQLExceptionTranslator;
 import org.springframework.jdbc.support.SQLExceptionTranslator;
 import org.springframework.jdbc.support.SQLStateSQLExceptionTranslator;
+import org.springframework.orm.jpa.JpaSystemException;
 import org.springframework.orm.jpa.vendor.AbstractJpaVendorAdapter;
 import org.springframework.orm.jpa.vendor.EclipseLinkJpaDialect;
 import org.springframework.orm.jpa.vendor.EclipseLinkJpaVendorAdapter;
 import org.springframework.transaction.jta.JtaTransactionManager;
 
 import org.apache.isis.applib.services.inject.ServiceInjector;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.persistence.jpa.eclipselink.inject.BeanManagerForEntityListeners;
 import org.apache.isis.persistence.jpa.integration.IsisModuleJpaIntegration;
@@ -167,11 +169,12 @@ public class IsisModuleJpaEclipselink extends JpaBaseConfiguration {
                 if(ex instanceof DataAccessException) {
                     return (DataAccessException)ex; // has already been translated to Spring's hierarchy
                 }
-
+                
                 // if its eg. a DatabaseException, it might wrap a java.sql.SQLException
                 if(getJdbcExceptionTranslator() != null 
                         && ex.getCause() instanceof SQLException) {
                 
+                    //converts SQL exceptions to Spring's hierarchy
                     val translatedEx = getJdbcExceptionTranslator()
                             .translate(
                                     "JPA operation: " + ex.getMessage(),
@@ -184,8 +187,35 @@ public class IsisModuleJpaEclipselink extends JpaBaseConfiguration {
                     
                 }
                 
-                //converts javax.persistence exceptions to Spring's hierarchy
-                return super.translateExceptionIfPossible(ex);
+                // (null-able) converts javax.persistence exceptions to Spring's hierarchy
+                val translatedEx = super.translateExceptionIfPossible(ex);
+                
+                if((translatedEx==null
+                        // JpaSystemException is just a generic fallback, try to be smarter
+                        || JpaSystemException.class.equals(translatedEx.getClass()))
+                        && getJdbcExceptionTranslator() != null) {
+                    
+                    val translatedSqlEx = _Exceptions.streamCausalChain(ex)
+                    .filter(nextEx->nextEx instanceof SQLException)
+                    .map(SQLException.class::cast)
+                    //converts SQL exceptions to Spring's hierarchy
+                    .map(nextEx->getJdbcExceptionTranslator()
+                            .translate(
+                                    "JPA operation: " + nextEx.getMessage(),
+                                    extractSqlStringFromException(nextEx), 
+                                    nextEx))
+                    .findFirst()
+                    .orElse(null);
+                    
+                    if(translatedSqlEx!=null) {
+                        return translatedSqlEx;
+                    }
+                    
+                }
+                
+                // (null-able)
+                return translatedEx;
+                
             }
             
             // -- HELPER 
