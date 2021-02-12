@@ -30,6 +30,7 @@ import org.springframework.dao.TransientDataAccessResourceException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.isis.applib.services.exceprecog.Category;
 import org.apache.isis.core.config.IsisConfiguration;
@@ -73,7 +74,7 @@ class ExceptionRecognizerForDataAccessExceptionTest {
         val recognized = recognizerForDae.recognize(dae).orElse(null);
         assertNotNull(recognized);
         assertNotNull(recognized.getReason());
-        assertEquals("msg", recognized.getReason());
+        assertTrue(recognized.getReason().length()>10);
         assertEquals(category, recognized.getCategory());
     }
 
