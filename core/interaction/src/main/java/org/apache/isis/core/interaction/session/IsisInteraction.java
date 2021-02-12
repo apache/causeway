@@ -29,6 +29,7 @@ import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.metrics.MetricsService;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.execution.InternalInteraction;
 
 import lombok.Getter;
@@ -113,7 +114,7 @@ public class IsisInteraction implements InternalInteraction {
             // we rather print all of them, no matter whether recognized or not later on
             // examples are IllegalArgument- or NullPointer- exceptions being swallowed when using the
             // WrapperFactory utilizing async calls
-            log.error("failed to execute an interaction", ex);
+            log.error("failed to execute an interaction", _Exceptions.getRootCause(ex));
 
             // just because an exception has thrown, does not mean it is that significant;
             // it could be that it is recognized by an ExceptionRecognizer and is not severe
