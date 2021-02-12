@@ -18,37 +18,84 @@
  */
 package org.apache.isis.core.runtimeservices.recognizer.dae;
 
-import java.util.function.Function;
-import java.util.function.Predicate;
+import java.util.Optional;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.core.annotation.Order;
+import org.springframework.dao.ConcurrencyFailureException;
+import org.springframework.dao.DataAccessException;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.DataRetrievalFailureException;
+import org.springframework.dao.NonTransientDataAccessException;
+import org.springframework.dao.RecoverableDataAccessException;
+import org.springframework.dao.TransientDataAccessException;
+import org.springframework.stereotype.Service;
+
+import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.exceprecog.Category;
-import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerForType;
+import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
+import org.apache.isis.applib.services.exceprecog.Recognition;
 import org.apache.isis.core.config.IsisConfiguration;
 
+import lombok.Getter;
+
 /**
- * Common to those that can be disabled via IsisConfiguration.
+ * Translates {@link DataAccessException}(s) to {@link Recognition}(s),
+ * unless disabled via {@link IsisConfiguration}.
  */
-public abstract class ExceptionRecognizerForDataAccessException
-extends ExceptionRecognizerForType {
+@Service
+@Named("isis.runtime.ExceptionRecognizerForDataAccessException")
+@Order(OrderPrecedence.MIDPOINT)
+@Qualifier("Default")
+public class ExceptionRecognizerForDataAccessException
+implements ExceptionRecognizer {
 
-    protected ExceptionRecognizerForDataAccessException(
-            final IsisConfiguration isisConfiguration,
-            final Category category,
-            final Predicate<Throwable> predicate,
-            final Function<Throwable, String> rootCauseMessageFormatter) {
-        super(category, predicate, rootCauseMessageFormatter);
-
-        super.setDisabled(
-                isisConfiguration.getCore().getRuntimeServices()
-                .getExceptionRecognizer().getDae().isDisable());
+    @Getter
+    private final boolean disabled;
+    
+    @Inject
+    public ExceptionRecognizerForDataAccessException(IsisConfiguration conf) {
+        this.disabled = conf.getCore().getRuntimeServices()
+              .getExceptionRecognizer().getDae().isDisable();
+    }
+    
+    @Override
+    public Optional<Recognition> recognize(Throwable ex) {
+        if(ex instanceof DataAccessException
+                && !isDisabled()) {
+            return recognizeDae((DataAccessException)ex);
+        }
+        return Optional.empty();
     }
 
-    protected ExceptionRecognizerForDataAccessException(
-            final IsisConfiguration isisConfiguration,
-            final Category category,
-            final Class<? extends Exception> exceptionType,
-            final Function<Throwable, String> rootCauseMessageFormatter) {
-        this(isisConfiguration, category, ofType(exceptionType), rootCauseMessageFormatter);
+    // -- HELPER
+    
+    private Optional<Recognition> recognizeDae(DataAccessException ex) {
+        if(ex instanceof ConcurrencyFailureException) {
+            return Recognition.of(Category.CONCURRENCY, ex.getMessage()); 
+        }
+        if(ex instanceof TransientDataAccessException
+                || ex instanceof RecoverableDataAccessException) {
+            return Recognition.of(Category.RETRYABLE, ex.getMessage()); 
+        }
+        if(ex instanceof DataIntegrityViolationException) {
+            // eg. Data or related data already exists
+            return Recognition.of(Category.CONSTRAINT_VIOLATION, ex.getMessage()); 
+        }
+        if(ex instanceof DataRetrievalFailureException) {
+            // Unable to load object. eg. Has it been deleted by someone else?
+            return Recognition.of(Category.NOT_FOUND, ex.getMessage()); 
+        }
+        if(ex instanceof NonTransientDataAccessException) {
+            // eg. Unable to save changes. Does similar data already exist, 
+            // or has referenced data been deleted?"
+            return Recognition.of(Category.SERVER_ERROR, ex.getMessage()); 
+        }
+        return Recognition.of(Category.OTHER, ex.getMessage());
     }
+
 
 }

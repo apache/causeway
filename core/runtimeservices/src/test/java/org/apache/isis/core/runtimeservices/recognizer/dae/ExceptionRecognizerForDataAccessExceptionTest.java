@@ -20,32 +20,30 @@ package org.apache.isis.core.runtimeservices.recognizer.dae;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.dao.CannotAcquireLockException;
+import org.springframework.dao.DataAccessException;
+import org.springframework.dao.DuplicateKeyException;
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.dao.NonTransientDataAccessResourceException;
+import org.springframework.dao.RecoverableDataAccessException;
+import org.springframework.dao.TransientDataAccessResourceException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import org.apache.isis.applib.services.exceprecog.Category;
 import org.apache.isis.core.config.IsisConfiguration;
-import org.apache.isis.core.runtimeservices.recognizer.dae.impl.ExceptionRecognizerForDataAlreadyExists;
-import org.apache.isis.core.runtimeservices.recognizer.dae.impl.ExceptionRecognizerForObjectNotFound;
-import org.apache.isis.core.runtimeservices.recognizer.dae.impl.ExceptionRecognizerForRelatedDataExists;
-import org.apache.isis.core.runtimeservices.recognizer.dae.impl.ExceptionRecognizerForUnableToSaveData;
 
 import lombok.val;
 
 class ExceptionRecognizerForDataAccessExceptionTest {
 
-    private ExceptionRecognizerForDataAlreadyExists recognizerDataAlreadyExists;  
-    private ExceptionRecognizerForObjectNotFound recognizerObjectNotFound;
-    private ExceptionRecognizerForRelatedDataExists recognizerRelatedDataExists;
-    private ExceptionRecognizerForUnableToSaveData recognizerUnableToSaveData;
+    private ExceptionRecognizerForDataAccessException recognizerForDae;  
 
     @BeforeEach
     public void setUp() {
         val conf = new IsisConfiguration(null); 
-        recognizerDataAlreadyExists = new ExceptionRecognizerForDataAlreadyExists(conf);  
-        recognizerObjectNotFound = new ExceptionRecognizerForObjectNotFound(conf);
-        recognizerRelatedDataExists = new ExceptionRecognizerForRelatedDataExists(conf);
-        recognizerUnableToSaveData = new ExceptionRecognizerForUnableToSaveData(conf);
+        recognizerForDae = new ExceptionRecognizerForDataAccessException(conf);  
     }
 
     @Test
@@ -56,56 +54,27 @@ class ExceptionRecognizerForDataAccessExceptionTest {
     }
 
     @Test
-    void recognizerDataAlreadyExists() {
-
-        val msg = "JDO operation: "
-                + "Insert of object \"domainapp.modules.hello.dom.hwo.HelloWorldObject@6cad4834\" "
-                + "using statement \"INSERT INTO \"hello\".\"HelloWorldObject\" "
-                + "(\"name\",\"notes\",\"version\") VALUES (?,?,?)\" failed : "
-                + "Unique index or primary key violation: "
-                + "\"hello.HelloWorldObject_name_UNQ_INDEX_B ON hello.HelloWorldObject(name) "
-                + "VALUES 1\"; SQL statement: ...";
-
-        val ex = new org.springframework.dao.DataIntegrityViolationException(msg);
-
-        val recognized = recognizerDataAlreadyExists.recognize(ex).orElse(null);
+    void daeToCategoryMapping() {
+        // testing just a subset here ...
+        assertCategory(Category.SERVER_ERROR, new NonTransientDataAccessResourceException("msg"));
+        assertCategory(Category.RETRYABLE, new TransientDataAccessResourceException("msg"));
+        assertCategory(Category.RETRYABLE, new RecoverableDataAccessException("msg"));
+        assertCategory(Category.NOT_FOUND, new EmptyResultDataAccessException("msg", 99));
+        assertCategory(Category.CONSTRAINT_VIOLATION, new DuplicateKeyException("msg"));
+        assertCategory(Category.CONCURRENCY, new CannotAcquireLockException("msg"));
+    }
+    
+    // -- HELPER
+    
+    void assertCategory(
+            Category category,
+            DataAccessException dae) {
+        
+        val recognized = recognizerForDae.recognize(dae).orElse(null);
         assertNotNull(recognized);
         assertNotNull(recognized.getReason());
-        assertEquals("Data already exists: " + msg, recognized.getReason());
+        assertEquals("msg", recognized.getReason());
+        assertEquals(category, recognized.getCategory());
     }
-
-    //TODO @Test
-    void recognizerObjectNotFound() {
-
-    }
-
-    //TODO @Test
-    void recognizerRelatedDataExists() {
-
-    }
-
-    //TODO @Test
-    void recognizerUnableToSaveData() {
-
-    }
-
-
-
-    //    @Test
-    //    void uniqueConstraintOrIndexViolation() {
-    //        final String msg = "initial gumph: unique constraint or index violation; further details";
-    //        final SQLIntegrityConstraintViolationException ex = new SQLIntegrityConstraintViolationException(msg);
-    //        val recognized = exceptionRecognizer.recognize(ex).orElse(null);
-    //        assertThat(recognized, is(not(nullValue())));
-    //        assertThat(recognized.getReason(), is("Data already exists: " + msg));
-    //    }
-    //
-    //    @Test
-    //    void notNullCheckConstraintViolation() {
-    //        final String msg = "initial gumph: NOT NULL check constraint; further details";
-    //        final SQLIntegrityConstraintViolationException ex = new SQLIntegrityConstraintViolationException(msg);
-    //        val recognized = exceptionRecognizer.recognize(ex).orElse(null);
-    //        assertThat(recognized, is(nullValue()));
-    //    }
 
 }
