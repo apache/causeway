@@ -27,6 +27,12 @@ public enum Category {
     CONCURRENCY(
             "concurrent modification"),
     /**
+     * A previously failed operation might be able to succeed when the operation is retried.
+     * (eg. a query timeout or a temporary failure)
+     */
+    RETRYABLE(
+            "try again later"),
+    /**
      * Recognized, but for some other reason... 40x error
      */
     CLIENT_ERROR(
