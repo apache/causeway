@@ -32,7 +32,7 @@ import org.apache.isis.persistence.jdo.spring.integration.JdoTransactionManager;
 
 final class _JdoExceptionTranslator {
 
-    //TODO[2502] if only we found a way to have this code run at a lower level already 
+    // not used, but maybe keep for debugging purposes 
     static DataAccessException translate(Throwable failure, JdoTransactionManager txManager) {
         
         return (DataAccessException) Result.failure(failure)

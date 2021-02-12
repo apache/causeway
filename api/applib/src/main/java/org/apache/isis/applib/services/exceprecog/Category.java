@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 /**
  * Categorises each exception that has been recognised, as per
  * {@link Recognition#getCategory()}.
+ * 
+ * @since 1.x {@index}
  */
 @RequiredArgsConstructor
 public enum Category {
