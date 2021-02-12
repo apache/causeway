@@ -38,9 +38,11 @@ import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.exceprecog.Category;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
 import org.apache.isis.applib.services.exceprecog.Recognition;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.config.IsisConfiguration;
 
 import lombok.Getter;
+import lombok.val;
 
 /**
  * Translates {@link DataAccessException}(s) to {@link Recognition}(s),
@@ -75,26 +77,44 @@ implements ExceptionRecognizer {
     
     private Optional<Recognition> recognizeDae(DataAccessException ex) {
         if(ex instanceof ConcurrencyFailureException) {
-            return Recognition.of(Category.CONCURRENCY, ex.getMessage()); 
+            return recognitionOf(Category.CONCURRENCY, ex);
+             
         }
         if(ex instanceof TransientDataAccessException
                 || ex instanceof RecoverableDataAccessException) {
-            return Recognition.of(Category.RETRYABLE, ex.getMessage()); 
+            return recognitionOf(Category.RETRYABLE, ex); 
         }
         if(ex instanceof DataIntegrityViolationException) {
             // eg. Data or related data already exists
-            return Recognition.of(Category.CONSTRAINT_VIOLATION, ex.getMessage()); 
+            return recognitionOf(Category.CONSTRAINT_VIOLATION, ex); 
         }
         if(ex instanceof DataRetrievalFailureException) {
             // Unable to load object. eg. Has it been deleted by someone else?
-            return Recognition.of(Category.NOT_FOUND, ex.getMessage()); 
+            return recognitionOf(Category.NOT_FOUND, ex); 
         }
         if(ex instanceof NonTransientDataAccessException) {
             // eg. Unable to save changes. Does similar data already exist, 
             // or has referenced data been deleted?"
-            return Recognition.of(Category.SERVER_ERROR, ex.getMessage()); 
+            return recognitionOf(Category.SERVER_ERROR, ex); 
         }
-        return Recognition.of(Category.OTHER, ex.getMessage());
+        return recognitionOf(Category.OTHER, ex);
+    }
+
+    private Optional<Recognition> recognitionOf(Category category, DataAccessException ex) {
+        val causeMessage = _Strings.nullToEmpty(ex.getMostSpecificCause().getMessage()).trim();
+        
+        val exceptionFriendlyName = _Strings.asNaturalName2
+                .apply(ex.getClass().getSimpleName())
+                .toLowerCase();
+        
+        val friendlyMessage = String.format("%s (%s): %s", 
+                category.getFriendlyName(),
+                exceptionFriendlyName,
+                _Strings.isEmpty(causeMessage)
+                    ? "Cannot find any details for what is causing the issue."
+                    : causeMessage);
+        
+        return Recognition.of(category, friendlyMessage);
     }
 
 
