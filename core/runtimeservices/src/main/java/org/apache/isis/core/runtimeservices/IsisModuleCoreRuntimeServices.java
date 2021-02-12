@@ -51,11 +51,7 @@ import org.apache.isis.core.runtimeservices.publish.EntityPropertyChangePublishe
 import org.apache.isis.core.runtimeservices.publish.ExecutionPublisherDefault;
 import org.apache.isis.core.runtimeservices.queryresultscache.QueryResultsCacheDefault;
 import org.apache.isis.core.runtimeservices.recognizer.ExceptionRecognizerServiceDefault;
-import org.apache.isis.core.runtimeservices.recognizer.dae.impl.ExceptionRecognizerForDataAlreadyExists;
-import org.apache.isis.core.runtimeservices.recognizer.dae.impl.ExceptionRecognizerForObjectNotFound;
-import org.apache.isis.core.runtimeservices.recognizer.dae.impl.ExceptionRecognizerForOtherDataAccessProblem;
-import org.apache.isis.core.runtimeservices.recognizer.dae.impl.ExceptionRecognizerForRelatedDataExists;
-import org.apache.isis.core.runtimeservices.recognizer.dae.impl.ExceptionRecognizerForUnableToSaveData;
+import org.apache.isis.core.runtimeservices.recognizer.dae.ExceptionRecognizerForDataAccessException;
 import org.apache.isis.core.runtimeservices.repository.RepositoryServiceDefault;
 import org.apache.isis.core.runtimeservices.routing.RoutingServiceDefault;
 import org.apache.isis.core.runtimeservices.scratchpad.ScratchpadDefault;
@@ -121,11 +117,7 @@ import org.apache.isis.core.runtimeservices.xmlsnapshot.XmlSnapshotServiceDefaul
         TranslationServicePoMenu.class,
         
         // Exception Recognizers
-        ExceptionRecognizerForDataAlreadyExists.class,
-        ExceptionRecognizerForObjectNotFound.class,
-        ExceptionRecognizerForRelatedDataExists.class,
-        ExceptionRecognizerForUnableToSaveData.class,
-        ExceptionRecognizerForOtherDataAccessProblem.class,
+        ExceptionRecognizerForDataAccessException.class,
 
 })
 public class IsisModuleCoreRuntimeServices {

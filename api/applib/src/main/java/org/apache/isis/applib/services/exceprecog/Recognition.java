@@ -17,6 +17,8 @@ import lombok.val;
  * <p>
  * Returned by {@link ExceptionRecognizer#recognize(Throwable)} when the
  * exception recognizer has recognised the exception
+ * 
+ * @since 1.x {@index}
  */
 @Value
 public class Recognition {
@@ -81,7 +83,6 @@ public class Recognition {
      * {@link TranslationService}..
      *
      * @param translationService
-     * @return
      */
     public String toMessage(@Nullable TranslationService translationService) {
 
@@ -98,7 +99,6 @@ public class Recognition {
      * {@link TranslationService}..
      *
      * @param translationService
-     * @return
      */
     public String toMessageNoCategory(@Nullable TranslationService translationService) {
 

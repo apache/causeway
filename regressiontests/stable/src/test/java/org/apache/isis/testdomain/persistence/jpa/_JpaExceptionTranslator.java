@@ -27,7 +27,7 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
 
 final class _JpaExceptionTranslator {
 
-    //TODO[2502] if only we found a way to have this code run at a lower level already 
+    // not used, but maybe keep for debugging purposes 
     static DataAccessException translate(Throwable failure, JpaTransactionManager txManager) {
         
         return (DataAccessException) Result.failure(failure)
