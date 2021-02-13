@@ -1,6 +1,10 @@
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
-SPI that allows individual interactions (action invocations or property edits) to be _#onExecution(Interaction.Execution) published_ . Note that re-publishing is not part of this SPI.
+SPI that allows the execution of individual interactions (action invocations or property edits) to be subscribed to.
+
+The typical use case is to facilitate coarse-grained messaging for system-to-system interactions, that is from an Apache Isis application to some other system. This could be done using a pub/sub bus such asApache ActiveMQwithApache Camel.
+
+Only actions/properties annotated for publishing (using _Action#executionPublishing()_ or _Property#executionPublishing()_ are published.
 
 == API
 
@@ -8,14 +12,14 @@ SPI that allows individual interactions (action invocations or property edits) t
 .ExecutionSubscriber.java
 ----
 interface ExecutionSubscriber {
-  void onExecution(Interaction.Execution<?, ?> execution)     // <.>
+  void onExecution(Execution<?, ?> execution)     // <.>
 }
 ----
 
 <.> xref:#onExecution[onExecution]
 +
 --
-Publish each _org.apache.isis.applib.services.iactn.Interaction.Execution_ immediately after it completes.
+Callback to notify that an interaction (an action invocation or property edit, as represented by xref:system:generated:index/applib/services/iactn/Execution.adoc[Execution] ) has completed.
 --
 
 == Members
@@ -23,7 +27,9 @@ Publish each _org.apache.isis.applib.services.iactn.Interaction.Execution_ immed
 [#onExecution]
 === onExecution
 
-Publish each _org.apache.isis.applib.services.iactn.Interaction.Execution_ immediately after it completes.
+Callback to notify that an interaction (an action invocation or property edit, as represented by xref:system:generated:index/applib/services/iactn/Execution.adoc[Execution] ) has completed.
 
-Most implementations are expected to use _org.apache.isis.applib.services.iactn.Interaction.Execution#getDto()_ to create a serializable XML representation of the execution. The easiest way to do this is using _InteractionDtoUtils#newInteractionDto(Interaction.Execution)_ . There is some flexibility here, though.
+This callback method is called by the framework immediately after the interaction (not at the end of the transaction, unlike some of the other subscribers).
+
+Most implementations are expected to use _Execution#getDto()_ to create a serializable XML representation of the execution. The easiest way to do this is using _InteractionDtoUtils#newInteractionDto(Execution)_ .
 

@@ -1,5 +1,11 @@
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
+This SPI service allow runtime infrastructure such as Kubernetes or Docker Swarm to monitor the app and (potentially) restart it if required.
+
+This SPI service integrates with Spring Boot'sHealthIndicatorSPI, surfaced through theSpring Boot Actuator. It is therefore accessible from the `/actuator/health` endpoint (Spring allows the endpoint URL to be altered or suppressed).
+
+The service, when called, will be within the context of a special internal user ___health_ with the internal role ___health-role_ .
+
 == API
 
 [source,java]

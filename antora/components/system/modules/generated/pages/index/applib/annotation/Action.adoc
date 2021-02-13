@@ -50,7 +50,7 @@ Indicates that an invocation of the action should be posted to the _org.apache.i
 <.> xref:#executionPublishing[executionPublishing]
 +
 --
-Whether _Execution_ s (triggered by action invocations), should be published to xref:system:generated:index/applib/services/publishing/spi/ExecutionSubscriber.adoc[ExecutionSubscriber] s.
+Whether xref:system:generated:index/applib/services/iactn/Execution.adoc[Execution] s (triggered by action invocations), should be published to xref:system:generated:index/applib/services/publishing/spi/ExecutionSubscriber.adoc[ExecutionSubscriber] s.
 --
 <.> xref:#hidden[hidden]
 +
@@ -139,7 +139,7 @@ This subclass must provide a no-arg constructor; the fields are set reflectively
 [#executionPublishing]
 === executionPublishing
 
-Whether _Execution_ s (triggered by action invocations), should be published to xref:system:generated:index/applib/services/publishing/spi/ExecutionSubscriber.adoc[ExecutionSubscriber] s.
+Whether xref:system:generated:index/applib/services/iactn/Execution.adoc[Execution] s (triggered by action invocations), should be published to xref:system:generated:index/applib/services/publishing/spi/ExecutionSubscriber.adoc[ExecutionSubscriber] s.
 
 [#hidden]
 === hidden

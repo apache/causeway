@@ -5,8 +5,6 @@
 ** xref:refguide:config:sections/isis.core.runtime.adoc[Core Runtime configurations]
 ** xref:refguide:config:sections/isis.core.runtime-services.adoc[Core Runtime Services configurations]
 ** xref:refguide:config:sections/isis.security.shiro.adoc[Shiro Security Implementation]
-** xref:refguide:config:sections/jdo-datanucleus.adoc[JDO DataNucleus]
-** xref:refguide:config:sections/jdo-datanucleus-conf.adoc[DataNucleus Configuration]
 ** xref:refguide:config:sections/isis.viewer.restfulobjects.adoc[Restful Objects Viewer]
 ** xref:refguide:config:sections/isis.viewer.wicket.adoc[Wicket Viewer]
 ** xref:refguide:config:sections/isis.extensions.adoc[Extensions]

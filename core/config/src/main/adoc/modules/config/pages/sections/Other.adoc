@@ -25,7 +25,7 @@ isis.persistence.schema. +
 additional-orm-files
 
 | 
-| Does lookup additional "mapping-files" in META-INF/orm-_name_.xml (equivalent to "mapping-file" entries in persistence.xml) and adds these to those that are already configured the _Spring Data_ way (if any).
+| Does lookup additional "mapping-files" in META-INF/orm-_name_.xml (equivalent to "mapping-file" entries in persistence.xml) and adds these to those that are already configured the _Spring Data_ way (if any). NOTE: not implemented for JDO
 
 
 |
@@ -47,11 +47,13 @@ isis.persistence.schema. +
 create-schema-sql-template
 
 |  CREATE SCHEMA IF NOT EXISTS %S
-| SQL syntax to create a DB schema.
+| Vendor specific SQL syntax to create a DB schema.
 
 This template is passed through schemaName) to make the actual SQL statement thats to be used against the configured data-source.
 
 Default template is \{@literal CREATE SCHEMA IF NOT EXISTS %S} with the schema name converted to upper-case.
+
+For MYSQL/MARIADB use escape like \{@code `%S`}
 
 
 

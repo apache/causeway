@@ -3,11 +3,10 @@
 == API
 
 [source,java]
-.ExecutionLogger.java
+.ActionInvocation.java
 ----
-class ExecutionLogger {
-  boolean isEnabled()
-  void onExecution(final Execution<?, ?> execution)
+class ActionInvocation {
+  ActionInvocation(final Interaction interaction, final String memberId, final Object target, final List<Object> args, final String targetMember, final String targetClass)
 }
 ----
 

@@ -11,7 +11,7 @@ The available policies as to whether data should be published to corresponding s
 * *xref:system:generated:index/applib/services/command/Command.adoc[Command] ... subscribed to via xref:system:generated:index/applib/services/publishing/spi/CommandSubscriber.adoc[CommandSubscriber]*
 
  *
-* *_org.apache.isis.applib.services.iactn.Interaction.Execution_ ... subscribed to via xref:system:generated:index/applib/services/publishing/spi/ExecutionSubscriber.adoc[ExecutionSubscriber]*
+* *xref:system:generated:index/applib/services/iactn/Execution.adoc[Execution] ... subscribed to via xref:system:generated:index/applib/services/publishing/spi/ExecutionSubscriber.adoc[ExecutionSubscriber]*
 
  ** * * * 
 

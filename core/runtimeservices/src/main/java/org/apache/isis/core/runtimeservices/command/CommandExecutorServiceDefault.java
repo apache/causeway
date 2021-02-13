@@ -219,7 +219,7 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
                 // for the result adapter, we could alternatively have used...
                 // (priorExecution populated by the push/pop within the interaction object)
                 //
-                // final Interaction.Execution priorExecution = backgroundInteraction.getPriorExecution();
+                // final Execution priorExecution = backgroundInteraction.getPriorExecution();
                 // Object unused = priorExecution.getReturned();
                 //
 

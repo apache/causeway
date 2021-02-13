@@ -26,7 +26,7 @@ import javax.inject.Inject;
 
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.services.iactn.Interaction.Execution;
+import org.apache.isis.applib.services.iactn.Execution;
 import org.apache.isis.applib.services.publishing.spi.ExecutionSubscriber;
 import org.apache.isis.applib.util.schema.MemberExecutionDtoUtils;
 import org.apache.isis.commons.collections.Can;
@@ -37,7 +37,7 @@ import lombok.extern.log4j.Log4j2;
 
 @Service
 @Log4j2
-public class ExecutionSubscriberForTesting 
+public class ExecutionSubscriberForTesting
 implements ExecutionSubscriber {
 
     @Inject private KVStoreForTesting kvStore;
@@ -51,16 +51,16 @@ implements ExecutionSubscriber {
     public void onExecution(Execution<?, ?> execution) {
 
         @SuppressWarnings("unchecked")
-        val publishedEntries = 
+        val publishedEntries =
         (List<Execution<?, ?>>) kvStore.get(this, "publishedExecutions").orElseGet(ArrayList::new);
 
         publishedEntries.add(execution);
 
         kvStore.put(this, "publishedExecutions", publishedEntries);
         log.debug("publish execution {}", ()->MemberExecutionDtoUtils.toXml(execution.getDto()));
-        
+
         System.err.println("exec: " + MemberExecutionDtoUtils.toXml(execution.getDto()));
-        
+
     }
 
     // -- UTILITIES

@@ -1,0 +1,93 @@
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+Categorises each exception that has been recognised, as per _Recognition#getCategory()_ .
+
+== API
+
+[source,java]
+.Category.java
+----
+enum Category {
+  CONSTRAINT_VIOLATION     // <.>
+  NOT_FOUND     // <.>
+  CONCURRENCY     // <.>
+  RETRYABLE     // <.>
+  CLIENT_ERROR     // <.>
+  SERVER_ERROR     // <.>
+  OTHER     // <.>
+}
+----
+
+<.> xref:#CONSTRAINT_VIOLATION[CONSTRAINT_VIOLATION]
++
+--
+A violation of some declarative constraint (eg uniqueness or referential integrity) was detected.
+--
+<.> xref:#NOT_FOUND[NOT_FOUND]
++
+--
+The object to be acted upon cannot be found (404)
+--
+<.> xref:#CONCURRENCY[CONCURRENCY]
++
+--
+A concurrency exception, in other words some other user has changed this object.
+--
+<.> xref:#RETRYABLE[RETRYABLE]
++
+--
+A previously failed operation might be able to succeed when the operation is retried. (eg. a query timeout or a temporary failure)
+--
+<.> xref:#CLIENT_ERROR[CLIENT_ERROR]
++
+--
+Recognized, but for some other reason... 40x error
+--
+<.> xref:#SERVER_ERROR[SERVER_ERROR]
++
+--
+50x error
+--
+<.> xref:#OTHER[OTHER]
++
+--
+Recognized, but uncategorized (typically: a recognizer of the original ExceptionRecognizer API).
+--
+
+== Members
+
+[#CONSTRAINT_VIOLATION]
+=== CONSTRAINT_VIOLATION
+
+A violation of some declarative constraint (eg uniqueness or referential integrity) was detected.
+
+[#NOT_FOUND]
+=== NOT_FOUND
+
+The object to be acted upon cannot be found (404)
+
+[#CONCURRENCY]
+=== CONCURRENCY
+
+A concurrency exception, in other words some other user has changed this object.
+
+[#RETRYABLE]
+=== RETRYABLE
+
+A previously failed operation might be able to succeed when the operation is retried. (eg. a query timeout or a temporary failure)
+
+[#CLIENT_ERROR]
+=== CLIENT_ERROR
+
+Recognized, but for some other reason... 40x error
+
+[#SERVER_ERROR]
+=== SERVER_ERROR
+
+50x error
+
+[#OTHER]
+=== OTHER
+
+Recognized, but uncategorized (typically: a recognizer of the original ExceptionRecognizer API).
+

@@ -435,7 +435,7 @@ execution-publishing
 
 The service's publish method is called only once per transaction, with ``Execution`` collecting details of the identity of the target object, the property edited, and the new value of the property.
 
-This setting can be overridden on a case-by-case basis using \{ @link org.apache.isis.applib.annotation.Property#publishing()}.
+This setting can be overridden on a case-by-case basis using ``Property#publishing()``.
 
 
 |

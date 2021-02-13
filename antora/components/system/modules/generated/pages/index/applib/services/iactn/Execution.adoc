@@ -1,0 +1,96 @@
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+Represents an action invocation/property edit as a node in a call-stack execution graph, with sub-interactions being made by way of the xref:system:generated:index/applib/services/wrapper/WrapperFactory.adoc[WrapperFactory] ).
+
+The xref:system:generated:index/applib/services/iactn/Interaction.adoc[Interaction] has a reference to a _Interaction#getCurrentExecution() top-level_ execution.
+
+== API
+
+[source,java]
+.Execution.java
+----
+class Execution<T, E> {
+  void setParent(final Execution<?, ?> parent)     // <.>
+  List<Execution<?, ?>> getChildren()     // <.>
+  void setEvent(final E event)     // <.>
+  Timestamp start(final ClockService clockService, final MetricsService metricsService)
+  void setCompletedAt(final Timestamp completedAt, final MetricsService metricsService)     // <.>
+  void setReturned(Object returned)     // <.>
+  void setThrew(Exception threw)     // <.>
+  void setDto(final T executionDto)     // <.>
+}
+----
+
+<.> xref:#setParent[setParent]
++
+--
+ *NOT API* : intended to be called only by the framework.
+--
+<.> xref:#getChildren[getChildren]
++
+--
+The actions/property edits made in turn via the xref:system:generated:index/applib/services/wrapper/WrapperFactory.adoc[WrapperFactory] .
+--
+<.> xref:#setEvent[setEvent]
++
+--
+ *NOT API* : intended to be called only by the framework.
+--
+<.> xref:#setCompletedAt[setCompletedAt]
++
+--
+ *NOT API* : intended to be called only by the framework.
+--
+<.> xref:#setReturned[setReturned]
++
+--
+ *NOT API* : intended to be called only by the framework.
+--
+<.> xref:#setThrew[setThrew]
++
+--
+ *NOT API* : intended to be called only by the framework.
+--
+<.> xref:#setDto[setDto]
++
+--
+ *NOT API* : Set by framework (implementation of _org.apache.isis.core.metamodel.execution.InternalInteraction.MemberExecutor_ )
+--
+
+== Members
+
+[#setParent]
+=== setParent
+
+ *NOT API* : intended to be called only by the framework.
+
+[#getChildren]
+=== getChildren
+
+The actions/property edits made in turn via the xref:system:generated:index/applib/services/wrapper/WrapperFactory.adoc[WrapperFactory] .
+
+[#setEvent]
+=== setEvent
+
+ *NOT API* : intended to be called only by the framework.
+
+[#setCompletedAt]
+=== setCompletedAt
+
+ *NOT API* : intended to be called only by the framework.
+
+[#setReturned]
+=== setReturned
+
+ *NOT API* : intended to be called only by the framework.
+
+[#setThrew]
+=== setThrew
+
+ *NOT API* : intended to be called only by the framework.
+
+[#setDto]
+=== setDto
+
+ *NOT API* : Set by framework (implementation of _org.apache.isis.core.metamodel.execution.InternalInteraction.MemberExecutor_ )
+

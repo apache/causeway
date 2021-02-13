@@ -167,7 +167,7 @@ extends SingleValueFacetAbstract<Class<? extends PropertyDomainEvent<?,?>>> {
         private final ManagedObject newValueAdapter;
         private final OneToOneAssociation owningProperty;
         private final ManagedObject targetManagedObject;
-        //private final Interaction.PropertyEdit propertyEdit;
+        //private final PropertyEdit propertyEdit;
 //        private final Command command;
         private final InteractionInitiatedBy interactionInitiatedBy;
         private final InteractionHead head;

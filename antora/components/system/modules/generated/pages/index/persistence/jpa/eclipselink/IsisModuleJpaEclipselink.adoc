@@ -10,7 +10,6 @@ Sets up EclipseLink as the implementation provider for Spring Data JPA.
 .IsisModuleJpaEclipselink.java
 ----
 class IsisModuleJpaEclipselink {
-  EclipseLinkJpaDialect eclipselinkJpaDialect()
 }
 ----
 

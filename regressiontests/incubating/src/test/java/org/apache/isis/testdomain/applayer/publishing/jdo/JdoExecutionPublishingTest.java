@@ -30,7 +30,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
 import org.apache.isis.applib.services.iactn.Interaction;
-import org.apache.isis.applib.services.iactn.Interaction.Execution;
+import org.apache.isis.applib.services.iactn.ActionInvocation;
+import org.apache.isis.applib.services.iactn.PropertyEdit;
+import org.apache.isis.applib.services.iactn.Execution;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.config.presets.IsisPresets;
@@ -50,7 +52,7 @@ import lombok.val;
                 Configuration_usingJdo.class,
                 Configuration_usingExecutionPublishing.class,
                 ApplicationLayerTestFactory.class
-        }, 
+        },
         properties = {
                 "logging.level.org.apache.isis.persistence.jdo.datanucleus5.persistence.IsisTransactionJdo=DEBUG",
                 "logging.level.org.apache.isis.core.runtimeservices.session.IsisInteractionFactoryDefault=DEBUG",
@@ -72,16 +74,16 @@ class JdoExecutionPublishingTest extends IsisIntegrationTestAbstract {
     private void given() {
         ExecutionSubscriberForTesting.clearPublishedEntries(kvStore);
     }
-    
+
     private void verify(VerificationStage verificationStage) {
         switch(verificationStage) {
-        
+
         case FAILURE_CASE:
             assertHasExecutionEntries(Can.empty());
             break;
         case POST_COMMIT:
-        
-            
+
+
             Interaction interaction = null;
             String propertyId = "org.apache.isis.testdomain.jdo.entities.JdoBook#name";
             Object target = null;
@@ -89,14 +91,14 @@ class JdoExecutionPublishingTest extends IsisIntegrationTestAbstract {
             String targetMemberName = "name???";
             String targetClass = "org.apache.isis.testdomain.jdo.entities.JdoBook";
             assertHasExecutionEntries(Can.of(
-                    new Interaction.PropertyEdit(interaction, propertyId, target, argValue, targetMemberName, targetClass)
+                    new PropertyEdit(interaction, propertyId, target, argValue, targetMemberName, targetClass)
                     ));
             break;
         default:
             // ignore ... no checks
         }
     }
-    
+
     // -- HELPER
 
     private void assertHasExecutionEntries(Can<Execution<?, ?>> expectedExecutions) {
@@ -104,40 +106,40 @@ class JdoExecutionPublishingTest extends IsisIntegrationTestAbstract {
         CollectionAssertions.assertComponentWiseEquals(
                 expectedExecutions, actualExecutions, this::executionDifference);
     }
-    
+
     private String executionDifference(Execution<?, ?> a, Execution<?, ?> b) {
         if(!Objects.equals(a.getMemberIdentifier(), b.getMemberIdentifier())) {
-            return String.format("differing member identifier %s != %s", 
+            return String.format("differing member identifier %s != %s",
                     a.getMemberIdentifier(), b.getMemberIdentifier());
         }
         if(!Objects.equals(a.getInteractionType(), b.getInteractionType())) {
-            return String.format("differing interaction type %s != %s", 
+            return String.format("differing interaction type %s != %s",
                     a.getInteractionType(), b.getInteractionType());
         }
-        
+
         switch(a.getInteractionType()) {
         case ACTION_INVOCATION:
             return actionInvocationDifference(
-                    (Interaction.ActionInvocation)a, (Interaction.ActionInvocation)b);
+                    (ActionInvocation)a, (ActionInvocation)b);
         case PROPERTY_EDIT:
             return porpertyEditDifference(
-                    (Interaction.PropertyEdit)a, (Interaction.PropertyEdit)b);
+                    (PropertyEdit)a, (Interaction.PropertyEdit)b);
         default:
             throw _Exceptions.unexpectedCodeReach();
         }
     }
-    
-    private String actionInvocationDifference(Interaction.ActionInvocation a, Interaction.ActionInvocation b) {
+
+    private String actionInvocationDifference(ActionInvocation a, ActionInvocation b) {
         return null; // no difference
     }
-    
-    
-    private String porpertyEditDifference(Interaction.PropertyEdit a, Interaction.PropertyEdit b) {
+
+
+    private String porpertyEditDifference(PropertyEdit a, PropertyEdit b) {
         if(!Objects.equals(a.getNewValue(), b.getNewValue())) {
-            return String.format("differing new value %s != %s", 
+            return String.format("differing new value %s != %s",
                     a.getNewValue(), b.getNewValue());
         }
-        
+
         return null; // no difference
     }
 
