@@ -24,7 +24,7 @@ import java.util.Objects;
 
 import org.apache.isis.applib.events.domain.AbstractDomainEvent;
 import org.apache.isis.applib.events.domain.PropertyDomainEvent;
-import org.apache.isis.applib.services.iactn.Interaction;
+import org.apache.isis.applib.services.iactn.PropertyEdit;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.execution.InternalInteraction;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -151,10 +151,10 @@ extends SingleValueFacetAbstract<Class<? extends PropertyDomainEvent<?,?>>> {
         return getTransactionService()
                 .callWithinCurrentTransactionElseCreateNew(() ->
                     doSetOrClearProperty(
-                            style, 
-                            owningProperty, 
-                            InteractionHead.simple(targetAdapter), 
-                            newValueAdapter, 
+                            style,
+                            owningProperty,
+                            InteractionHead.simple(targetAdapter),
+                            newValueAdapter,
                             interactionInitiatedBy))
                 .optionalElseFail()
                 .orElse(null);
@@ -162,7 +162,7 @@ extends SingleValueFacetAbstract<Class<? extends PropertyDomainEvent<?,?>>> {
 
     @RequiredArgsConstructor
     private final class DomainEventMemberExecutor
-            implements InternalInteraction.MemberExecutor<Interaction.PropertyEdit> {
+            implements InternalInteraction.MemberExecutor<PropertyEdit> {
 
         private final ManagedObject newValueAdapter;
         private final OneToOneAssociation owningProperty;
@@ -173,7 +173,7 @@ extends SingleValueFacetAbstract<Class<? extends PropertyDomainEvent<?,?>>> {
         private final InteractionHead head;
         private final EditingVariant style;
 
-        public Object execute(Interaction.PropertyEdit currentExecution) {
+        public Object execute(PropertyEdit currentExecution) {
 
             // TODO: REVIEW - is this safe to do?
             ManagedObject newValueAdapterMutatable = newValueAdapter;
@@ -253,7 +253,7 @@ extends SingleValueFacetAbstract<Class<? extends PropertyDomainEvent<?,?>>> {
         if(!editingVariant.hasCorrespondingFacet(this)) {
             return head.getTarget();
         }
-        
+
         return getMemberExecutor().setOrClearProperty(
                 owningProperty,
                 head,

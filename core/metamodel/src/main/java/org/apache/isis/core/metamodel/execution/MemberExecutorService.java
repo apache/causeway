@@ -21,8 +21,8 @@ package org.apache.isis.core.metamodel.execution;
 import java.lang.reflect.Method;
 import java.util.Optional;
 
-import org.apache.isis.applib.services.iactn.Interaction.ActionInvocation;
-import org.apache.isis.applib.services.iactn.Interaction.PropertyEdit;
+import org.apache.isis.applib.services.iactn.ActionInvocation;
+import org.apache.isis.applib.services.iactn.PropertyEdit;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -40,11 +40,11 @@ import lombok.NonNull;
  * Used by ActionInvocationFacets and PropertySetterOrClearFacets to submit their executions.
  * <p>
  * That is, invoke a domain action or edit a domain property.
- * 
+ *
  * @since 2.0
  */
 public interface MemberExecutorService {
-    
+
     @Deprecated // just a refactoring step
     @FunctionalInterface
     interface ActionExecutorFactory {
@@ -55,7 +55,7 @@ public interface MemberExecutorService {
                 ManagedObject mixinElseRegularAdapter,
                 ManagedObject mixedInAdapter);
     }
-    
+
     @Deprecated // just a refactoring step
     @FunctionalInterface
     interface PropertyExecutorFactory {
@@ -67,45 +67,45 @@ public interface MemberExecutorService {
                 InteractionHead head,
                 EditingVariant editingVariant);
     }
-    
+
     /**
      * Optionally, the currently active {@link InternalInteraction} for the calling thread.
      */
     Optional<InternalInteraction> getInteraction();
 
     // -- SHORTCUTS
-    
+
     default InternalInteraction getInteractionIfAny() {
         return getInteraction().orElse(null);
     }
-    
+
     default InternalInteraction getInteractionElseFail() {
         return getInteraction().orElseThrow(()->_Exceptions
                 .unrecoverable("needs an InteractionSession on current thread"));
     }
-    
+
     // -- REFACTORING
 
     //TODO implementations of this service should also handle domain object events, don't delegate this responsibility to facets
     ManagedObject invokeAction(
-            @NonNull ObjectAction owningAction, 
+            @NonNull ObjectAction owningAction,
             @NonNull InteractionHead head,
-            @NonNull Can<ManagedObject> argumentAdapters, 
+            @NonNull Can<ManagedObject> argumentAdapters,
             @NonNull InteractionInitiatedBy interactionInitiatedBy,
             @NonNull Method method,
-            @NonNull ActionExecutorFactory actionExecutorFactory, 
-            @NonNull FacetHolder facetHolder, 
+            @NonNull ActionExecutorFactory actionExecutorFactory,
+            @NonNull FacetHolder facetHolder,
             @NonNull IdentifiedHolder identifiedHolder);
 
     //TODO implementations of this service should also handle domain object events, don't delegate this responsibility to facets
     ManagedObject setOrClearProperty(
-            @NonNull OneToOneAssociation owningProperty, 
-            @NonNull InteractionHead head, 
+            @NonNull OneToOneAssociation owningProperty,
+            @NonNull InteractionHead head,
             @NonNull ManagedObject newValueAdapter,
             @NonNull InteractionInitiatedBy interactionInitiatedBy,
             @NonNull PropertyExecutorFactory propertyExecutorFactory,
             @NonNull FacetHolder facetHolder,
             @NonNull IdentifiedHolder identifiedHolder,
             @NonNull EditingVariant editingVariant);
-         
+
 }

@@ -20,7 +20,7 @@ package org.apache.isis.applib.services.publishing.spi;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.services.iactn.Interaction;
+import org.apache.isis.applib.services.iactn.Execution;
 import org.apache.isis.applib.util.schema.InteractionDtoUtils;
 import org.apache.isis.commons.having.HasEnabling;
 
@@ -49,7 +49,7 @@ public interface ExecutionSubscriber extends HasEnabling {
     /**
      * Callback to notify that an interaction (an action invocation or property
      * edit, as represented by
-     * {@link org.apache.isis.applib.services.iactn.Interaction.Execution}) has
+     * {@link Execution}) has
      * completed.
      *
      * <p>
@@ -60,12 +60,12 @@ public interface ExecutionSubscriber extends HasEnabling {
      *
      * <p>
      * Most implementations are expected to use
-     * {@link org.apache.isis.applib.services.iactn.Interaction.Execution#getDto()}
+     * {@link Execution#getDto()}
      * to create a serializable XML representation of the execution.
      * The easiest way to do this is using
-     * {@link InteractionDtoUtils#newInteractionDto(Interaction.Execution)}.
+     * {@link InteractionDtoUtils#newInteractionDto(Execution)}.
      * </p>
      */
-    void onExecution(Interaction.Execution<?, ?> execution);
+    void onExecution(Execution<?, ?> execution);
 
 }

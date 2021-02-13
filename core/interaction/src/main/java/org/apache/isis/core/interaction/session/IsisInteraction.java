@@ -26,6 +26,9 @@ import java.util.concurrent.atomic.LongAdder;
 
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.command.Command;
+import org.apache.isis.applib.services.iactn.ActionInvocation;
+import org.apache.isis.applib.services.iactn.Execution;
+import org.apache.isis.applib.services.iactn.PropertyEdit;
 import org.apache.isis.applib.services.metrics.MetricsService;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
@@ -154,7 +157,7 @@ public class IsisInteraction implements InternalInteraction {
     }
 
     private void start(
-            final IsisInteraction.Execution<?,?> execution,
+            final Execution<?,?> execution,
             final ClockService clockService,
             final MetricsService metricsService,
             final Command command) {

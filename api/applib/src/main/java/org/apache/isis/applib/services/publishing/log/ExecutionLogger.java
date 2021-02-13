@@ -26,7 +26,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
-import org.apache.isis.applib.services.iactn.Interaction;
+import org.apache.isis.applib.services.iactn.Execution;
 import org.apache.isis.applib.services.publishing.spi.ExecutionSubscriber;
 import org.apache.isis.applib.util.schema.InteractionDtoUtils;
 import org.apache.isis.schema.ixn.v2.InteractionDto;
@@ -34,7 +34,7 @@ import org.apache.isis.schema.ixn.v2.InteractionDto;
 import lombok.extern.log4j.Log4j2;
 
 /**
- * 
+ *
  * @since 2.0 {@index}
  */
 @Service
@@ -49,9 +49,9 @@ public class ExecutionLogger implements ExecutionSubscriber {
     public boolean isEnabled() {
         return log.isDebugEnabled();
     }
-    
+
     @Override
-    public void onExecution(final Interaction.Execution<?, ?> execution) {
+    public void onExecution(final Execution<?, ?> execution) {
 
         final InteractionDto interactionDto =
                 InteractionDtoUtils.newInteractionDto(execution, InteractionDtoUtils.Strategy.DEEP);

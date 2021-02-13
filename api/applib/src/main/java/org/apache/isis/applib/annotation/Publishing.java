@@ -19,6 +19,7 @@
 package org.apache.isis.applib.annotation;
 
 import org.apache.isis.applib.services.command.Command;
+import org.apache.isis.applib.services.iactn.Execution;
 import org.apache.isis.applib.services.publishing.spi.CommandSubscriber;
 import org.apache.isis.applib.services.publishing.spi.EntityChanges;
 import org.apache.isis.applib.services.publishing.spi.EntityChangesSubscriber;
@@ -27,22 +28,22 @@ import org.apache.isis.applib.services.publishing.spi.EntityPropertyChangeSubscr
 import org.apache.isis.applib.services.publishing.spi.ExecutionSubscriber;
 
 /**
- * The available policies as to whether data should be published to  
- * corresponding subscribers. The framework supports several kinds of data 
+ * The available policies as to whether data should be published to
+ * corresponding subscribers. The framework supports several kinds of data
  * that are available for publishing:
  * <ul>
  * <li><b>{@link EntityChanges} ... subscribed to via {@link EntityChangesSubscriber}</li>
  * <li><b>{@link EntityPropertyChange} ... subscribed to via {@link EntityPropertyChangeSubscriber}</li>
  * <li><b>{@link Command} ... subscribed to via {@link CommandSubscriber}</li>
- * <li><b>{@link org.apache.isis.applib.services.iactn.Interaction.Execution} ... subscribed to via {@link ExecutionSubscriber}</li>
+ * <li><b>{@link Execution} ... subscribed to via {@link ExecutionSubscriber}</li>
  * </ul>
  * @since 1.x {@index}
  */
 public enum Publishing {
 
     /**
-     * Publishing of data triggered by interaction with this object 
-     * should be handled as per the default publishing policy 
+     * Publishing of data triggered by interaction with this object
+     * should be handled as per the default publishing policy
      * configured in <tt>application.properties</tt>.
      * <p>
      * If no publishing policy is configured, then publishing is disabled.

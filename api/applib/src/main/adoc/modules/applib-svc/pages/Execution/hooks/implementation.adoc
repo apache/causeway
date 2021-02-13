@@ -5,5 +5,28 @@
 
 == Implementation
 
-This class (`o.a.i.applib.services.iactn.InteractionContext`) is also the default implementation.
+This is an abstract class with two concrete subclasses
+
+* `ActionInvocation` represents the execution of an action being invoked:
++
+[source,java]
+----
+public class ActionInvocation extends Execution {
+    public List<Object> getArgs();                  // <.>
+}
+----
+
+<.> The objects passed in as the arguments to the action's parameters.
+Any of these could be `null`.
+
+* `PropertyEdit` represents the execution of a property being edited:
+=
+[source,java]
+----
+public class PropertyEdit extends Execution {
+    public Object getNewValue();                    // <.>
+}
+----
+<.> The object used as the new value of the property.
+Could be `null` if the property is being cleared.
 

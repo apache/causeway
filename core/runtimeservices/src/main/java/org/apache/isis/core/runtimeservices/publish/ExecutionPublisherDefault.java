@@ -34,7 +34,7 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.InteractionScope;
 import org.apache.isis.applib.annotation.OrderPrecedence;
-import org.apache.isis.applib.services.iactn.Interaction;
+import org.apache.isis.applib.services.iactn.Execution;
 import org.apache.isis.applib.services.publishing.spi.ExecutionSubscriber;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.having.HasEnabling;
@@ -51,13 +51,13 @@ import lombok.val;
 @InteractionScope
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 //@Log4j2
-public class ExecutionPublisherDefault 
+public class ExecutionPublisherDefault
 implements ExecutionPublisher {
 
     private final List<ExecutionSubscriber> subscribers;
-    
+
     private Can<ExecutionSubscriber> enabledSubscribers;
-    
+
     @PostConstruct
     public void init() {
         enabledSubscribers = Can.ofCollection(subscribers)
@@ -65,15 +65,15 @@ implements ExecutionPublisher {
     }
 
     @Override
-    public void publishActionInvocation(final Interaction.Execution<?,?> execution) {
+    public void publishActionInvocation(final Execution<?,?> execution) {
         notifySubscribers(execution);
     }
 
     @Override
-    public void publishPropertyEdit(final Interaction.Execution<?,?> execution) {
+    public void publishPropertyEdit(final Execution<?,?> execution) {
         notifySubscribers(execution);
     }
-    
+
     @Override
     public <T> T withPublishingSuppressed(final Supplier<T> block) {
         try {
@@ -86,7 +86,7 @@ implements ExecutionPublisher {
 
     // -- HELPERS
 
-    private void notifySubscribers(final Interaction.Execution<?,?> execution) {
+    private void notifySubscribers(final Execution<?,?> execution) {
         if(isSuppressed()) {
             return;
         }
@@ -96,12 +96,12 @@ implements ExecutionPublisher {
     }
 
     private final LongAdder suppressionRequestCounter = new LongAdder();
-    
+
     private boolean isSuppressed() {
-        return enabledSubscribers == null 
-                || enabledSubscribers.isEmpty() 
+        return enabledSubscribers == null
+                || enabledSubscribers.isEmpty()
                 || suppressionRequestCounter.intValue() > 0;
     }
-    
+
 
 }

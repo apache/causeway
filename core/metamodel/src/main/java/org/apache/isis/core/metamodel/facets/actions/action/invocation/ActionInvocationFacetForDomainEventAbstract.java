@@ -28,7 +28,7 @@ import java.util.Objects;
 
 import org.apache.isis.applib.events.domain.AbstractDomainEvent;
 import org.apache.isis.applib.events.domain.ActionDomainEvent;
-import org.apache.isis.applib.services.iactn.Interaction.ActionInvocation;
+import org.apache.isis.applib.services.iactn.ActionInvocation;
 import org.apache.isis.applib.services.queryresultscache.QueryResultsCache;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.collections.Can;
@@ -73,7 +73,7 @@ implements ImperativeFacet {
             final ObjectSpecification onType,
             final ObjectSpecification returnType,
             final FacetHolder holder) {
-        
+
         super(holder);
         this.eventType = eventType;
         this.method = method;
@@ -104,7 +104,7 @@ implements ImperativeFacet {
             final Can<ManagedObject> argumentAdapters,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        val executionResult = 
+        val executionResult =
                 getTransactionService().callWithinCurrentTransactionElseCreateNew(()->
                     doInvoke(owningAction, head, argumentAdapters, interactionInitiatedBy));
 
@@ -115,7 +115,7 @@ implements ImperativeFacet {
                 .orElse(null);
     }
 
-    @Override 
+    @Override
     public void appendAttributesTo(final Map<String, Object> attributeMap) {
         super.appendAttributesTo(attributeMap);
         ImperativeFacet.Util.appendAttributesTo(this, attributeMap);
@@ -123,31 +123,31 @@ implements ImperativeFacet {
         attributeMap.put("returnType", returnType);
         attributeMap.put("eventType", eventType);
     }
-    
+
     @Override
     protected String toStringValues() {
         return "method=" + method;
     }
-    
+
     // -- HELPER
-    
+
     private ManagedObject doInvoke(
             final ObjectAction owningAction,
             final InteractionHead head,
             final Can<ManagedObject> argumentAdapters,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        
+
         _Assert.assertEquals(owningAction.getParameterCount(), argumentAdapters.size(),
                 "action's parameter count and provided argument count must match");
-        
+
         return getMemberExecutor().invokeAction(
-                owningAction, 
-                head, 
-                argumentAdapters, 
-                interactionInitiatedBy, 
+                owningAction,
+                head,
+                argumentAdapters,
+                interactionInitiatedBy,
                 method,
-                DomainEventMemberExecutor::new, 
-                getFacetHolder(), 
+                DomainEventMemberExecutor::new,
+                getFacetHolder(),
                 getIdentified());
     }
 
@@ -162,7 +162,7 @@ implements ImperativeFacet {
     }
 
     private Object invokeMethodElseFromCache(
-            final ManagedObject targetAdapter, 
+            final ManagedObject targetAdapter,
             final Can<ManagedObject> arguments)
                     throws IllegalAccessException, InvocationTargetException {
 
@@ -210,7 +210,7 @@ implements ImperativeFacet {
         final ManagedObject clonedAdapter = getObjectManager().adapt(clone);
         return clonedAdapter;
     }
-    
+
     private QueryResultsCache getQueryResultsCache() {
         return serviceRegistry.lookupServiceElseFail(QueryResultsCache.class);
     }
@@ -218,11 +218,11 @@ implements ImperativeFacet {
     private InteractionDtoServiceInternal getInteractionDtoServiceInternal() {
         return serviceRegistry.lookupServiceElseFail(InteractionDtoServiceInternal.class);
     }
-    
+
     @RequiredArgsConstructor
-    private final class DomainEventMemberExecutor 
+    private final class DomainEventMemberExecutor
             implements InternalInteraction.MemberExecutor<ActionInvocation> {
-        
+
         private final Can<ManagedObject> argumentAdapters;
         private final ManagedObject targetAdapter;
         private final ObjectAction owningAction;
@@ -241,9 +241,9 @@ implements ImperativeFacet {
                 // update the current execution with the DTO (memento)
                 val invocationDto = getInteractionDtoServiceInternal()
                 .asActionInvocationDto(owningAction, mixinElseRegularAdapter, argumentAdapters);
-                
+
                 currentExecution.setDto(invocationDto);
-                
+
                 val head = InteractionHead.mixedIn(targetAdapter, mixedInAdapter);
 
 
@@ -264,7 +264,7 @@ implements ImperativeFacet {
 
                 // invoke method
                 val resultPojo = invokeMethodElseFromCache(targetAdapter, argumentAdapters);
-                ManagedObject resultAdapterPossiblyCloned = 
+                ManagedObject resultAdapterPossiblyCloned =
                         cloneIfViewModelCloneable(resultPojo, mixinElseRegularAdapter);
 
                 // ... post the executed event
@@ -277,7 +277,7 @@ implements ImperativeFacet {
 
                 final Object returnValue = actionDomainEvent.getReturnValue();
                 if(returnValue != resultPojo) {
-                    resultAdapterPossiblyCloned = 
+                    resultAdapterPossiblyCloned =
                             cloneIfViewModelCloneable(returnValue, mixinElseRegularAdapter);
                 }
                 return UnwrapUtil.single(resultAdapterPossiblyCloned);

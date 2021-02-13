@@ -24,8 +24,18 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
 
 /**
  * Provides the current thread's {@link Interaction}.
- * 
- * @since 2.0 {@index}
+ *
+ * <p>
+ * An {@link Interaction}  contains a top-level {@link Execution}
+ * representing the invocation of an action or the editing of a property.
+ * If that top-level action or property uses the
+ * {@link org.apache.isis.applib.services.wrapper.WrapperFactory} domain
+ * service to invoke child actions/properties, then those sub-executions are
+ * captured as a call-graph. The {@link Execution} is thus a
+ * graph structure.
+ * </p>
+ *
+ * @since 1.x {@index}
  */
 public interface InteractionContext {
 
@@ -36,11 +46,11 @@ public interface InteractionContext {
     Optional<Interaction> currentInteraction();
 
     // -- SHORTCUTS
-    
+
     default Interaction currentInteractionElseFail() {
     	return currentInteraction().orElseThrow(()->_Exceptions
     			.illegalState("No InteractionSession on current thread"));
     }
-    
+
 
 }

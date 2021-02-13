@@ -36,6 +36,7 @@ import javax.xml.bind.Unmarshaller;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
+import org.apache.isis.applib.services.iactn.Execution;
 import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.util.JaxbUtil;
 import org.apache.isis.commons.internal.base._NullSafe;
@@ -115,30 +116,30 @@ public final class InteractionDtoUtils {
     // -- newInteractionDto
 
     /**
-     * Encapsulates the mechanism for obtaining a {@link MemberExecutionDto} DTO (XML memento) 
-     * of the provided in-memory 
-     * {@link org.apache.isis.applib.services.iactn.Interaction.Execution}.
+     * Encapsulates the mechanism for obtaining a {@link MemberExecutionDto} DTO (XML memento)
+     * of the provided in-memory
+     * {@link Execution}.
      */
     public enum Strategy {
         FLAT {
 
             @Override
-            public MemberExecutionDto dtoFor(final Interaction.Execution<?, ?> execution) {
+            public MemberExecutionDto dtoFor(final Execution<?, ?> execution) {
                 return execution.getDto();
             }
         },
         DEEP {
             @Override
-            public MemberExecutionDto dtoFor(final Interaction.Execution<?, ?> execution) {
+            public MemberExecutionDto dtoFor(final Execution<?, ?> execution) {
                 return traverse(execution);
             }
 
-            private MemberExecutionDto traverse(final Interaction.Execution<?, ?> parentExecution) {
+            private MemberExecutionDto traverse(final Execution<?, ?> parentExecution) {
 
                 final MemberExecutionDto parentDto = clone(parentExecution.getDto());
 
-                final List<Interaction.Execution<?, ?>> children = parentExecution.getChildren();
-                for (Interaction.Execution<?, ?> childExecution : children) {
+                final List<Execution<?, ?>> children = parentExecution.getChildren();
+                for (Execution<?, ?> childExecution : children) {
                     final MemberExecutionDto childDto = clone(childExecution.getDto());
                     final MemberExecutionDto.ChildExecutions childExecutions =
                             InteractionDtoUtils.childExecutionsOf(parentDto);
@@ -158,7 +159,7 @@ public final class InteractionDtoUtils {
         };
 
 
-        public abstract MemberExecutionDto dtoFor(final Interaction.Execution<?, ?> execution);
+        public abstract MemberExecutionDto dtoFor(final Execution<?, ?> execution);
 
     }
 
@@ -173,20 +174,20 @@ public final class InteractionDtoUtils {
 
     /**
      * Creates a {@link InteractionDto} (serializable  to XML) for the provided
-     * {@link org.apache.isis.applib.services.iactn.Interaction.Execution} 
+     * {@link Execution}
      * (the applib object).
      */
-    public static InteractionDto newInteractionDto(final Interaction.Execution<?, ?> execution) {
+    public static InteractionDto newInteractionDto(final Execution<?, ?> execution) {
         return newInteractionDto(execution, Strategy.FLAT);
     }
 
     /**
      * Creates a {@link InteractionDto} (serializable  to XML) for the provided
-     * {@link org.apache.isis.applib.services.iactn.Interaction.Execution} 
+     * {@link Execution}
      * (the applib object).
      */
     public static InteractionDto newInteractionDto(
-            final Interaction.Execution<?, ?> execution,
+            final Execution<?, ?> execution,
             final Strategy strategy) {
 
         final MemberExecutionDto memberExecutionDto = strategy.dtoFor(execution);
@@ -194,7 +195,7 @@ public final class InteractionDtoUtils {
     }
 
     private static InteractionDto newInteractionDto(
-            final Interaction.Execution<?, ?> execution,
+            final Execution<?, ?> execution,
             final MemberExecutionDto executionDto) {
         final Interaction interaction = execution.getInteraction();
         final String transactionId = interaction.getUniqueId().toString();

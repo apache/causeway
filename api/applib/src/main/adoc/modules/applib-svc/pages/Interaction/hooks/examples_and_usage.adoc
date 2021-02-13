@@ -3,19 +3,18 @@
 
 
 
-
 == Usage Notes
 
-Typically domain objects will have little need to interact with the `InteractionContext` and `Interaction` directly.
-The services are used within the framework however, primarily to support the xref:refguide:applib-svc:ExecutionSubscriber.adoc[ExecutionSubscriber] SPI, and to emit domain events over the xref:refguide:applib-svc:EventBusService.adoc[`EventBusService`].
+You could also think of this interface as somewhat analogous to a (database) transaction.
+However, the framework's xref:system:generated:index/applib/services/xactn/TransactionService.adoc[TransactionService] allows programmatic control of underlying database transactions, including the ability to commit one transaction and start a new one (using xref:system:generated:index/applib/services/xactn/TransactionService.adoc#nextTransaction[nextTransaction]).
+The is therefore not an exact mapping between an `Interaction` and a (database) transaction, because the former could span multiple of the latter.
+
 
 
 
 == See Also
 
-* xref:system:generated:index/applib/services/iactn/Interaction.adoc[Interaction], as provided by the `InteractionContext`
-
-* xref:system:generated:index/applib/services/iactn/Execution.adoc[Execution], as referenced by xref:system:generated:index/applib/services/iactn/Interaction.adoc[Interaction].
+* xref:system:generated:index/applib/services/iactn/Execution.adoc[Execution]
 
 * xref:system:generated:index/applib/services/publishing/spi/ExecutionSubscriber.adoc[ExecutionSubscriber]
 

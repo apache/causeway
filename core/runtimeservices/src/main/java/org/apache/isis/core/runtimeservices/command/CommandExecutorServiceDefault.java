@@ -40,7 +40,7 @@ import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.CommandExecutorService;
 import org.apache.isis.applib.services.command.CommandOutcomeHandler;
-import org.apache.isis.applib.services.iactn.Interaction;
+import org.apache.isis.applib.services.iactn.Execution;
 import org.apache.isis.applib.services.iactn.InteractionContext;
 import org.apache.isis.applib.services.sudo.SudoService;
 import org.apache.isis.applib.services.user.UserMemento;
@@ -159,7 +159,7 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
             log.warn("Exception when executing : {}",
                     dto.getMember().getLogicalMemberIdentifier(), ex);
         });
-        
+
         return handleOutcomeAndSetCompletedAt(commandUpdater, result);
     }
 
@@ -238,7 +238,7 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
                 final Object targetObject = bookmarkService.lookup(bookmark);
 
                 val targetAdapter = adapterFor(targetObject);
-                
+
                 if(ManagedObjects.isNullOrUnspecifiedOrEmpty(targetAdapter)) {
                     throw _Exceptions.unrecoverableFormatted("cannot recreate ManagedObject from bookmark %s", bookmark);
                 }
@@ -259,7 +259,7 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
             final CommandOutcomeHandler outcomeHandler,
             final Result<Bookmark> result) {
 
-        
+
         //
         // copy over the outcome
         //
@@ -274,7 +274,7 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
         //
         val interaction = interactionContextProvider.get().currentInteractionElseFail();
 
-        final Interaction.Execution<?, ?> priorExecution = interaction.getPriorExecution();
+        final Execution<?, ?> priorExecution = interaction.getPriorExecution();
         if(priorExecution != null) {
 
             if (outcomeHandler.getStartedAt() == null) {
@@ -344,7 +344,7 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
     private static ObjectAction findActionElseNull(
             final ObjectSpecification specification,
             final String localActionId) {
-        
+
         return specification.getAction(localActionId).orElse(null);
     }
 

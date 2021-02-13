@@ -22,7 +22,10 @@ import java.util.concurrent.Callable;
 
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.command.Command;
+import org.apache.isis.applib.services.iactn.ActionInvocation;
+import org.apache.isis.applib.services.iactn.Execution;
 import org.apache.isis.applib.services.iactn.Interaction;
+import org.apache.isis.applib.services.iactn.PropertyEdit;
 import org.apache.isis.applib.services.metrics.MetricsService;
 
 /**
@@ -40,10 +43,10 @@ public interface InternalInteraction extends Interaction {
 
     /**
      * Use the provided {@link MemberExecutor} to invoke an action, with the provided
-     * {@link org.apache.isis.applib.services.iactn.Interaction.ActionInvocation} capturing 
+     * {@link ActionInvocation} capturing
      * the details of said action.
      * <p>
-     * Because this both pushes an {@link org.apache.isis.applib.services.iactn.Interaction.Execution} to
+     * Because this both pushes an {@link Execution} to
      * represent the action invocation and then pops it, that completed
      * execution is accessible at {@link Interaction#getPriorExecution()}.
      */
@@ -56,10 +59,10 @@ public interface InternalInteraction extends Interaction {
 
     /**
      * Use the provided {@link MemberExecutor} to edit a property, with the provided
-     * {@link org.apache.isis.applib.services.iactn.Interaction.PropertyEdit} 
+     * {@link PropertyEdit}
      * capturing the details of said property edit.
      * <p>
-     * Because this both pushes an {@link org.apache.isis.applib.services.iactn.Interaction.Execution} to
+     * Because this both pushes an {@link Execution} to
      * represent the property edit and then pops it, that completed
      * execution is accessible at {@link Interaction#getPriorExecution()}.
      */
@@ -69,5 +72,5 @@ public interface InternalInteraction extends Interaction {
             final ClockService clockService,
             final MetricsService metricsService,
             final Command command);
-    
+
 }

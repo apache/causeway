@@ -34,7 +34,9 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.command.Command;
-import org.apache.isis.applib.services.iactn.Interaction;
+import org.apache.isis.applib.services.iactn.ActionInvocation;
+import org.apache.isis.applib.services.iactn.Execution;
+import org.apache.isis.applib.services.iactn.PropertyEdit;
 import org.apache.isis.applib.services.metrics.MetricsService;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.commons.collections.Can;
@@ -133,10 +135,10 @@ implements MemberExecutorService {
         val targetClass = CommandUtil.targetClassNameFor(targetAdapter);
 
         val actionInvocation =
-                new Interaction.ActionInvocation(
+                new ActionInvocation(
                         interaction, actionId, targetPojo, argumentPojos, targetMemberName,
                         targetClass);
-        final InternalInteraction.MemberExecutor<Interaction.ActionInvocation> memberExecution =
+        final InternalInteraction.MemberExecutor<ActionInvocation> memberExecution =
                 actionExecutorFactory.createExecutor(
                         argumentAdapters, targetAdapter, owningAction,
                         targetAdapter, mixedInAdapter);
@@ -145,7 +147,7 @@ implements MemberExecutorService {
         interaction.execute(memberExecution, actionInvocation, clockService, metricsService.get(), command);
 
         // handle any exceptions
-        final Interaction.Execution<ActionInvocationDto, ?> priorExecution =
+        final Execution<ActionInvocationDto, ?> priorExecution =
                 _Casts.uncheckedCast(interaction.getPriorExecution());
 
         val executionExceptionIfAny = priorExecution.getThrew();
@@ -205,7 +207,7 @@ implements MemberExecutorService {
         val targetMemberName = CommandUtil.targetMemberNameFor(owningProperty);
         val targetClass = CommandUtil.targetClassNameFor(targetManagedObject);
 
-        val propertyEdit = new Interaction.PropertyEdit(interaction, propertyId, target, argValue, targetMemberName, targetClass);
+        val propertyEdit = new PropertyEdit(interaction, propertyId, target, argValue, targetMemberName, targetClass);
         val executor = propertyExecutorFactory
                 .createExecutor(newValueAdapter, owningProperty, targetManagedObject,
                         interactionInitiatedBy, head, editingVariant);
@@ -214,7 +216,7 @@ implements MemberExecutorService {
         val targetPojo = interaction.execute(executor, propertyEdit, clockService, metricsService.get(), command);
 
         // handle any exceptions
-        final Interaction.Execution<?, ?> priorExecution = interaction.getPriorExecution();
+        final Execution<?, ?> priorExecution = interaction.getPriorExecution();
 
         // TODO: should also sync DTO's 'threw' attribute here...?
 

@@ -25,6 +25,7 @@ import org.apache.isis.applib.events.domain.ActionDomainEvent;
 import org.apache.isis.applib.jaxb.JavaSqlXMLGregorianCalendarMarshalling;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.commanddto.HasCommandDto;
+import org.apache.isis.applib.services.iactn.Execution;
 import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.publishing.spi.CommandSubscriber;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
@@ -177,7 +178,7 @@ public class Command implements HasUniqueId, HasUsername, HasCommandDto {
      * which the {@link Interaction} that executed the command started.
      *
      * @see Interaction#getCurrentExecution()
-     * @see Interaction.Execution#getStartedAt()
+     * @see Execution#getStartedAt()
      */
     @Getter
     private Timestamp startedAt;
@@ -188,12 +189,12 @@ public class Command implements HasUniqueId, HasUsername, HasCommandDto {
      *
      * <p>
      *     Previously this field was deprecated (on the basis that the completedAt is also held in
-     *     {@link Interaction.Execution#getCompletedAt()}). However, this property is now used in master/slave
+     *     {@link Execution#getCompletedAt()}). However, this property is now used in master/slave
      *     replay scenarios which may query a persisted Command.
      * </p>
      *
      * See also {@link Interaction#getCurrentExecution()} and
-     * {@link Interaction.Execution#getCompletedAt()}.
+     * {@link Execution#getCompletedAt()}.
      */
     @Getter
     private Timestamp completedAt;
@@ -208,7 +209,7 @@ public class Command implements HasUniqueId, HasUsername, HasCommandDto {
      * </p>
      *
      * See also  {@link Interaction#getCurrentExecution()} and
-     * {@link org.apache.isis.applib.services.iactn.Interaction.Execution#getReturned()}.
+     * {@link Execution#getReturned()}.
      */
     @Getter
     private Bookmark result;
@@ -223,7 +224,7 @@ public class Command implements HasUniqueId, HasUsername, HasCommandDto {
      * </p>
      *
      * See also {@link Interaction#getCurrentExecution()} and
-     * {@link org.apache.isis.applib.services.iactn.Interaction.Execution#getThrew()}.
+     * {@link Execution#getThrew()}.
      */
     @Getter
     private Throwable exception;

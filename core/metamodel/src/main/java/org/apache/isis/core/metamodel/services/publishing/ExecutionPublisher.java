@@ -20,7 +20,7 @@ package org.apache.isis.core.metamodel.services.publishing;
 
 import java.util.function.Supplier;
 
-import org.apache.isis.applib.services.iactn.Interaction;
+import org.apache.isis.applib.services.iactn.Execution;
 import org.apache.isis.applib.services.publishing.spi.ExecutionSubscriber;
 
 /**
@@ -29,9 +29,9 @@ import org.apache.isis.applib.services.publishing.spi.ExecutionSubscriber;
  */
 public interface ExecutionPublisher {
 
-    void publishActionInvocation(Interaction.Execution<?,?> execution);
+    void publishActionInvocation(Execution<?,?> execution);
 
-    void publishPropertyEdit(Interaction.Execution<?,?> execution);
+    void publishPropertyEdit(Execution<?,?> execution);
 
     /**
      * Slightly hokey wormhole (anti)pattern to disable publishing for mixin associations.

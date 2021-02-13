@@ -33,51 +33,51 @@ import lombok.Value;
 import lombok.With;
 
 /**
- * Provides the user and scenario specific environment for an {@link Interaction.Execution}
- * 
+ * Provides the user and scenario specific environment for an {@link Execution}
+ *
  * @since 2.0 {@index}
  */
 @Value @Builder
 @RequiredArgsConstructor
-public final class ExecutionContext implements Serializable {
-    
+public class ExecutionContext implements Serializable {
+
     private static final long serialVersionUID = -220896735209733865L;
-    
+
     // -- IMMUTABLE FIELDS
 
     /**
      * The (programmatically) simulated (or actual) user.
-     * 
-     * @apiNote immutable, allows an {@link Interaction} to (logically) run with its 
-     * own simulated (or actual) user 
+     *
+     * @apiNote immutable, allows an {@link Interaction} to (logically) run with its
+     * own simulated (or actual) user
      */
-    @With @Getter @Builder.Default 
-    private final @NonNull UserMemento user = UserMemento.system();
-    
+    @With @Getter @Builder.Default
+    @NonNull UserMemento user = UserMemento.system();
+
     /**
      * The (programmatically) simulated (or actual) clock.
-     * 
-     * @apiNote immutable, allows an {@link Interaction} to (logically) run with its 
-     * own simulated (or actual) clock 
+     *
+     * @apiNote immutable, allows an {@link Interaction} to (logically) run with its
+     * own simulated (or actual) clock
      */
-    @With @Getter @Builder.Default 
-    private final @NonNull VirtualClock clock = VirtualClock.system();
-    
-    @With @Getter @Builder.Default 
-    private final @NonNull Locale locale = Locale.getDefault();
-    
-    @With @Getter @Builder.Default 
-    private final @NonNull TimeZone timeZone = TimeZone.getDefault();
-    
+    @With @Getter @Builder.Default
+    @NonNull VirtualClock clock = VirtualClock.system();
+
+    @With @Getter @Builder.Default
+    @NonNull Locale locale = Locale.getDefault();
+
+    @With @Getter @Builder.Default
+    @NonNull TimeZone timeZone = TimeZone.getDefault();
+
     // -- FACTORIES
-    
+
     /**
-     * Creates a new {@link ExecutionContext} with the specified user and 
+     * Creates a new {@link ExecutionContext} with the specified user and
      * system defaults for clock, locale and time-zone.
      */
     public static ExecutionContext ofUserWithSystemDefaults(
             final @NonNull UserMemento user) {
         return new ExecutionContext(user, VirtualClock.system(), Locale.getDefault(), TimeZone.getDefault());
-    }   
-    
+    }
+
 }

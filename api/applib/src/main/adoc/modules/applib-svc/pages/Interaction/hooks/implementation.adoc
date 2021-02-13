@@ -5,5 +5,4 @@
 
 == Implementation
 
-This class (`o.a.i.applib.services.iactn.InteractionContext`) is also the default implementation.
-
+This is a concrete class.

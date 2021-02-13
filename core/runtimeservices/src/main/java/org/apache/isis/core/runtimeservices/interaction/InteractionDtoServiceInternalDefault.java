@@ -34,6 +34,7 @@ import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.iactn.InteractionContext;
+import org.apache.isis.applib.services.iactn.Sequence;
 import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.applib.util.schema.CommandDtoUtils;
 import org.apache.isis.applib.util.schema.InteractionDtoUtils;
@@ -65,18 +66,18 @@ public class InteractionDtoServiceInternalDefault implements InteractionDtoServi
     @Inject private BookmarkService bookmarkService;
     @Inject private javax.inject.Provider<InteractionContext> interactionContextProvider;
     @Inject private UserService userService;
-    
+
     @Override
     public ActionInvocationDto asActionInvocationDto(
             final ObjectAction objectAction,
             final ManagedObject targetAdapter,
             final Can<ManagedObject> argumentAdapters) {
-        
+
         _Assert.assertEquals(objectAction.getParameterCount(), argumentAdapters.size(),
                 "action's parameter count and provided argument count must match");
-        
+
         final Interaction interaction = interactionContextProvider.get().currentInteractionElseFail();
-        final int nextEventSequence = interaction.next(Interaction.Sequence.INTERACTION.id());
+        final int nextEventSequence = interaction.next(Sequence.INTERACTION.id());
 
         final Bookmark targetBookmark = targetAdapter.getRootOid()
                 .map(RootOid::asBookmark)
@@ -122,7 +123,7 @@ public class InteractionDtoServiceInternalDefault implements InteractionDtoServi
 
         final Interaction interaction = interactionContextProvider.get().currentInteractionElseFail();
 
-        final int nextEventSequence = interaction.next(Interaction.Sequence.INTERACTION.id());
+        final int nextEventSequence = interaction.next(Sequence.INTERACTION.id());
 
         final Bookmark targetBookmark = targetAdapter.getRootOid()
                 .map(RootOid::asBookmark)

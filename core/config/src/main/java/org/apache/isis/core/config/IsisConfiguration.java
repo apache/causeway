@@ -59,7 +59,7 @@ import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.LabelPosition;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.services.i18n.TranslationService;
-import org.apache.isis.applib.services.iactn.Interaction;
+import org.apache.isis.applib.services.iactn.Execution;
 import org.apache.isis.applib.services.publishing.spi.EntityChangesSubscriber;
 import org.apache.isis.applib.services.publishing.spi.EntityPropertyChangeSubscriber;
 import org.apache.isis.applib.services.userreg.EmailNotificationService;
@@ -655,9 +655,9 @@ public class IsisConfiguration {
                  * {@link org.apache.isis.applib.services.publishing.spi.ExecutionSubscriber} for publishing.
                  *
                  * <p>
-                 *     The service's {@link org.apache.isis.applib.services.publishing.spi.ExecutionSubscriber#publish(Interaction.Execution) publish}
+                 *     The service's {@link org.apache.isis.applib.services.publishing.spi.ExecutionSubscriber#publish(Execution) publish}
                  *     method is called only once per transaction, with
-                 *     {@link Interaction.Execution} collecting details of
+                 *     {@link Execution} collecting details of
                  *     the identity of the target object, the action invoked, the action arguments and the returned
                  *     object (if any).
                  * </p>
@@ -841,9 +841,9 @@ public class IsisConfiguration {
                  * {@link org.apache.isis.applib.services.publishing.spi.ExecutionSubscriber} for publishing.
                  *
                  * <p>
-                 * The service's {@link org.apache.isis.applib.services.publishing.spi.ExecutionSubscriber#publish(Interaction.Execution) publish}
+                 * The service's {@link org.apache.isis.applib.services.publishing.spi.ExecutionSubscriber#publish(Execution) publish}
                  * method is called only once per transaction, with
-                 * {@link Interaction.Execution} collecting details of
+                 * {@link Execution} collecting details of
                  * the identity of the target object, the property edited, and the new value of the property.
                  * </p>
                  *
@@ -1594,7 +1594,7 @@ public class IsisConfiguration {
             public static class Translation {
 
                 private final Po po = new Po();
-                
+
                 /**
                  * Specifies the relative resource path to look for translation files.
                  * <p>
@@ -1646,44 +1646,44 @@ public class IsisConfiguration {
     private final Persistence persistence = new Persistence();
     @Data
     public static class Persistence {
-        
+
         private final Schema schema = new Schema();
         @Data
         public static class Schema {
-            
+
             /**
              * List of additional schemas to be auto-created.
              * <p>
-             * Explicitly creates given list of schemas by using the specified 
-             * {@link #getCreateSchemaSqlTemplate()} to generate the actual SQL 
+             * Explicitly creates given list of schemas by using the specified
+             * {@link #getCreateSchemaSqlTemplate()} to generate the actual SQL
              * statement against the configured data-source.
-             * <p> 
-             * This configuration mechanism does not consider any schema-auto-creation 
+             * <p>
+             * This configuration mechanism does not consider any schema-auto-creation
              * configuration (if any), that independently is provided the standard JPA way.
              */
             private final List<String> autoCreateSchemas = new ArrayList<>();
-            
+
             /**
              * Does lookup additional "mapping-files" in META-INF/orm-<i>name</i>.xml
-             * (equivalent to "mapping-file" entries in persistence.xml) and adds these 
+             * (equivalent to "mapping-file" entries in persistence.xml) and adds these
              * to those that are already configured the <i>Spring Data</i> way (if any).
-             * @implNote not implemented for JDO 
+             * @implNote not implemented for JDO
              */
             private final List<String> additionalOrmFiles = new ArrayList<>();
-            
+
             /**
              * Vendor specific SQL syntax to create a DB schema.
              * <p>
-             * This template is passed through {@link String#format(String, schemaName)} to 
+             * This template is passed through {@link String#format(String, schemaName)} to
              * make the actual SQL statement thats to be used against the configured data-source.
              * <p>
-             * Default template is {@literal CREATE SCHEMA IF NOT EXISTS %S} with the schema name 
+             * Default template is {@literal CREATE SCHEMA IF NOT EXISTS %S} with the schema name
              * converted to upper-case.
-             * <p>  
+             * <p>
              * For MYSQL/MARIADB use escape like {@code `%S`}
              */
             private String createSchemaSqlTemplate = "CREATE SCHEMA IF NOT EXISTS %S";
-        
+
         }
     }
 
@@ -2768,7 +2768,7 @@ public class IsisConfiguration {
         }
     }
 
-    
+
     private final Extensions extensions = new Extensions();
     @Data
     public static class Extensions {

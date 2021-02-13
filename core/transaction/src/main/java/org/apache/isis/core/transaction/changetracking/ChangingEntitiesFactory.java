@@ -28,6 +28,7 @@ import javax.annotation.Nullable;
 import org.apache.isis.applib.annotation.EntityChangeKind;
 import org.apache.isis.applib.jaxb.JavaSqlXMLGregorianCalendarMarshalling;
 import org.apache.isis.applib.services.iactn.Interaction;
+import org.apache.isis.applib.services.iactn.Sequence;
 import org.apache.isis.applib.services.publishing.spi.EntityChanges;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Maps;
@@ -44,15 +45,15 @@ import lombok.experimental.UtilityClass;
 
 @UtilityClass
 class ChangingEntitiesFactory {
-    
+
     @Nullable
     public static EntityChanges createChangingEntities(
             final java.sql.Timestamp completedAt,
             final String userName,
             final EntityChangeTrackerDefault entityChangeTracker) {
-        
+
         // take a copy of enlisted adapters ... the JDO implementation of the PublishingService
-        // creates further entities which would be enlisted; 
+        // creates further entities which would be enlisted;
         // taking copy of the map avoids ConcurrentModificationException
 
         val changeKindByEnlistedAdapter = new HashMap<>(
@@ -66,15 +67,15 @@ class ChangingEntitiesFactory {
                 completedAt,
                 userName,
                 entityChangeTracker.currentInteraction(),
-                entityChangeTracker.numberEntitiesLoaded(), 
+                entityChangeTracker.numberEntitiesLoaded(),
                 entityChangeTracker.numberAuditedEntityPropertiesModified(),
                 changeKindByEnlistedAdapter);
-        
+
         return changingEntities;
     }
-    
+
     // -- HELPER
-    
+
     private static EntityChanges newChangingEntities(
             final java.sql.Timestamp completedAt,
             final String userName,
@@ -84,17 +85,17 @@ class ChangingEntitiesFactory {
             final Map<ManagedObject, EntityChangeKind> changeKindByEnlistedAdapter) {
 
         val uniqueId = interaction.getUniqueId();
-        final int nextEventSequence = interaction.next(Interaction.Sequence.INTERACTION.id());
+        final int nextEventSequence = interaction.next(Sequence.INTERACTION.id());
 
         return new SimpleChangingEntities(
                     uniqueId, nextEventSequence,
                     userName, completedAt,
-                    numberEntitiesLoaded, 
-                    numberEntityPropertiesModified, 
+                    numberEntitiesLoaded,
+                    numberEntityPropertiesModified,
                     ()->newDto(
                             uniqueId, nextEventSequence,
                             userName, completedAt,
-                            numberEntitiesLoaded,         
+                            numberEntitiesLoaded,
                             numberEntityPropertiesModified,
                             changeKindByEnlistedAdapter));
     }
@@ -105,11 +106,11 @@ class ChangingEntitiesFactory {
             final int numberEntitiesLoaded,
             final int numberEntityPropertiesModified,
             final Map<ManagedObject, EntityChangeKind> changeKindByEnlistedAdapter) {
-        
+
         // calculate the inverse of 'changesByAdapter'
-        final ListMultimap<EntityChangeKind, ManagedObject> adaptersByChange = 
+        final ListMultimap<EntityChangeKind, ManagedObject> adaptersByChange =
             _Maps.invertToListMultimap(changeKindByEnlistedAdapter);
-        
+
         val objectsDto = new ObjectsDto();
 
         objectsDto.setCreated(oidsDtoFor(adaptersByChange, EntityChangeKind.CREATE));
@@ -135,22 +136,22 @@ class ChangingEntitiesFactory {
     }
 
     private static OidsDto oidsDtoFor(
-            final ListMultimap<EntityChangeKind, ManagedObject> adaptersByChange, 
+            final ListMultimap<EntityChangeKind, ManagedObject> adaptersByChange,
             final EntityChangeKind kind) {
         val oidsDto = new OidsDto();
 
         _NullSafe.stream(adaptersByChange.get(kind))
-        .map((final ManagedObject adapter) -> 
+        .map((final ManagedObject adapter) ->
             ManagedObjects.identify(adapter)
             .map(RootOid::asOidDto)
             .orElse(null)
         )
         .filter(Objects::nonNull)
         .forEach(oidsDto.getOid()::add);
-        
+
         return oidsDto;
     }
 
 
-    
+
 }
