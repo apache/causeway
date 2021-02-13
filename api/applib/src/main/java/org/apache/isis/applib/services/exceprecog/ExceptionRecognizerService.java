@@ -31,7 +31,8 @@ import org.apache.isis.commons.collections.Can;
 public interface ExceptionRecognizerService {
 
     /**
-     *
+     * All ExceptionRecognizer implementations as discovered by the IoC
+     * container,  honoring order of precedence.
      * @return all ExceptionRecognizer implementations as discovered by the IoC container,
      * honoring order of precedence.
      */

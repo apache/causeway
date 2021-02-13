@@ -27,7 +27,7 @@ import java.util.Objects;
 import java.util.function.Function;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.applib.services.hint.HintStore;
+import org.apache.isis.applib.services.hint.HintIdProvider;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
@@ -68,7 +68,7 @@ final class ObjectMementoWkt implements Serializable {
      * Factory method
      */
     static ObjectMementoWkt createPersistent(
-            RootOid rootOid, 
+            RootOid rootOid,
             SpecificationLoader specificationLoader) {
 
         return new ObjectMementoWkt(rootOid, specificationLoader);
@@ -186,10 +186,10 @@ final class ObjectMementoWkt implements Serializable {
 
             @Override
             public boolean equals(
-                    ObjectMementoWkt memento, 
+                    ObjectMementoWkt memento,
                     ObjectMementoWkt otherMemento) {
 
-                return otherMemento.recreateStrategy == ENCODEABLE && 
+                return otherMemento.recreateStrategy == ENCODEABLE &&
                         memento.encodableValue.equals(otherMemento.encodableValue);
             }
 
@@ -222,7 +222,7 @@ final class ObjectMementoWkt implements Serializable {
                 if(_NullSafe.isEmpty(memento.persistentOidStr)) {
                     throw _Exceptions.illegalArgument("need an id to lookup an object specId=%s", memento.objectSpecId);
                 }
-                
+
                 RootOid rootOid = Oid.unmarshaller().unmarshal(memento.persistentOidStr, RootOid.class);
                 try {
 
@@ -253,7 +253,7 @@ final class ObjectMementoWkt implements Serializable {
 
             @Override
             public boolean equals(ObjectMementoWkt oam, ObjectMementoWkt other) {
-                return other.recreateStrategy == LOOKUP 
+                return other.recreateStrategy == LOOKUP
                         && oam.persistentOidStr.equals(other.persistentOidStr);
             }
 
@@ -267,10 +267,10 @@ final class ObjectMementoWkt implements Serializable {
                 return oam.persistentOidStr;
             }
 
-        }, 
+        },
         /**
          * If all other strategies fail, as last resort we use plain java serialization, provided
-         * that the type in question is serializable 
+         * that the type in question is serializable
          */
         SERIALIZABLE {
             @Override
@@ -286,7 +286,7 @@ final class ObjectMementoWkt implements Serializable {
 
             @Override
             public boolean equals(
-                    ObjectMementoWkt memento, 
+                    ObjectMementoWkt memento,
                     ObjectMementoWkt otherMemento) {
                 return otherMemento.recreateStrategy == SERIALIZABLE
                         && Objects.equals(memento.objectSpecId, otherMemento.objectSpecId)
@@ -316,7 +316,7 @@ final class ObjectMementoWkt implements Serializable {
                 MetaModelContext mmc);
 
         public abstract boolean equals(
-                ObjectMementoWkt memento, 
+                ObjectMementoWkt memento,
                 ObjectMementoWkt otherMemento);
 
         public abstract int hashCode(ObjectMementoWkt memento);
@@ -351,7 +351,7 @@ final class ObjectMementoWkt implements Serializable {
      * Also, populated only if {@link #getCardinality() sort} is {@link Cardinality#SCALAR scalar}
      */
     private String encodableValue;
-    
+
     /**
      * The current value, if {@link RecreateStrategy#SERIALIZABLE}; will be <tt>null</tt> otherwise.
      *
@@ -377,7 +377,7 @@ final class ObjectMementoWkt implements Serializable {
     private Bookmark bookmark;
 
     /**
-     * Only populated for {@link ManagedObject#getPojo() domain object}s that implement {@link HintStore.HintIdProvider}.
+     * Only populated for {@link ManagedObject#getPojo() domain object}s that implement {@link HintIdProvider}.
      */
     private String hintId;
 
@@ -387,7 +387,7 @@ final class ObjectMementoWkt implements Serializable {
     private ArrayList<ObjectMementoWkt> list;
 
     private ObjectMementoWkt(
-            ArrayList<ObjectMementoWkt> list, 
+            ArrayList<ObjectMementoWkt> list,
             ObjectSpecId objectSpecId) {
 
         this.cardinality = Cardinality.VECTOR;
@@ -398,7 +398,7 @@ final class ObjectMementoWkt implements Serializable {
     private ObjectMementoWkt(RootOid rootOid, SpecificationLoader specificationLoader) {
 
         // -- // TODO[2112] do we ever need to create ENCODEABLE here?
-        val specId = rootOid.getObjectSpecId(); 
+        val specId = rootOid.getObjectSpecId();
         val spec = specificationLoader.lookupBySpecIdElseLoad(specId);
         if(spec!=null && spec.isEncodeable()) {
             this.cardinality = Cardinality.SCALAR;
@@ -406,7 +406,7 @@ final class ObjectMementoWkt implements Serializable {
             this.encodableValue = rootOid.getIdentifier();
             this.recreateStrategy = RecreateStrategy.ENCODEABLE;
             return;
-        } 
+        }
         // -- //
 
         this.cardinality = Cardinality.SCALAR;
@@ -443,14 +443,14 @@ final class ObjectMementoWkt implements Serializable {
             val rootOid = ManagedObjects.identifyElseFail(adapter);
             persistentOidStr = rootOid.enString();
             bookmark = rootOid.asBookmark();
-            if(adapter.getPojo() instanceof HintStore.HintIdProvider) {
-                HintStore.HintIdProvider provider = (HintStore.HintIdProvider) adapter.getPojo();
+            if(adapter.getPojo() instanceof HintIdProvider) {
+                HintIdProvider provider = (HintIdProvider) adapter.getPojo();
                 this.hintId = provider.hintId();
             }
             recreateStrategy = RecreateStrategy.LOOKUP;
             return;
         }
-        
+
         val encodableFacet = spec.getFacet(EncodableFacet.class);
         val isEncodable = encodableFacet != null;
         if (isEncodable) {
@@ -458,21 +458,21 @@ final class ObjectMementoWkt implements Serializable {
             recreateStrategy = RecreateStrategy.ENCODEABLE;
             return;
         }
-        
+
         if(spec.isSerializable()) {
             val serializer = spec.getMetaModelContext().getObjectManager().getObjectSerializer();
-            serializedObject = serializer.serialize(adapter); 
-            recreateStrategy = RecreateStrategy.SERIALIZABLE;    
+            serializedObject = serializer.serialize(adapter);
+            recreateStrategy = RecreateStrategy.SERIALIZABLE;
             return;
         }
-        
+
         throw _Exceptions.illegalArgument("Don't know how to create an ObjectMemento for a type "
                 + "with ObjectSpecification %s. "
                 + "All other strategies failed. Type is neither "
                 + "identifiable (isManagedBean() || isViewModel() || isEntity()), "
                 + "nor is a 'parented' Collection, "
                 + "nor has 'encodable' semantics, nor is (Serializable || Externalizable)", spec);
-        
+
     }
 
     private Cardinality getCardinality() {
@@ -514,7 +514,7 @@ final class ObjectMementoWkt implements Serializable {
         if(spec.getBeanSort().isManagedBean()) {
             return spec.getMetaModelContext().lookupServiceAdapterById(objectSpecId.asString());
         }
-        
+
         return cardinality.asAdapter(this, mmc);
     }
 

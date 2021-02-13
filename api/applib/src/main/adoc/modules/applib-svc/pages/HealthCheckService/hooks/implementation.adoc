@@ -4,3 +4,31 @@
 
 
 == Implementation
+
+The framework provides no default implementation, but the xref:docs:starters:simpleapp.adoc[simpleapp] starter app provides a link:https://github.com/apache/isis-app-simpleapp/blob/master/webapp/src/main/java/domainapp/webapp/application/services/health/HealthCheckServiceImpl.java[sample implementation]:
+
+[source,java]
+----
+@Service
+@Named("domainapp.HealthCheckServiceImpl")
+@Log4j2
+public class HealthCheckServiceImpl implements HealthCheckService {
+
+    private final SimpleObjects simpleObjects;
+
+    @Inject
+    public HealthCheckServiceImpl(SimpleObjects simpleObjects) {
+        this.simpleObjects = simpleObjects;
+    }
+
+    @Override
+    public Health check() {
+        try {
+            simpleObjects.ping();
+            return Health.ok();
+        } catch (Exception ex) {
+            return Health.error(ex);
+        }
+    }
+}
+----

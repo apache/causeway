@@ -38,6 +38,10 @@ The framework will call all available implementations until a mapping is made (c
 
 
 
+|xref:refguide:applib-svc:HintStore.adoc[HintIdProvider]
+|Provide a "logical" identity for view models such that UI hints can be stored for them.
+
+
 |xref:refguide:applib-svc:HintStore.adoc[HintStore]
 |Stores UI hints on a per-object basis.
 For example, the viewer remembers which tabs are selected, and for collections which view is selected (eg table or hidden), which page of a table to render, or whether "show all" (rows) is toggled.

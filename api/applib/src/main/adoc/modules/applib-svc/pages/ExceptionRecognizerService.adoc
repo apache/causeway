@@ -5,7 +5,7 @@
 
 
 
-include::system:generated:page$index/applib/services/exceprecog/ExceptionRecognizerService.adoc[leveloffset=+2]
+include::system:generated:page$index/applib/services/exceprecog/ExceptionRecognizerService.adoc[]
 
 include::ExceptionRecognizerService/hooks/implementation.adoc[]
 

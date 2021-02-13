@@ -4,3 +4,5 @@
 
 
 == Implementation
+
+The default implementation is provided by `o.a.i.core.runtimeservices.homepage.HomePageResolverServiceDefault`.

@@ -5,7 +5,7 @@
 
 
 
-include::system:generated:page$index/applib/services/publishing/spi/ExecutionSubscriber.adoc[leveloffset=+2]
+include::system:generated:page$index/applib/services/publishing/spi/ExecutionSubscriber.adoc[]
 
 include::ExecutionSubscriber/hooks/implementation.adoc[]
 

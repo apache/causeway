@@ -4,3 +4,7 @@
 
 
 == Implementation
+
+The framework provides a single grid implementation, `o.a.i.core.metamodel.services.grid.bootstrap3.GridSystemServiceBS3`, which supports Bootstrap3.
+
+(The framework also provides xref:vw:ROOT:about.adoc[Wicket viewer] components that are capable of interpreting and rendering this metadata.
