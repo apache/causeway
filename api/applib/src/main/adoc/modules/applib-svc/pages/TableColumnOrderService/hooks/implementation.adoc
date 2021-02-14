@@ -4,3 +4,5 @@
 
 
 == Implementation
+
+The framework provides a fallback implementation of this service, namely `o.a.i.core.metamodel.services.tablecol.TableColumnOrderServiceDefault`.
