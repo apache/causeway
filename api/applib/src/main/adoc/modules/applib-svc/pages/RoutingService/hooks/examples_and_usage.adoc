@@ -2,3 +2,18 @@
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
 
+
+== Usage
+
+Unlike most other domain services, the framework will check _all_ available implementations of `RoutingService` to return a route, rather than the first implementation found; in other words it uses the chain-of-responsibility pattern.
+
+Services are called in the order defined by the Spring link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/core/annotation/Order.html[`@Order`] annotation (or equivalent).
+The route used will be the result of the first implementation checked that declares that it can provide a route.
+
+
+== Related Services
+
+* xref:refguide:applib-svc:HomePageResolverService.adoc[`HomePageResolverService`]
++
+Used by the default implementation of this service uses the
+ to determine where to route actions that return `null` or are declared as `void`.

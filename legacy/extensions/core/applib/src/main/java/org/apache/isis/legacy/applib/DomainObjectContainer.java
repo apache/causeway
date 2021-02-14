@@ -52,7 +52,7 @@ import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.legacy.applib.filter.Filter;
-import org.apache.isis.persistence.jdo.applib.integration.JdoSupportService;
+import org.apache.isis.persistence.jdo.applib.services.JdoSupportService;
 
 import lombok.NonNull;
 import lombok.SneakyThrows;
@@ -67,7 +67,7 @@ import lombok.SneakyThrows;
 @Qualifier("Default")
 @Deprecated
 public class DomainObjectContainer {
-	
+
 	@Inject private RepositoryService repositoryService;
 	@Inject private MetaModelService metaModelService;
 	@Inject private JdoSupportService jdoSupport;
@@ -78,9 +78,9 @@ public class DomainObjectContainer {
 	@Inject private ServiceRegistry serviceRegistry;
 	@Inject private MessageService messageService;
 	@Inject private UserService userService;
-	
+
     /**
-     * Return the title of the object, as rendered in the UI by the 
+     * Return the title of the object, as rendered in the UI by the
      * Isis viewers.
      *
      * @deprecated - use {@link TitleService#titleOf(Object)} instead.
@@ -102,7 +102,7 @@ public class DomainObjectContainer {
     public String iconNameOf(Object domainObject) {
     	return titleService.iconNameOf(domainObject);
     }
-    
+
     /**
      * Re-initialises the fields of an object, using the
      * JDO {@link javax.jdo.PersistenceManager#refresh(Object) refresh} API.
@@ -152,15 +152,15 @@ public class DomainObjectContainer {
     public void objectChanged(Object domainObject) {
     	// do nothing
     }
-    
+
 
     /**
      * Flush all changes to the object store.
-     * 
+     *
      * <p>
      * Occasionally useful to ensure that newly persisted domain objects
-     * are flushed to the database prior to a subsequent repository query. 
-     * 
+     * are flushed to the database prior to a subsequent repository query.
+     *
      * @return  - is never used, always returns <tt>false</tt>.
      *
      * @deprecated - use {@link TransactionService#flushTransaction()}.
@@ -174,12 +174,12 @@ public class DomainObjectContainer {
 
     /**
      * Commit all changes to the object store.
-     * 
+     *
      * <p>
      * This has been deprecated because the demarcation of transaction
      * boundaries is a framework responsibility rather than being a
      * responsibility of the domain object model.
-     * 
+     *
      * @deprecated
      */
     @Programmatic
@@ -245,12 +245,12 @@ public class DomainObjectContainer {
     /**
      * Returns a new instance of the specified class that has the same persisted
      * state (either transient or persisted) as the provided object.
-     * 
+     *
      * <p>
      * This method has been deprecated because it is a rare use case, causing
      * unnecessary interface bloat for very little gain.
      * <p></p>
-     * 
+     *
      * @deprecated
      */
     @Programmatic
@@ -293,13 +293,13 @@ public class DomainObjectContainer {
     @Deprecated
     @Programmatic
     public <T> Iterable<T> lookupServices(Class<T> service){
-    	return serviceRegistry.select(service);	
+    	return serviceRegistry.select(service);
     }
 
     /**
      * Whether the object is in a valid state, that is that none of the
      * validation of properties, collections and object-level is vetoing.
-     * 
+     *
      * @see #validate(Object)
      */
     @Programmatic
@@ -309,7 +309,7 @@ public class DomainObjectContainer {
 
     /**
      * The reason, if any why the object is in a invalid state
-     * 
+     *
      * <p>
      * Checks the validation of all of the properties, collections and
      * object-level.
@@ -348,7 +348,7 @@ public class DomainObjectContainer {
     public void persist(Object domainObject) {
     	repositoryService.persist(domainObject);
     }
-    
+
     /**
      * @deprecated - use {@link org.apache.isis.applib.services.repository.RepositoryService#persist(Object)} instead.
      */
@@ -493,7 +493,7 @@ public class DomainObjectContainer {
                 ? repositoryService.allMatches(ofType, predicate::apply, range[0], range[1])
                 : repositoryService.allMatches(ofType, predicate::apply);
     }
-    
+
     /**
      * @deprecated - use {@link #allMatches(Class, Predicate, long...)} or (better) {@link #allMatches(Query)} instead
      */
@@ -509,9 +509,9 @@ public class DomainObjectContainer {
     /**
      * Returns all the instances of the specified type (including subtypes) that
      * have the given title.
-     * If the optional range parameters are used, the dataset returned starts 
-     * from (0 based) index, and consists of only up to count items.  
-     * 
+     * If the optional range parameters are used, the dataset returned starts
+     * from (0 based) index, and consists of only up to count items.
+     *
      * <p>
      * If there are no instances the list will be empty. This method creates a
      * new {@link List} object each time it is called so the caller is free to
@@ -543,9 +543,9 @@ public class DomainObjectContainer {
      * Returns all the instances of the specified type (including subtypes) that
      * match the given object: where any property that is set will be tested and
      * properties that are not set will be ignored.
-     * If the optional range parameters are used, the dataset returned starts 
-     * from (0 based) index, and consists of only up to count items.  
-     * 
+     * If the optional range parameters are used, the dataset returned starts
+     * from (0 based) index, and consists of only up to count items.
+     *
      * <p>
      * If there are no instances the list will be empty. This method creates a
      * new {@link List} object each time it is called so the caller is free to
@@ -588,7 +588,7 @@ public class DomainObjectContainer {
     public <T> T firstMatch(final Class<T> ofType, final Predicate<T> predicate) {
     	return repositoryService.firstMatch(ofType, predicate::apply).orElse(null);
     }
-    
+
     /**
      * @deprecated - use {@link org.apache.isis.applib.services.repository.RepositoryService#firstMatch(Class, java.util.function.Predicate)}  instead.
      */
@@ -663,15 +663,15 @@ public class DomainObjectContainer {
     public <T> T uniqueMatch(final Class<T> ofType, final Filter<T> filter) {
     	return repositoryService.uniqueMatch(ofType, filter::accept).orElse(null);
     }
-    
+
     /**
      * Find the only instance of the specified type (including subtypes) that
      * has the specified title.
-     * 
+     *
      * <p>
      * If no instance is found then <tt>null</tt> will be returned, while if
      * there is more that one instances a run-time exception will be thrown.
-     * 
+     *
      * <p>
      * This method is useful during prototyping, but - because the filtering is performed client-side -
      * this method is only really suitable for initial development/prototyping, or for classes with very few
@@ -691,7 +691,7 @@ public class DomainObjectContainer {
      * that matches the set fields in the pattern object: where any property
      * that is set will be tested and properties that are not set will be
      * ignored.
-     * 
+     *
      * <p>
      * If no instance is found then null will be return, while if there is more
      * that one instances a run-time exception will be thrown.
@@ -720,5 +720,5 @@ public class DomainObjectContainer {
     	return repositoryService.uniqueMatch(query).orElse(null);
     }
 
-	
+
 }
