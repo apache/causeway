@@ -84,12 +84,12 @@ public interface Query<T> extends Serializable {
 
     // -- FACTORIES
 
-    public static <T> Query<T> allInstances(
+    static <T> Query<T> allInstances(
             final @NonNull Class<T> resultType) {
         return new _AllInstancesQueryDefault<>(resultType, QueryRange.unconstrained());
     }
 
-    public static <T> NamedQuery<T> named(
+    static <T> NamedQuery<T> named(
             final @NonNull Class<T> resultType,
             final @NonNull String queryName) {
         return new _NamedQueryDefault<>(resultType, queryName, QueryRange.unconstrained(), null);

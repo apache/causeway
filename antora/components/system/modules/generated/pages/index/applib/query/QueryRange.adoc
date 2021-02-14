@@ -1,14 +1,18 @@
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
+To support paging of query results, specifies an offset/start instance and limits the number of instances to be retrieved.
+
+Used by _NamedQuery#withRange(QueryRange)_ and _AllInstancesQuery#withRange(QueryRange)_ .
+
 == API
 
 [source,java]
 .QueryRange.java
 ----
 interface QueryRange {
-  boolean isUnconstrained()
-  boolean hasOffset()
-  boolean hasLimit()
+  boolean isUnconstrained()     // <.>
+  boolean hasOffset()     // <.>
+  boolean hasLimit()     // <.>
   long getStart()     // <.>
   long getLimit()     // <.>
   long getEnd()     // <.>
@@ -24,6 +28,21 @@ interface QueryRange {
 }
 ----
 
+<.> xref:#isUnconstrained__[isUnconstrained()]
++
+--
+Whether this range is unconstrained, meaning that there is _#hasOffset() no offset_ and _#hasLimit() no limit_ has been specified.
+--
+<.> xref:#hasOffset__[hasOffset()]
++
+--
+Whether this range has had a non-zero offset specified using _#withStart(long)_ .
+--
+<.> xref:#hasLimit__[hasLimit()]
++
+--
+Whether this range has a limit to the number of instances to be returned using _#withLimit(long)_ .
+--
 <.> xref:#getStart__[getStart()]
 +
 --
@@ -32,7 +51,7 @@ The start index into the set table. (non-negative)
 <.> xref:#getLimit__[getLimit()]
 +
 --
-The maximum number of items to return, starting at _#getStart()_ (non-negative)
+The maximum number of items to return, starting at _#getStart()_ (non-negative).
 --
 <.> xref:#getEnd__[getEnd()]
 +
@@ -57,6 +76,21 @@ The end index into the set table. Overflow is ignored. (as java int primitive) i
 
 == Members
 
+[#isUnconstrained__]
+=== isUnconstrained()
+
+Whether this range is unconstrained, meaning that there is _#hasOffset() no offset_ and _#hasLimit() no limit_ has been specified.
+
+[#hasOffset__]
+=== hasOffset()
+
+Whether this range has had a non-zero offset specified using _#withStart(long)_ .
+
+[#hasLimit__]
+=== hasLimit()
+
+Whether this range has a limit to the number of instances to be returned using _#withLimit(long)_ .
+
 [#getStart__]
 === getStart()
 
@@ -65,7 +99,7 @@ The start index into the set table. (non-negative)
 [#getLimit__]
 === getLimit()
 
-The maximum number of items to return, starting at _#getStart()_ (non-negative)
+The maximum number of items to return, starting at _#getStart()_ (non-negative).
 
 [#getEnd__]
 === getEnd()

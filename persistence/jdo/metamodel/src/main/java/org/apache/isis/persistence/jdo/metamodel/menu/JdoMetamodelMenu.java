@@ -34,7 +34,7 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.util.ZipWriter;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.NamedWithMimeType.CommonMimeType;
-import org.apache.isis.persistence.jdo.applib.integration.JdoSupportService;
+import org.apache.isis.persistence.jdo.applib.services.JdoSupportService;
 import org.apache.isis.persistence.jdo.provider.entities.JdoFacetContext;
 
 import lombok.val;
@@ -49,7 +49,7 @@ public class JdoMetamodelMenu {
 
     @Inject private JdoSupportService jdoSupport;
     @Inject private JdoFacetContext jdoFacetContext;
-    
+
     public static abstract class ActionDomainEvent
     extends IsisModuleApplib.ActionDomainEvent<JdoMetamodelMenu> {}
 
@@ -66,19 +66,19 @@ public class JdoMetamodelMenu {
             )
     @MemberOrder(sequence="500.670.1")
     public Blob downloadMetamodels() {
-        
+
         final byte[] zipBytes = zip();
         return Blob.of("jdo-metamodels", CommonMimeType.ZIP, zipBytes);
     }
-    
+
     // -- HELPER
-    
+
     private byte[] zip() {
 
         val pmFactory = getPersistenceManagerFactory();
-        
+
         val zipWriter = ZipWriter.ofFailureMessage("Unable to create zip of jdo metamodels");
-        
+
         pmFactory.getManagedClasses().stream()
         .filter(jdoFacetContext::isPersistenceEnhanced)
         .map(Class::getName)
@@ -89,7 +89,7 @@ public class JdoMetamodelMenu {
         });
         return zipWriter.toBytes();
     }
-    
+
     private String zipEntryNameFor(TypeMetadata metadata) {
         return metadata.getName() + ".xml";
     }

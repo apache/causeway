@@ -4,10 +4,188 @@
 
 == Usage
 
-Typically it's good practice to define a domain-specific service (eg `CustomerRepository`) which then delegates to `RepositoryService`.
-This domain-specific service can use some of the "naive" methods provided by `RepositoryService` that return all instances or rely on client-side filtering; these can then be replaced by more sophisticated implementations that use proper server-side filtering later on.
+=== Persist
+
+Use an n-arg constructor, eg:
+
+[source,java]
+----
+Customer cust = repositoryService.detachedEntity(
+    new Customer("Freddie", "Mercury"));
+repositoryService.persist(cust);
+----
+
+rather than the deprecated version that takes a type:
+
+[source,java]
+----
+Customer cust = repositoryService.detachedEntity(Customer.class);
+cust.setFirstName("Freddie");
+cust.setLastName("Mercury");
+repositoryService.persist(cust);
+----
+
+
+You should be aware that by default the framework queues up calls to xref:system:generated:index/applib/services/repository/RepositoryService.adoc#persist__T[#persist()] and xref:system:generated:index/applib/services/repository/RepositoryService.adoc#remove__Object[#remove()].
+These are then executed either when the request completes (and the transaction commits), or if the queue is flushed.
+This can be done either implicitly by the framework, or as the result of a direct call to xref:system:generated:index/applib/services/xactn/TransactionService.adoc#flushTransaction__[TransactionService#flushTransaction].
+
+By default the framework itself will cause `#flush()` to be called whenever a query is executed by way of `#allMatches(Query)`.
+However, this behaviour can be disabled using the  xref:refguide:config:sections/Other.adoc[]
+
+
+
+=== `persistAndFlush(...)`, `removeAndFlush(...)`
+
+In some cases, such as when using managed properties and collections for implementing 1-1, 1-n, or m-n relationships, the developer needs to invoke `flush()` to send the changes to the persistence mechanism.
+These managed properties and collections and then updated.
+
+The `persistAndFlush(...)` and `removeAndFlush(...)` methods save the developer from having to additionally call the `flush(...)` method after calling `persist()` or `remove()`.
+
+For example, the following code requires a flush to occur, so uses these methods:
+
+[source,java]
+----
+public abstract class Warehouse extends SalesVIPEntity<Marketplace> {
+
+    @Persistent(mappedBy = "marketplace", dependentElement = "true")
+    @Getter @Setter
+    SortedSet<MarketplaceExcludedProduct> excludedProducts =
+                            new TreeSet<MarketplaceExcludedProduct>();
+
+    @Action(semantics = SemanticsOf.IDEMPOTENT)
+    public MarketplaceExcludedProduct addExcludedProduct(final Product product) {
+        val marketplaceExcludedProduct = findExcludedProduct(product);
+        if (marketplaceExcludedProduct == null) {
+            marketplaceExcludedProduct =
+                repositoryService.detachedEntity(
+                    new MarketplaceExcludedProduct.builder()
+                            .marketPlace(this)
+                            .product(product)
+                            .build());
+        }
+
+        repositoryService.persistAndFlush(marketplaceExcludedProduct);  // <.>
+        return marketplaceExcludedProduct;
+    }
+
+    @Action(semantics = SemanticsOf.IDEMPOTENT)
+    public void removeExcludedProducts(final Product product) {
+        val marketplaceExcludedProduct = findExcludedProduct(product);
+        if (marketplaceExcludedProduct != null) {
+            repositoryService.removeAndFlush(marketplaceExcludedProduct);
+        }
+    }
+    ...
+}
+----
+<.> Needed for updating the managed properties and collections.
+
+On the “addExcludedProduct()” action, if the user didn't flush, the following test would fail because the managed collection would not containing the given product:
+
+[source,java]
+----
+@Test
+public void addExcludedProduct() {
+
+    // given
+    final AmazonMarketplace amazonMarketplace = this.wrapSkipRules(
+        this.marketplaceRepository).findOrCreateAmazonMarketplace(
+            AmazonMarketplaceLocation.FRANCE);
+
+    final Product product = this.wrap(this.productRepository)
+        .createProduct(UUID.randomUUID().toString(), UUID.randomUUID().toString());
+
+    // when
+    this.wrap(amazonMarketplace).addExcludedProduct(product);
+
+    // then
+    Assertions.assertThat(
+            this.wrapSkipRules(amazonMarketplace).findAllProductsExcluded()
+        ).contains(product);                                                    // <1>
+}
+----
+<1> this would fail.
+
+
+
+=== Named queries and `xxxMatches(...)`
+
+There are two subtypes of the `Query` API, namely `NamedQuery` and `AllInstancesQuery`.
+The former is the more important, as it identifies a named query and a set of parameter/argument tuples, and is executed server-side.
+
+For example, using JDO a `ToDoItem` could be annotated:
+
+[source,java]
+----
+@javax.jdo.annotations.Queries( {
+    @javax.jdo.annotations.Query(
+        name = "findByAtPathAndComplete", language = "JDOQL",  // <.>
+        value = "SELECT "
+                + "FROM todoapp.dom.module.todoitem.ToDoItem "
+                + "WHERE atPath.indexOf(:atPath) == 0 "        // <.>
+                + "   && complete == :complete"),              // <.>
+    // ...
+})
+public class ToDoItem ... {
+    // ...
+}
+----
+<1> name of the query
+<2> defines the `atPath` parameter
+<3> defines the `complete` parameter
+
+This JDO query definitions are used in the `ToDoItemRepositoryImplUsingJdoql` service:
+
+[source,java]
+----
+import org.springframework.stereotype.Service;
+
+@Service
+public class ToDoItemRepositoryImplUsingJdoql implements ToDoItemRepositoryImpl {
+    @Programmatic
+    public List<ToDoItem> findByAtPathAndCategory(final String atPath, final Category category) {
+        return repositoryService.allMatches(
+                Query.named(ToDoItem.class,
+                        "findByAtPathAndCategory", // <.>
+                        "atPath", atPath,          // <.>
+                        "category", category));    // <.>
+    }
+    ...
+    @javax.inject.Inject
+    RepositoryService repositoryService;
+}
+----
+<1> corresponds to the "findByAtPathAndCategory" JDO named query
+<2> provide argument for the `atPath` parameter.
+The pattern is parameter, argument, parameter, argument, ... and so on.
+<3> provide argument for the `category` parameter.
+The pattern is parameter, argument, parameter, argument, ... and so on.
+
+
+[TIP]
+====
+If using JPA, it is also possible to use the Spring Data repositories, using xref:system:generated:index/persistence/jpa/applib/services/JpaSupportService.adoc[JpaSupportService].
+====
+
+[TIP]
+====
+If using JDO/DataNucleus, it is also possible to use the DataNucleus type-safe query API, see xref:system:generated:index/persistence/jdo/applib/services/JdoSupportService.adoc[JdoSupportService].
+====
+
+
 
 
 == See also
 
-* xref:system:generated:index/applib
+Supporting classes used by the API:
+
+* xref:system:generated:index/applib/services/repository/EntityState.adoc[EntityState]
+* xref:system:generated:index/applib/query/Query.adoc[Query]
+** xref:system:generated:index/applib/query/NamedQuery.adoc[NamedQuery]
+** xref:system:generated:index/applib/query/AllInstancesQuery.adoc[AllInstancesQuery]
+* xref:system:generated:index/applib/query/QueryRange.adoc[QueryRange]
+
+Transaction management:
+
+* xref:system:generated:index/applib/services/xactn/TransactionService.adoc[TransactionService]

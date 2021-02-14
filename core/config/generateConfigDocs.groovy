@@ -92,6 +92,13 @@ groups+= new PropertyGroup() {{
 }}
 
 groups+= new PropertyGroup() {{
+    prefix = "isis.persistence.schema"
+    name = "Core Persistence Schema"
+    properties: []
+    searchOrder = 100
+}}
+
+groups+= new PropertyGroup() {{
     prefix = "isis.security.shiro"
     name = "Shiro Security Implementation"
     properties: []

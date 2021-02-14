@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.persistence.jdo.applib.integration;
+package org.apache.isis.persistence.jdo.applib.services;
 
 import java.util.Collection;
 import java.util.List;
@@ -32,19 +32,20 @@ import javax.jdo.query.BooleanExpression;
 import org.datanucleus.store.rdbms.RDBMSPropertyNames;
 
 /**
- * Primarily provides access to the current thread's {@link PersistenceManagerFactory} and 
- * hence also the current thread's {@link PersistenceManager}. 
- *  
+ * Primarily provides access to the current thread's {@link PersistenceManagerFactory} and
+ * hence also the current thread's {@link PersistenceManager}.
+ *
  * @since 2.0 {@index}
- * 
- * @apiNote While ideally should be independent of vendor specifics, yet depends on DataNucleus RDBMS. 
+ *
+ * @apiNote While ideally this service should be independent of vendor
+ *          specifics, currently it depends on DataNucleus RDBMS.
  */
 public interface JdoSupportService {
-    
+
     // -- INTERFACE
 
     PersistenceManagerFactory getPersistenceManagerFactory();
-    
+
     /**
      * Force a reload (corresponding to the JDO <tt>PersistenceManager</tt>'s <tt>refresh()</tt> method)
      * of a domain objects.
@@ -84,9 +85,9 @@ public interface JdoSupportService {
      * is temporarily disabled while this method is performed.
      */
     void deleteAll(Class<?>... pcClasses);
-    
+
     // -- QUERIES
-    
+
     /**
      * To perform the most common use-case of executing a (type-safe) query against the specified class,
      * filtering using the provided {@link BooleanExpression}, then automatically cloning the returned list
@@ -149,12 +150,12 @@ public interface JdoSupportService {
      * <p>
      * From <a href="http://www.datanucleus.org/products/accessplatform/jdo/query.html">DN-5.2</a> ...
      * <p>
-     * For RDBMS any single-valued member will be fetched in the original SQL query, but with 
-     * multiple-valued members this is not supported. However what will happen is that any 
-     * collection/array field will be retrieved in a single SQL query for all candidate objects 
-     * (by default using an EXISTS subquery); this avoids the "N+1" problem, resulting in 1 original 
-     * SQL query plus 1 SQL query per collection member. Note that you can disable this by either 
-     * not putting multi-valued fields in the FetchPlan, or by setting the query extension 
+     * For RDBMS any single-valued member will be fetched in the original SQL query, but with
+     * multiple-valued members this is not supported. However what will happen is that any
+     * collection/array field will be retrieved in a single SQL query for all candidate objects
+     * (by default using an EXISTS subquery); this avoids the "N+1" problem, resulting in 1 original
+     * SQL query plus 1 SQL query per collection member. Note that you can disable this by either
+     * not putting multi-valued fields in the FetchPlan, or by setting the query extension
      * datanucleus.rdbms.query.multivaluedFetch to none (default is "exists" using the single SQL per field).
      */
     default void disableMultivaluedFetch(JDOQLTypedQuery<?> query) {
@@ -168,12 +169,12 @@ public interface JdoSupportService {
     default void disableMultivaluedFetch(Query<?> query) {
         query.addExtension(RDBMSPropertyNames.PROPERTY_RDBMS_QUERY_MULTIVALUED_FETCH, "none");
     }
-    
-    
+
+
     // -- SHORTCUTS
-    
+
     default PersistenceManager getPersistenceManager() {
         return getPersistenceManagerFactory().getPersistenceManager();
     }
-    
+
 }

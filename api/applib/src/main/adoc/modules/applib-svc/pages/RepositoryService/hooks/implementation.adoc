@@ -4,3 +4,25 @@
 
 
 == Implementation
+
+The default implementation of this domain service is `o.a.i.core.runtimeservices.repository.RepositoryServiceDefault`.
+
+=== Configuration Properties
+
+The default implementation of this domain service supports the following configuration properties:
+
+[cols="2a,1,3a", options="header"]
+|===
+|Property
+|Value +
+(default value)
+|Description
+
+|`isis.core.runtime-services.` +
+`repository-service.` +
+`disable-auto-flush`
+|`true`,`false` +
+(`false`)
+|Whether the `RepositoryService` should automatically flush pending changes prior to querying (via `allMatches()`, `firstMatch()` and so on).
+
+|===

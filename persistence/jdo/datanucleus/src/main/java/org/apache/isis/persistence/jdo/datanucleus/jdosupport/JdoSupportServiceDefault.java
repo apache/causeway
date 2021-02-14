@@ -49,7 +49,7 @@ import org.apache.isis.applib.exceptions.unrecoverable.ObjectPersistenceExceptio
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.persistence.jdo.applib.integration.JdoSupportService;
+import org.apache.isis.persistence.jdo.applib.services.JdoSupportService;
 import org.apache.isis.persistence.jdo.spring.integration.TransactionAwarePersistenceManagerFactoryProxy;
 
 import static org.apache.isis.commons.internal.base._NullSafe.stream;

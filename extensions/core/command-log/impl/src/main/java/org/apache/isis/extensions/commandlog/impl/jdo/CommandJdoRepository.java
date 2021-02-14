@@ -46,7 +46,7 @@ import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.iactn.InteractionContext;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.util.schema.CommandDtoUtils;
-import org.apache.isis.persistence.jdo.applib.integration.JdoSupportService;
+import org.apache.isis.persistence.jdo.applib.services.JdoSupportService;
 import org.apache.isis.schema.cmd.v2.CommandDto;
 import org.apache.isis.schema.cmd.v2.CommandsDto;
 import org.apache.isis.schema.cmd.v2.MapDto;
@@ -77,7 +77,7 @@ public class CommandJdoRepository {
             final @Nullable LocalDate to) {
         final Timestamp fromTs = toTimestampStartOfDayWithOffset(from, 0);
         final Timestamp toTs = toTimestampStartOfDayWithOffset(to, 1);
-        
+
         final Query<CommandJdo> query;
         if(from != null) {
             if(to != null) {
@@ -85,12 +85,12 @@ public class CommandJdoRepository {
                         .withParameter("from", fromTs)
                         .withParameter("to", toTs);
             } else {
-                query = Query.named(CommandJdo.class, "findByTimestampAfter") 
+                query = Query.named(CommandJdo.class, "findByTimestampAfter")
                         .withParameter("from", fromTs);
             }
         } else {
             if(to != null) {
-                query = Query.named(CommandJdo.class, "findByTimestampBefore") 
+                query = Query.named(CommandJdo.class, "findByTimestampBefore")
                         .withParameter("to", toTs);
             } else {
                 query = Query.named(CommandJdo.class, "find");
@@ -126,32 +126,32 @@ public class CommandJdoRepository {
 
 
     public List<CommandJdo> findByTargetAndFromAndTo(
-            final Bookmark target, 
-            final @Nullable LocalDate from, 
+            final Bookmark target,
+            final @Nullable LocalDate from,
             final @Nullable LocalDate to) {
 
         final Timestamp fromTs = toTimestampStartOfDayWithOffset(from, 0);
         final Timestamp toTs = toTimestampStartOfDayWithOffset(to, 1);
-        
+
         final Query<CommandJdo> query;
         if(from != null) {
             if(to != null) {
-                query = Query.named(CommandJdo.class, "findByTargetAndTimestampBetween") 
+                query = Query.named(CommandJdo.class, "findByTargetAndTimestampBetween")
                         .withParameter("target", target)
                         .withParameter("from", fromTs)
                         .withParameter("to", toTs);
             } else {
-                query = Query.named(CommandJdo.class, "findByTargetAndTimestampAfter") 
+                query = Query.named(CommandJdo.class, "findByTargetAndTimestampAfter")
                         .withParameter("target", target)
                         .withParameter("from", fromTs);
             }
         } else {
             if(to != null) {
-                query = Query.named(CommandJdo.class, "findByTargetAndTimestampBefore") 
+                query = Query.named(CommandJdo.class, "findByTargetAndTimestampBefore")
                         .withParameter("target", target)
                         .withParameter("to", toTs);
             } else {
-                query = Query.named(CommandJdo.class, "findByTarget") 
+                query = Query.named(CommandJdo.class, "findByTarget")
                         .withParameter("target", target);
             }
         }
@@ -159,9 +159,9 @@ public class CommandJdoRepository {
     }
 
     private static Timestamp toTimestampStartOfDayWithOffset(
-            final @Nullable LocalDate dt, 
+            final @Nullable LocalDate dt,
             final int daysOffset) {
-        
+
         return dt!=null
                 ? new java.sql.Timestamp(
                         Instant.from(dt.atStartOfDay().plusDays(daysOffset).atZone(ZoneId.systemDefault()))
@@ -247,17 +247,17 @@ public class CommandJdoRepository {
     private List<CommandJdo> findSince(
             final Timestamp timestamp,
             final Integer batchSize) {
-        
+
         // DN generates incorrect SQL for SQL Server if count set to 1; so we set to 2 and then trim
-        // XXX that's a historic workaround, should rather be fixed upstream 
+        // XXX that's a historic workaround, should rather be fixed upstream
         val needsTrimFix = batchSize != null && batchSize == 1;
-        
+
         val q = Query.named(CommandJdo.class, "findSince")
                 .withParameter("timestamp", timestamp)
                 .withRange(QueryRange.limit(
                         needsTrimFix ? 2L : batchSize
                 ));
-        
+
         final List<CommandJdo> commandJdos = repositoryService().allMatches(q);
         return needsTrimFix && commandJdos.size() > 1
                     ? commandJdos.subList(0,1)
@@ -356,7 +356,7 @@ public class CommandJdoRepository {
     public void truncateLog() {
         repositoryService().removeAll(CommandJdo.class);
     }
-    
+
     private RepositoryService repositoryService() {
         return repositoryServiceProvider.get();
     }

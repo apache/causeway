@@ -641,12 +641,12 @@ skinparam rectangle<<116>> {
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<90>> {
+skinparam rectangle<<117>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<117>> {
+skinparam rectangle<<90>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
@@ -661,12 +661,12 @@ skinparam rectangle<<118>> {
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<119>> {
+skinparam rectangle<<92>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<92>> {
+skinparam rectangle<<119>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
@@ -706,12 +706,12 @@ skinparam rectangle<<98>> {
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<11>> {
+skinparam rectangle<<99>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<99>> {
+skinparam rectangle<<11>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
@@ -781,17 +781,12 @@ skinparam rectangle<<123>> {
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<3>> {
-  BackgroundColor #438dd5
-  FontColor #fffffe
-  BorderColor #2E6295
-}
 skinparam rectangle<<124>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<4>> {
+skinparam rectangle<<3>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
@@ -801,7 +796,7 @@ skinparam rectangle<<125>> {
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<5>> {
+skinparam rectangle<<4>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
@@ -811,7 +806,7 @@ skinparam rectangle<<126>> {
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<6>> {
+skinparam rectangle<<5>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
@@ -821,7 +816,7 @@ skinparam rectangle<<127>> {
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<128>> {
+skinparam rectangle<<6>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
@@ -831,12 +826,17 @@ skinparam rectangle<<7>> {
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<129>> {
+skinparam rectangle<<128>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
 }
 skinparam rectangle<<8>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<129>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
@@ -1381,12 +1381,12 @@ skinparam rectangle<<106>> {
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<80>> {
+skinparam rectangle<<107>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<107>> {
+skinparam rectangle<<80>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
@@ -3400,7 +3400,7 @@ Folder: \persistence\jdo\applib
 [%collapsible]
 .Document Index Entries
 ====
-xref:system:generated:index/persistence/jdo/applib/IsisModulePersistenceJdoApplib.adoc[IsisModulePersistenceJdoApplib], xref:system:generated:index/persistence/jdo/applib/integration/JdoSupportService.adoc[JdoSupportService]
+xref:system:generated:index/persistence/jdo/applib/IsisModulePersistenceJdoApplib.adoc[IsisModulePersistenceJdoApplib], xref:system:generated:index/persistence/jdo/applib/services/JdoSupportService.adoc[JdoSupportService]
 ====
 
 |Apache Isis Persistence - JDO Provider (DataNucleus)

@@ -21,14 +21,37 @@ package org.apache.isis.applib.query;
 import java.io.Serializable;
 
 /**
+ * To support paging of query results, specifies an offset/start instance and limits
+ * the number of instances to be retrieved.
+ *
+ * <p>
+ *     Used by {@link NamedQuery#withRange(QueryRange)} and
+ *     {@link AllInstancesQuery#withRange(QueryRange)}.
+ * </p>
+ *
  * @since 2.0 {@index}
  */
 public interface QueryRange extends Serializable {
 
     // -- INTERFACE
 
+    /**
+     * Whether this range is unconstrained, meaning that there is
+     * {@link #hasOffset() no offset} and {@link #hasLimit() no limit} has
+     * been specified.
+     */
     boolean isUnconstrained();
+
+    /**
+     * Whether this range has had a non-zero offset specified using
+     * {@link #withStart(long)}.
+     */
     boolean hasOffset();
+
+    /**
+     * Whether this range has a limit to the number of instances to be returned
+     * using {@link #withLimit(long)}.
+     */
     boolean hasLimit();
 
     /**
@@ -36,10 +59,10 @@ public interface QueryRange extends Serializable {
      * (non-negative)
      */
     long getStart();
-    
+
     /**
      * The maximum number of items to return, starting at {@link #getStart()}
-     * (non-negative)
+     * (non-negative).
      */
     long getLimit();
 
@@ -48,9 +71,9 @@ public interface QueryRange extends Serializable {
      * (non-negative)
      */
     long getEnd();
-    
+
     // -- TO INT
-    
+
     /**
      * The start index into the set table (as java int primitive)
      * @throws ArithmeticException - if {@code start} overflows an int
@@ -58,7 +81,7 @@ public interface QueryRange extends Serializable {
     default int getStartAsInt() {
         return Math.toIntExact(getStart());
     }
-    
+
     /**
      * The maximum number of items to return (as java int primitive)
      * if {@code limit} overflows an int, {@link Integer#MAX_VALUE} is returned.
@@ -80,34 +103,34 @@ public interface QueryRange extends Serializable {
                 ? Math.toIntExact(end)
                 : Integer.MAX_VALUE;
     }
-    
+
     // -- FACTORIES
-    
-    public static QueryRange unconstrained() {
+
+    static QueryRange unconstrained() {
         return of(0L, 0L);
     }
-    
-    public static QueryRange start(long start) {
+
+    static QueryRange start(long start) {
         return of(start, 0L);
     }
-    
-    public static QueryRange limit(long limit) {
+
+    static QueryRange limit(long limit) {
         return of(0L, limit);
     }
-    
-    public static QueryRange of(long... range) {
+
+    static QueryRange of(long... range) {
         return new _QueryRangeDefault(range);
     }
-    
+
     // -- WITHERS
-    
-    public default QueryRange withStart(long start) {
+
+    default QueryRange withStart(long start) {
         return of(start, getLimit());
     }
-    
-    public default QueryRange withLimit(long limit) {
+
+    default QueryRange withLimit(long limit) {
         return of(getStart(), limit);
     }
 
-    
+
 }
