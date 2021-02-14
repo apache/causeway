@@ -28,7 +28,8 @@ import org.springframework.context.annotation.Scope;
 
 /**
  * {@code @InteractionScope} is a specialization of {@link Scope @Scope} for a
- * component whose lifecycle is bound to the current top-level Interaction.
+ * component whose lifecycle is bound to the current top-level Interaction,
+ * in other words that it is private to the &quot;current user&quot;.
  *
  * <p>Specifically, {@code @InteractionScope} is a <em>composed annotation</em> that
  * acts as a shortcut for {@code @Scope("interaction")}.

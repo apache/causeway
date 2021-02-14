@@ -29,9 +29,23 @@ import org.apache.isis.commons.functional.ThrowingRunnable;
 import lombok.NonNull;
 
 /**
- * Intended only for use by fixture scripts and integration tests, allows a block of code to execute
- * while the {@link UserService}'s {@link UserService#currentUser() getUser()} method returns the specified user/role
- * as the effective user.
+ * Allows a block of code to be executed within an arbitrary
+ * {@link ExecutionContext}, allowing the who, when and where to be temporarily
+ * switched.
+ *
+ * <p>
+ * Most typically this service is used to temporarily change the
+ * &qout;who&quot;, that is the user reported by the {@link UserService}'s
+ * {@link UserService#currentUser() getUser()} - hence the name SudoService.
+ * But the user's locale and timezome can also be changed, as well as the time
+ * reported by {@link org.apache.isis.applib.services.clock.ClockService}.
+ * </p>
+ *
+ * <p>
+ * The primary use case for this service is for fixture scripts and
+ * integration tests.
+ * </p>
+ *
  * @since 1.x revised for 2.0 {@index}
  */
 public interface SudoService {
@@ -43,19 +57,23 @@ public interface SudoService {
             new RoleMemento(
                     SudoService.class.getName() + "#accessAll",
                     "Sudo, can view and use all object members.");
-            
+
 
     /**
-     * Executes the supplied block, with the {@link UserService} returning the specified user.
+     * Executes the supplied {@link Callable} block, within the provided
+     * {@link ExecutionContext}.
+     *
      * @param sudoMapper - maps the current {@link ExecutionContext} to the sudo one
      * @since 2.0
      */
     <T> T call(
-            @NonNull UnaryOperator<ExecutionContext> sudoMapper,
-            @NonNull Callable<T> supplier);
+            final @NonNull UnaryOperator<ExecutionContext> sudoMapper,
+            final @NonNull Callable<T> supplier);
 
     /**
-     * Executes the supplied block, with the {@link UserService} returning the specified user.
+     * Executes the supplied {@link Callable} block, within the provided
+     * {@link ExecutionContext}.
+     *
      * @param sudoMapper - maps the current {@link ExecutionContext} to the sudo one
      * @since 2.0
      */
@@ -63,19 +81,6 @@ public interface SudoService {
             final @NonNull UnaryOperator<ExecutionContext> sudoMapper,
             final @NonNull ThrowingRunnable runnable) {
         call(sudoMapper, ThrowingRunnable.toCallable(runnable));
-    }
-
-    
-    
-    /**
-     * Allows the {@link SudoService} to notify other services/components that the effective user has been changed.
-     * @since 2.0
-     */
-    interface Listener {
-
-        void beforeCall(@NonNull ExecutionContext before, @NonNull ExecutionContext after);
-
-        void afterCall(@NonNull ExecutionContext before, @NonNull ExecutionContext after);
     }
 
 

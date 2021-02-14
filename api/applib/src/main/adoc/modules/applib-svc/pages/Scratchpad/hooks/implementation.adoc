@@ -4,3 +4,6 @@
 
 
 == Implementation
+
+This framework provides a default implementation of `o.a.i.core.runtimeservices.scratchpad.ScratchpadDefault`.
+This is just an xref:refguide:applib-ant:InteractionScope.adoc[`@InteractionScope`]'d wrapper around a `java.util.Map`

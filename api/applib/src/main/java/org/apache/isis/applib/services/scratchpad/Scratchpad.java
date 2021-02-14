@@ -21,13 +21,8 @@ package org.apache.isis.applib.services.scratchpad;
 import org.springframework.beans.factory.DisposableBean;
 
 /**
- * This service (API and implementation) provides a mechanism to interchange information 
- * between multiple objects invoked in the same interaction.  
- * Most commonly this will be as the result of invoking a bulk action.
- * <p>
- * This implementation has only one implementation (this class) in applib, so it is annotated with
- * {@link org.apache.isis.applib.annotation.DomainService}.  This means that it is automatically registered and
- * available for use; no further configuration is required.
+ * This service (API and implementation) provides a mechanism to interchange information
+ * between multiple objects invoked in the same interaction.
  *
  * @since 1.x {@index}
  */
@@ -36,11 +31,19 @@ public interface Scratchpad
 
     /**
      * Obtain user-data, as set by a previous object being acted upon.
+     *
+     * <p>
+     *     The key value should obey the general contract for hash maps.
+     * </p>
      */
     public Object get(Object key);
 
     /**
      * Set user-data, for the use of a subsequent object being acted upon.
+     *
+     * <p>
+     *     The key value should obey the general contract for hash maps.
+     * </p>
      */
     public void put(Object key, Object value);
 

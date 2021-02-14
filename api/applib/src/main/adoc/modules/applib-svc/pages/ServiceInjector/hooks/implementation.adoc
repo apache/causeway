@@ -4,3 +4,6 @@
 
 
 == Implementation
+
+The framework provides a default implementation of `o.a.i.core.metamodel.services.ServiceInjectorDefault`.
+Under the covers this delegates to Spring Framework's injection mechanism.

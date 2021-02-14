@@ -4,3 +4,8 @@
 
 
 == Implementation
+
+
+The framework provides a default implementation, `o.a.i.applib.services.session.SessionLoggingServiceLogging` that logs using log4j2.
+
+//The (non-ASF) link:https://platform.incode.org[Incode Platform^]'s sessionlogger module provides an implementation that logs each session as a JDO entity.

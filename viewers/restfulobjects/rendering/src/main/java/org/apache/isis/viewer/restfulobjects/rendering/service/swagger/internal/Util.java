@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import org.apache.isis.applib.services.swagger.SwaggerService;
+import org.apache.isis.applib.services.swagger.Visibility;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.collections.ImmutableEnumSet;
 import org.apache.isis.commons.internal.base._Casts;
@@ -105,7 +105,7 @@ public final class Util {
                 correspondingClass == Void.class;
     }
 
-    static Predicate<ObjectAssociation> associationsWith(final SwaggerService.Visibility visibility) {
+    static Predicate<ObjectAssociation> associationsWith(final Visibility visibility) {
         return new Predicate<ObjectAssociation>() {
             @Override
             public boolean test(final ObjectAssociation objectAssociation) {
@@ -116,19 +116,19 @@ public final class Util {
 
     static List<OneToOneAssociation> propertiesOf(
             final ObjectSpecification objectSpecification,
-            final SwaggerService.Visibility visibility) {
+            final Visibility visibility) {
         return associationsOf(objectSpecification, ObjectAssociation.Predicates.PROPERTIES, visibility);
     }
 
     static List<OneToManyAssociation> collectionsOf(
             final ObjectSpecification objectSpecification,
-            final SwaggerService.Visibility visibility) {
+            final Visibility visibility) {
         return associationsOf(objectSpecification, ObjectAssociation.Predicates.COLLECTIONS, visibility);
     }
 
     private static <T extends ObjectAssociation> List<T> associationsOf(
             final ObjectSpecification objectSpecification,
-            final Predicate<ObjectAssociation> associationPredicate, final SwaggerService.Visibility visibility) {
+            final Predicate<ObjectAssociation> associationPredicate, final Visibility visibility) {
 
         return objectSpecification.streamAssociations(MixedIn.INCLUDED)
                 .filter(associationPredicate.and(associationsWith(visibility)))
@@ -138,14 +138,14 @@ public final class Util {
 
     static List<ObjectAction> actionsOf(
             final ObjectSpecification objectSpec,
-            final SwaggerService.Visibility visibility,
+            final Visibility visibility,
             final ClassExcluder classExcluder) {
         val actionTypes = actionTypesFor(visibility);
 
         return objectSpec.streamActions(actionTypes, MixedIn.INCLUDED)
                 .filter(objectAction->
-                    !classExcluder.exclude(objectAction) 
-                        && !visibility.isPublic() 
+                    !classExcluder.exclude(objectAction)
+                        && !visibility.isPublic()
                         || isVisibleForPublic(objectAction) )
                 .collect(Collectors.toList());
     }
@@ -160,7 +160,7 @@ public final class Util {
         return response;
     }
 
-    static ImmutableEnumSet<ActionType> actionTypesFor(final SwaggerService.Visibility visibility) {
+    static ImmutableEnumSet<ActionType> actionTypesFor(final Visibility visibility) {
         switch (visibility) {
         case PUBLIC:
             return ActionType.USER_ONLY;

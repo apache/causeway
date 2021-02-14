@@ -26,17 +26,34 @@ import org.springframework.beans.factory.InjectionPoint;
 import lombok.val;
 
 /**
- * Resolves injection points using the ServiceRegistry.
- * <p>
- * Implementation must be thread-safe.
- * </p>
- * 
- * @since 2.0 {@index}
+ * Resolves injection points using the
+ * {@link org.apache.isis.applib.services.registry.ServiceRegistry} (in other
+ * words provides a domain service instance to all fields and setters that are
+ * annotated with {@link javax.inject.Inject}).
+ *
+ * @since 1.x extended in 2.0 {@index}
  */
 public interface ServiceInjector {
 
+    /**
+     * Injects domain services into the object, and calls the provided
+     * {@link Consumer} for any non-resolvable injection points.
+     *
+     * @param domainObject
+     * @param onNotResolvable
+     * @param <T>
+     * @return
+     */
     <T> T injectServicesInto(final T domainObject, Consumer<InjectionPoint> onNotResolvable);
 
+    /**
+     * Injecs domain services into the object, and throws a
+     * {@link NoSuchElementException} for any injection points that cannot be resolved.
+     *
+     * @param domainObject
+     * @param <T>
+     * @return
+     */
     default <T> T injectServicesInto(final T domainObject) {
 
         return injectServicesInto(domainObject, injectionPoint->{

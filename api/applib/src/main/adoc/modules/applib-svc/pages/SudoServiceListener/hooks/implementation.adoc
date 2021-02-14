@@ -5,4 +5,4 @@
 
 == Implementation
 
-This is an enum.
+This is an SPI.

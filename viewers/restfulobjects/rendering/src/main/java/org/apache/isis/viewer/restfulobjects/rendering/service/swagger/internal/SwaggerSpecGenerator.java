@@ -25,7 +25,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 
 import org.springframework.stereotype.Component;
 
-import org.apache.isis.applib.services.swagger.SwaggerService;
+import org.apache.isis.applib.services.swagger.Format;
+import org.apache.isis.applib.services.swagger.Visibility;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 import io.swagger.models.Swagger;
@@ -55,8 +56,8 @@ public class SwaggerSpecGenerator {
 
     public String generate(
             final String basePath,
-            final SwaggerService.Visibility visibility,
-            final SwaggerService.Format format) {
+            final Visibility visibility,
+            final Format format) {
 
         final Generation generation = newGeneration(basePath, visibility);
         final Swagger swagger = generation.generate();
@@ -75,7 +76,7 @@ public class SwaggerSpecGenerator {
         }
     }
 
-    protected Generation newGeneration(final String basePath, final SwaggerService.Visibility visibility) {
+    protected Generation newGeneration(final String basePath, final Visibility visibility) {
         return new Generation(
                 basePath, visibility,
                 specificationLoader,

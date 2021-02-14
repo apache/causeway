@@ -33,7 +33,9 @@ import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
+import org.apache.isis.applib.services.swagger.Format;
 import org.apache.isis.applib.services.swagger.SwaggerService;
+import org.apache.isis.applib.services.swagger.Visibility;
 import org.apache.isis.applib.value.Clob;
 import org.apache.isis.applib.value.LocalResourcePath;
 import org.apache.isis.commons.internal.base._Strings;
@@ -120,8 +122,8 @@ public class SwaggerServiceMenu {
     public Clob downloadSwaggerSchemaDefinition(
             @ParameterLayout(named = "Filename")
             final String fileNamePrefix,
-            final SwaggerService.Visibility visibility,
-            final SwaggerService.Format format) {
+            final Visibility visibility,
+            final Format format) {
 
         final String fileName = buildFileName(fileNamePrefix, visibility, format);
         final String spec = swaggerService.generateSwaggerSpec(visibility, format);
@@ -131,11 +133,11 @@ public class SwaggerServiceMenu {
     public String default0DownloadSwaggerSchemaDefinition() {
         return "swagger";
     }
-    public SwaggerService.Visibility default1DownloadSwaggerSchemaDefinition() {
-        return SwaggerService.Visibility.PRIVATE;
+    public Visibility default1DownloadSwaggerSchemaDefinition() {
+        return Visibility.PRIVATE;
     }
-    public SwaggerService.Format default2DownloadSwaggerSchemaDefinition() {
-        return SwaggerService.Format.YAML;
+    public Format default2DownloadSwaggerSchemaDefinition() {
+        return Format.YAML;
     }
 
     // -- HELPER
@@ -149,8 +151,8 @@ public class SwaggerServiceMenu {
 
     private static String buildFileName(
             String fileNamePrefix,
-            final SwaggerService.Visibility visibility,
-            final SwaggerService.Format format) {
+            final Visibility visibility,
+            final Format format) {
         final String formatLower = format.name().toLowerCase();
         int i = fileNamePrefix.lastIndexOf("." + formatLower);
         if(i > 0) {

@@ -3,56 +3,10 @@
 
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
-WARNING: TODO: this content has not yet been reviewed/updated for v2.0
-
 include::system:generated:page$index/applib/services/inject/ServiceInjector.adoc[ServiceInjector]
 
 include::ServiceInjector/hooks/implementation.adoc[]
 
 include::ServiceInjector/hooks/examples_and_usage.adoc[]
 
-== API
 
-include::system:generated:page$index/applib/services/inject/ServiceInjector.adoc[leveloffset=+2]
-
-TODO example migration
-
-.Deprecated Docs
-[WARNING]
-================================
-
-== API
-
-[source,java]
-----
-include::refguide:applib-svc:example$services/inject/ServiceInjector.java[tags="refguide"]
-----
-
-
-================================
-
-== Implementation
-
-The framework provides a default implementation of `o.a.i.core.metamodel.services.ServiceInjectorDefault`.
-
-== Usage
-
-The primary use case is to instantiate domain objects using a regular constructor ("new is the new new"), and then using the `#injectServicesInto(...)` API to set up any dependencies.
-
-For example:
-
-[source,java]
-----
-Customer cust = serviceInjector.injectServicesInto( new Customer());
-cust.setFirstName("Freddie");
-cust.setLastName("Mercury");
-repositoryService.persist(cust);
-----
-
-The recommended alternative is to use the xref:refguide:applib-svc:FactoryService.adoc[`FactoryService`] API which performs both steps in a single factory method and also emits lifecycle events.
-
-
-
-== Related Services
-
-See xref:refguide:applib-svc:ServiceRegistry.adoc[`ServiceRegistry`] to just lookup existing domain services by type.

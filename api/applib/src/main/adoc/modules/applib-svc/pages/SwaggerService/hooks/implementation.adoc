@@ -4,3 +4,5 @@
 
 
 == Implementation
+
+The framework provides a default implementation of the service, `o.a.i.viewer.restfulobjects.rendering.service.swagger.SwaggerServiceDefault`.

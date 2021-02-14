@@ -34,6 +34,7 @@ import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.iactn.ExecutionContext;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.sudo.SudoService;
+import org.apache.isis.applib.services.sudo.SudoServiceListener;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.interaction.session.InteractionFactory;
 import org.apache.isis.core.interaction.session.InteractionTracker;
@@ -56,32 +57,32 @@ public class SudoServiceDefault implements SudoService {
     private final InteractionTracker interactionTracker;
 
     // -- LISTENERS
-    
-    private Can<SudoService.Listener> sudoListeners = Can.empty();
+
+    private Can<SudoServiceListener> sudoListeners = Can.empty();
 
     @PostConstruct @Inject
     public void init(final ServiceRegistry serviceRegistry) {
-        this.sudoListeners = serviceRegistry.select(SudoService.Listener.class);
+        this.sudoListeners = serviceRegistry.select(SudoServiceListener.class);
     }
-    
+
     // -- IMPLEMENTATION
-    
+
     @Override
     public <T> T call(
-            final @NonNull UnaryOperator<ExecutionContext> sudoMapper, 
+            final @NonNull UnaryOperator<ExecutionContext> sudoMapper,
             final @NonNull Callable<T> callable) {
 
         val currentInteractionLayer = interactionTracker.currentAuthenticationLayerElseFail();
         val currentExecutionContext = currentInteractionLayer.getExecutionContext();
         val sudoExecutionContext = sudoMapper.apply(currentExecutionContext);
-        
+
         val sodoSession = currentInteractionLayer
                 .getAuthentication()
                 .withExecutionContext(sudoExecutionContext);
-        
+
         try {
             beforeCall(currentExecutionContext, sudoExecutionContext);
-            
+
             return interactionFactory.callAuthenticated(sodoSession, callable);
         } finally {
             afterCall(sudoExecutionContext, currentExecutionContext);
@@ -91,7 +92,7 @@ public class SudoServiceDefault implements SudoService {
     // -- HELPER
 
     private void beforeCall(
-            final @NonNull ExecutionContext before, 
+            final @NonNull ExecutionContext before,
             final @NonNull ExecutionContext after) {
         for (val sudoListener : sudoListeners) {
             sudoListener.beforeCall(before, after);
@@ -99,7 +100,7 @@ public class SudoServiceDefault implements SudoService {
     }
 
     private void afterCall(
-            final @NonNull ExecutionContext before, 
+            final @NonNull ExecutionContext before,
             final @NonNull ExecutionContext after) {
         for (val sudoListener : sudoListeners) {
             sudoListener.afterCall(before, after);

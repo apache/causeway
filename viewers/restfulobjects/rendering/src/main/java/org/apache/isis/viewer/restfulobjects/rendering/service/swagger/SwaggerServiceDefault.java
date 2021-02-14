@@ -27,7 +27,9 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.applib.services.swagger.Format;
 import org.apache.isis.applib.services.swagger.SwaggerService;
+import org.apache.isis.applib.services.swagger.Visibility;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.config.RestEasyConfiguration;
 import org.apache.isis.core.config.viewer.wicket.WebAppContextPath;
@@ -50,12 +52,12 @@ public class SwaggerServiceDefault implements SwaggerService {
             final SwaggerSpecGenerator swaggerSpecGenerator,
             final RestEasyConfiguration restEasyConfiguration,
             final WebAppContextPath webAppContextPath) {
-        
+
         this.swaggerSpecGenerator = swaggerSpecGenerator;
-        
+
         val restfulPath = restEasyConfiguration.getJaxrs().getDefaultPath();
         val restfulBase = webAppContextPath.prependContextPath(restfulPath);
-        
+
         this.basePath = _Strings.suffix(restfulBase, "/");
     }
 

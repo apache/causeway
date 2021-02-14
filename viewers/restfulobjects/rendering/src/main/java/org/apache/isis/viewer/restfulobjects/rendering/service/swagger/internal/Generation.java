@@ -30,7 +30,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.services.swagger.SwaggerService;
+import org.apache.isis.applib.services.swagger.Visibility;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
@@ -68,9 +68,9 @@ class Generation {
 
     // double quotes
     private static final String DQ = ""; // empty seems the only variant that works
-    
+
     private final String basePath;
-    private final SwaggerService.Visibility visibility;
+    private final Visibility visibility;
     private final SpecificationLoader specificationLoader;
 
     private final ValuePropertyFactory valuePropertyFactory;
@@ -83,7 +83,7 @@ class Generation {
 
     public Generation(
             final String basePath,
-            final SwaggerService.Visibility visibility,
+            final Visibility visibility,
             final SpecificationLoader specificationLoader,
             final Tagger tagger,
             final ClassExcluder classExcluder,
@@ -99,8 +99,8 @@ class Generation {
     Swagger generate() {
         this.swagger = new Swagger();
 
-        final String swaggerVersionInfo = 
-                String.format("swagger.io (%s)", 
+        final String swaggerVersionInfo =
+                String.format("swagger.io (%s)",
                         Swagger.class.getPackage().getImplementationVersion()
                         );
 
@@ -159,7 +159,7 @@ class Generation {
             if(serviceActions.isEmpty()) {
                 continue;
             }
-            
+
             appendServicePath(spec);
 
             for (val serviceAction : serviceActions) {
@@ -829,27 +829,27 @@ class Generation {
     private static Operation newOperation(String ... reprTypes) {
         Operation operation = new Operation()
                 .produces("application/json");
-        
+
         boolean supportsV1 = false;
-                
+
         if(reprTypes!=null) {
             for(String reprType: reprTypes) {
-                
+
                 if(reprType.equals("object") || reprType.equals("action-result")) {
                     supportsV1 = true;
                 }
-                
+
                 operation = operation.produces(
                         "application/json;profile=" + DQ + "urn:org.restfulobjects:repr-types/" + reprType + DQ);
             }
         }
-        
+
         if(supportsV1) {
             operation = operation
                 .produces("application/json;profile=" + DQ + "urn:org.apache.isis/v1" + DQ)
                 .produces("application/json;profile=" + DQ + "urn:org.apache.isis/v1;suppress=all" + DQ);
         }
-                
+
         return operation;
     }
 

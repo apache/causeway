@@ -2,3 +2,26 @@
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
 
+== Usage
+
+The primary use case is to instantiate domain objects using a regular constructor, and then using the service to set up any dependencies.
+
+For example:
+
+[source,java]
+----
+Customer cust = serviceInjector.injectServicesInto(
+                    new Customer("Freddie", "Mercury"));
+repositoryService.persist(cust);
+----
+
+
+== Related Services
+
+* xref:refguide:applib-svc:ServiceRegistry.adoc[`ServiceRegistry`]
++
+to just lookup existing domain services by type.
+
+* xref:system:generated:index/applib/services/repository/RepositoryService.adoc#detachedEntity__T[RepositoryService#detachedEntity()]
+
+* xref:system:generated:index/applib/services/factory/FactoryService.adoc#detachedEntity__T[FactoryService#detachedEntity()]
