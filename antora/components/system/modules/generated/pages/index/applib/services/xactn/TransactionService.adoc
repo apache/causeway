@@ -15,22 +15,22 @@ interface TransactionService {
 }
 ----
 
-<.> xref:#currentTransactionId[currentTransactionId]
+<.> xref:#currentTransactionId__[currentTransactionId()]
 +
 --
 Optionally returns the unique identifier of the current thread's transaction, based on whether there is an active transaction associated with the current thread.
 --
-<.> xref:#currentTransactionState[currentTransactionState]
+<.> xref:#currentTransactionState__[currentTransactionState()]
 +
 --
 Returns the state of the current thread's transaction., or returns _TransactionState#NONE_ , if there is no active transaction associated with the current thread.
 --
-<.> xref:#flushTransaction[flushTransaction]
+<.> xref:#flushTransaction__[flushTransaction()]
 +
 --
 Flushes all changes to the object store.
 --
-<.> xref:#nextTransaction[nextTransaction]
+<.> xref:#nextTransaction__[nextTransaction()]
 +
 --
 Commits the current thread's transaction (if there is one), and in any case begins a new one.
@@ -38,18 +38,18 @@ Commits the current thread's transaction (if there is one), and in any case begi
 
 == Members
 
-[#currentTransactionId]
-=== currentTransactionId
+[#currentTransactionId__]
+=== currentTransactionId()
 
 Optionally returns the unique identifier of the current thread's transaction, based on whether there is an active transaction associated with the current thread.
 
-[#currentTransactionState]
-=== currentTransactionState
+[#currentTransactionState__]
+=== currentTransactionState()
 
 Returns the state of the current thread's transaction., or returns _TransactionState#NONE_ , if there is no active transaction associated with the current thread.
 
-[#flushTransaction]
-=== flushTransaction
+[#flushTransaction__]
+=== flushTransaction()
 
 Flushes all changes to the object store.
 
@@ -57,8 +57,8 @@ Occasionally useful to ensure that newly persisted domain objects are flushed to
 
 If there is no active transaction associated with the current thread, then does nothing.
 
-[#nextTransaction]
-=== nextTransaction
+[#nextTransaction__]
+=== nextTransaction()
 
 Commits the current thread's transaction (if there is one), and in any case begins a new one.
 

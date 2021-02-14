@@ -18,10 +18,10 @@ interface ApplicationPermissionRepository<P> {
 }
 ----
 
-<.> xref:#newApplicationPermission[newApplicationPermission]
+<.> xref:#newApplicationPermission__[newApplicationPermission()]
 
 == Members
 
-[#newApplicationPermission]
-=== newApplicationPermission
+[#newApplicationPermission__]
+=== newApplicationPermission()
 

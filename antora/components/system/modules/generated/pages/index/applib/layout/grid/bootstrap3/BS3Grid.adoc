@@ -23,7 +23,7 @@ class BS3Grid {
 }
 ----
 
-<.> xref:#getMetadataErrors[getMetadataErrors]
+<.> xref:#getMetadataErrors__[getMetadataErrors()]
 +
 --
 For diagnostics; populated by the framework if and only if a metadata error.
@@ -31,8 +31,8 @@ For diagnostics; populated by the framework if and only if a metadata error.
 
 == Members
 
-[#getMetadataErrors]
-=== getMetadataErrors
+[#getMetadataErrors__]
+=== getMetadataErrors()
 
 For diagnostics; populated by the framework if and only if a metadata error.
 

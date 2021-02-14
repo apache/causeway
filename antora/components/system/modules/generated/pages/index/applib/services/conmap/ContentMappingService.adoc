@@ -10,7 +10,7 @@ interface ContentMappingService {
 }
 ----
 
-<.> xref:#map[map]
+<.> xref:#map__Object_List[map(Object, List)]
 +
 --
 Typically for mapping from a domain object to a DTO.
@@ -18,8 +18,8 @@ Typically for mapping from a domain object to a DTO.
 
 == Members
 
-[#map]
-=== map
+[#map__Object_List]
+=== map(Object, List)
 
 Typically for mapping from a domain object to a DTO.
 

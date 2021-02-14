@@ -14,18 +14,18 @@ interface TreeAdapter<T> {
 }
 ----
 
-<.> xref:#parentOf[parentOf]
-<.> xref:#childCountOf[childCountOf]
-<.> xref:#childrenOf[childrenOf]
+<.> xref:#parentOf__T[parentOf(T)]
+<.> xref:#childCountOf__T[childCountOf(T)]
+<.> xref:#childrenOf__T[childrenOf(T)]
 
 == Members
 
-[#parentOf]
-=== parentOf
+[#parentOf__T]
+=== parentOf(T)
 
-[#childCountOf]
-=== childCountOf
+[#childCountOf__T]
+=== childCountOf(T)
 
-[#childrenOf]
-=== childrenOf
+[#childrenOf__T]
+=== childrenOf(T)
 

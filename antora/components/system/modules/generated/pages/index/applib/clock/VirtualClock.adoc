@@ -25,52 +25,52 @@ interface VirtualClock {
 }
 ----
 
-<.> xref:#now[now]
+<.> xref:#now__[now()]
 +
 --
 Returns the (virtual) time as an _Instant_ .
 --
-<.> xref:#system[system]
+<.> xref:#system__[system()]
 +
 --
 Returns a the system's default ticking clock.
 --
-<.> xref:#nowAt[nowAt]
+<.> xref:#nowAt__Instant[nowAt(Instant)]
 +
 --
 Returns a ticking clock set to virtual time _Instant_ _virtualNow_
 --
-<.> xref:#frozenAt[frozenAt]
+<.> xref:#frozenAt__Instant[frozenAt(Instant)]
 +
 --
 Always returns the time _Instant_ as given by _frozenAt_
 --
-<.> xref:#frozenTestClock[frozenTestClock]
+<.> xref:#frozenTestClock__[frozenTestClock()]
 +
 --
 Always returns the time _Instant_ 2003/8/17 21:30:25 (UTC)
 --
-<.> xref:#getEpochMillis[getEpochMillis]
+<.> xref:#getEpochMillis__[getEpochMillis()]
 +
 --
 Returns the (virtual) time as the number of milliseconds since the epoch start.
 --
-<.> xref:#localDate[localDate]
+<.> xref:#localDate__ZoneId[localDate(ZoneId)]
 +
 --
 Returns the (virtual) time as _LocalDate_ , using the _ZoneId_ timezone.
 --
-<.> xref:#localDateTime[localDateTime]
+<.> xref:#localDateTime__ZoneId[localDateTime(ZoneId)]
 +
 --
 Returns the (virtual) time as _LocalDateTime_ , using the _ZoneId_ timezone.
 --
-<.> xref:#offsetDateTime[offsetDateTime]
+<.> xref:#offsetDateTime__ZoneId[offsetDateTime(ZoneId)]
 +
 --
 Returns the (virtual) time as _OffsetDateTime_ , using the _ZoneId_ timezone.
 --
-<.> xref:#asJodaDateTime[asJodaDateTime]
+<.> xref:#asJodaDateTime__ZoneId[asJodaDateTime(ZoneId)]
 +
 --
 [WARNING]
@@ -82,7 +82,7 @@ please migrate to java.time.*
 
 Returns the time as a Joda _org.joda.time.DateTime_ , using the _ZoneId#systemDefault() system default_ timezone.
 --
-<.> xref:#asJodaLocalDate[asJodaLocalDate]
+<.> xref:#asJodaLocalDate__ZoneId[asJodaLocalDate(ZoneId)]
 +
 --
 [WARNING]
@@ -97,53 +97,53 @@ Returns the time as a Joda _DateTime_ , using the _ZoneId#systemDefault() system
 
 == Members
 
-[#now]
-=== now
+[#now__]
+=== now()
 
 Returns the (virtual) time as an _Instant_ .
 
-[#system]
-=== system
+[#system__]
+=== system()
 
 Returns a the system's default ticking clock.
 
-[#nowAt]
-=== nowAt
+[#nowAt__Instant]
+=== nowAt(Instant)
 
 Returns a ticking clock set to virtual time _Instant_ _virtualNow_
 
-[#frozenAt]
-=== frozenAt
+[#frozenAt__Instant]
+=== frozenAt(Instant)
 
 Always returns the time _Instant_ as given by _frozenAt_
 
-[#frozenTestClock]
-=== frozenTestClock
+[#frozenTestClock__]
+=== frozenTestClock()
 
 Always returns the time _Instant_ 2003/8/17 21:30:25 (UTC)
 
-[#getEpochMillis]
-=== getEpochMillis
+[#getEpochMillis__]
+=== getEpochMillis()
 
 Returns the (virtual) time as the number of milliseconds since the epoch start.
 
-[#localDate]
-=== localDate
+[#localDate__ZoneId]
+=== localDate(ZoneId)
 
 Returns the (virtual) time as _LocalDate_ , using the _ZoneId_ timezone.
 
-[#localDateTime]
-=== localDateTime
+[#localDateTime__ZoneId]
+=== localDateTime(ZoneId)
 
 Returns the (virtual) time as _LocalDateTime_ , using the _ZoneId_ timezone.
 
-[#offsetDateTime]
-=== offsetDateTime
+[#offsetDateTime__ZoneId]
+=== offsetDateTime(ZoneId)
 
 Returns the (virtual) time as _OffsetDateTime_ , using the _ZoneId_ timezone.
 
-[#asJodaDateTime]
-=== asJodaDateTime
+[#asJodaDateTime__ZoneId]
+=== asJodaDateTime(ZoneId)
 
 [WARNING]
 ====
@@ -154,8 +154,8 @@ please migrate to java.time.*
 
 Returns the time as a Joda _org.joda.time.DateTime_ , using the _ZoneId#systemDefault() system default_ timezone.
 
-[#asJodaLocalDate]
-=== asJodaLocalDate
+[#asJodaLocalDate__ZoneId]
+=== asJodaLocalDate(ZoneId)
 
 [WARNING]
 ====

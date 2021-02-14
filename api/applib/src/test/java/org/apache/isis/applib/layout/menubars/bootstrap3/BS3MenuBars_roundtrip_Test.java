@@ -26,6 +26,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.apache.isis.applib.layout.component.ServiceActionLayoutData;
 import org.apache.isis.applib.services.jaxb.JaxbService;
+import org.apache.isis.applib.services.jaxb.JaxbService.Simple;
 
 public class BS3MenuBars_roundtrip_Test {
 

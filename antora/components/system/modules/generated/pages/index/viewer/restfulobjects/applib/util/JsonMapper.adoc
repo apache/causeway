@@ -16,7 +16,7 @@ class JsonMapper {
 }
 ----
 
-<.> xref:#instance[instance]
+<.> xref:#instance__[instance()]
 +
 --
 Returns a _org.apache.isis.viewer.restfulobjects.applib.util.JsonMapper.PrettyPrinting#ENABLE pretty-printing enabled_ JSON mapper.
@@ -24,8 +24,8 @@ Returns a _org.apache.isis.viewer.restfulobjects.applib.util.JsonMapper.PrettyPr
 
 == Members
 
-[#instance]
-=== instance
+[#instance__]
+=== instance()
 
 Returns a _org.apache.isis.viewer.restfulobjects.applib.util.JsonMapper.PrettyPrinting#ENABLE pretty-printing enabled_ JSON mapper.
 

@@ -45,7 +45,7 @@ import org.apache.isis.commons.internal.collections._Maps;
 
 /**
  * An implementation of {@link SchemaOutputResolver} that keeps track of all the schemas for which it has
- * {@link #createOutput(String, String) created} an output {@link StreamResult} containing the content 
+ * {@link #createOutput(String, String) created} an output {@link StreamResult} containing the content
  * of the schema.
  */
 class CatalogingSchemaOutputResolver extends SchemaOutputResolver {
@@ -53,10 +53,10 @@ class CatalogingSchemaOutputResolver extends SchemaOutputResolver {
     private static final String SCHEMA_LOCATION_INCORRECT = "http://isis.apache.org/schema/common";
     private static final String SCHEMA_LOCATION_CORRECT = "http://isis.apache.org/schema/common/common.xsd";
 
-    private final JaxbService.IsisSchemas isisSchemas;
+    private final IsisSchemas isisSchemas;
     private final List<String> namespaceUris = _Lists.newArrayList();
 
-    public CatalogingSchemaOutputResolver(final JaxbService.IsisSchemas isisSchemas) {
+    public CatalogingSchemaOutputResolver(final IsisSchemas isisSchemas) {
         this.isisSchemas = isisSchemas;
     }
 
@@ -74,7 +74,7 @@ class CatalogingSchemaOutputResolver extends SchemaOutputResolver {
         String xsd = streamResult.asString();
 
         try {
-            
+
             final DocumentBuilder parser = _DocumentFactories.documentBuilder();
             final Document document = parser.parse(new InputSource(new StringReader(xsd)));
 

@@ -14,7 +14,7 @@ interface UserResource {
 }
 ----
 
-<.> xref:#logout[logout]
+<.> xref:#logout__[logout()]
 +
 --
 Not part of the Restful Objects spec.
@@ -22,8 +22,8 @@ Not part of the Restful Objects spec.
 
 == Members
 
-[#logout]
-=== logout
+[#logout__]
+=== logout()
 
 Not part of the Restful Objects spec.
 

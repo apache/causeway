@@ -20,37 +20,37 @@ interface GridSystemService<G> {
 }
 ----
 
-<.> xref:#gridImplementation[gridImplementation]
+<.> xref:#gridImplementation__[gridImplementation()]
 +
 --
 The concrete subclass of xref:system:generated:index/applib/layout/grid/Grid.adoc[Grid] supported by this implementation.
 --
-<.> xref:#tns[tns]
+<.> xref:#tns__[tns()]
 +
 --
 The target namespace for this grid system.
 --
-<.> xref:#schemaLocation[schemaLocation]
+<.> xref:#schemaLocation__[schemaLocation()]
 +
 --
 The schema location for the XSD.
 --
-<.> xref:#defaultGrid[defaultGrid]
+<.> xref:#defaultGrid__Class[defaultGrid(Class)]
 +
 --
 A default grid, used when no grid layout can be found for the domain class.
 --
-<.> xref:#normalize[normalize]
+<.> xref:#normalize__G_Class[normalize(G, Class)]
 +
 --
 Validates and normalizes a grid, modifying the grid so that all of the domain object's members (properties, collections, actions) are bound to regions of the grid.
 --
-<.> xref:#complete[complete]
+<.> xref:#complete__G_Class[complete(G, Class)]
 +
 --
 Takes a normalized grid and enriches it with all the available metadata (taken from Apache Isis' internal metadata) that can be represented in the layout XML.
 --
-<.> xref:#minimal[minimal]
+<.> xref:#minimal__G_Class[minimal(G, Class)]
 +
 --
 Takes a normalized grid and strips out removes all members, leaving only the grid structure.
@@ -58,50 +58,50 @@ Takes a normalized grid and strips out removes all members, leaving only the gri
 
 == Members
 
-[#gridImplementation]
-=== gridImplementation
+[#gridImplementation__]
+=== gridImplementation()
 
 The concrete subclass of xref:system:generated:index/applib/layout/grid/Grid.adoc[Grid] supported by this implementation.
 
 There can be multiple implementations of this service, this indicates the base class used by the implementation.
 
-[#tns]
-=== tns
+[#tns__]
+=== tns()
 
 The target namespace for this grid system.
 
 This is used when generating the XML. The Bootstrap3 grid system provided by the framework returns the value `http://isis.apache.org/applib/layout/grid/bootstrap3`.
 
-[#schemaLocation]
-=== schemaLocation
+[#schemaLocation__]
+=== schemaLocation()
 
 The schema location for the XSD.
 
 Every grid system is expected to provide a schema XSD in order to provide code completion in an IDE. The Bootstrap3 grid system provided by the framework returns the value `http://isis.apache.org/applib/layout/grid/bootstrap3/bootstrap3.xsd`.
 
-[#defaultGrid]
-=== defaultGrid
+[#defaultGrid__Class]
+=== defaultGrid(Class)
 
 A default grid, used when no grid layout can be found for the domain class.
 
 For example, this layout could define two columns in ratio 4:8.
 
-[#normalize]
-=== normalize
+[#normalize__G_Class]
+=== normalize(G, Class)
 
 Validates and normalizes a grid, modifying the grid so that all of the domain object's members (properties, collections, actions) are bound to regions of the grid.
 
 This is done using existing metadata, most notably that of the _org.apache.isis.applib.annotation.MemberOrder_ annotation. Such a grid, if persisted as the layout XML file for the domain class, allows the _org.apache.isis.applib.annotation.MemberOrder_ annotation to be removed from the source code of the domain class (but other annotations must be retained).
 
-[#complete]
-=== complete
+[#complete__G_Class]
+=== complete(G, Class)
 
 Takes a normalized grid and enriches it with all the available metadata (taken from Apache Isis' internal metadata) that can be represented in the layout XML.
 
 Such a grid, if persisted as the layout XML file for the domain class, allows all layout annotations ( _org.apache.isis.applib.annotation.ActionLayout_ , _org.apache.isis.applib.annotation.PropertyLayout_ , _org.apache.isis.applib.annotation.CollectionLayout_ ) to be removed from the source code of the domain class.
 
-[#minimal]
-=== minimal
+[#minimal__G_Class]
+=== minimal(G, Class)
 
 Takes a normalized grid and strips out removes all members, leaving only the grid structure.
 

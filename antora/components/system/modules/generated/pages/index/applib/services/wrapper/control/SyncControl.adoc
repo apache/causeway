@@ -13,7 +13,7 @@ class SyncControl {
 }
 ----
 
-<.> xref:#getExecutionModes[getExecutionModes]
+<.> xref:#getExecutionModes__[getExecutionModes()]
 +
 --
 Not API.
@@ -21,8 +21,8 @@ Not API.
 
 == Members
 
-[#getExecutionModes]
-=== getExecutionModes
+[#getExecutionModes__]
+=== getExecutionModes()
 
 Not API.
 

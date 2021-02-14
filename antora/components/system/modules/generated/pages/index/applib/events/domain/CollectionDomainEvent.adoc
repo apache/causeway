@@ -18,12 +18,12 @@ class CollectionDomainEvent<S, T> {
 --
 If used then the framework will set state via (non-API) setters.
 --
-<.> xref:#setValue[setValue]
+<.> xref:#setValue__T[setValue(T)]
 +
 --
 Not API, set by the framework.
 --
-<.> xref:#setOf[setOf]
+<.> xref:#setOf__Of[setOf(Of)]
 +
 --
 Not API; updates from _Of#ACCESS_ to either _Of#ADD_TO_ or _Of#REMOVE_FROM_ when hits the _AbstractDomainEvent.Phase#VALIDATE validation phase_ .
@@ -38,13 +38,13 @@ If used then the framework will set state via (non-API) setters.
 
 Recommended because it reduces the amount of boilerplate in the domain object classes.
 
-[#setValue]
-=== setValue
+[#setValue__T]
+=== setValue(T)
 
 Not API, set by the framework.
 
-[#setOf]
-=== setOf
+[#setOf__Of]
+=== setOf(Of)
 
 Not API; updates from _Of#ACCESS_ to either _Of#ADD_TO_ or _Of#REMOVE_FROM_ when hits the _AbstractDomainEvent.Phase#VALIDATE validation phase_ .
 

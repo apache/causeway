@@ -21,10 +21,19 @@ package org.apache.isis.applib.services.i18n;
 import java.util.Locale;
 
 /**
+ * One of a number of services that work together to provide support for i18n,
+ * its responsibility being simply to return the {@link Locale} of the current
+ * user.
+ *
  * @since 1.x {@index}
  */
 public interface LocaleProvider {
 
+    /**
+     * Returns the {@link Locale} of the current user.
+     *
+     * @return the {@link Locale} of the current user.
+     */
     Locale getLocale();
 
 }

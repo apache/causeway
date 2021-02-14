@@ -22,37 +22,37 @@ class TranslatableString {
 }
 ----
 
-<.> xref:#tr[tr]
+<.> xref:#tr__String_Object[tr(String, Object)]
 +
 --
 A translatable string with a single pattern for both singular and plural forms.
 --
-<.> xref:#trn[trn]
+<.> xref:#trn__String_String_int_Object[trn(String, String, int, Object)]
 +
 --
 A translatable string with different patterns for singular and plural forms, selected automatically by the number
 --
-<.> xref:#getSingularText[getSingularText]
+<.> xref:#getSingularText__[getSingularText()]
 +
 --
 The text as provided in (either of the _#tr(String, Object...) factory_ _#trn(String, String, int, Object...) method_ s, with placeholders rather than substituted arguments; if _#isPluralForm()_ is `true` then used only for the singular form.
 --
-<.> xref:#getPluralText[getPluralText]
+<.> xref:#getPluralText__[getPluralText()]
 +
 --
 The plural text as provided in the _#trn(String, String, int, Object...) factory method_ , with placeholders rather than substituted arguments; but will be `null` if _#isPluralForm()_ is `false` .
 --
-<.> xref:#getArgumentsByParameterName[getArgumentsByParameterName]
+<.> xref:#getArgumentsByParameterName__[getArgumentsByParameterName()]
 +
 --
 The arguments; excluded from _#equals(Object)_ comparison.
 --
-<.> xref:#translate[translate]
+<.> xref:#translate__TranslationService_String[translate(TranslationService, String)]
 +
 --
 Translates this string using the provided xref:system:generated:index/applib/services/i18n/TranslationService.adoc[TranslationService] , selecting either the single or plural form as per _#getPattern()_ .
 --
-<.> xref:#getPattern[getPattern]
+<.> xref:#getPattern__[getPattern()]
 +
 --
 The text to be translated; depends on whether _#isPluralForm()_ and whether to be translated.
@@ -60,38 +60,38 @@ The text to be translated; depends on whether _#isPluralForm()_ and whether to b
 
 == Members
 
-[#tr]
-=== tr
+[#tr__String_Object]
+=== tr(String, Object)
 
 A translatable string with a single pattern for both singular and plural forms.
 
-[#trn]
-=== trn
+[#trn__String_String_int_Object]
+=== trn(String, String, int, Object)
 
 A translatable string with different patterns for singular and plural forms, selected automatically by the number
 
-[#getSingularText]
-=== getSingularText
+[#getSingularText__]
+=== getSingularText()
 
 The text as provided in (either of the _#tr(String, Object...) factory_ _#trn(String, String, int, Object...) method_ s, with placeholders rather than substituted arguments; if _#isPluralForm()_ is `true` then used only for the singular form.
 
-[#getPluralText]
-=== getPluralText
+[#getPluralText__]
+=== getPluralText()
 
 The plural text as provided in the _#trn(String, String, int, Object...) factory method_ , with placeholders rather than substituted arguments; but will be `null` if _#isPluralForm()_ is `false` .
 
-[#getArgumentsByParameterName]
-=== getArgumentsByParameterName
+[#getArgumentsByParameterName__]
+=== getArgumentsByParameterName()
 
 The arguments; excluded from _#equals(Object)_ comparison.
 
-[#translate]
-=== translate
+[#translate__TranslationService_String]
+=== translate(TranslationService, String)
 
 Translates this string using the provided xref:system:generated:index/applib/services/i18n/TranslationService.adoc[TranslationService] , selecting either the single or plural form as per _#getPattern()_ .
 
-[#getPattern]
-=== getPattern
+[#getPattern__]
+=== getPattern()
 
 The text to be translated; depends on whether _#isPluralForm()_ and whether to be translated.
 

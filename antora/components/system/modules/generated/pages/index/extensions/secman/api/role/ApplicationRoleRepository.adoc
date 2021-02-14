@@ -21,8 +21,8 @@ interface ApplicationRoleRepository<R> {
 }
 ----
 
-<.> xref:#newApplicationRole[newApplicationRole]
-<.> xref:#findMatching[findMatching]
+<.> xref:#newApplicationRole__[newApplicationRole()]
+<.> xref:#findMatching__String[findMatching(String)]
 +
 --
 auto-complete support
@@ -30,11 +30,11 @@ auto-complete support
 
 == Members
 
-[#newApplicationRole]
-=== newApplicationRole
+[#newApplicationRole__]
+=== newApplicationRole()
 
-[#findMatching]
-=== findMatching
+[#findMatching__String]
+=== findMatching(String)
 
 auto-complete support
 

@@ -26,8 +26,8 @@ interface ApplicationUserRepository<U> {
 }
 ----
 
-<.> xref:#newApplicationUser[newApplicationUser]
-<.> xref:#findMatching[findMatching]
+<.> xref:#newApplicationUser__[newApplicationUser()]
+<.> xref:#findMatching__String[findMatching(String)]
 +
 --
 auto-complete support
@@ -35,11 +35,11 @@ auto-complete support
 
 == Members
 
-[#newApplicationUser]
-=== newApplicationUser
+[#newApplicationUser__]
+=== newApplicationUser()
 
-[#findMatching]
-=== findMatching
+[#findMatching__String]
+=== findMatching(String)
 
 auto-complete support
 

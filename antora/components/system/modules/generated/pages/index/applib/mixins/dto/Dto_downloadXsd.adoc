@@ -10,9 +10,9 @@ class Dto_downloadXsd {
 MessageService messageService;
   @Inject
 JaxbService jaxbService;
-  Object act(final String fileName, final JaxbService.IsisSchemas isisSchemas)
+  Object act(final String fileName, final IsisSchemas isisSchemas)
   String default0Act()
-  JaxbService.IsisSchemas default1Act()
+  IsisSchemas default1Act()
 }
 ----
 

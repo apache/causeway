@@ -16,12 +16,12 @@ interface EmailService {
 }
 ----
 
-<.> xref:#send[send]
+<.> xref:#send__List_List_List_String_String_DataSource[send(List, List, List, String, String, DataSource)]
 +
 --
 The main API to send the email (and optional attachments).
 --
-<.> xref:#isConfigured[isConfigured]
+<.> xref:#isConfigured__[isConfigured()]
 +
 --
 Whether this service has been configured and thus available for use.
@@ -29,13 +29,13 @@ Whether this service has been configured and thus available for use.
 
 == Members
 
-[#send]
-=== send
+[#send__List_List_List_String_String_DataSource]
+=== send(List, List, List, String, String, DataSource)
 
 The main API to send the email (and optional attachments).
 
-[#isConfigured]
-=== isConfigured
+[#isConfigured__]
+=== isConfigured()
 
 Whether this service has been configured and thus available for use.
 

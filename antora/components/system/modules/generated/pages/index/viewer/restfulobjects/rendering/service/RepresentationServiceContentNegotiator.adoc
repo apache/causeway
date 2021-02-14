@@ -16,7 +16,7 @@ class RepresentationServiceContentNegotiator {
 }
 ----
 
-<.> xref:#buildResponse[buildResponse]
+<.> xref:#buildResponse__Function[buildResponse(Function)]
 +
 --
 Iterates over all _#contentNegotiationServices injected_ xref:system:generated:index/viewer/restfulobjects/rendering/service/conneg/ContentNegotiationService.adoc[ContentNegotiationService] s to find one that returns a _ResponseBuilder_ using the provided function.
@@ -24,8 +24,8 @@ Iterates over all _#contentNegotiationServices injected_ xref:system:generated:i
 
 == Members
 
-[#buildResponse]
-=== buildResponse
+[#buildResponse__Function]
+=== buildResponse(Function)
 
 Iterates over all _#contentNegotiationServices injected_ xref:system:generated:index/viewer/restfulobjects/rendering/service/conneg/ContentNegotiationService.adoc[ContentNegotiationService] s to find one that returns a _ResponseBuilder_ using the provided function.
 

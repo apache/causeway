@@ -4,3 +4,5 @@
 
 
 == Implementation
+
+The framework provides a default implementation, `o.a.i.core.metamodel.services.layout.LayoutServiceDefault`.

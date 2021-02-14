@@ -19,12 +19,12 @@ interface SudoService {
 --
 If included in the list of roles, then will disable security checks (can view and use all object members).
 --
-<.> xref:#call[call]
+<.> xref:#call__UnaryOperator_Callable[call(UnaryOperator, Callable)]
 +
 --
 Executes the supplied block, with the xref:system:generated:index/applib/services/user/UserService.adoc[UserService] returning the specified user.
 --
-<.> xref:#run[run]
+<.> xref:#run__UnaryOperator_ThrowingRunnable[run(UnaryOperator, ThrowingRunnable)]
 +
 --
 Executes the supplied block, with the xref:system:generated:index/applib/services/user/UserService.adoc[UserService] returning the specified user.
@@ -37,13 +37,13 @@ Executes the supplied block, with the xref:system:generated:index/applib/service
 
 If included in the list of roles, then will disable security checks (can view and use all object members).
 
-[#call]
-=== call
+[#call__UnaryOperator_Callable]
+=== call(UnaryOperator, Callable)
 
 Executes the supplied block, with the xref:system:generated:index/applib/services/user/UserService.adoc[UserService] returning the specified user.
 
-[#run]
-=== run
+[#run__UnaryOperator_ThrowingRunnable]
+=== run(UnaryOperator, ThrowingRunnable)
 
 Executes the supplied block, with the xref:system:generated:index/applib/services/user/UserService.adoc[UserService] returning the specified user.
 

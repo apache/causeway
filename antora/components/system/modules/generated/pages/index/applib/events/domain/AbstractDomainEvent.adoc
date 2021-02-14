@@ -32,47 +32,47 @@ class AbstractDomainEvent<S> {
 --
 If used then the framework will set state via (non-API) setters.
 --
-<.> xref:#setMixedIn[setMixedIn]
+<.> xref:#setMixedIn__Object[setMixedIn(Object)]
 +
 --
 Not API - set by the framework.
 --
-<.> xref:#getSubject[getSubject]
+<.> xref:#getSubject__[getSubject()]
 +
 --
 The subject of the event, which will be either the _#getSource() source_ for a regular action, or the _#getMixedIn() mixed-in_ domain object for a mixin.
 --
-<.> xref:#setEventPhase[setEventPhase]
+<.> xref:#setEventPhase__Phase[setEventPhase(Phase)]
 +
 --
 Not API, set by the framework.
 --
-<.> xref:#setIdentifier[setIdentifier]
+<.> xref:#setIdentifier__Identifier[setIdentifier(Identifier)]
 +
 --
 Not API, set by the framework if the no-arg constructor is used.
 --
-<.> xref:#hide[hide]
-<.> xref:#disable[disable]
-<.> xref:#disable[disable]
-<.> xref:#invalidate[invalidate]
-<.> xref:#invalidate[invalidate]
-<.> xref:#veto[veto]
+<.> xref:#hide__[hide()]
+<.> xref:#disable__String[disable(String)]
+<.> xref:#disable__TranslatableString[disable(TranslatableString)]
+<.> xref:#invalidate__String[invalidate(String)]
+<.> xref:#invalidate__TranslatableString[invalidate(TranslatableString)]
+<.> xref:#veto__String_Object[veto(String, Object)]
 +
 --
 Use instead of _#hide()_ , _#disable(String)_ and _#invalidate(String)_ ; just delegates to appropriate vetoing method based upon the _#getEventPhase() phase_ .
 --
-<.> xref:#veto[veto]
+<.> xref:#veto__TranslatableString[veto(TranslatableString)]
 +
 --
 Use instead of _#hide()_ , _#disable(org.apache.isis.applib.services.i18n.TranslatableString)_ and _#invalidate(org.apache.isis.applib.services.i18n.TranslatableString)_ ; just delegates to appropriate vetoing method based upon the _#getEventPhase() phase_ .
 --
-<.> xref:#get[get]
+<.> xref:#get__Object[get(Object)]
 +
 --
 Obtain user-data, as set by a previous _#getEventPhase() phase_ .
 --
-<.> xref:#put[put]
+<.> xref:#put__Object_Object[put(Object, Object)]
 +
 --
 Set user-data, for the use of a subsequent _#getEventPhase() phase_ .
@@ -87,62 +87,62 @@ If used then the framework will set state via (non-API) setters.
 
 Because the xref:system:generated:index/applib/events/EventObjectBase.adoc[EventObjectBase] superclass prohibits a null source, a dummy value is temporarily used.
 
-[#setMixedIn]
-=== setMixedIn
+[#setMixedIn__Object]
+=== setMixedIn(Object)
 
 Not API - set by the framework.
 
-[#getSubject]
-=== getSubject
+[#getSubject__]
+=== getSubject()
 
 The subject of the event, which will be either the _#getSource() source_ for a regular action, or the _#getMixedIn() mixed-in_ domain object for a mixin.
 
-[#setEventPhase]
-=== setEventPhase
+[#setEventPhase__Phase]
+=== setEventPhase(Phase)
 
 Not API, set by the framework.
 
-[#setIdentifier]
-=== setIdentifier
+[#setIdentifier__Identifier]
+=== setIdentifier(Identifier)
 
 Not API, set by the framework if the no-arg constructor is used.
 
-[#hide]
-=== hide
+[#hide__]
+=== hide()
 
-[#disable]
-=== disable
+[#disable__String]
+=== disable(String)
 
-[#disable]
-=== disable
+[#disable__TranslatableString]
+=== disable(TranslatableString)
 
-[#invalidate]
-=== invalidate
+[#invalidate__String]
+=== invalidate(String)
 
-[#invalidate]
-=== invalidate
+[#invalidate__TranslatableString]
+=== invalidate(TranslatableString)
 
-[#veto]
-=== veto
+[#veto__String_Object]
+=== veto(String, Object)
 
 Use instead of _#hide()_ , _#disable(String)_ and _#invalidate(String)_ ; just delegates to appropriate vetoing method based upon the _#getEventPhase() phase_ .
 
 If hiding, just pass `null` for the parameter.
 
-[#veto]
-=== veto
+[#veto__TranslatableString]
+=== veto(TranslatableString)
 
 Use instead of _#hide()_ , _#disable(org.apache.isis.applib.services.i18n.TranslatableString)_ and _#invalidate(org.apache.isis.applib.services.i18n.TranslatableString)_ ; just delegates to appropriate vetoing method based upon the _#getEventPhase() phase_ .
 
 If hiding, just pass `null` for the parameter.
 
-[#get]
-=== get
+[#get__Object]
+=== get(Object)
 
 Obtain user-data, as set by a previous _#getEventPhase() phase_ .
 
-[#put]
-=== put
+[#put__Object_Object]
+=== put(Object, Object)
 
 Set user-data, for the use of a subsequent _#getEventPhase() phase_ .
 

@@ -16,7 +16,7 @@ interface EntityChangesSubscriber {
 }
 ----
 
-<.> xref:#onChanging[onChanging]
+<.> xref:#onChanging__EntityChanges[onChanging(EntityChanges)]
 +
 --
 Receives all changing entities (with publishing enabled using _DomainObject#entityChangePublishing()_ ) as an instance of xref:system:generated:index/applib/services/publishing/spi/EntityChanges.adoc[EntityChanges] .
@@ -24,8 +24,8 @@ Receives all changing entities (with publishing enabled using _DomainObject#enti
 
 == Members
 
-[#onChanging]
-=== onChanging
+[#onChanging__EntityChanges]
+=== onChanging(EntityChanges)
 
 Receives all changing entities (with publishing enabled using _DomainObject#entityChangePublishing()_ ) as an instance of xref:system:generated:index/applib/services/publishing/spi/EntityChanges.adoc[EntityChanges] .
 

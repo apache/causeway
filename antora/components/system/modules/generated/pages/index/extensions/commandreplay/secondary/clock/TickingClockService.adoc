@@ -20,12 +20,12 @@ class TickingClockService {
 }
 ----
 
-<.> xref:#at[at]
+<.> xref:#at__Timestamp_Runnable[at(Timestamp, Runnable)]
 +
 --
 Executes the runnable, setting the clock to be the specified time beforehand (and reinstating it to its original time afterwards).
 --
-<.> xref:#at[at]
+<.> xref:#at__Timestamp_Supplier[at(Timestamp, Supplier)]
 +
 --
 Executes the callable, setting the clock to be the specified time beforehand (and reinstating it to its original time afterwards).
@@ -33,15 +33,15 @@ Executes the callable, setting the clock to be the specified time beforehand (an
 
 == Members
 
-[#at]
-=== at
+[#at__Timestamp_Runnable]
+=== at(Timestamp, Runnable)
 
 Executes the runnable, setting the clock to be the specified time beforehand (and reinstating it to its original time afterwards).
 
 IMPORTANT: this method is not thread-safe, because the clock is a globally-scoped singleton rather than a thread-local. This method should therefore only be used in single-user systems, eg a replay secondary.
 
-[#at]
-=== at
+[#at__Timestamp_Supplier]
+=== at(Timestamp, Supplier)
 
 Executes the callable, setting the clock to be the specified time beforehand (and reinstating it to its original time afterwards).
 

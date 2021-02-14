@@ -23,27 +23,27 @@ class DomainObjectRepresentation {
 }
 ----
 
-<.> xref:#getDomainType[getDomainType]
+<.> xref:#getDomainType__[getDomainType()]
 +
 --
 Populated only for domain objects, not for domain services.
 --
-<.> xref:#getInstanceId[getInstanceId]
+<.> xref:#getInstanceId__[getInstanceId()]
 +
 --
 Populated only for domain objects, not for domain services.
 --
-<.> xref:#getServiceId[getServiceId]
+<.> xref:#getServiceId__[getServiceId()]
 +
 --
 Populated only for domain services, not for domain objects.
 --
-<.> xref:#getPersistLink[getPersistLink]
+<.> xref:#getPersistLink__[getPersistLink()]
 +
 --
 Only for transient, persistable, objects
 --
-<.> xref:#getOid[getOid]
+<.> xref:#getOid__[getOid()]
 +
 --
 Isis extension.
@@ -51,28 +51,28 @@ Isis extension.
 
 == Members
 
-[#getDomainType]
-=== getDomainType
+[#getDomainType__]
+=== getDomainType()
 
 Populated only for domain objects, not for domain services.
 
-[#getInstanceId]
-=== getInstanceId
+[#getInstanceId__]
+=== getInstanceId()
 
 Populated only for domain objects, not for domain services.
 
-[#getServiceId]
-=== getServiceId
+[#getServiceId__]
+=== getServiceId()
 
 Populated only for domain services, not for domain objects.
 
-[#getPersistLink]
-=== getPersistLink
+[#getPersistLink__]
+=== getPersistLink()
 
 Only for transient, persistable, objects
 
-[#getOid]
-=== getOid
+[#getOid__]
+=== getOid()
 
 Isis extension.
 

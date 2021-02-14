@@ -21,27 +21,27 @@ class ActionDomainEvent<S> {
 --
 If used then the framework will set state via (non-API) setters.
 --
-<.> xref:#setReturnValue[setReturnValue]
+<.> xref:#setReturnValue__Object[setReturnValue(Object)]
 +
 --
 Set by the framework. Event subscribers can replace the value with some other value if they wish, though only in the _AbstractDomainEvent.Phase#EXECUTED_ phase.
 --
-<.> xref:#setSemantics[setSemantics]
+<.> xref:#setSemantics__SemanticsOf[setSemantics(SemanticsOf)]
 +
 --
 Not API - set by the framework.
 --
-<.> xref:#setParameterNames[setParameterNames]
+<.> xref:#setParameterNames__List[setParameterNames(List)]
 +
 --
 Not API - set by the framework.
 --
-<.> xref:#setParameterTypes[setParameterTypes]
+<.> xref:#setParameterTypes__List[setParameterTypes(List)]
 +
 --
 Not API - set by the framework.
 --
-<.> xref:#setMixedIn[setMixedIn]
+<.> xref:#setMixedIn__Object[setMixedIn(Object)]
 +
 --
 Not API - set by the framework.
@@ -56,28 +56,28 @@ If used then the framework will set state via (non-API) setters.
 
 Recommended because it reduces the amount of boilerplate in the domain object classes.
 
-[#setReturnValue]
-=== setReturnValue
+[#setReturnValue__Object]
+=== setReturnValue(Object)
 
 Set by the framework. Event subscribers can replace the value with some other value if they wish, though only in the _AbstractDomainEvent.Phase#EXECUTED_ phase.
 
-[#setSemantics]
-=== setSemantics
+[#setSemantics__SemanticsOf]
+=== setSemantics(SemanticsOf)
 
 Not API - set by the framework.
 
-[#setParameterNames]
-=== setParameterNames
+[#setParameterNames__List]
+=== setParameterNames(List)
 
 Not API - set by the framework.
 
-[#setParameterTypes]
-=== setParameterTypes
+[#setParameterTypes__List]
+=== setParameterTypes(List)
 
 Not API - set by the framework.
 
-[#setMixedIn]
-=== setMixedIn
+[#setMixedIn__Object]
+=== setMixedIn(Object)
 
 Not API - set by the framework.
 

@@ -10,7 +10,7 @@ interface HasUniqueId {
 }
 ----
 
-<.> xref:#getUniqueId[getUniqueId]
+<.> xref:#getUniqueId__[getUniqueId()]
 +
 --
 A unique identifier (a GUID).
@@ -18,8 +18,8 @@ A unique identifier (a GUID).
 
 == Members
 
-[#getUniqueId]
-=== getUniqueId
+[#getUniqueId__]
+=== getUniqueId()
 
 A unique identifier (a GUID).
 

@@ -6,6 +6,13 @@
 
 WARNING: TODO: this content has not yet been reviewed/updated for v2.0
 
+include::system:generated:page$index/applib/services/session/SessionLoggingService.adoc[SessionLoggingService]
+
+include::SessionLoggingService/hooks/implementation.adoc[]
+
+include::SessionLoggingService/hooks/examples_and_usage.adoc[]
+
+
 The `SessionLoggingService` defines an SPI to keep track of (typically: to log) the current sessions that are using the application.
 
 Multiple implementations can be registered; all will be called.

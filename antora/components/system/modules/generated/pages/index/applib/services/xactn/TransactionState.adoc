@@ -45,22 +45,22 @@ Completed, having successfully committed.May not flush or abort or commit (will 
 --
 Completed, having aborted.May not flush, commit or abort (will throw _IllegalStateException_ ).
 --
-<.> xref:#canFlush[canFlush]
+<.> xref:#canFlush__[canFlush()]
 +
 --
 Whether it is valid to flush the transaction.
 --
-<.> xref:#canCommit[canCommit]
+<.> xref:#canCommit__[canCommit()]
 +
 --
 Whether it is valid to commit the transaction.
 --
-<.> xref:#canAbort[canAbort]
+<.> xref:#canAbort__[canAbort()]
 +
 --
 Whether it is valid to mark as aborted this transaction}.
 --
-<.> xref:#isComplete[isComplete]
+<.> xref:#isComplete__[isComplete()]
 +
 --
 Whether the transaction is complete (and so a new one can be started).
@@ -93,23 +93,23 @@ Completed, having successfully committed.May not flush or abort or commit (will 
 
 Completed, having aborted.May not flush, commit or abort (will throw _IllegalStateException_ ).
 
-[#canFlush]
-=== canFlush
+[#canFlush__]
+=== canFlush()
 
 Whether it is valid to flush the transaction.
 
-[#canCommit]
-=== canCommit
+[#canCommit__]
+=== canCommit()
 
 Whether it is valid to commit the transaction.
 
-[#canAbort]
-=== canAbort
+[#canAbort__]
+=== canAbort()
 
 Whether it is valid to mark as aborted this transaction}.
 
-[#isComplete]
-=== isComplete
+[#isComplete__]
+=== isComplete()
 
 Whether the transaction is complete (and so a new one can be started).
 

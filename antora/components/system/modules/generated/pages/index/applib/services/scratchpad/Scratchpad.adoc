@@ -15,12 +15,12 @@ interface Scratchpad {
 }
 ----
 
-<.> xref:#get[get]
+<.> xref:#get__Object[get(Object)]
 +
 --
 Obtain user-data, as set by a previous object being acted upon.
 --
-<.> xref:#put[put]
+<.> xref:#put__Object_Object[put(Object, Object)]
 +
 --
 Set user-data, for the use of a subsequent object being acted upon.
@@ -28,13 +28,13 @@ Set user-data, for the use of a subsequent object being acted upon.
 
 == Members
 
-[#get]
-=== get
+[#get__Object]
+=== get(Object)
 
 Obtain user-data, as set by a previous object being acted upon.
 
-[#put]
-=== put
+[#put__Object_Object]
+=== put(Object, Object)
 
 Set user-data, for the use of a subsequent object being acted upon.
 

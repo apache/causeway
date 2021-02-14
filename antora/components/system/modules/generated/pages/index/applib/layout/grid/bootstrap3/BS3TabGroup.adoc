@@ -22,22 +22,22 @@ class BS3TabGroup {
 }
 ----
 
-<.> xref:#isUnreferencedCollections[isUnreferencedCollections]
+<.> xref:#isUnreferencedCollections__[isUnreferencedCollections()]
 +
 --
 Whether this tab group should be used to hold any unreferenced collections (contributed or "native").
 --
-<.> xref:#isCollapseIfOne[isCollapseIfOne]
+<.> xref:#isCollapseIfOne__[isCollapseIfOne()]
 +
 --
 If there is a single tab in the tabgroup, then whether to collapse and render without the outer tab.
 --
-<.> xref:#getOwner[getOwner]
+<.> xref:#getOwner__[getOwner()]
 +
 --
 Owner.
 --
-<.> xref:#getMetadataError[getMetadataError]
+<.> xref:#getMetadataError__[getMetadataError()]
 +
 --
 For diagnostics; populated by the framework if and only if a metadata error.
@@ -45,27 +45,27 @@ For diagnostics; populated by the framework if and only if a metadata error.
 
 == Members
 
-[#isUnreferencedCollections]
-=== isUnreferencedCollections
+[#isUnreferencedCollections__]
+=== isUnreferencedCollections()
 
 Whether this tab group should be used to hold any unreferenced collections (contributed or "native").
 
 Any layout must have precisely one tab group or xref:system:generated:index/applib/layout/grid/bootstrap3/BS3Col.adoc[BS3Col] that has this attribute set.
 
-[#isCollapseIfOne]
-=== isCollapseIfOne
+[#isCollapseIfOne__]
+=== isCollapseIfOne()
 
 If there is a single tab in the tabgroup, then whether to collapse and render without the outer tab.
 
-[#getOwner]
-=== getOwner
+[#getOwner__]
+=== getOwner()
 
 Owner.
 
 Set programmatically by framework after reading in from XML.
 
-[#getMetadataError]
-=== getMetadataError
+[#getMetadataError__]
+=== getMetadataError()
 
 For diagnostics; populated by the framework if and only if a metadata error.
 

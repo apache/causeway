@@ -39,7 +39,7 @@ class Collections {
 }
 ----
 
-<.> xref:#randomEnum[randomEnum]
+<.> xref:#randomEnum__Class[randomEnum(Class)]
 +
 --
 [WARNING]
@@ -49,7 +49,7 @@ class Collections {
 - renamed to _#anyEnum(Class)_ .
 ====
 --
-<.> xref:#randomBounded[randomBounded]
+<.> xref:#randomBounded__Class[randomBounded(Class)]
 +
 --
 [WARNING]
@@ -62,8 +62,8 @@ class Collections {
 
 == Members
 
-[#randomEnum]
-=== randomEnum
+[#randomEnum__Class]
+=== randomEnum(Class)
 
 [WARNING]
 ====
@@ -72,8 +72,8 @@ class Collections {
 - renamed to _#anyEnum(Class)_ .
 ====
 
-[#randomBounded]
-=== randomBounded
+[#randomBounded__Class]
+=== randomBounded(Class)
 
 [WARNING]
 ====

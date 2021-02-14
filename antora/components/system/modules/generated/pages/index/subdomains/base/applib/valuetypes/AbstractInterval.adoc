@@ -28,32 +28,32 @@ class AbstractInterval<T> {
 }
 ----
 
-<.> xref:#contains[contains]
+<.> xref:#contains__LocalDate[contains(LocalDate)]
 +
 --
 Does this date contain the specified time interval.
 --
-<.> xref:#contains[contains]
+<.> xref:#contains__T[contains(T)]
 +
 --
 Does this time interval contain the specified time interval.
 --
-<.> xref:#days[days]
+<.> xref:#days__[days()]
 +
 --
 The duration in days
 --
-<.> xref:#overlap[overlap]
+<.> xref:#overlap__T[overlap(T)]
 +
 --
 Gets the overlap between this interval and another interval.
 --
-<.> xref:#overlaps[overlaps]
+<.> xref:#overlaps__T[overlaps(T)]
 +
 --
 Does this time interval contain the specified time interval.
 --
-<.> xref:#within[within]
+<.> xref:#within__T[within(T)]
 +
 --
 Does this interval is within the specified interval
@@ -61,33 +61,33 @@ Does this interval is within the specified interval
 
 == Members
 
-[#contains]
-=== contains
+[#contains__LocalDate]
+=== contains(LocalDate)
 
 Does this date contain the specified time interval.
 
-[#contains]
-=== contains
+[#contains__T]
+=== contains(T)
 
 Does this time interval contain the specified time interval.
 
-[#days]
-=== days
+[#days__]
+=== days()
 
 The duration in days
 
-[#overlap]
-=== overlap
+[#overlap__T]
+=== overlap(T)
 
 Gets the overlap between this interval and another interval.
 
-[#overlaps]
-=== overlaps
+[#overlaps__T]
+=== overlaps(T)
 
 Does this time interval contain the specified time interval.
 
-[#within]
-=== within
+[#within__T]
+=== within(T)
 
 Does this interval is within the specified interval
 

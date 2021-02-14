@@ -47,17 +47,17 @@ class Identifier {
 }
 ----
 
-<.> xref:#isPropertyOrCollection[isPropertyOrCollection]
+<.> xref:#isPropertyOrCollection__[isPropertyOrCollection()]
 +
 --
 Convenience method.
 --
-<.> xref:#equals[equals]
+<.> xref:#equals__Object[equals(Object)]
 +
 --
 REVIEW: why not just compare the _#toString()_ representations?
 --
-<.> xref:#fromIdentityString[fromIdentityString]
+<.> xref:#fromIdentityString__String[fromIdentityString(String)]
 +
 --
 Factory method.
@@ -65,18 +65,18 @@ Factory method.
 
 == Members
 
-[#isPropertyOrCollection]
-=== isPropertyOrCollection
+[#isPropertyOrCollection__]
+=== isPropertyOrCollection()
 
 Convenience method.
 
-[#equals]
-=== equals
+[#equals__Object]
+=== equals(Object)
 
 REVIEW: why not just compare the _#toString()_ representations?
 
-[#fromIdentityString]
-=== fromIdentityString
+[#fromIdentityString__String]
+=== fromIdentityString(String)
 
 Factory method.
 

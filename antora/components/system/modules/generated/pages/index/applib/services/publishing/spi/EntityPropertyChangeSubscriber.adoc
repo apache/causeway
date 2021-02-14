@@ -14,7 +14,7 @@ interface EntityPropertyChangeSubscriber {
 }
 ----
 
-<.> xref:#onChanging[onChanging]
+<.> xref:#onChanging__EntityPropertyChange[onChanging(EntityPropertyChange)]
 +
 --
 Receives a single property change event for changing entities (with publishing enabled using _DomainObject#entityChangePublishing()_ ) as an instance of xref:system:generated:index/applib/services/publishing/spi/EntityPropertyChange.adoc[EntityPropertyChange] .
@@ -22,8 +22,8 @@ Receives a single property change event for changing entities (with publishing e
 
 == Members
 
-[#onChanging]
-=== onChanging
+[#onChanging__EntityPropertyChange]
+=== onChanging(EntityPropertyChange)
 
 Receives a single property change event for changing entities (with publishing enabled using _DomainObject#entityChangePublishing()_ ) as an instance of xref:system:generated:index/applib/services/publishing/spi/EntityPropertyChange.adoc[EntityPropertyChange] .
 

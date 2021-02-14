@@ -11,7 +11,7 @@ class IsisModuleExtCommandLogImpl {
 }
 ----
 
-<.> xref:#getTeardownFixtureWillDelete[getTeardownFixtureWillDelete]
+<.> xref:#getTeardownFixtureWillDelete__[getTeardownFixtureWillDelete()]
 +
 --
 For tests that need to delete the command table first. Should be run in the @Before of the test.
@@ -19,8 +19,8 @@ For tests that need to delete the command table first. Should be run in the @Bef
 
 == Members
 
-[#getTeardownFixtureWillDelete]
-=== getTeardownFixtureWillDelete
+[#getTeardownFixtureWillDelete__]
+=== getTeardownFixtureWillDelete()
 
 For tests that need to delete the command table first. Should be run in the @Before of the test.
 

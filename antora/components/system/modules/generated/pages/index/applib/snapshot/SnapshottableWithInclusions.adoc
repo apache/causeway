@@ -12,7 +12,7 @@ interface SnapshottableWithInclusions {
 }
 ----
 
-<.> xref:#snapshotInclusions[snapshotInclusions]
+<.> xref:#snapshotInclusions__[snapshotInclusions()]
 +
 --
 Paths to include in the snapshot.
@@ -20,8 +20,8 @@ Paths to include in the snapshot.
 
 == Members
 
-[#snapshotInclusions]
-=== snapshotInclusions
+[#snapshotInclusions__]
+=== snapshotInclusions()
 
 Paths to include in the snapshot.
 

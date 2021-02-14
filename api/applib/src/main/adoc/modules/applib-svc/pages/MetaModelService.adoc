@@ -4,89 +4,9 @@
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
 
-WARNING: TODO: this content has not yet been reviewed/updated for v2.0
+include::system:generated:page$index/applib/services/metamodel/MetaModelService.adoc[MetaModelService]
 
-The `MetaModelService` service provides access to a number of aspects of Apache Isis' internal metamodel.
+include::MetaModelService/hooks/implementation.adoc[]
 
-
-== API
-
-include::system:generated:page$index/applib/services/metamodel/MetaModelService.adoc[leveloffset=+2]
-
-TODO example migration
-
-.Deprecated Docs
-[WARNING]
-================================
-
-== API
-
-
-The API defined by the service is:
-
-[source,java]
-----
-include::refguide:applib-svc:example$services/metamodel/MetaModelService.java[tags="refguide"]
-----
-<.> reverse lookup of a domain class' object type
-<.> lookup of a domain class' object type
-<.> invalidate and rebuild the internal metadata for the specified domain type.
-<.> returns a structure representing all the known types held in the domain model.
-Further details below.
-<.> what sort of object a domain type is represents:
-+
-accepting:
-+
-[source,java]
-----
-include::refguide:applib-svc:example$services/metamodel/MetaModelService.java[tags="refguide-1",indent=0]
-----
-+
-and returning:
-+
-[source,java]
-----
-include::refguide:applib-svc:example$services/metamodel/BeanSort.java[tags="refguide"]
-----
-<.> what sort of object the domain type inferred from a bookmark represents
-<.> obtain an implementation of `CommandDtoProcessor` (if any) as per an xref:refguide:applib-ant:Action.adoc#command[`@Action#commandDtoProcessor()`] or xref:refguide:applib-ant:Property.adoc#command[`@Property#commandDtoProcessor()`].
-+
-This is used by the xref:refguide:applib-svc:ContentMappingService.adoc#implementations[framework-provided implementations] of `ContentMappingService`.
-<.> Exports the entire metamodel as a DTO, serializable into XML using JAXB.
-Discussed further below.
-
-The `DomainModel` is simply:
-
-[source,java]
-----
-include::refguide:applib-svc:example$services/metamodel/DomainModel.java[tags="refguide"]
-----
-
-where `DomainMember` in turn is:
-
-[source,java]
-----
-include::refguide:applib-svc:example$services/metamodel/DomainMember.java[tags="refguide"]
-----
-
-For the `exportMetaModel()` method, the `Config` property specifies which package(s) to include and can be used to ignore certain elements:
-
-[source,java]
-----
-include::refguide:applib-svc:example$services/metamodel/MetaModelService.java[tags="refguide-2",indent=0]
-----
-
-
-
-
-================================
-
-== Implementation
-
-The framework provides a default implementation of this service, `o.a.i.c.m.services.metamodel.MetaModelServiceDefault`.
-
-
-== Related Services
-
-The `MetaModelServiceMenu` provides a method to download all domain members as a CSV (by calling `MetaModelService#export()`) or as an XML (by calling `MetaModelService6#exportMetaModel(...)`.
+include::MetaModelService/hooks/examples_and_usage.adoc[]
 

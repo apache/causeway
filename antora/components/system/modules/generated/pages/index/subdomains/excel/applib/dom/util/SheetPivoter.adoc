@@ -15,7 +15,7 @@ class SheetPivoter {
 }
 ----
 
-<.> xref:#pivot[pivot]
+<.> xref:#pivot__Sheet_Sheet[pivot(Sheet, Sheet)]
 +
 --
 Takes the values of the source sheet and creates a pivot in the target sheet based on the information of the first couple of rows. Only cells of type CELL_TYPE_NUMERIC will be handled and summed in the pivot.
@@ -23,8 +23,8 @@ Takes the values of the source sheet and creates a pivot in the target sheet bas
 
 == Members
 
-[#pivot]
-=== pivot
+[#pivot__Sheet_Sheet]
+=== pivot(Sheet, Sheet)
 
 Takes the values of the source sheet and creates a pivot in the target sheet based on the information of the first couple of rows. Only cells of type CELL_TYPE_NUMERIC will be handled and summed in the pivot.
 

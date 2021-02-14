@@ -6,6 +6,14 @@
 
 WARNING: TODO: this content has not yet been reviewed/updated for v2.0
 
+include::system:generated:page$index/applib/services/title/TitleService.adoc[TitleService]
+
+include::TitleService/hooks/implementation.adoc[]
+
+include::TitleService/hooks/examples_and_usage.adoc[]
+
+
+
 The `TitleService` provides methods to programmatically obtain the title and icon of a domain object.
 
 == API

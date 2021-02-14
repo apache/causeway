@@ -12,17 +12,17 @@ interface TranslationService {
 }
 ----
 
-<.> xref:#translate[translate]
+<.> xref:#translate__String_String[translate(String, String)]
 +
 --
 Return a translation of the text, in the locale of the "current user".
 --
-<.> xref:#translate[translate]
+<.> xref:#translate__String_String_String_int[translate(String, String, String, int)]
 +
 --
 Return a translation of either the singular or the plural text, dependent on the `num` parameter, in the locale of the "current user".
 --
-<.> xref:#getMode[getMode]
+<.> xref:#getMode__[getMode()]
 +
 --
 Whether this implementation is operating in read or in write mode.
@@ -30,22 +30,22 @@ Whether this implementation is operating in read or in write mode.
 
 == Members
 
-[#translate]
-=== translate
+[#translate__String_String]
+=== translate(String, String)
 
 Return a translation of the text, in the locale of the "current user".
 
 The mechanism to determine the locale is implementation-specific.
 
-[#translate]
-=== translate
+[#translate__String_String_String_int]
+=== translate(String, String, String, int)
 
 Return a translation of either the singular or the plural text, dependent on the `num` parameter, in the locale of the "current user".
 
 The mechanism to determine the locale is implementation-specific.
 
-[#getMode]
-=== getMode
+[#getMode__]
+=== getMode()
 
 Whether this implementation is operating in read or in write mode.
 

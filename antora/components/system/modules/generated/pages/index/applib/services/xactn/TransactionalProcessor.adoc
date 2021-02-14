@@ -15,32 +15,32 @@ interface TransactionalProcessor {
 }
 ----
 
-<.> xref:#callTransactional[callTransactional]
+<.> xref:#callTransactional__TransactionDefinition_Callable[callTransactional(TransactionDefinition, Callable)]
 +
 --
 Runs given _callable_ with a transactional boundary, where the detailed transactional behavior is governed by given _TransactionDefinition_ _def_ .
 --
-<.> xref:#runTransactional[runTransactional]
+<.> xref:#runTransactional__TransactionDefinition_ThrowingRunnable[runTransactional(TransactionDefinition, ThrowingRunnable)]
 +
 --
 Runs given _runnable_ with a transactional boundary, where the detailed transactional behavior is governed by given _TransactionDefinition_ _def_ .
 --
-<.> xref:#callTransactional[callTransactional]
+<.> xref:#callTransactional__Propagation_Callable[callTransactional(Propagation, Callable)]
 +
 --
 Runs given _callable_ with a transactional boundary, where the detailed transactional behavior is governed by given _Propagation_ _propagation_ .
 --
-<.> xref:#runTransactional[runTransactional]
+<.> xref:#runTransactional__Propagation_ThrowingRunnable[runTransactional(Propagation, ThrowingRunnable)]
 +
 --
 Runs given _runnable_ with a transactional boundary, where the detailed transactional behavior is governed by given _Propagation_ _propagation_ .
 --
-<.> xref:#callWithinCurrentTransactionElseCreateNew[callWithinCurrentTransactionElseCreateNew]
+<.> xref:#callWithinCurrentTransactionElseCreateNew__Callable[callWithinCurrentTransactionElseCreateNew(Callable)]
 +
 --
 Runs given _callable_ within an existing transactional boundary, or in the absence of such a boundary, creates a new one.
 --
-<.> xref:#runWithinCurrentTransactionElseCreateNew[runWithinCurrentTransactionElseCreateNew]
+<.> xref:#runWithinCurrentTransactionElseCreateNew__ThrowingRunnable[runWithinCurrentTransactionElseCreateNew(ThrowingRunnable)]
 +
 --
 Runs given _runnable_ within an existing transactional boundary, or in the absence of such a boundary creates a new one.
@@ -48,39 +48,39 @@ Runs given _runnable_ within an existing transactional boundary, or in the absen
 
 == Members
 
-[#callTransactional]
-=== callTransactional
+[#callTransactional__TransactionDefinition_Callable]
+=== callTransactional(TransactionDefinition, Callable)
 
 Runs given _callable_ with a transactional boundary, where the detailed transactional behavior is governed by given _TransactionDefinition_ _def_ .
 
-[#runTransactional]
-=== runTransactional
+[#runTransactional__TransactionDefinition_ThrowingRunnable]
+=== runTransactional(TransactionDefinition, ThrowingRunnable)
 
 Runs given _runnable_ with a transactional boundary, where the detailed transactional behavior is governed by given _TransactionDefinition_ _def_ .
 
-[#callTransactional]
-=== callTransactional
+[#callTransactional__Propagation_Callable]
+=== callTransactional(Propagation, Callable)
 
 Runs given _callable_ with a transactional boundary, where the detailed transactional behavior is governed by given _Propagation_ _propagation_ .
 
 More fine grained control is given via _#callTransactional(TransactionDefinition, Callable)_
 
-[#runTransactional]
-=== runTransactional
+[#runTransactional__Propagation_ThrowingRunnable]
+=== runTransactional(Propagation, ThrowingRunnable)
 
 Runs given _runnable_ with a transactional boundary, where the detailed transactional behavior is governed by given _Propagation_ _propagation_ .
 
 More fine grained control is given via _#runTransactional(TransactionDefinition, ThrowingRunnable)_
 
-[#callWithinCurrentTransactionElseCreateNew]
-=== callWithinCurrentTransactionElseCreateNew
+[#callWithinCurrentTransactionElseCreateNew__Callable]
+=== callWithinCurrentTransactionElseCreateNew(Callable)
 
 Runs given _callable_ within an existing transactional boundary, or in the absence of such a boundary, creates a new one.
 
 In other words, support a current transaction, create a new one if none exists.
 
-[#runWithinCurrentTransactionElseCreateNew]
-=== runWithinCurrentTransactionElseCreateNew
+[#runWithinCurrentTransactionElseCreateNew__ThrowingRunnable]
+=== runWithinCurrentTransactionElseCreateNew(ThrowingRunnable)
 
 Runs given _runnable_ within an existing transactional boundary, or in the absence of such a boundary creates a new one.
 

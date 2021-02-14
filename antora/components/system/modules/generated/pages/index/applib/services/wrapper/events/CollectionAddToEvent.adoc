@@ -15,7 +15,7 @@ class CollectionAddToEvent {
 }
 ----
 
-<.> xref:#getProposed[getProposed]
+<.> xref:#getProposed__[getProposed()]
 +
 --
 The object that is being added.
@@ -23,8 +23,8 @@ The object that is being added.
 
 == Members
 
-[#getProposed]
-=== getProposed
+[#getProposed__]
+=== getProposed()
 
 The object that is being added.
 

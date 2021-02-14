@@ -1,41 +1,97 @@
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
+Allows instances of JAXB-annotated classes to be marshalled to XML and unmarshalled from XML back into domain objects.
+
+The default implementation automatically caches the JAXB marshallers by target class.
+
 == API
 
 [source,java]
 .JaxbService.java
 ----
 interface JaxbService {
-  Object fromXml(JAXBContext jaxbContext, String xml)
-  Object fromXml(JAXBContext jaxbContext, String xml, Map<String, Object> unmarshallerProperties)
+  Object fromXml(JAXBContext jaxbContext, String xml)     // <.>
+  Object fromXml(JAXBContext jaxbContext, String xml, Map<String, Object> unmarshallerProperties)     // <.>
   T fromXml(Class<T> domainClass, String xml)     // <.>
   T fromXml(Class<T> domainClass, String xml, Map<String, Object> unmarshallerProperties)     // <.>
-  String toXml(Object domainObject)
-  String toXml(Object domainObject, Map<String, Object> marshallerProperties)
-  Map<String, String> toXsd(Object domainObject, IsisSchemas isisSchemas)
+  String toXml(Object domainObject)     // <.>
+  String toXml(Object domainObject, Map<String, Object> marshallerProperties)     // <.>
+  Map<String, String> toXsd(Object domainObject, IsisSchemas isisSchemas)     // <.>
 }
 ----
 
-<.> xref:#fromXml[fromXml]
+<.> xref:#fromXml__JAXBContext_String[fromXml(JAXBContext, String)]
 +
 --
-As _#fromXml(JAXBContext, String)_ , but downcast to a specific type.
+unmarshalls the XML into an instance of the class, using the provided _JAXBContext_ .
 --
-<.> xref:#fromXml[fromXml]
+<.> xref:#fromXml__JAXBContext_String_Map[fromXml(JAXBContext, String, Map)]
 +
 --
-As _#fromXml(JAXBContext, String, Map)_ , but downcast to a specific type.
+unmarshalls the XML into an instance of the class, using the provided _JAXBContext_ and the additional properties.
+--
+<.> xref:#fromXml__Class_String[fromXml(Class, String)]
++
+--
+Unmarshalls the XML to the specified domain class.
+--
+<.> xref:#fromXml__Class_String_Map[fromXml(Class, String, Map)]
++
+--
+Unmarshalls the XML to the specified domain class, with additional properties passed through to the _JAXBContext_ used to performed the unmarshalling.
+--
+<.> xref:#toXml__Object[toXml(Object)]
++
+--
+Marshalls the object into XML (using a _JAXBContext_ for the object's class).
+--
+<.> xref:#toXml__Object_Map[toXml(Object, Map)]
++
+--
+Marshalls the object into XML specifying additional properties (passed to the _JAXBContext_ used for the object's class).
+--
+<.> xref:#toXsd__Object_IsisSchemas[toXsd(Object, IsisSchemas)]
++
+--
+Generates a map of each of the schemas referenced; the key is the schema namespace, the value is the XML of the schema itself.
 --
 
 == Members
 
-[#fromXml]
-=== fromXml
+[#fromXml__JAXBContext_String]
+=== fromXml(JAXBContext, String)
 
-As _#fromXml(JAXBContext, String)_ , but downcast to a specific type.
+unmarshalls the XML into an instance of the class, using the provided _JAXBContext_ .
 
-[#fromXml]
-=== fromXml
+[#fromXml__JAXBContext_String_Map]
+=== fromXml(JAXBContext, String, Map)
 
-As _#fromXml(JAXBContext, String, Map)_ , but downcast to a specific type.
+unmarshalls the XML into an instance of the class, using the provided _JAXBContext_ and the additional properties.
+
+[#fromXml__Class_String]
+=== fromXml(Class, String)
+
+Unmarshalls the XML to the specified domain class.
+
+[#fromXml__Class_String_Map]
+=== fromXml(Class, String, Map)
+
+Unmarshalls the XML to the specified domain class, with additional properties passed through to the _JAXBContext_ used to performed the unmarshalling.
+
+[#toXml__Object]
+=== toXml(Object)
+
+Marshalls the object into XML (using a _JAXBContext_ for the object's class).
+
+[#toXml__Object_Map]
+=== toXml(Object, Map)
+
+Marshalls the object into XML specifying additional properties (passed to the _JAXBContext_ used for the object's class).
+
+[#toXsd__Object_IsisSchemas]
+=== toXsd(Object, IsisSchemas)
+
+Generates a map of each of the schemas referenced; the key is the schema namespace, the value is the XML of the schema itself.
+
+A JAXB-annotated domain object will live in its own XSD namespace and may reference multiple other XSD schemas. In particular, many JAXB domain objects will reference the common isis schemas. The _IsisSchemas_ paramter indicates whether these schemas should be included or excluded from the map.
 

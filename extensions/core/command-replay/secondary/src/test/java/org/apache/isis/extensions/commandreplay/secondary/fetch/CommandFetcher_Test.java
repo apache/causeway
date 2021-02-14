@@ -25,7 +25,8 @@ import javax.ws.rs.core.UriBuilder;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
-import org.apache.isis.applib.services.jaxb.JaxbService;
+import org.apache.isis.applib.services.jaxb.JaxbService.Simple;
+import org.apache.isis.applib.util.JaxbUtil;
 import org.apache.isis.extensions.jaxrsclient.applib.client.JaxRsClient;
 import org.apache.isis.extensions.jaxrsclient.applib.client.JaxRsResponse;
 import org.apache.isis.extensions.jaxrsclient.impl.client.JaxRsClientDefault;
@@ -48,6 +49,6 @@ public class CommandFetcher_Test {
         URI uri = uriBuilder.build();
         JaxRsResponse invoke = jaxRsClient.get(uri, CommandsDto.class, JaxRsClient.ReprType.ACTION_RESULT, "sven", "pass");
         CommandsDto entity = invoke.readEntity(CommandsDto.class);
-        System.out.println(new JaxbService.Simple().toXml(entity));
+        System.out.println(JaxbUtil.toXml(entity));
     }
 }

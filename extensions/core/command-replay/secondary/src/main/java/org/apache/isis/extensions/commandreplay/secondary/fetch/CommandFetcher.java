@@ -34,6 +34,7 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.jaxb.JaxbService;
+import org.apache.isis.applib.services.jaxb.JaxbService.Simple;
 import org.apache.isis.extensions.commandlog.impl.jdo.CommandJdo;
 import org.apache.isis.extensions.commandreplay.secondary.SecondaryStatus;
 import org.apache.isis.extensions.commandreplay.secondary.StatusException;
@@ -148,7 +149,7 @@ public class CommandFetcher {
         String entity = "<unable to read from response entity>";
         try {
             entity = readEntityFrom(response);
-            final JaxbService jaxbService = new JaxbService.Simple();
+            final JaxbService jaxbService = new Simple();
             commandsDto = jaxbService.fromXml(CommandsDto.class, entity);
             log.debug("commands:\n{}", entity);
         } catch(Exception ex) {

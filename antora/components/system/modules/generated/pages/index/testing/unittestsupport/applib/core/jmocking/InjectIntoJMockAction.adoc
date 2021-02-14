@@ -12,7 +12,7 @@ class InjectIntoJMockAction {
 }
 ----
 
-<.> xref:#injectInto[injectInto]
+<.> xref:#injectInto__[injectInto()]
 +
 --
 Factory
@@ -20,8 +20,8 @@ Factory
 
 == Members
 
-[#injectInto]
-=== injectInto
+[#injectInto__]
+=== injectInto()
 
 Factory
 

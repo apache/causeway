@@ -25,82 +25,82 @@ interface InteractionListener {
 }
 ----
 
-<.> xref:#objectTitleRead[objectTitleRead]
+<.> xref:#objectTitleRead__ObjectTitleEvent[objectTitleRead(ObjectTitleEvent)]
 +
 --
 The title was read.
 --
-<.> xref:#objectPersisted[objectPersisted]
+<.> xref:#objectPersisted__ObjectValidityEvent[objectPersisted(ObjectValidityEvent)]
 +
 --
 The object was persisted (or an attempt to persist it was made).
 --
-<.> xref:#propertyVisible[propertyVisible]
+<.> xref:#propertyVisible__PropertyVisibilityEvent[propertyVisible(PropertyVisibilityEvent)]
 +
 --
 A check was made to determine if a property was visible.
 --
-<.> xref:#propertyUsable[propertyUsable]
+<.> xref:#propertyUsable__PropertyUsabilityEvent[propertyUsable(PropertyUsabilityEvent)]
 +
 --
 A check was made to determine if a property was usable.
 --
-<.> xref:#propertyAccessed[propertyAccessed]
+<.> xref:#propertyAccessed__PropertyAccessEvent[propertyAccessed(PropertyAccessEvent)]
 +
 --
 A property was read.
 --
-<.> xref:#propertyModified[propertyModified]
+<.> xref:#propertyModified__PropertyModifyEvent[propertyModified(PropertyModifyEvent)]
 +
 --
 A property was modified (or an attempt to modify it was made)
 --
-<.> xref:#collectionVisible[collectionVisible]
+<.> xref:#collectionVisible__CollectionVisibilityEvent[collectionVisible(CollectionVisibilityEvent)]
 +
 --
 A check was made to determine if a collection was visible.
 --
-<.> xref:#collectionUsable[collectionUsable]
+<.> xref:#collectionUsable__CollectionUsabilityEvent[collectionUsable(CollectionUsabilityEvent)]
 +
 --
 A check was made to determine if a collection was usable.
 --
-<.> xref:#collectionAccessed[collectionAccessed]
+<.> xref:#collectionAccessed__CollectionAccessEvent[collectionAccessed(CollectionAccessEvent)]
 +
 --
 A collection was read.
 --
-<.> xref:#collectionAddedTo[collectionAddedTo]
+<.> xref:#collectionAddedTo__CollectionAddToEvent[collectionAddedTo(CollectionAddToEvent)]
 +
 --
 An object was added to the collection (or an attempt to add it was made).
 --
-<.> xref:#collectionRemovedFrom[collectionRemovedFrom]
+<.> xref:#collectionRemovedFrom__CollectionRemoveFromEvent[collectionRemovedFrom(CollectionRemoveFromEvent)]
 +
 --
 An object was removed from the collection (or an attempt to remove it was made).
 --
-<.> xref:#collectionMethodInvoked[collectionMethodInvoked]
+<.> xref:#collectionMethodInvoked__CollectionMethodEvent[collectionMethodInvoked(CollectionMethodEvent)]
 +
 --
 A method of a collection (such as `isEmpty()` or `size()` ) has been invoked.
 --
-<.> xref:#actionVisible[actionVisible]
+<.> xref:#actionVisible__ActionVisibilityEvent[actionVisible(ActionVisibilityEvent)]
 +
 --
 A check was made to determine if an action was visible.
 --
-<.> xref:#actionUsable[actionUsable]
+<.> xref:#actionUsable__ActionUsabilityEvent[actionUsable(ActionUsabilityEvent)]
 +
 --
 A check was made to determine if an action was usable.
 --
-<.> xref:#actionArgument[actionArgument]
+<.> xref:#actionArgument__ActionArgumentEvent[actionArgument(ActionArgumentEvent)]
 +
 --
 A check was made as to whether an argument proposed for an action was valid.
 --
-<.> xref:#actionInvoked[actionInvoked]
+<.> xref:#actionInvoked__ActionInvocationEvent[actionInvoked(ActionInvocationEvent)]
 +
 --
 An action was invoked (or an attempt to invoke it was made).
@@ -108,101 +108,101 @@ An action was invoked (or an attempt to invoke it was made).
 
 == Members
 
-[#objectTitleRead]
-=== objectTitleRead
+[#objectTitleRead__ObjectTitleEvent]
+=== objectTitleRead(ObjectTitleEvent)
 
 The title was read.
 
-[#objectPersisted]
-=== objectPersisted
+[#objectPersisted__ObjectValidityEvent]
+=== objectPersisted(ObjectValidityEvent)
 
 The object was persisted (or an attempt to persist it was made).
 
-[#propertyVisible]
-=== propertyVisible
+[#propertyVisible__PropertyVisibilityEvent]
+=== propertyVisible(PropertyVisibilityEvent)
 
 A check was made to determine if a property was visible.
 
-[#propertyUsable]
-=== propertyUsable
+[#propertyUsable__PropertyUsabilityEvent]
+=== propertyUsable(PropertyUsabilityEvent)
 
 A check was made to determine if a property was usable.
 
-[#propertyAccessed]
-=== propertyAccessed
+[#propertyAccessed__PropertyAccessEvent]
+=== propertyAccessed(PropertyAccessEvent)
 
 A property was read.
 
 Unlike most other events, a xref:system:generated:index/applib/services/wrapper/events/PropertyAccessEvent.adoc[PropertyAccessEvent] will never have been vetoed (that is, _PropertyAccessEvent#isVeto()_ will always be `false` ).
 
-[#propertyModified]
-=== propertyModified
+[#propertyModified__PropertyModifyEvent]
+=== propertyModified(PropertyModifyEvent)
 
 A property was modified (or an attempt to modify it was made)
 
 Use _PropertyModifyEvent#getProposed()_ to determine whether the property was being set or cleared.
 
-[#collectionVisible]
-=== collectionVisible
+[#collectionVisible__CollectionVisibilityEvent]
+=== collectionVisible(CollectionVisibilityEvent)
 
 A check was made to determine if a collection was visible.
 
 Will be fired prior to _#collectionUsable(CollectionUsabilityEvent)_ .
 
-[#collectionUsable]
-=== collectionUsable
+[#collectionUsable__CollectionUsabilityEvent]
+=== collectionUsable(CollectionUsabilityEvent)
 
 A check was made to determine if a collection was usable.
 
 Will be fired prior to either _#collectionAccessed(CollectionAccessEvent)_ or _#collectionAddedTo(CollectionAddToEvent)_ or _#collectionRemovedFrom(CollectionRemoveFromEvent)_ .
 
-[#collectionAccessed]
-=== collectionAccessed
+[#collectionAccessed__CollectionAccessEvent]
+=== collectionAccessed(CollectionAccessEvent)
 
 A collection was read.
 
 Unlike most other events, a xref:system:generated:index/applib/services/wrapper/events/CollectionAccessEvent.adoc[CollectionAccessEvent] will never have been vetoed (that is, _CollectionAccessEvent#isVeto()_ will always be `false` ).
 
-[#collectionAddedTo]
-=== collectionAddedTo
+[#collectionAddedTo__CollectionAddToEvent]
+=== collectionAddedTo(CollectionAddToEvent)
 
 An object was added to the collection (or an attempt to add it was made).
 
-[#collectionRemovedFrom]
-=== collectionRemovedFrom
+[#collectionRemovedFrom__CollectionRemoveFromEvent]
+=== collectionRemovedFrom(CollectionRemoveFromEvent)
 
 An object was removed from the collection (or an attempt to remove it was made).
 
-[#collectionMethodInvoked]
-=== collectionMethodInvoked
+[#collectionMethodInvoked__CollectionMethodEvent]
+=== collectionMethodInvoked(CollectionMethodEvent)
 
 A method of a collection (such as `isEmpty()` or `size()` ) has been invoked.
 
 Unlike the other methods in this interface, the source of these events will be an instance of a Collection (such as `java.util.List` ) rather than the domain object. (The domain object is _CollectionMethodEvent#getDomainObject()_ still available, however).
 
-[#actionVisible]
-=== actionVisible
+[#actionVisible__ActionVisibilityEvent]
+=== actionVisible(ActionVisibilityEvent)
 
 A check was made to determine if an action was visible.
 
 Will be fired prior to _#actionUsable(ActionUsabilityEvent)_ .
 
-[#actionUsable]
-=== actionUsable
+[#actionUsable__ActionUsabilityEvent]
+=== actionUsable(ActionUsabilityEvent)
 
 A check was made to determine if an action was usable.
 
 Will be fired prior to _#actionArgument(ActionArgumentEvent)_ .
 
-[#actionArgument]
-=== actionArgument
+[#actionArgument__ActionArgumentEvent]
+=== actionArgument(ActionArgumentEvent)
 
 A check was made as to whether an argument proposed for an action was valid.
 
 Will be fired prior to _#actionInvoked(ActionInvocationEvent)_ .
 
-[#actionInvoked]
-=== actionInvoked
+[#actionInvoked__ActionInvocationEvent]
+=== actionInvoked(ActionInvocationEvent)
 
 An action was invoked (or an attempt to invoke it was made).
 

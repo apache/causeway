@@ -11,12 +11,12 @@ interface MetricsService {
 }
 ----
 
-<.> xref:#numberEntitiesLoaded[numberEntitiesLoaded]
+<.> xref:#numberEntitiesLoaded__[numberEntitiesLoaded()]
 +
 --
 The number of entities that have, so far in this request, been loaded from the database.
 --
-<.> xref:#numberEntitiesDirtied[numberEntitiesDirtied]
+<.> xref:#numberEntitiesDirtied__[numberEntitiesDirtied()]
 +
 --
 The number of objects that have, so far in this request, been dirtied/will need updating in the database); a good measure of the footprint of the interaction.
@@ -24,8 +24,8 @@ The number of objects that have, so far in this request, been dirtied/will need 
 
 == Members
 
-[#numberEntitiesLoaded]
-=== numberEntitiesLoaded
+[#numberEntitiesLoaded__]
+=== numberEntitiesLoaded()
 
 The number of entities that have, so far in this request, been loaded from the database.
 
@@ -33,8 +33,8 @@ Corresponds to the number of times that `javax.jdo.listener.LoadLifecycleListene
 
 Is captured within _MemberExecutionDto#getMetrics()_ (accessible from _InteractionContext#currentInteraction()_ ).
 
-[#numberEntitiesDirtied]
-=== numberEntitiesDirtied
+[#numberEntitiesDirtied__]
+=== numberEntitiesDirtied()
 
 The number of objects that have, so far in this request, been dirtied/will need updating in the database); a good measure of the footprint of the interaction.
 

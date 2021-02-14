@@ -4,75 +4,10 @@
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
 
-WARNING: TODO: this content has not yet been reviewed/updated for v2.0
 
+include::system:generated:page$index/applib/services/grid/GridService.adoc[]
 
-The `GridService` provides the ability to load the XML layout (grid) for a domain class.
-To do this it delegates:
+include::GridService/hooks/implementation.adoc[]
 
-* to xref:refguide:applib-svc:GridLoaderService.adoc[`GridLoaderService`] to load a pre-existing layout for the domain class, if possible
+include::GridService/hooks/examples_and_usage.adoc[]
 
-* to xref:refguide:applib-svc:GridSystemService.adoc[`GridSystemService`] to normalize the grid with respect to Apache
-Isis' internal metamodel, in other words to ensure that all of the domain objects' properties, collections and actions are associated with regions of the grid.
-
-Once a grid has been loaded for a domain class, this is cached internally by Apache Isis' internal meta model (in the
-`GridFacet` facet).
-If running in prototype mode, any subsequent changes to the XML will be detected and the grid rebuilt.
-This allows for dynamic reloading of layouts, providing a far faster feedback (eg if tweaking the UI while working with end-users).
-Dynamic reloading is disabled in production mode.
-
-== API
-
-include::system:generated:page$index/applib/services/grid/GridService.adoc[leveloffset=+2]
-
-TODO example migration
-
-.Deprecated Docs
-[WARNING]
-================================
-
-== SPI
-
-The SPI defined by this service is:
-
-[source,java]
-----
-include::refguide:applib-svc:example$services/grid/GridService.java[tags="refguide"]
-----
-<.> whether dynamic reloading of layouts is enabled.
-The default implementation enables reloading for prototyping, disables in production
-<.> support metamodel invalidation/rebuilding of spec, eg as called by this xref:applib-classes:about.adoc#rebuildMetamodel[Object mixin] action.
-<.> whether any persisted layout metadata (eg a `.layout.xml` file) exists for this domain class.
-Just delegates to corresponding method in xref:refguide:applib-svc:GridLoaderService.adoc[`GridLoaderService`].
-<.> returns a new instance of a xref:applib-classes:layout.adoc#component[`Grid`] for the specified domain class, eg as loaded from a `layout.xml` file.
-If none exists, will return null (and the calling xref:refguide:applib-svc:GridService.adoc[`GridService`] will use xref:refguide:applib-svc:GridSystemService.adoc[`GridSystemService`] to obtain a default grid for the domain class).
-<.> returns a layout alternative, eg if specified through a `layout()` supporting method of the domain object itself.
-<.> returns a default grid, eg two columns in ratio 4:8.
-Used when no existing grid layout exists for a domain class.
-<.> validates and normalizes a grid, modifying the grid so that all of the domain object's members (properties, collections, actions) are bound to regions of the grid.
-This is done using existing metadata, most notably that of the xref:refguide:applib-ant:MemberOrder.adoc[`@MemberOrder`] annotation.
-Such a grid, if persisted as the layout XML file for the domain class, allows the `@MemberOrder` annotation to be removed from the source code of the domain class (but other annotations must be retained).
-<.> Takes a normalized grid and enriches it with additional metadata (taken from Apache Isis' internal metadata) that can be represented in the layout XML.
-Such a grid, if persisted as the layout XML file for the domain class, allows all layout annotations (xref:refguide:applib-ant:ActionLayout.adoc[`@ActionLayout`], xref:refguide:applib-ant:PropertyLayout.adoc[`@PropertyLayout`] and xref:refguide:applib-ant:CollectionLayout.adoc[`@CollectionLayout`]) to be removed from the source code of the domain class.
-<.> Takes a normalized grid and strips out removes all members, leaving only the grid structure.
-Such a grid, if persisted as the layout XML file for the domain class, requires that the xref:refguide:applib-ant:MemberOrder.adoc[`@MemberOrder`] annotation is retained in the source code of said class in order to bind members to the regions of the grid.
-
-The first five methods just delegate to the corresponding methods in xref:refguide:applib-svc:GridSystemService.adoc[`GridSystemService`], while the last four delegate to the  corresponding method in xref:refguide:applib-svc:GridSystemService.adoc[`GridSystemService`].
-The service inspects the ``Grid``'s concrete class to determine which actual `GridSystemService` instance to delegate to.
-
-
-
-================================
-
-== Implementation
-
-The framework provides a default implementation of this service, namely `o.a.i.core.metamodel.services.grid.GridServiceDefault`.
-
-
-
-== Related Services
-
-This service calls xref:refguide:applib-svc:GridLoaderService.adoc[`GridLoaderService`] and xref:refguide:applib-svc:GridSystemService.adoc[`GridSystemService`].
-
-This service is called by xref:refguide:applib-svc:LayoutService.adoc[`LayoutService`], exposed in the UI through `LayoutServiceMenu` (to download the layout XML as a zip file for all domain objects) and the xref:applib-classes:roles-mixins-contributees/mixins.adoc#Object[`downloadLayoutXml()`] mixin (to download the layout XML for a single domain
-object).

@@ -19,7 +19,7 @@ class ActionInvocationEvent {
 }
 ----
 
-<.> xref:#getProposed[getProposed]
+<.> xref:#getProposed__[getProposed()]
 +
 --
 Does not apply
@@ -27,8 +27,8 @@ Does not apply
 
 == Members
 
-[#getProposed]
-=== getProposed
+[#getProposed__]
+=== getProposed()
 
 Does not apply
 

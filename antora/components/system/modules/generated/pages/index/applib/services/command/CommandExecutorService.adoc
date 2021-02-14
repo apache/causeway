@@ -13,7 +13,7 @@ interface CommandExecutorService {
 }
 ----
 
-<.> xref:#executeCommand[executeCommand]
+<.> xref:#executeCommand__SudoPolicy_Command[executeCommand(SudoPolicy, Command)]
 +
 --
 Executes the specified command.
@@ -21,8 +21,8 @@ Executes the specified command.
 
 == Members
 
-[#executeCommand]
-=== executeCommand
+[#executeCommand__SudoPolicy_Command]
+=== executeCommand(SudoPolicy, Command)
 
 Executes the specified command.
 

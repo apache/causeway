@@ -13,7 +13,7 @@ ContentMappingServiceForCommandDto contentMappingServiceForCommandDto;
 }
 ----
 
-<.> xref:#map[map]
+<.> xref:#map__Object[map(Object)]
 +
 --
 Not part of the xref:system:generated:index/applib/services/conmap/ContentMappingService.adoc[ContentMappingService] API.
@@ -21,8 +21,8 @@ Not part of the xref:system:generated:index/applib/services/conmap/ContentMappin
 
 == Members
 
-[#map]
-=== map
+[#map__Object]
+=== map(Object)
 
 Not part of the xref:system:generated:index/applib/services/conmap/ContentMappingService.adoc[ContentMappingService] API.
 

@@ -20,12 +20,12 @@ class TitleUiEvent<S> {
 --
 If used then the framework will set state via (non-API) setters.
 --
-<.> xref:#setTitle[setTitle]
+<.> xref:#setTitle__String[setTitle(String)]
 +
 --
 For subscribers to call to provide a (non-translated) title for this object.
 --
-<.> xref:#setTranslatableTitle[setTranslatableTitle]
+<.> xref:#setTranslatableTitle__TranslatableString[setTranslatableTitle(TranslatableString)]
 +
 --
 For subscribers to call to provide a translatable (i18n) title for this object.
@@ -40,13 +40,13 @@ If used then the framework will set state via (non-API) setters.
 
 Because the _EventObject_ superclass prohibits a null source, a dummy value is temporarily used.
 
-[#setTitle]
-=== setTitle
+[#setTitle__String]
+=== setTitle(String)
 
 For subscribers to call to provide a (non-translated) title for this object.
 
-[#setTranslatableTitle]
-=== setTranslatableTitle
+[#setTranslatableTitle__TranslatableString]
+=== setTranslatableTitle(TranslatableString)
 
 For subscribers to call to provide a translatable (i18n) title for this object.
 

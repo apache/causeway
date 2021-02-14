@@ -14,7 +14,7 @@ interface HasUsername {
 }
 ----
 
-<.> xref:#getUsername[getUsername]
+<.> xref:#getUsername__[getUsername()]
 +
 --
 The user that created this object.
@@ -22,8 +22,8 @@ The user that created this object.
 
 == Members
 
-[#getUsername]
-=== getUsername
+[#getUsername__]
+=== getUsername()
 
 The user that created this object.
 

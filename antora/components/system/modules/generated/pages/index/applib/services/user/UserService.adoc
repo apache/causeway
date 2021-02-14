@@ -18,27 +18,27 @@ interface UserService {
 }
 ----
 
-<.> xref:#currentUser[currentUser]
+<.> xref:#currentUser__[currentUser()]
 +
 --
 Optionally gets the details about the current user, based on whether an xref:system:generated:index/applib/services/iactn/ExecutionContext.adoc[ExecutionContext] can be found with the current thread's context.
 --
-<.> xref:#getUser[getUser]
+<.> xref:#getUser__[getUser()]
 +
 --
 Gets the details about the current user.
 --
-<.> xref:#currentUserElseFail[currentUserElseFail]
+<.> xref:#currentUserElseFail__[currentUserElseFail()]
 +
 --
 Gets the details about the current user.
 --
-<.> xref:#currentUserName[currentUserName]
+<.> xref:#currentUserName__[currentUserName()]
 +
 --
 Optionally gets the the current user's name, based on whether an xref:system:generated:index/applib/services/iactn/ExecutionContext.adoc[ExecutionContext] can be found with the current thread's context.
 --
-<.> xref:#currentUserNameElseNobody[currentUserNameElseNobody]
+<.> xref:#currentUserNameElseNobody__[currentUserNameElseNobody()]
 +
 --
 Returns either the current user's name or else _Nobody_ .
@@ -46,28 +46,28 @@ Returns either the current user's name or else _Nobody_ .
 
 == Members
 
-[#currentUser]
-=== currentUser
+[#currentUser__]
+=== currentUser()
 
 Optionally gets the details about the current user, based on whether an xref:system:generated:index/applib/services/iactn/ExecutionContext.adoc[ExecutionContext] can be found with the current thread's context.
 
-[#getUser]
-=== getUser
+[#getUser__]
+=== getUser()
 
 Gets the details about the current user.
 
-[#currentUserElseFail]
-=== currentUserElseFail
+[#currentUserElseFail__]
+=== currentUserElseFail()
 
 Gets the details about the current user.
 
-[#currentUserName]
-=== currentUserName
+[#currentUserName__]
+=== currentUserName()
 
 Optionally gets the the current user's name, based on whether an xref:system:generated:index/applib/services/iactn/ExecutionContext.adoc[ExecutionContext] can be found with the current thread's context.
 
-[#currentUserNameElseNobody]
-=== currentUserNameElseNobody
+[#currentUserNameElseNobody__]
+=== currentUserNameElseNobody()
 
 Returns either the current user's name or else _Nobody_ .
 

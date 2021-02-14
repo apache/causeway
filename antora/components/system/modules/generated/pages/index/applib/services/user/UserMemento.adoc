@@ -30,32 +30,32 @@ class UserMemento {
 --
 Creates a new user with the specified name and assigned roles.
 --
-<.> xref:#system[system]
+<.> xref:#system__[system()]
 +
 --
 The framework's internal user with unrestricted privileges.
 --
-<.> xref:#ofName[ofName]
+<.> xref:#ofName__String[ofName(String)]
 +
 --
 Creates a new user with the specified name and no roles.
 --
-<.> xref:#ofNameAndRoles[ofNameAndRoles]
+<.> xref:#ofNameAndRoles__String_RoleMemento[ofNameAndRoles(String, RoleMemento)]
 +
 --
 Creates a new user with the specified name and assigned roles.
 --
-<.> xref:#ofNameAndRoleNames[ofNameAndRoleNames]
+<.> xref:#ofNameAndRoleNames__String_String[ofNameAndRoleNames(String, String)]
 +
 --
 Creates a new user with the specified name and assigned role names.
 --
-<.> xref:#ofNameAndRoleNames[ofNameAndRoleNames]
+<.> xref:#ofNameAndRoleNames__String_Stream[ofNameAndRoleNames(String, Stream)]
 +
 --
 Creates a new user with the specified name and assigned role names.
 --
-<.> xref:#isCurrentUser[isCurrentUser]
+<.> xref:#isCurrentUser__String[isCurrentUser(String)]
 +
 --
 Determine if the specified name is this user.
@@ -68,33 +68,33 @@ Determine if the specified name is this user.
 
 Creates a new user with the specified name and assigned roles.
 
-[#system]
-=== system
+[#system__]
+=== system()
 
 The framework's internal user with unrestricted privileges.
 
-[#ofName]
-=== ofName
+[#ofName__String]
+=== ofName(String)
 
 Creates a new user with the specified name and no roles.
 
-[#ofNameAndRoles]
-=== ofNameAndRoles
+[#ofNameAndRoles__String_RoleMemento]
+=== ofNameAndRoles(String, RoleMemento)
 
 Creates a new user with the specified name and assigned roles.
 
-[#ofNameAndRoleNames]
-=== ofNameAndRoleNames
+[#ofNameAndRoleNames__String_String]
+=== ofNameAndRoleNames(String, String)
 
 Creates a new user with the specified name and assigned role names.
 
-[#ofNameAndRoleNames]
-=== ofNameAndRoleNames
+[#ofNameAndRoleNames__String_Stream]
+=== ofNameAndRoleNames(String, Stream)
 
 Creates a new user with the specified name and assigned role names.
 
-[#isCurrentUser]
-=== isCurrentUser
+[#isCurrentUser__String]
+=== isCurrentUser(String)
 
 Determine if the specified name is this user.
 

@@ -12,17 +12,17 @@ interface Builder {
 }
 ----
 
-<.> xref:#includePath[includePath]
+<.> xref:#includePath__String[includePath(String)]
 +
 --
 Enrich the snapshot to include the state of these referenced objects
 --
-<.> xref:#includePathAndAnnotation[includePathAndAnnotation]
+<.> xref:#includePathAndAnnotation__String_String[includePathAndAnnotation(String, String)]
 +
 --
 Ditto, but add an XML annotation attribute to the included element(s).
 --
-<.> xref:#build[build]
+<.> xref:#build__[build()]
 +
 --
 Builds the Snapshot.
@@ -30,18 +30,18 @@ Builds the Snapshot.
 
 == Members
 
-[#includePath]
-=== includePath
+[#includePath__String]
+=== includePath(String)
 
 Enrich the snapshot to include the state of these referenced objects
 
-[#includePathAndAnnotation]
-=== includePathAndAnnotation
+[#includePathAndAnnotation__String_String]
+=== includePathAndAnnotation(String, String)
 
 Ditto, but add an XML annotation attribute to the included element(s).
 
-[#build]
-=== build
+[#build__]
+=== build()
 
 Builds the Snapshot.
 

@@ -18,37 +18,37 @@ interface ServiceRegistry {
 }
 ----
 
-<.> xref:#select[select]
+<.> xref:#select__Class_Annotation[][select(Class, Annotation[])]
 +
 --
 Obtains a xref:system:generated:index/commons/collections/Can.adoc[Can] container containing any matching instances for the given required type and additional required qualifiers.
 --
-<.> xref:#select[select]
+<.> xref:#select__Class[select(Class)]
 +
 --
 Obtains a xref:system:generated:index/commons/collections/Can.adoc[Can] container containing any matching instances for the given required type.
 --
-<.> xref:#streamRegisteredBeansOfType[streamRegisteredBeansOfType]
+<.> xref:#streamRegisteredBeansOfType__Class[streamRegisteredBeansOfType(Class)]
 +
 --
 Streams all registered bean adapters implementing the requested type.
 --
-<.> xref:#streamRegisteredBeans[streamRegisteredBeans]
+<.> xref:#streamRegisteredBeans__[streamRegisteredBeans()]
 +
 --
 Returns all bean adapters that have been registered.
 --
-<.> xref:#lookupRegisteredBeanById[lookupRegisteredBeanById]
+<.> xref:#lookupRegisteredBeanById__String[lookupRegisteredBeanById(String)]
 +
 --
 Returns a registered bean of given _name_ .
 --
-<.> xref:#lookupRegisteredBeanByIdElseFail[lookupRegisteredBeanByIdElseFail]
+<.> xref:#lookupRegisteredBeanByIdElseFail__String[lookupRegisteredBeanByIdElseFail(String)]
 +
 --
 Returns a registered bean of given _name_ , or throws when no such bean.
 --
-<.> xref:#lookupService[lookupService]
+<.> xref:#lookupService__Class[lookupService(Class)]
 +
 --
 Returns a domain service implementing the requested type.
@@ -56,38 +56,38 @@ Returns a domain service implementing the requested type.
 
 == Members
 
-[#select]
-=== select
+[#select__Class_Annotation[]]
+=== select(Class, Annotation[])
 
 Obtains a xref:system:generated:index/commons/collections/Can.adoc[Can] container containing any matching instances for the given required type and additional required qualifiers.
 
-[#select]
-=== select
+[#select__Class]
+=== select(Class)
 
 Obtains a xref:system:generated:index/commons/collections/Can.adoc[Can] container containing any matching instances for the given required type.
 
-[#streamRegisteredBeansOfType]
-=== streamRegisteredBeansOfType
+[#streamRegisteredBeansOfType__Class]
+=== streamRegisteredBeansOfType(Class)
 
 Streams all registered bean adapters implementing the requested type.
 
-[#streamRegisteredBeans]
-=== streamRegisteredBeans
+[#streamRegisteredBeans__]
+=== streamRegisteredBeans()
 
 Returns all bean adapters that have been registered.
 
-[#lookupRegisteredBeanById]
-=== lookupRegisteredBeanById
+[#lookupRegisteredBeanById__String]
+=== lookupRegisteredBeanById(String)
 
 Returns a registered bean of given _name_ .
 
-[#lookupRegisteredBeanByIdElseFail]
-=== lookupRegisteredBeanByIdElseFail
+[#lookupRegisteredBeanByIdElseFail__String]
+=== lookupRegisteredBeanByIdElseFail(String)
 
 Returns a registered bean of given _name_ , or throws when no such bean.
 
-[#lookupService]
-=== lookupService
+[#lookupService__Class]
+=== lookupService(Class)
 
 Returns a domain service implementing the requested type.
 

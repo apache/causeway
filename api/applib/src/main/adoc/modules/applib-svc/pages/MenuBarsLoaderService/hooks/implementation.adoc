@@ -4,3 +4,22 @@
 
 
 == Implementation
+
+The framework provides a default implementation of this service, namely `o.a.i.core.runtimeservices.menubars.MenuBarsLoaderServiceDefault`.
+This searches for a classpath resource `menubars.layout.xml`, located ni the root package.
+
+If using the Wicket viewer, the location of this file (and its name) can be overridden using the `isis.viewer.wicket.application.menubars-layout-xml` configuration property.
+
+For example:
+
+[source,yaml]
+.application.yaml
+----
+isis:
+  viewer:
+    wicket:
+      application:
+        menubars-layout-xml: demoapp/dom/menubars.layout.xml
+----
+
+The default implementaiton supports reloading only in prototype mode.

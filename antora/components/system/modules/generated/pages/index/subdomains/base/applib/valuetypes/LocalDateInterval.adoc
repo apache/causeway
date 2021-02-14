@@ -21,12 +21,12 @@ class LocalDateInterval {
 }
 ----
 
-<.> xref:#parseString[parseString]
+<.> xref:#parseString__String[parseString(String)]
 +
 --
 Parse a string representation of a LocalDateInterval Since this method is only used for testing it's not heavily guarded against illegal arguments
 --
-<.> xref:#endDateFromStartDate[endDateFromStartDate]
+<.> xref:#endDateFromStartDate__LocalDate[endDateFromStartDate(LocalDate)]
 +
 --
 Returns an end date given the start date of the next adjoining interval
@@ -34,13 +34,13 @@ Returns an end date given the start date of the next adjoining interval
 
 == Members
 
-[#parseString]
-=== parseString
+[#parseString__String]
+=== parseString(String)
 
 Parse a string representation of a LocalDateInterval Since this method is only used for testing it's not heavily guarded against illegal arguments
 
-[#endDateFromStartDate]
-=== endDateFromStartDate
+[#endDateFromStartDate__LocalDate]
+=== endDateFromStartDate(LocalDate)
 
 Returns an end date given the start date of the next adjoining interval
 

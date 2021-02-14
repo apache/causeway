@@ -30,13 +30,13 @@ Categorises the exception as per xref:system:generated:index/applib/services/exc
 --
 The untranslated user-friendly reason for the exception.
 --
-<.> xref:#of[of]
-<.> xref:#toMessage[toMessage]
+<.> xref:#of__Category_String[of(Category, String)]
+<.> xref:#toMessage__TranslationService[toMessage(TranslationService)]
 +
 --
 Translates the _#getReason() reason_ and prepends with a translation of _#getCategory() category_ , using the provided xref:system:generated:index/applib/services/i18n/TranslationService.adoc[TranslationService] ..
 --
-<.> xref:#toMessageNoCategory[toMessageNoCategory]
+<.> xref:#toMessageNoCategory__TranslationService[toMessageNoCategory(TranslationService)]
 +
 --
 Translates the _#getReason() reason_ alone (ignoring the _#getCategory() category_ , using the provided xref:system:generated:index/applib/services/i18n/TranslationService.adoc[TranslationService] ..
@@ -60,16 +60,16 @@ The untranslated user-friendly reason for the exception.
 
 The reason can also be translated (prepended or not by the translation of the _#getCategory() category_ using _#toMessage(TranslationService)_ or _#toMessageNoCategory(TranslationService)_ . .
 
-[#of]
-=== of
+[#of__Category_String]
+=== of(Category, String)
 
-[#toMessage]
-=== toMessage
+[#toMessage__TranslationService]
+=== toMessage(TranslationService)
 
 Translates the _#getReason() reason_ and prepends with a translation of _#getCategory() category_ , using the provided xref:system:generated:index/applib/services/i18n/TranslationService.adoc[TranslationService] ..
 
-[#toMessageNoCategory]
-=== toMessageNoCategory
+[#toMessageNoCategory__TranslationService]
+=== toMessageNoCategory(TranslationService)
 
 Translates the _#getReason() reason_ alone (ignoring the _#getCategory() category_ , using the provided xref:system:generated:index/applib/services/i18n/TranslationService.adoc[TranslationService] ..
 

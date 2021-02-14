@@ -11,12 +11,12 @@ interface Chained<T> {
 }
 ----
 
-<.> xref:#getPrevious[getPrevious]
+<.> xref:#getPrevious__[getPrevious()]
 +
 --
 The object (usually an xref:system:generated:index/subdomains/base/applib/with/WithInterval.adoc[WithInterval] , but not necessarily) that precedes this one, if any (not necessarily contiguously)..
 --
-<.> xref:#getNext[getNext]
+<.> xref:#getNext__[getNext()]
 +
 --
 The object (usually an xref:system:generated:index/subdomains/base/applib/with/WithInterval.adoc[WithInterval] , but not necessarily) that succeeds this one, if any (not necessarily contiguously).
@@ -24,15 +24,15 @@ The object (usually an xref:system:generated:index/subdomains/base/applib/with/W
 
 == Members
 
-[#getPrevious]
-=== getPrevious
+[#getPrevious__]
+=== getPrevious()
 
 The object (usually an xref:system:generated:index/subdomains/base/applib/with/WithInterval.adoc[WithInterval] , but not necessarily) that precedes this one, if any (not necessarily contiguously)..
 
 Implementations where successive intervals are contiguous should instead implement xref:system:generated:index/subdomains/base/applib/with/WithIntervalContiguous.adoc[WithIntervalContiguous] .
 
-[#getNext]
-=== getNext
+[#getNext__]
+=== getNext()
 
 The object (usually an xref:system:generated:index/subdomains/base/applib/with/WithInterval.adoc[WithInterval] , but not necessarily) that succeeds this one, if any (not necessarily contiguously).
 

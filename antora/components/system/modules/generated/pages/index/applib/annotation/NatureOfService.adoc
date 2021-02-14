@@ -25,12 +25,12 @@ The service's actions appear in the REST API and in 'viewers', eg. in the menu b
 --
 The service's actions should only be visible in the REST API exposed by the Restful Objects viewer.
 --
-<.> xref:#isView[isView]
+<.> xref:#isView__[isView()]
 +
 --
 Whether a service contributes its actions to viewers and to the REST API.
 --
-<.> xref:#isRestOnly[isRestOnly]
+<.> xref:#isRestOnly__[isRestOnly()]
 +
 --
 Whether a service contributes its actions exclusively to the REST API.
@@ -48,13 +48,13 @@ The service's actions appear in the REST API and in 'viewers', eg. in the menu b
 
 The service's actions should only be visible in the REST API exposed by the Restful Objects viewer.
 
-[#isView]
-=== isView
+[#isView__]
+=== isView()
 
 Whether a service contributes its actions to viewers and to the REST API.
 
-[#isRestOnly]
-=== isRestOnly
+[#isRestOnly__]
+=== isRestOnly()
 
 Whether a service contributes its actions exclusively to the REST API.
 

@@ -11,12 +11,12 @@ interface TitleService {
 }
 ----
 
-<.> xref:#titleOf[titleOf]
+<.> xref:#titleOf__Object[titleOf(Object)]
 +
 --
 Return the title of the object, as rendered in the UI by the Isis viewers.
 --
-<.> xref:#iconNameOf[iconNameOf]
+<.> xref:#iconNameOf__Object[iconNameOf(Object)]
 +
 --
 Return the icon name of the object, as rendered in the UI by the Isis viewers.
@@ -24,13 +24,13 @@ Return the icon name of the object, as rendered in the UI by the Isis viewers.
 
 == Members
 
-[#titleOf]
-=== titleOf
+[#titleOf__Object]
+=== titleOf(Object)
 
 Return the title of the object, as rendered in the UI by the Isis viewers.
 
-[#iconNameOf]
-=== iconNameOf
+[#iconNameOf__Object]
+=== iconNameOf(Object)
 
 Return the icon name of the object, as rendered in the UI by the Isis viewers.
 

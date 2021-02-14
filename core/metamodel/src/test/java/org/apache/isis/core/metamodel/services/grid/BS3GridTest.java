@@ -40,7 +40,9 @@ import org.apache.isis.applib.layout.grid.bootstrap3.BS3Grid;
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3Row;
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3Tab;
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3TabGroup;
+import org.apache.isis.applib.services.jaxb.IsisSchemas;
 import org.apache.isis.applib.services.jaxb.JaxbService;
+import org.apache.isis.applib.services.jaxb.JaxbService.Simple;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel.services.grid.bootstrap3.GridSystemServiceBS3;
@@ -151,7 +153,7 @@ public class BS3GridTest {
     }
 
     protected void dumpXsd(final BS3Grid bs3Page) {
-        Map<String, String> schemas = jaxbService.toXsd(bs3Page, JaxbService.IsisSchemas.INCLUDE);
+        Map<String, String> schemas = jaxbService.toXsd(bs3Page, IsisSchemas.INCLUDE);
         for (Map.Entry<String, String> entry : schemas.entrySet()) {
             println(entry.getKey() + ":");
             println(entry.getValue());

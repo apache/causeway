@@ -4,3 +4,5 @@
 
 
 == Implementation
+
+This is a concrete class.

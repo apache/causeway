@@ -8,9 +8,9 @@
 class Object_downloadLayoutXml {
   @Inject
 LayoutService layoutService;
-  Object act(final String fileName, final LayoutService.Style style)
+  Object act(final String fileName, final Style style)
   String default0Act()
-  LayoutService.Style default1Act()
+  Style default1Act()
 }
 ----
 

@@ -38,6 +38,9 @@ import org.apache.isis.applib.value.Clob;
 import org.apache.isis.commons.internal.base._Strings;
 
 /**
+ * Simply provides a UI to allow layouts (obtained from {@link LayoutService}
+ * to be downloaded within the UI.
+ *
  * @since 1.x {@index}
  */
 @Named("isis.applib.LayoutServiceMenu")
@@ -74,7 +77,7 @@ public class LayoutServiceMenu {
             )
     @MemberOrder(sequence="500.400.1")
     // ...
-    public Blob downloadLayouts(final LayoutService.Style style) {
+    public Blob downloadLayouts(final Style style) {
 
         final String fileName = "layouts." + style.name().toLowerCase() + ".zip";
 
@@ -84,8 +87,8 @@ public class LayoutServiceMenu {
         // ...
     }
 
-    public LayoutService.Style default0DownloadLayouts() {
-        return LayoutService.Style.NORMALIZED;
+    public Style default0DownloadLayouts() {
+        return Style.NORMALIZED;
     }
 
     public static class DownloadMenuBarsLayoutDomainEvent extends ActionDomainEvent {}

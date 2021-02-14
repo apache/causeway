@@ -15,22 +15,22 @@ interface XmlService {
 }
 ----
 
-<.> xref:#asDocument[asDocument]
+<.> xref:#asDocument__String[asDocument(String)]
 +
 --
 Converts xml string into an _Document W3C Document_ .
 --
-<.> xref:#asString[asString]
+<.> xref:#asString__Document[asString(Document)]
 +
 --
 Serializes a _Document W3C Document_ back into a string.
 --
-<.> xref:#getChildElement[getChildElement]
+<.> xref:#getChildElement__Element_String[getChildElement(Element, String)]
 +
 --
 Convenience method to walk XML document.
 --
-<.> xref:#getChildTextValue[getChildTextValue]
+<.> xref:#getChildTextValue__Element[getChildTextValue(Element)]
 +
 --
 Convenience method to obtain value of child text node.
@@ -38,23 +38,23 @@ Convenience method to obtain value of child text node.
 
 == Members
 
-[#asDocument]
-=== asDocument
+[#asDocument__String]
+=== asDocument(String)
 
 Converts xml string into an _Document W3C Document_ .
 
-[#asString]
-=== asString
+[#asString__Document]
+=== asString(Document)
 
 Serializes a _Document W3C Document_ back into a string.
 
-[#getChildElement]
-=== getChildElement
+[#getChildElement__Element_String]
+=== getChildElement(Element, String)
 
 Convenience method to walk XML document.
 
-[#getChildTextValue]
-=== getChildTextValue
+[#getChildTextValue__Element]
+=== getChildTextValue(Element)
 
 Convenience method to obtain value of child text node.
 

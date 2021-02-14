@@ -4,3 +4,7 @@
 
 
 == Implementation
+
+The xref:vw:ROOT:about.adoc[Wicket viewer] provides an implementation of this service (`LocaleProviderWicket`) which leverages Apache Wicket APIs.
+
+There is (currently) no equivalent implementation for the xref:vro:ROOT:about.adoc[RestfulObjects viewer].

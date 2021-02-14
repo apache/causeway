@@ -30,6 +30,7 @@ import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.mixins.MixinConstants;
 import org.apache.isis.applib.services.jaxb.JaxbService;
+import org.apache.isis.applib.services.metamodel.Config;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
 import org.apache.isis.applib.services.metamodel.MetaModelServiceMenu;
 import org.apache.isis.applib.value.Clob;
@@ -70,7 +71,7 @@ public class Object_downloadMetamodelXml {
         val pkg = holder.getClass().getPackage().getName();
 
         val config =
-                new MetaModelService.Config()
+                new Config()
                 .withIgnoreNoop()
                 .withIgnoreAbstractClasses()
                 .withIgnoreInterfaces()

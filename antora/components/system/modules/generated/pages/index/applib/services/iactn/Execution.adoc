@@ -21,37 +21,37 @@ class Execution<T, E> {
 }
 ----
 
-<.> xref:#setParent[setParent]
+<.> xref:#setParent__Execution[setParent(Execution)]
 +
 --
  *NOT API* : intended to be called only by the framework.
 --
-<.> xref:#getChildren[getChildren]
+<.> xref:#getChildren__[getChildren()]
 +
 --
 The actions/property edits made in turn via the xref:system:generated:index/applib/services/wrapper/WrapperFactory.adoc[WrapperFactory] .
 --
-<.> xref:#setEvent[setEvent]
+<.> xref:#setEvent__E[setEvent(E)]
 +
 --
  *NOT API* : intended to be called only by the framework.
 --
-<.> xref:#setCompletedAt[setCompletedAt]
+<.> xref:#setCompletedAt__Timestamp_MetricsService[setCompletedAt(Timestamp, MetricsService)]
 +
 --
  *NOT API* : intended to be called only by the framework.
 --
-<.> xref:#setReturned[setReturned]
+<.> xref:#setReturned__Object[setReturned(Object)]
 +
 --
  *NOT API* : intended to be called only by the framework.
 --
-<.> xref:#setThrew[setThrew]
+<.> xref:#setThrew__Exception[setThrew(Exception)]
 +
 --
  *NOT API* : intended to be called only by the framework.
 --
-<.> xref:#setDto[setDto]
+<.> xref:#setDto__T[setDto(T)]
 +
 --
  *NOT API* : Set by framework (implementation of _org.apache.isis.core.metamodel.execution.InternalInteraction.MemberExecutor_ )
@@ -59,38 +59,38 @@ The actions/property edits made in turn via the xref:system:generated:index/appl
 
 == Members
 
-[#setParent]
-=== setParent
+[#setParent__Execution]
+=== setParent(Execution)
 
  *NOT API* : intended to be called only by the framework.
 
-[#getChildren]
-=== getChildren
+[#getChildren__]
+=== getChildren()
 
 The actions/property edits made in turn via the xref:system:generated:index/applib/services/wrapper/WrapperFactory.adoc[WrapperFactory] .
 
-[#setEvent]
-=== setEvent
+[#setEvent__E]
+=== setEvent(E)
 
  *NOT API* : intended to be called only by the framework.
 
-[#setCompletedAt]
-=== setCompletedAt
+[#setCompletedAt__Timestamp_MetricsService]
+=== setCompletedAt(Timestamp, MetricsService)
 
  *NOT API* : intended to be called only by the framework.
 
-[#setReturned]
-=== setReturned
+[#setReturned__Object]
+=== setReturned(Object)
 
  *NOT API* : intended to be called only by the framework.
 
-[#setThrew]
-=== setThrew
+[#setThrew__Exception]
+=== setThrew(Exception)
 
  *NOT API* : intended to be called only by the framework.
 
-[#setDto]
-=== setDto
+[#setDto__T]
+=== setDto(T)
 
  *NOT API* : Set by framework (implementation of _org.apache.isis.core.metamodel.execution.InternalInteraction.MemberExecutor_ )
 

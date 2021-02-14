@@ -14,7 +14,7 @@ interface ReplayCommandExecutionController {
 }
 ----
 
-<.> xref:#getState[getState]
+<.> xref:#getState__[getState()]
 +
 --
 The current state, or `null` if the service implementing this SPI has not yet been initialized.
@@ -22,8 +22,8 @@ The current state, or `null` if the service implementing this SPI has not yet be
 
 == Members
 
-[#getState]
-=== getState
+[#getState__]
+=== getState()
 
 The current state, or `null` if the service implementing this SPI has not yet been initialized.
 

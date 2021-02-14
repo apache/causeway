@@ -11,12 +11,12 @@ interface Snapshot {
 }
 ----
 
-<.> xref:#getXmlDocument[getXmlDocument]
+<.> xref:#getXmlDocument__[getXmlDocument()]
 +
 --
 Converts the snapshotted state into an XML document.
 --
-<.> xref:#getXsdDocument[getXsdDocument]
+<.> xref:#getXsdDocument__[getXsdDocument()]
 +
 --
 Creates a corresponding XSD that describes the structure of the exported XML.
@@ -24,13 +24,13 @@ Creates a corresponding XSD that describes the structure of the exported XML.
 
 == Members
 
-[#getXmlDocument]
-=== getXmlDocument
+[#getXmlDocument__]
+=== getXmlDocument()
 
 Converts the snapshotted state into an XML document.
 
-[#getXsdDocument]
-=== getXsdDocument
+[#getXsdDocument__]
+=== getXsdDocument()
 
 Creates a corresponding XSD that describes the structure of the exported XML.
 

@@ -14,7 +14,7 @@ interface AcceptHeaderService {
 }
 ----
 
-<.> xref:#getAcceptableMediaTypes[getAcceptableMediaTypes]
+<.> xref:#getAcceptableMediaTypes__[getAcceptableMediaTypes()]
 +
 --
 The intention is that this service only returns a list when the request is initiated through the _Restful Objects viewer_.
@@ -22,8 +22,8 @@ The intention is that this service only returns a list when the request is initi
 
 == Members
 
-[#getAcceptableMediaTypes]
-=== getAcceptableMediaTypes
+[#getAcceptableMediaTypes__]
+=== getAcceptableMediaTypes()
 
 The intention is that this service only returns a list when the request is initiated through the _Restful Objects viewer_.
 

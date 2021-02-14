@@ -22,27 +22,27 @@ class ContentNegotiationServiceOrgApacheIsisV2 {
 --
 Unlike RO v1.0, use a single content-type of `application/json;profile="urn:org.apache.isis/v2"` .
 --
-<.> xref:#buildResponse[buildResponse]
+<.> xref:#buildResponse__IResourceContext_ManagedObject[buildResponse(IResourceContext, ManagedObject)]
 +
 --
 Domain object is returned as a map with the RO 1.0 representation as a special '$$ro' property within that map.
 --
-<.> xref:#buildResponse[buildResponse]
+<.> xref:#buildResponse__IResourceContext_ManagedProperty[buildResponse(IResourceContext, ManagedProperty)]
 +
 --
 Individual property of an object is not supported.
 --
-<.> xref:#buildResponse[buildResponse]
+<.> xref:#buildResponse__IResourceContext_ManagedCollection[buildResponse(IResourceContext, ManagedCollection)]
 +
 --
 Individual (parented) collection of an object is returned as a list with the RO representation as an object in the list with a single property named '$$ro'
 --
-<.> xref:#buildResponse[buildResponse]
+<.> xref:#buildResponse__IResourceContext_ManagedAction[buildResponse(IResourceContext, ManagedAction)]
 +
 --
 Action prompt is not supported.
 --
-<.> xref:#buildResponse[buildResponse]
+<.> xref:#buildResponse__IResourceContext_ObjectAndActionInvocation[buildResponse(IResourceContext, ObjectAndActionInvocation)]
 +
 --
 Action invocation is supported provided it returns a single domain object or a list of domain objects (ie invocations returning void or scalar value are not supported). Action invocations returning a domain object will be rendered as a map with the RO v1.0 representation as a '$$ro' property within (same as _#buildResponse(IResourceContext, ManagedObject)_ ), while action invocations returning a list will be rendered as a list with the RO v1.0 representation as a map object with a single '$$ro' property (similar to _#buildResponse(IResourceContext, ManagedCollection)_ )
@@ -57,28 +57,28 @@ Unlike RO v1.0, use a single content-type of `application/json;profile="urn:org.
 
 The response content types xref:system:generated:index/applib/client/RepresentationTypeSimplifiedV2.adoc[RepresentationTypeSimplifiedV2] append the 'repr-type' parameter.
 
-[#buildResponse]
-=== buildResponse
+[#buildResponse__IResourceContext_ManagedObject]
+=== buildResponse(IResourceContext, ManagedObject)
 
 Domain object is returned as a map with the RO 1.0 representation as a special '$$ro' property within that map.
 
-[#buildResponse]
-=== buildResponse
+[#buildResponse__IResourceContext_ManagedProperty]
+=== buildResponse(IResourceContext, ManagedProperty)
 
 Individual property of an object is not supported.
 
-[#buildResponse]
-=== buildResponse
+[#buildResponse__IResourceContext_ManagedCollection]
+=== buildResponse(IResourceContext, ManagedCollection)
 
 Individual (parented) collection of an object is returned as a list with the RO representation as an object in the list with a single property named '$$ro'
 
-[#buildResponse]
-=== buildResponse
+[#buildResponse__IResourceContext_ManagedAction]
+=== buildResponse(IResourceContext, ManagedAction)
 
 Action prompt is not supported.
 
-[#buildResponse]
-=== buildResponse
+[#buildResponse__IResourceContext_ObjectAndActionInvocation]
+=== buildResponse(IResourceContext, ObjectAndActionInvocation)
 
 Action invocation is supported provided it returns a single domain object or a list of domain objects (ie invocations returning void or scalar value are not supported). Action invocations returning a domain object will be rendered as a map with the RO v1.0 representation as a '$$ro' property within (same as _#buildResponse(IResourceContext, ManagedObject)_ ), while action invocations returning a list will be rendered as a list with the RO v1.0 representation as a map object with a single '$$ro' property (similar to _#buildResponse(IResourceContext, ManagedCollection)_ )
 

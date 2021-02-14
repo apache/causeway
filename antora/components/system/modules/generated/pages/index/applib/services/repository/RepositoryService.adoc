@@ -31,97 +31,97 @@ interface RepositoryService {
 }
 ----
 
-<.> xref:#getEntityState[getEntityState]
+<.> xref:#getEntityState__Object[getEntityState(Object)]
 +
 --
 Returns the EntityState of given _object_ . Returns _EntityState#NOT_PERSISTABLE_ for _object==null_ .
 --
-<.> xref:#detachedEntity[detachedEntity]
+<.> xref:#detachedEntity__T[detachedEntity(T)]
 +
 --
 Same as _org.apache.isis.applib.services.factory.FactoryService#detachedEntity(Object)_ ; provided as a convenience because instantiating and _#persist(Object) persisting_ are often done together.
 --
-<.> xref:#persist[persist]
+<.> xref:#persist__T[persist(T)]
 +
 --
 Persist the specified object (or do nothing if already persistent).
 --
-<.> xref:#persistAndFlush[persistAndFlush]
+<.> xref:#persistAndFlush__T[persistAndFlush(T)]
 +
 --
 Persist the specified object (or do nothing if already persistent) and flushes changes to the database.
 --
-<.> xref:#remove[remove]
+<.> xref:#remove__Object[remove(Object)]
 +
 --
 Deletes the domain object but only if is attached.
 --
-<.> xref:#removeAndFlush[removeAndFlush]
+<.> xref:#removeAndFlush__Object[removeAndFlush(Object)]
 +
 --
 Deletes the domain object but only if is persistent, and flushes changes to the database.
 --
-<.> xref:#removeAll[removeAll]
+<.> xref:#removeAll__Class[removeAll(Class)]
 +
 --
 Removes all instances of the domain object.
 --
-<.> xref:#allInstances[allInstances]
+<.> xref:#allInstances__Class[allInstances(Class)]
 +
 --
 As _#allInstances(Class, long, long)_ , but but returning all instances rather than just those * within the specified range..
 --
-<.> xref:#allInstances[allInstances]
+<.> xref:#allInstances__Class_long_long[allInstances(Class, long, long)]
 +
 --
 Returns all the instances of the specified type (including subtypes). If the optional range parameters are used, the dataset returned starts from (0 based) index, and consists of only up to count items.
 --
-<.> xref:#allMatches[allMatches]
+<.> xref:#allMatches__Class_Predicate[allMatches(Class, Predicate)]
 +
 --
 As _#allMatches(Class, Predicate, long, long)_ , but returning all instances rather than just those within the specified range.
 --
-<.> xref:#allMatches[allMatches]
+<.> xref:#allMatches__Class_Predicate_long_long[allMatches(Class, Predicate, long, long)]
 +
 --
 Returns all the instances of the specified type (including subtypes) that the predicate object accepts. If the optional range parameters are used, the dataset returned starts from (0 based) index, and consists of only up to count items.
 --
-<.> xref:#allMatches[allMatches]
+<.> xref:#allMatches__Query[allMatches(Query)]
 +
 --
 Returns all the instances that match the given xref:system:generated:index/applib/query/Query.adoc[Query] .
 --
-<.> xref:#uniqueMatch[uniqueMatch]
+<.> xref:#uniqueMatch__Class_Predicate[uniqueMatch(Class, Predicate)]
 +
 --
 Find the only instance of the specified type (including subtypes) that has the specified title.
 --
-<.> xref:#uniqueMatch[uniqueMatch]
+<.> xref:#uniqueMatch__Query[uniqueMatch(Query)]
 +
 --
 Find the only instance that matches the provided query.
 --
-<.> xref:#firstMatch[firstMatch]
+<.> xref:#firstMatch__Class_Predicate[firstMatch(Class, Predicate)]
 +
 --
 Find the only instance of the specified type (including subtypes) that has the specified title.
 --
-<.> xref:#firstMatch[firstMatch]
+<.> xref:#firstMatch__Query[firstMatch(Query)]
 +
 --
 Find the only instance that matches the provided query, if any..
 --
-<.> xref:#refresh[refresh]
+<.> xref:#refresh__T[refresh(T)]
 +
 --
 Reloads the pojo.
 --
-<.> xref:#detach[detach]
+<.> xref:#detach__T[detach(T)]
 +
 --
 Detach the entity from the current persistence session.
 --
-<.> xref:#detachedEntity[detachedEntity]
+<.> xref:#detachedEntity__Class[detachedEntity(Class)]
 +
 --
 [WARNING]
@@ -133,7 +133,7 @@ if applicable use _#detachedEntity(Object)_ instead ... "new is the new new", pa
 
 Same as _org.apache.isis.applib.services.factory.FactoryService#detachedEntity(Class)_ ; provided as a convenience because instantiating and _#persist(Object) persisting_ are often done together.
 --
-<.> xref:#instantiate[instantiate]
+<.> xref:#instantiate__Class[instantiate(Class)]
 +
 --
 [WARNING]
@@ -143,7 +143,7 @@ Same as _org.apache.isis.applib.services.factory.FactoryService#detachedEntity(C
 if applicable use _#detachedEntity(Object)_ instead
 ====
 --
-<.> xref:#isPersistent[isPersistent]
+<.> xref:#isPersistent__Object[isPersistent(Object)]
 +
 --
 [WARNING]
@@ -155,7 +155,7 @@ due to ambiguous semantic, use _#getEntityState(Object)_ instead
 
 Determines if the specified object is persistent (that it is stored permanently outside of the virtual machine in the object store).
 --
-<.> xref:#isDeleted[isDeleted]
+<.> xref:#isDeleted__Object[isDeleted(Object)]
 +
 --
 [WARNING]
@@ -170,50 +170,50 @@ Determines if the specified object has been deleted from the object store.
 
 == Members
 
-[#getEntityState]
-=== getEntityState
+[#getEntityState__Object]
+=== getEntityState(Object)
 
 Returns the EntityState of given _object_ . Returns _EntityState#NOT_PERSISTABLE_ for _object==null_ .
 
-[#detachedEntity]
-=== detachedEntity
+[#detachedEntity__T]
+=== detachedEntity(T)
 
 Same as _org.apache.isis.applib.services.factory.FactoryService#detachedEntity(Object)_ ; provided as a convenience because instantiating and _#persist(Object) persisting_ are often done together.
 
-[#persist]
-=== persist
+[#persist__T]
+=== persist(T)
 
 Persist the specified object (or do nothing if already persistent).
 
-[#persistAndFlush]
-=== persistAndFlush
+[#persistAndFlush__T]
+=== persistAndFlush(T)
 
 Persist the specified object (or do nothing if already persistent) and flushes changes to the database.
 
-[#remove]
-=== remove
+[#remove__Object]
+=== remove(Object)
 
 Deletes the domain object but only if is attached.
 
-[#removeAndFlush]
-=== removeAndFlush
+[#removeAndFlush__Object]
+=== removeAndFlush(Object)
 
 Deletes the domain object but only if is persistent, and flushes changes to the database.
 
-[#removeAll]
-=== removeAll
+[#removeAll__Class]
+=== removeAll(Class)
 
 Removes all instances of the domain object.
 
 Intended primarily for testing purposes.
 
-[#allInstances]
-=== allInstances
+[#allInstances__Class]
+=== allInstances(Class)
 
 As _#allInstances(Class, long, long)_ , but but returning all instances rather than just those * within the specified range..
 
-[#allInstances]
-=== allInstances
+[#allInstances__Class_long_long]
+=== allInstances(Class, long, long)
 
 Returns all the instances of the specified type (including subtypes). If the optional range parameters are used, the dataset returned starts from (0 based) index, and consists of only up to count items.
 
@@ -221,13 +221,13 @@ If there are no instances the list will be empty. This method creates a new _Lis
 
 This method should only be called where the number of instances is known to be relatively low, unless the optional range parameters (2 longs) are specified. The range parameters are "start" and "count".
 
-[#allMatches]
-=== allMatches
+[#allMatches__Class_Predicate]
+=== allMatches(Class, Predicate)
 
 As _#allMatches(Class, Predicate, long, long)_ , but returning all instances rather than just those within the specified range.
 
-[#allMatches]
-=== allMatches
+[#allMatches__Class_Predicate_long_long]
+=== allMatches(Class, Predicate, long, long)
 
 Returns all the instances of the specified type (including subtypes) that the predicate object accepts. If the optional range parameters are used, the dataset returned starts from (0 based) index, and consists of only up to count items.
 
@@ -235,8 +235,8 @@ If there are no instances the list will be empty. This method creates a new _Lis
 
 This method is useful during exploration/prototyping, but - because the filtering is performed client-side - this method is only really suitable for initial development/prototyping, or for classes with very few instances. Use _#allMatches(Query)_ for production code.
 
-[#allMatches]
-=== allMatches
+[#allMatches__Query]
+=== allMatches(Query)
 
 Returns all the instances that match the given xref:system:generated:index/applib/query/Query.adoc[Query] .
 
@@ -244,8 +244,8 @@ If there are no instances the list will be empty. This method creates a new _Lis
 
 This method is the recommended way of querying for multiple instances.
 
-[#uniqueMatch]
-=== uniqueMatch
+[#uniqueMatch__Class_Predicate]
+=== uniqueMatch(Class, Predicate)
 
 Find the only instance of the specified type (including subtypes) that has the specified title.
 
@@ -253,8 +253,8 @@ If no instance is found then _Optional#empty()_ will be return, while if there i
 
 This method is useful during exploration/prototyping, but - because the filtering is performed client-side - this method is only really suitable for initial development/prototyping, or for classes with very few instances. Use _#uniqueMatch(Query)_ for production code.
 
-[#uniqueMatch]
-=== uniqueMatch
+[#uniqueMatch__Query]
+=== uniqueMatch(Query)
 
 Find the only instance that matches the provided query.
 
@@ -262,8 +262,8 @@ If no instance is found then _Optional#empty()_ will be return, while if there i
 
 This method is the recommended way of querying for (precisely) one instance. See also _#allMatches(Query)_
 
-[#firstMatch]
-=== firstMatch
+[#firstMatch__Class_Predicate]
+=== firstMatch(Class, Predicate)
 
 Find the only instance of the specified type (including subtypes) that has the specified title.
 
@@ -271,27 +271,27 @@ If no instance is found then _Optional#empty()_ will be return, while if there i
 
 This method is useful during exploration/prototyping, but - because the filtering is performed client-side - this method is only really suitable for initial development/prototyping, or for classes with very few instances. Use _#firstMatch(Query)_ for production code.
 
-[#firstMatch]
-=== firstMatch
+[#firstMatch__Query]
+=== firstMatch(Query)
 
 Find the only instance that matches the provided query, if any..
 
 If no instance is found then _Optional#empty()_ will be return, while if there is more that one instances then the first will be returned.
 
-[#refresh]
-=== refresh
+[#refresh__T]
+=== refresh(T)
 
 Reloads the pojo.
 
-[#detach]
-=== detach
+[#detach__T]
+=== detach(T)
 
 Detach the entity from the current persistence session.
 
 This allows the entity to be read from even after the PersistenceSession that obtained it has been closed.
 
-[#detachedEntity]
-=== detachedEntity
+[#detachedEntity__Class]
+=== detachedEntity(Class)
 
 [WARNING]
 ====
@@ -302,8 +302,8 @@ if applicable use _#detachedEntity(Object)_ instead ... "new is the new new", pa
 
 Same as _org.apache.isis.applib.services.factory.FactoryService#detachedEntity(Class)_ ; provided as a convenience because instantiating and _#persist(Object) persisting_ are often done together.
 
-[#instantiate]
-=== instantiate
+[#instantiate__Class]
+=== instantiate(Class)
 
 [WARNING]
 ====
@@ -312,8 +312,8 @@ Same as _org.apache.isis.applib.services.factory.FactoryService#detachedEntity(C
 if applicable use _#detachedEntity(Object)_ instead
 ====
 
-[#isPersistent]
-=== isPersistent
+[#isPersistent__Object]
+=== isPersistent(Object)
 
 [WARNING]
 ====
@@ -326,8 +326,8 @@ Determines if the specified object is persistent (that it is stored permanently 
 
 This method can also return `true` if the object has been _#isDeleted(Object) deleted_ from the object store.
 
-[#isDeleted]
-=== isDeleted
+[#isDeleted__Object]
+=== isDeleted(Object)
 
 [WARNING]
 ====

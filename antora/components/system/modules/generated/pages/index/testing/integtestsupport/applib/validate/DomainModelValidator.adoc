@@ -17,17 +17,17 @@ class DomainModelValidator {
 }
 ----
 
-<.> xref:#assertValid[assertValid]
+<.> xref:#assertValid__[assertValid()]
 +
 --
 Typical usage in integration tests.
 --
-<.> xref:#throwIfInvalid[throwIfInvalid]
+<.> xref:#throwIfInvalid__[throwIfInvalid()]
 +
 --
 Alternative way of checking
 --
-<.> xref:#anyMatchesContaining[anyMatchesContaining]
+<.> xref:#anyMatchesContaining__Class_String[anyMatchesContaining(Class, String)]
 +
 --
 primarily used for testing
@@ -35,18 +35,18 @@ primarily used for testing
 
 == Members
 
-[#assertValid]
-=== assertValid
+[#assertValid__]
+=== assertValid()
 
 Typical usage in integration tests.
 
-[#throwIfInvalid]
-=== throwIfInvalid
+[#throwIfInvalid__]
+=== throwIfInvalid()
 
 Alternative way of checking
 
-[#anyMatchesContaining]
-=== anyMatchesContaining
+[#anyMatchesContaining__Class_String]
+=== anyMatchesContaining(Class, String)
 
 primarily used for testing
 

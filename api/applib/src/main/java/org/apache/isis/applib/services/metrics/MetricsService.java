@@ -18,10 +18,19 @@
  */
 package org.apache.isis.applib.services.metrics;
 
+import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.services.iactn.InteractionContext;
 import org.apache.isis.schema.ixn.v2.MemberExecutionDto;
 
 /**
+ * Hooks into the transaction nechanism to provide a counters relating to
+ * numbers of object loaded, dirtied etc.
+ *
+ * <p>
+ *     Only entities with {@link DomainObject#entityChangePublishing()} enabled
+ *     are counted.
+ * </p>
+ *
  * @since 1.x {@index}
  */
 public interface MetricsService {

@@ -27,8 +27,8 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
-import org.apache.isis.applib.services.queryresultscache.QueryResultCacheControl;
 import org.apache.isis.applib.services.queryresultscache.QueryResultsCache;
+import org.apache.isis.applib.services.queryresultscache.QueryResultsCacheControl;
 import org.apache.isis.testing.fixtures.applib.events.FixturesInstalledEvent;
 import org.apache.isis.testing.fixtures.applib.events.FixturesInstallingEvent;
 
@@ -41,7 +41,7 @@ import org.apache.isis.testing.fixtures.applib.events.FixturesInstallingEvent;
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")
-public class QueryResultsCacheControlDefault implements QueryResultCacheControl {
+public class QueryResultsCacheControlDefault implements QueryResultsCacheControl {
 
     @EventListener(FixturesInstallingEvent.class)
     public void onFixturesInstallingEvent(FixturesInstallingEvent ev) {

@@ -42,7 +42,7 @@ The (programmatically) simulated (or actual) user.
 --
 The (programmatically) simulated (or actual) clock.
 --
-<.> xref:#ofUserWithSystemDefaults[ofUserWithSystemDefaults]
+<.> xref:#ofUserWithSystemDefaults__UserMemento[ofUserWithSystemDefaults(UserMemento)]
 +
 --
 Creates a new xref:system:generated:index/applib/services/iactn/ExecutionContext.adoc[ExecutionContext] with the specified user and system defaults for clock, locale and time-zone.
@@ -60,8 +60,8 @@ The (programmatically) simulated (or actual) user.
 
 The (programmatically) simulated (or actual) clock.
 
-[#ofUserWithSystemDefaults]
-=== ofUserWithSystemDefaults
+[#ofUserWithSystemDefaults__UserMemento]
+=== ofUserWithSystemDefaults(UserMemento)
 
 Creates a new xref:system:generated:index/applib/services/iactn/ExecutionContext.adoc[ExecutionContext] with the specified user and system defaults for clock, locale and time-zone.
 

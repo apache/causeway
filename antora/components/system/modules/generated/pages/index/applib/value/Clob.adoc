@@ -23,7 +23,7 @@ class Clob {
 }
 ----
 
-<.> xref:#of[of]
+<.> xref:#of__String_CommonMimeType_CharSequence[of(String, CommonMimeType, CharSequence)]
 +
 --
 Returns a new xref:system:generated:index/applib/value/Clob.adoc[Clob] of given _name_ , _mimeType_ and _content_ .
@@ -31,8 +31,8 @@ Returns a new xref:system:generated:index/applib/value/Clob.adoc[Clob] of given 
 
 == Members
 
-[#of]
-=== of
+[#of__String_CommonMimeType_CharSequence]
+=== of(String, CommonMimeType, CharSequence)
 
 Returns a new xref:system:generated:index/applib/value/Clob.adoc[Clob] of given _name_ , _mimeType_ and _content_ .
 

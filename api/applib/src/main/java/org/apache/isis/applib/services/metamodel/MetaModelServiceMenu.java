@@ -48,7 +48,10 @@ import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.schema.metamodel.v2.MetamodelDto;
 
 /**
- * 
+ *
+ * Provides a UI to allow domain model metadata (obtained from
+ * {@link MetaModelService} to be downloaded within the UI.
+ *
  * @since 2.0 {@index}
  */
 @Named("isis.applib.MetaModelServiceMenu")
@@ -129,8 +132,8 @@ public class MetaModelServiceMenu {
             final boolean ignoreInterfaces
             ) {
 
-        MetaModelService.Config config =
-                new MetaModelService.Config()
+        Config config =
+                new Config()
                 .withIgnoreNoop()
                 .withIgnoreAbstractClasses()
                 .withIgnoreInterfaces()
@@ -222,7 +225,7 @@ public class MetaModelServiceMenu {
                 row.getChoices(),
                 row.getAutoComplete(),
                 row.getDefault(),
-                row.getValidate())  
+                row.getValidate())
                 .collect(Collectors.joining(","));
     }
 

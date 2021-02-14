@@ -20,12 +20,12 @@ class Bookmark {
 }
 ----
 
-<.> xref:#parse[parse]
+<.> xref:#parse__String[parse(String)]
 +
 --
 Round-trip with _#toString()_ representation.
 --
-<.> xref:#toString[toString]
+<.> xref:#toString__[toString()]
 +
 --
 The canonical form of the xref:system:generated:index/applib/services/bookmark/Bookmark.adoc[Bookmark] , that is " _#getObjectType() objectType_ _#SEPARATOR_ _#getIdentifier()_ ".
@@ -33,13 +33,13 @@ The canonical form of the xref:system:generated:index/applib/services/bookmark/B
 
 == Members
 
-[#parse]
-=== parse
+[#parse__String]
+=== parse(String)
 
 Round-trip with _#toString()_ representation.
 
-[#toString]
-=== toString
+[#toString__]
+=== toString()
 
 The canonical form of the xref:system:generated:index/applib/services/bookmark/Bookmark.adoc[Bookmark] , that is " _#getObjectType() objectType_ _#SEPARATOR_ _#getIdentifier()_ ".
 

@@ -6,6 +6,13 @@
 
 WARNING: TODO: this content has not yet been reviewed/updated for v2.0
 
+include::system:generated:page$index/applib/services/registry/ServiceRegistry.adoc[ServiceRegistry]
+
+include::ServiceRegistry/hooks/implementation.adoc[]
+
+include::ServiceRegistry/hooks/examples_and_usage.adoc[]
+
+
 The `ServiceRegistry` domain service (and its various supertypes)collects together methods for injecting or looking up domain services (either provided by the framework or application-specific) currently known to the runtime.
 
 

@@ -23,17 +23,17 @@ class BS3Row {
 }
 ----
 
-<.> xref:#getId[getId]
+<.> xref:#getId__[getId()]
 +
 --
 As per <div id="...">...</div> : must be unique across entire page.
 --
-<.> xref:#getMetadataError[getMetadataError]
+<.> xref:#getMetadataError__[getMetadataError()]
 +
 --
 For diagnostics; populated by the framework if and only if a metadata error.
 --
-<.> xref:#getOwner[getOwner]
+<.> xref:#getOwner__[getOwner()]
 +
 --
 Owner.
@@ -41,18 +41,18 @@ Owner.
 
 == Members
 
-[#getId]
-=== getId
+[#getId__]
+=== getId()
 
 As per <div id="...">...</div> : must be unique across entire page.
 
-[#getMetadataError]
-=== getMetadataError
+[#getMetadataError__]
+=== getMetadataError()
 
 For diagnostics; populated by the framework if and only if a metadata error.
 
-[#getOwner]
-=== getOwner
+[#getOwner__]
+=== getOwner()
 
 Owner.
 

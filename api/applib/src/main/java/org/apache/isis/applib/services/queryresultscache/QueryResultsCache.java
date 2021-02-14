@@ -30,19 +30,31 @@ import lombok.Getter;
 
 
 /**
- * This service (API and implementation) provides a mechanism by which idempotent query results can be cached for the duration of an interaction.
- * Most commonly this allows otherwise &quot;naive&quot; - eg that makes a repository call many times within a loop - to
- * be performance tuned.  The benefit is that the algorithm of the business logic can remain easy to understand.
+ * Provides a mechanism by which idempotent query results can be cached for
+ * the duration of an interaction.
  *
  * <p>
- * This implementation has no UI and there is only one implementation (this class) in applib, it is annotated with
- * {@link org.apache.isis.applib.annotation.DomainService}.  This means that it is automatically registered and
- * available for use; no further configuration is required.
+ * Caching such values is useful to improve the response time (for the end user)
+ * of code that loops &quot;naively&quot; through a set of items, performing
+ * an expensive operation each time.  If the data is such that the same
+ * expensive operation is made many times, then the query cache is a perfect fit.
+ * </p>
  *
  * @since 1.x {@index}
  */
 public interface QueryResultsCache extends DisposableBean {
 
+    /**
+     * Executes the callable if not already cached for the supplied calling
+     * class, method and keys.
+     *
+     * @param callable
+     * @param callingClass
+     * @param methodName
+     * @param keys
+     * @param <T>
+     * @return
+     */
     <T> T execute(
             Callable<T> callable,
             Class<?> callingClass, String methodName,

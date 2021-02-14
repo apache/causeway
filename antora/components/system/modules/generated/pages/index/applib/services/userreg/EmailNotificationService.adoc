@@ -16,17 +16,17 @@ interface EmailNotificationService {
 }
 ----
 
-<.> xref:#send[send]
+<.> xref:#send__EmailRegistrationEvent[send(EmailRegistrationEvent)]
 +
 --
 Sends an email to verify an email address as part of the initial user registration
 --
-<.> xref:#send[send]
+<.> xref:#send__PasswordResetEvent[send(PasswordResetEvent)]
 +
 --
 Sends an email to reset a password for an already-registered user
 --
-<.> xref:#isConfigured[isConfigured]
+<.> xref:#isConfigured__[isConfigured()]
 +
 --
 Whether this service has been configured and thus available for use.
@@ -34,18 +34,18 @@ Whether this service has been configured and thus available for use.
 
 == Members
 
-[#send]
-=== send
+[#send__EmailRegistrationEvent]
+=== send(EmailRegistrationEvent)
 
 Sends an email to verify an email address as part of the initial user registration
 
-[#send]
-=== send
+[#send__PasswordResetEvent]
+=== send(PasswordResetEvent)
 
 Sends an email to reset a password for an already-registered user
 
-[#isConfigured]
-=== isConfigured
+[#isConfigured__]
+=== isConfigured()
 
 Whether this service has been configured and thus available for use.
 

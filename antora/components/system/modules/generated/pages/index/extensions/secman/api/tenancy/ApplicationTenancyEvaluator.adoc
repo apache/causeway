@@ -14,7 +14,7 @@ interface ApplicationTenancyEvaluator {
 }
 ----
 
-<.> xref:#handles[handles]
+<.> xref:#handles__Class[handles(Class)]
 +
 --
 Whether this evaluator can determine the tenancy of the specified domain entity (such as `ToDoItem` ) being interacted with (the "what").
@@ -22,8 +22,8 @@ Whether this evaluator can determine the tenancy of the specified domain entity 
 
 == Members
 
-[#handles]
-=== handles
+[#handles__Class]
+=== handles(Class)
 
 Whether this evaluator can determine the tenancy of the specified domain entity (such as `ToDoItem` ) being interacted with (the "what").
 

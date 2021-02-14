@@ -6,6 +6,14 @@
 
 WARNING: TODO: this content has not yet been reviewed/updated for v2.0
 
+include::system:generated:page$index/applib/services/tablecol/TableColumnOrderService.adoc[TableColumnOrderService]
+
+include::TableColumnOrderService/hooks/implementation.adoc[]
+
+include::TableColumnOrderService/hooks/examples_and_usage.adoc[]
+
+
+
 The `TableColumnOrderService` provides the ability to reorder (or suppress) columns in both parented- and standalone tables.
 
 

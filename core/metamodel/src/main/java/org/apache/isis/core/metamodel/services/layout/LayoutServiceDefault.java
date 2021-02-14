@@ -35,6 +35,7 @@ import org.apache.isis.applib.layout.menubars.MenuBars;
 import org.apache.isis.applib.services.grid.GridService;
 import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.services.layout.LayoutService;
+import org.apache.isis.applib.services.layout.Style;
 import org.apache.isis.applib.services.menu.MenuBarsService;
 import org.apache.isis.applib.util.ZipWriter;
 import org.apache.isis.commons.internal.collections._Maps;
@@ -50,7 +51,7 @@ import lombok.val;
 @Primary
 @Qualifier("Default")
 public class LayoutServiceDefault implements LayoutService {
-    
+
     @Inject private SpecificationLoader specificationLoader;
     @Inject private JaxbService jaxbService;
     @Inject private GridService gridService;
@@ -97,7 +98,7 @@ public class LayoutServiceDefault implements LayoutService {
     public byte[] toZip(final Style style) {
         val domainObjectSpecs = specificationLoader.snapshotSpecifications()
         .filter(spec ->
-                !spec.isAbstract() 
+                !spec.isAbstract()
                 && (spec.isEntity() || spec.isViewModel()));
 
         val zipWriter = ZipWriter.ofFailureMessage("Unable to create zip of layouts");

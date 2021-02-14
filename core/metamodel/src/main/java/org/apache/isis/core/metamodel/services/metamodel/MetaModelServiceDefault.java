@@ -34,6 +34,7 @@ import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.commanddto.processor.CommandDtoProcessor;
 import org.apache.isis.applib.services.grid.GridService;
 import org.apache.isis.applib.services.metamodel.BeanSort;
+import org.apache.isis.applib.services.metamodel.Config;
 import org.apache.isis.applib.services.metamodel.DomainMember;
 import org.apache.isis.applib.services.metamodel.DomainModel;
 import org.apache.isis.applib.services.metamodel.MetaModelService;

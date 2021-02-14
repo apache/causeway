@@ -16,27 +16,27 @@ interface GridLoaderService {
 }
 ----
 
-<.> xref:#supportsReloading[supportsReloading]
+<.> xref:#supportsReloading__[supportsReloading()]
 +
 --
 Whether dynamic reloading of layouts is enabled.
 --
-<.> xref:#remove[remove]
+<.> xref:#remove__Class[remove(Class)]
 +
 --
 To support metamodel invalidation/rebuilding of spec.
 --
-<.> xref:#existsFor[existsFor]
+<.> xref:#existsFor__Class[existsFor(Class)]
 +
 --
 Whether any persisted layout metadata (eg a `.layout.xml` file) exists for this domain class.
 --
-<.> xref:#load[load]
+<.> xref:#load__Class[load(Class)]
 +
 --
 Returns a new instance of a xref:system:generated:index/applib/layout/grid/Grid.adoc[Grid] for the specified domain class, eg from a `layout.xml` file, else `null` .
 --
-<.> xref:#load[load]
+<.> xref:#load__Class_String[load(Class, String)]
 +
 --
 Loads a specic alternative xref:system:generated:index/applib/layout/grid/Grid.adoc[Grid] layout for the specified domain class.
@@ -44,34 +44,34 @@ Loads a specic alternative xref:system:generated:index/applib/layout/grid/Grid.a
 
 == Members
 
-[#supportsReloading]
-=== supportsReloading
+[#supportsReloading__]
+=== supportsReloading()
 
 Whether dynamic reloading of layouts is enabled.
 
 The default implementation enables reloading for prototyping mode, disables in production
 
-[#remove]
-=== remove
+[#remove__Class]
+=== remove(Class)
 
 To support metamodel invalidation/rebuilding of spec.
 
 This is called by the _org.apache.isis.applib.mixins.layout.Object_rebuildMetamodel_ mixin action.
 
-[#existsFor]
-=== existsFor
+[#existsFor__Class]
+=== existsFor(Class)
 
 Whether any persisted layout metadata (eg a `.layout.xml` file) exists for this domain class.
 
 If none exists, will return null (and the calling xref:system:generated:index/applib/services/grid/GridService.adoc[GridService] will use xref:system:generated:index/applib/services/grid/GridSystemService.adoc[GridSystemService] to obtain a default grid for the domain class).
 
-[#load]
-=== load
+[#load__Class]
+=== load(Class)
 
 Returns a new instance of a xref:system:generated:index/applib/layout/grid/Grid.adoc[Grid] for the specified domain class, eg from a `layout.xml` file, else `null` .
 
-[#load]
-=== load
+[#load__Class_String]
+=== load(Class, String)
 
 Loads a specic alternative xref:system:generated:index/applib/layout/grid/Grid.adoc[Grid] layout for the specified domain class.
 

@@ -20,47 +20,47 @@ interface DomainChangeRecord {
 }
 ----
 
-<.> xref:#getType[getType]
+<.> xref:#getType__[getType()]
 +
 --
 Distinguishes commands from audit entries from published events/interactions (when these are shown mixed together in a (standalone) table).
 --
-<.> xref:#getUniqueId[getUniqueId]
+<.> xref:#getUniqueId__[getUniqueId()]
 +
 --
 The unique identifier (a GUID) of the transaction in which this change occurred.
 --
-<.> xref:#getUsername[getUsername]
+<.> xref:#getUsername__[getUsername()]
 +
 --
 The user that caused the change.
 --
-<.> xref:#getTimestamp[getTimestamp]
+<.> xref:#getTimestamp__[getTimestamp()]
 +
 --
 The time that the change occurred.
 --
-<.> xref:#getTargetObjectType[getTargetObjectType]
+<.> xref:#getTargetObjectType__[getTargetObjectType()]
 +
 --
 The object type of the domain object being changed.
 --
-<.> xref:#getTarget[getTarget]
+<.> xref:#getTarget__[getTarget()]
 +
 --
 The xref:system:generated:index/applib/services/bookmark/Bookmark.adoc[Bookmark] identifying the domain object that has changed.
 --
-<.> xref:#getTargetMember[getTargetMember]
+<.> xref:#getTargetMember__[getTargetMember()]
 +
 --
 The member interaction (ie action invocation or property edit) which caused the domain object to be changed.
 --
-<.> xref:#getPreValue[getPreValue]
+<.> xref:#getPreValue__[getPreValue()]
 +
 --
 The value of the property prior to it being changed.
 --
-<.> xref:#getPostValue[getPostValue]
+<.> xref:#getPostValue__[getPostValue()]
 +
 --
 The value of the property after it has changed.
@@ -68,52 +68,52 @@ The value of the property after it has changed.
 
 == Members
 
-[#getType]
-=== getType
+[#getType__]
+=== getType()
 
 Distinguishes commands from audit entries from published events/interactions (when these are shown mixed together in a (standalone) table).
 
-[#getUniqueId]
-=== getUniqueId
+[#getUniqueId__]
+=== getUniqueId()
 
 The unique identifier (a GUID) of the transaction in which this change occurred.
 
-[#getUsername]
-=== getUsername
+[#getUsername__]
+=== getUsername()
 
 The user that caused the change.
 
-[#getTimestamp]
-=== getTimestamp
+[#getTimestamp__]
+=== getTimestamp()
 
 The time that the change occurred.
 
-[#getTargetObjectType]
-=== getTargetObjectType
+[#getTargetObjectType__]
+=== getTargetObjectType()
 
 The object type of the domain object being changed.
 
-[#getTarget]
-=== getTarget
+[#getTarget__]
+=== getTarget()
 
 The xref:system:generated:index/applib/services/bookmark/Bookmark.adoc[Bookmark] identifying the domain object that has changed.
 
-[#getTargetMember]
-=== getTargetMember
+[#getTargetMember__]
+=== getTargetMember()
 
 The member interaction (ie action invocation or property edit) which caused the domain object to be changed.
 
 Populated for commands and for published events that represent action invocations or property edits.
 
-[#getPreValue]
-=== getPreValue
+[#getPreValue__]
+=== getPreValue()
 
 The value of the property prior to it being changed.
 
 Populated only for audit entries.
 
-[#getPostValue]
-=== getPostValue
+[#getPostValue__]
+=== getPostValue()
 
 The value of the property after it has changed.
 

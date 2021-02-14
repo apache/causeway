@@ -19,64 +19,64 @@ class ResponseDigest<T> {
 }
 ----
 
-<.> xref:#of[of]
+<.> xref:#of__Response_Class[of(Response, Class)]
 +
 --
 synchronous response processing (single entity)
 --
-<.> xref:#ofList[ofList]
+<.> xref:#ofList__Response_Class_GenericType[ofList(Response, Class, GenericType)]
 +
 --
 synchronous response processing (list of entities)
 --
-<.> xref:#ofAsyncFailure[ofAsyncFailure]
+<.> xref:#ofAsyncFailure__Future_Class_Exception[ofAsyncFailure(Future, Class, Exception)]
 +
 --
 a-synchronous response failure processing
 --
-<.> xref:#isSuccess[isSuccess]
-<.> xref:#isFailure[isFailure]
-<.> xref:#getEntity[getEntity]
-<.> xref:#getEntities[getEntities]
-<.> xref:#getFailureCause[getFailureCause]
-<.> xref:#singletonOrElseMapFailure[singletonOrElseMapFailure]
-<.> xref:#multipleOrElseMapFailure[multipleOrElseMapFailure]
+<.> xref:#isSuccess__[isSuccess()]
+<.> xref:#isFailure__[isFailure()]
+<.> xref:#getEntity__[getEntity()]
+<.> xref:#getEntities__[getEntities()]
+<.> xref:#getFailureCause__[getFailureCause()]
+<.> xref:#singletonOrElseMapFailure__Function[singletonOrElseMapFailure(Function)]
+<.> xref:#multipleOrElseMapFailure__Function[multipleOrElseMapFailure(Function)]
 
 == Members
 
-[#of]
-=== of
+[#of__Response_Class]
+=== of(Response, Class)
 
 synchronous response processing (single entity)
 
-[#ofList]
-=== ofList
+[#ofList__Response_Class_GenericType]
+=== ofList(Response, Class, GenericType)
 
 synchronous response processing (list of entities)
 
-[#ofAsyncFailure]
-=== ofAsyncFailure
+[#ofAsyncFailure__Future_Class_Exception]
+=== ofAsyncFailure(Future, Class, Exception)
 
 a-synchronous response failure processing
 
-[#isSuccess]
-=== isSuccess
+[#isSuccess__]
+=== isSuccess()
 
-[#isFailure]
-=== isFailure
+[#isFailure__]
+=== isFailure()
 
-[#getEntity]
-=== getEntity
+[#getEntity__]
+=== getEntity()
 
-[#getEntities]
-=== getEntities
+[#getEntities__]
+=== getEntities()
 
-[#getFailureCause]
-=== getFailureCause
+[#getFailureCause__]
+=== getFailureCause()
 
-[#singletonOrElseMapFailure]
-=== singletonOrElseMapFailure
+[#singletonOrElseMapFailure__Function]
+=== singletonOrElseMapFailure(Function)
 
-[#multipleOrElseMapFailure]
-=== multipleOrElseMapFailure
+[#multipleOrElseMapFailure__Function]
+=== multipleOrElseMapFailure(Function)
 

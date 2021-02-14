@@ -40,57 +40,57 @@ interface WrapperFactory {
 }
 ----
 
-<.> xref:#wrap[wrap]
+<.> xref:#wrap__T_SyncControl[wrap(T, SyncControl)]
 +
 --
 Provides the "wrapper" of a domain object against which to invoke the action.
 --
-<.> xref:#wrap[wrap]
+<.> xref:#wrap__T[wrap(T)]
 +
 --
 A convenience overload for _#wrap(Object, SyncControl)_ , returning a wrapper to invoke the action synchronously, enforcing business rules. Any exceptions will be propagated, not swallowed.
 --
-<.> xref:#wrapMixin[wrapMixin]
+<.> xref:#wrapMixin__Class_Object_SyncControl[wrapMixin(Class, Object, SyncControl)]
 +
 --
 Provides the wrapper for a _FactoryService#mixin(Class, Object) mixin_ , against which to invoke the action.
 --
-<.> xref:#wrapMixin[wrapMixin]
+<.> xref:#wrapMixin__Class_Object[wrapMixin(Class, Object)]
 +
 --
 A convenience overload for _#wrapMixin(Class, Object, SyncControl)_ , returning a wrapper to invoke the action synchronously, enforcing business rules. Any exceptions will be propagated, not swallowed.
 --
-<.> xref:#unwrap[unwrap]
+<.> xref:#unwrap__T[unwrap(T)]
 +
 --
 Obtains the underlying domain object, if wrapped.
 --
-<.> xref:#isWrapper[isWrapper]
+<.> xref:#isWrapper__T[isWrapper(T)]
 +
 --
 Whether the supplied object is a wrapper around a domain object.
 --
-<.> xref:#asyncWrap[asyncWrap]
+<.> xref:#asyncWrap__T_AsyncControl[asyncWrap(T, AsyncControl)]
 +
 --
 Returns a proxy object for the provided _domainObject_ , through which can execute the action asynchronously.
 --
-<.> xref:#asyncWrapMixin[asyncWrapMixin]
+<.> xref:#asyncWrapMixin__Class_Object_AsyncControl[asyncWrapMixin(Class, Object, AsyncControl)]
 +
 --
 Returns a proxy object for the provided _mixinClass_ , through which can execute the action asynchronously.
 --
-<.> xref:#getListeners[getListeners]
+<.> xref:#getListeners__[getListeners()]
 +
 --
 All xref:system:generated:index/applib/services/wrapper/listeners/InteractionListener.adoc[InteractionListener] s that have been registered using _#addInteractionListener(InteractionListener)_ .
 --
-<.> xref:#addInteractionListener[addInteractionListener]
+<.> xref:#addInteractionListener__InteractionListener[addInteractionListener(InteractionListener)]
 +
 --
 Registers an xref:system:generated:index/applib/services/wrapper/listeners/InteractionListener.adoc[InteractionListener] , to be notified of interactions on all wrappers.
 --
-<.> xref:#removeInteractionListener[removeInteractionListener]
+<.> xref:#removeInteractionListener__InteractionListener[removeInteractionListener(InteractionListener)]
 +
 --
 Remove an xref:system:generated:index/applib/services/wrapper/listeners/InteractionListener.adoc[InteractionListener] , to no longer be notified of interactions on wrappers.
@@ -98,8 +98,8 @@ Remove an xref:system:generated:index/applib/services/wrapper/listeners/Interact
 
 == Members
 
-[#wrap]
-=== wrap
+[#wrap__T_SyncControl]
+=== wrap(T, SyncControl)
 
 Provides the "wrapper" of a domain object against which to invoke the action.
 
@@ -113,59 +113,59 @@ The last logical option (skip rules, skip action) is valid but doesn't make sens
 
 Otherwise, will do all the validations (raise exceptions as required etc.), but doesn't modify the model.
 
-[#wrap]
-=== wrap
+[#wrap__T]
+=== wrap(T)
 
 A convenience overload for _#wrap(Object, SyncControl)_ , returning a wrapper to invoke the action synchronously, enforcing business rules. Any exceptions will be propagated, not swallowed.
 
-[#wrapMixin]
-=== wrapMixin
+[#wrapMixin__Class_Object_SyncControl]
+=== wrapMixin(Class, Object, SyncControl)
 
 Provides the wrapper for a _FactoryService#mixin(Class, Object) mixin_ , against which to invoke the action.
 
 The provided xref:system:generated:index/applib/services/wrapper/control/SyncControl.adoc[SyncControl] determines whether business rules are checked first, and conversely whether the action is executed. See _#wrap(Object, SyncControl)_ for more details on this.
 
-[#wrapMixin]
-=== wrapMixin
+[#wrapMixin__Class_Object]
+=== wrapMixin(Class, Object)
 
 A convenience overload for _#wrapMixin(Class, Object, SyncControl)_ , returning a wrapper to invoke the action synchronously, enforcing business rules. Any exceptions will be propagated, not swallowed.
 
-[#unwrap]
-=== unwrap
+[#unwrap__T]
+=== unwrap(T)
 
 Obtains the underlying domain object, if wrapped.
 
 If the object _#isWrapper(Object) is not wrapped_ , then should just return the object back unchanged.
 
-[#isWrapper]
-=== isWrapper
+[#isWrapper__T]
+=== isWrapper(T)
 
 Whether the supplied object is a wrapper around a domain object.
 
-[#asyncWrap]
-=== asyncWrap
+[#asyncWrap__T_AsyncControl]
+=== asyncWrap(T, AsyncControl)
 
 Returns a proxy object for the provided _domainObject_ , through which can execute the action asynchronously.
 
-[#asyncWrapMixin]
-=== asyncWrapMixin
+[#asyncWrapMixin__Class_Object_AsyncControl]
+=== asyncWrapMixin(Class, Object, AsyncControl)
 
 Returns a proxy object for the provided _mixinClass_ , through which can execute the action asynchronously.
 
-[#getListeners]
-=== getListeners
+[#getListeners__]
+=== getListeners()
 
 All xref:system:generated:index/applib/services/wrapper/listeners/InteractionListener.adoc[InteractionListener] s that have been registered using _#addInteractionListener(InteractionListener)_ .
 
-[#addInteractionListener]
-=== addInteractionListener
+[#addInteractionListener__InteractionListener]
+=== addInteractionListener(InteractionListener)
 
 Registers an xref:system:generated:index/applib/services/wrapper/listeners/InteractionListener.adoc[InteractionListener] , to be notified of interactions on all wrappers.
 
 This is retrospective: the listener will be notified of interactions even on wrappers created before the listener was installed. (From an implementation perspective this is because the wrappers delegate back to the container to fire the events).
 
-[#removeInteractionListener]
-=== removeInteractionListener
+[#removeInteractionListener__InteractionListener]
+=== removeInteractionListener(InteractionListener)
 
 Remove an xref:system:generated:index/applib/services/wrapper/listeners/InteractionListener.adoc[InteractionListener] , to no longer be notified of interactions on wrappers.
 

@@ -19,12 +19,12 @@ interface EncoderDecoder<T> {
 }
 ----
 
-<.> xref:#toEncodedString[toEncodedString]
+<.> xref:#toEncodedString__T[toEncodedString(T)]
 +
 --
 Returns the provided object as an encoded string.
 --
-<.> xref:#fromEncodedString[fromEncodedString]
+<.> xref:#fromEncodedString__String[fromEncodedString(String)]
 +
 --
 Converts an encoded string to an instance of the object.
@@ -32,15 +32,15 @@ Converts an encoded string to an instance of the object.
 
 == Members
 
-[#toEncodedString]
-=== toEncodedString
+[#toEncodedString__T]
+=== toEncodedString(T)
 
 Returns the provided object as an encoded string.
 
 Even if the class is self-encodeable, note that this method is always called on a new instance of the object created via the no-arg constructor. That is, the object shouldn't encode itself, it should encode the object provided to it.
 
-[#fromEncodedString]
-=== fromEncodedString
+[#fromEncodedString__String]
+=== fromEncodedString(String)
 
 Converts an encoded string to an instance of the object.
 

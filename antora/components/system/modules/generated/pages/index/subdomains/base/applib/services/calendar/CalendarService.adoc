@@ -16,7 +16,7 @@ class CalendarService {
 }
 ----
 
-<.> xref:#timestamp[timestamp]
+<.> xref:#timestamp__[timestamp()]
 +
 --
 [WARNING]
@@ -29,8 +29,8 @@ class CalendarService {
 
 == Members
 
-[#timestamp]
-=== timestamp
+[#timestamp__]
+=== timestamp()
 
 [WARNING]
 ====

@@ -21,6 +21,15 @@ package org.apache.isis.applib.services.menu;
 import org.apache.isis.applib.layout.menubars.MenuBars;
 
 /**
+ * Responsible for returning a {@link MenuBarsService} instance, a data
+ * structure representing the arrangement of domain service actions across
+ * multiple menu bars, menus and sections.
+ *
+ * <p>
+ * This is used by the Wicket viewer to build up the menu.  It is also served
+ * as the "menuBars" resource by the Restful Objects viewer.
+ * </p>
+ *
  * @since 1.x {@index}
  */
 public interface MenuBarsService {
@@ -48,5 +57,11 @@ public interface MenuBarsService {
         return menuBars(Type.DEFAULT);
     }
 
+    /**
+     * Returns the menu bars with the requested {@link Type}.
+     *
+     * @param type - as requested
+     * @return
+     */
     MenuBars menuBars(final Type type);
 }

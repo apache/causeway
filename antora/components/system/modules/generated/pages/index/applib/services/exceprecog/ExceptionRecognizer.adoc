@@ -22,7 +22,7 @@ interface ExceptionRecognizer {
 }
 ----
 
-<.> xref:#recognize[recognize]
+<.> xref:#recognize__Throwable[recognize(Throwable)]
 +
 --
 (Attempt to) recognize the exception and return a user-friendly message to render instead.
@@ -30,8 +30,8 @@ interface ExceptionRecognizer {
 
 == Members
 
-[#recognize]
-=== recognize
+[#recognize__Throwable]
+=== recognize(Throwable)
 
 (Attempt to) recognize the exception and return a user-friendly message to render instead.
 

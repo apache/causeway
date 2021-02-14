@@ -58,17 +58,17 @@ Neither safe nor idempotent; every invocation is likely to change the state of t
 --
 Ignore the value provided by this annotation (meaning that the framework will keep searching, in meta annotations or superclasses/interfaces).
 --
-<.> xref:#isIdempotentInNature[isIdempotentInNature]
+<.> xref:#isIdempotentInNature__[isIdempotentInNature()]
 +
 --
 Any of _#SAFE_ , _#SAFE_AND_REQUEST_CACHEABLE_ or (obviously) _#IDEMPOTENT_ .
 --
-<.> xref:#isSafeInNature[isSafeInNature]
+<.> xref:#isSafeInNature__[isSafeInNature()]
 +
 --
 Either of _#SAFE_ or _#SAFE_AND_REQUEST_CACHEABLE_ .
 --
-<.> xref:#isSafe[isSafe]
+<.> xref:#isSafe__[isSafe()]
 +
 --
 [WARNING]
@@ -146,18 +146,18 @@ If supported the UI viewer will show a confirmation dialog before executing the 
 
 Ignore the value provided by this annotation (meaning that the framework will keep searching, in meta annotations or superclasses/interfaces).
 
-[#isIdempotentInNature]
-=== isIdempotentInNature
+[#isIdempotentInNature__]
+=== isIdempotentInNature()
 
 Any of _#SAFE_ , _#SAFE_AND_REQUEST_CACHEABLE_ or (obviously) _#IDEMPOTENT_ .
 
-[#isSafeInNature]
-=== isSafeInNature
+[#isSafeInNature__]
+=== isSafeInNature()
 
 Either of _#SAFE_ or _#SAFE_AND_REQUEST_CACHEABLE_ .
 
-[#isSafe]
-=== isSafe
+[#isSafe__]
+=== isSafe()
 
 [WARNING]
 ====

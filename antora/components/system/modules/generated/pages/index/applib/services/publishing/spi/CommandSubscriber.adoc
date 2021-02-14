@@ -12,7 +12,7 @@ interface CommandSubscriber {
 }
 ----
 
-<.> xref:#onCompleted[onCompleted]
+<.> xref:#onCompleted__Command[onCompleted(Command)]
 +
 --
 Notifies that the command has completed.
@@ -20,8 +20,8 @@ Notifies that the command has completed.
 
 == Members
 
-[#onCompleted]
-=== onCompleted
+[#onCompleted__Command]
+=== onCompleted(Command)
 
 Notifies that the command has completed.
 

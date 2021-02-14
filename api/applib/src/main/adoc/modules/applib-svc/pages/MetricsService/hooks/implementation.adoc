@@ -4,3 +4,7 @@
 
 
 == Implementation
+
+The framework provides a default of this service, namely `o.a.i.core.transaction.changetracking.EntityChangeTrackerDefault`.
+
+This supports both JDO and JPA persistence mechanisms.

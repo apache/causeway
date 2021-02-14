@@ -18,17 +18,17 @@ class ContentNegotiationServiceForRestfulObjectsV1_0 {
 }
 ----
 
-<.> xref:#buildResponseTo[buildResponseTo]
+<.> xref:#buildResponseTo__IResourceContext_ManagedObject_JsonRepresentation_JsonRepresentation[buildResponseTo(IResourceContext, ManagedObject, JsonRepresentation, JsonRepresentation)]
 +
 --
 Not API
 --
-<.> xref:#buildResponseTo[buildResponseTo]
+<.> xref:#buildResponseTo__IResourceContext_ManagedCollection_JsonRepresentation_JsonRepresentation[buildResponseTo(IResourceContext, ManagedCollection, JsonRepresentation, JsonRepresentation)]
 +
 --
 Not API
 --
-<.> xref:#buildResponseTo[buildResponseTo]
+<.> xref:#buildResponseTo__IResourceContext_ObjectAndActionInvocation_JsonRepresentation_JsonRepresentation[buildResponseTo(IResourceContext, ObjectAndActionInvocation, JsonRepresentation, JsonRepresentation)]
 +
 --
 Not API
@@ -36,18 +36,18 @@ Not API
 
 == Members
 
-[#buildResponseTo]
-=== buildResponseTo
+[#buildResponseTo__IResourceContext_ManagedObject_JsonRepresentation_JsonRepresentation]
+=== buildResponseTo(IResourceContext, ManagedObject, JsonRepresentation, JsonRepresentation)
 
 Not API
 
-[#buildResponseTo]
-=== buildResponseTo
+[#buildResponseTo__IResourceContext_ManagedCollection_JsonRepresentation_JsonRepresentation]
+=== buildResponseTo(IResourceContext, ManagedCollection, JsonRepresentation, JsonRepresentation)
 
 Not API
 
-[#buildResponseTo]
-=== buildResponseTo
+[#buildResponseTo__IResourceContext_ObjectAndActionInvocation_JsonRepresentation_JsonRepresentation]
+=== buildResponseTo(IResourceContext, ObjectAndActionInvocation, JsonRepresentation, JsonRepresentation)
 
 Not API
 

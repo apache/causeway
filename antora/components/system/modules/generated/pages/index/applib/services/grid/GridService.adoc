@@ -1,5 +1,7 @@
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
+Provides the ability to load the XML layout (grid) for a domain class.
+
 == API
 
 [source,java]
@@ -18,47 +20,47 @@ interface GridService {
 }
 ----
 
-<.> xref:#supportsReloading[supportsReloading]
+<.> xref:#supportsReloading__[supportsReloading()]
 +
 --
 Whether dynamic reloading of layouts is enabled.
 --
-<.> xref:#remove[remove]
+<.> xref:#remove__Class[remove(Class)]
 +
 --
 To support metamodel invalidation/rebuilding of spec.
 --
-<.> xref:#existsFor[existsFor]
+<.> xref:#existsFor__Class[existsFor(Class)]
 +
 --
 Whether any persisted layout metadata (eg a `.layout.xml` file) exists for this domain class.
 --
-<.> xref:#load[load]
+<.> xref:#load__Class[load(Class)]
 +
 --
-Returns a new instance of a xref:system:generated:index/applib/layout/grid/Grid.adoc[Grid] for the specified domain class, eg from a `layout.xml` file, else `null` .
+Returns a new instance of a xref:system:generated:index/applib/layout/grid/Grid.adoc[Grid] for the specified domain class, for example as loaded from a `layout.xml` file.
 --
-<.> xref:#load[load]
+<.> xref:#load__Class_String[load(Class, String)]
 +
 --
-Returns a new instance of a xref:system:generated:index/applib/layout/grid/Grid.adoc[Grid] for the specified domain class, eg from a `[domainClass].layout.[layout].xml` file, else `null` .
+Returns an alternative layout for the domain class.
 --
-<.> xref:#defaultGridFor[defaultGridFor]
+<.> xref:#defaultGridFor__Class[defaultGridFor(Class)]
 +
 --
 Returns a default grid; eg where none can be loaded using _#load(Class)_ .
 --
-<.> xref:#normalize[normalize]
+<.> xref:#normalize__Grid[normalize(Grid)]
 +
 --
 Returns a normalized grid for the domain class obtained previously using _#load(Class)_ .
 --
-<.> xref:#complete[complete]
+<.> xref:#complete__Grid[complete(Grid)]
 +
 --
 Modifies the provided xref:system:generated:index/applib/layout/grid/Grid.adoc[Grid] with additional metadata, broadly speaking corresponding to the xref:system:generated:index/applib/annotation/DomainObjectLayout.adoc[DomainObjectLayout] , xref:system:generated:index/applib/annotation/ActionLayout.adoc[ActionLayout] , xref:system:generated:index/applib/annotation/PropertyLayout.adoc[PropertyLayout] and xref:system:generated:index/applib/annotation/CollectionLayout.adoc[CollectionLayout] .
 --
-<.> xref:#minimal[minimal]
+<.> xref:#minimal__Grid[minimal(Grid)]
 +
 --
 Modifies the provided xref:system:generated:index/applib/layout/grid/Grid.adoc[Grid] , removing all metadata except the basic grid structure.
@@ -66,52 +68,70 @@ Modifies the provided xref:system:generated:index/applib/layout/grid/Grid.adoc[G
 
 == Members
 
-[#supportsReloading]
-=== supportsReloading
+[#supportsReloading__]
+=== supportsReloading()
 
 Whether dynamic reloading of layouts is enabled.
 
-[#remove]
-=== remove
+The default implementation just delegates to the configured xref:system:generated:index/applib/services/grid/GridLoaderService.adoc[GridLoaderService] ; the default implementation of _that_ service enables reloading wihle prototyping, disables in production.
+
+[#remove__Class]
+=== remove(Class)
 
 To support metamodel invalidation/rebuilding of spec.
 
-[#existsFor]
-=== existsFor
+The default implementation just delegates to the configured xref:system:generated:index/applib/services/grid/GridLoaderService.adoc[GridLoaderService] .
+
+[#existsFor__Class]
+=== existsFor(Class)
 
 Whether any persisted layout metadata (eg a `.layout.xml` file) exists for this domain class.
 
-[#load]
-=== load
+The default implementation just delegates to the configured xref:system:generated:index/applib/services/grid/GridLoaderService.adoc[GridLoaderService] .
 
-Returns a new instance of a xref:system:generated:index/applib/layout/grid/Grid.adoc[Grid] for the specified domain class, eg from a `layout.xml` file, else `null` .
+[#load__Class]
+=== load(Class)
 
-[#load]
-=== load
+Returns a new instance of a xref:system:generated:index/applib/layout/grid/Grid.adoc[Grid] for the specified domain class, for example as loaded from a `layout.xml` file.
 
-Returns a new instance of a xref:system:generated:index/applib/layout/grid/Grid.adoc[Grid] for the specified domain class, eg from a `[domainClass].layout.[layout].xml` file, else `null` .
+If non exists, returns `null` . (The caller can then use _GridService#defaultGridFor(Class)_ to obtain a default grid if necessary).
 
-[#defaultGridFor]
-=== defaultGridFor
+The default implementation just delegates to the configured xref:system:generated:index/applib/services/grid/GridLoaderService.adoc[GridLoaderService] .
+
+[#load__Class_String]
+=== load(Class, String)
+
+Returns an alternative layout for the domain class.
+
+The alternative layout name can for example be returned by the domain object's `layout()` method, whereby - based on the state of the domain object - it requests a different layout be used.
+
+The default implementation just delegates to the configured xref:system:generated:index/applib/services/grid/GridLoaderService.adoc[GridLoaderService] ; the default implementation of _that_ service uses the layout name to search for a differently named layout file, `[domainClass].layout.[layout].xml` .
+
+[#defaultGridFor__Class]
+=== defaultGridFor(Class)
 
 Returns a default grid; eg where none can be loaded using _#load(Class)_ .
 
-[#normalize]
-=== normalize
+Used when no existing grid layout exists for a domain class.
+
+The default implementation searches through all available xref:system:generated:index/applib/services/grid/GridSystemService.adoc[GridSystemService] s and asks each in turn for a _GridSystemService#defaultGrid(Class) default grid_ .
+
+[#normalize__Grid]
+=== normalize(Grid)
 
 Returns a normalized grid for the domain class obtained previously using _#load(Class)_ .
 
 If a "normalized" grid is persisted as the `layout.xml` , then the expectation is that the xref:system:generated:index/applib/annotation/MemberOrder.adoc[MemberOrder] annotation can be removed from the domain class because the binding of properties/collections/actions will be within the XML. However, the layout annotations ( xref:system:generated:index/applib/annotation/DomainObjectLayout.adoc[DomainObjectLayout] , xref:system:generated:index/applib/annotation/ActionLayout.adoc[ActionLayout] , xref:system:generated:index/applib/annotation/PropertyLayout.adoc[PropertyLayout] and xref:system:generated:index/applib/annotation/CollectionLayout.adoc[CollectionLayout] ) (if present) will continue to be used to provide additional layout metadata. Of course, there is nothing to prevent the developer from extending the layout XML to also include the layout XML (in other words moving towards a _#complete(Grid) complete_ grid. Metadata within the `layout.xml` file takes precedence over any annotations.
 
-[#complete]
-=== complete
+[#complete__Grid]
+=== complete(Grid)
 
 Modifies the provided xref:system:generated:index/applib/layout/grid/Grid.adoc[Grid] with additional metadata, broadly speaking corresponding to the xref:system:generated:index/applib/annotation/DomainObjectLayout.adoc[DomainObjectLayout] , xref:system:generated:index/applib/annotation/ActionLayout.adoc[ActionLayout] , xref:system:generated:index/applib/annotation/PropertyLayout.adoc[PropertyLayout] and xref:system:generated:index/applib/annotation/CollectionLayout.adoc[CollectionLayout] .
 
 If a "completed" grid is persisted as the `layout.xml` , then there should be no need for any of the layout annotations, nor the xref:system:generated:index/applib/annotation/MemberOrder.adoc[MemberOrder] annotations, to be required in the domain class itself.
 
-[#minimal]
-=== minimal
+[#minimal__Grid]
+=== minimal(Grid)
 
 Modifies the provided xref:system:generated:index/applib/layout/grid/Grid.adoc[Grid] , removing all metadata except the basic grid structure.
 

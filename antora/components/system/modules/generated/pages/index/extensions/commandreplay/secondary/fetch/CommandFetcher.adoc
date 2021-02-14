@@ -13,7 +13,7 @@ SecondaryConfig secondaryConfig;
 }
 ----
 
-<.> xref:#fetchCommand[fetchCommand]
+<.> xref:#fetchCommand__CommandJdo[fetchCommand(CommandJdo)]
 +
 --
 Replicates a single command.
@@ -21,8 +21,8 @@ Replicates a single command.
 
 == Members
 
-[#fetchCommand]
-=== fetchCommand
+[#fetchCommand__CommandJdo]
+=== fetchCommand(CommandJdo)
 
 Replicates a single command.
 

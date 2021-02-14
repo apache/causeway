@@ -28,6 +28,7 @@ import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.mixins.MixinConstants;
 import org.apache.isis.applib.services.layout.LayoutService;
+import org.apache.isis.applib.services.layout.Style;
 import org.apache.isis.applib.value.Clob;
 import org.apache.isis.applib.value.NamedWithMimeType.CommonMimeType;
 
@@ -60,7 +61,7 @@ public class Object_downloadLayoutXml {
                     named = MixinConstants.FILENAME_PROPERTY_NAME,
                     describedAs = MixinConstants.FILENAME_PROPERTY_DESCRIPTION)
             final String fileName,
-            final LayoutService.Style style) {
+            final Style style) {
 
         val xmlString = layoutService.toXml(holder.getClass(), style);
         return  Clob.of(fileName, CommonMimeType.XML, xmlString);
@@ -70,8 +71,8 @@ public class Object_downloadLayoutXml {
         return holder.getClass().getSimpleName() + ".layout";
     }
 
-    public LayoutService.Style default1Act() {
-        return LayoutService.Style.NORMALIZED;
+    public Style default1Act() {
+        return Style.NORMALIZED;
     }
 
     @Inject LayoutService layoutService;

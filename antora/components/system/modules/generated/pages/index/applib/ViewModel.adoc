@@ -15,12 +15,12 @@ interface ViewModel {
 }
 ----
 
-<.> xref:#viewModelMemento[viewModelMemento]
+<.> xref:#viewModelMemento__[viewModelMemento()]
 +
 --
 Obtain a memento of the view model.
 --
-<.> xref:#viewModelInit[viewModelInit]
+<.> xref:#viewModelInit__String[viewModelInit(String)]
 +
 --
 Used to re-initialize a view model with a memento obtained from _#viewModelMemento()_ .
@@ -28,8 +28,8 @@ Used to re-initialize a view model with a memento obtained from _#viewModelMemen
 
 == Members
 
-[#viewModelMemento]
-=== viewModelMemento
+[#viewModelMemento__]
+=== viewModelMemento()
 
 Obtain a memento of the view model.
 
@@ -37,8 +37,8 @@ Typically this will be the identifier of a backing domain entity, but it could a
 
 This method is called by the framework in order that the view model may be recreated subsequently through _#viewModelInit(String)_ .
 
-[#viewModelInit]
-=== viewModelInit
+[#viewModelInit__String]
+=== viewModelInit(String)
 
 Used to re-initialize a view model with a memento obtained from _#viewModelMemento()_ .
 

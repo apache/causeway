@@ -25,37 +25,37 @@ interface JdoSupportService {
 }
 ----
 
-<.> xref:#refresh[refresh]
+<.> xref:#refresh__T[refresh(T)]
 +
 --
 Force a reload (corresponding to the JDO `PersistenceManager` 's `refresh()` method) of a domain objects.
 --
-<.> xref:#deleteAll[deleteAll]
+<.> xref:#deleteAll__Class[deleteAll(Class)]
 +
 --
 Force the deletion of all instances of the specified class.
 --
-<.> xref:#executeQuery[executeQuery]
+<.> xref:#executeQuery__Class_BooleanExpression[executeQuery(Class, BooleanExpression)]
 +
 --
 To perform the most common use-case of executing a (type-safe) query against the specified class, filtering using the provided _BooleanExpression_ , then automatically cloning the returned list and closing the query.
 --
-<.> xref:#executeQueryUnique[executeQueryUnique]
+<.> xref:#executeQueryUnique__Class_BooleanExpression[executeQueryUnique(Class, BooleanExpression)]
 +
 --
 To perform a common use-case of executing a (type-safe) query against the specified class, filtering a unique match using the provided _BooleanExpression_ , then returning the result and closing the query.
 --
-<.> xref:#newTypesafeQuery[newTypesafeQuery]
+<.> xref:#newTypesafeQuery__Class[newTypesafeQuery(Class)]
 +
 --
 To support the execution of type-safe queries using DataNucleus' lower-level APIs (eg for group by and so on).
 --
-<.> xref:#disableMultivaluedFetch[disableMultivaluedFetch]
+<.> xref:#disableMultivaluedFetch__JDOQLTypedQuery[disableMultivaluedFetch(JDOQLTypedQuery)]
 +
 --
 Fetch Optimization
 --
-<.> xref:#disableMultivaluedFetch[disableMultivaluedFetch]
+<.> xref:#disableMultivaluedFetch__Query[disableMultivaluedFetch(Query)]
 +
 --
 Fetch Optimization
@@ -63,8 +63,8 @@ Fetch Optimization
 
 == Members
 
-[#refresh]
-=== refresh
+[#refresh__T]
+=== refresh(T)
 
 Force a reload (corresponding to the JDO `PersistenceManager` 's `refresh()` method) of a domain objects.
 
@@ -72,8 +72,8 @@ In fact, this may just reset the lazy-load state of the domain object, but the e
 
 The particular example that led to this method being added was a 1:m bidirectional relationship, analogous to `Customer <-> * Order` . Persisting the child `Order` object did not cause the parent `Customer` 's collection of orders to be updated. In fact, JDO does not make any such guarantee to do so. Options are therefore either to maintain the collection in code, or to refresh the parent.
 
-[#deleteAll]
-=== deleteAll
+[#deleteAll__Class]
+=== deleteAll(Class)
 
 Force the deletion of all instances of the specified class.
 
@@ -81,8 +81,8 @@ Note: this is intended primarily for testing purposes, eg clearing existing data
 
 Implementation note: It can occasionally be the case that Isis' internal adapter for the domain object is still in memory. JDO/DataNucleus seems to bump up the version of the object prior to its deletion, which under normal circumstances would cause Isis to throw a concurrency exception. Therefore To prevent this from happening (ie to _force_ the deletion of all instances), concurrency checking is temporarily disabled while this method is performed.
 
-[#executeQuery]
-=== executeQuery
+[#executeQuery__Class_BooleanExpression]
+=== executeQuery(Class, BooleanExpression)
 
 To perform the most common use-case of executing a (type-safe) query against the specified class, filtering using the provided _BooleanExpression_ , then automatically cloning the returned list and closing the query.
 
@@ -98,8 +98,8 @@ Typical usage:
     
 ----
 
-[#executeQueryUnique]
-=== executeQueryUnique
+[#executeQueryUnique__Class_BooleanExpression]
+=== executeQueryUnique(Class, BooleanExpression)
 
 To perform a common use-case of executing a (type-safe) query against the specified class, filtering a unique match using the provided _BooleanExpression_ , then returning the result and closing the query.
 
@@ -115,15 +115,15 @@ Typical usage:
     
 ----
 
-[#newTypesafeQuery]
-=== newTypesafeQuery
+[#newTypesafeQuery__Class]
+=== newTypesafeQuery(Class)
 
 To support the execution of type-safe queries using DataNucleus' lower-level APIs (eg for group by and so on).
 
 Responsibility for cloning any result sets and closing the query is the responsibility of the caller.
 
-[#disableMultivaluedFetch]
-=== disableMultivaluedFetch
+[#disableMultivaluedFetch__JDOQLTypedQuery]
+=== disableMultivaluedFetch(JDOQLTypedQuery)
 
 Fetch Optimization
 
@@ -131,8 +131,8 @@ FromDN-5.2...
 
 For RDBMS any single-valued member will be fetched in the original SQL query, but with multiple-valued members this is not supported. However what will happen is that any collection/array field will be retrieved in a single SQL query for all candidate objects (by default using an EXISTS subquery); this avoids the "N+1" problem, resulting in 1 original SQL query plus 1 SQL query per collection member. Note that you can disable this by either not putting multi-valued fields in the FetchPlan, or by setting the query extension datanucleus.rdbms.query.multivaluedFetch to none (default is "exists" using the single SQL per field).
 
-[#disableMultivaluedFetch]
-=== disableMultivaluedFetch
+[#disableMultivaluedFetch__Query]
+=== disableMultivaluedFetch(Query)
 
 Fetch Optimization
 

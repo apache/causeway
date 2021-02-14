@@ -10,10 +10,10 @@ interface CommandReplayAnalyser {
 }
 ----
 
-<.> xref:#analyzeReplay[analyzeReplay]
+<.> xref:#analyzeReplay__CommandJdo[analyzeReplay(CommandJdo)]
 
 == Members
 
-[#analyzeReplay]
-=== analyzeReplay
+[#analyzeReplay__CommandJdo]
+=== analyzeReplay(CommandJdo)
 

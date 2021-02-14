@@ -33,32 +33,32 @@ class JUnitRuleMockery2 {
 }
 ----
 
-<.> xref:#createFor[createFor]
+<.> xref:#createFor__Mode[createFor(Mode)]
 +
 --
 Factory method.
 --
-<.> xref:#ignoring[ignoring]
+<.> xref:#ignoring__T[ignoring(T)]
 +
 --
 Ignoring any interaction with the mock; an allowing/ignoring mock will be returned in turn.
 --
-<.> xref:#allowing[allowing]
+<.> xref:#allowing__T[allowing(T)]
 +
 --
 Allow any interaction with the mock; an allowing mock will be returned in turn.
 --
-<.> xref:#never[never]
+<.> xref:#never__T[never(T)]
 +
 --
 Prohibit any interaction with the mock.
 --
-<.> xref:#ignoring[ignoring]
+<.> xref:#ignoring__Object[ignoring(Object)]
 +
 --
 Ignore a set of mocks.
 --
-<.> xref:#oneOf[oneOf]
+<.> xref:#oneOf__Object[oneOf(Object)]
 +
 --
 Require one interaction
@@ -66,33 +66,33 @@ Require one interaction
 
 == Members
 
-[#createFor]
-=== createFor
+[#createFor__Mode]
+=== createFor(Mode)
 
 Factory method.
 
-[#ignoring]
-=== ignoring
+[#ignoring__T]
+=== ignoring(T)
 
 Ignoring any interaction with the mock; an allowing/ignoring mock will be returned in turn.
 
-[#allowing]
-=== allowing
+[#allowing__T]
+=== allowing(T)
 
 Allow any interaction with the mock; an allowing mock will be returned in turn.
 
-[#never]
-=== never
+[#never__T]
+=== never(T)
 
 Prohibit any interaction with the mock.
 
-[#ignoring]
-=== ignoring
+[#ignoring__Object]
+=== ignoring(Object)
 
 Ignore a set of mocks.
 
-[#oneOf]
-=== oneOf
+[#oneOf__Object]
+=== oneOf(Object)
 
 Require one interaction
 

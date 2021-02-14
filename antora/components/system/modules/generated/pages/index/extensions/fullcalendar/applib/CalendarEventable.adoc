@@ -11,7 +11,7 @@ interface CalendarEventable {
 }
 ----
 
-<.> xref:#getCalendarName[getCalendarName]
+<.> xref:#getCalendarName__[getCalendarName()]
 +
 --
 The name of the calendar to which this event belongs.
@@ -19,8 +19,8 @@ The name of the calendar to which this event belongs.
 
 == Members
 
-[#getCalendarName]
-=== getCalendarName
+[#getCalendarName__]
+=== getCalendarName()
 
 The name of the calendar to which this event belongs.
 

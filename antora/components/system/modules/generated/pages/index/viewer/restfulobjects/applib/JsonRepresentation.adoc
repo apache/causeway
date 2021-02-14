@@ -142,92 +142,92 @@ class JsonRepresentation {
 }
 ----
 
-<.> xref:#isValue[isValue]
+<.> xref:#isValue__[isValue()]
 +
 --
 Node is a value (nb: could be _#isNull() null_ ).
 --
-<.> xref:#isIntegralNumber[isIntegralNumber]
+<.> xref:#isIntegralNumber__String[isIntegralNumber(String)]
 +
 --
 Is a long, an int or a _BigInteger_ .
 --
-<.> xref:#isIntegralNumber[isIntegralNumber]
+<.> xref:#isIntegralNumber__[isIntegralNumber()]
 +
 --
 Is a long, an int or a _BigInteger_ .
 --
-<.> xref:#getBoolean[getBoolean]
+<.> xref:#getBoolean__String[getBoolean(String)]
 +
 --
 Use _#isBoolean(String)_ to check first, if required.
 --
-<.> xref:#asBoolean[asBoolean]
+<.> xref:#asBoolean__[asBoolean()]
 +
 --
 Use _#isBoolean()_ to check first, if required.
 --
-<.> xref:#getByte[getByte]
+<.> xref:#getByte__String[getByte(String)]
 +
 --
 Use _#isIntegralNumber(String)_ to test if number (it is not possible to check if a byte, however).
 --
-<.> xref:#asByte[asByte]
+<.> xref:#asByte__[asByte()]
 +
 --
 Use _#isIntegralNumber()_ to test if number (it is not possible to check if a byte, however).
 --
-<.> xref:#getShort[getShort]
+<.> xref:#getShort__String[getShort(String)]
 +
 --
 Use _#isIntegralNumber(String)_ to check if number (it is not possible to check if a short, however).
 --
-<.> xref:#asShort[asShort]
+<.> xref:#asShort__[asShort()]
 +
 --
 Use _#isIntegralNumber()_ to check if number (it is not possible to check if a short, however).
 --
-<.> xref:#getChar[getChar]
+<.> xref:#getChar__String[getChar(String)]
 +
 --
 Use _#isString(String)_ to check if string (it is not possible to check if a character, however).
 --
-<.> xref:#asChar[asChar]
+<.> xref:#asChar__[asChar()]
 +
 --
 Use _#isString()_ to check if string (it is not possible to check if a character, however).
 --
-<.> xref:#getInt[getInt]
+<.> xref:#getInt__String[getInt(String)]
 +
 --
 Use _#isInt(String)_ to check first, if required.
 --
-<.> xref:#asInt[asInt]
+<.> xref:#asInt__[asInt()]
 +
 --
 Use _#isInt()_ to check first, if required.
 --
-<.> xref:#getLong[getLong]
+<.> xref:#getLong__String[getLong(String)]
 +
 --
 Use _#isLong(String)_ to check first, if required.
 --
-<.> xref:#asLong[asLong]
+<.> xref:#asLong__[asLong()]
 +
 --
 Use _#isLong()_ to check first, if required.
 --
-<.> xref:#getFloat[getFloat]
+<.> xref:#getFloat__String[getFloat(String)]
 +
 --
 Use _#isDecimal(String)_ to test if a decimal value
 --
-<.> xref:#asFloat[asFloat]
+<.> xref:#asFloat__[asFloat()]
 +
 --
 Use _#isNumber()_ to test if number (it is not possible to check if a float, however).
 --
-<.> xref:#isDouble[isDouble]
+<.> xref:#isDouble__String[isDouble(String)]
 +
 --
 [WARNING]
@@ -237,7 +237,7 @@ Use _#isNumber()_ to test if number (it is not possible to check if a float, how
 - use _#isDecimal(String)_
 ====
 --
-<.> xref:#isDouble[isDouble]
+<.> xref:#isDouble__[isDouble()]
 +
 --
 [WARNING]
@@ -247,97 +247,97 @@ Use _#isNumber()_ to test if number (it is not possible to check if a float, how
 - use _#isDecimal()_
 ====
 --
-<.> xref:#getDouble[getDouble]
+<.> xref:#getDouble__String[getDouble(String)]
 +
 --
 Use _#isDouble(String)_ to check first, if required.
 --
-<.> xref:#asDouble[asDouble]
+<.> xref:#asDouble__[asDouble()]
 +
 --
 Use _#isDouble()_ to check first, if required.
 --
-<.> xref:#getBigInteger[getBigInteger]
+<.> xref:#getBigInteger__String[getBigInteger(String)]
 +
 --
 Use _#isBigInteger(String)_ to check first, if required.
 --
-<.> xref:#getBigInteger[getBigInteger]
+<.> xref:#getBigInteger__String_String[getBigInteger(String, String)]
 +
 --
 Use _#isBigInteger(String)_ to check first, if required.
 --
-<.> xref:#asBigInteger[asBigInteger]
+<.> xref:#asBigInteger__[asBigInteger()]
 +
 --
 Use _#isBigInteger()_ to check first, if required.
 --
-<.> xref:#getBigDecimal[getBigDecimal]
+<.> xref:#getBigDecimal__String[getBigDecimal(String)]
 +
 --
 Use _#isBigDecimal(String)_ to check first, if required.
 --
-<.> xref:#getBigDecimal[getBigDecimal]
+<.> xref:#getBigDecimal__String_String[getBigDecimal(String, String)]
 +
 --
 Use _#isBigDecimal(String)_ to check first, if required.
 --
-<.> xref:#asBigDecimal[asBigDecimal]
+<.> xref:#asBigDecimal__[asBigDecimal()]
 +
 --
 Use _#isBigDecimal()_ to check first, if required.
 --
-<.> xref:#asBigDecimal[asBigDecimal]
+<.> xref:#asBigDecimal__String[asBigDecimal(String)]
 +
 --
 Use _#isBigDecimal()_ to check first, if required.
 --
-<.> xref:#getString[getString]
+<.> xref:#getString__String[getString(String)]
 +
 --
 Use _#isString(String)_ to check first, if required.
 --
-<.> xref:#asString[asString]
+<.> xref:#asString__[asString()]
 +
 --
 Use _#isString()_ to check first, if required.
 --
-<.> xref:#getLink[getLink]
+<.> xref:#getLink__String[getLink(String)]
 +
 --
 Use _#isLink(String)_ to check first, if required.
 --
-<.> xref:#asLink[asLink]
+<.> xref:#asLink__[asLink()]
 +
 --
 Use _#isLink()_ to check first, if required.
 --
-<.> xref:#isNull[isNull]
+<.> xref:#isNull__String[isNull(String)]
 +
 --
 Indicates that the wrapped node has `null` value (ie _JsonRepresentation#isNull()_ ), or returns `null` if there was no node with the provided path.
 --
-<.> xref:#getNull[getNull]
+<.> xref:#getNull__String[getNull(String)]
 +
 --
 Either returns a xref:system:generated:index/viewer/restfulobjects/applib/JsonRepresentation.adoc[JsonRepresentation] that indicates that the wrapped node has `null` value (ie _JsonRepresentation#isNull()_ ), or returns `null` if there was no node with the provided path.
 --
-<.> xref:#asNull[asNull]
+<.> xref:#asNull__[asNull()]
 +
 --
 Either returns a xref:system:generated:index/viewer/restfulobjects/applib/JsonRepresentation.adoc[JsonRepresentation] that indicates that the wrapped node has `null` value (ie _JsonRepresentation#isNull()_ ), or returns `null` if there was no node with the provided path.
 --
-<.> xref:#mapValueAsLink[mapValueAsLink]
+<.> xref:#mapValueAsLink__[mapValueAsLink()]
 +
 --
 Convert a representation that contains a single node representing a link into a xref:system:generated:index/viewer/restfulobjects/applib/LinkRepresentation.adoc[LinkRepresentation] .
 --
-<.> xref:#as[as]
+<.> xref:#as__Class[as(Class)]
 +
 --
 Convenience to simply "downcast".
 --
-<.> xref:#ensureArray[ensureArray]
+<.> xref:#ensureArray__[ensureArray()]
 +
 --
 A reciprocal of the behaviour of the automatic dereferencing of arrays that occurs when there is only a single instance.
@@ -345,93 +345,93 @@ A reciprocal of the behaviour of the automatic dereferencing of arrays that occu
 
 == Members
 
-[#isValue]
-=== isValue
+[#isValue__]
+=== isValue()
 
 Node is a value (nb: could be _#isNull() null_ ).
 
-[#isIntegralNumber]
-=== isIntegralNumber
+[#isIntegralNumber__String]
+=== isIntegralNumber(String)
 
 Is a long, an int or a _BigInteger_ .
 
-[#isIntegralNumber]
-=== isIntegralNumber
+[#isIntegralNumber__]
+=== isIntegralNumber()
 
 Is a long, an int or a _BigInteger_ .
 
-[#getBoolean]
-=== getBoolean
+[#getBoolean__String]
+=== getBoolean(String)
 
 Use _#isBoolean(String)_ to check first, if required.
 
-[#asBoolean]
-=== asBoolean
+[#asBoolean__]
+=== asBoolean()
 
 Use _#isBoolean()_ to check first, if required.
 
-[#getByte]
-=== getByte
+[#getByte__String]
+=== getByte(String)
 
 Use _#isIntegralNumber(String)_ to test if number (it is not possible to check if a byte, however).
 
-[#asByte]
-=== asByte
+[#asByte__]
+=== asByte()
 
 Use _#isIntegralNumber()_ to test if number (it is not possible to check if a byte, however).
 
-[#getShort]
-=== getShort
+[#getShort__String]
+=== getShort(String)
 
 Use _#isIntegralNumber(String)_ to check if number (it is not possible to check if a short, however).
 
-[#asShort]
-=== asShort
+[#asShort__]
+=== asShort()
 
 Use _#isIntegralNumber()_ to check if number (it is not possible to check if a short, however).
 
-[#getChar]
-=== getChar
+[#getChar__String]
+=== getChar(String)
 
 Use _#isString(String)_ to check if string (it is not possible to check if a character, however).
 
-[#asChar]
-=== asChar
+[#asChar__]
+=== asChar()
 
 Use _#isString()_ to check if string (it is not possible to check if a character, however).
 
-[#getInt]
-=== getInt
+[#getInt__String]
+=== getInt(String)
 
 Use _#isInt(String)_ to check first, if required.
 
-[#asInt]
-=== asInt
+[#asInt__]
+=== asInt()
 
 Use _#isInt()_ to check first, if required.
 
-[#getLong]
-=== getLong
+[#getLong__String]
+=== getLong(String)
 
 Use _#isLong(String)_ to check first, if required.
 
-[#asLong]
-=== asLong
+[#asLong__]
+=== asLong()
 
 Use _#isLong()_ to check first, if required.
 
-[#getFloat]
-=== getFloat
+[#getFloat__String]
+=== getFloat(String)
 
 Use _#isDecimal(String)_ to test if a decimal value
 
-[#asFloat]
-=== asFloat
+[#asFloat__]
+=== asFloat()
 
 Use _#isNumber()_ to test if number (it is not possible to check if a float, however).
 
-[#isDouble]
-=== isDouble
+[#isDouble__String]
+=== isDouble(String)
 
 [WARNING]
 ====
@@ -440,8 +440,8 @@ Use _#isNumber()_ to test if number (it is not possible to check if a float, how
 - use _#isDecimal(String)_
 ====
 
-[#isDouble]
-=== isDouble
+[#isDouble__]
+=== isDouble()
 
 [WARNING]
 ====
@@ -450,104 +450,104 @@ Use _#isNumber()_ to test if number (it is not possible to check if a float, how
 - use _#isDecimal()_
 ====
 
-[#getDouble]
-=== getDouble
+[#getDouble__String]
+=== getDouble(String)
 
 Use _#isDouble(String)_ to check first, if required.
 
-[#asDouble]
-=== asDouble
+[#asDouble__]
+=== asDouble()
 
 Use _#isDouble()_ to check first, if required.
 
-[#getBigInteger]
-=== getBigInteger
+[#getBigInteger__String]
+=== getBigInteger(String)
 
 Use _#isBigInteger(String)_ to check first, if required.
 
-[#getBigInteger]
-=== getBigInteger
+[#getBigInteger__String_String]
+=== getBigInteger(String, String)
 
 Use _#isBigInteger(String)_ to check first, if required.
 
-[#asBigInteger]
-=== asBigInteger
+[#asBigInteger__]
+=== asBigInteger()
 
 Use _#isBigInteger()_ to check first, if required.
 
-[#getBigDecimal]
-=== getBigDecimal
+[#getBigDecimal__String]
+=== getBigDecimal(String)
 
 Use _#isBigDecimal(String)_ to check first, if required.
 
-[#getBigDecimal]
-=== getBigDecimal
+[#getBigDecimal__String_String]
+=== getBigDecimal(String, String)
 
 Use _#isBigDecimal(String)_ to check first, if required.
 
-[#asBigDecimal]
-=== asBigDecimal
+[#asBigDecimal__]
+=== asBigDecimal()
 
 Use _#isBigDecimal()_ to check first, if required.
 
-[#asBigDecimal]
-=== asBigDecimal
+[#asBigDecimal__String]
+=== asBigDecimal(String)
 
 Use _#isBigDecimal()_ to check first, if required.
 
-[#getString]
-=== getString
+[#getString__String]
+=== getString(String)
 
 Use _#isString(String)_ to check first, if required.
 
-[#asString]
-=== asString
+[#asString__]
+=== asString()
 
 Use _#isString()_ to check first, if required.
 
-[#getLink]
-=== getLink
+[#getLink__String]
+=== getLink(String)
 
 Use _#isLink(String)_ to check first, if required.
 
-[#asLink]
-=== asLink
+[#asLink__]
+=== asLink()
 
 Use _#isLink()_ to check first, if required.
 
-[#isNull]
-=== isNull
+[#isNull__String]
+=== isNull(String)
 
 Indicates that the wrapped node has `null` value (ie _JsonRepresentation#isNull()_ ), or returns `null` if there was no node with the provided path.
 
-[#getNull]
-=== getNull
+[#getNull__String]
+=== getNull(String)
 
 Either returns a xref:system:generated:index/viewer/restfulobjects/applib/JsonRepresentation.adoc[JsonRepresentation] that indicates that the wrapped node has `null` value (ie _JsonRepresentation#isNull()_ ), or returns `null` if there was no node with the provided path.
 
 Use _#isNull(String)_ to check first, if required.
 
-[#asNull]
-=== asNull
+[#asNull__]
+=== asNull()
 
 Either returns a xref:system:generated:index/viewer/restfulobjects/applib/JsonRepresentation.adoc[JsonRepresentation] that indicates that the wrapped node has `null` value (ie _JsonRepresentation#isNull()_ ), or returns `null` if there was no node with the provided path.
 
 Use _#isNull()_ to check first, if required.
 
-[#mapValueAsLink]
-=== mapValueAsLink
+[#mapValueAsLink__]
+=== mapValueAsLink()
 
 Convert a representation that contains a single node representing a link into a xref:system:generated:index/viewer/restfulobjects/applib/LinkRepresentation.adoc[LinkRepresentation] .
 
-[#as]
-=== as
+[#as__Class]
+=== as(Class)
 
 Convenience to simply "downcast".
 
 In fact, the method creates a new instance of the specified type, which shares the underlying _#jsonNode jsonNode_ .
 
-[#ensureArray]
-=== ensureArray
+[#ensureArray__]
+=== ensureArray()
 
 A reciprocal of the behaviour of the automatic dereferencing of arrays that occurs when there is only a single instance.
 

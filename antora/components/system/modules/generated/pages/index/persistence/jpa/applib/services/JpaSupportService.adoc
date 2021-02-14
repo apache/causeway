@@ -13,12 +13,12 @@ interface JpaSupportService {
 }
 ----
 
-<.> xref:#getEntityManager[getEntityManager]
+<.> xref:#getEntityManager__Class[getEntityManager(Class)]
 +
 --
 Optionally returns the current interaction's _EntityManager_ , that is bound to given _entityClass_ , based on whether an open interaction is available and a persistence layer is configured in support of JPA.
 --
-<.> xref:#getEntityManagerElseFail[getEntityManagerElseFail]
+<.> xref:#getEntityManagerElseFail__Class[getEntityManagerElseFail(Class)]
 +
 --
 Returns the current interaction's _EntityManager_ that is managing the given domain type _entityType_ .
@@ -26,13 +26,13 @@ Returns the current interaction's _EntityManager_ that is managing the given dom
 
 == Members
 
-[#getEntityManager]
-=== getEntityManager
+[#getEntityManager__Class]
+=== getEntityManager(Class)
 
 Optionally returns the current interaction's _EntityManager_ , that is bound to given _entityClass_ , based on whether an open interaction is available and a persistence layer is configured in support of JPA.
 
-[#getEntityManagerElseFail]
-=== getEntityManagerElseFail
+[#getEntityManagerElseFail__Class]
+=== getEntityManagerElseFail(Class)
 
 Returns the current interaction's _EntityManager_ that is managing the given domain type _entityType_ .
 

@@ -20,7 +20,7 @@ class Markup {
 }
 ----
 
-<.> xref:#valueOfHtml[valueOfHtml]
+<.> xref:#valueOfHtml__String[valueOfHtml(String)]
 +
 --
 syntactic sugar
@@ -28,8 +28,8 @@ syntactic sugar
 
 == Members
 
-[#valueOfHtml]
-=== valueOfHtml
+[#valueOfHtml__String]
+=== valueOfHtml(String)
 
 syntactic sugar
 

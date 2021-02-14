@@ -41,10 +41,10 @@ class VT {
 }
 ----
 
-<.> xref:#ld[ld]
+<.> xref:#ld__String[ld(String)]
 
 == Members
 
-[#ld]
-=== ld
+[#ld__String]
+=== ld(String)
 

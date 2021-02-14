@@ -5,6 +5,12 @@
 
 WARNING: TODO: this content has not yet been reviewed/updated for v2.0
 
+include::system:generated:page$index/applib/services/inject/ServiceInjector.adoc[ServiceInjector]
+
+include::ServiceInjector/hooks/implementation.adoc[]
+
+include::ServiceInjector/hooks/examples_and_usage.adoc[]
+
 == API
 
 include::system:generated:page$index/applib/services/inject/ServiceInjector.adoc[leveloffset=+2]

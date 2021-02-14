@@ -96,12 +96,12 @@ class IsisLdapRealm {
 }
 ----
 
-<.> xref:#setResourcePath[setResourcePath]
+<.> xref:#setResourcePath__String[setResourcePath(String)]
 +
 --
 
 --
-<.> xref:#setPermissionsByRole[setPermissionsByRole]
+<.> xref:#setPermissionsByRole__String[setPermissionsByRole(String)]
 +
 --
 Specify permissions for each role using a formatted string.
@@ -109,8 +109,8 @@ Specify permissions for each role using a formatted string.
 
 == Members
 
-[#setResourcePath]
-=== setResourcePath
+[#setResourcePath__String]
+=== setResourcePath(String)
 
 ----
 
@@ -128,8 +128,8 @@ self-install_role = *:ToDoItemsFixturesService:install:*
 admin_role = *
 ----
 
-[#setPermissionsByRole]
-=== setPermissionsByRole
+[#setPermissionsByRole__String]
+=== setPermissionsByRole(String)
 
 Specify permissions for each role using a formatted string.
 

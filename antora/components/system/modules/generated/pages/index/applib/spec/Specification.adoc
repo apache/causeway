@@ -12,7 +12,7 @@ interface Specification {
 }
 ----
 
-<.> xref:#satisfies[satisfies]
+<.> xref:#satisfies__Object[satisfies(Object)]
 +
 --
 If `null` then satisfied, otherwise is reason why the specification is not satisfied.
@@ -20,8 +20,8 @@ If `null` then satisfied, otherwise is reason why the specification is not satis
 
 == Members
 
-[#satisfies]
-=== satisfies
+[#satisfies__Object]
+=== satisfies(Object)
 
 If `null` then satisfied, otherwise is reason why the specification is not satisfied.
 

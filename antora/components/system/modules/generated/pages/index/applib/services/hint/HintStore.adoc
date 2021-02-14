@@ -18,27 +18,27 @@ interface HintStore {
 }
 ----
 
-<.> xref:#get[get]
+<.> xref:#get__Bookmark_String[get(Bookmark, String)]
 +
 --
 Obtain a hint (eg which tab to open) for a particular object.
 --
-<.> xref:#set[set]
+<.> xref:#set__Bookmark_String_String[set(Bookmark, String, String)]
 +
 --
 Set the state of a hint for the domain object
 --
-<.> xref:#remove[remove]
+<.> xref:#remove__Bookmark_String[remove(Bookmark, String)]
 +
 --
 Removes hint for the domain object.
 --
-<.> xref:#removeAll[removeAll]
+<.> xref:#removeAll__Bookmark[removeAll(Bookmark)]
 +
 --
 Remotes all hints for the domain object.
 --
-<.> xref:#findHintKeys[findHintKeys]
+<.> xref:#findHintKeys__Bookmark[findHintKeys(Bookmark)]
 +
 --
 The keys of all available hints for the domain object.
@@ -46,30 +46,30 @@ The keys of all available hints for the domain object.
 
 == Members
 
-[#get]
-=== get
+[#get__Bookmark_String]
+=== get(Bookmark, String)
 
 Obtain a hint (eg which tab to open) for a particular object.
 
 Object identity is represented by xref:system:generated:index/applib/services/bookmark/Bookmark.adoc[Bookmark] so that alternative implementations can easily serialize this state to a string.
 
-[#set]
-=== set
+[#set__Bookmark_String_String]
+=== set(Bookmark, String, String)
 
 Set the state of a hint for the domain object
 
-[#remove]
-=== remove
+[#remove__Bookmark_String]
+=== remove(Bookmark, String)
 
 Removes hint for the domain object.
 
-[#removeAll]
-=== removeAll
+[#removeAll__Bookmark]
+=== removeAll(Bookmark)
 
 Remotes all hints for the domain object.
 
-[#findHintKeys]
-=== findHintKeys
+[#findHintKeys__Bookmark]
+=== findHintKeys(Bookmark)
 
 The keys of all available hints for the domain object.
 

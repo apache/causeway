@@ -36,6 +36,7 @@ import org.apache.isis.tooling.j2adoc.J2AdocUnit;
 import org.apache.isis.tooling.j2adoc.convert.J2AdocConverter;
 import org.apache.isis.tooling.j2adoc.convert.J2AdocConverterDefault;
 import org.apache.isis.tooling.javamodel.ast.Javadocs;
+import org.apache.isis.tooling.javamodel.ast.MethodDeclarations;
 import org.apache.isis.tooling.model4adoc.AsciiDocFactory;
 
 import lombok.NonNull;
@@ -101,8 +102,8 @@ extends UnitFormatterAbstract {
         appendMembersToList(ul, unit,
                 unit.getTypeDeclaration().getPublicMethodDeclarations(),
                 decl -> String.format("xref:#%s[%s]",
-                        decl.getName(),
-                        decl.getName()),
+                        MethodDeclarations.asAnchor(decl),
+                        MethodDeclarations.asMethodSignature(decl)),
                 firstParaOnly);
 
 
@@ -121,27 +122,32 @@ extends UnitFormatterAbstract {
         appendMemberSections(membersDoc, unit,
                 unit.getTypeDeclaration().getEnumConstantDeclarations(),
                 decl -> decl.getName().toString(),
+                decl -> decl.getName().toString(),
                 allJavadocStrategy
         );
 
         appendMemberSections(membersDoc, unit,
                 unit.getTypeDeclaration().getPublicFieldDeclarations(),
                 decl -> decl.getVariables().stream().findFirst().get().getName().toString(),
+                decl -> decl.getVariables().stream().findFirst().get().getName().toString(),
                 allJavadocStrategy);
 
         appendMemberSections(membersDoc, unit,
                 unit.getTypeDeclaration().getAnnotationMemberDeclarations(),
+                decl -> decl.getName().toString(),
                 decl -> decl.getName().toString(),
                 allJavadocStrategy);
 
         appendMemberSections(membersDoc, unit,
                 unit.getTypeDeclaration().getPublicConstructorDeclarations(),
                 decl -> decl.getName().toString(),
+                decl -> decl.getName().toString(),
                 allJavadocStrategy);
 
         appendMemberSections(membersDoc, unit,
                 unit.getTypeDeclaration().getPublicMethodDeclarations(),
-                decl -> decl.getName().toString(),
+                decl -> MethodDeclarations.asAnchor(decl),
+                decl -> MethodDeclarations.asMethodSignature(decl),
                 allJavadocStrategy);
 
         if (!membersDoc.getBlocks().isEmpty()) {
@@ -164,7 +170,7 @@ extends UnitFormatterAbstract {
      * @param container - the List within the Asciidoc document to append to.
      * @param unit - the containing java unit (java source code model)
      * @param declarations - the collection of {@link NodeWithJavadoc declarations} to process
-     * @param memberRepresenter - encodes which parts of the member are to be pulled out into a representation
+     * @param memberSignature - encodes which parts of the member are to be pulled out into a representation
      * @param javadoc2Asciidocker - strategy for converting each node's javadoc into some Asciidoc
      *
      * @param <T> - the specific subtype of {@link NodeWithJavadoc}
@@ -173,7 +179,8 @@ extends UnitFormatterAbstract {
             final StructuralNode container,
             final J2AdocUnit unit,
             final Can<T> declarations,
-            final Function<T, String> memberRepresenter,
+            final Function<T, String> memberAnchor,
+            final Function<T, String> memberSignature,
             final BiFunction<Javadoc, J2AdocUnit, Document> javadoc2Asciidocker) {
 
         declarations.stream()
@@ -181,10 +188,10 @@ extends UnitFormatterAbstract {
                 .forEach(nwj->{
                     nwj.getJavadoc()
                             .ifPresent(javadoc-> {
-                                final String memberRepresentation = memberRepresenter.apply(nwj);
                                 final Document asciidoc = javadoc2Asciidocker.apply(javadoc, unit);
                                 appendMemberSection(container,
-                                        memberRepresentation,
+                                        memberAnchor.apply(nwj),
+                                        memberSignature.apply(nwj),
                                         asciidoc);
                             });
                 });
@@ -200,13 +207,14 @@ extends UnitFormatterAbstract {
      */
     private static void appendMemberSection(
             final StructuralNode section,
+            final String sectionAnchor,
             final String sectionHeader,
             final Document sectionContent) {
 
         val titleBlock = AsciiDocFactory.block(section);
-        titleBlock.setId(sectionHeader);
+        titleBlock.setId(sectionAnchor);
         titleBlock.setLines(Arrays.asList(
-                String.format("[#%s]", sectionHeader),
+                String.format("[#%s]", sectionAnchor),
                 String.format("=== %s", sectionHeader)
         ));
 

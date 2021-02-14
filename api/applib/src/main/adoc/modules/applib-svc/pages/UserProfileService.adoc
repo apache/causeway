@@ -6,6 +6,13 @@
 
 WARNING: TODO: this content has not yet been reviewed/updated for v2.0
 
+include::system:generated:page$index/applib/services/userprof/UserProfileService.adoc[UserProfileService]
+
+include::UserProfileService/hooks/implementation.adoc[]
+
+include::UserProfileService/hooks/examples_and_usage.adoc[]
+
+
 
 The `UserProfileService` provides the ability for the domain application to return supplementary metadata about the current user. This information is used (by the xref:vw:ROOT:about.adoc[Wicket viewer]) to customize the appearance of the tertiary "Me" menu bar (top right). For example, rather than display the username, instead the user's first and last name could be displayed.
 

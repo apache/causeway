@@ -6,6 +6,14 @@
 
 WARNING: TODO: this content has not yet been reviewed/updated for v2.0
 
+
+include::system:generated:page$index/applib/services/i18n/TranslationsResolver.adoc[TranslationsResolver]
+
+include::TranslationsResolver/hooks/implementation.adoc[]
+
+include::TranslationsResolver/hooks/examples_and_usage.adoc[]
+
+
 The `TranslationsResolver` domain service locates and return translations.
 
 It is one of the supporting services that work together to implement Apache Isis' support for i18n, being used by Isis' default implementation of xref:refguide:applib-svc:TranslationService.adoc[`TranslationService`].

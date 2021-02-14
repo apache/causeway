@@ -17,28 +17,28 @@ interface BookmarkService {
 }
 ----
 
-<.> xref:#bookmarkFor[bookmarkFor]
+<.> xref:#bookmarkFor__Object[bookmarkFor(Object)]
 +
 --
 Returns the xref:system:generated:index/applib/services/bookmark/Bookmark.adoc[Bookmark] for the given domain object.
 --
-<.> xref:#bookmarkForElseThrow[bookmarkForElseThrow]
+<.> xref:#bookmarkForElseThrow__Object[bookmarkForElseThrow(Object)]
 +
 --
 As per _#bookmarkFor(Object)_ , but requires that a non-null xref:system:generated:index/applib/services/bookmark/Bookmark.adoc[Bookmark] is returned.
 --
-<.> xref:#bookmarkFor[bookmarkFor]
+<.> xref:#bookmarkFor__Class_String[bookmarkFor(Class, String)]
 +
 --
 Utility method that creates a xref:system:generated:index/applib/services/bookmark/Bookmark.adoc[Bookmark] from the constituent parts.
 --
-<.> xref:#lookup[lookup]
-<.> xref:#lookup[lookup]
+<.> xref:#lookup__BookmarkHolder[lookup(BookmarkHolder)]
+<.> xref:#lookup__Bookmark[lookup(Bookmark)]
 +
 --
 Reciprocal of _#bookmarkFor(Object)_
 --
-<.> xref:#lookup[lookup]
+<.> xref:#lookup__Bookmark_Class[lookup(Bookmark, Class)]
 +
 --
 As _#lookup(Bookmark)_ , but down-casting to the specified type.
@@ -46,33 +46,33 @@ As _#lookup(Bookmark)_ , but down-casting to the specified type.
 
 == Members
 
-[#bookmarkFor]
-=== bookmarkFor
+[#bookmarkFor__Object]
+=== bookmarkFor(Object)
 
 Returns the xref:system:generated:index/applib/services/bookmark/Bookmark.adoc[Bookmark] for the given domain object.
 
  *Note* : Not every domain object is bookmark-able: only entities, view models and services (NOT values or collections)
 
-[#bookmarkForElseThrow]
-=== bookmarkForElseThrow
+[#bookmarkForElseThrow__Object]
+=== bookmarkForElseThrow(Object)
 
 As per _#bookmarkFor(Object)_ , but requires that a non-null xref:system:generated:index/applib/services/bookmark/Bookmark.adoc[Bookmark] is returned.
 
-[#bookmarkFor]
-=== bookmarkFor
+[#bookmarkFor__Class_String]
+=== bookmarkFor(Class, String)
 
 Utility method that creates a xref:system:generated:index/applib/services/bookmark/Bookmark.adoc[Bookmark] from the constituent parts.
 
-[#lookup]
-=== lookup
+[#lookup__BookmarkHolder]
+=== lookup(BookmarkHolder)
 
-[#lookup]
-=== lookup
+[#lookup__Bookmark]
+=== lookup(Bookmark)
 
 Reciprocal of _#bookmarkFor(Object)_
 
-[#lookup]
-=== lookup
+[#lookup__Bookmark_Class]
+=== lookup(Bookmark, Class)
 
 As _#lookup(Bookmark)_ , but down-casting to the specified type.
 

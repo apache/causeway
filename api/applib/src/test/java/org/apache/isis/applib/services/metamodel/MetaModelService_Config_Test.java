@@ -33,12 +33,12 @@ public class MetaModelService_Config_Test {
     public void ignore_noop() throws Exception {
 
         // when
-        MetaModelService.Config config = new MetaModelService.Config();
+        Config config = new Config();
         // then
         assertThat(config.isIgnoreNoop(), is(equalTo(false)));
 
         // and when
-        MetaModelService.Config config2 = config.withIgnoreNoop();
+        Config config2 = config.withIgnoreNoop();
 
         // then
         assertNotSame(config, config2);
@@ -50,12 +50,12 @@ public class MetaModelService_Config_Test {
     public void packages_prefixes() throws Exception {
 
         // when
-        MetaModelService.Config config = new MetaModelService.Config();
+        Config config = new Config();
         // then
         assertThat(config.getPackagePrefixes(), is(emptyCollectionOf(String.class)));
 
         // and when
-        MetaModelService.Config config2 = config.withPackagePrefix("org.foo");
+        Config config2 = config.withPackagePrefix("org.foo");
 
         // then
         assertNotSame(config, config2);
@@ -63,7 +63,7 @@ public class MetaModelService_Config_Test {
         assertThat(config2.getPackagePrefixes().iterator().next(), is(equalTo("org.foo")));
 
         // and when
-        MetaModelService.Config config3 = config2.withPackagePrefix("org.bar");
+        Config config3 = config2.withPackagePrefix("org.bar");
 
         // then
         assertNotSame(config, config3);

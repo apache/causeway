@@ -21,7 +21,7 @@ class BS3Tab {
 }
 ----
 
-<.> xref:#getOwner[getOwner]
+<.> xref:#getOwner__[getOwner()]
 +
 --
 Owner.
@@ -29,8 +29,8 @@ Owner.
 
 == Members
 
-[#getOwner]
-=== getOwner
+[#getOwner__]
+=== getOwner()
 
 Owner.
 

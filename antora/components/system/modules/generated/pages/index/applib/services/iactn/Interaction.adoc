@@ -22,27 +22,27 @@ interface Interaction {
 }
 ----
 
-<.> xref:#getUniqueId[getUniqueId]
+<.> xref:#getUniqueId__[getUniqueId()]
 +
 --
 The unique identifier of this interaction (inherited from xref:system:generated:index/commons/having/HasUniqueId.adoc[HasUniqueId] )
 --
-<.> xref:#getCommand[getCommand]
+<.> xref:#getCommand__[getCommand()]
 +
 --
 Represents the _intention_ to perform this interaction.
 --
-<.> xref:#getCurrentExecution[getCurrentExecution]
+<.> xref:#getCurrentExecution__[getCurrentExecution()]
 +
 --
 The current (most recently pushed) xref:system:generated:index/applib/services/iactn/Execution.adoc[Execution] .
 --
-<.> xref:#getPriorExecution[getPriorExecution]
+<.> xref:#getPriorExecution__[getPriorExecution()]
 +
 --
 The execution that preceded the current one.
 --
-<.> xref:#next[next]
+<.> xref:#next__String[next(String)]
 +
 --
 Generates numbers in a named sequence. The name of the sequence can be arbitrary, though note that the framework also uses this capability to generate sequence numbers corresponding to the sequences enumerated by the xref:system:generated:index/applib/services/iactn/Sequence.adoc[Sequence] enum.
@@ -50,30 +50,30 @@ Generates numbers in a named sequence. The name of the sequence can be arbitrary
 
 == Members
 
-[#getUniqueId]
-=== getUniqueId
+[#getUniqueId__]
+=== getUniqueId()
 
 The unique identifier of this interaction (inherited from xref:system:generated:index/commons/having/HasUniqueId.adoc[HasUniqueId] )
 
 This can be used to correlate audit records and transactions happening as a consequence or within the interaction.
 
-[#getCommand]
-=== getCommand
+[#getCommand__]
+=== getCommand()
 
 Represents the _intention_ to perform this interaction.
 
-[#getCurrentExecution]
-=== getCurrentExecution
+[#getCurrentExecution__]
+=== getCurrentExecution()
 
 The current (most recently pushed) xref:system:generated:index/applib/services/iactn/Execution.adoc[Execution] .
 
-[#getPriorExecution]
-=== getPriorExecution
+[#getPriorExecution__]
+=== getPriorExecution()
 
 The execution that preceded the current one.
 
-[#next]
-=== next
+[#next__String]
+=== next(String)
 
 Generates numbers in a named sequence. The name of the sequence can be arbitrary, though note that the framework also uses this capability to generate sequence numbers corresponding to the sequences enumerated by the xref:system:generated:index/applib/services/iactn/Sequence.adoc[Sequence] enum.
 

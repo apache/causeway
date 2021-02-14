@@ -17,7 +17,7 @@ CommandJdoRepository commandServiceRepository;
 }
 ----
 
-<.> xref:#hideAct[hideAct]
+<.> xref:#hideAct__[hideAct()]
 +
 --
 Hide if the contributee is a xref:system:generated:index/applib/services/command/Command.adoc[Command] , because xref:system:generated:index/applib/services/command/Command.adoc[Command] s already have a _Command#getParent() parent_ property.
@@ -25,8 +25,8 @@ Hide if the contributee is a xref:system:generated:index/applib/services/command
 
 == Members
 
-[#hideAct]
-=== hideAct
+[#hideAct__]
+=== hideAct()
 
 Hide if the contributee is a xref:system:generated:index/applib/services/command/Command.adoc[Command] , because xref:system:generated:index/applib/services/command/Command.adoc[Command] s already have a _Command#getParent() parent_ property.
 

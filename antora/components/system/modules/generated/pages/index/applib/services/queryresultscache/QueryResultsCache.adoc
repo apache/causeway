@@ -21,7 +21,7 @@ interface QueryResultsCache {
 }
 ----
 
-<.> xref:#onTransactionEnded[onTransactionEnded]
+<.> xref:#onTransactionEnded__[onTransactionEnded()]
 +
 --
 Not API, for framework use only.
@@ -29,8 +29,8 @@ Not API, for framework use only.
 
 == Members
 
-[#onTransactionEnded]
-=== onTransactionEnded
+[#onTransactionEnded__]
+=== onTransactionEnded()
 
 Not API, for framework use only.
 

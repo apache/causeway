@@ -6,6 +6,14 @@
 
 WARNING: TODO: this content has not yet been reviewed/updated for v2.0
 
+include::system:generated:page$index/applib/services/routing/RoutingService.adoc[RoutingService]
+
+include::RoutingService/hooks/implementation.adoc[]
+
+include::RoutingService/hooks/examples_and_usage.adoc[]
+
+
+
 The `RoutingService` provides the ability to return (and therefore render) an alternative object from an action invocation.
 
 There are two primary use cases:

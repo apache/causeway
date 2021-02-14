@@ -20,10 +20,20 @@
 package org.apache.isis.applib.services.xactn;
 
 import java.util.Optional;
+import java.util.concurrent.Callable;
+
+import org.springframework.transaction.TransactionDefinition;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
+
+import org.apache.isis.commons.functional.Result;
+import org.apache.isis.commons.functional.ThrowingRunnable;
+
+import lombok.val;
 
 /**
- * Provides utilities to access active transactions associated with the current thread. 
- * 
+ * Provides utilities to access active transactions associated with the current thread.
+ *
  * @since 2.0 {@index}
  */
 public interface TransactionService extends TransactionalProcessor {
@@ -35,8 +45,8 @@ public interface TransactionService extends TransactionalProcessor {
     Optional<TransactionId> currentTransactionId();
 
     /**
-     * Returns the state of the current thread's transaction., or returns 
-     * {@link TransactionState#NONE}, if there is no active transaction associated with the 
+     * Returns the state of the current thread's transaction., or returns
+     * {@link TransactionState#NONE}, if there is no active transaction associated with the
      * current thread.
      */
     TransactionState currentTransactionState();

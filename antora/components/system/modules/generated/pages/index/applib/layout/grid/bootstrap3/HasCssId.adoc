@@ -10,7 +10,7 @@ interface HasCssId {
 }
 ----
 
-<.> xref:#getId[getId]
+<.> xref:#getId__[getId()]
 +
 --
 As per <div id="...">...</div> : must be unique across entire page.
@@ -18,8 +18,8 @@ As per <div id="...">...</div> : must be unique across entire page.
 
 == Members
 
-[#getId]
-=== getId
+[#getId__]
+=== getId()
 
 As per <div id="...">...</div> : must be unique across entire page.
 

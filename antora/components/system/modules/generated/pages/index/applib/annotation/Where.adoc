@@ -79,7 +79,7 @@ To act as an override if a member would normally be hidden as a result of some o
 --
 Acts as the default no-op value for _PropertyLayout#hidden()_ , _CollectionLayout#hidden()_ and _ActionLayout#hidden()_ .
 --
-<.> xref:#includes[includes]
+<.> xref:#includes__Where[includes(Where)]
 +
 --
 Whether this `Where` is a superset of the context `Where` provided.
@@ -155,8 +155,8 @@ For example, if a property is annotated with `@Title` , then normally this shoul
 
 Acts as the default no-op value for _PropertyLayout#hidden()_ , _CollectionLayout#hidden()_ and _ActionLayout#hidden()_ .
 
-[#includes]
-=== includes
+[#includes__Where]
+=== includes(Where)
 
 Whether this `Where` is a superset of the context `Where` provided.
 

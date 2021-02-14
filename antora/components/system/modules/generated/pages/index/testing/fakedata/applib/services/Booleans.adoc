@@ -14,12 +14,12 @@ class Booleans {
 }
 ----
 
-<.> xref:#coinFlip[coinFlip]
+<.> xref:#coinFlip__[coinFlip()]
 +
 --
 Same as _#any()_ .
 --
-<.> xref:#either[either]
+<.> xref:#either__[either()]
 +
 --
 Same as _#any()_ .
@@ -27,13 +27,13 @@ Same as _#any()_ .
 
 == Members
 
-[#coinFlip]
-=== coinFlip
+[#coinFlip__]
+=== coinFlip()
 
 Same as _#any()_ .
 
-[#either]
-=== either
+[#either__]
+=== either()
 
 Same as _#any()_ .
 

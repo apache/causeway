@@ -12,7 +12,7 @@ List<CommandReplayAnalyser> analysers;
 }
 ----
 
-<.> xref:#analyse[analyse]
+<.> xref:#analyse__CommandJdo[analyse(CommandJdo)]
 +
 --
 if hit an issue with the command having been replayed, then mark this as in error. This will effectively block the running of any further commands until the adminstrator fixes the issue.
@@ -20,8 +20,8 @@ if hit an issue with the command having been replayed, then mark this as in erro
 
 == Members
 
-[#analyse]
-=== analyse
+[#analyse__CommandJdo]
+=== analyse(CommandJdo)
 
 if hit an issue with the command having been replayed, then mark this as in error. This will effectively block the running of any further commands until the adminstrator fixes the issue.
 

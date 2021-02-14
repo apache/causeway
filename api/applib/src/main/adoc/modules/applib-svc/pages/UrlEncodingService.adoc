@@ -7,6 +7,13 @@
 WARNING: TODO: this content has not yet been reviewed/updated for v2.0
 
 
+include::system:generated:page$index/applib/services/urlencoding/UrlEncodingService.adoc[UrlEncodingService]
+
+include::UrlEncodingService/hooks/implementation.adoc[]
+
+include::UrlEncodingService/hooks/examples_and_usage.adoc[]
+
+
 The `UrlEncodingService` defines a consistent way to convert strings to/from a form safe for use within a URL.
 The service is used by the framework to map xref:userguide:fun:overview.adoc#view-models[view model] mementos (derived from the state of the view model itself) into a form that can be used as a view model.
 When the framework needs to recreate the view model (for example to invoke an action on it), this URL is converted back into a view model memento, from which the view model can then be hydrated.

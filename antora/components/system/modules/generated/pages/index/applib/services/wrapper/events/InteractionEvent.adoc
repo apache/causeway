@@ -27,67 +27,67 @@ class InteractionEvent {
 }
 ----
 
-<.> xref:#getSource[getSource]
+<.> xref:#getSource__[getSource()]
 +
 --
 The domain object (pojo) against which the interaction occurred.
 --
-<.> xref:#getIdentifier[getIdentifier]
+<.> xref:#getIdentifier__[getIdentifier()]
 +
 --
 The xref:system:generated:index/applib/Identifier.adoc[Identifier] of the feature of the object being interacted with.
 --
-<.> xref:#getClassName[getClassName]
+<.> xref:#getClassName__[getClassName()]
 +
 --
 As per _#getClassName()_ , but naturalized.
 --
-<.> xref:#getClassNaturalName[getClassNaturalName]
+<.> xref:#getClassNaturalName__[getClassNaturalName()]
 +
 --
 Convenience method that returns the _Identifier#getClassNaturalName() natural class name_ of the _#getIdentifier() identifier_ .
 --
-<.> xref:#getMemberName[getMemberName]
+<.> xref:#getMemberName__[getMemberName()]
 +
 --
 Convenience method that returns the _Identifier#getMemberName() member name_ of the _#getIdentifier() identifier_ .
 --
-<.> xref:#getMemberNaturalName[getMemberNaturalName]
+<.> xref:#getMemberNaturalName__[getMemberNaturalName()]
 +
 --
 As per _#getMemberName()_ , but naturalized.
 --
-<.> xref:#getMemberParameterNames[getMemberParameterNames]
+<.> xref:#getMemberParameterNames__[getMemberParameterNames()]
 +
 --
 Convenience method that returns the _Identifier#getClassName() class name_ of the _#getIdentifier() identifier_ .
 --
-<.> xref:#getMemberParameterNaturalNames[getMemberParameterNaturalNames]
+<.> xref:#getMemberParameterNaturalNames__[getMemberParameterNaturalNames()]
 +
 --
 As per _#getMemberParameterNames()_ , but naturalized.
 --
-<.> xref:#getReason[getReason]
+<.> xref:#getReason__[getReason()]
 +
 --
 The reason, if any, that this interaction may have been vetoed or otherwise disallowed.
 --
-<.> xref:#getReasonMessage[getReasonMessage]
+<.> xref:#getReasonMessage__[getReasonMessage()]
 +
 --
 The reason message, if any, that this interaction may have been vetoed or otherwise disallowed.
 --
-<.> xref:#getAdvisorClass[getAdvisorClass]
+<.> xref:#getAdvisorClass__[getAdvisorClass()]
 +
 --
 The class of the (first) advisor, if any, that provided the _#getReason() reason_ that this interaction is _#isVeto() vetoed_ .
 --
-<.> xref:#advised[advised]
+<.> xref:#advised__String_Class[advised(String, Class)]
 +
 --
 Specify the _#getReason() reason_ that this interaction has been vetoed and the _#getAdvisorClass() class of the advisor_ that did the veto.
 --
-<.> xref:#isVeto[isVeto]
+<.> xref:#isVeto__[isVeto()]
 +
 --
 Whether this interaction has been vetoed (meaning that _#getReason()_ and _#getAdvisorClass()_ will both be non- `null` and the _#getReason() reason_ non-empty.)
@@ -95,74 +95,74 @@ Whether this interaction has been vetoed (meaning that _#getReason()_ and _#getA
 
 == Members
 
-[#getSource]
-=== getSource
+[#getSource__]
+=== getSource()
 
 The domain object (pojo) against which the interaction occurred.
 
-[#getIdentifier]
-=== getIdentifier
+[#getIdentifier__]
+=== getIdentifier()
 
 The xref:system:generated:index/applib/Identifier.adoc[Identifier] of the feature of the object being interacted with.
 
 Will be consistent with the subclass of xref:system:generated:index/applib/services/wrapper/events/InteractionEvent.adoc[InteractionEvent] . So for example a xref:system:generated:index/applib/services/wrapper/events/PropertyModifyEvent.adoc[PropertyModifyEvent] will have an xref:system:generated:index/applib/Identifier.adoc[Identifier] that identifies the property being modified.
 
-[#getClassName]
-=== getClassName
+[#getClassName__]
+=== getClassName()
 
 As per _#getClassName()_ , but naturalized.
 
-[#getClassNaturalName]
-=== getClassNaturalName
+[#getClassNaturalName__]
+=== getClassNaturalName()
 
 Convenience method that returns the _Identifier#getClassNaturalName() natural class name_ of the _#getIdentifier() identifier_ .
 
-[#getMemberName]
-=== getMemberName
+[#getMemberName__]
+=== getMemberName()
 
 Convenience method that returns the _Identifier#getMemberName() member name_ of the _#getIdentifier() identifier_ .
 
-[#getMemberNaturalName]
-=== getMemberNaturalName
+[#getMemberNaturalName__]
+=== getMemberNaturalName()
 
 As per _#getMemberName()_ , but naturalized.
 
-[#getMemberParameterNames]
-=== getMemberParameterNames
+[#getMemberParameterNames__]
+=== getMemberParameterNames()
 
 Convenience method that returns the _Identifier#getClassName() class name_ of the _#getIdentifier() identifier_ .
 
-[#getMemberParameterNaturalNames]
-=== getMemberParameterNaturalNames
+[#getMemberParameterNaturalNames__]
+=== getMemberParameterNaturalNames()
 
 As per _#getMemberParameterNames()_ , but naturalized.
 
-[#getReason]
-=== getReason
+[#getReason__]
+=== getReason()
 
 The reason, if any, that this interaction may have been vetoed or otherwise disallowed.
 
 Intended to be _#advised(String, Class) set_ as a result of consulting one of the facets.
 
-[#getReasonMessage]
-=== getReasonMessage
+[#getReasonMessage__]
+=== getReasonMessage()
 
 The reason message, if any, that this interaction may have been vetoed or otherwise disallowed.
 
 This message should be overridden by subclasses for containing the Reason, the Identifier and any other relevant context information.
 
-[#getAdvisorClass]
-=== getAdvisorClass
+[#getAdvisorClass__]
+=== getAdvisorClass()
 
 The class of the (first) advisor, if any, that provided the _#getReason() reason_ that this interaction is _#isVeto() vetoed_ .
 
-[#advised]
-=== advised
+[#advised__String_Class]
+=== advised(String, Class)
 
 Specify the _#getReason() reason_ that this interaction has been vetoed and the _#getAdvisorClass() class of the advisor_ that did the veto.
 
-[#isVeto]
-=== isVeto
+[#isVeto__]
+=== isVeto()
 
 Whether this interaction has been vetoed (meaning that _#getReason()_ and _#getAdvisorClass()_ will both be non- `null` and the _#getReason() reason_ non-empty.)
 

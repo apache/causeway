@@ -14,17 +14,17 @@ interface ExceptionRecognizerService {
 }
 ----
 
-<.> xref:#getExceptionRecognizers[getExceptionRecognizers]
+<.> xref:#getExceptionRecognizers__[getExceptionRecognizers()]
 +
 --
 All ExceptionRecognizer implementations as discovered by the IoC container, honoring order of precedence.
 --
-<.> xref:#recognize[recognize]
+<.> xref:#recognize__Throwable[recognize(Throwable)]
 +
 --
 Takes into consideration ExceptionRecognizers as given by _#getExceptionRecognizers()_ .
 --
-<.> xref:#recognizeFromSelected[recognizeFromSelected]
+<.> xref:#recognizeFromSelected__Can_Throwable[recognizeFromSelected(Can, Throwable)]
 +
 --
 Takes into consideration ExceptionRecognizers as given by _recognizers_ .
@@ -32,18 +32,18 @@ Takes into consideration ExceptionRecognizers as given by _recognizers_ .
 
 == Members
 
-[#getExceptionRecognizers]
-=== getExceptionRecognizers
+[#getExceptionRecognizers__]
+=== getExceptionRecognizers()
 
 All ExceptionRecognizer implementations as discovered by the IoC container, honoring order of precedence.
 
-[#recognize]
-=== recognize
+[#recognize__Throwable]
+=== recognize(Throwable)
 
 Takes into consideration ExceptionRecognizers as given by _#getExceptionRecognizers()_ .
 
-[#recognizeFromSelected]
-=== recognizeFromSelected
+[#recognizeFromSelected__Can_Throwable]
+=== recognizeFromSelected(Can, Throwable)
 
 Takes into consideration ExceptionRecognizers as given by _recognizers_ .
 

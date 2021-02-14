@@ -29,6 +29,7 @@ import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.mixins.MixinConstants;
+import org.apache.isis.applib.services.jaxb.IsisSchemas;
 import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.util.ZipWriter;
@@ -68,7 +69,7 @@ public class Dto_downloadXsd {
             final String fileName,
 
             // PARAM 1
-            final JaxbService.IsisSchemas isisSchemas) {
+            final IsisSchemas isisSchemas) {
 
         val schemaMap = jaxbService.toXsd(holder, isisSchemas);
 
@@ -107,8 +108,8 @@ public class Dto_downloadXsd {
 
     // -- PARAM 1
 
-    public JaxbService.IsisSchemas default1Act() {
-        return JaxbService.IsisSchemas.IGNORE;
+    public IsisSchemas default1Act() {
+        return IsisSchemas.IGNORE;
     }
 
     // -- HELPER

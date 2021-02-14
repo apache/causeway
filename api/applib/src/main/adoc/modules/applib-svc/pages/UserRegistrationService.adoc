@@ -6,6 +6,13 @@
 
 WARNING: TODO: this content has not yet been reviewed/updated for v2.0
 
+include::system:generated:page$index/applib/services/userreg/UserRegistrationService.adoc[UserRegistrationService]
+
+include::UserRegistrationService/hooks/implementation.adoc[]
+
+include::UserRegistrationService/hooks/examples_and_usage.adoc[]
+
+
 The `UserRegistrationService` provides the ability for users to sign-up to access an application by providing a valid email address, and also provides the capability for users to reset their password if forgotten.
 
 For user sign-up, the xref:vw:ROOT:about.adoc[Wicket viewer] will check whether an implementation of this service (and also the xref:refguide:applib-svc:EmailNotificationService.adoc[`EmailNotificationService`]) is available, and if so will render a sign-up page where the user enters their email address.

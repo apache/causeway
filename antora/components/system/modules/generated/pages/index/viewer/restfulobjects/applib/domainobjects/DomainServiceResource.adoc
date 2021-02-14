@@ -25,7 +25,7 @@ interface DomainServiceResource {
 }
 ----
 
-<.> xref:#invokeActionQueryOnly[invokeActionQueryOnly]
+<.> xref:#invokeActionQueryOnly__String_String_String[invokeActionQueryOnly(String, String, String)]
 +
 --
 Because it isn't possible with the RestEasy client-side framework to specify a query string nor to pass arbitrary query params; instead we provide an additional syntax of passing an Isis-defined query param `x-isis-querystring` .
@@ -33,8 +33,8 @@ Because it isn't possible with the RestEasy client-side framework to specify a q
 
 == Members
 
-[#invokeActionQueryOnly]
-=== invokeActionQueryOnly
+[#invokeActionQueryOnly__String_String_String]
+=== invokeActionQueryOnly(String, String, String)
 
 Because it isn't possible with the RestEasy client-side framework to specify a query string nor to pass arbitrary query params; instead we provide an additional syntax of passing an Isis-defined query param `x-isis-querystring` .
 

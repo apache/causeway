@@ -18,12 +18,12 @@ class BS3RowContent {
 }
 ----
 
-<.> xref:#getSize[getSize]
+<.> xref:#getSize__[getSize()]
 +
 --
 Default if not specified is _Size#MD_ .
 --
-<.> xref:#getOwner[getOwner]
+<.> xref:#getOwner__[getOwner()]
 +
 --
 Owner.
@@ -31,13 +31,13 @@ Owner.
 
 == Members
 
-[#getSize]
-=== getSize
+[#getSize__]
+=== getSize()
 
 Default if not specified is _Size#MD_ .
 
-[#getOwner]
-=== getOwner
+[#getOwner__]
+=== getOwner()
 
 Owner.
 

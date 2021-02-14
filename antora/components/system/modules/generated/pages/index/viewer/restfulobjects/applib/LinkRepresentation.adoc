@@ -26,7 +26,7 @@ class LinkRepresentation {
 }
 ----
 
-<.> xref:#getArguments[getArguments]
+<.> xref:#getArguments__[getArguments()]
 +
 --
 Returns the "arguments" json-property of the link (a map).
@@ -34,8 +34,8 @@ Returns the "arguments" json-property of the link (a map).
 
 == Members
 
-[#getArguments]
-=== getArguments
+[#getArguments__]
+=== getArguments()
 
 Returns the "arguments" json-property of the link (a map).
 

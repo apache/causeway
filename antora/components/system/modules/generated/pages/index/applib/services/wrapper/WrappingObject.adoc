@@ -14,17 +14,17 @@ interface WrappingObject {
 }
 ----
 
-<.> xref:#__isis_save[__isis_save]
+<.> xref:#__isis_save__[__isis_save()]
 +
 --
 Programmatic equivalent of invoking save for a transient object .
 --
-<.> xref:#__isis_wrapped[__isis_wrapped]
+<.> xref:#__isis_wrapped__[__isis_wrapped()]
 +
 --
 Provide access to the underlying, wrapped object.
 --
-<.> xref:#__isis_executionModes[__isis_executionModes]
+<.> xref:#__isis_executionModes__[__isis_executionModes()]
 +
 --
 The _EnumSetexecution modes_ inferred from the xref:system:generated:index/applib/services/wrapper/control/SyncControl.adoc[SyncControl] with which this wrapper was _WrapperFactory#wrap(Object, SyncControl) created_ .
@@ -32,15 +32,15 @@ The _EnumSetexecution modes_ inferred from the xref:system:generated:index/appli
 
 == Members
 
-[#__isis_save]
-=== __isis_save
+[#__isis_save__]
+=== __isis_save()
 
 Programmatic equivalent of invoking save for a transient object .
 
 NOTE: domain classes may not have a method with this name. The `__isis_` prefix is intended to reduce the risk of a collision.
 
-[#__isis_wrapped]
-=== __isis_wrapped
+[#__isis_wrapped__]
+=== __isis_wrapped()
 
 Provide access to the underlying, wrapped object.
 
@@ -50,8 +50,8 @@ NOTE: domain classes may not have a method with this name. The `__isis_` prefix 
 
  *NOTE: there is a string-literal reference to this name `DomainObjectInvocationHandler` , so it should not be changed.* .
 
-[#__isis_executionModes]
-=== __isis_executionModes
+[#__isis_executionModes__]
+=== __isis_executionModes()
 
 The _EnumSetexecution modes_ inferred from the xref:system:generated:index/applib/services/wrapper/control/SyncControl.adoc[SyncControl] with which this wrapper was _WrapperFactory#wrap(Object, SyncControl) created_ .
 

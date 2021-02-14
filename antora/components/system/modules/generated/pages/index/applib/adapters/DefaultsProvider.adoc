@@ -18,7 +18,7 @@ interface DefaultsProvider<T> {
 }
 ----
 
-<.> xref:#getDefaultValue[getDefaultValue]
+<.> xref:#getDefaultValue__[getDefaultValue()]
 +
 --
 The default, if any (as a pojo).
@@ -26,8 +26,8 @@ The default, if any (as a pojo).
 
 == Members
 
-[#getDefaultValue]
-=== getDefaultValue
+[#getDefaultValue__]
+=== getDefaultValue()
 
 The default, if any (as a pojo).
 

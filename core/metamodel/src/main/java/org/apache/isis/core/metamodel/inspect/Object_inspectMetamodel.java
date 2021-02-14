@@ -30,6 +30,7 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.graph.tree.TreeNode;
 import org.apache.isis.applib.graph.tree.TreePath;
 import org.apache.isis.applib.mixins.MixinConstants;
+import org.apache.isis.applib.services.metamodel.Config;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.inspect.model.MMNodeFactory;
@@ -50,10 +51,10 @@ public class Object_inspectMetamodel {
 
     @Inject private MetaModelService metaModelService;
     //@Inject private SpecificationLoader specificationLoader;
-    
+
     private final Object holder;
 
-    public static class ActionDomainEvent 
+    public static class ActionDomainEvent
     extends org.apache.isis.applib.IsisModuleApplib.ActionDomainEvent<Object_inspectMetamodel> {}
 
     @MemberOrder(name = MixinConstants.METADATA_LAYOUT_GROUPNAME, sequence = "700.2.1")
@@ -62,7 +63,7 @@ public class Object_inspectMetamodel {
         val pkg = holder.getClass().getPackage().getName();
 
         val config =
-                new MetaModelService.Config()
+                new Config()
                 .withIgnoreNoop()
                 .withIgnoreAbstractClasses()
                 .withIgnoreInterfaces()
@@ -78,20 +79,20 @@ public class Object_inspectMetamodel {
             .filter(classDto->Objects.equals(classDto.getId(), className))
             .findFirst()
             .orElseThrow(_Exceptions::noSuchElement);
-        
+
         val root = MMNodeFactory.type(domainClassDto, null);
         val tree = TreeNode.lazy(root, MMTreeAdapter.class);
-        
+
         // Initialize view-model nodes of the entire tree,
         // because as it stands, all the type information gets cleared,
         // after the jax-b model got de-serialized.
         tree.streamDepthFirst()
         .map(TreeNode::getValue)
-        .forEach(node->node.title()); 
-        
+        .forEach(node->node.title());
+
         tree.expand(TreePath.of(0)); // expand the root node
         return tree;
     }
-    
+
 
 }

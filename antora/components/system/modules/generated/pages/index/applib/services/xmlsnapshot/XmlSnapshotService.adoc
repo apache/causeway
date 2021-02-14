@@ -16,17 +16,17 @@ interface XmlSnapshotService {
 }
 ----
 
-<.> xref:#snapshotFor[snapshotFor]
+<.> xref:#snapshotFor__Object[snapshotFor(Object)]
 +
 --
 Exports the state of a domain object into a Snapshot (which can then be converted into XML, for example).
 --
-<.> xref:#builderFor[builderFor]
+<.> xref:#builderFor__Object[builderFor(Object)]
 +
 --
 Creates a Snapshot.Builder that allows the contents of the snapshot to include other related state.
 --
-<.> xref:#getChildElementValue[getChildElementValue]
+<.> xref:#getChildElementValue__Element_String_Class[getChildElementValue(Element, String, Class)]
 +
 --
 Convenience method to extract value of an XML element, based on its type.
@@ -34,18 +34,18 @@ Convenience method to extract value of an XML element, based on its type.
 
 == Members
 
-[#snapshotFor]
-=== snapshotFor
+[#snapshotFor__Object]
+=== snapshotFor(Object)
 
 Exports the state of a domain object into a Snapshot (which can then be converted into XML, for example).
 
-[#builderFor]
-=== builderFor
+[#builderFor__Object]
+=== builderFor(Object)
 
 Creates a Snapshot.Builder that allows the contents of the snapshot to include other related state.
 
-[#getChildElementValue]
-=== getChildElementValue
+[#getChildElementValue__Element_String_Class]
+=== getChildElementValue(Element, String, Class)
 
 Convenience method to extract value of an XML element, based on its type.
 

@@ -16,7 +16,7 @@ interface ExecutionSubscriber {
 }
 ----
 
-<.> xref:#onExecution[onExecution]
+<.> xref:#onExecution__Execution[onExecution(Execution)]
 +
 --
 Callback to notify that an interaction (an action invocation or property edit, as represented by xref:system:generated:index/applib/services/iactn/Execution.adoc[Execution] ) has completed.
@@ -24,8 +24,8 @@ Callback to notify that an interaction (an action invocation or property edit, a
 
 == Members
 
-[#onExecution]
-=== onExecution
+[#onExecution__Execution]
+=== onExecution(Execution)
 
 Callback to notify that an interaction (an action invocation or property edit, as represented by xref:system:generated:index/applib/services/iactn/Execution.adoc[Execution] ) has completed.
 

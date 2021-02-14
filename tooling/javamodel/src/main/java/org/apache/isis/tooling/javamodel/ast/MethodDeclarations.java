@@ -21,7 +21,9 @@ package org.apache.isis.tooling.javamodel.ast;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.EnumDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
+import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.type.TypeParameter;
+import com.github.javaparser.printer.PrettyPrinterConfiguration;
 
 import org.apache.isis.commons.collections.Can;
 
@@ -41,17 +43,46 @@ public final class MethodDeclarations {
         .forEach(p->p.getAnnotations().clear());
         return clone.getDeclarationAsString(false, false, true);
     }
-    
+
+    public static String asAnchor(final @NonNull MethodDeclaration md) {
+        return nameAndParams(md, "__", "_", "");
+    }
+
+    public static String asMethodSignature(final @NonNull MethodDeclaration md) {
+        return nameAndParams(md, "(", ", ", ")");
+    }
+
+    private static final PrettyPrinterConfiguration prettyPrinterNoCommentsConfiguration = new PrettyPrinterConfiguration().setPrintComments(false);
+
+    private static String nameAndParams(@NonNull MethodDeclaration md, String openParam, String comma, String closeParam) {
+        final StringBuilder sb = new StringBuilder();
+        sb.append(md.getName());
+        sb.append(openParam);
+        boolean firstParam = true;
+        for (Parameter param : md.getParameters()) {
+            if (firstParam) {
+                firstParam = false;
+            } else {
+                sb.append(comma);
+            }
+            final String paramType = param.getType().asString();
+            final String paramTypeNoWildcard = paramType.split("<")[0];
+            sb.append(paramTypeNoWildcard);
+        }
+        sb.append(closeParam);
+        return sb.toString();
+    }
+
     public static String asNormalizedName(final @NonNull MethodDeclaration md) {
         return md.getNameAsString().trim();
     }
-    
+
     public static Can<TypeParameter> getTypeParameters(final @NonNull MethodDeclaration md) {
         return Can.ofStream(md.getTypeParameters().stream());
     }
 
     public static boolean isEffectivePublic(
-            final @NonNull MethodDeclaration md, 
+            final @NonNull MethodDeclaration md,
             final @NonNull ClassOrInterfaceDeclaration context) {
 
         if(!ClassOrInterfaceDeclarations.isEffectivePublic(context)) {
@@ -61,22 +92,22 @@ public final class MethodDeclarations {
             return true;
         }
 
-        return !md.isPrivate() 
-                && !md.isAbstract() 
+        return !md.isPrivate()
+                && !md.isAbstract()
                 && !md.isProtected()
                 ;
     }
 
     public static boolean isEffectivePublic(
-            final @NonNull MethodDeclaration md, 
+            final @NonNull MethodDeclaration md,
             final @NonNull EnumDeclaration context) {
 
         if(!EnumDeclarations.isEffectivePublic(context)) {
             return false;
         }
 
-        return !md.isPrivate() 
-                && !md.isAbstract() 
+        return !md.isPrivate()
+                && !md.isAbstract()
                 && !md.isProtected()
                 ;
     }

@@ -14,12 +14,12 @@ class IsisModuleJdoDatanucleus {
 }
 ----
 
-<.> xref:#getDnJdoDialect[getDnJdoDialect]
+<.> xref:#getDnJdoDialect__DataSource[getDnJdoDialect(DataSource)]
 +
 --
 Conveniently registers this dialect as a _PersistenceExceptionTranslator_ with _Spring_ .
 --
-<.> xref:#getTransactionInterceptorFactory[getTransactionInterceptorFactory]
+<.> xref:#getTransactionInterceptorFactory__[getTransactionInterceptorFactory()]
 +
 --
 AOP PATCH
@@ -27,13 +27,13 @@ AOP PATCH
 
 == Members
 
-[#getDnJdoDialect]
-=== getDnJdoDialect
+[#getDnJdoDialect__DataSource]
+=== getDnJdoDialect(DataSource)
 
 Conveniently registers this dialect as a _PersistenceExceptionTranslator_ with _Spring_ .
 
-[#getTransactionInterceptorFactory]
-=== getTransactionInterceptorFactory
+[#getTransactionInterceptorFactory__]
+=== getTransactionInterceptorFactory()
 
 AOP PATCH
 

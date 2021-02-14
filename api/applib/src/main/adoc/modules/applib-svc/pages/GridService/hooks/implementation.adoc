@@ -4,3 +4,5 @@
 
 
 == Implementation
+
+The framework provides a default implementation of this service, namely `o.a.i.core.metamodel.services.grid.GridServiceDefault`.

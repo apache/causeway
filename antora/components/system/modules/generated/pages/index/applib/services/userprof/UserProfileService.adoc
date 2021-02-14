@@ -14,7 +14,7 @@ interface UserProfileService {
 }
 ----
 
-<.> xref:#userProfileName[userProfileName]
+<.> xref:#userProfileName__[userProfileName()]
 +
 --
 Used as the menu name of the _org.apache.isis.applib.annotation.DomainServiceLayout.MenuBar#TERTIARY tertiary_ "Me" menu bar.
@@ -22,8 +22,8 @@ Used as the menu name of the _org.apache.isis.applib.annotation.DomainServiceLay
 
 == Members
 
-[#userProfileName]
-=== userProfileName
+[#userProfileName__]
+=== userProfileName()
 
 Used as the menu name of the _org.apache.isis.applib.annotation.DomainServiceLayout.MenuBar#TERTIARY tertiary_ "Me" menu bar.
 

@@ -21,10 +21,10 @@ package org.apache.isis.core.metamodel.facetapi;
 
 import java.util.Map;
 
-import org.apache.isis.applib.services.metamodel.MetaModelService;
+import org.apache.isis.applib.services.metamodel.Config;
 
 /**
- * For serialization of metamodel into XML, see {@link org.apache.isis.applib.services.metamodel.MetaModelService#exportMetaModel(MetaModelService.Config)}.
+ * For serialization of metamodel into XML, see {@link org.apache.isis.applib.services.metamodel.MetaModelService#exportMetaModel(Config)}.
  */
 public interface FacetWithAttributes {
 

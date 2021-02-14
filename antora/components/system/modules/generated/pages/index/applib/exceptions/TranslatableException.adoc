@@ -15,12 +15,12 @@ interface TranslatableException {
 }
 ----
 
-<.> xref:#getTranslatableMessage[getTranslatableMessage]
+<.> xref:#getTranslatableMessage__[getTranslatableMessage()]
 +
 --
 In the spirit of _Exception#getLocalizedMessage()_ , but using xref:system:generated:index/applib/services/i18n/TranslatableString.adoc[TranslatableString] instead.
 --
-<.> xref:#getTranslationContext[getTranslationContext]
+<.> xref:#getTranslationContext__[getTranslationContext()]
 +
 --
 The context to use when translating the _#getTranslatableMessage() translatable message_ , as ultimately passed through to _org.apache.isis.applib.services.i18n.TranslationService#translate(String, String)_ .
@@ -28,15 +28,15 @@ The context to use when translating the _#getTranslatableMessage() translatable 
 
 == Members
 
-[#getTranslatableMessage]
-=== getTranslatableMessage
+[#getTranslatableMessage__]
+=== getTranslatableMessage()
 
 In the spirit of _Exception#getLocalizedMessage()_ , but using xref:system:generated:index/applib/services/i18n/TranslatableString.adoc[TranslatableString] instead.
 
 If returns `null` , then _Exception#getMessage()_ will be used as a fallback. This design allows the Isis-provided xref:system:generated:index/applib/exceptions/RecoverableException.adoc[RecoverableException] and xref:system:generated:index/applib/exceptions/UnrecoverableException.adoc[UnrecoverableException] to provide constructors that accept a xref:system:generated:index/applib/services/i18n/TranslatableString.adoc[TranslatableString] , but can be left as null for any existing code.
 
-[#getTranslationContext]
-=== getTranslationContext
+[#getTranslationContext__]
+=== getTranslationContext()
 
 The context to use when translating the _#getTranslatableMessage() translatable message_ , as ultimately passed through to _org.apache.isis.applib.services.i18n.TranslationService#translate(String, String)_ .
 

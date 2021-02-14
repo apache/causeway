@@ -12,7 +12,7 @@ interface BookmarkUiService {
 }
 ----
 
-<.> xref:#clear[clear]
+<.> xref:#clear__[clear()]
 +
 --
 Simply clears the current list of breadcrumbs and bookmarks.
@@ -20,8 +20,8 @@ Simply clears the current list of breadcrumbs and bookmarks.
 
 == Members
 
-[#clear]
-=== clear
+[#clear__]
+=== clear()
 
 Simply clears the current list of breadcrumbs and bookmarks.
 

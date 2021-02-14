@@ -9,6 +9,15 @@ WARNING: TODO: this content has not yet been reviewed/updated for v2.0
 // TODO: Document `Transaction` and `TransactionId` and `TransactionState`.
 
 
+include::system:generated:page$index/applib/services/xactn/TransactionService.adoc[TransactionService]
+
+include::TransactionService/hooks/implementation.adoc[]
+
+include::TransactionService/hooks/examples_and_usage.adoc[]
+
+
+
+
 The `TransactionService` (and its various supertypes) allows domain objects to influence user transactions.
 
 

@@ -18,17 +18,17 @@ class DomainObjectMemberRepresentation {
 }
 ----
 
-<.> xref:#getMemberType[getMemberType]
+<.> xref:#getMemberType__[getMemberType()]
 +
 --
 Whether this is a `property` , `collection` or `action` .
 --
-<.> xref:#getDisabledReason[getDisabledReason]
+<.> xref:#getDisabledReason__[getDisabledReason()]
 +
 --
 The reason this member cannot be modified (if property or collection) or invoked (if action).
 --
-<.> xref:#getXIsisFormat[getXIsisFormat]
+<.> xref:#getXIsisFormat__[getXIsisFormat()]
 +
 --
 Isis-specific extension; not part of the RO API;
@@ -36,20 +36,20 @@ Isis-specific extension; not part of the RO API;
 
 == Members
 
-[#getMemberType]
-=== getMemberType
+[#getMemberType__]
+=== getMemberType()
 
 Whether this is a `property` , `collection` or `action` .
 
-[#getDisabledReason]
-=== getDisabledReason
+[#getDisabledReason__]
+=== getDisabledReason()
 
 The reason this member cannot be modified (if property or collection) or invoked (if action).
 
 If null, then is not disabled.
 
-[#getXIsisFormat]
-=== getXIsisFormat
+[#getXIsisFormat__]
+=== getXIsisFormat()
 
 Isis-specific extension; not part of the RO API;
 

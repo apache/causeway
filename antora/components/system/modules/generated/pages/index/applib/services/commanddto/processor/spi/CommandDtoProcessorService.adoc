@@ -14,7 +14,7 @@ interface CommandDtoProcessorService {
 }
 ----
 
-<.> xref:#process[process]
+<.> xref:#process__Object_CommandDto[process(Object, CommandDto)]
 +
 --
 Converts the domain object (acting as the source) into a _CommandDto_ .
@@ -22,8 +22,8 @@ Converts the domain object (acting as the source) into a _CommandDto_ .
 
 == Members
 
-[#process]
-=== process
+[#process__Object_CommandDto]
+=== process(Object, CommandDto)
 
 Converts the domain object (acting as the source) into a _CommandDto_ .
 

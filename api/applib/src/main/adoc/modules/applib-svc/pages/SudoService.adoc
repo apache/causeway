@@ -6,6 +6,14 @@
 
 WARNING: TODO: this content has not yet been reviewed/updated for v2.0
 
+include::system:generated:page$index/applib/services/sudo/SudoService.adoc[SudoService]
+
+include::SudoService/hooks/implementation.adoc[]
+
+include::SudoService/hooks/examples_and_usage.adoc[]
+
+
+
 The `SudoService` allows the current user reported by the xref:refguide:applib-svc:UserService.adoc[`UserService`]  to be temporarily changed to some other user.
 This is useful both for xref:testing:integtestsupport:about.adoc[integration testing] (eg if testing a workflow system whereby objects are moved from one user to another) and while running xref:fixtures:ROOT:about.adoc[fixture scripts] (eg setting up objects that would normally require several users to have acted upon the objects).
 

@@ -23,27 +23,27 @@ interface Ticket {
 }
 ----
 
-<.> xref:#getReference[getReference]
+<.> xref:#getReference__[getReference()]
 +
 --
 A unique identifier that the end-user can use to track any follow-up from this error.
 --
-<.> xref:#getUserMessage[getUserMessage]
+<.> xref:#getUserMessage__[getUserMessage()]
 +
 --
 A short, jargon-free message to display to the user.
 --
-<.> xref:#getDetails[getDetails]
+<.> xref:#getDetails__[getDetails()]
 +
 --
 Optional additional details to show to the end-user.
 --
-<.> xref:#getStackTracePolicy[getStackTracePolicy]
+<.> xref:#getStackTracePolicy__[getStackTracePolicy()]
 +
 --
 Whether the stack trace for the exception should be displayed or be hidden.
 --
-<.> xref:#getMarkup[getMarkup]
+<.> xref:#getMarkup__[getMarkup()]
 +
 --
 Returns a Html representation of this ticket.
@@ -51,36 +51,36 @@ Returns a Html representation of this ticket.
 
 == Members
 
-[#getReference]
-=== getReference
+[#getReference__]
+=== getReference()
 
 A unique identifier that the end-user can use to track any follow-up from this error.
 
 For example, an implementation might automatically log an issue in a bug tracking system such as JIRA, in which case the _#getReference() reference_ would be the JIRA issue number `XXX-1234` .
 
-[#getUserMessage]
-=== getUserMessage
+[#getUserMessage__]
+=== getUserMessage()
 
 A short, jargon-free message to display to the user.
 
 Typically this message should be short, one line long.
 
-[#getDetails]
-=== getDetails
+[#getDetails__]
+=== getDetails()
 
 Optional additional details to show to the end-user.
 
 For example, these might include text on how to recover from the error, or workarounds, or just further details on contacting the help desk if the issue is severe and requires immediate attention.
 
-[#getStackTracePolicy]
-=== getStackTracePolicy
+[#getStackTracePolicy__]
+=== getStackTracePolicy()
 
 Whether the stack trace for the exception should be displayed or be hidden.
 
 The default is to hide it on the basis that the reporting service will have reported the stack trace to the support team, meaning there's no need to expose this info to the end-user.
 
-[#getMarkup]
-=== getMarkup
+[#getMarkup__]
+=== getMarkup()
 
 Returns a Html representation of this ticket.
 

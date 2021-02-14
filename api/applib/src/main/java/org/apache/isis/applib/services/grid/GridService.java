@@ -26,39 +26,91 @@ import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.layout.grid.Grid;
 
 /**
+ * Provides the ability to load the XML layout (grid) for a domain class.
+ *
  * @since 1.x {@index}
  */
 public interface GridService {
 
+
     /**
      * Whether dynamic reloading of layouts is enabled.
+     *
+     * <p>
+     *     The default implementation just delegates to the configured
+     *     {@link GridLoaderService}; the default implementation of <i>that</i>
+     *     service enables reloading wihle prototyping, disables in production.
+     * </p>
      */
     boolean supportsReloading();
 
     /**
      * To support metamodel invalidation/rebuilding of spec.
+     *
+     * <p>
+     *     The default implementation just delegates to the configured
+     *     {@link GridLoaderService}.
+     * </p>
      */
     void remove(Class<?> domainClass);
 
     /**
      * Whether any persisted layout metadata (eg a <code>.layout.xml</code> file) exists for this domain class.
+     *
+     * <p>
+     *     The default implementation just delegates to the configured
+     *     {@link GridLoaderService}.
+     * </p>
      */
     boolean existsFor(Class<?> domainClass);
 
     /**
-     * Returns a new instance of a {@link Grid} for the specified domain class, eg from a
-     * <code>layout.xml</code> file, else <code>null</code>.
+     * Returns a new instance of a {@link Grid} for the specified domain class,
+     * for example as loaded from a <code>layout.xml</code> file.
+     *
+     * <p>
+     *     If non exists, returns <code>null</code>.  (The caller can then
+     *     use {@link GridService#defaultGridFor(Class)} to obtain a
+     *     default grid if necessary).
+     * </p>
+     *
+     * <p>
+     *     The default implementation just delegates to the configured
+     *     {@link GridLoaderService}.
+     * </p>
      */
     Grid load(final Class<?> domainClass);
 
     /**
-     * Returns a new instance of a {@link Grid} for the specified domain class, eg from a
-     * <code>[domainClass].layout.[layout].xml</code> file, else <code>null</code>.
+     * Returns an alternative layout for the domain class.
+     *
+     * <p>
+     *     The alternative layout name can for example be returned by the
+     *     domain object's <code>layout()</code> method, whereby - based on the
+     *     state of the domain object - it requests a different layout be used.
+     * </p>
+     *
+     * <p>
+     *     The default implementation just delegates to the configured
+     *     {@link GridLoaderService}; the default implementation of <i>that</i>
+     *     service uses the layout name to search for a differently
+     *      named layout file, <code>[domainClass].layout.[layout].xml</code>.
+     * </p>
      */
     Grid load(Class<?> domainClass, String layout);
 
     /**
      * Returns a default grid; eg where none can be loaded using {@link #load(Class)}.
+     *
+     * <p>
+     * Used when no existing grid layout exists for a domain class.
+     * </p>
+     *
+     * <p>
+     *     The default implementation searches through all available
+     *     {@link GridSystemService}s and asks each in turn for a
+     *     {@link GridSystemService#defaultGrid(Class) default grid}.
+     * </p>
      */
     Grid defaultGridFor(Class<?> domainClass);
 

@@ -1,8 +1,6 @@
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
-This service provides a formal API into Isis' metamodel.
-
-This API is currently extremely limited, but the intention is to extend it gradually as use cases emerge.
+This service provides a formal API into the framework's metamodel.
 
 == API
 
@@ -12,49 +10,103 @@ This API is currently extremely limited, but the intention is to extend it gradu
 interface MetaModelService {
   Class<?> fromObjectType(final String objectType)     // <.>
   String toObjectType(final Class<?> domainType)     // <.>
-  void rebuild(final Class<?> domainType)
+  void rebuild(final Class<?> domainType)     // <.>
   DomainModel getDomainModel()     // <.>
-  BeanSort sortOf(Class<?> domainType, Mode mode)
-  BeanSort sortOf(Bookmark bookmark, Mode mode)
-  CommandDtoProcessor commandDtoProcessorFor(String logicalMemberIdentifier)
-  MetamodelDto exportMetaModel(final Config config)
+  BeanSort sortOf(Class<?> domainType, Mode mode)     // <.>
+  BeanSort sortOf(Bookmark bookmark, Mode mode)     // <.>
+  CommandDtoProcessor commandDtoProcessorFor(String logicalMemberIdentifier)     // <.>
+  MetamodelDto exportMetaModel(final Config config)     // <.>
 }
 ----
 
-<.> xref:#fromObjectType[fromObjectType]
+<.> xref:#fromObjectType__String[fromObjectType(String)]
 +
 --
 Provides a reverse lookup of a domain class' object type, as defined by _DomainObject#objectType()_ (or any other mechanism that corresponds to Isis' `ObjectSpecIdFacet` ).
 --
-<.> xref:#toObjectType[toObjectType]
+<.> xref:#toObjectType__Class[toObjectType(Class)]
 +
 --
 Provides a lookup of a domain class' object type, as defined by _DomainObject#objectType()_ (or any other mechanism that corresponds to Isis' `ObjectSpecIdFacet` ).
 --
-<.> xref:#getDomainModel[getDomainModel]
+<.> xref:#rebuild__Class[rebuild(Class)]
++
+--
+Invalidates and rebuilds the internal metadata for the specified domain type.
+--
+<.> xref:#getDomainModel__[getDomainModel()]
 +
 --
 Returns a list of representations of each of member of each domain class.
 --
+<.> xref:#sortOf__Class_Mode[sortOf(Class, Mode)]
++
+--
+What sort of object the domain type represents.
+--
+<.> xref:#sortOf__Bookmark_Mode[sortOf(Bookmark, Mode)]
++
+--
+Override of _#sortOf(Class, Mode)_ , extracting the domain type from the provided xref:system:generated:index/applib/services/bookmark/Bookmark.adoc[Bookmark] of a domain object instance.
+--
+<.> xref:#commandDtoProcessorFor__String[commandDtoProcessorFor(String)]
++
+--
+Obtains the implementation of xref:system:generated:index/applib/services/commanddto/processor/CommandDtoProcessor.adoc[CommandDtoProcessor] (if any) as per _Action#commandDtoProcessor()_ or _Property#commandDtoProcessor()_ .
+--
+<.> xref:#exportMetaModel__Config[exportMetaModel(Config)]
++
+--
+Exports the entire metamodel as a DTO, serializable into XML using JAXB.
+--
 
 == Members
 
-[#fromObjectType]
-=== fromObjectType
+[#fromObjectType__String]
+=== fromObjectType(String)
 
 Provides a reverse lookup of a domain class' object type, as defined by _DomainObject#objectType()_ (or any other mechanism that corresponds to Isis' `ObjectSpecIdFacet` ).
 
-[#toObjectType]
-=== toObjectType
+[#toObjectType__Class]
+=== toObjectType(Class)
 
 Provides a lookup of a domain class' object type, as defined by _DomainObject#objectType()_ (or any other mechanism that corresponds to Isis' `ObjectSpecIdFacet` ).
 
-[#getDomainModel]
-=== getDomainModel
+[#rebuild__Class]
+=== rebuild(Class)
+
+Invalidates and rebuilds the internal metadata for the specified domain type.
+
+[#getDomainModel__]
+=== getDomainModel()
 
 Returns a list of representations of each of member of each domain class.
 
 Used by xref:system:generated:index/applib/services/metamodel/MetaModelServiceMenu.adoc[MetaModelServiceMenu] to return a downloadable CSV.
 
 Note that _MetaModelService#exportMetaModel(Config)_ provides a superset of the functionality provided by this method.
+
+[#sortOf__Class_Mode]
+=== sortOf(Class, Mode)
+
+What sort of object the domain type represents.
+
+[#sortOf__Bookmark_Mode]
+=== sortOf(Bookmark, Mode)
+
+Override of _#sortOf(Class, Mode)_ , extracting the domain type from the provided xref:system:generated:index/applib/services/bookmark/Bookmark.adoc[Bookmark] of a domain object instance.
+
+[#commandDtoProcessorFor__String]
+=== commandDtoProcessorFor(String)
+
+Obtains the implementation of xref:system:generated:index/applib/services/commanddto/processor/CommandDtoProcessor.adoc[CommandDtoProcessor] (if any) as per _Action#commandDtoProcessor()_ or _Property#commandDtoProcessor()_ .
+
+This is used by framework-provided implementations of _org.apache.isis.applib.services.conmap.ContentMappingService_ .
+
+[#exportMetaModel__Config]
+=== exportMetaModel(Config)
+
+Exports the entire metamodel as a DTO, serializable into XML using JAXB.
+
+The xref:system:generated:index/applib/services/metamodel/Config.adoc[Config] parameter can be used to restrict/filter the export to some subset of the metamodel; in particular to specific _Config#getPackagePrefixes() package prefixes_ .
 

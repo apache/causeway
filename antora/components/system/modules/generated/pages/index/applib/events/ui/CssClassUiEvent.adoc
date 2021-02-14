@@ -19,7 +19,7 @@ class CssClassUiEvent<S> {
 --
 If used then the framework will set state via (non-API) setters.
 --
-<.> xref:#setCssClass[setCssClass]
+<.> xref:#setCssClass__String[setCssClass(String)]
 +
 --
 For subscribers to call to provide a CSS class for this object.
@@ -32,8 +32,8 @@ For subscribers to call to provide a CSS class for this object.
 
 If used then the framework will set state via (non-API) setters.
 
-[#setCssClass]
-=== setCssClass
+[#setCssClass__String]
+=== setCssClass(String)
 
 For subscribers to call to provide a CSS class for this object.
 

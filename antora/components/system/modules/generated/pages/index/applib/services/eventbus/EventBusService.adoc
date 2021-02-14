@@ -14,7 +14,7 @@ interface EventBusService {
 }
 ----
 
-<.> xref:#post[post]
+<.> xref:#post__Object[post(Object)]
 +
 --
 Post an event (of any class) to the in-memory event bus.
@@ -22,8 +22,8 @@ Post an event (of any class) to the in-memory event bus.
 
 == Members
 
-[#post]
-=== post
+[#post__Object]
+=== post(Object)
 
 Post an event (of any class) to the in-memory event bus.
 

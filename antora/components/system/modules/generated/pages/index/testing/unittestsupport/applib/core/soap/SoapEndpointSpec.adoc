@@ -18,7 +18,7 @@ class SoapEndpointSpec {
 }
 ----
 
-<.> xref:#setEndpointAddress[setEndpointAddress]
+<.> xref:#setEndpointAddress__String[setEndpointAddress(String)]
 +
 --
 Populated when published if not otherwise.
@@ -26,8 +26,8 @@ Populated when published if not otherwise.
 
 == Members
 
-[#setEndpointAddress]
-=== setEndpointAddress
+[#setEndpointAddress__String]
+=== setEndpointAddress(String)
 
 Populated when published if not otherwise.
 

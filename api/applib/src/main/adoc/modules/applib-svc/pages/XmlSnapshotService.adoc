@@ -6,6 +6,13 @@
 
 WARNING: TODO: this content has not yet been reviewed/updated for v2.0
 
+include::system:generated:page$index/applib/services/xmlsnapshot/XmlSnapshotService.adoc[XmlSnapshotService]
+
+include::XmlSnapshotService/hooks/implementation.adoc[]
+
+include::XmlSnapshotService/hooks/examples_and_usage.adoc[]
+
+
 The `XmlSnapshotService` provides the capability to generate XML snapshots (and if required corresponding XSD schemas) based on graphs of domain objects.
 
 Typical use cases include creating mementos for business-focused auditing, such that a report could be generated as to which end-user performed a business action (perhaps for legal reasons).

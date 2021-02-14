@@ -37,7 +37,7 @@ import org.apache.isis.applib.services.MethodReferences.Call2;
 import org.apache.isis.applib.services.MethodReferences.Call3;
 import org.apache.isis.applib.services.MethodReferences.Call4;
 import org.apache.isis.applib.services.MethodReferences.Call5;
-import org.apache.isis.applib.services.queryresultscache.QueryResultCacheControl;
+import org.apache.isis.applib.services.queryresultscache.QueryResultsCacheControl;
 import org.apache.isis.applib.services.queryresultscache.QueryResultsCache;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._NullSafe;
@@ -64,7 +64,7 @@ import lombok.extern.log4j.Log4j2;
 public class QueryResultsCacheDefault implements QueryResultsCache {
 
     private final Map<Key, Value<?>> cache = _Maps.newHashMap();
-    
+
     @Override
     public <R> R execute(Call0<? extends R> action, Class<?> callingClass, String methodName) {
         if(isIgnoreCache()) {
@@ -198,7 +198,7 @@ public class QueryResultsCacheDefault implements QueryResultsCache {
     // -- HELPER
 
     @Autowired(required = false)
-    protected List<QueryResultCacheControl> cacheControl;
+    protected List<QueryResultsCacheControl> cacheControl;
 
     private boolean isIgnoreCache() {
         return _NullSafe.stream(cacheControl)

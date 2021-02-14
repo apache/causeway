@@ -4,33 +4,12 @@
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
 
-WARNING: TODO: this content has not yet been reviewed/updated for v2.0
+include::system:generated:page$index/applib/services/repository/RepositoryService.adoc[RepositoryService]
 
-The `RepositoryService` collects together methods for creating, persisting and searching for entities from the underlying persistence store.
-It acts as an abstraction over the JDO/DataNucleus objectstore.
+include::RepositoryService/hooks/implementation.adoc[]
 
-You can use it during prototyping to write naive queries, or you can use it to call the ORM (such as
-xref:pjdo:ROOT:about.adoc[JDO/DataNucleus]).
+include::RepositoryService/hooks/examples_and_usage.adoc[]
 
-
-== API
-
-include::system:generated:page$index/applib/services/repository/EntityState.adoc[leveloffset=+2]
-
-TODO example migration
-
-.Deprecated Docs
-[WARNING]
-================================
-
-== API
-
-The API of `RepositoryService` is:
-
-[source,java]
-----
-include::refguide:applib-svc:example$services/repository/RepositoryService.java[tags="refguide"]
-----
 <.> determine the state of this domain entity:
 +
 [source,java]

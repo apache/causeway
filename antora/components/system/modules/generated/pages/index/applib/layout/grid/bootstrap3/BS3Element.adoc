@@ -11,7 +11,7 @@ interface BS3Element {
 }
 ----
 
-<.> xref:#getCssClass[getCssClass]
+<.> xref:#getCssClass__[getCssClass()]
 +
 --
 Any additional CSS classes to render on the page element corresponding to this object, eg as per theBootstrap mixinsor just for custom styling.
@@ -19,8 +19,8 @@ Any additional CSS classes to render on the page element corresponding to this o
 
 == Members
 
-[#getCssClass]
-=== getCssClass
+[#getCssClass__]
+=== getCssClass()
 
 Any additional CSS classes to render on the page element corresponding to this object, eg as per theBootstrap mixinsor just for custom styling.
 

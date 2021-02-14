@@ -28,6 +28,14 @@ The persistence layer APIs provide domain objects with tools to manage the inter
 |Methods to help implement repositories: query for existing objects, persist new or delete existing objects
 
 
+|xref:refguide:applib-svc:TransactionalProcessor/[TransactionalProcessor]
+|Running commands within a transaction
+
+
+|xref:refguide:applib-svc:TransactionService.adoc[TransactionService]
+|Transaction management
+
+
 
 |===
 

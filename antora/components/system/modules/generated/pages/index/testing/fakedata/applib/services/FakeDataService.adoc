@@ -55,7 +55,7 @@ RepositoryService repositoryService;
 }
 ----
 
-<.> xref:#javaFaker[javaFaker]
+<.> xref:#javaFaker__[javaFaker()]
 +
 --
 Access to the full API of the underlying javafaker library.
@@ -63,8 +63,8 @@ Access to the full API of the underlying javafaker library.
 
 == Members
 
-[#javaFaker]
-=== javaFaker
+[#javaFaker__]
+=== javaFaker()
 
 Access to the full API of the underlying javafaker library.
 

@@ -19,10 +19,24 @@
 package org.apache.isis.applib.services.queryresultscache;
 
 /**
+ * Used to enable or disable caching by {@link QueryResultsCache}.
+ *
+ * <p>
+ *     This mechanism was introduced to allow fixtures module to be able to
+ *     disable the {@link QueryResultsCache} while fixtures are being
+ *     installed.
+ * </p>
+ *
  * @since 1.x {@index}
  */
-public interface QueryResultCacheControl {
+public interface QueryResultsCacheControl {
 
+    /**
+     * Whether the {@link QueryResultsCache} should be disabled, in other
+     * words to stop using any cached results.
+     *
+     * @return
+     */
     boolean isIgnoreCache();
 
 }

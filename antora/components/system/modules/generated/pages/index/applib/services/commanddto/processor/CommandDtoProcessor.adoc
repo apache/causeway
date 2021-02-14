@@ -12,7 +12,7 @@ interface CommandDtoProcessor {
 }
 ----
 
-<.> xref:#process[process]
+<.> xref:#process__CommandDto[process(CommandDto)]
 +
 --
 The implementation can if necessary refine or alter the _CommandDto_ to be replicated from primary to secondary.
@@ -20,8 +20,8 @@ The implementation can if necessary refine or alter the _CommandDto_ to be repli
 
 == Members
 
-[#process]
-=== process
+[#process__CommandDto]
+=== process(CommandDto)
 
 The implementation can if necessary refine or alter the _CommandDto_ to be replicated from primary to secondary.
 

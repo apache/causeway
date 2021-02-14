@@ -16,12 +16,12 @@ interface WithInterval<T> {
 }
 ----
 
-<.> xref:#getStartDate[getStartDate]
+<.> xref:#getStartDate__[getStartDate()]
 +
 --
 The start date of the interval.
 --
-<.> xref:#getEndDate[getEndDate]
+<.> xref:#getEndDate__[getEndDate()]
 +
 --
 The end date of the interval.
@@ -29,15 +29,15 @@ The end date of the interval.
 
 == Members
 
-[#getStartDate]
-=== getStartDate
+[#getStartDate__]
+=== getStartDate()
 
 The start date of the interval.
 
 A value of `null` implies that the parent's start date should be used. If that is `null` , then implies 'the beginning of time'.
 
-[#getEndDate]
-=== getEndDate
+[#getEndDate__]
+=== getEndDate()
 
 The end date of the interval.
 

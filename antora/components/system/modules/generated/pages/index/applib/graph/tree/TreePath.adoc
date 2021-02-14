@@ -20,14 +20,14 @@ interface TreePath {
 }
 ----
 
-<.> xref:#append[append]
-<.> xref:#getParentIfAny[getParentIfAny]
+<.> xref:#append__int[append(int)]
+<.> xref:#getParentIfAny__[getParentIfAny()]
 
 == Members
 
-[#append]
-=== append
+[#append__int]
+=== append(int)
 
-[#getParentIfAny]
-=== getParentIfAny
+[#getParentIfAny__]
+=== getParentIfAny()
 

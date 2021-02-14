@@ -29,4 +29,4 @@ if [[ "$SKIP_TESTS" == "true" ]]; then
   OPTS="$OPTS -DskipTests "
 fi
 
-mvnd -Dmodule-tooling -Dskip.essential $OPTS install
+mvn -Dmodule-tooling -Dskip.essential $OPTS install

@@ -17,27 +17,27 @@ class CollectionMethodEvent {
 }
 ----
 
-<.> xref:#getSource[getSource]
+<.> xref:#getSource__[getSource()]
 +
 --
 The collection object (an instance of a `List` or a `Set` etc) that is the originator of this event.
 --
-<.> xref:#getDomainObject[getDomainObject]
+<.> xref:#getDomainObject__[getDomainObject()]
 +
 --
 The owner of the collection (an instance of `Customer/tt> or `Order` , say).` 
 --
-<.> xref:#getMethodName[getMethodName]
+<.> xref:#getMethodName__[getMethodName()]
 +
 --
 The name of the method invoked on this collection, for example `isEmpty` .
 --
-<.> xref:#getArgs[getArgs]
+<.> xref:#getArgs__[getArgs()]
 +
 --
 The arguments with which the collection's _#getMethodName() method_ was invoked.
 --
-<.> xref:#getReturnValue[getReturnValue]
+<.> xref:#getReturnValue__[getReturnValue()]
 +
 --
 The return value from the _#getMethodName() method_ invocation.
@@ -45,30 +45,30 @@ The return value from the _#getMethodName() method_ invocation.
 
 == Members
 
-[#getSource]
-=== getSource
+[#getSource__]
+=== getSource()
 
 The collection object (an instance of a `List` or a `Set` etc) that is the originator of this event.
 
 The owning domain object is available using _#getDomainObject()_ .
 
-[#getDomainObject]
-=== getDomainObject
+[#getDomainObject__]
+=== getDomainObject()
 
 The owner of the collection (an instance of `Customer/tt> or `Order` , say).` 
 
-[#getMethodName]
-=== getMethodName
+[#getMethodName__]
+=== getMethodName()
 
 The name of the method invoked on this collection, for example `isEmpty` .
 
-[#getArgs]
-=== getArgs
+[#getArgs__]
+=== getArgs()
 
 The arguments with which the collection's _#getMethodName() method_ was invoked.
 
-[#getReturnValue]
-=== getReturnValue
+[#getReturnValue__]
+=== getReturnValue()
 
 The return value from the _#getMethodName() method_ invocation.
 

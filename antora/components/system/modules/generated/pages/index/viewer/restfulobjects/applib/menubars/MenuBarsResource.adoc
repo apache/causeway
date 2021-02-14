@@ -15,22 +15,22 @@ interface MenuBarsResource {
 }
 ----
 
-<.> xref:#menuBars[menuBars]
+<.> xref:#menuBars__[menuBars()]
 +
 --
 Not part of the Restful Objects spec.
 --
-<.> xref:#deleteMenuBarsNotAllowed[deleteMenuBarsNotAllowed]
+<.> xref:#deleteMenuBarsNotAllowed__[deleteMenuBarsNotAllowed()]
 +
 --
 Not part of the Restful Objects spec.
 --
-<.> xref:#putMenuBarsNotAllowed[putMenuBarsNotAllowed]
+<.> xref:#putMenuBarsNotAllowed__[putMenuBarsNotAllowed()]
 +
 --
 Not part of the Restful Objects spec.
 --
-<.> xref:#postMenuBarsNotAllowed[postMenuBarsNotAllowed]
+<.> xref:#postMenuBarsNotAllowed__[postMenuBarsNotAllowed()]
 +
 --
 Not part of the Restful Objects spec.
@@ -38,23 +38,23 @@ Not part of the Restful Objects spec.
 
 == Members
 
-[#menuBars]
-=== menuBars
+[#menuBars__]
+=== menuBars()
 
 Not part of the Restful Objects spec.
 
-[#deleteMenuBarsNotAllowed]
-=== deleteMenuBarsNotAllowed
+[#deleteMenuBarsNotAllowed__]
+=== deleteMenuBarsNotAllowed()
 
 Not part of the Restful Objects spec.
 
-[#putMenuBarsNotAllowed]
-=== putMenuBarsNotAllowed
+[#putMenuBarsNotAllowed__]
+=== putMenuBarsNotAllowed()
 
 Not part of the Restful Objects spec.
 
-[#postMenuBarsNotAllowed]
-=== postMenuBarsNotAllowed
+[#postMenuBarsNotAllowed__]
+=== postMenuBarsNotAllowed()
 
 Not part of the Restful Objects spec.
 

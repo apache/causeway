@@ -6,6 +6,13 @@
 
 WARNING: TODO: this content has not yet been reviewed/updated for v2.0
 
+include::system:generated:page$index/applib/services/scratchpad/Scratchpad.adoc[Scratchpad]
+
+include::Scratchpad/hooks/implementation.adoc[]
+
+include::Scratchpad/hooks/examples_and_usage.adoc[]
+
+
 The `Scratchpad` domain service allows objects to exchange information even if they do not directly call each other.
 
 

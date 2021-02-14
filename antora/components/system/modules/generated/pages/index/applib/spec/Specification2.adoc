@@ -14,7 +14,7 @@ interface Specification2 {
 }
 ----
 
-<.> xref:#satisfiesTranslatable[satisfiesTranslatable]
+<.> xref:#satisfiesTranslatable__Object[satisfiesTranslatable(Object)]
 +
 --
 If `null` then satisfied, otherwise is the reason (as a xref:system:generated:index/applib/services/i18n/TranslatableString.adoc[TranslatableString] translatable string) as to why the specification is not satisfied.
@@ -22,8 +22,8 @@ If `null` then satisfied, otherwise is the reason (as a xref:system:generated:in
 
 == Members
 
-[#satisfiesTranslatable]
-=== satisfiesTranslatable
+[#satisfiesTranslatable__Object]
+=== satisfiesTranslatable(Object)
 
 If `null` then satisfied, otherwise is the reason (as a xref:system:generated:index/applib/services/i18n/TranslatableString.adoc[TranslatableString] translatable string) as to why the specification is not satisfied.
 

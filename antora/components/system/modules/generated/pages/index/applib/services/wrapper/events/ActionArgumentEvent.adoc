@@ -20,7 +20,7 @@ class ActionArgumentEvent {
 }
 ----
 
-<.> xref:#getPosition[getPosition]
+<.> xref:#getPosition__[getPosition()]
 +
 --
 The position (0-based) of the invalid argument.
@@ -28,8 +28,8 @@ The position (0-based) of the invalid argument.
 
 == Members
 
-[#getPosition]
-=== getPosition
+[#getPosition__]
+=== getPosition()
 
 The position (0-based) of the invalid argument.
 

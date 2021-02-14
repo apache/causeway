@@ -14,10 +14,10 @@ interface PermissionsEvaluationService {
 }
 ----
 
-<.> xref:#evaluate[evaluate]
+<.> xref:#evaluate__ApplicationFeatureId_ApplicationPermissionMode_Collection[evaluate(ApplicationFeatureId, ApplicationPermissionMode, Collection)]
 
 == Members
 
-[#evaluate]
-=== evaluate
+[#evaluate__ApplicationFeatureId_ApplicationPermissionMode_Collection]
+=== evaluate(ApplicationFeatureId, ApplicationPermissionMode, Collection)
 

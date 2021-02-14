@@ -24,27 +24,27 @@ class Command {
 }
 ----
 
-<.> xref:#getUsername[getUsername]
+<.> xref:#getUsername__[getUsername()]
 +
 --
 The user that created the command.
 --
-<.> xref:#getTimestamp[getTimestamp]
+<.> xref:#getTimestamp__[getTimestamp()]
 +
 --
 The date/time at which this command was created.
 --
-<.> xref:#getTarget[getTarget]
+<.> xref:#getTarget__[getTarget()]
 +
 --
 Derived from _#getCommandDto()_ , is the xref:system:generated:index/applib/services/bookmark/Bookmark.adoc[Bookmark] of the target object (entity or service) on which this action/edit was performed.
 --
-<.> xref:#getLogicalMemberIdentifier[getLogicalMemberIdentifier]
+<.> xref:#getLogicalMemberIdentifier__[getLogicalMemberIdentifier()]
 +
 --
 Derived from _#getCommandDto()_ , holds a string representation of the invoked action, or the edited property.
 --
-<.> xref:#updater[updater]
+<.> xref:#updater__[updater()]
 +
 --
  *NOT API* : intended to be called only by the framework.
@@ -52,32 +52,32 @@ Derived from _#getCommandDto()_ , holds a string representation of the invoked a
 
 == Members
 
-[#getUsername]
-=== getUsername
+[#getUsername__]
+=== getUsername()
 
 The user that created the command.
 
 Derived from _#getCommandDto()_ 's _CommandDto#getUser()_
 
-[#getTimestamp]
-=== getTimestamp
+[#getTimestamp__]
+=== getTimestamp()
 
 The date/time at which this command was created.
 
 Derived from _#getCommandDto()_ 's _CommandDto#getTimestamp()_ .
 
-[#getTarget]
-=== getTarget
+[#getTarget__]
+=== getTarget()
 
 Derived from _#getCommandDto()_ , is the xref:system:generated:index/applib/services/bookmark/Bookmark.adoc[Bookmark] of the target object (entity or service) on which this action/edit was performed.
 
-[#getLogicalMemberIdentifier]
-=== getLogicalMemberIdentifier
+[#getLogicalMemberIdentifier__]
+=== getLogicalMemberIdentifier()
 
 Derived from _#getCommandDto()_ , holds a string representation of the invoked action, or the edited property.
 
-[#updater]
-=== updater
+[#updater__]
+=== updater()
 
  *NOT API* : intended to be called only by the framework.
 

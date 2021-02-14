@@ -50,7 +50,7 @@ enum RepresentationType {
 }
 ----
 
-<.> xref:#getMediaType[getMediaType]
+<.> xref:#getMediaType__[getMediaType()]
 +
 --
 [WARNING]
@@ -60,17 +60,17 @@ enum RepresentationType {
 - use _#getJsonMediaType()_ instead.
 ====
 --
-<.> xref:#getMediaType[getMediaType]
+<.> xref:#getMediaType__String_String[getMediaType(String, String)]
 +
 --
 Clones the (immutable) _#getMediaType() media type_ , adding in one additional parameter value.
 --
-<.> xref:#matchesXmlProfileWithParameter[matchesXmlProfileWithParameter]
+<.> xref:#matchesXmlProfileWithParameter__List_String[matchesXmlProfileWithParameter(List, String)]
 +
 --
 whether any of the xref:system:generated:index/viewer/restfulobjects/applib/RepresentationType.adoc[RepresentationType] s matches any (accept header) XML _MediaType_ with specified parameter.
 --
-<.> xref:#matchesJsonProfileWithParameter[matchesJsonProfileWithParameter]
+<.> xref:#matchesJsonProfileWithParameter__List_String[matchesJsonProfileWithParameter(List, String)]
 +
 --
 whether any of the xref:system:generated:index/viewer/restfulobjects/applib/RepresentationType.adoc[RepresentationType] s matches any (accept header) JSON _MediaType_ with specified parameter.
@@ -78,8 +78,8 @@ whether any of the xref:system:generated:index/viewer/restfulobjects/applib/Repr
 
 == Members
 
-[#getMediaType]
-=== getMediaType
+[#getMediaType__]
+=== getMediaType()
 
 [WARNING]
 ====
@@ -88,18 +88,18 @@ whether any of the xref:system:generated:index/viewer/restfulobjects/applib/Repr
 - use _#getJsonMediaType()_ instead.
 ====
 
-[#getMediaType]
-=== getMediaType
+[#getMediaType__String_String]
+=== getMediaType(String, String)
 
 Clones the (immutable) _#getMediaType() media type_ , adding in one additional parameter value.
 
-[#matchesXmlProfileWithParameter]
-=== matchesXmlProfileWithParameter
+[#matchesXmlProfileWithParameter__List_String]
+=== matchesXmlProfileWithParameter(List, String)
 
 whether any of the xref:system:generated:index/viewer/restfulobjects/applib/RepresentationType.adoc[RepresentationType] s matches any (accept header) XML _MediaType_ with specified parameter.
 
-[#matchesJsonProfileWithParameter]
-=== matchesJsonProfileWithParameter
+[#matchesJsonProfileWithParameter__List_String]
+=== matchesJsonProfileWithParameter(List, String)
 
 whether any of the xref:system:generated:index/viewer/restfulobjects/applib/RepresentationType.adoc[RepresentationType] s matches any (accept header) JSON _MediaType_ with specified parameter.
 

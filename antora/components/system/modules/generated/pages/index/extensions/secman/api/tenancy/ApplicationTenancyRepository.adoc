@@ -19,8 +19,8 @@ interface ApplicationTenancyRepository<T> {
 }
 ----
 
-<.> xref:#newApplicationTenancy[newApplicationTenancy]
-<.> xref:#findMatching[findMatching]
+<.> xref:#newApplicationTenancy__[newApplicationTenancy()]
+<.> xref:#findMatching__String[findMatching(String)]
 +
 --
 auto-complete support
@@ -28,11 +28,11 @@ auto-complete support
 
 == Members
 
-[#newApplicationTenancy]
-=== newApplicationTenancy
+[#newApplicationTenancy__]
+=== newApplicationTenancy()
 
-[#findMatching]
-=== findMatching
+[#findMatching__String]
+=== findMatching(String)
 
 auto-complete support
 

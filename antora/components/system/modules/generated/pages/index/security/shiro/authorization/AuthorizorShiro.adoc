@@ -17,12 +17,12 @@ class AuthorizorShiro {
 }
 ----
 
-<.> xref:#isVisibleInRole[isVisibleInRole]
+<.> xref:#isVisibleInRole__String_Identifier[isVisibleInRole(String, Identifier)]
 +
 --
 Returns `false` because the checking across all roles is done in _#isVisibleInAnyRole(Identifier)_ , which is always called prior to this.
 --
-<.> xref:#isUsableInRole[isUsableInRole]
+<.> xref:#isUsableInRole__String_Identifier[isUsableInRole(String, Identifier)]
 +
 --
 Returns `false` because the checking across all roles is done in _#isUsableInAnyRole(Identifier)_ , which is always called prior to this.
@@ -30,13 +30,13 @@ Returns `false` because the checking across all roles is done in _#isUsableInAny
 
 == Members
 
-[#isVisibleInRole]
-=== isVisibleInRole
+[#isVisibleInRole__String_Identifier]
+=== isVisibleInRole(String, Identifier)
 
 Returns `false` because the checking across all roles is done in _#isVisibleInAnyRole(Identifier)_ , which is always called prior to this.
 
-[#isUsableInRole]
-=== isUsableInRole
+[#isUsableInRole__String_Identifier]
+=== isUsableInRole(String, Identifier)
 
 Returns `false` because the checking across all roles is done in _#isUsableInAnyRole(Identifier)_ , which is always called prior to this.
 

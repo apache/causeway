@@ -43,7 +43,7 @@ interface ApplicationUser {
 }
 ----
 
-<.> xref:#title[title]
+<.> xref:#title__[title()]
 +
 --
 having a title() method (rather than using @Title annotation) is necessary as a workaround to be able to use wrapperFactory#unwrap(...) method, which is otherwise broken in Isis 1.6.0
@@ -51,8 +51,8 @@ having a title() method (rather than using @Title annotation) is necessary as a 
 
 == Members
 
-[#title]
-=== title
+[#title__]
+=== title()
 
 having a title() method (rather than using @Title annotation) is necessary as a workaround to be able to use wrapperFactory#unwrap(...) method, which is otherwise broken in Isis 1.6.0
 

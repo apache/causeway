@@ -12,17 +12,17 @@ interface WithIntervalContiguous<T> {
 }
 ----
 
-<.> xref:#getPredecessor[getPredecessor]
+<.> xref:#getPredecessor__[getPredecessor()]
 +
 --
 The interval that immediately precedes this one, if any.
 --
-<.> xref:#getSuccessor[getSuccessor]
+<.> xref:#getSuccessor__[getSuccessor()]
 +
 --
 The interval that immediately succeeds this one, if any.
 --
-<.> xref:#getTimeline[getTimeline]
+<.> xref:#getTimeline__[getTimeline()]
 +
 --
 Show this xref:system:generated:index/subdomains/base/applib/with/WithIntervalContiguous.adoc[WithIntervalContiguous] in context with its predecessors and successors.
@@ -30,8 +30,8 @@ Show this xref:system:generated:index/subdomains/base/applib/with/WithIntervalCo
 
 == Members
 
-[#getPredecessor]
-=== getPredecessor
+[#getPredecessor__]
+=== getPredecessor()
 
 The interval that immediately precedes this one, if any.
 
@@ -39,8 +39,8 @@ The predecessor's _#getEndDate() end date_ is the day before this interval's _#g
 
 Implementations where successive intervals are NOT contiguous should instead implement xref:system:generated:index/subdomains/base/applib/Chained.adoc[Chained] .
 
-[#getSuccessor]
-=== getSuccessor
+[#getSuccessor__]
+=== getSuccessor()
 
 The interval that immediately succeeds this one, if any.
 
@@ -48,8 +48,8 @@ The successor's _#getStartDate() start date_ is the day after this interval's _#
 
 Implementations where successive intervals are NOT contiguous should instead implement xref:system:generated:index/subdomains/base/applib/Chained.adoc[Chained] .
 
-[#getTimeline]
-=== getTimeline
+[#getTimeline__]
+=== getTimeline()
 
 Show this xref:system:generated:index/subdomains/base/applib/with/WithIntervalContiguous.adoc[WithIntervalContiguous] in context with its predecessors and successors.
 

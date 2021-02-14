@@ -65,276 +65,276 @@ interface Can<T> {
 }
 ----
 
-<.> xref:#getCardinality[getCardinality]
-<.> xref:#size[size]
-<.> xref:#get[get]
+<.> xref:#getCardinality__[getCardinality()]
+<.> xref:#size__[size()]
+<.> xref:#get__int[get(int)]
 +
 --
 Will only ever return an empty Optional, if the elementIndex is out of bounds.
 --
-<.> xref:#getElseFail[getElseFail]
+<.> xref:#getElseFail__int[getElseFail(int)]
 +
 --
 Shortcut to _get(elementIndex).orElseThrow(...)_
 --
-<.> xref:#compareTo[compareTo]
+<.> xref:#compareTo__Can[compareTo(Can)]
 +
 --
 For convenience allows the argument to be _null_ treating _null_ equivalent to _Can#empty()_ .
 --
-<.> xref:#stream[stream]
-<.> xref:#parallelStream[parallelStream]
-<.> xref:#getFirst[getFirst]
-<.> xref:#getFirstOrFail[getFirstOrFail]
+<.> xref:#stream__[stream()]
+<.> xref:#parallelStream__[parallelStream()]
+<.> xref:#getFirst__[getFirst()]
+<.> xref:#getFirstOrFail__[getFirstOrFail()]
 +
 --
 Shortcut for _getFirst().orElseThrow(_Exceptions::noSuchElement)_
 --
-<.> xref:#getSingleton[getSingleton]
-<.> xref:#getSingletonOrFail[getSingletonOrFail]
+<.> xref:#getSingleton__[getSingleton()]
+<.> xref:#getSingletonOrFail__[getSingletonOrFail()]
 +
 --
 Shortcut for _getSingleton().orElseThrow(_Exceptions::noSuchElement)_
 --
-<.> xref:#contains[contains]
-<.> xref:#empty[empty]
+<.> xref:#contains__T[contains(T)]
+<.> xref:#empty__[empty()]
 +
 --
 Returns an empty _Can_ .
 --
-<.> xref:#ofNullable[ofNullable]
+<.> xref:#ofNullable__T[ofNullable(T)]
 +
 --
 Returns either a _Can_ with the given _element_ or an empty _Can_ if the _element_ is _null_ .
 --
-<.> xref:#ofSingleton[ofSingleton]
+<.> xref:#ofSingleton__T[ofSingleton(T)]
 +
 --
 Returns either a _Can_ with the given _element_ or throws if the _element_ is _null_ .
 --
-<.> xref:#ofCollection[ofCollection]
+<.> xref:#ofCollection__Collection[ofCollection(Collection)]
 +
 --
 Returns either a _Can_ with all the elements from given _collection_ or an empty _Can_ if the _collection_ is _null_ . Any elements equal to _null_ are ignored and will not be contained in the resulting _Can_ .
 --
-<.> xref:#ofStream[ofStream]
+<.> xref:#ofStream__Stream[ofStream(Stream)]
 +
 --
 Returns either a _Can_ with all the elements from given _stream_ or an empty _Can_ if the _stream_ is _null_ . Any elements equal to _null_ are ignored and will not be contained in the resulting _Can_ .
 --
-<.> xref:#ofInstance[ofInstance]
+<.> xref:#ofInstance__Instance[ofInstance(Instance)]
 +
 --
 Returns either a _Can_ with all the elements from given _instance_ or an empty _Can_ if the _instance_ is _null_ . Any elements equal to _null_ are ignored and will not be contained in the resulting _Can_ .
 --
-<.> xref:#reverse[reverse]
+<.> xref:#reverse__[reverse()]
 +
 --
 Returns a _Can_ with all the elements from this _Can_ but contained in reversed order.
 --
-<.> xref:#filter[filter]
+<.> xref:#filter__Predicate[filter(Predicate)]
 +
 --
 Returns a _Can_ with all the elements from this _Can_ , that are accepted by the given _predicate_ . If _predicate_ is _null_ *all* elements are accepted.
 --
-<.> xref:#map[map]
+<.> xref:#map__Function[map(Function)]
 +
 --
 Returns a _Can_ with all the elements from this _Can_ 'transformed' by the given _mapper_ function. Any resulting elements equal to _null_ are ignored and will not be contained in the resulting _Can_ .
 --
-<.> xref:#concat[concat]
+<.> xref:#concat__Can_T[concat(Can, T)]
 +
 --
 Returns a _Can_ with all the elements from given _can_ joined by the given _element_ . If any of given _can_ or _element_ are _null_ these do not contribute any elements and are ignored.
 --
-<.> xref:#zip[zip]
+<.> xref:#zip__Iterable_BiConsumer[zip(Iterable, BiConsumer)]
 +
 --
 Similar to _#forEach(Consumer)_ , but zipps in _zippedIn_ to iterate through its elements and passes them over as the second argument to the _action_ .
 --
-<.> xref:#zipMap[zipMap]
+<.> xref:#zipMap__Iterable_BiFunction[zipMap(Iterable, BiFunction)]
 +
 --
 Similar to _#map(Function)_ , but zipps in _zippedIn_ to iterate through its elements and passes them over as the second argument to the _mapper_ .
 --
-<.> xref:#add[add]
+<.> xref:#add__int_T[add(int, T)]
 +
 --
 Inserts the specified element at the specified position in this list (optional operation). Shifts the element currently at that position (if any) and any subsequent elements to the right (adds one to their indices).
 --
-<.> xref:#remove[remove]
+<.> xref:#remove__int[remove(int)]
 +
 --
 Removes the element at the specified position in this list (optional operation). Shifts any subsequent elements to the left (subtracts one from their indices). Returns the element that was removed from the list.
 --
-<.> xref:#indexOf[indexOf]
+<.> xref:#indexOf__T[indexOf(T)]
 +
 --
 Returns the index of the first occurrence of the specified element in this list, or -1 if this list does not contain the element. More formally, returns the lowest index `i` such that `(o==null ? get(i)==null : o.equals(get(i)))` , or -1 if there is no such index.
 --
-<.> xref:#isEqualTo[isEqualTo]
-<.> xref:#startsWith[startsWith]
+<.> xref:#isEqualTo__Can[isEqualTo(Can)]
+<.> xref:#startsWith__Can[startsWith(Can)]
 +
 --
 Let _n_ be the number of elements in _other_ . Returns whether the first _n_ elements of this _Can_ are element-wise equal to _other_ .
 --
-<.> xref:#endsWith[endsWith]
+<.> xref:#endsWith__Can[endsWith(Can)]
 +
 --
 Let _n_ be the number of elements in _other_ . Returns whether the last _n_ elements of this _Can_ are element-wise equal to _other_ .
 --
-<.> xref:#toList[toList]
-<.> xref:#toCollection[toCollection]
-<.> xref:#toArray[toArray]
-<.> xref:#toArray[toArray]
+<.> xref:#toList__[toList()]
+<.> xref:#toCollection__Supplier[toCollection(Supplier)]
+<.> xref:#toArray__T[][toArray(T[])]
+<.> xref:#toArray__Class[toArray(Class)]
 
 == Members
 
-[#getCardinality]
-=== getCardinality
+[#getCardinality__]
+=== getCardinality()
 
-[#size]
-=== size
+[#size__]
+=== size()
 
-[#get]
-=== get
+[#get__int]
+=== get(int)
 
 Will only ever return an empty Optional, if the elementIndex is out of bounds.
 
-[#getElseFail]
-=== getElseFail
+[#getElseFail__int]
+=== getElseFail(int)
 
 Shortcut to _get(elementIndex).orElseThrow(...)_
 
 Will only ever throw, if the elementIndex is out of bounds.
 
-[#compareTo]
-=== compareTo
+[#compareTo__Can]
+=== compareTo(Can)
 
 For convenience allows the argument to be _null_ treating _null_ equivalent to _Can#empty()_ .
 
-[#stream]
-=== stream
+[#stream__]
+=== stream()
 
-[#parallelStream]
-=== parallelStream
+[#parallelStream__]
+=== parallelStream()
 
-[#getFirst]
-=== getFirst
+[#getFirst__]
+=== getFirst()
 
-[#getFirstOrFail]
-=== getFirstOrFail
+[#getFirstOrFail__]
+=== getFirstOrFail()
 
 Shortcut for _getFirst().orElseThrow(_Exceptions::noSuchElement)_
 
-[#getSingleton]
-=== getSingleton
+[#getSingleton__]
+=== getSingleton()
 
-[#getSingletonOrFail]
-=== getSingletonOrFail
+[#getSingletonOrFail__]
+=== getSingletonOrFail()
 
 Shortcut for _getSingleton().orElseThrow(_Exceptions::noSuchElement)_
 
-[#contains]
-=== contains
+[#contains__T]
+=== contains(T)
 
-[#empty]
-=== empty
+[#empty__]
+=== empty()
 
 Returns an empty _Can_ .
 
-[#ofNullable]
-=== ofNullable
+[#ofNullable__T]
+=== ofNullable(T)
 
 Returns either a _Can_ with the given _element_ or an empty _Can_ if the _element_ is _null_ .
 
-[#ofSingleton]
-=== ofSingleton
+[#ofSingleton__T]
+=== ofSingleton(T)
 
 Returns either a _Can_ with the given _element_ or throws if the _element_ is _null_ .
 
-[#ofCollection]
-=== ofCollection
+[#ofCollection__Collection]
+=== ofCollection(Collection)
 
 Returns either a _Can_ with all the elements from given _collection_ or an empty _Can_ if the _collection_ is _null_ . Any elements equal to _null_ are ignored and will not be contained in the resulting _Can_ .
 
-[#ofStream]
-=== ofStream
+[#ofStream__Stream]
+=== ofStream(Stream)
 
 Returns either a _Can_ with all the elements from given _stream_ or an empty _Can_ if the _stream_ is _null_ . Any elements equal to _null_ are ignored and will not be contained in the resulting _Can_ .
 
-[#ofInstance]
-=== ofInstance
+[#ofInstance__Instance]
+=== ofInstance(Instance)
 
 Returns either a _Can_ with all the elements from given _instance_ or an empty _Can_ if the _instance_ is _null_ . Any elements equal to _null_ are ignored and will not be contained in the resulting _Can_ .
 
-[#reverse]
-=== reverse
+[#reverse__]
+=== reverse()
 
 Returns a _Can_ with all the elements from this _Can_ but contained in reversed order.
 
-[#filter]
-=== filter
+[#filter__Predicate]
+=== filter(Predicate)
 
 Returns a _Can_ with all the elements from this _Can_ , that are accepted by the given _predicate_ . If _predicate_ is _null_ *all* elements are accepted.
 
-[#map]
-=== map
+[#map__Function]
+=== map(Function)
 
 Returns a _Can_ with all the elements from this _Can_ 'transformed' by the given _mapper_ function. Any resulting elements equal to _null_ are ignored and will not be contained in the resulting _Can_ .
 
-[#concat]
-=== concat
+[#concat__Can_T]
+=== concat(Can, T)
 
 Returns a _Can_ with all the elements from given _can_ joined by the given _element_ . If any of given _can_ or _element_ are _null_ these do not contribute any elements and are ignored.
 
-[#zip]
-=== zip
+[#zip__Iterable_BiConsumer]
+=== zip(Iterable, BiConsumer)
 
 Similar to _#forEach(Consumer)_ , but zipps in _zippedIn_ to iterate through its elements and passes them over as the second argument to the _action_ .
 
-[#zipMap]
-=== zipMap
+[#zipMap__Iterable_BiFunction]
+=== zipMap(Iterable, BiFunction)
 
 Similar to _#map(Function)_ , but zipps in _zippedIn_ to iterate through its elements and passes them over as the second argument to the _mapper_ .
 
-[#add]
-=== add
+[#add__int_T]
+=== add(int, T)
 
 Inserts the specified element at the specified position in this list (optional operation). Shifts the element currently at that position (if any) and any subsequent elements to the right (adds one to their indices).
 
-[#remove]
-=== remove
+[#remove__int]
+=== remove(int)
 
 Removes the element at the specified position in this list (optional operation). Shifts any subsequent elements to the left (subtracts one from their indices). Returns the element that was removed from the list.
 
-[#indexOf]
-=== indexOf
+[#indexOf__T]
+=== indexOf(T)
 
 Returns the index of the first occurrence of the specified element in this list, or -1 if this list does not contain the element. More formally, returns the lowest index `i` such that `(o==null ? get(i)==null : o.equals(get(i)))` , or -1 if there is no such index.
 
-[#isEqualTo]
-=== isEqualTo
+[#isEqualTo__Can]
+=== isEqualTo(Can)
 
-[#startsWith]
-=== startsWith
+[#startsWith__Can]
+=== startsWith(Can)
 
 Let _n_ be the number of elements in _other_ . Returns whether the first _n_ elements of this _Can_ are element-wise equal to _other_ .
 
-[#endsWith]
-=== endsWith
+[#endsWith__Can]
+=== endsWith(Can)
 
 Let _n_ be the number of elements in _other_ . Returns whether the last _n_ elements of this _Can_ are element-wise equal to _other_ .
 
-[#toList]
-=== toList
+[#toList__]
+=== toList()
 
-[#toCollection]
-=== toCollection
+[#toCollection__Supplier]
+=== toCollection(Supplier)
 
-[#toArray]
-=== toArray
+[#toArray__T[]]
+=== toArray(T[])
 
-[#toArray]
-=== toArray
+[#toArray__Class]
+=== toArray(Class)
 

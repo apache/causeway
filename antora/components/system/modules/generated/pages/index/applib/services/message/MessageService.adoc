@@ -1,5 +1,9 @@
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
+Allows domain objects to raise information, warning or error messages.
+
+These messages can either be simple strings, or can be translated.
+
 == API
 
 [source,java]
@@ -18,102 +22,112 @@ interface MessageService {
 }
 ----
 
-<.> xref:#informUser[informUser]
+<.> xref:#informUser__String[informUser(String)]
 +
 --
-Make the specified message available to the user. Note this will probably be displayed in transitory fashion, so is only suitable for useful but optional information.
+Make the specified message available to the user, intended to be useful but optional information, for a viewer to display typically in a transitory manner.
 --
-<.> xref:#informUser[informUser]
+<.> xref:#informUser__TranslatableString_Class_String[informUser(TranslatableString, Class, String)]
 +
 --
-Make the specified message available to the user, translated (if possible) to user's locale.
+As _#informUser(String)_ , but with the message translated (if possible) to user's _java.util.Locale_ .
 --
-<.> xref:#informUser[informUser]
+<.> xref:#informUser__TranslatableString_String[informUser(TranslatableString, String)]
 +
 --
-Override of _MessageService#informUser(TranslatableString, Class, String)_ , but with last two parameters combined into a context string.
+Override of _MessageService#informUser(TranslatableString, Class, String)_ , but with an arbitrary translation context (rather than inferred from the context class and method).
 --
-<.> xref:#warnUser[warnUser]
+<.> xref:#warnUser__String[warnUser(String)]
 +
 --
-Warn the user about a situation with the specified message. The container should guarantee to display this warning to the user, and will typically require acknowledgement.
+Warn the user about a situation with the specified message.
 --
-<.> xref:#warnUser[warnUser]
+<.> xref:#warnUser__TranslatableString_Class_String[warnUser(TranslatableString, Class, String)]
 +
 --
-Warn the user about a situation with the specified message, translated (if possible) to user's locale.
+As _#warnUser(String)_ , but with the message translated (if possible) to user's _java.util.Locale_ .
 --
-<.> xref:#warnUser[warnUser]
+<.> xref:#warnUser__TranslatableString_String[warnUser(TranslatableString, String)]
 +
 --
-Override of _MessageService#warnUser(TranslatableString, Class, String)_ , but with last two parameters combined into a context string.
+Override of _MessageService#warnUser(TranslatableString, Class, String)_ , but with an arbitrary translation context (rather than inferred from the context class and method).
 --
-<.> xref:#raiseError[raiseError]
+<.> xref:#raiseError__String[raiseError(String)]
 +
 --
-Notify the user of an application error with the specified message. Note this will probably be displayed in an alarming fashion, so is only suitable for errors. The user will typically be required to perform additional steps after the error (eg to inform the helpdesk).
+Notify the user of an application error with the specified message.
 --
-<.> xref:#raiseError[raiseError]
+<.> xref:#raiseError__TranslatableString_Class_String[raiseError(TranslatableString, Class, String)]
 +
 --
-Notify the user of an application error with the specified message, translated (if possible) to user's locale.
+As _#raiseError(String)_ , but with the message translated (if possible) to user's _java.util.Locale_ .
 --
-<.> xref:#raiseError[raiseError]
+<.> xref:#raiseError__TranslatableString_String[raiseError(TranslatableString, String)]
 +
 --
-Override of _MessageService#raiseError(TranslatableString, Class, String)_ , but with last two parameters combined into a context string.
+Override of _MessageService#raiseError(TranslatableString, Class, String)_ , but with an arbitrary translation context (rather than inferred from the context class and method).
 --
 
 == Members
 
-[#informUser]
-=== informUser
+[#informUser__String]
+=== informUser(String)
 
-Make the specified message available to the user. Note this will probably be displayed in transitory fashion, so is only suitable for useful but optional information.
+Make the specified message available to the user, intended to be useful but optional information, for a viewer to display typically in a transitory manner.
 
-[#informUser]
-=== informUser
+In the Wicket viewer this is implemented as a "toast" message that automatically disappears after a period of time.
 
-Make the specified message available to the user, translated (if possible) to user's locale.
+[#informUser__TranslatableString_Class_String]
+=== informUser(TranslatableString, Class, String)
 
-More precisely, the locale is as provided by the configured _org.apache.isis.applib.services.i18n.LocaleProvider_ service. This will most commonly be the locale of the current request (ie the current user's locale).
+As _#informUser(String)_ , but with the message translated (if possible) to user's _java.util.Locale_ .
 
-[#informUser]
-=== informUser
+More precisely, the locale is as provided by the configured _org.apache.isis.applib.services.i18n.LocaleProvider_ service. This should be the _java.util.Locale_ of the user making the current request.
 
-Override of _MessageService#informUser(TranslatableString, Class, String)_ , but with last two parameters combined into a context string.
+[#informUser__TranslatableString_String]
+=== informUser(TranslatableString, String)
 
-[#warnUser]
-=== warnUser
+Override of _MessageService#informUser(TranslatableString, Class, String)_ , but with an arbitrary translation context (rather than inferred from the context class and method).
 
-Warn the user about a situation with the specified message. The container should guarantee to display this warning to the user, and will typically require acknowledgement.
+[#warnUser__String]
+=== warnUser(String)
 
-[#warnUser]
-=== warnUser
+Warn the user about a situation with the specified message.
 
-Warn the user about a situation with the specified message, translated (if possible) to user's locale.
+The viewer should guarantee to display this warning to the user, and will typically require acknowledgement.
 
-More precisely, the locale is as provided by the configured _org.apache.isis.applib.services.i18n.LocaleProvider_ service. This will most commonly be the locale of the current request (ie the current user's locale).
+In the Wicket viewer this is implemented as a "toast" message that must be explicitly closed by the user.
 
-[#warnUser]
-=== warnUser
+[#warnUser__TranslatableString_Class_String]
+=== warnUser(TranslatableString, Class, String)
 
-Override of _MessageService#warnUser(TranslatableString, Class, String)_ , but with last two parameters combined into a context string.
+As _#warnUser(String)_ , but with the message translated (if possible) to user's _java.util.Locale_ .
 
-[#raiseError]
-=== raiseError
+More precisely, the locale is as provided by the configured _org.apache.isis.applib.services.i18n.LocaleProvider_ service. This should be the _java.util.Locale_ of the user making the current request.
 
-Notify the user of an application error with the specified message. Note this will probably be displayed in an alarming fashion, so is only suitable for errors. The user will typically be required to perform additional steps after the error (eg to inform the helpdesk).
+[#warnUser__TranslatableString_String]
+=== warnUser(TranslatableString, String)
 
-[#raiseError]
-=== raiseError
+Override of _MessageService#warnUser(TranslatableString, Class, String)_ , but with an arbitrary translation context (rather than inferred from the context class and method).
 
-Notify the user of an application error with the specified message, translated (if possible) to user's locale.
+[#raiseError__String]
+=== raiseError(String)
 
-More precisely, the locale is as provided by the configured _org.apache.isis.applib.services.i18n.LocaleProvider_ service. This will most commonly be the locale of the current request (ie the current user's locale).
+Notify the user of an application error with the specified message.
 
-[#raiseError]
-=== raiseError
+Note this will probably be displayed in an prominent fashion, so is only suitable for errors. The user will typically be required to perform additional steps after the error..
 
-Override of _MessageService#raiseError(TranslatableString, Class, String)_ , but with last two parameters combined into a context string.
+In the Wicket viewer this is implemented as a toast (with a different colour) that must be closed by the end-user.
+
+[#raiseError__TranslatableString_Class_String]
+=== raiseError(TranslatableString, Class, String)
+
+As _#raiseError(String)_ , but with the message translated (if possible) to user's _java.util.Locale_ .
+
+More precisely, the locale is as provided by the configured _org.apache.isis.applib.services.i18n.LocaleProvider_ service. This should be the _java.util.Locale_ of the user making the current request.
+
+[#raiseError__TranslatableString_String]
+=== raiseError(TranslatableString, String)
+
+Override of _MessageService#raiseError(TranslatableString, Class, String)_ , but with an arbitrary translation context (rather than inferred from the context class and method).
 
