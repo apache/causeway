@@ -4,3 +4,6 @@
 
 
 == Implementation
+
+
+The service works by returning a "wrapper" around a supplied domain object (using link:https://bytebuddy.net/[byte buddy]), and it is this wrapper that ensures that the hide/disable/validate rules implies by the Apache Isis programming model are enforced.

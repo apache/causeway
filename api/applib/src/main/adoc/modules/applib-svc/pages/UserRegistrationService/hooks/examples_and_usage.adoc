@@ -2,3 +2,41 @@
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
 
+
+== Usage by the framework
+
+The xref:vw:ROOT:about.adoc[Wicket viewer] supports user registration, relying on
+both the xref:system:generated:index/applib/services/userreg/EmailNotificationService.adoc[EmailNotificationService] and xref:system:generated:index/applib/services/email/EmailService.adoc[EmailService].
+
+The framework provides default implementations of both of these services.
+The notification service requires no further configuration.
+The email service (`EmailServiceDefault`) _does_ require a couple of configuration properties to be set (specifying the SMTP mail server/accounts/password).
+
+=== User sign-up
+
+For user sign-up, the xref:vw:ROOT:about.adoc[Wicket viewer] will check whether an implementation of this service (and also the xref:refguide:applib-svc:EmailNotificationService.adoc[`EmailNotificationService`]) is available, and if so will render a sign-up page where the user enters their email address.
+A verification email is sent (using the aforementioned `EmailNotificationService`) which includes a link back to the running application; this allows the user then to complete their registration process (choose user name, password and so on).
+When the user has provided the additional details, the Wicket viewer calls _this_ service in order to create an account for them, and then logs the user on.
+
+
+=== Password reset
+
+For the password reset feature, the Wicket viewer will render a password reset page, and use the `EmailNotificationService` to send a "password forgotten" email.
+This service provides the ability to reset a password based on the user's email address.
+
+
+Further details on the user registration feature (as supported by the Wicket viewer) are discussed  xref:vw:ROOT:features.adoc#user-registration[here].
+
+=== Other usages
+
+It is of course possible for domain objects to use this service; it will be injected into domain object or other domain services in the usual way.
+That said, we expect that such use cases will be comparatively rare; the primary use case is for the Wicket viewer's sign-up page.
+
+
+
+
+
+== See also
+
+* xref:system:generated:index/applib/services/userreg/EmailNotificationService.adoc[EmailNotificationService]
+* xref:system:generated:index/applib/services/email/EmailService.adoc[EmailService]

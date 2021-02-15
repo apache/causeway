@@ -33,7 +33,7 @@ import lombok.Value;
  */
 @DomainObject(objectType = "isis.applib.RoleMemento")
 @Value
-public final class RoleMemento implements Serializable {
+public class RoleMemento implements Serializable {
 
     private static final long serialVersionUID = -3876856609238378274L;
 
@@ -64,10 +64,10 @@ public final class RoleMemento implements Serializable {
 
     @MemberOrder(sequence = "1.1")
     @Getter
-    private final String name;
+    String name;
 
     @MemberOrder(sequence = "1.2")
     @Getter
-    private final String description;
+    String description;
 
 }

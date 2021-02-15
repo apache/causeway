@@ -33,17 +33,43 @@ import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
 
 /**
+ * Modifies the way in which an asynchronous action initiated through the
+ * {@link org.apache.isis.applib.services.wrapper.WrapperFactory} is actually
+ * executed.
+ *
+ * <p>
+ *     Executing in a separate thread means that the target and arguments are
+ *     used in a new {@link org.apache.isis.applib.services.iactn.Interaction}
+ *     (and transaction).  If any of these are entities, they are retrieved
+ *     from the database afresh; it isn't possible to pass domain entity
+ *     references from the foreground calling thread to the background threads.
+ * </p>
  *
  * @param <R> - return value.
- * 
+ *
  * @since 2.0 {@index}
  */
 @Log4j2
 public class AsyncControl<R> extends ControlAbstract<AsyncControl<R>> {
 
+    /**
+     * Factory method to instantiate a control instance for a void action
+     * or a property edit (where there is no need or intention to provide a
+     * return value through the `Future`).
+     */
     public static AsyncControl<Void> returningVoid() {
         return new AsyncControl<>(Void.class);
     }
+
+    /**
+     * Factory method to instantiate for a control instance for an action
+     * returning a value of `<R>` (where this value will be returned through
+     * the `Future`).
+     *
+     * @param cls
+     * @param <X>
+     * @return
+     */
     public static <X> AsyncControl<X> returning(final Class<X> cls) {
         return new AsyncControl<X>(cls);
     }
@@ -59,9 +85,46 @@ public class AsyncControl<R> extends ControlAbstract<AsyncControl<R>> {
         });
     }
 
+    /**
+     * Skip checking business rules (hide/disable/validate) before
+     * executing the underlying property or action
+     */
+    @Override
+    public AsyncControl<R> withSkipRules() {
+        return super.withSkipRules();
+    }
+
+    /**
+     * How to handle exceptions if they occur, using the provided
+     * {@link ExceptionHandler}.
+     *
+     * <p>
+     *     The default behaviour is to rethrow the exception.
+     * </p>
+     */
+    @Override
+    public AsyncControl with(ExceptionHandler exceptionHandler) {
+        return super.with(exceptionHandler);
+    }
+
+
+
     @Getter @NonNull
     private ExecutorService executorService =
                             ForkJoinPool.commonPool();
+
+    /**
+     * Specifies the {@link ExecutorService} to use to obtain the thread
+     * to invoke the action.
+     *
+     * <p>
+     * The default executor service is the common pool.
+     * </p>
+     *
+     *
+     * @param executorService
+     * @return
+     */
     public AsyncControl<R> with(ExecutorService executorService) {
         this.executorService = executorService;
         return this;
@@ -103,11 +166,16 @@ public class AsyncControl<R> extends ControlAbstract<AsyncControl<R>> {
 
 
 
-    /**
-     * Defaults to user initiating the action, if not overridden
-     */
     @Getter
     private UserMemento user;
+    /**
+     * Specifies the user for the session used to execute the command
+     * asynchronously, in the background.
+     *
+     * <p>
+     * If not specified, then the user of the current foreground session is used.
+     * </p>
+     */
     public AsyncControl<R> withUser(final @NonNull UserMemento user) {
         this.user = user;
         return this;
@@ -115,13 +183,23 @@ public class AsyncControl<R> extends ControlAbstract<AsyncControl<R>> {
     }
 
     /**
-     * Set by framework.
+     * Contains the result of the invocation.
      *
-     * Contains the result of the invocation.  However, if an entity is returned, then the object is automatically
-     * detached because the persistence session within which it was obtained will have been closed already.
+     * <p>
+     * If an entity is returned, then the object is automatically detached
+     * because the persistence session within which it was obtained will have
+     * been closed already.
+     * </p>
      */
-    @Getter @Setter
+    @Getter
     private Future<R> future;
+
+    /**
+     * For framework use only.
+     */
+    public void setFuture(Future<R> future) {
+        this.future = future;
+    }
 
     private String logMessage() {
         StringBuilder buf = new StringBuilder("Failed to execute ");

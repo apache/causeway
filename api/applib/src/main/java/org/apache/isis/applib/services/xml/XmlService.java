@@ -22,8 +22,9 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 /**
- * This service provides a number of utility services for interacting with XML {@link Document}s
- * 
+ * This service provides a number of utility services for interacting with
+ * w3c DOM (XML) {@link Document}s
+ *
  * @since 1.x {@index}
  */
 public interface XmlService {

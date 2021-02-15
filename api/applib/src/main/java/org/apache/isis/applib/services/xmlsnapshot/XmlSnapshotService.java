@@ -22,16 +22,29 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 /**
- * This service allows an XML document to be generated capturing the data of a root entity and specified related
- * entities.  This XML can be used for various purposes, such as mail merge/reporting, or adhoc auditing.
+ * Allows an XML document to be generated capturing the data of a root entity
+ * and specified related entities.
+ *
  * <p>
- * The framework provides an implementation of this service (<tt>XmlSnapshotServiceDefault</tt>) which is automatically
- * registered and available for use; no further configuration is required.
+ *     An XSD schema (to which the XML will be compatible) can also be
+ *     generated.
  * </p>
- * 
+ *
+ * <p>
+ *     This XML/XSD can be used for various purposes, such as mail
+ *     merge/reporting, or adhoc auditing.
+ * </p>
+ *
+ * <p>
+ *     The service offers a basic API to create a snapshot of a single object,
+ *     and a more flexible API that allows the size of the graph to be
+ *     customized.
+ * </p>
+ *
  * @since 1.x {@index}
  */
 public interface XmlSnapshotService {
+
 
     /**
      * @since 1.x {@index}
@@ -50,7 +63,7 @@ public interface XmlSnapshotService {
          */
         interface Builder {
             /**
-             * Enrich the snapshot to include the state of these referenced objects 
+             * Enrich the snapshot to include the state of these referenced objects
              */
             void includePath(final String path);
             /**
@@ -72,7 +85,7 @@ public interface XmlSnapshotService {
                                     final Object domainObject);
 
     /**
-     *  Creates a Snapshot.Builder that allows the contents of the snapshot to include other related state. 
+     *  Creates a Snapshot.Builder that allows the contents of the snapshot to include other related state.
      */
     XmlSnapshotService.Snapshot.Builder builderFor(
                                     final Object domainObject);

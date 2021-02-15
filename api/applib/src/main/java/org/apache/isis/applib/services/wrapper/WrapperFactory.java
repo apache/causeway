@@ -29,16 +29,22 @@ import org.apache.isis.applib.services.wrapper.events.InteractionEvent;
 import org.apache.isis.applib.services.wrapper.listeners.InteractionListener;
 
 /**
- * 
+ *
  * Provides the ability to 'wrap' a domain object such that it can
  * be interacted with while enforcing the hide/disable/validate rules implied by
  * the Apache Isis programming model.
  *
  * <p>
+ * This capability goes beyond enforcing the (imperative) constraints within
+ * the `hideXxx()`, `disableXxx()` and `validateXxx()` supporting methods; it
+ * also enforces (declarative) constraints such as those represented by
+ * annotations, eg `@Parameter(maxLength=...)` or `@Property(mustSatisfy=...)`.
+ * </p>
+ *
+ * <p>
  * The wrapper can alternatively also be used to execute the action
  * asynchronously, through an {@link java.util.concurrent.ExecutorService}.
  * Any business rules will be invoked synchronously beforehand, however.
- * hand
  * </p>
  *
  * <p>
@@ -49,6 +55,7 @@ import org.apache.isis.applib.services.wrapper.listeners.InteractionListener;
  * <li>a <tt>set</tt> method for properties</li>
  * <li>any action</li>
  * </ul>
+ * </p>
  *
  * <p>
  * Calling any of the above methods may result in a (subclass of)
@@ -57,6 +64,7 @@ import org.apache.isis.applib.services.wrapper.listeners.InteractionListener;
  * be thrown. Similarly if an action has a <tt>validate</tt> method and the
  * supplied arguments are invalid then a {@link InvalidException} will be
  * thrown.
+ * </p>
  *
  * <p>
  * In addition, the following methods may also be called:
@@ -64,11 +72,13 @@ import org.apache.isis.applib.services.wrapper.listeners.InteractionListener;
  * <li>the <tt>title</tt> method</li>
  * <li>any <tt>defaultXxx</tt> or <tt>choicesXxx</tt> method</li>
  * </ul>
+ * </p>
  *
  * <p>
  * If the object has (see {@link #isWrapper(Object)} already been wrapped),
  * then should just return the object back unchanged.
- * 
+ * </p>
+ *
  * @since 1.x {@index}
  */
 public interface WrapperFactory {
@@ -148,7 +158,7 @@ public interface WrapperFactory {
 
     /**
      * Returns a proxy object for the provided {@code domainObject},
-     * through which can execute the action asynchronously.
+     * through which can execute the action asynchronously (in another thread).
      *
      * @param <T> - the type of the domain object
      * @param <R> - the type of the return of the action
@@ -162,7 +172,7 @@ public interface WrapperFactory {
 
     /**
      * Returns a proxy object for the provided {@code mixinClass},
-     * through which can execute the action asynchronously.
+     * through which can execute the action asynchronously (in another thread).
      *
      * @param <T>
      * @param mixinClass

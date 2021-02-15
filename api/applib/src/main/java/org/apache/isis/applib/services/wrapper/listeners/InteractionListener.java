@@ -37,6 +37,9 @@ import org.apache.isis.applib.services.wrapper.events.PropertyUsabilityEvent;
 import org.apache.isis.applib.services.wrapper.events.PropertyVisibilityEvent;
 
 /**
+ * Allows the interactions between the wrapper and the underlying domain object
+ * to be observed.
+ *
  * @since 1.x {@index}
  */
 public interface InteractionListener {

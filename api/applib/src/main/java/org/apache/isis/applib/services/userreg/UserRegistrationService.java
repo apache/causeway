@@ -19,26 +19,49 @@
 package org.apache.isis.applib.services.userreg;
 
 /**
- * Required API to enable users to register an account on the system (aka &quot;sign up&quot;).
+ * Provides the ability for users to sign-up to access an application by
+ * providing a valid email address.
+ * Also provides the capability for users to reset their password if forgotten.
  *
- * <p>
- *     User registration also requires that the {@link EmailNotificationService} and
- *     {@link org.apache.isis.applib.services.email.EmailService} to be configured.  The framework provides default
- *     implementations of both of these services.  The notification service requires no further configuration.
- *     The email service (<code>EmailServiceDefault</code>) <i>does</i> require a couple of configuration properties
- *     to be set (specifying the SMTP mail server/accounts/password).
- * </p>
- * 
  * @since 1.x {@index}
  */
 public interface UserRegistrationService {
 
+    /**
+     * Checks if there is already a user with the specified username
+     *
+     * @param username
+     * @return
+     */
     boolean usernameExists(String username);
 
+    /**
+     * Checks if there is already a user with the specified email address.
+     *
+     * @param emailAddress
+     * @return
+     */
     boolean emailExists(String emailAddress);
 
+    /**
+     * Creates the user, with specified password and email address.
+     *
+     * <p>
+     * The username and email address must both be unique (not being used by an
+     * existing user).
+     * </p>
+     *
+     * @param userDetails
+     */
     void registerUser(UserDetails userDetails);
 
+    /**
+     * Allows the user to reset their password.
+     *
+     * @param emailAddress
+     * @param password
+     * @return
+     */
     boolean updatePasswordByEmail(String emailAddress, String password);
 
 }

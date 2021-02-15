@@ -4,3 +4,8 @@
 
 
 == Implementation
+
+The core framework provides a default implementation of this service (`o.a.i.core.runtime.services.user.UserServiceDefault`).
+
+
+

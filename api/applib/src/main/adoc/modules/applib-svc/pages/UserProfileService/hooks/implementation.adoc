@@ -4,3 +4,6 @@
 
 
 == Implementation
+
+The framework provides a default implementation of this service, `o.a.i.core.runtimeservices.UserProfileServiceDefault`.
+This simply returns the user's name as the user's profile name.

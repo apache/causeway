@@ -43,7 +43,6 @@ public final class UserMemento implements Serializable {
 
     private static final long serialVersionUID = 7190090455587885367L;
     private static final UserMemento SYSTEM_USER = UserMemento.ofName("__system");
-//    private static final UserMemento NO_USER = UserMemento.ofName("__nobody");
 
     // -- FACTORIES
 
@@ -54,13 +53,6 @@ public final class UserMemento implements Serializable {
         return SYSTEM_USER;
     }
 
-//    /**
-//     * The framework's internal user with no privileges at all, returned by the
-//     * {@link UserService} if no user is logged in.
-//     */
-//    public static UserMemento nobody() {
-//        return NO_USER;
-//    }
 
     /**
      * Creates a new user with the specified name and no roles.
@@ -179,10 +171,7 @@ public final class UserMemento implements Serializable {
         if(!Objects.equals(this.getName(), other.getName())) {
             return false;
         }
-        if(!Objects.equals(this.getRoles(), other.getRoles())) {
-            return false;
-        }
-        return true;
+        return Objects.equals(this.getRoles(), other.getRoles());
     }
 
     @Override
@@ -192,38 +181,4 @@ public final class UserMemento implements Serializable {
 
 
 }
-
-// -- REMOVED
-
-//XXX implemented as regex match, java-doc is not specific about what these methods actually do; so if in doubt, rather remove
-///**
-//* Determines if the user fulfills the specified role.
-//*
-//* @param role  the role to search for, regular expressions are allowed
-//*/
-//public boolean hasRole(final RoleMemento role) {
-//  return hasRole(role.getName());
-//}
-//
-///**
-//* Determines if the user fulfills the specified role. Roles are compared
-//* lexically by role name.
-//*/
-//public boolean hasRole(final String roleName) {
-//  for (final RoleMemento role : roles) {
-//      if (role.getName().matches(roleName)) {
-//          return true;
-//      }
-//  }
-//  return false;
-//}
-
-//XXX not used
-//@UtilityClass
-//public static class NameType {
-//  @UtilityClass
-//  public static class Meta {
-//      public static final int MAX_LEN = 50;
-//  }
-//}
 

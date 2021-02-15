@@ -27,20 +27,22 @@ import org.apache.isis.applib.services.sudo.SudoService;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 
 /**
- * The {@link UserService} allows the domain object to obtain the identity of the user 
- * interacting with said object.
+ * Allows the domain object to obtain the identity of the user interacting with
+ * said object.
+ *
  * <p>
- * If {@link SudoService} has been used to temporarily override the user and/or roles, 
- * then this service will report the overridden values instead.
+ * If {@link SudoService} has been used to temporarily override the user and/or
+ * roles, then this service will report the overridden values instead.
+ * </p>
  *
  * @since 1.x revised in 2.0 {@index}
  */
 public interface UserService {
 
     // -- INTERFACE
-    
+
     /**
-     * Optionally gets the details about the current user, 
+     * Optionally gets the details about the current user,
      * based on whether an {@link ExecutionContext} can be found with the current thread's context.
      */
     Optional<UserMemento> currentUser();
@@ -53,9 +55,9 @@ public interface UserService {
     default UserMemento getUser() {
         return currentUser().orElse(null);
     }
-    
+
     // -- UTILITIES
-    
+
     /**
      * Gets the details about the current user.
      * @throws IllegalStateException if no {@link ExecutionContext} can be found with the current thread's context.
@@ -64,18 +66,18 @@ public interface UserService {
         return currentUser()
                 .orElseThrow(()->_Exceptions.illegalState("Current thread has no ExecutionContext."));
     }
-    
+
     /**
-     * Optionally gets the the current user's name, 
+     * Optionally gets the the current user's name,
      * based on whether an {@link ExecutionContext} can be found with the current thread's context.
      */
     default Optional<String> currentUserName() {
         return currentUser()
                 .map(UserMemento::getName);
     }
-    
+
     /**
-     * Returns either the current user's name or else {@literal Nobody}.    
+     * Returns either the current user's name or else {@literal Nobody}.
      */
     default String currentUserNameElseNobody() {
         return currentUserName()
