@@ -26,7 +26,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.apache.isis.applib.services.i18n.LocaleProvider;
-import org.apache.isis.applib.services.i18n.TranslationService;
+import org.apache.isis.applib.services.i18n.Mode;
 import org.apache.isis.applib.services.i18n.TranslationsResolver;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Strings;
@@ -66,7 +66,7 @@ class PoReader extends PoAbstract {
     private List<String> fallback;
 
     public PoReader(final TranslationServicePo translationServicePo) {
-        super(translationServicePo, TranslationService.Mode.READ);
+        super(translationServicePo, Mode.READ);
         translationsResolver = translationServicePo.getTranslationsResolver();
         if(translationsResolver.isEmpty()) {
             log.warn("No TranslationsResolver available");

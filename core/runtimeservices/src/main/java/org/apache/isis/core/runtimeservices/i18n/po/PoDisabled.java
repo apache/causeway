@@ -18,12 +18,12 @@
  */
 package org.apache.isis.core.runtimeservices.i18n.po;
 
-import org.apache.isis.applib.services.i18n.TranslationService;
+import org.apache.isis.applib.services.i18n.Mode;
 
 class PoDisabled extends PoAbstract {
 
     PoDisabled(TranslationServicePo translationServicePo) {
-        super(translationServicePo, TranslationService.Mode.DISABLED);
+        super(translationServicePo, Mode.DISABLED);
     }
 
     @Override

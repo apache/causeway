@@ -5,11 +5,6 @@
 
 
 
-WARNING: TODO: this content has not yet been reviewed/updated for v2.0
-// TODO: Document `Transaction` and `TransactionId` and `TransactionState`.
-
-
-
 include::system:generated:page$index/applib/services/xactn/TransactionalProcessor.adoc[TransactionalProcessor]
 
 include::TransactionalProcessor/hooks/implementation.adoc[]

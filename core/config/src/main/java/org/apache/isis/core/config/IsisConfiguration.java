@@ -58,7 +58,7 @@ import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.LabelPosition;
 import org.apache.isis.applib.annotation.PromptStyle;
-import org.apache.isis.applib.services.i18n.TranslationService;
+import org.apache.isis.applib.services.i18n.Mode;
 import org.apache.isis.applib.services.iactn.Execution;
 import org.apache.isis.applib.services.publishing.spi.EntityChangesSubscriber;
 import org.apache.isis.applib.services.publishing.spi.EntityPropertyChangeSubscriber;
@@ -1614,7 +1614,7 @@ public class IsisConfiguration {
                      *     <ul>
                      *         <li>
                      *              <p>
-                     *                  The default mode of {@link TranslationService.Mode#WRITE write} is appropriate for
+                     *                  The default mode of {@link Mode#WRITE write} is appropriate for
                      *                  integration testing or prototyping, meaning that the service records any requests made of it
                      *                  but just returns the string unaltered.  This is a good way to discover new strings that
                      *                  require translation.
@@ -1622,13 +1622,13 @@ public class IsisConfiguration {
                      *         </li>
                      *         <li>
                      *              <p>
-                     *                  The {@link TranslationService.Mode#READ read} mode is appropriate for production; the
+                     *                  The {@link Mode#READ read} mode is appropriate for production; the
                      *                  service looks up translations that have previously been captured.
                      *              </p>
                      *         </li>
                      *         <li>
                      *             <p>
-                     *                 The {@link TranslationService.Mode#DISABLED disabled} performs no translation
+                     *                 The {@link Mode#DISABLED disabled} performs no translation
                      *                 and simply returns the original string unchanged.  Unlike the write mode, it
                      *                 does <i>not</i> keep track of translation requests.
                      *             </p>
@@ -1636,7 +1636,7 @@ public class IsisConfiguration {
                      *     </ul>
                      * </p>
                      */
-                    TranslationService.Mode mode = TranslationService.Mode.WRITE;
+                    Mode mode = Mode.WRITE;
                 }
             }
         }

@@ -18,10 +18,18 @@
  */
 package org.apache.isis.applib.services.i18n;
 
-import java.util.Objects;
-import java.util.function.Predicate;
-
 /**
+ * Provides translated versions of the various elements within the framework's
+ * metamodel: service and object classes, properties, collections, actions,
+ * action parameters; and also to translate business rule (disable/valid)
+ * messages, and exceptions. These translations provide for both singular and
+ * plural forms.
+ *
+ * <p>
+ * As such, this domain service is the cornerstone of the framework's i18n
+ * support.
+ * </p>
+ *
  * @since 1.x {@index}
  */
 public interface TranslationService {
@@ -58,51 +66,6 @@ public interface TranslationService {
             final String singularText,
             final String pluralText,
             int num);
-
-    enum Mode {
-        DISABLED
-            (
-                configValue->
-                    ("disable".equalsIgnoreCase(configValue) ||
-                     "disabled".equalsIgnoreCase(configValue))
-            )
-        , READ
-            (
-                configValue->
-                    ("read".equalsIgnoreCase(configValue) ||
-                     "reader".equalsIgnoreCase(configValue))
-            )
-        , WRITE
-            (
-                configValue ->
-                    !READ.matches(configValue) &&
-                    !DISABLED.matches(configValue)
-            )
-        ;
-
-        // -- handle values from configuration
-
-        private final Predicate<String> matchesConfigValue;
-        private Mode(Predicate<String> matchesConfigValue) {
-            this.matchesConfigValue = Objects.requireNonNull(matchesConfigValue);
-        }
-        public boolean matches(String configValue) {
-            return matchesConfigValue.test(configValue);
-        }
-
-        // -- for convenience
-
-        public boolean isRead() {
-            return this == READ;
-        }
-        public boolean isWrite() {
-            return this == WRITE;
-        }
-        public boolean isDisabled() {
-            return this == DISABLED;
-        }
-
-    }
 
     /**
      * Whether this implementation is operating in read or in write mode.

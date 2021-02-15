@@ -25,38 +25,61 @@ import org.apache.isis.commons.having.HasUniqueId;
 import lombok.Value;
 
 /**
- * 
+ * Value type used to identify a transaction within the context of an
+ * outer {@link org.apache.isis.applib.services.iactn.Interaction}.
+ *
+ * <p>
+ *     The transaction and
+ *     {@link org.apache.isis.applib.services.iactn.Interaction} are associated
+ *     by the {@link #getUniqueId() uniqueId}.
+ * </p>
+ *
+ * <p>
+ *     Obtainable from {@link TransactionService#currentTransactionId()}.
+ * </p>
+ *
  * @since 2.0 {@index}
  */
 @Value(staticConstructor = "of")
-public final class TransactionId implements HasUniqueId {
-    
+public class TransactionId implements HasUniqueId {
+
     /**
-     * The unique identifier of the request/interaction.
+     * The unique identifier of the outer
+     * {@link org.apache.isis.applib.services.iactn.Interaction}.
      */
-    private final UUID uniqueId;
-    
+    UUID uniqueId;
+
     /**
-     * The {@link HasUniqueId#getUniqueId()} is actually an identifier for the request/
-     * interaction, and there can actually be multiple transactions within such a request/interaction.
-     * The sequence (0-based) is used to distinguish such.
+     * Identifies the transaction (there could be multiple) within the
+     * {@link org.apache.isis.applib.services.iactn.Interaction}.
      */
-    private final int sequence;
-    
+    int sequence;
+
     /**
-     * Unique identifier, to identify the persistence context, this TransactionId was created for.
+     * Identifies the persistence context that this {@link TransactionId} was
+     * created for.
+     *
      * <p>
-     * Particularly useful, when there are multiple persistence contexts configured, while there are 
-     * no constraints to format of this String, this is left for the implementation to decide.  
+     * Useful when there are multiple persistence contexts configured.
+     * There are no constraints to format of this String, it is  left for the
+     * implementation to ensure that the string is a uniqie identifier to
+     * the context.
+     * </p>
      */
-    private final String context;
-    
+    String context;
+
     // -- EMPTY
-    
-    private static final TransactionId EMPTY = 
+
+    private static final TransactionId EMPTY =
             TransactionId
             .of(UUID.fromString("0000-00-00-00-000000"), 0, "");
 
+    /**
+     * Factory method that returns a nominally &quot;empty&quot; transaction
+     * identifier, used as a placeholder.
+     *
+     * @return
+     */
     public static TransactionId empty() {
         return EMPTY;
     }

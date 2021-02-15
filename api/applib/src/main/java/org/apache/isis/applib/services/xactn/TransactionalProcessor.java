@@ -30,6 +30,11 @@ import org.apache.isis.commons.functional.ThrowingRunnable;
 import lombok.val;
 
 /**
+ * Provides the mechanism to run a block of code within a transaction boundary,
+ * using Spring Framework's transaction primitives (such as
+ * {@link TransactionDefinition} and its annotation equivalent,
+ * {@link Propagation}).
+ *
  * @since 2.0 {@index}
  */
 public interface TransactionalProcessor {
@@ -70,7 +75,7 @@ public interface TransactionalProcessor {
      * Runs given {@code runnable} with a transactional boundary, where the detailed transactional behavior
      * is governed by given {@link Propagation} {@code propagation}.
      * <p>
-     * More fine grained control is given via 
+     * More fine grained control is given via
      * {@link #runTransactional(TransactionDefinition, ThrowingRunnable)}
      */
     default Result<Void> runTransactional(Propagation propagation, ThrowingRunnable runnable) {

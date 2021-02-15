@@ -4,3 +4,7 @@
 
 
 == Implementation
+
+
+The framework provides a default implementation, `o.a.i.core.runtimeservices.urlencoding.UrlEncodingServiceWithCompression`, that first (gzip) compresses the state and then uses `base-64` encoding of the resulting bytes.
+

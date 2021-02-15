@@ -2,3 +2,27 @@
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
 
+== Usage Notes
+
+Defining this functionality as an SPI has two use cases:
+
+* first, (though some browsers support longer strings), there is a limit of 2083 characters for URLs.
+For view model mementos that correspond to large strings (as might occur when serializing a JAXB xref:refguide:applib-ant:XmlRootElement.adoc[`@XmlRootElement`]-annotated view model), the service provides a hook.
++
+For example, each memento string could be mapped to a GUID held in some cluster-aware cache.
+
+* the service provides the ability, to encrypt the string in order to avoid leakage of potentially sensitive state within the URL.
+
+
+For large view models, there's the possibility that the 2083 character limit could be exceeded; in such cases register an alternative implementation of this service.
+
+
+
+== See also
+
+* xref:userguide:fun:overview.adoc#view-models[view models]
+
+* xref:system:generated:index/applib/services/urlencoding/UrlEncodingServiceUsingBaseEncodingAbstract.adoc[UrlEncodingServiceUsingBaseEncodingAbstract]
++
+provided as a convenient base class for alternative implementations.
+

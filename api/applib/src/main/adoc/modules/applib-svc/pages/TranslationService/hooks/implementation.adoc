@@ -4,3 +4,5 @@
 
 
 == Implementation
+
+The Apache Isis framework provides a default implementation (`o.a.i.core.runtimeservices.i18n.po.TranslationServicePo`) that uses the GNU `.pot` and `.po` files for translations.

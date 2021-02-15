@@ -18,6 +18,7 @@
  */
 package org.apache.isis.core.metamodel._testing;
 
+import org.apache.isis.applib.services.i18n.Mode;
 import org.apache.isis.applib.services.i18n.TranslationService;
 
 public class TranslationService_forTesting implements TranslationService {

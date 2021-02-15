@@ -24,13 +24,35 @@ import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.memento._Mementos.EncoderDecoder;
 
 /**
+ * Defines a consistent way to convert strings to/from a form safe for use
+ * within a URL.
+ *
+ * <p>
+ *     The service is used by the framework to map mementos (derived from the
+ *     state of the view model itself) into a form that can be used as a view
+ *     model. When the framework needs to recreate the view model (for example
+ *     to invoke an action on it), this URL is converted back into a view model
+ *     memento, from which the view model can be hydrated.
+ * </p>
+ *
  * @since 1.x {@index}
  */
 public interface UrlEncodingService extends EncoderDecoder {
 
+    /**
+     * Converts the string (eg view model memento) into a string safe for use
+     * within an URL
+     */
     @Override
     String encode(final byte[] bytes);
 
+    /**
+     * Unconverts the string from its URL form into its original form URL.
+     *
+     * <p>
+     *     Reciprocal of {@link #encode(byte[])}.
+     * </p>
+     */
     @Override
     byte[] decode(String str);
 

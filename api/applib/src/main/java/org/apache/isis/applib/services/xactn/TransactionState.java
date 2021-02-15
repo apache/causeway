@@ -19,83 +19,104 @@
 package org.apache.isis.applib.services.xactn;
 
 /**
- * 
+ * Represents the state of the current transaction.
+ *
+ * <p>
+ *     Obtainable from {@link TransactionService#currentTransactionState()}.
+ * </p>
+ *
  * @since 2.0 {@index}
  */
 public enum TransactionState {
+
     /**
      * No transaction exists.
      */
     NONE,
     /**
      * Started, still in progress.
-     * <p/>
-     * <p/>
+     *
+     * <p>
      * May flush, commit or abort.
+     * </p>
      */
     IN_PROGRESS,
     /**
      * Started, but has hit an exception.
-     * <p/>
-     * <p/>
+     *
+     * <p>
      * May not flush or commit (will throw an {@link IllegalStateException}),
      * can only abort.
-     * <p/>
-     * <p/>
-     * Similar to <tt>setRollbackOnly</tt> in EJBs.
+     * </p>
      */
     MUST_ABORT,
     /**
      * Completed, having successfully committed.
-     * <p/>
-     * <p/>
+     *
+     * <p>
      * May not flush or abort or commit (will throw {@link IllegalStateException}).
+     * </p>
      */
     COMMITTED,
     /**
      * Completed, having aborted.
-     * <p/>
-     * <p/>
+     *
+     * <p>
      * May not flush, commit or abort (will throw {@link IllegalStateException}).
+     * </p>
      */
     ABORTED
     ;
 
-    private TransactionState() {
-    }
-
     /**
-     * Whether it is valid to flush the transaction.
+     * Whether it is valid to flush the transaction (specifically if the
+     * transaction is {@link #IN_PROGRESS in progress}.
      */
     public boolean canFlush() {
         return this == IN_PROGRESS;
     }
 
     /**
-     * Whether it is valid to commit the transaction.
+     * Whether it is valid to commit the transaction (specifically if the
+     * transaction is {@link #IN_PROGRESS in progress}.
      */
     public boolean canCommit() {
         return this == IN_PROGRESS;
     }
 
     /**
-     * Whether it is valid to mark as aborted this transaction}.
+     * Whether it is valid to mark as aborted this transaction.
+     *
+     * <p>
+     *     This is the case if the transaction is either currently
+     *     {@link #IN_PROGRESS in progress} or has already been marked as
+     *     {@link #MUST_ABORT must abort}.
+     * </p>
      */
     public boolean canAbort() {
         return this == IN_PROGRESS || this == MUST_ABORT;
     }
 
     /**
-     * Whether the transaction is complete (and so a new one can be started).
+     * Whether the transaction is complete (that is, is either
+     * {@link #COMMITTED committed} or {@link #ABORTED aborted}), and so a new
+     * transaction can be started.
      */
     public boolean isComplete() {
         return this == COMMITTED || this == ABORTED;
     }
 
+    /**
+     * Whether the transaction is {@link #IN_PROGRESS in progress}.
+     * @return
+     */
     public boolean isInProgress() {
         return this == IN_PROGRESS;
     }
-    
+
+    /**
+     * Whether the transaction {@link #MUST_ABORT must abort}.
+     */
     public boolean mustAbort() {
         return this == MUST_ABORT;
     }

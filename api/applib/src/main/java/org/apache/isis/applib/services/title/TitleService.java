@@ -20,21 +20,23 @@
 package org.apache.isis.applib.services.title;
 
 /**
- * 
+ * Provides methods to programmatically obtain the title and icon of a domain
+ * object.
+ *
  * @since 1.x {@index}
  */
 public interface TitleService {
 
     /**
-     * Return the title of the object, as rendered in the UI by the
-     * Isis viewers.
+     * Returns the title of the object (as rendered in the UI by the
+     * framework's viewers).
      */
-    String titleOf(Object domainObject);
+    String titleOf(final Object domainObject);
 
     /**
-     * Return the icon name of the object, as rendered in the UI by the
-     * Isis viewers.
+     * Returns the icon name of the object (as rendered in the UI by the
+     * framework's viewers).
      */
-    String iconNameOf(Object domainObject);
+    String iconNameOf(final Object domainObject);
 
 }

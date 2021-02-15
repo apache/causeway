@@ -31,7 +31,7 @@ import static org.mockito.Mockito.when;
 
 import org.apache.isis.applib.services.grid.GridService;
 import org.apache.isis.applib.services.i18n.TranslationService;
-import org.apache.isis.applib.services.i18n.TranslationService.Mode;
+import org.apache.isis.applib.services.i18n.Mode;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.services.title.TitleService;
@@ -84,7 +84,7 @@ abstract class SpecificationLoaderTestAbstract {
         TitleService mockTitleService() {
             return Mockito.mock(TitleService.class);
         }
-        
+
         TranslationService mockTranslationService() {
             val mock = Mockito.mock(TranslationService.class);
             when(mock.getMode()).thenReturn(Mode.DISABLED);
@@ -98,7 +98,7 @@ abstract class SpecificationLoaderTestAbstract {
         ProgrammingModel getProgrammingModel() {
             return new ProgrammingModelFacetsJava8(mockServiceInjector());
         }
-        
+
     }
 
     protected IsisConfiguration isisConfiguration;
@@ -117,7 +117,7 @@ abstract class SpecificationLoaderTestAbstract {
         // PRODUCTION
 
         val producers = new Producers();
-        
+
         val programmingModel = producers.getProgrammingModel();
 
         metaModelContext = MetaModelContext_forTesting.builder()
@@ -126,15 +126,15 @@ abstract class SpecificationLoaderTestAbstract {
                 .translationService(producers.mockTranslationService())
                 .titleService(producers.mockTitleService())
 //                .objectAdapterProvider(mockPersistenceSessionServiceInternal = producers.mockPersistenceSessionServiceInternal())
-                .authenticationContext(mockAuthenticationContext = 
+                .authenticationContext(mockAuthenticationContext =
                     producers.mockAuthenticationProvider())
                 .singleton(mockMessageService = producers.mockMessageService())
                 .singleton(mockGridService = producers.mockGridService())
                 .serviceInjector(producers.mockServiceInjector())
                 .build();
-        
+
         specificationLoader = metaModelContext.getSpecificationLoader();
-        
+
         ((ProgrammingModelAbstract)programmingModel).init(new ProgrammingModelInitFilterDefault(), metaModelContext);
 
         specificationLoader.createMetaModel();
