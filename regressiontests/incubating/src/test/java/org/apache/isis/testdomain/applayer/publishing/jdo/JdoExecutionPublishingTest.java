@@ -123,7 +123,7 @@ class JdoExecutionPublishingTest extends IsisIntegrationTestAbstract {
                     (ActionInvocation)a, (ActionInvocation)b);
         case PROPERTY_EDIT:
             return porpertyEditDifference(
-                    (PropertyEdit)a, (Interaction.PropertyEdit)b);
+                    (PropertyEdit)a, (PropertyEdit)b);
         default:
             throw _Exceptions.unexpectedCodeReach();
         }

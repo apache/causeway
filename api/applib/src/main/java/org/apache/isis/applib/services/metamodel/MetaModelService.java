@@ -69,7 +69,6 @@ public interface MetaModelService {
      *
      * @param domainType
      * @param mode
-     * @return
      */
     BeanSort sortOf(Class<?> domainType, Mode mode);
 
@@ -79,7 +78,6 @@ public interface MetaModelService {
      *
      * @param bookmark
      * @param mode
-     * @return
      */
     BeanSort sortOf(Bookmark bookmark, Mode mode);
 
@@ -121,7 +119,6 @@ public interface MetaModelService {
      * </p>
      *
      * @param config - restricts/filters to a subsets of the metamodel.
-     * @return
      */
     MetamodelDto exportMetaModel(final Config config);
 
