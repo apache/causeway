@@ -114,6 +114,13 @@ object RoMenuBar : SimplePanel() {
                 SvgInline().open()
             }
 
+            val searchTitle = "Dropdown search example"
+            ddLink(searchTitle,
+                    icon = IconManager.find("Find")
+            ).onClick {
+                UiManager.add(searchTitle, DropdownSearch())
+            }
+            
             val aboutTitle = "About"
             ddLink(aboutTitle,
                     icon = IconManager.find(aboutTitle)
