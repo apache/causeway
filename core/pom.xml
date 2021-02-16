@@ -86,11 +86,11 @@
 
 		<!-- LIBRARY DEPENDENCIES -->
 
-		<approvaltests.version>9.5.0</approvaltests.version>
+		<approvaltests.version>10.0.0</approvaltests.version>
 
 		<assertj-guava.version>3.4.0</assertj-guava.version>
 
-		<camel.version>3.7.2</camel.version>
+		<camel.version>3.8.0</camel.version>
 
 		<commons-email.version>1.5</commons-email.version>
 		<commons-httpclient.version>4.5.12</commons-httpclient.version>
@@ -1613,7 +1613,7 @@
 					<plugin>
 						<groupId>org.owasp</groupId>
 						<artifactId>dependency-check-maven</artifactId>
-						<version>6.1.0</version>
+						<version>6.1.1</version>
 						<executions>
 							<execution>
 								<id>owasp-aggregate</id>
