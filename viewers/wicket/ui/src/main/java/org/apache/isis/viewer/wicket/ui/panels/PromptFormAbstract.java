@@ -122,7 +122,8 @@ implements ScalarModelSubscriber {
             public void onSubmit(AjaxRequestTarget target) {
                 
                 _Probe.entryPoint(EntryPoint.USER_INTERACTION, "Wicket Ajax Request, "
-                        + "originating from User clicking OK on an inline editing form.");
+                        + "originating from User clicking OK on an inline editing form or"
+                        + "action prompt.");
                 
                 onOkSubmittedOf(target, getForm(), this);
             }

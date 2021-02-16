@@ -48,6 +48,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.object.entity.EntityFacet;
+import org.apache.isis.core.metamodel.facets.object.entity.PersistenceStandard;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
@@ -104,6 +105,11 @@ public class JpaEntityFacetFactory extends FacetFactoryAbstract {
         @Override public boolean alwaysReplace() { return true;}
         
         // -- ENTITY FACET 
+        
+        @Override
+        public PersistenceStandard getPersistenceStandard() {
+            return PersistenceStandard.JPA;
+        }
 
         @Override
         public String identifierFor(ObjectSpecification spec, Object pojo) {

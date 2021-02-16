@@ -55,4 +55,6 @@ public interface EntityFacet extends Facet {
 
     <T> T detach(T pojo);
     
+    PersistenceStandard getPersistenceStandard();
+    
 }

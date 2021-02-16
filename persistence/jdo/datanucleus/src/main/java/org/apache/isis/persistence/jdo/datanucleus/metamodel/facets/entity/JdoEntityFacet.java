@@ -48,6 +48,7 @@ import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.entity.EntityFacet;
+import org.apache.isis.core.metamodel.facets.object.entity.PersistenceStandard;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -75,6 +76,11 @@ implements EntityFacet {
             final FacetHolder holder) {
         super(EntityFacet.class, holder, Derivation.NOT_DERIVED);
         super.setFacetAliasType(EntityFacet.class);
+    }
+    
+    @Override
+    public PersistenceStandard getPersistenceStandard() {
+        return PersistenceStandard.JDO;
     }
 
     @Override

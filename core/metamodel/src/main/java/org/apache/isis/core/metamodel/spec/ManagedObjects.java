@@ -52,6 +52,7 @@ import org.apache.isis.core.metamodel.commons.MethodUtil;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.collections.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.object.entity.EntityFacet;
+import org.apache.isis.core.metamodel.facets.object.entity.PersistenceStandard;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.interactions.ObjectVisibilityContext;
@@ -63,6 +64,7 @@ import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.val;
 import lombok.experimental.UtilityClass;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * A collection of utilities for {@link ManagedObject}. 
@@ -70,6 +72,7 @@ import lombok.experimental.UtilityClass;
  *
  */
 @UtilityClass
+@Log4j2
 public final class ManagedObjects {
     
     // -- CATEGORISATION
@@ -389,6 +392,24 @@ public final class ManagedObjects {
     public static final class EntityUtil {
         
         @NonNull
+        public static Optional<PersistenceStandard> getPersistenceStandard(@Nullable ManagedObject adapter) {
+            if(adapter==null) {
+                return Optional.empty();
+            }
+            val spec = adapter.getSpecification();
+            if(spec==null || !spec.isEntity()) {
+                return Optional.empty();
+            }
+
+            val entityFacet = spec.getFacet(EntityFacet.class);
+            if(entityFacet==null) {
+                return Optional.empty();
+            }
+            
+            return Optional.of(entityFacet.getPersistenceStandard());
+        }
+        
+        @NonNull
         public static EntityState getEntityState(@Nullable ManagedObject adapter) {
             if(adapter==null) {
                 return EntityState.NOT_PERSISTABLE;
@@ -466,11 +487,16 @@ public final class ManagedObjects {
                 return managedObject;
             }
             
-            // identification fails, on detached object, if rootOid was not previously memoized
-            if(!managedObject.isRootOidMemoized()) {
-                throw _Exceptions.illegalState("entity %s is required to have a memoized ID, "
+            // identification (on JDO) fails, when detached object, where rootOid was not previously memoized
+            if(EntityUtil.getPersistenceStandard(managedObject)
+                        .map(PersistenceStandard::isJdo)
+                        .orElse(false)
+                    && !managedObject.isRootOidMemoized()) {
+                val msg = String.format("entity %s is required to have a memoized ID, "
                         + "otherwise cannot re-attach", 
                         managedObject.getSpecification().getSpecId());
+                log.error(msg); // in case exception gets swallowed
+                throw _Exceptions.illegalState(msg);
             }
             
             val objectIdentifier = identify(managedObject)
