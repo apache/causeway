@@ -20,16 +20,6 @@
 package org.apache.isis.applib.services.xactn;
 
 import java.util.Optional;
-import java.util.concurrent.Callable;
-
-import org.springframework.transaction.TransactionDefinition;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.support.DefaultTransactionDefinition;
-
-import org.apache.isis.commons.functional.Result;
-import org.apache.isis.commons.functional.ThrowingRunnable;
-
-import lombok.val;
 
 /**
  * Provides utilities to access active transactions associated with the
@@ -40,9 +30,9 @@ import lombok.val;
  *     little need to leverage; there will normally be a transaction started
  *     already by the framework at the beginning of an
  *     {@link org.apache.isis.applib.services.iactn.Interaction} and committed
- *     at the end.  On occasion though it can on occasion be useful to take
+ *     at the end. On occasion though it can be useful to take
  *     explicit control over transaction boundaries, which is where the
- *     methods provided by this domain service an be useful.
+ *     methods provided by this domain service can be useful.
  * </p>
  *
  * @since 2.0 {@index}

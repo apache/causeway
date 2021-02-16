@@ -77,8 +77,6 @@ public class TransactionId implements HasUniqueId {
     /**
      * Factory method that returns a nominally &quot;empty&quot; transaction
      * identifier, used as a placeholder.
-     *
-     * @return
      */
     public static TransactionId empty() {
         return EMPTY;

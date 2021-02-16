@@ -108,7 +108,6 @@ public enum TransactionState {
 
     /**
      * Whether the transaction is {@link #IN_PROGRESS in progress}.
-     * @return
      */
     public boolean isInProgress() {
         return this == IN_PROGRESS;
