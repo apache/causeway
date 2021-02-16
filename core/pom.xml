@@ -90,7 +90,7 @@
 
 		<assertj-guava.version>3.4.0</assertj-guava.version>
 
-		<camel.version>3.7.2</camel.version>
+		<camel.version>3.8.0</camel.version>
 
 		<commons-email.version>1.5</commons-email.version>
 		<commons-httpclient.version>4.5.12</commons-httpclient.version>
