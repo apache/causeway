@@ -27,4 +27,3 @@ If `null` , then the property was cleared.
 === getProposed()
 
 If `null` , then the property was cleared.
-

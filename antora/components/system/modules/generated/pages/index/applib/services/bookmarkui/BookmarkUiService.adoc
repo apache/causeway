@@ -24,4 +24,3 @@ Simply clears the current list of breadcrumbs and bookmarks.
 === clear()
 
 Simply clears the current list of breadcrumbs and bookmarks.
-

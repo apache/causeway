@@ -116,4 +116,3 @@ Number of domain objects properties that were changed in this interaction
 Same details, but as an an instance of _ChangesDto_ .
 
 This can be converted into a serializable XML representation using the _org.apache.isis.applib.util.schema.ChangesDtoUtils_ utility class.
-

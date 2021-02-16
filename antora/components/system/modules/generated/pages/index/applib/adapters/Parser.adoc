@@ -99,4 +99,3 @@ The idea here is that the viewer can display a parseable title for an existing o
 === maxLength()
 
 The max length of objects that can be parsed (if any). A return type of -1 corresponds to unlimited.
-

@@ -88,4 +88,3 @@ The media type used as content-Type header when a list of values is rendered.
 === VOID
 
 The media type used as content-Type header when a void action result is rendered.
-

@@ -44,4 +44,3 @@ A one-shot function. Only allowed to be called if a source has not already been 
 === toString()
 
 Returns a String representation of this EventObject.
-

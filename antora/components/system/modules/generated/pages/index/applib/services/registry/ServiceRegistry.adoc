@@ -1,5 +1,7 @@
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
+Collects together methods for injecting or looking up domain services (either provided by the framework or application-specific) currently known to the runtime.
+
 == API
 
 [source,java]
@@ -14,7 +16,8 @@ interface ServiceRegistry {
   _ManagedBeanAdapter lookupRegisteredBeanByIdElseFail(String id)     // <.>
   Optional<?> lookupBeanById(final String id)
   Optional<T> lookupService(final Class<T> serviceClass)     // <.>
-  T lookupServiceElseFail(final Class<T> serviceClass)
+  Optional<T> lookupService(Class<T> serviceClass, Comparator<Object> comparator)     // <.>
+  T lookupServiceElseFail(final Class<T> serviceClass)     // <.>
 }
 ----
 
@@ -52,6 +55,16 @@ Returns a registered bean of given _name_ , or throws when no such bean.
 +
 --
 Returns a domain service implementing the requested type.
+--
+<.> xref:#lookupService__Class_Comparator[lookupService(Class, Comparator)]
++
+--
+Returns a domain service implementing the requested type.
+--
+<.> xref:#lookupServiceElseFail__Class[lookupServiceElseFail(Class)]
++
+--
+Looks up a domain service of the requested type (same as _#lookupService(Class)_ ) but throws a _NoSuchElementException_ if there are no such instances.
 --
 
 == Members
@@ -93,3 +106,14 @@ Returns a domain service implementing the requested type.
 
 If this lookup is ambiguous, the service annotated with highest priority is returned. see _Priority_
 
+[#lookupService__Class_Comparator]
+=== lookupService(Class, Comparator)
+
+Returns a domain service implementing the requested type.
+
+If this lookup is ambiguous, then the provided comparator is used.
+
+[#lookupServiceElseFail__Class]
+=== lookupServiceElseFail(Class)
+
+Looks up a domain service of the requested type (same as _#lookupService(Class)_ ) but throws a _NoSuchElementException_ if there are no such instances.

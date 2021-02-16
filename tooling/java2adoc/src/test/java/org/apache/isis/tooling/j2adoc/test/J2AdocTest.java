@@ -44,7 +44,7 @@ import static guru.nidi.codeassert.config.Language.JAVA;
 class J2AdocTest {
 
     @Test @Disabled
-    void testJavaDoc2AsciiDoc() {
+    void testJavaDoc2AsciiDoc() throws IOException {
 
         val analyzerConfig = AnalyzerConfigFactory
                 .maven(ProjectSampler.apacheIsisApplib(), Language.JAVA)
@@ -67,9 +67,10 @@ class J2AdocTest {
         //.peek(source->System.out.println("parsing source: " + source))
         .forEach(j2aContext::add);
 
+        final File tempFile = File.createTempFile("tmp", "adoc");
         j2aContext.streamUnits()
         //.peek(unit->System.err.println("namespace "+unit.getNamespace()))
-        .map(unit->unit.toAsciiDoc(j2aContext))
+        .map(unit->unit.toAsciiDoc(j2aContext, tempFile))
         .forEach(adoc->{
 
             //System.out.println(adoc);

@@ -25,4 +25,3 @@ class Files {
 
 [#deleteFilesWithPrefix__String_String_Recursion]
 === deleteFilesWithPrefix(String, String, Recursion)
-

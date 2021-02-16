@@ -11,10 +11,10 @@ class SwaggerServiceMenu {
   String disableOpenSwaggerUi()
   LocalResourcePath openRestApi()
   String disableOpenRestApi()
-  Clob downloadSwaggerSchemaDefinition(final String fileNamePrefix, final SwaggerService.Visibility visibility, final SwaggerService.Format format)
+  Clob downloadSwaggerSchemaDefinition(final String fileNamePrefix, final Visibility visibility, final Format format)
   String default0DownloadSwaggerSchemaDefinition()
-  SwaggerService.Visibility default1DownloadSwaggerSchemaDefinition()
-  SwaggerService.Format default2DownloadSwaggerSchemaDefinition()
+  Visibility default1DownloadSwaggerSchemaDefinition()
+  Format default2DownloadSwaggerSchemaDefinition()
 }
 ----
 

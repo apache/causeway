@@ -57,4 +57,3 @@ Whether a service contributes its actions to viewers and to the REST API.
 === isRestOnly()
 
 Whether a service contributes its actions exclusively to the REST API.
-

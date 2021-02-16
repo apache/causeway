@@ -28,4 +28,3 @@ Returns a _org.apache.isis.viewer.restfulobjects.applib.util.JsonMapper.PrettyPr
 === instance()
 
 Returns a _org.apache.isis.viewer.restfulobjects.applib.util.JsonMapper.PrettyPrinting#ENABLE pretty-printing enabled_ JSON mapper.
-

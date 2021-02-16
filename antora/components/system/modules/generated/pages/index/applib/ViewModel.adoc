@@ -41,4 +41,3 @@ This method is called by the framework in order that the view model may be recre
 === viewModelInit(String)
 
 Used to re-initialize a view model with a memento obtained from _#viewModelMemento()_ .
-

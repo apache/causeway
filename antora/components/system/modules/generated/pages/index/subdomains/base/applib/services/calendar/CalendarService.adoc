@@ -38,4 +38,3 @@ class CalendarService {
 
 - use _ClockService#getClock()_ .getEpochMillis()
 ====
-

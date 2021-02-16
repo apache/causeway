@@ -26,4 +26,3 @@ Not part of the Restful Objects spec.
 === logout()
 
 Not part of the Restful Objects spec.
-

@@ -116,4 +116,3 @@ Here, the interval of the [1-may-2013,1-jun-2013) would be rendered as the dates
 === typicalLength
 
 The typical entry length of a field, use to determine the optimum width for display
-

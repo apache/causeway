@@ -171,4 +171,3 @@ The interpretation of this depends on the subclass:
 * for xref:system:generated:index/applib/services/wrapper/events/VisibilityEvent.adoc[VisibilityEvent] , a veto means that the feature (property, collection, action) is hidden
 * for xref:system:generated:index/applib/services/wrapper/events/UsabilityEvent.adoc[UsabilityEvent] , a veto means that the feature is disabled
 * for xref:system:generated:index/applib/services/wrapper/events/ValidityEvent.adoc[ValidityEvent] , a veto means that the proposed modification (property value, object added/removed, action argument) is invalid
-

@@ -26,4 +26,3 @@ Returns all properties, each as an instance of xref:system:generated:index/appli
 === allProperties()
 
 Returns all properties, each as an instance of xref:system:generated:index/applib/services/confview/ConfigurationProperty.adoc[ConfigurationProperty] (a view model). Mask sensitive values if required.
-

@@ -64,4 +64,3 @@ The (programmatically) simulated (or actual) clock.
 === ofUserWithSystemDefaults(UserMemento)
 
 Creates a new xref:system:generated:index/applib/services/iactn/ExecutionContext.adoc[ExecutionContext] with the specified user and system defaults for clock, locale and time-zone.
-

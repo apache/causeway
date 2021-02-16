@@ -40,4 +40,3 @@ The xref:system:generated:index/extensions/secman/api/permission/ApplicationPerm
 The permission prevents the ability to view/use the _ApplicationFeature_ .
 
 The xref:system:generated:index/extensions/secman/api/permission/ApplicationPermissionMode.adoc[ApplicationPermissionMode] determines whether the permission is to only view or also to use the _ApplicationFeature_ .
-

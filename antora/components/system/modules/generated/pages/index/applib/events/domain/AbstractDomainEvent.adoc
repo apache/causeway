@@ -145,4 +145,3 @@ Obtain user-data, as set by a previous _#getEventPhase() phase_ .
 === put(Object, Object)
 
 Set user-data, for the use of a subsequent _#getEventPhase() phase_ .
-

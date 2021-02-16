@@ -67,4 +67,3 @@ Access to the full API of the underlying javafaker library.
 === javaFaker()
 
 Access to the full API of the underlying javafaker library.
-

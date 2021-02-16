@@ -46,4 +46,3 @@ Obtains a zip file of the serialized XML of the layouts (grids) of all domain en
 === toMenuBarsXml(MenuBarsService.Type)
 
 Obtains the serialized XML form of the menu bars layout ( xref:system:generated:index/applib/services/menu/MenuBarsService.adoc[MenuBarsService] ).
-

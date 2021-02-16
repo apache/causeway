@@ -8,6 +8,12 @@ Immutable serializable value held by xref:system:generated:index/applib/services
 .RoleMemento.java
 ----
 class RoleMemento {
+  @MemberOrder(sequence = "1.1")
+@Getter
+String name;
+  @MemberOrder(sequence = "1.2")
+@Getter
+String description;
   RoleMemento(final String name)     // <.>
   RoleMemento(final String name, final String description)     // <.>
   String title()
@@ -36,4 +42,3 @@ Creates a new role with the specified name. Description is left blank.
 === RoleMemento
 
 Creates a new role with the specified name and description.
-

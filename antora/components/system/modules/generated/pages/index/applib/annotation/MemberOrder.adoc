@@ -41,4 +41,3 @@ Groups or associate members with each other.
 === sequence
 
 The order of this member relative to other members in the same group, in Dewey-decimal notation. For collections this is relative to each other (collections aren't grouped).
-

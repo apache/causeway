@@ -59,4 +59,3 @@ The string to append to this property if non-empty.
 === abbreviatedTo
 
 The length to abbreviate this title element to.
-

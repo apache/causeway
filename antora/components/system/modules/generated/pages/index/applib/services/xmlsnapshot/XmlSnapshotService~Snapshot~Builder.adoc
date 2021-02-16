@@ -44,4 +44,3 @@ Ditto, but add an XML annotation attribute to the included element(s).
 === build()
 
 Builds the Snapshot.
-

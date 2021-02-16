@@ -34,4 +34,3 @@ interface ExceptionRecognizer {
 === recognize(Throwable)
 
 (Attempt to) recognize the exception and return a user-friendly message to render instead.
-

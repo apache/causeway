@@ -76,7 +76,9 @@ final class ProjectDocWriter {
                 // delete all generated documents in the index
                 _Files.searchFiles(pagesFolder, dir->true, file-> {
                     val fileName = file.getName();
+                    final String parentFile = file.getParentFile().getName();
                     return fileName.endsWith(".adoc") &&
+                           !parentFile.equals("hooks") &&
                            !fileName.equals(overview.getSystemOverviewFilename());
                 })
                 .stream()
@@ -94,7 +96,7 @@ final class ProjectDocWriter {
 
                     log.info("writing file: {}", adocIndexFile.getName());
 
-                    final Document asciiDoc = unit.toAsciiDoc(j2aContext);
+                    final Document asciiDoc = unit.toAsciiDoc(j2aContext, adocIndexFile);
                     docWriter.accept(
                             asciiDoc,
                             adocIndexFile);

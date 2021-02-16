@@ -28,4 +28,3 @@ Converts the domain object (acting as the source) into a _CommandDto_ .
 Converts the domain object (acting as the source) into a _CommandDto_ .
 
 The _CommandDto_ that is also passed into the method will be from a default implementation provided by the framework. Most implementations will typically refine this provided DTO and return, for example adding additional user metadata to _CommandDto#getUserData()_ .
-

@@ -32,4 +32,3 @@ The position (0-based) of the invalid argument.
 === getPosition()
 
 The position (0-based) of the invalid argument.
-

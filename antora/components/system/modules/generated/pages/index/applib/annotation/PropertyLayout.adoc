@@ -169,4 +169,3 @@ Design note: we considered implementing this an "immutable" flag on the xref:sys
 === typicalLength
 
 The typical entry length of a field, use to determine the optimum width for display
-

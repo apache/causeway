@@ -49,4 +49,3 @@ For subscribers to call to provide a (non-translated) title for this object.
 === setTranslatableTitle(TranslatableString)
 
 For subscribers to call to provide a translatable (i18n) title for this object.
-

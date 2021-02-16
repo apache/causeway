@@ -38,4 +38,3 @@ Because the _EventObject_ superclass prohibits a null source, a dummy value is t
 === setLayout(String)
 
 For subscribers to call to provide a layout for this object.
-

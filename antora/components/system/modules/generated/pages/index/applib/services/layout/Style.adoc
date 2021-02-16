@@ -77,4 +77,3 @@ The intention here is for layout annotations that "bind" the properties/collecti
 * _@MemberGroupLayout_ : *serialized as XML*
 * _@MemberOrder_ : *ignored*
 * _@ActionLayout, @PropertyLayout, @CollectionLayout_ : *ignored*
-

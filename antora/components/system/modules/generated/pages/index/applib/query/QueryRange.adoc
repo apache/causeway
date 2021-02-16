@@ -120,4 +120,3 @@ The maximum number of items to return (as java int primitive) if _limit_ overflo
 === getEndAsInt()
 
 The end index into the set table. Overflow is ignored. (as java int primitive) if _end_ overflows an int, _Integer#MAX_VALUE_ is returned.
-

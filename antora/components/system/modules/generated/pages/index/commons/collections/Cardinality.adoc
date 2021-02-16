@@ -47,4 +47,3 @@ The container has exactly one element.
 === MULTIPLE
 
 The container has at least two elements.
-

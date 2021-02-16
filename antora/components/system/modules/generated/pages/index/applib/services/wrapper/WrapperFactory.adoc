@@ -2,7 +2,9 @@
 
 Provides the ability to 'wrap' a domain object such that it can be interacted with while enforcing the hide/disable/validate rules implied by the Apache Isis programming model.
 
-The wrapper can alternatively also be used to execute the action asynchronously, through an _java.util.concurrent.ExecutorService_ . Any business rules will be invoked synchronously beforehand, however. hand
+This capability goes beyond enforcing the (imperative) constraints within the `hideXxx()`, `disableXxx()` and `validateXxx()` supporting methods; it also enforces (declarative) constraints such as those represented by annotations, eg `@Parameter(maxLength=...)` or `@Property(mustSatisfy=...)`.
+
+The wrapper can alternatively also be used to execute the action asynchronously, through an _java.util.concurrent.ExecutorService_ . Any business rules will be invoked synchronously beforehand, however.
 
 The 'wrap' is a runtime-code-generated proxy that wraps the underlying domain object. The wrapper can then be interacted with as follows:
 
@@ -73,12 +75,12 @@ Whether the supplied object is a wrapper around a domain object.
 <.> xref:#asyncWrap__T_AsyncControl[asyncWrap(T, AsyncControl)]
 +
 --
-Returns a proxy object for the provided _domainObject_ , through which can execute the action asynchronously.
+Returns a proxy object for the provided _domainObject_ , through which can execute the action asynchronously (in another thread).
 --
 <.> xref:#asyncWrapMixin__Class_Object_AsyncControl[asyncWrapMixin(Class, Object, AsyncControl)]
 +
 --
-Returns a proxy object for the provided _mixinClass_ , through which can execute the action asynchronously.
+Returns a proxy object for the provided _mixinClass_ , through which can execute the action asynchronously (in another thread).
 --
 <.> xref:#getListeners__[getListeners()]
 +
@@ -145,12 +147,12 @@ Whether the supplied object is a wrapper around a domain object.
 [#asyncWrap__T_AsyncControl]
 === asyncWrap(T, AsyncControl)
 
-Returns a proxy object for the provided _domainObject_ , through which can execute the action asynchronously.
+Returns a proxy object for the provided _domainObject_ , through which can execute the action asynchronously (in another thread).
 
 [#asyncWrapMixin__Class_Object_AsyncControl]
 === asyncWrapMixin(Class, Object, AsyncControl)
 
-Returns a proxy object for the provided _mixinClass_ , through which can execute the action asynchronously.
+Returns a proxy object for the provided _mixinClass_ , through which can execute the action asynchronously (in another thread).
 
 [#getListeners__]
 === getListeners()
@@ -170,4 +172,3 @@ This is retrospective: the listener will be notified of interactions even on wra
 Remove an xref:system:generated:index/applib/services/wrapper/listeners/InteractionListener.adoc[InteractionListener] , to no longer be notified of interactions on wrappers.
 
 This is retrospective: the listener will no longer be notified of any interactions created on any wrappers, not just on those wrappers created subsequently. (From an implementation perspective this is because the wrappers delegate back to the container to fire the events).
-

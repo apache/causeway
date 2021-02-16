@@ -58,4 +58,3 @@ These actions should be called with HTTP Accept Header set to: `application/xml;
 === downloadCommandById(UUID, String)
 
 This action should be called with HTTP Accept Header set to: `application/xml;profile="urn:org.restfulobjects:repr-types/action-result";x-ro-domain-type="org.apache.isis.schema.cmd.v1.CommandDto"` 
-

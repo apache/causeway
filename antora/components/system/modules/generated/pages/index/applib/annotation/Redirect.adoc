@@ -48,4 +48,3 @@ Redirect (meaning render a new page) even if the result of the action is the sam
 Don't redirect if the result is the same as the target, instead just update the existing page.
 
 Of course, a redirect is still performed if the result of the action is different from the target.
-

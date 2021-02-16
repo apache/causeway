@@ -75,4 +75,3 @@ Reciprocal of _#bookmarkFor(Object)_
 === lookup(Bookmark, Class)
 
 As _#lookup(Bookmark)_ , but down-casting to the specified type.
-

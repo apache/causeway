@@ -75,4 +75,3 @@ Only for transient, persistable, objects
 === getOid()
 
 Isis extension.
-

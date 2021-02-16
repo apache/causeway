@@ -98,4 +98,3 @@ The text to be translated; depends on whether _#isPluralForm()_ and whether to b
 Any placeholders will _not_ have been replaced.
 
 NB: this method is exposed only so that implementations of _org.apache.isis.applib.exceptions.TranslatableException_ can return a non-null _Exception#getMessage() message_ when only a translatable message has been provided.
-

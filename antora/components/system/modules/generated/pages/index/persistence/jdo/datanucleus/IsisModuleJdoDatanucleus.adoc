@@ -36,4 +36,3 @@ Conveniently registers this dialect as a _PersistenceExceptionTranslator_ with _
 === getTransactionInterceptorFactory()
 
 AOP PATCH
-

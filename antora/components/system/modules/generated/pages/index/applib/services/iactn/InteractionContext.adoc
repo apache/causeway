@@ -27,4 +27,3 @@ Optionally, the currently active xref:system:generated:index/applib/services/iac
 === currentInteraction()
 
 Optionally, the currently active xref:system:generated:index/applib/services/iactn/Interaction.adoc[Interaction] for the calling thread.
-

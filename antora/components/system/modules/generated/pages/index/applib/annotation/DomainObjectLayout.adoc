@@ -159,4 +159,3 @@ This subclass must provide a no-arg constructor; the fields are set reflectively
 Which subclass of xref:system:generated:index/applib/events/ui/TitleUiEvent.adoc[TitleUiEvent] should be used to obtain a title.
 
 This subclass must provide a no-arg constructor; the fields are set reflectively.
-

@@ -129,4 +129,3 @@ How this parameters for this action are prompted, either _PromptStyle#DIALOG dia
 === redirectPolicy
 
 If the action returns its target, then determines whether to update the page or instead to redirect (forcing a re-rendering of a new page).
-

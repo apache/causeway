@@ -72,4 +72,3 @@ Remotes all hints for the domain object.
 === findHintKeys(Bookmark)
 
 The keys of all available hints for the domain object.
-

@@ -142,4 +142,3 @@ As _#fromExcel(Blob, Class, String)_ , but specifying the class name and sheet n
 === fromExcel(Blob, List)
 
 As _#fromExcel(Blob, WorksheetSpec)_ , but reading multiple sheets (and returning a list of lists of domain objects).
-

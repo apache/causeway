@@ -60,4 +60,3 @@ Creates a _InteractionDto_ (serializable to XML) for the provided xref:system:ge
 
 [#addReturn__ActionInvocationDto_Class_Object_BookmarkService]
 === addReturn(ActionInvocationDto, Class, Object, BookmarkService)
-

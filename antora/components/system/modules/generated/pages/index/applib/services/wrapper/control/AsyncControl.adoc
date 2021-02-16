@@ -1,18 +1,103 @@
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
+Modifies the way in which an asynchronous action initiated through the _org.apache.isis.applib.services.wrapper.WrapperFactory_ is actually executed.
+
+Executing in a separate thread means that the target and arguments are used in a new _org.apache.isis.applib.services.iactn.Interaction_ (and transaction). If any of these are entities, they are retrieved from the database afresh; it isn't possible to pass domain entity references from the foreground calling thread to the background threads.
+
 == API
 
 [source,java]
 .AsyncControl.java
 ----
 class AsyncControl<R> {
-  AsyncControl<Void> returningVoid()
-  AsyncControl<X> returning(final Class<X> cls)
-  AsyncControl<R> with(ExecutorService executorService)
+  AsyncControl<Void> returningVoid()     // <.>
+  AsyncControl<X> returning(final Class<X> cls)     // <.>
+  AsyncControl<R> withSkipRules()     // <.>
+  AsyncControl with(ExceptionHandler exceptionHandler)     // <.>
+  AsyncControl<R> with(ExecutorService executorService)     // <.>
   AsyncControl<R> withClock(final VirtualClock clock)
   AsyncControl<R> withLocale(final Locale locale)
   AsyncControl<R> withTimeZone(final TimeZone timeZone)
-  AsyncControl<R> withUser(final UserMemento user)
+  AsyncControl<R> withUser(final UserMemento user)     // <.>
+  void setFuture(Future<R> future)     // <.>
 }
 ----
 
+<.> xref:#returningVoid__[returningVoid()]
++
+--
+Factory method to instantiate a control instance for a void action or a property edit (where there is no need or intention to provide a return value through the `Future`).
+--
+<.> xref:#returning__Class[returning(Class)]
++
+--
+Factory method to instantiate for a control instance for an action returning a value of `` (where this value will be returned through the `Future`).
+--
+<.> xref:#withSkipRules__[withSkipRules()]
++
+--
+Skip checking business rules (hide/disable/validate) before executing the underlying property or action
+--
+<.> xref:#with__ExceptionHandler[with(ExceptionHandler)]
++
+--
+How to handle exceptions if they occur, using the provided xref:system:generated:index/applib/services/wrapper/control/ExceptionHandler.adoc[ExceptionHandler] .
+--
+<.> xref:#with__ExecutorService[with(ExecutorService)]
++
+--
+Specifies the _ExecutorService_ to use to obtain the thread to invoke the action.
+--
+<.> xref:#withUser__UserMemento[withUser(UserMemento)]
++
+--
+Specifies the user for the session used to execute the command asynchronously, in the background.
+--
+<.> xref:#setFuture__Future[setFuture(Future)]
++
+--
+For framework use only.
+--
+
+== Members
+
+[#returningVoid__]
+=== returningVoid()
+
+Factory method to instantiate a control instance for a void action or a property edit (where there is no need or intention to provide a return value through the `Future`).
+
+[#returning__Class]
+=== returning(Class)
+
+Factory method to instantiate for a control instance for an action returning a value of `` (where this value will be returned through the `Future`).
+
+[#withSkipRules__]
+=== withSkipRules()
+
+Skip checking business rules (hide/disable/validate) before executing the underlying property or action
+
+[#with__ExceptionHandler]
+=== with(ExceptionHandler)
+
+How to handle exceptions if they occur, using the provided xref:system:generated:index/applib/services/wrapper/control/ExceptionHandler.adoc[ExceptionHandler] .
+
+The default behaviour is to rethrow the exception.
+
+[#with__ExecutorService]
+=== with(ExecutorService)
+
+Specifies the _ExecutorService_ to use to obtain the thread to invoke the action.
+
+The default executor service is the common pool.
+
+[#withUser__UserMemento]
+=== withUser(UserMemento)
+
+Specifies the user for the session used to execute the command asynchronously, in the background.
+
+If not specified, then the user of the current foreground session is used.
+
+[#setFuture__Future]
+=== setFuture(Future)
+
+For framework use only.

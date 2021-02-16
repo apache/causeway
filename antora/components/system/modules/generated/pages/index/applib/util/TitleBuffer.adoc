@@ -273,4 +273,3 @@ Returns a String that represents the value of this object.
 === truncate(int)
 
 Truncates this title so it has a maximum number of words. Spaces are used to determine words, thus two spaces in a title will cause two words to be mistakenly identified.
-

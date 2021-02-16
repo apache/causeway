@@ -52,4 +52,3 @@ The xref:system:generated:index/applib/adapters/EncoderDecoder.adoc[EncoderDecod
 The xref:system:generated:index/applib/adapters/DefaultsProvider.adoc[DefaultsProvider] , if any.
 
 If not `null` , implies that the value has (or may have) a default.
-

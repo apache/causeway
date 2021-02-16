@@ -22,4 +22,3 @@ As per <div id="...">...</div> : must be unique across entire page.
 === getId()
 
 As per <div id="...">...</div> : must be unique across entire page.
-

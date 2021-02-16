@@ -31,4 +31,3 @@ Checks not null and is correct type, and delegates to _#satisfiesSafely(Object)_
 === satisfies(Object)
 
 Checks not null and is correct type, and delegates to _#satisfiesSafely(Object)_ .
-

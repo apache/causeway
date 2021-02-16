@@ -118,4 +118,3 @@ Populated only for audit entries.
 The value of the property after it has changed.
 
 Populated only for audit entries.
-

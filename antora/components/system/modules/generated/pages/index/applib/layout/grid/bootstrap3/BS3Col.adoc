@@ -97,4 +97,3 @@ Whether to show the object's icon and title.
 === getMetadataError()
 
 For diagnostics; populated by the framework if and only if a metadata error.
-

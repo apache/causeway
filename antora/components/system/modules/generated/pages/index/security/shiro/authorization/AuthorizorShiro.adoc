@@ -39,4 +39,3 @@ Returns `false` because the checking across all roles is done in _#isVisibleInAn
 === isUsableInRole(String, Identifier)
 
 Returns `false` because the checking across all roles is done in _#isUsableInAnyRole(Identifier)_ , which is always called prior to this.
-

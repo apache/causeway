@@ -45,4 +45,3 @@ Obtain user-data, as set by any other subscribers.
 === put(Object, Object)
 
 Set user-data, for the use of other subscribers.
-

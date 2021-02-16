@@ -1,5 +1,7 @@
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
+Controls the way that a (synchronous) wrapper works.
+
 == API
 
 [source,java]
@@ -7,12 +9,34 @@
 ----
 class SyncControl {
   SyncControl control()
-  SyncControl withExecute()
-  SyncControl withNoExecute()
+  SyncControl withSkipRules()     // <.>
+  SyncControl with(ExceptionHandler exceptionHandler)     // <.>
+  SyncControl withExecute()     // <.>
+  SyncControl withNoExecute()     // <.>
   ImmutableEnumSet<ExecutionMode> getExecutionModes()     // <.>
 }
 ----
 
+<.> xref:#withSkipRules__[withSkipRules()]
++
+--
+Skip checking business rules (hide/disable/validate) before executing the underlying property or action
+--
+<.> xref:#with__ExceptionHandler[with(ExceptionHandler)]
++
+--
+How to handle exceptions if they occur, using the provided xref:system:generated:index/applib/services/wrapper/control/ExceptionHandler.adoc[ExceptionHandler] .
+--
+<.> xref:#withExecute__[withExecute()]
++
+--
+Explicitly set the action to be executed.
+--
+<.> xref:#withNoExecute__[withNoExecute()]
++
+--
+Explicitly set the action to _not_ be executed, in other words a "dry run".
+--
 <.> xref:#getExecutionModes__[getExecutionModes()]
 +
 --
@@ -21,8 +45,29 @@ Not API.
 
 == Members
 
+[#withSkipRules__]
+=== withSkipRules()
+
+Skip checking business rules (hide/disable/validate) before executing the underlying property or action
+
+[#with__ExceptionHandler]
+=== with(ExceptionHandler)
+
+How to handle exceptions if they occur, using the provided xref:system:generated:index/applib/services/wrapper/control/ExceptionHandler.adoc[ExceptionHandler] .
+
+The default behaviour is to rethrow the exception.
+
+[#withExecute__]
+=== withExecute()
+
+Explicitly set the action to be executed.
+
+[#withNoExecute__]
+=== withNoExecute()
+
+Explicitly set the action to _not_ be executed, in other words a "dry run".
+
 [#getExecutionModes__]
 === getExecutionModes()
 
 Not API.
-

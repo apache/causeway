@@ -71,4 +71,3 @@ The arguments with which the collection's _#getMethodName() method_ was invoked.
 === getReturnValue()
 
 The return value from the _#getMethodName() method_ invocation.
-

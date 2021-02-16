@@ -24,4 +24,3 @@ Paths to include in the snapshot.
 === snapshotInclusions()
 
 Paths to include in the snapshot.
-

@@ -79,4 +79,3 @@ REVIEW: why not just compare the _#toString()_ representations?
 === fromIdentityString(String)
 
 Factory method.
-

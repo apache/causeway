@@ -26,4 +26,3 @@ The user that created this object.
 === getUsername()
 
 The user that created this object.
-

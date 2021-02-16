@@ -43,4 +43,3 @@ Parse a string representation of a LocalDateInterval Since this method is only u
 === endDateFromStartDate(LocalDate)
 
 Returns an end date given the start date of the next adjoining interval
-

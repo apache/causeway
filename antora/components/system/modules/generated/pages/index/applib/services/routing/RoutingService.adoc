@@ -2,14 +2,53 @@
 
 Provides the ability to return (and therefore have rendered) an alternative object from an action invocation.
 
+There are two primary use cases:
+
+* if an action returns an aggregate leaf (that is, a child object which has an owning parent), then the parent object can be * returned instead.
++
+--
+For example, an action returning `OrderItem` might instead render the owning `Order` object. It is the responsibility of the implementation to figure out what the "owning" object might be.
+--
+* if an action returns `null` or is `void`, then return some other "useful" object.
++
+--
+For example, return the home page (eg as defined by the _org.apache.isis.applib.annotation.HomePage_ annotation).
+--
+
+Currently this service is used only by the Wicket viewer; it is ignored by the Restful Objects viewer.
+
 == API
 
 [source,java]
 .RoutingService.java
 ----
 interface RoutingService {
-  boolean canRoute(Object original)
-  Object route(Object original)
+  boolean canRoute(Object original)     // <.>
+  Object route(Object original)     // <.>
 }
 ----
 
+<.> xref:#canRoute__Object[canRoute(Object)]
++
+--
+whether this implementation recognizes and can "route" the object.
+--
+<.> xref:#route__Object[route(Object)]
++
+--
+The object to route to instead; this may be the same as the original object, some other object, or (indeed) `null`.
+--
+
+== Members
+
+[#canRoute__Object]
+=== canRoute(Object)
+
+whether this implementation recognizes and can "route" the object.
+
+The _#route(Object)_ method is only called if this method returns `true` .
+
+[#route__Object]
+=== route(Object)
+
+The object to route to instead; this may be the same as the original object, some other object, or (indeed) `null`.

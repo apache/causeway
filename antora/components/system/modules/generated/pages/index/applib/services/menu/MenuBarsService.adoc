@@ -37,4 +37,3 @@ Returns _#menuBars()_ with a type of _Type#DEFAULT_ .
 === menuBars(Type)
 
 Returns the menu bars with the requested _Type_ .
-

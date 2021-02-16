@@ -58,4 +58,3 @@ A human-readable representation of this query and its values.
 === getRange()
 
 Returns a model with start index into the set table and maximal number of items to return.
-

@@ -34,4 +34,3 @@ Provide an array of tuples; each tuple should consist of 4 elements, whereby ite
 === listOf(E)
 
 Syntax sugar to remove boilerplate from subclasses.
-

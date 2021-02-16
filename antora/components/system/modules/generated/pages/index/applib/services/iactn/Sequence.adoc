@@ -47,4 +47,3 @@ For objects: multiple such could be dirtied and thus published as separate event
 === TRANSACTION
 
 There may be multiple transactions within a given interaction.
-

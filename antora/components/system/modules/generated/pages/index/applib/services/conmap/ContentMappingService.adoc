@@ -22,4 +22,3 @@ Typically for mapping from a domain object to a DTO.
 === map(Object, List)
 
 Typically for mapping from a domain object to a DTO.
-

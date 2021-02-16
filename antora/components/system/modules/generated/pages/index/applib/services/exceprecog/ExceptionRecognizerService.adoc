@@ -46,4 +46,3 @@ Takes into consideration ExceptionRecognizers as given by _#getExceptionRecogniz
 === recognizeFromSelected(Can, Throwable)
 
 Takes into consideration ExceptionRecognizers as given by _recognizers_ .
-

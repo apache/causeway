@@ -221,4 +221,3 @@ The default value, `0` , means that no flags have been specified.
 === regexPatternReplacement
 
 Replacement text for the pattern in generated error message.
-

@@ -23,4 +23,3 @@ For tests that need to delete the command table first. Should be run in the @Bef
 === getTeardownFixtureWillDelete()
 
 For tests that need to delete the command table first. Should be run in the @Before of the test.
-

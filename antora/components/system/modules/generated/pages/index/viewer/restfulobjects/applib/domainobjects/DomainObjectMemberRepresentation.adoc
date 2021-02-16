@@ -52,4 +52,3 @@ If null, then is not disabled.
 === getXIsisFormat()
 
 Isis-specific extension; not part of the RO API;
-

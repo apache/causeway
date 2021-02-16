@@ -72,4 +72,3 @@ Translates the _#getReason() reason_ and prepends with a translation of _#getCat
 === toMessageNoCategory(TranslationService)
 
 Translates the _#getReason() reason_ alone (ignoring the _#getCategory() category_ , using the provided xref:system:generated:index/applib/services/i18n/TranslationService.adoc[TranslationService] ..
-

@@ -43,4 +43,3 @@ Executes the callable if not already cached for the supplied calling class, meth
 === onTransactionEnded()
 
 Not API, for framework use only.
-

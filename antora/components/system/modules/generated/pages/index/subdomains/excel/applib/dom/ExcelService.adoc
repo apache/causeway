@@ -54,4 +54,3 @@ There are no specific restrictions on the domain objects; they can be either per
 Returns a list of objects for each line in the spreadsheet, of the specified type.
 
 If the class is a view model then the objects will be properly instantiated, with the correct view model memento); otherwise the objects will be simple transient objects.
-

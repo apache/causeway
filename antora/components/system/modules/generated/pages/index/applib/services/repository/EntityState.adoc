@@ -101,4 +101,3 @@ Object with this state is an entity but that is detached from a persistence sess
 === isDestroyed()
 
 Object with this state is an entity that has been removed from the database. Objects in this state may no longer be interacted with.
-

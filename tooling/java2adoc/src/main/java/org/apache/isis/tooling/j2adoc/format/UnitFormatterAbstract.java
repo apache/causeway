@@ -18,13 +18,20 @@
  */
 package org.apache.isis.tooling.j2adoc.format;
 
+import java.io.File;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import com.github.javaparser.ast.nodeTypes.NodeWithJavadoc;
 import com.github.javaparser.javadoc.Javadoc;
 
+import org.asciidoctor.ast.Block;
 import org.asciidoctor.ast.Document;
 import org.asciidoctor.ast.List;
 import org.asciidoctor.ast.StructuralNode;
@@ -57,7 +64,7 @@ implements UnitFormatter {
      * @param unit - the containing java unit (java source code model)
      */
     @Override
-    public Document apply(final J2AdocUnit unit) {
+    public Document apply(final J2AdocUnit unit, final File file) {
 
         val doc = AsciiDocFactory.doc();
 
@@ -92,8 +99,13 @@ implements UnitFormatter {
 
         // -- outro
 
-        outro(unit)
-        .ifPresent(block(doc)::setSource);
+        inclusions(unit, file)
+                .stream()
+                .map(inclusion -> String.format("include::%s[]", inclusion))
+                .forEach(inclusion -> {
+                    final Block block = block(doc);
+                    block.setSource(inclusion);
+                });
 
         return doc;
     }
@@ -185,9 +197,15 @@ implements UnitFormatter {
     /**
      * Hook method (with empty default implementation)
      * @param unit - the containing java unit (java source code model)
+     * @param file - not to write to, but to determine if any include's of optional hook files are required.
      */
-    protected Optional<String> outro(final J2AdocUnit unit) {
-        return Optional.empty();
+    protected java.util.List<String> inclusions(final J2AdocUnit unit, final File file) {
+        return Arrays.asList(
+                "hooks/implementation.adoc",
+                "hooks/examples_and_usage.adoc"
+        ).stream()
+                .filter(fileName -> file.toPath().getParent().resolve(fileName).toFile().exists())
+                .collect(Collectors.toList());
     }
 
 }

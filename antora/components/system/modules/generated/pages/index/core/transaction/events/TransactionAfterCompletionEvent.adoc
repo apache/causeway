@@ -48,4 +48,3 @@ Completion status in case of proper rollback.
 === UNKNOWN
 
 Completion status in case of heuristic mixed completion or system errors.
-

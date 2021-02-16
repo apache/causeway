@@ -1,5 +1,9 @@
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
+Provides translated versions of the various elements within the framework's metamodel: service and object classes, properties, collections, actions, action parameters; and also to translate business rule (disable/valid) messages, and exceptions. These translations provide for both singular and plural forms.
+
+As such, this domain service is the cornerstone of the framework's i18n support.
+
 == API
 
 [source,java]
@@ -52,4 +56,3 @@ Whether this implementation is operating in read or in write mode.
 If in read mode, then the translations are expected to be present. In such cases, the _#translate(String, String) translate_ _#translate(String, String, String, int) method_ s should be _lazily_ called, if only because there will (most likely) need to be a session in progress (such that the locale of the current user can be determined).
 
 If in write mode, then the implementation is saving translation keys, and will always return the untranslated translation. In such cases, the _#translate(String, String) translate_ _#translate(String, String, String, int) method_ s should be _eagerly_ called such that all pathways are exercised..
-

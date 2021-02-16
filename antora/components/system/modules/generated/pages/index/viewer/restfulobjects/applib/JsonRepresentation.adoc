@@ -550,4 +550,3 @@ In fact, the method creates a new instance of the specified type, which shares t
 === ensureArray()
 
 A reciprocal of the behaviour of the automatic dereferencing of arrays that occurs when there is only a single instance.
-

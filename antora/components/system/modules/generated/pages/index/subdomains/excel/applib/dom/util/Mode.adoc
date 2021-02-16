@@ -33,4 +33,3 @@ All cells must be well formed and with valid data
 === RELAXED
 
 Ignore any cells that cannot be interpreted.
-

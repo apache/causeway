@@ -57,4 +57,3 @@ Not part of the Restful Objects spec.
 === postMenuBarsNotAllowed()
 
 Not part of the Restful Objects spec.
-

@@ -98,4 +98,3 @@ Set programmatically by framework after reading in from XML.
 === getMetadataError()
 
 For diagnostics; populated by the framework if and only if a metadata error.
-

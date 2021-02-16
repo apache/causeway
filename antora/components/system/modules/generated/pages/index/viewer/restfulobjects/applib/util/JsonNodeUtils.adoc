@@ -38,4 +38,3 @@ For example, if given a list ("a", "b", "c") and starting with an empty map, the
   }
 }
 ----
-

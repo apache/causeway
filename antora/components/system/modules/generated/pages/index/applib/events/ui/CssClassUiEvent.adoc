@@ -36,4 +36,3 @@ If used then the framework will set state via (non-API) setters.
 === setCssClass(String)
 
 For subscribers to call to provide a CSS class for this object.
-

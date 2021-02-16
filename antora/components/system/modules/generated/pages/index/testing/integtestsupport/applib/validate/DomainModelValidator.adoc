@@ -49,4 +49,3 @@ Alternative way of checking
 === anyMatchesContaining(Class, String)
 
 primarily used for testing
-

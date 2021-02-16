@@ -38,4 +38,3 @@ Returns a new _Config_ with given _packagePrefix_ added to the set of this _Conf
 === withPackagePrefix(String)
 
 Returns a new _Config_ with given _packagePrefix_ added to the set of this _Config_ 's packagePrefixes.
-

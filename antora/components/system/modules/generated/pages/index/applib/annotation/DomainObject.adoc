@@ -291,4 +291,3 @@ public class Order {
 ----
 
 This subclass must provide a no-arg constructor; the fields are set reflectively. It must also use `Object` as its generic type. This is to allow mixins to also emit the same event.
-

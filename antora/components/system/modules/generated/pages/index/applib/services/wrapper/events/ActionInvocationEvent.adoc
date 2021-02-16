@@ -31,4 +31,3 @@ Does not apply
 === getProposed()
 
 Does not apply
-

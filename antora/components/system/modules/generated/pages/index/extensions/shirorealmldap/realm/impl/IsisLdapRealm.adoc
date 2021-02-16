@@ -141,4 +141,3 @@ ldapRealm.permissionsByRole=\
    self-install_role = *:ToDoItemsFixturesService:install:* ; \
    admin_role = *
 ----
-

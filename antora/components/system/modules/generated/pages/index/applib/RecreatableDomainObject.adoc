@@ -41,4 +41,3 @@ This method is called by the framework in order that the view model may be recre
 === __isis_recreate(String)
 
 Used to recreate a recreatable object with a memento obtained from _#__isis_recreate(String)_ .
-

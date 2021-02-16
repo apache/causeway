@@ -63,4 +63,3 @@ This annotation, therefore, is intended to override any objectstore-specific ann
 === NOT_SPECIFIED
 
 Ignore the value provided by this annotation (meaning that the framework will keep searching, in meta annotations or superclasses/interfaces).
-

@@ -41,4 +41,3 @@ If not, then the calling xref:system:generated:index/applib/services/menu/MenuBa
 === menuBars()
 
 Returns a new instance of a xref:system:generated:index/applib/layout/menubars/bootstrap3/BS3MenuBars.adoc[BS3MenuBars] if possible, else `null` .
-

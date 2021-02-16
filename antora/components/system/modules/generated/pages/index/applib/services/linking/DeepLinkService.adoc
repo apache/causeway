@@ -28,4 +28,3 @@ Creates a URI that can be used to obtain a representation of the provided domain
 === deepLinkFor(Object)
 
 Creates a URI that can be used to obtain a representation of the provided domain object in one of the Isis viewers.
-

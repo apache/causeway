@@ -26,4 +26,3 @@ Whether the xref:system:generated:index/applib/services/queryresultscache/QueryR
 === isIgnoreCache()
 
 Whether the xref:system:generated:index/applib/services/queryresultscache/QueryResultsCache.adoc[QueryResultsCache] should be disabled, in other words to stop using any cached results.
-

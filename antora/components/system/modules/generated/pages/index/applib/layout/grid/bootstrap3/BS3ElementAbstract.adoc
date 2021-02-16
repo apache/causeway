@@ -25,4 +25,3 @@ Any additional CSS classes to render on the page element corresponding to this o
 === getCssClass()
 
 Any additional CSS classes to render on the page element corresponding to this object, eg as per theBootstrap mixinsor just for custom styling.
-

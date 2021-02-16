@@ -44,4 +44,3 @@ Round-trip with _#toString()_ representation.
 The canonical form of the xref:system:generated:index/applib/services/bookmark/Bookmark.adoc[Bookmark] , that is " _#getObjectType() objectType_ _#SEPARATOR_ _#getIdentifier()_ ".
 
 This is parseable by the _#parse(String)_ .
-

@@ -27,4 +27,3 @@ The object that is being added.
 === getProposed()
 
 The object that is being added.
-

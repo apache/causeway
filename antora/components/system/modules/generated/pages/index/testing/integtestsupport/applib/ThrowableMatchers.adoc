@@ -23,4 +23,3 @@ Matches when the exception's causal chain contains the given _type_
 === causedBy(Class)
 
 Matches when the exception's causal chain contains the given _type_
-

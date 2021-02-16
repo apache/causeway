@@ -25,4 +25,3 @@ Replicates a single command.
 === fetchCommand(CommandJdo)
 
 Replicates a single command.
-

@@ -47,4 +47,3 @@ Not API, set by the framework.
 === setOf(Of)
 
 Not API; updates from _Of#ACCESS_ to either _Of#ADD_TO_ or _Of#REMOVE_FROM_ when hits the _AbstractDomainEvent.Phase#VALIDATE validation phase_ .
-

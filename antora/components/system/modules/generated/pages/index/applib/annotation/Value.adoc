@@ -54,4 +54,3 @@ Implementation note: the default value provided here is simply an empty string b
 As per _#semanticsProviderName()_ , but specifying a class literal rather than a fully qualified class name.
 
 Implementation note: the default value provided here is simply the xref:system:generated:index/applib/annotation/Value.adoc[Value] 's own class, because `null` is not a valid default.
-

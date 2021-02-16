@@ -59,4 +59,3 @@ Do not allow the properties to be edited, or the collections to be added to/remo
 === NOT_SPECIFIED
 
 Ignore the value provided by this annotation (meaning that the framework will keep searching, in meta annotations or superclasses/interfaces).
-

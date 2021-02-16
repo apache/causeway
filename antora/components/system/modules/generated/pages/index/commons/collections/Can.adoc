@@ -337,4 +337,3 @@ Let _n_ be the number of elements in _other_ . Returns whether the last _n_ elem
 
 [#toArray__Class]
 === toArray(Class)
-

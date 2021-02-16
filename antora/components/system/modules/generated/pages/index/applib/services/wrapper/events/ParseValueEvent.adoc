@@ -28,4 +28,3 @@ Will be the source provided in the _#ParseValueEvent(Object, Identifier, String)
 === getSource()
 
 Will be the source provided in the _#ParseValueEvent(Object, Identifier, String) constructor_ if not null, otherwise will fallback to the proposed value.
-

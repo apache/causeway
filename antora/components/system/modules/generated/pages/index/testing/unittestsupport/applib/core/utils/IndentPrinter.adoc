@@ -117,4 +117,3 @@ Prints the current indent level.
 === println()
 
 Prints an end-of-line character (if enabled via addNewLines property). Defaults to outputting a single '\n' character but by using a custom Writer, e.g. PlatformLineWriter, you can get platform-specific end-of-line characters.
-

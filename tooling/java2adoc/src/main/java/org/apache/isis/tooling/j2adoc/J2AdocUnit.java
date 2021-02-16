@@ -177,8 +177,9 @@ public final class J2AdocUnit {
     }
 
     public Document toAsciiDoc(
-            final @NonNull J2AdocContext j2aContext) {
-        return j2aContext.getFormatter().apply(this);
+            final @NonNull J2AdocContext j2aContext,
+            final @NonNull File file) {
+        return j2aContext.getFormatter().apply(this, file);
     }
 
     @Override

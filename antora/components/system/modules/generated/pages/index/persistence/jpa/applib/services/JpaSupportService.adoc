@@ -35,4 +35,3 @@ Optionally returns the current interaction's _EntityManager_ , that is bound to 
 === getEntityManagerElseFail(Class)
 
 Returns the current interaction's _EntityManager_ that is managing the given domain type _entityType_ .
-

@@ -85,4 +85,3 @@ For diagnostics; populated by the framework if and only if a metadata error.
 The link to access this resource from the REST API (Restful Objects viewer).
 
 Populated by the framework automatically.
-

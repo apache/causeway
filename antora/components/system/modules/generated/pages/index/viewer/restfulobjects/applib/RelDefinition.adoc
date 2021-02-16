@@ -48,4 +48,3 @@ xref:system:generated:index/viewer/restfulobjects/applib/Rel.adoc[Rel] defined b
 === IMPL
 
 Proprietary rel defined by implementation.
-

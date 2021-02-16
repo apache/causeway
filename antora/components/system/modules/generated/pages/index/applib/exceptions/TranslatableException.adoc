@@ -39,4 +39,3 @@ If returns `null` , then _Exception#getMessage()_ will be used as a fallback. Th
 === getTranslationContext()
 
 The context to use when translating the _#getTranslatableMessage() translatable message_ , as ultimately passed through to _org.apache.isis.applib.services.i18n.TranslationService#translate(String, String)_ .
-

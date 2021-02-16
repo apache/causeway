@@ -65,4 +65,3 @@ For those xref:system:generated:index/viewer/restfulobjects/applib/Rel.adoc[Rel]
 === andParam(String, String)
 
 For those xref:system:generated:index/viewer/restfulobjects/applib/Rel.adoc[Rel] s that also take a param
-

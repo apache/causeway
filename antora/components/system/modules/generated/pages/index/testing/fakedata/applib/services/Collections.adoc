@@ -81,4 +81,3 @@ class Collections {
 
 - renamed to _#anyBounded(Class)_ .
 ====
-

@@ -70,4 +70,3 @@ Set programmatically by framework after reading in from XML.
 The link to access this resource from the REST API (Restful Objects viewer).
 
 Populated by the framework automatically.
-

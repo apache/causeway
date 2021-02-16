@@ -51,4 +51,3 @@ Append a reason to the list of existing reasons if the condition flag is true.
 === getReason()
 
 Return the combined set of reasons, or `null` if there are none.
-

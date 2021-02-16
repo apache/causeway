@@ -24,4 +24,3 @@ If `null` then satisfied, otherwise is reason why the specification is not satis
 === satisfies(Object)
 
 If `null` then satisfied, otherwise is reason why the specification is not satisfied.
-

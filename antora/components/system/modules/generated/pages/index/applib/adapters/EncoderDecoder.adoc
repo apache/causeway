@@ -45,4 +45,3 @@ Even if the class is self-encodeable, note that this method is always called on 
 Converts an encoded string to an instance of the object.
 
 Note that here the implementing class is acting as a factory for itself.
-

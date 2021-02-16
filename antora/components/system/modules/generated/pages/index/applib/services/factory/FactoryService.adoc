@@ -147,4 +147,3 @@ It is recommended that the object be initially instantiated using this method, t
 * the `created()` callback will not be called.
 
 The corollary is: if your code never uses `default _Xxx_ ()` supporting methods or the `created()` callback, then you can alternatively just _new()_ up the object rather than call this method.
-

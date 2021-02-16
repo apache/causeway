@@ -38,4 +38,3 @@ The main API to send the email (and optional attachments).
 === isConfigured()
 
 Whether this service has been configured and thus available for use.
-

@@ -20,4 +20,3 @@ interface PermissionsEvaluationService {
 
 [#evaluate__ApplicationFeatureId_ApplicationPermissionMode_Collection]
 === evaluate(ApplicationFeatureId, ApplicationPermissionMode, Collection)
-

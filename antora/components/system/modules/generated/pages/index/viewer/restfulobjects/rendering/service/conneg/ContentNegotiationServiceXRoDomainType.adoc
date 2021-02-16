@@ -40,4 +40,3 @@ search for an accept header in form `application/xml;profile=urn:org.restfulobje
 === buildResponse(IResourceContext, ObjectAndActionInvocation)
 
 search for an accept header in form `application/xml;profile=urn:org.restfulobjects:repr-types/action-result;x-ro-domain-type=todoapp.dto.module.todoitem.ToDoItemDto` 
-

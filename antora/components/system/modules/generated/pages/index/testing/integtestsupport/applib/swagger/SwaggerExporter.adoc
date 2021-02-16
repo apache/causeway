@@ -8,9 +8,9 @@
 class SwaggerExporter {
   SwaggerExporter(final ServiceRegistry registry)
   SwaggerExporter(final SwaggerService swaggerService)
-  void export(SwaggerService.Visibility visibility, SwaggerService.Format format)
-  void export(SwaggerService.Visibility visibility, SwaggerService.Format format, File outputDir)
-  void export(SwaggerService.Visibility visibility, SwaggerService.Format format, File outputDir, String fileNamePrefix)
+  void export(Visibility visibility, Format format)
+  void export(Visibility visibility, Format format, File outputDir)
+  void export(Visibility visibility, Format format, File outputDir, String fileNamePrefix)
 }
 ----
 

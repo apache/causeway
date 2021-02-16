@@ -26,4 +26,3 @@ The current state, or `null` if the service implementing this SPI has not yet be
 === getState()
 
 The current state, or `null` if the service implementing this SPI has not yet been initialized.
-

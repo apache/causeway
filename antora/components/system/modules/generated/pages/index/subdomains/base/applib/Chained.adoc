@@ -37,4 +37,3 @@ Implementations where successive intervals are contiguous should instead impleme
 The object (usually an xref:system:generated:index/subdomains/base/applib/with/WithInterval.adoc[WithInterval] , but not necessarily) that succeeds this one, if any (not necessarily contiguously).
 
 Implementations where successive intervals are contiguous should instead implement xref:system:generated:index/subdomains/base/applib/with/WithIntervalContiguous.adoc[WithIntervalContiguous] .
-

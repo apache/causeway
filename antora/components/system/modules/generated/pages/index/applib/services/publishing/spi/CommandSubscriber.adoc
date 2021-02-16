@@ -26,4 +26,3 @@ Notifies that the command has completed.
 Notifies that the command has completed.
 
 This is an opportunity for implementations to process the command, for example to persist a representation of it.
-

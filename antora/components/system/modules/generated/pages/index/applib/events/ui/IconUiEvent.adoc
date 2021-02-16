@@ -49,4 +49,3 @@ The icon name as provided by a subscriber using _#setIconName(String)_ .
 === setIconName(String)
 
 For subscribers to call to provide an icon name for this object.
-

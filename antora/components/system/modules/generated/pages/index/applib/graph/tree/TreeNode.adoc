@@ -73,4 +73,3 @@ Convenient shortcut.
 
 [#getTreeAdapterClass__]
 === getTreeAdapterClass()
-

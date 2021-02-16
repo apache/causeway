@@ -42,4 +42,3 @@ If specified, is the external URL of an image to display to the end user.
 If specified, is the external URL of an image to display to the end user.
 
 Not necessarily of a kitten, but something by way of an apology.
-

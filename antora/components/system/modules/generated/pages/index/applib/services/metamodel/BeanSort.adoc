@@ -112,4 +112,3 @@ Immutable, serializable object.
 === COLLECTION
 
 Container of objects.
-

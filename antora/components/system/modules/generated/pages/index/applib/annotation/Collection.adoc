@@ -73,4 +73,3 @@ Indicates when the collection is not visible to the user.
 === typeOf
 
 The type-of the elements held within the collection.
-

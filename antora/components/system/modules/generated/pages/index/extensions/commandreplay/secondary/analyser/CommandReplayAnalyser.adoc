@@ -16,4 +16,3 @@ interface CommandReplayAnalyser {
 
 [#analyzeReplay__CommandJdo]
 === analyzeReplay(CommandJdo)
-

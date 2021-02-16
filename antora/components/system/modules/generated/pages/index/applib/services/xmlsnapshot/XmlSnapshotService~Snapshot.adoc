@@ -33,4 +33,3 @@ Converts the snapshotted state into an XML document.
 === getXsdDocument()
 
 Creates a corresponding XSD that describes the structure of the exported XML.
-

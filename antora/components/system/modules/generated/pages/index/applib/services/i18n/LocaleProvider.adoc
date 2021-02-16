@@ -24,4 +24,3 @@ Returns the _Locale_ of the current user.
 === getLocale()
 
 Returns the _Locale_ of the current user.
-

@@ -30,4 +30,3 @@ Convenience that recasts this response as wrapping some other representation.
 Convenience that recasts this response as wrapping some other representation.
 
 This would typically be as the results of a content type being an error rather than a representation returned on success.
-

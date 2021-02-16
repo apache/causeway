@@ -94,4 +94,3 @@ Marshalls the object into XML specifying additional properties (passed to the _J
 Generates a map of each of the schemas referenced; the key is the schema namespace, the value is the XML of the schema itself.
 
 A JAXB-annotated domain object will live in its own XSD namespace and may reference multiple other XSD schemas. In particular, many JAXB domain objects will reference the common isis schemas. The _IsisSchemas_ paramter indicates whether these schemas should be included or excluded from the map.
-

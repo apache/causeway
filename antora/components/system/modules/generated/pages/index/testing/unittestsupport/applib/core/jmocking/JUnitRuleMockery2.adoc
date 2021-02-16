@@ -95,4 +95,3 @@ Ignore a set of mocks.
 === oneOf(Object)
 
 Require one interaction
-

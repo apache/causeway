@@ -67,4 +67,3 @@ Delegated users, on first successful logon, are auto-created but disabled (by de
 This option allows to override this behavior, such that authenticated users are also auto-enabled.
 
 default: false
-

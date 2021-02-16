@@ -130,4 +130,3 @@ More precisely, the locale is as provided by the configured _org.apache.isis.app
 === raiseError(TranslatableString, String)
 
 Override of _MessageService#raiseError(TranslatableString, Class, String)_ , but with an arbitrary translation context (rather than inferred from the context class and method).
-

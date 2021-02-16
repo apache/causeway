@@ -102,4 +102,3 @@ whether any of the xref:system:generated:index/viewer/restfulobjects/applib/Repr
 === matchesJsonProfileWithParameter(List, String)
 
 whether any of the xref:system:generated:index/viewer/restfulobjects/applib/RepresentationType.adoc[RepresentationType] s matches any (accept header) JSON _MediaType_ with specified parameter.
-

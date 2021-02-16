@@ -72,4 +72,3 @@ Do *not* publish data triggered by interaction with this object (even if otherwi
 === NOT_SPECIFIED
 
 Ignore the value provided by this annotation (meaning that the framework will keep searching, in meta annotations or super-classes/interfaces).
-

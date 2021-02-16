@@ -34,4 +34,3 @@ Whether this menu should be used to hold any unreferenced actions.
 Whether this menu should be used to hold any unreferenced actions.
 
 Any menubars layout must have precisely one menu that has this attribute set.
-

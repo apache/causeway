@@ -54,4 +54,3 @@ Implementations where successive intervals are NOT contiguous should instead imp
 Show this xref:system:generated:index/subdomains/base/applib/with/WithIntervalContiguous.adoc[WithIntervalContiguous] in context with its predecessors and successors.
 
 This will typically (always) be a derived collection obtained by filtering a collection of the "parent".
-

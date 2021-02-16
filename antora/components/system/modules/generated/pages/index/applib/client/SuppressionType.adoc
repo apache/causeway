@@ -78,4 +78,3 @@ suppress '$$title', title of the domain object
 === ALL
 
 suppress all '$$...' entries
-

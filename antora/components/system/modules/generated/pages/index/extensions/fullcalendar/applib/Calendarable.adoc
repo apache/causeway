@@ -37,4 +37,3 @@ For example, an event of a lease's `FixedBreakOption` has three dates: the _brea
 === getCalendarEvents()
 
 The events associated with this object, keyed by their corresponding _#getCalendarNames() calendar name_ .
-

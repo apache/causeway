@@ -83,4 +83,3 @@ The default is to hide it on the basis that the reporting service will have repo
 === getMarkup()
 
 Returns a Html representation of this ticket.
-

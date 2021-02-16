@@ -36,4 +36,3 @@ Equivalent to `@PropertyLayout(unchanging=true)` prior to Isis 2.x
 === NOT_SPECIFIED
 
 Ignore the value provided by this annotation (meaning that the framework will keep searching, in meta annotations or superclasses/interfaces).
-

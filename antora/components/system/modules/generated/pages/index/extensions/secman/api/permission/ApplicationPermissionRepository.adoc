@@ -24,4 +24,3 @@ interface ApplicationPermissionRepository<P> {
 
 [#newApplicationPermission__]
 === newApplicationPermission()
-

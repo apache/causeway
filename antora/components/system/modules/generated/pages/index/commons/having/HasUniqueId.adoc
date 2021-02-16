@@ -22,4 +22,3 @@ A unique identifier (a GUID).
 === getUniqueId()
 
 A unique identifier (a GUID).
-

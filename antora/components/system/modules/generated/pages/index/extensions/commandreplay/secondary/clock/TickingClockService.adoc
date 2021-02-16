@@ -46,4 +46,3 @@ IMPORTANT: this method is not thread-safe, because the clock is a globally-scope
 Executes the callable, setting the clock to be the specified time beforehand (and reinstating it to its original time afterwards).
 
 IMPORTANT: this method is not thread-safe, because the clock is a globally-scoped singleton rather than a thread-local. This method should therefore only be used in single-user systems, eg a replay secondary.
-

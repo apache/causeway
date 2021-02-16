@@ -26,4 +26,3 @@ If `null` then satisfied, otherwise is the reason (as a xref:system:generated:in
 === satisfiesTranslatable(Object)
 
 If `null` then satisfied, otherwise is the reason (as a xref:system:generated:index/applib/services/i18n/TranslatableString.adoc[TranslatableString] translatable string) as to why the specification is not satisfied.
-

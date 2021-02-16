@@ -51,4 +51,3 @@ Does not close the OutputStream.
 
 [#asImage__]
 === asImage()
-

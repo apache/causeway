@@ -77,4 +77,3 @@ An object that acts as a mix-in to some other object, contributing behavior and/
 === BEAN
 
 An object that is entirely managed by the underlying IoC container.
-

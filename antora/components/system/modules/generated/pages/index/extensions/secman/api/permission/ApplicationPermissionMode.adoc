@@ -44,4 +44,3 @@ In other words, whether they can execute (if an action, modify/clear (if a prope
 The xref:system:generated:index/extensions/secman/api/permission/ApplicationPermissionRule.adoc[ApplicationPermissionRule] of the xref:system:generated:index/extensions/secman/api/permission/ApplicationPermission.adoc[ApplicationPermission] indicates whether access is being granted or denied.
 
 Note that the Wicket viewer does not at the time of writing (Isis 1.6.0) support the notion of mutable collections. The RO viewer does, however.
-

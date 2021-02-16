@@ -39,4 +39,3 @@ The nature of this service, eg for menus, contributed actions, repository.
 Provides the (first part of the) unique identifier (OID) for the service (the instanceId is always "1").
 
 If not specified then either the optional "getId()" is used, otherwise the class' name.
-

@@ -28,4 +28,3 @@ interface TreeAdapter<T> {
 
 [#childrenOf__T]
 === childrenOf(T)
-

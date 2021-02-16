@@ -33,4 +33,3 @@ The property holds the underlying domain object of which this (view model) objec
 === NOT_SPECIFIED
 
 The property
-

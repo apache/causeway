@@ -25,4 +25,3 @@ Configures a _org.apache.shiro.authz.permission.PermissionResolver_ that knows h
 === IsisModuleExtSecmanShiroRealm
 
 Configures a _org.apache.shiro.authz.permission.PermissionResolver_ that knows how to process the permission strings that are provided by Isis' _Authorizor_ for Shiro.
-
