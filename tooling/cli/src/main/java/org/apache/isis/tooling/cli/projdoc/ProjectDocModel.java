@@ -432,13 +432,13 @@ public class ProjectDocModel {
                 .stream()
                 .map(Dependency::getArtifactCoordinates)
                 .map(ArtifactCoordinates::toString)
-                .map(ProjectDocModel::toAdocListItem)
+                .map(ProjectDocModel::toAdocCompactListItem)
                 .collect(Collectors.joining())
                 .trim();
         val componentList = gatherSpringComponents(module.getProjectDirectory())
                 .stream()
                 .map(s->s.replace("org.apache.isis.", "o.a.i."))
-                .map(ProjectDocModel::toAdocListItem)
+                .map(ProjectDocModel::toAdocCompactListItem)
                 .collect(Collectors.joining())
                 .trim();
 
@@ -476,15 +476,22 @@ public class ProjectDocModel {
 
     private static String toAdocSection(String title, String content) {
         
-        return AsciiDocFactory.toString(doc->{
-            val collapsibleBlock = AsciiDocFactory.collapsibleBlock(doc, content);
-            collapsibleBlock.setTitle(title);
-        });
-        //return String.format("_%s_\n\n%s\n\n", title, content);
+        //XXX collapsible will be supported with antora 3
+        //        return AsciiDocFactory.toString(doc->{
+        //            val collapsibleBlock = AsciiDocFactory.collapsibleBlock(doc, content);
+        //            collapsibleBlock.setTitle(title);
+        //        });
+        
+        // render as Sidebar block for now
+        return String.format(".%s\n****\n%s\n****\n\n", title, content);
     }
 
     private static String toAdocListItem(String element) {
         return String.format("* %s\n", element);
+    }
+    
+    private static String toAdocCompactListItem(String element) {
+        return String.format("%s +\n", element);
     }
 
     private SortedSet<String> gatherGlobalDocIndexXrefs(File projDir, J2AdocContext j2aContext) {
