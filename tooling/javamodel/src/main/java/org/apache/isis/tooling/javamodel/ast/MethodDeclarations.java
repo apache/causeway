@@ -23,7 +23,6 @@ import com.github.javaparser.ast.body.EnumDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.type.TypeParameter;
-import com.github.javaparser.printer.PrettyPrinterConfiguration;
 
 import org.apache.isis.commons.collections.Can;
 
@@ -52,7 +51,9 @@ public final class MethodDeclarations {
         return nameAndParams(md, "(", ", ", ")");
     }
 
-    private static final PrettyPrinterConfiguration prettyPrinterNoCommentsConfiguration = new PrettyPrinterConfiguration().setPrintComments(false);
+//    private static final PrinterConfiguration printingNoCommentsConfiguration = 
+//            new DefaultPrinterConfiguration()
+//            .removeOption(new DefaultConfigurationOption(ConfigOption.PRINT_COMMENTS));
 
     private static String nameAndParams(@NonNull MethodDeclaration md, String openParam, String comma, String closeParam) {
         final StringBuilder sb = new StringBuilder();

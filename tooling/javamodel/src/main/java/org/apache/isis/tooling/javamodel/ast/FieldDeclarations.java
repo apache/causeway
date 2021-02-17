@@ -26,7 +26,10 @@ import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.type.TypeParameter;
-import com.github.javaparser.printer.PrettyPrinterConfiguration;
+import com.github.javaparser.printer.configuration.DefaultConfigurationOption;
+import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration;
+import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration.ConfigOption;
+import com.github.javaparser.printer.configuration.PrinterConfiguration;
 
 import org.apache.isis.commons.collections.Can;
 
@@ -36,10 +39,8 @@ import lombok.val;
 //TODO effective public might require more context
 public final class FieldDeclarations {
     
-    private static PrettyPrinterConfiguration printingConf = new PrettyPrinterConfiguration();
-    static {
-        printingConf.setPrintJavadoc(false);
-    }
+    private static final PrinterConfiguration printingConf = new DefaultPrinterConfiguration()
+            .removeOption(new DefaultConfigurationOption(ConfigOption.PRINT_JAVADOC));
     
     /**
      * Returns given {@link FieldDeclaration} as normal text, without formatting.

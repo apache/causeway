@@ -19,16 +19,17 @@
 package org.apache.isis.tooling.javamodel.ast;
 
 import com.github.javaparser.ast.body.AnnotationMemberDeclaration;
-import com.github.javaparser.printer.PrettyPrinterConfiguration;
+import com.github.javaparser.printer.configuration.DefaultConfigurationOption;
+import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration;
+import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration.ConfigOption;
+import com.github.javaparser.printer.configuration.PrinterConfiguration;
 
 import lombok.NonNull;
 
 public final class AnnotationMemberDeclarations {
     
-    private static PrettyPrinterConfiguration printingConf = new PrettyPrinterConfiguration();
-    static {
-        printingConf.setPrintJavadoc(false);
-    }
+    private static final PrinterConfiguration printingConf = new DefaultPrinterConfiguration()
+            .removeOption(new DefaultConfigurationOption(ConfigOption.PRINT_JAVADOC));
     
     /**
      * Returns given {@link AnnotationMemberDeclaration} as normal text, without formatting.

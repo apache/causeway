@@ -22,7 +22,6 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 import com.github.javaparser.ast.body.AnnotationMemberDeclaration;
-import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.body.ConstructorDeclaration;
 import com.github.javaparser.ast.body.EnumConstantDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
