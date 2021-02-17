@@ -250,10 +250,10 @@ public class WebRequestCycleForIsis implements IRequestCycleListener {
         // avoid infinite redirect loops
         RedirectPolicy redirectPolicy = ex instanceof PageExpiredException
                 ? RedirectPolicy.NEVER_REDIRECT
-                        : RedirectPolicy.ALWAYS_REDIRECT;
+                : RedirectPolicy.ALWAYS_REDIRECT;
         return errorPageProvider != null
                 ? new RenderPageRequestHandler(errorPageProvider, redirectPolicy)
-                        : null;
+                : null;
     }
 
     private IRequestHandler respondGracefully(final RequestCycle cycle) {

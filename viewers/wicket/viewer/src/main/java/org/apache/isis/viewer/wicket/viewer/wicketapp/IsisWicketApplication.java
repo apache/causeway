@@ -317,6 +317,9 @@ implements
             settings.setThemeProvider(themeSupport.getThemeProvider());
         });
 
+        //XXX ISIS-2530, don't recreate expired pages
+        getPageSettings().setRecreateBookmarkablePagesAfterExpiry(false);
+        
     }
     
     /*
@@ -360,7 +363,7 @@ implements
     String defaultEncryptionKey() {
         return systemEnvironment.isPrototyping()
                 ? "PrototypingEncryptionKey"
-                        : UUID.randomUUID().toString();
+                : UUID.randomUUID().toString();
     }
 
     private void configureWicketSelect2() {
@@ -540,7 +543,7 @@ implements
         
         return systemEnvironment.isPrototyping()
                 ? RuntimeConfigurationType.DEVELOPMENT
-                        : RuntimeConfigurationType.DEPLOYMENT;
+                : RuntimeConfigurationType.DEPLOYMENT;
     }
 
     // /////////////////////////////////////////////////
