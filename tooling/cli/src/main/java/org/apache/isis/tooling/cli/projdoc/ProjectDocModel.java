@@ -270,7 +270,7 @@ public class ProjectDocModel {
             val key = c4.getWorkspaceName();
 
             return AsciiDocFactory.toString(doc->
-                        AsciiDocFactory.DiagramFactory.plantumlPng(doc, toPlantUml(softwareSystemName), key, null));
+                        AsciiDocFactory.DiagramFactory.plantumlSvg(doc, toPlantUml(softwareSystemName), key, null));
         }
     }
 
