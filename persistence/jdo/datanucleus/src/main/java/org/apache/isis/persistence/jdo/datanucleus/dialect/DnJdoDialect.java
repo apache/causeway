@@ -69,9 +69,14 @@ public class DnJdoDialect extends DefaultJdoDialect {
 
         .getFailure()
         .orElse(null);
-        
-        return (DataAccessException) translatedException;
 
+        if(translatedException instanceof DataAccessException) {
+            return (DataAccessException) translatedException;    
+        }
+        
+        // cannot translate
+        return null;
+        
     }
     
 }
