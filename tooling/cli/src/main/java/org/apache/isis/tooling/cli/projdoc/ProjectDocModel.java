@@ -36,6 +36,8 @@ import java.util.stream.Stream;
 import javax.annotation.Nullable;
 
 import com.structurizr.model.Container;
+import com.structurizr.view.AutomaticLayout.RankDirection;
+import com.structurizr.view.LayoutMergeStrategy;
 
 import org.apache.commons.lang3.builder.EqualsExclude;
 import org.asciidoctor.ast.Document;
@@ -262,6 +264,8 @@ public class ProjectDocModel {
                     .createContainerView(softwareSystem, key, "Artifact Hierarchy (Maven)");
             containerView.addAllContainers();
 
+            containerView.enableAutomaticLayout(RankDirection.LeftRight);
+            
             val plantUmlSource = c4.toPlantUML(containerView);
             return plantUmlSource;
         }
@@ -270,7 +274,8 @@ public class ProjectDocModel {
             val key = c4.getWorkspaceName();
 
             return AsciiDocFactory.toString(doc->
-                        AsciiDocFactory.DiagramFactory.plantumlSvg(doc, toPlantUml(softwareSystemName), key, null));
+                        AsciiDocFactory.DiagramFactory
+                        .plantumlSvg(doc, toPlantUml(softwareSystemName), key, null));
         }
     }
 
