@@ -19,6 +19,7 @@
 
 package org.apache.isis.security.spring.authentication;
 
+import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -26,8 +27,10 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.core.security.authentication.Authentication;
+import org.apache.isis.core.security.authentication.AuthenticationContext;
 import org.apache.isis.core.security.authentication.AuthenticationRequest;
-import org.apache.isis.core.security.authentication.standard.AuthenticatorAbstract;
+import org.apache.isis.core.security.authentication.standard.Authenticator;
 
 /**
  * @since 2.0 {@index}
@@ -36,16 +39,23 @@ import org.apache.isis.core.security.authentication.standard.AuthenticatorAbstra
 @Named("isis.security.AuthenticatorSpring")
 @Order(OrderPrecedence.EARLY)
 @Qualifier("Spring")
-public class AuthenticatorSpring extends AuthenticatorAbstract {
+public class AuthenticatorSpring implements Authenticator {
+
+    @Inject private AuthenticationContext authenticationTracker;
 
     @Override
-    public boolean isValid(final AuthenticationRequest request) {
+    public final boolean canAuthenticate(final Class<? extends AuthenticationRequest> authenticationRequestClass) {
         return true;
     }
 
     @Override
-    public boolean canAuthenticate(final Class<? extends AuthenticationRequest> authenticationRequestClass) {
-        return true;
+    public Authentication authenticate(final AuthenticationRequest request, final String code) {
+        // SpringSecurityFilter should already have taken care of Authentication creation
+        return authenticationTracker.currentAuthentication().orElse(null);
+    }
+
+    @Override
+    public void logout(final Authentication session) {
     }
 
 }

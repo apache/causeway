@@ -36,33 +36,4 @@ public interface Authorizor {
      */
     boolean isUsableInRole(final String role, final Identifier identifier);
 
-    // -- NOP IMPLEMENTATIOn 
-
-    static final Authorizor NOP = new Authorizor() {
-
-        @Override
-        public boolean isVisibleInRole(final String user, final Identifier identifier) {
-            return true;
-        }
-
-        @Override
-        public boolean isUsableInRole(final String role, final Identifier identifier) {
-            return true;
-        }
-
-        @Override
-        public boolean isVisibleInAnyRole(Identifier identifier) {
-            return true;
-        }
-
-        @Override
-        public boolean isUsableInAnyRole(Identifier identifier) {
-            return true;
-        }
-    };
-
-    public static Authorizor nop() {
-        return NOP;
-    }
-
 }
