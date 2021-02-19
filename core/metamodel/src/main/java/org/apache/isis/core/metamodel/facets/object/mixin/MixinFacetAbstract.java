@@ -132,7 +132,7 @@ implements MixinFacet {
                     .isAssignableFrom(constructor.getDeclaringClass());
     }
 
-    @Override
+    @Override @Deprecated
     public ManagedObject mixedIn(ManagedObject mixinAdapter, Policy policy) {
         val mixinPojo = mixinAdapter.getPojo();
         val holderPojo = holderPojoFor(mixinPojo, policy);

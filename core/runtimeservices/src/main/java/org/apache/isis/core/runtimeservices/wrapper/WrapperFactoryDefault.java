@@ -167,15 +167,24 @@ public class WrapperFactoryDefault implements WrapperFactory {
     public <T> T wrap(
             final @NonNull T domainObject,
             final @NonNull SyncControl syncControl) {
-        final ImmutableEnumSet<ExecutionMode> modes = syncControl.getExecutionModes();
-        if (domainObject instanceof WrappingObject) {
+        
+        // skip in support of JUnit tests, that don't inject a SpecificationLoader 
+        if(specificationLoader!=null) {
+            val spec = specificationLoader.loadSpecification(domainObject.getClass());
+            if(spec.isMixin()) {
+                throw _Exceptions.illegalArgument("cannot wrap a mixin instance directly, "
+                        + "use WrapperFactory.wrapMixin(...) instead");
+            }
+        }
+        
+        if (isWrapper(domainObject)) {
             val wrapperObject = (WrappingObject) domainObject;
             val executionMode = wrapperObject.__isis_executionModes();
-            if(! equivalent(executionMode, modes)) {
-                val underlyingDomainObject = wrapperObject.__isis_wrapped();
-                return _Casts.uncheckedCast(createProxy(underlyingDomainObject, syncControl));
+            if(equivalent(executionMode, syncControl.getExecutionModes())) {
+                return domainObject;    
             }
-            return domainObject;
+            val underlyingDomainObject = wrapperObject.__isis_wrapped();
+            return _Casts.uncheckedCast(createProxy(underlyingDomainObject, syncControl));
         }
         return createProxy(domainObject, syncControl);
     }
@@ -191,27 +200,45 @@ public class WrapperFactoryDefault implements WrapperFactory {
     @Override
     public <T> T wrapMixin(
             final @NonNull Class<T> mixinClass, 
-            final @NonNull Object mixedIn) {
-        return wrapMixin(mixinClass, mixedIn, control());
+            final @NonNull Object mixee) {
+        return wrapMixin(mixinClass, mixee, control());
     }
 
     @Override
     public <T> T wrapMixin(
             final @NonNull Class<T> mixinClass, 
-            final @NonNull Object mixedIn, 
+            final @NonNull Object mixee, 
             final @NonNull SyncControl syncControl) {
-        T mixin = factoryService.mixin(mixinClass, mixedIn);
-        return wrap(mixin, syncControl);
+        
+        T mixin = factoryService.mixin(mixinClass, mixee);
+        
+        if (isWrapper(mixee)) {
+            val wrapperObject = (WrappingObject) mixee;
+            val executionMode = wrapperObject.__isis_executionModes();
+            if(equivalent(executionMode, syncControl.getExecutionModes())) {
+                return mixin;    
+            }
+            val underlyingMixee = wrapperObject.__isis_wrapped();
+            return _Casts.uncheckedCast(createMixinProxy(underlyingMixee, mixin, syncControl));
+        }
+        
+        return createMixinProxy(mixee, mixin, syncControl);
     }
 
     protected <T> T createProxy(T domainObject, SyncControl syncControl) {
         val objAdapter = adaptAndGuardAgainstWrappingNotSupported(domainObject);
         return proxyContextHandler.proxy(domainObject, objAdapter, syncControl);
     }
+    
+    protected <T> T createMixinProxy(Object mixee, T mixin, SyncControl syncControl) {
+        val mixeeAdapter = adaptAndGuardAgainstWrappingNotSupported(mixee);
+        val mixinAdapter = adaptAndGuardAgainstWrappingNotSupported(mixin);
+        return proxyContextHandler.mixinProxy(mixin, mixeeAdapter, mixinAdapter, syncControl);
+    }
 
     @Override
-    public boolean isWrapper(Object possibleWrappedDomainObject) {
-        return possibleWrappedDomainObject instanceof WrappingObject;
+    public boolean isWrapper(Object obj) {
+        return obj instanceof WrappingObject;
     }
 
     @Override
@@ -233,6 +260,10 @@ public class WrapperFactoryDefault implements WrapperFactory {
             final AsyncControl<R> asyncControl) {
 
         val targetAdapter = adaptAndGuardAgainstWrappingNotSupported(domainObject);
+        if(targetAdapter.getSpecification().isMixin()) {
+            throw _Exceptions.illegalArgument("cannot wrap a mixin instance directly, "
+                    + "use WrapperFactory.asyncWrapMixin(...) instead");
+        }
         
         val proxyFactory = proxyFactoryService
                 .<T>factory(_Casts.uncheckedCast(domainObject.getClass()), WrappingObject.class);
@@ -247,7 +278,8 @@ public class WrapperFactoryDefault implements WrapperFactory {
 
                 if (shouldCheckRules(asyncControl)) {
                     val doih = new DomainObjectInvocationHandler<>(
-                            domainObject, 
+                            domainObject,
+                            null, // mixeeAdapter ignored
                             targetAdapter,
                             control().withNoExecute(), 
                             null);
@@ -273,14 +305,16 @@ public class WrapperFactoryDefault implements WrapperFactory {
     @Override
     public <T, R> T asyncWrapMixin(
             final @NonNull Class<T> mixinClass, 
-            final @NonNull Object mixedIn, 
+            final @NonNull Object mixee, 
             final @NonNull AsyncControl<R> asyncControl) {
 
-        T mixin = factoryService.mixin(mixinClass, mixedIn);
+        T mixin = factoryService.mixin(mixinClass, mixee);
         
+        val mixeeAdapter = adaptAndGuardAgainstWrappingNotSupported(mixee);
         val mixinAdapter = adaptAndGuardAgainstWrappingNotSupported(mixin);
         
-        val proxyFactory = proxyFactoryService.factory(mixinClass, new Class[]{WrappingObject.class}, new Class[]{mixedIn.getClass()});
+        val proxyFactory = proxyFactoryService
+                .factory(mixinClass, new Class[]{WrappingObject.class}, new Class[]{mixee.getClass()});
 
         return proxyFactory.createInstance(new InvocationHandler() {
             @Override
@@ -294,20 +328,21 @@ public class WrapperFactoryDefault implements WrapperFactory {
                 if (shouldCheckRules(asyncControl)) {
                     val doih = new DomainObjectInvocationHandler<>(
                             mixin,
+                            mixeeAdapter,
                             mixinAdapter, 
                             control().withNoExecute(), 
                             null);
                     doih.invoke(null, method, args);
                 }
 
-                val actionAndTarget = memberAndTargetForMixin(method, mixedIn, mixinAdapter);
+                val actionAndTarget = memberAndTargetForMixin(method, mixee, mixinAdapter);
                 if (! actionAndTarget.isMemberFound()) {
                     return method.invoke(mixin, args);
                 }
 
                 return submitAsync(actionAndTarget, args, asyncControl);
             }
-        }, new Object[]{ mixedIn });
+        }, new Object[]{ mixee });
     }
 
     private boolean isInheritedFromJavaLangObject(final Method method) {

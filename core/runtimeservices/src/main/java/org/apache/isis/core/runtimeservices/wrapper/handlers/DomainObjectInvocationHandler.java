@@ -95,10 +95,12 @@ extends DelegatingInvocationHandlerDefault<T> {
      */
     protected Method __isis_executionModes;
 
-    private EntityFacet entityFacet;
+    private final EntityFacet entityFacet;
+    private final ManagedObject mixeeAdapter;
 
     public DomainObjectInvocationHandler(
             final T domainObject,
+            final ManagedObject mixeeAdapter, // ignored if not handling a mixin
             final ManagedObject targetAdapter,
             final SyncControl syncControl,
             final ProxyContextHandler proxyContextHandler) {
@@ -126,6 +128,8 @@ extends DelegatingInvocationHandlerDefault<T> {
 
         entityFacet = targetAdapter.getSpecification()
                 .getFacet(EntityFacet.class);
+        
+        this.mixeeAdapter = mixeeAdapter; 
     }
 
     /**
@@ -220,25 +224,22 @@ extends DelegatingInvocationHandlerDefault<T> {
             val mixinFacet = targetSpec.getFacet(MixinFacet.class);
             if(mixinFacet != null) {
 
-                // rather than invoke on a (transient) mixin, instead try to
-                // figure out the corresponding contributed member on the contributee.
-                final ManagedObject contributeeAdapter =
-                        mixinFacet.mixedIn(targetAdapter, MixinFacet.Policy.IGNORE_FAILURES);
-
-                if (contributeeAdapter == null) {
-                    throw _Exceptions.illegalState(String.format("Could not locate contributeeAdapter for action '%s'", objectAction.getId()));
+                if (mixeeAdapter == null) {
+                    throw _Exceptions.illegalState(
+                            "Missing the required mixeeAdapter for action '%s'", 
+                            objectAction.getId());
                 }
-                final ObjectMember mixinMember = determineMixinMember(contributeeAdapter, objectAction);
+                final ObjectMember mixinMember = determineMixinMember(mixeeAdapter, objectAction);
 
                 if (mixinMember != null) {
                     if(mixinMember instanceof ObjectAction) {
-                        return handleActionMethod(contributeeAdapter, args, (ObjectAction)mixinMember);
+                        return handleActionMethod(mixeeAdapter, args, (ObjectAction)mixinMember);
                     }
                     if(mixinMember instanceof OneToOneAssociation) {
-                        return handleGetterMethodOnProperty(contributeeAdapter, new Object[0], (OneToOneAssociation)mixinMember);
+                        return handleGetterMethodOnProperty(mixeeAdapter, new Object[0], (OneToOneAssociation)mixinMember);
                     }
                     if(mixinMember instanceof OneToManyAssociation) {
-                        return handleGetterMethodOnCollection(contributeeAdapter, new Object[0], (OneToManyAssociation)mixinMember, memberName);
+                        return handleGetterMethodOnCollection(mixeeAdapter, new Object[0], (OneToManyAssociation)mixinMember, memberName);
                     }
                 } else {
                     throw _Exceptions.illegalState(String.format(

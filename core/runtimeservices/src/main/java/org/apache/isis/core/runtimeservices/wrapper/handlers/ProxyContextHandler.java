@@ -43,6 +43,7 @@ public class ProxyContextHandler {
 
         val invocationHandler = new DomainObjectInvocationHandler<T>(
                 domainObject,
+                null, // mixeeAdapter ignored
                 adapter,
                 syncControl,
                 this);
@@ -50,6 +51,23 @@ public class ProxyContextHandler {
         return proxyCreator.instantiateProxy(invocationHandler);
     }
 
+    public <T> T mixinProxy(
+            T mixin, 
+            ManagedObject mixeeAdapter, 
+            ManagedObject mixinAdapter,
+            SyncControl syncControl) {
+
+        val invocationHandler = new DomainObjectInvocationHandler<T>(
+                mixin,
+                mixeeAdapter,
+                mixinAdapter,
+                syncControl,
+                this);
+
+        return proxyCreator.instantiateProxy(invocationHandler);
+    }
+    
+    
     /**
      * Whether to execute or not will be picked up from the supplied parent
      * handler.
@@ -84,5 +102,7 @@ public class ProxyContextHandler {
 
         return proxyCreator.instantiateProxy(mapInvocationHandler);
     }
+
+
 
 }
