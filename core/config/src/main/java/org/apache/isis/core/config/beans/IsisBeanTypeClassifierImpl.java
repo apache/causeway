@@ -20,9 +20,11 @@ package org.apache.isis.core.config.beans;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.Locale;
 
 import javax.enterprise.inject.Vetoed;
 import javax.persistence.Entity;
+import javax.persistence.Table;
 
 import org.springframework.stereotype.Component;
 
@@ -75,6 +77,33 @@ implements IsisBeanTypeClassifier {
 
         val entityAnnotation = findNearestAnnotation(type, Entity.class).orElse(null);
         if(entityAnnotation!=null) {
+            
+            String objectType = null; 
+            
+            val aDomainObject = findNearestAnnotation(type, DomainObject.class).orElse(null);
+            if(aDomainObject!=null) {
+                objectType = aDomainObject.objectType();
+            }
+            
+            // don't trample over the @DomainObject(objectType=..) if present
+            if(_Strings.isEmpty(objectType)) {
+                val aTable = findNearestAnnotation(type, Table.class).orElse(null);
+                if(aTable!=null) {
+                    val schema = aTable.schema();      
+                    if(_Strings.isNotEmpty(schema)) {
+                        val table = aTable.name();
+                        objectType = String.format("%s.%s", schema.toLowerCase(Locale.ROOT), 
+                                _Strings.isNotEmpty(table)
+                                    ? table
+                                    : type.getSimpleName());
+                    }    
+                }
+            }
+      
+            if(_Strings.isNotEmpty(objectType)) {
+                BeanClassification.selfManaged(
+                        BeanSort.ENTITY, objectType);
+            }
             return BeanClassification.selfManaged(BeanSort.ENTITY);
         }
         

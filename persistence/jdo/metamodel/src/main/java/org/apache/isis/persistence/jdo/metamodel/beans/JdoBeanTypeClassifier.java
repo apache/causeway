@@ -16,7 +16,9 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.persistence.jdo.datanucleus.config;
+package org.apache.isis.persistence.jdo.metamodel.beans;
+
+import java.util.Locale;
 
 import javax.jdo.annotations.EmbeddedOnly;
 
@@ -58,11 +60,17 @@ public class JdoBeanTypeClassifier implements IsisBeanTypeClassifier {
                 objectType = aDomainObject.objectType();
             }
             
-            // don't tremble over the @DomainObject(objectType=..) if present
+            // don't trample over the @DomainObject(objectType=..) if present
             if(_Strings.isEmpty(objectType)) {
                 val schema = persistenceCapableAnnot.get().schema();      
                 if(_Strings.isNotEmpty(schema)) {
-                    objectType = String.format("%s.%s", schema, type.getSimpleName());
+                    
+                    val table = persistenceCapableAnnot.get().table();
+                    
+                    objectType = String.format("%s.%s", schema.toLowerCase(Locale.ROOT), 
+                            _Strings.isNotEmpty(table)
+                                ? table
+                                : type.getSimpleName());
                 }
             }
             

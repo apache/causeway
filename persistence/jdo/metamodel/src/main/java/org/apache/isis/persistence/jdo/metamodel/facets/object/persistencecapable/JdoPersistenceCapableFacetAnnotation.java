@@ -18,18 +18,58 @@
  */
 package org.apache.isis.persistence.jdo.metamodel.facets.object.persistencecapable;
 
+import java.util.Map;
+
 import javax.jdo.annotations.IdentityType;
 
+import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.object.entity.EntityFacet;
+import org.apache.isis.persistence.jdo.provider.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacet;
 
-public class JdoPersistenceCapableFacetAnnotation extends JdoPersistenceCapableFacetAbstract {
+public class JdoPersistenceCapableFacetAnnotation 
+extends FacetAbstract 
+implements JdoPersistenceCapableFacet {
+
+    private final String schema;
+    private final String table;
+    private final IdentityType identityType;
 
     public JdoPersistenceCapableFacetAnnotation(
             final String schemaName,
             final String tableOrTypeName,
             final IdentityType identityType,
             final FacetHolder holder) {
-        super(schemaName, tableOrTypeName, identityType, holder);
+        
+        super(JdoPersistenceCapableFacet.class, holder, Derivation.NOT_DERIVED);
+        super.setFacetAliasType(EntityFacet.class);
+        this.schema = schemaName;
+        this.table = tableOrTypeName;
+        this.identityType = identityType;
     }
+
+    @Override
+    public IdentityType getIdentityType() {
+        return identityType;
+    }
+
+    @Override
+    public String getSchema() {
+        return schema;
+    }
+    
+    @Override
+    public String getTable() {
+        return table;
+    }
+
+    @Override 
+    public void appendAttributesTo(final Map<String, Object> attributeMap) {
+        super.appendAttributesTo(attributeMap);
+        attributeMap.put("schema", schema);
+        attributeMap.put("table", table);
+        attributeMap.put("identityType", identityType);
+    }
+
 
 }

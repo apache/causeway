@@ -16,8 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
-package org.apache.isis.persistence.jdo.metamodel.facets.object.domainobject.objectspecid;
+package org.apache.isis.persistence.jpa.metamodel.object.domainobject.objectspecid;
 
 import java.util.Locale;
 
@@ -25,27 +24,28 @@ import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
 import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacetAbstract;
-import org.apache.isis.persistence.jdo.provider.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacet;
+import org.apache.isis.persistence.jpa.metamodel.object.table.JpaTableFacetAnnotation;
 
-public class ObjectSpecIdFacetForJdoPersistenceCapableAnnotation 
+public class ObjectSpecIdFacetForTableAnnotation 
 extends ObjectSpecIdFacetAbstract {
 
     public static ObjectSpecIdFacet create(
-            final JdoPersistenceCapableFacet persistenceCapableFacet,
+            final JpaTableFacetAnnotation tableFacet,
             final FacetHolder holder) {
 
-        if(persistenceCapableFacet.isFallback()) {
+        if(tableFacet.isFallback()) {
             return null;
         }
-        final String schema = persistenceCapableFacet.getSchema();
+        final String schema = tableFacet.getSchema();
         if(_Strings.isNullOrEmpty(schema)) {
             return null;
         }
-        final String objectType = schema.toLowerCase(Locale.ROOT) + "." + persistenceCapableFacet.getTable();
-        return new ObjectSpecIdFacetForJdoPersistenceCapableAnnotation(objectType, holder);
+        final String objectType = schema.toLowerCase(Locale.ROOT) + "." + tableFacet.getTable();
+        return new ObjectSpecIdFacetForTableAnnotation(objectType, holder);
     }
 
-    private ObjectSpecIdFacetForJdoPersistenceCapableAnnotation(final String value,
+    private ObjectSpecIdFacetForTableAnnotation(
+            final String value,
             final FacetHolder holder) {
         super(value, holder);
     }

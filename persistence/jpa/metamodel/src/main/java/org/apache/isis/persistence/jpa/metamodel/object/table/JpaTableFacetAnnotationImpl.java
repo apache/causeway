@@ -16,46 +16,28 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.persistence.jdo.metamodel.facets.object.persistencecapable;
+package org.apache.isis.persistence.jpa.metamodel.object.table;
 
 import java.util.Map;
 
-import javax.jdo.annotations.IdentityType;
-
-import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.object.entity.EntityFacet;
-import org.apache.isis.persistence.jdo.provider.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacet;
 
-public abstract class JdoPersistenceCapableFacetAbstract 
+public class JpaTableFacetAnnotationImpl 
 extends FacetAbstract 
-implements JdoPersistenceCapableFacet {
-
-    public static Class<? extends Facet> type() {
-        return JdoPersistenceCapableFacet.class;
-    }
+implements JpaTableFacetAnnotation {
 
     private final String schema;
-    private final String table;
-    private final IdentityType identityType;
+    private final String tableOrTypeName;
 
-    public JdoPersistenceCapableFacetAbstract(
+    public JpaTableFacetAnnotationImpl(
             final String schemaName,
             final String tableOrTypeName,
-            final IdentityType identityType,
             final FacetHolder holder) {
         
-        super(JdoPersistenceCapableFacetAbstract.type(), holder, Derivation.NOT_DERIVED);
-        super.setFacetAliasType(EntityFacet.class);
+        super(JpaTableFacetAnnotation.class, holder, Derivation.NOT_DERIVED);
         this.schema = schemaName;
-        this.table = tableOrTypeName;
-        this.identityType = identityType;
-    }
-
-    @Override
-    public IdentityType getIdentityType() {
-        return identityType;
+        this.tableOrTypeName = tableOrTypeName;
     }
 
     @Override
@@ -65,16 +47,15 @@ implements JdoPersistenceCapableFacet {
     
     @Override
     public String getTable() {
-        return table;
+        return tableOrTypeName;
     }
 
     @Override 
     public void appendAttributesTo(final Map<String, Object> attributeMap) {
         super.appendAttributesTo(attributeMap);
         attributeMap.put("schema", schema);
-        attributeMap.put("table", table);
-        attributeMap.put("identityType", identityType);
+        attributeMap.put("table", tableOrTypeName);
     }
 
-    
+
 }
