@@ -52,7 +52,6 @@ public class SpringSecurityFilter implements Filter {
             final ServletResponse servletResponse,
             final FilterChain filterChain) throws IOException, ServletException {
 
-        //val httpServletRequest = (HttpServletRequest) servletRequest;
         val httpServletResponse = (HttpServletResponse) servletResponse;
         
         val springAuthentication = SecurityContextHolder.getContext().getAuthentication();
@@ -69,22 +68,11 @@ public class SpringSecurityFilter implements Filter {
         }
         
         val authenticatedPrincipal = (AuthenticatedPrincipal)principal;
+        val principalIdentity = authenticatedPrincipal.getName();
         
-        val userid = authenticatedPrincipal.getName();
-        
-//        final String userid = header(httpServletRequest, "X-Auth-Userid");
-//        final String rolesHeader = header(httpServletRequest, "X-Auth-Roles");
-//        final String subjectHeader = header(httpServletRequest, "X-Auth-Subject");
-//        if(userid == null || rolesHeader == null || subjectHeader == null) {
-//            httpServletResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-//            return;
-//        }
-//        final List<String> roles = toClaims(rolesHeader);
-//
-        val user = UserMemento.ofNameAndRoleNames(userid, 
+        val user = UserMemento.ofNameAndRoleNames(principalIdentity, 
                 Stream.of("org.apache.isis.viewer.wicket.roles.USER"));
         val authentication = SimpleAuthentication.validOf(user);
-                //of(user, subjectHeader);
         authentication.setType(Authentication.Type.EXTERNAL);
 
         isisInteractionFactory.runAuthenticated(
@@ -94,28 +82,4 @@ public class SpringSecurityFilter implements Filter {
                 });
     }
 
-//    static List<String> toClaims(final String claimsHeader) {
-//        final List<String> roles = asRoles(claimsHeader);
-//        roles.add("org.apache.isis.viewer.wicket.roles.USER");
-//        return roles;
-//    }
-//
-//    static List<String> asRoles(String claimsHeader) {
-//        final List<String> roles = new ArrayList<>();
-//        if(claimsHeader != null) {
-//            roles.addAll(Arrays.asList(claimsHeader.split(",")));
-//        }
-//        return roles;
-//    }
-//
-//    private String header(final HttpServletRequest httpServletRequest, final String headerName) {
-//        final Enumeration<String> headerNames = httpServletRequest.getHeaderNames();
-//        while(headerNames.hasMoreElements()) {
-//            final String header = headerNames.nextElement();
-//            if(header.toLowerCase().equals(headerName.toLowerCase())) {
-//                return httpServletRequest.getHeader(header);
-//            }
-//        }
-//        return null;
-//    }
 }
