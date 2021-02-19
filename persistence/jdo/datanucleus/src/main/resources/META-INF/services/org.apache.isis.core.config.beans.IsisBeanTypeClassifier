@@ -1,1 +1,1 @@
-org.apache.isis.persistence.jdo.integration.config.JdoBeanTypeClassifier
+org.apache.isis.persistence.jdo.datanucleus.config.JdoBeanTypeClassifier

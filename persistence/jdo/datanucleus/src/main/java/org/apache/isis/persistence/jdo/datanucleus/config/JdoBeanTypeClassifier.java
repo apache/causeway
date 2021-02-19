@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.persistence.jdo.metamodel.beans;
+package org.apache.isis.persistence.jdo.datanucleus.config;
 
 import javax.jdo.annotations.EmbeddedOnly;
 
