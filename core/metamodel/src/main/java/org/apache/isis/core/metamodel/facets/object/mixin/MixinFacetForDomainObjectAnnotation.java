@@ -44,10 +44,9 @@ extends MixinFacetAbstract {
             final Class<?> mixinType,
             final String value, 
             final Constructor<?> constructorType,
-            final FacetHolder holder, 
-            MetaModelValidatorForMixinTypes mixinTypeValidator) {
+            final FacetHolder holder) {
 
-        super(mixinType, value, constructorType, holder, mixinTypeValidator);
+        super(mixinType, value, constructorType, holder);
     }
 
     public static MixinFacet create(
@@ -70,8 +69,7 @@ extends MixinFacetAbstract {
                         candidateMixinType, 
                         domainObject.mixinMethod(), 
                         constructor, 
-                        facetHolder,
-                        mixinTypeValidator))
+                        facetHolder))
             .orElse(null);
         })
         .orElse(null);

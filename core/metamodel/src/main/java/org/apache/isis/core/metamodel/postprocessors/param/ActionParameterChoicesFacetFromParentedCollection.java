@@ -22,6 +22,7 @@ package org.apache.isis.core.metamodel.postprocessors.param;
 import java.util.Map;
 
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.collections.CollectionFacet;
@@ -33,7 +34,8 @@ import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 
 import lombok.val;
 
-public class ActionParameterChoicesFacetFromParentedCollection extends ActionParameterChoicesFacetAbstract {
+public class ActionParameterChoicesFacetFromParentedCollection 
+extends ActionParameterChoicesFacetAbstract {
 
     private final OneToManyAssociation otma;
 
@@ -51,22 +53,21 @@ public class ActionParameterChoicesFacetFromParentedCollection extends ActionPar
             final Can<ManagedObject> pendingArgs,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        val parentAdapter = determineParentAdapter(target);
-        val objectAdapter = otma.get(parentAdapter, interactionInitiatedBy);
-        return CollectionFacet.streamAdapters(objectAdapter).collect(Can.toCan());
+        guardAgainstMixin(target);
+        val collectionAdapter = otma.get(target, interactionInitiatedBy);
+        return CollectionFacet.streamAdapters(collectionAdapter).collect(Can.toCan());
     }
 
     /**
      * in the case of a mixin action, the target passed to the facet is actually the mixin itself, 
-     * not the mixee.
+     * not the mixee
      */
-    private ManagedObject determineParentAdapter(final ManagedObject target) {
+    private void guardAgainstMixin(final ManagedObject target) {
         val mixinFacet = target.getSpecification().getFacet(MixinFacet.class);
-        ManagedObject mixedInTarget = null;
         if(mixinFacet != null) {
-            mixedInTarget = mixinFacet.mixedIn(target, MixinFacet.Policy.FAIL_FAST);
+            _Exceptions.unrecoverable("internal error: choices facet invoked on mixin target, "
+                    + "but should be a mixee target instead");
         }
-        return mixedInTarget != null ? mixedInTarget : target;
     }
 
     @Override 

@@ -29,7 +29,7 @@ class MixinFacetAbstract_Test {
             // given
             val constructor = Collection_numberOfChildren.class.getConstructor(Object.class);
             val facet = new MixinFacetAbstract(
-                    Collection_numberOfChildren.class, "prop", constructor, null, null) {};
+                    Collection_numberOfChildren.class, "prop", constructor, null) {};
 
             val propMethodInSubclass = SimpleObject_numberOfChildren.class.getMethod("prop");
 

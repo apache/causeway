@@ -27,7 +27,6 @@ import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.core.metamodel.facets.SingleValueFacet;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 /**
@@ -50,12 +49,6 @@ public interface MixinFacet extends SingleValueFacet<String> {
         FAIL_FAST,
         IGNORE_FAILURES
     }
-
-    /**
-     * Returns the (adapter of the) domain object that is the <i>holder</i> of the 
-     * given mix-in adapter.
-     */
-    ManagedObject mixedIn(ManagedObject mixinAdapter, Policy policy);
 
     /**
      * Returns the mix-in around the provided domain object (<i>holder</i>)
