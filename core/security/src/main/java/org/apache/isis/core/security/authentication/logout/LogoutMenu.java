@@ -38,6 +38,7 @@ import org.apache.isis.core.security.authentication.Authentication;
 import org.apache.isis.core.security.authentication.AuthenticationContext;
 
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 
 @Named("isis.security.LogoutMenu")
 @DomainService(objectType = "isis.security.LogoutMenu")
@@ -59,30 +60,44 @@ public class LogoutMenu {
             cssClassFa = "fa-sign-out-alt"
             )
     @MemberOrder(sequence = "999")
-    public LoginRedirect logout(){
+    public Object logout(){
         _NullSafe.stream(logoutHandler)
             .filter(LogoutHandler::isHandlingCurrentThread)
             .forEach(LogoutHandler::logout);
-        return new LoginRedirect();
+        
+        return getRedirect();
     }
 
-    public String disableLogout() {
-        return authenticationTracker.currentAuthentication()
+    private Object getRedirect() {
+        val redirect =  authenticationTracker.currentAuthentication()
         .map(authentication->
             authentication.getType() == Authentication.Type.EXTERNAL
-            ? "External"
-            : null
+            ? "logout"
+            : "login"
         )
-        .orElse(null);
+        .orElse("login");
+        if("login".equals(redirect)) {
+            return new LoginRedirect();
+        }
+        return null; // redirects to the homepage
     }
     
     /** A pseudo model used to redirect to the login page.*/
     @DomainObject(
-            nature = Nature.VIEW_MODEL, //XXX was INMEMORY_ENTITY 
+            nature = Nature.VIEW_MODEL, 
             objectType = LoginRedirect.OBJECT_TYPE)  
     public static class LoginRedirect {
         public final static String OBJECT_TYPE = "isis.security.LoginRedirect";
     }
-
+    
+    /** A pseudo model used to redirect to the logout page.*/
+    @DomainObject(
+            nature = Nature.VIEW_MODEL, 
+            objectType = LogoutRedirect.OBJECT_TYPE)  
+    public static class LogoutRedirect {
+        public final static String OBJECT_TYPE = "isis.security.LogoutRedirect";
+    }
+    
+    
 }
 
