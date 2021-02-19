@@ -37,7 +37,7 @@ esac
 # (else) ... explicitly ensure that maven-source-plugin is disabled. (in case maven-source-plugin is included by some other means)
 # this is a bit belt-n-braces
 case $SOURCE_MODE in
-  "attach") SOURCE_MODE_OPTS="-Dsource" ;;
+  "attach") SOURCE_MODE_OPTS="-Dsources" ;;
   "*") SOURCE_MODE_OPTS="-Dmaven.source.skip=true" ;;
 esac
 
