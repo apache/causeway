@@ -40,9 +40,12 @@ public class BookmarkedPagesModel extends ModelAbstract<List<BookmarkTreeNode>> 
     private final List<BookmarkTreeNode> rootNodes = _Lists.newArrayList();
 
     private transient PageParameters current;
+
+    private int numPinned;
     
     public BookmarkedPagesModel(IsisAppCommonContext commonContext) {
         super(commonContext);
+        this.numPinned = 0;
     }
 
     public void bookmarkPage(final BookmarkableModel bookmarkableModel) {
@@ -80,7 +83,7 @@ public class BookmarkedPagesModel extends ModelAbstract<List<BookmarkTreeNode>> 
     }
 
     private int getMaxSize() {
-        return getConfiguration().getViewer().getWicket().getBookmarkedPages().getMaxSize();
+        return getConfiguration().getViewer().getWicket().getBookmarkedPages().getMaxSize() + this.numPinned;
     }
 
     private static void trim(List<?> list, int requiredSize) {
@@ -114,6 +117,20 @@ public class BookmarkedPagesModel extends ModelAbstract<List<BookmarkTreeNode>> 
                 iter.remove();
             }
         }
+    }
+
+    public void pin(BookmarkTreeNode rootNode) {
+        this.rootNodes.remove(rootNode);
+        this.rootNodes.add(0, rootNode);
+        rootNode.pin();
+        this.numPinned++;
+    }
+
+    public void unpin(BookmarkTreeNode rootNode) {
+        this.rootNodes.remove(rootNode);
+        this.rootNodes.add(this.numPinned, rootNode);
+        rootNode.unpin();
+        this.numPinned--;
     }
 
     public void clear() {

@@ -22,7 +22,6 @@ package org.apache.isis.viewer.wicket.model.models;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Stream;
 
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
@@ -53,6 +52,7 @@ public class BookmarkTreeNode implements Serializable {
 
     private String title;
     private PageParameters pageParameters;
+    private boolean pinnedState;
 
     public static BookmarkTreeNode newRoot(
             BookmarkableModel bookmarkableModel) {
@@ -74,6 +74,7 @@ public class BookmarkTreeNode implements Serializable {
         this.title = bookmarkableModel.getTitle();
         this.pageType = bookmarkableModel instanceof EntityModel ? PageType.ENTITY : PageType.ACTION_PROMPT;
         this.depth = depth;
+        this.pinnedState = false;
 
     }
 
@@ -95,6 +96,18 @@ public class BookmarkTreeNode implements Serializable {
         final BookmarkTreeNode childNode = new BookmarkTreeNode(childModel, depth+1);
         children.add(childNode);
         return childNode;
+    }
+
+    public void pin() {
+        this.pinnedState = true;
+    }
+
+    public void unpin() {
+        this.pinnedState = false;
+    }
+
+    public boolean isPinned() {
+        return this.pinnedState;
     }
 
     /**

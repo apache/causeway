@@ -60,6 +60,7 @@ public class BookmarkedPagesPanel extends PanelAbstract<BookmarkedPagesModel> {
 
     private static final String ID_BOOKMARK_LIST = "bookmarkList";
     private static final String ID_BOOKMARKS_HELP_TEXT = "helpText";
+    private static final String ID_PIN_BOOKMARK_LINK = "pinBookmarkLink";
     private static final String ID_BOOKMARKED_PAGE_LINK = "bookmarkedPageLink";
     private static final String ID_CLEAR_BOOKMARK_LINK = "clearBookmarkLink";
     private static final String ID_BOOKMARKED_PAGE_ITEM = "bookmarkedPageItem";
@@ -137,6 +138,28 @@ public class BookmarkedPagesPanel extends PanelAbstract<BookmarkedPagesModel> {
                     final PageType pageType = node.getPageType();
                     final Class<? extends Page> pageClass = pageClassRegistry.getPageClass(pageType);
 
+                    final AjaxLink<Object> pinBookmarkLink = new AjaxLink<Object>(ID_PIN_BOOKMARK_LINK) {
+
+                        private static final long serialVersionUID = 1L;
+
+                        @Override
+                        public void onClick(AjaxRequestTarget target) {
+                            if(!node.isPinned()) {
+                                bookmarkedPagesModel.pin(node);
+                                this.add(new CssClassAppender("text-success"));
+                            } else {
+                                bookmarkedPagesModel.unpin(node);
+                                this.add(new CssClassAppender("text-muted"));
+                            }
+                        }
+
+                    };
+                    if(!node.isPinned()) {
+                        pinBookmarkLink.add(new CssClassAppender("text-muted"));
+                    } else {
+                        pinBookmarkLink.add(new CssClassAppender("text-success"));
+                    }
+
                     final AjaxLink<Object> clearBookmarkLink = new AjaxLink<Object>(ID_CLEAR_BOOKMARK_LINK) {
 
                         private static final long serialVersionUID = 1L;
@@ -152,10 +175,13 @@ public class BookmarkedPagesPanel extends PanelAbstract<BookmarkedPagesModel> {
 
                     };
                     if(node.getDepth() == 0) {
+                        pinBookmarkLink.add(new CssClassAppender("pinBookmark"));
                         clearBookmarkLink.add(new CssClassAppender("clearBookmark"));
                     } else {
+                        pinBookmarkLink.setEnabled(true);
                         clearBookmarkLink.setEnabled(true);
                     }
+                    item.add(pinBookmarkLink);
                     item.add(clearBookmarkLink);
 
                     PageParameters pageParameters = node.getPageParameters();
