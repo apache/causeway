@@ -104,6 +104,21 @@ javax.jdo. ...
 
 |===
 
+Framework functionality was removed to inspect the JDO meta-model for any schemas, such that these would be auto-created. This responsibility is now delegated to Spring.
+However, as a fallback we introduced configuration options, that allow explicit schema creation by the framework, for both JDO and JPA: 
+
+[source,yaml]
+.application.yml
+----
+isis:
+  persistence:
+    schema:
+      auto-create-schemas: hello
+      create-schema-sql-template: "CREATE SCHEMA IF NOT EXISTS %S"
+----
+
+More details, on the various configuration options can be found with _Javadoc_ on _IsisConfiguration_.
+
 == Changes to the Programming Model
 
 === Removed (Programming Model)
