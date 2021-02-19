@@ -33,7 +33,7 @@ import org.apache.isis.persistence.jdo.provider.metamodel.facets.prop.primarykey
  * Use to locate the property annotated with {@link PrimaryKey}.
  * <p>
  * In addition, must also be a {@link OneToOneAssociation}, and can be
- * {@link PropertyAccessorFacet read}.
+ * {@link PropertyOrCollectionAccessorFacet read}.
  * <p>
  * Note that it is NOT necessary for there to be a facet to
  * {@link PropertySetterFacet set} the property.

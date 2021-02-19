@@ -21,6 +21,7 @@ package org.apache.isis.persistence.jdo.metamodel.beans;
 import javax.jdo.annotations.EmbeddedOnly;
 
 import org.apache.isis.applib.services.metamodel.BeanSort;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.config.beans.IsisBeanTypeClassifier;
 import org.apache.isis.core.metamodel.facets.Annotations;
 
@@ -49,6 +50,12 @@ public class JdoBeanTypeClassifier implements IsisBeanTypeClassifier {
                 return null; // don't categorize as entity ... fall through in the caller's logic
             }
             
+            val schema = persistenceCapableAnnot.get().schema();      
+            if(_Strings.isNotEmpty(schema)) {
+                BeanClassification.selfManaged(
+                        BeanSort.ENTITY, 
+                        String.format("%s.%s", schema, type.getSimpleName()));
+            }
             return BeanClassification.selfManaged(BeanSort.ENTITY);
         }
         
