@@ -64,7 +64,6 @@ function buildDependency() {
 
 	mvn --batch-mode \
 	  install \
-	    $SOURCE_MODE_OPTS \
       -Dskip.git \
       -Dskip.arch \
       -DskipTests \
@@ -151,11 +150,12 @@ fi
 cd $PROJECT_ROOT_PATH
 echo ""
 echo ""
-echo ">>> ${PROJECT_ROOT_PATH}: mvn -s $SETTINGS_XML $MVN_STAGES $* $MVN_ADDITIONAL_OPTS"
+echo ">>> ${PROJECT_ROOT_PATH}: mvn -s $SETTINGS_XML $BATCH_MODE $SOURCE_MODE_OPTS -T1C $MVN_STAGES $MVN_ADDITIONAL_OPTS $* -Dmodule-all"
 echo ""
 echo ""
 mvn -s $SETTINGS_XML \
     $BATCH_MODE \
+    $SOURCE_MODE_OPTS \
     -T1C \
     $MVN_STAGES \
     $MVN_ADDITIONAL_OPTS \
