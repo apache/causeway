@@ -28,9 +28,6 @@
     </description>
 
     <properties>
-		<sonar.projectKey>jmhupanen_isis</sonar.projectKey>
-		<sonar.organization>apache-isis-maintenance</sonar.organization>
-		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.deploy.skip>true</maven.deploy.skip> <!-- don't deploy the aggregator -->
     </properties>
