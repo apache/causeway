@@ -35,8 +35,8 @@ import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.environment.IsisSystemEnvironment;
 import org.apache.isis.core.interaction.session.InteractionFactory;
 import org.apache.isis.core.metamodel.events.MetamodelEvent;
-import org.apache.isis.testing.fixtures.applib.clock.Clock;
-import org.apache.isis.testing.fixtures.applib.clock.FixtureClock;
+import org.apache.isis.testing.fixtures.applib.services.clock.Clock;
+import org.apache.isis.testing.fixtures.applib.services.clock.FixtureClock;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 

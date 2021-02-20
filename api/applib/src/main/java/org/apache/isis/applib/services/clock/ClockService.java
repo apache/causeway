@@ -18,7 +18,7 @@
  */
 package org.apache.isis.applib.services.clock;
 
-import org.apache.isis.applib.clock.VirtualClock;
+import org.apache.isis.applib.services.clock.VirtualClock;
 
 /**
  * This service allows an application to be decoupled from the system time.

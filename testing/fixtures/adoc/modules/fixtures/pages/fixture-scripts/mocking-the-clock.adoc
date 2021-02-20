@@ -10,7 +10,7 @@ This page describes how to change the current time, and how to set up tests usin
 
 == FixtureClock
 
-The default xref:refguide:applib-svc:ClockService.adoc[`ClockService`] implementation in fact simply delegates to another class defined in the API, namely the `o.a.i.applib.clock.Clock`, an abstract singleton class.
+The default xref:refguide:applib-svc:ClockService.adoc[`ClockService`] implementation in fact simply delegates to another class defined in the API, namely the `o.a.i.applib.services.clock.Clock`, an abstract singleton class.
 It is not recommended that your code use the `Clock` directly, but it's worth understanding how this all works.
 
 * If running in xref:refguide:config:about.adoc#deployment-types[production] (server) mode, then the framework will (lazily) instantiate the ``SystemClock` when first required.

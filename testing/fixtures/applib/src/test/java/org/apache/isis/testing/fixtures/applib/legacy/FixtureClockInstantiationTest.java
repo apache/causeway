@@ -27,8 +27,8 @@ import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-import org.apache.isis.testing.fixtures.applib.clock.Clock;
-import org.apache.isis.testing.fixtures.applib.clock.FixtureClock;
+import org.apache.isis.testing.fixtures.applib.services.clock.Clock;
+import org.apache.isis.testing.fixtures.applib.services.clock.FixtureClock;
 
 public class FixtureClockInstantiationTest {
 

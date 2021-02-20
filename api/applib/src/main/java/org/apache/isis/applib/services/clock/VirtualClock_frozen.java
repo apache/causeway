@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.clock;
+package org.apache.isis.applib.services.clock;
 
 import java.time.Instant;
 import java.util.Objects;
@@ -24,19 +24,15 @@ import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-final class VirtualClock_withOffset implements VirtualClock {
+final class VirtualClock_frozen implements VirtualClock {
 
     private static final long serialVersionUID = -2589204298085221985L;
     
-    /**
-     * Amount of time (milli seconds) this clock is offset into the future 
-     * with respect to the actual (system) time.
-     */
-    private final long millisOffset;
+    private final Instant frozenInstant;
     
     @Override
     public Instant now() {
-        return Instant.now().plusMillis(millisOffset);
+        return frozenInstant;
     }
     
     // -- TO STRING, EQUALS, HASHCODE
@@ -51,11 +47,11 @@ final class VirtualClock_withOffset implements VirtualClock {
         if(obj==null) {
             return false;
         }
-        // equal if same class and same millisOffset
+        // equal if same class and same frozenInstant
         if(!Objects.equals(this.getClass(), obj.getClass())) {
             return false;
         }
-        if(!Objects.equals(this.millisOffset, ((VirtualClock_withOffset)obj).millisOffset)) {
+        if(!Objects.equals(this.frozenInstant, ((VirtualClock_frozen)obj).frozenInstant)) {
             return false;
         }
         return true;
@@ -63,8 +59,8 @@ final class VirtualClock_withOffset implements VirtualClock {
     
     @Override
     public int hashCode() {
-        // equal if same class and same millisOffset
-        return Objects.hash(this.getClass(), millisOffset);
+        // equal if same class and same frozenInstant
+        return Objects.hash(this.getClass(), frozenInstant);
     }
 
 }

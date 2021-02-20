@@ -24,7 +24,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.Future;
 
-import org.apache.isis.applib.clock.VirtualClock;
+import org.apache.isis.applib.services.clock.VirtualClock;
 import org.apache.isis.applib.services.user.UserMemento;
 
 import lombok.Getter;

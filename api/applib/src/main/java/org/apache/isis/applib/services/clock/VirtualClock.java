@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.clock;
+package org.apache.isis.applib.services.clock;
 
 import java.io.Serializable;
 import java.time.Instant;

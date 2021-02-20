@@ -22,7 +22,7 @@ import java.io.Serializable;
 import java.util.Locale;
 import java.util.TimeZone;
 
-import org.apache.isis.applib.clock.VirtualClock;
+import org.apache.isis.applib.services.clock.VirtualClock;
 import org.apache.isis.applib.services.user.UserMemento;
 
 import lombok.Builder;

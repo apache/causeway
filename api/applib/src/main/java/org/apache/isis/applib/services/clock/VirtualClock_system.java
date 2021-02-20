@@ -16,25 +16,22 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.clock;
+package org.apache.isis.applib.services.clock;
 
 import java.time.Instant;
-import java.util.Objects;
 
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-final class VirtualClock_frozen implements VirtualClock {
+final class VirtualClock_system implements VirtualClock {
 
-    private static final long serialVersionUID = -2589204298085221985L;
-    
-    private final Instant frozenInstant;
-    
+    private static final long serialVersionUID = 4019699893189814294L;
+
     @Override
     public Instant now() {
-        return frozenInstant;
+        return Instant.now();
     }
-    
+
     // -- TO STRING, EQUALS, HASHCODE
     
     @Override
@@ -47,20 +44,14 @@ final class VirtualClock_frozen implements VirtualClock {
         if(obj==null) {
             return false;
         }
-        // equal if same class and same frozenInstant
-        if(!Objects.equals(this.getClass(), obj.getClass())) {
-            return false;
-        }
-        if(!Objects.equals(this.frozenInstant, ((VirtualClock_frozen)obj).frozenInstant)) {
-            return false;
-        }
-        return true;
+        // equal if same class
+        return this.getClass().equals(obj.getClass());
     }
     
     @Override
     public int hashCode() {
-        // equal if same class and same frozenInstant
-        return Objects.hash(this.getClass(), frozenInstant);
+        // equal if same class
+        return this.getClass().hashCode();
     }
 
 }

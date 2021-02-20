@@ -32,7 +32,7 @@ import org.junit.runners.Parameterized.Parameters;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-import org.apache.isis.applib.clock.VirtualClock;
+import org.apache.isis.applib.services.clock.VirtualClock;
 import org.apache.isis.applib.services.clock.ClockService;
 
 @RunWith(Parameterized.class)
