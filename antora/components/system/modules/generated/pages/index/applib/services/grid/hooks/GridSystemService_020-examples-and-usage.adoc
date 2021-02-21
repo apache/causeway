@@ -11,4 +11,4 @@ This is therefore a highly specialized and very deep customisation of the framew
 
 == See also
 
-This service is used by xref:refguide:applib-svc:GridService.adoc[`GridService`].
+This service is used by xref:system:generated:index/applib/services/grid/GridService.adoc[`GridService`].

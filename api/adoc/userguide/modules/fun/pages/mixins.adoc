@@ -168,7 +168,7 @@ DocumentHolder_documents mixin =
     factoryService.mixin(DocumentHolder_documents.class, customer);
 ----
 
-Alternatively, you can use xref:refguide:applib-svc:ServiceInjector.adoc[`ServiceInjector`] to inject domain services after the mixin has been instantiated.
+Alternatively, you can use xref:system:generated:index/applib/services/inject/ServiceInjector.adoc[`ServiceInjector`] to inject domain services after the mixin has been instantiated.
 You'll need to use this method if using nested non-static mixins:
 
 

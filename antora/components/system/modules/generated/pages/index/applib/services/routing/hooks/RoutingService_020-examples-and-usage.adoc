@@ -13,7 +13,7 @@ The route used will be the result of the first implementation checked that decla
 
 == Related Services
 
-* xref:refguide:applib-svc:HomePageResolverService.adoc[`HomePageResolverService`]
+* xref:system:generated:index/applib/services/homepage/HomePageResolverService.adoc[`HomePageResolverService`]
 +
 Used by the default implementation of this service uses the
  to determine where to route actions that return `null` or are declared as `void`.

@@ -29,7 +29,7 @@ Either of these can be suppressed, if required, using a vetoing subscriber that 
 //Bookmarks are useful to store a reference to an arbitrary object, although be aware that there is no referential integrity.
 //
 //Several of the extension libraries use bookmarks.
-//For example the xref:refguide:applib-svc:EntityPropertyChangeSubscriber.adoc[EntityPropertyChangeSubscriber] uses bookmarks to identify the object that is being modified.
+//For example the xref:system:generated:index/applib/services/publishing/spi/EntityPropertyChangeSubscriber.adoc[EntityPropertyChangeSubscriber] uses bookmarks to identify the object that is being modified.
 //
 //Serialized form of bookmarks also appear within  xref:refguide:schema:about.adoc[schema] instances, for example as used by xref:refguide:applib-svc:CommandServiceInternal.adoc[`CommandService`] and the xref:system:generated:index/applib/services/publishing/spi/ExecutionSubscriber.adoc[ExecutionSubscriber].
 

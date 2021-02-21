@@ -44,7 +44,7 @@ Such programmatic services are usually annotated with Spring's link:https://docs
 
 == Repository and Factory
 
-The repository/factory uses an injected xref:refguide:applib-svc:RepositoryService.adoc[`RepositoryService`] to both instantiate new objects and to query the database for existing objects of a given entity type.
+The repository/factory uses an injected xref:system:generated:index/applib/services/repository/RepositoryService.adoc[`RepositoryService`] to both instantiate new objects and to query the database for existing objects of a given entity type.
 Generally these services are not visible in UI, and so are annotated with link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/stereotype/Repository.html[`@Repository`]
 
 For example:
@@ -79,7 +79,7 @@ public CustomerRepository {
 }
 ----
 <.> Detected and managed by Spring Boot.
-<.> Lombok annotation for dependency injection of xref:refguide:applib-svc:RepositoryService.adoc[`RepositoryService`] through generated constructor.
+<.> Lombok annotation for dependency injection of xref:system:generated:index/applib/services/repository/RepositoryService.adoc[`RepositoryService`] through generated constructor.
 <.> uses injected `RepositoryService` to query via JDOQL.
 <.> uses injected `RepositoryService` to instantiate a not-yet-persisted domain entity ...
 <.> \... and then save into the database a new `Customer` instance.
@@ -195,7 +195,7 @@ By default all domain services are application-scoped, in other words singletons
 Such domain services are required to be thread-safe, usually satisfied by being intrinsically stateless.
 
 Sometimes though a service's lifetime is applicable only to a single (http) request.
-The framework has a number of such services, including a xref:refguide:applib-svc:Scratchpad.adoc[`Scratchpad`] service (to share adhoc data between methods), and xref:refguide:applib-svc:QueryResultsCache.adoc[`QueryResultsCache`], which as its name suggests will cache query results.
+The framework has a number of such services, including a xref:system:generated:index/applib/services/scratchpad/Scratchpad.adoc[`Scratchpad`] service (to share adhoc data between methods), and xref:system:generated:index/applib/services/queryresultscache/QueryResultsCache.adoc[`QueryResultsCache`], which as its name suggests will cache query results.
 Such services _do_ hold state, but that state is scoped per (possibly concurrent) request and should be removed afterwards.
 
 The requirement for request-scoped services is supported using Apache Isis' own xref:system:generated:index/applib/annotation/InteractionScope.adoc[`@IsisSessionScope`] annotation (named because a short-lived `IsisSession` is created for each request).

@@ -155,7 +155,7 @@ Must correspond to the class on which the annotation is defined (the framework c
 
 JDO/DataNucleus provides several APIs for defining queries, including entirely programmatic and type-safe APIs; but JDOQL is very similar to SQL and so easily learnt.
 
-To actually use the above definition, the framework provides the xref:refguide:applib-svc:RepositoryService.adoc[`RepositoryService`].
+To actually use the above definition, the framework provides the xref:system:generated:index/applib/services/repository/RepositoryService.adoc[`RepositoryService`].
 This is a generic repository for any domain class.
 
 The corresponding repository method for the above query is:

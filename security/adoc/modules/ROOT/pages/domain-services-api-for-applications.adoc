@@ -12,7 +12,7 @@ Still, on very rare occasion you may have a need, in which case you can either u
 
 == `UserService` API
 
-The xref:refguide:applib-svc:UserService.adoc[`UserService`] service exposes the following API:
+The xref:system:generated:index/applib/services/user/UserService.adoc[`UserService`] service exposes the following API:
 
 [source,java]
 ----

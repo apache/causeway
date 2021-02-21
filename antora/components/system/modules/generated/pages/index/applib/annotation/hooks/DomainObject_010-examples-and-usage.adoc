@@ -27,8 +27,8 @@
 //<.> xref:system:generated:index/applib/annotation/DomainObject.adoc#entityChangePublishing[`entityChangePublishing()`]
 //+
 //Indicates whether each of the changed properties of an object should be submitted to the registered
-//xref:refguide:applib-svc:EntityPropertyChangeSubscriber.adoc[EntityPropertyChangeSubscriber](s) and
-//whether entity changes, captured as `ChangingEntities` should be published to xref:refguide:applib-svc:EntityChangesSubscriber.adoc[`EntityChangesSubscriber`](s). (Does only apply to entity objects.)
+//xref:system:generated:index/applib/services/publishing/spi/EntityPropertyChangeSubscriber.adoc[EntityPropertyChangeSubscriber](s) and
+//whether entity changes, captured as `ChangingEntities` should be published to xref:system:generated:index/applib/services/publishing/spi/EntityChangesSubscriber.adoc[`EntityChangesSubscriber`](s). (Does only apply to entity objects.)
 //
 //<.> xref:system:generated:index/applib/annotation/DomainObject.adoc#mixinMethod[`mixinMethod()`]
 //+
@@ -57,7 +57,7 @@
 //----
 //<.> xref:system:generated:index/applib/annotation/DomainObject.adoc#createdLifecycleEvent[`createdLifecycleEvent()`]
 //+
-//The event type to be posted to the xref:refguide:applib-svc:EventBusService.adoc[`EventBusService`] whenever an instance is created
+//The event type to be posted to the xref:system:generated:index/applib/services/eventbus/EventBusService.adoc[`EventBusService`] whenever an instance is created
 //
 //<.> xref:system:generated:index/applib/annotation/DomainObject.adoc#persistingLifecycleEvent[`persistingLifecycleEvent()`]
 //+
@@ -97,15 +97,15 @@
 //----
 //<.> `actionDomainEvent()`
 //+
-//The event type to be posted to the xref:refguide:applib-svc:EventBusService.adoc[`EventBusService`] whenever an action of the domain object is interacted with (if not overridden using xref:system:generated:index/applib/annotation/Action.adoc#domainEvent[`@Action#domainEvent()]`).
+//The event type to be posted to the xref:system:generated:index/applib/services/eventbus/EventBusService.adoc[`EventBusService`] whenever an action of the domain object is interacted with (if not overridden using xref:system:generated:index/applib/annotation/Action.adoc#domainEvent[`@Action#domainEvent()]`).
 //
 //<.> `propertyDomainEvent()`
 //+
-//The event type to be posted to the xref:refguide:applib-svc:EventBusService.adoc[`EventBusService`] whenever a property of the domain object is interacted with (if not overridden using xref:system:generated:index/applib/annotation/Property.adoc#domainEvent[`@Property#domainEvent()]`).
+//The event type to be posted to the xref:system:generated:index/applib/services/eventbus/EventBusService.adoc[`EventBusService`] whenever a property of the domain object is interacted with (if not overridden using xref:system:generated:index/applib/annotation/Property.adoc#domainEvent[`@Property#domainEvent()]`).
 //
 //<.> `collectionDomainEvent()`
 //+
-//The event type to be posted to the xref:refguide:applib-svc:EventBusService.adoc[`EventBusService`] whenever a collection of the domain object is interacted with (if not overridden using xref:system:generated:index/applib/annotation/Collection.adoc#domainEvent[`@Collection#domainEvent()]`).
+//The event type to be posted to the xref:system:generated:index/applib/services/eventbus/EventBusService.adoc[`EventBusService`] whenever a collection of the domain object is interacted with (if not overridden using xref:system:generated:index/applib/annotation/Collection.adoc#domainEvent[`@Collection#domainEvent()]`).
 //
 //
 //// TODO: v2: currently missing subpages for these attributes.
@@ -152,7 +152,7 @@ public class CustomerViewModel {
 ----
 
 Although there are several ways to instantiate a view model, we recommend that they are instantiated using an N-arg constructor that initializes all relevant state.
-The xref:refguide:applib-svc:ServiceRegistry.adoc[`ServiceRegistry`] can then be used to inject dependencies into the view model.
+The xref:system:generated:index/applib/services/registry/ServiceRegistry.adoc[`ServiceRegistry`] can then be used to inject dependencies into the view model.
 For example:
 
 [source,java]

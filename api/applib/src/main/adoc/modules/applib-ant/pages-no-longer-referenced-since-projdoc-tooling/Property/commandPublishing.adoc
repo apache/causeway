@@ -12,7 +12,7 @@ The main uses cases are:
 
 * as a means to allow asynchronous child commands to be executed, using the xref:system:generated:index/applib/services/wrapper/WrapperFactory.adoc[WrapperFactory] service;
 
-* as a means to audit (persist) commands, by implementing the xref:refguide:applib-svc:CommandSubscriber.adoc[CommandSubscriber] SPI.
+* as a means to audit (persist) commands, by implementing the xref:system:generated:index/applib/services/publishing/spi/CommandSubscriber.adoc[CommandSubscriber] SPI.
 +
 The xref:extensions:command-log:about.adoc[Command Log] extension _does_ provide such an implementation.
 +

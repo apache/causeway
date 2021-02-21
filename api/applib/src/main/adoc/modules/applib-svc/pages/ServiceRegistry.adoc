@@ -14,7 +14,7 @@ include::ServiceRegistry/hooks/examples_and_usage.adoc[]
 
 == Related Services
 
-* xref:refguide:applib-svc:ServiceInjector.adoc[ServiceInjector]
+* xref:system:generated:index/applib/services/inject/ServiceInjector.adoc[ServiceInjector]
 +
 to inject domain services rather than just look them up.
 

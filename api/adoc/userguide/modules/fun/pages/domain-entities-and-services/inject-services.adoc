@@ -5,7 +5,7 @@
 :page-partial:
 
 
-Apache Isis runs on top of Spring Boot, and uses Spring Boot for dependency injection, both the application's own domain services and also the many additional services defined by the framework (such as xref:refguide:applib-svc:RepositoryService.adoc[`RepositoryService`]).
+Apache Isis runs on top of Spring Boot, and uses Spring Boot for dependency injection, both the application's own domain services and also the many additional services defined by the framework (such as xref:system:generated:index/applib/services/repository/RepositoryService.adoc[`RepositoryService`]).
 
 Since this is a core capability of Spring, it's worth checking out Spring's link:https://docs.spring.io/spring/docs/current/spring-framework-reference/core.html#beans-factory-collaborators[documentation] on the topic.
 
@@ -179,7 +179,7 @@ Most domain services are application-scoped, in other words they are stateless g
 
 A small number of framework-provided services are annotated using xref:system:generated:index/applib/annotation/InteractionScope.adoc[`@IsisSessionScope`].
 This means that they are stateful and scoped with each isis session, in other words HTTP request.
-One such service is xref:refguide:applib-svc:QueryResultsCache.adoc[`QueryResultsCache`], used for performance caching.
+One such service is xref:system:generated:index/applib/services/queryresultscache/QueryResultsCache.adoc[`QueryResultsCache`], used for performance caching.
 
 These domain services must be requested using a slightly different idiom, using the `Provider` interface.
 For example:

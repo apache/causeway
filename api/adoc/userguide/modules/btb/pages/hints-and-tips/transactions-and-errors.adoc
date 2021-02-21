@@ -11,7 +11,7 @@ Indeed, if you do try to manage transactions (eg by reaching into the JDO `Persi
 
 However, you can complete a given transaction and start a new one.
 This is sometimes useful if writing a xref:testing:fixtures:about.adoc#fixture-scripts[fixture script] which is going to perform some sort of bulk migration of data from an old system.
-For this use case, use the xref:refguide:applib-svc:TransactionService.adoc[`TransactionService`].
+For this use case, use the xref:system:generated:index/applib/services/xactn/TransactionService.adoc[`TransactionService`].
 
 For example:
 
@@ -35,7 +35,7 @@ public class SomeLongRunningFixtureScript extends FixtureScript
 
 == Raise message in the UI
 
-The framework provides the xref:refguide:applib-svc:MessageService.adoc[`MessageService`] as a means to return an out-of-band message to the end-user.
+The framework provides the xref:system:generated:index/applib/services/message/MessageService.adoc[`MessageService`] as a means to return an out-of-band message to the end-user.
 In the xref:vw:ROOT:about.adoc[Wicket viewer] these are shown as "toast" pop-ups; the
 xref:vro:ROOT:about.adoc[Restful Objects viewer] returns an HTTP header.
 
@@ -64,7 +64,7 @@ If however you want to indicate that the exception is in some sense "expected", 
 Another way in which exceptions might be considered "expected" could be as the result of attempting to persist an object which then violates some type of database constraint.
 Even if the domain application checks beforehand, it could be that another user operating on the object at the same moment of time might result in the conflict.
 
-To handle this the xref:refguide:applib-svc:ExceptionRecognizerService.adoc[`ExceptionRecognizer`] SPI can be used.
+To handle this the xref:system:generated:index/applib/services/exceprecog/ExceptionRecognizerService.adoc[`ExceptionRecognizer`] SPI can be used.
 The framework provides a number of implementations out-of-the-box; whenever an exception is thrown it is passed to each known recognizer implementation to see if it recognizes the exception and can return a user-meaningful error message.
 For example, `ExceptionRecognizerForSQLIntegrityConstraintViolationUniqueOrIndexException` checks if the exception inherits from `java.sql.SQLIntegrityConstraintViolationException`, and if so, constructs a suitable message.
 

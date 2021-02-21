@@ -4,10 +4,10 @@
 :page-partial:
 
 
-When the framework renders a domain object, and as the end-user interacts with the domain object, the framework it emits multiple events using the intra-process xref:refguide:applib-svc:EventBusService.adoc[event bus].
+When the framework renders a domain object, and as the end-user interacts with the domain object, the framework it emits multiple events using the intra-process xref:system:generated:index/applib/services/eventbus/EventBusService.adoc[event bus].
 These events enable other domain services (possibly in other modules) to influence how the domain object is rendered, or to perform side-effects or even veto an action invocation.
 
-To receive the events, the domain service should subscribe to the xref:refguide:applib-svc:EventBusService.adoc[`EventBusService`], and implement an appropriately annotated method to receive the events.
+To receive the events, the domain service should subscribe to the xref:system:generated:index/applib/services/eventbus/EventBusService.adoc[`EventBusService`], and implement an appropriately annotated method to receive the events.
 
 The framework has several categories of events: domain events, UI events and lifecycle events.
 These are explored in the sections below.
@@ -15,7 +15,7 @@ These are explored in the sections below.
 [#domain-events]
 == Domain Events
 
-Domain events are fired -- through the internal xref:refguide:applib-svc:EventBusService.adoc[event bus] -- for every user interaction with each object member (property, collection or action).
+Domain events are fired -- through the internal xref:system:generated:index/applib/services/eventbus/EventBusService.adoc[event bus] -- for every user interaction with each object member (property, collection or action).
 
 By default, rendering a property causes a `PropertyDomainEvent` to be fired, though the xref:system:generated:index/applib/annotation/Property.adoc#domainEvent[`@Property#domainEvent()`] attribute allows a custom subclass to be specified if necessary.
 Similarly, rendering a collection causes a `CollectionDomainEvent` to be fired, and rendering an action causes an `ActionDomainEvent` to be fired.

@@ -4,7 +4,7 @@
 
 == Related Services
 
-* xref:refguide:applib-svc:QueryResultsCache.adoc[`QueryResultsCache`]
+* xref:system:generated:index/applib/services/queryresultscache/QueryResultsCache.adoc[`QueryResultsCache`]
 +
 is useful for caching the results of expensive method calls.
 It is also

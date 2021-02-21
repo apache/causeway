@@ -52,4 +52,4 @@ If however every order is for a different product, then no benefit will be gaine
 
 == Related Services
 
-The xref:refguide:applib-svc:Scratchpad.adoc[Scratchpad] service is also intended for actions that are called many times, allowing arbitrary information to be shared between them.
+The xref:system:generated:index/applib/services/scratchpad/Scratchpad.adoc[Scratchpad] service is also intended for actions that are called many times, allowing arbitrary information to be shared between them.

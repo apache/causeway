@@ -71,7 +71,7 @@ public class LibraryMember {
     ...
 }
 ----
-<1> `LibraryMemberLeaveEvent` is a subclass of `o.a.i.applib.eventbus.ActionDomainEvent`.The topic of subclassing is discussed in more detail xref:refguide:applib-svc:EventBusService.adoc#event-hierarchy[below].
+<1> `LibraryMemberLeaveEvent` is a subclass of `o.a.i.applib.eventbus.ActionDomainEvent`.The topic of subclassing is discussed in more detail xref:system:generated:index/applib/services/eventbus/EventBusService.adoc#event-hierarchy[below].
 
 Meanwhile, in the `BookRepository` domain service, we subscribe to the event and act upon it.
 For example:
@@ -258,7 +258,7 @@ There are several mechanisms to suport coarse-grained publish/subscribe for syst
 +
 These events apply to actions annotated with xref:system:generated:index/applib/annotation/Action.adoc#commandPublishing[`@Action#commandPublishing()`]) and to properties properties annotated with xref:system:generated:index/applib/annotation/Property.adoc#commandPublishing[`@Property#commandPublishing`]).
 +
-The events are received by any/all xref:refguide:applib-svc:CommandSubscriber.adoc[`CommandSubscriber`]s.
+The events are received by any/all xref:system:generated:index/applib/services/publishing/spi/CommandSubscriber.adoc[`CommandSubscriber`]s.
 
 * Execution publishing, representing the _completion_ of an action invocation or property edit.
 +
@@ -270,4 +270,4 @@ The events are received by any/all xref:system:generated:index/applib/services/p
 +
 These events apply to objects annotated with xref:system:generated:index/applib/annotation/DomainObject.adoc#entityChangePublishing[`@DomainObject#entityChangePublishing()`]).
 +
-The events are received by any/all xref:refguide:applib-svc:EntityChangesSubscriber.adoc[`EntityChangesSubscriber`]s
+The events are received by any/all xref:system:generated:index/applib/services/publishing/spi/EntityChangesSubscriber.adoc[`EntityChangesSubscriber`]s

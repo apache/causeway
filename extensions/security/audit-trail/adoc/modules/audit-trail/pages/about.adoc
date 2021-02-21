@@ -5,7 +5,7 @@
 WARNING: TODO: this content has not yet been reviewed/updated for v2.0
 
 
-The xref:security:audit-trail:about.adoc[Auditer] module provides an implementation of the xref:refguide:applib-svc:EntityPropertyChangeSubscriber.adoc[EntityPropertyChangeSubscriber], as well as a number of related domain services,
+The xref:security:audit-trail:about.adoc[Auditer] module provides an implementation of the xref:system:generated:index/applib/services/publishing/spi/EntityPropertyChangeSubscriber.adoc[EntityPropertyChangeSubscriber], as well as a number of related domain services,
 It creates an audit record for each changed property (ie every time that `AuditerService#audit(...)` is called.
 
 The module also provides:
@@ -29,10 +29,9 @@ The typical way to indicate that an object should be audited is to annotate it w
 
 == Related Services
 
-The auditing service works very well with implementations of xref:system:generated:index/applib/services/publishing/spi/ExecutionSubscriber.adoc[ExecutionSubscriber] that persist the ``Interaction.Execution`` objects obtained from the xref:system:generated:index/applib/services/iactn/InteractionContext.adoc[`InteractionContext`] service.
-The interaction execution captures the _cause_ of an interaction (an action was invoked, a property was edited), while the `AuditerService` audit entries capture the _effect_ of that interaction in terms of changed state.
+The auditing service works very well with implementations of xref:system:generated:index/applib/services/publishing/spi/ExecutionSubscriber.adoc[ExecutionSubscriber] that persist the ``Execution`` objects obtained from the xref:system:generated:index/applib/services/iactn/InteractionContext.adoc[`InteractionContext`] service.
+The interaction execution captures the _cause_ of an interaction (an action was invoked, a property was edited), while the `EntityPropertyChangeSubscriber` audit entries capture the _effect_ of that interaction in terms of changed state.
 
-The xref:refguide:applib-svc:CommandServiceInternal.adoc[`CommandService`] can also be combined with the auditer service, however
-``Command``s are primarily concerned with capture the _intent_ of an action, not the actual action invocation itself.
+The xref:system:generated:index/applib/services/publishing/spi/CommandSubscriber.adoc[`CommandSubscriber`] SPI can also be combined with the audit-trail service, where the ``Command`` capturesthe _intent_ of an action, not the actual action invocation itself.
 
 

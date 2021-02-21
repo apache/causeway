@@ -11,7 +11,7 @@ From this link:http://isis.markmail.org/thread/dduarjscrbnodfsi[thread] on the A
 * _What is the easiest way to add a spell checker to the text written in a field in
    a domain object, for instance to check English syntax?_
 
-One way to implement is to use the xref:refguide:applib-svc:EventBusService.adoc[event bus]:
+One way to implement is to use the xref:system:generated:index/applib/services/eventbus/EventBusService.adoc[event bus]:
 
 * Set up a xref:refguide:applib-cm:classes/domainevent.adoc[domain event] subscriber that can veto the changes.
 

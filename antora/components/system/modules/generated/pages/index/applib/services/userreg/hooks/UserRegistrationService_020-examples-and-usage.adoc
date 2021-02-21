@@ -14,7 +14,7 @@ The email service (`EmailServiceDefault`) _does_ require a couple of configurati
 
 === User sign-up
 
-For user sign-up, the xref:vw:ROOT:about.adoc[Wicket viewer] will check whether an implementation of this service (and also the xref:refguide:applib-svc:EmailNotificationService.adoc[`EmailNotificationService`]) is available, and if so will render a sign-up page where the user enters their email address.
+For user sign-up, the xref:vw:ROOT:about.adoc[Wicket viewer] will check whether an implementation of this service (and also the xref:system:generated:index/applib/services/userreg/EmailNotificationService.adoc[`EmailNotificationService`]) is available, and if so will render a sign-up page where the user enters their email address.
 A verification email is sent (using the aforementioned `EmailNotificationService`) which includes a link back to the running application; this allows the user then to complete their registration process (choose user name, password and so on).
 When the user has provided the additional details, the Wicket viewer calls _this_ service in order to create an account for them, and then logs the user on.
 

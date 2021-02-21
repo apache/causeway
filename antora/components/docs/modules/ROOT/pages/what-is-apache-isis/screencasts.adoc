@@ -332,7 +332,7 @@ How to validate action parameters using the xref:system:generated:index/applib/a
 
 
 |link:https://www.youtube.com/watch?v=fYJjXAepWAs[032^] +
-How to instantiate/initialize objects using xref:refguide:applib-svc:RepositoryService.adoc[`RepositoryService`], xref:refguide:applib-svc:ServiceRegistry.adoc[`ServiceRegistry`] and/or xref:system:generated:index/applib/services/factory/FactoryService.adoc[`FactoryService`].
+How to instantiate/initialize objects using xref:system:generated:index/applib/services/repository/RepositoryService.adoc[`RepositoryService`], xref:system:generated:index/applib/services/registry/ServiceRegistry.adoc[`ServiceRegistry`] and/or xref:system:generated:index/applib/services/factory/FactoryService.adoc[`FactoryService`].
 |x||||||||x||
 
 

@@ -6,7 +6,7 @@
 
 CAUTION: TODO: v2 - publishing/auditing got a complete overhaul
 
-The `entityChangePublishing` attribute indicates that if the object is modified, then each of its changed properties should be submitted to the registered xref:refguide:applib-svc:EntityPropertyChangeSubscriber.adoc[`EntityPropertyChangeSubscriber`](s).
+The `entityChangePublishing` attribute indicates that if the object is modified, then each of its changed properties should be submitted to the registered xref:system:generated:index/applib/services/publishing/spi/EntityPropertyChangeSubscriber.adoc[`EntityPropertyChangeSubscriber`](s).
 
 The default value for the attribute is `AS_CONFIGURED`, meaning that the xref:refguide:config:sections/isis.applib.adoc#isis.applib.annotation.domain-object.propertyChangePublishing[`isis.applib.annotation.domain-object.propertyChangePublishing`] configuration property is used to determine the whether the action is audited:
 

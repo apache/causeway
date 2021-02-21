@@ -15,30 +15,30 @@ These are generally of use to support development-time activities, for example c
 |Description
 
 
-|xref:refguide:applib-svc:ApplicationFeatureRepository.adoc[ApplicationFeatureRepository]
+|xref:system:generated:index/applib/services/appfeat/ApplicationFeatureRepository.adoc[ApplicationFeatureRepository]
 |Provides access to string representations of the features (package, class, class members) of the domain classes
 within the metamodel.
 
 
 
-|xref:refguide:applib-svc:LayoutService.adoc[LayoutService] &
-xref:refguide:applib-svc:LayoutServiceMenu.adoc[LayoutServiceMenu]
+|xref:system:generated:index/applib/services/layout/LayoutService.adoc[LayoutService] &
+xref:system:generated:index/applib/services/layout/LayoutServiceMenu.adoc[LayoutServiceMenu]
 |Use to obtain the resolved `Xxx.layout.xml` for a class, and the top-level `menubars.layout.xml` files.
 
 
 
 
 
-|xref:refguide:applib-svc:MetamodelService.adoc[MetaModelService] & xref:refguide:applib-svc:MetaModelServiceMenu.adoc[MetaModelServiceMenu]
+|xref:system:generated:index/applib/services/metamodel/MetaModelService.adoc[MetaModelService] & xref:system:generated:index/applib/services/metamodel/MetaModelServiceMenu.adoc[MetaModelServiceMenu]
 |Access to certain information from the Apache Isis metamodel.
 
 
-|xref:refguide:applib-svc:ServiceRegistry.adoc[ServiceRegistry]
+|xref:system:generated:index/applib/services/registry/ServiceRegistry.adoc[ServiceRegistry]
 |Methods to access and use other domain services.
 
 
 
-|xref:refguide:applib-svc:SwaggerService.adoc[SwaggerService]
+|xref:system:generated:index/applib/services/swagger/SwaggerService.adoc[SwaggerService]
 |Exports link:http://swagger.io/[Swagger] spec files, eg to generate link:http://swagger.io/swagger-codegen/[client-side stubs] for use in a custom REST client.
 
 

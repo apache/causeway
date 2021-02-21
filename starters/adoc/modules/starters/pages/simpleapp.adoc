@@ -607,7 +607,7 @@ Used for prototyping and also integration testing.
 +
 NOTE: Fixture scenarios also need to be link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/context/annotation/Import.html[@Import]ed, typically in the top-level `AppManifest`.
 
-<4> An implementation of the xref:refguide:applib-svc:HealthCheckService.adoc[HealtCheckService].
+<4> An implementation of the xref:system:generated:index/applib/services/health/HealthCheckService.adoc[HealtCheckService].
 This integrates with Spring Boot's link:https://docs.spring.io/spring-boot/docs/current/api/org/springframework/boot/actuate/health/HealthIndicator.html[HealthIndicator] SPI, surfaced through the link:https://docs.spring.io/spring-boot/docs/current/reference/html/production-ready-features.html[Spring Boot Actuator].
 <5> Annotated with xref:system:generated:index/applib/annotation/HomePage.adoc[@HomePage] and so is shown automatically as the home page.
 <6> Defines the services in the webapp module, along with dependencies onto the other modules in the application. +

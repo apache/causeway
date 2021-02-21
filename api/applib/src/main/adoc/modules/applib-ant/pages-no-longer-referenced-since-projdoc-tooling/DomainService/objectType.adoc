@@ -11,7 +11,7 @@ This value is used internally to generate a string representation of an service 
 This can appear in several contexts, including:
 
 * as the value of `Bookmark#getObjectType()` and in the `toString()` value of `Bookmark`
-(see xref:refguide:applib-svc:BookmarkService.adoc[`BookmarkService`])
+(see xref:system:generated:index/applib/services/bookmark/BookmarkService.adoc[`BookmarkService`])
 * in the serialization of `OidDto` in the xref:refguide:schema:cmd[command] and xref:refguide:schema:ixn.adoc[interaction] schemas
 * in the URLs of the xref:vro:ROOT:about.adoc[RestfulObjects viewer]
 * in the URLs of the xref:vw:ROOT:about.adoc[Wicket viewer] (specifically, for bookmarked actions)

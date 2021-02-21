@@ -16,17 +16,17 @@ image::reference-services/categories.png[width="600px"]
 What distinguishes API from SPI is primarily whether it is called by the domain application itself, or is called by the framework:
 
 * All of the API domain services provide a default implementation, and so can always be called by domain objects.
-* Most of the SPI domain services also have a default implementation, although in many cases this is a fallback implementation (such as ``AuditerServiceLogging`` for the xref:refguide:applib-svc:EntityPropertyChangeSubscriber.adoc[EntityPropertyChangeSubscriber]).
+* Most of the SPI domain services also have a default implementation, although in many cases this is a fallback implementation (such as ``AuditerServiceLogging`` for the xref:system:generated:index/applib/services/publishing/spi/EntityPropertyChangeSubscriber.adoc[EntityPropertyChangeSubscriber]).
 
 In one sense all API domain services are also SPI, in that they can be overridden by the domain programmer providing another domain service implementing the same type.
-For example, the framework-provided implementation of xref:refguide:applib-svc:RepositoryService.adoc[`RepositoryService`] could be overridden this way, perhaps for more monitoring or caching purposes.
+For example, the framework-provided implementation of xref:system:generated:index/applib/services/repository/RepositoryService.adoc[`RepositoryService`] could be overridden this way, perhaps for more monitoring or caching purposes.
 This is most easily done using the Spring link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/core/annotation/Order.html[`@Order`] annotation.
 Generally speaking in such cases higher precedence implementation will be used instead of the framework-provided implementation.
 For a small number of services, though, _all_ available implementations are delegated to.
-One example is the (aforementioned) xref:refguide:applib-svc:EntityPropertyChangeSubscriber.adoc[EntityPropertyChangeSubscriber] - all configured implementations will be delegated to.
+One example is the (aforementioned) xref:system:generated:index/applib/services/publishing/spi/EntityPropertyChangeSubscriber.adoc[EntityPropertyChangeSubscriber] - all configured implementations will be delegated to.
 
-A small number of domain services can be considered both API and SPI; a good example is the xref:refguide:applib-svc:EmailService.adoc[`EmailService`] that is of direct use for domain objects wishing to send out emails, but is also used by the framework to support the xref:vw:ROOT:features.adoc#user-registration[user registration] functionality supported by the xref:vw:ROOT:about.adoc[Wicket viewer].
-The same is true of the xref:refguide:applib-svc:EventBusService.adoc[`EventBusService`]; this can be used by domain objects to broadcast arbitrary events, but is also used by the framework to automatically emit events for
+A small number of domain services can be considered both API and SPI; a good example is the xref:system:generated:index/applib/services/email/EmailService.adoc[`EmailService`] that is of direct use for domain objects wishing to send out emails, but is also used by the framework to support the xref:vw:ROOT:features.adoc#user-registration[user registration] functionality supported by the xref:vw:ROOT:about.adoc[Wicket viewer].
+The same is true of the xref:system:generated:index/applib/services/eventbus/EventBusService.adoc[`EventBusService`]; this can be used by domain objects to broadcast arbitrary events, but is also used by the framework to automatically emit events for
 xref:system:generated:index/applib/annotation/Action.adoc#domainEvent[`@Action#domainEvent()`] etc.
 For these hybrid services we have categorized the service as an API service.
 
@@ -87,9 +87,9 @@ public class Customer {
 
 For objects that are already persisted, the service is automatically injected just after the object is rehydrated by JDO/DataNucleus.
 
-For transient objects (instantiated programmatically), the xref:system:generated:index/applib/services/factory/FactoryService.adoc[`FactoryService#viewModel(...)`] or the xref:refguide:applib-svc:RepositoryService.adoc[`RepositoryService#detachedEntity(...)`]'s will automatically inject the services.
+For transient objects (instantiated programmatically), the xref:system:generated:index/applib/services/factory/FactoryService.adoc[`FactoryService#viewModel(...)`] or the xref:system:generated:index/applib/services/repository/RepositoryService.adoc[`RepositoryService#detachedEntity(...)`]'s will automatically inject the services.
 
-Alternatively the object can be instantiated simply using `new`, then services injected using xref:refguide:applib-svc:ServiceInjector.adoc[`ServiceInjector`]'s ``injectServicesInto(...)`` method.
+Alternatively the object can be instantiated simply using `new`, then services injected using xref:system:generated:index/applib/services/inject/ServiceInjector.adoc[`ServiceInjector`]'s ``injectServicesInto(...)`` method.
 
 [#overriding-the-services]
 == Overriding the services
@@ -110,11 +110,11 @@ Spring offers a number of other mechanisms to specify the ordering; these can al
 For some domain services, all framework will delegate to all available implementation, using a chain-of-responsibility pattern):
 These include:
 
-xref:refguide:applib-svc:ContentMappingService.adoc[`ContentMappingService`],
-xref:refguide:applib-svc:GridSystemService.adoc[`GridSystemService`], and
-xref:refguide:applib-svc:RoutingService.adoc[`RoutingService`].
+xref:system:generated:index/applib/services/conmap/ContentMappingService.adoc[`ContentMappingService`],
+xref:system:generated:index/applib/services/grid/GridSystemService.adoc[`GridSystemService`], and
+xref:system:generated:index/applib/services/routing/RoutingService.adoc[`RoutingService`].
 
-For example, suppose you wanted to provide your own implementation of xref:refguide:applib-svc:LocaleProvider.adoc[`LocaleProvider`].
+For example, suppose you wanted to provide your own implementation of xref:system:generated:index/applib/services/i18n/LocaleProvider.adoc[`LocaleProvider`].
 The default implementation has these annotations:
 
 [source,java]
@@ -163,7 +163,7 @@ Whether this occurs depends on whether the action/property has been annotated (u
 (Note that subscribers will also receive events for vetoing the action/property; this is not shown on the diagram).
 
 * As each execution progresses, and objects that are modified are "enlisted" into the (internal) xref:core:runtime-services:ChangedObjectsService.adoc[`ChangedObjectsServiceInternal`] domain service.
-Metrics as to which objects are merely loaded into memory are also captured using the xref:refguide:applib-svc:MetricsService.adoc[`MetricsService`] (not shown on the diagram).
+Metrics as to which objects are merely loaded into memory are also captured using the xref:system:generated:index/applib/services/metrics/MetricsService.adoc[`MetricsService`] (not shown on the diagram).
 
 * At the end of each execution, details of that execution are published through the (internal)
 xref:core:runtime-services:ExecutionPublisher.adoc[`ExecutionPublisher`] domain service.
@@ -177,16 +177,16 @@ Only domain objects specified to be published with xref:system:generated:index/a
 +
 [NOTE]
 ====
-Note that it's possible for there to be more than one transaction per top-level interaction, by virtue of the xref:refguide:applib-svc:TransactionService.adoc[`TransactionService`].
+Note that it's possible for there to be more than one transaction per top-level interaction, by virtue of the xref:system:generated:index/applib/services/xactn/TransactionService.adoc[`TransactionService`].
 ====
 
-* At the end of the entire interaction footnote:[although rare, there can be multiple transactions in a single interaction], details of the top-level `Command` are sent to each xref:refguide:applib-svc:CommandSubscriber.adoc[CommandSubscriber].
+* At the end of the entire interaction footnote:[although rare, there can be multiple transactions in a single interaction], details of the top-level `Command` are sent to each xref:system:generated:index/applib/services/publishing/spi/CommandSubscriber.adoc[CommandSubscriber].
 This captures whether the command succeeded or failed.
 +
 The xref:extensions:command-log:about.adoc[Command Log] extension uses this to persist a log of commands, for auditing or to support regression testing with the xref:extensions:command-replay:about.adoc[Command Replay] extension.
 
 
-Implementations of xref:refguide:applib-svc:CommandServiceInternal.adoc[`CommandService`] can use the `Command#getMemento()` method to obtain a XML equivalent of that `Command`, reified using the xref:refguide:schema:cmd.adoc[`cmd.xsd`] schema.
+Implementations of xref:system:generated:index/applib/services/publishing/spi/CommandSubscriber.adoc[CommandSubscriber] can use the `Command#getMemento()` method to obtain a XML equivalent of that `Command`, reified using the xref:refguide:schema:cmd.adoc[`cmd.xsd`] schema.
 This can be converted back into a `CommandDto` using the `CommandDtoUtils` utility class (part of the applib).
 
 Similarly, implementations of xref:system:generated:index/applib/services/publishing/spi/ExecutionSubscriber.adoc[ExecutionSubscriber] can use the `InteractionDtoUtils` utility class to obtain a `InteractionDto` representing the interaction, either just for a single execution or for the entire call-graph.

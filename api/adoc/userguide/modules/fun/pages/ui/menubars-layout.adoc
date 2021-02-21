@@ -175,7 +175,7 @@ Once the application has bootstrapped with a layout file, downloading the "Defau
 
 === Downloading the layout file
 
-The current `menubars.layout.xml` can be downloaded from the xref:refguide:applib-svc:MenuBarsService.adoc[`MenuBarsService`] (exposed on the prototyping menu):
+The current `menubars.layout.xml` can be downloaded from the xref:system:generated:index/applib/services/menu/MenuBarsService.adoc[`MenuBarsService`] (exposed on the prototyping menu):
 
 image::menubars/010-download.png[width="300px"]
 

@@ -17,32 +17,32 @@ The metadata SPIs allow the framework to obtain metadata from alternative locati
 
 
 
-|xref:refguide:applib-svc:GridLoaderService.adoc[GridLoaderService]
+|xref:system:generated:index/applib/services/grid/GridLoaderService.adoc[GridLoaderService]
 |Responsible for loading a grid layout for a domain class, eg from a `layout.xml` file.
 
 
-|xref:refguide:applib-svc:GridService.adoc[GridService]
-|A facade on top of both xref:refguide:applib-svc:GridLoaderService.adoc[`GridLoaderService`] and
-xref:refguide:applib-svc:GridSystemService.adoc[`GridSystemService`], thus being able to return normalized grids for any domain class.
+|xref:system:generated:index/applib/services/grid/GridService.adoc[GridService]
+|A facade on top of both xref:system:generated:index/applib/services/grid/GridLoaderService.adoc[`GridLoaderService`] and
+xref:system:generated:index/applib/services/grid/GridSystemService.adoc[`GridSystemService`], thus being able to return normalized grids for any domain class.
 
 
 
-|xref:refguide:applib-svc:GridSystemService.adoc[GridSystemService]
+|xref:system:generated:index/applib/services/grid/GridSystemService.adoc[GridSystemService]
 |Validates and normalizes the grid layout for a domain class (with respect to a particular grid system such as Bootstrap3), also providing a default grid (for those domain classes where there is no grid layout).
 
 
 
-|xref:refguide:applib-svc:MenuBarsLoaderService.adoc[MenuBarsLoaderService]
+|xref:system:generated:index/applib/services/menu/MenuBarsLoaderService.adoc[MenuBarsLoaderService]
 |Low-level SPI to load the serialized form of the menubars (normally: the `menubars.layout.xml`) into memory.
 Used by
 
 
-|xref:refguide:applib-svc:MenuBarsService.adoc[MenuBarsService]
+|xref:system:generated:index/applib/services/menu/MenuBarsService.adoc[MenuBarsService]
 |Constructs and normalizes the in-memory representation of the menubars.
 
 
-|xref:refguide:applib-svc:TranslationsResolver.adoc[TranslationsResolver]
-|Obtain translations for a particuar phrase and locale, in support of i18n (ie so that the app's UI, messages and exceptions can be translated to the required locale by the xref:refguide:applib-svc:TranslationService.adoc[`TranslationService`]
+|xref:system:generated:index/applib/services/i18n/TranslationsResolver.adoc[TranslationsResolver]
+|Obtain translations for a particuar phrase and locale, in support of i18n (ie so that the app's UI, messages and exceptions can be translated to the required locale by the xref:system:generated:index/applib/services/i18n/TranslationService.adoc[`TranslationService`]
 
 
 

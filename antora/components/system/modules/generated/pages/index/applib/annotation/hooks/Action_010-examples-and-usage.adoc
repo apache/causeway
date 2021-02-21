@@ -120,7 +120,7 @@ The main uses cases are:
 
 * as a means to allow asynchronous child commands to be executed, using the xref:system:generated:index/applib/services/wrapper/WrapperFactory.adoc[WrapperFactory] service;
 
-* as a means to audit (persist) commands, by implementing the xref:refguide:applib-svc:CommandSubscriber.adoc[CommandSubscriber] SPI.
+* as a means to audit (persist) commands, by implementing the xref:system:generated:index/applib/services/publishing/spi/CommandSubscriber.adoc[CommandSubscriber] SPI.
 +
 The xref:extensions:command-log:about.adoc[Command Log] extension _does_ provide such an implementation.
 +
@@ -254,7 +254,7 @@ In the cases of the domain object's actions, the events that are fired are:
 * pre-execute phase: before the invocation of the action
 * post-execute: after the invocation of the action
 
-Subscribers subscribe through the xref:refguide:applib-svc:EventBusService.adoc[`EventBusService`] and can influence each of these phases.
+Subscribers subscribe through the xref:system:generated:index/applib/services/eventbus/EventBusService.adoc[`EventBusService`] and can influence each of these phases.
 
 By default the event raised is `ActionDomainEvent.Default`.
 For example:
@@ -294,7 +294,7 @@ This substantially reduces the boilerplate required in subclasses because no exp
 
 ==== Subscribers
 
-Subscribers (which must be domain services) subscribe to events posted through the xref:refguide:applib-svc:EventBusService.adoc[`EventBusService`].
+Subscribers (which must be domain services) subscribe to events posted through the xref:system:generated:index/applib/services/eventbus/EventBusService.adoc[`EventBusService`].
 
 Subscribers can be either coarse-grained (if they subscribe to the top-level event type):
 
@@ -564,7 +564,7 @@ public class Customer {
 }
 ----
 
-Actions that are safe and request-cacheable automatically use the xref:refguide:applib-svc:QueryResultsCache.adoc[`QueryResultsCache`] service to cache the result of the method.
+Actions that are safe and request-cacheable automatically use the xref:system:generated:index/applib/services/queryresultscache/QueryResultsCache.adoc[`QueryResultsCache`] service to cache the result of the method.
 Note though that the results of this caching will only be apparent if the action is invoked from another method using the xref:system:generated:index/applib/services/wrapper/WrapperFactory.adoc[WrapperFactory] service.
 
 
@@ -615,6 +615,6 @@ for actions where xref:system:generated:index/applib/annotation/Action.adoc#exec
 
 == See also
 
-* xref:refguide:applib-svc:EventBusService.adoc[EventBusService]
+* xref:system:generated:index/applib/services/eventbus/EventBusService.adoc[EventBusService]
 +
 which broadcast the action's domain event -- as specified by xref:system:generated:index/applib/annotation/Action.adoc#domainEvent[domainEvent()] --  for business rule checking (hide, disable, validate) and its invocation (pre-execute and post-execute).

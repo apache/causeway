@@ -12,21 +12,12 @@ It further provides a number of supporting services:
 
 * `org.isisaddons.module.command.dom.CommandServiceJdoContributions` contributes actions for searching for persisted child and sibling ``Command``s.
 
-//* implementation of the
-//xref:refguide:applib-svc:CommandServiceInternal.adoc[`BackgroundCommandService`].
-
 All of these can be activated by updating the `pom.xml` and updating the `AppManifest#getModules()` method.
 
 If contributions are not required in the UI, these can be suppressed either using security or by implementing a xref:userguide:btb:about.adoc#vetoing-visibility[vetoing subscriber].
 
 
 
-== Alternatives
-
-WARNING: TODO: v2 - this is to move into the xref:mappings:ROOT:about.adoc[mappings catalogue].
-
-The xref:extensions:command-log:about.adoc[Command Log] extension provides an implementation of the service (`CommandServiceListener`), and also provides a number of related domain services (`CommandJdoRepository` and `CommandServiceJdoContributions`).
-//This module also provides service implementations of the xref:refguide:applib-svc:CommandServiceInternal.adoc[`BackgroundCommandService`].
 
 
 

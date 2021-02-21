@@ -52,7 +52,7 @@
 //----
 //<.> xref:system:generated:index/applib/annotation/DomainObjectLayout.adoc#cssClassUiEvent[`cssClassUiEvent`]
 //+
-//The event type to be posted to the xref:refguide:applib-svc:EventBusService.adoc[`EventBusService`] to obtain a CSS class for the domain object.
+//The event type to be posted to the xref:system:generated:index/applib/services/eventbus/EventBusService.adoc[`EventBusService`] to obtain a CSS class for the domain object.
 //
 //<.> xref:system:generated:index/applib/annotation/DomainObjectLayout.adoc#iconUiEvent[`iconUiEvent`]
 //+

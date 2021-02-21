@@ -5,7 +5,7 @@
 :page-partial:
 
 
-Subclass of xref:applib-classes:events.adoc#AbstractLifecycleEvent[`AbstractLifecycleEvent`], broadcast when an object is about to be deleted from the database using the xref:refguide:applib-svc:RepositoryService.adoc[`RepositoryService`]'s `#remove(...)` method.
+Subclass of xref:applib-classes:events.adoc#AbstractLifecycleEvent[`AbstractLifecycleEvent`], broadcast when an object is about to be deleted from the database using the xref:system:generated:index/applib/services/repository/RepositoryService.adoc[`RepositoryService`]'s `#remove(...)` method.
 
 
 `ObjectRemovingEvent.Default` is the implementation that is used by default, but this can be overridden using xref:system:generated:index/applib/annotation/DomainObject.adoc#removingLifecycleEvent[`@DomainObject#removingLifecycleEvent`].

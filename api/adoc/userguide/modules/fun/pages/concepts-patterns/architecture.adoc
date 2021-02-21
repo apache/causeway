@@ -94,4 +94,4 @@ Apache Isis' support for contributions (not only contributed actions, but also c
 And again, to loop back to the topic of this section, it's an AOP concept that being implemented by the framework.
 
 The nice thing about aspect orientation is that for the most part you can ignore these cross-cutting concerns and - at least initially - just focus on implementing your domain object.
-Later when your app starts to grow and you start to break it out into smaller modules, you can leverage Apache Isis' AOP support for xref:userguide:fun:overview.adoc#mixins[mixins] and interceptors (using the xref:refguide:applib-svc:EventBusService.adoc[event bus]) to ensure that your codebase remains maintainable.
+Later when your app starts to grow and you start to break it out into smaller modules, you can leverage Apache Isis' AOP support for xref:userguide:fun:overview.adoc#mixins[mixins] and interceptors (using the xref:system:generated:index/applib/services/eventbus/EventBusService.adoc[event bus]) to ensure that your codebase remains maintainable.

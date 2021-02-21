@@ -78,7 +78,7 @@ cucumber.filter.tags=not @backlog and not @ignore                          # <.>
 cucumber.glue=domainapp.webapp.bdd                                         # <.>
 cucumber.plugin=pretty, html:target/cucumber-reports/cucumber-html.json    # <.>
 ----
-<.> disable verbose cucumber report publishing information 
+<.> disable verbose cucumber report publishing information
 <.> tag based test filtering
 <.> restrict classpath search for _@Cucumber_ annotated classes
 <.> activate built-in reporting plugins: _pretty_ to console and _html_ to filesystem
@@ -124,7 +124,7 @@ public class TransactionalStepDef {                         // <2>
     public void beforeScenario(){
         //open InteractionSession to be closed after scenario (see below)
         isisInteractionFactory.openInteraction(new InitialisationSession());
-    
+
         val txTemplate = new TransactionTemplate(txMan);    // <3>
         val status = txTemplate.getTransactionManager().getTransaction(null);
         afterScenario = () -> {
@@ -239,7 +239,7 @@ This is done using the xref:testing:integtestsupport:about.adoc#wrapper-factory[
 
 [TIP]
 ====
-The xref:refguide:applib-svc:Scratchpad.adoc[`Scratchpad`] domain service is one way in which glue classes can pass state between each other.
+The xref:system:generated:index/applib/services/scratchpad/Scratchpad.adoc[`Scratchpad`] domain service is one way in which glue classes can pass state between each other.
 Or, for more type safety, you could develop your own custom domain services for each scenario, and inject these in as regular services.
 See link:http://www.thinkcode.se/blog/2017/04/01/sharing-state-between-steps-in-cucumberjvm-using-picocontainer[this blog] post for more details.
 ====

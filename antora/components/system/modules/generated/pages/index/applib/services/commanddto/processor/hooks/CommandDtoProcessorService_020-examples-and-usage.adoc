@@ -6,7 +6,7 @@
 
 Having a DTO representation of ``Command``s (or more precisely, any object implementing `HasCommandDto` offers the ability to move or copy it across the network, for example to support replay scenarios.
 This is used for example by xref:extensions:command-log:about.adoc[Command Log] extension to return persisted representations of commands.
-The conversion is performed by an in-built implementation of the xref:refguide:applib-svc:ContentMappingService.adoc[`ContentMappingService`] SPI.
+The conversion is performed by an in-built implementation of the xref:system:generated:index/applib/services/conmap/ContentMappingService.adoc[`ContentMappingService`] SPI.
 
 The `CommandDtoProcessorService` SPI provides a mechanism to post-process the `CommandDto` of any objects being serialized across the network.
 

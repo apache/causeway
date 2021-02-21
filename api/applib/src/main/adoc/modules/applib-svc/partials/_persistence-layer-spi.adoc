@@ -15,8 +15,8 @@ The persistence layer SPIs are to control persistence and caching of domain obje
 |Description
 
 
-|xref:refguide:applib-svc:QueryResultsCacheControl.adoc[QueryResultsCacheControl]
-|Controls whether the xref:refguide:applib-svc:QueryResultsCache.adoc[QueryResultsCache] is enabled.
+|xref:system:generated:index/applib/services/queryresultscache/QueryResultsCacheControl.adoc[QueryResultsCacheControl]
+|Controls whether the xref:system:generated:index/applib/services/queryresultscache/QueryResultsCache.adoc[QueryResultsCache] is enabled.
 
 
 

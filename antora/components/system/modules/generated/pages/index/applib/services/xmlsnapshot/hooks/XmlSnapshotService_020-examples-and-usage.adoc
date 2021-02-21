@@ -125,11 +125,11 @@ One reason for doing this is to provide a stable API between the domain model an
 * xref:system:generated:index/applib/services/xmlsnapshot/XmlSnapshotService~Snapshot.adoc[Snapshot]
 ** xref:system:generated:index/applib/services/xmlsnapshot/XmlSnapshotService~Snapshot~Builder.adoc[Snapshot.Builder]
 
-* xref:refguide:applib-svc:BookmarkService.adoc[BookmarkService]
+* xref:system:generated:index/applib/services/bookmark/BookmarkService.adoc[BookmarkService]
 +
 provides a mechanism for obtaining a string representations of a single domain object.
 
-* xref:refguide:applib-svc:JaxbService.adoc[JaxbService]
+* xref:system:generated:index/applib/services/jaxb/JaxbService.adoc[JaxbService]
 +
 is a simple wrapper around standard JAXB functionality for generating both XMLs and XSDs from JAXB-annotated classes.
 +

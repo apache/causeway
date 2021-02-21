@@ -51,7 +51,7 @@ For example, using a Javascript framework such as Angular/Ionic/ReactJs/Vue etc,
 +
 REST is designed to be machine-readable, and so is an excellent choice for synchronous data interchange scenarios.
 +
-The framework provides xref:refguide:applib-svc:ContentMappingService.adoc[SPI]s to allow custom repreentations to be returned as required.
+The framework provides xref:system:generated:index/applib/services/conmap/ContentMappingService.adoc[SPI]s to allow custom repreentations to be returned as required.
 
 * as the basis for a generic UI.
 +

@@ -6,11 +6,11 @@
 //
 //<.> xref:system:generated:index/applib/annotation/Property.adoc#commandPublishing[`commandPublishing()`]
 //+
-//Whether the editing of a property should be published to registered xref:refguide:applib-svc:CommandSubscriber.adoc[`CommandSubscriber`]s as a `Command` object, that captures the details of this edit. Typically so it can be logged using the xref:extensions:command-log:about.adoc[Command Log] extension (for auditing or for regression testing using xref:extensions:command-replay:about.adoc[Command Replay]).
+//Whether the editing of a property should be published to registered xref:system:generated:index/applib/services/publishing/spi/CommandSubscriber.adoc[`CommandSubscriber`]s as a `Command` object, that captures the details of this edit. Typically so it can be logged using the xref:extensions:command-log:about.adoc[Command Log] extension (for auditing or for regression testing using xref:extensions:command-replay:about.adoc[Command Replay]).
 //
 //<.> xref:system:generated:index/applib/annotation/Property.adoc#domainEvent[`domainEvent()`]
 //+
-//The event type to be posted to the xref:refguide:applib-svc:EventBusService.adoc[`EventBusService`] to broadcast the property's business rule checking (hide, disable, validate) and its modification (before and after).
+//The event type to be posted to the xref:system:generated:index/applib/services/eventbus/EventBusService.adoc[`EventBusService`] to broadcast the property's business rule checking (hide, disable, validate) and its modification (before and after).
 //
 //<.> xref:system:generated:index/applib/annotation/Property.adoc#editing[`editing()`]
 //+

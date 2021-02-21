@@ -7,7 +7,7 @@
 
 
 Subclass of xref:applib-classes:events.adoc#AbstractLifecycleEvent[`AbstractLifecycleEvent`], broadcast when an object is about to be updated in the database.
-This is done either explicitly when the current transaction is flushed using the xref:refguide:applib-svc:RepositoryService.adoc[`RepositoryService`]'s `#flush(...)` method, else is done implicitly when the transaction commits at the end of the user request.
+This is done either explicitly when the current transaction is flushed using the xref:system:generated:index/applib/services/repository/RepositoryService.adoc[`RepositoryService`]'s `#flush(...)` method, else is done implicitly when the transaction commits at the end of the user request.
 
 
 `ObjectUpdatingEvent.Default` is the implementation that is used by default, but this can be overridden using xref:system:generated:index/applib/annotation/DomainObject.adoc#updatingLifecycleEvent[`@DomainObject#updatingLifecycleEvent`].

@@ -11,7 +11,7 @@ The default implementations ultimately generate representations according to the
 However, it also delegates to the xref:core:runtime-services:ContentNegotiationService.adoc[`ContentNegotiationService`] which provides a mechanism for altering representations according to the HTTP `Accept` header.
 This allows more flexible representations to be generated for REST clients that (perhaps through their use of a certain Javascript library, say) expect, or at least works best with, a certain style of representation.
 
-In all there are three domain services that can influence the representations generated: this service, xref:core:runtime-services:ContentNegotiationService.adoc[`ContentNegotiationService`] and the xref:refguide:applib-svc:ContentMappingService.adoc[`ContentMappingService`].
+In all there are three domain services that can influence the representations generated: this service, xref:core:runtime-services:ContentNegotiationService.adoc[`ContentNegotiationService`] and the xref:system:generated:index/applib/services/conmap/ContentMappingService.adoc[`ContentMappingService`].
 The diagram below shows how these collaborate:
 
 image::RepresentationService/service-collaborations.png[width="700px"]
@@ -90,4 +90,4 @@ Apache Isis' default implementation of `RepresentationService` service is automa
 
 == Related Services
 
-The default implementation delegates to xref:core:runtime-services:ContentNegotiationService.adoc[`ContentNegotiationService`], whose default implementation may delegate in turn to xref:refguide:applib-svc:ContentMappingService.adoc[`ContentMappingService`] (if present).
+The default implementation delegates to xref:core:runtime-services:ContentNegotiationService.adoc[`ContentNegotiationService`], whose default implementation may delegate in turn to xref:system:generated:index/applib/services/conmap/ContentMappingService.adoc[`ContentMappingService`] (if present).

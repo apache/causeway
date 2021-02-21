@@ -14,7 +14,7 @@ In the cases of the domain object's properties, the events that are fired are:
 * pre-execute phase: before the modification of the property
 * post-execute: after the modification of the property
 
-Subscribers (which must be domain services) subscribe to events posted through the xref:refguide:applib-svc:EventBusService.adoc[`EventBusService`], and can influence each of these phases.
+Subscribers (which must be domain services) subscribe to events posted through the xref:system:generated:index/applib/services/eventbus/EventBusService.adoc[`EventBusService`], and can influence each of these phases.
 
 By default the event raised is `PropertyDomainEvent.Default`.
 For example:
@@ -67,7 +67,7 @@ This substantially reduces the boilerplate in the subclasses because no explicit
 
 == Subscribers
 
-Subscribers (which must be domain services) subscribe to events posted through the xref:refguide:applib-svc:EventBusService.adoc[`EventBusService`].
+Subscribers (which must be domain services) subscribe to events posted through the xref:system:generated:index/applib/services/eventbus/EventBusService.adoc[`EventBusService`].
 
 Subscribers can be either coarse-grained (if they subscribe to the top-level event type):
 

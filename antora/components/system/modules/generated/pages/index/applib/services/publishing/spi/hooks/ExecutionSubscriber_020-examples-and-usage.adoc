@@ -19,7 +19,7 @@ See also:
 
 * the xref:system:generated:index/applib/services/publishing/spi/EntityChangesSubscriber.adoc[EntityChangesSubscriber] is used to obtain the set of objects modified within the interaction
 
-* the xref:refguide:applib-svc:MetricsService.adoc[`MetricsService`] is used to obtain the objects that are loaded throughout the transaction; this info is used in order to instantiate the xref:system:generated:index/applib/services/publishing/spi/EntityChanges.adoc[EntityChanges] object passed through to the xref:system:generated:index/applib/services/publishing/spi/EntityChangesSubscriber.adoc[EntityChangesSubscriber].
+* the xref:system:generated:index/applib/services/metrics/MetricsService.adoc[`MetricsService`] is used to obtain the objects that are loaded throughout the transaction; this info is used in order to instantiate the xref:system:generated:index/applib/services/publishing/spi/EntityChanges.adoc[EntityChanges] object passed through to the xref:system:generated:index/applib/services/publishing/spi/EntityChangesSubscriber.adoc[EntityChangesSubscriber].
 
 * The services provided by this module combine very well with the xref:system:generated:index/applib/services/publishing/spi/CommandSubscriber.adoc[CommandSubscriber] and with xref:system:generated:index/applib/services/publishing/spi/EntityPropertyChangeSubscriber.adoc[EntityPropertyChangeSubscriber].
 +

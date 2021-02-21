@@ -7,4 +7,4 @@
 
 
 The framework provides a default implementation - `o.a.i.runtimeservices.routing.RoutingServiceDefault` - which will always return the original object provided, or the home page if a `null` or `void` was provided.
-Under the covers this implementation uses the xref:refguide:applib-svc:HomePageResolverService.adoc[`HomePageResolverService`].
+Under the covers this implementation uses the xref:system:generated:index/applib/services/homepage/HomePageResolverService.adoc[`HomePageResolverService`].

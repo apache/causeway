@@ -15,61 +15,57 @@ The persistence layer SPIs influence how the framework persists domain objects, 
 |Description
 
 
-|xref:refguide:applib-svc:ContentMappingService.adoc[ContentMappingService]
+|xref:system:generated:index/applib/services/conmap/ContentMappingService.adoc[ContentMappingService]
 |(Attempt to) map the returned data into the representation required by the client's HTTP `Accept` header.
 
 The framework will call all available implementations until a mapping is made (chain of responsibility pattern).
 
 
-|xref:refguide:applib-svc:EmailNotificationService.adoc[EmailNotificationService]
-|Notify a user during xref:refguide:applib-svc:UserRegistrationService.adoc[self-registration] of users.
+|xref:system:generated:index/applib/services/userreg/EmailNotificationService.adoc[EmailNotificationService]
+|Notify a user during xref:system:generated:index/applib/services/userreg/UserRegistrationService.adoc[self-registration] of users.
 
 
-|xref:refguide:applib-svc:ErrorReportingService.adoc[ErrorReportingService]
+|xref:system:generated:index/applib/services/error/ErrorReportingService.adoc[ErrorReportingService]
 |Record details of an error occurring in the system (eg in an external incident recording system such as JIRA), and return a more friendly (jargon-free) message to display to the end user, with optional reference (eg `XXX-1234`).
 
 
-|xref:refguide:applib-svc:ExceptionRecognizer.adoc[ExceptionRecognizerService]
-|Convert certain exceptions (eg foreign or unique key violation in the database) into a format that can be rendered to the end-user.
-
-
-|xref:refguide:applib-svc:ExceptionRecognizerService.adoc[ExceptionRecognizerService]
+|xref:system:generated:index/applib/services/exceprecog/ExceptionRecognizerService.adoc[ExceptionRecognizerService]
 |Convert certain exceptions (eg foreign or unique key violation in the database) into a format that can be rendered to the end-user.
 
 
 
-|xref:refguide:applib-svc:HintStore.adoc[HintIdProvider]
+|xref:system:generated:index/applib/services/hint/HintStore.adoc[HintIdProvider]
 |Provide a "logical" identity for view models such that UI hints can be stored for them.
 
 
-|xref:refguide:applib-svc:HintStore.adoc[HintStore]
+|xref:system:generated:index/applib/services/hint/HintStore.adoc[HintStore]
 |Stores UI hints on a per-object basis.
 For example, the viewer remembers which tabs are selected, and for collections which view is selected (eg table or hidden), which page of a table to render, or whether "show all" (rows) is toggled.
 
 
-|xref:refguide:applib-svc:LocaleProvider.adoc[LocaleProvider]
-|Request-scoped service to return the locale of the current user, in support of i18n (ie so that the app's UI, messages and exceptions can be translated to the required locale by the xref:refguide:applib-svc:TranslationService.adoc[`TranslationService`].
+|xref:system:generated:index/applib/services/i18n/LocaleProvider.adoc[LocaleProvider]
+|Request-scoped service to return the locale of the current user, in support of i18n (ie so that the app's UI, messages and exceptions can be translated to the required locale by the xref:system:generated:index/applib/services/i18n/TranslationService.adoc[`TranslationService`].
 
 
-|xref:refguide:applib-svc:RoutingService.adoc[RoutingService]
+|xref:system:generated:index/applib/services/routing/RoutingService.adoc[RoutingService]
 |Return an alternative object than that returned by an action.
 
 
 
-|xref:refguide:applib-svc:TableColumnOrderService.adoc[TableColumnOrderService]
+|xref:system:generated:index/applib/services/tablecol/TableColumnOrderService.adoc[TableColumnOrderService]
 |Allows the columns of a parented or standalone table to be reordered, based upon the parent object, collection id and type of object in the collection.
 
 
-|xref:refguide:applib-svc:TranslationService.adoc[TranslationService]
-|Translate an app's UI, messages and exceptions for the current user (as per the locale provided by xref:refguide:applib-svc:LocaleProvider.adoc[`LocalProvider`].
+|xref:system:generated:index/applib/services/i18n/TranslationService.adoc[TranslationService]
+|Translate an app's UI, messages and exceptions for the current user (as per the locale provided by xref:system:generated:index/applib/services/i18n/LocaleProvider.adoc[`LocalProvider`].
 
 
-|xref:refguide:applib-svc:UrlEncodingService.adoc[UrlEncodingService]
+|xref:system:generated:index/applib/services/urlencoding/UrlEncodingService.adoc[UrlEncodingService]
 |Converts strings into a form safe for use within a URL.
 Used to convert view models mementos into usable URL form.
 
 
-|xref:refguide:applib-svc:UserProfileService.adoc[UserProfileService]
+|xref:system:generated:index/applib/services/userprof/UserProfileService.adoc[UserProfileService]
 |Obtain an alternative (usually enriched/customized) name for the current user, to render in the UI.
 
 |===

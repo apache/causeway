@@ -9,7 +9,7 @@ Whenever a domain object is to be rendered, the framework fires off a title UI e
 This is as an alternative to implementing xref:refguide:applib-methods:reserved.adoc#title[`title()`] reserved method, or using the xref:system:generated:index/applib/annotation/Title.adoc[`@Title`] annotation, within the class itself.
 (If either `title()` or `@Title` are present, then they will take precedence).
 
-Subscribers subscribe through the xref:refguide:applib-svc:EventBusService.adoc[`EventBusService`] and can use obtain a reference to the domain object from the event.
+Subscribers subscribe through the xref:system:generated:index/applib/services/eventbus/EventBusService.adoc[`EventBusService`] and can use obtain a reference to the domain object from the event.
 From this they can, if they wish, specify a title for the domain object using the event's API.
 
 By default the event raised is `TitleUiEvent.Default`.
@@ -44,7 +44,7 @@ The benefit is that subscribers can be more targeted as to the events that they 
 
 == Subscribers
 
-Subscribers (which must be domain services) subscribe to events posted through the xref:refguide:applib-svc:EventBusService.adoc[`EventBusService`].
+Subscribers (which must be domain services) subscribe to events posted through the xref:system:generated:index/applib/services/eventbus/EventBusService.adoc[`EventBusService`].
 
 Subscribers can be either coarse-grained (if they subscribe to the top-level event type):
 
@@ -96,6 +96,6 @@ And, conversely, the framework also provides `TitleUiEvent.Noop`; if `titleUiEve
 == Raising events programmatically
 
 Normally events are only raised for interactions through the UI.
-However, events can be raised programmatically either by calling the xref:refguide:applib-svc:EventBusService.adoc[`EventBusService`] API directly, or as a result of calling the xref:refguide:applib-svc:TitleService.adoc[`TitleService`]'s `titleOf(...)` method.
+However, events can be raised programmatically either by calling the xref:system:generated:index/applib/services/eventbus/EventBusService.adoc[`EventBusService`] API directly, or as a result of calling the xref:system:generated:index/applib/services/title/TitleService.adoc[`TitleService`]'s `titleOf(...)` method.
 
 

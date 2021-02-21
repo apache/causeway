@@ -26,6 +26,6 @@ The option is to use the media type's type/subtype, eg `application/vnd.myrestap
 
 == Alternatives
 
-As an alternative to performing content negotiation within the domain classes, the xref:refguide:applib-svc:ContentMappingService.adoc[`ContentMappingService`] SPI domain service allows the framework to perform the content negotiation responsibility.
+As an alternative to performing content negotiation within the domain classes, the xref:system:generated:index/applib/services/conmap/ContentMappingService.adoc[`ContentMappingService`] SPI domain service allows the framework to perform the content negotiation responsibility.
 
-The Restful Objects specification supports this with its own `x-ro-domain-type` media type parameter; this is used by the xref:refguide:applib-svc:ContentMappingService.adoc[`ContentMappingService`] to determine how to map domain objects to view models/DTOs.
+The Restful Objects specification supports this with its own `x-ro-domain-type` media type parameter; this is used by the xref:system:generated:index/applib/services/conmap/ContentMappingService.adoc[`ContentMappingService`] to determine how to map domain objects to view models/DTOs.

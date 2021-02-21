@@ -2,7 +2,7 @@
 
 //<.> xref:system:generated:index/applib/annotation/Collection.adoc#domainEvent[`domainEvent()`]
 //+
-//The event type to be posted to the xref:refguide:applib-svc:EventBusService.adoc[`EventBusService`] to broadcast the collection's business rule checking (hide, disable, validate) and its modification (before and after).
+//The event type to be posted to the xref:system:generated:index/applib/services/eventbus/EventBusService.adoc[`EventBusService`] to broadcast the collection's business rule checking (hide, disable, validate) and its modification (before and after).
 //
 //<.> xref:system:generated:index/applib/annotation/Collection.adoc#hidden[`hidden()`]
 //+

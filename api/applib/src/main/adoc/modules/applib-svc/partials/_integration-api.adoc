@@ -15,23 +15,23 @@ TIP: see also the xref:mappings:ROOT:about.adoc[Bounded Context Mappings] catalo
 |Description
 
 
-|xref:refguide:applib-svc:BookmarkService.adoc[BookmarkService]
+|xref:system:generated:index/applib/services/bookmark/BookmarkService.adoc[BookmarkService]
 |Convert object reference to a serializable "bookmark", and vice versa.
 
 
 
-|xref:refguide:applib-svc:EmailService.adoc[EmailService]
+|xref:system:generated:index/applib/services/email/EmailService.adoc[EmailService]
 |Send a HTML email, optionally with attachments.
 
 
 
-|xref:refguide:applib-svc:JaxbService.adoc[JaxbService]
+|xref:system:generated:index/applib/services/jaxb/JaxbService.adoc[JaxbService]
 |Marshal and unmarshal JAXB-annotated view models to/from XML.
 
 
 
 
-|xref:refguide:applib-svc:XmlSnapshotService.adoc[XmlSnapshotService]
+|xref:system:generated:index/applib/services/xmlsnapshot/XmlSnapshotService.adoc[XmlSnapshotService]
 |Generate an XML representation of an object and optionally a graph of related objects.
 
 

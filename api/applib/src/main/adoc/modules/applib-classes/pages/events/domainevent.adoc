@@ -6,7 +6,7 @@
 
 This section catalogues the various domain event classes defined by Apache Isis.
 
-These events are broadcast on the xref:refguide:applib-svc:EventBusService.adoc[`EventBusService`].
+These events are broadcast on the xref:system:generated:index/applib/services/eventbus/EventBusService.adoc[`EventBusService`].
 The domain events are broadcast as a result of being specified in the xref:system:generated:index/applib/annotation/Action.adoc#domainEvent[`@Action#domainEvent()`],  xref:system:generated:index/applib/annotation/Property.adoc#domainEvent[`@Property#domainEvent()`] or xref:system:generated:index/applib/annotation/Collection.adoc#domainEvent[`@Collection#domainEvent()`] attributes.
 
 They are listed in the table below.

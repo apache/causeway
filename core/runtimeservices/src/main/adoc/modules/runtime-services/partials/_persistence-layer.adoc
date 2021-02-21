@@ -55,7 +55,7 @@ querying and for persisting objects.
 `PublisherDispatchService`]
 |Co-ordinates between
 xref:core:runtime-services:ChangedObjectsService.adoc[`ChangedObjectsServiceInternal`] and
-xref:refguide:applib-svc:MetricsService.adoc[`MetricsService`] and the SPI services, and the
+xref:system:generated:index/applib/services/metrics/MetricsService.adoc[`MetricsService`] and the SPI services, and the
 xref:system:generated:index/applib/services/publishing/spi/ExecutionSubscriber.adoc[ExecutionSubscriber].
 |`PublishingService-` +
 `InternalDefault` +

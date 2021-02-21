@@ -13,15 +13,15 @@ The core/domain APIs provide general-purpose services to the domain objects, for
 |Description
 
 
-|xref:refguide:applib-svc:ClockService.adoc[ClockService]
+|xref:system:generated:index/applib/services/clock/ClockService.adoc[ClockService]
 |Access the current time (and for testing, allow the time to be changed)
 
 
-|xref:refguide:applib-svc:ConfigurationViewService.adoc[ConfigurationViewService] & xref:refguide:applib-svc:ConfigurationMenu.adoc[ConfigurationMenu]
-|Backing service which creates the list of configuration properties for xref:refguide:applib-svc:ConfigurationMenu.adoc[ConfigurationMenu].
+|xref:system:generated:index/applib/services/confview/ConfigurationViewService.adoc[ConfigurationViewService] & xref:system:generated:index/applib/services/confview/ConfigurationMenu.adoc[ConfigurationMenu]
+|Backing service which creates the list of configuration properties for xref:system:generated:index/applib/services/confview/ConfigurationMenu.adoc[ConfigurationMenu].
 
 
-|xref:refguide:applib-svc:EventBusService.adoc[EventBusService]
+|xref:system:generated:index/applib/services/eventbus/EventBusService.adoc[EventBusService]
 |Programmatically post events to the internal event bus.  Also used by Apache Isis itself to broadcast domain, UI and lifecycle events.
 
 
@@ -29,19 +29,19 @@ The core/domain APIs provide general-purpose services to the domain objects, for
 |Methods to instantiate and initialize domain objects
 
 
-|xref:refguide:applib-svc:Scratchpad.adoc[Scratchpad]
+|xref:system:generated:index/applib/services/scratchpad/Scratchpad.adoc[Scratchpad]
 |Request-scoped service for interchanging information between and aggregating over multiple method calls.
 
 
-|xref:refguide:applib-svc:ServiceInjector.adoc[ServiceInjector]
+|xref:system:generated:index/applib/services/inject/ServiceInjector.adoc[ServiceInjector]
 |Programmatically inject services into arbitrary objects.
 
 
-|xref:refguide:applib-svc:ServiceRegistry.adoc[ServiceRegistry]
+|xref:system:generated:index/applib/services/registry/ServiceRegistry.adoc[ServiceRegistry]
 |Registry of all domain services, for service locator pattern.
 
 
-|xref:refguide:applib-svc:UserService.adoc[UserService]
+|xref:system:generated:index/applib/services/user/UserService.adoc[UserService]
 |Methods to access the currently-logged on user.
 
 

@@ -4,7 +4,7 @@
 
 WARNING: TODO: this content has not yet been reviewed/updated for v2.0
 
-The (internal) `EntityChangesPublisher` service acts as an internal facade to any configured xref:refguide:applib-svc:EntityChangesSubscriber.adoc[`EntityChangesSubscriber`] domain service(s).
+The (internal) `EntityChangesPublisher` service acts as an internal facade to any configured xref:system:generated:index/applib/services/publishing/spi/EntityChangesSubscriber.adoc[`EntityChangesSubscriber`] domain service(s).
 
 For changing entities, it provides an API for the framework to call at the end of the interaction; it obtains details of the changed entities (from the xref:core:runtime-services:ChangedObjectsService.adoc[`ChangedObjectsService`]) and filters them to just those objects that are to be published; these are then passed through to any configured `EntityChangesSubscriber` implementations.
 

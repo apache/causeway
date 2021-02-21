@@ -26,7 +26,7 @@ If the underlying tables change (as the result of a change in their correspondin
 +
 The `ContentNegotiationService` is responsible for inspecting the HTTP `Accept` header, and use this to select the correct representation to render.  +
 +
-The Apache Isis framework provides three implementations of `ContentNegotiationService` which inspects different elements of the HTTP `Accept` header.  One of these implementations, `ContentNegotiationServiceXRoDomainType` will further delegate down to the companion xref:refguide:applib-svc:ContentMappingService.adoc[`ContentMappingService`] service (if configured/available), based on the value of the "x-ro-domain-type" parameter of the header. +
+The Apache Isis framework provides three implementations of `ContentNegotiationService` which inspects different elements of the HTTP `Accept` header.  One of these implementations, `ContentNegotiationServiceXRoDomainType` will further delegate down to the companion xref:system:generated:index/applib/services/conmap/ContentMappingService.adoc[`ContentMappingService`] service (if configured/available), based on the value of the "x-ro-domain-type" parameter of the header. +
 +
 A typical implementation of `ContentMappingService` will convert the domain object into some sort of DTO (data transfer object) as specified by the "x-ro-domaintype".  If this DTO is annotated with JAXB or Jackson mappings, then the RO viewer (courtesy of the underlying link:http://resteasy.jboss.org/[RestEasy] framework) can serialize these directly. +
 +
@@ -113,7 +113,7 @@ As discussed in the introduction, the framework also provides three implementati
 ** `application/xml;profile=urn:org.restfulobjects:repr-types/action-result;x-ro-domain-type=...`
 
 
-The value of the `x-ro-domain-type` parameter corresponds to the DTO to be mapped into by the xref:refguide:applib-svc:ContentMappingService.adoc[`ContentMappingService`].
+The value of the `x-ro-domain-type` parameter corresponds to the DTO to be mapped into by the xref:system:generated:index/applib/services/conmap/ContentMappingService.adoc[`ContentMappingService`].
 
 If the DTO is annotated with JAXB, then also note that the runtime type must be annotated with the JAXB `javax.xml.bind.annotation.XmlRootElement` so that RestEasy is able to unambiguously serialize it.
 
@@ -201,6 +201,6 @@ To use an alternative implementation, use Spring's link:https://docs.spring.io/s
 
 == Related Services
 
-The default implementation of `ContentNegotiationService` delegates to xref:refguide:applib-svc:ContentMappingService.adoc[`ContentMappingService`] (if present) to convert domain entities into a stable form (eg DTO).
+The default implementation of `ContentNegotiationService` delegates to xref:system:generated:index/applib/services/conmap/ContentMappingService.adoc[`ContentMappingService`] (if present) to convert domain entities into a stable form (eg DTO).
 
 The `ContentNegotiationService` is itself called by the (default implementation of) xref:core:runtime-services:RepresentationService.adoc[`RepresentationService`].
