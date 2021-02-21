@@ -32,6 +32,7 @@ import org.apache.wicket.Session;
 import org.apache.wicket.WicketRuntimeException;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.core.request.handler.ListenerInvocationNotAllowedException;
+import org.apache.wicket.core.request.handler.ListenerRequestHandler;
 import org.apache.wicket.core.request.handler.PageProvider;
 import org.apache.wicket.core.request.handler.RenderPageRequestHandler;
 import org.apache.wicket.core.request.handler.RenderPageRequestHandler.RedirectPolicy;
@@ -68,6 +69,9 @@ import org.apache.isis.viewer.wicket.ui.panels.PromptFormAbstract;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * Isis-specific implementation of the Wicket's {@link RequestCycle},
  * automatically opening a {@link InteractionSession} at the beginning of the request
@@ -80,6 +84,10 @@ public class WebRequestCycleForIsis implements IRequestCycleListener {
 
     public static final MetaDataKey<IsisRequestCycle> REQ_CYCLE_HANDLE_KEY =
             new MetaDataKey<IsisRequestCycle>() {private static final long serialVersionUID = 1L; };
+    public static final MetaDataKey<Boolean> SESSION_WAS_EXPIRED_KEY =
+            new MetaDataKey<Boolean>() { private static final long serialVersionUID = 1L; };
+    public static final MetaDataKey<Boolean> LISTENER_HANDLER_USED_KEY =
+            new MetaDataKey<Boolean>() { private static final long serialVersionUID = 1L; };
 
     private PageClassRegistry pageClassRegistry;
     private IsisAppCommonContext commonContext;
@@ -90,7 +98,11 @@ public class WebRequestCycleForIsis implements IRequestCycleListener {
         log.debug("onBeginRequest in");
 
         if (!Session.exists()) {
-
+            // Track if session was created from an expired one to notify user of the refresh.
+            // If there is no remember me cookie, user will be redirected to sign in and no need to notify.
+            if (userHasSessionWithRememberMe(requestCycle)) {
+                Session.get().setMetaData(SESSION_WAS_EXPIRED_KEY, true);
+            }
             log.debug("onBeginRequest out - session was not opened (because no Session)");
             return;
         }
@@ -134,6 +146,22 @@ public class WebRequestCycleForIsis implements IRequestCycleListener {
             }
         }
 
+        val isisRequestCycle = cycle.getMetaData(REQ_CYCLE_HANDLE_KEY);
+        val session = AuthenticatedWebSessionForIsis.get();
+        val wasExpired = session.getMetaData(SESSION_WAS_EXPIRED_KEY);
+        
+        if (wasExpired != null && wasExpired && isisRequestCycle != null) {
+            // If a user clicks a menu item in an expired session, no action is executed, the session simply refreshes.
+            // Two requests make it here, and the first one uses ListenerRequestHandler as its first handler.
+            // The whole first request has to be ignored here, or the message would disappear before user can see it.
+            if (handler instanceof ListenerRequestHandler) {
+                cycle.setMetaData(LISTENER_HANDLER_USED_KEY, true);
+            } else if (cycle.getMetaData(LISTENER_HANDLER_USED_KEY) == null) {
+                getMessageBroker().ifPresent(broker -> broker.addMessage(translate("Expired session was refreshed")));
+                session.setMetaData(SESSION_WAS_EXPIRED_KEY, false);
+            }
+        }
+        
         log.debug("onRequestHandlerResolved out");
 
     }
@@ -369,6 +397,22 @@ public class WebRequestCycleForIsis implements IRequestCycleListener {
             return false;
         }
         return getWicketAuthenticatedWebSession().isSignedIn();
+    }
+    
+    private boolean userHasSessionWithRememberMe(RequestCycle requestCycle) {
+        val containerRequest = requestCycle.getRequest().getContainerRequest();
+        
+        if (containerRequest instanceof HttpServletRequest) {
+            val cookies = ((HttpServletRequest) containerRequest).getCookies();
+            String cookieKey = getCommonContext().getConfiguration().getViewer().getWicket().getRememberMe().getCookieKey();
+            
+            for (Cookie c : cookies) {
+                if (c.getName().equals(cookieKey)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
 
