@@ -39,7 +39,7 @@ public abstract class CollectionDomainEvent<S,T> extends AbstractDomainEvent<S> 
     public Of getOf();                                          // <.>
 }
 ----
-<1> The `Default` nested static class is the default for the xref:refguide:applib-ant:Collection.adoc#domainEvent[`@Collection#domainEvent()`] annotation attribute.
+<1> The `Default` nested static class is the default for the xref:system:generated:index/applib/annotation/Collection.adoc#domainEvent[`@Collection#domainEvent()`] annotation attribute.
 Whether this raises an event or not depends upon the
 `isis.reflector.facet.collectionAnnotation.domainEvent.postForDefault` configuration property.
 <2> The `Noop` class is provided as a convenience to indicate that an event should _not_ be posted (irrespective of the configuration property setting).

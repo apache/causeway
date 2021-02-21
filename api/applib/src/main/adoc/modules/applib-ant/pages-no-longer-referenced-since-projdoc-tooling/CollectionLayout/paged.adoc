@@ -41,4 +41,4 @@ As an alternative to using the annotation, the dynamic xref:userguide:fun:ui.ado
 
 This attribute can also be applied to:
 
-* xref:refguide:applib-ant:DomainObjectLayout.adoc#paged[domain objects]
+* xref:system:generated:index/applib/annotation/DomainObjectLayout.adoc#paged[domain objects]

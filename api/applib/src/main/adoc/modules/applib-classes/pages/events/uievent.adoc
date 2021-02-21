@@ -7,7 +7,7 @@
 This section catalogues the various UI event classes defined by Apache Isis.
 
 These events are broadcast on the xref:refguide:applib-svc:EventBusService.adoc[`EventBusService`].  The domain
-events are broadcast as a result of being specified in the xref:refguide:applib-ant:DomainObjectLayout.adoc#titleUiEvent[`@DomainObjectLayout#titleUiEvent()`],  xref:refguide:applib-ant:DomainObjectLayout.adoc#iconUiEvent[`@DomainObjectLayout#iconUiEvent()`] or xref:refguide:applib-ant:DomainObjectLayout.adoc#cssClassUiEvent[`@DomainObjectLayout#cssClassUiEvent()`] attributes.
+events are broadcast as a result of being specified in the xref:system:generated:index/applib/annotation/DomainObjectLayout.adoc#titleUiEvent[`@DomainObjectLayout#titleUiEvent()`],  xref:system:generated:index/applib/annotation/DomainObjectLayout.adoc#iconUiEvent[`@DomainObjectLayout#iconUiEvent()`] or xref:system:generated:index/applib/annotation/DomainObjectLayout.adoc#cssClassUiEvent[`@DomainObjectLayout#cssClassUiEvent()`] attributes.
 
 They are listed in the table below.
 
@@ -25,14 +25,14 @@ They are listed in the table below.
 |(abstract class). +
 `TitleUiEvent.Default` is the concrete implementation used if no `@DomainObjectLayout#titleUiEvent` attribute is specified
 |Broadcast whenever there is a requirement to obtain a title for a domain object.
-Note that if the domain object defines its own xref:refguide:applib-methods:reserved.adoc#title[`title()`] supporting method, or has xref:refguide:applib-ant:Title.adoc[`@Title`] annotation(s) on its properties, then these will take precedence.
+Note that if the domain object defines its own xref:refguide:applib-methods:reserved.adoc#title[`title()`] supporting method, or has xref:system:generated:index/applib/annotation/Title.adoc[`@Title`] annotation(s) on its properties, then these will take precedence.
 
 |xref:applib-classes:events.adoc#IconUiEvent[`o.a.i.applib.` +
 `IconUiEvent`]
 |(abstract class). +
 `IconUiEvent.Default` is the concrete implementation used if no `@DomainObjectLayout#iconUiEvent` attribute is specified
 |Broadcast whenever there is a requirement to obtain an icon (or rather, the name of an icon) for a domain object.
-Note that if the domain object defines its own xref:refguide:applib-methods:reserved.adoc#iconName[`iconName()`] supporting method, or if it has the xref:refguide:applib-ant:DomainObjectLayout.adoc#cssClassFa[`@DomainObjectLayout#cssClassFa()`] attribute, then these will take precedence.
+Note that if the domain object defines its own xref:refguide:applib-methods:reserved.adoc#iconName[`iconName()`] supporting method, or if it has the xref:system:generated:index/applib/annotation/DomainObjectLayout.adoc#cssClassFa[`@DomainObjectLayout#cssClassFa()`] attribute, then these will take precedence.
 
 |xref:applib-classes:events.adoc#CssClassUiEvent[`o.a.i.applib.` +
 `CssClassUiEvent`]

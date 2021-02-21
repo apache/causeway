@@ -62,7 +62,7 @@ public class ShoppingCartItem {
 
 <.> `product` is the 0th argument of the action.
 
-<.> the xref:refguide:applib-ant:MinLength.adoc[`@MinLength`] annotation specifies the minimum number of characters that must be entered before a search is performed for matching objects
+<.> the xref:system:generated:index/applib/annotation/MinLength.adoc[`@MinLength`] annotation specifies the minimum number of characters that must be entered before a search is performed for matching objects
 
 
 == Properties
@@ -95,6 +95,6 @@ public class ShoppingCartItem {
     ...
 }
 ----
-<1> the xref:refguide:applib-ant:MinLength.adoc[`@MinLength`] annotation specifies the minimum number of characters that must be entered before a search is performed for matching objects
+<1> the xref:system:generated:index/applib/annotation/MinLength.adoc[`@MinLength`] annotation specifies the minimum number of characters that must be entered before a search is performed for matching objects
 
 

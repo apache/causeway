@@ -25,25 +25,25 @@ The table below summarizes the annotations available:
 
 
 | Class
-| xref:refguide:applib-ant:DomainObjectLayout.adoc#named[`@DomainObjectLayout#named`]
-| xref:refguide:applib-ant:DomainObjectLayout.adoc#describedAs[`@DomainObjectLayout#describedAs`]
+| xref:system:generated:index/applib/annotation/DomainObjectLayout.adoc#named[`@DomainObjectLayout#named`]
+| xref:system:generated:index/applib/annotation/DomainObjectLayout.adoc#describedAs[`@DomainObjectLayout#describedAs`]
 
 
 | Property
-| xref:refguide:applib-ant:PropertyLayout.adoc#named[`@PropertyLayout#named`]
-| xref:refguide:applib-ant:PropertyLayout.adoc#describedAs[`@PropertyLayout#describedAs`]
+| xref:system:generated:index/applib/annotation/PropertyLayout.adoc#named[`@PropertyLayout#named`]
+| xref:system:generated:index/applib/annotation/PropertyLayout.adoc#describedAs[`@PropertyLayout#describedAs`]
 
 | Collection
-| xref:refguide:applib-ant:CollectionLayout.adoc#named[`@CollectionLayout#named`]
-| xref:refguide:applib-ant:CollectionLayout.adoc#describedAs[`@CollectionLayout#describedAs`]
+| xref:system:generated:index/applib/annotation/CollectionLayout.adoc#named[`@CollectionLayout#named`]
+| xref:system:generated:index/applib/annotation/CollectionLayout.adoc#describedAs[`@CollectionLayout#describedAs`]
 
 | Action
-| xref:refguide:applib-ant:ActionLayout.adoc#named[`@ActionLayout#named`]
-| xref:refguide:applib-ant:ActionLayout.adoc#describedAs[`@ActionLayout#describedAs`]
+| xref:system:generated:index/applib/annotation/ActionLayout.adoc#named[`@ActionLayout#named`]
+| xref:system:generated:index/applib/annotation/ActionLayout.adoc#describedAs[`@ActionLayout#describedAs`]
 
 | Action Parameters
-| xref:refguide:applib-ant:ParameterLayout.adoc#named[`@ParameterLayout#named`]
-| xref:refguide:applib-ant:ParameterLayout.adoc#describedAs[`@ParameterLayout#describedAs`]
+| xref:system:generated:index/applib/annotation/ParameterLayout.adoc#named[`@ParameterLayout#named`]
+| xref:system:generated:index/applib/annotation/ParameterLayout.adoc#describedAs[`@ParameterLayout#describedAs`]
 
 |===
 

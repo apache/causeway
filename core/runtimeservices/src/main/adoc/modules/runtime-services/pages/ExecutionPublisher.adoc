@@ -25,9 +25,9 @@ public interface ExecutionPublisher {
 
 }
 ----
-<1> to publish an action invocation, as represented by the specified member `Execution` parameter and with the xref:refguide:applib-ant:Action.adoc#publishing[`@Action#executionPublishing`] annotation attribute or equivalent, to any configured xref:refguide:applib-svc:ExecutionSubscriber.adoc[`PublisherService`].
+<1> to publish an action invocation, as represented by the specified member `Execution` parameter and with the xref:system:generated:index/applib/annotation/Action.adoc#executionPublishing[@Action#executionPublishing] annotation attribute or equivalent, to any configured xref:refguide:applib-svc:ExecutionSubscriber.adoc[`PublisherService`].
 The `Execution` object will be an instance of `ActionInvocation` (see xref:refguide:applib-svc:InteractionContext.adoc[`InteractionContext`] for details).
-<2> to publish a property edit, as as represented by the specified member `Execution` parameter and with the xref:refguide:applib-ant:Property.adoc#publishing[`@Property#executionPublishing`] annotation attribute or equivalent, to any configured xref:refguide:applib-svc:ExecutionSubscriber.adoc[`PublisherService`].
+<2> to publish a property edit, as as represented by the specified member `Execution` parameter and with the xref:system:generated:index/applib/annotation/Property.adoc#publishing[`@Property#executionPublishing`] annotation attribute or equivalent, to any configured xref:refguide:applib-svc:ExecutionSubscriber.adoc[`PublisherService`].
 The `Execution` object will be an instance of `PropertyEdit` (see xref:refguide:applib-svc:InteractionContext.adoc[`InteractionContext`] for details).
 
 == Related Classes

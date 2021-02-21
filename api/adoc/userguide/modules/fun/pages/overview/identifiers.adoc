@@ -58,7 +58,7 @@ Some examples:
 * the information within an OID could be converted into a barcode, and stamped onto a PDF form.
 When the PDF is scanned by the mail room, the barcode could be read to attach the correspondence to the relevant domain object.
 
-* as a handle to any object in an audit record, as used by xref:refguide:applib-svc:AuditerService.adoc[`AuditerService`];
+* as a handle to any object in an audit record, as used by xref:refguide:applib-svc:EntityPropertyChangeSubscriber.adoc[EntityPropertyChangeSubscriber];
 
 * similarly within implementations of xref:refguide:applib-svc:CommandServiceInternal.adoc[`CommandService`] to persist `Command` objects
 

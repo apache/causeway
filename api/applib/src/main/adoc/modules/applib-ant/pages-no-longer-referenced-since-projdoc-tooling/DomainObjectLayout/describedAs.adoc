@@ -28,8 +28,8 @@ public class ProspectiveSale {
 
 The attribute can also be specified for:
 
-* xref:refguide:applib-ant:CollectionLayout.adoc#describedAs[collections]
-* xref:refguide:applib-ant:PropertyLayout.adoc#describedAs[properties]
-* xref:refguide:applib-ant:ActionLayout.adoc#describedAs[actions]
-* xref:refguide:applib-ant:ParameterLayout.adoc#describedAs[parameters] and
+* xref:system:generated:index/applib/annotation/CollectionLayout.adoc#describedAs[collections]
+* xref:system:generated:index/applib/annotation/PropertyLayout.adoc#describedAs[properties]
+* xref:system:generated:index/applib/annotation/ActionLayout.adoc#describedAs[actions]
+* xref:system:generated:index/applib/annotation/ParameterLayout.adoc#describedAs[parameters] and
 

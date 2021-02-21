@@ -180,8 +180,8 @@ However, events can be raised programmatically either by calling the xref:refgui
 
 This attribute is also supported for:
 
-* xref:refguide:applib-ant:Collection.adoc#domainEvent[collections] and
-* xref:refguide:applib-ant:Property.adoc#domainEvent[properties].
+* xref:system:generated:index/applib/annotation/Collection.adoc#domainEvent[collections] and
+* xref:system:generated:index/applib/annotation/Property.adoc#domainEvent[properties].
 
 
 

@@ -45,10 +45,10 @@ public class Order {
 
 This attribute can also be specified for:
 
-* xref:refguide:applib-ant:DomainObject.adoc#publishing[domain objects]
+* xref:system:generated:index/applib/annotation/DomainObject.adoc#publishing[domain objects]
 +
 where it controls whether changed objects are published as events, and for
 
-* xref:refguide:applib-ant:Action.adoc#publishing[actions]
+* xref:system:generated:index/applib/annotation/Action.adoc#executionPublishing[actions]
 +
 where it controls whether action invocations are published as events.

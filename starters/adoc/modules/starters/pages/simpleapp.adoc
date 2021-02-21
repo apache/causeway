@@ -64,7 +64,7 @@ Once you've logged in you'll see the default home page:
 
 image::simpleapp/using/030-home-page.png[width="600px"]
 
-This is a view model annotated with xref:refguide:applib-ant:HomePage.adoc[@HomePage]:
+This is a view model annotated with xref:system:generated:index/applib/annotation/HomePage.adoc[@HomePage]:
 
 [source,java]
 .HomePageViewModel.java
@@ -466,11 +466,11 @@ The `@Name.Specification` class uses this configuration property.
 
 The scanning mechanism is leveraged by Apache Isis to pick up three types of classes:
 
-This will pick up the `SimpleObjects` repository because it is annotated with the framework's xref:refguide:applib-ant:DomainService.adoc[@DomainService] annotation; itself meta-annotated with `@Component`.
+This will pick up the `SimpleObjects` repository because it is annotated with the framework's xref:system:generated:index/applib/annotation/DomainService.adoc[@DomainService] annotation; itself meta-annotated with `@Component`.
 
 * all domain services
 +
-These are classes that are annotated with the framework's xref:refguide:applib-ant:DomainService.adoc[@DomainService] annotation.
+These are classes that are annotated with the framework's xref:system:generated:index/applib/annotation/DomainService.adoc[@DomainService] annotation.
 Because `@DomainService` is meta-annotated as a `@Component`, these are found automatically and are managed by Spring (ie instantiated, injected etc).
 +
 Depending on their nature, domain services are used to build up the menu, or are available to call programmatically, eg repositories, or sometimes both.
@@ -480,7 +480,7 @@ This appears in the menu, and also acts as a repository for the `SimpleObject` e
 
 * all entities.
 +
-These are entities that are annotated with both xref:refguide:applib-ant:DomainObject.adoc[`@DomainObject`] annotation and with `@javax.jdo.annotations.PersistenceCapable`.
+These are entities that are annotated with both xref:system:generated:index/applib/annotation/DomainObject.adoc[`@DomainObject`] annotation and with `@javax.jdo.annotations.PersistenceCapable`.
 Because `@DomainObject` is meta-annotated as a `@Component`, these are found automatically by Spring.
 They are passed through to the JDO/DataNucleus object store, in order to create database mappings from the entities to relational tables.
 +
@@ -609,7 +609,7 @@ NOTE: Fixture scenarios also need to be link:https://docs.spring.io/spring-frame
 
 <4> An implementation of the xref:refguide:applib-svc:HealthCheckService.adoc[HealtCheckService].
 This integrates with Spring Boot's link:https://docs.spring.io/spring-boot/docs/current/api/org/springframework/boot/actuate/health/HealthIndicator.html[HealthIndicator] SPI, surfaced through the link:https://docs.spring.io/spring-boot/docs/current/reference/html/production-ready-features.html[Spring Boot Actuator].
-<5> Annotated with xref:refguide:applib-ant:HomePage.adoc[@HomePage] and so is shown automatically as the home page.
+<5> Annotated with xref:system:generated:index/applib/annotation/HomePage.adoc[@HomePage] and so is shown automatically as the home page.
 <6> Defines the services in the webapp module, along with dependencies onto the other modules in the application. +
 Discussed in more detail below.
 <7> `AppManifest` is the top-level Spring link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/context/annotation/Configuration.html[@Configuration] that specifies the components of Apache Isis to use, along with the modules making up the application itself (ie `ApplicationModule`, which depends in turn on `SimpleModule`). +

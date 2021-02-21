@@ -91,7 +91,7 @@ CustomerRepository customers;
 ----
 
 Domain services are discovered by Spring Boot, either explicitly referenced in the link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/context/annotation/Import.html[@Import] annotation, or picked up from class path scanning of link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/context/annotation/ComponentScan.html[@ComponentScan].
-Any service annotated or meta-annotated with link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/stereotype/Component.html[@Component] can be discovered; this includes classes annotated with Apache Isis' xref:refguide:applib-ant:DomainService.adoc[@DomainService].
+Any service annotated or meta-annotated with link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/stereotype/Component.html[@Component] can be discovered; this includes classes annotated with Apache Isis' xref:system:generated:index/applib/annotation/DomainService.adoc[@DomainService].
 
 
 == Given/When/Then

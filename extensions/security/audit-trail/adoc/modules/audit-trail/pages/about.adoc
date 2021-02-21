@@ -5,7 +5,7 @@
 WARNING: TODO: this content has not yet been reviewed/updated for v2.0
 
 
-The xref:security:audit-trail:about.adoc[Auditer] module provides an implementation of the xref:refguide:applib-svc:AuditerService.adoc[`AuditerService`], as well as a number of related domain services,
+The xref:security:audit-trail:about.adoc[Auditer] module provides an implementation of the xref:refguide:applib-svc:EntityPropertyChangeSubscriber.adoc[EntityPropertyChangeSubscriber], as well as a number of related domain services,
 It creates an audit record for each changed property (ie every time that `AuditerService#audit(...)` is called.
 
 The module also provides:
@@ -24,7 +24,7 @@ If menu items or contributions are not required in the UI, these can be suppress
 
 == Usage
 
-The typical way to indicate that an object should be audited is to annotate it with the xref:refguide:applib-ant:DomainObject.adoc#auditing[`@DomainObject#auditing()`] annotation.
+The typical way to indicate that an object should be audited is to annotate it with the xref:system:generated:index/applib/annotation/DomainObject.adoc#auditing[`@DomainObject#auditing()`] annotation.
 
 
 == Related Services

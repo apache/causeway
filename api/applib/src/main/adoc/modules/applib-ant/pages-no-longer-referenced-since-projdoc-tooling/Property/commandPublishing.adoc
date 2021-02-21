@@ -6,7 +6,7 @@
 
 CAUTION: TODO: v2 - publishing/auditing got a complete overhaul
 
-Every property edit (and xref:Action.adoc#commandPublishing[action invocation] for that matter) is normally reified into a concrete `Command` object, basically a wrapper around the XML invocation xref:schema:cmd.adoc[Command] schema that also captures some timing metrics about the execution as well as the outcome.
+Every property edit (and xref:system:generated:index/applib/annotation/Action.adoc#commandPublishing[action invocation] for that matter) is normally reified into a concrete `Command` object, basically a wrapper around the XML invocation xref:schema:cmd.adoc[Command] schema that also captures some timing metrics about the execution as well as the outcome.
 
 The main uses cases are:
 
@@ -75,6 +75,6 @@ If `commandDtoProcessor()` is specified, then `commandPublishing()` is assumed t
 
 
 
-For an example application, see xref:refguide:applib-ant:Action.adoc#command[`Action#command()`].
+For an example application, see xref:system:generated:index/applib/annotation/Action.adoc#command[`Action#command()`].
 
 

@@ -8,7 +8,7 @@
 The `cssClassFa` attribute is used to specify the name of a link:http://fortawesome.github.io/Font-Awesome/icons/[Font Awesome icon] name, to be rendered on the action's representation as a button or menu item.
 The related `cssClassFaPosition` attribute specifies the positioning of the icon, to the left or the right of the text.
 
-These attributes can also be applied to xref:refguide:applib-ant:DomainObjectLayout.adoc#cssClassFa[domain objects] to specify the object's icon.
+These attributes can also be applied to xref:system:generated:index/applib/annotation/DomainObjectLayout.adoc#cssClassFa[domain objects] to specify the object's icon.
 
 For example:
 
@@ -43,6 +43,6 @@ As an alternative to using the annotation, the dynamic xref:userguide:fun:ui.ado
 
 [NOTE]
 ====
-The similar xref:refguide:applib-ant:ActionLayout.adoc#cssClass[`@ActionLayout#cssClass`] annotation attribute is also used as a hint to apply CSS, but for wrapping the representation of an object or object member so that it can be styled in an application-specific way.
+The similar xref:system:generated:index/applib/annotation/ActionLayout.adoc#cssClass[`@ActionLayout#cssClass`] annotation attribute is also used as a hint to apply CSS, but for wrapping the representation of an object or object member so that it can be styled in an application-specific way.
 ====
 

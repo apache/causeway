@@ -22,15 +22,15 @@ public class ToDoItem { /* ... */ }
 
 [NOTE]
 ====
-The similar xref:refguide:applib-ant:DomainObjectLayout.adoc#cssClassFa[`@DomainObjectLayout#cssClassFa()`] annotation attribute is also used as a hint to apply CSS, but in particular to allow http://fortawesome.github.io/Font-Awesome/icons/[Font Awesome icons] to be rendered as the icon for classes.
+The similar xref:system:generated:index/applib/annotation/DomainObjectLayout.adoc#cssClassFa[`@DomainObjectLayout#cssClassFa()`] annotation attribute is also used as a hint to apply CSS, but in particular to allow http://fortawesome.github.io/Font-Awesome/icons/[Font Awesome icons] to be rendered as the icon for classes.
 ====
 
 == See also
 
 This attribute can also be applied to:
 
-* xref:refguide:applib-ant:ActionLayout.adoc#cssClass[actions]
-* xref:refguide:applib-ant:PropertyLayout.adoc#cssClass[properties],
-* xref:refguide:applib-ant:CollectionLayout.adoc#cssClass[collections]
-* xref:refguide:applib-ant:ParameterLayout.adoc#cssClass[parameters].
+* xref:system:generated:index/applib/annotation/ActionLayout.adoc#cssClass[actions]
+* xref:system:generated:index/applib/annotation/PropertyLayout.adoc#cssClass[properties],
+* xref:system:generated:index/applib/annotation/CollectionLayout.adoc#cssClass[collections]
+* xref:system:generated:index/applib/annotation/ParameterLayout.adoc#cssClass[parameters].
 

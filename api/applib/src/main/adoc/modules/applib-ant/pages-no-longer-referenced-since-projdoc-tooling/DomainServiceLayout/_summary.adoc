@@ -1,6 +1,6 @@
 // TODO - v2 (reconcile/move into javadoc).
 
-//<.> xref:refguide:applib-ant:DomainServiceLayout.adoc#menuBar[`menuBar()`]
+//<.> xref:system:generated:index/applib/annotation/DomainServiceLayout.adoc#menuBar[`menuBar()`]
 //+
 //The menubar in which the menu that holds this service's actions should reside:
 //+
@@ -9,6 +9,6 @@
 //include::refguide:applib-ant:example$annotation/DomainServiceLayout.java[tags="refguide-menu-bar",indent=0]
 //----
 //
-//<.> xref:refguide:applib-ant:DomainServiceLayout.adoc#named[`named()`]
+//<.> xref:system:generated:index/applib/annotation/DomainServiceLayout.adoc#named[`named()`]
 //+
 //Name of this class (overriding the name derived from its name in code)

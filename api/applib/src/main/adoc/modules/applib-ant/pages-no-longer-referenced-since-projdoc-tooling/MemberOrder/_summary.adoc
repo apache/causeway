@@ -1,10 +1,10 @@
 // TODO - v2 (reconcile/move into javadoc).
 
-//<.> xref:refguide:applib-ant:MemberOrder.adoc#name[`name()`]
+//<.> xref:system:generated:index/applib/annotation/MemberOrder.adoc#name[`name()`]
 //+
 //Names a group of (property) members.
 //All properties with this name will be grouped together.
 //
-//<.> xref:refguide:applib-ant:MemberOrder.adoc#sequence[`sequence()`]
+//<.> xref:system:generated:index/applib/annotation/MemberOrder.adoc#sequence[`sequence()`]
 //+
 //Defines an ordering for members, within their container.

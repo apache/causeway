@@ -52,7 +52,7 @@ Use the layout file to define the positioning of the fieldsets, and use `@Member
 
 For actions, the `name` attribute indicates the name of a property to associate the action with.
 
-TIP: For actions, `@Member#name()` and xref:refguide:applib-ant:Action.adoc#associateWith()` are the same.
+TIP: For actions, `@Member#name()` and xref:system:generated:index/applib/annotation/Action.adoc#associateWith()` are the same.
 
 For example:
 
@@ -77,7 +77,7 @@ public class Customer {
 }
 ----
 
-TIP: the xref:refguide:applib-ant:ActionLayout.adoc#position[`@ActionLayout#position()`] to indicate whether the action should be rendered beneath the property, or on its fieldset panel's header.
+TIP: the xref:system:generated:index/applib/annotation/ActionLayout.adoc#position[`@ActionLayout#position()`] to indicate whether the action should be rendered beneath the property, or on its fieldset panel's header.
 
 == Collections
 

@@ -14,4 +14,4 @@ The class has a number of responsibilities:
 
 The class itself is instantiated automatically by the framework whenever interacting with a rendered object's action.
 
-If the domain object defines its own xref:refguide:applib-methods:reserved.adoc#title[`title()`] supporting method, or has xref:refguide:applib-ant:Title.adoc[`@Title`] annotation(s) on its properties, then these will take precedence.
+If the domain object defines its own xref:refguide:applib-methods:reserved.adoc#title[`title()`] supporting method, or has xref:system:generated:index/applib/annotation/Title.adoc[`@Title`] annotation(s) on its properties, then these will take precedence.

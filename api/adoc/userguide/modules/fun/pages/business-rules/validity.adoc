@@ -62,7 +62,7 @@ The framework validates each argument separately; only if all are valid does it 
 == For more information
 
 For more information, see the xref:refguide:applib-cm:methods.adoc#validate[`validate...()`] section in the appropriate reference guide.
-The reference guide also explains how to define validation declaratively, using the xref:refguide:applib-ant:Parameter.adoc#mustSatisfy[`@Parameter#mustSatisfy()`] or xref:refguide:applib-ant:Property.adoc#mustSatisfy[`@Property#mustSatisfy()`] attributes.
+The reference guide also explains how to define validation declaratively, using the xref:system:generated:index/applib/annotation/Parameter.adoc#mustSatisfy[`@Parameter#mustSatisfy()`] or xref:system:generated:index/applib/annotation/Property.adoc#mustSatisfy[`@Property#mustSatisfy()`] attributes.
 
 It's also possible to return xref:userguide:btb:i18n.adoc#imperative-messages[locale-specific] strings, by returning xref:refguide:applib-cm:classes.adoc#TranslatableString[`TranslatableString`] instead of `java.lang.String`.
 

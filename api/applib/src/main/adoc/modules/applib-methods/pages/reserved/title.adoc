@@ -46,7 +46,7 @@ public String title() {
 
 As the example above shows, the implementation can be as complex as you like.
 
-In many cases, though, you may be able to use the xref:refguide:applib-ant:Title.adoc[`@Title`] annotation.
+In many cases, though, you may be able to use the xref:system:generated:index/applib/annotation/Title.adoc[`@Title`] annotation.
 
 r
 

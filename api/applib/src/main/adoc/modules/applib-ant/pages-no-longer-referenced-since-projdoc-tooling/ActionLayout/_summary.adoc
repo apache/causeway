@@ -1,13 +1,13 @@
 // TODO - v2 (reconcile/move into javadoc).
 
-//<.> xref:refguide:applib-ant:ActionLayout.adoc#named[`named()`]
+//<.> xref:system:generated:index/applib/annotation/ActionLayout.adoc#named[`named()`]
 //+
 //To override the name inferred from the action's name in code. +
 //A typical use case is if the desired name is a reserved Java keyword, such as `default` or `package`.
 //
-//<.> xref:refguide:applib-ant:ActionLayout.adoc#position[`position()`]
+//<.> xref:system:generated:index/applib/annotation/ActionLayout.adoc#position[`position()`]
 //+
-//For actions associated (using xref:refguide:applib-ant:MemberOrder.adoc[`@MemberOrder#named`]) with properties, the positioning of the action's button with respect to the property
+//For actions associated (using xref:system:generated:index/applib/annotation/MemberOrder.adoc[`@MemberOrder#named`]) with properties, the positioning of the action's button with respect to the property
 //
 //<.> `promptStyle()`
 //+

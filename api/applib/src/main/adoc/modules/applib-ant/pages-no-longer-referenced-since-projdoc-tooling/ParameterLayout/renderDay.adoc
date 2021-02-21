@@ -37,5 +37,5 @@ public class Tenancy {
 
 == See also
 
-This attribute is also supported for xref:refguide:applib-ant:PropertyLayout.adoc#renderDay[properties].
+This attribute is also supported for xref:system:generated:index/applib/annotation/PropertyLayout.adoc#renderDay[properties].
 

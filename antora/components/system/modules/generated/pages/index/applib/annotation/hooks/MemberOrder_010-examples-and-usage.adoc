@@ -1,0 +1,10 @@
+== Notes
+
+As this is an important topic, there is xref:userguide:fun:ui.adoc#object-layout[chapter] in the user guide that discusses object layout in full.
+
+
+[TIP]
+====
+The annotation is one of a handful (others including xref:system:generated:index/applib/annotation/Collection.adoc[`@Collection`], xref:system:generated:index/applib/annotation/CollectionLayout.adoc[`@CollectionLayout`], xref:system:generated:index/applib/annotation/Property.adoc[`@Property`]) and xref:system:generated:index/applib/annotation/PropertyLayout.adoc[`@PropertyLayout`] that can also be applied to the field, rather than the getter method.
+This is specifically so that boilerplate-busting tools such as link:https://projectlombok.org/[Project Lombok] can be used.
+====

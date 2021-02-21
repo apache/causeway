@@ -15,15 +15,15 @@ Under the covers, all mixins are basically actions that use the mixee as one of 
 ** if as derived state, then it will be rendered as a property (if it returns a scalar), or as a collection (if it returns a vector).
 
 
-Accordingly, a mixin can be defined using the xref:refguide:applib-ant:Action.adoc[`@Action`], xref:refguide:applib-ant:Property.adoc[`@Property`] or xref:refguide:applib-ant:Collection.adoc[`@Collection`] annotations, but defined at the domain class level rather than at the method level.
+Accordingly, a mixin can be defined using the xref:system:generated:index/applib/annotation/Action.adoc[`@Action`], xref:system:generated:index/applib/annotation/Property.adoc[`@Property`] or xref:system:generated:index/applib/annotation/Collection.adoc[`@Collection`] annotations, but defined at the domain class level rather than at the method level.
 
-Using xref:refguide:applib-ant:DomainObject.adoc#nature[`@DomainObject#nature`] attribute (specifying a nature of `Nature.MIXIN`), in combination with the above allows for more fine grained control, eg. nominating the mixin's method name.
+Using xref:system:generated:index/applib/annotation/DomainObject.adoc#nature[`@DomainObject#nature`] attribute (specifying a nature of `Nature.MIXIN`), in combination with the above allows for more fine grained control, eg. nominating the mixin's method name.
 
 When the mixin follows the naming convention `SomeType_mixinName` then the method name can be abbreviated, and the name of the member being contributed is inferred from the name of the class itself, being everything after the last '_'.
 
 == Contributed Collection
 
-The example below shows how to contribute a collection, using xref:refguide:applib-ant:Collection.adoc[`@Collection`].
+The example below shows how to contribute a collection, using xref:system:generated:index/applib/annotation/Collection.adoc[`@Collection`].
 The method is expected to be called "coll":
 
 [source,java]
@@ -52,7 +52,7 @@ The above will result in a contributed collection "documents" for all types that
 
 == Contributed Property
 
-Contributed properties can likewise be defined using xref:refguide:applib-ant:Property.adoc[`@Property`]; this implies a method called "prop":
+Contributed properties can likewise be defined using xref:system:generated:index/applib/annotation/Property.adoc[`@Property`]; this implies a method called "prop":
 
 [source,java]
 ----
@@ -80,7 +80,7 @@ This contributes a property called "mostRecentDocument".
 [#contributed-action]
 == Contributed Action
 
-Contributed actions are defined similarly, using xref:refguide:applib-ant:Action.adoc[`@Action`]; this implies a method called "act".
+Contributed actions are defined similarly, using xref:system:generated:index/applib/annotation/Action.adoc[`@Action`]; this implies a method called "act".
 For example:
 
 [source,java]

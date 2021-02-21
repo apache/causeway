@@ -1,0 +1,185 @@
+// TODO - v2 need to clean up references
+
+
+//== Main API
+//
+//
+//<.> xref:system:generated:index/applib/annotation/DomainObject.adoc#autoCompleteRepository[`autoCompleteRepository()`]
+//+
+//Nominate a method on a domain service to be used for looking up instances of the domain object
+//
+//<.> xref:system:generated:index/applib/annotation/DomainObject.adoc#autoCompleteAction[`autoCompleteAction()`]
+//+
+//Override the method name to use on the auto-complete repository
+//
+//<.> xref:system:generated:index/applib/annotation/DomainObject.adoc#bounding[`bounding()`]
+//+
+//Whether the number of instances of this domain class is relatively small (a "bounded" set), such that instances could be selected from a drop-down list box or similar.
+//
+//<.> xref:system:generated:index/applib/annotation/DomainObject.adoc#editing[`editing()`]
+//+
+//Whether the object's properties and collections can be edited or not (ie whether the instance should be considered to be immutable)
+//
+//<.> `editingDisabledReason()`
+//+
+//The default reason why the object's properties and collections cannot be edited.
+//
+//<.> xref:system:generated:index/applib/annotation/DomainObject.adoc#entityChangePublishing[`entityChangePublishing()`]
+//+
+//Indicates whether each of the changed properties of an object should be submitted to the registered
+//xref:refguide:applib-svc:EntityPropertyChangeSubscriber.adoc[EntityPropertyChangeSubscriber](s) and
+//whether entity changes, captured as `ChangingEntities` should be published to xref:refguide:applib-svc:EntityChangesSubscriber.adoc[`EntityChangesSubscriber`](s). (Does only apply to entity objects.)
+//
+//<.> xref:system:generated:index/applib/annotation/DomainObject.adoc#mixinMethod[`mixinMethod()`]
+//+
+//How to recognize the "reserved" method name, meaning that the mixin's own name will be inferred from the mixin type.
+//Typical examples are "exec", "execute", "invoke", "apply" and so on.
+//The default "reserved" method name is `$$`.
+//
+//<.> xref:system:generated:index/applib/annotation/DomainObject.adoc#nature[`nature()`]
+//+
+//Whether the domain object logically is an entity (part of the domain layer) or is a view model (part of the application layer); or is a mixin.
+//If an entity, indicates how its persistence is managed.
+//
+//<.> xref:system:generated:index/applib/annotation/DomainObject.adoc#objectType[`objectType()`]
+//+
+//Specify an alias for the domain class used to uniquely identify the object both within the Apache Isis runtime and externally
+
+
+
+//== Entity Lifecycle API
+//
+//These attributes define the events to be fired throughout an the persistence lifecycle of a domain entity:
+
+//[source,java]
+//----
+//include::refguide:applib-ant:example$annotation/DomainObject.java[tags="refguide-lifecycle-events"]
+//----
+//<.> xref:system:generated:index/applib/annotation/DomainObject.adoc#createdLifecycleEvent[`createdLifecycleEvent()`]
+//+
+//The event type to be posted to the xref:refguide:applib-svc:EventBusService.adoc[`EventBusService`] whenever an instance is created
+//
+//<.> xref:system:generated:index/applib/annotation/DomainObject.adoc#persistingLifecycleEvent[`persistingLifecycleEvent()`]
+//+
+//The event type to be posted to whenever an instance is about to be persisted
+//
+//<.> xref:system:generated:index/applib/annotation/DomainObject.adoc#persistedLifecycleEvent[`persistedLifecycleEvent()`]
+//+
+//The event type to be posted whenever an instance has just been persisted
+//
+//<.> xref:system:generated:index/applib/annotation/DomainObject.adoc#loadedLifecycleEvent[`loadedLifecycleEvent()`]
+//+
+//The event type to be posted whenever an instance has just been loaded from the datastore
+//
+//<.> xref:system:generated:index/applib/annotation/DomainObject.adoc#removingLifecycleEvent[`removingLifecycleEvent()`]
+//+
+//The event type to be posted whenever an instance is about to be deleted
+//
+//<.> xref:system:generated:index/applib/annotation/DomainObject.adoc#updatedLifecycleEvent[`updatedLifecycleEvent()`]
+//+
+//The event type to be posted whenever an instance has just been updated
+//
+//<.> xref:system:generated:index/applib/annotation/DomainObject.adoc#updatingLifecycleEvent[`updatingLifecycleEvent()`]
+//+
+//The event type to be posted whenever an instance is about to be updated
+
+
+
+//== Domain Events API
+//
+//These attributes define the events to be fired when a domain object's members (its actions, properties and collections) are interacted with.
+//
+//These attributes define the default event types; they can be overridden for each specific domain member.
+//
+//[source,java]
+//----
+//include::refguide:applib-ant:example$annotation/DomainObject.java[tags="refguide-domain-events"]
+//----
+//<.> `actionDomainEvent()`
+//+
+//The event type to be posted to the xref:refguide:applib-svc:EventBusService.adoc[`EventBusService`] whenever an action of the domain object is interacted with (if not overridden using xref:system:generated:index/applib/annotation/Action.adoc#domainEvent[`@Action#domainEvent()]`).
+//
+//<.> `propertyDomainEvent()`
+//+
+//The event type to be posted to the xref:refguide:applib-svc:EventBusService.adoc[`EventBusService`] whenever a property of the domain object is interacted with (if not overridden using xref:system:generated:index/applib/annotation/Property.adoc#domainEvent[`@Property#domainEvent()]`).
+//
+//<.> `collectionDomainEvent()`
+//+
+//The event type to be posted to the xref:refguide:applib-svc:EventBusService.adoc[`EventBusService`] whenever a collection of the domain object is interacted with (if not overridden using xref:system:generated:index/applib/annotation/Collection.adoc#domainEvent[`@Collection#domainEvent()]`).
+//
+//
+//// TODO: v2: currently missing subpages for these attributes.
+//
+//For example:
+//
+//[source,java]
+//----
+//@DomainObject(
+//    auditing=Auditing.ENABLED,
+//    autoCompleteRepository=CustomerRepository.class
+//    editing=Editing.ENABLED,                            // <.>
+//    updatedLifecycleEvent=Customer.UpdatedEvent.class
+//
+//)
+//public class Customer {
+//    ...
+//}
+//----
+//<.> default value, so could be omitted
+
+
+[#view-models]
+== View Models
+
+The `@DomainObject(nature=VIEW_MODEL)` annotation, applied to a class, indicates that the class is a view model.
+
+View models are not persisted to the database, instead their state is encoded within their identity (ultimately represented in the URL).
+
+
+For example:
+
+[source,java]
+----
+@DomainObject(nature=VIEW_MODEL)
+public class CustomerViewModel {
+    public CustomerViewModel() {}
+    public CustomerViewModel(String firstName, int lastName) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
+    ...
+}
+----
+
+Although there are several ways to instantiate a view model, we recommend that they are instantiated using an N-arg constructor that initializes all relevant state.
+The xref:refguide:applib-svc:ServiceRegistry.adoc[`ServiceRegistry`] can then be used to inject dependencies into the view model.
+For example:
+
+[source,java]
+----
+Customer cust = ...
+CustomerViewModel vm = factoryService.viewModel(
+    new CustomerViewModel(cust.getFirstName(), cust.getLastName()));
+----
+
+[TIP]
+====
+See this xref:userguide:btb:hints-and-tips/view-model-instantiation.adoc[tip] for further discussion about instantiating view models.
+====
+
+View models must have a no-arg constructor; this is used internally by the framework for subsequent "recreation".
+
+The view model's memento will be derived from the value of the view model object's properties.
+Any properties annotated with xref:system:generated:index/applib/annotation/Programmatic.adoc[`@Programmatic`] will be excluded from the memento.
+Properties that are merely xref:system:generated:index/applib/annotation/Property.adoc#hidden[hidden] _are_ included in the memento.
+
+View models when defined using `@DomainObject(nature=VIEW_MODEL)` have some limitations:
+
+* view models cannot hold collections other view models (simple properties _are_ supported, though)
+* collections (of either view models or entities) are ignored.
+* not every data type is supported,
+
+However, these limitations do _not_ apply to xref:userguide:fun:view-models.adoc#jaxb[JAXB] view models.
+If you are using view models heavily, you may wish to restrict yourself to just the JAXB flavour.
+
+

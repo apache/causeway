@@ -10,7 +10,7 @@ Collections can be hidden at the domain-level, indicating that they are not visi
 
 [TIP]
 ====
-It is also possible to use xref:refguide:applib-ant:CollectionLayout.adoc#hidden[`@CollectionLayout#hidden`] or using xref:userguide:fun:ui.adoc#object-layout[file-based layout] such that the collection can be hidden at the view layer.
+It is also possible to use xref:system:generated:index/applib/annotation/CollectionLayout.adoc#hidden[`@CollectionLayout#hidden`] or using xref:userguide:fun:ui.adoc#object-layout[file-based layout] such that the collection can be hidden at the view layer.
 ====
 
 For example:
@@ -57,5 +57,5 @@ The other values of the `Where` enum have no meaning for a collection.
 
 This attribute can also be applied to:
 
-* xref:refguide:applib-ant:Action.adoc#hidden[actions]
-* xref:refguide:applib-ant:Property.adoc#hidden[properties].
+* xref:system:generated:index/applib/annotation/Action.adoc#hidden[actions]
+* xref:system:generated:index/applib/annotation/Property.adoc#hidden[properties].

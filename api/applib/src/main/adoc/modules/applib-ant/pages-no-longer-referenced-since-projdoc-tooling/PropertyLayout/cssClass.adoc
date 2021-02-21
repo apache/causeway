@@ -33,9 +33,9 @@ As an alternative to using the annotation, the dynamic xref:userguide:fun:ui.ado
 
 This attribute can also be applied to:
 
-* xref:refguide:applib-ant:DomainObjectLayout.adoc#cssClass[domain objects]
-* xref:refguide:applib-ant:ActionLayout.adoc#cssClass[actions]
-* xref:refguide:applib-ant:CollectionLayout.adoc#cssClass[collections]
-* xref:refguide:applib-ant:ParameterLayout.adoc#cssClass[parameters].
+* xref:system:generated:index/applib/annotation/DomainObjectLayout.adoc#cssClass[domain objects]
+* xref:system:generated:index/applib/annotation/ActionLayout.adoc#cssClass[actions]
+* xref:system:generated:index/applib/annotation/CollectionLayout.adoc#cssClass[collections]
+* xref:system:generated:index/applib/annotation/ParameterLayout.adoc#cssClass[parameters].
 
 

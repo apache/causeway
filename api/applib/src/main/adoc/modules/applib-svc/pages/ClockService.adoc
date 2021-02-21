@@ -8,5 +8,5 @@ include::system:generated:page$index/applib/services/clock/ClockService.adoc[]
 
 include::ClockService/hooks/implementation.adoc[]
 
-include::ClockService/hooks/examples_and_usage.adoc[]
+include::ClockService/hooks/020-examples-and-usage.adoc[]
 

@@ -26,7 +26,7 @@ you can generally recognize an Apache Isis domain class because it will be proba
 The framework also recognises some annotations from the ORM layer (eg JDO/DataNucleus) and infers domain semantics from these annotations.
 Similarly, JAXB annotations are typically used for view models.
 
-The framework also defines supplementary annotations, notably xref:refguide:applib-ant:DomainObjectLayout.adoc[`@DomainObjectLayout`] and xref:refguide:applib-ant:DomainServiceLayout.adoc[`@DomainServiceLayout`].
+The framework also defines supplementary annotations, notably xref:system:generated:index/applib/annotation/DomainObjectLayout.adoc[`@DomainObjectLayout`] and xref:system:generated:index/applib/annotation/DomainServiceLayout.adoc[`@DomainServiceLayout`].
 These provide hints relating to the layout of the domain object in the user interface.
 Alternatively, these UI hints might be defined in a supplementary xref:userguide:fun:ui.adoc#object-layout[`.layout.xml`] file.
 

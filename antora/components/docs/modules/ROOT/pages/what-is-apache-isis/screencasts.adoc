@@ -138,7 +138,7 @@ include::screencasts/playlists.adoc[]
 
 
 |link:https://www.youtube.com/watch?v=dfRZeYqzMtI[012^] +
-Implementing business logic using a (no-arg) action, and associating with a property using either the xref:refguide:applib-ant:MemberOrder.adoc[`@MemberOrder`] annotations or using xref:userguide:fun:ui.adoc#object-layout[dynamic (XML) layouts].
+Implementing business logic using a (no-arg) action, and associating with a property using either the xref:system:generated:index/applib/annotation/MemberOrder.adoc[`@MemberOrder`] annotations or using xref:userguide:fun:ui.adoc#object-layout[dynamic (XML) layouts].
 |x||||||||x||
 
 
@@ -159,7 +159,7 @@ Using the xref:refguide:applib-cm:methods.adoc#title[`title()`], xref:refguide:a
 
 
 |link:https://www.youtube.com/watch?v=7ToRKBOeemM[015^] +
-Moving the responsibility to specify the icon for a domain object out and into a subscriber, using the xref:refguide:applib-cm:classes/uievent.adoc#IconUiEvent[`IconUiEvent`] as per the xref:refguide:applib-ant:DomainObjectLayout.adoc#iconUiEvent[`@DomainObjectLayout#iconUiEvent()`] annotation
+Moving the responsibility to specify the icon for a domain object out and into a subscriber, using the xref:refguide:applib-cm:classes/uievent.adoc#IconUiEvent[`IconUiEvent`] as per the xref:system:generated:index/applib/annotation/DomainObjectLayout.adoc#iconUiEvent[`@DomainObjectLayout#iconUiEvent()`] annotation
 ||||||x|||||
 
 
@@ -219,7 +219,7 @@ Demonstrates how the end-user can copy and share URLs for domain objects - inclu
 
 
 |link:https://www.youtube.com/watch?v=a0QQLT_16To[021^] +
-Demonstrates how the end-user can use bookmarks and breadcrumbs within Apache Isis' xref:vw:ROOT:about.adoc[Wicket viewer], and how the developer can ensure that xref:refguide:applib-ant:DomainObjectLayout.adoc#bookmarking[domain objects] and (xref:refguide:applib-ant:Action.adoc#semantics[query-only]) xref:refguide:applib-ant:ActionLayout.adoc#bookmarking[actions] can be bookmarked.
+Demonstrates how the end-user can use bookmarks and breadcrumbs within Apache Isis' xref:vw:ROOT:about.adoc[Wicket viewer], and how the developer can ensure that xref:system:generated:index/applib/annotation/DomainObjectLayout.adoc#bookmarking[domain objects] and (xref:system:generated:index/applib/annotation/Action.adoc#semantics[query-only]) xref:system:generated:index/applib/annotation/ActionLayout.adoc#bookmarking[actions] can be bookmarked.
 |||x||||||||
 
 
@@ -265,7 +265,7 @@ Using a domain event subscriber to hide functionality, in this
 
 
 |link:https://www.youtube.com/watch?v=qj4bMkQRBUY[026^] +
-Using the xref:refguide:applib-ant:Title.adoc[`@Title`] annotation (instead of the xref:refguide:applib-cm:methods.adoc#title[`title()`] reserved method) to obtain the title of a domain object, so that the end-user can distinguish one object from another.
+Using the xref:system:generated:index/applib/annotation/Title.adoc[`@Title`] annotation (instead of the xref:refguide:applib-cm:methods.adoc#title[`title()`] reserved method) to obtain the title of a domain object, so that the end-user can distinguish one object from another.
 |x||||||||x||
 
 
@@ -319,7 +319,7 @@ How to validate action parameters using a supporting xref:refguide:applib-cm:met
 
 
 |link:https://www.youtube.com/watch?v=1Vlzob89pYI[031^] +
-How to validate action parameters using the xref:refguide:applib-ant:Parameter.adoc#mustSatisfy[`@Parameter#mustSatisfy()`]  and the Specification interface.
+How to validate action parameters using the xref:system:generated:index/applib/annotation/Parameter.adoc#mustSatisfy[`@Parameter#mustSatisfy()`]  and the Specification interface.
 |||||||||x||
 
 
@@ -378,7 +378,7 @@ include::screencasts/playlists.adoc[]
 
 
 |link:https://www.youtube.com/watch?v=1SCyBlMM2Bo[037^] +
-How to hide properties as columns in tables (parented collections or standalone collections), using the dynamic XML layout (equivalent to xref:refguide:applib-ant:PropertyLayout.adoc#hidden[`@PropertyLayout#hidden()`]).
+How to hide properties as columns in tables (parented collections or standalone collections), using the dynamic XML layout (equivalent to xref:system:generated:index/applib/annotation/PropertyLayout.adoc#hidden[`@PropertyLayout#hidden()`]).
 ||||x|||||||
 
 
@@ -442,7 +442,7 @@ How to use the supporting xref:refguide:applib-cm:methods.adoc#default[`defaultX
 
 
 |link:https://www.youtube.com/watch?v=qAJDGxztWIQ[044^] +
-How to use xref:refguide:applib-ant:DomainObject.adoc#bounding[`@DomainObject#bounding()`] so that a drop-down list is automatically provided for any parameters to actions that are for (domain entity) reference types.
+How to use xref:system:generated:index/applib/annotation/DomainObject.adoc#bounding[`@DomainObject#bounding()`] so that a drop-down list is automatically provided for any parameters to actions that are for (domain entity) reference types.
 |||||||||x||
 
 
@@ -478,7 +478,7 @@ component.
 
 
 |link:https://www.youtube.com/watch?v=0YoFa44Xr6M[049^] +
-Using the xref:refguide:applib-ant:Programmatic.adoc[`@Programmatic`] annotation to exclude methods from a domain object
+Using the xref:system:generated:index/applib/annotation/Programmatic.adoc[`@Programmatic`] annotation to exclude methods from a domain object
 (eg implementing methods of an interface as defined by the (non-ASF) link:https://platform.incode.org[Incode Platform^]'s fullcalendar2 wicket component) that would
 otherwise be part of the Apache Isis metamodel (and thus show up in the UI).
 ||||||||||x|
@@ -545,7 +545,7 @@ How to rename a menu (on the top-level menubar) as rendered in the  xref:vw:ROOT
 
 
 |link:https://www.youtube.com/watch?v=mgHqRxQrp28[058^] +
-How to rename various elements (collections, title) of the xref:refguide:applib-ant:HomePage.adoc[home page] view model,
+How to rename various elements (collections, title) of the xref:system:generated:index/applib/annotation/HomePage.adoc[home page] view model,
 for an improved initial page.
 ||||||||||x|
 

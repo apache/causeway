@@ -4,15 +4,15 @@
 //+
 //If the xref:extensions:command-replay:about.adoc[Command Replay] extension is being used (for regression testing), provides a mechanism to process the `CommandDto` before being replicated from primary to secondary system
 //
-//<.> xref:refguide:applib-ant:Property.adoc#commandPublishing[`commandPublishing()`]
+//<.> xref:system:generated:index/applib/annotation/Property.adoc#commandPublishing[`commandPublishing()`]
 //+
 //Whether the editing of a property should be published to registered xref:refguide:applib-svc:CommandSubscriber.adoc[`CommandSubscriber`]s as a `Command` object, that captures the details of this edit. Typically so it can be logged using the xref:extensions:command-log:about.adoc[Command Log] extension (for auditing or for regression testing using xref:extensions:command-replay:about.adoc[Command Replay]).
 //
-//<.> xref:refguide:applib-ant:Property.adoc#domainEvent[`domainEvent()`]
+//<.> xref:system:generated:index/applib/annotation/Property.adoc#domainEvent[`domainEvent()`]
 //+
 //The event type to be posted to the xref:refguide:applib-svc:EventBusService.adoc[`EventBusService`] to broadcast the property's business rule checking (hide, disable, validate) and its modification (before and after).
 //
-//<.> xref:refguide:applib-ant:Property.adoc#editing[`editing()`]
+//<.> xref:system:generated:index/applib/annotation/Property.adoc#editing[`editing()`]
 //+
 //Whether a property can be modified or cleared from within the UI
 //
@@ -20,46 +20,46 @@
 //+
 //The reason that this property cannot be modified.
 //
-//<.> xref:refguide:applib-ant:Property.adoc#executionPublishing[`executionPublishing()`]
+//<.> xref:system:generated:index/applib/annotation/Property.adoc#executionPublishing[`executionPublishing()`]
 //+
 //Whether the editing of a property should be published to registered xref:refguide:applib-svc:ExecutionSubscriber.adoc[`ExecutionSubscriber`]s as an `Execution` object, that captures the details of this edit.
 //
-//<.> xref:refguide:applib-ant:Property.adoc#fileAccept[`fileAccept()`]
+//<.> xref:system:generated:index/applib/annotation/Property.adoc#fileAccept[`fileAccept()`]
 //+
 //Hints the file type (media type or file extension) to be uploaded to a xref:applib-classes:value-types.adoc#Blob[`Blob`]
 // or xref:applib-classes:value-types.adoc#Clob[`Clob`]. +
 //+
 //Note that this does not prevent the user from uploading some other file type; rather it merely defaults the file type in the file open dialog.
 //
-//<.> xref:refguide:applib-ant:Property.adoc#hidden[`hidden()`]
+//<.> xref:system:generated:index/applib/annotation/Property.adoc#hidden[`hidden()`]
 //+
 //Indicates where (in the UI) the property should be hidden from the user.
 //
-//<.> xref:refguide:applib-ant:Property.adoc#maxLength[`maxLength()`]
+//<.> xref:system:generated:index/applib/annotation/Property.adoc#maxLength[`maxLength()`]
 //+
 //Maximum number of characters for string parameters; ignored otherwise +
 //+
 //TIP: In many/most cases you should however use xref:refguide:applib-ant:Column.adoc[`@Column#length()`]
 //
-//<.> xref:refguide:applib-ant:Property.adoc#snapshot[`snapshot()`]
+//<.> xref:system:generated:index/applib/annotation/Property.adoc#snapshot[`snapshot()`]
 //+
 //Whether to exclude from snapshots. +
 //
-//<.> xref:refguide:applib-ant:Property.adoc#mustSatisfy[`mustSatisfy()`]
+//<.> xref:system:generated:index/applib/annotation/Property.adoc#mustSatisfy[`mustSatisfy()`]
 //+
 //Implementation of `o.a.i.applib.spec.Specification` that allows arbitrary validation to be applied.
 //
-//<.> xref:refguide:applib-ant:Property.adoc#optionality[`optionality()`]
+//<.> xref:system:generated:index/applib/annotation/Property.adoc#optionality[`optionality()`]
 //+
 //Specifies a property is optional rather than mandatory
 //+
 //TIP: In many/most cases you should however use xref:refguide:applib-ant:Column.adoc[`@Column#allowsNull()`]
 //
-//<.> xref:refguide:applib-ant:Property.adoc#projecting[`projecting()`]
+//<.> xref:system:generated:index/applib/annotation/Property.adoc#projecting[`projecting()`]
 //+
 //Indicates that owning object is a view model that is acting as a projection of the underlying entity referenced by this property.
 //
-//<.> xref:refguide:applib-ant:Property.adoc#regexPattern[`regexPattern()`]
+//<.> xref:system:generated:index/applib/annotation/Property.adoc#regexPattern[`regexPattern()`]
 //+
 //Validates the contents of a string parameter against the regular expression pattern
 //

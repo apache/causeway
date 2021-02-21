@@ -15,9 +15,9 @@ Other new groups have been introduced: "value-types", "subdomains", (bounded con
 
 This milestone also introduces a number of new features:
 
-* new xref:refguide:applib-ant:Property.adoc#projecting[`@Property#projecting`] allows view model summaries to be returned as "projections" of underlying entities.
+* new xref:system:generated:index/applib/annotation/Property.adoc#projecting[`@Property#projecting`] allows view model summaries to be returned as "projections" of underlying entities.
 * new xref:refguide:applib-methods:reserved.adoc#layout[`layout()`] method (or xref:refguide:applib-classes:events.adoc#ui-event-classes[UI event]) allows a domain object to specify which layout file should be used to render it.
-* no longer any need to specify xref:refguide:applib-ant:ParameterLayout.adoc#named[`@ParameterLayout#named()`]
+* no longer any need to specify xref:system:generated:index/applib/annotation/ParameterLayout.adoc#named[`@ParameterLayout#named()`]
 * security integration with xref:security:keycloak:about.adoc[Keycloak]
 
 * New value types:

@@ -10,7 +10,7 @@ Properties can be hidden at the domain-level, indicating that they are not visib
 
 [TIP]
 ====
-It is also possible to use xref:refguide:applib-ant:Property.adoc#hidden[`@Property#hidden()`] to hide an action at the domain layer.
+It is also possible to use xref:system:generated:index/applib/annotation/Property.adoc#hidden[`@Property#hidden()`] to hide an action at the domain layer.
 ====
 
 For example:
@@ -60,7 +60,7 @@ This combines `PARENTED_TABLES` and `STANDALONE_TABLES`.
 * `Where.NOWHERE` +
 + The property should not be hidden, overriding any other metadata/conventions that would normally cause the property to be hidden. +
 
-For example, if a property is annotated with xref:refguide:applib-ant:Title.adoc[`@Title`], then normally this should be hidden from all tables.
+For example, if a property is annotated with xref:system:generated:index/applib/annotation/Title.adoc[`@Title`], then normally this should be hidden from all tables.
 Annotating with `@Property(where=Where.NOWHERE)` overrides this.
 
 [NOTE]
@@ -72,5 +72,5 @@ The xref:vro:ROOT:about.adoc[RestfulObjects viewer] has only partial support for
 
 This attribute can also be applied to:
 
-* xref:refguide:applib-ant:ActionLayout.adoc#hidden[actions]
-* xref:refguide:applib-ant:CollectionLayout.adoc#hidden[collections].
+* xref:system:generated:index/applib/annotation/ActionLayout.adoc#hidden[actions]
+* xref:system:generated:index/applib/annotation/CollectionLayout.adoc#hidden[collections].

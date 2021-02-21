@@ -5,7 +5,7 @@
 
 CAUTION: TODO: v2 - publishing/auditing got a complete overhaul
 
-Every action invocation (and xref:Property.adoc#command[property edit] for that matter) is normally reified into a concrete `Command` object, basically a wrapper around the XML invocation xref:schema:cmd.adoc[Command] schema that also captures some timing metrics about the execution as well as the outcome.
+Every action invocation (and xref:system:generated:index/applib/annotation/Property.adoc#commandPublishing[property edit] for that matter) is normally reified into a concrete `Command` object, basically a wrapper around the XML invocation xref:schema:cmd.adoc[Command] schema that also captures some timing metrics about the execution as well as the outcome.
 
 The main uses cases are:
 

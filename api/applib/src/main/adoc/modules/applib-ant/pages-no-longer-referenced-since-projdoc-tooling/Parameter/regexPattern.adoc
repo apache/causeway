@@ -37,4 +37,4 @@ public class Customer {
 
 == See also
 
-This attribute can also be specified for xref:refguide:applib-ant:Property.adoc#regexPattern[properties].
+This attribute can also be specified for xref:system:generated:index/applib/annotation/Property.adoc#regexPattern[properties].

@@ -173,3 +173,5 @@ The type-of the elements returned by the action.
 For downloading xref:system:generated:index/applib/value/Blob.adoc[Blob] or xref:system:generated:index/applib/value/Clob.adoc[Clob] , optionally restrict the files accepted (eg `.xslx` ).
 
 The value should be of the form "file_extension|audio/*|video/*|image/*|media_type".
+
+include::hooks/Action_010-examples-and-usage.adoc[]

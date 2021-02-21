@@ -168,6 +168,6 @@ However, events can be raised programmatically by wrapping the target object usi
 
 This attribute is also supported for:
 
-* xref:refguide:applib-ant:Action.adoc#domainEvent[actions] and
-* xref:refguide:applib-ant:Property.adoc#domainEvent[properties].
+* xref:system:generated:index/applib/annotation/Action.adoc#domainEvent[actions] and
+* xref:system:generated:index/applib/annotation/Property.adoc#domainEvent[properties].
 

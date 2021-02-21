@@ -8,7 +8,7 @@
 
 The `multiLine` attribute specifies that the text field for a string parameter should span multiple lines.
 It is ignored for other parameter types.
-The attribute is also supported for xref:refguide:applib-ant:PropertyLayout.adoc#multiLine[properties].
+The attribute is also supported for xref:system:generated:index/applib/annotation/PropertyLayout.adoc#multiLine[properties].
 
 For example:
 
@@ -30,6 +30,6 @@ public class BugReport {
 
 [NOTE]
 ====
-If set > 1 (as would normally be the case), then the default xref:refguide:applib-ant:ParameterLayout.adoc#labelPosition[`labelPosition`] defaults to `TOP` (rather than `LEFT`, as would normally be the case).
+If set > 1 (as would normally be the case), then the default xref:system:generated:index/applib/annotation/ParameterLayout.adoc#labelPosition[`labelPosition`] defaults to `TOP` (rather than `LEFT`, as would normally be the case).
 ====
 

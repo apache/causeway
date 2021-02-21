@@ -18,10 +18,10 @@ The SPI of the service is:
 public class EntityChangesPublisher {
 
 	void publishChanging(...);   // <1>
-	
+
 }
 ----
-<1> to published all changing entities that are to be published (with the xref:refguide:applib-ant:DomainObject.adoc#publishing[`@DomainObject#publishing`] annotation attribute or equivalent).
+<1> to published all changing entities that are to be published (with the xref:system:generated:index/applib/annotation/DomainObject.adoc#publishing[`@DomainObject#publishing`] annotation attribute or equivalent).
 
 == Related Classes
 

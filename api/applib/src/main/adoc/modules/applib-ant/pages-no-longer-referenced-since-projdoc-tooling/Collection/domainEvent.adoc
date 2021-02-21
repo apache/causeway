@@ -21,7 +21,7 @@ Subscribers (which must be domain services) subscribe to events posted through t
 The xref:vw:ROOT:about.adoc[Wicket viewer] does _not_ currently support the modification of collections; they are rendered read-only.
 However, domain events are still relevant to determine if such collections should be hidden.
 
-The workaround is to create add/remove actions and use xref:refguide:applib-ant:MemberOrder.adoc[UI hints] to render them close to the collection.
+The workaround is to create add/remove actions and use xref:system:generated:index/applib/annotation/MemberOrder.adoc[UI hints] to render them close to the collection.
 ====
 
 By default the event raised is `CollectionDomainEvent.Default`.
@@ -177,8 +177,8 @@ However, events can be raised programmatically either by calling the xref:refgui
 
 This attribute is also supported for:
 
-* xref:refguide:applib-ant:Action.adoc#domainEvent[actions] and
-* xref:refguide:applib-ant:Property.adoc#domainEvent[properties].
+* xref:system:generated:index/applib/annotation/Action.adoc#domainEvent[actions] and
+* xref:system:generated:index/applib/annotation/Property.adoc#domainEvent[properties].
 
 
 

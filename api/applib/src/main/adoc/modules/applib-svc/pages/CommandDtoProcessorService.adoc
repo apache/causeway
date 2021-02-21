@@ -8,6 +8,6 @@ include::system:generated:page$index/applib/services/commanddto/processor/spi/Co
 
 include::CommandDtoProcessorService/hooks/implementation.adoc[]
 
-include::CommandDtoProcessorService/hooks/examples_and_usage.adoc[]
+include::CommandDtoProcessorService/hooks/020-examples-and-usage.adoc[]
 
 

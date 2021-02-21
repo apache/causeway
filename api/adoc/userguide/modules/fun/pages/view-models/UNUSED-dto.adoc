@@ -50,7 +50,7 @@ public class ToDoItemV1_1 implements Dto {                          // <.>
 <.> package name encodes major version; see discussion on xref:userguide:fun:view-models.adoc#versioning[versioning]
 <.> identifies this class as a view model and defines the root element for JAXB serialization
 <.> all properties in the class must be listed; (they can be ignored using `@XmlTransient`)
-<.> demonstrating use of UI events for a subscriber to provide the DTO's title; see xref:refguide:applib-ant:DomainObjectLayout.adoc#titleUiEvent[`@DomainObjectLayout#titleUiEvent()`].
+<.> demonstrating use of UI events for a subscriber to provide the DTO's title; see xref:system:generated:index/applib/annotation/DomainObjectLayout.adoc#titleUiEvent[`@DomainObjectLayout#titleUiEvent()`].
 <.> class name encodes (major and) minor version; see discussion on xref:userguide:fun:view-models.adoc#versioning[versioning]
 <.> again, see discussion on xref:userguide:fun:view-models.adoc#versioning[versioning]
 <.> again, see discussion on xref:userguide:fun:view-models.adoc#versioning[versioning]

@@ -32,4 +32,4 @@ It is also possible to specify a global default for the page size of standalone 
 
 This attribute can also be applied to:
 
-* xref:refguide:applib-ant:CollectionLayout.adoc#paged[collections]
+* xref:system:generated:index/applib/annotation/CollectionLayout.adoc#paged[collections]

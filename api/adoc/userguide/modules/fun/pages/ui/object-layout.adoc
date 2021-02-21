@@ -227,7 +227,7 @@ The layout XML will then be ignored.
 Rather than specify every UI semantic in the layout file, you can optionally combine with a number of annotations.
 The idea is that the layout.xml is used primarily for the coarse-grained grid layout, with annotations used for the stuff that changes less often, such as associating actions with properties or collections, or the order of properties or actions within a fieldset.
 
-The annotations most relevant here is xref:refguide:applib-ant:MemberOrder.adoc[`@MemberOrder`]:
+The annotations most relevant here is xref:system:generated:index/applib/annotation/MemberOrder.adoc[`@MemberOrder`]:
 
 * for properties:
 
@@ -248,10 +248,10 @@ The `@Action#associateWith()` annotation can be used instead as a direct replace
 +
 The `@Action#associateWithSequence()` annotation can be used as a direct replacement.
 
-There are a number of other "layout" annotations, specifically xref:refguide:applib-ant:PropertyLayout.adoc[`@PropertyLayout`], xref:refguide:applib-ant:CollectionLayout.adoc[`@CollectionLayout`] and xref:refguide:applib-ant:ActionLayout.adoc[`@ActionLayout`].
+There are a number of other "layout" annotations, specifically xref:system:generated:index/applib/annotation/PropertyLayout.adoc[`@PropertyLayout`], xref:system:generated:index/applib/annotation/CollectionLayout.adoc[`@CollectionLayout`] and xref:system:generated:index/applib/annotation/ActionLayout.adoc[`@ActionLayout`].
 All of the semantics in these layout annotations can also be specified in the `.layout.xml` files; which is used is a matter of taste.
 
-In addition, xref:refguide:applib-ant:ParameterLayout.adoc[`@ParameterLayout`] provides layout hints for action parameters.
+In addition, xref:system:generated:index/applib/annotation/ParameterLayout.adoc[`@ParameterLayout`] provides layout hints for action parameters.
 There is no way to specify these semantics in the `.layout.xml` file (action parameters are not enumerated in the file).
 
 === Layout file styles

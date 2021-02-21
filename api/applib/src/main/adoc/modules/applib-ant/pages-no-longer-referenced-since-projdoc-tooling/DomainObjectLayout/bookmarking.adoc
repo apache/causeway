@@ -7,7 +7,7 @@
 
 
 The `bookmarking` attribute indicates that an entity is automatically bookmarked.
-This attribute is also supported for  xref:refguide:applib-ant:ActionLayout.adoc#bookmarking[domain objects].
+This attribute is also supported for  xref:system:generated:index/applib/annotation/ActionLayout.adoc#bookmarking[domain objects].
 
 In the xref:vw:ROOT:about.adoc[Wicket Viewer], a link to a bookmarked object is shown in the bookmarks panel:
 

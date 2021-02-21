@@ -6,7 +6,7 @@
 
 
 Whenever a domain object is to be rendered, the framework fires off a title UI event to obtain a title for the object.
-This is as an alternative to implementing xref:refguide:applib-methods:reserved.adoc#title[`title()`] reserved method, or using the xref:refguide:applib-ant:Title.adoc[`@Title`] annotation, within the class itself.
+This is as an alternative to implementing xref:refguide:applib-methods:reserved.adoc#title[`title()`] reserved method, or using the xref:system:generated:index/applib/annotation/Title.adoc[`@Title`] annotation, within the class itself.
 (If either `title()` or `@Title` are present, then they will take precedence).
 
 Subscribers subscribe through the xref:refguide:applib-svc:EventBusService.adoc[`EventBusService`] and can use obtain a reference to the domain object from the event.

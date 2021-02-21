@@ -20,7 +20,7 @@ public interface EntityPropertyChangePublisher {
     void publishEntityPropertyChanges(...);  // <1>
 }
 ----
-<1> uses the xref:core:runtime-services:ChangedObjectsService.adoc[`ChangedObjectsServiceInternal`] to obtain details of the changed properties, then call the configured xref:refguide:applib-svc:AuditerService.adoc[`AuditerService`](s).
+<1> uses the xref:core:runtime-services:ChangedObjectsService.adoc[`ChangedObjectsServiceInternal`] to obtain details of the changed properties, then call the configured xref:refguide:applib-svc:EntityPropertyChangeSubscriber.adoc[EntityPropertyChangeSubscriber](s).
 
 == Registering the Service
 

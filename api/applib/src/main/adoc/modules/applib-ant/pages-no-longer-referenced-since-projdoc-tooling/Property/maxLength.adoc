@@ -55,5 +55,5 @@ public class Customer {
 
 == See also
 
-This attribute can also be applied to xref:refguide:applib-ant:Parameter.adoc#maxLength[parameters].
+This attribute can also be applied to xref:system:generated:index/applib/annotation/Parameter.adoc#maxLength[parameters].
 

@@ -8,5 +8,5 @@ include::system:generated:page$index/applib/services/bookmark/BookmarkService.ad
 
 include::BookmarkService/hooks/implementation.adoc[]
 
-include::BookmarkService/hooks/examples_and_usage.adoc[]
+include::BookmarkService/hooks/020-examples-and-usage.adoc[]
 

@@ -11,7 +11,7 @@ The related `editingDisabledReason` attribute specifies the a hard-coded reason 
 
 Whether a property is enabled or disabled depends upon these factors:
 
-* whether the domain object has been configured as immutable through the xref:refguide:applib-ant:DomainObject.adoc#editing[`@DomainObject#editing()`] attribute
+* whether the domain object has been configured as immutable through the xref:system:generated:index/applib/annotation/DomainObject.adoc#editing[`@DomainObject#editing()`] attribute
 
 * else (that is, if the domain object's editability is specified as being `AS_CONFIGURED`), then the value of the xref:refguide:config:sections/isis.applib.adoc#isis.applib.annotation.domain-object.editing['isis.applib.annotation.domain-object.editing'] configuration property.
 If set to `false`, then the object's properties (and collections) are __not__ editable
@@ -44,4 +44,4 @@ public class Customer {
 
 This attribute can also be specified for:
 
-* xref:refguide:applib-ant:DomainObject.adoc#editing[domain object].
+* xref:system:generated:index/applib/annotation/DomainObject.adoc#editing[domain object].

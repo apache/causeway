@@ -7,7 +7,7 @@
 
 Whenever a property of a domain object is interacted with then a domain event will be fired, for each of the various phases (hidden, disabled, validated, executing, executed).
 The `@DomainObject#propertyDomainEvent` attribute allows a common event domain class to be fired for all of the properties of the domain object.
-This can be overridden for any given property using xref:refguide:applib-ant:Property.adoc#domainEvent[`@Property#domainEvent()`].
+This can be overridden for any given property using xref:system:generated:index/applib/annotation/Property.adoc#domainEvent[`@Property#domainEvent()`].
 
 For example:
 
@@ -37,10 +37,10 @@ For example:
 public class ToDoItem_priority {
     private final ToDoItem todoItem;
     // constructor omitted
-    
+
     public static class PropertyDomainEventDefault
         extends org.apache.isis.applib.events.domain.PropertyDomainEvent<Object> { }
-    
+
     public Integer prop() { /* ... */ }
 }
 ----

@@ -43,5 +43,5 @@ As an alternative to using the annotation, the dynamic xref:userguide:fun:ui.ado
 
 == See also
 
-This attribute is also supported for xref:refguide:applib-ant:ParameterLayout.adoc#renderDay[parameters].
+This attribute is also supported for xref:system:generated:index/applib/annotation/ParameterLayout.adoc#renderDay[parameters].
 

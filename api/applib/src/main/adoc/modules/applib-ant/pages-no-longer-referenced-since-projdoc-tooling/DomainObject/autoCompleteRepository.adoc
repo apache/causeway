@@ -76,7 +76,7 @@ public class Customers {
 ----
 <.> end-user must enter minimum number of characters to trigger the query
 
-The autocomplete "action" can also be a regular method, annotated using xref:refguide:applib-ant:Programmatic.adoc[`@Programmatic`].
+The autocomplete "action" can also be a regular method, annotated using xref:system:generated:index/applib/annotation/Programmatic.adoc[`@Programmatic`].
 That is, it does not need to be part of the metamodel:
 
 [source,java]

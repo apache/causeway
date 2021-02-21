@@ -11,7 +11,7 @@ Actions can be hidden at the domain-level, indicating that they are not visible 
 
 [TIP]
 ====
-It is also possible to use xref:refguide:applib-ant:ActionLayout.adoc#hidden[`@ActionLayout#hidden`] or xref:userguide:fun:ui.adoc#object-layout[file-based layouts] such that the action can be hidden at the view layer.
+It is also possible to use xref:system:generated:index/applib/annotation/ActionLayout.adoc#hidden[`@ActionLayout#hidden`] or xref:userguide:fun:ui.adoc#object-layout[file-based layouts] such that the action can be hidden at the view layer.
 Both options are provided with a view that in the future the view-layer semantics may be under the control of (expert) users, whereas domain-layer semantics should never be overridden or modified by the user.
 ====
 
@@ -51,6 +51,6 @@ The other values of the `Where` enum have no meaning for a collection.
 
 This attribute can also be applied to:
 
-* xref:refguide:applib-ant:Property.adoc#hidden[properties]
-* xref:refguide:applib-ant:Collection.adoc#hidden[collections].
+* xref:system:generated:index/applib/annotation/Property.adoc#hidden[properties]
+* xref:system:generated:index/applib/annotation/Collection.adoc#hidden[collections].
 

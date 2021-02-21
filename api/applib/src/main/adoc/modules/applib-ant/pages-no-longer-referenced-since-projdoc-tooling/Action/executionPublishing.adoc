@@ -45,10 +45,10 @@ public class Order {
 
 This attribute is also supported for:
 
-* xref:refguide:applib-ant:DomainObject.adoc#entityChangePublishing[domain objects]
+* xref:system:generated:index/applib/annotation/DomainObject.adoc#entityChangePublishing[domain objects]
 + where it controls whether changed objects are published as events, and for
 
-* xref:refguide:applib-ant:Property.adoc#executionPublishing[properties]
+* xref:system:generated:index/applib/annotation/Property.adoc#executionPublishing[properties]
 +
 where it controls whether property edits are published as events.
 

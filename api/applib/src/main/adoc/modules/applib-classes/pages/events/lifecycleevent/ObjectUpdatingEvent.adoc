@@ -10,4 +10,4 @@ Subclass of xref:applib-classes:events.adoc#AbstractLifecycleEvent[`AbstractLife
 This is done either explicitly when the current transaction is flushed using the xref:refguide:applib-svc:RepositoryService.adoc[`RepositoryService`]'s `#flush(...)` method, else is done implicitly when the transaction commits at the end of the user request.
 
 
-`ObjectUpdatingEvent.Default` is the implementation that is used by default, but this can be overridden using xref:refguide:applib-ant:DomainObject.adoc#updatingLifecycleEvent[`@DomainObject#updatingLifecycleEvent`].
+`ObjectUpdatingEvent.Default` is the implementation that is used by default, but this can be overridden using xref:system:generated:index/applib/annotation/DomainObject.adoc#updatingLifecycleEvent[`@DomainObject#updatingLifecycleEvent`].

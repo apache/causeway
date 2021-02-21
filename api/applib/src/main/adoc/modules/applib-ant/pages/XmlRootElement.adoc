@@ -11,8 +11,8 @@ In the case of a JAXB-annotated object this memento is its XML representation.
 JAXB generally requires that the root element of the XML representation is annotated with `@XmlRootElement`.
 Apache Isis makes this a mandatory requirement.
 
-In comparison to using either the xref:applib-classes:ViewModel.adoc[`ViewModel`] interface or the 
-xref:refguide:applib-ant:ViewModel.adoc[`@DomainObject(nature=VIEW_MODEL)`] annotation, 
+In comparison to using either the xref:applib-classes:ViewModel.adoc[`ViewModel`] interface or the
+xref:refguide:applib-ant:ViewModel.adoc[`@DomainObject(nature=VIEW_MODEL)`] annotation,
 using `@XmlRootElement` has a couple of significant advantages:
 
 * the view model can be used as a "canonical" DTO, for example when accessing data using the xref:vro:ROOT:about.adoc[RestfulObjects viewer] in combination with the
@@ -59,7 +59,7 @@ public class ToDoItemDto implements Dto {
 
 Although (like any other viewmodel) a JAXB-annotated can have behaviour (actions) and UI hints, you may wish to keep the DTO "clean", just focused on specifying the data contract.
 
-Behaviour can therefore be provided using xref:userguide:fun:overview.adoc#mixins[mixins] (annotated with xref:refguide:applib-ant:DomainObject.adoc[`@DomainObject(nature=MIXIN)`]), while xref:applib-classes:classes/uievent.adoc[UI events] can be used to obtain title, icons and so on.
+Behaviour can therefore be provided using xref:userguide:fun:overview.adoc#mixins[mixins] (annotated with xref:system:generated:index/applib/annotation/DomainObject.adoc[`@DomainObject(nature=MIXIN)`]), while xref:applib-classes:classes/uievent.adoc[UI events] can be used to obtain title, icons and so on.
 
 For a more complete discussion of writing JAXB view models/DTOs, see xref:userguide:fun:overview.adoc#view-models[this topic] in the user guide.
 

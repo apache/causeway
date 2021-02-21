@@ -68,7 +68,7 @@ The benefit of `nature()` is that it allows the developer to properly characteri
 
 [NOTE]
 ====
-On the other hand, view models defined in this way do have some limitations; see xref:refguide:applib-ant:DomainObject.adoc#view-models[View Models] for further discussion.
+On the other hand, view models defined in this way do have some limitations; see xref:system:generated:index/applib/annotation/DomainObject.adoc#view-models[View Models] for further discussion.
 
 These limitations do _not_ apply to xref:userguide:fun:view-models.adoc#jaxb[JAXB] view models.
 If you are using view models heavily, you may wish to restrict yourself to just the JAXB flavour.

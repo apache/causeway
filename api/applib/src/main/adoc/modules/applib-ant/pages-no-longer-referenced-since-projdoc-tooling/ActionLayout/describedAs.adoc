@@ -28,8 +28,8 @@ As an alternative to using the annotation, the dynamic xref:userguide:fun:ui.ado
 
 This attribute can also be specified for:
 
-* xref:refguide:applib-ant:CollectionLayout.adoc#describedAs[collections]
-* xref:refguide:applib-ant:PropertyLayout.adoc#describedAs[properties]
-* xref:refguide:applib-ant:ParameterLayout.adoc#describedAs[parameters]
-* xref:refguide:applib-ant:DomainObjectLayout.adoc#describedAs[domain objects]
+* xref:system:generated:index/applib/annotation/CollectionLayout.adoc#describedAs[collections]
+* xref:system:generated:index/applib/annotation/PropertyLayout.adoc#describedAs[properties]
+* xref:system:generated:index/applib/annotation/ParameterLayout.adoc#describedAs[parameters]
+* xref:system:generated:index/applib/annotation/DomainObjectLayout.adoc#describedAs[domain objects]
 

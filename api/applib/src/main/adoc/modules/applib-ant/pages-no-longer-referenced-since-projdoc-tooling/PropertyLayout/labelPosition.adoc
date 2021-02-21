@@ -9,7 +9,7 @@
 The `labelPosition` attribute determines the positioning of labels for properties.
 
 The positioning of labels is typically `LEFT`, but can be positioned to the `TOP`.
-The one exception is xref:refguide:applib-ant:ParameterLayout.adoc#multiLine[`multiLine`] string properties, where the label defaults to `TOP` automatically (to provide as much real-estate for the multiline text field as possible).
+The one exception is xref:system:generated:index/applib/annotation/ParameterLayout.adoc#multiLine[`multiLine`] string properties, where the label defaults to `TOP` automatically (to provide as much real-estate for the multiline text field as possible).
 
 For boolean properties a positioning of `RIGHT` is also allowed; this is ignored for all other types.
 
@@ -89,5 +89,5 @@ As an alternative to using the annotation, the dynamic xref:userguide:fun:ui.ado
 
 == See also
 
-This attribute can also be specified for xref:refguide:applib-ant:ParameterLayout.adoc#labelPosition[parameters].
+This attribute can also be specified for xref:system:generated:index/applib/annotation/ParameterLayout.adoc#labelPosition[parameters].
 

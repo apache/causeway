@@ -19,6 +19,7 @@
 package org.apache.isis.tooling.j2adoc.format;
 
 import java.io.File;
+import java.io.FilenameFilter;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -27,6 +28,7 @@ import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import com.github.javaparser.ast.nodeTypes.NodeWithJavadoc;
 import com.github.javaparser.javadoc.Javadoc;
@@ -97,7 +99,8 @@ implements UnitFormatter {
 
         memberDescriptions(unit, doc);
 
-        // -- outro
+
+        // -- inclusions
 
         inclusions(unit, file)
                 .stream()
@@ -200,12 +203,20 @@ implements UnitFormatter {
      * @param file - not to write to, but to determine if any include's of optional hook files are required.
      */
     protected java.util.List<String> inclusions(final J2AdocUnit unit, final File file) {
-        return Arrays.asList(
-                "hooks/implementation.adoc",
-                "hooks/examples_and_usage.adoc"
-        ).stream()
-                .filter(fileName -> file.toPath().getParent().resolve(fileName).toFile().exists())
-                .collect(Collectors.toList());
+        final String fileNamex = file.getName();
+        final String baseName = determineBaseName(fileNamex);
+        final File hooks = file.toPath().getParent().resolve("hooks").toFile();
+        if (!hooks.exists() || !hooks.isDirectory()) {
+            return Collections.emptyList();
+        } else {
+            return Arrays.stream(hooks.list((dir, name) -> name.startsWith(baseName + "_")))
+            .map(hookFileName -> "hooks/" + hookFileName)
+                    .collect(Collectors.toList());
+        }
+    }
+
+    static String determineBaseName(String fileName) {
+        return fileName.split("\\.adoc")[0];
     }
 
 }

@@ -8,6 +8,6 @@ include::system:generated:page$index/applib/services/bookmarkui/BookmarkUiServic
 
 include::BookmarkUiService/hooks/implementation.adoc[]
 
-include::BookmarkUiService/hooks/examples_and_usage.adoc[]
+include::BookmarkUiService/hooks/020-examples-and-usage.adoc[]
 
 

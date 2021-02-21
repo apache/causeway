@@ -17,7 +17,7 @@ The framework provides an implementation of the grid classes modelled closely on
 In principle it is also possible to extend the layout architecture for other grid systems.
 The component classes, though, are intended to be reusable across all grid systems.
 
-The component classes, meanwhile, are broadly equivalent to the "layout" annotations (xref:refguide:applib-ant:PropertyLayout.adoc[`@PropertyLayout`], xref:refguide:applib-ant:CollectionLayout.adoc[`@CollectionLayout`], xref:refguide:applib-ant:ActionLayout.adoc[`@ActionLayout`] and xref:refguide:applib-ant:DomainObjectLayout.adoc[`@DomainObjectLayout`]
+The component classes, meanwhile, are broadly equivalent to the "layout" annotations (xref:system:generated:index/applib/annotation/PropertyLayout.adoc[`@PropertyLayout`], xref:system:generated:index/applib/annotation/CollectionLayout.adoc[`@CollectionLayout`], xref:system:generated:index/applib/annotation/ActionLayout.adoc[`@ActionLayout`] and xref:system:generated:index/applib/annotation/DomainObjectLayout.adoc[`@DomainObjectLayout`]
 
 All of the classes in this package are JAXB-annotated, meaning that they can be serialized to/from XML (the `component` classes in the `http://isis.apache.org/applib/layout/component` XSD namespace, the bootstrap 3 grid classes in the `http://isis.apache.org/applib/layout/grid/bootstrap3` XSD namespace).
 This ability to serialize to/from XML is used by the xref:refguide:applib-svc:GridLoaderService.adoc[`GridLoaderService`], the default implementation of which reads the grid layout for a domain class from a `.layout.xml` file on the classpath.
@@ -39,13 +39,13 @@ A fieldset (sometimes also called a property group or member group) of a number 
 
 * layout data classes, which correspond to the similarly named annotations:
 
-** `PropertyLayoutData`, corresponding to the xref:refguide:applib-ant:PropertyLayout.adoc[`@PropertyLayout`] annotation;
+** `PropertyLayoutData`, corresponding to the xref:system:generated:index/applib/annotation/PropertyLayout.adoc[`@PropertyLayout`] annotation;
 
-** `CollectionLayoutData`, corresponding to the xref:refguide:applib-ant:CollectionLayout.adoc[`@CollectionLayout`] annotation;
+** `CollectionLayoutData`, corresponding to the xref:system:generated:index/applib/annotation/CollectionLayout.adoc[`@CollectionLayout`] annotation;
 
-** `ActionLayoutData`, corresponding to the xref:refguide:applib-ant:ActionLayout.adoc[`@ActionLayout`] annotation;
+** `ActionLayoutData`, corresponding to the xref:system:generated:index/applib/annotation/ActionLayout.adoc[`@ActionLayout`] annotation;
 
-** `DomainObjectLayoutData`, corresponding to the xref:refguide:applib-ant:DomainObjectLayout.adoc[`@DomainObjectLayout`] annotation.
+** `DomainObjectLayoutData`, corresponding to the xref:system:generated:index/applib/annotation/DomainObjectLayout.adoc[`@DomainObjectLayout`] annotation.
 
 In addition, the component package includes `Grid`, representing the top level container for a custom layout for a domain object.
 `Grid` itself is merely an interface, but it also defines the visitor pattern to make it easy for validate and normalize the grid layouts.

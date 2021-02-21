@@ -240,8 +240,8 @@ public class CustomerRecordOnSAP {
     // ...
 }
 ----
-|Annotated with xref:refguide:applib-ant:DomainObject.adoc#nature[`@DomainObject#nature`] and a nature of `EXTERNAL_ENTITY`, with memento derived automatically from the properties of the domain object.
-Collections are ignored, as are any properties annotated as xref:refguide:applib-ant:Property.adoc#snapshot[snapshot=EXCLUDED].
+|Annotated with xref:system:generated:index/applib/annotation/DomainObject.adoc#nature[`@DomainObject#nature`] and a nature of `EXTERNAL_ENTITY`, with memento derived automatically from the properties of the domain object.
+Collections are ignored, as are any properties annotated as xref:system:generated:index/applib/annotation/Property.adoc#snapshot[snapshot=EXCLUDED].
 
 | In-memory entity
 | WARNING: TODO INMEMORY_ENTITY was removed, this use-case is still valid for consideration, what to do?

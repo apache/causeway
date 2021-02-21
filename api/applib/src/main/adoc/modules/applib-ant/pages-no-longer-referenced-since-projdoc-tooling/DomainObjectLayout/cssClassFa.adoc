@@ -30,12 +30,12 @@ The related `cssClassFaPosition` attribute is currently unused for domain object
 
 [TIP]
 ====
-The similar xref:refguide:applib-ant:DomainObjectLayout.adoc#cssClass[`@DomainObjectLayout#cssClass()`] annotation attribute is also used as a hint to apply CSS, but for wrapping the representation of an object or object member so that it can be styled in an application-specific way.
+The similar xref:system:generated:index/applib/annotation/DomainObjectLayout.adoc#cssClass[`@DomainObjectLayout#cssClass()`] annotation attribute is also used as a hint to apply CSS, but for wrapping the representation of an object or object member so that it can be styled in an application-specific way.
 ====
 
 == See also
 
 These attributes can also be applied to:
 
-* xref:refguide:applib-ant:ActionLayout.adoc#cssClassFa[actions] to specify an icon for the action's representation as a button or menu item.
+* xref:system:generated:index/applib/annotation/ActionLayout.adoc#cssClassFa[actions] to specify an icon for the action's representation as a button or menu item.
 

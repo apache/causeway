@@ -121,7 +121,7 @@ For example:
 public class Product { /* ... */ }
 ----
 
-For more on this, see xref:refguide:applib-ant:DomainObject.adoc#bounding[`@DomainObject#bounding`].
+For more on this, see xref:system:generated:index/applib/annotation/DomainObject.adoc#bounding[`@DomainObject#bounding`].
 
 Or, if the data type is an enum, then a drop-down will be provided automatically.
 A payment method is a good example of this:
@@ -160,7 +160,7 @@ public class Customers {
 }
 ----
 
-For more on this, see xref:refguide:applib-ant:DomainObject.adoc#autoCompleteRepository[`@DomainObject#autoCompleteRepository`].
+For more on this, see xref:system:generated:index/applib/annotation/DomainObject.adoc#autoCompleteRepository[`@DomainObject#autoCompleteRepository`].
 
 [TIP]
 ====
@@ -187,7 +187,7 @@ public List<Tag> autoCompleteTag(@MinLength(1) search) {
 ----
 
 
-If the action has been associated with a collection, using xref:refguide:applib-ant:Action.adoc#associateWith[`@Action#associateWith()`], then the collection can be used to provide a list of candidate values.
+If the action has been associated with a collection, using xref:system:generated:index/applib/annotation/Action.adoc#associateWith[`@Action#associateWith()`], then the collection can be used to provide a list of candidate values.
 
 The xref:vw:ROOT:about.adoc[Wicket Viewer] handles this by rendering checkboxes against the associated collection; the user can select/deselect these checkboxes and the selected items are taken as the values for the multi-select action.
 

@@ -1,26 +1,26 @@
 // TODO - v2 (reconcile/move into javadoc).
 
 
-//<.> xref:refguide:applib-ant:ParameterLayout.adoc#cssClass[`cssClass()`]
+//<.> xref:system:generated:index/applib/annotation/ParameterLayout.adoc#cssClass[`cssClass()`]
 //+The css class that a parameter should have, to allow more targetted styling in xref:refguide:config:application-specific/application-css.adoc[`application.css`]
 //
-//<.> xref:refguide:applib-ant:ParameterLayout.adoc#describedAs[`describedAs()`]
+//<.> xref:system:generated:index/applib/annotation/ParameterLayout.adoc#describedAs[`describedAs()`]
 //+
 //Description of this parameter, eg to be rendered in a tooltip.
 //
-//<.> xref:refguide:applib-ant:ParameterLayout.adoc#labelPosition[`labelPosition()`]
+//<.> xref:system:generated:index/applib/annotation/ParameterLayout.adoc#labelPosition[`labelPosition()`]
 //In forms, the positioning of the label relative to the property value. +
 //=
-//Default is `LEFT`, unless xref:refguide:applib-ant:ParameterLayout.adoc#multiLine[`multiLine`] in which case `TOP`.
+//Default is `LEFT`, unless xref:system:generated:index/applib/annotation/ParameterLayout.adoc#multiLine[`multiLine`] in which case `TOP`.
 //The value `RIGHT` is only supported for boolean parameters.
 //
-//<.> xref:refguide:applib-ant:ParameterLayout.adoc#multiLine[`multiLine()`]
+//<.> xref:system:generated:index/applib/annotation/ParameterLayout.adoc#multiLine[`multiLine()`]
 //+
 //For string parameters, render as a text area over specified number of lines.
 //+
-//If set > 1, then then xref:refguide:applib-ant:ParameterLayout.adoc#labelPosition[`labelPosition`] defaults to `TOP`.
+//If set > 1, then then xref:system:generated:index/applib/annotation/ParameterLayout.adoc#labelPosition[`labelPosition`] defaults to `TOP`.
 //
-//<.> xref:refguide:applib-ant:ParameterLayout.adoc#named[`named()`]
+//<.> xref:system:generated:index/applib/annotation/ParameterLayout.adoc#named[`named()`]
 //+
 //The name of this parameter.
 //+
@@ -35,11 +35,11 @@
 //+
 //Whether to HTML escape the name of this parameter.
 //
-//<.> xref:refguide:applib-ant:ParameterLayout.adoc#renderDay[`renderDay()`]
+//<.> xref:system:generated:index/applib/annotation/ParameterLayout.adoc#renderDay[`renderDay()`]
 //+
 //For date parameters only, render the date as one day prior to the actually stored date (eg the end date of an open interval into a closed interval)
 //
-//<.> xref:refguide:applib-ant:ParameterLayout.adoc#typicalLength[`typicalLength()`]
+//<.> xref:system:generated:index/applib/annotation/ParameterLayout.adoc#typicalLength[`typicalLength()`]
 //+
 //The typical entry length of a field, use to determine the optimum width for display
 

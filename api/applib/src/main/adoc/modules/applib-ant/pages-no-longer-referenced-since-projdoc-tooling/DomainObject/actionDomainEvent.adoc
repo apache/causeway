@@ -7,7 +7,7 @@
 
 Whenever an action of a domain object is interacted with then a domain event will be fired, for each of the various phases (hidden, disabled, validated, executing, executed).
 The `@DomainObject#actionDomainEvent` attribute allows a common event domain class to be fired for all of the actions of the domain object.
-This can be overridden for any given action using xref:refguide:applib-ant:Action.adoc#domainEvent[`@Action#domainEvent`].
+This can be overridden for any given action using xref:system:generated:index/applib/annotation/Action.adoc#domainEvent[`@Action#domainEvent`].
 
 For example:
 

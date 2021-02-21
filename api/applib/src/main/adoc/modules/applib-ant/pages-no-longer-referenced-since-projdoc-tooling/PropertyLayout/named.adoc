@@ -46,9 +46,9 @@ The framework also provides a separate, powerful mechanism for xref:userguide:bt
 
 This attribute can also be specified for:
 
-* xref:refguide:applib-ant:ActionLayout.adoc#named[actions]
-* xref:refguide:applib-ant:CollectionLayout.adoc#named[collections]
-* xref:refguide:applib-ant:ParameterLayout.adoc#named[parameters]
-* xref:refguide:applib-ant:DomainObjectLayout.adoc#named[domain objects]
-* xref:refguide:applib-ant:DomainServiceLayout.adoc#named[domain services].
+* xref:system:generated:index/applib/annotation/ActionLayout.adoc#named[actions]
+* xref:system:generated:index/applib/annotation/CollectionLayout.adoc#named[collections]
+* xref:system:generated:index/applib/annotation/ParameterLayout.adoc#named[parameters]
+* xref:system:generated:index/applib/annotation/DomainObjectLayout.adoc#named[domain objects]
+* xref:system:generated:index/applib/annotation/DomainServiceLayout.adoc#named[domain services].
 

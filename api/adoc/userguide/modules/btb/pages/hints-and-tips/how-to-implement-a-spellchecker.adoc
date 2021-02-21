@@ -15,9 +15,9 @@ One way to implement is to use the xref:refguide:applib-svc:EventBusService.adoc
 
 * Set up a xref:refguide:applib-cm:classes/domainevent.adoc[domain event] subscriber that can veto the changes.
 
-* if the change is made through an action, you can use xref:refguide:applib-ant:Action.adoc#domainEvent[`@Action#domainEvent`].
+* if the change is made through an action, you can use xref:system:generated:index/applib/annotation/Action.adoc#domainEvent[`@Action#domainEvent`].
 
-if if the change is made through an edit, you can use xref:refguide:applib-ant:Property.adoc#domainEvent[`@Property#domainEvent`].
+if if the change is made through an edit, you can use xref:system:generated:index/applib/annotation/Property.adoc#domainEvent[`@Property#domainEvent`].
 
 You'll need some way to know which fields should be spell checked.  Two ways spring to mind:
 
