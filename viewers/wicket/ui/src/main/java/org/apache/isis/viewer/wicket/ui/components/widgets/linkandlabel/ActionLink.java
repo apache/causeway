@@ -231,7 +231,7 @@ public abstract class ActionLink extends AjaxLink<ManagedObject> implements IAja
                     //ISIS-1619, prevent clients from caching the response content
                     return isIdempotentOrCachable(actionModel)
                             ? handler
-                                    : enforceNoCacheOnClientSide(handler);
+                            : enforceNoCacheOnClientSide(handler);
                 }
             };
         }
@@ -240,20 +240,18 @@ public abstract class ActionLink extends AjaxLink<ManagedObject> implements IAja
 
     // TODO: should unify with ActionResultResponseType (as used in ActionParametersPanel)
     private static boolean isNoArgReturnTypeRedirect(final ObjectAction action) {
-        return action.getParameterCount() == 0 &&
-                action.getReturnType() != null &&
-                (
-                        action.getReturnType().getCorrespondingClass() == java.net.URL.class ||
-                        action.getReturnType().getCorrespondingClass() == LocalResourcePath.class
-                        )
-                ;
+        return action.getParameterCount() == 0 
+                && action.getReturnType() != null 
+                && (action.getReturnType().getCorrespondingClass() == java.net.URL.class 
+                    || action.getReturnType().getCorrespondingClass() == LocalResourcePath.class);
     }
 
     // TODO: should unify with ActionResultResponseType (as used in ActionParametersPanel)
     private static boolean isNoArgReturnTypeDownload(final ObjectAction action) {
-        return action.getParameterCount() == 0 && action.getReturnType() != null &&
-                (action.getReturnType().getCorrespondingClass() == org.apache.isis.applib.value.Blob.class ||
-                action.getReturnType().getCorrespondingClass() == org.apache.isis.applib.value.Clob.class);
+        return action.getParameterCount() == 0 
+                && action.getReturnType() != null 
+                && (action.getReturnType().getCorrespondingClass() == org.apache.isis.applib.value.Blob.class
+                    || action.getReturnType().getCorrespondingClass() == org.apache.isis.applib.value.Clob.class);
     }
 
     private static boolean isIdempotentOrCachable(ActionModel actionModel) {

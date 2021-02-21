@@ -23,6 +23,7 @@ import java.io.Serializable;
 import java.net.URISyntaxException;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
@@ -31,8 +32,17 @@ import org.apache.isis.applib.annotation.Value;
 import lombok.NonNull;
 
 /**
- * Represents a local resource path, typically a relative path originating at this web-app's root or context-root.
+ * Represents a local resource path, typically a relative path originating at this web-app's 
+ * root or context-root.
+ * <p>
+ * Action results of type {@link LocalResourcePath} are interpreted as
+ * browser/client redirects, if applicable.
+ * <p>
+ * {@link OpenUrlStrategy} gives control on whether the redirect URL should open in the same 
+ * or a new window/tap.
+ * 
  * @since 2.0 {@index}
+ * @see OpenUrlStrategy
  */
 @Value(semanticsProviderName =
         "org.apache.isis.core.metamodel.facets.value.localrespath.LocalResourcePathValueSemanticsProvider")
@@ -41,12 +51,24 @@ public final class LocalResourcePath implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @NonNull private final String path;
+    @NonNull private final OpenUrlStrategy openUrlStrategy;
 
-    public LocalResourcePath(final String path) throws IllegalArgumentException {
+    public LocalResourcePath(final @Nullable String path) throws IllegalArgumentException {
+        this(path, null);
+    }
+    
+    public LocalResourcePath(
+            final @Nullable String path, 
+            final @Nullable OpenUrlStrategy openUrlStrategy) throws IllegalArgumentException {
 
         validate(path); // may throw IllegalArgumentException
 
-        this.path = (path != null) ? path : "";
+        this.path = path != null 
+                ? path 
+                : "";
+        this.openUrlStrategy = openUrlStrategy != null 
+                ? openUrlStrategy 
+                : OpenUrlStrategy.NEW_WINDOW; // default
     }
 
     @NonNull
