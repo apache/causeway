@@ -15,3 +15,4 @@ _@InteractionScope_ may be used as a meta-annotation to create custom composed a
 }
 ----
 
+include::hooks/InteractionScope_010-examples-and-usage.adoc[]

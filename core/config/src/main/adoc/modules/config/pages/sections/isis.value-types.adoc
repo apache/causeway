@@ -88,7 +88,7 @@ big-integer.format
 isis.value-types.java-sql.date. +
 format
 
-| 
+|  medium
 | Configures the formats understood by ``JavaSqlDateValueSemanticsProvider``. @deprecated
 
 
@@ -97,7 +97,7 @@ format
 isis.value-types.java-sql.time. +
 format
 
-| 
+|  short
 | Configures the formats understood by ``JavaSqlTimeValueSemanticsProvider``. @deprecated
 
 
@@ -106,7 +106,7 @@ format
 isis.value-types.java-sql. +
 timestamp.format
 
-| 
+|  short
 | Configures the formats understood by ``JavaSqlTimeStampValueSemanticsProvider``. @deprecated
 
 
@@ -115,7 +115,7 @@ timestamp.format
 isis.value-types.java-time. +
 local-date-time.format
 
-| 
+|  medium
 | Configures the formats understood by ``LocalDateTimeValueSemanticsProvider``. @deprecated
 
 
@@ -124,7 +124,7 @@ local-date-time.format
 isis.value-types.java-time. +
 local-date.format
 
-| 
+|  medium
 | Configures the formats understood by ``LocalDateValueSemanticsProvider``. @deprecated
 
 
@@ -133,7 +133,7 @@ local-date.format
 isis.value-types.java-time. +
 local-time.format
 
-| 
+|  medium
 | Configures the formats understood by ``LocalTimeValueSemanticsProvider``. @deprecated
 
 
@@ -142,7 +142,7 @@ local-time.format
 isis.value-types.java-time. +
 offset-date-time.format
 
-| 
+|  medium
 | Configures the formats understood by ``OffsetDateTimeValueSemanticsProvider``. @deprecated
 
 
@@ -151,7 +151,7 @@ offset-date-time.format
 isis.value-types.java-time. +
 offset-time.format
 
-| 
+|  medium
 | Configures the formats understood by ``OffsetTimeValueSemanticsProvider``. @deprecated
 
 
@@ -160,7 +160,7 @@ offset-time.format
 isis.value-types.java-time. +
 zoned-date-time.format
 
-| 
+|  medium
 | Configures the formats understood by ``ZonedDateTimeValueSemanticsProvider``. @deprecated
 
 
@@ -169,7 +169,7 @@ zoned-date-time.format
 isis.value-types.java-util.date. +
 format
 
-| 
+|  medium
 | Configures the formats understood by ``JavaUtilDateValueSemanticsProvider``. @deprecated
 
 
@@ -178,7 +178,7 @@ format
 isis.value-types.joda.date-time. +
 format
 
-| 
+|  medium
 | Configures the formats understood by ``JodaDateTimeValueSemanticsProvider``. @deprecated
 
 
@@ -187,7 +187,7 @@ format
 isis.value-types.joda. +
 local-date-time.format
 
-| 
+|  medium
 | Configures the formats understood by ``JodaLocalDateTimeValueSemanticsProvider``. @deprecated
 
 
@@ -196,7 +196,7 @@ local-date-time.format
 isis.value-types.joda.local-date. +
 format
 
-| 
+|  medium
 | Configures the formats understood by ``JodaLocalDateValueSemanticsProvider``. @deprecated
 
 

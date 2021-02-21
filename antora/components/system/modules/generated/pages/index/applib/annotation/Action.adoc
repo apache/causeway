@@ -60,7 +60,7 @@ Indicates where (in the UI) the action is not visible to the user.
 <.> xref:#restrictTo[restrictTo]
 +
 --
-Whether the action is restricted to prototyping.
+Whether the action is restricted to prototyping, or whether it is available also in production mode.
 --
 <.> xref:#semantics[semantics]
 +
@@ -70,7 +70,7 @@ The action semantics, either _SemanticsOf#SAFE_AND_REQUEST_CACHEABLE cached_ , _
 <.> xref:#typeOf[typeOf]
 +
 --
-The type-of the elements returned by the action.
+If the action returns a collection, then this hints as to the run-time type of the objects within that collection.
 --
 <.> xref:#fileAccept[fileAccept]
 +
@@ -98,11 +98,7 @@ Specifies the sequence/order in the UI for an action that's been associated with
 
 This is an alternative to using _MemberOrder#sequence()_ , but is ignored if _Action#associateWith()_ isn't also specified.
 
-For example:
-
-----
-
-----
+For example: `@Action(associateWith="items", associateWithSequence="2.1")` 
 
 [#commandDtoProcessor]
 === commandDtoProcessor
@@ -120,6 +116,8 @@ Whether action invocations, captured as xref:system:generated:index/applib/servi
 === domainEvent
 
 Indicates that an invocation of the action should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService_ using a custom (subclass of) xref:system:generated:index/applib/events/domain/ActionDomainEvent.adoc[ActionDomainEvent] .
+
+Subscribers of this event can interact with the business rule checking (hide, disable, validate) and its modification (before and after).
 
 For example:
 
@@ -153,7 +151,7 @@ For xref:system:generated:index/applib/annotation/DomainService.adoc[DomainServi
 [#restrictTo]
 === restrictTo
 
-Whether the action is restricted to prototyping.
+Whether the action is restricted to prototyping, or whether it is available also in production mode.
 
 By default there are no restrictions, with the action being available in all environments.
 
@@ -162,10 +160,16 @@ By default there are no restrictions, with the action being available in all env
 
 The action semantics, either _SemanticsOf#SAFE_AND_REQUEST_CACHEABLE cached_ , _SemanticsOf#SAFE safe_ (query-only), _SemanticsOf#IDEMPOTENT idempotent_ or _SemanticsOf#NON_IDEMPOTENT non-idempotent_ .
 
+The action's semantics determine whether objects are modified as the result of invoking this action (if not, the results can be cached for the remainder of the request). If the objects do cause a change in state, they additionally determine whether re-invoking the action would result in a further change.
+
+There are also `...ARE_YOU_SURE` variants (@link _SemanticsOf#IDEMPOTENT_ARE_YOU_SURE_ and (@link _SemanticsOf#NON_IDEMPOTENT_ARE_YOU_SURE_ that cause a confirmation dialog to be displayed in the Wicket viewer.
+
 [#typeOf]
 === typeOf
 
-The type-of the elements returned by the action.
+If the action returns a collection, then this hints as to the run-time type of the objects within that collection.
+
+This is only provided as a fallback; usually the framework can infer the element type of the collection from the action method's return type (eg if it returns `Collection` instead of `Collection<Customer>` )
 
 [#fileAccept]
 === fileAccept

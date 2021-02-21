@@ -24,3 +24,7 @@ Returns the _Locale_ of the current user.
 === getLocale()
 
 Returns the _Locale_ of the current user.
+
+include::hooks/LocaleProvider_010-implementation.adoc[]
+
+include::hooks/LocaleProvider_020-examples-and-usage.adoc[]

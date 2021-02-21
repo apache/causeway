@@ -63,7 +63,7 @@ Whether entity changes should be published to _org.apache.isis.applib.services.p
 <.> xref:#mixinMethod[mixinMethod]
 +
 --
-Applicable only if _#nature()_ is _Nature#MIXIN_ .
+Applicable only if _#nature()_ is _Nature#MIXIN_ , indicates the name of the method within the mixin class to be inferred as the action of that mixin.
 --
 <.> xref:#nature[nature]
 +
@@ -73,7 +73,7 @@ The nature of this domain object.
 <.> xref:#objectType[objectType]
 +
 --
-Provides a unique abbreviation for the object type, eg "customer.Customer" for Customer.
+Provides a unique abbreviation for the object type's, eg "customer.Customer" for Customer.
 --
 <.> xref:#createdLifecycleEvent[createdLifecycleEvent]
 +
@@ -171,7 +171,11 @@ Whether entity changes should be published to _org.apache.isis.applib.services.p
 [#mixinMethod]
 === mixinMethod
 
-Applicable only if _#nature()_ is _Nature#MIXIN_ .
+Applicable only if _#nature()_ is _Nature#MIXIN_ , indicates the name of the method within the mixin class to be inferred as the action of that mixin.
+
+Supporting methods are then derived from that method name. For example, if the mixin method name is "act", then the _disable_ supporting method will be "disableAct".
+
+Typical examples are "act", "prop", "coll", "exec", "execute", "invoke", "apply" and so on. The default name is `$$`.
 
 [#nature]
 === nature
@@ -181,7 +185,7 @@ The nature of this domain object.
 [#objectType]
 === objectType
 
-Provides a unique abbreviation for the object type, eg "customer.Customer" for Customer.
+Provides a unique abbreviation for the object type's, eg "customer.Customer" for Customer.
 
 This value, if specified, is used in the serialized form of the object's OID. An OID is used by the framework to unique identify an object over time (same concept as a URN).
 
@@ -291,3 +295,25 @@ public class Order {
 ----
 
 This subclass must provide a no-arg constructor; the fields are set reflectively. It must also use `Object` as its generic type. This is to allow mixins to also emit the same event.
+
+include::hooks/DomainObject_010-examples-and-usage.adoc[]
+
+include::hooks/DomainObject_011-domain-events.adoc[]
+
+include::hooks/DomainObject_012-_lifecycle-events.adoc[]
+
+include::hooks/DomainObject_013-autoCompleteRepository.adoc[]
+
+include::hooks/DomainObject_014-bounding.adoc[]
+
+include::hooks/DomainObject_015-editing.adoc[]
+
+include::hooks/DomainObject_016-entityChangePublishing.adoc[]
+
+include::hooks/DomainObject_017-mixinMethod.adoc[]
+
+include::hooks/DomainObject_018-nature.adoc[]
+
+include::hooks/DomainObject_019-objectType.adoc[]
+
+include::hooks/DomainObject_030-see-also.adoc[]

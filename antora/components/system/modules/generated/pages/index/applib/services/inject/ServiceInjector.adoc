@@ -35,3 +35,7 @@ Injects domain services into the object, and calls the provided _Consumer_ for a
 === injectServicesInto(T)
 
 Injecs domain services into the object, and throws a _NoSuchElementException_ for any injection points that cannot be resolved.
+
+include::hooks/ServiceInjector_010-implementation.adoc[]
+
+include::hooks/ServiceInjector_020-examples-and-usage.adoc[]

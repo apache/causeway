@@ -57,3 +57,7 @@ Convenience method to walk XML document.
 === getChildTextValue(Element)
 
 Convenience method to obtain value of child text node.
+
+include::hooks/XmlService_010-implementation.adoc[]
+
+include::hooks/XmlService_020-examples-and-usage.adoc[]

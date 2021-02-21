@@ -28,3 +28,7 @@ Post an event (of any class) to the in-memory event bus.
 Post an event (of any class) to the in-memory event bus.
 
 The event will be delivered synchronously (within the same transactional boundary) to all subscribers of that event type (with subscribers as domain services with public method annotated using Spring's _org.springframework.context.event.EventListener_ annotation.
+
+include::hooks/EventBusService_010-implementation.adoc[]
+
+include::hooks/EventBusService_020-examples-and-usage.adoc[]

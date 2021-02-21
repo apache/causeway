@@ -43,3 +43,7 @@ Return `null` if has no opinion/provides no reordering for this parent and colle
 For the standalone collection of the specified type, return the set of property ids in the same or other order.
 
 Return `null` if has no opinion/provides no reordering for this type.
+
+include::hooks/TableColumnOrderService_010-implementation.adoc[]
+
+include::hooks/TableColumnOrderService_020-examples-and-usage.adoc[]

@@ -22,3 +22,6 @@ interface ErrorReportingService {
 }
 ----
 
+include::hooks/ErrorReportingService_010-implementation.adoc[]
+
+include::hooks/ErrorReportingService_020-examples-and-usage.adoc[]

@@ -34,3 +34,7 @@ interface ExceptionRecognizer {
 === recognize(Throwable)
 
 (Attempt to) recognize the exception and return a user-friendly message to render instead.
+
+include::hooks/ExceptionRecognizer_010-implementation.adoc[]
+
+include::hooks/ExceptionRecognizer_020-examples-and-usage.adoc[]

@@ -127,6 +127,8 @@ Whether property edits, captured as xref:system:generated:index/applib/services/
 
 Indicates that changes to the property that should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService event bus_ using a custom (subclass of) xref:system:generated:index/applib/events/domain/PropertyDomainEvent.adoc[PropertyDomainEvent] .
 
+Subscribers of this event can interact with the business rule checking (hide, disable, validate) and its modification (before and after).
+
 For example:
 
 ----
@@ -163,6 +165,8 @@ For uploading xref:system:generated:index/applib/value/Blob.adoc[Blob] or xref:s
 
 The value should be of the form "file_extension|audio/*|video/*|image/*|media_type".
 
+Note that this does not prevent the user from uploading some other file type; rather it merely defaults the file type in the file open dialog.
+
 [#hidden]
 === hidden
 
@@ -174,6 +178,8 @@ Indicates where the property is not visible to the user.
 The maximum entry length of a field.
 
 The default value ( `-1` ) indicates that no maxLength has been specified.
+
+NOTE: this will usually be supplemented by a JDO or JPA-specific annotation to indicate length of the column in the table to whic the entity is mapped.
 
 [#snapshot]
 === snapshot
@@ -194,7 +200,7 @@ If more than one is provided, then all must be satisfied (in effect "AND"ed toge
 
 Whether this property is optional or is mandatory (ie required).
 
-For properties the default value, _org.apache.isis.applib.annotation.Optionality#DEFAULT_ , usually means that the property is required unless it has been overridden by `javax.jdo.annotations.Column` with its `javax.jdo.annotations.Column#allowsNull()` attribute set to true.
+NOTE: this will usually be supplmented by a JDO or JPA-specific annotation to specify the nullability of the corresponding column in the table to which the owning entity is mapped.
 
 [#projecting]
 === projecting
@@ -221,3 +227,5 @@ The default value, `0` , means that no flags have been specified.
 === regexPatternReplacement
 
 Replacement text for the pattern in generated error message.
+
+include::hooks/Property_010-examples-and-usage.adoc[]

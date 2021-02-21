@@ -18,12 +18,12 @@ Also indicates whether the domain service acts as a repository for an entity, an
 <.> xref:#nature[nature]
 +
 --
-The nature of this service, eg for menus, contributed actions, repository.
+The nature of this service, either in the UI or REST only
 --
 <.> xref:#objectType[objectType]
 +
 --
-Provides the (first part of the) unique identifier (OID) for the service (the instanceId is always "1").
+Provides a unique abbreviation for the object type's, eg "customer.CustomerService" for CustomerService.
 --
 
 == Members
@@ -31,11 +31,13 @@ Provides the (first part of the) unique identifier (OID) for the service (the in
 [#nature]
 === nature
 
-The nature of this service, eg for menus, contributed actions, repository.
+The nature of this service, either in the UI or REST only
 
 [#objectType]
 === objectType
 
-Provides the (first part of the) unique identifier (OID) for the service (the instanceId is always "1").
+Provides a unique abbreviation for the object type's, eg "customer.CustomerService" for CustomerService.
 
-If not specified then either the optional "getId()" is used, otherwise the class' name.
+This value, if specified, is used in the serialized form of the object's OID. An OID is used by the framework to unique identify an object over time (same concept as a URN).
+
+include::hooks/DomainService_010-examples-and-usage.adoc[]

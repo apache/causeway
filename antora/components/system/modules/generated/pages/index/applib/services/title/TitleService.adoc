@@ -35,3 +35,7 @@ Returns the title of the object (as rendered in the UI by the framework's viewer
 === iconNameOf(Object)
 
 Returns the icon name of the object (as rendered in the UI by the framework's viewers).
+
+include::hooks/TitleService_010-implementation.adoc[]
+
+include::hooks/TitleService_020-examples-and-usage.adoc[]

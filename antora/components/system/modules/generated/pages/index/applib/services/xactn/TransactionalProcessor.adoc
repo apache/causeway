@@ -85,3 +85,7 @@ In other words, support a current transaction, create a new one if none exists.
 === runWithinCurrentTransactionElseCreateNew(ThrowingRunnable)
 
 Runs given _runnable_ within an existing transactional boundary, or in the absence of such a boundary creates a new one.
+
+include::hooks/TransactionalProcessor_010-implementation.adoc[]
+
+include::hooks/TransactionalProcessor_020-examples-and-usage.adoc[]

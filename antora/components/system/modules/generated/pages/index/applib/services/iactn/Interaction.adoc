@@ -76,3 +76,7 @@ The execution that preceded the current one.
 === next(String)
 
 Generates numbers in a named sequence. The name of the sequence can be arbitrary, though note that the framework also uses this capability to generate sequence numbers corresponding to the sequences enumerated by the xref:system:generated:index/applib/services/iactn/Sequence.adoc[Sequence] enum.
+
+include::hooks/Interaction_010-implementation.adoc[]
+
+include::hooks/Interaction_020-examples-and-usage.adoc[]

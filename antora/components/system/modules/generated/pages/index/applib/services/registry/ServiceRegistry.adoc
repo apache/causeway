@@ -117,3 +117,7 @@ If this lookup is ambiguous, then the provided comparator is used.
 === lookupServiceElseFail(Class)
 
 Looks up a domain service of the requested type (same as _#lookupService(Class)_ ) but throws a _NoSuchElementException_ if there are no such instances.
+
+include::hooks/ServiceRegistry_010-implementation.adoc[]
+
+include::hooks/ServiceRegistry_020-examples-and-usage.adoc[]

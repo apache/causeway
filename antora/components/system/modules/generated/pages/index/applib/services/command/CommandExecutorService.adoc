@@ -25,3 +25,7 @@ Executes the specified command.
 === executeCommand(SudoPolicy, Command)
 
 Executes the specified command.
+
+include::hooks/CommandExecutorService_010-implementation.adoc[]
+
+include::hooks/CommandExecutorService_020-examples-and-usage.adoc[]

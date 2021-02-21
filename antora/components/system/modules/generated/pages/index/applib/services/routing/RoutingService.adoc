@@ -52,3 +52,7 @@ The _#route(Object)_ method is only called if this method returns `true` .
 === route(Object)
 
 The object to route to instead; this may be the same as the original object, some other object, or (indeed) `null`.
+
+include::hooks/RoutingService_010-implementation.adoc[]
+
+include::hooks/RoutingService_020-examples-and-usage.adoc[]

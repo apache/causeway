@@ -48,7 +48,7 @@ resteasy.jaxrs.app.registration
 [[resteasy.jaxrs.default-path]]
 resteasy.jaxrs.default-path
 
-| 
+|  /restful
 | The path at which the RO viewer should be mounted.
 
 Note that this is used rather than ``prefix`` because there is _NO_ implementation of ``Application``, so we rely on it being automatically created.

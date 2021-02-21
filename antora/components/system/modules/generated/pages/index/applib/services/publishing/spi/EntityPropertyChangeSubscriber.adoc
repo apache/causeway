@@ -28,3 +28,7 @@ Receives a single property change event for changing entities (with publishing e
 Receives a single property change event for changing entities (with publishing enabled using _DomainObject#entityChangePublishing()_ ) as an instance of xref:system:generated:index/applib/services/publishing/spi/EntityPropertyChange.adoc[EntityPropertyChange] .
 
 The callback is called (multiple times) at the end of the transaction, during the pre-commit phase.
+
+include::hooks/EntityPropertyChangeSubscriber_010-implementation.adoc[]
+
+include::hooks/EntityPropertyChangeSubscriber_020-examples-and-usage.adoc[]

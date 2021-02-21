@@ -23,7 +23,7 @@ Groups or associate members with each other.
 <.> xref:#sequence[sequence]
 +
 --
-The order of this member relative to other members in the same group, in Dewey-decimal notation. For collections this is relative to each other (collections aren't grouped).
+The order of this member relative to other members in the same group, in Dewey-decimal notation.
 --
 
 == Members
@@ -33,6 +33,8 @@ The order of this member relative to other members in the same group, in Dewey-d
 
 Groups or associate members with each other.
 
+The intepretation ofthis grouping depends on the member:
+
 * For actions, indicates the property or collection to associate.
 * For properties, indicates the property group
 * For collections, currently has no meaning
@@ -40,4 +42,6 @@ Groups or associate members with each other.
 [#sequence]
 === sequence
 
-The order of this member relative to other members in the same group, in Dewey-decimal notation. For collections this is relative to each other (collections aren't grouped).
+The order of this member relative to other members in the same group, in Dewey-decimal notation.
+
+include::hooks/MemberOrder_010-examples-and-usage.adoc[]

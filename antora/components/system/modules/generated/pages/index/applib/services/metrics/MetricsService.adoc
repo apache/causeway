@@ -45,3 +45,7 @@ The number of objects that have, so far in this request, been dirtied/will need 
 Corresponds to the number of times that `javax.jdo.listener.DirtyLifecycleListener#preDirty(InstanceLifecycleEvent)` (or equivalent) callback is fired.
 
 Is captured within _MemberExecutionDto#getMetrics()_ (accessible from _InteractionContext#currentInteraction()_ .
+
+include::hooks/MetricsService_010-implementation.adoc[]
+
+include::hooks/MetricsService_020-examples-and-usage.adoc[]

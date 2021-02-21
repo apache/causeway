@@ -16,3 +16,6 @@ interface HealthCheckService {
 }
 ----
 
+include::hooks/HealthCheckService_010-implementation.adoc[]
+
+include::hooks/HealthCheckService_020-examples-and-usage.adoc[]

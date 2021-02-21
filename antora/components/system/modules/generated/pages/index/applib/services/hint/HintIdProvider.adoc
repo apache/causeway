@@ -16,3 +16,6 @@ interface HintIdProvider {
 }
 ----
 
+include::hooks/HintIdProvider_010-implementation.adoc[]
+
+include::hooks/HintIdProvider_020-examples-and-usage.adoc[]

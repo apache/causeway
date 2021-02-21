@@ -19,3 +19,6 @@ LayoutService layoutService;
 }
 ----
 
+include::hooks/LayoutServiceMenu_010-implementation.adoc[]
+
+include::hooks/LayoutServiceMenu_020-examples-and-usage.adoc[]

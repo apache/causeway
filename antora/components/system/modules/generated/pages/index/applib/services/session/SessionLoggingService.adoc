@@ -28,3 +28,7 @@ Callback to log the session.
 Callback to log the session.
 
 The `sessionId` is an internal identifier (for the Wicket viewer, its the JVM hashCode of the Wicket session).
+
+include::hooks/SessionLoggingService_010-implementation.adoc[]
+
+include::hooks/SessionLoggingService_020-examples-and-usage.adoc[]

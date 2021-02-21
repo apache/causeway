@@ -41,3 +41,5 @@ Either the array provided by this method or by _#facetFactoryClasses()_ should b
 Array of _Class_ s, each indicating a class implementing `org.apache.isis.core.metamodel.facets.FacetFactory` .
 
 Either the array provided by this method or by _#facetFactoryNames()_ should be non-empty.
+
+include::hooks/Facets_010-examples-and-usage.adoc[]

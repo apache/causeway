@@ -22,3 +22,7 @@ Typically for mapping from a domain object to a DTO.
 === map(Object, List)
 
 Typically for mapping from a domain object to a DTO.
+
+include::hooks/ContentMappingService_010-implementation.adoc[]
+
+include::hooks/ContentMappingService_020-examples-and-usage.adoc[]

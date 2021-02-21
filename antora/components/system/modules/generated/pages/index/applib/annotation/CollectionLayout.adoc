@@ -23,7 +23,7 @@ Class sortedBy() default Comparator.class;     // <.>
 <.> xref:#cssClass[cssClass]
 +
 --
-Indicates the css class that a collection should have.
+Indicates the css class that a collection should have, to allow more targeted styling in `application.css` .
 --
 <.> xref:#defaultView[defaultView]
 +
@@ -66,14 +66,16 @@ Indicates that the elements in a ( _java.util.SortedSet_ ) collection should be 
 [#cssClass]
 === cssClass
 
-Indicates the css class that a collection should have.
+Indicates the css class that a collection should have, to allow more targeted styling in `application.css` .
 
 [#defaultView]
 === defaultView
 
 Indicates which view is used by default to render the collection.
 
-The only view available within the core framework is "table". However, other views can be added as extensions. Examples are those provided by the (non-ASF)Isis addons, eg "excel", "calendar" and "map".
+This is a simple string; every available implementation is required to use a different string.
+
+The default is "table". Extensions provide also: "excel" (download as Excel spreadsheet), "calendar" and "map".
 
 [#describedAs]
 === describedAs
@@ -91,6 +93,8 @@ Only _Where#NOWHERE NOWHERE_ or _Where#EVERYWHERE EVERYWHERE_ / _Where#ANYWHERE 
 === named
 
 Name of this collection (overriding the name derived from its name in code).
+
+A typical use case is if the desired name is a reserved Java keyword, such as `default` or `package`.
 
 [#namedEscaped]
 === namedEscaped
@@ -118,3 +122,17 @@ However, in some circumstances the ordering of collection may be different to th
 The purpose of this annotation is to provide a _java.util.Comparator_ such that the collection may be sorted in an order more suitable to the context.
 
 include::hooks/CollectionLayout_010-examples-and-usage.adoc[]
+
+include::hooks/CollectionLayout_011-cssClass.adoc[]
+
+include::hooks/CollectionLayout_012-defaultView.adoc[]
+
+include::hooks/CollectionLayout_013-describedAs.adoc[]
+
+include::hooks/CollectionLayout_014-hidden.adoc[]
+
+include::hooks/CollectionLayout_015-named.adoc[]
+
+include::hooks/CollectionLayout_016-paged.adoc[]
+
+include::hooks/CollectionLayout_017-sortedBy.adoc[]

@@ -28,3 +28,7 @@ Reads the lines from the specified "logical" file name.
 Reads the lines from the specified "logical" file name.
 
 It is the responsibility of xref:system:generated:index/applib/services/i18n/TranslationsResolver.adoc[TranslationsResolver] to determine where the file actually resides (the data could be read from a database, for example, rather than an actual file.
+
+include::hooks/TranslationsResolver_010-implementation.adoc[]
+
+include::hooks/TranslationsResolver_020-examples-and-usage.adoc[]

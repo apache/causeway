@@ -50,3 +50,7 @@ Executes the supplied _Callable_ block, within the provided xref:system:generate
 === run(UnaryOperator, ThrowingRunnable)
 
 Executes the supplied _Callable_ block, within the provided xref:system:generated:index/applib/services/iactn/ExecutionContext.adoc[ExecutionContext] .
+
+include::hooks/SudoService_010-implementation.adoc[]
+
+include::hooks/SudoService_020-examples-and-usage.adoc[]

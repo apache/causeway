@@ -172,3 +172,7 @@ This is retrospective: the listener will be notified of interactions even on wra
 Remove an xref:system:generated:index/applib/services/wrapper/listeners/InteractionListener.adoc[InteractionListener] , to no longer be notified of interactions on wrappers.
 
 This is retrospective: the listener will no longer be notified of any interactions created on any wrappers, not just on those wrappers created subsequently. (From an implementation perspective this is because the wrappers delegate back to the container to fire the events).
+
+include::hooks/WrapperFactory_010-implementation.adoc[]
+
+include::hooks/WrapperFactory_020-examples-and-usage.adoc[]

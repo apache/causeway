@@ -13,3 +13,6 @@ class ConfigurationMenu {
 }
 ----
 
+include::hooks/ConfigurationMenu_010-implementation.adoc[]
+
+include::hooks/ConfigurationMenu_020-examples-and-usage.adoc[]

@@ -37,3 +37,7 @@ Returns _#menuBars()_ with a type of _Type#DEFAULT_ .
 === menuBars(Type)
 
 Returns the menu bars with the requested _Type_ .
+
+include::hooks/MenuBarsService_010-implementation.adoc[]
+
+include::hooks/MenuBarsService_020-examples-and-usage.adoc[]

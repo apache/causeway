@@ -70,3 +70,7 @@ Optionally gets the the current user's name, based on whether an xref:system:gen
 === currentUserNameElseNobody()
 
 Returns either the current user's name or else _Nobody_ .
+
+include::hooks/UserService_010-implementation.adoc[]
+
+include::hooks/UserService_020-examples-and-usage.adoc[]

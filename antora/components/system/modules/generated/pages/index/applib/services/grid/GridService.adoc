@@ -136,3 +136,7 @@ If a "completed" grid is persisted as the `layout.xml` , then there should be no
 Modifies the provided xref:system:generated:index/applib/layout/grid/Grid.adoc[Grid] , removing all metadata except the basic grid structure.
 
 If a "minimal" grid is persisted as the `layout.xml` , then the expectation is that most of the layout annotations ( xref:system:generated:index/applib/annotation/DomainObjectLayout.adoc[DomainObjectLayout] , xref:system:generated:index/applib/annotation/ActionLayout.adoc[ActionLayout] , xref:system:generated:index/applib/annotation/PropertyLayout.adoc[PropertyLayout] , xref:system:generated:index/applib/annotation/CollectionLayout.adoc[CollectionLayout] , but also xref:system:generated:index/applib/annotation/MemberOrder.adoc[MemberOrder] ) will still be retained in the domain class code.
+
+include::hooks/GridService_010-implementation.adoc[]
+
+include::hooks/GridService_020-examples-and-usage.adoc[]

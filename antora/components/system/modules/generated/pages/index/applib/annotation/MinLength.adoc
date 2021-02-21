@@ -12,3 +12,4 @@ Specify the minimum number of characters for an autocomplete search argument.
 }
 ----
 
+include::hooks/MinLength_010-examples-and-usage.adoc[]

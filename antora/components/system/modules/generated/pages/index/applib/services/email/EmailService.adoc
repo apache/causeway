@@ -38,3 +38,7 @@ The main API to send the email (and optional attachments).
 === isConfigured()
 
 Whether this service has been configured and thus available for use.
+
+include::hooks/EmailService_010-implementation.adoc[]
+
+include::hooks/EmailService_020-examples-and-usage.adoc[]

@@ -31,7 +31,7 @@ Whether (and how) this domain object can be bookmarked in the UI.
 <.> xref:#cssClass[cssClass]
 +
 --
-Indicates the css class that a domain class (type) should have.
+Indicates the css class that a domain class (type) should have, to allow more targeted styling in `application.css` .
 --
 <.> xref:#cssClassFa[cssClassFa]
 +
@@ -94,7 +94,7 @@ Whether (and how) this domain object can be bookmarked in the UI.
 [#cssClass]
 === cssClass
 
-Indicates the css class that a domain class (type) should have.
+Indicates the css class that a domain class (type) should have, to allow more targeted styling in `application.css` .
 
 [#cssClassFa]
 === cssClassFa
@@ -117,6 +117,8 @@ Description of this class, eg to be rendered in a tooltip.
 === named
 
 Name of this class (overriding the name derived from its name in code).
+
+A typical use case is if the desired name is a reserved Java keyword, such as `default` or `package`.
 
 [#paged]
 === paged
@@ -159,3 +161,5 @@ This subclass must provide a no-arg constructor; the fields are set reflectively
 Which subclass of xref:system:generated:index/applib/events/ui/TitleUiEvent.adoc[TitleUiEvent] should be used to obtain a title.
 
 This subclass must provide a no-arg constructor; the fields are set reflectively.
+
+include::hooks/DomainObjectLayout_010-examples-and-usage.adoc[]

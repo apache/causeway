@@ -54,44 +54,9 @@ In fact, it isn't even necessary for there to be any `.po` files; `.po` translat
 
 == API
 
-include::system:generated:page$index/TranslationService.adoc[leveloffset=+2]
+The main API is the `TranslationService`:
 
-TODO example migration
-
-.Deprecated Docs
-[WARNING]
-================================
-
-== API
-
-include::system:generated:page$index/TranslationService.adoc[leveloffset=+2]
-
-TODO example migration
-
-.Deprecated Docs
-[WARNING]
-================================
-
-== `TranslationService`
-
-The cornerstone of Apache Isis' support for i18n is the `TranslationService` service.
-This is defined in the applib with the following API:
-
-[source,java]
-.TranslationService.java
-----
-include::refguide:applib-svc:example$services/i18n/TranslationService.java[tags="refguide"]
-----
-<.> is to translate the singular form of the text
-<.> is to translate the plural form of the text
-<.> indicates whether the translation service is in read or write mode.
-
-where `Mode` is:
-
-[source,java]
-----
-include::refguide:applib-svc:example$services/i18n/TranslationService.java[tags="refguide-1",indent=0]
-----
+* xref:system:generated:index/applib/services/i18n/TranslationService.adoc[leveloffset=+2]
 
 The `translate(...)` methods are closely modelled on GNU's gettext API.
 The first version is used when no translation is required, the second is when both a singular and plural form will be required, with the `num` parameter being used to select which is returned.
@@ -99,10 +64,4 @@ In both cases the `context` parameter provides some contextual information for t
 
 The mode meanwhile determines the behaviour of the service.
 More on this below.
-
-
-================================
-
-================================
-
 

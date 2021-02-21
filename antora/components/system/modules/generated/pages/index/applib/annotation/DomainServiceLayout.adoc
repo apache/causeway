@@ -37,3 +37,7 @@ The menubar in which the menu that holds this service's actions should reside.
 === named
 
 Name of this class (overriding the name derived from its name in code).
+
+A typical use case is if the desired name is a reserved Java keyword, such as `default` or `package`.
+
+include::hooks/DomainServiceLayout_010-examples-and-usage.adoc[]

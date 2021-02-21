@@ -13,3 +13,4 @@ The view model is instantiated through a no-arg constructor, so must in effect b
 }
 ----
 
+include::hooks/HomePage_010-examples-and-usage.adoc[]

@@ -13,3 +13,6 @@ interface ClockService {
 }
 ----
 
+include::hooks/ClockService_010-implementation.adoc[]
+
+include::hooks/ClockService_020-examples-and-usage.adoc[]

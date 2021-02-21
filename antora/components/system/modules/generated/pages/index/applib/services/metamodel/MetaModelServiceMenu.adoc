@@ -25,3 +25,6 @@ JaxbService jaxbService;
 }
 ----
 
+include::hooks/MetaModelServiceMenu_010-implementation.adoc[]
+
+include::hooks/MetaModelServiceMenu_020-examples-and-usage.adoc[]

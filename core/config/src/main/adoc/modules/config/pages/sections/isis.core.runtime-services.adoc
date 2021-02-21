@@ -52,7 +52,7 @@ override.to
 isis.core.runtime-services.email. +
 port
 
-| 
+|  587
 | The port to use for sending email.
 
 
@@ -107,7 +107,7 @@ If not specified, then the sender's email address will be used instead.
 isis.core.runtime-services.email. +
 socket-connection-timeout
 
-| 
+|  2000
 | The maximum number of millseconds to wait to obtain a socket connection before timing out.
 
 
@@ -116,7 +116,7 @@ socket-connection-timeout
 isis.core.runtime-services.email. +
 socket-timeout
 
-| 
+|  2000
 | The maximum number of millseconds to wait to obtain a socket before timing out.
 
 
@@ -125,7 +125,7 @@ socket-timeout
 isis.core.runtime-services.email. +
 throw-exception-on-fail
 
-| 
+|  true
 | If an email fails to send, whether to propagate the exception (meaning that potentially the end-user might see the exception), or whether instead to just indicate failure through the return value of the method (List, List, String, String, DataSource...) that's being called.
 
 
@@ -134,7 +134,7 @@ throw-exception-on-fail
 isis.core.runtime-services.email. +
 tls.enabled
 
-| 
+|  true
 | Whether TLS encryption should be started (that is, ``STARTTLS``).
 
 

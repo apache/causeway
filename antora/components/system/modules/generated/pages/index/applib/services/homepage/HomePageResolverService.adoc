@@ -12,3 +12,6 @@ interface HomePageResolverService {
 }
 ----
 
+include::hooks/HomePageResolverService_010-implementation.adoc[]
+
+include::hooks/HomePageResolverService_020-examples-and-usage.adoc[]

@@ -16,3 +16,6 @@ interface ApplicationFeatureRepository {
 }
 ----
 
+include::hooks/ApplicationFeatureRepository_010-implementation.adoc[]
+
+include::hooks/ApplicationFeatureRepository_020-examples-and-usage.adoc[]

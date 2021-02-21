@@ -72,3 +72,7 @@ Remotes all hints for the domain object.
 === findHintKeys(Bookmark)
 
 The keys of all available hints for the domain object.
+
+include::hooks/HintStore_010-implementation.adoc[]
+
+include::hooks/HintStore_020-examples-and-usage.adoc[]

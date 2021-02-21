@@ -38,7 +38,7 @@ This configuration mechanism does not consider any schema-auto-creation configur
 isis.persistence.schema. +
 create-schema-sql-template
 
-| 
+|  CREATE SCHEMA IF NOT EXISTS %S
 | Vendor specific SQL syntax to create a DB schema.
 
 This template is passed through schemaName) to make the actual SQL statement thats to be used against the configured data-source.

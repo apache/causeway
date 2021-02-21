@@ -30,3 +30,7 @@ Receives all changing entities (with publishing enabled using _DomainObject#enti
 Receives all changing entities (with publishing enabled using _DomainObject#entityChangePublishing()_ ) as an instance of xref:system:generated:index/applib/services/publishing/spi/EntityChanges.adoc[EntityChanges] .
 
 The callback is called at the end of the transaction, during the pre-commit phase.
+
+include::hooks/EntityChangesSubscriber_010-implementation.adoc[]
+
+include::hooks/EntityChangesSubscriber_020-examples-and-usage.adoc[]

@@ -63,3 +63,7 @@ If there is no active transaction associated with the current thread, then does 
 === nextTransaction()
 
 Commits the current thread's transaction (if there is one), and in any case begins a new one.
+
+include::hooks/TransactionService_010-implementation.adoc[]
+
+include::hooks/TransactionService_020-examples-and-usage.adoc[]

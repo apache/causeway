@@ -41,3 +41,7 @@ Converts the string (eg view model memento) into a string safe for use within an
 Unconverts the string from its URL form into its original form URL.
 
 Reciprocal of _#encode(byte[])_ .
+
+include::hooks/UrlEncodingService_010-implementation.adoc[]
+
+include::hooks/UrlEncodingService_020-examples-and-usage.adoc[]

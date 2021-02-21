@@ -9,7 +9,6 @@ Domain semantics for domain object collection.
 ----
 @interface Collection {
   Class<? extends CollectionDomainEvent<?, ?>> domainEvent() default CollectionDomainEvent.Default.class;     // <.>
-  Editing editing() default Editing.NOT_SPECIFIED;     // <.>
   Where hidden() default Where.NOT_SPECIFIED;     // <.>
   Class<?> typeOf() default Object.class;     // <.>
 }
@@ -19,11 +18,6 @@ Domain semantics for domain object collection.
 +
 --
 Indicates that changes to the collection that should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService event bus_ using a custom (subclass of) xref:system:generated:index/applib/events/domain/CollectionDomainEvent.adoc[CollectionDomainEvent] .
---
-<.> xref:#editing[editing]
-+
---
-Whether the properties of this domain object can be edited, or collections of this object be added to/removed from.
 --
 <.> xref:#hidden[hidden]
 +
@@ -43,6 +37,8 @@ The type-of the elements held within the collection.
 
 Indicates that changes to the collection that should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService event bus_ using a custom (subclass of) xref:system:generated:index/applib/events/domain/CollectionDomainEvent.adoc[CollectionDomainEvent] .
 
+Subscribers of this event can interact with the business rule checking (hide, disable, validate) and its modification (before and after).
+
 For example:
 
 ----
@@ -57,13 +53,6 @@ public class Order {
 
 This subclass must provide a no-arg constructor; the fields are set reflectively.
 
-[#editing]
-=== editing
-
-Whether the properties of this domain object can be edited, or collections of this object be added to/removed from.
-
-Note that non-editable objects can nevertheless have actions invoked upon them.
-
 [#hidden]
 === hidden
 
@@ -74,4 +63,12 @@ Indicates when the collection is not visible to the user.
 
 The type-of the elements held within the collection.
 
+This is only provided as a fallback; usually the framework can infer the element type of the collection from the collection method's generic type.
+
 include::hooks/Collection_010-examples-and-usage.adoc[]
+
+include::hooks/Collection_011_domainEvent.adoc[]
+
+include::hooks/Collection_012_hidden.adoc[]
+
+include::hooks/Collection_013_typeOf.adoc[]

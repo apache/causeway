@@ -26,7 +26,7 @@ Collects together all layout hints for a property of a domain object.
 <.> xref:#cssClass[cssClass]
 +
 --
-Indicates the css class that a property should have.
+Indicates the css class that a property should have, to allow more targeted styling in `application.css` .
 --
 <.> xref:#describedAs[describedAs]
 +
@@ -36,7 +36,7 @@ Description of this property, eg to be rendered in a tooltip.
 <.> xref:#hidden[hidden]
 +
 --
-Indicates where in the UI the property should _not_ not be visible.
+Indicates where in the UI the property should _not_ be visible.
 --
 <.> xref:#labelPosition[labelPosition]
 +
@@ -81,7 +81,7 @@ Indicates that the value held by the property never changes over time, even when
 <.> xref:#typicalLength[typicalLength]
 +
 --
-The typical entry length of a field, use to determine the optimum width for display
+The typical entry length of a field, use to determine the optimum width for display.
 --
 
 == Members
@@ -89,7 +89,7 @@ The typical entry length of a field, use to determine the optimum width for disp
 [#cssClass]
 === cssClass
 
-Indicates the css class that a property should have.
+Indicates the css class that a property should have, to allow more targeted styling in `application.css` .
 
 [#describedAs]
 === describedAs
@@ -99,24 +99,28 @@ Description of this property, eg to be rendered in a tooltip.
 [#hidden]
 === hidden
 
-Indicates where in the UI the property should _not_ not be visible.
+Indicates where in the UI the property should _not_ be visible.
 
 [#labelPosition]
 === labelPosition
 
 In forms, positioning of the label (left, top or none) relative to the property value.
 
-If not specified, the default depends upon the property value's datatype.
+If not specified, the default depends upon the property value's datatype (including whether the field is _#multiLine()_ .
 
 [#multiLine]
 === multiLine
 
 For string properties (and parameters), render as a text area over specified number of lines.
 
+If set to > 1, then _#labelPosition()_ defaults to _LabelPosition#TOP top_ .
+
 [#named]
 === named
 
 Name of this property (overriding the name derived from its name in code).
+
+A typical use case is if the desired name is a reserved Java keyword, such as `default` or `package`.
 
 [#namedEscaped]
 === namedEscaped
@@ -168,4 +172,8 @@ Design note: we considered implementing this an "immutable" flag on the xref:sys
 [#typicalLength]
 === typicalLength
 
-The typical entry length of a field, use to determine the optimum width for display
+The typical entry length of a field, use to determine the optimum width for display.
+
+Note: the Wicket viewer does not use this information.
+
+include::hooks/PropertyLayout_010-examples-and-usage.adoc[]

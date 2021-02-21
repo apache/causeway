@@ -39,3 +39,7 @@ The key value should obey the general contract for hash maps.
 Set user-data, for the use of a subsequent object being acted upon.
 
 The key value should obey the general contract for hash maps.
+
+include::hooks/Scratchpad_010-implementation.adoc[]
+
+include::hooks/Scratchpad_020-examples-and-usage.adoc[]

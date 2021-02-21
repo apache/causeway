@@ -52,3 +52,7 @@ Creates a Snapshot.Builder that allows the contents of the snapshot to include o
 === getChildElementValue(Element, String, Class)
 
 Convenience method to extract value of an XML element, based on its type.
+
+include::hooks/XmlSnapshotService_010-implementation.adoc[]
+
+include::hooks/XmlSnapshotService_020-examples-and-usage.adoc[]

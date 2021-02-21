@@ -46,3 +46,7 @@ Takes into consideration ExceptionRecognizers as given by _#getExceptionRecogniz
 === recognizeFromSelected(Can, Throwable)
 
 Takes into consideration ExceptionRecognizers as given by _recognizers_ .
+
+include::hooks/ExceptionRecognizerService_010-implementation.adoc[]
+
+include::hooks/ExceptionRecognizerService_020-examples-and-usage.adoc[]

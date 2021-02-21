@@ -28,3 +28,7 @@ The intention is that this service only returns a list when the request is initi
 The intention is that this service only returns a list when the request is initiated through the _Restful Objects viewer_.
 
 Otherwise the service will likely return `null`.
+
+include::hooks/AcceptHeaderService_010-implementation.adoc[]
+
+include::hooks/AcceptHeaderService_020-examples-and-usage.adoc[]

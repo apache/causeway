@@ -26,3 +26,7 @@ Generate a Swagger spec with the specified visibility and format.
 === generateSwaggerSpec(Visibility, Format)
 
 Generate a Swagger spec with the specified visibility and format.
+
+include::hooks/SwaggerService_010-implementation.adoc[]
+
+include::hooks/SwaggerService_020-examples-and-usage.adoc[]

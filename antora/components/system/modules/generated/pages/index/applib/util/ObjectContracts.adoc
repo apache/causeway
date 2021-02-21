@@ -54,3 +54,4 @@ class ObjectContracts {
 }
 ----
 
+include::hooks/ObjectContracts_examples-and-usage.adoc[]

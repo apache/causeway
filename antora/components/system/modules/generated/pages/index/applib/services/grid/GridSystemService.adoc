@@ -106,3 +106,7 @@ Such a grid, if persisted as the layout XML file for the domain class, allows al
 Takes a normalized grid and strips out removes all members, leaving only the grid structure.
 
 Such a grid, if persisted as the layout XML file for the domain class, requires that the _org.apache.isis.applib.annotation.MemberOrder_ annotation is retained in the source code of said class in order to bind members to the regions of the grid.
+
+include::hooks/GridSystemService_010-implementation.adoc[]
+
+include::hooks/GridSystemService_020-examples-and-usage.adoc[]

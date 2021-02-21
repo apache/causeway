@@ -365,3 +365,7 @@ due to ambiguous semantic, use _#getEntityState(Object)_ instead
 ====
 
 Determines if the specified object has been deleted from the object store.
+
+include::hooks/RepositoryService_010-implementation.adoc[]
+
+include::hooks/RepositoryService_020-examples-and-usage.adoc[]

@@ -59,3 +59,7 @@ The username and email address must both be unique (not being used by an existin
 === updatePasswordByEmail(String, String)
 
 Allows the user to reset their password.
+
+include::hooks/UserRegistrationService_010-implementation.adoc[]
+
+include::hooks/UserRegistrationService_020-examples-and-usage.adoc[]

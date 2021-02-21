@@ -26,7 +26,7 @@ For uploading xref:system:generated:index/applib/value/Blob.adoc[Blob] or xref:s
 <.> xref:#maxLength[maxLength]
 +
 --
-The maximum entry length of a field.
+The maximum entry length of a string parameter (it is ignored for other types).
 --
 <.> xref:#mustSatisfy[mustSatisfy]
 +
@@ -63,10 +63,12 @@ For uploading xref:system:generated:index/applib/value/Blob.adoc[Blob] or xref:s
 
 The value should be of the form "file_extension|audio/*|video/*|image/*|media_type".
 
+Note that this does not prevent the user from uploading some other file type; rather it merely defaults the file type in the file open dialog.
+
 [#maxLength]
 === maxLength
 
-The maximum entry length of a field.
+The maximum entry length of a string parameter (it is ignored for other types).
 
 The default value ( `-1` ) indicates that no maxLength has been specified.
 
@@ -100,3 +102,5 @@ The default value, `0` , means that no flags have been specified.
 === regexPatternReplacement
 
 Replacement text for the pattern in generated error message.
+
+include::hooks/Parameter_010-examples-and-usage.adoc[]
