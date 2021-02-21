@@ -26,15 +26,13 @@ import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.extensions.ajax.markup.html.AjaxIndicatorAppender;
 import org.apache.wicket.markup.ComponentTag;
-import org.apache.wicket.request.IRequestHandler;
-import org.apache.wicket.request.handler.resource.ResourceStreamRequestHandler;
-import org.apache.wicket.util.time.Duration;
 
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.value.LocalResourcePath;
 import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.commons.internal.debug._Probe.EntryPoint;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.wicket.model.common.CommonContextUtils;
@@ -179,7 +177,7 @@ public abstract class ActionLink extends AjaxLink<ManagedObject> implements IAja
     public String getAjaxIndicatorMarkupId() {
         return this.indicatorAppenderIfAny != null
                 ? this.indicatorAppenderIfAny.getMarkupId()
-                        : null;
+                : null;
     }
 
     protected WicketViewerSettings getSettings() {
@@ -188,90 +186,29 @@ public abstract class ActionLink extends AjaxLink<ManagedObject> implements IAja
 
     AjaxDeferredBehaviour determineDeferredBehaviour() {
 
-        final ObjectAction action = getObjectAction();
-        final ActionModel actionModel = this.getActionModel();
+        val action = getObjectAction();
+        val actionModel = this.getActionModel();
+        val actionReturnTypeSpec = action.getReturnType();
+        
+        if(action.getParameterCount() > 0 
+                || actionReturnTypeSpec == null) {
+            return null; // default behavior, don't defer
+        }
+        
+        val actionReturnType = actionReturnTypeSpec.getCorrespondingClass();
 
         // TODO: should unify with ActionResultResponseType (as used in ActionParametersPanel)
-        if (isNoArgReturnTypeRedirect(action)) {
-            /**
-             * adapted from:
-             *
-             * @see https://cwiki.apache.org/confluence/display/WICKET/AJAX+update+and+file+download+in+one+blow
-             */
-            return new AjaxDeferredBehaviour(AjaxDeferredBehaviour.OpenUrlStrategy.NEW_WINDOW) {
-
-                private static final long serialVersionUID = 1L;
-
-                @Override
-                protected IRequestHandler getRequestHandler() {
-                    val resultAdapter = actionModel.execute();
-                    val value = resultAdapter.getPojo();
-                    return ActionModel.redirectHandler(value);
-                }
-            };
+        if (actionReturnType == java.net.URL.class 
+                || actionReturnType == LocalResourcePath.class) {
+            return AjaxDeferredBehaviour.redirecting(actionModel);
         }
-        if (isNoArgReturnTypeDownload(action)) {
-
-            /**
-             * adapted from:
-             *
-             * @see https://cwiki.apache.org/confluence/display/WICKET/AJAX+update+and+file+download+in+one+blow
-             */
-            return new AjaxDeferredBehaviour(AjaxDeferredBehaviour.OpenUrlStrategy.SAME_WINDOW) {
-
-                private static final long serialVersionUID = 1L;
-
-                @Override
-                protected IRequestHandler getRequestHandler() {
-                    val resultAdapter = actionModel.execute();
-                    val value = resultAdapter!=null ? resultAdapter.getPojo() : null;
-
-                    val handler = ActionModel.downloadHandler(value);
-
-                    //ISIS-1619, prevent clients from caching the response content
-                    return isIdempotentOrCachable(actionModel)
-                            ? handler
-                            : enforceNoCacheOnClientSide(handler);
-                }
-            };
+        if ((actionReturnType == org.apache.isis.applib.value.Blob.class
+                || actionReturnType == org.apache.isis.applib.value.Clob.class)) {
+            return AjaxDeferredBehaviour.downloading(actionModel);
         }
-        return null;
+        
+        return null; // default behavior, don't defer
     }
 
-    // TODO: should unify with ActionResultResponseType (as used in ActionParametersPanel)
-    private static boolean isNoArgReturnTypeRedirect(final ObjectAction action) {
-        return action.getParameterCount() == 0 
-                && action.getReturnType() != null 
-                && (action.getReturnType().getCorrespondingClass() == java.net.URL.class 
-                    || action.getReturnType().getCorrespondingClass() == LocalResourcePath.class);
-    }
-
-    // TODO: should unify with ActionResultResponseType (as used in ActionParametersPanel)
-    private static boolean isNoArgReturnTypeDownload(final ObjectAction action) {
-        return action.getParameterCount() == 0 
-                && action.getReturnType() != null 
-                && (action.getReturnType().getCorrespondingClass() == org.apache.isis.applib.value.Blob.class
-                    || action.getReturnType().getCorrespondingClass() == org.apache.isis.applib.value.Clob.class);
-    }
-
-    private static boolean isIdempotentOrCachable(ActionModel actionModel) {
-        val objectAction = actionModel.getMetaModel();
-        return ObjectAction.Util.isIdempotentOrCachable(objectAction);
-    }
-
-    // -- CLIENT SIDE CACHING ASPECTS ...
-
-    private static IRequestHandler enforceNoCacheOnClientSide(IRequestHandler downloadHandler){
-        if(downloadHandler==null)
-            return downloadHandler;
-
-        if(downloadHandler instanceof ResourceStreamRequestHandler)
-            ((ResourceStreamRequestHandler) downloadHandler)
-            .setCacheDuration(Duration.seconds(0));
-
-        return downloadHandler;
-    }
-
-    // --
 
 }
