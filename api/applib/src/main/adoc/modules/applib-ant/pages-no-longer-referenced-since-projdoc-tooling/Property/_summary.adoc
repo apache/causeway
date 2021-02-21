@@ -22,7 +22,7 @@
 //
 //<.> xref:system:generated:index/applib/annotation/Property.adoc#executionPublishing[`executionPublishing()`]
 //+
-//Whether the editing of a property should be published to registered xref:refguide:applib-svc:ExecutionSubscriber.adoc[`ExecutionSubscriber`]s as an `Execution` object, that captures the details of this edit.
+//Whether the editing of a property should be published to registered xref:system:generated:index/applib/services/publishing/spi/ExecutionSubscriber.adoc[`ExecutionSubscriber`]s as an `Execution` object, that captures the details of this edit.
 //
 //<.> xref:system:generated:index/applib/annotation/Property.adoc#fileAccept[`fileAccept()`]
 //+

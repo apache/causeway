@@ -70,6 +70,8 @@ public @interface Action {
      *     and any collection parameter defaults can be specified using checkboxes
      *     (in the Wicket UI, at least).
      * </p>
+     *
+     * @see Action#associateWithSequence()
      */
     String associateWith()
             default "";
@@ -83,11 +85,10 @@ public @interface Action {
      * </p>
      *
      * <p>
-     *     For example:
-     *     <pre>
-     *         @Action(associateWith="items", associateWithSequence="2.1")
- *         </pre>
+     *     For example: <tt> @Action(associateWith="items", associateWithSequence="2.1") </tt>
      * </p>
+     *
+     * @see Action#associateWith()
      */
     String associateWithSequence()
             default "1";
@@ -99,6 +100,9 @@ public @interface Action {
      *     The processor itself is used by {@link ContentMappingServiceForCommandDto} and
      *     {@link ContentMappingServiceForCommandsDto} to dynamically transform the DTOs.
      * </p>
+     *
+     * @see Property#commandDtoProcessor()
+     * @see Action#commandPublishing()
      */
     Class<? extends CommandDtoProcessor> commandDtoProcessor()
             default CommandDtoProcessor.class;
@@ -106,6 +110,9 @@ public @interface Action {
     /**
      * Whether action invocations, captured as {@link Command}s,
      * should be published to {@link CommandSubscriber}s.
+     *
+     * @see Property#commandPublishing()
+     * @see Action#commandDtoProcessor()
      */
     Publishing commandPublishing()
             default Publishing.NOT_SPECIFIED;
@@ -131,6 +138,10 @@ public @interface Action {
      * <p>
      * This subclass must provide a no-arg constructor; the fields are set reflectively.
      * </p>
+     *
+     * @see Property#domainEvent()
+     * @see Collection#domainEvent()
+     * @see DomainObject#actionDomainEvent()
      */
     Class<? extends ActionDomainEvent<?>> domainEvent()
             default ActionDomainEvent.Default.class;
@@ -138,6 +149,8 @@ public @interface Action {
     /**
      * Whether {@link Execution}s (triggered by action invocations), should
      * be published to {@link ExecutionSubscriber}s.
+     *
+     * @see Property#executionPublishing()
      */
     Publishing executionPublishing()
             default Publishing.NOT_SPECIFIED;
@@ -151,12 +164,16 @@ public @interface Action {
      * <p>
      * For {@link DomainService domain service} actions, the action's visibility is dependent upon its
      * {@link DomainService#nature() nature}.
+     *
+     * @see Property#hidden()
+     * @see Collection#hidden()
      */
     Where hidden()
             default Where.NOT_SPECIFIED;
 
     /**
-     * Whether the action is restricted to prototyping.
+     * Whether the action is restricted to prototyping, or whether it is
+     * available also in production mode.
      *
      * <p>
      *     By default there are no restrictions, with the action being available in all environments.
@@ -166,15 +183,41 @@ public @interface Action {
             default RestrictTo.NOT_SPECIFIED;
 
     /**
-     * The action semantics, either {@link SemanticsOf#SAFE_AND_REQUEST_CACHEABLE cached}, {@link SemanticsOf#SAFE safe} (query-only),
+     * The action semantics, either
+     * {@link SemanticsOf#SAFE_AND_REQUEST_CACHEABLE cached},
+     * {@link SemanticsOf#SAFE safe} (query-only),
      * {@link SemanticsOf#IDEMPOTENT idempotent} or
      * {@link SemanticsOf#NON_IDEMPOTENT non-idempotent}.
+     *
+     * <p>
+     * The action's semantics determine whether objects are modified as the
+     * result of invoking this action (if not, the results can be cached for the
+     * remainder of the request).  If the objects do cause a change in state,
+     * they additionally determine whether re-invoking the action would result
+     * in a further change.
+     * </p>
+     *
+     * <p>
+     *     There are also `...ARE_YOU_SURE` variants
+     *     (@link {@link SemanticsOf#IDEMPOTENT_ARE_YOU_SURE} and
+     *     (@link {@link SemanticsOf#NON_IDEMPOTENT_ARE_YOU_SURE} that cause a
+     *     confirmation dialog to be displayed in the Wicket viewer.
+     * </p>
      */
     SemanticsOf semantics()
             default SemanticsOf.NOT_SPECIFIED;
 
     /**
-     * The type-of the elements returned by the action.
+     * If the action returns a collection, then this hints as to the run-time
+     * type of the objects within that collection.
+     *
+     * <p>
+     *     This is only provided as a fallback; usually the framework can infer
+     *     the element type of the collection from the collection method's
+     *     generic type.
+     * </p>
+     *
+     * @see Collection#typeOf()
      */
     Class<?> typeOf()
             default Object.class;
@@ -187,7 +230,8 @@ public @interface Action {
      * </p>
      *
      * @see <a href="http://www.w3schools.com/tags/att_input_accept.asp">http://www.w3schools.com</a>
-     *
+     * @see Parameter#fileAccept()
+     * @see Property#fileAccept()
      */
     String fileAccept()
             default "";

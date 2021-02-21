@@ -87,7 +87,7 @@ public class Customer {
 
 For objects that are already persisted, the service is automatically injected just after the object is rehydrated by JDO/DataNucleus.
 
-For transient objects (instantiated programmatically), the xref:refguide:applib-svc:FactoryService.adoc[`FactoryService#viewModel(...)`] or the xref:refguide:applib-svc:RepositoryService.adoc[`RepositoryService#detachedEntity(...)`]'s will automatically inject the services.
+For transient objects (instantiated programmatically), the xref:system:generated:index/applib/services/factory/FactoryService.adoc[`FactoryService#viewModel(...)`] or the xref:refguide:applib-svc:RepositoryService.adoc[`RepositoryService#detachedEntity(...)`]'s will automatically inject the services.
 
 Alternatively the object can be instantiated simply using `new`, then services injected using xref:refguide:applib-svc:ServiceInjector.adoc[`ServiceInjector`]'s ``injectServicesInto(...)`` method.
 
@@ -151,9 +151,9 @@ image::reference-services/commands-and-events.png[width="960px"]
 
 To explain:
 
-* the (request-scoped) xref:refguide:applib-svc:InteractionContext.adoc[`InteractionContext`] domain service acts as a factory for the ``Interaction`` object, which keeps track of the call-graph of executions (``Interaction.Execution``) of either action invocations or property edits.
+* the (request-scoped) xref:system:generated:index/applib/services/iactn/InteractionContext.adoc[`InteractionContext`] domain service acts as a factory for the ``Interaction`` object, which keeps track of the call-graph of executions (``Interaction.Execution``) of either action invocations or property edits.
 +
-In the majority of cases there is likely to be just a single top-level node of this graph, but for applications that use the xref:refguide:applib-svc:WrapperFactory.adoc[`WrapperFactory`] extensively each successive call results in a new child execution.
+In the majority of cases there is likely to be just a single top-level node of this graph, but for applications that use the xref:system:generated:index/applib/services/wrapper/WrapperFactory.adoc[WrapperFactory] extensively each successive call results in a new child execution.
 
 * the `Interaction` also holds a reference to the `Command`, which represents the top-level intention to invoke the action / edit the property.
 
@@ -169,7 +169,7 @@ Metrics as to which objects are merely loaded into memory are also captured usin
 xref:core:runtime-services:ExecutionPublisher.adoc[`ExecutionPublisher`] domain service.
 This is only done for actions/properties annotated appropriate (with xref:system:generated:index/applib/annotation/Action.adoc#exectionPublishing[`@Action#exectionPublishing()`] or xref:system:generated:index/applib/annotation/Property.adoc#exectionPublishing[`@Property#exectionPublishing()`]).
 +
-The internal service delegates in turn to any registered xref:refguide:applib-svc:ExecutionSubscriber.adoc[`PublisherService`]s (there may be more than one).
+The internal service delegates in turn to any registered xref:system:generated:index/applib/services/publishing/spi/ExecutionSubscriber.adoc[ExecutionSubscriber]s (there may be more than one).
 
 * At the end of each transaction, details of all changed objects are published, through the (internal) xref:core:runtime-services:EntityChangesPublisher.adoc[`EntityChangesPublisher`] to any registered `EntityChangesSubscriber` implementations and
 through the (internal) xref:core:runtime-services:EntityPropertyChangePublisher.adoc[`EntityPropertyChangePublisher`] to any registered `EntityPropertyChangeSubscriber` implementations.
@@ -180,7 +180,7 @@ Only domain objects specified to be published with xref:system:generated:index/a
 Note that it's possible for there to be more than one transaction per top-level interaction, by virtue of the xref:refguide:applib-svc:TransactionService.adoc[`TransactionService`].
 ====
 
-* At the end of the entire interaction footnote:[although rare, there can be multiple transactions in a single interaction], details of the top-level `Command` are sent to each xref:refguide:applib-svc:CommandSubscriber.adoc[`CommandServiceListener`].
+* At the end of the entire interaction footnote:[although rare, there can be multiple transactions in a single interaction], details of the top-level `Command` are sent to each xref:refguide:applib-svc:CommandSubscriber.adoc[CommandSubscriber].
 This captures whether the command succeeded or failed.
 +
 The xref:extensions:command-log:about.adoc[Command Log] extension uses this to persist a log of commands, for auditing or to support regression testing with the xref:extensions:command-replay:about.adoc[Command Replay] extension.
@@ -189,13 +189,13 @@ The xref:extensions:command-log:about.adoc[Command Log] extension uses this to p
 Implementations of xref:refguide:applib-svc:CommandServiceInternal.adoc[`CommandService`] can use the `Command#getMemento()` method to obtain a XML equivalent of that `Command`, reified using the xref:refguide:schema:cmd.adoc[`cmd.xsd`] schema.
 This can be converted back into a `CommandDto` using the `CommandDtoUtils` utility class (part of the applib).
 
-Similarly, implementations of xref:refguide:applib-svc:ExecutionSubscriber.adoc[`PublisherService`] can use the `InteractionDtoUtils` utility class to obtain a `InteractionDto` representing the interaction, either just for a single execution or for the entire call-graph.
+Similarly, implementations of xref:system:generated:index/applib/services/publishing/spi/ExecutionSubscriber.adoc[ExecutionSubscriber] can use the `InteractionDtoUtils` utility class to obtain a `InteractionDto` representing the interaction, either just for a single execution or for the entire call-graph.
 This can be converted into XML in a similar fashion.
 
 Likewise, the `PublishedObjects` class passed to the `PublisherService` at the end of the interaction provides the `PublishedObjects#getDto()` method which returns a `ChangesDto` instance.
 This can be converted into XML using the `ChangesDtoUtils` utility class.
 
-One final point: multiple xref:refguide:applib-svc:ExecutionSubscriber.adoc[`PublisherService`] implementations are supported because different implementations may have different responsibilities.
+One final point: multiple xref:system:generated:index/applib/services/publishing/spi/ExecutionSubscriber.adoc[ExecutionSubscriber] implementations are supported because different implementations may have different responsibilities.
 
 However, the SPI can also be used for profiling; each execution within the call-graph contains metrics of the number of objects loaded or modified as a result of that execution, and thus could be used for application profiling.
 The framework provides a default `PublisherServiceLogging` implementation that logs this using LOG4J2.

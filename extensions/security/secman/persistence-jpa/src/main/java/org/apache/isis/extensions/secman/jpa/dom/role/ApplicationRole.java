@@ -63,20 +63,20 @@ import lombok.Setter;
 
 @Entity
 @Table(
-        name = "ApplicationRole", 
+        name = "ApplicationRole",
         uniqueConstraints =
             @UniqueConstraint(
-                    name = "ApplicationRole_name_UNQ", 
+                    name = "ApplicationRole_name_UNQ",
                     columnNames={"name"})
 )
 @NamedQueries({
     @NamedQuery(
-            name = NamedQueryNames.ROLE_BY_NAME, 
+            name = NamedQueryNames.ROLE_BY_NAME,
             query = "SELECT r "
                   + "FROM org.apache.isis.extensions.secman.jpa.dom.role.ApplicationRole r "
                   + "WHERE r.name = :name"),
     @NamedQuery(
-            name = NamedQueryNames.ROLE_BY_NAME_CONTAINING, 
+            name = NamedQueryNames.ROLE_BY_NAME_CONTAINING,
             query = "SELECT r "
                   + "FROM org.apache.isis.extensions.secman.jpa.dom.role.ApplicationRole r "
                   + "WHERE r.name LIKE '%:nameRegex%'"),
@@ -92,18 +92,18 @@ import lombok.Setter;
 @DomainObjectLayout(
         bookmarking = BookmarkPolicy.AS_ROOT
         )
-public class ApplicationRole 
-implements 
-    org.apache.isis.extensions.secman.api.role.ApplicationRole, 
+public class ApplicationRole
+implements
+    org.apache.isis.extensions.secman.api.role.ApplicationRole,
     Comparable<ApplicationRole> {
 
     @Inject private transient ApplicationFeatureRepository applicationFeatureRepository;
     @Inject private transient ApplicationPermissionRepository applicationPermissionRepository;
-    
+
     @Id
     @GeneratedValue
     private Long id;
-    
+
     // -- name (property)
 
     public static class NameDomainEvent extends PropertyDomainEvent<String> {}
@@ -178,8 +178,7 @@ implements
 
     @ManyToMany
     @Collection(
-            domainEvent = UsersDomainEvent.class,
-            editing = Editing.DISABLED
+            domainEvent = UsersDomainEvent.class
             )
     @CollectionLayout(
             defaultView="table"

@@ -5,7 +5,7 @@
 WARNING: TODO: this content has not yet been reviewed/updated for v2.0
 
 
-The `InteractionDtoServiceInternal` internal domain service is used by the framework to create and update DTOs representing member executions, ie the invocation of an action or the editing of a property.  The DTO is in all cases a subclass of `MemberExecutionDto`, from the xref:refguide:schema:ixn["ixn" schema], and subsequently accessible from the `Interaction` object (per the xref:refguide:applib-svc:InteractionContext.adoc[`InteractionContext`] service).
+The `InteractionDtoServiceInternal` internal domain service is used by the framework to create and update DTOs representing member executions, ie the invocation of an action or the editing of a property.  The DTO is in all cases a subclass of `MemberExecutionDto`, from the xref:refguide:schema:ixn["ixn" schema], and subsequently accessible from the `Interaction` object (per the xref:system:generated:index/applib/services/iactn/InteractionContext.adoc[`InteractionContext`] service).
 
 
 == SPI & Implementation

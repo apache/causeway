@@ -50,6 +50,8 @@ public @interface Parameter {
      * The value should be of the form "file_extension|audio/*|video/*|image/*|media_type".
      * </p>
      *
+     * @see Action#fileAccept()
+     * @see Property#fileAccept()
      * @see <a href="http://www.w3schools.com/tags/att_input_accept.asp">http://www.w3schools.com</a>
      */
     String fileAccept()
@@ -61,6 +63,8 @@ public @interface Parameter {
      * <p>
      *     The default value (<code>-1</code>) indicates that no maxLength has been specified.
      * </p>
+     *
+     * @see Property#maxLength()
      */
     int maxLength()
             default -1;
@@ -71,6 +75,8 @@ public @interface Parameter {
      * <p>
      * If more than one is provided, then all must be satisfied (in effect &quot;AND&quot;ed together).
      * </p>
+     *
+     * @see Property#mustSatisfy()
      */
     Class<? extends Specification>[] mustSatisfy()
             default {};
@@ -82,12 +88,18 @@ public @interface Parameter {
      *     For parameters the default value, {@link org.apache.isis.applib.annotation.Optionality#DEFAULT}, is taken
      *     to mean that the parameter is required.
      * </p>
+     *
+     * @see Property#optionality()
      */
     Optionality optionality()
             default Optionality.NOT_SPECIFIED;
 
     /**
      * Regular expression pattern that a value should conform to, and can be formatted as.
+     *
+     * @see Property#regexPattern()
+     * @see Parameter#regexPatternReplacement()
+     * @see Parameter#regexPatternFlags()
      */
     String regexPattern()
             default "";
@@ -98,12 +110,16 @@ public @interface Parameter {
      * <p>
      *     The default value, <code>0</code>, means that no flags have been specified.
      * </p>
+     *
+     * @see Parameter#regexPattern()
      */
     int regexPatternFlags()
             default 0;
 
     /**
      * Replacement text for the pattern in generated error message.
+     *
+     * @see Parameter#regexPattern()
      */
     String regexPatternReplacement()
             default "Doesn't match pattern";

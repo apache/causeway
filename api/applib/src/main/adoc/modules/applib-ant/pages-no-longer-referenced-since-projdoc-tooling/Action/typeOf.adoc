@@ -5,28 +5,3 @@
 :page-partial:
 
 
-
-The `typeOf` attribute specifies the expected type of an element returned by the action (returning a collection), when for whatever reason the type cannot be inferred from the generic type, or to provide a hint about the actual run-time (as opposed to compile-time) type.
-
-For example:
-
-[source,java]
-----
-public void AccountService {
-
-    @Action(typeOf=Customer.class)
-    public List errantAccounts() {
-        return customers.allNewCustomers();
-    }
-    ...
-
-    @Inject CustomerRepository customers;
-}
-----
-
-In general we recommend that you use generics instead, eg `List<Customer>`.
-
-== See also
-
-This attribute can also be specified for xref:system:generated:index/applib/annotation/Collection.adoc#typeOf[collections].
-

@@ -24,7 +24,7 @@ Domain service APIs for the application layer allow the domain objects to contro
 
 
 
-|xref:refguide:applib-svc:InteractionContext.adoc[InteractionContext]
+|xref:system:generated:index/applib/services/iactn/InteractionContext.adoc[InteractionContext]
 |Request-scoped access to the current member execution (action invocation or property edit), represented as the `Interaction` context.
 
 
@@ -48,7 +48,7 @@ Domain service APIs for the application layer allow the domain objects to contro
 
 
 
-|xref:refguide:applib-svc:WrapperFactory.adoc[WrapperFactory]
+|xref:system:generated:index/applib/services/wrapper/WrapperFactory.adoc[WrapperFactory]
 |Interact with another domain object "as if" through the UI (enforcing business rules, firing domain events)
 
 

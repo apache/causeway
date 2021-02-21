@@ -6,13 +6,13 @@
 
 
 This chapter shows the idioms for creating, reading, updating and deleting xref:userguide:fun:overview.adoc#domain-entities[domain entities].
-The main domain services used for this are xref:refguide:applib-svc:RepositoryService.adoc[`RepositoryService`] and xref:refguide:applib-svc:FactoryService.adoc[`FactoryService`].
+The main domain services used for this are xref:refguide:applib-svc:RepositoryService.adoc[`RepositoryService`] and xref:system:generated:index/applib/services/factory/FactoryService.adoc[`FactoryService`].
 
 
 [[instantiating]]
 == Instantiating
 
-Domain entities can be instantiated using the xref:refguide:applib-svc:FactoryService.adoc[`FactoryService`] provided by the framework.
+Domain entities can be instantiated using the xref:system:generated:index/applib/services/factory/FactoryService.adoc[`FactoryService`] provided by the framework.
 For example:
 
 [source,java]
@@ -39,7 +39,7 @@ public class Customer {
 }
 ----
 
-In such cases, the domain object cannot be instantiated using xref:refguide:applib-svc:FactoryService.adoc[`FactoryService`].
+In such cases, the domain object cannot be instantiated using xref:system:generated:index/applib/services/factory/FactoryService.adoc[`FactoryService`].
 Instead the xref:refguide:applib-svc:ServiceInjector.adoc[`ServiceInjector`] service can be used to inject services:
 
 [source,java]
@@ -56,7 +56,7 @@ Customer customer = factoryService.detachedEntity(
                         new Customer(reference, firstName, lastName));
 ----
 
-Note though that this does _not_ raise any lifecycle event. 
+Note though that this does _not_ raise any lifecycle event.
 
 
 [[persisting]]

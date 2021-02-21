@@ -171,7 +171,7 @@ And, conversely, the framework also provides `CollectionDomainEvent.Noop`; if `d
 == Raising events programmatically
 
 Normally events are only raised for interactions through the UI.
-However, events can be raised programmatically either by calling the xref:refguide:applib-svc:EventBusService.adoc[`EventBusService`] API directly, or by emulating the UI by wrapping the target object using the xref:refguide:applib-svc:WrapperFactory.adoc[`WrapperFactory`] domain service.
+However, events can be raised programmatically either by calling the xref:refguide:applib-svc:EventBusService.adoc[`EventBusService`] API directly, or by emulating the UI by wrapping the target object using the xref:system:generated:index/applib/services/wrapper/WrapperFactory.adoc[WrapperFactory] domain service.
 
 == See also
 

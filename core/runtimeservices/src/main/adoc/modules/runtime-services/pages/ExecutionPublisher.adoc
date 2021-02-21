@@ -4,7 +4,7 @@
 
 WARNING: TODO: this content has not yet been reviewed/updated for v2.0
 
-The (internal) `ExecutionPublisher` domain service acts as an internal facade to any configured xref:refguide:applib-svc:ExecutionSubscriber.adoc[`ExecutionSubscriber`] domain service(s).
+The (internal) `ExecutionPublisher` domain service acts as an internal facade to any configured xref:system:generated:index/applib/services/publishing/spi/ExecutionSubscriber.adoc[`ExecutionSubscriber`] domain service(s).
 
 For published action invocations/ property edits, it provides an API for those member executions to call.
 
@@ -25,10 +25,10 @@ public interface ExecutionPublisher {
 
 }
 ----
-<1> to publish an action invocation, as represented by the specified member `Execution` parameter and with the xref:system:generated:index/applib/annotation/Action.adoc#executionPublishing[@Action#executionPublishing] annotation attribute or equivalent, to any configured xref:refguide:applib-svc:ExecutionSubscriber.adoc[`PublisherService`].
-The `Execution` object will be an instance of `ActionInvocation` (see xref:refguide:applib-svc:InteractionContext.adoc[`InteractionContext`] for details).
-<2> to publish a property edit, as as represented by the specified member `Execution` parameter and with the xref:system:generated:index/applib/annotation/Property.adoc#publishing[`@Property#executionPublishing`] annotation attribute or equivalent, to any configured xref:refguide:applib-svc:ExecutionSubscriber.adoc[`PublisherService`].
-The `Execution` object will be an instance of `PropertyEdit` (see xref:refguide:applib-svc:InteractionContext.adoc[`InteractionContext`] for details).
+<1> to publish an action invocation, as represented by the specified member `Execution` parameter and with the xref:system:generated:index/applib/annotation/Action.adoc#executionPublishing[@Action#executionPublishing] annotation attribute or equivalent, to any configured xref:system:generated:index/applib/services/publishing/spi/ExecutionSubscriber.adoc[ExecutionSubscriber].
+The `Execution` object will be an instance of `ActionInvocation` (see xref:system:generated:index/applib/services/iactn/InteractionContext.adoc[`InteractionContext`] for details).
+<2> to publish a property edit, as as represented by the specified member `Execution` parameter and with the xref:system:generated:index/applib/annotation/Property.adoc#publishing[`@Property#executionPublishing`] annotation attribute or equivalent, to any configured xref:system:generated:index/applib/services/publishing/spi/ExecutionSubscriber.adoc[ExecutionSubscriber].
+The `Execution` object will be an instance of `PropertyEdit` (see xref:system:generated:index/applib/services/iactn/InteractionContext.adoc[`InteractionContext`] for details).
 
 == Related Classes
 

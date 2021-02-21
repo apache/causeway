@@ -39,12 +39,20 @@ public @interface PropertyLayout {
 
     /**
      * Indicates the css class that a property should have.
+     *
+     * @see ActionLayout#cssClass()
+     * @see CollectionLayout#cssClass()
+     * @see DomainObjectLayout#cssClass()
      */
     String cssClass()
             default "";
 
     /**
      * Description of this property, eg to be rendered in a tooltip.
+     *
+     * @see ActionLayout#describedAs()
+     * @see CollectionLayout#describedAs()
+     * @see DomainObjectLayout#describedAs()
      */
     String describedAs()
             default "";
@@ -73,12 +81,20 @@ public @interface PropertyLayout {
 
     /**
      * Name of this property (overriding the name derived from its name in code).
+     *
+     * @see ActionLayout#named()
+     * @see CollectionLayout#named()
+     * @see DomainObjectLayout#named()
+     * @see PropertyLayout#namedEscaped()
      */
     String named()
             default "";
 
     /**
-     * A flag indicating whether the value of {@linkplain #named()} should be HTML escaped or not.
+     * A flag indicating whether the value of {@linkplain #named()} should be
+     * HTML escaped or not.
+     *
+     * @see PropertyLayout#named()
      */
     boolean namedEscaped()
             default true;

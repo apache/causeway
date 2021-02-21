@@ -62,27 +62,28 @@ public @interface Collection {
      * <p>
      * This subclass must provide a no-arg constructor; the fields are set reflectively.
      * </p>
+     *
+     * @see Action#domainEvent()
+     * @see Property#domainEvent()
+     * @see DomainObject#collectionDomainEvent()
      */
     Class<? extends CollectionDomainEvent<?,?>> domainEvent()
             default CollectionDomainEvent.Default.class;
 
     /**
-     * Whether the properties of this domain object can be edited, or collections of this object be added to/removed from.
-     *
-     * <p>
-     *     Note that non-editable objects can nevertheless have actions invoked upon them.
-     * </p>
-     */
-    Editing editing()
-            default Editing.NOT_SPECIFIED;
-    /**
      * Indicates when the collection is not visible to the user.
+     *
+     * @see Action#hidden()
+     * @see Property#hidden()
+     * @see Collection#hidden()
      */
     Where hidden()
             default Where.NOT_SPECIFIED;
 
     /**
      * The type-of the elements held within the collection.
+     *
+     * @see Action#typeOf()
      */
     Class<?> typeOf()
             default Object.class;

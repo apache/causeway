@@ -6,7 +6,7 @@
 
 
 Whenever a domain object is instantiated or otherwise becomes known to the framework, a "created" lifecycle event is fired.
-This is typically when the xref:refguide:applib-svc:FactoryService.adoc[`FactoryService`]'s `viewModel(...)` method is called.
+This is typically when the xref:system:generated:index/applib/services/factory/FactoryService.adoc[`FactoryService`]'s `viewModel(...)` method is called.
 
 Subscribers subscribe through the xref:refguide:applib-svc:EventBusService.adoc[`EventBusService`] and can use the event to obtain a reference to the object just created.
 The subscriber could then, for example, update the object, eg looking up state from some external datastore.

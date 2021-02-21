@@ -33,7 +33,7 @@ public class ChangedObjectsService {
 }
 ----
 <.> Enlists an object that has just been created, updated or deleted, capturing the pre-modification values of the properties.
-<.> Used by the framework to determine whether to send the completed `Command` to xref:refguide:applib-svc:CommandSubscriber.adoc[`CommandServiceListener`], for example so that it can be persisted).
+<.> Used by the framework to determine whether to send the completed `Command` to xref:refguide:applib-svc:CommandSubscriber.adoc[CommandSubscriber], for example so that it can be persisted).
 <.> Used by xref:core:runtime-services:PublisherDispatchService.adoc[`PublisherDispatchService`] to obtain details of and
 counters of all objects changed within the transaction.
 <.> Used by xref:core:runtime-services:AuditerDispatchService.adoc[`AuditerDispatchService`] to obtain all pairs of

@@ -4,7 +4,7 @@
 
 == Wrapper Factory
 
-If the xref:refguide:applib-svc:WrapperFactory.adoc[`WrapperFactory`] is used to call other objects then the metrics are captured for each sub-execution.
+If the xref:system:generated:index/applib/services/wrapper/WrapperFactory.adoc[WrapperFactory] is used to call other objects then the metrics are captured for each sub-execution.
 
 
 
@@ -15,7 +15,7 @@ If the xref:refguide:applib-svc:WrapperFactory.adoc[`WrapperFactory`] is used to
 
 See also:
 
-* the xref:refguide:applib-svc:InteractionContext.adoc[`InteractionContext`] is used to obtain the `Interaction` from which the member executions are published.
+* the xref:system:generated:index/applib/services/iactn/InteractionContext.adoc[`InteractionContext`] is used to obtain the `Interaction` from which the member executions are published.
 
 * the xref:system:generated:index/applib/services/publishing/spi/EntityChangesSubscriber.adoc[EntityChangesSubscriber] is used to obtain the set of objects modified within the interaction
 

@@ -25,7 +25,7 @@ The core/domain APIs provide general-purpose services to the domain objects, for
 |Programmatically post events to the internal event bus.  Also used by Apache Isis itself to broadcast domain, UI and lifecycle events.
 
 
-|xref:refguide:applib-svc:FactoryService.adoc[FactoryService]
+|xref:system:generated:index/applib/services/factory/FactoryService.adoc[FactoryService]
 |Methods to instantiate and initialize domain objects
 
 

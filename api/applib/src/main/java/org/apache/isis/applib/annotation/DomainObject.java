@@ -39,13 +39,13 @@ import org.apache.isis.applib.events.lifecycle.ObjectUpdatedEvent;
 import org.apache.isis.applib.events.lifecycle.ObjectUpdatingEvent;
 
 /**
- * Domain semantics for domain objects (entities and view models; 
+ * Domain semantics for domain objects (entities and view models;
  * for services see {@link org.apache.isis.applib.annotation.DomainService}).
- * 
- * @apiNote Meta annotation {@link Component} allows for the Spring framework to pick up (discover) the 
- * annotated type. 
+ *
+ * @apiNote Meta annotation {@link Component} allows for the Spring framework to pick up (discover) the
+ * annotated type.
  * For more details see <code>org.apache.isis.core.config.beans.IsisBeanFactoryPostProcessorForSpring</code>
- * 
+ *
  * @since 1.x {@index}
  */
 @Inherited
@@ -64,6 +64,8 @@ public @interface DomainObject {
      *
      * <p>
      * It is sufficient to specify an interface rather than a concrete type.
+     *
+     * @see DomainObject#autoCompleteAction()
      */
     Class<?> autoCompleteRepository()
             default Object.class;
@@ -74,6 +76,9 @@ public @interface DomainObject {
      *
      * <p>
      * The method is required to accept a single string parameter, and must return a list of the domain type.
+     * </p>
+     *
+     * @see DomainObject#autoCompleteRepository()
      */
     String autoCompleteAction()
             default "autoComplete";
@@ -99,6 +104,9 @@ public @interface DomainObject {
      * <p>
      *     Note that non-editable objects can nevertheless have actions invoked upon them.
      * </p>
+     *
+     * @see Property#editing()
+     * @see DomainObject#editingDisabledReason()
      */
     Editing editing()
             default Editing.NOT_SPECIFIED;
@@ -106,28 +114,33 @@ public @interface DomainObject {
     /**
      * If {@link #editing()} is set to {@link Editing#DISABLED},
      * then the reason to provide to the user as to why the object's properties cannot be edited/collections modified.
+     *
+     * @see DomainObject#editing()
      */
     String editingDisabledReason()
             default "Disabled";
 
     /**
-     * Whether entity changes should be published to 
+     * Whether entity changes should be published to
      * {@link org.apache.isis.applib.services.publishing.spi.EntityPropertyChangeSubscriber}s
-     * and whether entity changes, captured as {@link org.apache.isis.applib.services.publishing.spi.EntityChanges}, 
+     * and whether entity changes, captured as {@link org.apache.isis.applib.services.publishing.spi.EntityChanges},
      * should be dispatched to {@link org.apache.isis.applib.services.publishing.spi.EntityChangesSubscriber}s.
      * @apiNote does only apply to entity objects
      */
     Publishing entityChangePublishing()
             default Publishing.NOT_SPECIFIED;
-    
+
     /**
-     * Applicable only if {@link #nature()} is {@link Nature#MIXIN}.
+     * Applicable only if {@link #nature()} is {@link Nature#MIXIN}, indicates
+     * the default name of the method of that mixin.
      */
     String mixinMethod()
             default "$$";
 
     /**
      * The nature of this domain object.
+     *
+     * @see DomainService#nature()
      */
     Nature nature()
             default Nature.NOT_SPECIFIED;
@@ -139,6 +152,8 @@ public @interface DomainObject {
      * This value, if specified, is used in the serialized form of the object's OID.  An OID is
      * used by the framework to unique identify an object over time (same concept as a URN).
      * </p>
+     *
+     * @see DomainService#objectType()
      */
     String objectType()
             default "";
@@ -152,6 +167,13 @@ public @interface DomainObject {
      * <p>
      * This subclass must provide a no-arg constructor; the fields are set reflectively.
      * </p>
+     *
+     * @see DomainObject#loadedLifecycleEvent()
+     * @see DomainObject#persistingLifecycleEvent()
+     * @see DomainObject#persistedLifecycleEvent()
+     * @see DomainObject#updatingLifecycleEvent()
+     * @see DomainObject#updatedLifecycleEvent()
+     * @see DomainObject#removingLifecycleEvent()
      */
     Class<? extends ObjectCreatedEvent<?>>
             createdLifecycleEvent()
@@ -165,6 +187,13 @@ public @interface DomainObject {
      * <p>
      * This subclass must provide a no-arg constructor; the fields are set reflectively.
      * </p>
+     *
+     * @see DomainObject#createdLifecycleEvent()
+     * @see DomainObject#loadedLifecycleEvent()
+     * @see DomainObject#persistedLifecycleEvent()
+     * @see DomainObject#updatingLifecycleEvent()
+     * @see DomainObject#updatedLifecycleEvent()
+     * @see DomainObject#removingLifecycleEvent()
      */
     Class<? extends ObjectPersistingEvent<?>>
             persistingLifecycleEvent()
@@ -178,6 +207,13 @@ public @interface DomainObject {
      * <p>
      * This subclass must provide a no-arg constructor; the fields are set reflectively.
      * </p>
+     *
+     * @see DomainObject#createdLifecycleEvent()
+     * @see DomainObject#loadedLifecycleEvent()
+     * @see DomainObject#persistingLifecycleEvent()
+     * @see DomainObject#updatingLifecycleEvent()
+     * @see DomainObject#updatedLifecycleEvent()
+     * @see DomainObject#removingLifecycleEvent()
      */
     Class<? extends ObjectPersistedEvent<?>>
             persistedLifecycleEvent()
@@ -191,6 +227,13 @@ public @interface DomainObject {
      * <p>
      * This subclass must provide a no-arg constructor; the fields are set reflectively.
      * </p>
+     *
+     * @see DomainObject#createdLifecycleEvent()
+     * @see DomainObject#persistingLifecycleEvent()
+     * @see DomainObject#persistedLifecycleEvent()
+     * @see DomainObject#updatingLifecycleEvent()
+     * @see DomainObject#updatedLifecycleEvent()
+     * @see DomainObject#removingLifecycleEvent()
      */
     Class<? extends ObjectLoadedEvent<?>>
             loadedLifecycleEvent()
@@ -204,6 +247,13 @@ public @interface DomainObject {
      * <p>
      * This subclass must provide a no-arg constructor; the fields are set reflectively.
      * </p>
+     *
+     * @see DomainObject#createdLifecycleEvent()
+     * @see DomainObject#loadedLifecycleEvent()
+     * @see DomainObject#persistingLifecycleEvent()
+     * @see DomainObject#persistedLifecycleEvent()
+     * @see DomainObject#updatedLifecycleEvent()
+     * @see DomainObject#removingLifecycleEvent()
      */
     Class<? extends ObjectUpdatingEvent<?>>
             updatingLifecycleEvent()
@@ -217,6 +267,13 @@ public @interface DomainObject {
      * <p>
      * This subclass must provide a no-arg constructor; the fields are set reflectively.
      * </p>
+     *
+     * @see DomainObject#createdLifecycleEvent()
+     * @see DomainObject#loadedLifecycleEvent()
+     * @see DomainObject#persistingLifecycleEvent()
+     * @see DomainObject#persistedLifecycleEvent()
+     * @see DomainObject#updatingLifecycleEvent()
+     * @see DomainObject#removingLifecycleEvent()
      */
     Class<? extends ObjectUpdatedEvent<?>>
             updatedLifecycleEvent()
@@ -230,6 +287,13 @@ public @interface DomainObject {
      * <p>
      * This subclass must provide a no-arg constructor; the fields are set reflectively.
      * </p>
+     *
+     * @see DomainObject#createdLifecycleEvent()
+     * @see DomainObject#loadedLifecycleEvent()
+     * @see DomainObject#persistingLifecycleEvent()
+     * @see DomainObject#persistedLifecycleEvent()
+     * @see DomainObject#updatingLifecycleEvent()
+     * @see DomainObject#updatedLifecycleEvent()
      */
     Class<? extends ObjectRemovingEvent<?>>
             removingLifecycleEvent()
@@ -261,6 +325,10 @@ public @interface DomainObject {
      * This subclass must provide a no-arg constructor; the fields are set reflectively.
      * It must also use <tt>Object</tt> as its generic type.  This is to allow mixins to also emit the same event.
      * </p>
+     *
+     * @see DomainObject#propertyDomainEvent()
+     * @see DomainObject#collectionDomainEvent()
+     * @see Action#domainEvent()
      */
     Class<? extends ActionDomainEvent<?>>
             actionDomainEvent()
@@ -287,6 +355,10 @@ public @interface DomainObject {
      * This subclass must provide a no-arg constructor; the fields are set reflectively.
      * It must also use <tt>Object</tt> as its generic type.  This is to allow mixins to also emit the same event.
      * </p>
+     *
+     * @see DomainObject#actionDomainEvent()
+     * @see DomainObject#collectionDomainEvent()
+     * @see Property#domainEvent()
      */
     Class<? extends PropertyDomainEvent<?,?>>
             propertyDomainEvent()
@@ -312,10 +384,13 @@ public @interface DomainObject {
      * This subclass must provide a no-arg constructor; the fields are set reflectively.
      * It must also use <tt>Object</tt> as its generic type.  This is to allow mixins to also emit the same event.
      * </p>
+     *
+     * @see DomainObject#actionDomainEvent()
+     * @see DomainObject#propertyDomainEvent()
+     * @see Collection#domainEvent()
      */
     Class<? extends CollectionDomainEvent<?,?>>
             collectionDomainEvent()
             default CollectionDomainEvent.Default.class;
 
-    // ...
 }

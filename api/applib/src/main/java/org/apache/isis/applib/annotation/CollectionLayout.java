@@ -28,7 +28,7 @@ import java.util.Comparator;
 
 /**
  * Layout hints for collections.
- * 
+ *
  * @since 1.x {@index}
  */
 @Inherited
@@ -44,6 +44,10 @@ public @interface CollectionLayout {
 
     /**
      * Indicates the css class that a collection should have.
+     *
+     * @see ActionLayout#cssClass()
+     * @see PropertyLayout#cssClass()
+     * @see DomainObjectLayout#cssClass()
      */
     String cssClass()
             default "";
@@ -64,6 +68,10 @@ public @interface CollectionLayout {
 
     /**
      * Description of this collection, eg to be rendered in a tooltip.
+     *
+     * @see ActionLayout#describedAs()
+     * @see PropertyLayout#describedAs()
+     * @see DomainObjectLayout#describedAs()
      */
     String describedAs()
             default "";
@@ -81,12 +89,19 @@ public @interface CollectionLayout {
 
     /**
      * Name of this collection (overriding the name derived from its name in code).
+     *
+     * @see ActionLayout#named()
+     * @see PropertyLayout#named()
+     * @see DomainObjectLayout#named()
+     * @see CollectionLayout#namedEscaped()
      */
     String named()
             default "";
 
     /**
      * A flag indicating whether the value of {@linkplain #named()} should be HTML escaped or not.
+     *
+     * @see CollectionLayout#named()
      */
     boolean namedEscaped()
             default true;
@@ -102,6 +117,8 @@ public @interface CollectionLayout {
      * <p>
      * If annotated on a type, then the page size refers to standalone
      * collections (eg as returned from a repository query).
+     *
+     * @see DomainObjectLayout#paged()
      */
     int paged()
             default -1;

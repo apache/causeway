@@ -197,7 +197,7 @@ public String default0UpdateName() {
     return getName();
 }
 ----
-<.> Publishing enabled means that the action invocation is converted into XML and dispatched to all configured implementations of the xref:refguide:applib-svc:ExecutionSubscriber.adoc[PublisherService] SPI.
+<.> Publishing enabled means that the action invocation is converted into XML and dispatched to all configured implementations of the xref:system:generated:index/applib/services/publishing/spi/ExecutionSubscriber.adoc[ExecutionSubscriber] SPI.
 +
 The framework provides a default implementation that just logs the interaction:
 +
@@ -516,7 +516,7 @@ src/test/java/
 <1> These are very simple unit tests of `SimpleObject` and `SimpleObjects` with the package structure the same as in `src/main/java`.
 They are written in JUnit 5, and use JMockito as the mocking library.
 <2> Integration tests for the module.
-These use the xref:refguide:applib-svc:WrapperFactory.adoc[WrapperFactory] to simulate interactions through the UI.
+These use the xref:system:generated:index/applib/services/wrapper/WrapperFactory.adoc[WrapperFactory] to simulate interactions through the UI.
 <3> The `SimpleModuleIntegTestAbstract` superclass bootstraps the module's integration tests.
 This is discussed in more detail below.
 

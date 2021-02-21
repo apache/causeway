@@ -19,6 +19,7 @@
 package org.apache.isis.extensions.secman.jpa.dom.tenancy;
 
 import java.util.Comparator;
+import java.util.Set;
 import java.util.TreeSet;
 
 import javax.persistence.Column;
@@ -52,25 +53,25 @@ import lombok.Setter;
 
 @Entity
 @Table(
-        name = "ApplicationTenancy", 
+        name = "ApplicationTenancy",
         uniqueConstraints =
             @UniqueConstraint(
-                    name = "ApplicationTenancy_name_UNQ", 
+                    name = "ApplicationTenancy_name_UNQ",
                     columnNames={"name"})
 )
 @NamedQueries({
     @NamedQuery(
-            name = NamedQueryNames.TENANCY_BY_PATH, 
+            name = NamedQueryNames.TENANCY_BY_PATH,
             query = "SELECT t "
                   + "FROM org.apache.isis.extensions.secman.jpa.dom.tenancy.ApplicationTenancy t "
                   + "WHERE t.path = :path"),
     @NamedQuery(
-            name = NamedQueryNames.TENANCY_BY_NAME, 
+            name = NamedQueryNames.TENANCY_BY_NAME,
             query = "SELECT t "
                   + "FROM org.apache.isis.extensions.secman.jpa.dom.tenancy.ApplicationTenancy t "
                   + "WHERE t.name = :name"),
     @NamedQuery(
-            name = NamedQueryNames.TENANCY_BY_NAME_OR_PATH_MATCHING, 
+            name = NamedQueryNames.TENANCY_BY_NAME_OR_PATH_MATCHING,
             query = "SELECT t "
                   + "FROM org.apache.isis.extensions.secman.jpa.dom.tenancy.ApplicationTenancy t "
                   + "WHERE t.name LIKE '%:regex%' "
@@ -84,8 +85,8 @@ import lombok.Setter;
 @DomainObjectLayout(
         bookmarking = BookmarkPolicy.AS_ROOT
         )
-public class ApplicationTenancy 
-implements 
+public class ApplicationTenancy
+implements
     Comparable<ApplicationTenancy>,
     org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy {
 
@@ -144,14 +145,13 @@ implements
 
     @OneToMany(mappedBy="parent")
     @Collection(
-            domainEvent = ChildrenDomainEvent.class,
-            editing = Editing.DISABLED
+            domainEvent = ChildrenDomainEvent.class
             )
     @CollectionLayout(
             defaultView="table"
             )
     @Getter @Setter
-    private TreeSet<ApplicationTenancy> children = new TreeSet<>();
+    private Set<ApplicationTenancy> children = new TreeSet<>();
 
 
     // necessary for integration tests

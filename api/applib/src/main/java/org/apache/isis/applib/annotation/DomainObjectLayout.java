@@ -53,6 +53,10 @@ public @interface DomainObjectLayout {
 
     /**
      * Indicates the css class that a domain class (type) should have.
+     *
+     * @see ActionLayout#cssClass()
+     * @see PropertyLayout#cssClass()
+     * @see CollectionLayout#cssClass()
      */
     String cssClass()
             default "";
@@ -60,6 +64,8 @@ public @interface DomainObjectLayout {
     /**
      * Indicates the <a href="http://fortawesome.github.io/Font-Awesome/">Font Awesome</a> CSS class to decorate an
      * domain object.
+     *
+     * @see ActionLayout#cssClassFa()
      */
     String cssClassFa()
             default "";
@@ -77,12 +83,21 @@ public @interface DomainObjectLayout {
 
     /**
      * Description of this class, eg to be rendered in a tooltip.
+     *
+     * @see ActionLayout#describedAs()
+     * @see PropertyLayout#describedAs()
+     * @see CollectionLayout#describedAs()
      */
     String describedAs()
             default "";
 
     /**
      * Name of this class (overriding the name derived from its name in code).
+     *
+     * @see ActionLayout#named()
+     * @see PropertyLayout#named()
+     * @see CollectionLayout#named()
+     * @see DomainObjectLayout#plural()
      */
     String named()
             default "";
@@ -98,12 +113,16 @@ public @interface DomainObjectLayout {
      * <p>
      * If annotated on a type, then the page size refers to standalone
      * collections (eg as returned from a repository query).
+     *
+     * @see CollectionLayout#paged()
      */
     int paged()
             default -1;
 
     /**
      * The plural name of the class.
+     *
+     * @see DomainObjectLayout#named()
      */
     String plural()
             default "";
@@ -114,6 +133,10 @@ public @interface DomainObjectLayout {
      * <p>
      * This subclass must provide a no-arg constructor; the fields are set reflectively.
      * </p>
+     *
+     * @see DomainObjectLayout#iconUiEvent()
+     * @see DomainObjectLayout#layoutUiEvent()
+     * @see DomainObjectLayout#titleUiEvent()
      */
     Class<? extends CssClassUiEvent<?>>
             cssClassUiEvent()
@@ -125,6 +148,10 @@ public @interface DomainObjectLayout {
      * <p>
      * This subclass must provide a no-arg constructor; the fields are set reflectively.
      * </p>
+     *
+     * @see DomainObjectLayout#cssClassUiEvent()
+     * @see DomainObjectLayout#layoutUiEvent()
+     * @see DomainObjectLayout#titleUiEvent()
      */
     Class<? extends IconUiEvent<?>>
             iconUiEvent()
@@ -136,6 +163,11 @@ public @interface DomainObjectLayout {
      * <p>
      * This subclass must provide a no-arg constructor; the fields are set reflectively.
      * </p>
+     *
+     *
+     * @see DomainObjectLayout#cssClassUiEvent()
+     * @see DomainObjectLayout#iconUiEvent()
+     * @see DomainObjectLayout#titleUiEvent()
      */
     Class<? extends LayoutUiEvent<?>>
             layoutUiEvent()
@@ -147,6 +179,11 @@ public @interface DomainObjectLayout {
      * <p>
      * This subclass must provide a no-arg constructor; the fields are set reflectively.
      * </p>
+     *
+     *
+     * @see DomainObjectLayout#cssClassUiEvent()
+     * @see DomainObjectLayout#iconUiEvent()
+     * @see DomainObjectLayout#layoutUiEvent()
      */
     Class<? extends TitleUiEvent<?>>
             titleUiEvent()

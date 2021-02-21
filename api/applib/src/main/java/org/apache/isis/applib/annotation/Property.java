@@ -61,6 +61,9 @@ public @interface Property {
      *     The processor itself is used by {@link ContentMappingServiceForCommandDto} and
      *     {@link ContentMappingServiceForCommandsDto} to dynamically transform the DTOs.
      * </p>
+     *
+     * @see Action#commandDtoProcessor()
+     * @see Property#commandPublishing()
      */
     Class<? extends CommandDtoProcessor> commandDtoProcessor()
             default CommandDtoProcessor.class;
@@ -68,6 +71,9 @@ public @interface Property {
     /**
      * Whether property edits, captured as {@link Command}s,
      * should be published to {@link CommandSubscriber}s.
+     *
+     * @see Action#commandPublishing()
+     * @see Property#commandDtoProcessor()
      */
     Publishing commandPublishing()
             default Publishing.NOT_SPECIFIED;
@@ -90,6 +96,10 @@ public @interface Property {
      * <p>
      * This subclass must provide a no-arg constructor; the fields are set reflectively.
      * </p>
+     *
+     * @see Action#domainEvent()
+     * @see Collection#domainEvent()
+     * @see DomainObject#propertyDomainEvent()
      */
     Class<? extends PropertyDomainEvent<?,?>> domainEvent()
             default PropertyDomainEvent.Default.class;
@@ -100,6 +110,9 @@ public @interface Property {
      * <p>
      *     Note that non-editable objects can nevertheless have actions invoked upon them.
      * </p>
+     *
+     * @see Property#editingDisabledReason()
+     * @see DomainObject#editing()
      */
     Editing editing()
             default Editing.NOT_SPECIFIED;
@@ -107,6 +120,8 @@ public @interface Property {
     /**
      * If {@link #editing()} is set to {@link Editing#DISABLED},
      * then the reason to provide to the user as to why this property cannot be edited.
+     *
+     * @see Property#editing()
      */
     String editingDisabledReason()
             default "";
@@ -116,6 +131,8 @@ public @interface Property {
      * {@link Execution}s
      * (triggered property edits), should be dispatched to
      * {@link ExecutionSubscriber}s.
+     *
+     * @see Action#executionPublishing()
      */
     Publishing executionPublishing()
             default Publishing.NOT_SPECIFIED;
@@ -128,12 +145,17 @@ public @interface Property {
      * </p>
      *
      * @see <a href="http://www.w3schools.com/tags/att_input_accept.asp">http://www.w3schools.com</a>
+     * @see Parameter#fileAccept()
+     * @see Action#fileAccept()
      */
     String fileAccept()
             default "";
 
     /**
      * Indicates where the property is not visible to the user.
+     *
+     * @see Action#hidden()
+     * @see Collection#hidden()
      */
     Where hidden()
             default Where.NOT_SPECIFIED;
@@ -144,6 +166,8 @@ public @interface Property {
      * <p>
      *     The default value (<code>-1</code>) indicates that no maxLength has been specified.
      * </p>
+     *
+     * @see Parameter#maxLength()
      */
     int maxLength()
             default -1;
@@ -165,6 +189,8 @@ public @interface Property {
      * <p>
      * If more than one is provided, then all must be satisfied (in effect &quot;AND&quot;ed together).
      * </p>
+     *
+     * @see Parameter#mustSatisfy()
      */
     Class<? extends Specification>[] mustSatisfy()
             default {};
@@ -177,6 +203,8 @@ public @interface Property {
      *     means that the property is required unless it has been overridden by <code>javax.jdo.annotations.Column</code>
      *     with its <code>javax.jdo.annotations.Column#allowsNull()</code> attribute set to true.
      * </p>
+     *
+     * @see Parameter#optionality()
      */
     Optionality optionality()
             default Optionality.NOT_SPECIFIED;
@@ -200,6 +228,10 @@ public @interface Property {
 
     /**
      * Regular expression pattern that a value should conform to, and can be formatted as.
+     *
+     * @see Parameter#regexPattern()
+     * @see Property#regexPatternReplacement()
+     * @see Property#regexPatternFlags()
      */
     String regexPattern()
             default "";
@@ -210,12 +242,16 @@ public @interface Property {
      * <p>
      *     The default value, <code>0</code>, means that no flags have been specified.
      * </p>
+     *
+     * @see Property#regexPattern()
      */
     int regexPatternFlags()
             default 0;
 
     /**
      * Replacement text for the pattern in generated error message.
+     *
+     * @see Property#regexPattern()
      */
     String regexPatternReplacement()
             default "Doesn't match pattern";

@@ -215,7 +215,7 @@ In practice we suspect there will be few cases where the programmatic approach i
 == Using `WrapperFactory`
 
 Using the declarative approach does require that the method to emit the event is an action called directly by the framework (rather than a helper method programmatically called by that action).
-However by using the xref:refguide:applib-svc:WrapperFactory.adoc[`WrapperFactory`] we can invoke that helper method "through" the framework, thereby allowing the framework to emit events.
+However by using the xref:system:generated:index/applib/services/wrapper/WrapperFactory.adoc[WrapperFactory] we can invoke that helper method "through" the framework, thereby allowing the framework to emit events.
 (It can also optionally perform validation checks and other concerns associated with the UI).
 
 Another use case for the `WrapperFactory` is when you wish to enforce a (lack-of-) trust boundary between the caller and the callee.
@@ -264,7 +264,7 @@ The events are received by any/all xref:refguide:applib-svc:CommandSubscriber.ad
 +
 These events apply to actions annotated with xref:system:generated:index/applib/annotation/Action.adoc#executionPublishing[`@Action#executionPublishing()`]) and properties annotated with xref:system:generated:index/applib/annotation/Property.adoc#executionPublishing[`@Property#executionPublishing`]).
 +
-The events are received by any/all xref:refguide:applib-svc:ExecutionSubscriber.adoc[`ExecutionSubscriber`]s
+The events are received by any/all xref:system:generated:index/applib/services/publishing/spi/ExecutionSubscriber.adoc[`ExecutionSubscriber`]s
 
 * Entity change publishing, representing an entity that has changed its state.
 +

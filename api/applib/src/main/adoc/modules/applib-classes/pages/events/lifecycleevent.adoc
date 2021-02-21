@@ -30,7 +30,7 @@ The lifecycle event classes are listed in the table below:
 `ObjectCreatedEvent`]
 |(abstract class). +
 `ObjectCreatedEvent.Default` is the concrete implementation that is used.
-|Broadcast when an object is first instantiated using the xref:refguide:applib-svc:FactoryService.adoc[`FactoryService`]'s
+|Broadcast when an object is first instantiated using the xref:system:generated:index/applib/services/factory/FactoryService.adoc[`FactoryService`]'s
 `#instantiate(...)` method.
 
 

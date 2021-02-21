@@ -51,7 +51,7 @@ In addition to Apache Isis' Shiro-based implementation of its authentication and
 ====
 A further aspect of security is auditing: recording what data was modified by which user.
 
-Apache Isis provides the xref:refguide:applib-svc:InteractionContext.adoc[`InteractionContext`]
+Apache Isis provides the xref:system:generated:index/applib/services/iactn/InteractionContext.adoc[`InteractionContext`]
 can be used to track the actions being invoked, and the xref:refguide:applib-svc:EntityPropertyChangeSubscriber.adoc[EntityPropertyChangeSubscriber]
 captures what data was modified as a result (auditing).
 When ``Interaction``s are persisted (eg by way of the xref:mappings:outbox-publisher:about.adoc[Outbox Publisher] mapping module) then this provides excellent

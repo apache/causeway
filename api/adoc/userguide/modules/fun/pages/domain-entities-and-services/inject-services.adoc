@@ -168,7 +168,7 @@ These will be in the order as defined by the Spring link:https://docs.spring.io/
 This pattern can be useful when implementing the link:https://en.wikipedia.org/wiki/Chain-of-responsibility_pattern[chain of responsibility] design pattern, that is, looking for the first implementation that can handle a request.
 
 It is also useful to "broadcast" or fan out an implementation.
-For example, the framework defines the xref:refguide:applib-svc:ExecutionSubscriber.adoc[`PublisherService`] SPI, which is used to publish xref:refguide:schema:ixn.adoc[Interaction Execution]s to external systems.
+For example, the framework defines the xref:system:generated:index/applib/services/publishing/spi/ExecutionSubscriber.adoc[ExecutionSubscriber] SPI, which is used to publish xref:refguide:schema:ixn.adoc[Interaction Execution]s to external systems.
 The framework provides a simple logging implementation, which will always be called.
 All other implementations available will also be called.
 

@@ -31,7 +31,7 @@ Either of these can be suppressed, if required, using a vetoing subscriber that 
 //Several of the extension libraries use bookmarks.
 //For example the xref:refguide:applib-svc:EntityPropertyChangeSubscriber.adoc[EntityPropertyChangeSubscriber] uses bookmarks to identify the object that is being modified.
 //
-//Serialized form of bookmarks also appear within  xref:refguide:schema:about.adoc[schema] instances, for example as used by xref:refguide:applib-svc:CommandServiceInternal.adoc[`CommandService`] and the xref:refguide:applib-svc:ExecutionSubscriber.adoc[`PublisherService`].
+//Serialized form of bookmarks also appear within  xref:refguide:schema:about.adoc[schema] instances, for example as used by xref:refguide:applib-svc:CommandServiceInternal.adoc[`CommandService`] and the xref:system:generated:index/applib/services/publishing/spi/ExecutionSubscriber.adoc[ExecutionSubscriber].
 
 
 == See Also

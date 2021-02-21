@@ -125,7 +125,7 @@ public String default0UpdateName() {
     return getName();
 }
 ----
-<.> Publishing enabled means that the action invocation is converted into XML and dispatched to all configured implementations of the xref:refguide:applib-svc:ExecutionSubscriber.adoc[PublisherService] SPI.
+<.> Publishing enabled means that the action invocation is converted into XML and dispatched to all configured implementations of the xref:system:generated:index/applib/services/publishing/spi/ExecutionSubscriber.adoc[ExecutionSubscriber] SPI.
 +
 The framework provides a default implementation that just logs the interaction:
 +

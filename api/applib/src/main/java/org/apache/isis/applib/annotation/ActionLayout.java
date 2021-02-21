@@ -61,6 +61,10 @@ public @interface ActionLayout {
      * <p>
      *     For the Wicket viewer, this can be a bootstrap class such as <code>btn-info</code>.
      * </p>
+     *
+     * @see PropertyLayout#cssClass()
+     * @see CollectionLayout#cssClass()
+     * @see DomainObjectLayout#cssClass()
      */
     String cssClass()
             default "";
@@ -68,19 +72,32 @@ public @interface ActionLayout {
     /**
      * Indicates the <a href="http://fortawesome.github.io/Font-Awesome/">Font Awesome</a> CSS class to decorate an
      * action (button or menu item).
+     *
+     * @see ActionLayout#cssClassFaPosition()
+     * @see DomainObjectLayout#cssClassFa()
      */
     String cssClassFa()
             default "";
 
     /**
      * Indicates the position of the <a href="http://fortawesome.github.io/Font-Awesome/">Font Awesome</a>
-     * icon. The icon could be rendered on the left or the right of the action button
+     * icon.
+     *
+     * <p>
+     * The icon could be rendered on the left or the right of the action button
+     * </p>
+     *
+     * @see ActionLayout#cssClassFa()
      */
     CssClassFaPosition cssClassFaPosition()
             default CssClassFaPosition.LEFT;
 
     /**
      * Description of this action, eg to be rendered in a tooltip.
+     *
+     * @see PropertyLayout#describedAs()
+     * @see CollectionLayout#describedAs()
+     * @see DomainObjectLayout#describedAs()
      */
     String describedAs()
             default "";
@@ -93,6 +110,10 @@ public @interface ActionLayout {
 
     /**
      * Name of this action (overriding the name derived from its name in code).
+     *
+     * @see PropertyLayout#named()
+     * @see CollectionLayout#named()
+     * @see DomainObjectLayout#named()
      */
     String named()
             default "";

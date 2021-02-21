@@ -92,7 +92,7 @@ Said another way: interactions are performed "as if" they are through the viewer
 
 One possible use case for the listener API would be to autogenerate documentation, for example a sequence diagram from tests.
 
-Such a feature would probably also use xref:refguide:applib-svc:InteractionContext.adoc[`InteractionContext`], which builds up an execution call graph of interactions between (wrapped) objects.
+Such a feature would probably also use xref:system:generated:index/applib/services/iactn/InteractionContext.adoc[`InteractionContext`], which builds up an execution call graph of interactions between (wrapped) objects.
 
 
 

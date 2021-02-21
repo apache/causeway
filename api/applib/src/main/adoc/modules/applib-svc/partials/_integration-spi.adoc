@@ -23,7 +23,7 @@ TIP: see also the xref:mappings:ROOT:about.adoc[Bounded Context Mappings] catalo
 |xref:refguide:applib-svc:CommandExecutorService.adoc[CommandExecutorService]
 |Service used to execute commands.
 One use case is to replay commands from a primary onto a secondary (see xref:extensions:command-replay:about.adoc[Command Replay] ; another is in support of async commands (using
-xref:refguide:applib-svc:WrapperFactory.adoc[`WrapperFactory`] ).
+xref:system:generated:index/applib/services/wrapper/WrapperFactory.adoc[WrapperFactory] ).
 
 
 |xref:refguide:applib-svc:CommandSubscriber.adoc[CommandSubscriber]
@@ -38,7 +38,7 @@ The xref:extensions:command-log:about.adoc[Command Log] extension implements the
 |Publish the changes to all changed properties of all domain object within an interaction.
 
 
-|xref:refguide:applib-svc:ExecutionSubscriber.adoc[ExecutionSubscriber]
+|xref:system:generated:index/applib/services/publishing/spi/ExecutionSubscriber.adoc[ExecutionSubscriber]
 |Publish any action invocations/property edits and changed objects, typically for interchange with an external system in a different bounded context.
 
 

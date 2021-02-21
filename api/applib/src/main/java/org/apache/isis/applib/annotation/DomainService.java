@@ -35,11 +35,11 @@ import org.springframework.stereotype.Service;
  * <p>
  * Also indicates whether the domain service acts as a repository for an entity, and menu ordering UI hints.
  * </p>
- * 
- * @implNote Meta annotation {@link Service} allows for the Spring framework to pick up (discover) the 
- * annotated type. 
+ *
+ * @implNote Meta annotation {@link Service} allows for the Spring framework to pick up (discover) the
+ * annotated type.
  * For more details see {@code org.apache.isis.core.config.beans.IsisBeanFactoryPostProcessorForSpring}.
- * 
+ *
  * @since 1.x {@index}
  */
 @Inherited
@@ -52,7 +52,9 @@ import org.springframework.stereotype.Service;
 public @interface DomainService {
 
     /**
-     * The nature of this service, eg for menus, contributed actions, repository.
+     * The nature of this service, either in the UI or REST only
+     *
+     * @see DomainObject#nature()
      */
     NatureOfService nature()
             default NatureOfService.VIEW;
@@ -62,8 +64,11 @@ public @interface DomainService {
      *
      * <p>
      * If not specified then either the optional &quot;getId()&quot is used, otherwise the class' name.
+     * </p>
+     *
+     * @see DomainObject#objectType()
      */
     String objectType()
             default "";
-    
+
 }

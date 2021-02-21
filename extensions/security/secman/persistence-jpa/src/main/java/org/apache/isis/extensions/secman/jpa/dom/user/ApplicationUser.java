@@ -20,6 +20,7 @@ package org.apache.isis.extensions.secman.jpa.dom.user;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import java.util.TreeSet;
 
 import javax.inject.Inject;
@@ -73,30 +74,30 @@ import lombok.val;
 
 @Entity
 @Table(
-        name = "ApplicationUser", 
+        name = "ApplicationUser",
         uniqueConstraints =
             @UniqueConstraint(
-                    name = "ApplicationUser_username_UNQ", 
+                    name = "ApplicationUser_username_UNQ",
                     columnNames={"username"})
 )
 @NamedQueries({
     @NamedQuery(
-            name = NamedQueryNames.USER_BY_USERNAME, 
+            name = NamedQueryNames.USER_BY_USERNAME,
             query = "SELECT u "
                   + "FROM org.apache.isis.extensions.secman.jpa.dom.user.ApplicationUser u "
                   + "WHERE u.username = :username"),
     @NamedQuery(
-            name = NamedQueryNames.USER_BY_EMAIL, 
+            name = NamedQueryNames.USER_BY_EMAIL,
             query = "SELECT u "
                   + "FROM org.apache.isis.extensions.secman.jpa.dom.user.ApplicationUser u "
                   + "WHERE u.emailAddress = :emailAddress"),
     @NamedQuery(
-            name = NamedQueryNames.USER_BY_ATPATH, 
+            name = NamedQueryNames.USER_BY_ATPATH,
             query = "SELECT u "
                   + "FROM org.apache.isis.extensions.secman.jpa.dom.user.ApplicationUser u "
                   + "WHERE u.atPath = :atPath"),
     @NamedQuery(
-            name = NamedQueryNames.USER_FIND, 
+            name = NamedQueryNames.USER_FIND,
             query = "SELECT u "
                   + "FROM org.apache.isis.extensions.secman.jpa.dom.user.ApplicationUser u "
                   + "WHERE u.username LIKE '%:regex%'"
@@ -114,7 +115,7 @@ import lombok.val;
 @DomainObjectLayout(
         bookmarking = BookmarkPolicy.AS_ROOT
         )
-public class ApplicationUser implements Comparable<ApplicationUser>, 
+public class ApplicationUser implements Comparable<ApplicationUser>,
 org.apache.isis.extensions.secman.api.user.ApplicationUser {
 
     @Inject private transient ApplicationUserRepository applicationUserRepository;
@@ -132,7 +133,7 @@ org.apache.isis.extensions.secman.api.user.ApplicationUser {
     @Id
     @GeneratedValue
     private Long id;
-    
+
     // -- name (derived property)
 
     public static class NameDomainEvent extends PropertyDomainEvent<String> {}
@@ -363,19 +364,18 @@ org.apache.isis.extensions.secman.api.user.ApplicationUser {
 //    @javax.jdo.annotations.Element(column="roleId")
     @ManyToMany(mappedBy = "users")
     @JoinTable(
-            name = "ApplicationUserRoles", 
-            joinColumns = {@JoinColumn(name = "userId")}, 
+            name = "ApplicationUserRoles",
+            joinColumns = {@JoinColumn(name = "userId")},
             inverseJoinColumns = {@JoinColumn(name = "roleId")})
     @Collection(
-            domainEvent = RolesDomainEvent.class,
-            editing = Editing.DISABLED
+            domainEvent = RolesDomainEvent.class
             )
     @CollectionLayout(
             defaultView="table"
             )
     @MemberOrder(sequence = "20")
     @Getter @Setter
-    private TreeSet<ApplicationRole> roles = new TreeSet<>();
+    private Set<ApplicationRole> roles = new TreeSet<>();
 
 
     // -- PermissionSet (programmatic)
@@ -427,7 +427,7 @@ org.apache.isis.extensions.secman.api.user.ApplicationUser {
     // -- equals, hashCode, compareTo, toString
     private static final String propertyNames = "username";
 
-    private static final ObjectContract<ApplicationUser> contract = 
+    private static final ObjectContract<ApplicationUser> contract =
             ObjectContracts.parse(ApplicationUser.class, propertyNames);
 
 
