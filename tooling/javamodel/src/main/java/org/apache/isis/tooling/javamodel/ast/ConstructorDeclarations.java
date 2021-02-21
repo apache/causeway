@@ -18,9 +18,12 @@
  */
 package org.apache.isis.tooling.javamodel.ast;
 
+import com.github.javaparser.ast.body.CallableDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.ConstructorDeclaration;
 import com.github.javaparser.ast.body.EnumDeclaration;
+import com.github.javaparser.ast.body.MethodDeclaration;
+import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.type.TypeParameter;
 
 import org.apache.isis.commons.collections.Can;
@@ -40,44 +43,44 @@ public final class ConstructorDeclarations {
         .forEach(p->p.getAnnotations().clear());
         return clone.getDeclarationAsString(false, false, true);
     }
-    
+
     public static String asNormalizedName(final @NonNull ConstructorDeclaration cd) {
         return cd.getNameAsString().trim();
     }
-    
+
     public static Can<TypeParameter> getTypeParameters(final @NonNull ConstructorDeclaration cd) {
         return Can.ofStream(cd.getTypeParameters().stream());
     }
-    
+
     public static boolean isEffectivePublic(
-            final @NonNull ConstructorDeclaration cd, 
+            final @NonNull ConstructorDeclaration cd,
             final @NonNull ClassOrInterfaceDeclaration context) {
-        
+
         if(!ClassOrInterfaceDeclarations.isEffectivePublic(context)) {
             return false;
         }
         if(context.isInterface()) {
             return true;
         }
-       
-        return !cd.isPrivate() 
-                && !cd.isAbstract() 
+
+        return !cd.isPrivate()
+                && !cd.isAbstract()
                 && !cd.isProtected()
                 ;
     }
 
     public static boolean isEffectivePublic(
-            final @NonNull ConstructorDeclaration cd, 
+            final @NonNull ConstructorDeclaration cd,
             final @NonNull EnumDeclaration context) {
 
         if(!EnumDeclarations.isEffectivePublic(context)) {
             return false;
         }
 
-        return !cd.isPrivate() 
-                && !cd.isAbstract() 
+        return !cd.isPrivate()
+                && !cd.isAbstract()
                 && !cd.isProtected()
                 ;
     }
-    
+
 }

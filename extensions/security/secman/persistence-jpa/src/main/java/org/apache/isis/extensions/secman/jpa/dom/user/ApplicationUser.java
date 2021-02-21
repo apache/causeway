@@ -21,6 +21,7 @@ package org.apache.isis.extensions.secman.jpa.dom.user;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import java.util.SortedSet;
 import java.util.TreeSet;
 
 import javax.inject.Inject;
@@ -375,7 +376,7 @@ org.apache.isis.extensions.secman.api.user.ApplicationUser {
             )
     @MemberOrder(sequence = "20")
     @Getter @Setter
-    private Set<ApplicationRole> roles = new TreeSet<>();
+    private SortedSet<ApplicationRole> roles = new TreeSet<>();
 
 
     // -- PermissionSet (programmatic)

@@ -43,37 +43,6 @@ public final class MethodDeclarations {
         return clone.getDeclarationAsString(false, false, true);
     }
 
-    public static String asAnchor(final @NonNull MethodDeclaration md) {
-        return nameAndParams(md, "__", "_", "");
-    }
-
-    public static String asMethodSignature(final @NonNull MethodDeclaration md) {
-        return nameAndParams(md, "(", ", ", ")");
-    }
-
-//    private static final PrinterConfiguration printingNoCommentsConfiguration = 
-//            new DefaultPrinterConfiguration()
-//            .removeOption(new DefaultConfigurationOption(ConfigOption.PRINT_COMMENTS));
-
-    private static String nameAndParams(@NonNull MethodDeclaration md, String openParam, String comma, String closeParam) {
-        final StringBuilder sb = new StringBuilder();
-        sb.append(md.getName());
-        sb.append(openParam);
-        boolean firstParam = true;
-        for (Parameter param : md.getParameters()) {
-            if (firstParam) {
-                firstParam = false;
-            } else {
-                sb.append(comma);
-            }
-            final String paramType = param.getType().asString();
-            final String paramTypeNoWildcard = paramType.split("<")[0];
-            sb.append(paramTypeNoWildcard);
-        }
-        sb.append(closeParam);
-        return sb.toString();
-    }
-
     public static String asNormalizedName(final @NonNull MethodDeclaration md) {
         return md.getNameAsString().trim();
     }

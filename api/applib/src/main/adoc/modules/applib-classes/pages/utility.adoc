@@ -9,7 +9,7 @@ classes designed to simplify the coding of some common tasks.
 
 
 
-include::utility/Enums.adoc[leveloffset=+1]
-include::utility/ObjectContracts.adoc[leveloffset=+1]
-include::utility/Reasons.adoc[leveloffset=+1]
-include::utility/TitleBuffer.adoc[leveloffset=+1]
+include::system:generated:page$index/applib/util/Enums.adoc.adoc[leveloffset=+1]
+include::system:generated:page$index/applib/util/ObjectContracts.adoc[leveloffset=+1]
+include::system:generated:page$index/applib/util/Reasons.adoc[leveloffset=+1]
+include::system:generated:page$index/applib/util/TitleBuffer.adoc[leveloffset=+1]

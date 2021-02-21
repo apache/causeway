@@ -35,6 +35,8 @@ import org.apache.isis.tooling.j2adoc.J2AdocContext;
 import org.apache.isis.tooling.j2adoc.J2AdocUnit;
 import org.apache.isis.tooling.j2adoc.convert.J2AdocConverter;
 import org.apache.isis.tooling.j2adoc.convert.J2AdocConverterDefault;
+import org.apache.isis.tooling.javamodel.ast.CallableDeclarations;
+import org.apache.isis.tooling.javamodel.ast.ConstructorDeclarations;
 import org.apache.isis.tooling.javamodel.ast.Javadocs;
 import org.apache.isis.tooling.javamodel.ast.MethodDeclarations;
 import org.apache.isis.tooling.model4adoc.AsciiDocFactory;
@@ -95,15 +97,15 @@ extends UnitFormatterAbstract {
         appendMembersToList(ul, unit,
                 unit.getTypeDeclaration().getPublicConstructorDeclarations(),
                 decl -> String.format("xref:#%s[%s]",
-                        decl.getName(),
-                        decl.getName()),
+                        CallableDeclarations.asAnchor(decl),
+                        CallableDeclarations.asMethodSignature(decl)),
                 firstParaOnly);
 
         appendMembersToList(ul, unit,
                 unit.getTypeDeclaration().getPublicMethodDeclarations(),
                 decl -> String.format("xref:#%s[%s]",
-                        MethodDeclarations.asAnchor(decl),
-                        MethodDeclarations.asMethodSignature(decl)),
+                        CallableDeclarations.asAnchor(decl),
+                        CallableDeclarations.asMethodSignature(decl)),
                 firstParaOnly);
 
 
@@ -140,14 +142,14 @@ extends UnitFormatterAbstract {
 
         appendMemberSections(membersDoc, unit,
                 unit.getTypeDeclaration().getPublicConstructorDeclarations(),
-                decl -> decl.getName().toString(),
-                decl -> decl.getName().toString(),
+                CallableDeclarations::asAnchor,
+                CallableDeclarations::asMethodSignature,
                 allJavadocStrategy);
 
         appendMemberSections(membersDoc, unit,
                 unit.getTypeDeclaration().getPublicMethodDeclarations(),
-                decl -> MethodDeclarations.asAnchor(decl),
-                decl -> MethodDeclarations.asMethodSignature(decl),
+                CallableDeclarations::asAnchor,
+                CallableDeclarations::asMethodSignature,
                 allJavadocStrategy);
 
         if (!membersDoc.getBlocks().isEmpty()) {

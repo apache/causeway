@@ -98,12 +98,8 @@ The framework provides default implementations for many of the domain services.
 This is convenient, but sometimes you will want to replace the default implementation with your own service implementation.
 This is most commonly done using the Spring link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/core/annotation/Order.html[@Order] annotation.
 Inspect the source code of the default implementation to determine which value to use.
-The `OrderPrecedence` class provides some pre-defined precedences:
+The xref:system:generated:index/applib/annotation/OrderPrecedence.adoc[OrderPrecedence] class provides some pre-defined precedences.
 
-[source,java]
-----
-include::applib-ant:example$annotation/OrderPrecedence.java[tags=refguide]
-----
 
 Spring offers a number of other mechanisms to specify the ordering; these can also be used.
 

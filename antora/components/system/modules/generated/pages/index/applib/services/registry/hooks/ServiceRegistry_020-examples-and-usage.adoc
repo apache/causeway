@@ -21,3 +21,18 @@ Optional<MyService> myServiceIfAny = serviceRegistry.lookupService(MyService.cla
 MyService myService = serviceRegistry.lookupServiceElseFail(MyService.class);
 ----
 
+
+== Related Services
+
+* xref:system:generated:index/applib/services/inject/ServiceInjector.adoc[ServiceInjector]
++
+to inject domain services rather than just look them up.
+
+* xref:system:generated:index/applib/services/factory/FactoryService.adoc[FactoryService]
++
+also provides a method that will inject domain services
+
+* xref:system:generated:index/applib/services/repository/RepositoryService.adoc[RepositoryService].
++
+also provides a method that will inject domain services
+
