@@ -1,0 +1,28 @@
+=== Names
+
+The xref:system:generated:index/applib/annotation/ActionLayout.adoc#named[named()] element explicitly specifies the action's name, overriding the name that would normally be inferred from the Java source code.
+
+[TIP]
+====
+Only use this attribute when the desired name cannot be used in Java source code.
+Examples of that include a name that would be a reserved Java keyword (eg "package"), or a name that has punctuation, eg apostrophes.
+====
+
+For example:
+
+[source,java]
+----
+public class Customer {
+    @ActionLayout(named="Get credit rating")        // <.>
+    public CreditRating obtainCreditRating() {
+        // ...
+    }
+}
+----
+
+<.> "get" normally indicates a property rather than an action.
+
+As an alternative to using the annotation, the dynamic xref:userguide:fun:ui.adoc#object-layout[file-based layout] can be used instead.
+
+The framework also provides a separate, powerful mechanism for xref:userguide:btb:i18n.adoc[internationalization].
+

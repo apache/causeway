@@ -1,0 +1,43 @@
+=== Editing
+
+
+The xref:system:generated:index/applib/annotation/DomainObject.adoc#editing[editing()] element determines whether a domain object's properties and collections are not editable (are read-only).
+
+The default is `AS_CONFIGURED`, meaning that the xref:refguide:config:sections/isis.applib.adoc#isis.applib.annotation.domain-object.editing[`isis.applib.annotation.domain-object.editing`]
+configuration property is used to determine the whether the object is modifiable:
+
+* `true` +
++ the object's properties and collections are modifiable.
+
+* `false` +
++ the object's properties and collections are read-only, ie _not_ modifiable.
+
+If there is no configuration property in `application.properties` then object are assumed to be modifiable.
+
+[TIP]
+====
+In other words, editing can be disabled globally by setting the xref:refguide:config:sections/isis.applib.adoc#isis.applib.annotation.domain-object.editing[`isis.applib.adoc#isis.applib.annotation.domain-object.editing`] configuration property:
+
+[source,ini]
+----
+isis.applib.annotation.domain-object.editing=false
+----
+
+We recommend this setting; it will help drive out the underlying business operations (processes and procedures) that require objects to change; these can then be captured as business actions.
+====
+
+This default can be overridden on an object-by-object basis; if `editing()` is set to `ENABLED` then the object's properties and collections are editable irrespective of the configured value; if set to `DISABLED` then the object's properties and collections are not editable irrespective of the configured value.
+
+For example:
+
+[source,java]
+----
+@DomainObject(
+    editing=Editing.DISABLED,
+    editingDisabledReason="Reference data, so cannot be modified"
+)
+public class Country {
+    ...
+}
+----
+

@@ -40,6 +40,9 @@ import org.springframework.stereotype.Service;
  * annotated type.
  * For more details see {@code org.apache.isis.core.config.beans.IsisBeanFactoryPostProcessorForSpring}.
  *
+ * @see DomainObject
+ * @see DomainServiceLayout
+ *
  * @since 1.x {@index}
  */
 @Inherited
@@ -60,10 +63,13 @@ public @interface DomainService {
             default NatureOfService.VIEW;
 
     /**
-     * Provides the (first part of the) unique identifier (OID) for the service (the instanceId is always &quot;1&quot;).
+     * Provides a unique abbreviation for the object type's, eg
+     * &quot;customer.CustomerService&quot; for CustomerService.
      *
      * <p>
-     * If not specified then either the optional &quot;getId()&quot is used, otherwise the class' name.
+     * This value, if specified, is used in the serialized form of the object's
+     * OID.  An OID is used by the framework to unique identify an object over
+     * time (same concept as a URN).
      * </p>
      *
      * @see DomainObject#objectType()

@@ -30,7 +30,10 @@ import java.lang.annotation.Target;
  * annotation.
  *
  * @since 1.x {@index}
- * @see org.apache.isis.applib.annotation.PropertyLayout
+ *
+ * @see ActionLayout
+ * @see PropertyLayout
+ * @see Parameter
  */
 @Inherited
 @Target({
@@ -41,13 +44,24 @@ import java.lang.annotation.Target;
 public @interface ParameterLayout {
 
     /**
-     * Indicates the css class that a parameter should have.
+     * Indicates the css class that a parameter should have, to
+     * allow more targeted styling in <code>application.css</code>.
+     *
+     * @see PropertyLayout#cssClass()
+     * @see ActionLayout#cssClass()
+     * @see CollectionLayout#cssClass()
+     * @see DomainObjectLayout#cssClass()
      */
     String cssClass()
             default "";
 
     /**
      * Description of this property, eg to be rendered in a tooltip.
+     *
+     * @see PropertyLayout#describedAs()
+     * @see ActionLayout#describedAs()
+     * @see CollectionLayout#describedAs()
+     * @see DomainObjectLayout#describedAs()
      */
     String describedAs()
             default "";
@@ -56,26 +70,59 @@ public @interface ParameterLayout {
      * In forms, positioning of the label (left, top or none) relative to the parameter value.
      *
      * <p>
-     * If not specified, the default depends upon the parameter value's datatype.
+     * If not specified, the default depends upon the parameter value's
+     * datatype (including whether the field is {@link #multiLine()}.
      * </p>
+     *
+     * @see #multiLine()
      */
     LabelPosition labelPosition()
             default LabelPosition.NOT_SPECIFIED;
 
     /**
      * Name of this action parameter.
+     *
+     * <p>
+     *     The name of an action parameters is available to the framework
+     *     provided that the code is compiled using <code>-parameters</code>
+     *     (for <code>javac</code>.
+     * </p>
+     *
+     * <p>
+     * The only reason then to name the parameter is if the desired name is a reserved Java keyword, such as `default` or `package`.
+     * </p>
+     *
+     * @see ActionLayout#named()
+     * @see PropertyLayout#named()
+     * @see CollectionLayout#named()
+     * @see DomainObjectLayout#named()
+     * @see DomainServiceLayout#named()
+     * @see ParameterLayout#namedEscaped()
      */
     String named()
             default "";
 
     /**
      * A flag indicating whether the value of {@linkplain #named()} should be HTML escaped or not.
+     *
+     * @see PropertyLayout#namedEscaped()
+     * @see CollectionLayout#namedEscaped()
+     * @see ParameterLayout#named()
      */
     boolean namedEscaped()
             default true;
 
     /**
-     * For string parameters (and properties), whether to render as a text area over multiple lines.
+     * For string parameters (and properties), whether to render as a text area
+     * over multiple lines.
+     *
+     * <p>
+     *     If set to &gt; 1, then {@link #labelPosition()} defaults to
+     *     {@link LabelPosition#TOP top}.
+     * </p>
+     *
+     * @see #labelPosition()
+     * @see PropertyLayout#multiLine()
      */
     int multiLine()
             default -1;
@@ -103,12 +150,20 @@ public @interface ParameterLayout {
      * 1-may-2013 for the start date but using 31-may-2013 (the day before) for the end date.  What is stored
      * In the domain object, itself, however, the value stored is 1-jun-2013.
      * </p>
+     *
+     * @see PropertyLayout#renderDay()
      */
     RenderDay renderDay()
             default RenderDay.NOT_SPECIFIED;
 
     /**
      * The typical entry length of a field, use to determine the optimum width for display
+     *
+     * <p>
+     *     Note: the Wicket viewer does not use this information.
+     * </p>
+     *
+     * @see PropertyLayout#typicalLength()
      */
     int typicalLength()
             default -1;

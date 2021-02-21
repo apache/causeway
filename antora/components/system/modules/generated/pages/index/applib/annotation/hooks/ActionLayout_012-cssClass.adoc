@@ -1,0 +1,25 @@
+=== CSS Styling
+
+The xref:system:generated:index/applib/annotation/ActionLayout.adoc#cssClass[cssClass()] element can be used to render additional CSS classes in the HTML (a wrapping `<div>`) that represents the action.
+xref:refguide:config:application-specific/application-css.adoc[Application-specific CSS] can then be used to target and adjust the UI representation of that particular element.
+
+For example:
+
+[source,java]
+----
+public class ToDoItem {
+    @ActionLayout(cssClass="x-key")
+    public ToDoItem postpone(LocalDate until) { /* ... */ }
+    ...
+}
+----
+
+[NOTE]
+====
+The similar xref:system:generated:index/applib/annotation/ActionLayout.adoc#cssClassFa[`@ActionLayout#cssClassFa`] annotation attribute is also used as a hint to apply CSS, specifically to add http://fortawesome.github.io/Font-Awesome/icons/[Font Awesome icons] on action menu items or buttons.
+====
+
+==== Alternatives
+
+As an alternative to using the annotation, the dynamic xref:userguide:fun:ui.adoc#object-layout[file-based layout] can be used instead.
+

@@ -29,6 +29,11 @@ import java.util.Comparator;
 /**
  * Layout hints for collections.
  *
+ * @see ActionLayout
+ * @see PropertyLayout
+ * @see DomainObjectLayout
+ * @see Collection
+ *
  * @since 1.x {@index}
  */
 @Inherited
@@ -43,10 +48,12 @@ import java.util.Comparator;
 public @interface CollectionLayout {
 
     /**
-     * Indicates the css class that a collection should have.
+     * Indicates the css class that a collection should have, to
+     * allow more targeted styling in <code>application.css</code>.
      *
      * @see ActionLayout#cssClass()
      * @see PropertyLayout#cssClass()
+     * @see ParameterLayout#cssClass()
      * @see DomainObjectLayout#cssClass()
      */
     String cssClass()
@@ -56,11 +63,13 @@ public @interface CollectionLayout {
      * Indicates which view is used by default to render the collection.
      *
      * <p>
-     *     The only view available within the core framework is &quot;table&quot;.  However, other views can be added
-     *     as extensions.  Examples are those provided by the (non-ASF) <a href="isisaddons.org">Isis addons</a>, eg
-     *     &quot;<a href="https://github.com/isisaddons/isis-wicket-excel">excel</a>&quot;,
-     *     &quot;<a href="https://github.com/isisaddons/isis-wicket-fullcalendar2">calendar</a>&quot; and
-     *     &quot;<a href="https://github.com/isisaddons/isis-wicket-gmap3">map</a>&quot;.
+     *     This is a simple string; every available implementation is required
+     *     to use a different string.
+     * </p>
+     * <p>
+     *     The default is &quot;table&quot;.  Extensions provide also:
+     *     &quot;excel&quot; (download as Excel spreadsheet), &quot;calendar&quot;
+     *     and &quot;map&quot;.
      * </p>
      */
     String defaultView()
@@ -70,6 +79,7 @@ public @interface CollectionLayout {
      * Description of this collection, eg to be rendered in a tooltip.
      *
      * @see ActionLayout#describedAs()
+     * @see ParameterLayout#describedAs()
      * @see PropertyLayout#describedAs()
      * @see DomainObjectLayout#describedAs()
      */
@@ -88,11 +98,19 @@ public @interface CollectionLayout {
             default Where.NOT_SPECIFIED;
 
     /**
-     * Name of this collection (overriding the name derived from its name in code).
+     * Name of this collection (overriding the name derived from its name in
+     * code).
+     *
+     * <p>
+     *     A typical use case is if the desired name is a reserved Java
+     *     keyword, such as `default` or `package`.
+     * </p>
      *
      * @see ActionLayout#named()
+     * @see ParameterLayout#named()
      * @see PropertyLayout#named()
      * @see DomainObjectLayout#named()
+     * @see DomainServiceLayout#named()
      * @see CollectionLayout#namedEscaped()
      */
     String named()

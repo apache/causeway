@@ -33,6 +33,10 @@ import org.apache.isis.applib.value.Clob;
  * Collects together all domain semantics of an action parameter within a
  * single annotation.
  *
+ * @see Action
+ * @see Property
+ * @see ParameterLayout
+ *
  * @since 1.x {@index}
  */
 @Inherited
@@ -50,6 +54,11 @@ public @interface Parameter {
      * The value should be of the form "file_extension|audio/*|video/*|image/*|media_type".
      * </p>
      *
+     * <p>
+     *     Note that this does not prevent the user from uploading some other file type; rather it merely defaults the
+     *     file type in the file open dialog.
+     * </p>
+     *
      * @see Action#fileAccept()
      * @see Property#fileAccept()
      * @see <a href="http://www.w3schools.com/tags/att_input_accept.asp">http://www.w3schools.com</a>
@@ -58,10 +67,12 @@ public @interface Parameter {
             default "";
 
     /**
-     * The maximum entry length of a field.
+     * The maximum entry length of a string parameter (it is ignored for other
+     * types).
      *
      * <p>
-     *     The default value (<code>-1</code>) indicates that no maxLength has been specified.
+     *     The default value (<code>-1</code>) indicates that no maxLength has
+     *     been specified.
      * </p>
      *
      * @see Property#maxLength()

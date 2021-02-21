@@ -28,6 +28,11 @@ import java.lang.annotation.Target;
 /**
  * Collects together all layout hints for a property of a domain object.
  *
+ * @see ActionLayout
+ * @see CollectionLayout
+ * @see DomainObjectLayout
+ * @see Property
+ *
  * @since 1.x {@index}
  * @see org.apache.isis.applib.annotation.ParameterLayout
  */
@@ -38,9 +43,11 @@ import java.lang.annotation.Target;
 public @interface PropertyLayout {
 
     /**
-     * Indicates the css class that a property should have.
+     * Indicates the css class that a property should have, to
+     * allow more targeted styling in <code>application.css</code>.
      *
      * @see ActionLayout#cssClass()
+     * @see ParameterLayout#cssClass()
      * @see CollectionLayout#cssClass()
      * @see DomainObjectLayout#cssClass()
      */
@@ -51,6 +58,7 @@ public @interface PropertyLayout {
      * Description of this property, eg to be rendered in a tooltip.
      *
      * @see ActionLayout#describedAs()
+     * @see ParameterLayout#describedAs()
      * @see CollectionLayout#describedAs()
      * @see DomainObjectLayout#describedAs()
      */
@@ -58,7 +66,11 @@ public @interface PropertyLayout {
             default "";
 
     /**
-     * Indicates where in the UI the property should <i>not</i>not be visible.
+     * Indicates where in the UI the property
+     * should <i>not</i> be visible.
+     *
+     * @see ActionLayout#hidden()
+     * @see CollectionLayout#hidden()
      */
     Where hidden()
             default Where.NOT_SPECIFIED;
@@ -67,14 +79,25 @@ public @interface PropertyLayout {
      * In forms, positioning of the label (left, top or none) relative to the property value.
      *
      * <p>
-     * If not specified, the default depends upon the property value's datatype.
+     * If not specified, the default depends upon the property value's
+     * datatype (including whether the field is {@link #multiLine()}.
      * </p>
+     *
+     * @see #multiLine()
+     * @see ParameterLayout#labelPosition()
      */
     LabelPosition labelPosition()
             default LabelPosition.NOT_SPECIFIED;
 
     /**
      * For string properties (and parameters), render as a text area over specified number of lines.
+     *
+     * <p>
+     *     If set to &gt; 1, then {@link #labelPosition()} defaults to
+     *     {@link LabelPosition#TOP top}.
+     * </p>
+     *
+     * @see ParameterLayout#multiLine()
      */
     int multiLine()
             default -1;
@@ -82,9 +105,15 @@ public @interface PropertyLayout {
     /**
      * Name of this property (overriding the name derived from its name in code).
      *
+     * <p>
+     * A typical use case is if the desired name is a reserved Java keyword, such as `default` or `package`.
+     * </p>
+     *
      * @see ActionLayout#named()
+     * @see ParameterLayout#named()
      * @see CollectionLayout#named()
      * @see DomainObjectLayout#named()
+     * @see DomainServiceLayout#named()
      * @see PropertyLayout#namedEscaped()
      */
     String named()
@@ -94,6 +123,8 @@ public @interface PropertyLayout {
      * A flag indicating whether the value of {@linkplain #named()} should be
      * HTML escaped or not.
      *
+     * @see ParameterLayout#namedEscaped()
+     * @see CollectionLayout#namedEscaped()
      * @see PropertyLayout#named()
      */
     boolean namedEscaped()
@@ -139,6 +170,8 @@ public @interface PropertyLayout {
      * 1-may-2013 for the start date but using 31-may-2013 (the day before) for the end date.  What is stored
      * In the domain object, itself, however, the value stored is 1-jun-2013.
      * </p>
+     *
+     * @see ParameterLayout#renderDay()
      */
     RenderDay renderDay()
             default RenderDay.NOT_SPECIFIED;
@@ -169,7 +202,14 @@ public @interface PropertyLayout {
             default Repainting.NOT_SPECIFIED;
 
     /**
-     * The typical entry length of a field, use to determine the optimum width for display
+     * The typical entry length of a field, use to determine the optimum width
+     * for display.
+     *
+     * <p>
+     *     Note: the Wicket viewer does not use this information.
+     * </p>
+     *
+     * @see ParameterLayout#typicalLength()
      */
     int typicalLength()
             default -1;

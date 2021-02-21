@@ -1,0 +1,19 @@
+=== Descriptions
+
+The xref:system:generated:index/applib/annotation/ActionLayout.adoc#describedAs[describedAs()] attribute is used to provide a short description of the action to the user.
+In the xref:vw:ROOT:about.adoc[Wicket viewer] it is displayed as a 'tool tip'.
+
+For example:
+
+[source,java]
+----
+public class Customer {
+    @ActionLayout(describedAs=
+        "Place a repeat order of the last (most recently placed) order")
+    public Order placeRepeatOrder(...) { /* ... */ }
+}
+----
+
+
+As an alternative to using the annotation, the dynamic xref:userguide:fun:ui.adoc#object-layout[file-based layout] can be used instead.
+

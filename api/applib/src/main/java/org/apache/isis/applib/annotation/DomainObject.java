@@ -46,6 +46,12 @@ import org.apache.isis.applib.events.lifecycle.ObjectUpdatingEvent;
  * annotated type.
  * For more details see <code>org.apache.isis.core.config.beans.IsisBeanFactoryPostProcessorForSpring</code>
  *
+ * @see Action
+ * @see Property
+ * @see Collection
+ * @see DomainObjectLayout
+ * @see DomainService
+ *
  * @since 1.x {@index}
  */
 @Inherited
@@ -132,7 +138,19 @@ public @interface DomainObject {
 
     /**
      * Applicable only if {@link #nature()} is {@link Nature#MIXIN}, indicates
-     * the default name of the method of that mixin.
+     * the name of the method within the mixin class to be inferred as the
+     * action of that mixin.
+     *
+     * <p>
+     *     Supporting methods are then derived from that method name.  For
+     *     example, if the mixin method name is &quot;act&quot;, then the
+     *     <i>disable</i> supporting method will be &quot;disableAct&quot;.
+     * </p>
+     *
+     * <p>
+     * Typical examples are "act", "prop", "coll", "exec", "execute", "invoke",
+     * "apply" and so on. The default name is `$$`.
+     * </p>
      */
     String mixinMethod()
             default "$$";
@@ -146,7 +164,8 @@ public @interface DomainObject {
             default Nature.NOT_SPECIFIED;
 
     /**
-     * Provides a unique abbreviation for the object type, eg &quot;customer.Customer&quot; for Customer.
+     * Provides a unique abbreviation for the object type's, eg
+     * &quot;customer.Customer&quot; for Customer.
      *
      * <p>
      * This value, if specified, is used in the serialized form of the object's OID.  An OID is

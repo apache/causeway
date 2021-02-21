@@ -41,6 +41,11 @@ import org.apache.isis.applib.value.Clob;
  * Collects together all the domain semantics for the property of a domain
  * object.
  *
+ * @see Action
+ * @see Collection
+ * @see DomainObject
+ * @see PropertyLayout
+ *
  * @since 1.x {@index}
  */
 @Inherited
@@ -82,6 +87,12 @@ public @interface Property {
      * Indicates that changes to the property that should be posted to the
      * {@link org.apache.isis.applib.services.eventbus.EventBusService event bus} using a custom (subclass of)
      * {@link org.apache.isis.applib.events.domain.PropertyDomainEvent}.
+     *
+     * <p>
+     *     Subscribers of this event can interact with the business rule
+     *     checking (hide, disable, validate) and its modification (before and
+     *     after).
+     * </p>
      *
      * <p>For example:
      * </p>
@@ -144,6 +155,11 @@ public @interface Property {
      * The value should be of the form "file_extension|audio/*|video/*|image/*|media_type".
      * </p>
      *
+     * <p>
+     *     Note that this does not prevent the user from uploading some other
+     *     file type; rather it merely defaults the file type in the file open dialog.
+     * </p>
+     *
      * @see <a href="http://www.w3schools.com/tags/att_input_accept.asp">http://www.w3schools.com</a>
      * @see Parameter#fileAccept()
      * @see Action#fileAccept()
@@ -165,6 +181,12 @@ public @interface Property {
      *
      * <p>
      *     The default value (<code>-1</code>) indicates that no maxLength has been specified.
+     * </p>
+     *
+     * <p>
+     *     NOTE: this will usually be supplemented by a JDO or JPA-specific
+     *     annotation to indicate length of the column in the table to whic
+     *     the entity is mapped.
      * </p>
      *
      * @see Parameter#maxLength()
@@ -199,9 +221,9 @@ public @interface Property {
      * Whether this property is optional or is mandatory (ie required).
      *
      * <p>
-     *     For properties the default value, {@link org.apache.isis.applib.annotation.Optionality#DEFAULT}, usually
-     *     means that the property is required unless it has been overridden by <code>javax.jdo.annotations.Column</code>
-     *     with its <code>javax.jdo.annotations.Column#allowsNull()</code> attribute set to true.
+     *     NOTE: this will usually be supplmented by a JDO or JPA-specific
+     *     annotation to specify the nullability of the corresponding column in
+     *     the table to which the owning entity is mapped.
      * </p>
      *
      * @see Parameter#optionality()

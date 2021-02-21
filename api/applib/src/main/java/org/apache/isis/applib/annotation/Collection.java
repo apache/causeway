@@ -30,6 +30,11 @@ import org.apache.isis.applib.events.domain.CollectionDomainEvent;
 /**
  * Domain semantics for domain object collection.
  *
+ * @see Action
+ * @see Property
+ * @see DomainObject
+ * @see CollectionLayout
+ *
  * @since 1.x {@index}
  */
 @Inherited
@@ -47,6 +52,12 @@ public @interface Collection {
      * Indicates that changes to the collection that should be posted to the
      * {@link org.apache.isis.applib.services.eventbus.EventBusService event bus} using a custom (subclass of)
      * {@link org.apache.isis.applib.events.domain.CollectionDomainEvent}.
+     *
+     * <p>
+     *     Subscribers of this event can interact with the business rule
+     *     checking (hide, disable, validate) and its modification (before and
+     *     after).
+     * </p>
      *
      * <p>For example:
      * </p>
@@ -82,6 +93,12 @@ public @interface Collection {
 
     /**
      * The type-of the elements held within the collection.
+     *
+     * <p>
+     *     This is only provided as a fallback; usually the framework can infer
+     *     the element type of the collection from the collection method's
+     *     generic type.
+     * </p>
      *
      * @see Action#typeOf()
      */

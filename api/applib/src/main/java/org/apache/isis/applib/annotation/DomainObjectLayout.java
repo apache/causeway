@@ -34,6 +34,11 @@ import org.apache.isis.applib.layout.component.CssClassFaPosition;
 /**
  * Layout hints for domain objects.
  *
+ * @see ActionLayout
+ * @see PropertyLayout
+ * @see CollectionLayout
+ * @see DomainObject
+ *
  * @since 1.x {@index}
  */
 @Inherited
@@ -52,10 +57,12 @@ public @interface DomainObjectLayout {
             default BookmarkPolicy.NOT_SPECIFIED;
 
     /**
-     * Indicates the css class that a domain class (type) should have.
+     * Indicates the css class that a domain class (type) should have, to
+     * allow more targeted styling in <code>application.css</code>.
      *
      * @see ActionLayout#cssClass()
      * @see PropertyLayout#cssClass()
+     * @see ParameterLayout#cssClass()
      * @see CollectionLayout#cssClass()
      */
     String cssClass()
@@ -85,6 +92,7 @@ public @interface DomainObjectLayout {
      * Description of this class, eg to be rendered in a tooltip.
      *
      * @see ActionLayout#describedAs()
+     * @see ParameterLayout#describedAs()
      * @see PropertyLayout#describedAs()
      * @see CollectionLayout#describedAs()
      */
@@ -94,9 +102,15 @@ public @interface DomainObjectLayout {
     /**
      * Name of this class (overriding the name derived from its name in code).
      *
+     * <p>
+     * A typical use case is if the desired name is a reserved Java keyword, such as `default` or `package`.
+     * </p>
+     *
      * @see ActionLayout#named()
+     * @see ParameterLayout#named()
      * @see PropertyLayout#named()
      * @see CollectionLayout#named()
+     * @see DomainServiceLayout#named()
      * @see DomainObjectLayout#plural()
      */
     String named()

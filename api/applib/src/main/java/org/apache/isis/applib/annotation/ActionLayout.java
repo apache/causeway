@@ -31,6 +31,12 @@ import org.apache.isis.applib.layout.component.CssClassFaPosition;
 
 /**
  * Layout hints for actions.
+ *
+ * @see PropertyLayout
+ * @see CollectionLayout
+ * @see DomainObjectLayout
+ * @see Action
+ *
  * @since 1.x {@index}
  */
 @Inherited
@@ -63,6 +69,7 @@ public @interface ActionLayout {
      * </p>
      *
      * @see PropertyLayout#cssClass()
+     * @see ParameterLayout#cssClass()
      * @see CollectionLayout#cssClass()
      * @see DomainObjectLayout#cssClass()
      */
@@ -96,6 +103,7 @@ public @interface ActionLayout {
      * Description of this action, eg to be rendered in a tooltip.
      *
      * @see PropertyLayout#describedAs()
+     * @see ParameterLayout#describedAs()
      * @see CollectionLayout#describedAs()
      * @see DomainObjectLayout#describedAs()
      */
@@ -111,16 +119,24 @@ public @interface ActionLayout {
     /**
      * Name of this action (overriding the name derived from its name in code).
      *
+     * <p>
+     * A typical use case is if the desired name is a reserved Java keyword, such as `default` or `package`.
+     * </p>
+     *
      * @see PropertyLayout#named()
+     * @see ParameterLayout#named()
      * @see CollectionLayout#named()
      * @see DomainObjectLayout#named()
+     * @see DomainServiceLayout#named()
      */
     String named()
             default "";
 
     /**
-     * For actions that are associated with a property, indicates the positioning of the
-     * action's button relative to the property.
+     * For actions that are associated with a property (using either
+     * {@link Action#associateWith()} or {@link MemberOrder#name()},
+     * indicates the positioning of the action's button relative to the
+     * property.
      *
      * <p>
      * Ignored if the action has not been associated with a property.
@@ -139,14 +155,23 @@ public @interface ActionLayout {
     }
 
     /**
-     * How this parameters for this action are prompted, either {@link PromptStyle#DIALOG dialog} or {@link PromptStyle#INLINE inline}.
+     * How the parameters for this action are prompted, either {@link PromptStyle#DIALOG dialog} or
+     * {@link PromptStyle#INLINE inline}.
      */
     PromptStyle promptStyle()
             default PromptStyle.AS_CONFIGURED;
 
     /**
-     * If the action returns its target, then determines whether to update the page or
-     * instead to redirect (forcing a re-rendering of a new page).
+     * If the action returns its target, then determines whether to update the
+     * page or instead to redirect (forcing a re-rendering of a new page).
+     *
+     * <p>
+     *     Not re-rendering can provide a smoother UI experience.
+     * </p>
+     *
+     * <p>
+     *     Supported by the Wicket viewer.
+     * </p>
      */
     Redirect redirectPolicy()
             default Redirect.AS_CONFIGURED;

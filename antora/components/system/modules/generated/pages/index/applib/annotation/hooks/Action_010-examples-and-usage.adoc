@@ -271,7 +271,7 @@ public class ToDoItem {
 }
 ----
 
-The `domainEvent` attribute allows a custom subclass to be emitted allowing more precise subscriptions (to those subclasses) to be defined instead.
+The xref:system:generated:index/applib/annotation/Action.adoc#domainEvent[domainEvent()] element allows a custom subclass to be emitted allowing more precise subscriptions (to those subclasses) to be defined instead.
 
 For example:
 
@@ -378,14 +378,14 @@ If the exception is a subtype of `RecoverableException` then the exception will 
 
 ==== Default, Doop and Noop events
 
-If the `domainEvent` attribute is not explicitly specified (is left as its default value, `ActionDomainEvent.Default`), then the framework will, by default, post an event.
+If the xref:system:generated:index/applib/annotation/Action.adoc#domainEvent[domainEvent()] element is not explicitly specified (is left as its default value, `ActionDomainEvent.Default`), then the framework will, by default, post an event.
 
 If this is not required, then the `isis.reflector.facet.actionAnnotation.domainEvent.postForDefault` configuration property can be set to "false"; this will disable posting.
 
 On the other hand, if the `domainEvent` has been explicitly specified to some subclass, then an event will be posted.
-The framework provides `ActionDomainEvent.Doop` as such a subclass, so setting the `domainEvent` attribute to this class will ensure that the event to be posted, irrespective of the configuration property setting.
+The framework provides `ActionDomainEvent.Doop` as such a subclass, so setting the `domainEvent` element to this class will ensure that the event to be posted, irrespective of the configuration property setting.
 
-And, conversely, the framework also provides `ActionDomainEvent.Noop`; if `domainEvent` attribute is set to this class, then no event will be posted.
+And, conversely, the framework also provides `ActionDomainEvent.Noop`; if `domainEvent` element is set to this class, then no event will be posted.
 
 === Class-level default
 
@@ -499,7 +499,7 @@ However, it would be useful to disaply how for a test or demo system where there
 The xref:system:generated:index/applib/annotation/Action.adoc#semantics[semantics()] element describes whether the invocation modifies state of the system, and if so whether it does so idempotently.
 If the action invocation does _not_ modify the state of the system, in other words is safe, then it also can beused to specify whether the results of the action can be cached automatically for the remainder of the request.
 
-The attribute was originally introduced for the xref:vro:ROOT:about.adoc[RestfulObjects viewer] in order that action invocations could be using the appropriate `HTTP` verb (`GET`, `PUT` and `POST`).
+The `semantics` element was originally introduced for the xref:vro:ROOT:about.adoc[RestfulObjects viewer] in order that action invocations could be using the appropriate `HTTP` verb (`GET`, `PUT` and `POST`).
 
 The table below summarizes the semantics:
 
