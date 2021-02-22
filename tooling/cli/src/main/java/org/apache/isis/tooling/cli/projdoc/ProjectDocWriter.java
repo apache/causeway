@@ -41,7 +41,7 @@ final class ProjectDocWriter {
     @SneakyThrows
     static void write(
             final @NonNull CliConfig cliConfig,
-            final @NonNull Document systemSummaryAdoc,
+            final @NonNull Document overviewAdoc,
             final @NonNull J2AdocContext j2aContext,
             final @NonNull ProjectDocModel.Mode mode) {
 
@@ -67,7 +67,7 @@ final class ProjectDocWriter {
                 // write system overview
                 val overviewFile = new File(pagesFolder, overview.getSystemOverviewFilename());
                 log.info("writing system overview: {}", overviewFile.getName());
-                docWriter.accept(systemSummaryAdoc, overviewFile);
+                docWriter.accept(overviewAdoc, overviewFile);
                 ++writeCount;
             }
 

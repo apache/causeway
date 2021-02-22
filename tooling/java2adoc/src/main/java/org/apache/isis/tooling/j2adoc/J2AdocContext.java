@@ -260,16 +260,20 @@ public class J2AdocContext {
 
     public String xref(final @NonNull J2AdocUnit unit) {
 
-        val xrefCoordinates = unit.getNamespace()
+        val xrefModule = unit.getNamespace()
                 .stream()
                 .skip(getNamespacePartsSkipCount())
+                .findFirst().get();
+        val xrefCoordinates = unit.getNamespace()
+                .stream()
+                .skip(getNamespacePartsSkipCount() + 1)
                 .collect(Can.toCan())
                 .add(unit.getCanonicalName())
                 .stream()
                 .collect(Collectors.joining("/"));
 
-        val xref = String.format("xref:%s[%s]",
-                String.format(getXrefPageIdFormat(), xrefCoordinates),
+        val xref = String.format("xref:s[%s]",
+                String.format(getXrefPageIdFormat(), xrefModule, xrefCoordinates),
                 unit.getFriendlyName());
 
         return xref;

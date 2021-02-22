@@ -106,12 +106,9 @@ public class ProjectDocModel {
         modules = new TreeSet<ProjectNode>();
         projTree.depthFirst(modules::add);
 
-        final SortedSet<File> asciiDocFiles = new TreeSet<>();
 
         val j2aContext = J2AdocContext.builder()
-                //.compactFormat()
-//                .javaSourceWithFootnotesFormat()
-                .formatterFactory(new Function<J2AdocContext, UnitFormatter>() {
+                .formatterFactory(new Function<>() {
                     @SneakyThrows
                     @Override
                     public UnitFormatter apply(J2AdocContext j2AdocContext) {
@@ -126,15 +123,6 @@ public class ProjectDocModel {
                 .namespacePartsSkipCount(cliConfig.getGlobal().getNamespacePartsSkipCount())
                 .skipTitleHeader(cliConfig.getCommands().getIndex().isSkipTitleHeader())
                 .build();
-
-        val doc = doc();
-        doc.setTitle("System Overview");
-
-        _Strings.nonEmpty(cliConfig.getGlobal().getLicenseHeader())
-        .ifPresent(notice->AsciiDocFactory.attrNotice(doc, notice));
-
-        _Strings.nonEmpty(cliConfig.getCommands().getOverview().getDescription())
-        .ifPresent(block(doc)::setSource);
 
         // partition modules into sections
         val sections = new ArrayList<Section>();
@@ -164,9 +152,20 @@ public class ProjectDocModel {
         }
 
         // now generate the overview or index
-        writeSections(sections, doc, j2aContext, mode, asciiDocFiles::add);
+        final SortedSet<File> asciiDocFiles = new TreeSet<>();
 
-        ProjectDocWriter.write(cliConfig, doc, j2aContext, mode);
+        val overviewDoc = doc();
+        overviewDoc.setTitle("System Overview");
+
+        _Strings.nonEmpty(cliConfig.getGlobal().getLicenseHeader())
+                .ifPresent(notice->AsciiDocFactory.attrNotice(overviewDoc, notice));
+
+        _Strings.nonEmpty(cliConfig.getCommands().getOverview().getDescription())
+                .ifPresent(block(overviewDoc)::setSource);
+
+        writeSections(sections, overviewDoc, j2aContext, mode, asciiDocFiles::add);
+
+        ProjectDocWriter.write(cliConfig, overviewDoc, j2aContext, mode);
 
         // update include statements ...
         OrphanedIncludeStatementFixer.fixIncludeStatements(asciiDocFiles, cliConfig, j2aContext);
@@ -265,7 +264,7 @@ public class ProjectDocModel {
             containerView.addAllContainers();
 
             containerView.enableAutomaticLayout(RankDirection.LeftRight);
-            
+
             val plantUmlSource = c4.toPlantUML(containerView);
             return plantUmlSource;
         }
@@ -296,19 +295,19 @@ public class ProjectDocModel {
 
     private void writeSections(
             final @NonNull List<Section> sections,
-            final @NonNull Document doc,
+            final @NonNull Document overviewDoc,
             final @NonNull J2AdocContext j2aContext,
             final @NonNull Mode mode,
             final @NonNull Consumer<File> onAdocFile) {
 
         sections.forEach(section -> {
-            writeSection(section, doc, j2aContext, mode, onAdocFile);
+            writeSection(section, overviewDoc, j2aContext, mode, onAdocFile);
         });
     }
 
     private void writeSection(
             final @NonNull Section section,
-            final @NonNull Document doc,
+            final @NonNull Document overviewDoc,
             final @NonNull J2AdocContext j2aContext,
             final @NonNull Mode mode,
             final @NonNull Consumer<File> onAdocFile) {
@@ -316,7 +315,7 @@ public class ProjectDocModel {
         val sectionName = section.getSectionName();
         val groupIdPattern = section.getGroupIdArtifactIdPattern();
 
-        val titleBlock = block(doc);
+        val titleBlock = block(overviewDoc);
 
         val headingLevel =
                 (groupIdPattern == null || !groupIdPattern.contains(":"))
@@ -329,10 +328,10 @@ public class ProjectDocModel {
             return;
         }
 
-        val descriptionBlock = block(doc);
+        val descriptionBlock = block(overviewDoc);
         val groupDiagram = new GroupDiagram(C4.of(sectionName, null));
 
-        val table = table(doc);
+        val table = table(overviewDoc);
         table.setTitle(String.format("Projects/Modules (%s)", sectionName));
         table.setAttribute("cols", "3a,5a", true);
         table.setAttribute("header-option", "", true);
@@ -408,14 +407,14 @@ public class ProjectDocModel {
     //    Group: org.apache.isis.commons
     //    Artifact: isis-commons
     //    Type: jar
-    //    Folder: \commons
+    //    Directory: /commons
     //    ----
     private String coordinates(ProjectNode module, String projRelativePath) {
         val coors = new StringBuilder();
         appendKeyValue(coors, "Group", module.getArtifactCoordinates().getGroupId());
         appendKeyValue(coors, "Artifact", module.getArtifactCoordinates().getArtifactId());
         appendKeyValue(coors, "Type", module.getArtifactCoordinates().getPackaging());
-        appendKeyValue(coors, "Folder", projRelativePath);
+        appendKeyValue(coors, "Directory", projRelativePath.replaceAll("\\\\", "/"));
         return String.format("%s\n%s",
                 module.getName(),
                 AsciiDocFactory.toString(doc->
@@ -475,13 +474,13 @@ public class ProjectDocModel {
     }
 
     private static String toAdocSection(String title, String content) {
-        
+
         //XXX collapsible will be supported with antora 3
         //        return AsciiDocFactory.toString(doc->{
         //            val collapsibleBlock = AsciiDocFactory.collapsibleBlock(doc, content);
         //            collapsibleBlock.setTitle(title);
         //        });
-        
+
         // render as Sidebar block for now
         return String.format(".%s\n****\n%s\n****\n\n", title, content);
     }
@@ -489,7 +488,7 @@ public class ProjectDocModel {
     private static String toAdocListItem(String element) {
         return String.format("* %s\n", element);
     }
-    
+
     private static String toAdocCompactListItem(String element) {
         return String.format("%s +\n", element);
     }

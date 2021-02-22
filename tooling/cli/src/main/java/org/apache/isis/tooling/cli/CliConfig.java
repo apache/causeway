@@ -92,8 +92,8 @@ public class CliConfig {
         @Data
         public static class Index {
 
-            private String documentGlobalIndexPath = "pages/index";
-            private String documentGlobalIndexXrefPageIdFormat = "system:generated:index/%s.adoc";
+            private String documentGlobalIndexPath = "pages";
+            private String documentGlobalIndexXrefPageIdFormat = "refguide:%s:index/%s.adoc";
 
             private boolean fixOrphanedAdocIncludeStatements = false;
             private boolean skipTitleHeader = false;

@@ -63,9 +63,10 @@ public final class OrphanedIncludeStatementFixer {
             val originLines = _Text.readLinesFromFile(adocFile, StandardCharsets.UTF_8);
 
             val lines = IncludeStatements.rewrite(originLines, include->{
-                if(include.isLocal()
-                        || !( "system".equals(include.getComponent()) // TODO should be reasoned from config
-                                && "generated".equals(include.getModule()))) { // TODO should be reasoned from config
+                final boolean inGlobalIndex =
+                        "refguide".equals(include.getComponent())               // TODO should be reasoned from config
+                        && include.getNamespace().startsWith(Can.of("index"));  // TODO should be reasoned from config
+                if(include.isLocal() || !inGlobalIndex) {
                     return null; // keep original line, don't mangle
                 }
 
@@ -75,14 +76,17 @@ public final class OrphanedIncludeStatementFixer {
                 j2aContext.findUnitByTypeSimpleName(typeSimpleName)
                 .ifPresent(unit->{
 
+                    val module = unit.getNamespace().stream()
+                            .skip(j2aContext.getNamespacePartsSkipCount())
+                            .findFirst().get();
                     val expected = IncludeStatement.builder()
-                    .component("system")
-                    .module("generated")
+                    .component("refguide")
+                    .module(module)
                     .type("page")
                     .namespace(unit.getNamespace().stream()
-                            .skip(j2aContext.getNamespacePartsSkipCount())
+                            .skip(j2aContext.getNamespacePartsSkipCount() + 1) // +1 because is part of the module
                             .collect(Can.toCan())
-                            .add(0, "index") //TODO this is antora config specific
+                            .add(0, "index") // TODO this is antora config specific
                             )
                     .canonicalName(typeSimpleName)
                     .ext(".adoc")
