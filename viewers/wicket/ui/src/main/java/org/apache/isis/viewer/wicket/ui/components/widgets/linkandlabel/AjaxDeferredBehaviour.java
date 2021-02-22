@@ -28,6 +28,7 @@ import org.apache.wicket.util.time.Duration;
 
 import org.apache.isis.applib.value.LocalResourcePath;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.ui.actionresponse.ActionResultResponseHandlingStrategy;
@@ -144,10 +145,7 @@ public abstract class AjaxDeferredBehaviour extends AbstractAjaxBehavior {
         if(resultAdapter==null) {
             resultAdapter = actionModel.execute();
         }
-        val value = resultAdapter!=null 
-                ? resultAdapter.getPojo() 
-                : (Object)null;
-        return value;
+        return ManagedObjects.UnwrapUtil.single(resultAdapter);
     }
     
     protected void freeResultValue() {
