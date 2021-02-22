@@ -18,7 +18,7 @@
  */
 package org.apache.isis.extensions.secman.api.user;
 
-import java.util.SortedSet;
+import java.util.Set;
 
 import org.apache.isis.commons.having.HasUsername;
 import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
@@ -87,7 +87,7 @@ public interface ApplicationUser extends HasUsername, HasAtPath {
 
     ApplicationPermissionValueSet getPermissionSet();
 
-    SortedSet<? extends ApplicationRole> getRoles();
+    Set<? extends ApplicationRole> getRoles();
 
     ApplicationUserStatus getStatus();
     void setStatus(ApplicationUserStatus disabled);

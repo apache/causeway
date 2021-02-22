@@ -20,7 +20,7 @@ package org.apache.isis.extensions.secman.jdo.dom.role;
 
 import java.util.Comparator;
 import java.util.List;
-import java.util.SortedSet;
+import java.util.Set;
 import java.util.TreeSet;
 
 import javax.inject.Inject;
@@ -174,7 +174,7 @@ implements org.apache.isis.extensions.secman.api.role.ApplicationRole, Comparabl
             )
     @MemberOrder(sequence = "20")
     @Getter @Setter
-    private SortedSet<ApplicationUser> users = new TreeSet<>();
+    private Set<ApplicationUser> users = new TreeSet<>();
 
 
     // necessary for integration tests
