@@ -20,7 +20,7 @@ package org.apache.isis.applib.value;
 
 /**
  * Controls, for Action results of type {@link LocalResourcePath}, whether the redirect URL 
- * should open in the same or a new window/tap.
+ * should open in the same or a new window/tab.
  * 
  * @since 2.0 {@index}
  * @see LocalResourcePath

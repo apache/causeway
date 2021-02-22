@@ -72,11 +72,8 @@ public abstract class ActionLink extends AjaxLink<ManagedObject> implements IAja
                 // trivial optimization; also store the objectAction if it is available (saves looking it up)
                 objectAction = model.getMetaModel();
 
-                // this returns non-null if the action is no-arg and returns a URL or a Blob or a Clob.
+                // this returns non-null if the action is no-arg and returns a LocalResourcePath or URL.
                 // Otherwise can use default handling
-                // TODO: the method looks at the actual compile-time return type;
-                // TODO: cannot see a way to check at runtime what is returned.
-                // TODO: see https://issues.apache.org/jira/browse/ISIS-1264 for further detail.
                 ajaxDeferredBehaviourIfAny = determineDeferredBehaviour();
                 if(ajaxDeferredBehaviourIfAny != null) {
                     this.add(ajaxDeferredBehaviourIfAny);
@@ -93,7 +90,8 @@ public abstract class ActionLink extends AjaxLink<ManagedObject> implements IAja
         _Probe.entryPoint(EntryPoint.USER_INTERACTION, "Wicket Ajax Request, "
                 + "originating from User clicking an Action Link.");
 
-        if (ajaxDeferredBehaviourIfAny != null) {
+        if(ajaxDeferredBehaviourIfAny!=null
+                && ajaxDeferredBehaviourIfAny.needsDeferring()) {
             ajaxDeferredBehaviourIfAny.initiate(target);
             return;
         }
@@ -183,6 +181,7 @@ public abstract class ActionLink extends AjaxLink<ManagedObject> implements IAja
         return ((WicketViewerSettingsAccessor) Application.get()).getSettings();
     }
 
+    // TODO: should unify with ActionResultResponseType (as used in ActionParametersPanel)
     AjaxDeferredBehaviour determineDeferredBehaviour() {
 
         val action = getObjectAction();
@@ -193,20 +192,8 @@ public abstract class ActionLink extends AjaxLink<ManagedObject> implements IAja
             return null; // default behavior, don't defer
         }
 
-        val actionModel = this.getActionModel();
-        val actionReturnType = actionReturnTypeSpec.getCorrespondingClass();
-
-        // TODO: should unify with ActionResultResponseType (as used in ActionParametersPanel)
-        if (actionReturnType == java.net.URL.class 
-                || actionReturnType == LocalResourcePath.class) {
-            return AjaxDeferredBehaviour.redirecting(this.getActionModel());
-        }
-        if ((actionReturnType == org.apache.isis.applib.value.Blob.class
-                || actionReturnType == org.apache.isis.applib.value.Clob.class)) {
-            return AjaxDeferredBehaviour.downloading(actionModel);
-        }
-        
-        return null; // default behavior, don't defer
+        // use redirect handler, which only executes if needed 
+        return AjaxDeferredBehaviour.redirecting(this.getActionModel());
     }
 
 
