@@ -54,5 +54,5 @@ Both scripts can be found at the root of this git repo.
 
 == Updating the Generated System Overview
 
-The xref:system:generated:system-overview.adoc[System Overview] contains a set of `.adoc` files that are generated from Java classes.
+The xref:refguide:_overview:about.adoc[System Overview] contains a set of `.adoc` files that are generated from Java classes.
 

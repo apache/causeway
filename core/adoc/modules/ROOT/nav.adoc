@@ -3,5 +3,3 @@
 
 include::core:ROOT:partial$component-nav.adoc[]
 
-* see also:
-** xref:system:generated:system-overview.adoc[System Overview]

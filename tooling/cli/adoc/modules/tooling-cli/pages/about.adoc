@@ -253,7 +253,7 @@ This command generates the _Document Global Index_ (`.adoc`) files.
 
 Any class found with magic `{@index}` in its _java-doc_ section at type level, will be included with the _Document Global Index_.
 
-Asciidoc files may refer to the _Document Global Index_ via `xref` or `include` statements using paths such as `system:generated:index/applib/Xxx.adoc`.
+Asciidoc files may refer to the _Document Global Index_ via `xref` or `include` statements using paths such as `refguide:applib:index/annotation/Xxx.adoc`.
 
 
 ==== Usage

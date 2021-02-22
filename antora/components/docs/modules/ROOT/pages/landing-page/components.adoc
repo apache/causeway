@@ -7,7 +7,7 @@ This page provides user/config guides for each of the main components of the fra
 
 == Overview
 
-xref:system:generated:system-overview.adoc[System Overview]
+xref:refguide:_overview:about.adoc[System Overview]
 
 == Viewers
 
