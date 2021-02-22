@@ -26,9 +26,9 @@ repositoryService.persist(cust);
 ----
 
 
-You should be aware that by default the framework queues up calls to xref:system:generated:index/applib/services/repository/RepositoryService.adoc#persist__T[#persist()] and xref:system:generated:index/applib/services/repository/RepositoryService.adoc#remove__Object[#remove()].
+You should be aware that by default the framework queues up calls to xref:refguide:applib:index/services/repository/RepositoryService.adoc#persist__T[#persist()] and xref:refguide:applib:index/services/repository/RepositoryService.adoc#remove__Object[#remove()].
 These are then executed either when the request completes (and the transaction commits), or if the queue is flushed.
-This can be done either implicitly by the framework, or as the result of a direct call to xref:system:generated:index/applib/services/xactn/TransactionService.adoc#flushTransaction__[TransactionService#flushTransaction].
+This can be done either implicitly by the framework, or as the result of a direct call to xref:refguide:applib:index/services/xactn/TransactionService.adoc#flushTransaction__[TransactionService#flushTransaction].
 
 By default the framework itself will cause `#flush()` to be called whenever a query is executed by way of `#allMatches(Query)`.
 However, this behaviour can be disabled using the  xref:refguide:config:sections/Other.adoc[]
@@ -165,12 +165,12 @@ The pattern is parameter, argument, parameter, argument, ... and so on.
 
 [TIP]
 ====
-If using JPA, it is also possible to use the Spring Data repositories, using xref:system:generated:index/persistence/jpa/applib/services/JpaSupportService.adoc[JpaSupportService].
+If using JPA, it is also possible to use the Spring Data repositories, using xref:refguide:persistence:index/jpa/applib/services/JpaSupportService.adoc[JpaSupportService].
 ====
 
 [TIP]
 ====
-If using JDO/DataNucleus, it is also possible to use the DataNucleus type-safe query API, see xref:system:generated:index/persistence/jdo/applib/services/JdoSupportService.adoc[JdoSupportService].
+If using JDO/DataNucleus, it is also possible to use the DataNucleus type-safe query API, see xref:refguide:persistence:index/jdo/applib/services/JdoSupportService.adoc[JdoSupportService].
 ====
 
 
@@ -180,12 +180,12 @@ If using JDO/DataNucleus, it is also possible to use the DataNucleus type-safe q
 
 Supporting classes used by the API:
 
-* xref:system:generated:index/applib/services/repository/EntityState.adoc[EntityState]
-* xref:system:generated:index/applib/query/Query.adoc[Query]
-** xref:system:generated:index/applib/query/NamedQuery.adoc[NamedQuery]
-** xref:system:generated:index/applib/query/AllInstancesQuery.adoc[AllInstancesQuery]
-* xref:system:generated:index/applib/query/QueryRange.adoc[QueryRange]
+* xref:refguide:applib:index/services/repository/EntityState.adoc[EntityState]
+* xref:refguide:applib:index/query/Query.adoc[Query]
+** xref:refguide:applib:index/query/NamedQuery.adoc[NamedQuery]
+** xref:refguide:applib:index/query/AllInstancesQuery.adoc[AllInstancesQuery]
+* xref:refguide:applib:index/query/QueryRange.adoc[QueryRange]
 
 Transaction management:
 
-* xref:system:generated:index/applib/services/xactn/TransactionService.adoc[TransactionService]
+* xref:refguide:applib:index/services/xactn/TransactionService.adoc[TransactionService]

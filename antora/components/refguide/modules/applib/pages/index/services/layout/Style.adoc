@@ -61,7 +61,7 @@ The intention here is that any layout metadata annotations can be removed from t
 
 Default, whereby missing properties/collections/actions are added to regions, and unused/empty regions are removed/trimmed.
 
-It should be possible to remove any xref:system:generated:index/applib/annotation/MemberOrder.adoc[MemberOrder] annotation but any property/collection/action layout annotations would need to be retained.
+It should be possible to remove any xref:refguide:applib:index/annotation/MemberOrder.adoc[MemberOrder] annotation but any property/collection/action layout annotations would need to be retained.
 
 * _@MemberGroupLayout_ : *serialized as XML*
 * _@MemberOrder_ : *serialized as XML*

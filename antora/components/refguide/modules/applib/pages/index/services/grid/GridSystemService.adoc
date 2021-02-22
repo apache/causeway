@@ -23,7 +23,7 @@ interface GridSystemService<G> {
 <.> xref:#gridImplementation__[gridImplementation()]
 +
 --
-The concrete subclass of xref:system:generated:index/applib/layout/grid/Grid.adoc[Grid] supported by this implementation.
+The concrete subclass of xref:refguide:applib:index/layout/grid/Grid.adoc[Grid] supported by this implementation.
 --
 <.> xref:#tns__[tns()]
 +
@@ -61,7 +61,7 @@ Takes a normalized grid and strips out removes all members, leaving only the gri
 [#gridImplementation__]
 === gridImplementation()
 
-The concrete subclass of xref:system:generated:index/applib/layout/grid/Grid.adoc[Grid] supported by this implementation.
+The concrete subclass of xref:refguide:applib:index/layout/grid/Grid.adoc[Grid] supported by this implementation.
 
 There can be multiple implementations of this service, this indicates the base class used by the implementation.
 

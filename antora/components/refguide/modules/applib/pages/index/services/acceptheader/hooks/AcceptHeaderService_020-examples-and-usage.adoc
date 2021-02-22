@@ -12,7 +12,7 @@ The diagram below illustrated this:
 
 image::reference-services-api/acceptheaderservice.png[width="700px"]
 
-The REST request is submitted to a domain service with a xref:system:generated:index/applib/annotation/DomainService.adoc#nature[nature] of `VIEW_REST_ONLY` (`MyRestApi` in the diagram).
+The REST request is submitted to a domain service with a xref:refguide:applib:index/annotation/DomainService.adoc#nature[nature] of `VIEW_REST_ONLY` (`MyRestApi` in the diagram).
 This uses the `AcceptHeaderService` to obtain the values of the HTTP `Accept` header.
 Based on this it delegates to the appropriate underlying domain service (with a nature of `DOMAIN` so that they are not exposed in the REST API at all).
 
@@ -26,6 +26,6 @@ The option is to use the media type's type/subtype, eg `application/vnd.myrestap
 
 == Alternatives
 
-As an alternative to performing content negotiation within the domain classes, the xref:system:generated:index/applib/services/conmap/ContentMappingService.adoc[`ContentMappingService`] SPI domain service allows the framework to perform the content negotiation responsibility.
+As an alternative to performing content negotiation within the domain classes, the xref:refguide:applib:index/services/conmap/ContentMappingService.adoc[`ContentMappingService`] SPI domain service allows the framework to perform the content negotiation responsibility.
 
-The Restful Objects specification supports this with its own `x-ro-domain-type` media type parameter; this is used by the xref:system:generated:index/applib/services/conmap/ContentMappingService.adoc[`ContentMappingService`] to determine how to map domain objects to view models/DTOs.
+The Restful Objects specification supports this with its own `x-ro-domain-type` media type parameter; this is used by the xref:refguide:applib:index/services/conmap/ContentMappingService.adoc[`ContentMappingService`] to determine how to map domain objects to view models/DTOs.

@@ -2,7 +2,7 @@
 
 Strategy for determining which permission should apply when there are multiple that apply for a particular target feature Id, and which may conflict with each other.
 
-All implementations of this interface must be _java.io.Serializable_ , because an instance is serialized into xref:system:generated:index/extensions/secman/api/permission/ApplicationPermissionValueSet.adoc[ApplicationPermissionValueSet] .
+All implementations of this interface must be _java.io.Serializable_ , because an instance is serialized into xref:refguide:extensions:index/secman/api/permission/ApplicationPermissionValueSet.adoc[ApplicationPermissionValueSet] .
 
 == API
 

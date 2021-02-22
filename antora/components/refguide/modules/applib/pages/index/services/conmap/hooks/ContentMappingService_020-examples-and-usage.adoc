@@ -17,4 +17,4 @@ The mapped object used will be the first non-`null` result returned by an implem
 
 This service is a companion to the default implementation of the xref:core:runtime-services:ContentNegotiationService.adoc[`ContentNegotiationService`].
 
-The framework implementations of `ContentMappingService` use the xref:system:generated:index/applib/services/metamodel/MetaModelService.adoc[`MetaModelService`] to lookup any custom implementations of `CommandDtoProcessor`.
+The framework implementations of `ContentMappingService` use the xref:refguide:applib:index/services/metamodel/MetaModelService.adoc[`MetaModelService`] to lookup any custom implementations of `CommandDtoProcessor`.

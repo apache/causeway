@@ -19,5 +19,5 @@ NOTE: FIXME
 
 == Persistence Concerns
 
-NOTE: FIXME -  easiest to simply store using DataNucleus' support for collections, marked as xref:system:generated:index/applib/annotation/Programmatic.adoc[`@Programmatic`] so that it is ignored by Apache Isis.  Alternatively can store as json/xml in a varchar(4000) or clob and manually unpack.
+NOTE: FIXME -  easiest to simply store using DataNucleus' support for collections, marked as xref:refguide:applib:index/annotation/Programmatic.adoc[`@Programmatic`] so that it is ignored by Apache Isis.  Alternatively can store as json/xml in a varchar(4000) or clob and manually unpack.
 

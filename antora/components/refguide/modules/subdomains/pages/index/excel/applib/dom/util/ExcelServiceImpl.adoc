@@ -43,12 +43,12 @@ As _#toExcel(List, Class, String, String)_ , but appends a single-sheet spreadsh
 <.> xref:#toExcel__WorksheetContent_String[toExcel(WorksheetContent, String)]
 +
 --
-As _#toExcel(List, Class, String, String)_ , but with the domain objects, class and sheet name provided using a xref:system:generated:index/subdomains/excel/applib/dom/WorksheetContent.adoc[WorksheetContent] .
+As _#toExcel(List, Class, String, String)_ , but with the domain objects, class and sheet name provided using a xref:refguide:subdomains:index/excel/applib/dom/WorksheetContent.adoc[WorksheetContent] .
 --
 <.> xref:#toExcel__WorksheetContent_String_InputStream[toExcel(WorksheetContent, String, InputStream)]
 +
 --
-As _#toExcel(List, Class, String, String)_ , but with the domain objects, class and sheet name provided using a xref:system:generated:index/subdomains/excel/applib/dom/WorksheetContent.adoc[WorksheetContent] and with an input stream.
+As _#toExcel(List, Class, String, String)_ , but with the domain objects, class and sheet name provided using a xref:refguide:subdomains:index/excel/applib/dom/WorksheetContent.adoc[WorksheetContent] and with an input stream.
 --
 <.> xref:#toExcel__List_String[toExcel(List, String)]
 +
@@ -73,7 +73,7 @@ Returns a list of objects for each line in the spreadsheet, of the specified typ
 <.> xref:#fromExcel__Blob_WorksheetSpec[fromExcel(Blob, WorksheetSpec)]
 +
 --
-As _#fromExcel(Blob, Class, String)_ , but specifying the class name and sheet name by way of a xref:system:generated:index/subdomains/excel/applib/dom/WorksheetSpec.adoc[WorksheetSpec] .
+As _#fromExcel(Blob, Class, String)_ , but specifying the class name and sheet name by way of a xref:refguide:subdomains:index/excel/applib/dom/WorksheetSpec.adoc[WorksheetSpec] .
 --
 <.> xref:#fromExcel__Blob_List[fromExcel(Blob, List)]
 +
@@ -98,12 +98,12 @@ As _#toExcel(List, Class, String, String)_ , but appends a single-sheet spreadsh
 [#toExcel__WorksheetContent_String]
 === toExcel(WorksheetContent, String)
 
-As _#toExcel(List, Class, String, String)_ , but with the domain objects, class and sheet name provided using a xref:system:generated:index/subdomains/excel/applib/dom/WorksheetContent.adoc[WorksheetContent] .
+As _#toExcel(List, Class, String, String)_ , but with the domain objects, class and sheet name provided using a xref:refguide:subdomains:index/excel/applib/dom/WorksheetContent.adoc[WorksheetContent] .
 
 [#toExcel__WorksheetContent_String_InputStream]
 === toExcel(WorksheetContent, String, InputStream)
 
-As _#toExcel(List, Class, String, String)_ , but with the domain objects, class and sheet name provided using a xref:system:generated:index/subdomains/excel/applib/dom/WorksheetContent.adoc[WorksheetContent] and with an input stream.
+As _#toExcel(List, Class, String, String)_ , but with the domain objects, class and sheet name provided using a xref:refguide:subdomains:index/excel/applib/dom/WorksheetContent.adoc[WorksheetContent] and with an input stream.
 
 [#toExcel__List_String]
 === toExcel(List, String)
@@ -122,9 +122,9 @@ Creates a Blob holding a single-sheet spreadsheet with a pivot of the domain obj
 
 Minimal requirements for the domain object are:
 
-* One property has annotation xref:system:generated:index/subdomains/excel/applib/dom/PivotRow.adoc[PivotRow] and will be used as row identifier in left column of pivot. Empty values are supported.
-* At least one property has annotation xref:system:generated:index/subdomains/excel/applib/dom/PivotColumn.adoc[PivotColumn] . Its values will be used in columns of pivot. Empty values are supported.
-* At least one property has annotation xref:system:generated:index/subdomains/excel/applib/dom/PivotValue.adoc[PivotValue] . Its values will be distributed in the pivot.
+* One property has annotation xref:refguide:subdomains:index/excel/applib/dom/PivotRow.adoc[PivotRow] and will be used as row identifier in left column of pivot. Empty values are supported.
+* At least one property has annotation xref:refguide:subdomains:index/excel/applib/dom/PivotColumn.adoc[PivotColumn] . Its values will be used in columns of pivot. Empty values are supported.
+* At least one property has annotation xref:refguide:subdomains:index/excel/applib/dom/PivotValue.adoc[PivotValue] . Its values will be distributed in the pivot.
 
 [#fromExcel__Blob_Class_String]
 === fromExcel(Blob, Class, String)
@@ -136,7 +136,7 @@ If the class is a view model then the objects will be properly instantiated, wit
 [#fromExcel__Blob_WorksheetSpec]
 === fromExcel(Blob, WorksheetSpec)
 
-As _#fromExcel(Blob, Class, String)_ , but specifying the class name and sheet name by way of a xref:system:generated:index/subdomains/excel/applib/dom/WorksheetSpec.adoc[WorksheetSpec] .
+As _#fromExcel(Blob, Class, String)_ , but specifying the class name and sheet name by way of a xref:refguide:subdomains:index/excel/applib/dom/WorksheetSpec.adoc[WorksheetSpec] .
 
 [#fromExcel__Blob_List]
 === fromExcel(Blob, List)

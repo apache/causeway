@@ -39,7 +39,7 @@ public abstract class ActionDomainEvent<S> extends AbstractDomainEvent<S> {
     public void setReturnValue();                                       // <.>
 }
 ----
-<.> The `Default` nested static class is the default for the xref:system:generated:index/applib/annotation/Action.adoc#domainEvent[`@Action#domainEvent()`]
+<.> The `Default` nested static class is the default for the xref:refguide:applib:index/annotation/Action.adoc#domainEvent[`@Action#domainEvent()`]
 annotation attribute.
 Whether this raises an event or not depends upon the `isis.reflector.facet.actionAnnotation.domainEvent.postForDefault` configuration property.
 <.> The `Noop` class is provided as a convenience to indicate that an event should _not_ be posted (irrespective of the configuration property setting).

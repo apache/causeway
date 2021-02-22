@@ -1,8 +1,8 @@
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
-Allows a block of code to be executed within an arbitrary xref:system:generated:index/applib/services/iactn/ExecutionContext.adoc[ExecutionContext] , allowing the who, when and where to be temporarily switched.
+Allows a block of code to be executed within an arbitrary xref:refguide:applib:index/services/iactn/ExecutionContext.adoc[ExecutionContext] , allowing the who, when and where to be temporarily switched.
 
-Most typically this service is used to temporarily change the &qout;who", that is the user reported by the xref:system:generated:index/applib/services/user/UserService.adoc[UserService] 's _UserService#currentUser() getUser()_ - hence the name SudoService. But the user's locale and timezome can also be changed, as well as the time reported by _org.apache.isis.applib.services.clock.ClockService_ .
+Most typically this service is used to temporarily change the &qout;who", that is the user reported by the xref:refguide:applib:index/services/user/UserService.adoc[UserService] 's _UserService#currentUser() getUser()_ - hence the name SudoService. But the user's locale and timezome can also be changed, as well as the time reported by _org.apache.isis.applib.services.clock.ClockService_ .
 
 The primary use case for this service is for fixture scripts and integration tests.
 
@@ -26,12 +26,12 @@ If included in the list of roles, then will disable security checks (can view an
 <.> xref:#call__UnaryOperator_Callable[call(UnaryOperator, Callable)]
 +
 --
-Executes the supplied _Callable_ block, within the provided xref:system:generated:index/applib/services/iactn/ExecutionContext.adoc[ExecutionContext] .
+Executes the supplied _Callable_ block, within the provided xref:refguide:applib:index/services/iactn/ExecutionContext.adoc[ExecutionContext] .
 --
 <.> xref:#run__UnaryOperator_ThrowingRunnable[run(UnaryOperator, ThrowingRunnable)]
 +
 --
-Executes the supplied _Callable_ block, within the provided xref:system:generated:index/applib/services/iactn/ExecutionContext.adoc[ExecutionContext] .
+Executes the supplied _Callable_ block, within the provided xref:refguide:applib:index/services/iactn/ExecutionContext.adoc[ExecutionContext] .
 --
 
 == Members
@@ -44,12 +44,12 @@ If included in the list of roles, then will disable security checks (can view an
 [#call__UnaryOperator_Callable]
 === call(UnaryOperator, Callable)
 
-Executes the supplied _Callable_ block, within the provided xref:system:generated:index/applib/services/iactn/ExecutionContext.adoc[ExecutionContext] .
+Executes the supplied _Callable_ block, within the provided xref:refguide:applib:index/services/iactn/ExecutionContext.adoc[ExecutionContext] .
 
 [#run__UnaryOperator_ThrowingRunnable]
 === run(UnaryOperator, ThrowingRunnable)
 
-Executes the supplied _Callable_ block, within the provided xref:system:generated:index/applib/services/iactn/ExecutionContext.adoc[ExecutionContext] .
+Executes the supplied _Callable_ block, within the provided xref:refguide:applib:index/services/iactn/ExecutionContext.adoc[ExecutionContext] .
 
 include::hooks/SudoService_010-implementation.adoc[]
 

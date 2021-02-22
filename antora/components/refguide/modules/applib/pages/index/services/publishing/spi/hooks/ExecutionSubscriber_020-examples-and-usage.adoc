@@ -4,7 +4,7 @@
 
 == Wrapper Factory
 
-If the xref:system:generated:index/applib/services/wrapper/WrapperFactory.adoc[WrapperFactory] is used to call other objects then the metrics are captured for each sub-execution.
+If the xref:refguide:applib:index/services/wrapper/WrapperFactory.adoc[WrapperFactory] is used to call other objects then the metrics are captured for each sub-execution.
 
 
 
@@ -15,21 +15,21 @@ If the xref:system:generated:index/applib/services/wrapper/WrapperFactory.adoc[W
 
 See also:
 
-* the xref:system:generated:index/applib/services/iactn/InteractionContext.adoc[`InteractionContext`] is used to obtain the `Interaction` from which the member executions are published.
+* the xref:refguide:applib:index/services/iactn/InteractionContext.adoc[`InteractionContext`] is used to obtain the `Interaction` from which the member executions are published.
 
-* the xref:system:generated:index/applib/services/publishing/spi/EntityChangesSubscriber.adoc[EntityChangesSubscriber] is used to obtain the set of objects modified within the interaction
+* the xref:refguide:applib:index/services/publishing/spi/EntityChangesSubscriber.adoc[EntityChangesSubscriber] is used to obtain the set of objects modified within the interaction
 
-* the xref:system:generated:index/applib/services/metrics/MetricsService.adoc[`MetricsService`] is used to obtain the objects that are loaded throughout the transaction; this info is used in order to instantiate the xref:system:generated:index/applib/services/publishing/spi/EntityChanges.adoc[EntityChanges] object passed through to the xref:system:generated:index/applib/services/publishing/spi/EntityChangesSubscriber.adoc[EntityChangesSubscriber].
+* the xref:refguide:applib:index/services/metrics/MetricsService.adoc[`MetricsService`] is used to obtain the objects that are loaded throughout the transaction; this info is used in order to instantiate the xref:refguide:applib:index/services/publishing/spi/EntityChanges.adoc[EntityChanges] object passed through to the xref:refguide:applib:index/services/publishing/spi/EntityChangesSubscriber.adoc[EntityChangesSubscriber].
 
-* The services provided by this module combine very well with the xref:system:generated:index/applib/services/publishing/spi/CommandSubscriber.adoc[CommandSubscriber] and with xref:system:generated:index/applib/services/publishing/spi/EntityPropertyChangeSubscriber.adoc[EntityPropertyChangeSubscriber].
+* The services provided by this module combine very well with the xref:refguide:applib:index/services/publishing/spi/CommandSubscriber.adoc[CommandSubscriber] and with xref:refguide:applib:index/services/publishing/spi/EntityPropertyChangeSubscriber.adoc[EntityPropertyChangeSubscriber].
 +
-The xref:system:generated:index/applib/services/command/Command.adoc[Command]  captures the __cause__ of an interaction (an action was invoked, a property was edited), while the xref:system:generated:index/applib/services/publishing/spi/ExecutionSubscriber.adoc[ExecutionSubscriber] captures the __effect__ of that interaction in terms of events, while the xref:system:generated:index/applib/services/publishing/spi/EntityPropertyChangeSubscriber.adoc[EntityPropertyChangeSubscriber] captures the effect of the interaction in terms of changed state.
+The xref:refguide:applib:index/services/command/Command.adoc[Command]  captures the __cause__ of an interaction (an action was invoked, a property was edited), while the xref:refguide:applib:index/services/publishing/spi/ExecutionSubscriber.adoc[ExecutionSubscriber] captures the __effect__ of that interaction in terms of events, while the xref:refguide:applib:index/services/publishing/spi/EntityPropertyChangeSubscriber.adoc[EntityPropertyChangeSubscriber] captures the effect of the interaction in terms of changed state.
 
-All of these services collaborate implicitly by way of the xref:system:generated:index/commons/having/HasUniqueId.adoc[HasUniqueId] interface.
+All of these services collaborate implicitly by way of the xref:refguide:commons:index//having/HasUniqueId.adoc[HasUniqueId] interface.
 
 In contrast:
 
-* The xref:system:generated:index/applib/services/eventbus/EventBusService.adoc[EventBusService] differs from the xref:system:generated:index/applib/services/publishing/spi/ExecutionSubscriber.adoc[ExecutionSubscriber] in that the former is intended for fine-grained publish/subscribe for object-to-object interactions _within_ an Apache Isis domain object model.
+* The xref:refguide:applib:index/services/eventbus/EventBusService.adoc[EventBusService] differs from the xref:refguide:applib:index/services/publishing/spi/ExecutionSubscriber.adoc[ExecutionSubscriber] in that the former is intended for fine-grained publish/subscribe for object-to-object interactions _within_ an Apache Isis domain object model.
 +
 The event propagation is strictly in-memory, and there are no restrictions on the object acting as the event; it need not be serializable, for example.
 

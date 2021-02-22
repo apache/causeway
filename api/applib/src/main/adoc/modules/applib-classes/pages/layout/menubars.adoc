@@ -10,12 +10,12 @@ The `org.apache.isis.applib.layout.menubars` package and subpackages define a nu
 The classes define a hierarchical structure of menu bars, menus and menu sections.
 Similar to the xref:applib-classes:layout.adoc[object layout] classes, the concrete menu classes support bootstrap3; support for other layout systems is possible.
 
-The component class `ServiceActionLayoutData` defines action metadata, being broadly equivalent to the "layout" annotations for actions, ie xref:system:generated:index/applib/annotation/ActionLayout.adoc[`@ActionLayout`].
+The component class `ServiceActionLayoutData` defines action metadata, being broadly equivalent to the "layout" annotations for actions, ie xref:refguide:applib:index/annotation/ActionLayout.adoc[`@ActionLayout`].
 This is similar to the `ActionLayoutData` component class used for object layouts, but also captures the identity of the "owning" domain service.
 Service actions are grouped into menu sections.
 
 All of the classes in this package are JAXB-annotated, meaning that they can be serialized to/from XML (in the `http://isis.apache.org/applib/layout/menubars/bootstrap3` XSD namespace).
-This ability to serialize to/from XML is used by the xref:system:generated:index/applib/services/menu/MenuBarsLoaderService.adoc[`MenuBarsLoaderService`], the default implementation of which reads the grid layout for a domain class from a `.layout.xml` file on the classpath.
+This ability to serialize to/from XML is used by the xref:refguide:applib:index/services/menu/MenuBarsLoaderService.adoc[`MenuBarsLoaderService`], the default implementation of which reads the grid layout for a domain class from a `.layout.xml` file on the classpath.
 It also allows the menu bars to be exposed through the REST API provided by the xref:vro:ROOT:about.adoc[Restful Objects viewer], as either XML or JSON.
 
 The service action component also allows a link to be associated with it.
@@ -57,7 +57,7 @@ The service action class reside in the `org.apache.isis.applib.layout.component`
 * `ServiceActionLayoutData` class
 
 +
-which correspond to the xref:system:generated:index/applib/annotation/ActionLayout.adoc[`@ActionLayout`] annotation.
+which correspond to the xref:refguide:applib:index/annotation/ActionLayout.adoc[`@ActionLayout`] annotation.
 
 This is similar to `ActionLayoutData` (of the xref:applib-classes:layout.adoc[object layout] classes), however it also identifies the domain service to which it belongs.
 (This isn't required for the object layouts because the owner in that case is implicit).

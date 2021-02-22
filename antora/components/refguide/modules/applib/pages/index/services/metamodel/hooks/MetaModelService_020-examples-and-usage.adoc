@@ -4,11 +4,11 @@
 
 == See also
 
-* xref:system:generated:index/applib/services/metamodel/MetaModelServiceMenu.adoc[MetaModelServiceMenu]
+* xref:refguide:applib:index/services/metamodel/MetaModelServiceMenu.adoc[MetaModelServiceMenu]
 +
-exposes xref:system:generated:index/applib/services/metamodel/MetaModelService.adoc#exportMetaModel__Config[exportMetaModel] as an action in the user interface.
+exposes xref:refguide:applib:index/services/metamodel/MetaModelService.adoc#exportMetaModel__Config[exportMetaModel] as an action in the user interface.
 
-* xref:system:generated:index/applib/services/metamodel/BeanSort.adoc[BeanSort]
-* xref:system:generated:index/applib/services/metamodel/DomainMember.adoc[DomainMember]
-* xref:system:generated:index/applib/services/metamodel/DomainModel.adoc[DomainModel]
-* xref:system:generated:index/applib/services/metamodel/Config.adoc[Config]
+* xref:refguide:applib:index/services/metamodel/BeanSort.adoc[BeanSort]
+* xref:refguide:applib:index/services/metamodel/DomainMember.adoc[DomainMember]
+* xref:refguide:applib:index/services/metamodel/DomainModel.adoc[DomainModel]
+* xref:refguide:applib:index/services/metamodel/Config.adoc[Config]

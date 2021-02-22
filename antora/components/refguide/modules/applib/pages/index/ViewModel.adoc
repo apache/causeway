@@ -2,7 +2,7 @@
 
 Indicates that an object belongs to the UI/application layer, and is intended to be used as a view model.
 
-Objects that are part of the domain object layer should instead implement xref:system:generated:index/applib/RecreatableDomainObject.adoc[RecreatableDomainObject] .
+Objects that are part of the domain object layer should instead implement xref:refguide:applib:index/RecreatableDomainObject.adoc[RecreatableDomainObject] .
 
 == API
 

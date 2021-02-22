@@ -3,7 +3,7 @@
 
 == Usage by the Framework
 
-The primary user of the service is the framework itself, which automatically emit events for xref:system:generated:index/applib/annotation/Action.adoc#domainEvent[actions], xref:system:generated:index/applib/annotation/Property.adoc#domainEvent[properties] and xref:system:generated:index/applib/annotation/Collection.adoc#domainEvent[collections].
+The primary user of the service is the framework itself, which automatically emit events for xref:refguide:applib:index/annotation/Action.adoc#domainEvent[actions], xref:refguide:applib:index/annotation/Property.adoc#domainEvent[properties] and xref:refguide:applib:index/annotation/Collection.adoc#domainEvent[collections].
 Multiple events are generated:
 
 * when an object member is to be viewed, an event is fired; subscribers can veto (meaning that the member is hidden)
@@ -14,7 +14,7 @@ Multiple events are generated:
 
 If a subscriber throws an exception in the first three steps, then the interaction is vetoed.
 If a subscriber throws an exception in the last two steps, then the transaction is aborted.
-For more on this topic, see xref:system:generated:index/applib/annotation/Action.adoc#domainEvent[`@Action#domainEvent()`], xref:system:generated:index/applib/annotation/Property.adoc#domainEvent[`@Property#domainEvent()`] and xref:system:generated:index/applib/annotation/Collection.adoc#domainEvent[`@Collection#domainEvent()`].
+For more on this topic, see xref:refguide:applib:index/annotation/Action.adoc#domainEvent[`@Action#domainEvent()`], xref:refguide:applib:index/annotation/Property.adoc#domainEvent[`@Property#domainEvent()`] and xref:refguide:applib:index/annotation/Collection.adoc#domainEvent[`@Collection#domainEvent()`].
 
 It is also possible for domain objects to programmatically generate domain events.
 However the events are published, the primary use case is to decoupling interactions from one module/package/namespace and another.
@@ -71,7 +71,7 @@ public class LibraryMember {
     ...
 }
 ----
-<1> `LibraryMemberLeaveEvent` is a subclass of `o.a.i.applib.eventbus.ActionDomainEvent`.The topic of subclassing is discussed in more detail xref:system:generated:index/applib/services/eventbus/EventBusService.adoc#event-hierarchy[below].
+<1> `LibraryMemberLeaveEvent` is a subclass of `o.a.i.applib.eventbus.ActionDomainEvent`.The topic of subclassing is discussed in more detail xref:refguide:applib:index/services/eventbus/EventBusService.adoc#event-hierarchy[below].
 
 Meanwhile, in the `BookRepository` domain service, we subscribe to the event and act upon it.
 For example:
@@ -192,7 +192,7 @@ This then allows for other classes - in particular domain services contributing 
 
 == Programmatic posting
 
-To programmatically post an event, simply call xref:system:generated:index/applib/services/eventbus/EventBusService.adoc#post[EventBusService#post].
+To programmatically post an event, simply call xref:refguide:applib:index/services/eventbus/EventBusService.adoc#post[EventBusService#post].
 
 The `LibraryMember` example described above could for example be rewritten into:
 
@@ -209,13 +209,13 @@ public class LibraryMember {
 ----
 <.> `LibraryMember.LeaveEvent` could be _any_ class, not just a subclass of `o.a.i.applib.event.ActionDomainEvent`.
 
-In practice we suspect there will be few cases where the programmatic approach is required rather than the declarative approach afforded by xref:system:generated:index/applib/annotation/Action.adoc#domainEvent[`@Action#domainEvent()`] et al.
+In practice we suspect there will be few cases where the programmatic approach is required rather than the declarative approach afforded by xref:refguide:applib:index/annotation/Action.adoc#domainEvent[`@Action#domainEvent()`] et al.
 
 
 == Using `WrapperFactory`
 
 Using the declarative approach does require that the method to emit the event is an action called directly by the framework (rather than a helper method programmatically called by that action).
-However by using the xref:system:generated:index/applib/services/wrapper/WrapperFactory.adoc[WrapperFactory] we can invoke that helper method "through" the framework, thereby allowing the framework to emit events.
+However by using the xref:refguide:applib:index/services/wrapper/WrapperFactory.adoc[WrapperFactory] we can invoke that helper method "through" the framework, thereby allowing the framework to emit events.
 (It can also optionally perform validation checks and other concerns associated with the UI).
 
 Another use case for the `WrapperFactory` is when you wish to enforce a (lack-of-) trust boundary between the caller and the callee.
@@ -256,18 +256,18 @@ There are several mechanisms to suport coarse-grained publish/subscribe for syst
 
 * Command publishing, representing the _intention_ to invoke an action or edit a property.
 +
-These events apply to actions annotated with xref:system:generated:index/applib/annotation/Action.adoc#commandPublishing[`@Action#commandPublishing()`]) and to properties properties annotated with xref:system:generated:index/applib/annotation/Property.adoc#commandPublishing[`@Property#commandPublishing`]).
+These events apply to actions annotated with xref:refguide:applib:index/annotation/Action.adoc#commandPublishing[`@Action#commandPublishing()`]) and to properties properties annotated with xref:refguide:applib:index/annotation/Property.adoc#commandPublishing[`@Property#commandPublishing`]).
 +
-The events are received by any/all xref:system:generated:index/applib/services/publishing/spi/CommandSubscriber.adoc[`CommandSubscriber`]s.
+The events are received by any/all xref:refguide:applib:index/services/publishing/spi/CommandSubscriber.adoc[`CommandSubscriber`]s.
 
 * Execution publishing, representing the _completion_ of an action invocation or property edit.
 +
-These events apply to actions annotated with xref:system:generated:index/applib/annotation/Action.adoc#executionPublishing[`@Action#executionPublishing()`]) and properties annotated with xref:system:generated:index/applib/annotation/Property.adoc#executionPublishing[`@Property#executionPublishing`]).
+These events apply to actions annotated with xref:refguide:applib:index/annotation/Action.adoc#executionPublishing[`@Action#executionPublishing()`]) and properties annotated with xref:refguide:applib:index/annotation/Property.adoc#executionPublishing[`@Property#executionPublishing`]).
 +
-The events are received by any/all xref:system:generated:index/applib/services/publishing/spi/ExecutionSubscriber.adoc[`ExecutionSubscriber`]s
+The events are received by any/all xref:refguide:applib:index/services/publishing/spi/ExecutionSubscriber.adoc[`ExecutionSubscriber`]s
 
 * Entity change publishing, representing an entity that has changed its state.
 +
-These events apply to objects annotated with xref:system:generated:index/applib/annotation/DomainObject.adoc#entityChangePublishing[`@DomainObject#entityChangePublishing()`]).
+These events apply to objects annotated with xref:refguide:applib:index/annotation/DomainObject.adoc#entityChangePublishing[`@DomainObject#entityChangePublishing()`]).
 +
-The events are received by any/all xref:system:generated:index/applib/services/publishing/spi/EntityChangesSubscriber.adoc[`EntityChangesSubscriber`]s
+The events are received by any/all xref:refguide:applib:index/services/publishing/spi/EntityChangesSubscriber.adoc[`EntityChangesSubscriber`]s

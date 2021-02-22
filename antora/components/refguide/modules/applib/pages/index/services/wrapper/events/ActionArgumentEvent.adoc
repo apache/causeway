@@ -4,7 +4,7 @@
 
 If _#getReason()_ is not `null` then provides the reason why the argument is invalid; otherwise the argument is valid.
 
-Called once per argument, and before xref:system:generated:index/applib/services/wrapper/events/ActionInvocationEvent.adoc[ActionInvocationEvent] .
+Called once per argument, and before xref:refguide:applib:index/services/wrapper/events/ActionInvocationEvent.adoc[ActionInvocationEvent] .
 
 == API
 

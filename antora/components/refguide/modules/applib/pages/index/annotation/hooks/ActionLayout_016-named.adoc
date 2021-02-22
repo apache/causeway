@@ -1,6 +1,6 @@
 === Names
 
-The xref:system:generated:index/applib/annotation/ActionLayout.adoc#named[named()] element explicitly specifies the action's name, overriding the name that would normally be inferred from the Java source code.
+The xref:refguide:applib:index/annotation/ActionLayout.adoc#named[named()] element explicitly specifies the action's name, overriding the name that would normally be inferred from the Java source code.
 
 [TIP]
 ====

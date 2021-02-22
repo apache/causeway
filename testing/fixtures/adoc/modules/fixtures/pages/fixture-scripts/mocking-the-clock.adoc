@@ -4,13 +4,13 @@
 
 
 It's often useful to be able to change the effective time that a test runs.
-The framework itself uses the xref:system:generated:index/applib/services/clock/ClockService.adoc[`ClockService`] to obtain the current time, and applications should also use this domain service for a consistent view of the current time.
+The framework itself uses the xref:refguide:applib:index/services/clock/ClockService.adoc[`ClockService`] to obtain the current time, and applications should also use this domain service for a consistent view of the current time.
 
 This page describes how to change the current time, and how to set up tests using fixture scripts with a mocked time.
 
 == FixtureClock
 
-The default xref:system:generated:index/applib/services/clock/ClockService.adoc[`ClockService`] implementation in fact simply delegates to another class defined in the API, namely the `o.a.i.applib.clock.Clock`, an abstract singleton class.
+The default xref:refguide:applib:index/services/clock/ClockService.adoc[`ClockService`] implementation in fact simply delegates to another class defined in the API, namely the `o.a.i.applib.clock.Clock`, an abstract singleton class.
 It is not recommended that your code use the `Clock` directly, but it's worth understanding how this all works.
 
 * If running in xref:refguide:config:about.adoc#deployment-types[production] (server) mode, then the framework will (lazily) instantiate the ``SystemClock` when first required.
@@ -30,7 +30,7 @@ Will be superceded as a requirement if refactor to provide alternative ClockServ
 
 == TickingClockFixture
 
-The `TickingClockFixture` is a pre-built fixture script that resets the date/time returned by the xref:system:generated:index/applib/services/clock/ClockService.adoc[`ClockService`] to a known value.
+The `TickingClockFixture` is a pre-built fixture script that resets the date/time returned by the xref:refguide:applib:index/services/clock/ClockService.adoc[`ClockService`] to a known value.
 
 Thereafter the time returned continues to tick forward (as would the real clock) until reset once more.
 

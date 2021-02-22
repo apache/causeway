@@ -12,7 +12,7 @@ The 'wrap' is a runtime-code-generated proxy that wraps the underlying domain ob
 * a `set` method for properties
 * any action
 
-Calling any of the above methods may result in a (subclass of) _InteractionException_ if the object disallows it. For example, if a property is annotated as hidden then a xref:system:generated:index/applib/services/wrapper/HiddenException.adoc[HiddenException] will be thrown. Similarly if an action has a `validate` method and the supplied arguments are invalid then a xref:system:generated:index/applib/services/wrapper/InvalidException.adoc[InvalidException] will be thrown.
+Calling any of the above methods may result in a (subclass of) _InteractionException_ if the object disallows it. For example, if a property is annotated as hidden then a xref:refguide:applib:index/services/wrapper/HiddenException.adoc[HiddenException] will be thrown. Similarly if an action has a `validate` method and the supplied arguments are invalid then a xref:refguide:applib:index/services/wrapper/InvalidException.adoc[InvalidException] will be thrown.
 
 In addition, the following methods may also be called:
 
@@ -85,17 +85,17 @@ Returns a proxy object for the provided _mixinClass_ , through which can execute
 <.> xref:#getListeners__[getListeners()]
 +
 --
-All xref:system:generated:index/applib/services/wrapper/listeners/InteractionListener.adoc[InteractionListener] s that have been registered using _#addInteractionListener(InteractionListener)_ .
+All xref:refguide:applib:index/services/wrapper/listeners/InteractionListener.adoc[InteractionListener] s that have been registered using _#addInteractionListener(InteractionListener)_ .
 --
 <.> xref:#addInteractionListener__InteractionListener[addInteractionListener(InteractionListener)]
 +
 --
-Registers an xref:system:generated:index/applib/services/wrapper/listeners/InteractionListener.adoc[InteractionListener] , to be notified of interactions on all wrappers.
+Registers an xref:refguide:applib:index/services/wrapper/listeners/InteractionListener.adoc[InteractionListener] , to be notified of interactions on all wrappers.
 --
 <.> xref:#removeInteractionListener__InteractionListener[removeInteractionListener(InteractionListener)]
 +
 --
-Remove an xref:system:generated:index/applib/services/wrapper/listeners/InteractionListener.adoc[InteractionListener] , to no longer be notified of interactions on wrappers.
+Remove an xref:refguide:applib:index/services/wrapper/listeners/InteractionListener.adoc[InteractionListener] , to no longer be notified of interactions on wrappers.
 --
 
 == Members
@@ -105,7 +105,7 @@ Remove an xref:system:generated:index/applib/services/wrapper/listeners/Interact
 
 Provides the "wrapper" of a domain object against which to invoke the action.
 
-The provided xref:system:generated:index/applib/services/wrapper/control/SyncControl.adoc[SyncControl] determines whether business rules are checked first, and conversely whether the action is executed. There are therefore three typical cases:
+The provided xref:refguide:applib:index/services/wrapper/control/SyncControl.adoc[SyncControl] determines whether business rules are checked first, and conversely whether the action is executed. There are therefore three typical cases:
 
 * check rules, execute action
 * skip rules, execute action
@@ -125,7 +125,7 @@ A convenience overload for _#wrap(Object, SyncControl)_ , returning a wrapper to
 
 Provides the wrapper for a _FactoryService#mixin(Class, Object) mixin_ , against which to invoke the action.
 
-The provided xref:system:generated:index/applib/services/wrapper/control/SyncControl.adoc[SyncControl] determines whether business rules are checked first, and conversely whether the action is executed. See _#wrap(Object, SyncControl)_ for more details on this.
+The provided xref:refguide:applib:index/services/wrapper/control/SyncControl.adoc[SyncControl] determines whether business rules are checked first, and conversely whether the action is executed. See _#wrap(Object, SyncControl)_ for more details on this.
 
 [#wrapMixin__Class_Object]
 === wrapMixin(Class, Object)
@@ -157,19 +157,19 @@ Returns a proxy object for the provided _mixinClass_ , through which can execute
 [#getListeners__]
 === getListeners()
 
-All xref:system:generated:index/applib/services/wrapper/listeners/InteractionListener.adoc[InteractionListener] s that have been registered using _#addInteractionListener(InteractionListener)_ .
+All xref:refguide:applib:index/services/wrapper/listeners/InteractionListener.adoc[InteractionListener] s that have been registered using _#addInteractionListener(InteractionListener)_ .
 
 [#addInteractionListener__InteractionListener]
 === addInteractionListener(InteractionListener)
 
-Registers an xref:system:generated:index/applib/services/wrapper/listeners/InteractionListener.adoc[InteractionListener] , to be notified of interactions on all wrappers.
+Registers an xref:refguide:applib:index/services/wrapper/listeners/InteractionListener.adoc[InteractionListener] , to be notified of interactions on all wrappers.
 
 This is retrospective: the listener will be notified of interactions even on wrappers created before the listener was installed. (From an implementation perspective this is because the wrappers delegate back to the container to fire the events).
 
 [#removeInteractionListener__InteractionListener]
 === removeInteractionListener(InteractionListener)
 
-Remove an xref:system:generated:index/applib/services/wrapper/listeners/InteractionListener.adoc[InteractionListener] , to no longer be notified of interactions on wrappers.
+Remove an xref:refguide:applib:index/services/wrapper/listeners/InteractionListener.adoc[InteractionListener] , to no longer be notified of interactions on wrappers.
 
 This is retrospective: the listener will no longer be notified of any interactions created on any wrappers, not just on those wrappers created subsequently. (From an implementation perspective this is because the wrappers delegate back to the container to fire the events).
 

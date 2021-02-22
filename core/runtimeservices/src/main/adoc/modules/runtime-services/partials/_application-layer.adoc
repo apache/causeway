@@ -37,8 +37,8 @@ Impl'n (g: a:)
 `CommandDtoServiceInternal`]
 |Creates memento of current action invocation, for use as a serializable XML reified command.  The
 most notable usage of this is to allow the execution of the `Command` to be deferred to run in the background (via
-xref:system:generated:index/applib/annotation/Action.adoc#command[`@Action#commandExecuteIn()`] or
-xref:system:generated:index/applib/annotation/Property.adoc#command[`@Property#commandExecuteIn()`].
+xref:refguide:applib:index/annotation/Action.adoc#command[`@Action#commandExecuteIn()`] or
+xref:refguide:applib:index/annotation/Property.adoc#command[`@Property#commandExecuteIn()`].
 |`CommandDtoService-` +
 `InternalServiceDefault` +
 ``isis-core-runtime``
@@ -47,7 +47,7 @@ xref:system:generated:index/applib/annotation/Property.adoc#command[`@Property#c
 
 |xref:core:runtime-services:InteractionDtoServiceInternal.adoc[`o.a.i.c.m.s.ixn` +
 `InteractionDtoServiceInternal`]
-|Creates DTO for the current execution of an action invocation or property edit, for use either as a reified command or for implementations of the xref:system:generated:index/applib/services/publishing/spi/ExecutionSubscriber.adoc[ExecutionSubscriber].
+|Creates DTO for the current execution of an action invocation or property edit, for use either as a reified command or for implementations of the xref:refguide:applib:index/services/publishing/spi/ExecutionSubscriber.adoc[ExecutionSubscriber].
 |`CommandDtoService-` +
 `InternalServiceDefault` +
 ``isis-core-metamodel``

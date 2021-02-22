@@ -1,6 +1,6 @@
 === Bookmarking
 
-The xref:system:generated:index/applib/annotation/ActionLayout.adoc#bookmarking[bookmarking()] element indicates if an action (with safe xref:system:generated:index/applib/annotation/Action.adoc#semantics[action semantics]) is automatically bookmarked.
+The xref:refguide:applib:index/annotation/ActionLayout.adoc#bookmarking[bookmarking()] element indicates if an action (with safe xref:refguide:applib:index/annotation/Action.adoc#semantics[action semantics]) is automatically bookmarked.
 
 In the xref:vw:ROOT:about.adoc[Wicket viewer], a link to a bookmarked object is shown in the bookmarks panel.
 
@@ -30,7 +30,7 @@ indicates that the `notYetComplete()` action is bookmarkable.
 
 [NOTE]
 ====
-The enum value `AS_CHILD` has no meaning for actions; it relates only to bookmarked xref:system:generated:index/applib/annotation/DomainObjectLayout.adoc#bookmarking[domain object]s.
+The enum value `AS_CHILD` has no meaning for actions; it relates only to bookmarked xref:refguide:applib:index/annotation/DomainObjectLayout.adoc#bookmarking[domain object]s.
 ====
 
 

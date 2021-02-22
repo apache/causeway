@@ -24,12 +24,12 @@ interface ServiceRegistry {
 <.> xref:#select__Class_Annotation[][select(Class, Annotation[])]
 +
 --
-Obtains a xref:system:generated:index/commons/collections/Can.adoc[Can] container containing any matching instances for the given required type and additional required qualifiers.
+Obtains a xref:refguide:commons:index//collections/Can.adoc[Can] container containing any matching instances for the given required type and additional required qualifiers.
 --
 <.> xref:#select__Class[select(Class)]
 +
 --
-Obtains a xref:system:generated:index/commons/collections/Can.adoc[Can] container containing any matching instances for the given required type.
+Obtains a xref:refguide:commons:index//collections/Can.adoc[Can] container containing any matching instances for the given required type.
 --
 <.> xref:#streamRegisteredBeansOfType__Class[streamRegisteredBeansOfType(Class)]
 +
@@ -72,12 +72,12 @@ Looks up a domain service of the requested type (same as _#lookupService(Class)_
 [#select__Class_Annotation[]]
 === select(Class, Annotation[])
 
-Obtains a xref:system:generated:index/commons/collections/Can.adoc[Can] container containing any matching instances for the given required type and additional required qualifiers.
+Obtains a xref:refguide:commons:index//collections/Can.adoc[Can] container containing any matching instances for the given required type and additional required qualifiers.
 
 [#select__Class]
 === select(Class)
 
-Obtains a xref:system:generated:index/commons/collections/Can.adoc[Can] container containing any matching instances for the given required type.
+Obtains a xref:refguide:commons:index//collections/Can.adoc[Can] container containing any matching instances for the given required type.
 
 [#streamRegisteredBeansOfType__Class]
 === streamRegisteredBeansOfType(Class)

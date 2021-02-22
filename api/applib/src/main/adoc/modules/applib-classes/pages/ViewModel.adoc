@@ -4,7 +4,7 @@
 
 
 [#ViewModel]
-include::system:generated:page$index/applib/ViewModel.adoc[]
+include::refguide:applib:page$index/ViewModel.adoc[]
 
 
 See also the xref:userguide:fun:view-models.adoc#view-model-interface[`ViewModel` interface] in the user guide.

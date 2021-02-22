@@ -4,4 +4,4 @@
 
 == See Also
 
-* xref:system:generated:index/applib/services/publishing/spi/EntityChanges.adoc[EntityChanges]
+* xref:refguide:applib:index/services/publishing/spi/EntityChanges.adoc[EntityChanges]

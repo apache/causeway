@@ -5,10 +5,10 @@
 
 All of the layout annotations provide the ability to specify adhoc CSS classes, associated with the corresponding element:
 
-* xref:system:generated:index/applib/annotation/DomainObjectLayout.adoc#cssClass[`@DomainObjectLayout#cssClass()`]
-* xref:system:generated:index/applib/annotation/ActionLayout.adoc#cssClass[`@ActionLayout#cssClass()`]
-* xref:system:generated:index/applib/annotation/PropertyLayout.adoc#cssClass[`@PropertyLayout#cssClass()`]
-* xref:system:generated:index/applib/annotation/CollectionLayout.adoc#cssClass[`@CollectionLayout#cssClass()`]
+* xref:refguide:applib:index/annotation/DomainObjectLayout.adoc#cssClass[`@DomainObjectLayout#cssClass()`]
+* xref:refguide:applib:index/annotation/ActionLayout.adoc#cssClass[`@ActionLayout#cssClass()`]
+* xref:refguide:applib:index/annotation/PropertyLayout.adoc#cssClass[`@PropertyLayout#cssClass()`]
+* xref:refguide:applib:index/annotation/CollectionLayout.adoc#cssClass[`@CollectionLayout#cssClass()`]
 
 CSS can also be specified using the xref:userguide:fun:ui.adoc#object-layout[`Xxx.layout.xml`] layout files.
 The viewer can then use this information within the rendered page.

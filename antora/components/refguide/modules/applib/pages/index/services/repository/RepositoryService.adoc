@@ -2,7 +2,7 @@
 
 Collects together methods for creating, persisting and searching for entities from the underlying persistence store.
 
-Typically it's good practice to define a domain-specific service (eg `CustomerRepository` ) which then delegates to this service. This domain-specific service can use some xref:system:generated:index/applib/services/repository/RepositoryService.adoc[RepositoryService] 's "naive" methods that use client-side predicates for filtering; these can then be replaced by more sophisticated implementations that use proper server-side filtering later on without impacting the rest of the application.
+Typically it's good practice to define a domain-specific service (eg `CustomerRepository` ) which then delegates to this service. This domain-specific service can use some xref:refguide:applib:index/services/repository/RepositoryService.adoc[RepositoryService] 's "naive" methods that use client-side predicates for filtering; these can then be replaced by more sophisticated implementations that use proper server-side filtering later on without impacting the rest of the application.
 
 == API
 
@@ -38,7 +38,7 @@ interface RepositoryService {
 <.> xref:#getEntityState__Object[getEntityState(Object)]
 +
 --
-Returns the xref:system:generated:index/applib/services/repository/EntityState.adoc[EntityState] of given _object_ .
+Returns the xref:refguide:applib:index/services/repository/EntityState.adoc[EntityState] of given _object_ .
 --
 <.> xref:#detachedEntity__T[detachedEntity(T)]
 +
@@ -93,7 +93,7 @@ Overload of _#allMatches(Class, Predicate)_ , returns a _page_ of persisted inst
 <.> xref:#allMatches__Query[allMatches(Query)]
 +
 --
-Returns all the instances that match the given xref:system:generated:index/applib/query/Query.adoc[Query] .
+Returns all the instances that match the given xref:refguide:applib:index/query/Query.adoc[Query] .
 --
 <.> xref:#uniqueMatch__Class_Predicate[uniqueMatch(Class, Predicate)]
 +
@@ -103,7 +103,7 @@ Finds the only instance of the specified type (including subtypes) that satifies
 <.> xref:#uniqueMatch__Query[uniqueMatch(Query)]
 +
 --
-Find the only instance that matches the provided xref:system:generated:index/applib/query/Query.adoc[Query] .
+Find the only instance that matches the provided xref:refguide:applib:index/query/Query.adoc[Query] .
 --
 <.> xref:#firstMatch__Class_Predicate[firstMatch(Class, Predicate)]
 +
@@ -113,7 +113,7 @@ Find the only instance of the specified type (including subtypes) that satifies 
 <.> xref:#firstMatch__Query[firstMatch(Query)]
 +
 --
-Find the only instance that matches the provided xref:system:generated:index/applib/query/Query.adoc[Query] , if any.
+Find the only instance that matches the provided xref:refguide:applib:index/query/Query.adoc[Query] , if any.
 --
 <.> xref:#refresh__T[refresh(T)]
 +
@@ -179,7 +179,7 @@ Determines if the specified object has been deleted from the object store.
 [#getEntityState__Object]
 === getEntityState(Object)
 
-Returns the xref:system:generated:index/applib/services/repository/EntityState.adoc[EntityState] of given _object_ .
+Returns the xref:refguide:applib:index/services/repository/EntityState.adoc[EntityState] of given _object_ .
 
 [#detachedEntity__T]
 === detachedEntity(T)
@@ -262,7 +262,7 @@ If the optional range parameters are used, the dataset returned starts from (0 b
 [#allMatches__Query]
 === allMatches(Query)
 
-Returns all the instances that match the given xref:system:generated:index/applib/query/Query.adoc[Query] .
+Returns all the instances that match the given xref:refguide:applib:index/query/Query.adoc[Query] .
 
 This is the main API for server-side (performant) queries returning multiple instances, where a _org.apache.isis.applib.query.NamedQuery_ can be passed in that ultimately describes a SELECT query with WHERE predicates. The mechanism by which this is defined depends on the ORM (JDO or JPA). A _org.apache.isis.applib.query.NamedQuery_ can optionally specify a _org.apache.isis.applib.query.NamedQuery#withRange(QueryRange) range_ of instances to be returned.
 
@@ -280,7 +280,7 @@ If no instance is found then _Optional#empty()_ will be return, while if there i
 [#uniqueMatch__Query]
 === uniqueMatch(Query)
 
-Find the only instance that matches the provided xref:system:generated:index/applib/query/Query.adoc[Query] .
+Find the only instance that matches the provided xref:refguide:applib:index/query/Query.adoc[Query] .
 
 This is the main API for server-side (performant) queries returning no more than one instance, where a _org.apache.isis.applib.query.NamedQuery_ can be passed in that ultimately describes a SELECT query with WHERE predicates. The mechanism by which this is defined depends on the ORM (JDO or JPA). A _org.apache.isis.applib.query.NamedQuery_ can optionally specify a _org.apache.isis.applib.query.NamedQuery#withRange(QueryRange) range_ of instances to be returned.
 
@@ -298,7 +298,7 @@ If no instance is found then _Optional#empty()_ will be return, while if there i
 [#firstMatch__Query]
 === firstMatch(Query)
 
-Find the only instance that matches the provided xref:system:generated:index/applib/query/Query.adoc[Query] , if any.
+Find the only instance that matches the provided xref:refguide:applib:index/query/Query.adoc[Query] , if any.
 
 This is the main API for server-side (performant) queries returning the first matching instance, where a _org.apache.isis.applib.query.NamedQuery_ can be passed in that ultimately describes a SELECT query with WHERE predicates. The mechanism by which this is defined depends on the ORM (JDO or JPA). A _org.apache.isis.applib.query.NamedQuery_ can optionally specify a _org.apache.isis.applib.query.NamedQuery#withRange(QueryRange) range_ of instances to be returned.
 

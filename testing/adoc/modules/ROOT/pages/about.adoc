@@ -62,7 +62,7 @@ When we talk about integration tests/specs here, we mean tests that exercise the
 
 For most other frameworks that would require having to test the application in a very heavy weight/fragile fashion using a tool such as link:http://docs.seleniumhq.org/[Selenium], driving a web browser to navigate .  In this regard though, Apache Isis has a significant trick up its sleeve.  Because Apache Isis implements the naked objects pattern, it means that the UI is generated automatically from declared domain-objects, -views and -services. This therefore allows for other implementations of the UI.
 
-The xref:system:generated:index/applib/services/wrapper/WrapperFactory.adoc[WrapperFactory] domain service allows a test to wrap domain objects and thus to interact with said objects "as if" through the UI:
+The xref:refguide:applib:index/services/wrapper/WrapperFactory.adoc[WrapperFactory] domain service allows a test to wrap domain objects and thus to interact with said objects "as if" through the UI:
 
 .Wrapper objects
 image::testing:integtestsupport:wrapper-factory.png[width="400px"]
@@ -91,7 +91,7 @@ CustomerRepository customers;
 ----
 
 Domain services are discovered by Spring Boot, either explicitly referenced in the link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/context/annotation/Import.html[@Import] annotation, or picked up from class path scanning of link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/context/annotation/ComponentScan.html[@ComponentScan].
-Any service annotated or meta-annotated with link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/stereotype/Component.html[@Component] can be discovered; this includes classes annotated with Apache Isis' xref:system:generated:index/applib/annotation/DomainService.adoc[@DomainService].
+Any service annotated or meta-annotated with link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/stereotype/Component.html[@Component] can be discovered; this includes classes annotated with Apache Isis' xref:refguide:applib:index/annotation/DomainService.adoc[@DomainService].
 
 
 == Given/When/Then

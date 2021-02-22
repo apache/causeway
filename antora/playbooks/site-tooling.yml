@@ -31,7 +31,7 @@ content:
       start_path: antora/components/comguide # comguide
       branches: HEAD
     - url: .
-      start_path: antora/components/system # system
+      start_path: antora/components/refguide # refguide
       branches: HEAD
 
 # core

@@ -13,7 +13,7 @@ The implementations are:
 * `o.a.i.applib.services.commanddto.conmap.ContentMappingServiceForCommandDto` will map any single instance of a `HasCommandDto` into a `CommandDto` XML document
 * `o.a.i.applib.services.commanddto.conmap.ContentMappingServiceForCommandsDto` will map a list of ``HasCommandDto``s into a `CommandsDto` XML document, and will wrap any single instance of a `CommandWithDto` into a singleton list and thence into a `CommandsDto` XML document.
 
-If the action invocation or property edit represent provides an implementation of a `CommandDtoProcessor` (by way of xref:system:generated:index/applib/annotation/Action.adoc#commandDtoProcessor[`@Action#commandDtoProcessor()`] or xref:system:generated:index/applib/annotation/Property.adoc#commandDtoProcessor[`@Property#commandDtoProcessor()`]) then this is also called to post-process the persisted `CommandDto` if required.
+If the action invocation or property edit represent provides an implementation of a `CommandDtoProcessor` (by way of xref:refguide:applib:index/annotation/Action.adoc#commandDtoProcessor[`@Action#commandDtoProcessor()`] or xref:refguide:applib:index/annotation/Property.adoc#commandDtoProcessor[`@Property#commandDtoProcessor()`]) then this is also called to post-process the persisted `CommandDto` if required.
 A typical use case for this is to dynamically add in serialized ``Blob``s or ``Clob``s, the values of which are not captured by default in `CommandDto`.
 
 To support the writing of custom implementations of this interface, the framework also provides `ContentMappingService.Util` which includes a couple of convenience utilities:

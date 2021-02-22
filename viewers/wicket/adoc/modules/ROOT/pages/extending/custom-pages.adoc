@@ -20,10 +20,10 @@ Isis defines eight page types (see the `org.apache.isis.viewer.wicket.model.mode
 | The initial sign-in (aka login) page
 
 | SIGN_UP
-| The sign-up page (if xref:system:generated:index/applib/services/userreg/UserRegistrationService.adoc[user registration] is enabled).
+| The sign-up page (if xref:refguide:applib:index/services/userreg/UserRegistrationService.adoc[user registration] is enabled).
 
 | SIGN_UP_VERIFY
-| The sign-up verification page (if xref:system:generated:index/applib/services/userreg/UserRegistrationService.adoc[user registration] is enabled; as accessed by link from verification email)
+| The sign-up verification page (if xref:refguide:applib:index/services/userreg/UserRegistrationService.adoc[user registration] is enabled; as accessed by link from verification email)
 
 | PASSWORD_RESET
 | The password reset page (if enabled).

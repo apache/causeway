@@ -20,7 +20,7 @@ enum Nature {
 <.> xref:#NOT_SPECIFIED[NOT_SPECIFIED]
 +
 --
-The default; allows the programmer to combine `@DomainObject` annotation with the xref:system:generated:index/applib/ViewModel.adoc[ViewModel] annotation, or the _XmlRootElement_ annotation, or by implementing the xref:system:generated:index/applib/ViewModel.adoc[ViewModel] interface.
+The default; allows the programmer to combine `@DomainObject` annotation with the xref:refguide:applib:index/ViewModel.adoc[ViewModel] annotation, or the _XmlRootElement_ annotation, or by implementing the xref:refguide:applib:index/ViewModel.adoc[ViewModel] interface.
 --
 <.> xref:#ENTITY[ENTITY]
 +
@@ -48,7 +48,7 @@ An object that is entirely managed by the underlying IoC container.
 [#NOT_SPECIFIED]
 === NOT_SPECIFIED
 
-The default; allows the programmer to combine `@DomainObject` annotation with the xref:system:generated:index/applib/ViewModel.adoc[ViewModel] annotation, or the _XmlRootElement_ annotation, or by implementing the xref:system:generated:index/applib/ViewModel.adoc[ViewModel] interface.
+The default; allows the programmer to combine `@DomainObject` annotation with the xref:refguide:applib:index/ViewModel.adoc[ViewModel] annotation, or the _XmlRootElement_ annotation, or by implementing the xref:refguide:applib:index/ViewModel.adoc[ViewModel] interface.
 
 [#ENTITY]
 === ENTITY
@@ -64,7 +64,7 @@ Currently implies no additional semantics other than documentation.
 
 An object that is conceptually part of the application layer, and which surfaces behavior and/or state that is aggregate of one or more domain entity.
 
-The identity of a view model is determined solely by the state of object's properties. Using this nature should be considered exactly equivalent to annotating with xref:system:generated:index/applib/ViewModel.adoc[ViewModel] .
+The identity of a view model is determined solely by the state of object's properties. Using this nature should be considered exactly equivalent to annotating with xref:refguide:applib:index/ViewModel.adoc[ViewModel] .
 
 Note that collections are ignored; if their state is required to fully identify the view model, define the view model using the JAXB _XmlRootElement_ annotation instead (where the object's state is serialized to an arbitrarily deep graph of data, with references to persistent entities transparently resolved to `<oid-dto>` elements).
 

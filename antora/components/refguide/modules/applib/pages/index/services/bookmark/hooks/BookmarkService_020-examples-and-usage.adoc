@@ -8,11 +8,11 @@
 
 There are two mixins that will contribute to this interface:
 
-* xref:system:generated:index/applib/services/bookmark/BookmarkHolder_lookup.adoc[BookmarkHolder_lookup]
+* xref:refguide:applib:index/services/bookmark/BookmarkHolder_lookup.adoc[BookmarkHolder_lookup]
 +
 which contributes a `lookup` action to return the referenced object
 
-* xref:system:generated:index/applib/services/bookmark/BookmarkHolder_object.adoc[BookmarkHolder_object]
+* xref:refguide:applib:index/services/bookmark/BookmarkHolder_object.adoc[BookmarkHolder_object]
 +
 which contributes instead an `object` property, being the referenced object.
 
@@ -23,19 +23,19 @@ Either of these can be suppressed, if required, using a vetoing subscriber that 
 
 //== Examples
 //
-//For example, a `Customer` object with an xref:system:generated:index/applib/annotation/DomainObject.adoc#objectType[object type] of "custmgmt.Customer" and an id of 123
+//For example, a `Customer` object with an xref:refguide:applib:index/annotation/DomainObject.adoc#objectType[object type] of "custmgmt.Customer" and an id of 123
 //would correspond to a xref:BookmarkService.adoc#bookmark[`Bookmark`] with a string representation of "custmgmt.Customer|123".
 //
 //Bookmarks are useful to store a reference to an arbitrary object, although be aware that there is no referential integrity.
 //
 //Several of the extension libraries use bookmarks.
-//For example the xref:system:generated:index/applib/services/publishing/spi/EntityPropertyChangeSubscriber.adoc[EntityPropertyChangeSubscriber] uses bookmarks to identify the object that is being modified.
+//For example the xref:refguide:applib:index/services/publishing/spi/EntityPropertyChangeSubscriber.adoc[EntityPropertyChangeSubscriber] uses bookmarks to identify the object that is being modified.
 //
-//Serialized form of bookmarks also appear within  xref:refguide:schema:about.adoc[schema] instances, for example as used by xref:refguide:applib-svc:CommandServiceInternal.adoc[`CommandService`] and the xref:system:generated:index/applib/services/publishing/spi/ExecutionSubscriber.adoc[ExecutionSubscriber].
+//Serialized form of bookmarks also appear within  xref:refguide:schema:about.adoc[schema] instances, for example as used by xref:refguide:applib-svc:CommandServiceInternal.adoc[`CommandService`] and the xref:refguide:applib:index/services/publishing/spi/ExecutionSubscriber.adoc[ExecutionSubscriber].
 
 
 == See Also
 
-* xref:system:generated:index/applib/services/bookmark/Bookmark.adoc[Bookmark]
-* xref:system:generated:index/applib/services/bookmark/BookmarkHolder.adoc[BookmarkHolder]
+* xref:refguide:applib:index/services/bookmark/Bookmark.adoc[Bookmark]
+* xref:refguide:applib:index/services/bookmark/BookmarkHolder.adoc[BookmarkHolder]
 

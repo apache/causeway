@@ -3,4 +3,4 @@
 
 == See also
 
-* xref:system:generated:index/applib/services/sudo/SudoService.adoc[SudoService]
+* xref:refguide:applib:index/services/sudo/SudoService.adoc[SudoService]

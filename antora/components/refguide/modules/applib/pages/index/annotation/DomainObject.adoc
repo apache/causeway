@@ -1,6 +1,6 @@
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
-Domain semantics for domain objects (entities and view models; for services see xref:system:generated:index/applib/annotation/DomainService.adoc[DomainService] ).
+Domain semantics for domain objects (entities and view models; for services see xref:refguide:applib:index/annotation/DomainService.adoc[DomainService] ).
 
 == API
 
@@ -78,52 +78,52 @@ Provides a unique abbreviation for the object type's, eg "customer.Customer" for
 <.> xref:#createdLifecycleEvent[createdLifecycleEvent]
 +
 --
-Indicates that the loading of the domain object should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService event bus_ using a custom (subclass of) xref:system:generated:index/applib/events/lifecycle/ObjectCreatedEvent.adoc[ObjectCreatedEvent] .
+Indicates that the loading of the domain object should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService event bus_ using a custom (subclass of) xref:refguide:applib:index/events/lifecycle/ObjectCreatedEvent.adoc[ObjectCreatedEvent] .
 --
 <.> xref:#persistingLifecycleEvent[persistingLifecycleEvent]
 +
 --
-Indicates that the loading of the domain object should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService event bus_ using a custom (subclass of) xref:system:generated:index/applib/events/lifecycle/ObjectPersistingEvent.adoc[ObjectPersistingEvent] .
+Indicates that the loading of the domain object should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService event bus_ using a custom (subclass of) xref:refguide:applib:index/events/lifecycle/ObjectPersistingEvent.adoc[ObjectPersistingEvent] .
 --
 <.> xref:#persistedLifecycleEvent[persistedLifecycleEvent]
 +
 --
-Indicates that the loading of the domain object should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService event bus_ using a custom (subclass of) xref:system:generated:index/applib/events/lifecycle/ObjectPersistedEvent.adoc[ObjectPersistedEvent] .
+Indicates that the loading of the domain object should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService event bus_ using a custom (subclass of) xref:refguide:applib:index/events/lifecycle/ObjectPersistedEvent.adoc[ObjectPersistedEvent] .
 --
 <.> xref:#loadedLifecycleEvent[loadedLifecycleEvent]
 +
 --
-Indicates that the loading of the domain object should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService event bus_ using a custom (subclass of) xref:system:generated:index/applib/events/lifecycle/ObjectLoadedEvent.adoc[ObjectLoadedEvent] .
+Indicates that the loading of the domain object should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService event bus_ using a custom (subclass of) xref:refguide:applib:index/events/lifecycle/ObjectLoadedEvent.adoc[ObjectLoadedEvent] .
 --
 <.> xref:#updatingLifecycleEvent[updatingLifecycleEvent]
 +
 --
-Indicates that the loading of the domain object should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService event bus_ using a custom (subclass of) xref:system:generated:index/applib/events/lifecycle/ObjectUpdatingEvent.adoc[ObjectUpdatingEvent] .
+Indicates that the loading of the domain object should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService event bus_ using a custom (subclass of) xref:refguide:applib:index/events/lifecycle/ObjectUpdatingEvent.adoc[ObjectUpdatingEvent] .
 --
 <.> xref:#updatedLifecycleEvent[updatedLifecycleEvent]
 +
 --
-Indicates that the loading of the domain object should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService event bus_ using a custom (subclass of) xref:system:generated:index/applib/events/lifecycle/ObjectUpdatedEvent.adoc[ObjectUpdatedEvent] .
+Indicates that the loading of the domain object should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService event bus_ using a custom (subclass of) xref:refguide:applib:index/events/lifecycle/ObjectUpdatedEvent.adoc[ObjectUpdatedEvent] .
 --
 <.> xref:#removingLifecycleEvent[removingLifecycleEvent]
 +
 --
-Indicates that the loading of the domain object should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService event bus_ using a custom (subclass of) xref:system:generated:index/applib/events/lifecycle/ObjectRemovingEvent.adoc[ObjectRemovingEvent] .
+Indicates that the loading of the domain object should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService event bus_ using a custom (subclass of) xref:refguide:applib:index/events/lifecycle/ObjectRemovingEvent.adoc[ObjectRemovingEvent] .
 --
 <.> xref:#actionDomainEvent[actionDomainEvent]
 +
 --
-Indicates that an invocation of _any_ action of the domain object (that do not themselves specify their own `@Action(domainEvent=...)` should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService event bus_ using the specified custom (subclass of) xref:system:generated:index/applib/events/domain/ActionDomainEvent.adoc[ActionDomainEvent] .
+Indicates that an invocation of _any_ action of the domain object (that do not themselves specify their own `@Action(domainEvent=...)` should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService event bus_ using the specified custom (subclass of) xref:refguide:applib:index/events/domain/ActionDomainEvent.adoc[ActionDomainEvent] .
 --
 <.> xref:#propertyDomainEvent[propertyDomainEvent]
 +
 --
-Indicates that changes to _any_ property of the domain object (that do not themselves specify their own `@Property(domainEvent=...)` should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService event bus_ using the specified custom (subclass of) xref:system:generated:index/applib/events/domain/PropertyDomainEvent.adoc[PropertyDomainEvent] .
+Indicates that changes to _any_ property of the domain object (that do not themselves specify their own `@Property(domainEvent=...)` should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService event bus_ using the specified custom (subclass of) xref:refguide:applib:index/events/domain/PropertyDomainEvent.adoc[PropertyDomainEvent] .
 --
 <.> xref:#collectionDomainEvent[collectionDomainEvent]
 +
 --
-Indicates that changes to _any_ collection of the domain object (that do not themselves specify their own `@Collection(domainEvent=...)` should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService event bus_ using a custom (subclass of) xref:system:generated:index/applib/events/domain/CollectionDomainEvent.adoc[CollectionDomainEvent] .
+Indicates that changes to _any_ collection of the domain object (that do not themselves specify their own `@Collection(domainEvent=...)` should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService event bus_ using a custom (subclass of) xref:refguide:applib:index/events/domain/CollectionDomainEvent.adoc[CollectionDomainEvent] .
 --
 
 == Members
@@ -192,56 +192,56 @@ This value, if specified, is used in the serialized form of the object's OID. An
 [#createdLifecycleEvent]
 === createdLifecycleEvent
 
-Indicates that the loading of the domain object should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService event bus_ using a custom (subclass of) xref:system:generated:index/applib/events/lifecycle/ObjectCreatedEvent.adoc[ObjectCreatedEvent] .
+Indicates that the loading of the domain object should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService event bus_ using a custom (subclass of) xref:refguide:applib:index/events/lifecycle/ObjectCreatedEvent.adoc[ObjectCreatedEvent] .
 
 This subclass must provide a no-arg constructor; the fields are set reflectively.
 
 [#persistingLifecycleEvent]
 === persistingLifecycleEvent
 
-Indicates that the loading of the domain object should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService event bus_ using a custom (subclass of) xref:system:generated:index/applib/events/lifecycle/ObjectPersistingEvent.adoc[ObjectPersistingEvent] .
+Indicates that the loading of the domain object should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService event bus_ using a custom (subclass of) xref:refguide:applib:index/events/lifecycle/ObjectPersistingEvent.adoc[ObjectPersistingEvent] .
 
 This subclass must provide a no-arg constructor; the fields are set reflectively.
 
 [#persistedLifecycleEvent]
 === persistedLifecycleEvent
 
-Indicates that the loading of the domain object should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService event bus_ using a custom (subclass of) xref:system:generated:index/applib/events/lifecycle/ObjectPersistedEvent.adoc[ObjectPersistedEvent] .
+Indicates that the loading of the domain object should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService event bus_ using a custom (subclass of) xref:refguide:applib:index/events/lifecycle/ObjectPersistedEvent.adoc[ObjectPersistedEvent] .
 
 This subclass must provide a no-arg constructor; the fields are set reflectively.
 
 [#loadedLifecycleEvent]
 === loadedLifecycleEvent
 
-Indicates that the loading of the domain object should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService event bus_ using a custom (subclass of) xref:system:generated:index/applib/events/lifecycle/ObjectLoadedEvent.adoc[ObjectLoadedEvent] .
+Indicates that the loading of the domain object should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService event bus_ using a custom (subclass of) xref:refguide:applib:index/events/lifecycle/ObjectLoadedEvent.adoc[ObjectLoadedEvent] .
 
 This subclass must provide a no-arg constructor; the fields are set reflectively.
 
 [#updatingLifecycleEvent]
 === updatingLifecycleEvent
 
-Indicates that the loading of the domain object should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService event bus_ using a custom (subclass of) xref:system:generated:index/applib/events/lifecycle/ObjectUpdatingEvent.adoc[ObjectUpdatingEvent] .
+Indicates that the loading of the domain object should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService event bus_ using a custom (subclass of) xref:refguide:applib:index/events/lifecycle/ObjectUpdatingEvent.adoc[ObjectUpdatingEvent] .
 
 This subclass must provide a no-arg constructor; the fields are set reflectively.
 
 [#updatedLifecycleEvent]
 === updatedLifecycleEvent
 
-Indicates that the loading of the domain object should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService event bus_ using a custom (subclass of) xref:system:generated:index/applib/events/lifecycle/ObjectUpdatedEvent.adoc[ObjectUpdatedEvent] .
+Indicates that the loading of the domain object should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService event bus_ using a custom (subclass of) xref:refguide:applib:index/events/lifecycle/ObjectUpdatedEvent.adoc[ObjectUpdatedEvent] .
 
 This subclass must provide a no-arg constructor; the fields are set reflectively.
 
 [#removingLifecycleEvent]
 === removingLifecycleEvent
 
-Indicates that the loading of the domain object should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService event bus_ using a custom (subclass of) xref:system:generated:index/applib/events/lifecycle/ObjectRemovingEvent.adoc[ObjectRemovingEvent] .
+Indicates that the loading of the domain object should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService event bus_ using a custom (subclass of) xref:refguide:applib:index/events/lifecycle/ObjectRemovingEvent.adoc[ObjectRemovingEvent] .
 
 This subclass must provide a no-arg constructor; the fields are set reflectively.
 
 [#actionDomainEvent]
 === actionDomainEvent
 
-Indicates that an invocation of _any_ action of the domain object (that do not themselves specify their own `@Action(domainEvent=...)` should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService event bus_ using the specified custom (subclass of) xref:system:generated:index/applib/events/domain/ActionDomainEvent.adoc[ActionDomainEvent] .
+Indicates that an invocation of _any_ action of the domain object (that do not themselves specify their own `@Action(domainEvent=...)` should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService event bus_ using the specified custom (subclass of) xref:refguide:applib:index/events/domain/ActionDomainEvent.adoc[ActionDomainEvent] .
 
 For example:
 
@@ -263,7 +263,7 @@ This subclass must provide a no-arg constructor; the fields are set reflectively
 [#propertyDomainEvent]
 === propertyDomainEvent
 
-Indicates that changes to _any_ property of the domain object (that do not themselves specify their own `@Property(domainEvent=...)` should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService event bus_ using the specified custom (subclass of) xref:system:generated:index/applib/events/domain/PropertyDomainEvent.adoc[PropertyDomainEvent] .
+Indicates that changes to _any_ property of the domain object (that do not themselves specify their own `@Property(domainEvent=...)` should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService event bus_ using the specified custom (subclass of) xref:refguide:applib:index/events/domain/PropertyDomainEvent.adoc[PropertyDomainEvent] .
 
 For example:
 
@@ -281,7 +281,7 @@ This subclass must provide a no-arg constructor; the fields are set reflectively
 [#collectionDomainEvent]
 === collectionDomainEvent
 
-Indicates that changes to _any_ collection of the domain object (that do not themselves specify their own `@Collection(domainEvent=...)` should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService event bus_ using a custom (subclass of) xref:system:generated:index/applib/events/domain/CollectionDomainEvent.adoc[CollectionDomainEvent] .
+Indicates that changes to _any_ collection of the domain object (that do not themselves specify their own `@Collection(domainEvent=...)` should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService event bus_ using a custom (subclass of) xref:refguide:applib:index/events/domain/CollectionDomainEvent.adoc[CollectionDomainEvent] .
 
 For example:
 

@@ -22,7 +22,7 @@ For large view models, there's the possibility that the 2083 character limit cou
 
 * xref:userguide:fun:overview.adoc#view-models[view models]
 
-* xref:system:generated:index/applib/services/urlencoding/UrlEncodingServiceUsingBaseEncodingAbstract.adoc[UrlEncodingServiceUsingBaseEncodingAbstract]
+* xref:refguide:applib:index/services/urlencoding/UrlEncodingServiceUsingBaseEncodingAbstract.adoc[UrlEncodingServiceUsingBaseEncodingAbstract]
 +
 provided as a convenient base class for alternative implementations.
 

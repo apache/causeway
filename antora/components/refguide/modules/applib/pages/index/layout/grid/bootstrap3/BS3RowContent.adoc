@@ -2,7 +2,7 @@
 
 Common superclass for any content of a row.
 
-Most commonly the content of a row is xref:system:generated:index/applib/layout/grid/bootstrap3/BS3Col.adoc[BS3Col] umns, but it may be either of the xref:system:generated:index/applib/layout/grid/bootstrap3/BS3ClearFix.adoc[BS3ClearFix] classes.
+Most commonly the content of a row is xref:refguide:applib:index/layout/grid/bootstrap3/BS3Col.adoc[BS3Col] umns, but it may be either of the xref:refguide:applib:index/layout/grid/bootstrap3/BS3ClearFix.adoc[BS3ClearFix] classes.
 
 == API
 

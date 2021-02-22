@@ -135,7 +135,7 @@ A check was made to determine if a property was usable.
 
 A property was read.
 
-Unlike most other events, a xref:system:generated:index/applib/services/wrapper/events/PropertyAccessEvent.adoc[PropertyAccessEvent] will never have been vetoed (that is, _PropertyAccessEvent#isVeto()_ will always be `false` ).
+Unlike most other events, a xref:refguide:applib:index/services/wrapper/events/PropertyAccessEvent.adoc[PropertyAccessEvent] will never have been vetoed (that is, _PropertyAccessEvent#isVeto()_ will always be `false` ).
 
 [#propertyModified__PropertyModifyEvent]
 === propertyModified(PropertyModifyEvent)
@@ -163,7 +163,7 @@ Will be fired prior to either _#collectionAccessed(CollectionAccessEvent)_ or _#
 
 A collection was read.
 
-Unlike most other events, a xref:system:generated:index/applib/services/wrapper/events/CollectionAccessEvent.adoc[CollectionAccessEvent] will never have been vetoed (that is, _CollectionAccessEvent#isVeto()_ will always be `false` ).
+Unlike most other events, a xref:refguide:applib:index/services/wrapper/events/CollectionAccessEvent.adoc[CollectionAccessEvent] will never have been vetoed (that is, _CollectionAccessEvent#isVeto()_ will always be `false` ).
 
 [#collectionAddedTo__CollectionAddToEvent]
 === collectionAddedTo(CollectionAddToEvent)

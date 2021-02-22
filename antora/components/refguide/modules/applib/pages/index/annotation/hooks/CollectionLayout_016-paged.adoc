@@ -1,6 +1,6 @@
 === Paging
 
-The xref:system:generated:index/applib/annotation/CollectionLayout.adoc#paged[paged()] element specifies the number of rows to display in a (parented) collection.
+The xref:refguide:applib:index/annotation/CollectionLayout.adoc#paged[paged()] element specifies the number of rows to display in a (parented) collection.
 
 [WARNING]
 ====

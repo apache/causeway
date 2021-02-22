@@ -1,10 +1,10 @@
 === Hiding collections
 
-The xref:system:generated:index/applib/annotation/CollectionLayout.adoc#hidden[hidden()] element indicates where (in the UI) the collection should be hidden from the user.
+The xref:refguide:applib:index/annotation/CollectionLayout.adoc#hidden[hidden()] element indicates where (in the UI) the collection should be hidden from the user.
 
 [TIP]
 ====
-It is also possible to use xref:system:generated:index/applib/annotation/Collection.adoc#hidden[`@Collection#hidden`] to hide an action at the domain layer.
+It is also possible to use xref:refguide:applib:index/annotation/Collection.adoc#hidden[`@Collection#hidden`] to hide an action at the domain layer.
 ====
 
 For example:

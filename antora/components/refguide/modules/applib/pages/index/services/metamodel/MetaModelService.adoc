@@ -47,12 +47,12 @@ What sort of object the domain type represents.
 <.> xref:#sortOf__Bookmark_Mode[sortOf(Bookmark, Mode)]
 +
 --
-Override of _#sortOf(Class, Mode)_ , extracting the domain type from the provided xref:system:generated:index/applib/services/bookmark/Bookmark.adoc[Bookmark] of a domain object instance.
+Override of _#sortOf(Class, Mode)_ , extracting the domain type from the provided xref:refguide:applib:index/services/bookmark/Bookmark.adoc[Bookmark] of a domain object instance.
 --
 <.> xref:#commandDtoProcessorFor__String[commandDtoProcessorFor(String)]
 +
 --
-Obtains the implementation of xref:system:generated:index/applib/services/commanddto/processor/CommandDtoProcessor.adoc[CommandDtoProcessor] (if any) as per _Action#commandDtoProcessor()_ or _Property#commandDtoProcessor()_ .
+Obtains the implementation of xref:refguide:applib:index/services/commanddto/processor/CommandDtoProcessor.adoc[CommandDtoProcessor] (if any) as per _Action#commandDtoProcessor()_ or _Property#commandDtoProcessor()_ .
 --
 <.> xref:#exportMetaModel__Config[exportMetaModel(Config)]
 +
@@ -82,7 +82,7 @@ Invalidates and rebuilds the internal metadata for the specified domain type.
 
 Returns a list of representations of each of member of each domain class.
 
-Used by xref:system:generated:index/applib/services/metamodel/MetaModelServiceMenu.adoc[MetaModelServiceMenu] to return a downloadable CSV.
+Used by xref:refguide:applib:index/services/metamodel/MetaModelServiceMenu.adoc[MetaModelServiceMenu] to return a downloadable CSV.
 
 Note that _MetaModelService#exportMetaModel(Config)_ provides a superset of the functionality provided by this method.
 
@@ -94,12 +94,12 @@ What sort of object the domain type represents.
 [#sortOf__Bookmark_Mode]
 === sortOf(Bookmark, Mode)
 
-Override of _#sortOf(Class, Mode)_ , extracting the domain type from the provided xref:system:generated:index/applib/services/bookmark/Bookmark.adoc[Bookmark] of a domain object instance.
+Override of _#sortOf(Class, Mode)_ , extracting the domain type from the provided xref:refguide:applib:index/services/bookmark/Bookmark.adoc[Bookmark] of a domain object instance.
 
 [#commandDtoProcessorFor__String]
 === commandDtoProcessorFor(String)
 
-Obtains the implementation of xref:system:generated:index/applib/services/commanddto/processor/CommandDtoProcessor.adoc[CommandDtoProcessor] (if any) as per _Action#commandDtoProcessor()_ or _Property#commandDtoProcessor()_ .
+Obtains the implementation of xref:refguide:applib:index/services/commanddto/processor/CommandDtoProcessor.adoc[CommandDtoProcessor] (if any) as per _Action#commandDtoProcessor()_ or _Property#commandDtoProcessor()_ .
 
 This is used by framework-provided implementations of _org.apache.isis.applib.services.conmap.ContentMappingService_ .
 
@@ -108,7 +108,7 @@ This is used by framework-provided implementations of _org.apache.isis.applib.se
 
 Exports the entire metamodel as a DTO, serializable into XML using JAXB.
 
-The xref:system:generated:index/applib/services/metamodel/Config.adoc[Config] parameter can be used to restrict/filter the export to some subset of the metamodel; in particular to specific _Config#getPackagePrefixes() package prefixes_ .
+The xref:refguide:applib:index/services/metamodel/Config.adoc[Config] parameter can be used to restrict/filter the export to some subset of the metamodel; in particular to specific _Config#getPackagePrefixes() package prefixes_ .
 
 include::hooks/MetaModelService_010-implementation.adoc[]
 

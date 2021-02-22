@@ -18,12 +18,12 @@ enum Sequence {
 <.> xref:#INTERACTION[INTERACTION]
 +
 --
-Each interaction is either an action invocation or a property edit. There could be multiple of these, typically as the result of a nested calls using the xref:system:generated:index/applib/services/wrapper/WrapperFactory.adoc[WrapperFactory] . Another reason is support for bulk action invocations within a single transaction.
+Each interaction is either an action invocation or a property edit. There could be multiple of these, typically as the result of a nested calls using the xref:refguide:applib:index/services/wrapper/WrapperFactory.adoc[WrapperFactory] . Another reason is support for bulk action invocations within a single transaction.
 --
 <.> xref:#PUBLISHED_EVENT[PUBLISHED_EVENT]
 +
 --
-For objects: multiple such could be dirtied and thus published as separate events. For actions invocations/property edits : multiple sub-invocations could occur if sub-invocations are made through the xref:system:generated:index/applib/services/wrapper/WrapperFactory.adoc[WrapperFactory] .
+For objects: multiple such could be dirtied and thus published as separate events. For actions invocations/property edits : multiple sub-invocations could occur if sub-invocations are made through the xref:refguide:applib:index/services/wrapper/WrapperFactory.adoc[WrapperFactory] .
 --
 <.> xref:#TRANSACTION[TRANSACTION]
 +
@@ -36,12 +36,12 @@ There may be multiple transactions within a given interaction.
 [#INTERACTION]
 === INTERACTION
 
-Each interaction is either an action invocation or a property edit. There could be multiple of these, typically as the result of a nested calls using the xref:system:generated:index/applib/services/wrapper/WrapperFactory.adoc[WrapperFactory] . Another reason is support for bulk action invocations within a single transaction.
+Each interaction is either an action invocation or a property edit. There could be multiple of these, typically as the result of a nested calls using the xref:refguide:applib:index/services/wrapper/WrapperFactory.adoc[WrapperFactory] . Another reason is support for bulk action invocations within a single transaction.
 
 [#PUBLISHED_EVENT]
 === PUBLISHED_EVENT
 
-For objects: multiple such could be dirtied and thus published as separate events. For actions invocations/property edits : multiple sub-invocations could occur if sub-invocations are made through the xref:system:generated:index/applib/services/wrapper/WrapperFactory.adoc[WrapperFactory] .
+For objects: multiple such could be dirtied and thus published as separate events. For actions invocations/property edits : multiple sub-invocations could occur if sub-invocations are made through the xref:refguide:applib:index/services/wrapper/WrapperFactory.adoc[WrapperFactory] .
 
 [#TRANSACTION]
 === TRANSACTION

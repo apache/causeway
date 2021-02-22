@@ -125,7 +125,7 @@ public String default0UpdateName() {
     return getName();
 }
 ----
-<.> Publishing enabled means that the action invocation is converted into XML and dispatched to all configured implementations of the xref:system:generated:index/applib/services/publishing/spi/ExecutionSubscriber.adoc[ExecutionSubscriber] SPI.
+<.> Publishing enabled means that the action invocation is converted into XML and dispatched to all configured implementations of the xref:refguide:applib:index/services/publishing/spi/ExecutionSubscriber.adoc[ExecutionSubscriber] SPI.
 +
 The framework provides a default implementation that just logs the interaction:
 +
@@ -274,11 +274,11 @@ If there were, these would be expressed in terms of module classes (each being a
 
 The scanning mechanism is leveraged by Apache Isis to pick up three types of classes:
 
-This will pick up the `HelloWorldObjects` repository because it is annotated with the framework's xref:system:generated:index/applib/annotation/DomainService.adoc[@DomainService] annotation (in turn meta-annotated with `@Component`).
+This will pick up the `HelloWorldObjects` repository because it is annotated with the framework's xref:refguide:applib:index/annotation/DomainService.adoc[@DomainService] annotation (in turn meta-annotated with `@Component`).
 
 * all domain services
 +
-These are classes that are annotated with the framework's xref:system:generated:index/applib/annotation/DomainService.adoc[`@DomainService`] annotation.
+These are classes that are annotated with the framework's xref:refguide:applib:index/annotation/DomainService.adoc[`@DomainService`] annotation.
 Because `@DomainService` is meta-annotated as a `@Component`, these are found automatically and are managed by Spring.
 +
 Depending on their nature, domain services are used to build up the menu, or are available to call programmatically, eg repositories, or sometimes both.
@@ -288,10 +288,10 @@ This appears in the menu, and also acts as a repository for the `HelloWorldObjec
 
 * all entities.
 +
-These are entities that are annotated with both xref:system:generated:index/applib/annotation/DomainObject.adoc[`@DomainObject`] annotation and with `@javax.jdo.annotations.PersistenceCapable`.
+These are entities that are annotated with both xref:refguide:applib:index/annotation/DomainObject.adoc[`@DomainObject`] annotation and with `@javax.jdo.annotations.PersistenceCapable`.
 Because `@DomainObject` is meta-annotated as a `@Component`, these are found automatically by Spring.
 They are passed through to the JDO/DataNucleus object store, in order to create database mappings from the entities to relational tables.
-It is also annotated with xref:system:generated:index/applib/annotation/DomainObject.adoc[`@DomainObject`]
+It is also annotated with xref:refguide:applib:index/annotation/DomainObject.adoc[`@DomainObject`]
 +
 In the helloworld starter app, the only entity is `HelloWorldObject`.
 

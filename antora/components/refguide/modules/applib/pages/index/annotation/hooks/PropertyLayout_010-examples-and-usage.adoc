@@ -33,7 +33,7 @@ As an alternative to using the `@PropertyLayout` annotation, a xref:userguide:fu
 
 [TIP]
 ====
-The annotation is one of a handful (others including xref:system:generated:index/applib/annotation/Collection.adoc[`@Collection`], xref:system:generated:index/applib/annotation/CollectionLayout.adoc[`@CollectionLayout`] and xref:system:generated:index/applib/annotation/Property.adoc[`@Property`]) that can also be applied to the field, rather than the getter method.  This is specifically
+The annotation is one of a handful (others including xref:refguide:applib:index/annotation/Collection.adoc[`@Collection`], xref:refguide:applib:index/annotation/CollectionLayout.adoc[`@CollectionLayout`] and xref:refguide:applib:index/annotation/Property.adoc[`@Property`]) that can also be applied to the field, rather than the getter method.  This is specifically
 so that boilerplate-busting tools such as link:https://projectlombok.org/[Project Lombok] can be used.
 ====
 

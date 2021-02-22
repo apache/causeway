@@ -19,36 +19,36 @@ Domain service APIs for the application layer allow the domain objects to contro
 //NOTE: TODO: v2: this has been replaced by `WrapperFactory#async(...)`
 
 
-|xref:system:generated:index/applib/services/command/CommandExecutorService.adoc[CommandExecutorService]
+|xref:refguide:applib:index/services/command/CommandExecutorService.adoc[CommandExecutorService]
 |Executes the specified `Command`.
 
 
 
-|xref:system:generated:index/applib/services/iactn/InteractionContext.adoc[InteractionContext]
+|xref:refguide:applib:index/services/iactn/InteractionContext.adoc[InteractionContext]
 |Request-scoped access to the current member execution (action invocation or property edit), represented as the `Interaction` context.
 
 
 
-|xref:system:generated:index/applib/services/message/MessageService.adoc[MessageService]
+|xref:refguide:applib:index/services/message/MessageService.adoc[MessageService]
 |Methods to inform or warn the user, or to raise errors.
 
 
-|xref:system:generated:index/applib/services/sudo/SudoService.adoc[SudoService]
+|xref:refguide:applib:index/services/sudo/SudoService.adoc[SudoService]
 |Typically for use in testing while running xref:testing:fixtures:services/FixtureScripts.adoc[fixture scripts], allows a block of code to run as a specified user account.
 
 
 
-|xref:system:generated:index/applib/services/title/TitleService.adoc[TitleService]
+|xref:refguide:applib:index/services/title/TitleService.adoc[TitleService]
 |Methods to programmatically obtain the title or icon of a domain object.
 
 
 
-|xref:system:generated:index/applib/services/xactn/TransactionService.adoc[TransactionService]
+|xref:refguide:applib:index/services/xactn/TransactionService.adoc[TransactionService]
 |Methods for managing transactions.
 
 
 
-|xref:system:generated:index/applib/services/wrapper/WrapperFactory.adoc[WrapperFactory]
+|xref:refguide:applib:index/services/wrapper/WrapperFactory.adoc[WrapperFactory]
 |Interact with another domain object "as if" through the UI (enforcing business rules, firing domain events)
 
 

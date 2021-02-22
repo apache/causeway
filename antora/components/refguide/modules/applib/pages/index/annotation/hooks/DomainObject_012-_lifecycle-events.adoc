@@ -3,7 +3,7 @@
 Whenever the framework interacts with a domain entity, lifecycle events are fired.
 These are:
 
-* instantiated through xref:system:generated:index/applib/services/factory/FactoryService.adoc[`FactoryService`]
+* instantiated through xref:refguide:applib:index/services/factory/FactoryService.adoc[`FactoryService`]
 +
 An event is also fired for view models
 
@@ -32,20 +32,20 @@ an already persistent entity has just been saved (``UPDATE``d) to the database
 an already persistent entity is about to be removed (``DELETE``d) from the database
 
 
-Subscribers subscribe through the xref:system:generated:index/applib/services/eventbus/EventBusService.adoc[`EventBusService`] and can use the event to obtain a reference to the object just created.
+Subscribers subscribe through the xref:refguide:applib:index/services/eventbus/EventBusService.adoc[`EventBusService`] and can use the event to obtain a reference to the object just created.
 The subscriber could then, for example, update the object, eg looking up state from some external datastore.
 
 This basic model can be influenced in a couple of ways:
 
 * first, it is also possible to suppress any events from being emitted using a configuration property (a different config property exists each lifecycle hook).
 
-* second, an element on xref:system:generated:index/applib/annotation/DomainObject.adoc[DomainObject] annotation (for each lifecycle hook) allows a different subtype event types to be emitted instead
+* second, an element on xref:refguide:applib:index/annotation/DomainObject.adoc[DomainObject] annotation (for each lifecycle hook) allows a different subtype event types to be emitted instead
 +
 This allows subscribers to more targeted as to the events that they subscribe to.
 
 The framework also provides convenience "Doop" and a "Noop" event classes, that provoke these behaviours:
 
-* if the appropriate xref:system:generated:index/applib/annotation/DomainObject.adoc[DomainObject]' element is set to the "Doop" subclass, then this will event will be fired
+* if the appropriate xref:refguide:applib:index/annotation/DomainObject.adoc[DomainObject]' element is set to the "Doop" subclass, then this will event will be fired
 +
 this is a convenient way of ensuring an event is fired even if the hook has been disabled globally, but without the hassle of defining a custom event type
 
@@ -59,54 +59,54 @@ The table below summarises all the lifecycle hooks:
 |===
 | Lifecycle event
 | Config property
-| xref:system:generated:index/applib/annotation/DomainObject.adoc[@DomainObject] override
+| xref:refguide:applib:index/annotation/DomainObject.adoc[@DomainObject] override
 | Framework event types
 
 |created
 |xref:refguide:config:sections/isis.applib.adoc#isis.applib.annotation.domain-object.created-lifecycle-event.post-for-default[isis.applib.annotation.domain-object.created-lifecycle-event.post-for-default]
-| xref:system:generated:index/applib/annotation/DomainObject.adoc#createdLifecycleEvent[createdLifecycleEvent()]
+| xref:refguide:applib:index/annotation/DomainObject.adoc#createdLifecycleEvent[createdLifecycleEvent()]
 m|ObjectCreatedEvent.Default +
 ObjectCreatedEvent.Doop +
 ObjectCreatedEvent.Noop
 
 |loaded
 |xref:refguide:config:sections/isis.applib.adoc#isis.applib.annotation.domain-object.loaded-lifecycle-event.post-for-default[isis.applib.annotation.domain-object.loaded-lifecycle-event.post-for-default]
-| xref:system:generated:index/applib/annotation/DomainObject.adoc#loadedLifecycleEvent[loadedLifecycleEvent()]
+| xref:refguide:applib:index/annotation/DomainObject.adoc#loadedLifecycleEvent[loadedLifecycleEvent()]
 m|ObjectLoadedEvent.Default +
 ObjectLoadedEvent.Doop +
 ObjectLoadedEvent.Noop
 
 |persisting
 |xref:refguide:config:sections/isis.applib.adoc#isis.applib.annotation.domain-object.persisting-lifecycle-event.post-for-default[isis.applib.annotation.domain-object.persisting-lifecycle-event.post-for-default]
-| xref:system:generated:index/applib/annotation/DomainObject.adoc#persistingLifecycleEvent[persistingLifecycleEvent()]
+| xref:refguide:applib:index/annotation/DomainObject.adoc#persistingLifecycleEvent[persistingLifecycleEvent()]
 m|ObjectPersistingEvent.Default +
 ObjectPersistingEvent.Doop +
 ObjectPersistingEvent.Noop
 
 |persisted
 |xref:refguide:config:sections/isis.applib.adoc#isis.applib.annotation.domain-object.persisted-lifecycle-event.post-for-default[isis.applib.annotation.domain-object.persisted-lifecycle-event.post-for-default]
-| xref:system:generated:index/applib/annotation/DomainObject.adoc#persistedLifecycleEvent[persistedLifecycleEvent()]
+| xref:refguide:applib:index/annotation/DomainObject.adoc#persistedLifecycleEvent[persistedLifecycleEvent()]
 m|ObjectPersistedEvent.Default +
 ObjectPersistedEvent.Doop +
 ObjectPersistedEvent.Noop
 
 |updating
 |xref:refguide:config:sections/isis.applib.adoc#isis.applib.annotation.domain-object.updating-lifecycle-event.post-for-default[isis.applib.annotation.domain-object.updating-lifecycle-event.post-for-default]
-| xref:system:generated:index/applib/annotation/DomainObject.adoc#updatingLifecycleEvent[updatingLifecycleEvent()]
+| xref:refguide:applib:index/annotation/DomainObject.adoc#updatingLifecycleEvent[updatingLifecycleEvent()]
 m|ObjectUpdatingEvent.Default +
 ObjectUpdatingEvent.Doop +
 ObjectUpdatingEvent.Noop
 
 |updated
 |xref:refguide:config:sections/isis.applib.adoc#isis.applib.annotation.domain-object.updated-lifecycle-event.post-for-default[isis.applib.annotation.domain-object.updated-lifecycle-event.post-for-default]
-| xref:system:generated:index/applib/annotation/DomainObject.adoc#updatedLifecycleEvent[updatedLifecycleEvent()]
+| xref:refguide:applib:index/annotation/DomainObject.adoc#updatedLifecycleEvent[updatedLifecycleEvent()]
 m|ObjectUpdatedEvent.Default +
 ObjectUpdatedEvent.Doop +
 ObjectUpdatedEvent.Noop
 
 |removing
 |xref:refguide:config:sections/isis.applib.adoc#isis.applib.annotation.domain-object.removing-lifecycle-event.post-for-default[isis.applib.annotation.domain-object.removing-lifecycle-event.post-for-default]
-| xref:system:generated:index/applib/annotation/DomainObject.adoc#removingLifecycleEvent[removingLifecycleEvent()]
+| xref:refguide:applib:index/annotation/DomainObject.adoc#removingLifecycleEvent[removingLifecycleEvent()]
 m|ObjectRemovingEvent.Default +
 ObjectRemovingEvent.Doop +
 ObjectRemovingEvent.Noop
@@ -172,7 +172,7 @@ public class ToDoItem {
 [NOTE]
 ====
 It's possible to instantiate objects without firing this lifecycle; just instantiate using its regular constructor, and then use the ``ServiceInjector``'s
-xref:system:generated:index/applib/services/inject/ServiceInjector.adoc[`injectServicesInto(...)`] to manually inject any required domain services.
+xref:refguide:applib:index/services/inject/ServiceInjector.adoc[`injectServicesInto(...)`] to manually inject any required domain services.
 ====
 
 

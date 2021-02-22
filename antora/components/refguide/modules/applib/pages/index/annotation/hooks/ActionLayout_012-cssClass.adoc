@@ -1,6 +1,6 @@
 === CSS Styling
 
-The xref:system:generated:index/applib/annotation/ActionLayout.adoc#cssClass[cssClass()] element can be used to render additional CSS classes in the HTML (a wrapping `<div>`) that represents the action.
+The xref:refguide:applib:index/annotation/ActionLayout.adoc#cssClass[cssClass()] element can be used to render additional CSS classes in the HTML (a wrapping `<div>`) that represents the action.
 xref:refguide:config:application-specific/application-css.adoc[Application-specific CSS] can then be used to target and adjust the UI representation of that particular element.
 
 For example:
@@ -16,7 +16,7 @@ public class ToDoItem {
 
 [NOTE]
 ====
-The similar xref:system:generated:index/applib/annotation/ActionLayout.adoc#cssClassFa[`@ActionLayout#cssClassFa`] annotation attribute is also used as a hint to apply CSS, specifically to add http://fortawesome.github.io/Font-Awesome/icons/[Font Awesome icons] on action menu items or buttons.
+The similar xref:refguide:applib:index/annotation/ActionLayout.adoc#cssClassFa[`@ActionLayout#cssClassFa`] annotation attribute is also used as a hint to apply CSS, specifically to add http://fortawesome.github.io/Font-Awesome/icons/[Font Awesome icons] on action menu items or buttons.
 ====
 
 ==== Alternatives

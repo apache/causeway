@@ -19,7 +19,7 @@ interface EntityChangesSubscriber {
 <.> xref:#onChanging__EntityChanges[onChanging(EntityChanges)]
 +
 --
-Receives all changing entities (with publishing enabled using _DomainObject#entityChangePublishing()_ ) as an instance of xref:system:generated:index/applib/services/publishing/spi/EntityChanges.adoc[EntityChanges] .
+Receives all changing entities (with publishing enabled using _DomainObject#entityChangePublishing()_ ) as an instance of xref:refguide:applib:index/services/publishing/spi/EntityChanges.adoc[EntityChanges] .
 --
 
 == Members
@@ -27,7 +27,7 @@ Receives all changing entities (with publishing enabled using _DomainObject#enti
 [#onChanging__EntityChanges]
 === onChanging(EntityChanges)
 
-Receives all changing entities (with publishing enabled using _DomainObject#entityChangePublishing()_ ) as an instance of xref:system:generated:index/applib/services/publishing/spi/EntityChanges.adoc[EntityChanges] .
+Receives all changing entities (with publishing enabled using _DomainObject#entityChangePublishing()_ ) as an instance of xref:refguide:applib:index/services/publishing/spi/EntityChanges.adoc[EntityChanges] .
 
 The callback is called at the end of the transaction, during the pre-commit phase.
 

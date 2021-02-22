@@ -4,9 +4,9 @@
 
 == See also:
 
-* xref:system:generated:index/applib/services/error/ErrorDetails.adoc[ErrorDetails]
-* xref:system:generated:index/applib/services/error/Ticket.adoc[Ticket]
-* xref:system:generated:index/applib/services/error/SimpleTicket.adoc[SimpleTicket]
+* xref:refguide:applib:index/services/error/ErrorDetails.adoc[ErrorDetails]
+* xref:refguide:applib:index/services/error/Ticket.adoc[Ticket]
+* xref:refguide:applib:index/services/error/SimpleTicket.adoc[SimpleTicket]
 +
 a convenience implementation of `Ticket` for use by implementations.
 

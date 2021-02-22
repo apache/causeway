@@ -14,7 +14,7 @@ File-based layouts offer a number of benefits:
 
 * UI hints can be provided for xref:userguide:fun:mixins.adoc[mixin] contributions that are synthesised at runtime.
 
-It is also possible to download an initial `.layout.xml` - capturing any existing layout metadata - using the xref:system:generated:index/applib/services/layout/LayoutService.adoc[`LayoutService`] (exposed on the prototyping menu) or using a xref:refguide:applib-cm:roles-mixins-contributees/mixins.adoc#Object[mixin action] contributed to every domain object.
+It is also possible to download an initial `.layout.xml` - capturing any existing layout metadata - using the xref:refguide:applib:index/services/layout/LayoutService.adoc[`LayoutService`] (exposed on the prototyping menu) or using a xref:refguide:applib-cm:roles-mixins-contributees/mixins.adoc#Object[mixin action] contributed to every domain object.
 
 There are some downsides, though:
 
@@ -227,7 +227,7 @@ The layout XML will then be ignored.
 Rather than specify every UI semantic in the layout file, you can optionally combine with a number of annotations.
 The idea is that the layout.xml is used primarily for the coarse-grained grid layout, with annotations used for the stuff that changes less often, such as associating actions with properties or collections, or the order of properties or actions within a fieldset.
 
-The annotations most relevant here is xref:system:generated:index/applib/annotation/MemberOrder.adoc[`@MemberOrder`]:
+The annotations most relevant here is xref:refguide:applib:index/annotation/MemberOrder.adoc[`@MemberOrder`]:
 
 * for properties:
 
@@ -248,15 +248,15 @@ The `@Action#associateWith()` annotation can be used instead as a direct replace
 +
 The `@Action#associateWithSequence()` annotation can be used as a direct replacement.
 
-There are a number of other "layout" annotations, specifically xref:system:generated:index/applib/annotation/PropertyLayout.adoc[`@PropertyLayout`], xref:system:generated:index/applib/annotation/CollectionLayout.adoc[`@CollectionLayout`] and xref:system:generated:index/applib/annotation/ActionLayout.adoc[`@ActionLayout`].
+There are a number of other "layout" annotations, specifically xref:refguide:applib:index/annotation/PropertyLayout.adoc[`@PropertyLayout`], xref:refguide:applib:index/annotation/CollectionLayout.adoc[`@CollectionLayout`] and xref:refguide:applib:index/annotation/ActionLayout.adoc[`@ActionLayout`].
 All of the semantics in these layout annotations can also be specified in the `.layout.xml` files; which is used is a matter of taste.
 
-In addition, xref:system:generated:index/applib/annotation/ParameterLayout.adoc[`@ParameterLayout`] provides layout hints for action parameters.
+In addition, xref:refguide:applib:index/annotation/ParameterLayout.adoc[`@ParameterLayout`] provides layout hints for action parameters.
 There is no way to specify these semantics in the `.layout.xml` file (action parameters are not enumerated in the file).
 
 === Layout file styles
 
-If you want to make your usage of layout files consistent, then the framework can help because it allows the layout XML files to be downloaded using the xref:system:generated:index/applib/services/layout/LayoutService.adoc[`LayoutService`].
+If you want to make your usage of layout files consistent, then the framework can help because it allows the layout XML files to be downloaded using the xref:refguide:applib:index/services/layout/LayoutService.adoc[`LayoutService`].
 This is exposed on the prototyping menu to allow you to download a ZIP file of layout XML files for all domain entities and view models.
 
 When downloading the layout files, there are four "styles" available:

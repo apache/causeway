@@ -14,4 +14,4 @@ The functionality to download XML and XSD schemas is also exposed in the UI thro
 
 == See also
 
-* xref:system:generated:index/applib/services/jaxb/IsisSchemas.adoc[IsisSchemas]
+* xref:refguide:applib:index/services/jaxb/IsisSchemas.adoc[IsisSchemas]

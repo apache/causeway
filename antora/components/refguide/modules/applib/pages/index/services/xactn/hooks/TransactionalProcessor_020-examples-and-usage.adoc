@@ -40,10 +40,10 @@ class CustomController {
 
 == See also
 
-* xref:system:generated:index/core/interaction/session/InteractionFactory.adoc[InteractionFactory]
+* xref:refguide:core:index/interaction/session/InteractionFactory.adoc[InteractionFactory]
 +
 Not formal API, but used in the example above to obtain an outer "interaction" (session) within which the transaction is executed.
 
-* xref:system:generated:index/commons/functional/Result.adoc[Result]
+* xref:refguide:commons:index//functional/Result.adoc[Result]
 +
 which captures the result of an operation, either its successful return value or an exception.

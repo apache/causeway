@@ -18,18 +18,18 @@ TIP: see also the xref:security:ROOT:about.adoc[Security Guide].
 
 
 
-|xref:system:generated:index/applib/services/publishing/spi/EntityPropertyChangeSubscriber.adoc[EntityPropertyChangesSubscriber]
+|xref:refguide:applib:index/services/publishing/spi/EntityPropertyChangeSubscriber.adoc[EntityPropertyChangesSubscriber]
 |Create an audit record for every changed property of every changed object within a transaction.
 
 
 
-|xref:system:generated:index/applib/services/session/SessionLoggingService.adoc[SessionLoggingService]
+|xref:refguide:applib:index/services/session/SessionLoggingService.adoc[SessionLoggingService]
 |Records each login and logout by end-users.
 |
 * xref:security:session-log:about.adoc[Session Log +
 (Security Guide)]
 
-|xref:system:generated:index/applib/services/userreg/UserRegistrationService.adoc[UserRegistrationService]
+|xref:refguide:applib:index/services/userreg/UserRegistrationService.adoc[UserRegistrationService]
 |Create a new user account with the configured security mechanism.
 
 

@@ -14,11 +14,11 @@ The service is_not_ (currently) used by the framework itself; it is provided as 
 
 == See also
 
-* xref:system:generated:index/viewer/restfulobjects/rendering/service/swagger/SwaggerServiceMenu.adoc[SwaggerServiceMenu]
+* xref:refguide:viewer:index/restfulobjects/rendering/service/swagger/SwaggerServiceMenu.adoc[SwaggerServiceMenu]
 +
 part of the xref:vro:ROOT:about.adoc[Restful Objects viewer], this provides a prototype action that enables the swagger spec to be downloaded from theUI.
 
-* xref:system:generated:index/testing/integtestsupport/applib/swagger/SwaggerExporter.adoc[SwaggerExporter]
+* xref:refguide:testing:index/integtestsupport/applib/swagger/SwaggerExporter.adoc[SwaggerExporter]
 +
 can be used to generate a Swagger spec, for example within a test suite or larger build pipeline.
 +

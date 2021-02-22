@@ -1,10 +1,10 @@
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
-The initial idea of xref:system:generated:index/applib/domain/DomainObjectList.adoc[DomainObjectList] was to simplify restful clients.
+The initial idea of xref:refguide:applib:index/domain/DomainObjectList.adoc[DomainObjectList] was to simplify restful clients.
 
 In the original Restful Objects specification, invoking an action that returned a list meant that the RO client needed to handle this collection, which didn't have any identity. That made for special case logic in the client.
 
-Instead, if the RO client invokes the action but uses the _Accept Header_ to request an object, then the RO viewer would automatically wrap the returned list in this xref:system:generated:index/applib/domain/DomainObjectList.adoc[DomainObjectList] view model.
+Instead, if the RO client invokes the action but uses the _Accept Header_ to request an object, then the RO viewer would automatically wrap the returned list in this xref:refguide:applib:index/domain/DomainObjectList.adoc[DomainObjectList] view model.
 
 Thus, the RO client then only ever needs to know how to render an object, in all cases.
 

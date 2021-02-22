@@ -6,5 +6,5 @@
 
 Related services:
 
-* xref:system:generated:index/applib/services/grid/GridService.adoc[GridService]
-* xref:system:generated:index/applib/services/grid/GridLoaderService.adoc[GridLoaderService]
+* xref:refguide:applib:index/services/grid/GridService.adoc[GridService]
+* xref:refguide:applib:index/services/grid/GridLoaderService.adoc[GridLoaderService]

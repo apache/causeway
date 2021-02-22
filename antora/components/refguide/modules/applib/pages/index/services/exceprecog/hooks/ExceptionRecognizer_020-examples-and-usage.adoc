@@ -4,22 +4,22 @@
 
 == Usage
 
-If you want to recognize and handle additional exceptions (for example to capture error messages specific to the JDBC driver you might be using), then create an implementation of this SPI for the particular error message, and annotate your implementation as a xref:system:generated:index/applib/annotation/DomainService.adoc[DomainService].
+If you want to recognize and handle additional exceptions (for example to capture error messages specific to the JDBC driver you might be using), then create an implementation of this SPI for the particular error message, and annotate your implementation as a xref:refguide:applib:index/annotation/DomainService.adoc[DomainService].
 
 There are some convenience implementations of the interface to subclass from if required.
 
 
 == See also
 
-* xref:system:generated:index/applib/services/exceprecog/Recognition.adoc[Recognition]
+* xref:refguide:applib:index/services/exceprecog/Recognition.adoc[Recognition]
 +
-Part of the SPI for xref:system:generated:index/applib/services/exceprecog/ExceptionRecognizer.adoc[ExceptionRecognizer]
+Part of the SPI for xref:refguide:applib:index/services/exceprecog/ExceptionRecognizer.adoc[ExceptionRecognizer]
 
-* xref:system:generated:index/applib/services/exceprecog/Category.adoc[Category]
+* xref:refguide:applib:index/services/exceprecog/Category.adoc[Category]
 +
-Part of the SPI for xref:system:generated:index/applib/services/exceprecog/ExceptionRecognizer.adoc[ExceptionRecognizer]
+Part of the SPI for xref:refguide:applib:index/services/exceprecog/ExceptionRecognizer.adoc[ExceptionRecognizer]
 
-* xref:system:generated:index/applib/services/exceprecog/ExceptionRecognizerService.adoc[ExceptionRecognizerService]
+* xref:refguide:applib:index/services/exceprecog/ExceptionRecognizerService.adoc[ExceptionRecognizerService]
 +
-mediates access to xref:system:generated:index/applib/services/exceprecog/ExceptionRecognizer.adoc[ExceptionRecognizer]s in the correct order.
+mediates access to xref:refguide:applib:index/services/exceprecog/ExceptionRecognizer.adoc[ExceptionRecognizer]s in the correct order.
 

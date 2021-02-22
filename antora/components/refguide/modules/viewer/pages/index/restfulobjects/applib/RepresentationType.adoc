@@ -68,12 +68,12 @@ Clones the (immutable) _#getMediaType() media type_ , adding in one additional p
 <.> xref:#matchesXmlProfileWithParameter__List_String[matchesXmlProfileWithParameter(List, String)]
 +
 --
-whether any of the xref:system:generated:index/viewer/restfulobjects/applib/RepresentationType.adoc[RepresentationType] s matches any (accept header) XML _MediaType_ with specified parameter.
+whether any of the xref:refguide:viewer:index/restfulobjects/applib/RepresentationType.adoc[RepresentationType] s matches any (accept header) XML _MediaType_ with specified parameter.
 --
 <.> xref:#matchesJsonProfileWithParameter__List_String[matchesJsonProfileWithParameter(List, String)]
 +
 --
-whether any of the xref:system:generated:index/viewer/restfulobjects/applib/RepresentationType.adoc[RepresentationType] s matches any (accept header) JSON _MediaType_ with specified parameter.
+whether any of the xref:refguide:viewer:index/restfulobjects/applib/RepresentationType.adoc[RepresentationType] s matches any (accept header) JSON _MediaType_ with specified parameter.
 --
 
 == Members
@@ -96,9 +96,9 @@ Clones the (immutable) _#getMediaType() media type_ , adding in one additional p
 [#matchesXmlProfileWithParameter__List_String]
 === matchesXmlProfileWithParameter(List, String)
 
-whether any of the xref:system:generated:index/viewer/restfulobjects/applib/RepresentationType.adoc[RepresentationType] s matches any (accept header) XML _MediaType_ with specified parameter.
+whether any of the xref:refguide:viewer:index/restfulobjects/applib/RepresentationType.adoc[RepresentationType] s matches any (accept header) XML _MediaType_ with specified parameter.
 
 [#matchesJsonProfileWithParameter__List_String]
 === matchesJsonProfileWithParameter(List, String)
 
-whether any of the xref:system:generated:index/viewer/restfulobjects/applib/RepresentationType.adoc[RepresentationType] s matches any (accept header) JSON _MediaType_ with specified parameter.
+whether any of the xref:refguide:viewer:index/restfulobjects/applib/RepresentationType.adoc[RepresentationType] s matches any (accept header) JSON _MediaType_ with specified parameter.

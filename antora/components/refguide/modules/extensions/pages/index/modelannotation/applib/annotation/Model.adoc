@@ -2,7 +2,7 @@
 
 Indicates that a method is a supporting-method, one that contributes (hide, validate, ...) to an *Action* .
 
-By placing the xref:system:generated:index/extensions/modelannotation/applib/annotation/Model.adoc[Model] annotation on a method, a contract with the meta-model is enforced, such that this method must be recognized and cannot be ignored.
+By placing the xref:refguide:extensions:index/modelannotation/applib/annotation/Model.adoc[Model] annotation on a method, a contract with the meta-model is enforced, such that this method must be recognized and cannot be ignored.
 
 == API
 

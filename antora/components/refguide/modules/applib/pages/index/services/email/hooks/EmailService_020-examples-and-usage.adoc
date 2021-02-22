@@ -9,4 +9,4 @@ If you wish to write an alternative implementation, be aware that it should proc
 
 == Related Services
 
-The email service is used by the xref:system:generated:index/applib/services/userreg/EmailNotificationService.adoc[`EmailNotificationService`] which is, in turn, used by xref:system:generated:index/applib/services/userreg/UserRegistrationService.adoc[`UserRegistrationService`].
+The email service is used by the xref:refguide:applib:index/services/userreg/EmailNotificationService.adoc[`EmailNotificationService`] which is, in turn, used by xref:refguide:applib:index/services/userreg/UserRegistrationService.adoc[`UserRegistrationService`].

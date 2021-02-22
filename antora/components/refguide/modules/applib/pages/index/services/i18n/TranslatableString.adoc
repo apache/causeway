@@ -50,7 +50,7 @@ The arguments; excluded from _#equals(Object)_ comparison.
 <.> xref:#translate__TranslationService_String[translate(TranslationService, String)]
 +
 --
-Translates this string using the provided xref:system:generated:index/applib/services/i18n/TranslationService.adoc[TranslationService] , selecting either the single or plural form as per _#getPattern()_ .
+Translates this string using the provided xref:refguide:applib:index/services/i18n/TranslationService.adoc[TranslationService] , selecting either the single or plural form as per _#getPattern()_ .
 --
 <.> xref:#getPattern__[getPattern()]
 +
@@ -88,7 +88,7 @@ The arguments; excluded from _#equals(Object)_ comparison.
 [#translate__TranslationService_String]
 === translate(TranslationService, String)
 
-Translates this string using the provided xref:system:generated:index/applib/services/i18n/TranslationService.adoc[TranslationService] , selecting either the single or plural form as per _#getPattern()_ .
+Translates this string using the provided xref:refguide:applib:index/services/i18n/TranslationService.adoc[TranslationService] , selecting either the single or plural form as per _#getPattern()_ .
 
 [#getPattern__]
 === getPattern()

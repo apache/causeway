@@ -5,21 +5,21 @@
 
 == Usage Notes
 
-``Execution``s can be subscribed to using the xref:system:generated:index/applib/services/publishing/spi/ExecutionSubscriber.adoc[ExecutionSubscriber] interface.
+``Execution``s can be subscribed to using the xref:refguide:applib:index/services/publishing/spi/ExecutionSubscriber.adoc[ExecutionSubscriber] interface.
 +
 One reason to subscribe is to persist these interaction/executions.
 This supports several use cases:
 
 ** they enable profiling of the running application (which actions are invoked then most often, what is their response time)
 
-** if auditing is configured (using xref:system:generated:index/applib/services/publishing/spi/EntityPropertyChangeSubscriber.adoc[`EntityPropertyChangeSubscriber`]), they provide better audit information, since the parent xref:system:generated:index/applib/services/iactn/Interaction.adoc[Interaction] captures the 'cause' of an interaction and can be correlated to the audit records (the "effect" of the interaction) by way of the xref:applib-classes:roles-mixins-contributees/contributee.adoc#HasUniqueId[`uniqueId`] that both share.
+** if auditing is configured (using xref:refguide:applib:index/services/publishing/spi/EntityPropertyChangeSubscriber.adoc[`EntityPropertyChangeSubscriber`]), they provide better audit information, since the parent xref:refguide:applib:index/services/iactn/Interaction.adoc[Interaction] captures the 'cause' of an interaction and can be correlated to the audit records (the "effect" of the interaction) by way of the xref:applib-classes:roles-mixins-contributees/contributee.adoc#HasUniqueId[`uniqueId`] that both share.
 
 
 == See also
 
-* xref:system:generated:index/applib/services/iactn/Interaction.adoc[Interaction]
+* xref:refguide:applib:index/services/iactn/Interaction.adoc[Interaction]
 
-* xref:system:generated:index/applib/services/publishing/spi/ExecutionSubscriber.adoc[ExecutionSubscriber]
+* xref:refguide:applib:index/services/publishing/spi/ExecutionSubscriber.adoc[ExecutionSubscriber]
 
 
 // TODO: mention oubox publisher once ported over from incode-platform

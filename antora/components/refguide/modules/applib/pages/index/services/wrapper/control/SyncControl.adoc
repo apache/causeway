@@ -25,7 +25,7 @@ Skip checking business rules (hide/disable/validate) before executing the underl
 <.> xref:#with__ExceptionHandler[with(ExceptionHandler)]
 +
 --
-How to handle exceptions if they occur, using the provided xref:system:generated:index/applib/services/wrapper/control/ExceptionHandler.adoc[ExceptionHandler] .
+How to handle exceptions if they occur, using the provided xref:refguide:applib:index/services/wrapper/control/ExceptionHandler.adoc[ExceptionHandler] .
 --
 <.> xref:#withExecute__[withExecute()]
 +
@@ -53,7 +53,7 @@ Skip checking business rules (hide/disable/validate) before executing the underl
 [#with__ExceptionHandler]
 === with(ExceptionHandler)
 
-How to handle exceptions if they occur, using the provided xref:system:generated:index/applib/services/wrapper/control/ExceptionHandler.adoc[ExceptionHandler] .
+How to handle exceptions if they occur, using the provided xref:refguide:applib:index/services/wrapper/control/ExceptionHandler.adoc[ExceptionHandler] .
 
 The default behaviour is to rethrow the exception.
 

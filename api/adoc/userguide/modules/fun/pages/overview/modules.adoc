@@ -44,7 +44,7 @@ A mixin would allow the UI for a `Customer` to also display these attached ``Doc
 Dependencies are also injected into mixins.
 A common technique is to factor out from domain objects into mixins and then generalise.
 
-* the internal xref:system:generated:index/applib/services/eventbus/EventBusService.adoc[event bus] allows modules to influence other modules.
+* the internal xref:refguide:applib:index/services/eventbus/EventBusService.adoc[event bus] allows modules to influence other modules.
 +
 A subscriber in one module can subscribe to events emitted by domain objects in another module.
 These events can affect both the UI (eg hiding or disabling xref:overview.adoc#object-members[object members], or allowing or vetoing interactions).

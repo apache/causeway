@@ -2,7 +2,7 @@
 
 Locates and return translations.
 
-This is one of the supporting services that work together to implement the framework's support for i18n, being used by the default implementation xref:system:generated:index/applib/services/i18n/TranslationService.adoc[TranslationService] .
+This is one of the supporting services that work together to implement the framework's support for i18n, being used by the default implementation xref:refguide:applib:index/services/i18n/TranslationService.adoc[TranslationService] .
 
 == API
 
@@ -27,7 +27,7 @@ Reads the lines from the specified "logical" file name.
 
 Reads the lines from the specified "logical" file name.
 
-It is the responsibility of xref:system:generated:index/applib/services/i18n/TranslationsResolver.adoc[TranslationsResolver] to determine where the file actually resides (the data could be read from a database, for example, rather than an actual file.
+It is the responsibility of xref:refguide:applib:index/services/i18n/TranslationsResolver.adoc[TranslationsResolver] to determine where the file actually resides (the data could be read from a database, for example, rather than an actual file.
 
 include::hooks/TranslationsResolver_010-implementation.adoc[]
 

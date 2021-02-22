@@ -2,7 +2,7 @@
 
 Returns the configuration properties (as view models) such that they can be rendered into the UI (in the Wicket Viewer, under the "Configuration" menu).
 
-This is the backing service used by xref:system:generated:index/applib/services/confview/ConfigurationMenu.adoc[ConfigurationMenu] .
+This is the backing service used by xref:refguide:applib:index/services/confview/ConfigurationMenu.adoc[ConfigurationMenu] .
 
 == API
 
@@ -17,7 +17,7 @@ interface ConfigurationViewService {
 <.> xref:#allProperties__[allProperties()]
 +
 --
-Returns all properties, each as an instance of xref:system:generated:index/applib/services/confview/ConfigurationProperty.adoc[ConfigurationProperty] (a view model). Mask sensitive values if required.
+Returns all properties, each as an instance of xref:refguide:applib:index/services/confview/ConfigurationProperty.adoc[ConfigurationProperty] (a view model). Mask sensitive values if required.
 --
 
 == Members
@@ -25,7 +25,7 @@ Returns all properties, each as an instance of xref:system:generated:index/appli
 [#allProperties__]
 === allProperties()
 
-Returns all properties, each as an instance of xref:system:generated:index/applib/services/confview/ConfigurationProperty.adoc[ConfigurationProperty] (a view model). Mask sensitive values if required.
+Returns all properties, each as an instance of xref:refguide:applib:index/services/confview/ConfigurationProperty.adoc[ConfigurationProperty] (a view model). Mask sensitive values if required.
 
 include::hooks/ConfigurationViewService_010-implementation.adoc[]
 

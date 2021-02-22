@@ -4,7 +4,7 @@
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
 
-The actions of xref:domain-entities-and-services.adoc#domain-services[domain services] (annotated using xref:system:generated:index/applib/annotation/DomainService.adoc[`@DomainService`] with a xref:system:generated:index/applib/annotation/DomainService.adoc#nature[`nature`] of `VIEW`) are made available as menu items on menus.
+The actions of xref:domain-entities-and-services.adoc#domain-services[domain services] (annotated using xref:refguide:applib:index/annotation/DomainService.adoc[`@DomainService`] with a xref:refguide:applib:index/annotation/DomainService.adoc#nature[`nature`] of `VIEW`) are made available as menu items on menus.
 
 For example:
 
@@ -36,7 +36,7 @@ If using annotations, services can be added to either the primary, secondary or 
 
 image::application-menu/layout-menus.png[width="800px"]
 
-This is done using the xref:system:generated:index/applib/annotation/DomainServiceLayout.adoc#menuBar[`@DomainServiceLayout#menuBar()`] annotation.
+This is done using the xref:refguide:applib:index/annotation/DomainServiceLayout.adoc#menuBar[`@DomainServiceLayout#menuBar()`] annotation.
 
 For example:
 
@@ -61,7 +61,7 @@ image::application-menu/tertiary.png[width="300px"]
 
 
 
-In addition, the xref:system:generated:index/applib/annotation/MemberOrder.adoc[`@MemberOrder`] annotation can be used to group and order domain service actions:
+In addition, the xref:refguide:applib:index/annotation/MemberOrder.adoc[`@MemberOrder`] annotation can be used to group and order domain service actions:
 
 * `@MemberOrder#name()` is used to define the name of the menu
 +
@@ -155,7 +155,7 @@ For example, here's a fragment of that provided by the xref:docs:starters:simple
 <.> Menu on the menu bar
 <.> References an action of a domain service
 <.> Divider is placed between each section
-<.> Identifies the service through its xref:system:generated:index/applib/annotation/DomainService.adoc#objectType[object type]
+<.> Identifies the service through its xref:refguide:applib:index/annotation/DomainService.adoc#objectType[object type]
 <.> Optionally override the name inferred from the action
 <.> Domain service actions not specified elsewhere are displayed on the "Other" menu (with `unreferencedActions` attribute set to `true`). +
 +
@@ -175,7 +175,7 @@ Once the application has bootstrapped with a layout file, downloading the "Defau
 
 === Downloading the layout file
 
-The current `menubars.layout.xml` can be downloaded from the xref:system:generated:index/applib/services/menu/MenuBarsService.adoc[`MenuBarsService`] (exposed on the prototyping menu):
+The current `menubars.layout.xml` can be downloaded from the xref:refguide:applib:index/services/menu/MenuBarsService.adoc[`MenuBarsService`] (exposed on the prototyping menu):
 
 image::menubars/010-download.png[width="300px"]
 

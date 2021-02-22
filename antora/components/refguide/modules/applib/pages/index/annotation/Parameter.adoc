@@ -21,7 +21,7 @@ Collects together all domain semantics of an action parameter within a single an
 <.> xref:#fileAccept[fileAccept]
 +
 --
-For uploading xref:system:generated:index/applib/value/Blob.adoc[Blob] or xref:system:generated:index/applib/value/Clob.adoc[Clob] , optionally restrict the files accepted (eg `.xslx` ).
+For uploading xref:refguide:applib:index/value/Blob.adoc[Blob] or xref:refguide:applib:index/value/Clob.adoc[Clob] , optionally restrict the files accepted (eg `.xslx` ).
 --
 <.> xref:#maxLength[maxLength]
 +
@@ -31,7 +31,7 @@ The maximum entry length of a string parameter (it is ignored for other types).
 <.> xref:#mustSatisfy[mustSatisfy]
 +
 --
-The xref:system:generated:index/applib/spec/Specification.adoc[Specification] (s) to be satisfied by this parameter.
+The xref:refguide:applib:index/spec/Specification.adoc[Specification] (s) to be satisfied by this parameter.
 --
 <.> xref:#optionality[optionality]
 +
@@ -59,7 +59,7 @@ Replacement text for the pattern in generated error message.
 [#fileAccept]
 === fileAccept
 
-For uploading xref:system:generated:index/applib/value/Blob.adoc[Blob] or xref:system:generated:index/applib/value/Clob.adoc[Clob] , optionally restrict the files accepted (eg `.xslx` ).
+For uploading xref:refguide:applib:index/value/Blob.adoc[Blob] or xref:refguide:applib:index/value/Clob.adoc[Clob] , optionally restrict the files accepted (eg `.xslx` ).
 
 The value should be of the form "file_extension|audio/*|video/*|image/*|media_type".
 
@@ -75,7 +75,7 @@ The default value ( `-1` ) indicates that no maxLength has been specified.
 [#mustSatisfy]
 === mustSatisfy
 
-The xref:system:generated:index/applib/spec/Specification.adoc[Specification] (s) to be satisfied by this parameter.
+The xref:refguide:applib:index/spec/Specification.adoc[Specification] (s) to be satisfied by this parameter.
 
 If more than one is provided, then all must be satisfied (in effect "AND"ed together).
 

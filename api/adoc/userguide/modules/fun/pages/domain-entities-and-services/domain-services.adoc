@@ -10,7 +10,7 @@ This may be exposed in the UI, or might be invoked programmatically.
 
 However, a service cannot have (persisted) properties, nor can it have (persisted) collections.
 
-Domain services that are visible in the UI or REST API are annotated with xref:system:generated:index/applib/annotation/DomainService.adoc[`@DomainService()`], while services that are _programmatic_ in nature should be simply annotated using Spring's xref:https://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/stereotype/Component.html[`@Component`] or one of its specializations, eg
+Domain services that are visible in the UI or REST API are annotated with xref:refguide:applib:index/annotation/DomainService.adoc[`@DomainService()`], while services that are _programmatic_ in nature should be simply annotated using Spring's xref:https://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/stereotype/Component.html[`@Component`] or one of its specializations, eg
 xref:https://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/stereotype/Service.html[`@Service`]
 orxref:https://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/stereotype/Repository.html[`@Repository`].
 
@@ -23,12 +23,12 @@ This section looks at the programming model for writing your own domain services
 == Nature of Service
 
 Apache Isis uses Spring Boot to instantiate and manage the dependency injection of domain services.
-The vast majority of these are singleton (application) scoped; a smaller number are request scoped (using the xref:system:generated:index/applib/annotation/InteractionScope.adoc[`@IsisSessionScope`] annotation).
+The vast majority of these are singleton (application) scoped; a smaller number are request scoped (using the xref:refguide:applib:index/annotation/InteractionScope.adoc[`@IsisSessionScope`] annotation).
 
 Accordingly, all domain services are annotated or meta-annotated using Spring's link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/stereotype/Component.html[`@Component`] annotation.
 
-For domain services to be visible in the Apache Isis UI, they must be annotated with xref:system:generated:index/applib/annotation/DomainService.adoc[`@DomainService`].
-Its xref:system:generated:index/applib/annotation/DomainService.adoc#nature[`#nature()`] attribute is either:
+For domain services to be visible in the Apache Isis UI, they must be annotated with xref:refguide:applib:index/annotation/DomainService.adoc[`@DomainService`].
+Its xref:refguide:applib:index/annotation/DomainService.adoc#nature[`#nature()`] attribute is either:
 
 * `VIEW` (the default if not specified)
 +
@@ -44,7 +44,7 @@ Such programmatic services are usually annotated with Spring's link:https://docs
 
 == Repository and Factory
 
-The repository/factory uses an injected xref:system:generated:index/applib/services/repository/RepositoryService.adoc[`RepositoryService`] to both instantiate new objects and to query the database for existing objects of a given entity type.
+The repository/factory uses an injected xref:refguide:applib:index/services/repository/RepositoryService.adoc[`RepositoryService`] to both instantiate new objects and to query the database for existing objects of a given entity type.
 Generally these services are not visible in UI, and so are annotated with link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/stereotype/Repository.html[`@Repository`]
 
 For example:
@@ -79,7 +79,7 @@ public CustomerRepository {
 }
 ----
 <.> Detected and managed by Spring Boot.
-<.> Lombok annotation for dependency injection of xref:system:generated:index/applib/services/repository/RepositoryService.adoc[`RepositoryService`] through generated constructor.
+<.> Lombok annotation for dependency injection of xref:refguide:applib:index/services/repository/RepositoryService.adoc[`RepositoryService`] through generated constructor.
 <.> uses injected `RepositoryService` to query via JDOQL.
 <.> uses injected `RepositoryService` to instantiate a not-yet-persisted domain entity ...
 <.> \... and then save into the database a new `Customer` instance.
@@ -138,7 +138,7 @@ public class Customers {
 
 <.> Rendered in the UI as a "Find By Name" menu item underneath the "Customers" menu.
 
-<.> The xref:system:generated:index/applib/annotation/ParameterLayout.adoc[`@ParameterLayout`] provides metadata for the parameter itself, in this case its name.
+<.> The xref:refguide:applib:index/annotation/ParameterLayout.adoc[`@ParameterLayout`] provides metadata for the parameter itself, in this case its name.
 +
 [TIP]
 ====
@@ -149,7 +149,7 @@ There's no need to name the action parameters if the code is compiled using the 
 The framework can inject into not just other domain services but will also automatically into domain entities and view models.
 There is further discussion of service injection xref:userguide:fun:domain-entities-and-services.adoc#injecting-services[below].
 
-<.> xref:system:generated:index/applib/annotation/Action.adoc#restrictTo[Prototype] actions are rendered only in prototyping mode.
+<.> xref:refguide:applib:index/annotation/Action.adoc#restrictTo[Prototype] actions are rendered only in prototyping mode.
 A "list all" action such as this can be useful when exploring the domain with a small dataset.
 
 <.> Menu services typically delegate to an underlying repository/ies specific to the domain (rather than use `RepositoryService` directly, for example).
@@ -195,10 +195,10 @@ By default all domain services are application-scoped, in other words singletons
 Such domain services are required to be thread-safe, usually satisfied by being intrinsically stateless.
 
 Sometimes though a service's lifetime is applicable only to a single (http) request.
-The framework has a number of such services, including a xref:system:generated:index/applib/services/scratchpad/Scratchpad.adoc[`Scratchpad`] service (to share adhoc data between methods), and xref:system:generated:index/applib/services/queryresultscache/QueryResultsCache.adoc[`QueryResultsCache`], which as its name suggests will cache query results.
+The framework has a number of such services, including a xref:refguide:applib:index/services/scratchpad/Scratchpad.adoc[`Scratchpad`] service (to share adhoc data between methods), and xref:refguide:applib:index/services/queryresultscache/QueryResultsCache.adoc[`QueryResultsCache`], which as its name suggests will cache query results.
 Such services _do_ hold state, but that state is scoped per (possibly concurrent) request and should be removed afterwards.
 
-The requirement for request-scoped services is supported using Apache Isis' own xref:system:generated:index/applib/annotation/InteractionScope.adoc[`@IsisSessionScope`] annotation (named because a short-lived `IsisSession` is created for each request).
+The requirement for request-scoped services is supported using Apache Isis' own xref:refguide:applib:index/annotation/InteractionScope.adoc[`@IsisSessionScope`] annotation (named because a short-lived `IsisSession` is created for each request).
 This is used by the framework services and can also be used for user-defined services.
 
 For example:

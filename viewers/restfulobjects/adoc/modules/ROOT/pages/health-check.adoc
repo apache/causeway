@@ -5,7 +5,7 @@
 
 WARNING: TODO: this content has not yet been reviewed/updated for v2.0
 
-The xref:system:generated:index/applib/services/health/HealthCheckService.adoc[`HealthCheckService`] SPI allows applications to provide an implementation of that service which can indicate the overall health of the application.
+The xref:refguide:applib:index/services/health/HealthCheckService.adoc[`HealthCheckService`] SPI allows applications to provide an implementation of that service which can indicate the overall health of the application.
 The "health" is defined by the very simple `Health` class, where a non-null message indicates a problem, otherwise everything is ok:
 
 [source,java]

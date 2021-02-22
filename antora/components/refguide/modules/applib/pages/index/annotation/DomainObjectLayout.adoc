@@ -66,22 +66,22 @@ The plural name of the class.
 <.> xref:#cssClassUiEvent[cssClassUiEvent]
 +
 --
-Which subclass of xref:system:generated:index/applib/events/ui/CssClassUiEvent.adoc[CssClassUiEvent] should be used to obtain a CSS class.
+Which subclass of xref:refguide:applib:index/events/ui/CssClassUiEvent.adoc[CssClassUiEvent] should be used to obtain a CSS class.
 --
 <.> xref:#iconUiEvent[iconUiEvent]
 +
 --
-Which subclass of xref:system:generated:index/applib/events/ui/IconUiEvent.adoc[IconUiEvent] should be used to obtain an icon.
+Which subclass of xref:refguide:applib:index/events/ui/IconUiEvent.adoc[IconUiEvent] should be used to obtain an icon.
 --
 <.> xref:#layoutUiEvent[layoutUiEvent]
 +
 --
-Which subclass of xref:system:generated:index/applib/events/ui/LayoutUiEvent.adoc[LayoutUiEvent] should be used to obtain a layout.
+Which subclass of xref:refguide:applib:index/events/ui/LayoutUiEvent.adoc[LayoutUiEvent] should be used to obtain a layout.
 --
 <.> xref:#titleUiEvent[titleUiEvent]
 +
 --
-Which subclass of xref:system:generated:index/applib/events/ui/TitleUiEvent.adoc[TitleUiEvent] should be used to obtain a title.
+Which subclass of xref:refguide:applib:index/events/ui/TitleUiEvent.adoc[TitleUiEvent] should be used to obtain a title.
 --
 
 == Members
@@ -137,28 +137,28 @@ The plural name of the class.
 [#cssClassUiEvent]
 === cssClassUiEvent
 
-Which subclass of xref:system:generated:index/applib/events/ui/CssClassUiEvent.adoc[CssClassUiEvent] should be used to obtain a CSS class.
+Which subclass of xref:refguide:applib:index/events/ui/CssClassUiEvent.adoc[CssClassUiEvent] should be used to obtain a CSS class.
 
 This subclass must provide a no-arg constructor; the fields are set reflectively.
 
 [#iconUiEvent]
 === iconUiEvent
 
-Which subclass of xref:system:generated:index/applib/events/ui/IconUiEvent.adoc[IconUiEvent] should be used to obtain an icon.
+Which subclass of xref:refguide:applib:index/events/ui/IconUiEvent.adoc[IconUiEvent] should be used to obtain an icon.
 
 This subclass must provide a no-arg constructor; the fields are set reflectively.
 
 [#layoutUiEvent]
 === layoutUiEvent
 
-Which subclass of xref:system:generated:index/applib/events/ui/LayoutUiEvent.adoc[LayoutUiEvent] should be used to obtain a layout.
+Which subclass of xref:refguide:applib:index/events/ui/LayoutUiEvent.adoc[LayoutUiEvent] should be used to obtain a layout.
 
 This subclass must provide a no-arg constructor; the fields are set reflectively.
 
 [#titleUiEvent]
 === titleUiEvent
 
-Which subclass of xref:system:generated:index/applib/events/ui/TitleUiEvent.adoc[TitleUiEvent] should be used to obtain a title.
+Which subclass of xref:refguide:applib:index/events/ui/TitleUiEvent.adoc[TitleUiEvent] should be used to obtain a title.
 
 This subclass must provide a no-arg constructor; the fields are set reflectively.
 

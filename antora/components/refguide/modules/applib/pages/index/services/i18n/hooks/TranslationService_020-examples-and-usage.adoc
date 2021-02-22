@@ -9,11 +9,11 @@ For the "big picture" and further details on the framework's support, see xref:u
 
 == Related Services
 
-* xref:system:generated:index/applib/services/i18n/Mode.adoc[Mode]
+* xref:refguide:applib:index/services/i18n/Mode.adoc[Mode]
 +
 enumerates the mode that the translation service is currently in, as per xref:TranslationService.adoc#getMode__[getMode()].
 
-* xref:system:generated:index/applib/services/i18n/LocaleProvider.adoc[`LocaleProvider`]
+* xref:refguide:applib:index/services/i18n/LocaleProvider.adoc[`LocaleProvider`]
 +
 Used by the default implementation (`TranslationServicePo`) to return the `Locale` of the current user.
 

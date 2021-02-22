@@ -27,7 +27,7 @@ Obtains a zip file of the serialized XML of the layouts (grids) of all domain en
 <.> xref:#toMenuBarsXml__MenuBarsService.Type[toMenuBarsXml(MenuBarsService.Type)]
 +
 --
-Obtains the serialized XML form of the menu bars layout ( xref:system:generated:index/applib/services/menu/MenuBarsService.adoc[MenuBarsService] ).
+Obtains the serialized XML form of the menu bars layout ( xref:refguide:applib:index/services/menu/MenuBarsService.adoc[MenuBarsService] ).
 --
 
 == Members
@@ -45,7 +45,7 @@ Obtains a zip file of the serialized XML of the layouts (grids) of all domain en
 [#toMenuBarsXml__MenuBarsService.Type]
 === toMenuBarsXml(MenuBarsService.Type)
 
-Obtains the serialized XML form of the menu bars layout ( xref:system:generated:index/applib/services/menu/MenuBarsService.adoc[MenuBarsService] ).
+Obtains the serialized XML form of the menu bars layout ( xref:refguide:applib:index/services/menu/MenuBarsService.adoc[MenuBarsService] ).
 
 include::hooks/LayoutService_010-implementation.adoc[]
 

@@ -5,7 +5,7 @@
 
 WARNING: TODO: this content has not yet been reviewed/updated for v2.0
 
-The `CommandPublisher` service is an internal service whose responsibility is simply to notify all known xref:system:generated:index/applib/services/publishing/spi/CommandSubscriber.adoc[`CommandSubscriber`] when the `Command` has completed.
+The `CommandPublisher` service is an internal service whose responsibility is simply to notify all known xref:refguide:applib:index/services/publishing/spi/CommandSubscriber.adoc[`CommandSubscriber`] when the `Command` has completed.
 
 == Related Classes
 

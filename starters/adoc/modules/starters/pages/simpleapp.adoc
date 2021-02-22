@@ -64,7 +64,7 @@ Once you've logged in you'll see the default home page:
 
 image::simpleapp/using/030-home-page.png[width="600px"]
 
-This is a view model annotated with xref:system:generated:index/applib/annotation/HomePage.adoc[@HomePage]:
+This is a view model annotated with xref:refguide:applib:index/annotation/HomePage.adoc[@HomePage]:
 
 [source,java]
 .HomePageViewModel.java
@@ -197,7 +197,7 @@ public String default0UpdateName() {
     return getName();
 }
 ----
-<.> Publishing enabled means that the action invocation is converted into XML and dispatched to all configured implementations of the xref:system:generated:index/applib/services/publishing/spi/ExecutionSubscriber.adoc[ExecutionSubscriber] SPI.
+<.> Publishing enabled means that the action invocation is converted into XML and dispatched to all configured implementations of the xref:refguide:applib:index/services/publishing/spi/ExecutionSubscriber.adoc[ExecutionSubscriber] SPI.
 +
 The framework provides a default implementation that just logs the interaction:
 +
@@ -466,11 +466,11 @@ The `@Name.Specification` class uses this configuration property.
 
 The scanning mechanism is leveraged by Apache Isis to pick up three types of classes:
 
-This will pick up the `SimpleObjects` repository because it is annotated with the framework's xref:system:generated:index/applib/annotation/DomainService.adoc[@DomainService] annotation; itself meta-annotated with `@Component`.
+This will pick up the `SimpleObjects` repository because it is annotated with the framework's xref:refguide:applib:index/annotation/DomainService.adoc[@DomainService] annotation; itself meta-annotated with `@Component`.
 
 * all domain services
 +
-These are classes that are annotated with the framework's xref:system:generated:index/applib/annotation/DomainService.adoc[@DomainService] annotation.
+These are classes that are annotated with the framework's xref:refguide:applib:index/annotation/DomainService.adoc[@DomainService] annotation.
 Because `@DomainService` is meta-annotated as a `@Component`, these are found automatically and are managed by Spring (ie instantiated, injected etc).
 +
 Depending on their nature, domain services are used to build up the menu, or are available to call programmatically, eg repositories, or sometimes both.
@@ -480,7 +480,7 @@ This appears in the menu, and also acts as a repository for the `SimpleObject` e
 
 * all entities.
 +
-These are entities that are annotated with both xref:system:generated:index/applib/annotation/DomainObject.adoc[`@DomainObject`] annotation and with `@javax.jdo.annotations.PersistenceCapable`.
+These are entities that are annotated with both xref:refguide:applib:index/annotation/DomainObject.adoc[`@DomainObject`] annotation and with `@javax.jdo.annotations.PersistenceCapable`.
 Because `@DomainObject` is meta-annotated as a `@Component`, these are found automatically by Spring.
 They are passed through to the JDO/DataNucleus object store, in order to create database mappings from the entities to relational tables.
 +
@@ -516,7 +516,7 @@ src/test/java/
 <1> These are very simple unit tests of `SimpleObject` and `SimpleObjects` with the package structure the same as in `src/main/java`.
 They are written in JUnit 5, and use JMockito as the mocking library.
 <2> Integration tests for the module.
-These use the xref:system:generated:index/applib/services/wrapper/WrapperFactory.adoc[WrapperFactory] to simulate interactions through the UI.
+These use the xref:refguide:applib:index/services/wrapper/WrapperFactory.adoc[WrapperFactory] to simulate interactions through the UI.
 <3> The `SimpleModuleIntegTestAbstract` superclass bootstraps the module's integration tests.
 This is discussed in more detail below.
 
@@ -607,9 +607,9 @@ Used for prototyping and also integration testing.
 +
 NOTE: Fixture scenarios also need to be link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/context/annotation/Import.html[@Import]ed, typically in the top-level `AppManifest`.
 
-<4> An implementation of the xref:system:generated:index/applib/services/health/HealthCheckService.adoc[HealtCheckService].
+<4> An implementation of the xref:refguide:applib:index/services/health/HealthCheckService.adoc[HealtCheckService].
 This integrates with Spring Boot's link:https://docs.spring.io/spring-boot/docs/current/api/org/springframework/boot/actuate/health/HealthIndicator.html[HealthIndicator] SPI, surfaced through the link:https://docs.spring.io/spring-boot/docs/current/reference/html/production-ready-features.html[Spring Boot Actuator].
-<5> Annotated with xref:system:generated:index/applib/annotation/HomePage.adoc[@HomePage] and so is shown automatically as the home page.
+<5> Annotated with xref:refguide:applib:index/annotation/HomePage.adoc[@HomePage] and so is shown automatically as the home page.
 <6> Defines the services in the webapp module, along with dependencies onto the other modules in the application. +
 Discussed in more detail below.
 <7> `AppManifest` is the top-level Spring link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/context/annotation/Configuration.html[@Configuration] that specifies the components of Apache Isis to use, along with the modules making up the application itself (ie `ApplicationModule`, which depends in turn on `SimpleModule`). +

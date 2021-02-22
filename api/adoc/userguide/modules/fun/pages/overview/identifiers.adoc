@@ -58,17 +58,17 @@ Some examples:
 * the information within an OID could be converted into a barcode, and stamped onto a PDF form.
 When the PDF is scanned by the mail room, the barcode could be read to attach the correspondence to the relevant domain object.
 
-* as a handle to any object in an audit record, as used by xref:system:generated:index/applib/services/publishing/spi/EntityPropertyChangeSubscriber.adoc[EntityPropertyChangeSubscriber];
+* as a handle to any object in an audit record, as used by xref:refguide:applib:index/services/publishing/spi/EntityPropertyChangeSubscriber.adoc[EntityPropertyChangeSubscriber];
 
-* similarly within implementations of xref:system:generated:index/applib/services/publishing/spi/CommandSubscriber.adoc[CommandSubscriber] to persist `Command` objects
+* similarly within implementations of xref:refguide:applib:index/services/publishing/spi/CommandSubscriber.adoc[CommandSubscriber] to persist `Command` objects
 
-* similarly within implementations of xref:system:generated:index/applib/services/publishing/spi/ExecutionSubscriber.adoc[ExecutionSubscriber] to persist published action invocations
+* similarly within implementations of xref:refguide:applib:index/services/publishing/spi/ExecutionSubscriber.adoc[ExecutionSubscriber] to persist published action invocations
 
 * and of course both the xref:vro:ROOT:about.adoc[RestfulObjects viewer] and xref:vw:ROOT:about.adoc[Wicket viewer] use the oid tuple to look up, render and allow the user to interact with domain objects.
 
 Although the exact content of an OID should be considered opaque by domain objects, it is possible for domain objects to obtain OIDs.
-These are represented as ``Bookmark``s, obtained from the xref:system:generated:index/applib/services/bookmark/BookmarkService.adoc[`BookmarkService`].
-Deep links meanwhile can be obtained from the xref:system:generated:index/applib/services/linking/DeepLinkService.adoc[`DeepLinkService`].
+These are represented as ``Bookmark``s, obtained from the xref:refguide:applib:index/services/bookmark/BookmarkService.adoc[`BookmarkService`].
+Deep links meanwhile can be obtained from the xref:refguide:applib:index/services/linking/DeepLinkService.adoc[`DeepLinkService`].
 
 OIDs can also be converted into XML format, useful for integration scenarios.
 The xref:refguide:schema:common.adoc[common schema] XSD defines the `oidDto` complex type for precisely this purpose.

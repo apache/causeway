@@ -29,7 +29,7 @@ For example the title of a customer object shouldn't include the literal string 
 
 === Declarative style
 
-The xref:system:generated:index/applib/annotation/Title.adoc[`@Title`] annotation can be used build up the title of an object from its constituent parts.
+The xref:refguide:applib:index/annotation/Title.adoc[`@Title`] annotation can be used build up the title of an object from its constituent parts.
 
 For example:
 
@@ -125,7 +125,7 @@ A variation on this approach also supports localized names; see xref:userguide:b
 
 A third alternative is to move the responsibility for deriving the title into a separate subscriber object.
 
-In the target object, we define an appropriate event type and use the xref:system:generated:index/applib/annotation/DomainObjectLayout.adoc#titleUiEvent[`@DomainObjectLayout#titleUiEvent()`] attribute to specify:
+In the target object, we define an appropriate event type and use the xref:refguide:applib:index/annotation/DomainObjectLayout.adoc#titleUiEvent[`@DomainObjectLayout#titleUiEvent()`] attribute to specify:
 
 [source,java]
 ----
@@ -185,7 +185,7 @@ If there is no requirement to customize the icon (the normal case), then the ico
 For example, the icon for a class `org.mydomain.myapp.Customer` will be `org/mydomain/myapp/Customer.png` (if it exists).
 
 Alternatively, a font-awesome icon can be used.
-This is specified using the xref:system:generated:index/applib/annotation/DomainObjectLayout.adoc#cssClassFa[`@DomainObjectLayout#cssClassFa()`] attribute or in the xref:userguide:fun:ui.adoc#object-layout[layout.xml] file.
+This is specified using the xref:refguide:applib:index/annotation/DomainObjectLayout.adoc#cssClassFa[`@DomainObjectLayout#cssClassFa()`] attribute or in the xref:userguide:fun:ui.adoc#object-layout[layout.xml] file.
 
 For example:
 
@@ -221,7 +221,7 @@ Otherwise it will just use "Order.png", as normal.
 
 As for title, the determination of which image file to use for the icon can be externalized into a UI event subscriber.
 
-In the target object, we define an appropriate event type and use the xref:system:generated:index/applib/annotation/DomainObjectLayout.adoc#iconUiEvent[`@DomainObjectLayout#iconUiEvent()`] attribute to specify.
+In the target object, we define an appropriate event type and use the xref:refguide:applib:index/annotation/DomainObjectLayout.adoc#iconUiEvent[`@DomainObjectLayout#iconUiEvent()`] attribute to specify.
 
 For example:
 
@@ -268,7 +268,7 @@ In conjunction with a viewer-specific customisation of CSS (eg for the xref:vw:R
 === Declarative style
 
 To render an object with a particular CSS, use
-xref:system:generated:index/applib/annotation/DomainObjectLayout.adoc#cssClass[`@DomainObjectLayout#cssClass()`] or in the xref:userguide:fun:ui.adoc#object-layout[layout.xml] file.
+xref:refguide:applib:index/annotation/DomainObjectLayout.adoc#cssClass[`@DomainObjectLayout#cssClass()`] or in the xref:userguide:fun:ui.adoc#object-layout[layout.xml] file.
 
 The usage of this CSS class is viewer-specific.
 In the case of the xref:vw:ROOT:about.adoc[Wicket Viewer], when the domain object is rendered on its own page, this CSS class will appear on a top-level `<div>`.
@@ -299,7 +299,7 @@ If non-null value is returned then the CSS class will be rendered _in addition_ 
 
 As for title and icon, the determination of which CSS class to render can be externalized into a UI event subscriber.
 
-In the target object, we define an appropriate event type and use the xref:system:generated:index/applib/annotation/DomainObjectLayout.adoc#cssClassUiEvent[`@DomainObjectLayout#cssClassUiEvent()`] attribute to specify.
+In the target object, we define an appropriate event type and use the xref:refguide:applib:index/annotation/DomainObjectLayout.adoc#cssClassUiEvent[`@DomainObjectLayout#cssClassUiEvent()`] attribute to specify.
 
 For example
 
@@ -371,7 +371,7 @@ public class IncomingInvoice {
 
 As for title, icon and CSS, the determination of which layout class to render can be externalized into a UI event subscriber.
 
-In the target object, we define an appropriate event type and use the xref:system:generated:index/applib/annotation/DomainObjectLayout.adoc#layoutUiEvent[`@DomainObjectLayout#layoutUiEvent()`] attribute to specify.
+In the target object, we define an appropriate event type and use the xref:refguide:applib:index/annotation/DomainObjectLayout.adoc#layoutUiEvent[`@DomainObjectLayout#layoutUiEvent()`] attribute to specify.
 
 For example
 

@@ -2,9 +2,9 @@
 
 Specifies how a particular _#getRole() application role_ may interact with a specific _ApplicationFeature application feature_ .
 
-Each permission has a _#getRule() rule_ and a _#getMode() mode_ . The xref:system:generated:index/extensions/secman/api/permission/ApplicationPermissionRule.adoc[ApplicationPermissionRule] determines whether the permission _ApplicationPermissionRule#ALLOW grants_ access to the feature or _ApplicationPermissionRule#VETO veto_ es access to it. The xref:system:generated:index/extensions/secman/api/permission/ApplicationPermissionMode.adoc[ApplicationPermissionMode] indicates whether the role can _ApplicationPermissionMode#VIEWING view_ the feature or can _ApplicationPermissionMode#CHANGING change_ the state of the system using the feature.
+Each permission has a _#getRule() rule_ and a _#getMode() mode_ . The xref:refguide:extensions:index/secman/api/permission/ApplicationPermissionRule.adoc[ApplicationPermissionRule] determines whether the permission _ApplicationPermissionRule#ALLOW grants_ access to the feature or _ApplicationPermissionRule#VETO veto_ es access to it. The xref:refguide:extensions:index/secman/api/permission/ApplicationPermissionMode.adoc[ApplicationPermissionMode] indicates whether the role can _ApplicationPermissionMode#VIEWING view_ the feature or can _ApplicationPermissionMode#CHANGING change_ the state of the system using the feature.
 
-For a given permission, there is an interaction between the xref:system:generated:index/extensions/secman/api/permission/ApplicationPermissionRule.adoc[ApplicationPermissionRule] and the xref:system:generated:index/extensions/secman/api/permission/ApplicationPermissionMode.adoc[ApplicationPermissionMode] :
+For a given permission, there is an interaction between the xref:refguide:extensions:index/secman/api/permission/ApplicationPermissionRule.adoc[ApplicationPermissionRule] and the xref:refguide:extensions:index/secman/api/permission/ApplicationPermissionMode.adoc[ApplicationPermissionMode] :
 
 * for an _ApplicationPermissionRule#ALLOW allow_ , a _ApplicationPermissionMode#CHANGING usability_ allow implies _ApplicationPermissionMode#VIEWING visibility_ allow.
 * conversely, for a _ApplicationPermissionRule#VETO veto_ , a _ApplicationPermissionMode#VIEWING visibility_ veto implies a _ApplicationPermissionMode#CHANGING usability_ veto.

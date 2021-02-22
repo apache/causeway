@@ -56,7 +56,7 @@ In fact, it isn't even necessary for there to be any `.po` files; `.po` translat
 
 The main API is the `TranslationService`:
 
-* xref:system:generated:index/applib/services/i18n/TranslationService.adoc[leveloffset=+2]
+* xref:refguide:applib:index/services/i18n/TranslationService.adoc[leveloffset=+2]
 
 The `translate(...)` methods are closely modelled on GNU's gettext API.
 The first version is used when no translation is required, the second is when both a singular and plural form will be required, with the `num` parameter being used to select which is returned.

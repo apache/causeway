@@ -1,7 +1,7 @@
 === Smoother UI
 
 Often an action, when invoked, will return the target (in other words, will "return this").
-The xref:system:generated:index/applib/annotation/ActionLayout.adoc#redirectPolicy[redirectPolicy()] element is used to control how the object is re-rendered.
+The xref:refguide:applib:index/annotation/ActionLayout.adoc#redirectPolicy[redirectPolicy()] element is used to control how the object is re-rendered.
 
 There are three options:
 
@@ -11,7 +11,7 @@ This makes for a smoother UI.
 +
 [NOTE]
 ====
-Any properties with xref:system:generated:index/applib/annotation/PropertyLayout.adoc#repainting[`@PropertyLayout#repainting`] set to `NO_REPAINT` are then _not_ updated.
+Any properties with xref:refguide:applib:index/annotation/PropertyLayout.adoc#repainting[`@PropertyLayout#repainting`] set to `NO_REPAINT` are then _not_ updated.
 ====
 
 * if set to `EVEN_IF_SAME`, then a redirect occurs and a new web page is rendered.

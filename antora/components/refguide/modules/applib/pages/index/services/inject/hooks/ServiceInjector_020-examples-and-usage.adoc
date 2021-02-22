@@ -18,10 +18,10 @@ repositoryService.persist(cust);
 
 == Related Services
 
-* xref:system:generated:index/applib/services/registry/ServiceRegistry.adoc[`ServiceRegistry`]
+* xref:refguide:applib:index/services/registry/ServiceRegistry.adoc[`ServiceRegistry`]
 +
 to just lookup existing domain services by type.
 
-* xref:system:generated:index/applib/services/repository/RepositoryService.adoc#detachedEntity__T[RepositoryService#detachedEntity()]
+* xref:refguide:applib:index/services/repository/RepositoryService.adoc#detachedEntity__T[RepositoryService#detachedEntity()]
 
-* xref:system:generated:index/applib/services/factory/FactoryService.adoc#detachedEntity__T[FactoryService#detachedEntity()]
+* xref:refguide:applib:index/services/factory/FactoryService.adoc#detachedEntity__T[FactoryService#detachedEntity()]

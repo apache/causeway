@@ -15,7 +15,7 @@ The XML can then be copied into the codebase of the application, and annotations
 
 === Styles
 
-Each of these actions take as a parameter an instance of xref:system:generated:index/applib/services/layout/Style.adoc[Style].
+Each of these actions take as a parameter an instance of xref:refguide:applib:index/services/layout/Style.adoc[Style].
 
 The `CURRENT` style corresponds to the layout already loaded for the domain class, typically from an already persisted `layout.xml` file.
 The other three styles allow the developer to choose how much metadata is to be specified in the XML, and how much (if any) will be obtained elsewhere, typically from annotations in the metamodel.
@@ -26,8 +26,8 @@ The table below summarises the choices:
 |===
 
 | Style
-| xref:system:generated:index/applib/annotation/MemberOrder.adoc[`@MemberOrder`]
-| xref:system:generated:index/applib/annotation/ActionLayout.adoc[`@ActionLayout`], xref:system:generated:index/applib/annotation/PropertyLayout.adoc[`@PropertyLayout`], xref:system:generated:index/applib/annotation/CollectionLayout.adoc[`@CollectionLayout`]
+| xref:refguide:applib:index/annotation/MemberOrder.adoc[`@MemberOrder`]
+| xref:refguide:applib:index/annotation/ActionLayout.adoc[`@ActionLayout`], xref:refguide:applib:index/annotation/PropertyLayout.adoc[`@PropertyLayout`], xref:refguide:applib:index/annotation/CollectionLayout.adoc[`@CollectionLayout`]
 
 
 |`COMPLETE`
@@ -68,11 +68,11 @@ The grid regions will be empty in this version, and the framework will use the `
 
 == See also
 
-The functionality of `LayoutService` is surfaced in the user interface through a related xref:system:generated:index/applib/services/layout/LayoutService.adoc#related-mixins-and-menus[mixin and menu action].
-See also xref:system:generated:index/applib/services/layout/Style.adoc[Style], which determines how much data is included in the downloaded XML.
+The functionality of `LayoutService` is surfaced in the user interface through a related xref:refguide:applib:index/services/layout/LayoutService.adoc#related-mixins-and-menus[mixin and menu action].
+See also xref:refguide:applib:index/services/layout/Style.adoc[Style], which determines how much data is included in the downloaded XML.
 
-The xref:system:generated:index/applib/services/grid/GridService.adoc[`GridService`] is responsible for loading and normalizing layout XML for a domain class.
-It in turn uses the xref:system:generated:index/applib/services/grid/GridLoaderService.adoc[`GridLoaderService`] and  xref:system:generated:index/applib/services/grid/GridSystemService.adoc[`GridSystemService`]
+The xref:refguide:applib:index/services/grid/GridService.adoc[`GridService`] is responsible for loading and normalizing layout XML for a domain class.
+It in turn uses the xref:refguide:applib:index/services/grid/GridLoaderService.adoc[`GridLoaderService`] and  xref:refguide:applib:index/services/grid/GridSystemService.adoc[`GridSystemService`]
 services.
 
 

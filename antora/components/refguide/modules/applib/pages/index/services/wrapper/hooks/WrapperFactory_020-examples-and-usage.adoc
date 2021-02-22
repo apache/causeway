@@ -44,7 +44,7 @@ For domain objects (not mixins), the wrapper can be interacted with as follows:
 * any action
 
 Calling any of the above methods may result in a (subclass of) `InteractionException` if the object disallows it.
-For example, if a property is annotated with xref:system:generated:index/applib/annotation/ActionLayout.adoc#hidden[`@ActionLayout#hidden`] then a `HiddenException` will be thrown.
+For example, if a property is annotated with xref:refguide:applib:index/annotation/ActionLayout.adoc#hidden[`@ActionLayout#hidden`] then a `HiddenException` will be thrown.
 Similarly if an action has a xref:refguide:applib-methods:prefixes.adoc[`validateXxx()`] method and the supplied arguments are invalid then an `InvalidException` will be thrown.
 
 In addition, the following methods may also be called:
@@ -54,7 +54,7 @@ In addition, the following methods may also be called:
 
 An exception will be thrown if any other methods are thrown.
 
-If the interface is performed (action invoked or property set), then - irrespective of whether the business rules were checked or skipped - a xref:system:generated:index/applib/annotation/Action.adoc#command[command] will be created and pre- and post-execute xref:system:generated:index/applib/annotation/Action.adoc#domainEvent[domain event]s) will be fired.
+If the interface is performed (action invoked or property set), then - irrespective of whether the business rules were checked or skipped - a xref:refguide:applib:index/annotation/Action.adoc#command[command] will be created and pre- and post-execute xref:refguide:applib:index/annotation/Action.adoc#domainEvent[domain event]s) will be fired.
 
 === Mixins
 
@@ -67,7 +67,7 @@ In addition, any xref:refguide:applib-methods:prefixes.adoc#default[`default...(
 
 === Creating interactions
 
-One use case for the `WrapperFactory` is to invoke actions that have xref:system:generated:index/applib/annotation/Action.adoc#executionPublishing[Action#executionPublishing] enabled.
+One use case for the `WrapperFactory` is to invoke actions that have xref:refguide:applib:index/annotation/Action.adoc#executionPublishing[Action#executionPublishing] enabled.
 This will result in a serializable representation of the action invocation to be published; this could then be used to route a message to another system.
 
 The target action is often a no-op; indeed it can even be hidden if the `WrapperFactory` is invoked with rules skipped.
@@ -92,7 +92,7 @@ Said another way: interactions are performed "as if" they are through the viewer
 
 One possible use case for the listener API would be to autogenerate documentation, for example a sequence diagram from tests.
 
-Such a feature would probably also use xref:system:generated:index/applib/services/iactn/InteractionContext.adoc[`InteractionContext`], which builds up an execution call graph of interactions between (wrapped) objects.
+Such a feature would probably also use xref:refguide:applib:index/services/iactn/InteractionContext.adoc[`InteractionContext`], which builds up an execution call graph of interactions between (wrapped) objects.
 
 
 
@@ -101,8 +101,8 @@ Such a feature would probably also use xref:system:generated:index/applib/servic
 
 == See also
 
-* xref:system:generated:index/applib/services/wrapper/control/SyncControl.adoc[SyncControl] and xref:system:generated:index/applib/services/wrapper/control/AsyncControl.adoc[AsyncControl]
-** xref:system:generated:index/applib/services/wrapper/control/ExceptionHandler.adoc[ExceptionHandler]
-** xref:system:generated:index/applib/services/wrapper/control/ExecutionMode.adoc[ExecutionMode]
-* xref:system:generated:index/applib/services/wrapper/listeners/InteractionListener.adoc[InteractionListener]
-** xref:system:generated:index/applib/services/wrapper/listeners/InteractionAdapter.adoc[InteractionAdapter]
+* xref:refguide:applib:index/services/wrapper/control/SyncControl.adoc[SyncControl] and xref:refguide:applib:index/services/wrapper/control/AsyncControl.adoc[AsyncControl]
+** xref:refguide:applib:index/services/wrapper/control/ExceptionHandler.adoc[ExceptionHandler]
+** xref:refguide:applib:index/services/wrapper/control/ExecutionMode.adoc[ExecutionMode]
+* xref:refguide:applib:index/services/wrapper/listeners/InteractionListener.adoc[InteractionListener]
+** xref:refguide:applib:index/services/wrapper/listeners/InteractionAdapter.adoc[InteractionAdapter]

@@ -7,6 +7,6 @@
 The `updating()` lifecycle callback method is called when a (persistent) object is just about to be updated in the object store
 
 
-An alternative means to interact with the lifecycle is by setting up a subscriber on the xref:system:generated:index/applib/annotation/DomainObject.adoc#updatingLifecycleEvent[`@DomainObject#updatingLifecycleEvent()`] event.
+An alternative means to interact with the lifecycle is by setting up a subscriber on the xref:refguide:applib:index/annotation/DomainObject.adoc#updatingLifecycleEvent[`@DomainObject#updatingLifecycleEvent()`] event.
 
 See also xref:refguide:applib-methods:lifecycle.adoc#updated[`updated()`].

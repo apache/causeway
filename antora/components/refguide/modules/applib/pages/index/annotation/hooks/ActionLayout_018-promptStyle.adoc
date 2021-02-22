@@ -4,7 +4,7 @@
 :page-partial:
 
 
-The xref:system:generated:index/applib/annotation/ActionLayout.adoc#promptStyle[promptStyle()] element is used to specify whether, when invoking an action associated with a domain object property, the parameters for the action are prompted either in modal dialog box, a (non-modal) sidebar dialog box, or is prompted using an inline panel (replacing the property on the page).
+The xref:refguide:applib:index/annotation/ActionLayout.adoc#promptStyle[promptStyle()] element is used to specify whether, when invoking an action associated with a domain object property, the parameters for the action are prompted either in modal dialog box, a (non-modal) sidebar dialog box, or is prompted using an inline panel (replacing the property on the page).
 For more on sidebar vs modal dialogs, see xref:vw:ROOT:features.adoc#sidebar-vs-modal-dialogs[Wicket viewer features].
 
 The prompt style is influenced by two xref:vw:ROOT:configuration-properties.adoc[configuration properties]:

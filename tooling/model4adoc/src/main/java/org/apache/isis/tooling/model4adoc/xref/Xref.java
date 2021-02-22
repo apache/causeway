@@ -30,38 +30,38 @@ import lombok.val;
 
 @Value @Builder
 public final class Xref {
-    
+
     // model for
-    // xref:system:generated:index/applib/services/xmlsnapshot/XmlSnapshotService~Snapshot.adoc[XmlSnapshotService.Snapshot]
+    // xref:refguide:applib:index/services/xmlsnapshot/XmlSnapshotService~Snapshot.adoc[XmlSnapshotService.Snapshot]
     // location: system, generated
     // namespace: index, applib, services, xmlsnapshot
     // canonicalName: XmlSnapshotService~Snapshot.adoc
     // friendlyName: XmlSnapshotService.Snapshot
-    
-    private final @NonNull Can<String> location; 
-    private final @NonNull Can<String> namespace; 
+
+    private final @NonNull Can<String> location;
+    private final @NonNull Can<String> namespace;
     private final @NonNull String canonicalName;
     private final @NonNull String friendlyName;  // as used for display
-    
+
     @Getter(lazy = true)
     private final @NonNull String xref = xref(); // full xref string
 
     private String xref() {
         val sb = new StringBuilder();
-        
+
         sb.append("xref:")
         .append(location.stream().collect(Collectors.joining(":")))
         .append(":");
-        
+
         namespace.stream().forEach(part->sb.append(part).append("/"));
-        
+
         sb.append(canonicalName)
         .append("[")
         .append(friendlyName)
         .append("]");
-        
+
         return sb.toString();
     }
-     
-    
+
+
 }

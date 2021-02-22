@@ -106,7 +106,7 @@ For example, the client could use an `Accept` header such as:
 Accept: application/xml;x-ro-domain-type="com.mycompany.viewmodels.v2.CustomerViewModel"
 ----
 
-The server will use the xref:system:generated:index/applib/services/conmap/ContentMappingService.adoc[`ContentMappingService`] to attempt to transform the domain object into the requested `x-ro-domain-type`.
+The server will use the xref:refguide:applib:index/services/conmap/ContentMappingService.adoc[`ContentMappingService`] to attempt to transform the domain object into the requested `x-ro-domain-type`.
 The whole process is discussed in more detail in the xref:vro:ROOT:architecture.adoc[architecture] chapter.
 
 ==== Apache Isis profile

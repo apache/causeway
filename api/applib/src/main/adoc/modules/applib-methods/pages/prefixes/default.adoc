@@ -8,7 +8,7 @@
 The `default...()` supporting method is called for action parameters to return the initial argument value.
 This may be some sensible default (eg today's date, or 0 or 1), or -- for an action that is modifying the state of an object -- might default to the current value of a corresponding property.
 
-The method is _also_ called for properties in the case when an object is newly instantiated using xref:system:generated:index/applib/services/repository/RepositoryService.adoc[`RepositoryService#detachedEntity(...)`] or xref:system:generated:index/applib/services/factory/FactoryService.adoc[`FactoryService#create(...)`].
+The method is _also_ called for properties in the case when an object is newly instantiated using xref:refguide:applib:index/services/repository/RepositoryService.adoc[`RepositoryService#detachedEntity(...)`] or xref:refguide:applib:index/services/factory/FactoryService.adoc[`FactoryService#create(...)`].
 This is a much less common use case.
 If a default is not specified then properties are initialized to a default based on their type (eg 0 or `false`).
 
@@ -153,7 +153,7 @@ public class ShoppingCartItem {
 
 There are, in fact, two other ways to set properties of a newly instantiated object to default values.
 
-The first is to use the xref:refguide:applib-methods:lifecycle.adoc#created[`created()`] callback, called by the framework when xref:system:generated:index/applib/services/repository/RepositoryService.adoc[`RepositoryService#detachedEntity(...)`] or xref:system:generated:index/applib/services/factory/FactoryService.adoc[`FactoryService#create(...)`] is called.
+The first is to use the xref:refguide:applib-methods:lifecycle.adoc#created[`created()`] callback, called by the framework when xref:refguide:applib:index/services/repository/RepositoryService.adoc[`RepositoryService#detachedEntity(...)`] or xref:refguide:applib:index/services/factory/FactoryService.adoc[`FactoryService#create(...)`] is called.
 This method is called after any services have been injected into the domain object.
 
 The second is more straightforward: simply initialize properties in the constructor.

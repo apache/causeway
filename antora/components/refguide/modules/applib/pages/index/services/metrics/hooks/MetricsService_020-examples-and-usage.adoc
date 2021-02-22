@@ -6,7 +6,7 @@
 == Related Services
 
 
-* xref:system:generated:index/applib/services/publishing/spi/EntityChangesSubscriber.adoc[EntityChangesSubscriber]
+* xref:refguide:applib:index/services/publishing/spi/EntityChangesSubscriber.adoc[EntityChangesSubscriber]
 +
-provides a mechanism to access these same metrics (as xref:system:generated:index/applib/services/publishing/spi/EntityChanges.adoc[EntityChanges]) through a subscriber SPI.
+provides a mechanism to access these same metrics (as xref:refguide:applib:index/services/publishing/spi/EntityChanges.adoc[EntityChanges]) through a subscriber SPI.
 

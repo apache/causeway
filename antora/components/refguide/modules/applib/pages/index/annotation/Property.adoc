@@ -30,17 +30,17 @@ Collects together all the domain semantics for the property of a domain object.
 <.> xref:#commandDtoProcessor[commandDtoProcessor]
 +
 --
-The xref:system:generated:index/applib/services/commanddto/processor/CommandDtoProcessor.adoc[CommandDtoProcessor] to process this command's DTO.
+The xref:refguide:applib:index/services/commanddto/processor/CommandDtoProcessor.adoc[CommandDtoProcessor] to process this command's DTO.
 --
 <.> xref:#commandPublishing[commandPublishing]
 +
 --
-Whether property edits, captured as xref:system:generated:index/applib/services/command/Command.adoc[Command] s, should be published to xref:system:generated:index/applib/services/publishing/spi/CommandSubscriber.adoc[CommandSubscriber] s.
+Whether property edits, captured as xref:refguide:applib:index/services/command/Command.adoc[Command] s, should be published to xref:refguide:applib:index/services/publishing/spi/CommandSubscriber.adoc[CommandSubscriber] s.
 --
 <.> xref:#domainEvent[domainEvent]
 +
 --
-Indicates that changes to the property that should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService event bus_ using a custom (subclass of) xref:system:generated:index/applib/events/domain/PropertyDomainEvent.adoc[PropertyDomainEvent] .
+Indicates that changes to the property that should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService event bus_ using a custom (subclass of) xref:refguide:applib:index/events/domain/PropertyDomainEvent.adoc[PropertyDomainEvent] .
 --
 <.> xref:#editing[editing]
 +
@@ -55,12 +55,12 @@ If _#editing()_ is set to _Editing#DISABLED_ , then the reason to provide to the
 <.> xref:#executionPublishing[executionPublishing]
 +
 --
-Whether xref:system:generated:index/applib/services/iactn/Execution.adoc[Execution] s (triggered property edits), should be dispatched to xref:system:generated:index/applib/services/publishing/spi/ExecutionSubscriber.adoc[ExecutionSubscriber] s.
+Whether xref:refguide:applib:index/services/iactn/Execution.adoc[Execution] s (triggered property edits), should be dispatched to xref:refguide:applib:index/services/publishing/spi/ExecutionSubscriber.adoc[ExecutionSubscriber] s.
 --
 <.> xref:#fileAccept[fileAccept]
 +
 --
-For uploading xref:system:generated:index/applib/value/Blob.adoc[Blob] or xref:system:generated:index/applib/value/Clob.adoc[Clob] , optionally restrict the files accepted (eg `.xslx` ).
+For uploading xref:refguide:applib:index/value/Blob.adoc[Blob] or xref:refguide:applib:index/value/Clob.adoc[Clob] , optionally restrict the files accepted (eg `.xslx` ).
 --
 <.> xref:#hidden[hidden]
 +
@@ -80,7 +80,7 @@ Indicates whether the property should be included or excluded from mementos.
 <.> xref:#mustSatisfy[mustSatisfy]
 +
 --
-The xref:system:generated:index/applib/spec/Specification.adoc[Specification] (s) to be satisfied by this property.
+The xref:refguide:applib:index/spec/Specification.adoc[Specification] (s) to be satisfied by this property.
 --
 <.> xref:#optionality[optionality]
 +
@@ -113,19 +113,19 @@ Replacement text for the pattern in generated error message.
 [#commandDtoProcessor]
 === commandDtoProcessor
 
-The xref:system:generated:index/applib/services/commanddto/processor/CommandDtoProcessor.adoc[CommandDtoProcessor] to process this command's DTO.
+The xref:refguide:applib:index/services/commanddto/processor/CommandDtoProcessor.adoc[CommandDtoProcessor] to process this command's DTO.
 
-The processor itself is used by xref:system:generated:index/applib/services/commanddto/conmap/ContentMappingServiceForCommandDto.adoc[ContentMappingServiceForCommandDto] and xref:system:generated:index/applib/services/commanddto/conmap/ContentMappingServiceForCommandsDto.adoc[ContentMappingServiceForCommandsDto] to dynamically transform the DTOs.
+The processor itself is used by xref:refguide:applib:index/services/commanddto/conmap/ContentMappingServiceForCommandDto.adoc[ContentMappingServiceForCommandDto] and xref:refguide:applib:index/services/commanddto/conmap/ContentMappingServiceForCommandsDto.adoc[ContentMappingServiceForCommandsDto] to dynamically transform the DTOs.
 
 [#commandPublishing]
 === commandPublishing
 
-Whether property edits, captured as xref:system:generated:index/applib/services/command/Command.adoc[Command] s, should be published to xref:system:generated:index/applib/services/publishing/spi/CommandSubscriber.adoc[CommandSubscriber] s.
+Whether property edits, captured as xref:refguide:applib:index/services/command/Command.adoc[Command] s, should be published to xref:refguide:applib:index/services/publishing/spi/CommandSubscriber.adoc[CommandSubscriber] s.
 
 [#domainEvent]
 === domainEvent
 
-Indicates that changes to the property that should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService event bus_ using a custom (subclass of) xref:system:generated:index/applib/events/domain/PropertyDomainEvent.adoc[PropertyDomainEvent] .
+Indicates that changes to the property that should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService event bus_ using a custom (subclass of) xref:refguide:applib:index/events/domain/PropertyDomainEvent.adoc[PropertyDomainEvent] .
 
 Subscribers of this event can interact with the business rule checking (hide, disable, validate) and its modification (before and after).
 
@@ -156,12 +156,12 @@ If _#editing()_ is set to _Editing#DISABLED_ , then the reason to provide to the
 [#executionPublishing]
 === executionPublishing
 
-Whether xref:system:generated:index/applib/services/iactn/Execution.adoc[Execution] s (triggered property edits), should be dispatched to xref:system:generated:index/applib/services/publishing/spi/ExecutionSubscriber.adoc[ExecutionSubscriber] s.
+Whether xref:refguide:applib:index/services/iactn/Execution.adoc[Execution] s (triggered property edits), should be dispatched to xref:refguide:applib:index/services/publishing/spi/ExecutionSubscriber.adoc[ExecutionSubscriber] s.
 
 [#fileAccept]
 === fileAccept
 
-For uploading xref:system:generated:index/applib/value/Blob.adoc[Blob] or xref:system:generated:index/applib/value/Clob.adoc[Clob] , optionally restrict the files accepted (eg `.xslx` ).
+For uploading xref:refguide:applib:index/value/Blob.adoc[Blob] or xref:refguide:applib:index/value/Clob.adoc[Clob] , optionally restrict the files accepted (eg `.xslx` ).
 
 The value should be of the form "file_extension|audio/*|video/*|image/*|media_type".
 
@@ -186,12 +186,12 @@ NOTE: this will usually be supplemented by a JDO or JPA-specific annotation to i
 
 Indicates whether the property should be included or excluded from mementos.
 
-To ensure that the property is actually not persisted in the objectstore, also annotate with the JDO annotation `javax.jdo.annotations.NotPersistent` 
+To ensure that the property is actually not persisted in the objectstore, also annotate with the JDO annotation `javax.jdo.annotations.NotPersistent`
 
 [#mustSatisfy]
 === mustSatisfy
 
-The xref:system:generated:index/applib/spec/Specification.adoc[Specification] (s) to be satisfied by this property.
+The xref:refguide:applib:index/spec/Specification.adoc[Specification] (s) to be satisfied by this property.
 
 If more than one is provided, then all must be satisfied (in effect "AND"ed together).
 

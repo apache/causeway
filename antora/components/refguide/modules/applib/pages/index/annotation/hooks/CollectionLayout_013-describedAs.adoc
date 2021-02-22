@@ -1,6 +1,6 @@
 === Descriptions
 
-The xref:system:generated:index/applib/annotation/CollectionLayout.adoc#describedAs[describedAs()] element is used to provide a short description of the collection to the user.
+The xref:refguide:applib:index/annotation/CollectionLayout.adoc#describedAs[describedAs()] element is used to provide a short description of the collection to the user.
 In the xref:vw:ROOT:about.adoc[Wicket viewer] it is displayed as a 'tool tip'.
 
 For example:

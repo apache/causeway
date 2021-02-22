@@ -1,6 +1,6 @@
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
-Provides the user and scenario specific environment for an xref:system:generated:index/applib/services/iactn/Execution.adoc[Execution]
+Provides the user and scenario specific environment for an xref:refguide:applib:index/services/iactn/Execution.adoc[Execution]
 
 == API
 
@@ -45,7 +45,7 @@ The (programmatically) simulated (or actual) clock.
 <.> xref:#ofUserWithSystemDefaults__UserMemento[ofUserWithSystemDefaults(UserMemento)]
 +
 --
-Creates a new xref:system:generated:index/applib/services/iactn/ExecutionContext.adoc[ExecutionContext] with the specified user and system defaults for clock, locale and time-zone.
+Creates a new xref:refguide:applib:index/services/iactn/ExecutionContext.adoc[ExecutionContext] with the specified user and system defaults for clock, locale and time-zone.
 --
 
 == Members
@@ -63,4 +63,4 @@ The (programmatically) simulated (or actual) clock.
 [#ofUserWithSystemDefaults__UserMemento]
 === ofUserWithSystemDefaults(UserMemento)
 
-Creates a new xref:system:generated:index/applib/services/iactn/ExecutionContext.adoc[ExecutionContext] with the specified user and system defaults for clock, locale and time-zone.
+Creates a new xref:refguide:applib:index/services/iactn/ExecutionContext.adoc[ExecutionContext] with the specified user and system defaults for clock, locale and time-zone.

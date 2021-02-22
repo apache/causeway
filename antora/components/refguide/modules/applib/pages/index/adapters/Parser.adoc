@@ -8,7 +8,7 @@ Specifically, this interface embodies three related capabilities:
 * to provide a string representation of the object, for use as its title.
 * to indicate the typical length of such a string representation.
 
-For custom-written (as opposed to third-party) value types, the ability for the xref:system:generated:index/applib/adapters/Parser.adoc[Parser] to provide a title responsibilities overlap with other conventions for domain objects. Specifically, normally we write a `title()` method to return a title. In such cases a typical implementation of xref:system:generated:index/applib/adapters/Parser.adoc[Parser] would just delegate to the value type itself to obtain the title (ie invoking the `title()` method directly rather than having the framework do this).
+For custom-written (as opposed to third-party) value types, the ability for the xref:refguide:applib:index/adapters/Parser.adoc[Parser] to provide a title responsibilities overlap with other conventions for domain objects. Specifically, normally we write a `title()` method to return a title. In such cases a typical implementation of xref:refguide:applib:index/adapters/Parser.adoc[Parser] would just delegate to the value type itself to obtain the title (ie invoking the `title()` method directly rather than having the framework do this).
 
 For third-party value types, eg seeTime-and-Moneythere is no ability to write `title()` methods; so this is the main reason that this interface has to deal with titles and lengths.
 

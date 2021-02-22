@@ -2,9 +2,9 @@
 
 Intended to be annotated on the root marker class of a (Maven) module which contains a single coherent set of functionality, possibly including domain services.
 
-A xref:system:generated:index/applib/annotation/Module.adoc[Module] (because it's a meta-annotation) is also a Spring _Configuration @Configuration_ , which means that the functionality can be depended upon transitively using Spring's _Import @Import_ annotation. Normally the import graph mirrors the dependencies in Maven.
+A xref:refguide:applib:index/annotation/Module.adoc[Module] (because it's a meta-annotation) is also a Spring _Configuration @Configuration_ , which means that the functionality can be depended upon transitively using Spring's _Import @Import_ annotation. Normally the import graph mirrors the dependencies in Maven.
 
-Also, a xref:system:generated:index/applib/annotation/Module.adoc[Module] also declares the Spring _ComponentScan @ComponentScan_ (with no parameters), which means that any domain services in the same package or subpackages are automatically found and registered.
+Also, a xref:refguide:applib:index/annotation/Module.adoc[Module] also declares the Spring _ComponentScan @ComponentScan_ (with no parameters), which means that any domain services in the same package or subpackages are automatically found and registered.
 
 == API
 

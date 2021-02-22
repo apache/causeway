@@ -2,7 +2,7 @@
 
 Whenever an member of a domain object is interacted with then a domain event will be fired, for each of the various phases (hidden, disabled, validated, executing, executed).
 
-For each of the three types of members (action, property and collection), the xref:system:generated:index/applib/annotation/DomainObject.adoc[DomainObject] provides an element that defines a common event domain class to be fired whenever interating with members of that type.
+For each of the three types of members (action, property and collection), the xref:refguide:applib:index/annotation/DomainObject.adoc[DomainObject] provides an element that defines a common event domain class to be fired whenever interating with members of that type.
 This default event type can be overridden with a more specific event type if necessary.
 
 [cols="3a,6a,7a"]
@@ -12,21 +12,21 @@ This default event type can be overridden with a more specific event type if nec
 | Overridden with
 
 |Actions
-|xref:system:generated:index/applib/annotation/DomainObject.adoc#actionDomainEvent[actionDomainEvent()]
+|xref:refguide:applib:index/annotation/DomainObject.adoc#actionDomainEvent[actionDomainEvent()]
 
-|xref:system:generated:index/applib/annotation/Action.adoc#domainEvent[@Action#domainEvent].
+|xref:refguide:applib:index/annotation/Action.adoc#domainEvent[@Action#domainEvent].
 
 |Properties
-|xref:system:generated:index/applib/annotation/DomainObject.adoc#propertyDomainEvent[propertyDomainEvent()]
+|xref:refguide:applib:index/annotation/DomainObject.adoc#propertyDomainEvent[propertyDomainEvent()]
 
 
-|xref:system:generated:index/applib/annotation/Property.adoc#domainEvent[@Property#domainEvent()].
+|xref:refguide:applib:index/annotation/Property.adoc#domainEvent[@Property#domainEvent()].
 
 |Collections
 
-|xref:system:generated:index/applib/annotation/DomainObject.adoc#collectionDomainEvent[collectionDomainEvent()]
+|xref:refguide:applib:index/annotation/DomainObject.adoc#collectionDomainEvent[collectionDomainEvent()]
 
-|xref:system:generated:index/applib/annotation/Collection.adoc#domainEvent[@Collection#domainEvent()].
+|xref:refguide:applib:index/annotation/Collection.adoc#domainEvent[@Collection#domainEvent()].
 
 |===
 

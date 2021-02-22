@@ -27,7 +27,7 @@ Provide access to the underlying, wrapped object.
 <.> xref:#__isis_executionModes__[__isis_executionModes()]
 +
 --
-The _EnumSetexecution modes_ inferred from the xref:system:generated:index/applib/services/wrapper/control/SyncControl.adoc[SyncControl] with which this wrapper was _WrapperFactory#wrap(Object, SyncControl) created_ .
+The _EnumSetexecution modes_ inferred from the xref:refguide:applib:index/services/wrapper/control/SyncControl.adoc[SyncControl] with which this wrapper was _WrapperFactory#wrap(Object, SyncControl) created_ .
 --
 
 == Members
@@ -53,4 +53,4 @@ NOTE: domain classes may not have a method with this name. The `__isis_` prefix 
 [#__isis_executionModes__]
 === __isis_executionModes()
 
-The _EnumSetexecution modes_ inferred from the xref:system:generated:index/applib/services/wrapper/control/SyncControl.adoc[SyncControl] with which this wrapper was _WrapperFactory#wrap(Object, SyncControl) created_ .
+The _EnumSetexecution modes_ inferred from the xref:refguide:applib:index/services/wrapper/control/SyncControl.adoc[SyncControl] with which this wrapper was _WrapperFactory#wrap(Object, SyncControl) created_ .

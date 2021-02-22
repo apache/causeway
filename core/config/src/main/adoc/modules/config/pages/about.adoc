@@ -41,7 +41,7 @@ configuration
 |===
 
 By default Apache Isis runs in production mode.
-But if configured to run instead in prototyping mode, then any actions xref:system:generated:index/applib/annotation/Action.adoc#restrictTo[restricted to] to prototype mode are visible.
+But if configured to run instead in prototyping mode, then any actions xref:refguide:applib:index/annotation/Action.adoc#restrictTo[restricted to] to prototype mode are visible.
 In particular, the "Prototyping" menu will appear, containing a number of framework-provided menu services - all restricted to prototyping mode.
 For example, menu items to run in xref:testing:fixtures:about.adoc[fixture scripts] are on this menu.
 

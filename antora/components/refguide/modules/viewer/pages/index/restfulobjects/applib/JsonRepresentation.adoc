@@ -320,17 +320,17 @@ Indicates that the wrapped node has `null` value (ie _JsonRepresentation#isNull(
 <.> xref:#getNull__String[getNull(String)]
 +
 --
-Either returns a xref:system:generated:index/viewer/restfulobjects/applib/JsonRepresentation.adoc[JsonRepresentation] that indicates that the wrapped node has `null` value (ie _JsonRepresentation#isNull()_ ), or returns `null` if there was no node with the provided path.
+Either returns a xref:refguide:viewer:index/restfulobjects/applib/JsonRepresentation.adoc[JsonRepresentation] that indicates that the wrapped node has `null` value (ie _JsonRepresentation#isNull()_ ), or returns `null` if there was no node with the provided path.
 --
 <.> xref:#asNull__[asNull()]
 +
 --
-Either returns a xref:system:generated:index/viewer/restfulobjects/applib/JsonRepresentation.adoc[JsonRepresentation] that indicates that the wrapped node has `null` value (ie _JsonRepresentation#isNull()_ ), or returns `null` if there was no node with the provided path.
+Either returns a xref:refguide:viewer:index/restfulobjects/applib/JsonRepresentation.adoc[JsonRepresentation] that indicates that the wrapped node has `null` value (ie _JsonRepresentation#isNull()_ ), or returns `null` if there was no node with the provided path.
 --
 <.> xref:#mapValueAsLink__[mapValueAsLink()]
 +
 --
-Convert a representation that contains a single node representing a link into a xref:system:generated:index/viewer/restfulobjects/applib/LinkRepresentation.adoc[LinkRepresentation] .
+Convert a representation that contains a single node representing a link into a xref:refguide:viewer:index/restfulobjects/applib/LinkRepresentation.adoc[LinkRepresentation] .
 --
 <.> xref:#as__Class[as(Class)]
 +
@@ -523,21 +523,21 @@ Indicates that the wrapped node has `null` value (ie _JsonRepresentation#isNull(
 [#getNull__String]
 === getNull(String)
 
-Either returns a xref:system:generated:index/viewer/restfulobjects/applib/JsonRepresentation.adoc[JsonRepresentation] that indicates that the wrapped node has `null` value (ie _JsonRepresentation#isNull()_ ), or returns `null` if there was no node with the provided path.
+Either returns a xref:refguide:viewer:index/restfulobjects/applib/JsonRepresentation.adoc[JsonRepresentation] that indicates that the wrapped node has `null` value (ie _JsonRepresentation#isNull()_ ), or returns `null` if there was no node with the provided path.
 
 Use _#isNull(String)_ to check first, if required.
 
 [#asNull__]
 === asNull()
 
-Either returns a xref:system:generated:index/viewer/restfulobjects/applib/JsonRepresentation.adoc[JsonRepresentation] that indicates that the wrapped node has `null` value (ie _JsonRepresentation#isNull()_ ), or returns `null` if there was no node with the provided path.
+Either returns a xref:refguide:viewer:index/restfulobjects/applib/JsonRepresentation.adoc[JsonRepresentation] that indicates that the wrapped node has `null` value (ie _JsonRepresentation#isNull()_ ), or returns `null` if there was no node with the provided path.
 
 Use _#isNull()_ to check first, if required.
 
 [#mapValueAsLink__]
 === mapValueAsLink()
 
-Convert a representation that contains a single node representing a link into a xref:system:generated:index/viewer/restfulobjects/applib/LinkRepresentation.adoc[LinkRepresentation] .
+Convert a representation that contains a single node representing a link into a xref:refguide:viewer:index/restfulobjects/applib/LinkRepresentation.adoc[LinkRepresentation] .
 
 [#as__Class]
 === as(Class)

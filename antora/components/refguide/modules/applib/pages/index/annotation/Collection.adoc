@@ -17,7 +17,7 @@ Domain semantics for domain object collection.
 <.> xref:#domainEvent[domainEvent]
 +
 --
-Indicates that changes to the collection that should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService event bus_ using a custom (subclass of) xref:system:generated:index/applib/events/domain/CollectionDomainEvent.adoc[CollectionDomainEvent] .
+Indicates that changes to the collection that should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService event bus_ using a custom (subclass of) xref:refguide:applib:index/events/domain/CollectionDomainEvent.adoc[CollectionDomainEvent] .
 --
 <.> xref:#hidden[hidden]
 +
@@ -35,7 +35,7 @@ The type-of the elements held within the collection.
 [#domainEvent]
 === domainEvent
 
-Indicates that changes to the collection that should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService event bus_ using a custom (subclass of) xref:system:generated:index/applib/events/domain/CollectionDomainEvent.adoc[CollectionDomainEvent] .
+Indicates that changes to the collection that should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService event bus_ using a custom (subclass of) xref:refguide:applib:index/events/domain/CollectionDomainEvent.adoc[CollectionDomainEvent] .
 
 Subscribers of this event can interact with the business rule checking (hide, disable, validate) and its modification (before and after).
 

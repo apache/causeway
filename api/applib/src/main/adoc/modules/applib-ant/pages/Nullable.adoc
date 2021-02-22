@@ -31,14 +31,14 @@ public Customer updateName(@javax.annotation.Nullable final String name) {
 ----
 
 Apache Isis does provide several other ways to specify optionality: using the
-xref:system:generated:index/applib/annotation/Property.adoc#optionality[`@Property#optionality()`] /
-xref:system:generated:index/applib/annotation/Parameter.adoc#optionality[`@Parameter#optionality()`] annotation.
+xref:refguide:applib:index/annotation/Property.adoc#optionality[`@Property#optionality()`] /
+xref:refguide:applib:index/annotation/Parameter.adoc#optionality[`@Parameter#optionality()`] annotation.
 For properties, the optionality can also be inferred from the xref:refguide:applib-ant:Column.adoc#nullability[`@Column#allowsNull()`] attribute.
 
 [TIP]
 ====
 See the
-xref:system:generated:index/applib/annotation/Property.adoc#optionality[`@Property#optionality()`] documentation for a much fuller discussion on the relationship between using the Apache Isis annotations vs
+xref:refguide:applib:index/annotation/Property.adoc#optionality[`@Property#optionality()`] documentation for a much fuller discussion on the relationship between using the Apache Isis annotations vs
 xref:refguide:applib-ant:Column.adoc#nullability[`@Column#allowsNull()`].
 ====
 

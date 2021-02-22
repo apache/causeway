@@ -32,6 +32,6 @@ For the "big picture" and further details on the framework's i18n support, can b
 
 == See also
 
-* xref:system:generated:index/applib/services/i18n/LocaleProvider.adoc[LocaleProvider]
-* xref:system:generated:index/applib/services/i18n/TranslationService.adoc[TranslationService]
+* xref:refguide:applib:index/services/i18n/LocaleProvider.adoc[LocaleProvider]
+* xref:refguide:applib:index/services/i18n/TranslationService.adoc[TranslationService]
 

@@ -1,6 +1,6 @@
 === Mixin method
 
-The xref:system:generated:index/applib/annotation/DomainObject.adoc#mixinMethod[mixinMethod()] element specifies the name of the method to be treated as a "reserved" method name, meaning that the mixin's name should instead be inferred from the mixin's type.
+The xref:refguide:applib:index/annotation/DomainObject.adoc#mixinMethod[mixinMethod()] element specifies the name of the method to be treated as a "reserved" method name, meaning that the mixin's name should instead be inferred from the mixin's type.
 
 For example:
 
@@ -28,11 +28,11 @@ public class Customer {
 )
 ----
 <.> This is a mixin. +
-Alternatively, could have used xref:system:generated:index/applib/annotation/Action.adoc[`@Action`].
+Alternatively, could have used xref:refguide:applib:index/annotation/Action.adoc[`@Action`].
 <.> This mixin is using a non-standard method.
 <.> a trick - this is not a `static` class, so the java compiler will create the 1-arg constructor automatically
 <.> Same name as the specified mixinMethod.
-Alternatively, when using xref:system:generated:index/applib/annotation/Action.adoc[`@Action`] then method's name defaults to `act`.
+Alternatively, when using xref:refguide:applib:index/annotation/Action.adoc[`@Action`] then method's name defaults to `act`.
 
 This allows all mixins to follow a similar convention, with the name of the mixin inferred entirely from its type ("placeOrder").
 

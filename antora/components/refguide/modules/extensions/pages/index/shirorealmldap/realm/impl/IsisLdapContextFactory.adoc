@@ -2,7 +2,7 @@
 
 An extension of _JndiLdapContextFactory_ that allows a different authentication mechanism for system-level authentications (as used by authorization lookups, for example) compared to regular authentication.
 
-See xref:system:generated:index/extensions/shirorealmldap/realm/impl/IsisLdapRealm.adoc[IsisLdapRealm] for typical configuration within `shiro.ini` .
+See xref:refguide:extensions:index/shirorealmldap/realm/impl/IsisLdapRealm.adoc[IsisLdapRealm] for typical configuration within `shiro.ini` .
 
 == API
 

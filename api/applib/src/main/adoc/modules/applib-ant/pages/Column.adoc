@@ -34,7 +34,7 @@ public class Customer {
     public void setMiddleInitial(String middleInitial) { /* ... */ }
 ----
 
-Isis also provides xref:system:generated:index/applib/annotation/Property.adoc#optionality[`@Property#optionality`] attribute.
+Isis also provides xref:refguide:applib:index/annotation/Property.adoc#optionality[`@Property#optionality`] attribute.
 If both are specified, Apache Isis will check when it initializes for any contradictions, and will fail-fast with an appropriate error message in the log if there are.
 
 You should also be aware that in the lack of either the `@Column#allowsNull` or the `@Property#optionality` attributes, that the JDO and Apache Isis defaults differ.
@@ -43,7 +43,7 @@ JDO on the other hand specifies that only primitive types are mandatory; everyth
 Therefore a lack of either annotation can also trigger the fail-fast validation check.
 
 In the vast majority of cases you should be fine just to add the `@Column#allowsNull` attribute to the getter.
-But see the documentation for xref:system:generated:index/applib/annotation/Property.adoc#optionality[`@Property#optionality`] attribute for discussion on one or two minor edge cases.
+But see the documentation for xref:refguide:applib:index/annotation/Property.adoc#optionality[`@Property#optionality`] attribute for discussion on one or two minor edge cases.
 
 [#length-for-strings]
 == Length for ``String``s
@@ -66,7 +66,7 @@ public class Customer {
     public void setLastName(String lastName) { /* ... */ }
 ----
 
-Apache Isis also provides xref:system:generated:index/applib/annotation/Property.adoc#maxLength[`@Property#maxLength`] attribute.
+Apache Isis also provides xref:refguide:applib:index/annotation/Property.adoc#maxLength[`@Property#maxLength`] attribute.
 If both are specified, Apache Isis will check when it initializes for any contradictions, and will fail-fast with an appropriate error message in the log if there are.
 
 [#lengthscale-for-bigdecimals]

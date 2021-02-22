@@ -2,7 +2,7 @@
 
 A column within a row which, depending on its _#getSpan()_ , could be as narrow as 1/12th of the page's width, all the way up to spanning the entire page.
 
-Pretty much other content can be contained within a column, though most commonly it will be xref:system:generated:index/applib/layout/component/FieldSet.adoc[FieldSet] s (a group of properties) or xref:system:generated:index/applib/layout/component/CollectionLayoutData.adoc[CollectionLayoutData] s. However, columns can also be used to contain further xref:system:generated:index/applib/layout/grid/bootstrap3/BS3Row.adoc[BS3Row] s (creating a nested grid of rows/cols/rows/cols) and xref:system:generated:index/applib/layout/grid/bootstrap3/BS3TabGroup.adoc[BS3TabGroup] s.
+Pretty much other content can be contained within a column, though most commonly it will be xref:refguide:applib:index/layout/component/FieldSet.adoc[FieldSet] s (a group of properties) or xref:refguide:applib:index/layout/component/CollectionLayoutData.adoc[CollectionLayoutData] s. However, columns can also be used to contain further xref:refguide:applib:index/layout/grid/bootstrap3/BS3Row.adoc[BS3Row] s (creating a nested grid of rows/cols/rows/cols) and xref:refguide:applib:index/layout/grid/bootstrap3/BS3TabGroup.adoc[BS3TabGroup] s.
 
 It is rendered as a (eg) <div class="col-md-4 ...">
 
@@ -79,14 +79,14 @@ As per <div id="...">...</div> : must be unique across entire page.
 
 Whether this column should be used to hold any unreferenced actions (contributed or "native").
 
-Any layout must have precisely one column or xref:system:generated:index/applib/layout/component/FieldSet.adoc[FieldSet] that has this attribute set.
+Any layout must have precisely one column or xref:refguide:applib:index/layout/component/FieldSet.adoc[FieldSet] that has this attribute set.
 
 [#isUnreferencedCollections__]
 === isUnreferencedCollections()
 
 Whether this column should be used to hold any unreferenced collections (contributed or "native").
 
-Any layout must have precisely one column or xref:system:generated:index/applib/layout/grid/bootstrap3/BS3TabGroup.adoc[BS3TabGroup] that has this attribute set.
+Any layout must have precisely one column or xref:refguide:applib:index/layout/grid/bootstrap3/BS3TabGroup.adoc[BS3TabGroup] that has this attribute set.
 
 [#getDomainObject__]
 === getDomainObject()

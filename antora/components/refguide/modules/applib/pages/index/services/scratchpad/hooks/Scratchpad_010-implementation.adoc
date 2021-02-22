@@ -6,4 +6,4 @@
 == Implementation
 
 This framework provides a default implementation of `o.a.i.core.runtimeservices.scratchpad.ScratchpadDefault`.
-This is just an xref:system:generated:index/applib/annotation/InteractionScope.adoc[`@InteractionScope`]'d wrapper around a `java.util.Map`
+This is just an xref:refguide:applib:index/annotation/InteractionScope.adoc[`@InteractionScope`]'d wrapper around a `java.util.Map`

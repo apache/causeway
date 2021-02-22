@@ -4,7 +4,7 @@ Some domain classes are immutable to the user, and moreover have only a fixed nu
 Often these are "reference" ("standing") data, or lookup data/pick lists.
 Typical examples could include categories, countries, states, and tax or interest rate tables.
 
-Where the number of instances is relatively small, ie bounded, then the xref:system:generated:index/applib/annotation/DomainObject.adoc#bounding[bounding()] element can be used as a hint.
+Where the number of instances is relatively small, ie bounded, then the xref:refguide:applib:index/annotation/DomainObject.adoc#bounding[bounding()] element can be used as a hint.
 For such domain objects the framework will automatically allow instances to be selected; xref:vw:ROOT:about.adoc[Wicket viewer] displays these as a drop-down list.
 
 For example:
@@ -24,7 +24,7 @@ public class Currency {
 [TIP]
 ====
 There is nothing to prevent you from using this attribute for regular mutable entities, and indeed this is sometimes worth doing during early prototyping.
-However, if there is no realistic upper bound to the number of instances of an entity that might be created, generally you should use xref:refguide:applib-methods:prefixes.adoc#autoComplete[`autoComplete...()`] supporting method or the xref:system:generated:index/applib/annotation/DomainObject.adoc#autoCompleteRepository[`@DomainObject#autoCompleteRepository`] attribute instead.
+However, if there is no realistic upper bound to the number of instances of an entity that might be created, generally you should use xref:refguide:applib-methods:prefixes.adoc#autoComplete[`autoComplete...()`] supporting method or the xref:refguide:applib:index/annotation/DomainObject.adoc#autoCompleteRepository[`@DomainObject#autoCompleteRepository`] attribute instead.
 ====
 
 

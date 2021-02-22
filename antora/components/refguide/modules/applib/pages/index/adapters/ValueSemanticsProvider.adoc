@@ -2,7 +2,7 @@
 
 Provides a mechanism for providing a set of value semantics.
 
-This interface is used by xref:system:generated:index/applib/annotation/Value.adoc[Value] to allow these semantics to be provided through a single point. Alternatively, xref:system:generated:index/applib/annotation/Value.adoc[Value] supports this information being provided via the configuration files.
+This interface is used by xref:refguide:applib:index/annotation/Value.adoc[Value] to allow these semantics to be provided through a single point. Alternatively, xref:refguide:applib:index/annotation/Value.adoc[Value] supports this information being provided via the configuration files.
 
 Whatever the class that implements this interface, it must also expose either a `public` no-arg constructor, or (for implementations that also are `Facet` s) a `public` constructor that accepts a `FacetHolder` , and `IsisConfiguration` and a `ValueSemanticsProviderContext` . This constructor is then used by the framework to instantiate the object reflectively.
 
@@ -21,17 +21,17 @@ interface ValueSemanticsProvider<T> {
 <.> xref:#getParser__[getParser()]
 +
 --
-The xref:system:generated:index/applib/adapters/Parser.adoc[Parser] , if any.
+The xref:refguide:applib:index/adapters/Parser.adoc[Parser] , if any.
 --
 <.> xref:#getEncoderDecoder__[getEncoderDecoder()]
 +
 --
-The xref:system:generated:index/applib/adapters/EncoderDecoder.adoc[EncoderDecoder] , if any.
+The xref:refguide:applib:index/adapters/EncoderDecoder.adoc[EncoderDecoder] , if any.
 --
 <.> xref:#getDefaultsProvider__[getDefaultsProvider()]
 +
 --
-The xref:system:generated:index/applib/adapters/DefaultsProvider.adoc[DefaultsProvider] , if any.
+The xref:refguide:applib:index/adapters/DefaultsProvider.adoc[DefaultsProvider] , if any.
 --
 
 == Members
@@ -39,16 +39,16 @@ The xref:system:generated:index/applib/adapters/DefaultsProvider.adoc[DefaultsPr
 [#getParser__]
 === getParser()
 
-The xref:system:generated:index/applib/adapters/Parser.adoc[Parser] , if any.
+The xref:refguide:applib:index/adapters/Parser.adoc[Parser] , if any.
 
 [#getEncoderDecoder__]
 === getEncoderDecoder()
 
-The xref:system:generated:index/applib/adapters/EncoderDecoder.adoc[EncoderDecoder] , if any.
+The xref:refguide:applib:index/adapters/EncoderDecoder.adoc[EncoderDecoder] , if any.
 
 [#getDefaultsProvider__]
 === getDefaultsProvider()
 
-The xref:system:generated:index/applib/adapters/DefaultsProvider.adoc[DefaultsProvider] , if any.
+The xref:refguide:applib:index/adapters/DefaultsProvider.adoc[DefaultsProvider] , if any.
 
 If not `null` , implies that the value has (or may have) a default.

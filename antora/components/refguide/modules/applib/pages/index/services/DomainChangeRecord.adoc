@@ -48,7 +48,7 @@ The object type of the domain object being changed.
 <.> xref:#getTarget__[getTarget()]
 +
 --
-The xref:system:generated:index/applib/services/bookmark/Bookmark.adoc[Bookmark] identifying the domain object that has changed.
+The xref:refguide:applib:index/services/bookmark/Bookmark.adoc[Bookmark] identifying the domain object that has changed.
 --
 <.> xref:#getTargetMember__[getTargetMember()]
 +
@@ -96,7 +96,7 @@ The object type of the domain object being changed.
 [#getTarget__]
 === getTarget()
 
-The xref:system:generated:index/applib/services/bookmark/Bookmark.adoc[Bookmark] identifying the domain object that has changed.
+The xref:refguide:applib:index/services/bookmark/Bookmark.adoc[Bookmark] identifying the domain object that has changed.
 
 [#getTargetMember__]
 === getTargetMember()

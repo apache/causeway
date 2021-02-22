@@ -19,7 +19,7 @@ class RepresentationServiceContentNegotiator {
 <.> xref:#buildResponse__Function[buildResponse(Function)]
 +
 --
-Iterates over all _#contentNegotiationServices injected_ xref:system:generated:index/viewer/restfulobjects/rendering/service/conneg/ContentNegotiationService.adoc[ContentNegotiationService] s to find one that returns a _ResponseBuilder_ using the provided function.
+Iterates over all _#contentNegotiationServices injected_ xref:refguide:viewer:index/restfulobjects/rendering/service/conneg/ContentNegotiationService.adoc[ContentNegotiationService] s to find one that returns a _ResponseBuilder_ using the provided function.
 --
 
 == Members
@@ -27,6 +27,6 @@ Iterates over all _#contentNegotiationServices injected_ xref:system:generated:i
 [#buildResponse__Function]
 === buildResponse(Function)
 
-Iterates over all _#contentNegotiationServices injected_ xref:system:generated:index/viewer/restfulobjects/rendering/service/conneg/ContentNegotiationService.adoc[ContentNegotiationService] s to find one that returns a _ResponseBuilder_ using the provided function.
+Iterates over all _#contentNegotiationServices injected_ xref:refguide:viewer:index/restfulobjects/rendering/service/conneg/ContentNegotiationService.adoc[ContentNegotiationService] s to find one that returns a _ResponseBuilder_ using the provided function.
 
-There will always be at least one such service, namely the xref:system:generated:index/viewer/restfulobjects/rendering/service/conneg/ContentNegotiationServiceForRestfulObjectsV1_0.adoc[ContentNegotiationServiceForRestfulObjectsV1_0] .
+There will always be at least one such service, namely the xref:refguide:viewer:index/restfulobjects/rendering/service/conneg/ContentNegotiationServiceForRestfulObjectsV1_0.adoc[ContentNegotiationServiceForRestfulObjectsV1_0] .

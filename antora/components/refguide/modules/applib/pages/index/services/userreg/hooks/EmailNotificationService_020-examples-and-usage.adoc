@@ -17,7 +17,7 @@ If necessary, one can be created on the fly using the `InteractionFactory#runAut
 
 The `EmailNotificationService` supports the xref:vw:ROOT:features.adoc#user-registration[user registration] (self sign-up) features of the xref:vw:ROOT:about.adoc[Wicket viewer] whereby a user can sign-up to access an application by providing a valid email address.
 
-* The Wicket viewer will check whether an implementation of this service (and also the xref:system:generated:index/applib/services/userreg/UserRegistrationService.adoc[`UserRegistrationService`]) is available, and if so will (unless configured not to) expose a sign-up page where the user enters their email address.
+* The Wicket viewer will check whether an implementation of this service (and also the xref:refguide:applib:index/services/userreg/UserRegistrationService.adoc[`UserRegistrationService`]) is available, and if so will (unless configured not to) expose a sign-up page where the user enters their email address.
 
 * A verification email is sent using this service; the email includes a link back to the running application.
 
@@ -25,21 +25,21 @@ The `EmailNotificationService` supports the xref:vw:ROOT:features.adoc#user-regi
 
 * The role of this service in all of this is to format and send out emails for the initial registration, or for password resets.
 
-The default implementation of this service uses the xref:system:generated:index/applib/services/email/EmailService.adoc[`EmailService`], which must be configured in order for user registration to be enabled.
+The default implementation of this service uses the xref:refguide:applib:index/services/email/EmailService.adoc[`EmailService`], which must be configured in order for user registration to be enabled.
 
 
 == Related Services
 
-The default implementation of this service uses xref:system:generated:index/applib/services/email/EmailService.adoc[`EmailService`], which must have been configured/initialized correctly.
+The default implementation of this service uses xref:refguide:applib:index/services/email/EmailService.adoc[`EmailService`], which must have been configured/initialized correctly.
 
-This service is used by (Apache Isis' default implementation of) xref:system:generated:index/applib/services/userreg/UserRegistrationService.adoc[`UserRegistrationService`].
+This service is used by (Apache Isis' default implementation of) xref:refguide:applib:index/services/userreg/UserRegistrationService.adoc[`UserRegistrationService`].
 
 
 == Related Event Classes
 
 See:
 
-* xref:system:generated:index/applib/services/userreg/events/EmailRegistrationEvent.adoc[EmailRegistrationEvent]
-* xref:system:generated:index/applib/services/userreg/events/PasswordResetEvent.adoc[PasswordResetEvent]
+* xref:refguide:applib:index/services/userreg/events/EmailRegistrationEvent.adoc[EmailRegistrationEvent]
+* xref:refguide:applib:index/services/userreg/events/PasswordResetEvent.adoc[PasswordResetEvent]
 
 

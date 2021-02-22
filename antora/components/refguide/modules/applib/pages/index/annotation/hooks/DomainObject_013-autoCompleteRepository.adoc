@@ -1,6 +1,6 @@
 === Auto-complete
 
-The xref:system:generated:index/applib/annotation/DomainObject.adoc#autoCompleteRepository[autoCompleteRepository()] element nominates a single method on a domain service as the fallback means for looking up instances of the domain object using a simple string.
+The xref:refguide:applib:index/annotation/DomainObject.adoc#autoCompleteRepository[autoCompleteRepository()] element nominates a single method on a domain service as the fallback means for looking up instances of the domain object using a simple string.
 
 For example, this might search for a customer by their name or number.
 Or it could search for a country based on its ISO-3 code or user-friendly name.
@@ -36,7 +36,7 @@ public class CustomerRepository {
 
 
 (As noted above) the method invoked on the repository is assumed to be called "autoComplete".
-The optional xref:system:generated:index/applib/annotation/DomainObject.adoc#autoCompleteAction[autoCompleteAction()] element allows the name of this method to be overridden.
+The optional xref:refguide:applib:index/annotation/DomainObject.adoc#autoCompleteAction[autoCompleteAction()] element allows the name of this method to be overridden.
 
 For example:
 
@@ -68,7 +68,7 @@ public class Customers {
 ----
 <.> end-user must enter minimum number of characters to trigger the query
 
-NOTE: The autocomplete "action" can also be a regular method, annotated using xref:system:generated:index/applib/annotation/Programmatic.adoc[`@Programmatic`].
+NOTE: The autocomplete "action" can also be a regular method, annotated using xref:refguide:applib:index/annotation/Programmatic.adoc[`@Programmatic`].
 That is, it does not need to be part of the metamodel:
 +
 [source,java]

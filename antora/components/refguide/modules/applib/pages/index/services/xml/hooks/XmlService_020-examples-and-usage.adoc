@@ -4,7 +4,7 @@
 
 == See also
 
-* xref:system:generated:index/applib/services/xmlsnapshot/XmlSnapshotService.adoc[XmlSnapshotService]
+* xref:refguide:applib:index/services/xmlsnapshot/XmlSnapshotService.adoc[XmlSnapshotService]
 +
 uses this service.
 

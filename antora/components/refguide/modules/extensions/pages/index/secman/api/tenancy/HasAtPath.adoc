@@ -2,11 +2,11 @@
 
 Role interface for domain objects to implement, indicating that these are characteristics of the entity that can be used to determine its visibility/editability.object's tenancyuser's tenancyaccessnullnulleditablenullnon-nulleditable//editable//itvisible//it/carvisible//it/iglvisible//frvisible/nullnot visible/it/editable/it/iteditable/it/it/carvisible/it/it/iglvisible/it/frnot visible/itnullnot visible/it/car/editable/it/car/iteditable/it/car/it/careditable/it/car/it/iglnot visible/it/car/frnot visible/it/carnullnot visible
 
-Previously the `atPath` would have corresponded to the unique path of some particular xref:system:generated:index/extensions/secman/api/tenancy/ApplicationTenancy.adoc[ApplicationTenancy] instance. However, this has now been generalized; the atPath is simply a string whose interpretation is application-specific (in particular by the xref:system:generated:index/extensions/secman/api/tenancy/ApplicationTenancyEvaluator.adoc[ApplicationTenancyEvaluator] SPI).
+Previously the `atPath` would have corresponded to the unique path of some particular xref:refguide:extensions:index/secman/api/tenancy/ApplicationTenancy.adoc[ApplicationTenancy] instance. However, this has now been generalized; the atPath is simply a string whose interpretation is application-specific (in particular by the xref:refguide:extensions:index/secman/api/tenancy/ApplicationTenancyEvaluator.adoc[ApplicationTenancyEvaluator] SPI).
 
-For applications that still wish to follow the original more specific design (that the `atPath` corresponds to a single xref:system:generated:index/extensions/secman/api/tenancy/ApplicationTenancy.adoc[ApplicationTenancy] ), then the path can be interpreted according to the following table:
+For applications that still wish to follow the original more specific design (that the `atPath` corresponds to a single xref:refguide:extensions:index/secman/api/tenancy/ApplicationTenancy.adoc[ApplicationTenancy] ), then the path can be interpreted according to the following table:
 
-any object that is not tenanted (that is, its class does not implement xref:system:generated:index/extensions/secman/api/tenancy/HasAtPath.adoc[HasAtPath] is accessible by any user (usual permission rules apply).
+any object that is not tenanted (that is, its class does not implement xref:refguide:extensions:index/secman/api/tenancy/HasAtPath.adoc[HasAtPath] is accessible by any user (usual permission rules apply).
 
 == API
 

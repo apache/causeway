@@ -37,12 +37,12 @@ class InteractionDtoUtils {
 <.> xref:#newInteractionDto__Execution[newInteractionDto(Execution)]
 +
 --
-Creates a _InteractionDto_ (serializable to XML) for the provided xref:system:generated:index/applib/services/iactn/Execution.adoc[Execution] (the applib object).
+Creates a _InteractionDto_ (serializable to XML) for the provided xref:refguide:applib:index/services/iactn/Execution.adoc[Execution] (the applib object).
 --
 <.> xref:#newInteractionDto__Execution_Strategy[newInteractionDto(Execution, Strategy)]
 +
 --
-Creates a _InteractionDto_ (serializable to XML) for the provided xref:system:generated:index/applib/services/iactn/Execution.adoc[Execution] (the applib object).
+Creates a _InteractionDto_ (serializable to XML) for the provided xref:refguide:applib:index/services/iactn/Execution.adoc[Execution] (the applib object).
 --
 <.> xref:#addReturn__ActionInvocationDto_Class_Object_BookmarkService[addReturn(ActionInvocationDto, Class, Object, BookmarkService)]
 
@@ -51,12 +51,12 @@ Creates a _InteractionDto_ (serializable to XML) for the provided xref:system:ge
 [#newInteractionDto__Execution]
 === newInteractionDto(Execution)
 
-Creates a _InteractionDto_ (serializable to XML) for the provided xref:system:generated:index/applib/services/iactn/Execution.adoc[Execution] (the applib object).
+Creates a _InteractionDto_ (serializable to XML) for the provided xref:refguide:applib:index/services/iactn/Execution.adoc[Execution] (the applib object).
 
 [#newInteractionDto__Execution_Strategy]
 === newInteractionDto(Execution, Strategy)
 
-Creates a _InteractionDto_ (serializable to XML) for the provided xref:system:generated:index/applib/services/iactn/Execution.adoc[Execution] (the applib object).
+Creates a _InteractionDto_ (serializable to XML) for the provided xref:refguide:applib:index/services/iactn/Execution.adoc[Execution] (the applib object).
 
 [#addReturn__ActionInvocationDto_Class_Object_BookmarkService]
 === addReturn(ActionInvocationDto, Class, Object, BookmarkService)

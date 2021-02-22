@@ -19,4 +19,4 @@ Apache Isis provides such a facade through the `ClockService`.
 
 == See also
 
-* xref:system:generated:index/applib/clock/VirtualClock.adoc[VirtualClock]
+* xref:refguide:applib:index/clock/VirtualClock.adoc[VirtualClock]

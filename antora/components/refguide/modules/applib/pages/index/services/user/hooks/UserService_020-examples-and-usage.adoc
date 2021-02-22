@@ -12,5 +12,5 @@ In addition, when using the xref:vw:ROOT:about.adoc[Wicket viewer] there will be
 
 == See also
 
-* xref:system:generated:index/applib/services/user/UserMemento.adoc[UserMemento]
-* xref:system:generated:index/applib/services/user/RoleMemento.adoc[RoleMemento]
+* xref:refguide:applib:index/services/user/UserMemento.adoc[UserMemento]
+* xref:refguide:applib:index/services/user/RoleMemento.adoc[RoleMemento]

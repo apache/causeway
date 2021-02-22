@@ -2,11 +2,11 @@
 
 Represents an action invocation or property modification, resulting in some state change of the system. It captures not only the target object and arguments passed, but also builds up the call-graph, and captures metrics, eg for profiling.
 
-The `Interaction` can be used to obtain the xref:system:generated:index/applib/services/command/Command.adoc[Command] object representing the top-level invocation action/property edit.
+The `Interaction` can be used to obtain the xref:refguide:applib:index/services/command/Command.adoc[Command] object representing the top-level invocation action/property edit.
 
-The distinction between xref:system:generated:index/applib/services/command/Command.adoc[Command] and this object is perhaps subtle: the former represents the intention to invoke an action/edit a property, whereas this represents the actual invocation/edit itself.
+The distinction between xref:refguide:applib:index/services/command/Command.adoc[Command] and this object is perhaps subtle: the former represents the intention to invoke an action/edit a property, whereas this represents the actual invocation/edit itself.
 
-To confuse matters slightly, historically the xref:system:generated:index/applib/services/command/Command.adoc[Command] interface defines members (specifically: _Command#getStartedAt()_ , _Command#getCompletedAt()_ , _Command#getResult()_ , _Command#getException()_ ) which logically belong to this class instead; they remain in xref:system:generated:index/applib/services/command/Command.adoc[Command] for backward compatibility only (and have been deprecated).
+To confuse matters slightly, historically the xref:refguide:applib:index/services/command/Command.adoc[Command] interface defines members (specifically: _Command#getStartedAt()_ , _Command#getCompletedAt()_ , _Command#getResult()_ , _Command#getException()_ ) which logically belong to this class instead; they remain in xref:refguide:applib:index/services/command/Command.adoc[Command] for backward compatibility only (and have been deprecated).
 
 == API
 
@@ -25,7 +25,7 @@ interface Interaction {
 <.> xref:#getUniqueId__[getUniqueId()]
 +
 --
-The unique identifier of this interaction (inherited from xref:system:generated:index/commons/having/HasUniqueId.adoc[HasUniqueId] )
+The unique identifier of this interaction (inherited from xref:refguide:commons:index//having/HasUniqueId.adoc[HasUniqueId] )
 --
 <.> xref:#getCommand__[getCommand()]
 +
@@ -35,7 +35,7 @@ Represents the _intention_ to perform this interaction.
 <.> xref:#getCurrentExecution__[getCurrentExecution()]
 +
 --
-The current (most recently pushed) xref:system:generated:index/applib/services/iactn/Execution.adoc[Execution] .
+The current (most recently pushed) xref:refguide:applib:index/services/iactn/Execution.adoc[Execution] .
 --
 <.> xref:#getPriorExecution__[getPriorExecution()]
 +
@@ -45,7 +45,7 @@ The execution that preceded the current one.
 <.> xref:#next__String[next(String)]
 +
 --
-Generates numbers in a named sequence. The name of the sequence can be arbitrary, though note that the framework also uses this capability to generate sequence numbers corresponding to the sequences enumerated by the xref:system:generated:index/applib/services/iactn/Sequence.adoc[Sequence] enum.
+Generates numbers in a named sequence. The name of the sequence can be arbitrary, though note that the framework also uses this capability to generate sequence numbers corresponding to the sequences enumerated by the xref:refguide:applib:index/services/iactn/Sequence.adoc[Sequence] enum.
 --
 
 == Members
@@ -53,7 +53,7 @@ Generates numbers in a named sequence. The name of the sequence can be arbitrary
 [#getUniqueId__]
 === getUniqueId()
 
-The unique identifier of this interaction (inherited from xref:system:generated:index/commons/having/HasUniqueId.adoc[HasUniqueId] )
+The unique identifier of this interaction (inherited from xref:refguide:commons:index//having/HasUniqueId.adoc[HasUniqueId] )
 
 This can be used to correlate audit records and transactions happening as a consequence or within the interaction.
 
@@ -65,7 +65,7 @@ Represents the _intention_ to perform this interaction.
 [#getCurrentExecution__]
 === getCurrentExecution()
 
-The current (most recently pushed) xref:system:generated:index/applib/services/iactn/Execution.adoc[Execution] .
+The current (most recently pushed) xref:refguide:applib:index/services/iactn/Execution.adoc[Execution] .
 
 [#getPriorExecution__]
 === getPriorExecution()
@@ -75,7 +75,7 @@ The execution that preceded the current one.
 [#next__String]
 === next(String)
 
-Generates numbers in a named sequence. The name of the sequence can be arbitrary, though note that the framework also uses this capability to generate sequence numbers corresponding to the sequences enumerated by the xref:system:generated:index/applib/services/iactn/Sequence.adoc[Sequence] enum.
+Generates numbers in a named sequence. The name of the sequence can be arbitrary, though note that the framework also uses this capability to generate sequence numbers corresponding to the sequences enumerated by the xref:refguide:applib:index/services/iactn/Sequence.adoc[Sequence] enum.
 
 include::hooks/Interaction_010-implementation.adoc[]
 

@@ -55,7 +55,7 @@ Action invocation is supported provided it returns a single domain object or a l
 
 Unlike RO v1.0, use a single content-type of `application/json;profile="urn:org.apache.isis/v2"` .
 
-The response content types xref:system:generated:index/applib/client/RepresentationTypeSimplifiedV2.adoc[RepresentationTypeSimplifiedV2] append the 'repr-type' parameter.
+The response content types xref:refguide:applib:index/client/RepresentationTypeSimplifiedV2.adoc[RepresentationTypeSimplifiedV2] append the 'repr-type' parameter.
 
 [#buildResponse__IResourceContext_ManagedObject]
 === buildResponse(IResourceContext, ManagedObject)

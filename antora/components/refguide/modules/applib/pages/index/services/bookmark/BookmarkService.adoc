@@ -20,17 +20,17 @@ interface BookmarkService {
 <.> xref:#bookmarkFor__Object[bookmarkFor(Object)]
 +
 --
-Returns the xref:system:generated:index/applib/services/bookmark/Bookmark.adoc[Bookmark] for the given domain object.
+Returns the xref:refguide:applib:index/services/bookmark/Bookmark.adoc[Bookmark] for the given domain object.
 --
 <.> xref:#bookmarkForElseThrow__Object[bookmarkForElseThrow(Object)]
 +
 --
-As per _#bookmarkFor(Object)_ , but requires that a non-null xref:system:generated:index/applib/services/bookmark/Bookmark.adoc[Bookmark] is returned.
+As per _#bookmarkFor(Object)_ , but requires that a non-null xref:refguide:applib:index/services/bookmark/Bookmark.adoc[Bookmark] is returned.
 --
 <.> xref:#bookmarkFor__Class_String[bookmarkFor(Class, String)]
 +
 --
-Utility method that creates a xref:system:generated:index/applib/services/bookmark/Bookmark.adoc[Bookmark] from the constituent parts.
+Utility method that creates a xref:refguide:applib:index/services/bookmark/Bookmark.adoc[Bookmark] from the constituent parts.
 --
 <.> xref:#lookup__BookmarkHolder[lookup(BookmarkHolder)]
 <.> xref:#lookup__Bookmark[lookup(Bookmark)]
@@ -49,19 +49,19 @@ As _#lookup(Bookmark)_ , but down-casting to the specified type.
 [#bookmarkFor__Object]
 === bookmarkFor(Object)
 
-Returns the xref:system:generated:index/applib/services/bookmark/Bookmark.adoc[Bookmark] for the given domain object.
+Returns the xref:refguide:applib:index/services/bookmark/Bookmark.adoc[Bookmark] for the given domain object.
 
  *Note* : Not every domain object is bookmark-able: only entities, view models and services (NOT values or collections)
 
 [#bookmarkForElseThrow__Object]
 === bookmarkForElseThrow(Object)
 
-As per _#bookmarkFor(Object)_ , but requires that a non-null xref:system:generated:index/applib/services/bookmark/Bookmark.adoc[Bookmark] is returned.
+As per _#bookmarkFor(Object)_ , but requires that a non-null xref:refguide:applib:index/services/bookmark/Bookmark.adoc[Bookmark] is returned.
 
 [#bookmarkFor__Class_String]
 === bookmarkFor(Class, String)
 
-Utility method that creates a xref:system:generated:index/applib/services/bookmark/Bookmark.adoc[Bookmark] from the constituent parts.
+Utility method that creates a xref:refguide:applib:index/services/bookmark/Bookmark.adoc[Bookmark] from the constituent parts.
 
 [#lookup__BookmarkHolder]
 === lookup(BookmarkHolder)

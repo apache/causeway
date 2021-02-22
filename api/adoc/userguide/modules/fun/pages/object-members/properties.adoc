@@ -15,8 +15,8 @@ Formally speaking, a property is simply a regular JavaBean getter, returning a s
 Most properties (those that are editable/modifiable) will also have a setter and, if persisted, a backing instance field.
 And most properties will also have a number of annotations:
 
-* Apache Isis defines its own xref:system:generated:index/applib/annotation/Property.adoc[`@Property`] annotation for capturing domain semantics.
-It also provides a xref:system:generated:index/applib/annotation/PropertyLayout.adoc[`@PropertyLayout`] for UI hints (though the information in this annotation may instead be provided by a supplementary xref:userguide:fun:ui.adoc#object-layout[`.layout.xml`] file)
+* Apache Isis defines its own xref:refguide:applib:index/annotation/Property.adoc[`@Property`] annotation for capturing domain semantics.
+It also provides a xref:refguide:applib:index/annotation/PropertyLayout.adoc[`@PropertyLayout`] for UI hints (though the information in this annotation may instead be provided by a supplementary xref:userguide:fun:ui.adoc#object-layout[`.layout.xml`] file)
 
 * the properties of domain entities are usually also annotated with an ORM annotation.
 +
@@ -145,7 +145,7 @@ import lombok.Setter;
 private String notes;
 ----
 
-If this is omitted then whether editing is enabled or disabled is inherited from the domain object level, xref:system:generated:index/applib/annotation/DomainObject.adoc#editing[`@DomainObject#editing()`].
+If this is omitted then whether editing is enabled or disabled is inherited from the domain object level, xref:refguide:applib:index/annotation/DomainObject.adoc#editing[`@DomainObject#editing()`].
 
 If that isn't specified (or is set to "AS_CONFIGURED"), then the configuration is taken from the `application.properties` configuration file:
 
@@ -196,7 +196,7 @@ Excluded from the Apache Isis metamodel.
 == Ignoring Properties
 
 By default Apache Isis will automatically render all properties in the xref:vw:ROOT:about.adoc[Wicket UI] or in the xref:vro:ROOT:about.adoc[REST API].
-To get Apache Isis to ignore a property (exclude it from its metamodel), annotate the getter using xref:system:generated:index/applib/annotation/Programmatic.adoc[`@Programmatic`].
+To get Apache Isis to ignore a property (exclude it from its metamodel), annotate the getter using xref:refguide:applib:index/annotation/Programmatic.adoc[`@Programmatic`].
 
 Similarly, for the JDO/DataNucleus ORM, ignore a property using the `@javax.jdo.annotations.NotPersistent` annotation.
 This is independent of Apache Isis; in other words that property will still be rendered in the UI (unless also annotated with `@Programmatic`).
@@ -204,7 +204,7 @@ This is independent of Apache Isis; in other words that property will still be r
 For view models, you can tell JAXB to ignore a property using the `@javax.xml.bind.annotation.XmlTransient` annotation.
 Again, this is independent of Apache Isis.
 
-You can also suppress a property from the UI using xref:system:generated:index/applib/annotation/Property.adoc#hidden[`@Property#hidden()`] or indeed xref:system:generated:index/applib/annotation/PropertyLayout.adoc#hidden[`@PropertyLayout#hidden()`].
+You can also suppress a property from the UI using xref:refguide:applib:index/annotation/Property.adoc#hidden[`@Property#hidden()`] or indeed xref:refguide:applib:index/annotation/PropertyLayout.adoc#hidden[`@PropertyLayout#hidden()`].
 However, this doesn't exclude the property from the metamodel.
 
 == Derived Properties

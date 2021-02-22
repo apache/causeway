@@ -15,12 +15,8 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
-name: system
-title: "System Overview"
+name: refguide
 version: latest
-start_page: generated:system-overview.adoc
 
-nav:
-- modules/generated/nav.adoc
 
 

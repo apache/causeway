@@ -114,17 +114,17 @@ The Wicket viewer will then render the "items" collection with checkboxes, and a
 
 === Command Processing
 
-Every action invocation (and xref:system:generated:index/applib/annotation/Property.adoc#commandPublishing[property edit] for that matter) is normally reified into a concrete `Command` object, basically a wrapper around the xref:schema:cmd.adoc[CommandDto] that also captures some timing metrics about the execution as well as the outcome.
+Every action invocation (and xref:refguide:applib:index/annotation/Property.adoc#commandPublishing[property edit] for that matter) is normally reified into a concrete `Command` object, basically a wrapper around the xref:schema:cmd.adoc[CommandDto] that also captures some timing metrics about the execution as well as the outcome.
 
 The main uses cases are:
 
-* as a means to allow asynchronous child commands to be executed, using the xref:system:generated:index/applib/services/wrapper/WrapperFactory.adoc[WrapperFactory] service;
+* as a means to allow asynchronous child commands to be executed, using the xref:refguide:applib:index/services/wrapper/WrapperFactory.adoc[WrapperFactory] service;
 
-* as a means to audit (persist) commands, by implementing the xref:system:generated:index/applib/services/publishing/spi/CommandSubscriber.adoc[CommandSubscriber] SPI.
+* as a means to audit (persist) commands, by implementing the xref:refguide:applib:index/services/publishing/spi/CommandSubscriber.adoc[CommandSubscriber] SPI.
 +
 The xref:extensions:command-log:about.adoc[Command Log] extension _does_ provide such an implementation.
 +
-TIP: Another option to achieve this is to use the xref:system:generated:index/applib/services/publishing/spi/ExecutionSubscriber.adoc[ExecutionSubscriber] SPI.
+TIP: Another option to achieve this is to use the xref:refguide:applib:index/services/publishing/spi/ExecutionSubscriber.adoc[ExecutionSubscriber] SPI.
 
 * to replay commands onto a secondary system, for regression testing.
 +
@@ -147,7 +147,7 @@ public interface CommandDtoProcessor {
 This will typically be the `CommandDto` passed in, but may be supplemented in some way.
 <.> The `CommandDto` obtained already from the `Command`.
 
-This interface is used by the framework-provided implementations of xref:system:generated:index/applib/services/conmap/ContentMappingService.adoc[ContentMappingService] for the REST API, allowing ``Command``s implementations that also implement `CommandWithDto` to be further customised as they are serialized out.
+This interface is used by the framework-provided implementations of xref:refguide:applib:index/services/conmap/ContentMappingService.adoc[ContentMappingService] for the REST API, allowing ``Command``s implementations that also implement `CommandWithDto` to be further customised as they are serialized out.
 The primary use case for this capability is in support of primary/secondary replication.
 
 * on the primary, ``Command``s are serialized to XML.
@@ -254,7 +254,7 @@ In the cases of the domain object's actions, the events that are fired are:
 * pre-execute phase: before the invocation of the action
 * post-execute: after the invocation of the action
 
-Subscribers subscribe through the xref:system:generated:index/applib/services/eventbus/EventBusService.adoc[`EventBusService`] and can influence each of these phases.
+Subscribers subscribe through the xref:refguide:applib:index/services/eventbus/EventBusService.adoc[`EventBusService`] and can influence each of these phases.
 
 By default the event raised is `ActionDomainEvent.Default`.
 For example:
@@ -271,7 +271,7 @@ public class ToDoItem {
 }
 ----
 
-The xref:system:generated:index/applib/annotation/Action.adoc#domainEvent[domainEvent()] element allows a custom subclass to be emitted allowing more precise subscriptions (to those subclasses) to be defined instead.
+The xref:refguide:applib:index/annotation/Action.adoc#domainEvent[domainEvent()] element allows a custom subclass to be emitted allowing more precise subscriptions (to those subclasses) to be defined instead.
 
 For example:
 
@@ -294,7 +294,7 @@ This substantially reduces the boilerplate required in subclasses because no exp
 
 ==== Subscribers
 
-Subscribers (which must be domain services) subscribe to events posted through the xref:system:generated:index/applib/services/eventbus/EventBusService.adoc[`EventBusService`].
+Subscribers (which must be domain services) subscribe to events posted through the xref:refguide:applib:index/services/eventbus/EventBusService.adoc[`EventBusService`].
 
 Subscribers can be either coarse-grained (if they subscribe to the top-level event type):
 
@@ -378,7 +378,7 @@ If the exception is a subtype of `RecoverableException` then the exception will 
 
 ==== Default, Doop and Noop events
 
-If the xref:system:generated:index/applib/annotation/Action.adoc#domainEvent[domainEvent()] element is not explicitly specified (is left as its default value, `ActionDomainEvent.Default`), then the framework will, by default, post an event.
+If the xref:refguide:applib:index/annotation/Action.adoc#domainEvent[domainEvent()] element is not explicitly specified (is left as its default value, `ActionDomainEvent.Default`), then the framework will, by default, post an event.
 
 If this is not required, then the `isis.reflector.facet.actionAnnotation.domainEvent.postForDefault` configuration property can be set to "false"; this will disable posting.
 
@@ -415,13 +415,13 @@ public class ToDoItem {
 ==== Raising events programmatically
 
 Normally events are only raised for interactions through the UI.
-However, events can be raised programmatically either by calling the xref:system:generated:index/applib/services/eventbus/EventBusService.adoc[EventBusService] API directly, or by emulating the UI by wrapping the target object using the xref:system:generated:index/applib/services/wrapper/WrapperFactory.adoc[WrapperFactory] domain service.
+However, events can be raised programmatically either by calling the xref:refguide:applib:index/services/eventbus/EventBusService.adoc[EventBusService] API directly, or by emulating the UI by wrapping the target object using the xref:refguide:applib:index/services/wrapper/WrapperFactory.adoc[WrapperFactory] domain service.
 
 
 
 === Execution Publishing
 
-The xref:system:generated:index/applib/annotation/Action.adoc#executionPublishing[executionPublishing()] element determines whether and how an action invocation is published via the registered implementation of xref:system:generated:index/applib/services/publishing/spi/ExecutionSubscriber.adoc[ExecutionSubscriber].
+The xref:refguide:applib:index/annotation/Action.adoc#executionPublishing[executionPublishing()] element determines whether and how an action invocation is published via the registered implementation of xref:refguide:applib:index/services/publishing/spi/ExecutionSubscriber.adoc[ExecutionSubscriber].
 
 A common use case is to notify external "downstream" systems of changes in the state of the Apache Isis application.
 
@@ -462,7 +462,7 @@ public class Order {
 === Deployment modes
 
 By default actions are available irrespective of the xref:refguide:config:about.adoc#deployment-types[deployment mode].
-The xref:system:generated:index/applib/annotation/Action.adoc#restrictTo[restrictTo()] element specifies whether the action should instead be restricted to only available in prototyping mode.
+The xref:refguide:applib:index/annotation/Action.adoc#restrictTo[restrictTo()] element specifies whether the action should instead be restricted to only available in prototyping mode.
 
 For example:
 
@@ -496,7 +496,7 @@ However, it would be useful to disaply how for a test or demo system where there
 === Action Semantics
 
 
-The xref:system:generated:index/applib/annotation/Action.adoc#semantics[semantics()] element describes whether the invocation modifies state of the system, and if so whether it does so idempotently.
+The xref:refguide:applib:index/annotation/Action.adoc#semantics[semantics()] element describes whether the invocation modifies state of the system, and if so whether it does so idempotently.
 If the action invocation does _not_ modify the state of the system, in other words is safe, then it also can beused to specify whether the results of the action can be cached automatically for the remainder of the request.
 
 The `semantics` element was originally introduced for the xref:vro:ROOT:about.adoc[RestfulObjects viewer] in order that action invocations could be using the appropriate `HTTP` verb (`GET`, `PUT` and `POST`).
@@ -564,13 +564,13 @@ public class Customer {
 }
 ----
 
-Actions that are safe and request-cacheable automatically use the xref:system:generated:index/applib/services/queryresultscache/QueryResultsCache.adoc[`QueryResultsCache`] service to cache the result of the method.
-Note though that the results of this caching will only be apparent if the action is invoked from another method using the xref:system:generated:index/applib/services/wrapper/WrapperFactory.adoc[WrapperFactory] service.
+Actions that are safe and request-cacheable automatically use the xref:refguide:applib:index/services/queryresultscache/QueryResultsCache.adoc[`QueryResultsCache`] service to cache the result of the method.
+Note though that the results of this caching will only be apparent if the action is invoked from another method using the xref:refguide:applib:index/services/wrapper/WrapperFactory.adoc[WrapperFactory] service.
 
 
 === Collection type
 
-The xref:system:generated:index/applib/annotation/Action.adoc#typeOf[typeOf()] element specifies the expected type of an element returned by the action (returning a collection), when for whatever reason the type cannot be inferred from the generic type, or to provide a hint about the actual run-time (as opposed to compile-time) type.
+The xref:refguide:applib:index/annotation/Action.adoc#typeOf[typeOf()] element specifies the expected type of an element returned by the action (returning a collection), when for whatever reason the type cannot be inferred from the generic type, or to provide a hint about the actual run-time (as opposed to compile-time) type.
 
 For example:
 
@@ -595,9 +595,9 @@ In general we recommend that you use generics instead, eg `List<Customer>`.
 
 == Related SPIs
 
-* xref:system:generated:index/applib/services/publishing/spi/CommandSubscriber.adoc[CommandSubscriber] SPI
+* xref:refguide:applib:index/services/publishing/spi/CommandSubscriber.adoc[CommandSubscriber] SPI
 +
-foractions with xref:system:generated:index/applib/annotation/Action.adoc#commandPublishing[commandPublishing] enabled
+foractions with xref:refguide:applib:index/annotation/Action.adoc#commandPublishing[commandPublishing] enabled
 
 ** xref:extensions:command-log:about.adoc[Command Log] extension
 +
@@ -607,14 +607,14 @@ provides an implementation that simply logs actions for
 +
 provides an implementation to replicate commands from a primary to a secondary system.
 +
-This implementation also leverages xref:system:generated:index/applib/annotation/Action.adoc#commandDtoProcessor[commandDtoProcessor()] to process ``CommandDto``s before being replciated
+This implementation also leverages xref:refguide:applib:index/annotation/Action.adoc#commandDtoProcessor[commandDtoProcessor()] to process ``CommandDto``s before being replciated
 
-* xref:system:generated:index/applib/services/publishing/spi/ExecutionSubscriber.adoc[ExecutionSubscriber] SPI
+* xref:refguide:applib:index/services/publishing/spi/ExecutionSubscriber.adoc[ExecutionSubscriber] SPI
 +
-for actions where xref:system:generated:index/applib/annotation/Action.adoc#executionPublishing[executionPublishing] is enabled
+for actions where xref:refguide:applib:index/annotation/Action.adoc#executionPublishing[executionPublishing] is enabled
 
 == See also
 
-* xref:system:generated:index/applib/services/eventbus/EventBusService.adoc[EventBusService]
+* xref:refguide:applib:index/services/eventbus/EventBusService.adoc[EventBusService]
 +
-which broadcast the action's domain event -- as specified by xref:system:generated:index/applib/annotation/Action.adoc#domainEvent[domainEvent()] --  for business rule checking (hide, disable, validate) and its invocation (pre-execute and post-execute).
+which broadcast the action's domain event -- as specified by xref:refguide:applib:index/annotation/Action.adoc#domainEvent[domainEvent()] --  for business rule checking (hide, disable, validate) and its invocation (pre-execute and post-execute).

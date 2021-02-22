@@ -85,7 +85,7 @@ Set user-data, for the use of a subsequent _#getEventPhase() phase_ .
 
 If used then the framework will set state via (non-API) setters.
 
-Because the xref:system:generated:index/applib/events/EventObjectBase.adoc[EventObjectBase] superclass prohibits a null source, a dummy value is temporarily used.
+Because the xref:refguide:applib:index/events/EventObjectBase.adoc[EventObjectBase] superclass prohibits a null source, a dummy value is temporarily used.
 
 [#setMixedIn__Object]
 === setMixedIn(Object)

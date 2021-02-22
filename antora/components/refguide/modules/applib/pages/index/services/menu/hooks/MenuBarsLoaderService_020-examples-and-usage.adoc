@@ -4,4 +4,4 @@
 
 == See also
 
-* xref:system:generated:index/applib/services/menu/MenuBarsService.adoc[MenuBarsService]
+* xref:refguide:applib:index/services/menu/MenuBarsService.adoc[MenuBarsService]

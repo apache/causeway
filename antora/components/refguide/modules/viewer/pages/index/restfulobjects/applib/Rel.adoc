@@ -56,7 +56,7 @@ enum Rel {
 <.> xref:#andParam__String_String[andParam(String, String)]
 +
 --
-For those xref:system:generated:index/viewer/restfulobjects/applib/Rel.adoc[Rel] s that also take a param
+For those xref:refguide:viewer:index/restfulobjects/applib/Rel.adoc[Rel] s that also take a param
 --
 
 == Members
@@ -64,4 +64,4 @@ For those xref:system:generated:index/viewer/restfulobjects/applib/Rel.adoc[Rel]
 [#andParam__String_String]
 === andParam(String, String)
 
-For those xref:system:generated:index/viewer/restfulobjects/applib/Rel.adoc[Rel] s that also take a param
+For those xref:refguide:viewer:index/restfulobjects/applib/Rel.adoc[Rel] s that also take a param

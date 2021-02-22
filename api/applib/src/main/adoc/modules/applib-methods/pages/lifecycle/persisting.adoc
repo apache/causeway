@@ -7,7 +7,7 @@
 
 The `persisting()` lifecycle callback method is called when a (not-yet-persistent) object is just about to be persisted from the object store
 
-An alternative means to interact with the lifecycle is by setting up a subscriber on the xref:system:generated:index/applib/annotation/DomainObject.adoc#persistingLifecycleEvent[`@DomainObject#persistingLifecycleEvent()`] event.
+An alternative means to interact with the lifecycle is by setting up a subscriber on the xref:refguide:applib:index/annotation/DomainObject.adoc#persistingLifecycleEvent[`@DomainObject#persistingLifecycleEvent()`] event.
 
 
 See also xref:refguide:applib-methods:lifecycle.adoc#persisted[`persisted()`] callback.

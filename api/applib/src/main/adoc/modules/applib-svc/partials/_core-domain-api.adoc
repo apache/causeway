@@ -13,35 +13,35 @@ The core/domain APIs provide general-purpose services to the domain objects, for
 |Description
 
 
-|xref:system:generated:index/applib/services/clock/ClockService.adoc[ClockService]
+|xref:refguide:applib:index/services/clock/ClockService.adoc[ClockService]
 |Access the current time (and for testing, allow the time to be changed)
 
 
-|xref:system:generated:index/applib/services/confview/ConfigurationViewService.adoc[ConfigurationViewService] & xref:system:generated:index/applib/services/confview/ConfigurationMenu.adoc[ConfigurationMenu]
-|Backing service which creates the list of configuration properties for xref:system:generated:index/applib/services/confview/ConfigurationMenu.adoc[ConfigurationMenu].
+|xref:refguide:applib:index/services/confview/ConfigurationViewService.adoc[ConfigurationViewService] & xref:refguide:applib:index/services/confview/ConfigurationMenu.adoc[ConfigurationMenu]
+|Backing service which creates the list of configuration properties for xref:refguide:applib:index/services/confview/ConfigurationMenu.adoc[ConfigurationMenu].
 
 
-|xref:system:generated:index/applib/services/eventbus/EventBusService.adoc[EventBusService]
+|xref:refguide:applib:index/services/eventbus/EventBusService.adoc[EventBusService]
 |Programmatically post events to the internal event bus.  Also used by Apache Isis itself to broadcast domain, UI and lifecycle events.
 
 
-|xref:system:generated:index/applib/services/factory/FactoryService.adoc[FactoryService]
+|xref:refguide:applib:index/services/factory/FactoryService.adoc[FactoryService]
 |Methods to instantiate and initialize domain objects
 
 
-|xref:system:generated:index/applib/services/scratchpad/Scratchpad.adoc[Scratchpad]
+|xref:refguide:applib:index/services/scratchpad/Scratchpad.adoc[Scratchpad]
 |Request-scoped service for interchanging information between and aggregating over multiple method calls.
 
 
-|xref:system:generated:index/applib/services/inject/ServiceInjector.adoc[ServiceInjector]
+|xref:refguide:applib:index/services/inject/ServiceInjector.adoc[ServiceInjector]
 |Programmatically inject services into arbitrary objects.
 
 
-|xref:system:generated:index/applib/services/registry/ServiceRegistry.adoc[ServiceRegistry]
+|xref:refguide:applib:index/services/registry/ServiceRegistry.adoc[ServiceRegistry]
 |Registry of all domain services, for service locator pattern.
 
 
-|xref:system:generated:index/applib/services/user/UserService.adoc[UserService]
+|xref:refguide:applib:index/services/user/UserService.adoc[UserService]
 |Methods to access the currently-logged on user.
 
 

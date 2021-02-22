@@ -27,7 +27,7 @@ Impl'n (g: a:)
 |xref:core:runtime-services:ContentNegotiationService.adoc[`o.a.i.v.ro.` +
 `rendering.service.conneg.` +
 `ContentNegotiationService`]
-|Encodes the algorithm that delegates to any registered xref:system:generated:index/applib/services/conmap/ContentMappingService.adoc[`ContentMappingService`]s.
+|Encodes the algorithm that delegates to any registered xref:refguide:applib:index/services/conmap/ContentMappingService.adoc[`ContentMappingService`]s.
 |`ContentNegotiationService-` +
 `XRoDomainType` +
 ``o.a.i.core`` +

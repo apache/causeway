@@ -25,25 +25,25 @@ The table below summarizes the annotations available:
 
 
 | Class
-| xref:system:generated:index/applib/annotation/DomainObjectLayout.adoc#named[`@DomainObjectLayout#named`]
-| xref:system:generated:index/applib/annotation/DomainObjectLayout.adoc#describedAs[`@DomainObjectLayout#describedAs`]
+| xref:refguide:applib:index/annotation/DomainObjectLayout.adoc#named[`@DomainObjectLayout#named`]
+| xref:refguide:applib:index/annotation/DomainObjectLayout.adoc#describedAs[`@DomainObjectLayout#describedAs`]
 
 
 | Property
-| xref:system:generated:index/applib/annotation/PropertyLayout.adoc#named[`@PropertyLayout#named`]
-| xref:system:generated:index/applib/annotation/PropertyLayout.adoc#describedAs[`@PropertyLayout#describedAs`]
+| xref:refguide:applib:index/annotation/PropertyLayout.adoc#named[`@PropertyLayout#named`]
+| xref:refguide:applib:index/annotation/PropertyLayout.adoc#describedAs[`@PropertyLayout#describedAs`]
 
 | Collection
-| xref:system:generated:index/applib/annotation/CollectionLayout.adoc#named[`@CollectionLayout#named`]
-| xref:system:generated:index/applib/annotation/CollectionLayout.adoc#describedAs[`@CollectionLayout#describedAs`]
+| xref:refguide:applib:index/annotation/CollectionLayout.adoc#named[`@CollectionLayout#named`]
+| xref:refguide:applib:index/annotation/CollectionLayout.adoc#describedAs[`@CollectionLayout#describedAs`]
 
 | Action
-| xref:system:generated:index/applib/annotation/ActionLayout.adoc#named[`@ActionLayout#named`]
-| xref:system:generated:index/applib/annotation/ActionLayout.adoc#describedAs[`@ActionLayout#describedAs`]
+| xref:refguide:applib:index/annotation/ActionLayout.adoc#named[`@ActionLayout#named`]
+| xref:refguide:applib:index/annotation/ActionLayout.adoc#describedAs[`@ActionLayout#describedAs`]
 
 | Action Parameters
-| xref:system:generated:index/applib/annotation/ParameterLayout.adoc#named[`@ParameterLayout#named`]
-| xref:system:generated:index/applib/annotation/ParameterLayout.adoc#describedAs[`@ParameterLayout#describedAs`]
+| xref:refguide:applib:index/annotation/ParameterLayout.adoc#named[`@ParameterLayout#named`]
+| xref:refguide:applib:index/annotation/ParameterLayout.adoc#describedAs[`@ParameterLayout#describedAs`]
 
 |===
 

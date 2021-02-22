@@ -4,7 +4,7 @@
 
 WARNING: TODO: this content has not yet been reviewed/updated for v2.0
 
-The (internal) `EntityPropertyChangePublisher` service acts as an internal facade to any registered xref:system:generated:index/applib/services/publishing/spi/EntityPropertyChangeSubscriber.adoc[`EntityPropertyChangeSubscriber`] service(s).
+The (internal) `EntityPropertyChangePublisher` service acts as an internal facade to any registered xref:refguide:applib:index/services/publishing/spi/EntityPropertyChangeSubscriber.adoc[`EntityPropertyChangeSubscriber`] service(s).
 It is responsible for obtaining the details of all changes to domain objects within an interaction, and then to call the configured ``EntityPropertyChangeSubscriber``(s) to actually create audit entries of those changes.
 
 
@@ -20,7 +20,7 @@ public interface EntityPropertyChangePublisher {
     void publishEntityPropertyChanges(...);  // <1>
 }
 ----
-<1> uses the xref:core:runtime-services:ChangedObjectsService.adoc[`ChangedObjectsServiceInternal`] to obtain details of the changed properties, then call the configured xref:system:generated:index/applib/services/publishing/spi/EntityPropertyChangeSubscriber.adoc[EntityPropertyChangeSubscriber](s).
+<1> uses the xref:core:runtime-services:ChangedObjectsService.adoc[`ChangedObjectsServiceInternal`] to obtain details of the changed properties, then call the configured xref:refguide:applib:index/services/publishing/spi/EntityPropertyChangeSubscriber.adoc[EntityPropertyChangeSubscriber](s).
 
 == Registering the Service
 

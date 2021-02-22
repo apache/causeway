@@ -20,7 +20,7 @@ If more than one property is used, the order can be specified (using the same De
 <.> xref:#sequence[sequence]
 +
 --
-The order (in Dewey decimal notation) that the property annotated with xref:system:generated:index/applib/annotation/Title.adoc[Title] appears with respect to other properties also annotated with xref:system:generated:index/applib/annotation/Title.adoc[Title] .
+The order (in Dewey decimal notation) that the property annotated with xref:refguide:applib:index/annotation/Title.adoc[Title] appears with respect to other properties also annotated with xref:refguide:applib:index/annotation/Title.adoc[Title] .
 --
 <.> xref:#prepend[prepend]
 +
@@ -43,7 +43,7 @@ The length to abbreviate this title element to.
 [#sequence]
 === sequence
 
-The order (in Dewey decimal notation) that the property annotated with xref:system:generated:index/applib/annotation/Title.adoc[Title] appears with respect to other properties also annotated with xref:system:generated:index/applib/annotation/Title.adoc[Title] .
+The order (in Dewey decimal notation) that the property annotated with xref:refguide:applib:index/annotation/Title.adoc[Title] appears with respect to other properties also annotated with xref:refguide:applib:index/annotation/Title.adoc[Title] .
 
 [#prepend]
 === prepend

@@ -26,7 +26,7 @@ class Clob {
 <.> xref:#of__String_CommonMimeType_CharSequence[of(String, CommonMimeType, CharSequence)]
 +
 --
-Returns a new xref:system:generated:index/applib/value/Clob.adoc[Clob] of given _name_ , _mimeType_ and _content_ .
+Returns a new xref:refguide:applib:index/value/Clob.adoc[Clob] of given _name_ , _mimeType_ and _content_ .
 --
 
 == Members
@@ -34,8 +34,8 @@ Returns a new xref:system:generated:index/applib/value/Clob.adoc[Clob] of given 
 [#of__String_CommonMimeType_CharSequence]
 === of(String, CommonMimeType, CharSequence)
 
-Returns a new xref:system:generated:index/applib/value/Clob.adoc[Clob] of given _name_ , _mimeType_ and _content_ .
+Returns a new xref:refguide:applib:index/value/Clob.adoc[Clob] of given _name_ , _mimeType_ and _content_ .
 
-_name_ may or may not include the desired filename extension, it is guaranteed, that the resulting xref:system:generated:index/applib/value/Clob.adoc[Clob] has the appropriate extension as constraint by the given _mimeType_ .
+_name_ may or may not include the desired filename extension, it is guaranteed, that the resulting xref:refguide:applib:index/value/Clob.adoc[Clob] has the appropriate extension as constraint by the given _mimeType_ .
 
-For more fine-grained control use one of the xref:system:generated:index/applib/value/Clob.adoc[Clob] constructors directly.
+For more fine-grained control use one of the xref:refguide:applib:index/value/Clob.adoc[Clob] constructors directly.

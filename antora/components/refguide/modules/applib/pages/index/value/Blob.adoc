@@ -24,7 +24,7 @@ class Blob {
 <.> xref:#of__String_CommonMimeType_byte[][of(String, CommonMimeType, byte[])]
 +
 --
-Returns a new xref:system:generated:index/applib/value/Blob.adoc[Blob] of given _name_ , _mimeType_ and _content_ .
+Returns a new xref:refguide:applib:index/value/Blob.adoc[Blob] of given _name_ , _mimeType_ and _content_ .
 --
 <.> xref:#writeBytesTo__OutputStream[writeBytesTo(OutputStream)]
 +
@@ -38,11 +38,11 @@ Does not close the OutputStream.
 [#of__String_CommonMimeType_byte[]]
 === of(String, CommonMimeType, byte[])
 
-Returns a new xref:system:generated:index/applib/value/Blob.adoc[Blob] of given _name_ , _mimeType_ and _content_ .
+Returns a new xref:refguide:applib:index/value/Blob.adoc[Blob] of given _name_ , _mimeType_ and _content_ .
 
-_name_ may or may not include the desired filename extension, it is guaranteed, that the resulting xref:system:generated:index/applib/value/Blob.adoc[Blob] has the appropriate extension as constraint by the given _mimeType_ .
+_name_ may or may not include the desired filename extension, it is guaranteed, that the resulting xref:refguide:applib:index/value/Blob.adoc[Blob] has the appropriate extension as constraint by the given _mimeType_ .
 
-For more fine-grained control use one of the xref:system:generated:index/applib/value/Blob.adoc[Blob] constructors directly.
+For more fine-grained control use one of the xref:refguide:applib:index/value/Blob.adoc[Blob] constructors directly.
 
 [#writeBytesTo__OutputStream]
 === writeBytesTo(OutputStream)

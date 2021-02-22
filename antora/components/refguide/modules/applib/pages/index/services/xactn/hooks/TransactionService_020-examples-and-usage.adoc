@@ -4,7 +4,7 @@
 
 == See Also
 
-* xref:system:generated:index/applib/services/xactn/TransactionId.adoc[TransactionId]
-* xref:system:generated:index/applib/services/xactn/TransactionState.adoc[TransactionState]
+* xref:refguide:applib:index/services/xactn/TransactionId.adoc[TransactionId]
+* xref:refguide:applib:index/services/xactn/TransactionState.adoc[TransactionState]
 
 

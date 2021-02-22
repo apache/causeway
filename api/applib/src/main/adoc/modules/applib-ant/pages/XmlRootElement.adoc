@@ -16,7 +16,7 @@ xref:refguide:applib-ant:ViewModel.adoc[`@DomainObject(nature=VIEW_MODEL)`] anno
 using `@XmlRootElement` has a couple of significant advantages:
 
 * the view model can be used as a "canonical" DTO, for example when accessing data using the xref:vro:ROOT:about.adoc[RestfulObjects viewer] in combination with the
-xref:system:generated:index/applib/services/conmap/ContentMappingService.adoc[`ContentMappingService`].
+xref:refguide:applib:index/services/conmap/ContentMappingService.adoc[`ContentMappingService`].
 +
 This provides a stable and versioned API to access data in XML format using whatever client-side technology may be appropriate.
 
@@ -31,7 +31,7 @@ This adapter converts any references to such domain entities using the `oidDto` 
 [TIP]
 ====
 The memento string for view models is converted into a form compatible with use within a URL.
-This is performed by the xref:system:generated:index/applib/services/urlencoding/UrlEncodingService.adoc[`UrlEncodingService`], the default implementation of which simply encodes to base 64. If the view model XML graph is too large to be serialized to a string, then an alternative implementation (eg which maps XML strings to a GUID, say) can be configured using the technique described in xref:userguide:btb:about.adoc#replacing-default-service-implementations[here] in the user guide.
+This is performed by the xref:refguide:applib:index/services/urlencoding/UrlEncodingService.adoc[`UrlEncodingService`], the default implementation of which simply encodes to base 64. If the view model XML graph is too large to be serialized to a string, then an alternative implementation (eg which maps XML strings to a GUID, say) can be configured using the technique described in xref:userguide:btb:about.adoc#replacing-default-service-implementations[here] in the user guide.
 ====
 
 == Example
@@ -59,7 +59,7 @@ public class ToDoItemDto implements Dto {
 
 Although (like any other viewmodel) a JAXB-annotated can have behaviour (actions) and UI hints, you may wish to keep the DTO "clean", just focused on specifying the data contract.
 
-Behaviour can therefore be provided using xref:userguide:fun:overview.adoc#mixins[mixins] (annotated with xref:system:generated:index/applib/annotation/DomainObject.adoc[`@DomainObject(nature=MIXIN)`]), while xref:applib-classes:classes/uievent.adoc[UI events] can be used to obtain title, icons and so on.
+Behaviour can therefore be provided using xref:userguide:fun:overview.adoc#mixins[mixins] (annotated with xref:refguide:applib:index/annotation/DomainObject.adoc[`@DomainObject(nature=MIXIN)`]), while xref:applib-classes:classes/uievent.adoc[UI events] can be used to obtain title, icons and so on.
 
 For a more complete discussion of writing JAXB view models/DTOs, see xref:userguide:fun:overview.adoc#view-models[this topic] in the user guide.
 

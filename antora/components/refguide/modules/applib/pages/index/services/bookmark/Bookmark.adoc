@@ -28,7 +28,7 @@ Round-trip with _#toString()_ representation.
 <.> xref:#toString__[toString()]
 +
 --
-The canonical form of the xref:system:generated:index/applib/services/bookmark/Bookmark.adoc[Bookmark] , that is " _#getObjectType() objectType_ _#SEPARATOR_ _#getIdentifier()_ ".
+The canonical form of the xref:refguide:applib:index/services/bookmark/Bookmark.adoc[Bookmark] , that is " _#getObjectType() objectType_ _#SEPARATOR_ _#getIdentifier()_ ".
 --
 
 == Members
@@ -41,6 +41,6 @@ Round-trip with _#toString()_ representation.
 [#toString__]
 === toString()
 
-The canonical form of the xref:system:generated:index/applib/services/bookmark/Bookmark.adoc[Bookmark] , that is " _#getObjectType() objectType_ _#SEPARATOR_ _#getIdentifier()_ ".
+The canonical form of the xref:refguide:applib:index/services/bookmark/Bookmark.adoc[Bookmark] , that is " _#getObjectType() objectType_ _#SEPARATOR_ _#getIdentifier()_ ".
 
 This is parseable by the _#parse(String)_ .

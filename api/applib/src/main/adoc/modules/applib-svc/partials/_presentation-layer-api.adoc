@@ -15,14 +15,14 @@ Domain service APIs for the presentation layer allow the domain objects to contr
 |Description
 
 
-|xref:system:generated:index/applib/services/acceptheader/AcceptHeaderService.adoc[AcceptHeaderService]
+|xref:refguide:applib:index/services/acceptheader/AcceptHeaderService.adoc[AcceptHeaderService]
 |Request-scoped access to HTTP Accept headers.
 
-|xref:system:generated:index/applib/services/bookmarkui/BookmarkUiService.adoc[BookmarkUiService]
+|xref:refguide:applib:index/services/bookmarkui/BookmarkUiService.adoc[BookmarkUiService]
 |Manage bookmarks and breadcrumbs.
 
 
-|xref:system:generated:index/applib/services/linking/DeepLinkService.adoc[DeepLinkService]
+|xref:refguide:applib:index/services/linking/DeepLinkService.adoc[DeepLinkService]
 |Obtain a URL to a domain object (eg for use within an email or report)
 
 

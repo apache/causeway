@@ -2,7 +2,7 @@
 
 All top-level page layout classes should implement this interface.
 
-It is used by the xref:system:generated:index/applib/services/layout/LayoutService.adoc[LayoutService] as a common based type for any layouts read in from XML.
+It is used by the xref:refguide:applib:index/services/layout/LayoutService.adoc[LayoutService] as a common based type for any layouts read in from XML.
 
 == API
 

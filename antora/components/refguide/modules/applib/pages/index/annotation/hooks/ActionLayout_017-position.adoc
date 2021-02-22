@@ -1,6 +1,6 @@
 === Positioning
 
-The xref:system:generated:index/applib/annotation/ActionLayout.adoc#position[position()] element pertains only to actions that have been associated with properties using xref:system:generated:index/applib/annotation/MemberOrder.adoc[`@MemberOrder#named`].
+The xref:refguide:applib:index/annotation/ActionLayout.adoc#position[position()] element pertains only to actions that have been associated with properties using xref:refguide:applib:index/annotation/MemberOrder.adoc[`@MemberOrder#named`].
 For these actions, it specifies the positioning of the action's button with respect to the field representing the object property.
 
 The attribute can take one of four values: `BELOW`, `RIGHT`, `PANEL` or `PANEL_DROPDOWN`.

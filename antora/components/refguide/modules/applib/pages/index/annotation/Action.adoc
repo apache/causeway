@@ -35,22 +35,22 @@ Specifies the sequence/order in the UI for an action that's been associated with
 <.> xref:#commandDtoProcessor[commandDtoProcessor]
 +
 --
-The xref:system:generated:index/applib/services/commanddto/processor/CommandDtoProcessor.adoc[CommandDtoProcessor] to process this command's DTO.
+The xref:refguide:applib:index/services/commanddto/processor/CommandDtoProcessor.adoc[CommandDtoProcessor] to process this command's DTO.
 --
 <.> xref:#commandPublishing[commandPublishing]
 +
 --
-Whether action invocations, captured as xref:system:generated:index/applib/services/command/Command.adoc[Command] s, should be published to xref:system:generated:index/applib/services/publishing/spi/CommandSubscriber.adoc[CommandSubscriber] s.
+Whether action invocations, captured as xref:refguide:applib:index/services/command/Command.adoc[Command] s, should be published to xref:refguide:applib:index/services/publishing/spi/CommandSubscriber.adoc[CommandSubscriber] s.
 --
 <.> xref:#domainEvent[domainEvent]
 +
 --
-Indicates that an invocation of the action should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService_ using a custom (subclass of) xref:system:generated:index/applib/events/domain/ActionDomainEvent.adoc[ActionDomainEvent] .
+Indicates that an invocation of the action should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService_ using a custom (subclass of) xref:refguide:applib:index/events/domain/ActionDomainEvent.adoc[ActionDomainEvent] .
 --
 <.> xref:#executionPublishing[executionPublishing]
 +
 --
-Whether xref:system:generated:index/applib/services/iactn/Execution.adoc[Execution] s (triggered by action invocations), should be published to xref:system:generated:index/applib/services/publishing/spi/ExecutionSubscriber.adoc[ExecutionSubscriber] s.
+Whether xref:refguide:applib:index/services/iactn/Execution.adoc[Execution] s (triggered by action invocations), should be published to xref:refguide:applib:index/services/publishing/spi/ExecutionSubscriber.adoc[ExecutionSubscriber] s.
 --
 <.> xref:#hidden[hidden]
 +
@@ -75,7 +75,7 @@ If the action returns a collection, then this hints as to the run-time type of t
 <.> xref:#fileAccept[fileAccept]
 +
 --
-For downloading xref:system:generated:index/applib/value/Blob.adoc[Blob] or xref:system:generated:index/applib/value/Clob.adoc[Clob] , optionally restrict the files accepted (eg `.xslx` ).
+For downloading xref:refguide:applib:index/value/Blob.adoc[Blob] or xref:refguide:applib:index/value/Clob.adoc[Clob] , optionally restrict the files accepted (eg `.xslx` ).
 --
 
 == Members
@@ -87,7 +87,7 @@ Associates this action with a property or collection, specifying its id.
 
 This is an alternative to using _MemberOrder#name()_ . To specify the order (equivalent to _MemberOrder#sequence()_ }), use _#associateWithSequence()_ .
 
-For example `@Action(associateWith="items", associateWithSequence="2.1")` 
+For example `@Action(associateWith="items", associateWithSequence="2.1")`
 
 If an action is associated with a collection, then any matching parameters will have their choices automatically inferred from the collection (if not otherwise specified) and any collection parameter defaults can be specified using checkboxes (in the Wicket UI, at least).
 
@@ -98,24 +98,24 @@ Specifies the sequence/order in the UI for an action that's been associated with
 
 This is an alternative to using _MemberOrder#sequence()_ , but is ignored if _Action#associateWith()_ isn't also specified.
 
-For example: `@Action(associateWith="items", associateWithSequence="2.1")` 
+For example: `@Action(associateWith="items", associateWithSequence="2.1")`
 
 [#commandDtoProcessor]
 === commandDtoProcessor
 
-The xref:system:generated:index/applib/services/commanddto/processor/CommandDtoProcessor.adoc[CommandDtoProcessor] to process this command's DTO.
+The xref:refguide:applib:index/services/commanddto/processor/CommandDtoProcessor.adoc[CommandDtoProcessor] to process this command's DTO.
 
-The processor itself is used by xref:system:generated:index/applib/services/commanddto/conmap/ContentMappingServiceForCommandDto.adoc[ContentMappingServiceForCommandDto] and xref:system:generated:index/applib/services/commanddto/conmap/ContentMappingServiceForCommandsDto.adoc[ContentMappingServiceForCommandsDto] to dynamically transform the DTOs.
+The processor itself is used by xref:refguide:applib:index/services/commanddto/conmap/ContentMappingServiceForCommandDto.adoc[ContentMappingServiceForCommandDto] and xref:refguide:applib:index/services/commanddto/conmap/ContentMappingServiceForCommandsDto.adoc[ContentMappingServiceForCommandsDto] to dynamically transform the DTOs.
 
 [#commandPublishing]
 === commandPublishing
 
-Whether action invocations, captured as xref:system:generated:index/applib/services/command/Command.adoc[Command] s, should be published to xref:system:generated:index/applib/services/publishing/spi/CommandSubscriber.adoc[CommandSubscriber] s.
+Whether action invocations, captured as xref:refguide:applib:index/services/command/Command.adoc[Command] s, should be published to xref:refguide:applib:index/services/publishing/spi/CommandSubscriber.adoc[CommandSubscriber] s.
 
 [#domainEvent]
 === domainEvent
 
-Indicates that an invocation of the action should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService_ using a custom (subclass of) xref:system:generated:index/applib/events/domain/ActionDomainEvent.adoc[ActionDomainEvent] .
+Indicates that an invocation of the action should be posted to the _org.apache.isis.applib.services.eventbus.EventBusService_ using a custom (subclass of) xref:refguide:applib:index/events/domain/ActionDomainEvent.adoc[ActionDomainEvent] .
 
 Subscribers of this event can interact with the business rule checking (hide, disable, validate) and its modification (before and after).
 
@@ -137,7 +137,7 @@ This subclass must provide a no-arg constructor; the fields are set reflectively
 [#executionPublishing]
 === executionPublishing
 
-Whether xref:system:generated:index/applib/services/iactn/Execution.adoc[Execution] s (triggered by action invocations), should be published to xref:system:generated:index/applib/services/publishing/spi/ExecutionSubscriber.adoc[ExecutionSubscriber] s.
+Whether xref:refguide:applib:index/services/iactn/Execution.adoc[Execution] s (triggered by action invocations), should be published to xref:refguide:applib:index/services/publishing/spi/ExecutionSubscriber.adoc[ExecutionSubscriber] s.
 
 [#hidden]
 === hidden
@@ -146,7 +146,7 @@ Indicates where (in the UI) the action is not visible to the user.
 
 It is also possible to suppress an action's visibility using _ActionLayout#hidden()_ .
 
-For xref:system:generated:index/applib/annotation/DomainService.adoc[DomainService] actions, the action's visibility is dependent upon its _DomainService#nature() nature_ .
+For xref:refguide:applib:index/annotation/DomainService.adoc[DomainService] actions, the action's visibility is dependent upon its _DomainService#nature() nature_ .
 
 [#restrictTo]
 === restrictTo
@@ -174,7 +174,7 @@ This is only provided as a fallback; usually the framework can infer the element
 [#fileAccept]
 === fileAccept
 
-For downloading xref:system:generated:index/applib/value/Blob.adoc[Blob] or xref:system:generated:index/applib/value/Clob.adoc[Clob] , optionally restrict the files accepted (eg `.xslx` ).
+For downloading xref:refguide:applib:index/value/Blob.adoc[Blob] or xref:refguide:applib:index/value/Clob.adoc[Clob] , optionally restrict the files accepted (eg `.xslx` ).
 
 The value should be of the form "file_extension|audio/*|video/*|image/*|media_type".
 

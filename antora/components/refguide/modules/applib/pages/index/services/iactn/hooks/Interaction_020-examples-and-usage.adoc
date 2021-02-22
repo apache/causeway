@@ -6,7 +6,7 @@
 == Usage Notes
 
 You could also think of this interface as somewhat analogous to a (database) transaction.
-However, the framework's xref:system:generated:index/applib/services/xactn/TransactionService.adoc[TransactionService] allows programmatic control of underlying database transactions, including the ability to commit one transaction and start a new one (using xref:system:generated:index/applib/services/xactn/TransactionService.adoc#nextTransaction[nextTransaction]).
+However, the framework's xref:refguide:applib:index/services/xactn/TransactionService.adoc[TransactionService] allows programmatic control of underlying database transactions, including the ability to commit one transaction and start a new one (using xref:refguide:applib:index/services/xactn/TransactionService.adoc#nextTransaction[nextTransaction]).
 The is therefore not an exact mapping between an `Interaction` and a (database) transaction, because the former could span multiple of the latter.
 
 
@@ -14,7 +14,7 @@ The is therefore not an exact mapping between an `Interaction` and a (database) 
 
 == See Also
 
-* xref:system:generated:index/applib/services/iactn/Execution.adoc[Execution]
+* xref:refguide:applib:index/services/iactn/Execution.adoc[Execution]
 
-* xref:system:generated:index/applib/services/publishing/spi/ExecutionSubscriber.adoc[ExecutionSubscriber]
+* xref:refguide:applib:index/services/publishing/spi/ExecutionSubscriber.adoc[ExecutionSubscriber]
 

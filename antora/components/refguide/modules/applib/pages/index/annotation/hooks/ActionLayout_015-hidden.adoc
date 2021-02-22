@@ -1,10 +1,10 @@
 === Hiding actions
 
-The xref:system:generated:index/applib/annotation/ActionLayout.adoc#hidden[hidden()] attribute indicates where (in the UI) the action should be hidden from the user.
+The xref:refguide:applib:index/annotation/ActionLayout.adoc#hidden[hidden()] attribute indicates where (in the UI) the action should be hidden from the user.
 
 [TIP]
 ====
-It is also possible to use xref:system:generated:index/applib/annotation/Action.adoc#hidden[`@Action#hidden`] to hide an action at the domain layer.
+It is also possible to use xref:refguide:applib:index/annotation/Action.adoc#hidden[`@Action#hidden`] to hide an action at the domain layer.
 ====
 
 For example:

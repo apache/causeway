@@ -43,8 +43,8 @@ public class Customer
     ...
 }
 ----
-<.> The xref:system:generated:index/applib/annotation/Property.adoc[`@Property`] annotation defines additional domain-layer semantics
-<.> The xref:system:generated:index/applib/annotation/PropertyLayout.adoc[`@PropertyLayout`] annotation defines additional presentation-layer hints
+<.> The xref:refguide:applib:index/annotation/Property.adoc[`@Property`] annotation defines additional domain-layer semantics
+<.> The xref:refguide:applib:index/annotation/PropertyLayout.adoc[`@PropertyLayout`] annotation defines additional presentation-layer hints
 
 From this the framework infers the `Customer` domain entity, which in turn has a `firstName` string _property_.
 
@@ -76,8 +76,8 @@ public class Customer
     ...
 }
 ----
-<.> The xref:system:generated:index/applib/annotation/Collection.adoc[`@Collection`] annotation defines additional domain-layer semantics
-<.> The xref:system:generated:index/applib/annotation/CollectionLayout.adoc[`@CollectionLayout`] annotation defines additional presentation-layer hints
+<.> The xref:refguide:applib:index/annotation/Collection.adoc[`@Collection`] annotation defines additional domain-layer semantics
+<.> The xref:refguide:applib:index/annotation/CollectionLayout.adoc[`@CollectionLayout`] annotation defines additional presentation-layer hints
 <.> The most commonly a `java.util.SortedSet` for entities obtained from an RDBMS (with set semantics).
 +
 TIP: all entities should define a natural ordering so that when rendered in the UI they will be ordered "meaningfully" to the end-user.
@@ -137,10 +137,10 @@ public class Customer {
     ...
 }
 ----
-<.> The xref:system:generated:index/applib/annotation/Action.adoc[`@Action`] annotation defines additional domain-layer semantics
-<.> The xref:system:generated:index/applib/annotation/ActionLayout.adoc[`@ActionLayout`] annotation defines additional presentation-layer hints
-<.> The xref:system:generated:index/applib/annotation/Parameter.adoc[`@Parameter`] annotation defines additional domain-layer semantics
-<.> The xref:system:generated:index/applib/annotation/ParameterLayout.adoc[`@ParameterLayout`] annotation defines additional presentation-layer hints
+<.> The xref:refguide:applib:index/annotation/Action.adoc[`@Action`] annotation defines additional domain-layer semantics
+<.> The xref:refguide:applib:index/annotation/ActionLayout.adoc[`@ActionLayout`] annotation defines additional presentation-layer hints
+<.> The xref:refguide:applib:index/annotation/Parameter.adoc[`@Parameter`] annotation defines additional domain-layer semantics
+<.> The xref:refguide:applib:index/annotation/ParameterLayout.adoc[`@ParameterLayout`] annotation defines additional presentation-layer hints
 
 From this the framework infers a the `placeOrder` _action_.
 

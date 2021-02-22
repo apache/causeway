@@ -14,34 +14,34 @@ These annotations are also commonly used, but relate _not_ to objects or object 
 |Layer
 |xref:userguide:fun:ui.adoc#object-layout[File-based layout]?
 
-|xref:system:generated:index/applib/annotation/Facets.adoc[`@Facets`]
+|xref:refguide:applib:index/annotation/Facets.adoc[`@Facets`]
 |Install arbitrary facets within the Apache Isis metamodel.
 |(any)
 |
 
-|xref:system:generated:index/applib/annotation/HomePage.adoc[`@HomePage`]
+|xref:refguide:applib:index/annotation/HomePage.adoc[`@HomePage`]
 |Query-only action (on domain service) to be invoked, result of which is rendered as the user's home page.
 |UI
 |
 
-|xref:system:generated:index/applib/annotation/MemberOrder.adoc[`@MemberOrder`]
+|xref:refguide:applib:index/annotation/MemberOrder.adoc[`@MemberOrder`]
 |Ordering of properties, collections and actions, and also associating actions with either a property or a collection.
 |UI
 |Yes
 
 
-|xref:system:generated:index/applib/annotation/MinLength.adoc[`@MinLength`]
+|xref:refguide:applib:index/annotation/MinLength.adoc[`@MinLength`]
 |Minimum number of characters required for an auto-complete search argument.
 |UI
 |
 
 
-|xref:system:generated:index/applib/annotation/Programmatic.adoc[`@Programmatic`]
+|xref:refguide:applib:index/annotation/Programmatic.adoc[`@Programmatic`]
 |Ignore a public method, excluded from the Apache Isis metamodel.
 |Domain
 |
 
-|xref:system:generated:index/applib/annotation/Title.adoc[`@Title`]
+|xref:refguide:applib:index/annotation/Title.adoc[`@Title`]
 |Indicates which of the object's properties should be used to build up a title for the object.
 |UI
 

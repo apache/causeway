@@ -4,7 +4,7 @@
 
 == Usage within the framework
 
-The xref:system:generated:index/applib/services/userreg/EmailNotificationService.adoc[`EmailNotificationService`] uses this service in order to generate emails as part of xref:vw:ROOT:features.adoc#user-registration[user registration].
+The xref:refguide:applib:index/services/userreg/EmailNotificationService.adoc[`EmailNotificationService`] uses this service in order to generate emails as part of xref:vw:ROOT:features.adoc#user-registration[user registration].
 
 
 

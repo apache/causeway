@@ -2,9 +2,9 @@
 
 Represents a local resource path, typically a relative path originating at this web-app's root or context-root.
 
-Action results of type xref:system:generated:index/applib/value/LocalResourcePath.adoc[LocalResourcePath] are interpreted as browser/client redirects, if applicable.
+Action results of type xref:refguide:applib:index/value/LocalResourcePath.adoc[LocalResourcePath] are interpreted as browser/client redirects, if applicable.
 
-xref:system:generated:index/applib/value/OpenUrlStrategy.adoc[OpenUrlStrategy] gives control on whether the redirect URL should open in the same or a new window/tap.
+xref:refguide:applib:index/value/OpenUrlStrategy.adoc[OpenUrlStrategy] gives control on whether the redirect URL should open in the same or a new window/tap.
 
 == API
 

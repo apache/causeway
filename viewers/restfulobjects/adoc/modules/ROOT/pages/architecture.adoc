@@ -24,7 +24,7 @@ If the implementation does not recognize the value of the header, if can simply 
 xref:vro:ROOT:simplified-representations.adoc[simplified representation] of the Apache Isis profile; an implementation that provides support for the `x-ro-domain-type` parameter, and a default/fallback implementation that returns the representations defined by the RO spec.
 
 * `ContentMappingService` +
-+ The xref:system:generated:index/applib/services/conmap/ContentMappingService.adoc[`ContentMappingService`] is used by the implementation of
++ The xref:refguide:applib:index/services/conmap/ContentMappingService.adoc[`ContentMappingService`] is used by the implementation of
 `ContentNegotationService` that recognizes the `x-ro-domain-type`, its role being to transform a domain object (usually an entity) into some other form (usually a DTO), as specified by the `x-ro-domain-type` parameter.
 There can be many such implementations, each handling a different target domain type.
 

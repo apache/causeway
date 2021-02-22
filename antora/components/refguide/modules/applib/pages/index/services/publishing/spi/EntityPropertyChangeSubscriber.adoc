@@ -17,7 +17,7 @@ interface EntityPropertyChangeSubscriber {
 <.> xref:#onChanging__EntityPropertyChange[onChanging(EntityPropertyChange)]
 +
 --
-Receives a single property change event for changing entities (with publishing enabled using _DomainObject#entityChangePublishing()_ ) as an instance of xref:system:generated:index/applib/services/publishing/spi/EntityPropertyChange.adoc[EntityPropertyChange] .
+Receives a single property change event for changing entities (with publishing enabled using _DomainObject#entityChangePublishing()_ ) as an instance of xref:refguide:applib:index/services/publishing/spi/EntityPropertyChange.adoc[EntityPropertyChange] .
 --
 
 == Members
@@ -25,7 +25,7 @@ Receives a single property change event for changing entities (with publishing e
 [#onChanging__EntityPropertyChange]
 === onChanging(EntityPropertyChange)
 
-Receives a single property change event for changing entities (with publishing enabled using _DomainObject#entityChangePublishing()_ ) as an instance of xref:system:generated:index/applib/services/publishing/spi/EntityPropertyChange.adoc[EntityPropertyChange] .
+Receives a single property change event for changing entities (with publishing enabled using _DomainObject#entityChangePublishing()_ ) as an instance of xref:refguide:applib:index/services/publishing/spi/EntityPropertyChange.adoc[EntityPropertyChange] .
 
 The callback is called (multiple times) at the end of the transaction, during the pre-commit phase.
 

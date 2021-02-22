@@ -18,7 +18,7 @@ interface TranslatableException {
 <.> xref:#getTranslatableMessage__[getTranslatableMessage()]
 +
 --
-In the spirit of _Exception#getLocalizedMessage()_ , but using xref:system:generated:index/applib/services/i18n/TranslatableString.adoc[TranslatableString] instead.
+In the spirit of _Exception#getLocalizedMessage()_ , but using xref:refguide:applib:index/services/i18n/TranslatableString.adoc[TranslatableString] instead.
 --
 <.> xref:#getTranslationContext__[getTranslationContext()]
 +
@@ -31,9 +31,9 @@ The context to use when translating the _#getTranslatableMessage() translatable 
 [#getTranslatableMessage__]
 === getTranslatableMessage()
 
-In the spirit of _Exception#getLocalizedMessage()_ , but using xref:system:generated:index/applib/services/i18n/TranslatableString.adoc[TranslatableString] instead.
+In the spirit of _Exception#getLocalizedMessage()_ , but using xref:refguide:applib:index/services/i18n/TranslatableString.adoc[TranslatableString] instead.
 
-If returns `null` , then _Exception#getMessage()_ will be used as a fallback. This design allows the Isis-provided xref:system:generated:index/applib/exceptions/RecoverableException.adoc[RecoverableException] and xref:system:generated:index/applib/exceptions/UnrecoverableException.adoc[UnrecoverableException] to provide constructors that accept a xref:system:generated:index/applib/services/i18n/TranslatableString.adoc[TranslatableString] , but can be left as null for any existing code.
+If returns `null` , then _Exception#getMessage()_ will be used as a fallback. This design allows the Isis-provided xref:refguide:applib:index/exceptions/RecoverableException.adoc[RecoverableException] and xref:refguide:applib:index/exceptions/UnrecoverableException.adoc[UnrecoverableException] to provide constructors that accept a xref:refguide:applib:index/services/i18n/TranslatableString.adoc[TranslatableString] , but can be left as null for any existing code.
 
 [#getTranslationContext__]
 === getTranslationContext()

@@ -1,6 +1,6 @@
 === Default view
 
-The xref:system:generated:index/applib/annotation/CollectionLayout.adoc#defaultView[`defaultView()] element is used to select which of views should be used by default for a given collection.
+The xref:refguide:applib:index/annotation/CollectionLayout.adoc#defaultView[`defaultView()] element is used to select which of views should be used by default for a given collection.
 Without any hint the collection is shown collapsed (to save real estate and reduce load time).
 
 For example:

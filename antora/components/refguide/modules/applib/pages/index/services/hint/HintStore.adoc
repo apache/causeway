@@ -51,7 +51,7 @@ The keys of all available hints for the domain object.
 
 Obtain a hint (eg which tab to open) for a particular object.
 
-Object identity is represented by xref:system:generated:index/applib/services/bookmark/Bookmark.adoc[Bookmark] so that alternative implementations can easily serialize this state to a string.
+Object identity is represented by xref:refguide:applib:index/services/bookmark/Bookmark.adoc[Bookmark] so that alternative implementations can easily serialize this state to a string.
 
 [#set__Bookmark_String_String]
 === set(Bookmark, String, String)

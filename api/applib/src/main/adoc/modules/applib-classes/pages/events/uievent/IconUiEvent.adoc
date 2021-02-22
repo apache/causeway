@@ -15,5 +15,5 @@ The class has a number of responsibilities:
 The class itself is instantiated automatically by the framework whenever interacting with a rendered object's action.
 
 If the domain object defines its own xref:refguide:applib-methods:reserved.adoc#iconName[`iconName()`] supporting method, or if it has the
-xref:system:generated:index/applib/annotation/DomainObjectLayout.adoc#cssClassFa[`@DomainObjectLayout#cssClassFa()`] attribute, then these will take precedence.
+xref:refguide:applib:index/annotation/DomainObjectLayout.adoc#cssClassFa[`@DomainObjectLayout#cssClassFa()`] attribute, then these will take precedence.
 r

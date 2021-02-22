@@ -47,7 +47,7 @@ Param
 |Y
 |Return a list of matching elements for a property or an action parameter. +
 
-Alternatively, can specify for a class using xref:system:generated:index/applib/annotation/DomainObject.adoc#autoCompleteRepository[`@DomainObject` +
+Alternatively, can specify for a class using xref:refguide:applib:index/annotation/DomainObject.adoc#autoCompleteRepository[`@DomainObject` +
 `#autoCompleteRepository`] +
 
 See also xref:refguide:applib-methods:prefixes.adoc#choices[`choices...()`]

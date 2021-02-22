@@ -22,5 +22,5 @@ To use it therefore requires this dependency:
 ----
 ====
 
-* The xref:system:generated:index/applib/services/confview/ConfigurationMenu.adoc[ `ConfigurationMenu`] provides a UI to access this service.
+* The xref:refguide:applib:index/services/confview/ConfigurationMenu.adoc[ `ConfigurationMenu`] provides a UI to access this service.
 

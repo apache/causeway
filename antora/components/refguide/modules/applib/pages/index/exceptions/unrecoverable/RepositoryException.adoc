@@ -2,7 +2,7 @@
 
 Indicates that a repository method has failed.
 
-This exception is intended to represent an unexpected and non-recoverable condition (eg a syntax error in some JDOQL query syntax or similar), and so is a subclass of xref:system:generated:index/applib/exceptions/UnrecoverableException.adoc[UnrecoverableException] . Throwing this exception will therefore result in (some sort of) error page being displayed to the user.
+This exception is intended to represent an unexpected and non-recoverable condition (eg a syntax error in some JDOQL query syntax or similar), and so is a subclass of xref:refguide:applib:index/exceptions/UnrecoverableException.adoc[UnrecoverableException] . Throwing this exception will therefore result in (some sort of) error page being displayed to the user.
 
 == API
 

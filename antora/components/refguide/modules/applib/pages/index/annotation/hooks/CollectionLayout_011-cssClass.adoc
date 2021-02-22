@@ -1,6 +1,6 @@
 === CSS Styling
 
-The xref:system:generated:index/applib/annotation/CollectionLayout.adoc#cssClass[cssClass()] element can be used to render additional CSS classes in the HTML (a wrapping `<div>`) that represents the collection.
+The xref:refguide:applib:index/annotation/CollectionLayout.adoc#cssClass[cssClass()] element can be used to render additional CSS classes in the HTML (a wrapping `<div>`) that represents the collection.
 xref:refguide:config:application-specific/application-css.adoc[Application-specific CSS] can then be used to target and adjust the UI representation of that particular element.
 
 For example:
