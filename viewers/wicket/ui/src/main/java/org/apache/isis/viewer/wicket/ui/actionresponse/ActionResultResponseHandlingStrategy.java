@@ -26,13 +26,13 @@ import org.apache.wicket.request.IRequestHandler;
 import org.apache.wicket.request.Url;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.handler.resource.ResourceStreamRequestHandler;
-import org.apache.wicket.request.http.handler.RedirectRequestHandler;
 import org.apache.wicket.request.resource.ContentDisposition;
 import org.apache.wicket.util.resource.IResourceStream;
 import org.apache.wicket.util.time.Duration;
 
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
+import org.apache.isis.viewer.wicket.model.models.RedirectRequestHandlerWithOpenUrlStrategy;
 import org.apache.isis.viewer.wicket.model.models.VoidModel;
 import org.apache.isis.viewer.wicket.ui.pages.voidreturn.VoidReturnPage;
 
@@ -88,9 +88,18 @@ public enum ActionResultResponseHandlingStrategy {
                     page.add(streamingBehavior);
                     CharSequence callbackUrl = streamingBehavior.getCallbackUrl();
                     scheduleJs(target, javascriptFor_sameWindow(callbackUrl), 10);    
-                } else if(requestHandler instanceof RedirectRequestHandler) {
-                    RedirectRequestHandler redirectHandler = (RedirectRequestHandler) requestHandler;
-                    requestCycle.scheduleRequestHandlerAfterCurrent(redirectHandler);
+                } else if(requestHandler instanceof RedirectRequestHandlerWithOpenUrlStrategy) {
+                    final RedirectRequestHandlerWithOpenUrlStrategy redirectHandler = 
+                            (RedirectRequestHandlerWithOpenUrlStrategy) requestHandler;
+
+                    final String url = redirectHandler.getRedirectUrl();
+                    final String fullUrl = expanded(requestCycle, url);
+                    
+                    if(redirectHandler.getOpenUrlStrategy().isNewWindow()) {
+                        scheduleJs(target, javascriptFor_newWindow(fullUrl), 100);                        
+                    } else {
+                        scheduleJs(target, javascriptFor_sameWindow(fullUrl), 100);
+                    }
                 } else {
                     throw _Exceptions.unrecoverableFormatted(
                             "no logic implemented to handle IRequestHandler of type %s",

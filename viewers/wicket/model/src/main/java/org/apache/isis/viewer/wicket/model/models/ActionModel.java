@@ -26,7 +26,6 @@ import java.util.stream.Stream;
 
 import org.apache.wicket.request.IRequestHandler;
 import org.apache.wicket.request.handler.resource.ResourceStreamRequestHandler;
-import org.apache.wicket.request.http.handler.RedirectRequestHandler;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.ContentDisposition;
 import org.apache.wicket.util.resource.AbstractResourceStream;
@@ -42,6 +41,7 @@ import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.Clob;
 import org.apache.isis.applib.value.LocalResourcePath;
 import org.apache.isis.applib.value.NamedWithMimeType;
+import org.apache.isis.applib.value.OpenUrlStrategy;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -62,6 +62,7 @@ import org.apache.isis.viewer.common.model.action.form.FormPendingParamUiModel;
 import org.apache.isis.viewer.common.model.action.form.FormUiModel;
 import org.apache.isis.viewer.common.model.mementos.ActionMemento;
 
+import lombok.NonNull;
 import lombok.val;
 
 public final class ActionModel 
@@ -266,14 +267,19 @@ implements FormUiModel, FormExecutorContext, BookmarkableModel {
 
     // //////////////////////////////////////
 
-    public static IRequestHandler redirectHandler(final Object value) {
+    public static IRequestHandler redirectHandler(
+            final Object value, 
+            final @NonNull OpenUrlStrategy openUrlStrategy) {
+        
         if(value instanceof java.net.URL) {
             val url = (java.net.URL) value;
-            return new RedirectRequestHandler(url.toString());
+            return new RedirectRequestHandlerWithOpenUrlStrategy(url.toString());
         }
         if(value instanceof LocalResourcePath) {
             val localResourcePath = (LocalResourcePath) value;
-            return new RedirectRequestHandler(localResourcePath.getPath());
+            return new RedirectRequestHandlerWithOpenUrlStrategy(
+                    localResourcePath.getPath(), 
+                    localResourcePath.getOpenUrlStrategy());
         }
         return null;
     }

@@ -109,8 +109,8 @@ public enum ActionResultResponseType {
         @Override
         public ActionResultResponse interpretResult(ActionModel model, AjaxRequestTarget target, ManagedObject resultAdapter) {
             // open URL server-side redirect
-            final Object value = resultAdapter.getPojo();
-            IRequestHandler handler = ActionModel.redirectHandler(value);
+            final LocalResourcePath localResPath = (LocalResourcePath)resultAdapter.getPojo();
+            IRequestHandler handler = ActionModel.redirectHandler(localResPath, localResPath.getOpenUrlStrategy());
             return ActionResultResponse.withHandler(handler);
         }
     },
@@ -127,7 +127,7 @@ public enum ActionResultResponseType {
         public ActionResultResponse interpretResult(ActionModel model, AjaxRequestTarget target, ManagedObject resultAdapter) {
             // open URL server-side redirect
             final Object value = resultAdapter.getPojo();
-            IRequestHandler handler = ActionModel.redirectHandler(value);
+            IRequestHandler handler = ActionModel.redirectHandler(value, OpenUrlStrategy.NEW_WINDOW); // default behavior
             return ActionResultResponse.withHandler(handler);
         }
     },
@@ -193,11 +193,12 @@ public enum ActionResultResponseType {
 
     private static ActionResultResponseType determineFor(
             final ManagedObject resultAdapter,
-            final AjaxRequestTarget targetIfAny) {
+            AjaxRequestTarget targetIfAny) {
         
         if(resultAdapter == null) {
             return ActionResultResponseType.VOID;
         }
+        
         final ObjectSpecification resultSpec = resultAdapter.getSpecification();
         if (resultSpec.isNotCollection()) {
             if (resultSpec.getFacet(ValueFacet.class) != null) {
