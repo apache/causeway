@@ -76,9 +76,11 @@ final class ProjectDocWriter {
                 // delete all generated documents in the index
                 _Files.searchFiles(pagesFolder, dir->true, file-> {
                     val fileName = file.getName();
-                    final String parentFile = file.getParentFile().getName();
+                    val fileAbsolutePath = file.getAbsolutePath();
+                    final File parentFile = file.getParentFile();
+                    final String parentFileName = parentFile.getName();
                     return fileName.endsWith(".adoc") &&
-                           !parentFile.equals("hooks") &&
+                           !fileAbsolutePath.contains(File.separatorChar + "hooks" + File.separatorChar) &&
                            !fileName.equals(overview.getSystemOverviewFilename());
                 })
                 .stream()
