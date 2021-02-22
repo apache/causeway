@@ -31,6 +31,7 @@ import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoicesFacetAbstract;
+import org.apache.isis.core.metamodel.interactions.managed.ActionInteractionHead;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -74,13 +75,13 @@ implements ImperativeFacet {
     @Override
     public Can<ManagedObject> getChoices(
             final ObjectSpecification requiredSpec,
-            final ManagedObject owningAdapter,
+            final ActionInteractionHead head,
             final Can<ManagedObject> pendingArgs,
             final InteractionInitiatedBy interactionInitiatedBy) {
         
         final Object collectionOrArray = ppmFactory.isPresent()
-                ? ManagedObjects.InvokeUtil.invokeWithPPM(ppmFactory.get(), method, owningAdapter, pendingArgs) 
-                : ManagedObjects.InvokeUtil.invokeAutofit(method, owningAdapter, pendingArgs);
+                ? ManagedObjects.InvokeUtil.invokeWithPPM(ppmFactory.get(), method, head.getTarget(), pendingArgs) 
+                : ManagedObjects.InvokeUtil.invokeAutofit(method, head.getTarget(), pendingArgs);
         if (collectionOrArray == null) {
             return Can.empty();
         }

@@ -222,8 +222,11 @@ implements ObjectActionParameter, HasFacetHolder {
         if (choicesFacet == null) {
             return Can.empty();
         }
-
-        val visibleChoices = choicesFacet.getChoices(paramSpec, pendingArgs.getActionTarget(), pendingArgs.getParamValues(), interactionInitiatedBy);
+        
+        val visibleChoices = choicesFacet.getChoices(paramSpec, 
+                pendingArgs.getHead(), 
+                pendingArgs.getParamValues(), 
+                interactionInitiatedBy);
         checkChoicesOrAutoCompleteType(getSpecificationLoader(), visibleChoices, getSpecification());
         
         return visibleChoices;

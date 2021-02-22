@@ -523,7 +523,12 @@ implements ObjectAction {
                 val paramFacet = param.getFacet(ActionParameterChoicesFacet.class);
                 
                 if (paramFacet != null && !paramFacet.isFallback()) {
-                    val visibleChoices = paramFacet.getChoices(paramSpec, target, emptyPendingArgs, interactionInitiatedBy);
+                    
+                    val visibleChoices = paramFacet.getChoices(
+                            paramSpec, 
+                            interactionHead(target), 
+                            emptyPendingArgs, 
+                            interactionInitiatedBy);
                     ObjectActionParameterAbstract.checkChoicesOrAutoCompleteType(
                             getSpecificationLoader(), visibleChoices, paramSpec);
                     paramChoicesVector.set(i, visibleChoices);
@@ -533,36 +538,6 @@ implements ObjectAction {
             }
         }
         return paramChoicesVector;
-
-//        final List<Can<ManagedObject>> parameterChoicesAdapters = new ArrayList<>(parameterCount);
-//        for (int i = 0; i < parameterCount; i++) {
-//            
-//            ManagedObject[] choices;
-//            
-//            final ObjectSpecification paramSpec = parameters.getElseFail(i).getSpecification();
-//
-//            if (paramChoicesVector[i] != null && paramChoicesVector[i].length > 0) {
-//                ObjectActionParameterAbstract.checkChoicesOrAutoCompleteType(
-//                        getSpecificationLoader(), paramChoicesVector[i], paramSpec);
-//                choices = new ManagedObject[paramChoicesVector[i].length];
-//                for (int j = 0; j < paramChoicesVector[i].length; j++) {
-//                    choices[j] = ManagedObject.of(paramSpec, paramChoicesVector[i][j]);
-//                }
-//            } else if (paramSpec.isNotCollection()) {
-//                choices = new ManagedObject[0];
-//            } else {
-//                throw new UnknownTypeException(paramSpec);
-//            }
-//
-//            if (choices.length == 0) {
-//                choices = null;
-//            }
-//            
-//            parameterChoicesAdapters.add(Can.ofArray(choices));
-//            
-//        }
-//
-//        return Can.ofCollection(parameterChoicesAdapters);
     }
 
     @Override

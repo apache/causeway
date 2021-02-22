@@ -22,12 +22,11 @@ package org.apache.isis.core.metamodel.postprocessors.param;
 import java.util.Map;
 
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.collections.CollectionFacet;
-import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacet;
 import org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoicesFacetAbstract;
+import org.apache.isis.core.metamodel.interactions.managed.ActionInteractionHead;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
@@ -49,25 +48,12 @@ extends ActionParameterChoicesFacetAbstract {
     @Override
     public Can<ManagedObject> getChoices(
             final ObjectSpecification requiredSpec,
-            final ManagedObject target,
+            final ActionInteractionHead head,
             final Can<ManagedObject> pendingArgs,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        guardAgainstMixin(target);
-        val collectionAdapter = otma.get(target, interactionInitiatedBy);
+        val collectionAdapter = otma.get(head.getOwner(), interactionInitiatedBy);
         return CollectionFacet.streamAdapters(collectionAdapter).collect(Can.toCan());
-    }
-
-    /**
-     * in the case of a mixin action, the target passed to the facet is actually the mixin itself, 
-     * not the mixee
-     */
-    private void guardAgainstMixin(final ManagedObject target) {
-        val mixinFacet = target.getSpecification().getFacet(MixinFacet.class);
-        if(mixinFacet != null) {
-            _Exceptions.unrecoverable("internal error: choices facet invoked on mixin target, "
-                    + "but should be a mixee target instead");
-        }
     }
 
     @Override 

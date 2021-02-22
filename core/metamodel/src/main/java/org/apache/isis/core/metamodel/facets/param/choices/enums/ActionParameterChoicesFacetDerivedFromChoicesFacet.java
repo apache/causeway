@@ -25,6 +25,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.TypedHolder;
 import org.apache.isis.core.metamodel.facets.objectvalue.choices.ChoicesFacet;
 import org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoicesFacetAbstract;
+import org.apache.isis.core.metamodel.interactions.managed.ActionInteractionHead;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
@@ -37,7 +38,7 @@ public class ActionParameterChoicesFacetDerivedFromChoicesFacet extends ActionPa
     @Override
     public Can<ManagedObject> getChoices(
             final ObjectSpecification requiredSpec,
-            final ManagedObject adapter,
+            final ActionInteractionHead head,
             final Can<ManagedObject> pendingArgs,
             final InteractionInitiatedBy interactionInitiatedBy) {
         
@@ -48,7 +49,7 @@ public class ActionParameterChoicesFacetDerivedFromChoicesFacet extends ActionPa
         if (choicesFacet == null) {
             return Can.empty();
         }
-        return choicesFacet.getChoices(adapter, interactionInitiatedBy);
+        return choicesFacet.getChoices(head.getTarget(), interactionInitiatedBy);
     }
 
 }
