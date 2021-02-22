@@ -28,7 +28,6 @@ import org.apache.wicket.extensions.ajax.markup.html.AjaxIndicatorAppender;
 import org.apache.wicket.markup.ComponentTag;
 
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.value.LocalResourcePath;
 import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.commons.internal.debug._Probe.EntryPoint;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -50,8 +49,6 @@ public abstract class ActionLink extends AjaxLink<ManagedObject> implements IAja
 
     private final AjaxIndicatorAppender indicatorAppenderIfAny;
 
-    final AjaxDeferredBehaviour ajaxDeferredBehaviourIfAny;
-
     protected transient IsisAppCommonContext commonContext;
 
     ActionLink(IsisAppCommonContext commonContext, String id, ActionModel model) {
@@ -63,21 +60,15 @@ public abstract class ActionLink extends AjaxLink<ManagedObject> implements IAja
         this.indicatorAppenderIfAny =
                 useIndicatorForNoArgAction
                 ? new AjaxIndicatorAppender()
-                        : null;
+                : null;
 
-                if(this.indicatorAppenderIfAny != null) {
-                    this.add(this.indicatorAppenderIfAny);
-                }
+        if(this.indicatorAppenderIfAny != null) {
+            this.add(this.indicatorAppenderIfAny);
+        }
 
-                // trivial optimization; also store the objectAction if it is available (saves looking it up)
-                objectAction = model.getMetaModel();
+        // trivial optimization; also store the objectAction if it is available (saves looking it up)
+        objectAction = model.getMetaModel();
 
-                // this returns non-null if the action is no-arg and returns a LocalResourcePath or URL.
-                // Otherwise can use default handling
-                ajaxDeferredBehaviourIfAny = determineDeferredBehaviour();
-                if(ajaxDeferredBehaviourIfAny != null) {
-                    this.add(ajaxDeferredBehaviourIfAny);
-                }
     }
     
     public IsisAppCommonContext getCommonContext() {
@@ -89,12 +80,6 @@ public abstract class ActionLink extends AjaxLink<ManagedObject> implements IAja
         
         _Probe.entryPoint(EntryPoint.USER_INTERACTION, "Wicket Ajax Request, "
                 + "originating from User clicking an Action Link.");
-
-        if(ajaxDeferredBehaviourIfAny!=null
-                && ajaxDeferredBehaviourIfAny.needsDeferring()) {
-            ajaxDeferredBehaviourIfAny.initiate(target);
-            return;
-        }
 
         doOnClick(target);
     }
@@ -180,21 +165,5 @@ public abstract class ActionLink extends AjaxLink<ManagedObject> implements IAja
     protected WicketViewerSettings getSettings() {
         return ((WicketViewerSettingsAccessor) Application.get()).getSettings();
     }
-
-    // TODO: should unify with ActionResultResponseType (as used in ActionParametersPanel)
-    AjaxDeferredBehaviour determineDeferredBehaviour() {
-
-        val action = getObjectAction();
-        val actionReturnTypeSpec = action.getReturnType();
-        
-        if(action.getParameterCount() > 0 
-                || actionReturnTypeSpec == null) {
-            return null; // default behavior, don't defer
-        }
-
-        // use redirect handler, which only executes if needed 
-        return AjaxDeferredBehaviour.redirecting(this.getActionModel());
-    }
-
 
 }

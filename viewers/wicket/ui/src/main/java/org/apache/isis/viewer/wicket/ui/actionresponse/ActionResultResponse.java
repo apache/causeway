@@ -18,16 +18,18 @@
  */
 package org.apache.isis.viewer.wicket.ui.actionresponse;
 
-import java.net.URL;
-
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.request.IRequestHandler;
 
+import org.apache.isis.applib.value.OpenUrlStrategy;
 import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
+
+import lombok.NonNull;
 
 /**
  * The response to provide as a result of interpreting the response;
- * either to show a {@link #toPage(PageAbstract) page}, or to {@link #withHandler(IRequestHandler) redirect} to a
+ * either to show a {@link #toPage(PageAbstract) page}, or to 
+ * {@link #withHandler(IRequestHandler) redirect} to a
  * handler (eg a download).
  */
 public class ActionResultResponse {
@@ -36,27 +38,36 @@ public class ActionResultResponse {
     private final IRequestHandler handler;
     private final PageAbstract page;
     private final AjaxRequestTarget target;
-    private final URL url;
+    private final String url;
 
     public static ActionResultResponse withHandler(IRequestHandler handler) {
         return new ActionResultResponse(
                 ActionResultResponseHandlingStrategy.SCHEDULE_HANDLER, handler, null, null, null);
     }
+    
     public static ActionResultResponse toPage(PageAbstract page) {
         return new ActionResultResponse(
                 ActionResultResponseHandlingStrategy.REDIRECT_TO_PAGE, null, page, null, null);
     }
-    public static ActionResultResponse openUrlInBrowser(final AjaxRequestTarget target, final URL url) {
+    
+    public static ActionResultResponse openUrlInBrowser(
+            final AjaxRequestTarget target, 
+            final String url, 
+            final @NonNull OpenUrlStrategy openUrlStrategy) {
         return new ActionResultResponse(
-                ActionResultResponseHandlingStrategy.OPEN_URL_IN_BROWSER, null, null, target, url);
+                openUrlStrategy.isNewWindow()
+                    ? ActionResultResponseHandlingStrategy.OPEN_URL_IN_NEW_BROWSER_WINDOW 
+                    : ActionResultResponseHandlingStrategy.OPEN_URL_IN_SAME_BROWSER_WINDOW,
+                null, null, target, url);
     }
+    
     private ActionResultResponse(
             final ActionResultResponseHandlingStrategy strategy,
             final IRequestHandler handler,
             final PageAbstract page,
             final AjaxRequestTarget target,
-            final URL url) {
-        handlingStrategy = strategy;
+            final String url) {
+        this.handlingStrategy = strategy;
         this.handler = handler;
         this.page = page;
         this.target = target;
@@ -73,22 +84,29 @@ public class ActionResultResponse {
     public IRequestHandler getHandler() {
         return handler;
     }
+    
     /**
      * Populated only if {@link #getHandlingStrategy() handling strategy} is {@link ActionResultResponseHandlingStrategy#REDIRECT_TO_PAGE}
      */
     public PageAbstract getToPage() {
         return page;
     }
+    
     /**
-     * Populated only if {@link #getHandlingStrategy() handling strategy} is {@link ActionResultResponseHandlingStrategy#OPEN_URL_IN_BROWSER}
+     * Populated only if {@link #getHandlingStrategy() handling strategy} is 
+     * either {@link ActionResultResponseHandlingStrategy#OPEN_URL_IN_NEW_BROWSER_WINDOW}
+     * or {@link ActionResultResponseHandlingStrategy#OPEN_URL_IN_SAME_BROWSER_WINDOW}
      */
     public AjaxRequestTarget getTarget() {
         return target;
     }
+    
     /**
-     * Populated only if {@link #getHandlingStrategy() handling strategy} is {@link ActionResultResponseHandlingStrategy#OPEN_URL_IN_BROWSER}
+     * Populated only if {@link #getHandlingStrategy() handling strategy} is 
+     * either {@link ActionResultResponseHandlingStrategy#OPEN_URL_IN_NEW_BROWSER_WINDOW}
+     * or {@link ActionResultResponseHandlingStrategy#OPEN_URL_IN_SAME_BROWSER_WINDOW}
      */
-    public URL getUrl() {
+    public String getUrl() {
         return url;
     }
 }
