@@ -127,13 +127,29 @@ final class ProjectDocWriter {
             final @NonNull CliConfig.Commands.Index index
             ) {
 
-        val indexFolder = index.getDocumentIndexFolder(global.getOutputRootFolder());
+        // eg: was: antora/components/system/modules/generated
+        // eg: now: antora/components/refguide
+        final File outputRootFolder = global.getOutputRootFolder();
+        val indexFolder = index.getDocumentIndexFolder(outputRootFolder);
 
         val destFolderBuilder = _Refs.<File>objectRef(indexFolder);
 
+        // eg org/apache/isis/applib/annotation
         unit.getNamespace().stream()
+        // eg applib/annotation
         .skip(global.getNamespacePartsSkipCount())
-        .forEach(subDir->destFolderBuilder.update(currentDir->new File(currentDir, subDir)));
+        .peek(subDir-> {
+            // applib
+            // ... so updates to antora/components/refguide/modules/applib
+            destFolderBuilder.update(currentDir -> new File(currentDir, "modules"));
+            destFolderBuilder.update(currentDir -> new File(currentDir, subDir));
+        })
+        // annotation
+        .skip(1)
+        .forEach(subDir-> {
+            // annotation
+            destFolderBuilder.update(currentDir -> new File(currentDir, subDir));
+        });
 
         val destFolder = destFolderBuilder.getValueElseDefault(indexFolder);
         destFolder.mkdirs();

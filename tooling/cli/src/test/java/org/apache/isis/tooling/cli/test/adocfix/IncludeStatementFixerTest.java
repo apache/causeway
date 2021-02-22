@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.function.Consumer;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import org.apache.isis.commons.collections.Can;
@@ -35,28 +36,28 @@ import lombok.val;
 
 class IncludeStatementFixerTest {
 
-    @Test// @Disabled
+    @Test @Disabled("to reinstate after changing to refguide format")
     void adocDocMining() throws IOException {
-        
+
         val adocFiles = ProjectSampler.adocFiles(ProjectSampler.apacheIsisRoot());
-     
+
         val names = _Sets.<String>newTreeSet();
-        
+
         Can.ofCollection(adocFiles)
         .stream()
         .filter(source->
             !source.toString().contains("\\system\\generated\\")
             && !source.toString().contains("/system/generated/"))
-        
+
         //.filter(source->source.toString().contains("XmlSnapshotService"))
         .forEach(file->parseAdoc(file, names::add));
-        
+
         names.forEach(System.out::println);
     }
-    
+
     private void parseAdoc(final @NonNull File file, Consumer<String> onName) {
         val lines = _Text.readLinesFromFile(file, StandardCharsets.UTF_8);
-        
+
         IncludeStatements.find(lines)
         .filter(include->!include.isLocal()
                 && "system".equals(include.getComponent())
@@ -65,5 +66,5 @@ class IncludeStatementFixerTest {
             onName.accept(include.toString());
         });
     }
-    
+
 }

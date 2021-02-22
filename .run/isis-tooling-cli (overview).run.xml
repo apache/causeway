@@ -4,7 +4,7 @@
     <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
     <option name="MAIN_CLASS_NAME" value="org.apache.isis.tooling.cli.Cli" />
     <module name="isis-tooling-cli" />
-    <option name="PROGRAM_PARAMETERS" value="-p . -o antora/components/system/modules/generated overview" />
+    <option name="PROGRAM_PARAMETERS" value="-p . -o antora/components/refguide overview" />
     <extension name="net.ashald.envfile">
       <option name="IS_ENABLED" value="false" />
       <option name="IS_SUBST" value="false" />
@@ -24,7 +24,7 @@
     <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
     <option name="MAIN_CLASS_NAME" value="org.apache.isis.tooling.cli.Cli" />
     <module name="isis-tooling-cli" />
-    <option name="PROGRAM_PARAMETERS" value="-p . -o antora/components/system/modules/generated overview" />
+    <option name="PROGRAM_PARAMETERS" value="-p . -o antora/components/refguide overview" />
     <extension name="net.ashald.envfile">
       <option name="IS_ENABLED" value="false" />
       <option name="IS_SUBST" value="false" />
