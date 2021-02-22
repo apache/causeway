@@ -119,7 +119,6 @@ public class ProjectDocModel {
                     }
                 })
                 .licenseHeader(cliConfig.getGlobal().getLicenseHeader())
-                .xrefPageIdFormat(cliConfig.getCommands().getIndex().getDocumentGlobalIndexXrefPageIdFormat())
                 .namespacePartsSkipCount(cliConfig.getGlobal().getNamespacePartsSkipCount())
                 .skipTitleHeader(cliConfig.getCommands().getIndex().isSkipTitleHeader())
                 .build();

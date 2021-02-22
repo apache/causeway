@@ -54,7 +54,6 @@ class J2AdocTest {
                 .builder()
 //                .javaSourceWithFootnotesFormat()
                 //.compactFormat()
-                .xrefPageIdFormat("system:generated:index/%s.adoc")
                 .build();
 
         analyzerConfig.getSources(JAVA)

@@ -48,7 +48,6 @@ import lombok.extern.log4j.Log4j2;
 @Value @Builder @Log4j2
 public class J2AdocContext {
 
-    private final @NonNull String xrefPageIdFormat;
     private final @Nullable String licenseHeader;
 
     @Builder.Default
@@ -242,21 +241,6 @@ public class J2AdocContext {
         return Optional.ofNullable(unitIndex.get(key));
     }
 
-//    // -- PREDEFINED FORMATS
-//
-//    public static J2AdocContextBuilder javaSourceWithFootnotesFormat() {
-//        return J2AdocContext.builder()
-//                .converterFactory(J2AdocConverter::createDefault)
-//                .formatterFactory(UnitFormatterWithSourceAndCallouts::new)
-//                ;
-//    }
-//
-//    public static J2AdocContextBuilder compactFormat() {
-//        return J2AdocContext.builder()
-//                .converterFactory(J2AdocConverter::createDefault)
-//                .formatterFactory(UnitFormatterCompact::new)
-//                ;
-//    }
 
     public String xref(final @NonNull J2AdocUnit unit) {
 
@@ -272,9 +256,8 @@ public class J2AdocContext {
                 .stream()
                 .collect(Collectors.joining("/"));
 
-        val xref = String.format("xref:s[%s]",
-                String.format(getXrefPageIdFormat(), xrefModule, xrefCoordinates),
-                unit.getFriendlyName());
+        val xref = String.format("xref:refguide:%s:index/%s.adoc[%s]",
+                xrefModule, xrefCoordinates, unit.getFriendlyName());
 
         return xref;
     }
