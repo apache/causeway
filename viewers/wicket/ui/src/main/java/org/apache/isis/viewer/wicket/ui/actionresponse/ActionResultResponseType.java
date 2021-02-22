@@ -82,7 +82,7 @@ public enum ActionResultResponseType {
         @Override
         public ActionResultResponse interpretResult(ActionModel model, AjaxRequestTarget target, ManagedObject resultAdapter) {
             final Object value = resultAdapter.getPojo();
-            IRequestHandler handler = ActionModel.downloadHandler(value);
+            IRequestHandler handler = model.downloadHandler(value);
             return ActionResultResponse.withHandler(handler);
         }
     },
@@ -90,7 +90,7 @@ public enum ActionResultResponseType {
         @Override
         public ActionResultResponse interpretResult(ActionModel model, AjaxRequestTarget target, ManagedObject resultAdapter) {
             final Object value = resultAdapter.getPojo();
-            IRequestHandler handler = ActionModel.downloadHandler(value);
+            IRequestHandler handler = model.downloadHandler(value);
             return ActionResultResponse.withHandler(handler);
         }
     },
