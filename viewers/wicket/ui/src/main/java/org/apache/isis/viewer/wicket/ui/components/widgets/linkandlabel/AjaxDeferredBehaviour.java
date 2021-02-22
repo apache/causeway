@@ -146,7 +146,7 @@ public abstract class AjaxDeferredBehaviour extends AbstractAjaxBehavior {
         }
         val value = resultAdapter!=null 
                 ? resultAdapter.getPojo() 
-                : null;
+                : (Object)null;
         return value;
     }
     
