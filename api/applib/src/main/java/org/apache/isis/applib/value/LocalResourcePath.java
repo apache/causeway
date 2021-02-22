@@ -29,6 +29,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.isis.applib.annotation.Value;
 
+import lombok.Getter;
 import lombok.NonNull;
 
 /**
@@ -51,7 +52,7 @@ public final class LocalResourcePath implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @NonNull private final String path;
-    @NonNull private final OpenUrlStrategy openUrlStrategy;
+    @Getter @NonNull private final OpenUrlStrategy openUrlStrategy;
 
     public LocalResourcePath(final @Nullable String path) throws IllegalArgumentException {
         this(path, null);

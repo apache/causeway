@@ -268,11 +268,11 @@ implements FormUiModel, FormExecutorContext, BookmarkableModel {
 
     public static IRequestHandler redirectHandler(final Object value) {
         if(value instanceof java.net.URL) {
-            final java.net.URL url = (java.net.URL) value;
+            val url = (java.net.URL) value;
             return new RedirectRequestHandler(url.toString());
         }
         if(value instanceof LocalResourcePath) {
-            final LocalResourcePath localResourcePath = (LocalResourcePath) value;
+            val localResourcePath = (LocalResourcePath) value;
             return new RedirectRequestHandler(localResourcePath.getPath());
         }
         return null;
@@ -280,11 +280,11 @@ implements FormUiModel, FormExecutorContext, BookmarkableModel {
 
     public static IRequestHandler downloadHandler(final Object value) {
         if(value instanceof Clob) {
-            final Clob clob = (Clob)value;
+            val clob = (Clob)value;
             return handlerFor(resourceStreamFor(clob), clob);
         }
         if(value instanceof Blob) {
-            final Blob blob = (Blob)value;
+            val blob = (Blob)value;
             return handlerFor(resourceStreamFor(blob), blob);
         }
         return null;

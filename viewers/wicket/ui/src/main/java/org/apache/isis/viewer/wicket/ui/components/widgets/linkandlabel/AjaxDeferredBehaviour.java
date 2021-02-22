@@ -26,15 +26,21 @@ import org.apache.wicket.request.Url;
 import org.apache.wicket.request.handler.resource.ResourceStreamRequestHandler;
 import org.apache.wicket.util.time.Duration;
 
+import org.apache.isis.applib.value.LocalResourcePath;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.ui.actionresponse.ActionResultResponseHandlingStrategy;
 
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 
+@RequiredArgsConstructor
 public abstract class AjaxDeferredBehaviour extends AbstractAjaxBehavior {
     private static final long serialVersionUID = 1L;
+    
+    private final @NonNull ActionModel actionModel;
     
     // -- FACTORIES
     
@@ -44,23 +50,32 @@ public abstract class AjaxDeferredBehaviour extends AbstractAjaxBehavior {
          *
          * @see https://cwiki.apache.org/confluence/display/WICKET/AJAX+update+and+file+download+in+one+blow
          */
-        return new AjaxDeferredBehaviour() {
+        return new AjaxDeferredBehaviour(actionModel) {
 
             private static final long serialVersionUID = 1L;
-
+            
+            @Override
+            protected String javascriptFor(String url) {
+                // introspect the action result, to decide which JS to use
+                
+                val value = getResultValue();
+                
+                if(value instanceof LocalResourcePath) {
+                    if(((LocalResourcePath)value).getOpenUrlStrategy().isSameWindow()) {
+                        return javascriptFor_sameWindow(this, url);
+                    }
+                }
+                
+                return javascriptFor_newWindow(this, url);
+            }
+            
             @Override
             protected IRequestHandler getRequestHandler() {
-                val resultAdapter = actionModel.execute();
-                val value = resultAdapter.getPojo();
+                val value = getResultValue();
+                freeResultValue();
                 return ActionModel.redirectHandler(value);
             }
-
-            @Override
-            protected String javascriptFor(AjaxDeferredBehaviour deferredBehaviour, String url) {
-                //TODO need to introspect the action result, to decide which JS to use
-                //not sure yet whether this is even possible
-                return javascriptFor_newWindow(deferredBehaviour, url);
-            }
+            
         };
     }
     
@@ -70,17 +85,20 @@ public abstract class AjaxDeferredBehaviour extends AbstractAjaxBehavior {
          *
          * @see https://cwiki.apache.org/confluence/display/WICKET/AJAX+update+and+file+download+in+one+blow
          */
-        return new AjaxDeferredBehaviour() {
+        return new AjaxDeferredBehaviour(actionModel) {
 
             private static final long serialVersionUID = 1L;
 
             @Override
+            protected String javascriptFor(String url) {
+                return javascriptFor_sameWindow(this, url);
+            }
+            
+            @Override
             protected IRequestHandler getRequestHandler() {
-                val resultAdapter = actionModel.execute();
-                val value = resultAdapter!=null 
-                        ? resultAdapter.getPojo() 
-                        : null;
-
+                val value = getResultValue();
+                freeResultValue();
+                
                 val handler = ActionModel.downloadHandler(value);
 
                 //ISIS-1619, prevent clients from caching the response content
@@ -88,11 +106,7 @@ public abstract class AjaxDeferredBehaviour extends AbstractAjaxBehavior {
                         ? handler
                         : enforceNoCacheOnClientSide(handler);
             }
-
-            @Override
-            protected String javascriptFor(AjaxDeferredBehaviour deferredBehaviour, String url) {
-                return javascriptFor_sameWindow(deferredBehaviour, url);
-            }
+            
         };
     }
     
@@ -105,7 +119,7 @@ public abstract class AjaxDeferredBehaviour extends AbstractAjaxBehavior {
             final @NonNull AjaxRequestTarget target) {
         
         val url = ActionResultResponseHandlingStrategy.expanded(getCallbackUrl().toString());
-        val js = javascriptFor(this, url);
+        val js = javascriptFor(url);
 
         // the timeout is needed to let Wicket release the channel
         target.appendJavaScript(String.format("setTimeout(%s, 100);", js));
@@ -120,7 +134,25 @@ public abstract class AjaxDeferredBehaviour extends AbstractAjaxBehavior {
     }
 
     protected abstract IRequestHandler getRequestHandler();
-    protected abstract String javascriptFor(AjaxDeferredBehaviour deferredBehaviour, String url);
+    protected abstract String javascriptFor(String url);
+    
+    // -- RESULT MEMOIZATION
+    
+    private transient ManagedObject resultAdapter = null;
+    
+    protected Object getResultValue() {
+        if(resultAdapter==null) {
+            resultAdapter = actionModel.execute();
+        }
+        val value = resultAdapter!=null 
+                ? resultAdapter.getPojo() 
+                : null;
+        return value;
+    }
+    
+    protected void freeResultValue() {
+        resultAdapter = null;
+    }
     
     // -- HELPER
     

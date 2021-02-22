@@ -32,7 +32,6 @@ import org.apache.isis.applib.value.LocalResourcePath;
 import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.commons.internal.debug._Probe.EntryPoint;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.viewer.wicket.model.common.CommonContextUtils;
@@ -187,20 +186,20 @@ public abstract class ActionLink extends AjaxLink<ManagedObject> implements IAja
     AjaxDeferredBehaviour determineDeferredBehaviour() {
 
         val action = getObjectAction();
-        val actionModel = this.getActionModel();
         val actionReturnTypeSpec = action.getReturnType();
         
         if(action.getParameterCount() > 0 
                 || actionReturnTypeSpec == null) {
             return null; // default behavior, don't defer
         }
-        
+
+        val actionModel = this.getActionModel();
         val actionReturnType = actionReturnTypeSpec.getCorrespondingClass();
 
         // TODO: should unify with ActionResultResponseType (as used in ActionParametersPanel)
         if (actionReturnType == java.net.URL.class 
                 || actionReturnType == LocalResourcePath.class) {
-            return AjaxDeferredBehaviour.redirecting(actionModel);
+            return AjaxDeferredBehaviour.redirecting(this.getActionModel());
         }
         if ((actionReturnType == org.apache.isis.applib.value.Blob.class
                 || actionReturnType == org.apache.isis.applib.value.Clob.class)) {

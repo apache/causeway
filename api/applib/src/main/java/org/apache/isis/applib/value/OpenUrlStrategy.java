@@ -28,4 +28,12 @@ package org.apache.isis.applib.value;
 public enum OpenUrlStrategy {
     NEW_WINDOW,
     SAME_WINDOW;
+
+    public boolean isNewWindow() {
+        return this==NEW_WINDOW;
+    }
+    
+    public boolean isSameWindow() {
+        return this==SAME_WINDOW;
+    }
 }
