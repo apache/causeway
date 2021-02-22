@@ -18,17 +18,13 @@
  */
 package org.apache.isis.extensions.secman.jpa.seed.scripts;
 
-import java.util.Collections;
-import java.util.List;
-
 import javax.inject.Inject;
 
 import org.apache.isis.applib.value.Password;
-import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.extensions.secman.api.user.AccountType;
 import org.apache.isis.extensions.secman.api.user.ApplicationUserStatus;
-import org.apache.isis.extensions.secman.jpa.dom.role.ApplicationRole;
 import org.apache.isis.extensions.secman.jpa.dom.role.ApplicationRoleRepository;
 import org.apache.isis.extensions.secman.jpa.dom.user.ApplicationUser;
 import org.apache.isis.extensions.secman.jpa.dom.user.ApplicationUserRepository;
@@ -46,7 +42,7 @@ public class AbstractUserAndRolesFixtureScript extends FixtureScript {
     private final String emailAddress;
     private final String tenancyPath;
     private final AccountType accountType;
-    private final List<String> roleNames;
+    private final Can<String> roleNames;
     
     /**
      * The {@link org.apache.isis.extensions.secman.jpa.dom.user.ApplicationUser} 
@@ -58,7 +54,7 @@ public class AbstractUserAndRolesFixtureScript extends FixtureScript {
             final String username,
             final String password,
             final AccountType accountType, 
-            final List<String> roleNames) {
+            final Can<String> roleNames) {
         this(username, password, null, null, accountType, roleNames);
     }
 
@@ -68,14 +64,14 @@ public class AbstractUserAndRolesFixtureScript extends FixtureScript {
             final String emailAddress,
             final String tenancyPath,
             final AccountType accountType,
-            final List<String> roleNames) {
+            final Can<String> roleNames) {
         
         this.username = username;
         this.password = password;
         this.emailAddress = emailAddress;
         this.tenancyPath = tenancyPath;
         this.accountType = accountType;
-        this.roleNames = Collections.unmodifiableList(_Lists.newArrayList(roleNames));
+        this.roleNames = roleNames;
     }
 
     @Override
@@ -104,20 +100,17 @@ public class AbstractUserAndRolesFixtureScript extends FixtureScript {
             
             // update tenancy (repository checks for null)
             applicationUser.setAtPath(tenancyPath);
-            
-            for (final String roleName : roleNames) {
-                final ApplicationRole securityRole = applicationRoleRepository.findByName(roleName)
-                        .orElse(null);
-
-                if(securityRole!=null) {
-                    applicationRoleRepository.addRoleToUser(securityRole, applicationUser);
-                } else {
-                    throw _Exceptions.unrecoverable("role not found by name: "+roleName);
-                }
-
-            }
-            
         }
+            
+        for (final String roleName : roleNames) {
+            applicationRoleRepository.findByName(roleName)
+            .map(securityRole->{
+                applicationRoleRepository.addRoleToUser(securityRole, applicationUser);
+                return Boolean.TRUE;
+            })
+            .orElseThrow(()->_Exceptions.unrecoverable("role not found by name: "+roleName));
+        }
+        
     }
 
 

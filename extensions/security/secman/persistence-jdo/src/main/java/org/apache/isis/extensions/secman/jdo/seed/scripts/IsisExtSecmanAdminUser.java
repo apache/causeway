@@ -18,8 +18,7 @@
  */
 package org.apache.isis.extensions.secman.jdo.seed.scripts;
 
-import java.util.Arrays;
-
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.extensions.secman.api.SecmanConfiguration;
 import org.apache.isis.extensions.secman.api.user.AccountType;
 
@@ -35,6 +34,6 @@ public class IsisExtSecmanAdminUser extends AbstractUserAndRolesFixtureScript {
                 null,
                 GlobalTenancy.TENANCY_PATH,
                 AccountType.LOCAL,
-                Arrays.asList(configBean.getAdminRoleName()));
+                Can.of(configBean.getAdminRoleName()));
     }
 }
