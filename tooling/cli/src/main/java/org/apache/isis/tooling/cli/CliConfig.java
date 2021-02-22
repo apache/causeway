@@ -55,7 +55,7 @@ public class CliConfig {
                         + "or implied. See the License for the specific language governing permissions and limitations under "
                         + "the License.";
 
-        private String documentPagesPath = "pages";
+        private String documentPagesPath = "modules/_overview/pages";
 
         // when 3 eg. skips first three parts of the package names 'org.apache.isis'
         private int namespacePartsSkipCount = 0;
@@ -82,7 +82,7 @@ public class CliConfig {
 
         @Data
         public static class Overview {
-            private String systemOverviewFilename = "system-overview.adoc";
+            private String systemOverviewFilename = "about.adoc";
 
             private String description = "These tables summarize all Maven artifacts available with this project.";
         }
