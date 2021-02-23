@@ -120,8 +120,8 @@ implements org.apache.isis.extensions.secman.api.user.ApplicationUserRepository<
 
     @Override
     public Collection<ApplicationUser> find(final @Nullable String _search) {
-        val search = String.format("%s", _Strings.nullToEmpty(_search).replace("*", "%").replace("?", "_"));
-        val regex = _Strings.suffix(_Strings.prefix(search, "%"), "%");
+        val search = _Strings.nullToEmpty(_search).replace("*", "%").replace("?", "_");
+        val regex  = _Strings.suffix(_Strings.prefix(search, "%"), "%");
         return repository.allMatches(Query.named(ApplicationUser.class, NamedQueryNames.USER_FIND)
                 .withParameter("regex", regex))
                 .stream()
