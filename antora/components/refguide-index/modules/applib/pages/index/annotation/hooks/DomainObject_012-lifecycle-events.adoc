@@ -3,8 +3,9 @@
 Whenever the framework interacts with a domain entity, lifecycle events are fired.
 These are:
 
-* instantiated through xref:refguide:applib:index/services/factory/FactoryService.adoc[`FactoryService`]
+* instantiated
 +
+through xref:refguide:applib:index/services/factory/FactoryService.adoc[`FactoryService`].
 An event is also fired for view models
 
 * persisting
@@ -31,15 +32,14 @@ an already persistent entity has just been saved (``UPDATE``d) to the database
 +
 an already persistent entity is about to be removed (``DELETE``d) from the database
 
-
+The framework has a built-in event class (for each lifecycle hint) that is raised by default; for example a `ObjectUpdatingEvent.Default` is raised when an object is about to be updated.
 Subscribers subscribe through the xref:refguide:applib:index/services/eventbus/EventBusService.adoc[`EventBusService`] and can use the event to obtain a reference to the object just created.
-The subscriber could then, for example, update the object, eg looking up state from some external datastore.
 
 This basic model can be influenced in a couple of ways:
 
 * first, it is also possible to suppress any events from being emitted using a configuration property (a different config property exists each lifecycle hook).
 
-* second, an element on xref:refguide:applib:index/annotation/DomainObject.adoc[DomainObject] annotation (for each lifecycle hook) allows a different subtype event types to be emitted instead
+* second, an element on xref:refguide:applib:index/annotation/DomainObject.adoc[DomainObject] annotation (for each lifecycle hook) allows a different event subtype to be emitted instead
 +
 This allows subscribers to more targeted as to the events that they subscribe to.
 
