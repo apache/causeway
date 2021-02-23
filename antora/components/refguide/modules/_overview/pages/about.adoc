@@ -33,7 +33,7 @@ package "App\n[Software System]" {
 .Projects/Modules (App)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description
+|Coordinates |Description 
 
 |Apache Isis Starter Parent
 [source,yaml]
@@ -41,7 +41,7 @@ package "App\n[Software System]" {
 Group: org.apache.isis.app
 Artifact: isis-app-starter-parent
 Type: pom
-Folder: \starters
+Directory: /starters
 ----
 |Parent pom providing dependency and plugin management for Apache Isis applications
 built with Maven.  Builds on top of spring-boot-starter-parent.
@@ -126,7 +126,7 @@ package "Mavendeps\n[Software System]" {
 .Projects/Modules (Mavendeps)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description
+|Coordinates |Description 
 
 |Apache Isis Maven Deps
 [source,yaml]
@@ -134,7 +134,7 @@ package "Mavendeps\n[Software System]" {
 Group: org.apache.isis.mavendeps
 Artifact: isis-mavendeps
 Type: pom
-Folder: \mavendeps
+Directory: /mavendeps
 ----
 |Collection of Apache Isis Maven Dependency Bundles.
 
@@ -144,7 +144,7 @@ Folder: \mavendeps
 Group: org.apache.isis.mavendeps
 Artifact: isis-mavendeps-integspecs
 Type: pom
-Folder: \mavendeps\integspecs
+Directory: /mavendeps/integspecs
 ----
 |Defines a module that can be used as a single dependency for BDD (Cucumber) specs as integration tests.
 
@@ -161,7 +161,7 @@ org.apache.isis.testing:isis-testing-specsupport-applib:jar:<managed> +
 Group: org.apache.isis.mavendeps
 Artifact: isis-mavendeps-integtests
 Type: pom
-Folder: \mavendeps\integtests
+Directory: /mavendeps/integtests
 ----
 |Defines a module that can be used as a single dependency for integration tests.
 
@@ -178,7 +178,7 @@ org.apache.isis.testing:isis-testing-integtestsupport-applib:jar:<managed> +
 Group: org.apache.isis.mavendeps
 Artifact: isis-mavendeps-jdk11
 Type: pom
-Folder: \mavendeps\jdk11
+Directory: /mavendeps/jdk11
 ----
 |Defines a module to bring in dependencies that were part of JDK 8 but
 had been removed with JDK 11+. These dependencies are activated when the
@@ -190,7 +190,7 @@ consuming project is built with JDK 11 or higher.
 Group: org.apache.isis.mavendeps
 Artifact: isis-mavendeps-jdo
 Type: pom
-Folder: \mavendeps\jdo
+Directory: /mavendeps/jdo
 ----
 |Defines a module that provides the default JDO persistence layer integration
 for running an Apache Isis webapp (Wicket, Restful Objects and Shiro security).
@@ -208,7 +208,7 @@ org.apache.isis.persistence:isis-persistence-jdo-datanucleus:jar:<managed> +
 Group: org.apache.isis.mavendeps
 Artifact: isis-mavendeps-jpa
 Type: pom
-Folder: \mavendeps\jpa
+Directory: /mavendeps/jpa
 ----
 |Defines a module that provides the default JPA persistence layer integration
 for running an Apache Isis webapp (Wicket, Restful Objects and Shiro security).
@@ -226,7 +226,7 @@ org.apache.isis.persistence:isis-persistence-jpa-eclipselink:jar:<managed> +
 Group: org.apache.isis.mavendeps
 Artifact: isis-mavendeps-unittests
 Type: pom
-Folder: \mavendeps\unittests
+Directory: /mavendeps/unittests
 ----
 |Defines a module that can be used as a single dependency for a set of common testing libraries.
 
@@ -242,7 +242,7 @@ org.apache.isis.testing:isis-testing-unittestsupport-applib:jar:<managed> +
 Group: org.apache.isis.mavendeps
 Artifact: isis-mavendeps-webapp
 Type: pom
-Folder: \mavendeps\webapp
+Directory: /mavendeps/webapp
 ----
 |Defines a module that can be almost used as a single dependency for running
 an Apache Isis webapp (Wicket, Restful Objects and Shiro security).
@@ -408,7 +408,7 @@ package "Testing\n[Software System]" {
 .Projects/Modules (Testing)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description
+|Coordinates |Description 
 
 |Apache Isis Testing
 [source,yaml]
@@ -416,7 +416,7 @@ package "Testing\n[Software System]" {
 Group: org.apache.isis.testing
 Artifact: isis-testing
 Type: pom
-Folder: \testing
+Directory: /testing
 ----
 |A library of utilities, mini-frameworks and tools for prototyping and testing Apache Isis applications.
 
@@ -426,7 +426,7 @@ Folder: \testing
 Group: org.apache.isis.testing
 Artifact: isis-testing-fakedata
 Type: pom
-Folder: \testing\fakedata
+Directory: /testing/fakedata
 ----
 |A module providing a domain service to generate fake random data
 for use in unit tests or integration tests.
@@ -437,7 +437,7 @@ for use in unit tests or integration tests.
 Group: org.apache.isis.testing
 Artifact: isis-testing-fakedata-applib
 Type: jar
-Folder: \testing\fakedata\applib
+Directory: /testing/fakedata/applib
 ----
 |.Components
 ****
@@ -464,7 +464,7 @@ xref:refguide:testing:index/fakedata/applib/IsisModuleTestingFakeDataApplib.adoc
 Group: org.apache.isis.testing
 Artifact: isis-testing-fakedata-fixtures
 Type: jar
-Folder: \testing\fakedata\fixtures
+Directory: /testing/fakedata/fixtures
 ----
 |.Dependencies
 ****
@@ -481,7 +481,7 @@ org.projectlombok:lombok:jar:<managed> +
 Group: org.apache.isis.testing
 Artifact: isis-testing-fakedata-integtests
 Type: jar
-Folder: \testing\fakedata\integtests
+Directory: /testing/fakedata/integtests
 ----
 |.Dependencies
 ****
@@ -497,7 +497,7 @@ org.apache.isis.testing:isis-testing-fakedata-fixtures:jar:<managed> +
 Group: org.apache.isis.testing
 Artifact: isis-testing-fixtures
 Type: pom
-Folder: \testing\fixtures
+Directory: /testing/fixtures
 ----
 |Library to initialize the system under test, either for integration testing or for prototyping.
 
@@ -507,7 +507,7 @@ Folder: \testing\fixtures
 Group: org.apache.isis.testing
 Artifact: isis-testing-fixtures-applib
 Type: jar
-Folder: \testing\fixtures\applib
+Directory: /testing/fixtures/applib
 ----
 |.Components
 ****
@@ -533,7 +533,7 @@ org.apache.isis.testing:isis-testing-integtestsupport-applib:jar:<managed> +
 Group: org.apache.isis.testing
 Artifact: isis-testing-h2console
 Type: pom
-Folder: \testing\h2console
+Directory: /testing/h2console
 ----
 |Menu and configuration to open up H2 Console
 
@@ -543,7 +543,7 @@ Folder: \testing\h2console
 Group: org.apache.isis.testing
 Artifact: isis-testing-h2console-ui
 Type: jar
-Folder: \testing\h2console\ui
+Directory: /testing/h2console/ui
 ----
 |.Components
 ****
@@ -567,7 +567,7 @@ xref:refguide:testing:index/h2console/ui/IsisModuleTestingH2ConsoleUi.adoc[IsisM
 Group: org.apache.isis.testing
 Artifact: isis-testing-hsqldbmgr
 Type: pom
-Folder: \testing\hsqldbmgr
+Directory: /testing/hsqldbmgr
 ----
 |Menu and configuration to open up HSQLDB Manager
 
@@ -577,7 +577,7 @@ Folder: \testing\hsqldbmgr
 Group: org.apache.isis.testing
 Artifact: isis-testing-hsqldbmgr-ui
 Type: jar
-Folder: \testing\hsqldbmgr\ui
+Directory: /testing/hsqldbmgr/ui
 ----
 |.Dependencies
 ****
@@ -596,7 +596,7 @@ xref:refguide:extensions:index/hsqldbmgr/dom/IsisModuleExtHsqldbMgr.adoc[IsisMod
 Group: org.apache.isis.testing
 Artifact: isis-testing-integtestsupport
 Type: pom
-Folder: \testing\integtestsupport
+Directory: /testing/integtestsupport
 ----
 |Support for writing integ tests in JUnit 5; should be added as a dependency with scope=test only
 
@@ -606,7 +606,7 @@ Folder: \testing\integtestsupport
 Group: org.apache.isis.testing
 Artifact: isis-testing-integtestsupport-applib
 Type: jar
-Folder: \testing\integtestsupport\applib
+Directory: /testing/integtestsupport/applib
 ----
 |.Components
 ****
@@ -638,7 +638,7 @@ xref:refguide:testing:index/integtestsupport/applib/ExceptionRecognizerTranslate
 Group: org.apache.isis.testing
 Artifact: isis-testing-specsupport
 Type: pom
-Folder: \testing\specsupport
+Directory: /testing/specsupport
 ----
 |Allows Cucumber to be used to write BDD-style specifications, generally as an alternative to integration tests.
 
@@ -648,7 +648,7 @@ Folder: \testing\specsupport
 Group: org.apache.isis.testing
 Artifact: isis-testing-specsupport-applib
 Type: jar
-Folder: \testing\specsupport\applib
+Directory: /testing/specsupport/applib
 ----
 |.Dependencies
 ****
@@ -670,7 +670,7 @@ xref:refguide:testing:index/specsupport/applib/IsisModuleTestingSpecSupportAppli
 Group: org.apache.isis.testing
 Artifact: isis-testing-unittestsupport
 Type: pom
-Folder: \testing\unittestsupport
+Directory: /testing/unittestsupport
 ----
 |A module providing test utilities for unit testing of domain modules
 
@@ -680,7 +680,7 @@ Folder: \testing\unittestsupport
 Group: org.apache.isis.testing
 Artifact: isis-testing-unittestsupport-applib
 Type: jar
-Folder: \testing\unittestsupport\applib
+Directory: /testing/unittestsupport/applib
 ----
 |.Dependencies
 ****
@@ -767,7 +767,7 @@ package "Examples\n[Software System]" {
 .Projects/Modules (Examples)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description
+|Coordinates |Description 
 
 |Demo - Parent
 [source,yaml]
@@ -775,7 +775,7 @@ package "Examples\n[Software System]" {
 Group: org.apache.isis.examples.apps
 Artifact: demo-parent
 Type: pom
-Folder: \examples\demo
+Directory: /examples/demo
 ----
 |.Dependencies
 ****
@@ -802,7 +802,7 @@ org.projectlombok:lombok:jar:<managed> +
 Group: org.apache.isis.examples.apps
 Artifact: demo-domain
 Type: jar
-Folder: \examples\demo\domain
+Directory: /examples/demo/domain
 ----
 |.Components
 ****
@@ -993,7 +993,7 @@ org.springframework.boot:spring-boot-configuration-processor:jar:<managed> +
 Group: org.apache.isis.examples.apps
 Artifact: demo-javafx
 Type: jar
-Folder: \examples\demo\javafx
+Directory: /examples/demo/javafx
 ----
 |.Dependencies
 ****
@@ -1019,7 +1019,7 @@ org.projectlombok:lombok:jar:<managed> +
 Group: org.apache.isis.examples.apps
 Artifact: demo-vaadin
 Type: jar
-Folder: \examples\demo\vaadin
+Directory: /examples/demo/vaadin
 ----
 |.Dependencies
 ****
@@ -1039,7 +1039,7 @@ org.projectlombok:lombok:jar:<managed> +
 Group: org.apache.isis.examples.apps
 Artifact: demo-web
 Type: jar
-Folder: \examples\demo\web
+Directory: /examples/demo/web
 ----
 |.Components
 ****
@@ -1064,7 +1064,7 @@ org.springframework.boot:spring-boot-starter-log4j2:jar:<managed> +
 Group: org.apache.isis.examples.apps
 Artifact: demo-wicket
 Type: jar
-Folder: \examples\demo\wicket
+Directory: /examples/demo/wicket
 ----
 |.Components
 ****
@@ -1134,7 +1134,7 @@ package "Root\n[Software System]" {
 .Projects/Modules (Root)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description
+|Coordinates |Description 
 
 |Apache Isis (Aggregator)
 [source,yaml]
@@ -1142,7 +1142,7 @@ package "Root\n[Software System]" {
 Group: org.apache.isis
 Artifact: isis-all
 Type: pom
-Folder: /
+Directory: /
 ----
 |Convenience aggregator POM that references all modules, some explicitely,
 others via profiles, that are not activiated per default.
@@ -1154,7 +1154,7 @@ The parent POM of the core framework is isis-parent/pom.xml.
 Group: org.apache.isis
 Artifact: antora
 Type: pom
-Folder: \antora
+Directory: /antora
 ----
 |
 
@@ -1164,7 +1164,7 @@ Folder: \antora
 Group: org.apache.isis
 Artifact: isis-parent
 Type: pom
-Folder: \isis-parent
+Directory: /isis-parent
 ----
 |Parent for the core framework + extensions, starter parent pom for starter apps.
 
@@ -1174,7 +1174,7 @@ Folder: \isis-parent
 Group: org.apache.isis
 Artifact: supplemental-model
 Type: jar
-Folder: \supplemental-model
+Directory: /supplemental-model
 ----
 |For example, the templates used by many Apache distributions assemble a listing of project dependencies
 according to their organization name (and URL), along with the URL each project's website. When dependency
@@ -1213,7 +1213,7 @@ package "Commons\n[Software System]" {
 .Projects/Modules (Commons)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description
+|Coordinates |Description 
 
 |Apache Isis Commons
 [source,yaml]
@@ -1221,7 +1221,7 @@ package "Commons\n[Software System]" {
 Group: org.apache.isis.commons
 Artifact: isis-commons
 Type: jar
-Folder: \commons
+Directory: /commons
 ----
 |Apache Isis Commons is a library with utilities, that are shared with the entire Apache Isis ecosystem.
 
@@ -1244,7 +1244,7 @@ org.yaml:snakeyaml:jar:<managed> +
 
 .Document Index Entries
 ****
-xref:refguide:commons:index//collections/Can.adoc[Can], xref:refguide:commons:index//collections/Cardinality.adoc[Cardinality], xref:refguide:commons:index//functional/Result.adoc[Result], xref:refguide:commons:index//having/HasUniqueId.adoc[HasUniqueId], xref:refguide:commons:index//having/HasUpdatedAt.adoc[HasUpdatedAt], xref:refguide:commons:index//having/HasUpdatedBy.adoc[HasUpdatedBy], xref:refguide:commons:index//having/HasUsername.adoc[HasUsername], xref:refguide:commons:index//resource/ResourceCoordinates.adoc[ResourceCoordinates]
+xref:refguide:commons:index/collections/Can.adoc[Can], xref:refguide:commons:index/collections/Cardinality.adoc[Cardinality], xref:refguide:commons:index/functional/Result.adoc[Result], xref:refguide:commons:index/having/HasUniqueId.adoc[HasUniqueId], xref:refguide:commons:index/having/HasUpdatedAt.adoc[HasUpdatedAt], xref:refguide:commons:index/having/HasUpdatedBy.adoc[HasUpdatedBy], xref:refguide:commons:index/having/HasUsername.adoc[HasUsername], xref:refguide:commons:index/resource/ResourceCoordinates.adoc[ResourceCoordinates]
 ****
 |===
 
@@ -1369,7 +1369,7 @@ package "Core\n[Software System]" {
 .Projects/Modules (Core)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description
+|Coordinates |Description 
 
 |Apache Isis Core
 [source,yaml]
@@ -1377,7 +1377,7 @@ package "Core\n[Software System]" {
 Group: org.apache.isis.core
 Artifact: isis-core
 Type: pom
-Folder: \core
+Directory: /core
 ----
 |Core framework, providing metamodel, runtime and core APIs.
 
@@ -1392,7 +1392,7 @@ org.projectlombok:lombok:jar:<managed> +
 Group: org.apache.isis.core
 Artifact: isis-applib
 Type: jar
-Folder: \api\applib
+Directory: /api/applib
 ----
 |Isis application library, defining annotations and utilities for the
 default (Java) programming model.
@@ -1433,7 +1433,7 @@ xref:refguide:applib:index/AbstractViewModel.adoc[AbstractViewModel], xref:refgu
 Group: org.apache.isis.core
 Artifact: isis-core-codegen-bytebuddy
 Type: jar
-Folder: \core\codegen-bytebuddy
+Directory: /core/codegen-bytebuddy
 ----
 |Code generation using ByteBuddy.
 
@@ -1455,7 +1455,7 @@ org.objenesis:objenesis:jar:<managed> +
 Group: org.apache.isis.core
 Artifact: isis-core-config
 Type: jar
-Folder: \core\config
+Directory: /core/config
 ----
 |Isis configuration library for framework internal use.
 
@@ -1492,7 +1492,7 @@ xref:refguide:core:index/config/datasources/DataSourceIntrospectionService.adoc[
 Group: org.apache.isis.core
 Artifact: isis-core-interaction
 Type: jar
-Folder: \core\interaction
+Directory: /core/interaction
 ----
 |Provides _Interaction Scope_.
 Top level action execution or property changes are wrapped in an _Interaction_.
@@ -1521,7 +1521,7 @@ xref:refguide:core:index/interaction/session/InteractionFactory.adoc[Interaction
 Group: org.apache.isis.core
 Artifact: isis-core-internaltestsupport
 Type: jar
-Folder: \core\internaltestsupport
+Directory: /core/internaltestsupport
 ----
 |Support for writing unit tests in either JUnit 4 or JUnit 5; should be added as a dependency with scope=test only
 
@@ -1551,7 +1551,7 @@ org.springframework.boot:spring-boot-starter-test:jar:<managed> +
 Group: org.apache.isis.core
 Artifact: isis-core-metamodel
 Type: jar
-Folder: \core\metamodel
+Directory: /core/metamodel
 ----
 |.Components
 ****
@@ -1603,7 +1603,7 @@ org.jmock:jmock:jar:<managed> +
 Group: org.apache.isis.core
 Artifact: isis-core-runtime
 Type: jar
-Folder: \core\runtime
+Directory: /core/runtime
 ----
 |Bundles framework internal services, utilities and events.
 
@@ -1627,7 +1627,7 @@ org.apache.isis.core:isis-core-transaction:jar:<managed> +
 Group: org.apache.isis.core
 Artifact: isis-core-runtimeservices
 Type: jar
-Folder: \core\runtimeservices
+Directory: /core/runtimeservices
 ----
 |Introduced to keep the 'runtime' package concise. Viewers don't have dependencies on this module.
 
@@ -1690,7 +1690,7 @@ xref:refguide:core:index/runtimeservices/transaction/TransactionServiceSpring.ad
 Group: org.apache.isis.core
 Artifact: isis-core-security
 Type: jar
-Folder: \core\security
+Directory: /core/security
 ----
 |.Components
 ****
@@ -1715,7 +1715,7 @@ org.junit.vintage:junit-vintage-engine:jar:<managed> +
 Group: org.apache.isis.core
 Artifact: isis-core-transaction
 Type: jar
-Folder: \core\transaction
+Directory: /core/transaction
 ----
 |Provides transaction integration with Spring and also
 entity change tracking, with associated publishing and pre/post value events.
@@ -1743,7 +1743,7 @@ xref:refguide:core:index/transaction/changetracking/EntityChangeTrackerDefault.a
 Group: org.apache.isis.core
 Artifact: isis-core-webapp
 Type: jar
-Folder: \core\webapp
+Directory: /core/webapp
 ----
 |Bundles all the web specific classes a srequired by viewers.
 Introduced to keep the 'runtime' package concise.
@@ -1774,7 +1774,7 @@ org.springframework.boot:spring-boot-starter-thymeleaf:jar:<managed> +
 Group: org.apache.isis.core
 Artifact: isis-jdk-supplemental
 Type: pom
-Folder: \core\jdk-supplemental
+Directory: /core/jdk-supplemental
 ----
 |Defines a module to bring in dependencies that were part of JDK 8 but
 had been removed with later JDK versions.
@@ -1801,7 +1801,7 @@ org.eclipse.persistence:org.eclipse.persistence.sdo:jar:<managed> +
 Group: org.apache.isis.core
 Artifact: isis-schema
 Type: jar
-Folder: \api\schema
+Directory: /api/schema
 ----
 |Apache Isis schemas, for conversion into canonical DTOs (for use in integration scenarios).
 
@@ -1891,7 +1891,7 @@ package "JDO\n[Software System]" {
 .Projects/Modules (JDO)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description
+|Coordinates |Description 
 
 |Apache Isis Persistence - JDO
 [source,yaml]
@@ -1899,7 +1899,7 @@ package "JDO\n[Software System]" {
 Group: org.apache.isis.persistence
 Artifact: isis-persistence-jdo
 Type: pom
-Folder: \persistence\jdo
+Directory: /persistence/jdo
 ----
 |Supplementary applib for JDO persistence
 
@@ -1909,7 +1909,7 @@ Folder: \persistence\jdo
 Group: org.apache.isis.persistence
 Artifact: isis-persistence-jdo-applib
 Type: jar
-Folder: \persistence\jdo\applib
+Directory: /persistence/jdo/applib
 ----
 |Supplementary applib for JDO persistence
 
@@ -1932,7 +1932,7 @@ xref:refguide:persistence:index/jdo/applib/IsisModulePersistenceJdoApplib.adoc[I
 Group: org.apache.isis.persistence
 Artifact: isis-persistence-jdo-datanucleus
 Type: jar
-Folder: \persistence\jdo\datanucleus
+Directory: /persistence/jdo/datanucleus
 ----
 |JDO Implementation (powered by DataNucleus)
 
@@ -1971,7 +1971,7 @@ xref:refguide:persistence:index/jdo/datanucleus/IsisModuleJdoDatanucleus.adoc[Is
 Group: org.apache.isis.persistence
 Artifact: isis-persistence-jdo-integration
 Type: jar
-Folder: \persistence\jdo\integration
+Directory: /persistence/jdo/integration
 ----
 |JDO Integration (powered by DataNucleus)
 
@@ -1992,7 +1992,7 @@ org.apache.isis.persistence:isis-persistence-jdo-spring:jar:<managed> +
 Group: org.apache.isis.persistence
 Artifact: isis-persistence-jdo-metamodel
 Type: jar
-Folder: \persistence\jdo\metamodel
+Directory: /persistence/jdo/metamodel
 ----
 |JDO Metamodel Facets / Programming Model
 
@@ -2015,7 +2015,7 @@ org.apache.isis.persistence:isis-persistence-jdo-provider:jar:<managed> +
 Group: org.apache.isis.persistence
 Artifact: isis-persistence-jdo-provider
 Type: jar
-Folder: \persistence\jdo\provider
+Directory: /persistence/jdo/provider
 ----
 |JDO Provider to be implemented by any actual JDO provider eg. DataNucleus.
 
@@ -2031,7 +2031,7 @@ org.apache.isis.persistence:isis-persistence-jdo-applib:jar:<managed> +
 Group: org.apache.isis.persistence
 Artifact: isis-persistence-jdo-spring
 Type: jar
-Folder: \persistence\jdo\spring
+Directory: /persistence/jdo/spring
 ----
 |JDO Spring integration.
 
@@ -2115,7 +2115,7 @@ package "JPA\n[Software System]" {
 .Projects/Modules (JPA)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description
+|Coordinates |Description 
 
 |Apache Isis Persistence - JPA
 [source,yaml]
@@ -2123,7 +2123,7 @@ package "JPA\n[Software System]" {
 Group: org.apache.isis.persistence
 Artifact: isis-persistence-jpa
 Type: pom
-Folder: \persistence\jpa
+Directory: /persistence/jpa
 ----
 |Apache Isis JPA integration
 
@@ -2133,7 +2133,7 @@ Folder: \persistence\jpa
 Group: org.apache.isis.persistence
 Artifact: isis-persistence-jpa-applib
 Type: jar
-Folder: \persistence\jpa\applib
+Directory: /persistence/jpa/applib
 ----
 |Supplementary applib for JPA persistence
 
@@ -2154,7 +2154,7 @@ xref:refguide:persistence:index/jpa/applib/integration/JpaEntityInjectionPointRe
 Group: org.apache.isis.persistence
 Artifact: isis-persistence-jpa-eclipselink
 Type: jar
-Folder: \persistence\jpa\eclipselink
+Directory: /persistence/jpa/eclipselink
 ----
 |EclipseLink integration. Sets up EclipseLink as the implementation provider for Spring Data JPA.
 
@@ -2177,7 +2177,7 @@ xref:refguide:persistence:index/jpa/eclipselink/IsisModuleJpaEclipselink.adoc[Is
 Group: org.apache.isis.persistence
 Artifact: isis-persistence-jpa-integration
 Type: jar
-Folder: \persistence\jpa\integration
+Directory: /persistence/jpa/integration
 ----
 |JPA integration (facets, jpa-context)
 
@@ -2201,7 +2201,7 @@ org.springframework.data:spring-data-jpa:jar:<managed> +
 Group: org.apache.isis.persistence
 Artifact: isis-persistence-jpa-metamodel
 Type: jar
-Folder: \persistence\jpa\metamodel
+Directory: /persistence/jpa/metamodel
 ----
 |JPA Metamodel Facets / Programming Model
 
@@ -2250,7 +2250,7 @@ package "Bypass\n[Software System]" {
 .Projects/Modules (Bypass)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description
+|Coordinates |Description 
 
 |Apache Isis Security - Bypass
 [source,yaml]
@@ -2258,7 +2258,7 @@ package "Bypass\n[Software System]" {
 Group: org.apache.isis.security
 Artifact: isis-security-bypass
 Type: jar
-Folder: \security\bypass
+Directory: /security/bypass
 ----
 |.Components
 ****
@@ -2307,7 +2307,7 @@ package "Keycloak\n[Software System]" {
 .Projects/Modules (Keycloak)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description
+|Coordinates |Description 
 
 |Apache Isis Security - Keycloak
 [source,yaml]
@@ -2315,7 +2315,7 @@ package "Keycloak\n[Software System]" {
 Group: org.apache.isis.security
 Artifact: isis-security-keycloak
 Type: jar
-Folder: \security\keycloak
+Directory: /security/keycloak
 ----
 |Authentication and Authorization using Keycloak
 
@@ -2370,7 +2370,7 @@ package "Shiro\n[Software System]" {
 .Projects/Modules (Shiro)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description
+|Coordinates |Description 
 
 |Apache Isis Security - Shiro
 [source,yaml]
@@ -2378,7 +2378,7 @@ package "Shiro\n[Software System]" {
 Group: org.apache.isis.security
 Artifact: isis-security-shiro
 Type: jar
-Folder: \security\shiro
+Directory: /security/shiro
 ----
 |Authentication and Authorization using Apache Shiro.
 
@@ -2435,7 +2435,7 @@ package "Viewer\n[Software System]" {
 .Projects/Modules (Viewer)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description
+|Coordinates |Description 
 
 |Apache Isis Viewer - Common Model
 [source,yaml]
@@ -2443,7 +2443,7 @@ package "Viewer\n[Software System]" {
 Group: org.apache.isis.viewer
 Artifact: isis-viewer-common
 Type: jar
-Folder: \viewers\common
+Directory: /viewers/common
 ----
 |.Components
 ****
@@ -2526,7 +2526,7 @@ package "Restful Objects\n[Software System]" {
 .Projects/Modules (Restful Objects)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description
+|Coordinates |Description 
 
 |Apache Isis Viewer - RO
 [source,yaml]
@@ -2534,7 +2534,7 @@ package "Restful Objects\n[Software System]" {
 Group: org.apache.isis.viewer
 Artifact: isis-viewer-restfulobjects
 Type: pom
-Folder: \viewers\restfulobjects
+Directory: /viewers/restfulobjects
 ----
 |
 
@@ -2544,7 +2544,7 @@ Folder: \viewers\restfulobjects
 Group: org.apache.isis.viewer
 Artifact: isis-viewer-restfulobjects-applib
 Type: jar
-Folder: \viewers\restfulobjects\applib
+Directory: /viewers/restfulobjects/applib
 ----
 |.Dependencies
 ****
@@ -2565,7 +2565,7 @@ xref:refguide:viewer:index/restfulobjects/applib/IsisModuleViewerRestfulObjectsA
 Group: org.apache.isis.viewer
 Artifact: isis-viewer-restfulobjects-jaxrsresteasy4
 Type: jar
-Folder: \viewers\restfulobjects\jaxrs-resteasy-4
+Directory: /viewers/restfulobjects/jaxrs-resteasy-4
 ----
 |JAX-RS plugin using jboss resteasy.
 
@@ -2596,7 +2596,7 @@ xref:refguide:viewer:index/restfulobjects/jaxrsresteasy4/IsisModuleViewerRestful
 Group: org.apache.isis.viewer
 Artifact: isis-viewer-restfulobjects-rendering
 Type: jar
-Folder: \viewers\restfulobjects\rendering
+Directory: /viewers/restfulobjects/rendering
 ----
 |.Components
 ****
@@ -2634,7 +2634,7 @@ xref:refguide:viewer:index/restfulobjects/rendering/IsisModuleRestfulObjectsRend
 Group: org.apache.isis.viewer
 Artifact: isis-viewer-restfulobjects-testing
 Type: jar
-Folder: \viewers\restfulobjects\testing
+Directory: /viewers/restfulobjects/testing
 ----
 |.Dependencies
 ****
@@ -2649,7 +2649,7 @@ org.apache.isis.viewer:isis-viewer-restfulobjects-viewer:jar:<managed> +
 Group: org.apache.isis.viewer
 Artifact: isis-viewer-restfulobjects-viewer
 Type: jar
-Folder: \viewers\restfulobjects\viewer
+Directory: /viewers/restfulobjects/viewer
 ----
 |.Components
 ****
@@ -2734,7 +2734,7 @@ package "Wicket\n[Software System]" {
 .Projects/Modules (Wicket)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description
+|Coordinates |Description 
 
 |Apache Isis Viewer - Wicket
 [source,yaml]
@@ -2742,7 +2742,7 @@ package "Wicket\n[Software System]" {
 Group: org.apache.isis.viewer
 Artifact: isis-viewer-wicket
 Type: pom
-Folder: \viewers\wicket
+Directory: /viewers/wicket
 ----
 |
 
@@ -2752,7 +2752,7 @@ Folder: \viewers\wicket
 Group: org.apache.isis.viewer
 Artifact: isis-viewer-wicket-model
 Type: jar
-Folder: \viewers\wicket\model
+Directory: /viewers/wicket/model
 ----
 |.Dependencies
 ****
@@ -2774,7 +2774,7 @@ xref:refguide:viewer:index/wicket/model/IsisModuleViewerWicketModel.adoc[IsisMod
 Group: org.apache.isis.viewer
 Artifact: isis-viewer-wicket-ui
 Type: jar
-Folder: \viewers\wicket\ui
+Directory: /viewers/wicket/ui
 ----
 |.Components
 ****
@@ -2815,7 +2815,7 @@ xref:refguide:viewer:index/wicket/ui/IsisModuleViewerWicketUi.adoc[IsisModuleVie
 Group: org.apache.isis.viewer
 Artifact: isis-viewer-wicket-viewer
 Type: jar
-Folder: \viewers\wicket\viewer
+Directory: /viewers/wicket/viewer
 ----
 |.Components
 ****
@@ -2919,7 +2919,7 @@ package "Valuetypes\n[Software System]" {
 .Projects/Modules (Valuetypes)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description
+|Coordinates |Description 
 
 |Apache Isis Value types
 [source,yaml]
@@ -2927,7 +2927,7 @@ package "Valuetypes\n[Software System]" {
 Group: org.apache.isis.valuetypes
 Artifact: isis-valuetypes
 Type: pom
-Folder: \valuetypes
+Directory: /valuetypes
 ----
 |Value types for use within Apache Isis applications.
 
@@ -2942,7 +2942,7 @@ org.projectlombok:lombok:jar:<managed> +
 Group: org.apache.isis.valuetypes
 Artifact: isis-valuetypes-sse
 Type: pom
-Folder: \valuetypes\sse
+Directory: /valuetypes/sse
 ----
 |Dynamically updating HTML markup
 
@@ -2952,7 +2952,7 @@ Folder: \valuetypes\sse
 Group: org.apache.isis.valuetypes
 Artifact: isis-valuetypes-sse-applib
 Type: jar
-Folder: \valuetypes\sse\applib
+Directory: /valuetypes/sse/applib
 ----
 |.Dependencies
 ****
@@ -2972,7 +2972,7 @@ xref:refguide:valuetypes:index/sse/applib/IsisModuleValSseApplib.adoc[IsisModule
 Group: org.apache.isis.valuetypes
 Artifact: isis-valuetypes-sse-metamodel
 Type: jar
-Folder: \valuetypes\sse\metamodel
+Directory: /valuetypes/sse/metamodel
 ----
 |.Components
 ****
@@ -2991,7 +2991,7 @@ org.apache.isis.valuetypes:isis-valuetypes-sse-applib:jar:<managed> +
 Group: org.apache.isis.valuetypes
 Artifact: isis-valuetypes-sse-ui
 Type: pom
-Folder: \valuetypes\sse\ui
+Directory: /valuetypes/sse/ui
 ----
 |.Dependencies
 ****
@@ -3005,7 +3005,7 @@ org.apache.isis.valuetypes:isis-valuetypes-sse-applib:jar:<managed> +
 Group: org.apache.isis.valuetypes
 Artifact: isis-valuetypes-sse-ui-wkt
 Type: jar
-Folder: \valuetypes\sse\ui\wicket
+Directory: /valuetypes/sse/ui/wicket
 ----
 |.Components
 ****
@@ -3105,7 +3105,7 @@ package "Asciidoc\n[Software System]" {
 .Projects/Modules (Asciidoc)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description
+|Coordinates |Description 
 
 |Apache Isis Val - Asciidoctor (parent)
 [source,yaml]
@@ -3113,7 +3113,7 @@ package "Asciidoc\n[Software System]" {
 Group: org.apache.isis.valuetypes
 Artifact: isis-valuetypes-asciidoc
 Type: pom
-Folder: \valuetypes\asciidoc
+Directory: /valuetypes/asciidoc
 ----
 |Asciidoc value type.
 
@@ -3123,7 +3123,7 @@ Folder: \valuetypes\asciidoc
 Group: org.apache.isis.valuetypes
 Artifact: isis-valuetypes-asciidoc-applib
 Type: jar
-Folder: \valuetypes\asciidoc\applib
+Directory: /valuetypes/asciidoc/applib
 ----
 |.Dependencies
 ****
@@ -3143,7 +3143,7 @@ xref:refguide:valuetypes:index/asciidoc/applib/IsisModuleValAsciidocApplib.adoc[
 Group: org.apache.isis.valuetypes
 Artifact: isis-valuetypes-asciidoc-metamodel
 Type: jar
-Folder: \valuetypes\asciidoc\metamodel
+Directory: /valuetypes/asciidoc/metamodel
 ----
 |.Components
 ****
@@ -3168,7 +3168,7 @@ xref:refguide:valuetypes:index/asciidoc/metamodel/IsisModuleValAsciidocMetaModel
 Group: org.apache.isis.valuetypes
 Artifact: isis-valuetypes-asciidoc-persistence
 Type: pom
-Folder: \valuetypes\asciidoc\persistence
+Directory: /valuetypes/asciidoc/persistence
 ----
 |.Dependencies
 ****
@@ -3182,7 +3182,7 @@ org.apache.isis.valuetypes:isis-valuetypes-asciidoc-applib:jar:<managed> +
 Group: org.apache.isis.valuetypes
 Artifact: isis-valuetypes-asciidoc-persistence-jdo-dn5
 Type: jar
-Folder: \valuetypes\asciidoc\persistence\jdo-dn5
+Directory: /valuetypes/asciidoc/persistence/jdo-dn5
 ----
 |.Dependencies
 ****
@@ -3200,7 +3200,7 @@ xref:refguide:valuetypes:index/asciidoc/persistence/jdo/dn5/IsisModuleValAsciido
 Group: org.apache.isis.valuetypes
 Artifact: isis-valuetypes-asciidoc-ui
 Type: pom
-Folder: \valuetypes\asciidoc\ui
+Directory: /valuetypes/asciidoc/ui
 ----
 |.Dependencies
 ****
@@ -3218,7 +3218,7 @@ org.asciidoctor:asciidoctorj:jar:${asciidoctorj.version} +
 Group: org.apache.isis.valuetypes
 Artifact: isis-valuetypes-asciidoc-ui-vaa
 Type: jar
-Folder: \valuetypes\asciidoc\ui\vaadin
+Directory: /valuetypes/asciidoc/ui/vaadin
 ----
 |.Components
 ****
@@ -3236,7 +3236,7 @@ org.apache.isis.incubator.viewer:isis-viewer-vaadin-ui:jar:${project.version} +
 Group: org.apache.isis.valuetypes
 Artifact: isis-valuetypes-asciidoc-ui-wkt
 Type: jar
-Folder: \valuetypes\asciidoc\ui\wicket
+Directory: /valuetypes/asciidoc/ui/wicket
 ----
 |.Components
 ****
@@ -3333,7 +3333,7 @@ package "Markdown\n[Software System]" {
 .Projects/Modules (Markdown)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description
+|Coordinates |Description 
 
 |Apache Isis Val - Markdown (parent)
 [source,yaml]
@@ -3341,7 +3341,7 @@ package "Markdown\n[Software System]" {
 Group: org.apache.isis.valuetypes
 Artifact: isis-valuetypes-markdown
 Type: pom
-Folder: \valuetypes\markdown
+Directory: /valuetypes/markdown
 ----
 |Markdown value type.
 
@@ -3351,7 +3351,7 @@ Folder: \valuetypes\markdown
 Group: org.apache.isis.valuetypes
 Artifact: isis-valuetypes-markdown-applib
 Type: jar
-Folder: \valuetypes\markdown\applib
+Directory: /valuetypes/markdown/applib
 ----
 |.Dependencies
 ****
@@ -3371,7 +3371,7 @@ xref:refguide:valuetypes:index/markdown/applib/IsisModuleValMarkdownApplib.adoc[
 Group: org.apache.isis.valuetypes
 Artifact: isis-valuetypes-markdown-metamodel
 Type: jar
-Folder: \valuetypes\markdown\metamodel
+Directory: /valuetypes/markdown/metamodel
 ----
 |.Components
 ****
@@ -3396,7 +3396,7 @@ xref:refguide:valuetypes:index/markdown/metamodel/IsisModuleValMarkdownMetaModel
 Group: org.apache.isis.valuetypes
 Artifact: isis-valuetypes-markdown-persistence
 Type: pom
-Folder: \valuetypes\markdown\persistence
+Directory: /valuetypes/markdown/persistence
 ----
 |.Dependencies
 ****
@@ -3410,7 +3410,7 @@ org.apache.isis.valuetypes:isis-valuetypes-markdown-applib:jar:<managed> +
 Group: org.apache.isis.valuetypes
 Artifact: isis-valuetypes-markdown-persistence-jdo-dn5
 Type: jar
-Folder: \valuetypes\markdown\persistence\jdo-dn5
+Directory: /valuetypes/markdown/persistence/jdo-dn5
 ----
 |.Dependencies
 ****
@@ -3429,7 +3429,7 @@ xref:refguide:valuetypes:index/markdown/persistence/jdo/dn5/IsisModuleValMarkdow
 Group: org.apache.isis.valuetypes
 Artifact: isis-valuetypes-markdown-ui
 Type: pom
-Folder: \valuetypes\markdown\ui
+Directory: /valuetypes/markdown/ui
 ----
 |.Dependencies
 ****
@@ -3445,7 +3445,7 @@ org.jsoup:jsoup:jar:<managed> +
 Group: org.apache.isis.valuetypes
 Artifact: isis-valuetypes-markdown-ui-wkt
 Type: jar
-Folder: \valuetypes\markdown\ui\wicket
+Directory: /valuetypes/markdown/ui/wicket
 ----
 |.Dependencies
 ****
@@ -3490,7 +3490,7 @@ package "Mappings\n[Software System]" {
 .Projects/Modules (Mappings)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description
+|Coordinates |Description 
 
 |Apache Isis Mappings
 [source,yaml]
@@ -3498,7 +3498,7 @@ package "Mappings\n[Software System]" {
 Group: org.apache.isis.mappings
 Artifact: isis-mappings
 Type: pom
-Folder: \mappings
+Directory: /mappings
 ----
 |Libraries and tools to map one bounded context (usually an Apache Isis application) to some other BC (usually
 _not_ an Apache Isis application).
@@ -3553,7 +3553,7 @@ package "JAX-RS Client Library\n[Software System]" {
 .Projects/Modules (JAX-RS Client Library)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description
+|Coordinates |Description 
 
 |Apache Isis Map - JaxRS Client (parent)
 [source,yaml]
@@ -3561,7 +3561,7 @@ package "JAX-RS Client Library\n[Software System]" {
 Group: org.apache.isis.mappings
 Artifact: isis-mappings-jaxrsclient
 Type: pom
-Folder: \mappings\jaxrsclient
+Directory: /mappings/jaxrsclient
 ----
 |Integrates JaxRS Client Library
 
@@ -3571,7 +3571,7 @@ Folder: \mappings\jaxrsclient
 Group: org.apache.isis.mappings
 Artifact: isis-mappings-jaxrsclient-applib
 Type: jar
-Folder: \mappings\jaxrsclient\applib
+Directory: /mappings/jaxrsclient/applib
 ----
 |.Dependencies
 ****
@@ -3590,7 +3590,7 @@ xref:refguide:extensions:index/jaxrsclient/applib/IsisModuleExtJaxRsClientApplib
 Group: org.apache.isis.mappings
 Artifact: isis-mappings-jaxrsclient-impl
 Type: jar
-Folder: \mappings\jaxrsclient\testlib
+Directory: /mappings/jaxrsclient/testlib
 ----
 |.Dependencies
 ****
@@ -3635,7 +3635,7 @@ package "REST Client\n[Software System]" {
 .Projects/Modules (REST Client)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description
+|Coordinates |Description 
 
 |Apache Isis Ext - REST Client (parent)
 [source,yaml]
@@ -3643,7 +3643,7 @@ package "REST Client\n[Software System]" {
 Group: org.apache.isis.mappings
 Artifact: isis-mappings-restclient
 Type: pom
-Folder: \mappings\restclient
+Directory: /mappings/restclient
 ----
 |A client for the Restful Objects Viewer
 
@@ -3653,7 +3653,7 @@ Folder: \mappings\restclient
 Group: org.apache.isis.mappings
 Artifact: isis-mappings-restclient-applib
 Type: jar
-Folder: \mappings\restclient\applib
+Directory: /mappings/restclient/applib
 ----
 |A client for the Restful Objects Viewer
 
@@ -3686,12 +3686,12 @@ skinparam {
 }
 hide stereotype
 left to right direction
-skinparam rectangle<<22>> {
+skinparam rectangle<<11>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<11>> {
+skinparam rectangle<<22>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
@@ -3791,12 +3791,12 @@ skinparam rectangle<<20>> {
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<21>> {
+skinparam rectangle<<10>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<10>> {
+skinparam rectangle<<21>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
@@ -3853,7 +3853,7 @@ package "Extensions\n[Software System]" {
 .Projects/Modules (Extensions)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description
+|Coordinates |Description 
 
 |Apache Isis Extensions
 [source,yaml]
@@ -3861,7 +3861,7 @@ package "Extensions\n[Software System]" {
 Group: org.apache.isis.extensions
 Artifact: isis-extensions
 Type: pom
-Folder: \extensions
+Directory: /extensions
 ----
 |Extensions to the Apache Isis framework itself.
 These are _not_ intended to be called by the domain logic of an Apache Isis application (see instead org.apache.isis.platform).
@@ -3877,7 +3877,7 @@ org.projectlombok:lombok:jar:<managed> +
 Group: org.apache.isis.extensions
 Artifact: isis-extensions-cors
 Type: pom
-Folder: \extensions\vro\cors
+Directory: /extensions/vro/cors
 ----
 |Implementation of CORS Filter (using ebay filter)
 
@@ -3887,7 +3887,7 @@ Folder: \extensions\vro\cors
 Group: org.apache.isis.extensions
 Artifact: isis-extensions-cors-impl
 Type: jar
-Folder: \extensions\vro\cors\impl
+Directory: /extensions/vro/cors/impl
 ----
 |.Dependencies
 ****
@@ -3908,7 +3908,7 @@ xref:refguide:extensions:index/cors/impl/IsisModuleExtCorsImpl.adoc[IsisModuleEx
 Group: org.apache.isis.extensions
 Artifact: isis-extensions-exceldownload
 Type: pom
-Folder: \extensions\vw\exceldownload
+Directory: /extensions/vw/exceldownload
 ----
 |A component for Apache Isis' Wicket viewer, providing an alternative representation of collections to be downloaded as an Excel spreadsheet.
 
@@ -3918,7 +3918,7 @@ Folder: \extensions\vw\exceldownload
 Group: org.apache.isis.extensions
 Artifact: isis-extensions-exceldownload-ui
 Type: jar
-Folder: \extensions\vw\exceldownload\ui
+Directory: /extensions/vw/exceldownload/ui
 ----
 |.Components
 ****
@@ -3943,7 +3943,7 @@ xref:refguide:extensions:index/viewer/wicket/exceldownload/ui/IsisModuleExtExcel
 Group: org.apache.isis.extensions
 Artifact: isis-extensions-flyway
 Type: pom
-Folder: \extensions\core\flyway
+Directory: /extensions/core/flyway
 ----
 |Integrates Flyway when using any (relational) persistence store
 
@@ -3953,7 +3953,7 @@ Folder: \extensions\core\flyway
 Group: org.apache.isis.extensions
 Artifact: isis-extensions-flyway-impl
 Type: jar
-Folder: \extensions\core\flyway\impl
+Directory: /extensions/core/flyway/impl
 ----
 |.Dependencies
 ****
@@ -3970,7 +3970,7 @@ org.springframework.boot:spring-boot-autoconfigure:jar:<managed> +
 Group: org.apache.isis.extensions
 Artifact: isis-extensions-fullcalendar
 Type: pom
-Folder: \extensions\vw\fullcalendar
+Directory: /extensions/vw/fullcalendar
 ----
 |A component for Apache Isis' Wicket viewer, displaying collections of objects that have a date on a fullcalendar.io (javascript widget).
 
@@ -3980,7 +3980,7 @@ Folder: \extensions\vw\fullcalendar
 Group: org.apache.isis.extensions
 Artifact: isis-extensions-fullcalendar-applib
 Type: jar
-Folder: \extensions\vw\fullcalendar\applib
+Directory: /extensions/vw/fullcalendar/applib
 ----
 |.Dependencies
 ****
@@ -3999,7 +3999,7 @@ xref:refguide:extensions:index/fullcalendar/applib/CalendarEventable.adoc[Calend
 Group: org.apache.isis.extensions
 Artifact: isis-extensions-fullcalendar-ui
 Type: jar
-Folder: \extensions\vw\fullcalendar\ui
+Directory: /extensions/vw/fullcalendar/ui
 ----
 |.Dependencies
 ****
@@ -4019,7 +4019,7 @@ xref:refguide:extensions:index/fullcalendar/ui/component/IsisModuleExtFullCalend
 Group: org.apache.isis.extensions
 Artifact: isis-extensions-pdfjs
 Type: pom
-Folder: \extensions\vw\pdfjs
+Directory: /extensions/vw/pdfjs
 ----
 |A component for Apache Isis' Wicket viewer, allowing BLOBs containing PDFs to be rendered in a panel using pdf.js.
 
@@ -4029,7 +4029,7 @@ Folder: \extensions\vw\pdfjs
 Group: org.apache.isis.extensions
 Artifact: isis-extensions-pdfjs-applib
 Type: jar
-Folder: \extensions\vw\pdfjs\applib
+Directory: /extensions/vw/pdfjs/applib
 ----
 |.Dependencies
 ****
@@ -4048,7 +4048,7 @@ xref:refguide:extensions:index/viewer/wicket/pdfjs/applib/annotations/PdfJsViewe
 Group: org.apache.isis.extensions
 Artifact: isis-extensions-pdfjs-metamodel
 Type: jar
-Folder: \extensions\vw\pdfjs\metamodel
+Directory: /extensions/vw/pdfjs/metamodel
 ----
 |.Components
 ****
@@ -4068,7 +4068,7 @@ org.apache.isis.extensions:isis-extensions-pdfjs-applib:jar:<managed> +
 Group: org.apache.isis.extensions
 Artifact: isis-extensions-pdfjs-ui
 Type: jar
-Folder: \extensions\vw\pdfjs\ui
+Directory: /extensions/vw/pdfjs/ui
 ----
 |.Components
 ****
@@ -4092,7 +4092,7 @@ xref:refguide:extensions:index/viewer/wicket/pdfjs/ui/IsisModuleExtPdfjsUi.adoc[
 Group: org.apache.isis.extensions
 Artifact: isis-extensions-secman
 Type: pom
-Folder: \extensions\security\secman
+Directory: /extensions/security/secman
 ----
 |.Dependencies
 ****
@@ -4106,7 +4106,7 @@ org.apache.isis.core:isis-core-security:jar:<managed> +
 Group: org.apache.isis.extensions
 Artifact: isis-extensions-secman-api
 Type: jar
-Folder: \extensions\security\secman\api
+Directory: /extensions/security/secman/api
 ----
 |.Document Index Entries
 ****
@@ -4119,7 +4119,7 @@ xref:refguide:extensions:index/secman/api/IsisModuleExtSecmanApi.adoc[IsisModule
 Group: org.apache.isis.extensions
 Artifact: isis-extensions-secman-encryption-jbcrypt
 Type: jar
-Folder: \extensions\security\secman\encryption-jbcrypt
+Directory: /extensions/security/secman/encryption-jbcrypt
 ----
 |.Components
 ****
@@ -4144,7 +4144,7 @@ xref:refguide:extensions:index/secman/encryption/jbcrypt/IsisModuleExtSecmanEncr
 Group: org.apache.isis.extensions
 Artifact: isis-extensions-secman-model
 Type: jar
-Folder: \extensions\security\secman\model
+Directory: /extensions/security/secman/model
 ----
 |.Components
 ****
@@ -4168,7 +4168,7 @@ xref:refguide:extensions:index/secman/model/IsisModuleExtSecmanModel.adoc[IsisMo
 Group: org.apache.isis.extensions
 Artifact: isis-extensions-secman-persistence-jdo
 Type: jar
-Folder: \extensions\security\secman\persistence-jdo
+Directory: /extensions/security/secman/persistence-jdo
 ----
 |.Components
 ****
@@ -4200,7 +4200,7 @@ xref:refguide:extensions:index/secman/jdo/IsisModuleExtSecmanPersistenceJdo.adoc
 Group: org.apache.isis.extensions
 Artifact: isis-extensions-secman-persistence-jpa
 Type: jar
-Folder: \extensions\security\secman\persistence-jpa
+Directory: /extensions/security/secman/persistence-jpa
 ----
 |.Components
 ****
@@ -4231,7 +4231,7 @@ xref:refguide:extensions:index/secman/jpa/IsisModuleExtSecmanPersistenceJpa.adoc
 Group: org.apache.isis.extensions
 Artifact: isis-extensions-secman-shiro-realm
 Type: jar
-Folder: \extensions\security\secman\shiro-realm
+Directory: /extensions/security/secman/shiro-realm
 ----
 |.Components
 ****
@@ -4256,7 +4256,7 @@ xref:refguide:extensions:index/secman/shiro/IsisModuleExtSecmanRealmShiro.adoc[I
 Group: org.apache.isis.extensions
 Artifact: isis-extensions-shiro-realm-ldap
 Type: pom
-Folder: \extensions\security\shiro-realm-ldap
+Directory: /extensions/security/shiro-realm-ldap
 ----
 |Implementation of Shiro Realm using LDAP.
 
@@ -4266,7 +4266,7 @@ Folder: \extensions\security\shiro-realm-ldap
 Group: org.apache.isis.extensions
 Artifact: isis-extensions-shiro-realm-ldap-impl
 Type: jar
-Folder: \extensions\security\shiro-realm-ldap\impl
+Directory: /extensions/security/shiro-realm-ldap/impl
 ----
 |.Dependencies
 ****
@@ -4317,7 +4317,7 @@ package "Core: Command Log\n[Software System]" {
 .Projects/Modules (Core: Command Log)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description
+|Coordinates |Description 
 
 |Apache Isis Ext - Command Log
 [source,yaml]
@@ -4325,7 +4325,7 @@ package "Core: Command Log\n[Software System]" {
 Group: org.apache.isis.extensions
 Artifact: isis-extensions-command-log
 Type: pom
-Folder: \extensions\core\command-log
+Directory: /extensions/core/command-log
 ----
 |Logs commands
 
@@ -4335,7 +4335,7 @@ Folder: \extensions\core\command-log
 Group: org.apache.isis.extensions
 Artifact: isis-extensions-command-log-jdo
 Type: jar
-Folder: \extensions\core\command-log\impl
+Directory: /extensions/core/command-log/impl
 ----
 |.Components
 ****
@@ -4407,7 +4407,7 @@ package "Core: Command Replay\n[Software System]" {
 .Projects/Modules (Core: Command Replay)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description
+|Coordinates |Description 
 
 |Apache Isis Ext - Command Replay
 [source,yaml]
@@ -4415,7 +4415,7 @@ package "Core: Command Replay\n[Software System]" {
 Group: org.apache.isis.extensions
 Artifact: isis-extensions-command-replay
 Type: pom
-Folder: \extensions\core\command-replay
+Directory: /extensions/core/command-replay
 ----
 |Replays commands to secondary system
 
@@ -4425,7 +4425,7 @@ Folder: \extensions\core\command-replay
 Group: org.apache.isis.extensions
 Artifact: isis-extensions-command-replay-primary
 Type: jar
-Folder: \extensions\core\command-replay\primary
+Directory: /extensions/core/command-replay/primary
 ----
 |A module for obtaining commands from a primary
 
@@ -4457,7 +4457,7 @@ xref:refguide:extensions:index/commandreplay/primary/IsisModuleExtCommandReplayP
 Group: org.apache.isis.extensions
 Artifact: isis-extensions-command-replay-secondary
 Type: jar
-Folder: \extensions\core\command-replay\secondary
+Directory: /extensions/core/command-replay/secondary
 ----
 |A module providing a Quartz Job to run on a secondary system,
 for obtaining commands from a primary and saving them so that they are replayed.
@@ -4521,7 +4521,7 @@ package "Core: Model Annotation\n[Software System]" {
 .Projects/Modules (Core: Model Annotation)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description
+|Coordinates |Description 
 
 |Apache Isis Ext - @Model
 [source,yaml]
@@ -4529,7 +4529,7 @@ package "Core: Model Annotation\n[Software System]" {
 Group: org.apache.isis.extensions
 Artifact: isis-extensions-modelannotation
 Type: jar
-Folder: \extensions\core\model-annotation
+Directory: /extensions/core/model-annotation
 ----
 |Allows supporting methods to be annotated as @Model, to make explicit the bounds of the metamodel.
 
@@ -4588,7 +4588,7 @@ package "Core: Quartz\n[Software System]" {
 .Projects/Modules (Core: Quartz)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description
+|Coordinates |Description 
 
 |Apache Isis Ext - Quartz
 [source,yaml]
@@ -4596,7 +4596,7 @@ package "Core: Quartz\n[Software System]" {
 Group: org.apache.isis.extensions
 Artifact: isis-extensions-quartz
 Type: pom
-Folder: \extensions\core\quartz
+Directory: /extensions/core/quartz
 ----
 |Integrates Quartz
 
@@ -4606,7 +4606,7 @@ Folder: \extensions\core\quartz
 Group: org.apache.isis.extensions
 Artifact: isis-extensions-quartz-impl
 Type: jar
-Folder: \extensions\core\quartz\impl
+Directory: /extensions/core/quartz/impl
 ----
 |.Dependencies
 ****
@@ -4734,7 +4734,7 @@ package "Subdomains\n[Software System]" {
 .Projects/Modules (Subdomains)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description
+|Coordinates |Description 
 
 |Apache Isis Subdomains
 [source,yaml]
@@ -4742,7 +4742,7 @@ package "Subdomains\n[Software System]" {
 Group: org.apache.isis.subdomains
 Artifact: isis-subdomains
 Type: pom
-Folder: \subdomains
+Directory: /subdomains
 ----
 |A library of domain services and of supporting subdomains (often technical in nature), to be called from the
 core domain of an Apache Isis applications.
@@ -4758,7 +4758,7 @@ org.projectlombok:lombok:jar:<managed> +
 Group: org.apache.isis.subdomains
 Artifact: isis-subdomains-docx
 Type: pom
-Folder: \subdomains\docx
+Directory: /subdomains/docx
 ----
 |Uses the Apache POI library for mail merge functions of .docx Word documents
 
@@ -4768,7 +4768,7 @@ Folder: \subdomains\docx
 Group: org.apache.isis.subdomains
 Artifact: isis-subdomains-docx-applib
 Type: jar
-Folder: \subdomains\docx\applib
+Directory: /subdomains/docx/applib
 ----
 |.Dependencies
 ****
@@ -4781,7 +4781,7 @@ org.apache.isis.core:isis-applib:jar:<managed> +
 Group: org.apache.isis.subdomains
 Artifact: isis-subdomains-freemarker
 Type: pom
-Folder: \subdomains\freemarker
+Directory: /subdomains/freemarker
 ----
 |Integrates Freemarker Library
 
@@ -4791,7 +4791,7 @@ Folder: \subdomains\freemarker
 Group: org.apache.isis.subdomains
 Artifact: isis-subdomains-freemarker-applib
 Type: jar
-Folder: \subdomains\freemarker\applib
+Directory: /subdomains/freemarker/applib
 ----
 |.Dependencies
 ****
@@ -4804,7 +4804,7 @@ org.apache.isis.core:isis-applib:jar:<managed> +
 Group: org.apache.isis.subdomains
 Artifact: isis-subdomains-ognl
 Type: pom
-Folder: \subdomains\ognl
+Directory: /subdomains/ognl
 ----
 |Integrates Ognl Library
 
@@ -4814,7 +4814,7 @@ Folder: \subdomains\ognl
 Group: org.apache.isis.subdomains
 Artifact: isis-subdomains-ognl-applib
 Type: jar
-Folder: \subdomains\ognl\applib
+Directory: /subdomains/ognl/applib
 ----
 |.Dependencies
 ****
@@ -4827,7 +4827,7 @@ org.apache.isis.core:isis-applib:jar:<managed> +
 Group: org.apache.isis.subdomains
 Artifact: isis-subdomains-pdfbox
 Type: pom
-Folder: \subdomains\pdfbox
+Directory: /subdomains/pdfbox
 ----
 |Integrates PDF Box Library
 
@@ -4837,7 +4837,7 @@ Folder: \subdomains\pdfbox
 Group: org.apache.isis.subdomains
 Artifact: isis-subdomains-pdfbox-applib
 Type: jar
-Folder: \subdomains\pdfbox\applib
+Directory: /subdomains/pdfbox/applib
 ----
 |Integrates PDF Box Library
 
@@ -4852,7 +4852,7 @@ org.apache.isis.core:isis-applib:jar:<managed> +
 Group: org.apache.isis.subdomains
 Artifact: isis-subdomains-zip
 Type: pom
-Folder: \subdomains\zip
+Directory: /subdomains/zip
 ----
 |A domain service for Apache Isis', for zipping utilities.
 
@@ -4862,7 +4862,7 @@ Folder: \subdomains\zip
 Group: org.apache.isis.subdomains
 Artifact: isis-subdomains-zip-applib
 Type: jar
-Folder: \subdomains\zip\applib
+Directory: /subdomains/zip/applib
 ----
 |.Components
 ****
@@ -4914,7 +4914,7 @@ package "Base\n[Software System]" {
 .Projects/Modules (Base)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description
+|Coordinates |Description 
 
 |Apache Isis Sub - Base (parent)
 [source,yaml]
@@ -4922,7 +4922,7 @@ package "Base\n[Software System]" {
 Group: org.apache.isis.subdomains
 Artifact: isis-subdomains-base
 Type: pom
-Folder: \subdomains\base
+Directory: /subdomains/base
 ----
 |A module providing Base utilities for other subdomain modules
 
@@ -4932,7 +4932,7 @@ Folder: \subdomains\base
 Group: org.apache.isis.subdomains
 Artifact: isis-subdomains-base-applib
 Type: jar
-Folder: \subdomains\base\applib
+Directory: /subdomains/base/applib
 ----
 |.Components
 ****
@@ -5012,7 +5012,7 @@ package "Excel\n[Software System]" {
 .Projects/Modules (Excel)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description
+|Coordinates |Description 
 
 |Apache Isis Sub - Excel (parent)
 [source,yaml]
@@ -5020,7 +5020,7 @@ package "Excel\n[Software System]" {
 Group: org.apache.isis.subdomains
 Artifact: isis-subdomains-excel
 Type: pom
-Folder: \subdomains\excel
+Directory: /subdomains/excel
 ----
 |A domain service for Apache Isis', allowing collections
 of (view model) objects to be exported/imported to/from an
@@ -5032,7 +5032,7 @@ Excel spreadsheet.  Also support for excel-based fixtures.
 Group: org.apache.isis.subdomains
 Artifact: isis-subdomains-excel-applib
 Type: jar
-Folder: \subdomains\excel\applib
+Directory: /subdomains/excel/applib
 ----
 |.Components
 ****
@@ -5061,7 +5061,7 @@ xref:refguide:subdomains:index/excel/applib/IsisModuleSubdomainsExcelApplib.adoc
 Group: org.apache.isis.subdomains
 Artifact: isis-subdomains-excel-fixtures
 Type: jar
-Folder: \subdomains\excel\fixture
+Directory: /subdomains/excel/fixture
 ----
 |.Dependencies
 ****
@@ -5079,7 +5079,7 @@ org.projectlombok:lombok:jar:<managed> +
 Group: org.apache.isis.subdomains
 Artifact: isis-subdomains-excel-integtests
 Type: jar
-Folder: \subdomains\excel\integtests
+Directory: /subdomains/excel/integtests
 ----
 |.Dependencies
 ****
@@ -5096,7 +5096,7 @@ org.hsqldb:hsqldb:jar:<managed> +
 Group: org.apache.isis.subdomains
 Artifact: isis-subdomains-excel-testing
 Type: jar
-Folder: \subdomains\excel\testing
+Directory: /subdomains/excel/testing
 ----
 |.Dependencies
 ****
@@ -5148,7 +5148,7 @@ package "Spring\n[Software System]" {
 .Projects/Modules (Spring)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description
+|Coordinates |Description 
 
 |Apache Isis Sub - Spring (parent)
 [source,yaml]
@@ -5156,7 +5156,7 @@ package "Spring\n[Software System]" {
 Group: org.apache.isis.subdomains
 Artifact: isis-subdomains-spring
 Type: pom
-Folder: \subdomains\spring
+Directory: /subdomains/spring
 ----
 |Utility services for interacting with the Spring application context (that hosts the Apache Isis application itself)
 
@@ -5166,7 +5166,7 @@ Folder: \subdomains\spring
 Group: org.apache.isis.subdomains
 Artifact: isis-subdomains-spring-applib
 Type: jar
-Folder: \subdomains\spring\applib
+Directory: /subdomains/spring/applib
 ----
 |.Components
 ****
@@ -5222,7 +5222,7 @@ package "XDocReport\n[Software System]" {
 .Projects/Modules (XDocReport)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description
+|Coordinates |Description 
 
 |Apache Isis Sub - XdocReport (parent)
 [source,yaml]
@@ -5230,7 +5230,7 @@ package "XDocReport\n[Software System]" {
 Group: org.apache.isis.subdomains
 Artifact: isis-subdomains-xdocreport
 Type: pom
-Folder: \subdomains\xdocreport
+Directory: /subdomains/xdocreport
 ----
 |Integrates XDoc Report Library
 
@@ -5240,7 +5240,7 @@ Folder: \subdomains\xdocreport
 Group: org.apache.isis.subdomains
 Artifact: isis-subdomains-xdocreport-applib
 Type: jar
-Folder: \subdomains\xdocreport\applib
+Directory: /subdomains/xdocreport/applib
 ----
 |.Components
 ****
@@ -5337,7 +5337,7 @@ package "Tooling\n[Software System]" {
 .Projects/Modules (Tooling)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description
+|Coordinates |Description 
 
 |Apache Isis - Tooling
 [source,yaml]
@@ -5345,7 +5345,7 @@ package "Tooling\n[Software System]" {
 Group: org.apache.isis.tooling
 Artifact: isis-tooling
 Type: pom
-Folder: \tooling
+Directory: /tooling
 ----
 |Libraries and tools not depending on the _Apache Isis Core_ ecosystem,
 eg. code mining, automated documentation.
@@ -5369,7 +5369,7 @@ org.springframework.boot:spring-boot-starter-log4j2:jar:<managed> +
 Group: org.apache.isis.tooling
 Artifact: isis-tooling-c4modeling
 Type: jar
-Folder: \tooling\c4modeling
+Directory: /tooling/c4modeling
 ----
 |Library for programmatic C4 Model generation.
 
@@ -5388,7 +5388,7 @@ org.apache.isis.commons:isis-commons:jar:<managed> +
 Group: org.apache.isis.tooling
 Artifact: isis-tooling-cli
 Type: jar
-Folder: \tooling\cli
+Directory: /tooling/cli
 ----
 |Command Line Interface for the _Apache Isis Tooling_ ecosystem.
 
@@ -5409,7 +5409,7 @@ org.apache.isis.tooling:isis-tooling-projectmodel:jar:<managed> +
 Group: org.apache.isis.tooling
 Artifact: isis-tooling-java2adoc
 Type: jar
-Folder: \tooling\java2adoc
+Directory: /tooling/java2adoc
 ----
 |Code mining library for Java source to Asciidoc conversion.
 
@@ -5427,7 +5427,7 @@ org.jsoup:jsoup:jar:<managed> +
 Group: org.apache.isis.tooling
 Artifact: isis-tooling-javamodel
 Type: jar
-Folder: \tooling\javamodel
+Directory: /tooling/javamodel
 ----
 |Code mining library for Java bytecode introspection.
 
@@ -5444,7 +5444,7 @@ org.apache.isis.commons:isis-commons:jar:<managed> +
 Group: org.apache.isis.tooling
 Artifact: isis-tooling-model4adoc
 Type: jar
-Folder: \tooling\model4adoc
+Directory: /tooling/model4adoc
 ----
 |Library for programmatic AsciiDoc generation.
 
@@ -5467,7 +5467,7 @@ org.asciidoctor:asciidoctorj:jar:<managed> +
 Group: org.apache.isis.tooling
 Artifact: isis-tooling-projectmodel
 Type: jar
-Folder: \tooling\projectmodel
+Directory: /tooling/projectmodel
 ----
 |Code mining library for Gradle/Maven project module tree introspection.
 
@@ -5516,7 +5516,7 @@ package "Regression Tests\n[Software System]" {
 .Projects/Modules (Regression Tests)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description
+|Coordinates |Description 
 
 |Apache Isis - Regression Tests
 [source,yaml]
@@ -5524,7 +5524,7 @@ package "Regression Tests\n[Software System]" {
 Group: org.apache.isis.regressiontests
 Artifact: isis-regressiontests
 Type: pom
-Folder: \regressiontests
+Directory: /regressiontests
 ----
 |Collection of JUnit tests covering core functionalities of the framework.
 (Targeted for JVM 11+)
@@ -5562,7 +5562,7 @@ org.projectlombok:lombok:jar:<managed> +
 Group: org.apache.isis.regressiontests
 Artifact: isis-regressiontests-stable
 Type: jar
-Folder: \regressiontests\stable
+Directory: /regressiontests/stable
 ----
 |.Components
 ****
@@ -5618,7 +5618,7 @@ package "Incubator\n[Software System]" {
 .Projects/Modules (Incubator)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description
+|Coordinates |Description 
 
 |Apache Isis Incubator
 [source,yaml]
@@ -5626,7 +5626,7 @@ package "Incubator\n[Software System]" {
 Group: org.apache.isis.incubator
 Artifact: isis-incubator
 Type: pom
-Folder: \incubator
+Directory: /incubator
 ----
 |Collection of Apache Isis extensions, subdomains or BC mappings, currently incubating.
 
@@ -5666,7 +5666,7 @@ package "Kroviz Client\n[Software System]" {
 .Projects/Modules (Kroviz Client)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description
+|Coordinates |Description 
 
 |Apache Isis Inc - Client kroViz
 [source,yaml]
@@ -5674,7 +5674,7 @@ package "Kroviz Client\n[Software System]" {
 Group: org.apache.isis.incubator.clients
 Artifact: isis-client-kroviz
 Type: jar
-Folder: \incubator\clients\kroviz
+Directory: /incubator/clients/kroviz
 ----
 |Initial sketches
 |===
@@ -5730,7 +5730,7 @@ package "JavaFX Viewer\n[Software System]" {
 .Projects/Modules (JavaFX Viewer)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description
+|Coordinates |Description 
 
 |Apache Isis Inc - Viewer JavaFX
 [source,yaml]
@@ -5738,7 +5738,7 @@ package "JavaFX Viewer\n[Software System]" {
 Group: org.apache.isis.incubator.viewer
 Artifact: isis-viewer-javafx
 Type: pom
-Folder: \incubator\viewers\javafx
+Directory: /incubator/viewers/javafx
 ----
 |Initial sketches
 
@@ -5748,7 +5748,7 @@ Folder: \incubator\viewers\javafx
 Group: org.apache.isis.incubator.viewer
 Artifact: isis-viewer-javafx-model
 Type: jar
-Folder: \incubator\viewers\javafx\model
+Directory: /incubator/viewers/javafx/model
 ----
 |.Dependencies
 ****
@@ -5767,7 +5767,7 @@ org.openjfx:javafx-web:jar:<managed> +
 Group: org.apache.isis.incubator.viewer
 Artifact: isis-viewer-javafx-ui
 Type: jar
-Folder: \incubator\viewers\javafx\ui
+Directory: /incubator/viewers/javafx/ui
 ----
 |.Components
 ****
@@ -5804,7 +5804,7 @@ org.apache.isis.incubator.viewer:isis-viewer-javafx-model:jar:<managed> +
 Group: org.apache.isis.incubator.viewer
 Artifact: isis-viewer-javafx-viewer
 Type: jar
-Folder: \incubator\viewers\javafx\viewer
+Directory: /incubator/viewers/javafx/viewer
 ----
 |.Dependencies
 ****
@@ -5863,7 +5863,7 @@ package "Vaadin Viewer\n[Software System]" {
 .Projects/Modules (Vaadin Viewer)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description
+|Coordinates |Description 
 
 |Apache Isis Inc - Viewer Vaadin
 [source,yaml]
@@ -5871,7 +5871,7 @@ package "Vaadin Viewer\n[Software System]" {
 Group: org.apache.isis.incubator.viewer
 Artifact: isis-viewer-vaadin
 Type: pom
-Folder: \incubator\viewers\vaadin
+Directory: /incubator/viewers/vaadin
 ----
 |Initial sketches
 
@@ -5881,7 +5881,7 @@ Folder: \incubator\viewers\vaadin
 Group: org.apache.isis.incubator.viewer
 Artifact: isis-viewer-vaadin-model
 Type: jar
-Folder: \incubator\viewers\vaadin\model
+Directory: /incubator/viewers/vaadin/model
 ----
 |.Dependencies
 ****
@@ -5897,7 +5897,7 @@ org.apache.isis.viewer:isis-viewer-common:jar:<managed> +
 Group: org.apache.isis.incubator.viewer
 Artifact: isis-viewer-vaadin-ui
 Type: jar
-Folder: \incubator\viewers\vaadin\ui
+Directory: /incubator/viewers/vaadin/ui
 ----
 |.Components
 ****
@@ -5930,7 +5930,7 @@ org.apache.isis.incubator.viewer:isis-viewer-vaadin-model:jar:<managed> +
 Group: org.apache.isis.incubator.viewer
 Artifact: isis-viewer-vaadin-viewer
 Type: jar
-Folder: \incubator\viewers\vaadin\viewer
+Directory: /incubator/viewers/vaadin/viewer
 ----
 |.Dependencies
 ****
@@ -6003,7 +6003,7 @@ package "Legacy\n[Software System]" {
 .Projects/Modules (Legacy)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description
+|Coordinates |Description 
 
 |Apache Isis Legacy
 [source,yaml]
@@ -6011,7 +6011,7 @@ package "Legacy\n[Software System]" {
 Group: org.apache.isis.legacy
 Artifact: isis-legacy
 Type: pom
-Folder: \legacy
+Directory: /legacy
 ----
 |Collection of deprecated Apache Isis functionality, for removal.
 
@@ -6026,7 +6026,7 @@ org.projectlombok:lombok:jar:<managed> +
 Group: org.apache.isis.legacy
 Artifact: isis-legacy-applib
 Type: jar
-Folder: \legacy\extensions\core\applib
+Directory: /legacy/extensions/core/applib
 ----
 |To ease migration from Apache Isis versions 1.16+ to 2.0.0.
 
@@ -6051,7 +6051,7 @@ org.datanucleus:javax.jdo:jar:<managed> +
 Group: org.apache.isis.legacy
 Artifact: isis-legacy-commons
 Type: jar
-Folder: \legacy\extensions\core\commons
+Directory: /legacy/extensions/core/commons
 ----
 |To ease migration from Apache Isis versions 1.16+ to 2.0.0.
 
@@ -6071,7 +6071,7 @@ org.datanucleus:javax.jdo:jar:<managed> +
 Group: org.apache.isis.legacy
 Artifact: isis-legacy-metamodel
 Type: jar
-Folder: \legacy\extensions\core\metamodel
+Directory: /legacy/extensions/core/metamodel
 ----
 |To ease migration from Apache Isis versions 1.16+ to 2.0.0.
 
@@ -6092,7 +6092,7 @@ org.datanucleus:javax.jdo:jar:<managed> +
 Group: org.apache.isis.legacy
 Artifact: isis-legacy-restclient
 Type: jar
-Folder: \legacy\mappings\restclient
+Directory: /legacy/mappings/restclient
 ----
 |As defined in Isis v1.x RO Applib.
 
@@ -6110,7 +6110,7 @@ org.projectlombok:lombok:jar:<managed> +
 Group: org.apache.isis.legacy
 Artifact: isis-legacy-runtime
 Type: jar
-Folder: \legacy\extensions\core\runtime
+Directory: /legacy/extensions/core/runtime
 ----
 |To ease migration from Apache Isis versions 1.16+ to 2.0.0.
 

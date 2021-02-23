@@ -1,3 +1,4 @@
+= TitleBuffer
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
 Title buffer is a utility class to help produce titles for objects without having to add lots of guard code.
@@ -37,22 +38,22 @@ class TitleBuffer {
 }
 ----
 
-<.> xref:#TitleBuffer[TitleBuffer]
+<.> xref:#TitleBuffer__[TitleBuffer()]
 +
 --
 Creates a new, empty, xref:refguide:applib:index/util/TitleBuffer.adoc[TitleBuffer] .
 --
-<.> xref:#TitleBuffer[TitleBuffer]
+<.> xref:#TitleBuffer__Object[TitleBuffer(Object)]
 +
 --
 Creates a new xref:refguide:applib:index/util/TitleBuffer.adoc[TitleBuffer] , containing the title of the specified object.
 --
-<.> xref:#TitleBuffer[TitleBuffer]
+<.> xref:#TitleBuffer__Object_String[TitleBuffer(Object, String)]
 +
 --
 Creates a new title object, containing the title of the specified object.
 --
-<.> xref:#TitleBuffer[TitleBuffer]
+<.> xref:#TitleBuffer__String[TitleBuffer(String)]
 +
 --
 Creates a new title object, containing the specified text.
@@ -146,27 +147,27 @@ Truncates this title so it has a maximum number of words. Spaces are used to det
 
 == Members
 
-[#TitleBuffer]
-=== TitleBuffer
+[#TitleBuffer__]
+=== TitleBuffer()
 
 Creates a new, empty, xref:refguide:applib:index/util/TitleBuffer.adoc[TitleBuffer] .
 
-[#TitleBuffer]
-=== TitleBuffer
+[#TitleBuffer__Object]
+=== TitleBuffer(Object)
 
 Creates a new xref:refguide:applib:index/util/TitleBuffer.adoc[TitleBuffer] , containing the title of the specified object.
 
 Note: this method only obtains the title using either `title()` or `toString()` ; it doesn't honour other mechanisms for specifying the title, such as _org.apache.isis.applib.annotation.Title_ annotation. If that functionality is required, first call _TitleService#titleOf(Object)_ on the object and pass in the resultant string.
 
-[#TitleBuffer]
-=== TitleBuffer
+[#TitleBuffer__Object_String]
+=== TitleBuffer(Object, String)
 
 Creates a new title object, containing the title of the specified object.
 
 Note: this method only obtains the title using either `title()` or `toString()` ; it doesn't honour other mechanisms for specifying the title, such as _org.apache.isis.applib.annotation.Title_ annotation. If that functionality is required, first call _TitleService#titleOf(Object)_ on the object and pass in the resultant string.
 
-[#TitleBuffer]
-=== TitleBuffer
+[#TitleBuffer__String]
+=== TitleBuffer(String)
 
 Creates a new title object, containing the specified text.
 

@@ -131,7 +131,7 @@ final class ProjectDocWriter {
 
         // eg: antora/components/refguide
         final File outputRootFolder = global.getOutputRootFolder();
-        val indexFolder = index.getDocumentIndexFolder(outputRootFolder);
+        val indexFolder = outputRootFolder;
 
         val destFolderBuilder = _Refs.<File>objectRef(indexFolder);
 
@@ -139,16 +139,22 @@ final class ProjectDocWriter {
         unit.getNamespace().stream()
         // eg applib/annotation
         .skip(global.getNamespacePartsSkipCount())
-        .peek(subDir-> {
+        .findFirst()
+        .ifPresent(moduleName-> {
             // applib
             // ... so updates to antora/components/refguide/modules/applib/pages/index
-            destFolderBuilder.update(currentDir -> new File(currentDir, "modules"));
-            destFolderBuilder.update(currentDir -> new File(currentDir, subDir));
-            destFolderBuilder.update(currentDir -> new File(currentDir, "pages"));
-            destFolderBuilder.update(currentDir -> new File(currentDir, "index"));
-        })
-        // annotation
-        .skip(1)
+            destFolderBuilder.update(currentDir -> {
+                final File modules = new File(currentDir, "modules");
+                final File thisModule = new File(modules, moduleName);
+                final File pages = new File(thisModule, "pages");
+                return new File(pages, "index");
+            });
+        });
+
+        // eg org/apache/isis/applib/annotation
+        unit.getNamespace().stream()
+                // eg applib/annotation
+        .skip(global.getNamespacePartsSkipCount() + 1)
         .forEach(subDir-> {
             // annotation
             // ... so updates to antora/components/refguide/modules/applib/pages/index/annotation
@@ -158,9 +164,8 @@ final class ProjectDocWriter {
         val destFolder = destFolderBuilder.getValueElseDefault(indexFolder);
         destFolder.mkdirs();
 
-        return new File(
-                destFolder,
-                unit.getCanonicalName()+ ".adoc");
+        final String fileName = unit.getCanonicalName() + ".adoc";
+        return new File(destFolder, fileName);
 
     }
 

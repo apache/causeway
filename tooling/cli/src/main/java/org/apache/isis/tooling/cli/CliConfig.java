@@ -92,7 +92,6 @@ public class CliConfig {
         @Data
         public static class Index {
 
-            private String documentGlobalIndexPath = "pages";
             private String documentGlobalIndexXrefPageIdFormat = "refguide:%s:index/%s.adoc";
 
             private boolean fixOrphanedAdocIncludeStatements = false;
@@ -113,11 +112,6 @@ public class CliConfig {
 
             private Formatter formatter = Formatter.JAVA_SOURCES_WITH_SECTIONS;
 
-            public File getDocumentIndexFolder(File outputRootFolder) {
-                return Optional.ofNullable(outputRootFolder)
-                        .map(root->new File(root, getDocumentGlobalIndexPath()))
-                        .orElse(null);
-            }
         }
 
     }
