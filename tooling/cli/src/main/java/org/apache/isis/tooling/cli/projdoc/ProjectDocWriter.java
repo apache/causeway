@@ -129,7 +129,7 @@ final class ProjectDocWriter {
             final @NonNull CliConfig.Commands.Index index
             ) {
 
-        // eg: antora/components/refguide
+        // eg: antora/components/refguide-index
         final File outputRootFolder = global.getOutputRootFolder();
         val indexFolder = outputRootFolder;
 
@@ -142,7 +142,7 @@ final class ProjectDocWriter {
         .findFirst()
         .ifPresent(moduleName-> {
             // applib
-            // ... so updates to antora/components/refguide/modules/applib/pages/index
+            // ... so updates to antora/components/refguide-index/modules/applib/pages/index
             destFolderBuilder.update(currentDir -> {
                 final File modules = new File(currentDir, "modules");
                 final File thisModule = new File(modules, moduleName);
@@ -157,7 +157,7 @@ final class ProjectDocWriter {
         .skip(global.getNamespacePartsSkipCount() + 1)
         .forEach(subDir-> {
             // annotation
-            // ... so updates to antora/components/refguide/modules/applib/pages/index/annotation
+            // ... so updates to antora/components/refguide-index/modules/applib/pages/index/annotation
             destFolderBuilder.update(currentDir -> new File(currentDir, subDir));
         });
 

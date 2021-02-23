@@ -35,7 +35,7 @@ fi
 
 
 MODE=projdoc
-GENERATED_PATH="${PROJECT_ROOT_PATH}/antora/components/refguide"
+GENERATED_PATH="${PROJECT_ROOT_PATH}/antora/components/refguide-index"
 
 ##
 ## run java
