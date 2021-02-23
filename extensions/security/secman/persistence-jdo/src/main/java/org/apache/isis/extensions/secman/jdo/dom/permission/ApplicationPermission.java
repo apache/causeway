@@ -36,6 +36,7 @@ import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.appfeat.ApplicationMemberType;
 import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.applib.util.ObjectContracts.ObjectContract;
@@ -124,6 +125,7 @@ public class ApplicationPermission implements org.apache.isis.extensions.secman.
             domainEvent = RoleDomainEvent.class,
             editing = Editing.DISABLED
             )
+    @PropertyLayout(hidden = Where.REFERENCES_PARENT)
     @Getter(onMethod = @__(@Override)) 
     private ApplicationRole role;
     
