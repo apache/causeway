@@ -27,9 +27,8 @@ content:
     - url: .
       start_path: antora/components/docs # docs
       branches: HEAD
-# api
     - url: .
-      start_path: api/adoc/userguide # userguide
+      start_path: antora/components/userguide # userguide
       branches: HEAD
 
 # examples

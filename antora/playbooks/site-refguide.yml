@@ -27,10 +27,14 @@ content:
     - url: .
       start_path: antora/components/docs # docs
       branches: HEAD
-# api
     - url: .
-      start_path: api/adoc/refguide # refguide
+      start_path: antora/components/refguide # refguide
       branches: HEAD
+    - url: .
+      start_path: antora/components/refguide-index # refguide
+      branches: HEAD
+
+# api
     - url: .
       start_path: api/applib/src/main/adoc # refguide
       branches: HEAD

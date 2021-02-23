@@ -40,16 +40,16 @@ content:
       start_path: antora/components/setupguide # setupguide
       branches: HEAD
     - url: .
+      start_path: antora/components/refguide # refguide
+      branches: HEAD
+    - url: .
       start_path: antora/components/refguide-index # refguide
+      branches: HEAD
+    - url: .
+      start_path: antora/components/userguide # userguide
       branches: HEAD
 
 # api
-    - url: .
-      start_path: api/adoc/refguide # refguide
-      branches: HEAD
-    - url: .
-      start_path: api/adoc/userguide # userguide
-      branches: HEAD
     - url: .
       start_path: api/applib/src/main/adoc # refguide
       branches: HEAD
