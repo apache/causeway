@@ -123,8 +123,11 @@ implements org.apache.isis.extensions.secman.api.role.ApplicationRoleRepository<
         
         val role = _Casts.<ApplicationRole>uncheckedCast(genericRole);
         val user = _Casts.<ApplicationUser>uncheckedCast(genericUser);
-        // no need to add to users set, since will be done by JDO/DN.
         user.getRoles().add(role);
+        role.getUsers().add(user);
+        
+        // user is the relation owner
+        repository.persistAndFlush(user);
     }
     
     @Override
@@ -134,8 +137,11 @@ implements org.apache.isis.extensions.secman.api.role.ApplicationRoleRepository<
         
         val role = _Casts.<ApplicationRole>uncheckedCast(genericRole);
         val user = _Casts.<ApplicationUser>uncheckedCast(genericUser);
-        // no need to remove from users set, since will be done by JDO/DN.
         user.getRoles().remove(role);
+        role.getUsers().remove(user);
+        
+        // user is the relation owner
+        repository.persistAndFlush(user);
     }
 
     @Override

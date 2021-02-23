@@ -24,6 +24,7 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import javax.inject.Inject;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
@@ -366,7 +367,7 @@ org.apache.isis.extensions.secman.api.user.ApplicationUser {
 //    @javax.jdo.annotations.Persistent(table="ApplicationUserRoles")
 //    @javax.jdo.annotations.Join(column="userId")
 //    @javax.jdo.annotations.Element(column="roleId")
-    @ManyToMany(mappedBy = "users")
+    @ManyToMany(mappedBy = "users", cascade = CascadeType.ALL)
     @JoinTable(
             name = "ApplicationUserRoles",
             joinColumns = {@JoinColumn(name = "userId")},
