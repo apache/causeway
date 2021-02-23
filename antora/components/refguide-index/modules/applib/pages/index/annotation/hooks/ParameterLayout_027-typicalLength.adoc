@@ -7,7 +7,6 @@
 
 The xref:refguide:applib:index/annotation/ParameterLayout.adoc#typicalLength[typicalLength()] element indicates the typical length of a string parameter.
 It is ignored for parameters of other types.
-The attribute is also supported for xref:refguide:applib:index/annotation/PropertyLayout.adoc#typicalLength[properties].
 
 The information is intended as a hint to the UI to determine the space that should be given to render a particular string parameter.
 

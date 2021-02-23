@@ -2,29 +2,28 @@
 :page-partial:
 
 
-== Examples
+=== Collection type
+
+The xref:refguide:applib:index/annotation/Action.adoc#typeOf[typeOf()] element specifies the expected type of an element returned by the action (returning a collection), when for whatever reason the type cannot be inferred from the generic type, or to provide a hint about the actual run-time (as opposed to compile-time) type.
 
 For example:
 
 [source,java]
 ----
-public class ToDoItem {
-    public static class CompletedEvent extends ActionDomainEvent<ToDoItem> { }
-    @Action(
-        commandPublishing=Publishing.ENABLED,
-        commandExecuteIn=CommandExecuteIn.FOREGROUND,          // <.>
-        commandPersistence=CommandPersistence.NOT_PERSISTED,   // <.>
-        domainEvent=CompletedEvent.class,
-        hidden = Where.NOWHERE,                                // <.>
-        executionPublishing = Publishing.ENABLED,
-        semantics = SemanticsOf.IDEMPOTENT
-    )
-    public ToDoItem completed() { /* ... */ }
+public void AccountService {
+
+    @Action(typeOf=Customer.class)
+    public List errantAccounts() {
+        return customers.allNewCustomers();
+    }
+    ...
+
+    @Inject CustomerRepository customers;
 }
 ----
-<.> default value, so could be omitted
-<.> default value, so could be omitted
-<.> default value, so could be omitted
+
+In general we recommend that you use generics instead, eg `List<Customer>`.
 
 
-== Usage Notes
+
+

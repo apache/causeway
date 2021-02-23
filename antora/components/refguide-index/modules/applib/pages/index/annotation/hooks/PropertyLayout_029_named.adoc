@@ -1,0 +1,42 @@
+=== Names
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:page-partial:
+
+
+The xref:refguide:applib:index/annotation/PropertyLayout.adoc#named[named()] element explicitly specifies the property's name, overriding the name that would normally be inferred from the Java source code.
+
+[TIP]
+====
+We recommend that you only use this element when the desired name cannot be used in Java source code.
+Examples of that include a name that would be a reserved Java keyword (eg "package"), or a name that has punctuation, eg apostrophes.
+====
+
+
+By default the name is HTML escaped.
+To allow HTML markup, set the related xref:refguide:applib:index/annotation/PropertyLayout.adoc#namedEscaped[namedEscaped()] to `false`.
+
+For example:
+
+[source,java]
+----
+import lombok.Getter;
+import lombok.Setter;
+
+public class ToDoItem {
+
+    @PropertyLayout(
+        named="Description of this <i>item</i>",
+        namedEscaped=false
+    )
+    @Getter @Setter
+    private String description;
+
+    // ...
+}
+----
+
+==== Alternatives
+
+The framework also provides a separate, powerful mechanism for xref:userguide:btb:i18n.adoc[internationalization].
+

@@ -1,0 +1,131 @@
+=== Mandatory vs optional
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:page-partial:
+
+
+By default, Apache Isis assumes that all properties of an domain object or view model are required (mandatory).
+The xref:applib:index/annotation/Property.adoc#optionality[optionality()] attribute allows this to be relaxed.
+The attribute is also supported for xref:refguide:applib:index/annotation/Parameter.adoc#optionality[parameters].
+
+That said, properties are most commonly defined on persistent domain objects (entities), in which case the JDO xref:refguide:applib-ant:Column.adoc[`@Column`] should be specified.
+Apache Isis can infer the maxLength directly from the equivalent @Column#length() annotation.
+
+That said, properties are most commonly defined on persistent domain objects (entities), in which case the JDO xref:refguide:applib-ant:Column.adoc[`@Column`] will in any case need to be specified.
+Apache Isis can infer the `optionality` semantic directly from the equivalent `@Column#allowsNull()` annotation/attribute.
+
+For example:
+
+[source,java]
+----
+import lombok.Getter;
+import lombok.Setter;
+
+public class Customer {
+
+    @javax.jdo.annotations.Column(allowsNull="true")
+    @Getter @Setter
+    private String middleInitial;
+
+    // ...
+}
+----
+
+In this case there is no need for the `@Property#optionality` attribute.
+
+== Mismatched defaults
+
+If the `@Column#allowsNull` attribute is omitted and the `@Property#optionality() attribute is also omitted, then note that Isis' defaults and JDO's defaults differ.
+Specifically, Isis always assumes properties are mandatory, whereas JDO specifies that primitives are mandatory, but all reference types are optional.
+
+When Apache Isis initializes it checks for these mismatches during its metamodel validation phase, and will fail to boot ("fail-fast") if there is a mismatch.
+The fix is usually to add the `@Column#allowsNull()` annotation/attribute.
+
+== Superclass inheritance type
+
+There is one case (at least) it may be necessary to annotate the property with both `@Column#allowsNull` and also `@Property#optionality()`.
+If the property is logically mandatory and is in a subclass, but the mapping of the class hierarchy is to store both the superclass and subclass(es) into a single table (ie a "roll-up" mapping using `javax.jdo.annotations.InheritanceStrategy#SUPERCLASS_TABLE`), then JDO requires that the property is annotated as `@Column#allowsNull="true"`: its value will be not defined for other subclasses.
+
+In this case we therefore require both annotations.
+
+[source,java]
+----
+@javax.jdo.annotations.PersistenceCapable
+@javax.jdo.annotations.Inheritance(strategy = InheritanceStrategy.NEW_TABLE)
+public abstract class PaymentMethod {
+    ...
+}
+@javax.jdo.annotations.PersistenceCapable
+@javax.jdo.annotations.Inheritance(strategy = InheritanceStrategy.SUPERCLASS_TABLE)
+public class CreditCardPaymentMethod extends PaymentMethod {
+
+    private String cardNumber;
+    @javax.jdo.annotations.Column(allowsNull="true")
+    @Property(optionality=Optionality.MANDATORY)
+    public String getCardNumber() { return this.cardNumber; }
+    public void setCardNumber(String cardNumber) { this.cardNumber = cardNumber; }
+    ...
+}
+----
+
+Alternatively, you could rely on the fact that Apache Isis never looks at fields (whereas JDO does) and move the JDO annotation to the field:
+
+[source,java]
+----
+@javax.jdo.annotations.PersistenceCapable
+@javax.jdo.annotations.Inheritance(strategy = InheritanceStrategy.SUPERCLASS_TABLE)
+public class CreditCardPaymentMethod extends PaymentMethod {
+
+    @javax.jdo.annotations.Column(allowsNull="true")
+    private String cardNumber;
+
+    public String getCardNumber() { return this.cardNumber; }
+    public void setCardNumber(String cardNumber) { this.cardNumber = cardNumber; }
+
+    // ...
+}
+----
+
+However this at first glance this might be read as meaning that the property is optional whereas Apache Isis' default (required) applies.
+
+== Non-persistent properties
+
+Of course, not every property is persistent (it could instead be derived), and neither is every domain object an entity (it could be a view model).
+For these non persistable properties the `optionality` attribute is still required.
+
+For example:
+
+[source,java]
+----
+public class Customer {
+
+    @javax.jdo.annotation.NotPersistent             // <.>
+    @Property(optionality=Optionality.OPTIONAL)
+    public String getFullName() {                   // <.>
+        // ...
+    }
+    public void setFullName(String fullName) {      // <.>
+        // ...
+    }
+
+    // ...
+}
+----
+<.> a non persisted (derived) property
+<.> implementation would most likely derive full name from constituent parts (eg first name, middle initial, last name)
+<.> implementation would most likely parse the input and update the constituent parts
+
+[TIP]
+====
+The attribute has no meaning for a primitive type such as `int`: primitives will always have a default value (e.g. zero).
+If optionality is required, then use the corresponding wrapper class (e.g. `java.lang.Integer`) and annotate with `Parameter#optionality()` as required.
+====
+
+The values for the attribute are simply `OPTIONAL` or `MANDATORY`.
+
+
+[NOTE]
+====
+It is also possible to specify optionality using xref:refguide:applib-ant:Nullable.adoc[`@Nullable`] annotation.
+====
+

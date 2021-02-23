@@ -56,6 +56,3 @@ public class Customer {
 
 If `switchToEditMode()` action is invoked, then the UI will attempt to render the customer using a `Customer.layout.edit.xml` layout file (instead of the default `Customer.layout.xml`).
 
-As an alternative to using the annotation, the dynamic xref:userguide:fun:ui.adoc#object-layout[file-based layout] can be used instead.
-
-

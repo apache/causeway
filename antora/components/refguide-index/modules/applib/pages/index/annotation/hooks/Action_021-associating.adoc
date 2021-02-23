@@ -1,0 +1,51 @@
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:page-partial:
+
+
+=== Associating actions with properties and collections
+
+The `associateWith` element allows an action to be associated with other properties or collections of the same domain object.
+The optional `associateWithSequence` element specifies the order of the action in the UI.
+
+For example, an `Order` could have a collection of ``OrderItem``s, and might provide actions to add and remove items:
+
+[source,java]
+----
+public class Order {
+
+    @Getter @Setter
+    @Collection
+    private final SortedSet<OrderItem> items = ...
+
+    @Action(
+        associateWith="items",                      // <.>
+        associateWithSequence="1" )                 // <.>
+    public Order addItem(Product p, int quantity) {
+        // ...
+    }
+
+    @Action(
+        associateWith="items",                      // <.>
+        associateWithSequence="2" )                 // <.>
+    public Order removeItem(OrderItem item) {
+        // ...
+    }
+
+    // ...
+}
+----
+
+<.> matches the name of the collection
+<.> first action in the list of all associated actions
+<.> matches the name of the collection
+<.> second action in the list of all associated actions
+
+These actions - `addItem()` and `removeItem()` can be thought of as associated with with the `items` collection because that is the state that they primarily affect.
+
+In the user interface associated actions are rendered close to the member to which they relate.
+
+[NOTE]
+====
+The same effect can be accomplished using `@MemberOrder` or with the `.layout.xml` file.
+====
+

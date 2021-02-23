@@ -41,3 +41,5 @@ so that boilerplate-busting tools such as link:https://projectlombok.org/[Projec
 
 
 == Usage Notes
+
+As alternative to using the annotation, the dynamic xref:userguide:fun:ui.adoc#object-layout[file-based layout] can generally be used instead.
