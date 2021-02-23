@@ -18,12 +18,6 @@
  */
 package org.apache.isis.core.config.presets;
 
-import java.util.List;
-
-import org.apache.isis.commons.internal.collections._Lists;
-
-import lombok.RequiredArgsConstructor;
-
 /**
  * Supports Spring's {@code @PropertySource} annotation.
  * 
@@ -79,31 +73,6 @@ public final class IsisPresets  {
     public static void logging(Class<?> clazz, String loggingLevel) {
         System.setProperty("logging.level." + clazz.getName(), loggingLevel);
     }
-    
-    @RequiredArgsConstructor
-    public static enum DebugLoggingPreset {
-        PERSISTENCE(_Lists.of(
-                "org.apache.isis.persistence.jdo.datanucleus5.persistence.IsisPlatformTransactionManagerForJdo",
-                "org.apache.isis.persistence.jdo.datanucleus5.persistence.PersistenceSession5",
-                "org.apache.isis.persistence.jdo.datanucleus5.persistence.IsisTransactionJdo"                
-                )), 
-        ISIS_SESSION(_Lists.of(
-                "org.apache.isis.core.runtimeservices.session.IsisInteractionFactoryDefault"
-                )),
-        VAADIN(_Lists.of(
-                "com.vaadin",
-                "org.apache.isis.incubator.viewer.vaadin.ui.auth.VaadinAuthenticationHandler"
-                )),
-        ;
-        private final List<String> include;        
-        public void apply() {
-            include.forEach(className->
-                System.setProperty("logging.level." + className, "debug"));
-        }
-    }
-    
-    
-    
     
 
 }

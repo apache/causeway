@@ -24,6 +24,7 @@ import javax.jdo.PersistenceManagerFactory;
 import javax.sql.DataSource;
 
 import org.datanucleus.api.jdo.JDOPersistenceManagerFactory;
+import org.datanucleus.metadata.PersistenceUnitMetaData;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -36,6 +37,7 @@ import org.springframework.transaction.interceptor.TransactionInterceptor;
 import org.apache.isis.applib.services.eventbus.EventBusService;
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.core.config.IsisConfiguration;
+import org.apache.isis.core.config.beans.IsisBeanTypeRegistry;
 import org.apache.isis.core.config.beans.aoppatch.TransactionInterceptorFactory;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.transaction.changetracking.EntityChangeTracker;
@@ -106,6 +108,7 @@ public class IsisModuleJdoDatanucleus {
             final MetaModelContext metaModelContext,
             final EventBusService eventBusService,
             final Provider<EntityChangeTracker> entityChangeTrackerProvider,
+            final IsisBeanTypeRegistry beanTypeRegistry,
             final DnSettings dnSettings) {
         
         _Assert.assertNotNull(dataSource, "a datasource is required");
@@ -115,7 +118,8 @@ public class IsisModuleJdoDatanucleus {
         val lpmfBean = new LocalPersistenceManagerFactoryBean() {
             @Override
             protected PersistenceManagerFactory newPersistenceManagerFactory(java.util.Map<?,?> props) {
-                val pmf = new JDOPersistenceManagerFactory(props);
+                val pu = createDefaultPersistenceUnit(beanTypeRegistry);
+                val pmf = new JDOPersistenceManagerFactory(pu, props);
                 pmf.setConnectionFactory(dataSource);
                 integrateWithApplicationLayer(metaModelContext, eventBusService, entityChangeTrackerProvider, pmf);
                 return pmf;
@@ -210,20 +214,35 @@ public class IsisModuleJdoDatanucleus {
 
         if(!persistenceSchemaConf.getAutoCreateSchemas().isEmpty()) {
 
-            log.info("about to create db schema(s) {}", persistenceSchemaConf.getAutoCreateSchemas());
+            log.info("About to create db schema(s) {} with template '{}'", 
+                    persistenceSchemaConf.getAutoCreateSchemas(),
+                    persistenceSchemaConf.getCreateSchemaSqlTemplate());
 
             try(val con = dataSource.getConnection()){
 
                 val s = con.createStatement();
 
                 for(val schema : persistenceSchemaConf.getAutoCreateSchemas()) {
-                    s.execute(String.format(persistenceSchemaConf.getCreateSchemaSqlTemplate(), schema));
+                    val sql = String.format(persistenceSchemaConf.getCreateSchemaSqlTemplate(), schema);
+                    log.info("SQL '{}'", sql);
+                    s.execute(sql);
                 }
 
             }
         }
 
         return dataSource;
+    }
+    
+    private static PersistenceUnitMetaData createDefaultPersistenceUnit (
+            final IsisBeanTypeRegistry beanTypeRegistry) {
+        val pumd = new PersistenceUnitMetaData(
+                "dynamic-unit", "RESOURCE_LOCAL", null);
+        pumd.setExcludeUnlistedClasses(false);
+        beanTypeRegistry.getEntityTypes().stream()
+        .map(Class::getName)
+        .forEach(pumd::addClassName);
+        return pumd;
     }
     
     private static void integrateWithApplicationLayer(
