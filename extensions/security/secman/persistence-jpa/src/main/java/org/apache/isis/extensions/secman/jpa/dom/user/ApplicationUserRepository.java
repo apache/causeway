@@ -36,6 +36,7 @@ import org.apache.isis.applib.services.queryresultscache.QueryResultsCache;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.config.IsisConfiguration;
@@ -118,8 +119,9 @@ implements org.apache.isis.extensions.secman.api.user.ApplicationUserRepository<
     // -- findByName
 
     @Override
-    public Collection<ApplicationUser> find(final String search) {
-        final String regex = String.format("(?i).*%s.*", search.replace("*", ".*").replace("?", "."));
+    public Collection<ApplicationUser> find(final @Nullable String _search) {
+        val search = String.format("%s", _Strings.nullToEmpty(_search).replace("*", "%").replace("?", "_"));
+        val regex = _Strings.suffix(_Strings.prefix(search, "%"), "%");
         return repository.allMatches(Query.named(ApplicationUser.class, NamedQueryNames.USER_FIND)
                 .withParameter("regex", regex))
                 .stream()

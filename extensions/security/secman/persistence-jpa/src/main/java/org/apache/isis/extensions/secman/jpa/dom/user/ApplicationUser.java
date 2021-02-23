@@ -102,11 +102,11 @@ import lombok.val;
             name = NamedQueryNames.USER_FIND,
             query = "SELECT u "
                   + "FROM org.apache.isis.extensions.secman.jpa.dom.user.ApplicationUser u "
-                  + "WHERE u.username LIKE '%:regex%'"
-                  + "  OR u.familyName LIKE '%:regex%'"
-                  + "  OR u.givenName LIKE '%:regex%'"
-                  + "  OR u.knownAs LIKE '%:regex%'"
-                  + "  OR u.emailAddress LIKE '%:regex%'")
+                  + "WHERE u.username LIKE :regex"
+                  + "  OR u.familyName LIKE :regex"
+                  + "  OR u.givenName LIKE :regex"
+                  + "  OR u.knownAs LIKE :regex"
+                  + "  OR u.emailAddress LIKE :regex")
 })
 @EntityListeners(JpaEntityInjectionPointResolver.class)
 @DomainObject(
