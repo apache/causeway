@@ -1,0 +1,151 @@
+=== UI Events
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:page-partial:
+
+
+Whenever a domain object is to be rendered, the framework fires off a number of various events to allow subscribers to influence the visual appearance of that domain object:
+
+* a *CSS class* UI event
++
+to obtain a CSS class to use in any wrapping ``<div>``s and ``<span>``s that render the domain object.
+
+* an *icon* UI event
++
+to obtain an icon (name) for the object (if possible)
+
+* a *layout* UI event
++
+to obtain an alternative layout name with which to render the domain object.
+
+* a *title* UI event
++
+to obtain a title for the object
+
+The framework has a built-in event class (for each UI hint) that is raised by default; for example a `TitleUiEvent.Default` is raised to obtain a title for the object.
+Subscribers subscribe through the xref:refguide:applib:index/services/eventbus/EventBusService.adoc[`EventBusService`] and can use obtain a reference to the domain object from the event.
+From this they can, if they wish, specify the corresponding UI hint.
+
+This basic model can be influenced in a couple of ways:
+
+* first, it is also possible to suppress any events from being emitted using a configuration property (a different config property exists each lifecycle hook).
+
+* second, an element on xref:refguide:applib:index/annotation/DomainObjectLayout.adoc[@DomainObjectLayout] annotation (for each UI hook) allows a different subtype event types to be emitted instead
++
+This allows subscribers to more targeted as to the events that they subscribe to.
+
+
+The type of this event can be changed using various `xxxUiEvent` elements of xref:refguide:applib:index/annotation/DomainObjectLayout.adoc[@DomainObjectLayout].
+This allows subscribers to be more precise as to the domain objects that they will target.
+
+
+The framework also provides convenience "Doop" and a "Noop" event classes, that provoke these behaviours:
+
+* if the appropriate xref:refguide:applib:index/annotation/DomainObject.adoc[DomainObject]' element is set to the "Doop" subclass, then this will event will be fired
++
+this is a convenient way of ensuring an event is fired even if the hook has been disabled globally, but without the hassle of defining a custom event type
+
+* if set to the "Noop" subclass, then an event will _not_ be fired.
+
+If the domain object implements the corresponding  xref:refguide:applib-methods:reserved.adoc[reserved method] directly (for example xref:refguide:applib-methods:reserved.adoc#title[title()], then that will take precedence.
+
+The table below summarises all the UI event hooks:
+
+[cols="2a,5a,5a,4a,3a"]
+|===
+| UI hint
+| Config property
+| @DomainObjectLayout override
+| Framework event types
+| Reserved method
+
+| CSS class
+|xref:refguide:config:sections/isis.applib.adoc#isis.applib.annotation.domain-object-layout.css-class-ui-event.post-for-default[isis.applib.annotation.domain-object-layout.css-class-ui-event.post-for-default]
+| xref:refguide:applib:index/annotation/DomainObjectLayout.adoc#cssClassUiEvent[cssClassUiEvent()]
+m| CssClassUiEvent.Default +
+CssClassUiEvent.Doop +
+CssClassUiEvent.Noop
+|xref:refguide:applib-methods:reserved.adoc#cssClass[cssClass()]
+
+| Icon Name
+|xref:refguide:config:sections/isis.applib.adoc#isis.applib.annotation.domain-object-layout.icon-ui-event.post-for-default[isis.applib.annotation.domain-object-layout.icon-ui-event.post-for-default]
+| xref:refguide:applib:index/annotation/DomainObjectLayout.adoc#iconUiEvent[iconUiEvent()]
+m| IconUiEvent.Default +
+IconUiEvent.Doop +
+IconUiEvent.Noop
+|xref:refguide:applib-methods:reserved.adoc#iconName[iconName()]
+
+| Layout
+|xref:refguide:config:sections/isis.applib.adoc#isis.applib.annotation.domain-object-layout.layout-ui-event.post-for-default[isis.applib.annotation.domain-object-layout.layout-ui-event.post-for-default]
+| xref:refguide:applib:index/annotation/DomainObjectLayout.adoc#layoutUiEvent[layoutUiEvent()]
+m| LayoutUiEvent.Default +
+LayoutUiEvent.Doop +
+LayoutUiEvent.Noop
+|xref:refguide:applib-methods:reserved.adoc#layout[layout()]
+
+| Title
+|xref:refguide:config:sections/isis.applib.adoc#isis.applib.annotation.domain-object-layout.title-ui-event.post-for-default[isis.applib.annotation.domain-object-layout.title-ui-event.post-for-default]
+| xref:refguide:applib:index/annotation/DomainObjectLayout.adoc#titleUiEvent[titleUiEvent()]
+m| TitleUiEvent.Default +
+TitleUiEvent.Doop +
+TitleUiEvent.Noop
+|xref:refguide:applib-methods:reserved.adoc#title[title()]
+
+|===
+
+
+For example:
+
+[source,java]
+----
+@DomainObjectLayout(
+    iconUiEvent=ToDoItemDto.CssClassUiEvent.class,
+    titleUiEvent=ToDoItemDto.TitleUiEvent.class
+)
+public class ToDoItemDto {
+    public static class CssClassUiEvent
+        extends org.apache.isis.applib.events.ui.CssClassUiEvent<ToDoItemDto> { }
+    public static class TitleUiEvent
+    extends org.apache.isis.applib.events.ui.TitleUiEvent<ToDoItemDto> { }
+    ...
+}
+----
+
+==== Subscribers
+
+Subscribers can be either coarse-grained (if they subscribe to the top-level event type):
+
+[source,java]
+----
+import org.springframework.context.event.EventListener;
+import org.springframework.stereotype.Service;
+
+@Service
+public class SomeSubscriber {
+    @EventListener(CssClassUiEvent.class)
+    public void on(CssClassUiEvent ev) {
+        if(ev.getSource() instanceof ToDoItemDto) {
+            ...
+        }
+    }
+}
+----
+
+or can be fine-grained (by subscribing to specific event subtypes):
+
+[source,java]
+----
+import org.springframework.context.event.EventListener;
+import org.springframework.stereotype.Service;
+
+@Service
+public class SomeSubscriber {
+    @EventListener(ToDoItemDto.CssClassUiEvent.class)
+    public void on(ToDoItemDto.CssClassUiEvent ev) {
+        ...
+    }
+}
+----
+
+The subscriber should then use the appropriate method --  `CssClassUiEvent#setCssClass(...)`  -- to actually specify the CSS class to be used.
+

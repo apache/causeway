@@ -1,11 +1,10 @@
-[#named]
-= `named()`
+=== Names
 
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :page-partial:
 
 
-The `named` attribute explicitly specifies the property's name, overriding the name that would normally be inferred from the Java source code.
+The xref:refguide:applib:index/annotation/DomainObjectLayout.adoc#named[named()] element explicitly specifies the domain object's name, overriding the name that would normally be inferred from the Java source code.
 
 [TIP]
 ====
@@ -13,42 +12,38 @@ We recommend that you only use this element when the desired name cannot be used
 Examples of that include a name that would be a reserved Java keyword (eg "package"), or a name that has punctuation, eg apostrophes.
 ====
 
-By default the name is HTML escaped.
-To allow HTML markup, set the related `namedEscaped` attribute to `false`.
+For example:
+
+[source,java]
+----
+@DomainObjectLayout(
+   named="Customer"
+)
+public class CustomerImpl implements Customer{
+   // ...
+}
+----
+
+
+==== Plural form
+
+When Apache Isis displays a standalone collection of several objects, it will label the collection using the plural form of the object type.
+By default the plural name will be derived from the end of the singular name, with support for some basic English language defaults (eg using "ies" for names ending with a "y").
+
+For irregular plurals it's possible to specify a plural form using the xref:refguide:applib:index/annotation/DomainObjectLayout.adoc#plural[plural] element.
 
 For example:
 
 [source,java]
 ----
-import lombok.Getter;
-import lombok.Setter;
-
-public class ToDoItem {
-
-    @PropertyLayout(
-        named="Description of this <i>item</i>",
-        namedEscaped=false
-    )
-    @Getter @Setter
-    private String description;
-
+@DomainObjectLayout(plural="Children")
+public class Child {
     // ...
 }
 ----
 
-== Alternatives
 
-As an alternative to using the annotation, the dynamic xref:userguide:fun:ui.adoc#object-layout[file-based layout] can be used instead.
+==== i18n
 
 The framework also provides a separate, powerful mechanism for xref:userguide:btb:i18n.adoc[internationalization].
-
-== See also
-
-This attribute can also be specified for:
-
-* xref:refguide:applib:index/annotation/ActionLayout.adoc#named[actions]
-* xref:refguide:applib:index/annotation/CollectionLayout.adoc#named[collections]
-* xref:refguide:applib:index/annotation/ParameterLayout.adoc#named[parameters]
-* xref:refguide:applib:index/annotation/DomainObjectLayout.adoc#named[domain objects]
-* xref:refguide:applib:index/annotation/DomainServiceLayout.adoc#named[domain services].
 
