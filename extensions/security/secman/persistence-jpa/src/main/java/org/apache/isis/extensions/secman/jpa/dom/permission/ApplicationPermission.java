@@ -27,6 +27,8 @@ import javax.inject.Inject;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -151,6 +153,7 @@ implements
 
 
     @Column(nullable=false)
+    @Enumerated(EnumType.STRING)
     @Property(
             domainEvent = RuleDomainEvent.class,
             editing = Editing.DISABLED
@@ -165,6 +168,7 @@ implements
 
 
     @Column(nullable=false)
+    @Enumerated(EnumType.STRING)
     @Property(
             domainEvent = ModeDomainEvent.class,
             editing = Editing.DISABLED
@@ -220,6 +224,7 @@ implements
      * @see #getFeatureFqn()
      */
     @Column(nullable=false)
+    @Enumerated(EnumType.STRING)
     @Setter
     private ApplicationFeatureType featureType;
 

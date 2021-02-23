@@ -27,6 +27,8 @@ import javax.inject.Inject;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -301,6 +303,7 @@ org.apache.isis.extensions.secman.api.user.ApplicationUser {
 
 
     @Column(nullable=false)
+    @Enumerated(EnumType.STRING)
     @Property(
             domainEvent = AccountTypeDomainEvent.class,
             editing = Editing.DISABLED
@@ -316,6 +319,7 @@ org.apache.isis.extensions.secman.api.user.ApplicationUser {
 
 
     @Column(nullable=false)
+    @Enumerated(EnumType.STRING)
     @Property(
             domainEvent = StatusDomainEvent.class,
             editing = Editing.DISABLED
