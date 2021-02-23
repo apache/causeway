@@ -6,17 +6,17 @@
 
 CAUTION: TODO: v2 - publishing/auditing got a complete overhaul
 
-Every property edit (and xref:system:generated:index/applib/annotation/Action.adoc#commandPublishing[action invocation] for that matter) is normally reified into a concrete `Command` object, basically a wrapper around the XML invocation xref:schema:cmd.adoc[Command] schema that also captures some timing metrics about the execution as well as the outcome.
+Every property edit (and xref:refguide:applib:index/annotation/Action.adoc#commandPublishing[action invocation] for that matter) is normally reified into a concrete `Command` object, basically a wrapper around the XML invocation xref:schema:cmd.adoc[Command] schema that also captures some timing metrics about the execution as well as the outcome.
 
 The main uses cases are:
 
-* as a means to allow asynchronous child commands to be executed, using the xref:system:generated:index/applib/services/wrapper/WrapperFactory.adoc[WrapperFactory] service;
+* as a means to allow asynchronous child commands to be executed, using the xref:refguide:applib:index/services/wrapper/WrapperFactory.adoc[WrapperFactory] service;
 
-* as a means to audit (persist) commands, by implementing the xref:system:generated:index/applib/services/publishing/spi/CommandSubscriber.adoc[CommandSubscriber] SPI.
+* as a means to audit (persist) commands, by implementing the xref:refguide:applib:index/services/publishing/spi/CommandSubscriber.adoc[CommandSubscriber] SPI.
 +
 The xref:extensions:command-log:about.adoc[Command Log] extension _does_ provide such an implementation.
 +
-TIP: Another option to achieve this is to use the xref:system:generated:index/applib/services/publishing/spi/ExecutionSubscriber.adoc[ExecutionSubscriber] SPI.
+TIP: Another option to achieve this is to use the xref:refguide:applib:index/services/publishing/spi/ExecutionSubscriber.adoc[ExecutionSubscriber] SPI.
 
 * to replay commands onto a secondary system, for regression testing.
 +
@@ -75,6 +75,6 @@ If `commandDtoProcessor()` is specified, then `commandPublishing()` is assumed t
 
 
 
-For an example application, see xref:system:generated:index/applib/annotation/Action.adoc#command[`Action#command()`].
+For an example application, see xref:refguide:applib:index/annotation/Action.adoc#command[`Action#command()`].
 
 

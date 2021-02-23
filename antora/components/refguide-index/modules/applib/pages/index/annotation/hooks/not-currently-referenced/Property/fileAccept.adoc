@@ -6,7 +6,7 @@
 
 
 The `fileAccept` attribute applies only to xref:applib-classes:value-types.adoc#Blob[`Blob`] or xref:applib-classes:value-types.adoc#Clob[`Clob`] parameters, indicating the type of file to accept when uploading a new value.
-The attribute is also supported on xref:system:generated:index/applib/annotation/Parameter.adoc#fileAccept[parameters].
+The attribute is also supported on xref:refguide:applib:index/annotation/Parameter.adoc#fileAccept[parameters].
 
 For example:
 

@@ -39,5 +39,5 @@ public class Customer {
 
 == See also
 
-This attribute can also be specified for xref:system:generated:index/applib/annotation/Parameter.adoc#regexPattern[parameters].
+This attribute can also be specified for xref:refguide:applib:index/annotation/Parameter.adoc#regexPattern[parameters].
 

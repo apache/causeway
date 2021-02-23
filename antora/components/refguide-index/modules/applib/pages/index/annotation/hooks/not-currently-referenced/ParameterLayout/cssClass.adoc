@@ -29,8 +29,8 @@ public class ToDoItem {
 
 This attribute can also be applied to:
 
-* xref:system:generated:index/applib/annotation/DomainObjectLayout.adoc#cssClass[domain objects]
-* xref:system:generated:index/applib/annotation/ActionLayout.adoc#cssClass[actions]
-* xref:system:generated:index/applib/annotation/PropertyLayout.adoc#cssClass[properties],
-* xref:system:generated:index/applib/annotation/CollectionLayout.adoc#cssClass[collections]
-* xref:system:generated:index/applib/annotation/ParameterLayout.adoc#cssClass[parameters].
+* xref:refguide:applib:index/annotation/DomainObjectLayout.adoc#cssClass[domain objects]
+* xref:refguide:applib:index/annotation/ActionLayout.adoc#cssClass[actions]
+* xref:refguide:applib:index/annotation/PropertyLayout.adoc#cssClass[properties],
+* xref:refguide:applib:index/annotation/CollectionLayout.adoc#cssClass[collections]
+* xref:refguide:applib:index/annotation/ParameterLayout.adoc#cssClass[parameters].

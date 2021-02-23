@@ -1,0 +1,35 @@
+=== Menu bars
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:page-partial:
+
+
+
+The xref:refguide:applib:index/annotation/DomainServiceLayout.adoc#menuBar[menuBar] element is a hint to specify where on the application menu a domain service's actions should be rendered.
+
+For example:
+
+[source,java]
+----
+@DomainService
+@DomainServiceLayout(menuBar=MenuBar.PRIMARY)
+public class ToDoItems {
+    ...
+}
+----
+
+In the xref:vw:ROOT:about.adoc[Wicket viewer], domain services placed:
+
+* on the `PRIMARY` menu bar appears to the left.
+* on the `SECONDARY` menu bar appear to the right:
+* on the `TERTIARY` appear in the menu bar associated with the user's name (far top-right)
+
+The grouping of multiple domain services actions within a single drop-down is managed by the link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/core/annotation/Order.html[`@Order`] annotation.
+
+NOTE: The xref:vro:ROOT:about.adoc[RestfulObjects viewer] does not support this attribute.
+
+==== Alternatives
+
+Alternatively, use `menubars.layout.xml` layout file to organize menu action items arbitrarily.
+
+

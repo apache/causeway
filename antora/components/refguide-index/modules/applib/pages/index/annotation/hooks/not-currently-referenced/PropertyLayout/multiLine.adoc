@@ -7,7 +7,7 @@
 
 The `multiLine` attribute specifies that the text field for a string property should span multiple lines.
 It is ignored for other property types.
-The attribute is also supported for xref:system:generated:index/applib/annotation/ParameterLayout.adoc#multiLine[parameters].
+The attribute is also supported for xref:refguide:applib:index/annotation/ParameterLayout.adoc#multiLine[parameters].
 
 For example:
 
@@ -32,7 +32,7 @@ Here the `stepsToReproduce` will be displayed in a text area of 10 rows.
 
 [NOTE]
 ====
-If set > 1 (as would normally be the case), then the default xref:system:generated:index/applib/annotation/PropertyLayout.adoc#labelPosition[`labelPosition`] defaults to `TOP` (rather than `LEFT`, as would normally be the case).
+If set > 1 (as would normally be the case), then the default xref:refguide:applib:index/annotation/PropertyLayout.adoc#labelPosition[`labelPosition`] defaults to `TOP` (rather than `LEFT`, as would normally be the case).
 ====
 
 == Alternatives

@@ -9,7 +9,7 @@ The `hidden` attribute indicates where (in the UI) the property should be hidden
 
 [TIP]
 ====
-It is also possible to use xref:system:generated:index/applib/annotation/PropertyLayout.adoc#hidden[`@PropertyLayout#hidden`] or a xref:userguide:fun:ui.adoc#object-layout[file-based layout] such that the property can be hidden at the view layer.
+It is also possible to use xref:refguide:applib:index/annotation/PropertyLayout.adoc#hidden[`@PropertyLayout#hidden`] or a xref:userguide:fun:ui.adoc#object-layout[file-based layout] such that the property can be hidden at the view layer.
 Both options are provided with a view that in the future the view-layer semantics may be under the control of (expert) users, whereas domain-layer semantics should never be overridden or modified by the user.
 ====
 
@@ -63,7 +63,7 @@ This combines `PARENTED_TABLES` and `STANDALONE_TABLES`.
 +
 The property should not be hidden, overriding any other metadata/conventions that would normally cause the property to be hidden.
 
-For example, if a property is annotated with xref:system:generated:index/applib/annotation/Title.adoc[`@Title`], then normally this should be hidden from all tables.
+For example, if a property is annotated with xref:refguide:applib:index/annotation/Title.adoc[`@Title`], then normally this should be hidden from all tables.
 Annotating with `@Property(where=Where.NOWHERE)` overrides this.
 
 [NOTE]
@@ -79,6 +79,6 @@ As an alternative to using the annotation, the dynamic xref:userguide:fun:ui.ado
 
 This attribute can also be applied to:
 
-* xref:system:generated:index/applib/annotation/Action.adoc#hidden[actions]
-* xref:system:generated:index/applib/annotation/Collection.adoc#hidden[collections].
+* xref:refguide:applib:index/annotation/Action.adoc#hidden[actions]
+* xref:refguide:applib:index/annotation/Collection.adoc#hidden[collections].
 

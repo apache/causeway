@@ -21,6 +21,6 @@ public class ToDoItem { /* ... */ }
 
 [NOTE]
 ====
-The similar xref:system:generated:index/applib/annotation/DomainObjectLayout.adoc#cssClassFa[`@DomainObjectLayout#cssClassFa()`] element is also used as a hint to apply CSS, but in particular to allow http://fortawesome.github.io/Font-Awesome/icons/[Font Awesome icons] to be rendered as the icon for classes.
+The similar xref:refguide:applib:index/annotation/DomainObjectLayout.adoc#cssClassFa[`@DomainObjectLayout#cssClassFa()`] element is also used as a hint to apply CSS, but in particular to allow http://fortawesome.github.io/Font-Awesome/icons/[Font Awesome icons] to be rendered as the icon for classes.
 ====
 

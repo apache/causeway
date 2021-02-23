@@ -29,6 +29,6 @@ The related xref:refguide:applib:index/annotation/DomainObjectLayout.adoc#cssCla
 
 [TIP]
 ====
-The similar xref:system:generated:index/applib/annotation/DomainObjectLayout.adoc#cssClass[@DomainObjectLayout#cssClass()] element is also used as a hint to apply CSS, but for wrapping the representation of an object or object member so that it can be styled in an application-specific way.
+The similar xref:refguide:applib:index/annotation/DomainObjectLayout.adoc#cssClass[@DomainObjectLayout#cssClass()] element is also used as a hint to apply CSS, but for wrapping the representation of an object or object member so that it can be styled in an application-specific way.
 ====
 

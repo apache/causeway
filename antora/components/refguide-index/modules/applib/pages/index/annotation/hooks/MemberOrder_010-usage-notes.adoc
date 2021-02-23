@@ -1,18 +1,23 @@
-[#name]
-= `name()`
+=== Usage notes
 
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :page-partial:
 
 
-// TODO: v2: replace @MemberOrder#name() with @PropertyLayout#group().
+// TODO: v2: ISIS-2545: replace @MemberOrder#name() with @PropertyLayout#group().
 
-The interpretation of the `name` attribute varies dependent on the type of object member it is annotated upon.
+The interpretation of the xref:refguide:applib:index/annotation/MemberOrder.adoc#name[name] element varies dependent on the type of object member it is annotated upon, but generally speaking it is used to associate members together.
 
-== Properties
 
-For properties, the `name` attribute is used to group properties together.
+The xref:refguide:applib:index/annotation/MemberOrder.adoc#sequence[sequence] element then orders those members that have been grouped together.
+
+
+
+==== Properties
+
+For properties, the `name` attribute is used to group properties together, and `sequence` orders the properties within that group.
 It corresponds to a `<fieldset>` if using xref:userguide:fun:ui.adoc#object-layout[layout files].
+
 
 For example:
 
@@ -48,11 +53,10 @@ public class Customer {
 TIP: It's possible to combine `@MemberOrder` with xref:userguide:fun:ui.adoc#object-layout[layout file].
 Use the layout file to define the positioning of the fieldsets, and use `@MemberOrder` to organise the properties within the fieldset.
 
-== Actions
+==== Actions
 
-For actions, the `name` attribute indicates the name of a property to associate the action with.
+For actions, the `name` attribute indicates the name of a property to associate the action with, and `sequence` orders all the actions associated with the same property or collection (on the panel of the property's fieldset, or collection's title bar).
 
-TIP: For actions, `@Member#name()` and xref:system:generated:index/applib/annotation/Action.adoc#associateWith()` are the same.
 
 For example:
 
@@ -77,9 +81,12 @@ public class Customer {
 }
 ----
 
-TIP: the xref:system:generated:index/applib/annotation/ActionLayout.adoc#position[`@ActionLayout#position()`] to indicate whether the action should be rendered beneath the property, or on its fieldset panel's header.
+TIP: For actions, `@Member#name()` element and xref:refguide:applib:index/annotation/Action.adoc#associateWith[@Action#associateWith()] element have the same effect.
 
-== Collections
+TIP: For actions associated with properties, the xref:refguide:applib:index/annotation/ActionLayout.adoc#position[`@ActionLayout#position()`] element indicates whether the action should be rendered beneath the property's field, or instead on the property's fieldset panel's header.
+
+
+==== Collections
 
 The `name` attribute is ignored when annotated on collections.
 

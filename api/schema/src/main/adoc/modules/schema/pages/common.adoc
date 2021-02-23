@@ -170,7 +170,7 @@ This is primarily to save storage space if the resultant XML is persisted as a m
 
 == Ancillary types
 
-The common schema also defines a number of ancillary types, used either by the common schema itself (see above) or by the xref:refguide:schema:cmd["cmd"] and xref:refguide:schema:ixn.adoc["ixn"] schemas.
+The common schema also defines a number of ancillary types, used either by the common schema itself (see above) or by the xref:refguide:schema:cmd.adoc["cmd"] and xref:refguide:schema:ixn.adoc["ixn"] schemas.
 
 [source,xml]
 ----
@@ -239,6 +239,6 @@ The common schema also defines a number of ancillary types, used either by the c
 <5> Captures a pair of numbers representing a difference.
 Used for example to capture metrics (number objects modified before and after).
 <6> Whether this command/interaction with a member is invoking an action, or editing a property.
-Used by both the xref:refguide:schema:cmd["cmd"] and xref:refguide:schema:ixn.adoc["ixn"] schemas.
+Used by both the xref:refguide:schema:cmd.adoc["cmd"] and xref:refguide:schema:ixn.adoc["ixn"] schemas.
 <7> Contains a list of OIDs, eg for use in "bulk" actions that apply to multiple targets.
 
