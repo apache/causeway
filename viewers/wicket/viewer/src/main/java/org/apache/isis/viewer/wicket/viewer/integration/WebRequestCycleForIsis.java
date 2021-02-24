@@ -20,7 +20,6 @@
 package org.apache.isis.viewer.wicket.viewer.integration;
 
 import java.lang.reflect.Constructor;
-import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -83,6 +82,7 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class WebRequestCycleForIsis implements IRequestCycleListener {
     
+    // introduced (ISIS-1922) to handle render 'session refreshed' messages after session was expired
     private static enum SessionLifecyclePhase {
         DONT_CARE,
         EXPIRED,
@@ -95,6 +95,20 @@ public class WebRequestCycleForIsis implements IRequestCycleListener {
             return Session.exists() 
                     && SessionLifecyclePhase.ACTIVE_AFTER_EXPIRED == Session.get().getMetaData(SESSION_LIFECYCLE_PHASE_KEY);
         }
+        static void transferExpiredFlagToSession() {
+            Session.get().setMetaData(SESSION_LIFECYCLE_PHASE_KEY, SessionLifecyclePhase.ACTIVE_AFTER_EXPIRED);
+            Session.get().setAttribute("session-expiry-message-timeframe", LocalDateTime.now().plusNanos(1000_000_000L));
+        }
+        static void clearExpiredFlag() {
+            Session.get().setMetaData(SESSION_LIFECYCLE_PHASE_KEY, SessionLifecyclePhase.DONT_CARE);
+        }
+        static boolean isExpiryMessageTimeframeExpired() {
+            val sessionExpiryMessageTimeframe = 
+                    (LocalDateTime) Session.get().getAttribute("session-expiry-message-timeframe");
+            return sessionExpiryMessageTimeframe==null
+                    || LocalDateTime.now().isAfter(sessionExpiryMessageTimeframe);
+        }
+        
     }
 
     public static final MetaDataKey<IsisRequestCycle> REQ_CYCLE_HANDLE_KEY =
@@ -149,12 +163,12 @@ public class WebRequestCycleForIsis implements IRequestCycleListener {
 
         // this nested class is hidden; it seems it is always used to create a new session after one has expired
         if("org.apache.wicket.request.flow.ResetResponseException$ResponseResettingDecorator"
-                .equals(handler.getClass().getName())) {
-            if(SessionLifecyclePhase.isExpired(requestCycle)) {
-                log.debug("Transferring the 'expired' flag into the current session.");
-                Session.get().setMetaData(SESSION_LIFECYCLE_PHASE_KEY, SessionLifecyclePhase.ACTIVE_AFTER_EXPIRED);
-                Session.get().setAttribute("session-expiry-message-timeframe", LocalDateTime.now().plusNanos(1000_000_000L));
-            }
+                    .equals(handler.getClass().getName())
+                && SessionLifecyclePhase.isExpired(requestCycle)) {
+            
+            log.debug("Transferring the 'expired' flag into the current session.");
+            SessionLifecyclePhase.transferExpiredFlagToSession();
+            
         } else if(handler instanceof RenderPageRequestHandler) {
 
             val validationResult = getCommonContext().getSpecificationLoader().getValidationResult();
@@ -170,14 +184,15 @@ public class WebRequestCycleForIsis implements IRequestCycleListener {
             }
             
             if(SessionLifecyclePhase.isActiveAfterExpired()) {
-                
-                val sessionExpiryMessageTimeframe = 
-                        (LocalDateTime) Session.get().getAttribute("session-expiry-message-timeframe");
-                if(sessionExpiryMessageTimeframe==null
-                        || LocalDateTime.now().isAfter(sessionExpiryMessageTimeframe) ) {
-                    log.debug("clear the session's active-after-expired flag (timeframe: {})", 
-                            sessionExpiryMessageTimeframe);
-                    Session.get().setMetaData(SESSION_LIFECYCLE_PHASE_KEY, SessionLifecyclePhase.DONT_CARE);    
+            
+                // we receive multiple requests after a session had expired and was reactivated;
+                // impossible to tell which one is the last that should then render the message;
+                // so we just render them on all requests, until the 1 second time frame since session creation
+                // has gone by, could result in the message displayed too often, 
+                // but thats better than no message displayed at all 
+                if(SessionLifecyclePhase.isExpiryMessageTimeframeExpired()) {
+                    log.debug("clear the session's active-after-expired flag (expiry-message timeframe has expired");
+                    SessionLifecyclePhase.clearExpiredFlag();
                 } else {
                     getMessageBroker().ifPresent(broker -> {
                         log.debug("render 'expired' message");
