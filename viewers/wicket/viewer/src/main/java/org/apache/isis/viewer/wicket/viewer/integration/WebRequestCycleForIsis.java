@@ -196,7 +196,8 @@ public class WebRequestCycleForIsis implements IRequestCycleListener {
                 } else {
                     getMessageBroker().ifPresent(broker -> {
                         log.debug("render 'expired' message");
-                        broker.addMessage(translate("Expired session was refreshed."));
+                        broker.addMessage(translate("You have been redirected to the home page "
+                                + "as your session expired (no recent activity)."));
                     });    
                 }
             }
