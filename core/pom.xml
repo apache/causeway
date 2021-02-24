@@ -259,7 +259,7 @@
 			<extension>
 				<groupId>org.apache.maven.wagon</groupId>
 				<artifactId>wagon-ftp</artifactId>
-				<version>3.4.2</version>
+				<version>3.4.3</version>
 			</extension>
 			<extension>
 				<groupId>org.apache.maven.archetype</groupId>
