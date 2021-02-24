@@ -127,6 +127,9 @@ resteasy:
 
 server:
   max-http-header-size: 16KB
+  servlet:
+    session:
+      timeout: 20m
 
 spring:
   banner:
