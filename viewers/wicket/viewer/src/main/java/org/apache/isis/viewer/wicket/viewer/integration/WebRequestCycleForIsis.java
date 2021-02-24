@@ -23,6 +23,8 @@ import java.lang.reflect.Constructor;
 import java.util.List;
 import java.util.Optional;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.wicket.Application;
 import org.apache.wicket.IPageFactory;
 import org.apache.wicket.MetaDataKey;
@@ -45,10 +47,11 @@ import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
-import org.apache.isis.applib.services.exceprecog.Recognition;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerForType;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerService;
+import org.apache.isis.applib.services.exceprecog.Recognition;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.interaction.integration.IsisRequestCycle;
 import org.apache.isis.core.interaction.session.InteractionFactory;
@@ -69,9 +72,6 @@ import org.apache.isis.viewer.wicket.ui.panels.PromptFormAbstract;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-
 /**
  * Isis-specific implementation of the Wicket's {@link RequestCycle},
  * automatically opening a {@link InteractionSession} at the beginning of the request
@@ -81,13 +81,21 @@ import javax.servlet.http.HttpServletRequest;
  */
 @Log4j2
 public class WebRequestCycleForIsis implements IRequestCycleListener {
+    
+    private static enum SessionLifecyclePhase {
+        ACTIVE,
+        EXPIRED;
+        public static boolean isExpired(final RequestCycle requestCycle) {
+            return Session.exists() 
+                    && SessionLifecyclePhase.EXPIRED == requestCycle.getMetaData(SESSION_LIFECYCLE_PHASE_KEY);
+        }
+    }
 
     public static final MetaDataKey<IsisRequestCycle> REQ_CYCLE_HANDLE_KEY =
             new MetaDataKey<IsisRequestCycle>() {private static final long serialVersionUID = 1L; };
-    public static final MetaDataKey<Boolean> SESSION_WAS_EXPIRED_KEY =
-            new MetaDataKey<Boolean>() { private static final long serialVersionUID = 1L; };
-    public static final MetaDataKey<Boolean> LISTENER_HANDLER_USED_KEY =
-            new MetaDataKey<Boolean>() { private static final long serialVersionUID = 1L; };
+            
+    private static final MetaDataKey<SessionLifecyclePhase> SESSION_LIFECYCLE_PHASE_KEY =
+            new MetaDataKey<SessionLifecyclePhase>() { private static final long serialVersionUID = 1L; };
 
     private PageClassRegistry pageClassRegistry;
     private IsisAppCommonContext commonContext;
@@ -101,15 +109,15 @@ public class WebRequestCycleForIsis implements IRequestCycleListener {
             // Track if session was created from an expired one to notify user of the refresh.
             // If there is no remember me cookie, user will be redirected to sign in and no need to notify.
             if (userHasSessionWithRememberMe(requestCycle)) {
-                Session.get().setMetaData(SESSION_WAS_EXPIRED_KEY, true);
-            }
+                requestCycle.setMetaData(SESSION_LIFECYCLE_PHASE_KEY, SessionLifecyclePhase.EXPIRED);
+                log.debug("flagging the RequestCycle as expired (rememberMe feature is active for the current user)");
+            } 
             log.debug("onBeginRequest out - session was not opened (because no Session)");
             return;
         }
 
         val commonContext = getCommonContext();
         val authentication = AuthenticatedWebSessionForIsis.get().getAuthentication();
-
 
         if (authentication == null) {
             log.debug("onBeginRequest out - session was not opened (because no authentication)");
@@ -127,9 +135,9 @@ public class WebRequestCycleForIsis implements IRequestCycleListener {
     }
 
     @Override
-    public void onRequestHandlerResolved(final RequestCycle cycle, final IRequestHandler handler) {
+    public void onRequestHandlerResolved(final RequestCycle requestCycle, final IRequestHandler handler) {
 
-        log.debug("onRequestHandlerResolved in");
+        log.debug("onRequestHandlerResolved in (handler: {})", ()->handler.getClass().getName());
 
         if(handler instanceof RenderPageRequestHandler) {
 
@@ -146,19 +154,18 @@ public class WebRequestCycleForIsis implements IRequestCycleListener {
             }
         }
 
-        val isisRequestCycle = cycle.getMetaData(REQ_CYCLE_HANDLE_KEY);
-        val session = AuthenticatedWebSessionForIsis.get();
-        val wasExpired = session.getMetaData(SESSION_WAS_EXPIRED_KEY);
-        
-        if (wasExpired != null && wasExpired && isisRequestCycle != null) {
+        if(SessionLifecyclePhase.isExpired(requestCycle)) {
+            
             // If a user clicks a menu item in an expired session, no action is executed, the session simply refreshes.
             // Two requests make it here, and the first one uses ListenerRequestHandler as its first handler.
             // The whole first request has to be ignored here, or the message would disappear before user can see it.
             if (handler instanceof ListenerRequestHandler) {
-                cycle.setMetaData(LISTENER_HANDLER_USED_KEY, true);
-            } else if (cycle.getMetaData(LISTENER_HANDLER_USED_KEY) == null) {
-                getMessageBroker().ifPresent(broker -> broker.addMessage(translate("Expired session was refreshed")));
-                session.setMetaData(SESSION_WAS_EXPIRED_KEY, false);
+                // no-op
+            } else {
+                log.debug("handling RequestCycle that is flagged as 'expired'");
+                requestCycle.setMetaData(SESSION_LIFECYCLE_PHASE_KEY, SessionLifecyclePhase.ACTIVE);
+                getMessageBroker().ifPresent(broker -> 
+                    broker.addMessage(translate("Expired session was refreshed.")));
             }
         }
         
@@ -403,11 +410,12 @@ public class WebRequestCycleForIsis implements IRequestCycleListener {
         val containerRequest = requestCycle.getRequest().getContainerRequest();
         
         if (containerRequest instanceof HttpServletRequest) {
-            val cookies = ((HttpServletRequest) containerRequest).getCookies();
-            String cookieKey = getCommonContext().getConfiguration().getViewer().getWicket().getRememberMe().getCookieKey();
+            val cookies = Can.ofArray(((HttpServletRequest) containerRequest).getCookies());
+            val cookieKey = _Strings.nullToEmpty(
+                    getCommonContext().getConfiguration().getViewer().getWicket().getRememberMe().getCookieKey());
             
-            for (Cookie c : cookies) {
-                if (c.getName().equals(cookieKey)) {
+            for (val cookie : cookies) {
+                if (cookieKey.equals(cookie.getName())) {
                     return true;
                 }
             }

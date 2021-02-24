@@ -82,9 +82,8 @@ public class LogoutMenu {
         .orElse("login");
         switch(redirect) {
         case "login": return new LoginRedirect();
-        case "logout":
-        default:
-            return createLogoutRedirect(); 
+        case "logout": return createLogoutRedirect();
+        default: return null; // redirects to the homepage
         }
     }
     
