@@ -5,16 +5,16 @@
 :page-partial:
 
 
-Apache Isis runs on top of Spring Boot, and uses Spring Boot for dependency injection, both the application's own domain services and also the many additional services defined by the framework (such as xref:refguide:applib:index/services/repository/RepositoryService.adoc[`RepositoryService`]).
+Apache Isis runs on top of Spring Boot, and uses Spring Boot for dependency injection, both the application's own domain services and also the many additional services defined by the framework (such as xref:refguide:applib:index/services/repository/RepositoryService.adoc[RepositoryService]).
 
 Since this is a core capability of Spring, it's worth checking out Spring's link:https://docs.spring.io/spring/docs/current/spring-framework-reference/core.html#beans-factory-collaborators[documentation] on the topic.
 
 [TIP]
 ====
-Injection is requested using the JEE link:https://docs.oracle.com/javaee/7/api/javax/inject/Inject.html[`@javax.inject.Inject`] annotation.
+Injection is requested using the JEE link:https://docs.oracle.com/javaee/7/api/javax/inject/Inject.html[@javax.inject.Inject] annotation.
 This is described in Spring's documentation, link:https://docs.spring.io/spring/docs/current/spring-framework-reference/core.html#beans-standard-annotations[using JSR330 standard annotations].
 
-It is also possible to use Spring's own link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/beans/factory/annotation/Autowired.html[`@Autowired`] annotation.
+It is also possible to use Spring's own link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/beans/factory/annotation/Autowired.html[@Autowired] annotation.
 Since the two annotations are effectively equivalent, we recommend using the JEE standard.
 ====
 
@@ -143,7 +143,7 @@ Using default visibility here still allows the field to be mocked out within uni
 
 == Multiple Implementations
 
-If there is more than one implementation of the service, then a specific implementation can be requested using either Spring's link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/context/annotation/Primary.html[`@Primary`] annotation (further discussion link:https://docs.spring.io/spring/docs/current/spring-framework-reference/core.html#beans-autowired-annotation-primary[here]) or Spring's link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/beans/factory/annotation/Qualifier.html[`Qualifier`] annotation (further discussion link:https://docs.spring.io/spring/docs/current/spring-framework-reference/core.html#beans-autowired-annotation-qualifiers[here]).
+If there is more than one implementation of the service, then a specific implementation can be requested using either Spring's link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/context/annotation/Primary.html[@Primary] annotation (further discussion link:https://docs.spring.io/spring/docs/current/spring-framework-reference/core.html#beans-autowired-annotation-primary[here]) or Spring's link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/beans/factory/annotation/Qualifier.html[Qualifier] annotation (further discussion link:https://docs.spring.io/spring/docs/current/spring-framework-reference/core.html#beans-autowired-annotation-qualifiers[here]).
 
 All of the domain services provided by Apache Isis' are annotated with `@Qualifier` to enable this.
 
@@ -163,7 +163,7 @@ public class DocumentService {
 }
 ----
 
-These will be in the order as defined by the Spring link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/core/annotation/Order.html[`@Order`] annotation.
+These will be in the order as defined by the Spring link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/core/annotation/Order.html[@Order] annotation.
 
 This pattern can be useful when implementing the link:https://en.wikipedia.org/wiki/Chain-of-responsibility_pattern[chain of responsibility] design pattern, that is, looking for the first implementation that can handle a request.
 
@@ -177,9 +177,9 @@ All other implementations available will also be called.
 
 Most domain services are application-scoped, in other words they are stateless global singletons that are shared by all concurrent requests.
 
-A small number of framework-provided services are annotated using xref:refguide:applib:index/annotation/InteractionScope.adoc[`@IsisSessionScope`].
+A small number of framework-provided services are annotated using xref:refguide:applib:index/annotation/InteractionScope.adoc[@IsisSessionScope].
 This means that they are stateful and scoped with each isis session, in other words HTTP request.
-One such service is xref:refguide:applib:index/services/queryresultscache/QueryResultsCache.adoc[`QueryResultsCache`], used for performance caching.
+One such service is xref:refguide:applib:index/services/queryresultscache/QueryResultsCache.adoc[QueryResultsCache], used for performance caching.
 
 These domain services must be requested using a slightly different idiom, using the `Provider` interface.
 For example:

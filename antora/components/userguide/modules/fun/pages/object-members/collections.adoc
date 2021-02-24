@@ -15,14 +15,14 @@ Formally speaking, a collection is simply a regular JavaBean getter, returning a
 Most collections (those that are modifiable) will also have a setter and, if persisted, a backing instance field.
 And collections properties will also have a number of annotations:
 
-* Apache Isis defines its own xref xref:refguide:applib:index/annotation/Collection.adoc[`@Collection`] annotation for capturing domain semantics.
-It also provides a xref:refguide:applib:index/annotation/CollectionLayout.adoc[`@CollectionLayout`] for UI hints (though the information in this annotation may instead be provided by a supplementary xref:userguide:fun:ui.adoc#object-layout[`.layout.xml`] file)
+* Apache Isis defines its own xref xref:refguide:applib:index/annotation/Collection.adoc[@Collection] annotation for capturing domain semantics.
+It also provides a xref:refguide:applib:index/annotation/CollectionLayout.adoc[@CollectionLayout] for UI hints (though the information in this annotation may instead be provided by a supplementary xref:userguide:fun:ui.adoc#object-layout[.layout.xml] file)
 
 * the collections of domain entities are often annotated with ORM annotation(s).
 In the case of JDO/DataNucleus annotations this is most notably `javax.jdo.annotations.Persistent`.
 Other annotations can be used to specify if the association is bidirectional, and whether to define a link table or not to hold foreign key columns.
 
-* for the collections of view models, then JAXB annotations such as link:https://docs.oracle.com/javase/7/docs/api/javax/xml/bind/annotation/XmlElementWrapper.html[`@javax.xml.bind.annotation.XmlElementWrapper`] and link:https://docs.oracle.com/javase/7/docs/api/javax/xml/bind/annotation/XmlElement.html[`@javax.xml.bind.annotation.XmlElement`] will be present
+* for the collections of view models, then JAXB annotations such as link:https://docs.oracle.com/javase/7/docs/api/javax/xml/bind/annotation/XmlElementWrapper.html[@javax.xml.bind.annotation.XmlElementWrapper] and link:https://docs.oracle.com/javase/7/docs/api/javax/xml/bind/annotation/XmlElement.html[@javax.xml.bind.annotation.XmlElement] will be present
 
 Apache Isis may recognise some of these annotations from the persistence layer infers some domain semantics from them.
 
@@ -103,14 +103,14 @@ JDO/Datanucleus does support the mapping of these other types, but RDBMS are set
 
 While ORMs support `java.util.Map` as a collection type, maps are not supported by Apache Isis.
 
-If you do wish to use this collection type, then annotate the getter with xref:refguide:applib:index/annotation/Programmatic.adoc[`@Programmatic`] so that it is ignored by the Apache Isis framework.
+If you do wish to use this collection type, then annotate the getter with xref:refguide:applib:index/annotation/Programmatic.adoc[@Programmatic] so that it is ignored by the Apache Isis framework.
 
 == Value vs Reference Types
 
 While ORMs support collections/arrays of value types, such collections are not supported by Apache Isis.
 Apache Isis can (currently) only provide a UI for collections of references.
 
-If you do wish to use collections of this type, then annotate the getter with xref:refguide:applib:index/annotation/Programmatic.adoc[`@Programmatic`] so that it is ignored by the Apache Isis framework.
+If you do wish to use collections of this type, then annotate the getter with xref:refguide:applib:index/annotation/Programmatic.adoc[@Programmatic] so that it is ignored by the Apache Isis framework.
 
 As a workaround, if you want to visualize an array of value types in Apache Isis, then one option is to wrap the value in a view model, as explained xref:userguide:btb:about.adoc#simulating-collections-of-values[here].
 

@@ -18,7 +18,7 @@ If set to `false`, then the object's properties (and collections) are __not__ ed
 
 * else, the value of the `@Property(editing=...)` attribute itself
 
-* else, the result of invoking any supporting xref:refguide:applib-methods:prefixes.adoc#disable[`disable...()`] supporting methods
+* else, the result of invoking any supporting xref:refguide:applib-methods:prefixes.adoc#disable[disable...()] supporting methods
 
 
 Thus, to make a property read-only even if the object would otherwise be editable, use:

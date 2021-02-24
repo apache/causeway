@@ -40,8 +40,8 @@ XML) that represents the __intention__ to invoke an action on a target object (o
 bulk actions).  If an action, it can also be either mixin action or a contributed action.
 <2> Returns a JAXB DTO that represents the intention to edit (set or clear) a property on a target (or possibly many
 targets, for symmetry with actions).
-<3> add the arguments of an action to an `ActionDto`.  This is used when the command is actually executed (per xref:refguide:applib:index/services/iactn/InteractionContext.adoc[`InteractionContext`]) to populate the parameters of the equivalent `ActionInvocationDto`.
-<4> add the new value argument of a property to a `PropertyDto`.  This is used when the command is actually executed (per xref:refguide:applib:index/services/iactn/InteractionContext.adoc[`InteractionContext`]) to set the the new value of the equivalent `PropertyEditDto`.
+<3> add the arguments of an action to an `ActionDto`.  This is used when the command is actually executed (per xref:refguide:applib:index/services/iactn/InteractionContext.adoc[InteractionContext]) to populate the parameters of the equivalent `ActionInvocationDto`.
+<4> add the new value argument of a property to a `PropertyDto`.  This is used when the command is actually executed (per xref:refguide:applib:index/services/iactn/InteractionContext.adoc[InteractionContext]) to set the the new value of the equivalent `PropertyEditDto`.
 
 
 The SPI is implemented by `o.a.i.c.r.s.command.CommandDtoServiceInternalServiceDefault`.
@@ -50,5 +50,5 @@ The SPI is implemented by `o.a.i.c.r.s.command.CommandDtoServiceInternalServiceD
 == Related Services
 
 The design of this service is similar to that of
-xref:core:runtime-services:InteractionDtoServiceInternal.adoc[`InteractionDtoServiceInternal`], used to create the
+xref:core:runtime-services:InteractionDtoServiceInternal.adoc[InteractionDtoServiceInternal], used to create the
 `MemberExecutionDto` (from the xref:refguide:schema:ixn.adoc["ixn" schema]).

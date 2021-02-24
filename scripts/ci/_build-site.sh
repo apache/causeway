@@ -46,6 +46,12 @@ else
   bash $SCRIPT_DIR/_adoc-gen-projdoc.sh
 fi
 
+if [[ "$SKIP_FIX_ADOC_LINE_ENDINGS" == "true" ]]; then
+  echo "skipping fix adoc line endings"
+else
+  bash $SCRIPT_DIR/_adoc-fix-adoc-line-endings.sh
+fi
+
 
 
 if [[ "$SKIP_ANTORA_GENERATION" == "true" ]]; then

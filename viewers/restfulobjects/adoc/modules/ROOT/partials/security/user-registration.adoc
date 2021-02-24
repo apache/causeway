@@ -106,7 +106,7 @@ An alternative approach, possibly less work and overall of more value, would be 
 
 The following steps sketch out the solution in a little more detail:
 
-* Define some new Restful resources (cf link:https://github.com/apache/isis/blob/master/core/viewer-restfulobjects-server/src/main/java/org/apache/isis/viewer/restfulobjects/server/resources/DomainObjectResourceServerside.java[`DomainServiceResourceServerside`] that correspond to sign-up/register page, eg `SignupResource` +
+* Define some new Restful resources (cf link:https://github.com/apache/isis/blob/master/core/viewer-restfulobjects-server/src/main/java/org/apache/isis/viewer/restfulobjects/server/resources/DomainObjectResourceServerside.java[DomainServiceResourceServerside] that correspond to sign-up/register page, eg `SignupResource` +
 +
 [source,java]
 ----

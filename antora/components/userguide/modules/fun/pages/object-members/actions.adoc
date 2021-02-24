@@ -22,10 +22,10 @@ You can find further discussion on when and why you should write actions xref:ov
 
 == Defining actions
 
-If the xref:refguide:config:sections/isis.applib.adoc#isis.applib.annotation.action.explicit[`isis.applib.annotation.action.explicit`] configuration property is not set (the default), then any "left-over" `public` methods will be considered to be actions.
+If the xref:refguide:config:sections/isis.applib.adoc#isis.applib.annotation.action.explicit[isis.applib.annotation.action.explicit] configuration property is not set (the default), then any "left-over" `public` methods will be considered to be actions.
 These are methods that do not represent properties or collections, and that are not recognised as xref:business-rules.adoc[supporting methods] (such as `hideXxx()` or `disableXxx()`).
 
-Conversely, if that xref:refguide:config:sections/isis.applib.adoc#isis.applib.annotation.action.explicit[`isis.applib.annotation.action.explicit`] configuration property _is_ set, then the xref:refguide:applib:index/annotation/Action.adoc[`@Action`] annotation must be applied for the method to be treated as an action.
+Conversely, if that xref:refguide:config:sections/isis.applib.adoc#isis.applib.annotation.action.explicit[isis.applib.annotation.action.explicit] configuration property _is_ set, then the xref:refguide:applib:index/annotation/Action.adoc[@Action] annotation must be applied for the method to be treated as an action.
 The `@Action` annotation is also used to specify additional domain semantics, for example regarding idempotency.
 
 For example:
@@ -48,7 +48,7 @@ If the code is compiled (`javac`) using the `-parameters` flag, then the name of
 
 Otherwise, the type of the parameter is used.
 For the `product` parameter this is reasonable, but not so for the `quantity` parameter (which would by default show up with a name of "int".
-In such a case the xref:refguide:applib:index/annotation/ParameterLayout.adoc[`@ParameterLayout`] annotation can be used to provide the UI hint.
+In such a case the xref:refguide:applib:index/annotation/ParameterLayout.adoc[@ParameterLayout] annotation can be used to provide the UI hint.
 
 
 
@@ -58,7 +58,7 @@ In such a case the xref:refguide:applib:index/annotation/ParameterLayout.adoc[`@
 Parameter types can be value types or reference types.
 In the case of primitive types, the end-user can just enter the value directly through the parameter field.
 In the case of reference types however (such as `Product`), a drop-down must be provided from which the end-user to select.
-This is done using either a supporting xref:refguide:applib-cm:methods.adoc#choices[`choices`] or xref:refguide:applib-cm:methods.adoc#autoComplete[`autoComplete`] method.
+This is done using either a supporting xref:refguide:applib-cm:methods.adoc#choices[choices] or xref:refguide:applib-cm:methods.adoc#autoComplete[autoComplete] method.
 The "choices" is used when there is a limited set of options, while "autoComplete" is used when there are large set of options such that the end-user must provide some characters to use for a search.
 
 For example, the `addToBasket(...)` action shown above might well have an autocomplete supporting method :
@@ -87,7 +87,7 @@ ProductRepository productRepository;
 The "0" in the name means that this corresponds to parameter 0 of the "addToBasket" action (ie `Product`).
 It is also required to return a Collection of that type.
 
-<.> The xref:refguide:applib:index/annotation/MinLength.adoc[`@MinLength`] annotation defines how many characters the end-user must enter before performing a search.
+<.> The xref:refguide:applib:index/annotation/MinLength.adoc[@MinLength] annotation defines how many characters the end-user must enter before performing a search.
 
 <.> The implementation delegates to an injected repository service.  This is typical.
 
@@ -110,7 +110,7 @@ public class Product ... {
 <.> Whenever an action parameter requiring a `Product` is defined, provide an autoComplete drop-down automatically
 <.> Use the "find" method of `ProductRepository` (rather than the default name of "autoComplete").
 +
-NOTE: The referenced method can be xref:refguide:applib:index/annotation/Programmatic.adoc[`@Programmatic`] - it doesn't actually need to be an action in the metamodel.
+NOTE: The referenced method can be xref:refguide:applib:index/annotation/Programmatic.adoc[@Programmatic] - it doesn't actually need to be an action in the metamodel.
 
 === Removing boilerplate with choices
 
@@ -164,12 +164,12 @@ public List<Product> autoComplete0AddToBasket(              // <.>
 }
 ----
 
-As the example suggests, any collection parameter type must provide a way to select items, either by way of a "choices" or "autoComplete" supporting method or alternatively defined globally using xref:refguide:applib:index/annotation/DomainObject.adoc[`@DomainObject`] on the referenced type (described xref:userguide:fun:object-members.adoc#reference-parameter-types[above]).
+As the example suggests, any collection parameter type must provide a way to select items, either by way of a "choices" or "autoComplete" supporting method or alternatively defined globally using xref:refguide:applib:index/annotation/DomainObject.adoc[@DomainObject] on the referenced type (described xref:userguide:fun:object-members.adoc#reference-parameter-types[above]).
 
 
 == Optional Parameters
 
-Either the xref:refguide:applib-ant:Nullable.adoc[`@Nullable`] annotation or the xref:refguide:applib:index/annotation/Parameter.adoc#optionality[`@Parameter#optionality`]  annotation/attribute can be used to indicate that a parameter can be left blank.
+Either the xref:refguide:applib-ant:Nullable.adoc[@Nullable] annotation or the xref:refguide:applib:index/annotation/Parameter.adoc#optionality[@Parameter#optionality]  annotation/attribute can be used to indicate that a parameter can be left blank.
 
 For example:
 
@@ -205,7 +205,7 @@ See also xref:userguide:fun:meta-annotations.adoc#properties-vs-parameters[prope
 
 == ``String`` Parameters (Length)
 
-The xref:refguide:applib:index/annotation/Parameter.adoc#maxLength[`@Parameter#maxLength`] annotation/attribute is used to specify the maximum number of characters allowed for a string parameter.
+The xref:refguide:applib:index/annotation/Parameter.adoc#maxLength[@Parameter#maxLength] annotation/attribute is used to specify the maximum number of characters allowed for a string parameter.
 
 For example:
 
@@ -235,10 +235,10 @@ private String firstName;
 @Getter @Setter
 private String lastName;
 ----
-<.> Specifies the parameter length using xref:refguide:applib:index/annotation/Parameter.adoc#maxLength[`@Parameter#maxLength`] annotation
+<.> Specifies the parameter length using xref:refguide:applib:index/annotation/Parameter.adoc#maxLength[@Parameter#maxLength] annotation
 <.> Specifies the length of a corresponding property.
 +
-Note that this uses an ORM-specific annotation (in this case, xref:refguide:applib-ant:Column.adoc#length-for-strings[`@Column#length()`] annotation
+Note that this uses an ORM-specific annotation (in this case, xref:refguide:applib-ant:Column.adoc#length-for-strings[@Column#length()] annotation
 
 [IMPORTANT]
 ====
@@ -251,7 +251,7 @@ See also xref:userguide:fun:meta-annotations.adoc#properties-vs-parameters[prope
 
 == ``BigDecimal``s (Precision)
 
-The xref:refguide:applib-ant:Digits.adoc[`@javax.validation.constraints.Digits#fraction`] annotation/attribute is used to specify the scale/precision of decimals.
+The xref:refguide:applib-ant:Digits.adoc[@javax.validation.constraints.Digits#fraction] annotation/attribute is used to specify the scale/precision of decimals.
 
 For example:
 
@@ -273,10 +273,10 @@ public Order updateDiscount(
 @Getter @Setter
 private BigDecimal discountRate;
 ----
-<.> Specifies the parameter precision using xref:refguide:applib-ant:Digits.adoc[`@Digits#fraction`].
+<.> Specifies the parameter precision using xref:refguide:applib-ant:Digits.adoc[@Digits#fraction].
 <.> Specifies the corresponding property precision.
 +
-Note that this uses an ORM-specific annotation (in this case,  xref:refguide:applib-ant:Column.adoc#lengthscale-for-bigdecimals[`@Column#scale`]
+Note that this uses an ORM-specific annotation (in this case,  xref:refguide:applib-ant:Column.adoc#lengthscale-for-bigdecimals[@Column#scale]
 
 See also xref:userguide:fun:meta-annotations.adoc#properties-vs-parameters[properties vs parameters].
 

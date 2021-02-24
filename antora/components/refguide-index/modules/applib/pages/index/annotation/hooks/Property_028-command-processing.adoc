@@ -67,6 +67,6 @@ If `commandDtoProcessor()` is specified, then `commandPublishing()` is assumed t
 
 ==== Example
 
-For an example, see xref:refguide:applib:index/annotation/Action.adoc#commandPublishing[`Action#command()`].
+For an example, see xref:refguide:applib:index/annotation/Action.adoc#commandPublishing[Action#command()].
 
 

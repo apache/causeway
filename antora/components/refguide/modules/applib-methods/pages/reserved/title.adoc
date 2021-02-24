@@ -46,7 +46,7 @@ public String title() {
 
 As the example above shows, the implementation can be as complex as you like.
 
-In many cases, though, you may be able to use the xref:refguide:applib:index/annotation/Title.adoc[`@Title`] annotation.
+In many cases, though, you may be able to use the xref:refguide:applib:index/annotation/Title.adoc[@Title] annotation.
 
 r
 
@@ -54,7 +54,7 @@ r
 
 See also:
 
-* xref:refguide:applib-methods:reserved.adoc#iconName[`iconName()`]
-* xref:refguide:applib-methods:reserved.adoc#cssClass[`cssClass()`]
-* xref:refguide:applib-methods:reserved.adoc#layout[`layout()`]
+* xref:refguide:applib-methods:reserved.adoc#iconName[iconName()]
+* xref:refguide:applib-methods:reserved.adoc#cssClass[cssClass()]
+* xref:refguide:applib-methods:reserved.adoc#layout[layout()]
 

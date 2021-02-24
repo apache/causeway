@@ -26,8 +26,8 @@ The table below summarises the choices:
 |===
 
 | Style
-| xref:refguide:applib:index/annotation/MemberOrder.adoc[`@MemberOrder`]
-| xref:refguide:applib:index/annotation/ActionLayout.adoc[`@ActionLayout`], xref:refguide:applib:index/annotation/PropertyLayout.adoc[`@PropertyLayout`], xref:refguide:applib:index/annotation/CollectionLayout.adoc[`@CollectionLayout`]
+| xref:refguide:applib:index/annotation/MemberOrder.adoc[@MemberOrder]
+| xref:refguide:applib:index/annotation/ActionLayout.adoc[@ActionLayout], xref:refguide:applib:index/annotation/PropertyLayout.adoc[@PropertyLayout], xref:refguide:applib:index/annotation/CollectionLayout.adoc[@CollectionLayout]
 
 
 |`COMPLETE`
@@ -71,8 +71,8 @@ The grid regions will be empty in this version, and the framework will use the `
 The functionality of `LayoutService` is surfaced in the user interface through a related xref:refguide:applib:index/services/layout/LayoutService.adoc#related-mixins-and-menus[mixin and menu action].
 See also xref:refguide:applib:index/services/layout/Style.adoc[Style], which determines how much data is included in the downloaded XML.
 
-The xref:refguide:applib:index/services/grid/GridService.adoc[`GridService`] is responsible for loading and normalizing layout XML for a domain class.
-It in turn uses the xref:refguide:applib:index/services/grid/GridLoaderService.adoc[`GridLoaderService`] and  xref:refguide:applib:index/services/grid/GridSystemService.adoc[`GridSystemService`]
+The xref:refguide:applib:index/services/grid/GridService.adoc[GridService] is responsible for loading and normalizing layout XML for a domain class.
+It in turn uses the xref:refguide:applib:index/services/grid/GridLoaderService.adoc[GridLoaderService] and  xref:refguide:applib:index/services/grid/GridSystemService.adoc[GridSystemService]
 services.
 
 

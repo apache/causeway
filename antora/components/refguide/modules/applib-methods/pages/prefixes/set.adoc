@@ -7,4 +7,4 @@
 
 The `set...()` prefix is simply the normal JavaBean setter prefix that denotes writeable properties or collections.
 
-See also xref:refguide:applib-methods:prefixes.adoc#get[`get...()`].
+See also xref:refguide:applib-methods:prefixes.adoc#get[get...()].

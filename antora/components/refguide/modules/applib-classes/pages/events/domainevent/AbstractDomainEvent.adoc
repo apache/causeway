@@ -9,9 +9,9 @@ This class is the superclass for all domain events that are raised by the framew
 
 Its immediate subclasses are:
 
-* xref:applib-classes:events.adoc#ActionDomainEvent[`ActionDomainEvent`]
-* xref:applib-classes:events.adoc#PropertyDomainEvent[`PropertyDomainEvent`]
-* xref:applib-classes:events.adoc#CollectionDomainEvent[`CollectionDomainEvent`]
+* xref:applib-classes:events.adoc#ActionDomainEvent[ActionDomainEvent]
+* xref:applib-classes:events.adoc#PropertyDomainEvent[PropertyDomainEvent]
+* xref:applib-classes:events.adoc#CollectionDomainEvent[CollectionDomainEvent]
 
 The main purpose of the class is to define the protocol by which subscribers can influence an interaction (eg hide a collection, disable a property, validate action arguments).
 It class also provides a simple mechanism to allow adhoc sharing of user data between different phases.

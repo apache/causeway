@@ -65,10 +65,10 @@ public class Customer {
 ----
 
 
-As one specific use case, if a property is annotated with xref:refguide:applib:index/annotation/Title.adoc[`@Title`], then normally this should be hidden from all tables.
+As one specific use case, if a property is annotated with xref:refguide:applib:index/annotation/Title.adoc[@Title], then normally this should be hidden from all tables.
 Annotating with `@Property(where=Where.NOWHERE)` overrides this.
 
 
 ==== Alternatives
 
-It is also possible to use xref:refguide:applib:index/annotation/PropertyLayout.adoc#hidden[`@PropertyLayout#hidden`] to hide a property at the domain layer.
+It is also possible to use xref:refguide:applib:index/annotation/PropertyLayout.adoc#hidden[@PropertyLayout#hidden] to hide a property at the domain layer.

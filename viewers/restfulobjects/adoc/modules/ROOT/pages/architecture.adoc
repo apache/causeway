@@ -12,19 +12,19 @@ In response, the server uses the `Content-Type` header which the client can use 
 
 
 * `RepresentationService` +
-+ The xref:core:runtime-services:RepresentationService.adoc[`RepresentationService`] is an SPI domain service (plugin-point) that allows an arbitrary representation to be generated for any of the resources defined in the RO spec. +
++ The xref:core:runtime-services:RepresentationService.adoc[RepresentationService] is an SPI domain service (plugin-point) that allows an arbitrary representation to be generated for any of the resources defined in the RO spec. +
 + Normally this SPI service need not be replaced, because the default implementation (`RepresentationServiceContentNegotiator`) simply uses the HTTP `Accept` header and delegates onto another service, the (slightly misnamed) `ContentNegotiationService`, to actually generate the representation.
 There can be multiple implementations of the `ContentNegotiationService` and the content negotiator will delegate to each in turn until one is able to handle the request (per the chain of responsibliity pattern).
 
 * `ContentNegotiationService` +
 + As noted above, there can be multiple implementations of the
-xref:core:runtime-services:ContentNegotiationService.adoc[`ContentNegotiationService`], each one handling a particular HTTP `Accept` header.
+xref:core:runtime-services:ContentNegotiationService.adoc[ContentNegotiationService], each one handling a particular HTTP `Accept` header.
 If the implementation does not recognize the value of the header, if can simply return `null`. +
 + The framework provides a number of implementations; an implementation that handles the
 xref:vro:ROOT:simplified-representations.adoc[simplified representation] of the Apache Isis profile; an implementation that provides support for the `x-ro-domain-type` parameter, and a default/fallback implementation that returns the representations defined by the RO spec.
 
 * `ContentMappingService` +
-+ The xref:refguide:applib:index/services/conmap/ContentMappingService.adoc[`ContentMappingService`] is used by the implementation of
++ The xref:refguide:applib:index/services/conmap/ContentMappingService.adoc[ContentMappingService] is used by the implementation of
 `ContentNegotationService` that recognizes the `x-ro-domain-type`, its role being to transform a domain object (usually an entity) into some other form (usually a DTO), as specified by the `x-ro-domain-type` parameter.
 There can be many such implementations, each handling a different target domain type.
 

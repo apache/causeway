@@ -16,11 +16,11 @@ DataNucleus' persistence-by-reachability may cause performance issues.
 We strongly recommend that you disable it.
 ====
 
-One scenario in particular where this performance issues can arise is if your entities implement the `java.lang.Comparable` interface, and you have used Apache Isis' xref:refguide:applib-cm:classes/utility.adoc#ObjectContracts[`ObjectContracts`] utility class.
+One scenario in particular where this performance issues can arise is if your entities implement the `java.lang.Comparable` interface, and you have used Apache Isis' xref:refguide:applib-cm:classes/utility.adoc#ObjectContracts[ObjectContracts] utility class.
 The issue here is that `ObjectContracts` implementation can cause DataNucleus to recursively rehydrate a larger number of associated entities.
 (More detail below).
 
-We therefore recommend that you disable persistence-by-reachability by adding the following to `persistor_datanucleus.properties`:
+We therefore recommend that you disable persistence-by-reachability by adding the following to `application.properties`:
 
 [source,ini]
 ----

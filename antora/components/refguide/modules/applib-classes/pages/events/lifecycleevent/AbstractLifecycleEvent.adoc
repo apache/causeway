@@ -9,12 +9,12 @@ This class is the superclass for all lifecycle events that are raised by the fra
 
 Its immediate subclasses are:
 
-* xref:applib-classes:events.adoc#ObjectCreatedEvent[`ObjectCreatedEvent`]
-* xref:applib-classes:events.adoc#ObjectLoadedEvent[`ObjectLoadedEvent`]
-* xref:applib-classes:events.adoc#ObjectPersistedEvent[`ObjectPersistedEvent`]
-* xref:applib-classes:events.adoc#ObjectPersistingEvent[`ObjectPersistingEvent`]
-* xref:applib-classes:events.adoc#ObjectRemovingEvent[`ObjectRemovingEvent`]
-* xref:applib-classes:events.adoc#ObjectUpdatedEvent[`ObjectUpdatedEvent`]
-* xref:applib-classes:events.adoc#ObjectUpdatingEvent[`ObjectUpdatingEvent`]
+* xref:applib-classes:events.adoc#ObjectCreatedEvent[ObjectCreatedEvent]
+* xref:applib-classes:events.adoc#ObjectLoadedEvent[ObjectLoadedEvent]
+* xref:applib-classes:events.adoc#ObjectPersistedEvent[ObjectPersistedEvent]
+* xref:applib-classes:events.adoc#ObjectPersistingEvent[ObjectPersistingEvent]
+* xref:applib-classes:events.adoc#ObjectRemovingEvent[ObjectRemovingEvent]
+* xref:applib-classes:events.adoc#ObjectUpdatedEvent[ObjectUpdatedEvent]
+* xref:applib-classes:events.adoc#ObjectUpdatingEvent[ObjectUpdatingEvent]
 
 

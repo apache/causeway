@@ -21,6 +21,7 @@ package org.apache.isis.testdomain.interact;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
@@ -52,10 +53,10 @@ import lombok.Setter;
 import lombok.val;
 
 @SpringBootTest(
-        classes = { 
+        classes = {
                 Configuration_headless.class,
                 CommandArgumentTest.CommandArgDemo.class,
-        }, 
+        },
         properties = {
         })
 @TestPropertySource({
@@ -63,7 +64,7 @@ import lombok.val;
     IsisPresets.SilenceProgrammingModel
 })
 class CommandArgumentTest extends InteractionTestAbstract {
-    
+
     @XmlRootElement(name = "root")
     @XmlType
     @XmlAccessorType(XmlAccessType.FIELD)
@@ -71,44 +72,44 @@ class CommandArgumentTest extends InteractionTestAbstract {
     @NoArgsConstructor
     @AllArgsConstructor(staticName = "of")
     public static class CommandResult {
-        
+
         @Getter @Setter
         private String resultAsString;
-        
+
     }
-    
+
 
     @XmlRootElement(name = "root")
     @XmlType
     @XmlAccessorType(XmlAccessType.FIELD)
     @DomainObject(nature=Nature.VIEW_MODEL, objectType="regressiontests.CommandArgDemo")
     public static class CommandArgDemo {
-        
+
         @Action
         public CommandResult list(List<Long> someIds){
             val stringified = ""+someIds;
             assertEquals("[1, 2, 3]", stringified);
             return CommandResult.of(stringified);
         }
-        
+
     }
-    
+
     @Test
     void listParam_shouldAllowInvocation() {
 
         val actionInteraction = startActionInteractionOn(CommandArgDemo.class, "list", Where.OBJECT_FORMS)
         .checkVisibility()
         .checkUsability();
-        
+
         val pendingArgs = actionInteraction.startParameterNegotiation().get();
-        
+
         pendingArgs.setParamValue(0, ManagedObject.of(
-                objectManager.getMetaModelContext().getSpecificationLoader()::loadSpecification, 
-                List.of(1L, 2L, 3L)));
-        
+                objectManager.getMetaModelContext().getSpecificationLoader()::loadSpecification,
+                Arrays.asList(1L, 2L, 3L)));
+
         val resultOrVeto = actionInteraction.invokeWith(pendingArgs);
         assertTrue(resultOrVeto.isLeft());
-        
+
         val stringified = resultOrVeto.left()
                 .map(ManagedObject::getPojo)
                 .map(CommandResult.class::cast)
@@ -116,21 +117,21 @@ class CommandArgumentTest extends InteractionTestAbstract {
                 .orElse(null);
         assertEquals("[1, 2, 3]", stringified);
     }
-    
+
     @Test
     void listParam_shouldAllowAsyncInvocation() throws InterruptedException, ExecutionException, TimeoutException {
 
         val commandArgDemo = new CommandArgDemo();
-        
+
         val control = AsyncControl.returning(CommandResult.class);
-        
+
         wrapperFactory.asyncWrap(commandArgDemo, control)
-        .list(List.of(1L, 2L, 3L));
-        
+        .list(Arrays.asList(1L, 2L, 3L));
+
         val stringified = control.getFuture().get(3L, TimeUnit.DAYS).getResultAsString();
-        
+
         assertEquals("[1, 2, 3]", stringified);
     }
-    
+
 
 }

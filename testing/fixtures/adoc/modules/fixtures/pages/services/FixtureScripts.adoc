@@ -8,7 +8,7 @@
 
 The `FixtureScripts` service provides the ability to execute xref:fixtures:ROOT:about.adoc#api-and-usage[fixture scripts].
 
-The default implementation of this service, `FixtureScriptsDefault`, uses the associated xref:testing:fixtures:services/FixtureScriptsSpecificationProvider.adoc[`FixtureScriptsSpecificationProvider`] to obtain a `FixtureScriptsSpecification`.
+The default implementation of this service, `FixtureScriptsDefault`, uses the associated xref:testing:fixtures:services/FixtureScriptsSpecificationProvider.adoc[FixtureScriptsSpecificationProvider] to obtain a `FixtureScriptsSpecification`.
 This configures this service, for example telling it which package to search for `FixtureScript` classes, how to execute those classes, and hints that influence the UI.
 
 
@@ -52,11 +52,11 @@ The default implementation of this domain service supports the following configu
 |Whether fixture `FixturesInstallingEvent` and `FixturesInstalledEvent` events should be posted while the system is bootstrapping.
 
 Fixture events are fired to indicate the start and end of fixtures are being installed.
-This are listened to by the xref:refguide:applib:index/services/queryresultscache/QueryResultsCache.adoc[`QueryResultsCache`] to disable caching during this period.
+This are listened to by the xref:refguide:applib:index/services/queryresultscache/QueryResultsCache.adoc[QueryResultsCache] to disable caching during this period.
 
 |===
 
 
 === Related Services
 
-The default implementation of this domain service interacts with xref:testing:fixtures:services/FixtureScriptsSpecificationProvider.adoc[`FixtureScriptsSpecificationProvider`].
+The default implementation of this domain service interacts with xref:testing:fixtures:services/FixtureScriptsSpecificationProvider.adoc[FixtureScriptsSpecificationProvider].

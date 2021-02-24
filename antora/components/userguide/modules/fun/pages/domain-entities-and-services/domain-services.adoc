@@ -10,12 +10,12 @@ This may be exposed in the UI, or might be invoked programmatically.
 
 However, a service cannot have (persisted) properties, nor can it have (persisted) collections.
 
-Domain services that are visible in the UI or REST API are annotated with xref:refguide:applib:index/annotation/DomainService.adoc[`@DomainService()`], while services that are _programmatic_ in nature should be simply annotated using Spring's xref:https://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/stereotype/Component.html[`@Component`] or one of its specializations, eg
-xref:https://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/stereotype/Service.html[`@Service`]
-orxref:https://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/stereotype/Repository.html[`@Repository`].
+Domain services that are visible in the UI or REST API are annotated with xref:refguide:applib:index/annotation/DomainService.adoc[@DomainService()], while services that are _programmatic_ in nature should be simply annotated using Spring's xref:https://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/stereotype/Component.html[@Component] or one of its specializations, eg
+xref:https://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/stereotype/Service.html[@Service]
+orxref:https://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/stereotype/Repository.html[@Repository].
 
 Apache Isis runs on top of Spring Boot, and relies on Spring Boot for dependency injection using `@javax.inject.Inject`.
-The Spring link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/core/annotation/Order.html[`@Order`] annotation is used to prioritize multiple service implementations, effectively allowing any framework-provided domain service to be substituted out by a user-defined one with higher priority if required.
+The Spring link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/core/annotation/Order.html[@Order] annotation is used to prioritize multiple service implementations, effectively allowing any framework-provided domain service to be substituted out by a user-defined one with higher priority if required.
 
 This section looks at the programming model for writing your own domain services.
 
@@ -23,12 +23,12 @@ This section looks at the programming model for writing your own domain services
 == Nature of Service
 
 Apache Isis uses Spring Boot to instantiate and manage the dependency injection of domain services.
-The vast majority of these are singleton (application) scoped; a smaller number are request scoped (using the xref:refguide:applib:index/annotation/InteractionScope.adoc[`@IsisSessionScope`] annotation).
+The vast majority of these are singleton (application) scoped; a smaller number are request scoped (using the xref:refguide:applib:index/annotation/InteractionScope.adoc[@IsisSessionScope] annotation).
 
-Accordingly, all domain services are annotated or meta-annotated using Spring's link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/stereotype/Component.html[`@Component`] annotation.
+Accordingly, all domain services are annotated or meta-annotated using Spring's link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/stereotype/Component.html[@Component] annotation.
 
-For domain services to be visible in the Apache Isis UI, they must be annotated with xref:refguide:applib:index/annotation/DomainService.adoc[`@DomainService`].
-Its xref:refguide:applib:index/annotation/DomainService.adoc#nature[`#nature()`] attribute is either:
+For domain services to be visible in the Apache Isis UI, they must be annotated with xref:refguide:applib:index/annotation/DomainService.adoc[@DomainService].
+Its xref:refguide:applib:index/annotation/DomainService.adoc#nature[#nature()] attribute is either:
 
 * `VIEW` (the default if not specified)
 +
@@ -40,12 +40,12 @@ which indicates that the actions should appear in the REST API provided by the x
 
 It's also possible to define a "programmatic" domain service, meaning one that is instantiated and injected by Spring Boot, but is not visible in the UI or REST API.
 For example, the xref:subdomains:docx:about.adoc[Docx Library] provides a domain service that performs mail merge using MS Word, but this domain service is not intended to appear in the UI.
-Such programmatic services are usually annotated with Spring's link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/stereotype/Service.html[`@Service`] annotation or link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/stereotype/Repository.html[`@Repository`].
+Such programmatic services are usually annotated with Spring's link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/stereotype/Service.html[@Service] annotation or link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/stereotype/Repository.html[@Repository].
 
 == Repository and Factory
 
-The repository/factory uses an injected xref:refguide:applib:index/services/repository/RepositoryService.adoc[`RepositoryService`] to both instantiate new objects and to query the database for existing objects of a given entity type.
-Generally these services are not visible in UI, and so are annotated with link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/stereotype/Repository.html[`@Repository`]
+The repository/factory uses an injected xref:refguide:applib:index/services/repository/RepositoryService.adoc[RepositoryService] to both instantiate new objects and to query the database for existing objects of a given entity type.
+Generally these services are not visible in UI, and so are annotated with link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/stereotype/Repository.html[@Repository]
 
 For example:
 
@@ -79,7 +79,7 @@ public CustomerRepository {
 }
 ----
 <.> Detected and managed by Spring Boot.
-<.> Lombok annotation for dependency injection of xref:refguide:applib:index/services/repository/RepositoryService.adoc[`RepositoryService`] through generated constructor.
+<.> Lombok annotation for dependency injection of xref:refguide:applib:index/services/repository/RepositoryService.adoc[RepositoryService] through generated constructor.
 <.> uses injected `RepositoryService` to query via JDOQL.
 <.> uses injected `RepositoryService` to instantiate a not-yet-persisted domain entity ...
 <.> \... and then save into the database a new `Customer` instance.
@@ -90,7 +90,7 @@ There is no need to annotate the actions; they are implicitly hidden because of 
 [TIP]
 ====
 JDO/Datanucleus also supports link:http://www.datanucleus.org:15080/products/accessplatform_5_2/jdo/query.html#jdoql_typed[type-safe queries].
-These can be executed through the xref:pjdo:ROOT:services/IsisJdoSupport.adoc[`IsisJdoSupport`] domain service.
+These can be executed through the xref:pjdo:ROOT:services/IsisJdoSupport.adoc[IsisJdoSupport] domain service.
 ====
 
 == Menu
@@ -138,7 +138,7 @@ public class Customers {
 
 <.> Rendered in the UI as a "Find By Name" menu item underneath the "Customers" menu.
 
-<.> The xref:refguide:applib:index/annotation/ParameterLayout.adoc[`@ParameterLayout`] provides metadata for the parameter itself, in this case its name.
+<.> The xref:refguide:applib:index/annotation/ParameterLayout.adoc[@ParameterLayout] provides metadata for the parameter itself, in this case its name.
 +
 [TIP]
 ====
@@ -184,7 +184,7 @@ public class OnCustomerDeletedCascadeDeleteOrders {
 ----
 <.> subscriptions do not appear in the UI at all
 
-<.> use Spring Framework's link:https://javadoc.io/doc/org.springframework/spring-context/latest/org/springframework/context/event/EventListener.html[`@EventListener`]
+<.> use Spring Framework's link:https://javadoc.io/doc/org.springframework/spring-context/latest/org/springframework/context/event/EventListener.html[@EventListener]
 
 <.> the parameter type of the method corresponds to the event emitted on the event bus.
 The actual method name does not matter (though it must have `public` visibility).
@@ -195,10 +195,10 @@ By default all domain services are application-scoped, in other words singletons
 Such domain services are required to be thread-safe, usually satisfied by being intrinsically stateless.
 
 Sometimes though a service's lifetime is applicable only to a single (http) request.
-The framework has a number of such services, including a xref:refguide:applib:index/services/scratchpad/Scratchpad.adoc[`Scratchpad`] service (to share adhoc data between methods), and xref:refguide:applib:index/services/queryresultscache/QueryResultsCache.adoc[`QueryResultsCache`], which as its name suggests will cache query results.
+The framework has a number of such services, including a xref:refguide:applib:index/services/scratchpad/Scratchpad.adoc[Scratchpad] service (to share adhoc data between methods), and xref:refguide:applib:index/services/queryresultscache/QueryResultsCache.adoc[QueryResultsCache], which as its name suggests will cache query results.
 Such services _do_ hold state, but that state is scoped per (possibly concurrent) request and should be removed afterwards.
 
-The requirement for request-scoped services is supported using Apache Isis' own xref:refguide:applib:index/annotation/InteractionScope.adoc[`@IsisSessionScope`] annotation (named because a short-lived `IsisSession` is created for each request).
+The requirement for request-scoped services is supported using Apache Isis' own xref:refguide:applib:index/annotation/InteractionScope.adoc[@IsisSessionScope] annotation (named because a short-lived `IsisSession` is created for each request).
 This is used by the framework services and can also be used for user-defined services.
 
 For example:
@@ -238,7 +238,7 @@ public class SomeClient {
 
 Spring provides numerous mechanisms to configure domain services, both in terms of binding or passing in the configuration property to the service, and in terms of setting the value within some sort of configuration file.
 
-The mechanism prefered by Apache Isis itself, and which you are free to use for your own services, is the type-safe link:https://docs.spring.io/spring-boot/docs/current/api/org/springframework/boot/context/properties/ConfigurationProperties.html[`ConfigurationProperties`], whereby the configuration properties are expressed in a series of nested static classes.
+The mechanism prefered by Apache Isis itself, and which you are free to use for your own services, is the type-safe link:https://docs.spring.io/spring-boot/docs/current/api/org/springframework/boot/context/properties/ConfigurationProperties.html[ConfigurationProperties], whereby the configuration properties are expressed in a series of nested static classes.
 
 The xref:docs:starters:simpleapp.adoc[simpleapp starter app] includes an example:
 
@@ -278,7 +278,7 @@ val prohibitedCharacters =
   config.getTypes().getName().getValidation().getProhibitedCharacters();
 ----
 
-For this configuration property service to be discovered and managed by Spring, we need to use the link:https://docs.spring.io/spring-boot/docs/current/api/org/springframework/boot/context/properties/EnableConfigurationProperties.html[`EnableConfigurationProperties`] annotation.
+For this configuration property service to be discovered and managed by Spring, we need to use the link:https://docs.spring.io/spring-boot/docs/current/api/org/springframework/boot/context/properties/EnableConfigurationProperties.html[EnableConfigurationProperties] annotation.
 This normally would reside on the owning module (discussed in more detail xref:modules.adoc[later]):
 
 [source,java]

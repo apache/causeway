@@ -45,6 +45,6 @@ tr.done {
 
 See also:
 
-* xref:refguide:applib-methods:reserved.adoc#title[`title()`]
-* xref:refguide:applib-methods:reserved.adoc#iconName[`iconName()`]
-* xref:refguide:applib-methods:reserved.adoc#layout[`layout()`]
+* xref:refguide:applib-methods:reserved.adoc#title[title()]
+* xref:refguide:applib-methods:reserved.adoc#iconName[iconName()]
+* xref:refguide:applib-methods:reserved.adoc#layout[layout()]

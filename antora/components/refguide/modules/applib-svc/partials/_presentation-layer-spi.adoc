@@ -44,7 +44,7 @@ For example, the viewer remembers which tabs are selected, and for collections w
 
 
 |xref:refguide:applib:index/services/i18n/LocaleProvider.adoc[LocaleProvider]
-|Request-scoped service to return the locale of the current user, in support of i18n (ie so that the app's UI, messages and exceptions can be translated to the required locale by the xref:refguide:applib:index/services/i18n/TranslationService.adoc[`TranslationService`].
+|Request-scoped service to return the locale of the current user, in support of i18n (ie so that the app's UI, messages and exceptions can be translated to the required locale by the xref:refguide:applib:index/services/i18n/TranslationService.adoc[TranslationService].
 
 
 |xref:refguide:applib:index/services/routing/RoutingService.adoc[RoutingService]
@@ -57,7 +57,7 @@ For example, the viewer remembers which tabs are selected, and for collections w
 
 
 |xref:refguide:applib:index/services/i18n/TranslationService.adoc[TranslationService]
-|Translate an app's UI, messages and exceptions for the current user (as per the locale provided by xref:refguide:applib:index/services/i18n/LocaleProvider.adoc[`LocalProvider`].
+|Translate an app's UI, messages and exceptions for the current user (as per the locale provided by xref:refguide:applib:index/services/i18n/LocaleProvider.adoc[LocalProvider].
 
 
 |xref:refguide:applib:index/services/urlencoding/UrlEncodingService.adoc[UrlEncodingService]

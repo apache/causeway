@@ -11,20 +11,20 @@ The prompt style is influenced by two xref:vw:ROOT:configuration-properties.adoc
 
 * if the xref:refguide:applib:index/annotation/ActionLayout.adoc#promptStyle[promptStyle()] element is set to `DIALOG`, then a configuration property is used to determine whether to render using a modal dialog or a sidebar:
 
-** xref:refguide:config:sections/isis.viewer.wicket.adoc#isis.viewer.wicket.dialog-mode[`isis.viewer.wicket.dialog-mode`] if the action is for a domain object (entity or view model)
+** xref:refguide:config:sections/isis.viewer.wicket.adoc#isis.viewer.wicket.dialog-mode[isis.viewer.wicket.dialog-mode] if the action is for a domain object (entity or view model)
 +
 If the configuration property is not set, then sidebar is used.
 
-** xref:refguide:config:sections/isis.viewer.wicket.adoc#isis.viewer.wicket.dialog-mode-for-menu[`isis.viewer.wicket.dialog-mode-for-menu`] if the action is for a domain service
+** xref:refguide:config:sections/isis.viewer.wicket.adoc#isis.viewer.wicket.dialog-mode-for-menu[isis.viewer.wicket.dialog-mode-for-menu] if the action is for a domain service
 +
 If the configuration property is not set, then modal is used.
 
 
-* if the attribute is not set at all, then thexref:refguide:config:sections/isis.viewer.wicket.adoc#isis.viewer.wicket.prompt-style[`isis.viewer.wicket.prompt-style`] configuration property is used to specify the preferred prompt style.
+* if the attribute is not set at all, then thexref:refguide:config:sections/isis.viewer.wicket.adoc#isis.viewer.wicket.prompt-style[isis.viewer.wicket.prompt-style] configuration property is used to specify the preferred prompt style.
 +
 If the configuration property is not set, then an inline prompt is used.
 +
-And, if this _is_ set but is set to just `DIALOG`, then the xref:refguide:config:sections/isis.viewer.wicket.adoc#isis.viewer.wicket.dialog-mode[`isis.viewer.wicket.dialog-mode`] configuration property determines which style.
+And, if this _is_ set but is set to just `DIALOG`, then the xref:refguide:config:sections/isis.viewer.wicket.adoc#isis.viewer.wicket.dialog-mode[isis.viewer.wicket.dialog-mode] configuration property determines which style.
 
 For example:
 

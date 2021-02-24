@@ -7,7 +7,7 @@
 The xref:refguide:applib:index/annotation/PropertyLayout.adoc#multiLine[multiLine()] element  specifies that the text field for a string property should span multiple lines.
 It is ignored for other property types.
 
-If set > 1 (as would normally be the case), then the default xref:refguide:applib:index/annotation/PropertyLayout.adoc#labelPosition[`labelPosition`] defaults to `TOP` (rather than `LEFT`, as would normally be the case).
+If set > 1 (as would normally be the case), then the default xref:refguide:applib:index/annotation/PropertyLayout.adoc#labelPosition[labelPosition] defaults to `TOP` (rather than `LEFT`, as would normally be the case).
 
 For example:
 

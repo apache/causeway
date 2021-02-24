@@ -44,7 +44,7 @@ The HTML for this will be something like:
 </div>
 ----
 
-The xref:refguide:config:application-specific/application-css.adoc[`application.css`] file is the place to add application-specific styles.
+The xref:refguide:config:application-specific/application-css.adoc[application.css] file is the place to add application-specific styles.
 By way of an example, if (for some reason) we wanted to completely hide the notes value, we could do so using:
 
 [source,css]

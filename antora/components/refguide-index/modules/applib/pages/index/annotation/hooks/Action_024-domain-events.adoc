@@ -13,7 +13,7 @@ In the cases of the domain object's actions, the events that are fired are:
 * pre-execute phase: before the invocation of the action
 * post-execute: after the invocation of the action
 
-Subscribers subscribe through the xref:refguide:applib:index/services/eventbus/EventBusService.adoc[`EventBusService`] and can influence each of these phases.
+Subscribers subscribe through the xref:refguide:applib:index/services/eventbus/EventBusService.adoc[EventBusService] and can influence each of these phases.
 
 By default the event raised is `ActionDomainEvent.Default`.
 For example:
@@ -53,7 +53,7 @@ This substantially reduces the boilerplate required in subclasses because no exp
 
 ==== Subscribers
 
-Subscribers (which must be domain services) subscribe to events posted through the xref:refguide:applib:index/services/eventbus/EventBusService.adoc[`EventBusService`].
+Subscribers (which must be domain services) subscribe to events posted through the xref:refguide:applib:index/services/eventbus/EventBusService.adoc[EventBusService].
 
 Subscribers can be either coarse-grained (if they subscribe to the top-level event type):
 

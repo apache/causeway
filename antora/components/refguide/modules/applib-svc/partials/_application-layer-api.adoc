@@ -14,10 +14,6 @@ Domain service APIs for the application layer allow the domain objects to contro
 |API
 |Description
 
-//|xref:refguide:applib-svc:BackgroundService.adoc[BackgroundService]
-//|Programmatic persistence of commands to be persisted (so can be executed by a background mechanism, eg scheduler)
-//NOTE: TODO: v2: this has been replaced by `WrapperFactory#async(...)`
-
 
 |xref:refguide:applib:index/services/command/CommandExecutorService.adoc[CommandExecutorService]
 |Executes the specified `Command`.

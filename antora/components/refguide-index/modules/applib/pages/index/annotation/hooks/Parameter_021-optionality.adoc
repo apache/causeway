@@ -34,4 +34,4 @@ public class Customer {
 
 ==== Alternatives
 
-It is also possible to specify optionality using xref:refguide:applib-ant:Nullable.adoc[`@Nullable`] annotation.
+It is also possible to specify optionality using xref:refguide:applib-ant:Nullable.adoc[@Nullable] annotation.

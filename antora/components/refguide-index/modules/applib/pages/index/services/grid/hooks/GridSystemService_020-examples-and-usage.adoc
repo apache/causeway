@@ -4,11 +4,11 @@
 == Usage Notes
 
 The framework will check _all_ available implementations of `GridSystemService` to obtain available grid systems, rather than merely the first implementation found, to determine if a grid is available for the domain object to be rendered; in other words it uses the link:https://en.wikipedia.org/wiki/Chain-of-responsibility_pattern[chain-of-responsibility] pattern.
-Services are called in the order defined by the Spring link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/core/annotation/Order.html[`@Order`] annotation).
+Services are called in the order defined by the Spring link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/core/annotation/Order.html[@Order] annotation).
 
 Note though that each concrete implementation must also provide corresponding Wicket viewer components capable of interpreting the grid layout.
 This is therefore a highly specialized and very deep customisation of the framework.
 
 == See also
 
-This service is used by xref:refguide:applib:index/services/grid/GridService.adoc[`GridService`].
+This service is used by xref:refguide:applib:index/services/grid/GridService.adoc[GridService].

@@ -9,6 +9,6 @@ For the "big picture" and further details on Apache Isis' i18n support, see xref
 
 == See Also
 
-This service works in conjunction with xref:refguide:applib:index/services/i18n/LocaleProvider.adoc[`LocaleProvider`] and xref:refguide:applib:index/services/i18n/TranslationService.adoc[`TranslationService`] in order to provide i18n support.
+This service works in conjunction with xref:refguide:applib:index/services/i18n/LocaleProvider.adoc[LocaleProvider] and xref:refguide:applib:index/services/i18n/TranslationService.adoc[TranslationService] in order to provide i18n support.
 
 

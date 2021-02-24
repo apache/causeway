@@ -123,7 +123,7 @@ Customer -u.-^ DocumentHolder
 == Defining Modules
 
 In the context of Java applications, modularity is a rather overloaded term.
-We have Maven modules, Java 9 modules and we also have Spring link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/context/annotation/Configuration.html[`@Configuration`]s, which define a set of domain services.
+We have Maven modules, Java 9 modules and we also have Spring link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/context/annotation/Configuration.html[@Configuration]s, which define a set of domain services.
 
 In the context of Apache Isis, a module is actually the last of these, a Spring module.
 
@@ -136,9 +136,9 @@ This is at the root package of the maven module.
 
 * all of the domain classes (domain objects and services) are part of that Maven module.
 +
-All are annotated or meta-annotated with Spring's link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/stereotype/Component.html[`@Component`] annotation, and Spring's link:https://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/context/annotation/ComponentScan.html[`@ComponentScan`] is used to discover these from the classpath.
+All are annotated or meta-annotated with Spring's link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/stereotype/Component.html[@Component] annotation, and Spring's link:https://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/context/annotation/ComponentScan.html[@ComponentScan] is used to discover these from the classpath.
 
-* Spring's link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/context/annotation/Import.html[`@Import`] is used to express a dependency between each "configuration" module.
+* Spring's link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/context/annotation/Import.html[@Import] is used to express a dependency between each "configuration" module.
 
 By convention, we have just one Spring module to each Maven module.
 This means that the dependencies between Maven modules (using `<dependency>` are mirrored in the Spring module's `@Import` statements).

@@ -10,7 +10,7 @@ The "common" schema defines a number of complex types that are used by other hig
 == `oidDto`
 
 The `oidDto` complex type captures an object's type and its identifier.
-This is basically a formal XML equivalent to the `Bookmark` object obtained from the xref:refguide:applib:index/services/bookmark/BookmarkService.adoc[`BookmarkService`].
+This is basically a formal XML equivalent to the `Bookmark` object obtained from the xref:refguide:applib:index/services/bookmark/BookmarkService.adoc[BookmarkService].
 
 Although simple, this is an enormously powerful concept, in that it represents a URI to any domain object managed by a given Apache Isis application.
 With it, we have the ability to lookup any arbitrary object.
@@ -52,8 +52,8 @@ The `oidDto` complex type is defined as:
 Although URIs are not the same as URLs, you will find that the schemas are also downloadable from this location.
 <2> the `oidDto` complex type defines the unique identifier for any domain object: its type, and an identifier.
 The `objectState` attribute can usually be omitted (indicating a persistent object)
-<3> the object type, corresponding to either the xref:refguide:applib:index/annotation/DomainObject.adoc#objectType[`@DomainObject#objectType()`] attribute, or to the (JDO)
-xref:refguide:applib-ant:PersistenceCapable.adoc[`@PersistenceCapable`] annotation (`schema` and/or `table` attributes), or to the (JDO) xref:refguide:applib-ant:Discriminator.adoc[`@Discriminator`] annotation.
+<3> the object type, corresponding to either the xref:refguide:applib:index/annotation/DomainObject.adoc#objectType[@DomainObject#objectType()] attribute, or to the (JDO)
+xref:refguide:applib-ant:PersistenceCapable.adoc[@PersistenceCapable] annotation (`schema` and/or `table` attributes), or to the (JDO) xref:refguide:applib-ant:Discriminator.adoc[@Discriminator] annotation.
 If none is specified, then the fully qualified class name will be used.
 <4> the object identifier (aka primary key), converted to string form.
 <5> the `bookmarkObjectState` enumerates the possible persistence states of the referenced object.
@@ -68,7 +68,7 @@ The element form can still be used, but is deprecated.
 The `oidDto` complex type is used in a number of places by the framework:
 
 * first, as a means of serializing JAXB view model/DTOs (annotated with
-xref:refguide:applib-ant:XmlRootElement.adoc[`@XmlRootElement`]), that reference domain entities.
+xref:refguide:applib-ant:XmlRootElement.adoc[@XmlRootElement]), that reference domain entities.
 +
 These references are serialized instead into OIDs
 

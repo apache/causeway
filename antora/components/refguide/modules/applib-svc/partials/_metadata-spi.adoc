@@ -22,8 +22,8 @@ The metadata SPIs allow the framework to obtain metadata from alternative locati
 
 
 |xref:refguide:applib:index/services/grid/GridService.adoc[GridService]
-|A facade on top of both xref:refguide:applib:index/services/grid/GridLoaderService.adoc[`GridLoaderService`] and
-xref:refguide:applib:index/services/grid/GridSystemService.adoc[`GridSystemService`], thus being able to return normalized grids for any domain class.
+|A facade on top of both xref:refguide:applib:index/services/grid/GridLoaderService.adoc[GridLoaderService] and
+xref:refguide:applib:index/services/grid/GridSystemService.adoc[GridSystemService], thus being able to return normalized grids for any domain class.
 
 
 
@@ -42,7 +42,7 @@ Used by
 
 
 |xref:refguide:applib:index/services/i18n/TranslationsResolver.adoc[TranslationsResolver]
-|Obtain translations for a particuar phrase and locale, in support of i18n (ie so that the app's UI, messages and exceptions can be translated to the required locale by the xref:refguide:applib:index/services/i18n/TranslationService.adoc[`TranslationService`]
+|Obtain translations for a particuar phrase and locale, in support of i18n (ie so that the app's UI, messages and exceptions can be translated to the required locale by the xref:refguide:applib:index/services/i18n/TranslationService.adoc[TranslationService]
 
 
 

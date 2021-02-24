@@ -46,5 +46,5 @@ public class Customer {
 
 ==== Alternatives
 
-It is also possible to use xref:refguide:applib:index/annotation/CollectionLayout.adoc#hidden[`@CollectionLayout#hidden`] or using xref:userguide:fun:ui.adoc#object-layout[file-based layout] such that the collection can be hidden at the view layer.
+It is also possible to use xref:refguide:applib:index/annotation/CollectionLayout.adoc#hidden[@CollectionLayout#hidden] or using xref:userguide:fun:ui.adoc#object-layout[file-based layout] such that the collection can be hidden at the view layer.
 

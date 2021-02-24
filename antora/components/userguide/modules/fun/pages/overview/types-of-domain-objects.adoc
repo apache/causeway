@@ -26,9 +26,9 @@ you can generally recognize an Apache Isis domain class because it will be proba
 The framework also recognises some annotations from the ORM layer (eg JDO/DataNucleus) and infers domain semantics from these annotations.
 Similarly, JAXB annotations are typically used for view models.
 
-The framework also defines supplementary annotations, notably xref:refguide:applib:index/annotation/DomainObjectLayout.adoc[`@DomainObjectLayout`] and xref:refguide:applib:index/annotation/DomainServiceLayout.adoc[`@DomainServiceLayout`].
+The framework also defines supplementary annotations, notably xref:refguide:applib:index/annotation/DomainObjectLayout.adoc[@DomainObjectLayout] and xref:refguide:applib:index/annotation/DomainServiceLayout.adoc[@DomainServiceLayout].
 These provide hints relating to the layout of the domain object in the user interface.
-Alternatively, these UI hints might be defined in a supplementary xref:userguide:fun:ui.adoc#object-layout[`.layout.xml`] file.
+Alternatively, these UI hints might be defined in a supplementary xref:userguide:fun:ui.adoc#object-layout[.layout.xml] file.
 
 
 
@@ -214,7 +214,7 @@ These DTOs are still usable as "regular" view models; they will render in the xr
 In fact (as the xref:userguide:fun:view-models.adoc#jaxb[programming model] section below makes clear), these JAXB-annotated view models are in many regards the most powerful of all the alternative ways of writing view models.
 
 It's also worth noting that it is also possible to download the XML (or XSD) straight from the UI, useful during development.
-The view model simply needs to implement the xref:refguide:applib-cm:roles-mixins-contributees/mixins.adoc#Dto[`Dto`] marker interface; the framework has xref:refguide:applib-cm:roles-mixins-contributees/mixins.adoc#Dto[mixins] that contribute the download actions to the view model.
+The view model simply needs to implement the xref:refguide:applib-cm:roles-mixins-contributees/mixins.adoc#Dto[Dto] marker interface; the framework has xref:refguide:applib-cm:roles-mixins-contributees/mixins.adoc#Dto[mixins] that contribute the download actions to the view model.
 
 === For REST Clients
 

@@ -19,7 +19,7 @@ The idea here is simply to use XML as the means by which metadata is specified.
 The idea here is to accommodate for subtle differences in support for SQL between vendors.
 A good example is the default schema for a table: `dbo` for SQL Server, `public` for HSQLDB, `sys` for Oracle, and so on.
 
-If you want to use the first approach (the `.jdo` file), you'll find that you can download the effective XML representation of domain entities using the xref:refguide:applib-cm:classes.adoc#downloadJdoMetadata[`downloadJdoMetadata()`] mixin action available in prototyping mode.
+If you want to use the first approach (the `.jdo` file), you'll find that you can download the effective XML representation of domain entities using the xref:refguide:applib-cm:classes.adoc#downloadJdoMetadata[downloadJdoMetadata()] mixin action available in prototyping mode.
 This then needs to be renamed and placed in the appropriate location on the classpath; see the link:http://www.datanucleus.org[DataNucleus documentation] for details.
 
 However, using this first approach does create a maintenance effort; if the domain entity's class structure changes over time, then the XML metadata file will need to be updated.

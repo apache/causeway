@@ -16,7 +16,7 @@ The diagram below shows the Isis and components involved:
 
 image::configuration/configuring-shiro/ini/configure-shiro-to-use-ini-realm.PNG[width="600px"]
 
-The realm is responsible for validating the user credentials, and then creates a Shiro link:http://shiro.apache.org/static/latest/apidocs/org/apache/shiro/subject/Subject.html[`Subject`] which represents the user (for the current request).
+The realm is responsible for validating the user credentials, and then creates a Shiro link:http://shiro.apache.org/static/latest/apidocs/org/apache/shiro/subject/Subject.html[Subject] which represents the user (for the current request).
 Apache Isis `Authenticator` component then interacts with the `Subject` in order to check permissions.
 
 

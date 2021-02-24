@@ -1,3 +1,4 @@
+#!/bin/bash
 #  Licensed to the Apache Software Foundation (ASF) under one
 #  or more contributor license agreements.  See the NOTICE file
 #  distributed with this work for additional information
@@ -15,5 +16,43 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
-name: core
-version: latest
+
+SCRIPT_DIR=$( dirname "$0" )
+if [ -z "$PROJECT_ROOT_PATH" ]; then
+  PROJECT_ROOT_PATH=`cd $SCRIPT_DIR/../.. ; pwd`
+fi
+
+if [ -z "$REVISION" ]; then
+  if [ ! -z "$SHARED_VARS_FILE" ] && [ -f "$SHARED_VARS_FILE" ]; then
+    . $SHARED_VARS_FILE
+    export $(cut -d= -f1 $SHARED_VARS_FILE)
+  fi
+fi
+
+if [ -z "$REVISION" ]; then
+  export REVISION="SNAPSHOT"
+fi
+
+
+GENERATED_PATH="${PROJECT_ROOT_PATH}/antora/components/refguide-index"
+
+##
+## run java
+##
+DOS2UNIX_CMD=$(command -v dos2unix)
+
+echo ""
+echo "\$DOS2UNIX_CMD : ${DOS2UNIX_CMD}"
+echo ""
+
+if [ ! -z "${DOS2UNIX_CMD}" ]; then
+  for FILE in $(find $GENERATED_PATH -name "*.adoc" -print)
+  do
+    ${DOS2UNIX_CMD} $FILE
+  done
+  echo
+  echo
+  echo
+fi
+
+

@@ -45,5 +45,5 @@ public class ToDoItem {
 
 ==== Alternatives
 
-It is also possible to use xref:refguide:applib:index/annotation/Collection.adoc#hidden[`@Collection#hidden`] to hide a collection at the domain layer.
+It is also possible to use xref:refguide:applib:index/annotation/Collection.adoc#hidden[@Collection#hidden] to hide a collection at the domain layer.
 

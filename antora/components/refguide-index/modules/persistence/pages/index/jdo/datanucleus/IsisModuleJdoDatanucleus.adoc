@@ -8,7 +8,7 @@
 ----
 class IsisModuleJdoDatanucleus {
   DnJdoDialect getDnJdoDialect(final DataSource dataSource)     // <.>
-  LocalPersistenceManagerFactoryBean getLocalPersistenceManagerFactoryBean(final IsisConfiguration isisConfiguration, final DataSource dataSource, final MetaModelContext metaModelContext, final EventBusService eventBusService, final Provider<EntityChangeTracker> entityChangeTrackerProvider, final DnSettings dnSettings)
+  LocalPersistenceManagerFactoryBean getLocalPersistenceManagerFactoryBean(final IsisConfiguration isisConfiguration, final DataSource dataSource, final MetaModelContext metaModelContext, final EventBusService eventBusService, final Provider<EntityChangeTracker> entityChangeTrackerProvider, final IsisBeanTypeRegistry beanTypeRegistry, final DnSettings dnSettings)
   TransactionAwarePersistenceManagerFactoryProxy getTransactionAwarePersistenceManagerFactoryProxy(final LocalPersistenceManagerFactoryBean localPmfBean)
   JdoTransactionManager getTransactionManager(final JdoDialect jdoDialect, final LocalPersistenceManagerFactoryBean localPmfBean)
   TransactionInterceptorFactory getTransactionInterceptorFactory()     // <.>

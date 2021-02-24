@@ -30,43 +30,6 @@ import lombok.extern.log4j.Log4j2;
 /**
  * Provides fluent composition for Objects' equals, hashCode and toString.
  *
- * Sample usage by composing getters ...
- *
- *
- * <pre>
- * private static final Equality<ApplicationFeature> equality =
- * 		ObjectContracts.checkEquals(ApplicationFeature::getFeatureId);
- *
- * private static final Hashing<ApplicationFeature> hashing =
- * 		ObjectContracts.hashing(ApplicationFeature::getFeatureId);
- *
- * private static final ToString<ApplicationFeature> toString =
- * 		ObjectContracts.toString("featureId", ApplicationFeature::getFeatureId);
- *
- * public boolean equals(final Object obj) {
- * 	return equality.equals(this, obj);
- * }
- *
- * public int hashCode() {
- * 	return hashing.hashCode(this);
- * }
- *
- * public String toString() {
- * 	return toString.toString(this);
- * }
- * </pre>
- *
- * For 'compareTo' use JDK's comparator composition ...
- *
- * <pre>
- * private static final Comparator<ApplicationFeature> comparator =
- * 		Comparator.comparing(ApplicationFeature::getFeatureId);
- *
- * public int compareTo(final ApplicationFeature other) {
- * 	return comparator.compare(this, other);
- * }
- * </pre>
- *
  * @since 1.x revised for 2.0 {@index}
  */
 @Log4j2

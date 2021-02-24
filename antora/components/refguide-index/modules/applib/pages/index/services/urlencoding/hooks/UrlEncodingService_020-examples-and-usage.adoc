@@ -7,7 +7,7 @@
 Defining this functionality as an SPI has two use cases:
 
 * first, (though some browsers support longer strings), there is a limit of 2083 characters for URLs.
-For view model mementos that correspond to large strings (as might occur when serializing a JAXB xref:refguide:applib-ant:XmlRootElement.adoc[`@XmlRootElement`]-annotated view model), the service provides a hook.
+For view model mementos that correspond to large strings (as might occur when serializing a JAXB xref:refguide:applib-ant:XmlRootElement.adoc[@XmlRootElement]-annotated view model), the service provides a hook.
 +
 For example, each memento string could be mapped to a GUID held in some cluster-aware cache.
 

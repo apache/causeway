@@ -18,6 +18,8 @@
  */
 package org.apache.isis.testdomain.persistence.jpa;
 
+import java.util.NoSuchElementException;
+
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.orm.jpa.JpaTransactionManager;
@@ -27,11 +29,11 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
 
 final class _JpaExceptionTranslator {
 
-    // not used, but maybe keep for debugging purposes 
+    // not used, but maybe keep for debugging purposes
     static DataAccessException translate(Throwable failure, JpaTransactionManager txManager) {
-        
+
         return (DataAccessException) Result.failure(failure)
-        
+
         .mapFailure(ex-> _Exceptions.streamCausalChain(ex)
                 .filter(e->e instanceof RuntimeException)
                 .map(RuntimeException.class::cast)
@@ -40,12 +42,12 @@ final class _JpaExceptionTranslator {
                 .filter(nextEx -> nextEx instanceof DataAccessException)
                 .findFirst()
                 .orElseGet(()->new RuntimeException(ex)))
-        
+
         .getFailure()
-        .orElseThrow();
+        .orElse(new NoSuchElementException("No value present"));
 
     }
-    
-     
+
+
 
 }

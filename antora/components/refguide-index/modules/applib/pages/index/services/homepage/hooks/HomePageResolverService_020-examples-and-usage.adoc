@@ -4,4 +4,4 @@
 
 == Notes
 
-This service was originally introduced to support the default implementation of xref:refguide:applib:index/services/routing/RoutingService.adoc[`RoutingService`], but was factored out to support alternative implementations of that service (and may be useful for other use cases).
+This service was originally introduced to support the default implementation of xref:refguide:applib:index/services/routing/RoutingService.adoc[RoutingService], but was factored out to support alternative implementations of that service (and may be useful for other use cases).

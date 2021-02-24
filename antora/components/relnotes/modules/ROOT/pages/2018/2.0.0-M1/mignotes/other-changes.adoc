@@ -232,7 +232,7 @@ JAX-RS 2.0 (one of the JavaEE 7.0 specifications) is implemented by RestEasy 3 w
 
 == IsisJdoSupport domain service
 
-In 1.16.x the link:https://isis.apache.org/versions/2.0.0-M1/guides/rgsvc/rgsvc.html#_rgsvc_persistence-layer-api_IsisJdoSupport[`IsisJdoSupport`] domain service exposed the DataNucleus 4 `org.datanucleus.query.typesafe.TypesafeQuery` type in one of its signatures.
+In 1.16.x the link:https://isis.apache.org/versions/2.0.0-M1/guides/rgsvc/rgsvc.html#_rgsvc_persistence-layer-api_IsisJdoSupport[IsisJdoSupport] domain service exposed the DataNucleus 4 `org.datanucleus.query.typesafe.TypesafeQuery` type in one of its signatures.
 However, in DataNucleus 5 this type was removed and replaced by `javax.jdo.JDOQLTypedQuery`, reflecting the fact that type-safe queries are now part of JDO 3.2.
 
 Consequently in 2.0.0-M1 this API has been split into three:

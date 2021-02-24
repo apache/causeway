@@ -15,15 +15,15 @@ Under the covers, all mixins are basically actions that use the mixee as one of 
 ** if as derived state, then it will be rendered as a property (if it returns a scalar), or as a collection (if it returns a vector).
 
 
-Accordingly, a mixin can be defined using the xref:refguide:applib:index/annotation/Action.adoc[`@Action`], xref:refguide:applib:index/annotation/Property.adoc[`@Property`] or xref:refguide:applib:index/annotation/Collection.adoc[`@Collection`] annotations, but defined at the domain class level rather than at the method level.
+Accordingly, a mixin can be defined using the xref:refguide:applib:index/annotation/Action.adoc[@Action], xref:refguide:applib:index/annotation/Property.adoc[@Property] or xref:refguide:applib:index/annotation/Collection.adoc[@Collection] annotations, but defined at the domain class level rather than at the method level.
 
-Using xref:refguide:applib:index/annotation/DomainObject.adoc#nature[`@DomainObject#nature`] attribute (specifying a nature of `Nature.MIXIN`), in combination with the above allows for more fine grained control, eg. nominating the mixin's method name.
+Using xref:refguide:applib:index/annotation/DomainObject.adoc#nature[@DomainObject#nature] attribute (specifying a nature of `Nature.MIXIN`), in combination with the above allows for more fine grained control, eg. nominating the mixin's method name.
 
 When the mixin follows the naming convention `SomeType_mixinName` then the method name can be abbreviated, and the name of the member being contributed is inferred from the name of the class itself, being everything after the last '_'.
 
 == Contributed Collection
 
-The example below shows how to contribute a collection, using xref:refguide:applib:index/annotation/Collection.adoc[`@Collection`].
+The example below shows how to contribute a collection, using xref:refguide:applib:index/annotation/Collection.adoc[@Collection].
 The method is expected to be called "coll":
 
 [source,java]
@@ -52,7 +52,7 @@ The above will result in a contributed collection "documents" for all types that
 
 == Contributed Property
 
-Contributed properties can likewise be defined using xref:refguide:applib:index/annotation/Property.adoc[`@Property`]; this implies a method called "prop":
+Contributed properties can likewise be defined using xref:refguide:applib:index/annotation/Property.adoc[@Property]; this implies a method called "prop":
 
 [source,java]
 ----
@@ -80,7 +80,7 @@ This contributes a property called "mostRecentDocument".
 [#contributed-action]
 == Contributed Action
 
-Contributed actions are defined similarly, using xref:refguide:applib:index/annotation/Action.adoc[`@Action`]; this implies a method called "act".
+Contributed actions are defined similarly, using xref:refguide:applib:index/annotation/Action.adoc[@Action]; this implies a method called "act".
 For example:
 
 [source,java]
@@ -158,7 +158,7 @@ Can be camelCase or PascalCase, either will work.
 When a domain object is rendered, the framework will automatically instantiate all required mixins and delegate to them dynamically.
 If writing integration tests or fixtures, or (sometimes) just regular domain logic, then you may need to instantiate mixins directly.
 
-For this you can use the xref:refguide:applib:index/services/factory/FactoryService.adoc[`FactoryService#mixin(...)`] method.
+For this you can use the xref:refguide:applib:index/services/factory/FactoryService.adoc[FactoryService#mixin(...)] method.
 
 For example:
 
@@ -168,7 +168,7 @@ DocumentHolder_documents mixin =
     factoryService.mixin(DocumentHolder_documents.class, customer);
 ----
 
-Alternatively, you can use xref:refguide:applib:index/services/inject/ServiceInjector.adoc[`ServiceInjector`] to inject domain services after the mixin has been instantiated.
+Alternatively, you can use xref:refguide:applib:index/services/inject/ServiceInjector.adoc[ServiceInjector] to inject domain services after the mixin has been instantiated.
 You'll need to use this method if using nested non-static mixins:
 
 

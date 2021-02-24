@@ -26,7 +26,7 @@ The table below lists the method prefixes that are recognized as part of Apache 
 Param
 |Description
 
-//|xref:refguide:applib-methods:prefixes.adoc#addTo[`addTo...()`]
+//|xref:refguide:applib-methods:prefixes.adoc#addTo[addTo...()]
 //|
 //|
 //|Y
@@ -36,10 +36,10 @@ Param
 //
 //NOTE: Directly mutable collections are not currently supported by the xref:vw:ROOT:about.adoc[Wicket viewer].
 //
-//See also xref:refguide:applib-methods:prefixes.adoc#removeFrom[`removeFrom...()`]`
+//See also xref:refguide:applib-methods:prefixes.adoc#removeFrom[removeFrom...()]`
 
 
-|xref:refguide:applib-methods:prefixes.adoc#autoComplete[`autoComplete...()`]
+|xref:refguide:applib-methods:prefixes.adoc#autoComplete[autoComplete...()]
 |
 |Y
 |
@@ -50,9 +50,9 @@ Param
 Alternatively, can specify for a class using xref:refguide:applib:index/annotation/DomainObject.adoc#autoCompleteRepository[`@DomainObject` +
 `#autoCompleteRepository`] +
 
-See also xref:refguide:applib-methods:prefixes.adoc#choices[`choices...()`]
+See also xref:refguide:applib-methods:prefixes.adoc#choices[choices...()]
 
-|xref:refguide:applib-methods:prefixes.adoc#choices[`choices...()`]
+|xref:refguide:applib-methods:prefixes.adoc#choices[choices...()]
 |
 |Y
 |
@@ -60,9 +60,9 @@ See also xref:refguide:applib-methods:prefixes.adoc#choices[`choices...()`]
 |Y
 |Provide list of choices for a property or action parameter. +
 
-See also xref:refguide:applib-methods:prefixes.adoc#autoComplete[`autoComplete...()`].
+See also xref:refguide:applib-methods:prefixes.adoc#autoComplete[autoComplete...()].
 
-//|xref:refguide:applib-methods:prefixes.adoc#clear[`clear...()`]
+//|xref:refguide:applib-methods:prefixes.adoc#clear[clear...()]
 //|
 //|Y
 //|
@@ -72,10 +72,10 @@ See also xref:refguide:applib-methods:prefixes.adoc#autoComplete[`autoComplete..
 //
 //Allows business logic to be placed apart from the setter. +
 //
-//See also xref:refguide:applib-methods:prefixes.adoc#modify[`modify...()`]
+//See also xref:refguide:applib-methods:prefixes.adoc#modify[modify...()]
 
 
-|xref:refguide:applib-methods:prefixes.adoc#default[`default...()`]
+|xref:refguide:applib-methods:prefixes.adoc#default[default...()]
 |
 |Y
 |
@@ -83,7 +83,7 @@ See also xref:refguide:applib-methods:prefixes.adoc#autoComplete[`autoComplete..
 |Y
 |Default value for a property or an action parameter.
 
-|xref:refguide:applib-methods:prefixes.adoc#disable[`disable...()`]
+|xref:refguide:applib-methods:prefixes.adoc#disable[disable...()]
 |Y
 |Y
 |Y
@@ -91,7 +91,7 @@ See also xref:refguide:applib-methods:prefixes.adoc#autoComplete[`autoComplete..
 |
 |Disables (makes read-only) a property, a collection or an action.
 
-|xref:refguide:applib-methods:prefixes.adoc#get[`get...()`]
+|xref:refguide:applib-methods:prefixes.adoc#get[get...()]
 |
 |Y
 |Y
@@ -99,9 +99,9 @@ See also xref:refguide:applib-methods:prefixes.adoc#autoComplete[`autoComplete..
 |
 |Access the value of a property or collection. +
 
-See also xref:refguide:applib-methods:prefixes.adoc#set[`set...()`].
+See also xref:refguide:applib-methods:prefixes.adoc#set[set...()].
 
-|xref:refguide:applib-methods:prefixes.adoc#hide[`hide...()`]
+|xref:refguide:applib-methods:prefixes.adoc#hide[hide...()]
 |
 |Y
 |Y
@@ -109,7 +109,7 @@ See also xref:refguide:applib-methods:prefixes.adoc#set[`set...()`].
 |
 |Hides a property, a collection or an action.
 
-//|xref:refguide:applib-methods:prefixes.adoc#modify[`modify...()`]
+//|xref:refguide:applib-methods:prefixes.adoc#modify[modify...()]
 //|
 //|Y
 //|
@@ -119,9 +119,9 @@ See also xref:refguide:applib-methods:prefixes.adoc#set[`set...()`].
 //
 //Allows business logic to be placed apart from the setter. +
 //
-//See also xref:refguide:applib-methods:prefixes.adoc#clear[`clear...()`]`.
+//See also xref:refguide:applib-methods:prefixes.adoc#clear[clear...()]`.
 
-//|xref:refguide:applib-methods:prefixes.adoc#removeFrom[`removeFrom...()`]
+//|xref:refguide:applib-methods:prefixes.adoc#removeFrom[removeFrom...()]
 //|
 //|
 //|Y
@@ -131,10 +131,10 @@ See also xref:refguide:applib-methods:prefixes.adoc#set[`set...()`].
 //
 //NOTE:Directly mutable collections are not currently supported by the xref:vw:ROOT:about.adoc[Wicket viewer].
 //
-//See also xref:refguide:applib-methods:prefixes.adoc#addTo[`addTo...()`]`
+//See also xref:refguide:applib-methods:prefixes.adoc#addTo[addTo...()]`
 
 
-|xref:refguide:applib-methods:prefixes.adoc#set[`set...()`]
+|xref:refguide:applib-methods:prefixes.adoc#set[set...()]
 |
 |Y
 |Y
@@ -142,7 +142,7 @@ See also xref:refguide:applib-methods:prefixes.adoc#set[`set...()`].
 |
 |Sets the value of a property or a collection.
 
-//|xref:refguide:applib-methods:prefixes.adoc#validate[`validate...()`]
+//|xref:refguide:applib-methods:prefixes.adoc#validate[validate...()]
 //|Y
 //|
 //|
@@ -150,7 +150,7 @@ See also xref:refguide:applib-methods:prefixes.adoc#set[`set...()`].
 //|Y
 //|Check that a proposed value of a property or a set of action parameters or a single action parameter is valid. +
 //
-//See also xref:refguide:applib-methods:prefixes.adoc#validateAddTo[`validateAddTo...()`] and xref:refguide:applib-methods:prefixes.adoc#validateRemoveFrom[`validateRemoveFrom...()`] to validate modifications to collections.
+//See also xref:refguide:applib-methods:prefixes.adoc#validateAddTo[validateAddTo...()] and xref:refguide:applib-methods:prefixes.adoc#validateRemoveFrom[validateRemoveFrom...()] to validate modifications to collections.
 
 //|xref:refguide:applib-methods:prefixes.adoc#validateAddTo[`validate +
 //AddTo...()`]
@@ -166,7 +166,7 @@ See also xref:refguide:applib-methods:prefixes.adoc#set[`set...()`].
 //Directly mutable collections are not currently supported by the xref:vw:ROOT:about.adoc[Wicket viewer].
 //====
 //
-//See also xref:refguide:applib-methods:prefixes.adoc#validateRemoveFrom[`validateRemoveFrom...()`], and xref:refguide:applib-methods:prefixes.adoc#validate[`validate...()`] for properties and actions.
+//See also xref:refguide:applib-methods:prefixes.adoc#validateRemoveFrom[validateRemoveFrom...()], and xref:refguide:applib-methods:prefixes.adoc#validate[validate...()] for properties and actions.
 
 //|xref:refguide:applib-methods:prefixes.adoc#validateRemoveFrom[`validate +
 //RemoveFrom...()`]
@@ -182,7 +182,7 @@ See also xref:refguide:applib-methods:prefixes.adoc#set[`set...()`].
 //Directly mutable collections are not currently supported by the xref:vw:ROOT:about.adoc[Wicket viewer].
 //====
 //
-//See also xref:refguide:applib-methods:prefixes.adoc#validateAddTo[`validateAddTo...()`], and xref:refguide:applib-methods:prefixes.adoc#validate[`validate...()`] for properties and actions.
+//See also xref:refguide:applib-methods:prefixes.adoc#validateAddTo[validateAddTo...()], and xref:refguide:applib-methods:prefixes.adoc#validate[validate...()] for properties and actions.
 
 |===
 

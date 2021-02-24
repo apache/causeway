@@ -38,10 +38,10 @@ public @interface Name {
 ----
 <.> ORM annotation
 <.> Annotations that are inferred if annotated on a property. +
-The xref:refguide:applib:index/annotation/Property.adoc#mustSatisfy[`@Property#mustSatisfy()`] allows arbitrary validation rules to be specified for the property.
+The xref:refguide:applib:index/annotation/Property.adoc#mustSatisfy[@Property#mustSatisfy()] allows arbitrary validation rules to be specified for the property.
 
 <.> Annotations that are inferred if annotated on a parameter +
-The xref:refguide:applib:index/annotation/Parameter.adoc#mustSatisfy[`@Parameter#mustSatisfy()`] allows the same validation rules to be specified for the parameter.
+The xref:refguide:applib:index/annotation/Parameter.adoc#mustSatisfy[@Parameter#mustSatisfy()] allows the same validation rules to be specified for the parameter.
 
 <.> Layout annotations that are inferred if annotated on a parameter
 

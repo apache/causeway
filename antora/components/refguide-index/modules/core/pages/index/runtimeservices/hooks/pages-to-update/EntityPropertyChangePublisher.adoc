@@ -1,12 +1,13 @@
-= `EntityChangesPublisher`
+= `EntityPropertyChangePublisher`
 
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
 WARNING: TODO: this content has not yet been reviewed/updated for v2.0
 
-The (internal) `EntityChangesPublisher` service acts as an internal facade to any configured xref:refguide:applib:index/services/publishing/spi/EntityChangesSubscriber.adoc[`EntityChangesSubscriber`] domain service(s).
+The (internal) `EntityPropertyChangePublisher` service acts as an internal facade to any registered xref:refguide:applib:index/services/publishing/spi/EntityPropertyChangeSubscriber.adoc[EntityPropertyChangeSubscriber] service(s).
+It is responsible for obtaining the details of all changes to domain objects within an interaction, and then to call the configured ``EntityPropertyChangeSubscriber``(s) to actually create audit entries of those changes.
 
-For changing entities, it provides an API for the framework to call at the end of the interaction; it obtains details of the changed entities (from the xref:core:runtime-services:ChangedObjectsService.adoc[`ChangedObjectsService`]) and filters them to just those objects that are to be published; these are then passed through to any configured `EntityChangesSubscriber` implementations.
+
 
 
 == SPI and Implementation
@@ -15,13 +16,16 @@ The SPI of the service is:
 
 [source,java]
 ----
-public class EntityChangesPublisher {
-
-	void publishChanging(...);   // <1>
-
+public interface EntityPropertyChangePublisher {
+    void publishEntityPropertyChanges(...);  // <1>
 }
 ----
-<1> to published all changing entities that are to be published (with the xref:refguide:applib:index/annotation/DomainObject.adoc#publishing[`@DomainObject#publishing`] annotation attribute or equivalent).
+<1> uses the xref:core:runtime-services:ChangedObjectsService.adoc[ChangedObjectsServiceInternal] to obtain details of the changed properties, then call the configured xref:refguide:applib:index/services/publishing/spi/EntityPropertyChangeSubscriber.adoc[EntityPropertyChangeSubscriber](s).
+
+== Registering the Service
+
+Apache Isis' default implementation of `EntityAuditDispatcher` class is automatically registered (it is annotated with `@DomainService`) so no further configuration is required.
+
 
 == Related Classes
 
@@ -30,4 +34,3 @@ In total there are 4 sorts of data the framework has publishers for ...
 . *EntityChanges*: published via `EntityChangesPublisher` and subscribed to via `EntityChangesSubscriber` (SPI)
 . *Execution*: published via `ExecutionPublisher` and subscribed to via `ExecutionSubscriber` (SPI)
 . *Command*: published via `CommandPublisher` and subscribed to via `CommandSubscriber` (SPI)
-

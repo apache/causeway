@@ -10,7 +10,7 @@ Or it could search for a country based on its ISO-3 code or user-friendly name.
 
 [TIP]
 ====
-If you require additional control - for example restricting the returned results based on the object being interacted with - then use the xref:refguide:applib-methods:prefixes.adoc#autoComplete[`autoComplete...()`] supporting method instead.
+If you require additional control - for example restricting the returned results based on the object being interacted with - then use the xref:refguide:applib-methods:prefixes.adoc#autoComplete[autoComplete...()] supporting method instead.
 ====
 
 For example:
@@ -71,7 +71,7 @@ public class Customers {
 ----
 <.> end-user must enter minimum number of characters to trigger the query
 
-NOTE: The autocomplete "action" can also be a regular method, annotated using xref:refguide:applib:index/annotation/Programmatic.adoc[`@Programmatic`].
+NOTE: The autocomplete "action" can also be a regular method, annotated using xref:refguide:applib:index/annotation/Programmatic.adoc[@Programmatic].
 That is, it does not need to be part of the metamodel:
 +
 [source,java]

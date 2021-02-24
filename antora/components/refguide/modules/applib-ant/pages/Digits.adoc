@@ -27,7 +27,7 @@ public void setCost(final BigDecimal cost) {
         :null;
 }
 ----
-<.> the xref:refguide:applib-ant:Column.adoc[`@Column#scale`] attribute must be ...
+<.> the xref:refguide:applib-ant:Column.adoc[@Column#scale] attribute must be ...
 <.> ... consistent with `@Digits#fraction()`
 <.> the correct idiom when setting a new value is to normalized to the correct scale
 

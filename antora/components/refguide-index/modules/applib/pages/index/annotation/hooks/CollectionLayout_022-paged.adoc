@@ -28,6 +28,6 @@ public class Order {
 }
 ----
 
-It is also possible to specify a global default for the page size of parented collections, using the xref:refguide:config:sections/isis.applib.adoc#isis.applib.annotation.collection-layout.paged[`isis.applib.annotation.collection-layout.paged`] configuration property.
+It is also possible to specify a global default for the page size of parented collections, using the xref:refguide:config:sections/isis.applib.adoc#isis.applib.annotation.collection-layout.paged[isis.applib.annotation.collection-layout.paged] configuration property.
 
 

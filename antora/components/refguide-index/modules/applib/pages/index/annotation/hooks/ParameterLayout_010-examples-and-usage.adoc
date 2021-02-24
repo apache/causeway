@@ -28,7 +28,7 @@ public class ToDoItem {
 
 [NOTE]
 ====
-Note that there is (currently) no support for specifying UI hints for domain services through the dynamic xref:userguide:fun:ui.adoc#object-layout[`.layout.xml`] file (only for properties, collections and actions are supported).
+Note that there is (currently) no support for specifying UI hints for domain services through the dynamic xref:userguide:fun:ui.adoc#object-layout[.layout.xml] file (only for properties, collections and actions are supported).
 ====
 
 

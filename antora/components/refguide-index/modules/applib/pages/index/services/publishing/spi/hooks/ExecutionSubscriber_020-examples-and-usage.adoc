@@ -15,11 +15,11 @@ If the xref:refguide:applib:index/services/wrapper/WrapperFactory.adoc[WrapperFa
 
 See also:
 
-* the xref:refguide:applib:index/services/iactn/InteractionContext.adoc[`InteractionContext`] is used to obtain the `Interaction` from which the member executions are published.
+* the xref:refguide:applib:index/services/iactn/InteractionContext.adoc[InteractionContext] is used to obtain the `Interaction` from which the member executions are published.
 
 * the xref:refguide:applib:index/services/publishing/spi/EntityChangesSubscriber.adoc[EntityChangesSubscriber] is used to obtain the set of objects modified within the interaction
 
-* the xref:refguide:applib:index/services/metrics/MetricsService.adoc[`MetricsService`] is used to obtain the objects that are loaded throughout the transaction; this info is used in order to instantiate the xref:refguide:applib:index/services/publishing/spi/EntityChanges.adoc[EntityChanges] object passed through to the xref:refguide:applib:index/services/publishing/spi/EntityChangesSubscriber.adoc[EntityChangesSubscriber].
+* the xref:refguide:applib:index/services/metrics/MetricsService.adoc[MetricsService] is used to obtain the objects that are loaded throughout the transaction; this info is used in order to instantiate the xref:refguide:applib:index/services/publishing/spi/EntityChanges.adoc[EntityChanges] object passed through to the xref:refguide:applib:index/services/publishing/spi/EntityChangesSubscriber.adoc[EntityChangesSubscriber].
 
 * The services provided by this module combine very well with the xref:refguide:applib:index/services/publishing/spi/CommandSubscriber.adoc[CommandSubscriber] and with xref:refguide:applib:index/services/publishing/spi/EntityPropertyChangeSubscriber.adoc[EntityPropertyChangeSubscriber].
 +

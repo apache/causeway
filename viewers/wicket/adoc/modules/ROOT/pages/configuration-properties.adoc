@@ -471,10 +471,10 @@ The xref:refguide:config:about.adoc[Configuration Guide] includes a xref:refguid
 //`defaultView`
 //|`hidden`, `table` +
 //(`hidden`)
-//|Default for the default view for all (parented) collections if not explicitly specified using xref:refguide:applib:index/annotation/CollectionLayout.adoc#defaultView[`@CollectionLayout#defaultView()`]
+//|Default for the default view for all (parented) collections if not explicitly specified using xref:refguide:applib:index/annotation/CollectionLayout.adoc#defaultView[@CollectionLayout#defaultView()]
 //
 //By default the framework renders (parented) collections as "hidden", ie collapsed.
-//These can be overridden on a case-by-case basis using the xref:refguide:applib:index/annotation/CollectionLayout.adoc#defaultView[`@CollectionLayout#defaultView()`] or the corresponding `<collectionLayout defaultView="...">` element in the `Xxx.layout.xml` layout file.
+//These can be overridden on a case-by-case basis using the xref:refguide:applib:index/annotation/CollectionLayout.adoc#defaultView[@CollectionLayout#defaultView()] or the corresponding `<collectionLayout defaultView="...">` element in the `Xxx.layout.xml` layout file.
 //
 //If the majority of collections should be displayed as "table" form, then it is more convenient to specify the default view globally.
 //
@@ -496,7 +496,7 @@ The xref:refguide:config:about.adoc[Configuration Guide] includes a xref:refguid
 //`labelPosition`
 //|`TOP`, `LEFT` +
 //(`LEFT`)
-//|Default for label position for all properties if not explicitly specified using xref:refguide:applib:index/annotation/PropertyLayout.adoc#labelPosition[`@PropertyLayout#labelPosition()`]
+//|Default for label position for all properties if not explicitly specified using xref:refguide:applib:index/annotation/PropertyLayout.adoc#labelPosition[@PropertyLayout#labelPosition()]
 //
 //
 //If you want a consistent look-n-feel throughout the app, eg all property labels to the top, then it'd be rather frustrating to have to annotate every property.
@@ -534,7 +534,7 @@ The xref:refguide:config:about.adoc[Configuration Guide] includes a xref:refguid
 //For actions, `inline_as_if_edit` will suppress the action's button, and instead let the action be invoked as if editing the property.
 //The net effect is that being able to "edit" complex properties with multiple parts (eg a date) using a multi-argument editor (this editor, in fact, being the action's argument panel).
 //
-//The property can be overridden on a property-by-property basis using xref:refguide:applib:index/annotation/PropertyLayout.adoc#promptStyle[`@Property#promptStyle()`]) or  xref:refguide:applib:index/annotation/ActionLayout.adoc#promptStyle[`@Action#promptStyle()`]).
+//The property can be overridden on a property-by-property basis using xref:refguide:applib:index/annotation/PropertyLayout.adoc#promptStyle[@Property#promptStyle()]) or  xref:refguide:applib:index/annotation/ActionLayout.adoc#promptStyle[@Action#promptStyle()]).
 //
 //Note that `inline_as_if_edit` does not make sense for a configuration property default, and will instead be interpreted as `inline`.
 //

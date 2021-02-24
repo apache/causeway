@@ -138,7 +138,7 @@ include::screencasts/playlists.adoc[]
 
 
 |link:https://www.youtube.com/watch?v=dfRZeYqzMtI[012^] +
-Implementing business logic using a (no-arg) action, and associating with a property using either the xref:refguide:applib:index/annotation/MemberOrder.adoc[`@MemberOrder`] annotations or using xref:userguide:fun:ui.adoc#object-layout[dynamic (XML) layouts].
+Implementing business logic using a (no-arg) action, and associating with a property using either the xref:refguide:applib:index/annotation/MemberOrder.adoc[@MemberOrder] annotations or using xref:userguide:fun:ui.adoc#object-layout[dynamic (XML) layouts].
 |x||||||||x||
 
 
@@ -153,13 +153,13 @@ include::screencasts/playlists.adoc[]
 
 
 |link:https://www.youtube.com/watch?v=CwM430UH5WE[014^] +
-Using the xref:refguide:applib-cm:methods.adoc#title[`title()`], xref:refguide:applib-cm:methods.adoc#iconName[`iconName()`] and xref:refguide:applib-cm:methods.adoc#cssclass[`cssClass()`] so that end-users can distinguish domain objects within the UI.
+Using the xref:refguide:applib-cm:methods.adoc#title[title()], xref:refguide:applib-cm:methods.adoc#iconName[iconName()] and xref:refguide:applib-cm:methods.adoc#cssclass[cssClass()] so that end-users can distinguish domain objects within the UI.
 |x||x||||||x||
 
 
 
 |link:https://www.youtube.com/watch?v=7ToRKBOeemM[015^] +
-Moving the responsibility to specify the icon for a domain object out and into a subscriber, using the xref:refguide:applib-cm:classes/uievent.adoc#IconUiEvent[`IconUiEvent`] as per the xref:refguide:applib:index/annotation/DomainObjectLayout.adoc#iconUiEvent[`@DomainObjectLayout#iconUiEvent()`] annotation
+Moving the responsibility to specify the icon for a domain object out and into a subscriber, using the xref:refguide:applib-cm:classes/uievent.adoc#IconUiEvent[IconUiEvent] as per the xref:refguide:applib:index/annotation/DomainObjectLayout.adoc#iconUiEvent[@DomainObjectLayout#iconUiEvent()] annotation
 ||||||x|||||
 
 
@@ -265,7 +265,7 @@ Using a domain event subscriber to hide functionality, in this
 
 
 |link:https://www.youtube.com/watch?v=qj4bMkQRBUY[026^] +
-Using the xref:refguide:applib:index/annotation/Title.adoc[`@Title`] annotation (instead of the xref:refguide:applib-cm:methods.adoc#title[`title()`] reserved method) to obtain the title of a domain object, so that the end-user can distinguish one object from another.
+Using the xref:refguide:applib:index/annotation/Title.adoc[@Title] annotation (instead of the xref:refguide:applib-cm:methods.adoc#title[title()] reserved method) to obtain the title of a domain object, so that the end-user can distinguish one object from another.
 |x||||||||x||
 
 
@@ -313,13 +313,13 @@ include::screencasts/playlists.adoc[]
 
 
 |link:https://www.youtube.com/watch?v=ORoEYlg6XFM[030^] +
-How to validate action parameters using a supporting xref:refguide:applib-cm:methods.adoc#validate[`validateNXxx()`] method.
+How to validate action parameters using a supporting xref:refguide:applib-cm:methods.adoc#validate[validateNXxx()] method.
 |x||||||||x||
 
 
 
 |link:https://www.youtube.com/watch?v=1Vlzob89pYI[031^] +
-How to validate action parameters using the xref:refguide:applib:index/annotation/Parameter.adoc#mustSatisfy[`@Parameter#mustSatisfy()`]  and the Specification interface.
+How to validate action parameters using the xref:refguide:applib:index/annotation/Parameter.adoc#mustSatisfy[@Parameter#mustSatisfy()]  and the Specification interface.
 |||||||||x||
 
 
@@ -332,7 +332,7 @@ How to validate action parameters using the xref:refguide:applib:index/annotatio
 
 
 |link:https://www.youtube.com/watch?v=fYJjXAepWAs[032^] +
-How to instantiate/initialize objects using xref:refguide:applib:index/services/repository/RepositoryService.adoc[`RepositoryService`], xref:refguide:applib:index/services/registry/ServiceRegistry.adoc[`ServiceRegistry`] and/or xref:refguide:applib:index/services/factory/FactoryService.adoc[`FactoryService`].
+How to instantiate/initialize objects using xref:refguide:applib:index/services/repository/RepositoryService.adoc[RepositoryService], xref:refguide:applib:index/services/registry/ServiceRegistry.adoc[ServiceRegistry] and/or xref:refguide:applib:index/services/factory/FactoryService.adoc[FactoryService].
 |x||||||||x||
 
 
@@ -378,7 +378,7 @@ include::screencasts/playlists.adoc[]
 
 
 |link:https://www.youtube.com/watch?v=1SCyBlMM2Bo[037^] +
-How to hide properties as columns in tables (parented collections or standalone collections), using the dynamic XML layout (equivalent to xref:refguide:applib:index/annotation/PropertyLayout.adoc#hidden[`@PropertyLayout#hidden()`]).
+How to hide properties as columns in tables (parented collections or standalone collections), using the dynamic XML layout (equivalent to xref:refguide:applib:index/annotation/PropertyLayout.adoc#hidden[@PropertyLayout#hidden()]).
 ||||x|||||||
 
 
@@ -397,7 +397,7 @@ include::screencasts/playlists.adoc[]
 
 
 |link:https://www.youtube.com/watch?v=NKaR7ZedI8E[039^] +
-Using the xref:refguide:applib-cm:classes/super.adoc#FixtureScript[`FixtureScript`] `defaultParam(...)` method to reflectively default parameters to fixture scripts that have not been set by the caller.
+Using the xref:refguide:applib-cm:classes/super.adoc#FixtureScript[FixtureScript] `defaultParam(...)` method to reflectively default parameters to fixture scripts that have not been set by the caller.
 ||x|||||||||
 
 
@@ -423,7 +423,7 @@ Using BigDecimal as a property within a domain object, also demonstrating the "s
 
 
 |link:https://www.youtube.com/watch?v=n9Oy0m2bplw[042^] +
-How to use the xref:refguide:applib-ant:Digits.adoc[`@Digits`] annotation for action parameters of type ``java.math.BigDecimal``.
+How to use the xref:refguide:applib-ant:Digits.adoc[@Digits] annotation for action parameters of type ``java.math.BigDecimal``.
 |||||||||x||
 
 
@@ -437,22 +437,22 @@ include::screencasts/playlists.adoc[]
 
 
 |link:https://www.youtube.com/watch?v=Rt4JoV4ssVY[043^] +
-How to use the supporting xref:refguide:applib-cm:methods.adoc#default[`defaultXxx(...)`] supporting method to provide a default argument value for action parameters.
+How to use the supporting xref:refguide:applib-cm:methods.adoc#default[defaultXxx(...)] supporting method to provide a default argument value for action parameters.
 |x||||||||x||
 
 
 |link:https://www.youtube.com/watch?v=qAJDGxztWIQ[044^] +
-How to use xref:refguide:applib:index/annotation/DomainObject.adoc#bounding[`@DomainObject#bounding()`] so that a drop-down list is automatically provided for any parameters to actions that are for (domain entity) reference types.
+How to use xref:refguide:applib:index/annotation/DomainObject.adoc#bounding[@DomainObject#bounding()] so that a drop-down list is automatically provided for any parameters to actions that are for (domain entity) reference types.
 |||||||||x||
 
 
 |link:https://www.youtube.com/watch?v=0ro_YhXOpJU[045^] +
-How to use the xref:refguide:applib-cm:methods.adoc#choices[`choicesXxx(...)`] supporting method to provide a drop-down list for parameters to actions that are for reference types (domain entities or view models).
+How to use the xref:refguide:applib-cm:methods.adoc#choices[choicesXxx(...)] supporting method to provide a drop-down list for parameters to actions that are for reference types (domain entities or view models).
 |||||||||x||
 
 
 |link:https://www.youtube.com/watch?v=K36IJQ_hDfs[046^] +
-How to use the xref:refguide:applib-cm:methods.adoc#autoComplete[`autoCompleteXxx(...)`] supporting method to provide a drop-down list for parameters to actions that are for reference types (domain entities or view models).
+How to use the xref:refguide:applib-cm:methods.adoc#autoComplete[autoCompleteXxx(...)] supporting method to provide a drop-down list for parameters to actions that are for reference types (domain entities or view models).
 |||||||||x||
 
 
@@ -478,7 +478,7 @@ component.
 
 
 |link:https://www.youtube.com/watch?v=0YoFa44Xr6M[049^] +
-Using the xref:refguide:applib:index/annotation/Programmatic.adoc[`@Programmatic`] annotation to exclude methods from a domain object
+Using the xref:refguide:applib:index/annotation/Programmatic.adoc[@Programmatic] annotation to exclude methods from a domain object
 (eg implementing methods of an interface as defined by the (non-ASF) link:https://platform.incode.org[Incode Platform^]'s fullcalendar2 wicket component) that would
 otherwise be part of the Apache Isis metamodel (and thus show up in the UI).
 ||||||||||x|

@@ -5,7 +5,7 @@
 :page-partial:
 
 
-The `Timestampable` role interface is a convenience that combines the xref:applib-classes:about.adoc#HoldsUpdatedAt[`HoldsUpdatedAt`] and xref:applib-classes:about.adoc#HoldsUpdatedBy[`HoldsUpdatedBy`] interfaces.
+The `Timestampable` role interface is a convenience that combines the xref:applib-classes:about.adoc#HoldsUpdatedAt[HoldsUpdatedAt] and xref:applib-classes:about.adoc#HoldsUpdatedBy[HoldsUpdatedBy] interfaces.
 It is defined as:
 
 // TODO: v2: use include::[]
@@ -25,4 +25,4 @@ The interface no additional methods of its own.
 
 An alternative way to maintain a timestamp is to use JDO's `@Version` annotation.
 With this approach, it is the JDO/DataNucleus that maintains the version, rather than the framework's `TimestampService`.
-See xref:applib-classes:about.adoc#HoldsUpdatedBy[`HoldsUpdatedBy`] for further details.
+See xref:applib-classes:about.adoc#HoldsUpdatedBy[HoldsUpdatedBy] for further details.

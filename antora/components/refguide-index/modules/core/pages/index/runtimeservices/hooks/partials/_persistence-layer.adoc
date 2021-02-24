@@ -27,8 +27,8 @@ Impl'n (g: a:)
 |xref:core:runtime-services:AuditerDispatchService.adoc[`o.a.i.c.r.s.auditing.` +
 `AuditerDispatchService`]
 |Co-ordinates between
-xref:core:runtime-services:ChangedObjectsService.adoc[`ChangedObjectsServiceInternal`] and
-xref:core:runtime-services:AuditerService.adoc[`AuditerService`].
+xref:core:runtime-services:ChangedObjectsService.adoc[ChangedObjectsServiceInternal] and
+xref:core:runtime-services:AuditerService.adoc[AuditerService].
 |concrete class.
 |
 
@@ -54,8 +54,8 @@ querying and for persisting objects.
 |xref:core:runtime-services:PublisherDispatchService.adoc[`o.a.i.c.m.s.publishing.` +
 `PublisherDispatchService`]
 |Co-ordinates between
-xref:core:runtime-services:ChangedObjectsService.adoc[`ChangedObjectsServiceInternal`] and
-xref:refguide:applib:index/services/metrics/MetricsService.adoc[`MetricsService`] and the SPI services, and the
+xref:core:runtime-services:ChangedObjectsService.adoc[ChangedObjectsServiceInternal] and
+xref:refguide:applib:index/services/metrics/MetricsService.adoc[MetricsService] and the SPI services, and the
 xref:refguide:applib:index/services/publishing/spi/ExecutionSubscriber.adoc[ExecutionSubscriber].
 |`PublishingService-` +
 `InternalDefault` +

@@ -87,7 +87,7 @@ The xref:vw:ROOT:features.adoc#recent-pages[Recent Pages] also lists recently vi
 == Configuration
 
 By default, the bookmarked pages panel will show a maximum of 15 'root' pages.
-This can be overridden using the xref:refguide:config:sections/isis.viewer.wicket.adoc#isis.viewer.wicket.bookmarked-pages.max-size[`isis.viewer.wicket.bookmarked-pages.max-size`] configuration property, for example:
+This can be overridden using the xref:refguide:config:sections/isis.viewer.wicket.adoc#isis.viewer.wicket.bookmarked-pages.max-size[isis.viewer.wicket.bookmarked-pages.max-size] configuration property, for example:
 
 [source,ini]
 ----

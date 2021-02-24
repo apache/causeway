@@ -3,7 +3,7 @@
 
 
 
-== Implementation
-
-The core framework (xref:core:runtime-services:about.adoc[Runtime Services] module) provides a default implementation of this API, namely `o.a.i.core.runtimeservices.bookmarks.BookmarkServiceDefault`.
+//== Implementation
+//
+//The core framework (xref:core:runtime-services:about.adoc[Runtime Services] module) provides a default implementation of this API, namely `o.a.i.core.runtimeservices.bookmarks.BookmarkServiceDefault`.
 

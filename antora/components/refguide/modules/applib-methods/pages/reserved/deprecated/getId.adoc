@@ -10,7 +10,7 @@ This value is used internally to generate a string representation of an service 
 This can appear in several contexts, including:
 
 * as the value of `Bookmark#getObjectType()` and in the `toString()` value of `Bookmark`
- (see xref:refguide:applib:index/services/bookmark/BookmarkService.adoc[`BookmarkService`])
+ (see xref:refguide:applib:index/services/bookmark/BookmarkService.adoc[BookmarkService])
 * in the serialization of `OidDto` in the xref:refguide:schema:cmd.adoc[command] and xref:refguide:schema:ixn.adoc[interaction] schemas
 * in the URLs of the xref:vro:ROOT:about.adoc[RestfulObjects viewer]
 * in the URLs of the xref:vw:ROOT:about.adoc[Wicket viewer] (specifically, for bookmarked actions)
@@ -36,8 +36,8 @@ public class OrderMenu {
 
 The rules of precedence are:
 
-1. xref:refguide:applib:index/annotation/DomainService.adoc#objectType[`@DomainService#objectType()`]
-2. xref:refguide:applib-methods:reserved.adoc#getId[`getId()`]
+1. xref:refguide:applib:index/annotation/DomainService.adoc#objectType[@DomainService#objectType()]
+2. xref:refguide:applib-methods:reserved.adoc#getId[getId()]
 3. The fully qualified class name.
 
 

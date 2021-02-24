@@ -8,7 +8,7 @@ The xref:refguide:applib:index/annotation/Action.adoc#executionPublishing[execut
 
 A common use case is to notify external "downstream" systems of changes in the state of the Apache Isis application.
 
-The xref:refguide:config:sections/isis.applib.adoc#isis.applib.annotation.property.execution-publishing[`isis.applib.annotation.property.execution-publishing`] configuration property is used to determine the whether the action invocation is published:
+The xref:refguide:config:sections/isis.applib.adoc#isis.applib.annotation.property.execution-publishing[isis.applib.annotation.property.execution-publishing] configuration property is used to determine the whether the action invocation is published:
 
 * `all`
 +

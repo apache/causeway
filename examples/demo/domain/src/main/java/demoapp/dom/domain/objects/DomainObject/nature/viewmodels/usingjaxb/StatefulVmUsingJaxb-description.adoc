@@ -44,5 +44,5 @@ NOTE: the child object has value-type semantics (is annotated with `@lombok.Data
 == Long URLs
 
 As you can see this can result in long URLs.
-If the URL is too long, or needs to be encrypted, then the link:https://isis.apache.org/refguide/${ISIS_VERSION}/applib-svc/UrlEncodingService.html[`UrlEncodingService`] SPI can provide for different serializations.
+If the URL is too long, or needs to be encrypted, then the link:https://isis.apache.org/refguide/${ISIS_VERSION}/applib-svc/UrlEncodingService.html[UrlEncodingService] SPI can provide for different serializations.
 

@@ -9,7 +9,7 @@ The `autoComplete...()` supporting method is called for action parameters and fo
 
 [TIP]
 ====
-If the number of candidate objects is comparatively small, then use xref:refguide:applib-methods:prefixes.adoc#choices[`choices...()`] supporting method instead.
+If the number of candidate objects is comparatively small, then use xref:refguide:applib-methods:prefixes.adoc#choices[choices...()] supporting method instead.
 ====
 
 The signature of the supporting method depends on whether it is for a parameter or a property.
@@ -62,7 +62,7 @@ public class ShoppingCartItem {
 
 <.> `product` is the 0th argument of the action.
 
-<.> the xref:refguide:applib:index/annotation/MinLength.adoc[`@MinLength`] annotation specifies the minimum number of characters that must be entered before a search is performed for matching objects
+<.> the xref:refguide:applib:index/annotation/MinLength.adoc[@MinLength] annotation specifies the minimum number of characters that must be entered before a search is performed for matching objects
 
 
 == Properties
@@ -95,6 +95,6 @@ public class ShoppingCartItem {
     ...
 }
 ----
-<1> the xref:refguide:applib:index/annotation/MinLength.adoc[`@MinLength`] annotation specifies the minimum number of characters that must be entered before a search is performed for matching objects
+<1> the xref:refguide:applib:index/annotation/MinLength.adoc[@MinLength] annotation specifies the minimum number of characters that must be entered before a search is performed for matching objects
 
 

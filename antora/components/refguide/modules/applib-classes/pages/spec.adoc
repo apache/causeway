@@ -7,7 +7,7 @@
 
 The interfaces and classes listed in this chapter provide support for the  `Specification` pattern, as described in Eric Evans' book _Domain Driven Design_, p224.
 
-Apache Isis will automatically apply such specifications as validation rules on properties (as per xref:refguide:applib:index/annotation/Property.adoc#mustSatisfy[`@Property#mustSatisfy()`]) and on action parameters (as per xref:refguide:applib:index/annotation/Parameter.adoc#mustSatisfy[`@Parameter#mustSatisfy()`]).
+Apache Isis will automatically apply such specifications as validation rules on properties (as per xref:refguide:applib:index/annotation/Property.adoc#mustSatisfy[@Property#mustSatisfy()]) and on action parameters (as per xref:refguide:applib:index/annotation/Parameter.adoc#mustSatisfy[@Parameter#mustSatisfy()]).
 
 [#specification]
 == `Specification`

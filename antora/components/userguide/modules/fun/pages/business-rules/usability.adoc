@@ -8,9 +8,9 @@
 == Property
 
 By default properties cannot be edited, as specified by the
-xref:refguide:config:sections/isis.applib.adoc#isis.applib.annotation.domain-object.editing[`isis.applib.annotation.domain-object.editing`] configuration property.
+xref:refguide:config:sections/isis.applib.adoc#isis.applib.annotation.domain-object.editing[isis.applib.annotation.domain-object.editing] configuration property.
 
-This policy can be overridden for an individual property using the xref:refguide:applib:index/annotation/Property.adoc#editing[`@Property#editing`] annotation; this makes sense for properties where there are no business rules governing their content, for example "notes" or "comments" fields.
+This policy can be overridden for an individual property using the xref:refguide:applib:index/annotation/Property.adoc#editing[@Property#editing] annotation; this makes sense for properties where there are no business rules governing their content, for example "notes" or "comments" fields.
 
 For example:
 
@@ -25,7 +25,7 @@ private String notes;
 ----
 <.> Allows the property to be enabled (even if property editing is disabled globally).
 
-It's also possible to make all properties of a domain object editable using xref:refguide:applib:index/annotation/DomainObject.adoc[`@DomainObject`], though use cases for this are rare.
+It's also possible to make all properties of a domain object editable using xref:refguide:applib:index/annotation/DomainObject.adoc[@DomainObject], though use cases for this are rare.
 
 For very simply "CRUD-y" like applications, you might wish to switch the global policy, so that all properties are enabled by default, then selectively disable them.
 
@@ -113,7 +113,7 @@ A non-`null` return string is taken as the _reason_ why the action argument cann
 
 == For more information
 
-For more information, see  xref:refguide:applib-cm:methods.adoc#disable[`disable...()`] section in the appropriate reference guide.
+For more information, see  xref:refguide:applib-cm:methods.adoc#disable[disable...()] section in the appropriate reference guide.
 
-It's also possible to return xref:userguide:btb:i18n.adoc#imperative-messages[locale-specific] strings, by returning xref:refguide:applib-cm:classes.adoc#TranslatableString[`TranslatableString`] instead of `java.lang.String`.
+It's also possible to return xref:userguide:btb:i18n.adoc#imperative-messages[locale-specific] strings, by returning xref:refguide:applib-cm:classes.adoc#TranslatableString[TranslatableString] instead of `java.lang.String`.
 

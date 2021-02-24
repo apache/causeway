@@ -480,7 +480,7 @@ This appears in the menu, and also acts as a repository for the `SimpleObject` e
 
 * all entities.
 +
-These are entities that are annotated with both xref:refguide:applib:index/annotation/DomainObject.adoc[`@DomainObject`] annotation and with `@javax.jdo.annotations.PersistenceCapable`.
+These are entities that are annotated with both xref:refguide:applib:index/annotation/DomainObject.adoc[@DomainObject] annotation and with `@javax.jdo.annotations.PersistenceCapable`.
 Because `@DomainObject` is meta-annotated as a `@Component`, these are found automatically by Spring.
 They are passed through to the JDO/DataNucleus object store, in order to create database mappings from the entities to relational tables.
 +

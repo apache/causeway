@@ -18,7 +18,7 @@ repositoryService.persist(cust);
 
 == Related Services
 
-* xref:refguide:applib:index/services/registry/ServiceRegistry.adoc[`ServiceRegistry`]
+* xref:refguide:applib:index/services/registry/ServiceRegistry.adoc[ServiceRegistry]
 +
 to just lookup existing domain services by type.
 

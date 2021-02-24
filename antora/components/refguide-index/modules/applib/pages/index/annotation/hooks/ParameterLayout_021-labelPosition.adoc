@@ -7,7 +7,7 @@
 The xref:refguide:applib:index/annotation/ParameterLayout.adoc#labelPosition[labelPosition()] element determines the positioning of labels for parameters.
 
 The positioning of labels is typically `LEFT`, but can be positioned to the `TOP`.
-The one exception is xref:refguide:applib:index/annotation/ParameterLayout.adoc#multiLine[`multiLine()`] string parameters, where the label defaults to `TOP` automatically (to provide as much real-estate for the multiline text field as possible).
+The one exception is xref:refguide:applib:index/annotation/ParameterLayout.adoc#multiLine[multiLine()] string parameters, where the label defaults to `TOP` automatically (to provide as much real-estate for the multiline text field as possible).
 
 For boolean parameters a positioning of `RIGHT` is also allowed; this is ignored for all other types.
 
@@ -37,7 +37,7 @@ public class Order {
 
 If you want a consistent look-n-feel throughout the app, eg all parameter labels to the top, then it'd be rather frustrating to have to annotate every parameter.
 
-Instead, a default can be specified using the xref:refguide:config:sections/isis.applib.adoc#isis.applib.annotation.parameter-layout.label-position[`isis.applib.annotation.parameter-layout.label-position`] configuration property:
+Instead, a default can be specified using the xref:refguide:config:sections/isis.applib.adoc#isis.applib.annotation.parameter-layout.label-position[isis.applib.annotation.parameter-layout.label-position] configuration property:
 
 [source,ini]
 .application.properties

@@ -6,7 +6,7 @@
 
 The xref:refguide:applib:index/annotation/PropertyLayout.adoc#promptStyle[promptStyle()] element is used to specify whether, when editing a domain object property, the new value for the property is prompted by way of a dialog box, or is prompted using an inline panel (replacing the property on the page).
 
-If the attribute is not set, then the value of the xref:refguide:config:sections/isis.viewer.wicket.adoc#isis.viewer.wicket.prompt-style[`isis.viewer.wicket.prompt-style`] configuration property is used.
+If the attribute is not set, then the value of the xref:refguide:config:sections/isis.viewer.wicket.adoc#isis.viewer.wicket.prompt-style[isis.viewer.wicket.prompt-style] configuration property is used.
 If this is itself not set, then an inline prompt is used.
 
 For example:

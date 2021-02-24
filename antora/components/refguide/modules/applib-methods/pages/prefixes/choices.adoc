@@ -6,7 +6,7 @@
 
 
 The `choices...()` supporting method is called for both action parameters and for properties, to find objects from a drop-down list box.
-Unlike xref:refguide:applib-methods:prefixes.adoc#autoComplete[`autoComplete...()`], the use case is when the number of objects is comparatively small and can be selected from a drop-down without any additional filtering.
+Unlike xref:refguide:applib-methods:prefixes.adoc#autoComplete[autoComplete...()], the use case is when the number of objects is comparatively small and can be selected from a drop-down without any additional filtering.
 
 The signature of the supporting method depends on whether it is for an action parameter or a property.
 

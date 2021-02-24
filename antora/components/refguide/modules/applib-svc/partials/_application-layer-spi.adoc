@@ -13,13 +13,12 @@ Domain service SPIs influence how the framework handles application layer concer
 |Description
 
 
-//|xref:refguide:applib-svc:BackgroundCommandService.adoc[BackgroundCommandService]
-//|Persisted a memento of an action invocation such that it can be executed asynchronously ("in the background") eg by a scheduler.
-//TODO: v2: replaced by WrapperFactory#async
-
-
 
 |xref:refguide:applib:index/services/publishing/spi/CommandSubscriber.adoc[CommandSubscriber]
+|SPI service to listen on command instances, ie representations of an action invocation or property edit.
+Used for command/auditing and background services.
+
+|xref:refguide:applib:index/services/publishing/spi/ExecutionSubscriber.adoc[ExecutionSubscriber]
 |SPI service to listen on command instances, ie representations of an action invocation or property edit.
 Used for command/auditing and background services.
 

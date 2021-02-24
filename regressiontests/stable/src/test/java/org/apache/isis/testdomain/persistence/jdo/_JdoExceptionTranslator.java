@@ -18,6 +18,8 @@
  */
 package org.apache.isis.testdomain.persistence.jdo;
 
+import java.util.NoSuchElementException;
+
 import javax.jdo.JDODataStoreException;
 import javax.jdo.JDOException;
 
@@ -32,38 +34,38 @@ import org.apache.isis.persistence.jdo.spring.integration.JdoTransactionManager;
 
 final class _JdoExceptionTranslator {
 
-    // not used, but maybe keep for debugging purposes 
+    // not used, but maybe keep for debugging purposes
     static DataAccessException translate(Throwable failure, JdoTransactionManager txManager) {
-        
+
         return (DataAccessException) Result.failure(failure)
-        
+
         //XXX seems like a bug in DN, why do we need to unwrap this?
         .mapFailure(ex->ex instanceof IllegalArgumentException
                 ? ((IllegalArgumentException)ex).getCause()
                 : ex)
-        
+
         // asserts we have a NucleusException
         .ifFailure(ex->assertTrue(ex instanceof NucleusException))
-        
+
         // converts to JDOException
         .mapFailure(ex->ex instanceof NucleusException
                 ? NucleusJDOHelper
                         .getJDOExceptionForNucleusException(((NucleusException)ex))
                 : ex)
-        
+
         // asserts translation to JDO standard
         .ifFailure(ex->assertTrue(ex instanceof JDODataStoreException))
-        
+
         // converts to Spring DataAccessException
         .mapFailure(ex->ex instanceof JDOException
                 ? txManager.getJdoDialect().translateException((JDOException)ex)
                 : ex)
-        
+
         .getFailure()
-        .orElseThrow();
+        .orElse(new NoSuchElementException("No value present"));
 
     }
-    
-     
+
+
 
 }

@@ -68,7 +68,7 @@ It is perfectly possible to deploy the RESTful API alongside an auto-generated w
 == Deploy on your own platform
 
 The programming model defined by Apache Isis deliberately minimizes the dependencies on the rest of the framework.
-In fact, the only hard dependency that the domain model classes have on Apache Isis is through the `org.apache.isis.applib` classes, mostly to pick up annotations such as xref:refguide:applib:index/annotation/Action.adoc[`@Action`] and xref:refguide:applib:index/annotation/Property.adoc[`@Property`].
+In fact, the only hard dependency that the domain model classes have on Apache Isis is through the `org.apache.isis.applib` classes, mostly to pick up annotations such as xref:refguide:applib:index/annotation/Action.adoc[@Action] and xref:refguide:applib:index/annotation/Property.adoc[@Property].
 It's therefore relatively easy to take a domain object prototyped and/or tested using Apache Isis, but to deploy on some other framework's runtime.
 
 If you are interested in taking this approach, then you will need to provide your own implementations of any framework-provided services used by your code.

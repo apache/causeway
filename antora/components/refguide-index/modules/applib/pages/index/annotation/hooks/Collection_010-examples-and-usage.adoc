@@ -30,7 +30,7 @@ public class ToDoItem {
 
 [TIP]
 ====
-The annotation is one of a handful (others including xref:refguide:applib:index/annotation/CollectionLayout.adoc[`@CollectionLayout`], xref:refguide:applib:index/annotation/Property.adoc[`@Property`] and xref:refguide:applib:index/annotation/PropertyLayout.adoc[`@PropertyLayout`]) that can also be applied to the field, rather than the getter method.
+The annotation is one of a handful (others including xref:refguide:applib:index/annotation/CollectionLayout.adoc[@CollectionLayout], xref:refguide:applib:index/annotation/Property.adoc[@Property] and xref:refguide:applib:index/annotation/PropertyLayout.adoc[@PropertyLayout]) that can also be applied to the field, rather than the getter method.
 This is so that boilerplate-busting tools such as link:https://projectlombok.org/[Project Lombok] can be used.
 ====
 

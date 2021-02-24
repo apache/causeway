@@ -44,13 +44,13 @@ For domain objects (not mixins), the wrapper can be interacted with as follows:
 * any action
 
 Calling any of the above methods may result in a (subclass of) `InteractionException` if the object disallows it.
-For example, if a property is annotated with xref:refguide:applib:index/annotation/ActionLayout.adoc#hidden[`@ActionLayout#hidden`] then a `HiddenException` will be thrown.
-Similarly if an action has a xref:refguide:applib-methods:prefixes.adoc[`validateXxx()`] method and the supplied arguments are invalid then an `InvalidException` will be thrown.
+For example, if a property is annotated with xref:refguide:applib:index/annotation/ActionLayout.adoc#hidden[@ActionLayout#hidden] then a `HiddenException` will be thrown.
+Similarly if an action has a xref:refguide:applib-methods:prefixes.adoc[validateXxx()] method and the supplied arguments are invalid then an `InvalidException` will be thrown.
 
 In addition, the following methods may also be called:
 
-* the xref:refguide:applib-methods:reserved.adoc#title[`title()`] and `toString()` methods
-* any xref:refguide:applib-methods:prefixes.adoc#default[`default...()`], xref:refguide:applib-methods:prefixes.adoc#choices[`choices...()`] or xref:refguide:applib-methods:prefixes.adoc#autoComplete[`autoComplete...()`] methods
+* the xref:refguide:applib-methods:reserved.adoc#title[title()] and `toString()` methods
+* any xref:refguide:applib-methods:prefixes.adoc#default[default...()], xref:refguide:applib-methods:prefixes.adoc#choices[choices...()] or xref:refguide:applib-methods:prefixes.adoc#autoComplete[autoComplete...()] methods
 
 An exception will be thrown if any other methods are thrown.
 
@@ -60,7 +60,7 @@ If the interface is performed (action invoked or property set), then - irrespect
 
 For mixins, the behaviour of the wrapper is similar but simpler.
 Mixin wrappers only apply to actions, and so the wrapper will enforce the hidden/disable/validate rules before executing.
-In addition, any xref:refguide:applib-methods:prefixes.adoc#default[`default...()`], xref:refguide:applib-methods:prefixes.adoc#choices[`choices...()`] or xref:refguide:applib-methods:prefixes.adoc#autoComplete[`autoComplete...()`] methods can be called.
+In addition, any xref:refguide:applib-methods:prefixes.adoc#default[default...()], xref:refguide:applib-methods:prefixes.adoc#choices[choices...()] or xref:refguide:applib-methods:prefixes.adoc#autoComplete[autoComplete...()] methods can be called.
 
 
 == Other Use Cases
@@ -92,7 +92,7 @@ Said another way: interactions are performed "as if" they are through the viewer
 
 One possible use case for the listener API would be to autogenerate documentation, for example a sequence diagram from tests.
 
-Such a feature would probably also use xref:refguide:applib:index/services/iactn/InteractionContext.adoc[`InteractionContext`], which builds up an execution call graph of interactions between (wrapped) objects.
+Such a feature would probably also use xref:refguide:applib:index/services/iactn/InteractionContext.adoc[InteractionContext], which builds up an execution call graph of interactions between (wrapped) objects.
 
 
 

@@ -11,9 +11,9 @@ For the "big picture" and further details on the framework's i18n support, can b
 
 Other i18n services include:
 
-* xref:refguide:applib:index/services/i18n/TranslationService.adoc[`TranslationService`]
+* xref:refguide:applib:index/services/i18n/TranslationService.adoc[TranslationService]
 
-* xref:refguide:applib:index/services/i18n/TranslationsResolver.adoc[`TranslationsResolver`]
+* xref:refguide:applib:index/services/i18n/TranslationsResolver.adoc[TranslationsResolver]
 
 
 

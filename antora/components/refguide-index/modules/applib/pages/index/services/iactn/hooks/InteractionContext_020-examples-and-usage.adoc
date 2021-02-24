@@ -7,7 +7,7 @@
 == Usage Notes
 
 Typically domain objects will have little need to interact with the `InteractionContext` and `Interaction` directly.
-The services are used within the framework however, primarily to support the xref:refguide:applib:index/services/publishing/spi/ExecutionSubscriber.adoc[ExecutionSubscriber] SPI, and to emit domain events over the xref:refguide:applib:index/services/eventbus/EventBusService.adoc[`EventBusService`].
+The services are used within the framework however, primarily to support the xref:refguide:applib:index/services/publishing/spi/ExecutionSubscriber.adoc[ExecutionSubscriber] SPI, and to emit domain events over the xref:refguide:applib:index/services/eventbus/EventBusService.adoc[EventBusService].
 
 
 

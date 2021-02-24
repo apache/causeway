@@ -34,7 +34,7 @@ public class OrderMenu {
 The rules of precedence are:
 
 1. `@DomainService#objectType`
-2. xref:refguide:applib-methods:reserved.adoc#getId[`getId()`]
+2. xref:refguide:applib-methods:reserved.adoc#getId[getId()]
 3. The fully qualified class name.
 
 [TIP]

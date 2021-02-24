@@ -2,47 +2,54 @@
 :page-partial:
 
 
-== Example
+== Example Usage
 
 For example:
 
 [source,java]
 ----
-import lombok.Getter;
-import lombok.Setter;
+@RequiredArgsConstructor(staticName = "of")
+public static class ComplexNumber implements Comparable<ComplexNumber> {
 
-public class ToDoItem implements Comparable<ToDoItem> {
+    @Getter private final int real;
+    @Getter private final int imaginary;
 
-    @Getter @Setter
-    private boolean complete;
+    private ObjectContracts.ObjectContract<ComplexNumber> contract
+            = ObjectContracts.contract(ComplexNumber.class)
+                .thenUse("real", ComplexNumber::getReal)
+                .thenUse("imaginary", ComplexNumber::getImaginary);
 
-    @Getter @Setter
-    private LocalDate dueBy;
 
-    @Getter @Setter
-    private String description;
-
-    @Getter @Setter
-    private String ownedBy;
-
-    public int compareTo(final ToDoItem other) {
-        return ObjectContracts.compare(this, other,
-                    "complete","dueBy","description");
+    @Override
+    public boolean equals(Object o) {
+        return contract.equals(this, o);
     }
 
+    @Override
+    public int hashCode() {
+        return contract.hashCode(this);
+    }
+
+    @Override
+    public int compareTo(final ComplexNumber other) {
+        return contract.compare(this, other);
+    }
+
+    @Override
     public String toString() {
-        return ObjectContracts.toString(this,
-                    "description","complete","dueBy","ownedBy");
+        return contract.toString(this);
     }
 }
 ----
 
+[WARNING]
+====
+There are a number of deprecated methods that identify property names as strings.
+These should _not_ be use, as they use are not type-safe and also use reflection heavily and so impose a performance hit.
+====
+
 == Usage Notes
 
-=== Performance
-
-CAUTION: This class is only intended for use while prototyping.
-It uses reflection heavily and is not performant.
 
 === Be aware of ORM loading issues
 
@@ -52,7 +59,7 @@ We therefore recommend that you disable
 xref:refguide:config:sections/jdo-datanucleus-conf.adoc#datanucleus.persistenceByReachabilityAtCommit[persistence-by-reachability] by adding:
 
 [source,ini]
-.persistor_datanucleus.properties
+.application.properties
 ----
 datanucleus.persistenceByReachabilityAtCommit=false
 ----

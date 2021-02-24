@@ -41,11 +41,9 @@ GENERATED_PATH="${PROJECT_ROOT_PATH}/antora/components/refguide-index"
 ## run java
 ##
 JAVA_CMD=$(command -v java)
-DOS2UNIX_CMD=$(command -v dos2unix)
 
 echo ""
 echo "\$JAVA_CMD     : ${JAVA_CMD}"
-echo "\$DOS2UNIX_CMD : ${DOS2UNIX_CMD}"
 echo ""
 
 # for now meant to run with nightly builds only
@@ -53,17 +51,6 @@ if [ -z "${JAVA_CMD}" ]; then
   echo "projdoc gen: no java, skipping"
 else
   java -jar "${PROJECT_ROOT_PATH}/tooling/cli/target/isis-tooling-cli.jar" -p "${PROJECT_ROOT_PATH}" -o "${GENERATED_PATH}" $MODE
-
-  if [ ! -z "${DOS2UNIX_CMD}" ]; then
-    for FILE in $(find $GENERATED_PATH -name "*.adoc" -print)
-    do
-      ${DOS2UNIX_CMD} $FILE
-    done
-    echo
-    echo
-    echo
-  fi
-
 fi
 
 

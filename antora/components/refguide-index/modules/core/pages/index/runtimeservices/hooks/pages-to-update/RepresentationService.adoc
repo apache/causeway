@@ -8,10 +8,10 @@ WARNING: TODO: this content has not yet been reviewed/updated for v2.0
 The `RepresentationService` is the main plug-in point for the xref:vro:ROOT:about.adoc[RestfulObjects viewer] to generate representations.
 
 The default implementations ultimately generate representations according to the link:http://restfulobjects.org[Restful Objects spec] v1.0.
-However, it also delegates to the xref:core:runtime-services:ContentNegotiationService.adoc[`ContentNegotiationService`] which provides a mechanism for altering representations according to the HTTP `Accept` header.
+However, it also delegates to the xref:core:runtime-services:ContentNegotiationService.adoc[ContentNegotiationService] which provides a mechanism for altering representations according to the HTTP `Accept` header.
 This allows more flexible representations to be generated for REST clients that (perhaps through their use of a certain Javascript library, say) expect, or at least works best with, a certain style of representation.
 
-In all there are three domain services that can influence the representations generated: this service, xref:core:runtime-services:ContentNegotiationService.adoc[`ContentNegotiationService`] and the xref:refguide:applib:index/services/conmap/ContentMappingService.adoc[`ContentMappingService`].
+In all there are three domain services that can influence the representations generated: this service, xref:core:runtime-services:ContentNegotiationService.adoc[ContentNegotiationService] and the xref:refguide:applib:index/services/conmap/ContentMappingService.adoc[ContentMappingService].
 The diagram below shows how these collaborate:
 
 image::RepresentationService/service-collaborations.png[width="700px"]
@@ -77,9 +77,9 @@ ie `MemberReprMode`
 == Implementation
 
 As discussed in the introduction, the framework provides a default implementation, `o.a.i.v.ro.rendering.service.RepresentationServiceContentNegotiator`.
-This delegates to xref:core:runtime-services:ContentNegotiationService.adoc[`ContentNegotiationService`] to generate an alternative representation; but if none is provided then it falls back on generating the representations as defined in the link:http://restfulobjects.org[Restful Objects spec] v1.0.
+This delegates to xref:core:runtime-services:ContentNegotiationService.adoc[ContentNegotiationService] to generate an alternative representation; but if none is provided then it falls back on generating the representations as defined in the link:http://restfulobjects.org[Restful Objects spec] v1.0.
 
-To use an alternative implementation, use Spring's link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/core/annotation/Order.html[`@Order`] annotation (as explained in the xref:refguide:applib-svc:about.adoc#overriding-the-services[introduction] to this guide).
+To use an alternative implementation, use Spring's link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/core/annotation/Order.html[@Order] annotation (as explained in the xref:refguide:applib-svc:about.adoc#overriding-the-services[introduction] to this guide).
 
 
 == Registering the Services
@@ -90,4 +90,4 @@ Apache Isis' default implementation of `RepresentationService` service is automa
 
 == Related Services
 
-The default implementation delegates to xref:core:runtime-services:ContentNegotiationService.adoc[`ContentNegotiationService`], whose default implementation may delegate in turn to xref:refguide:applib:index/services/conmap/ContentMappingService.adoc[`ContentMappingService`] (if present).
+The default implementation delegates to xref:core:runtime-services:ContentNegotiationService.adoc[ContentNegotiationService], whose default implementation may delegate in turn to xref:refguide:applib:index/services/conmap/ContentMappingService.adoc[ContentMappingService] (if present).

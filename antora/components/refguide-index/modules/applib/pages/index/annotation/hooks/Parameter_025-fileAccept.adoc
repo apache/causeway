@@ -5,8 +5,8 @@
 
 
 
-The xref:refguide:applib:index/annotation/Parameter.adoc#fileAccept[fileAccept()] element applies only to xref:applib-classes:value-types.adoc#Blob[`Blob`]
-or xref:applib-classes:value-types.adoc#Clob[`Clob`] parameters, indicating the type of file to accept when uploading a new value.
+The xref:refguide:applib:index/annotation/Parameter.adoc#fileAccept[fileAccept()] element applies only to xref:applib-classes:value-types.adoc#Blob[Blob]
+or xref:applib-classes:value-types.adoc#Clob[Clob] parameters, indicating the type of file to accept when uploading a new value.
 
 For example:
 

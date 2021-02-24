@@ -134,7 +134,7 @@ provides a mechanism for obtaining a string representations of a single domain o
 is a simple wrapper around standard JAXB functionality for generating both XMLs and XSDs from JAXB-annotated classes.
 +
 Note that there is built-in support for JAXB classes (ie annotated with
-xref:refguide:applib-ant:XmlRootElement.adoc[`@XmlRootElement`]) to be used as view models.
+xref:refguide:applib-ant:XmlRootElement.adoc[@XmlRootElement]) to be used as view models.
 
 
 

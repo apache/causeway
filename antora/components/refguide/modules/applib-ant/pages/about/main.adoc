@@ -25,62 +25,62 @@ The table below summarizes these most commonly used annotations in Apache Isis.
 |Layer
 |xref:userguide:fun:ui.adoc#object-layout[File-based layout]?
 
-|xref:refguide:applib:index/annotation/Action.adoc[`@Action`]
+|xref:refguide:applib:index/annotation/Action.adoc[@Action]
 |Domain semantics for actions
 |Domain
 |
 
-|xref:refguide:applib:index/annotation/ActionLayout.adoc[`@ActionLayout`]
+|xref:refguide:applib:index/annotation/ActionLayout.adoc[@ActionLayout]
 |User interface hints for actions
 |UI
 |Yes
 
-|xref:refguide:applib:index/annotation/Collection.adoc[`@Collection`]
+|xref:refguide:applib:index/annotation/Collection.adoc[@Collection]
 |Domain semantics for collections
 |Domain
 |
 
-|xref:refguide:applib:index/annotation/CollectionLayout.adoc[`@CollectionLayout`]
+|xref:refguide:applib:index/annotation/CollectionLayout.adoc[@CollectionLayout]
 |User interface hints for collections
 |UI
 |Yes
 
-|xref:refguide:applib:index/annotation/DomainObject.adoc[`@DomainObject`]
+|xref:refguide:applib:index/annotation/DomainObject.adoc[@DomainObject]
 |Domain semantics for domain object (entities and optionally view models)
 |Domain
 |
 
-|xref:refguide:applib:index/annotation/DomainObjectLayout.adoc[`@DomainObjectLayout`]
+|xref:refguide:applib:index/annotation/DomainObjectLayout.adoc[@DomainObjectLayout]
 |User interface hints for domain object (entities and optionally view models)
 |UI
 |Yes
 
-|xref:refguide:applib:index/annotation/DomainService.adoc[`@DomainService`]
+|xref:refguide:applib:index/annotation/DomainService.adoc[@DomainService]
 |Class is a domain service (rather than an entity or view model)
 |Domain
 |
 
-|xref:refguide:applib:index/annotation/DomainServiceLayout.adoc[`@DomainServiceLayout`]
+|xref:refguide:applib:index/annotation/DomainServiceLayout.adoc[@DomainServiceLayout]
 |User interface hints for domain services
 |UI
 |
 
-|xref:refguide:applib:index/annotation/Parameter.adoc[`@Parameter`]
+|xref:refguide:applib:index/annotation/Parameter.adoc[@Parameter]
 |Domain semantics for action parameters
 |Domain
 |
 
-|xref:refguide:applib:index/annotation/ParameterLayout.adoc[`@ParameterLayout`]
+|xref:refguide:applib:index/annotation/ParameterLayout.adoc[@ParameterLayout]
 |Layout hints for an action parameter (currently: its label position either to top or the left).
 |UI
 |Yes
 
-|xref:refguide:applib:index/annotation/Property.adoc[`@Property`]
+|xref:refguide:applib:index/annotation/Property.adoc[@Property]
 |Domain semantics for properties
 |Domain
 |
 
-|xref:refguide:applib:index/annotation/PropertyLayout.adoc[`@PropertyLayout`]
+|xref:refguide:applib:index/annotation/PropertyLayout.adoc[@PropertyLayout]
 |Layout hints for a property
 |UI
 |Yes

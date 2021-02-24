@@ -36,7 +36,7 @@ public class Customer {
 
 [TIP]
 ====
-The annotation is one of a handful (others including xref:refguide:applib:index/annotation/Collection.adoc[`@Collection`], xref:refguide:applib:index/annotation/CollectionLayout.adoc[`@CollectionLayout`] and xref:refguide:applib:index/annotation/PropertyLayout.adoc[`@PropertyLayout`]) that can also be applied to the field, rather than the getter method.  This is specifically
+The annotation is one of a handful (others including xref:refguide:applib:index/annotation/Collection.adoc[@Collection], xref:refguide:applib:index/annotation/CollectionLayout.adoc[@CollectionLayout] and xref:refguide:applib:index/annotation/PropertyLayout.adoc[@PropertyLayout]) that can also be applied to the field, rather than the getter method.  This is specifically
 so that boilerplate-busting tools such as link:https://projectlombok.org/[Project Lombok] can be used.
 ====
 

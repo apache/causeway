@@ -41,5 +41,5 @@ public class LibraryMember {
 ----
 
 
-See also xref:refguide:applib-methods:prefixes.adoc#removeFrom[`removeFrom...()`] and  xref:refguide:applib-methods:prefixes.adoc#validateAddTo[`validateAddTo...()`]`
+See also xref:refguide:applib-methods:prefixes.adoc#removeFrom[removeFrom...()] and  xref:refguide:applib-methods:prefixes.adoc#validateAddTo[validateAddTo...()]`
 

@@ -33,13 +33,13 @@ public Clob downloadJdoMetadata(                    // <.>
     // ...
 }
 ----
-<.> returns the XML text wrapped up in a xref:applib-classes:about.adoc#Clob[`Clob`].
+<.> returns the XML text wrapped up in a xref:applib-classes:about.adoc#Clob[Clob].
 
 
 
 === Related Services
 
-The mixin delegates to the xref:pjdo:ROOT:services/IsisJdoSupport.adoc[`IsisJdoSupport`] service to obtain a reference to the JDO `PersistenceManagerFactory`.
+The mixin delegates to the xref:pjdo:ROOT:services/IsisJdoSupport.adoc[IsisJdoSupport] service to obtain a reference to the JDO `PersistenceManagerFactory`.
 
 
 [#datanucleusXxx]

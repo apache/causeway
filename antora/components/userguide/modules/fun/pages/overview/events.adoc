@@ -7,7 +7,7 @@
 When the framework renders a domain object, and as the end-user interacts with the domain object, the framework it emits multiple events using the intra-process xref:refguide:applib:index/services/eventbus/EventBusService.adoc[event bus].
 These events enable other domain services (possibly in other modules) to influence how the domain object is rendered, or to perform side-effects or even veto an action invocation.
 
-To receive the events, the domain service should subscribe to the xref:refguide:applib:index/services/eventbus/EventBusService.adoc[`EventBusService`], and implement an appropriately annotated method to receive the events.
+To receive the events, the domain service should subscribe to the xref:refguide:applib:index/services/eventbus/EventBusService.adoc[EventBusService], and implement an appropriately annotated method to receive the events.
 
 The framework has several categories of events: domain events, UI events and lifecycle events.
 These are explored in the sections below.
@@ -17,7 +17,7 @@ These are explored in the sections below.
 
 Domain events are fired -- through the internal xref:refguide:applib:index/services/eventbus/EventBusService.adoc[event bus] -- for every user interaction with each object member (property, collection or action).
 
-By default, rendering a property causes a `PropertyDomainEvent` to be fired, though the xref:refguide:applib:index/annotation/Property.adoc#domainEvent[`@Property#domainEvent()`] attribute allows a custom subclass to be specified if necessary.
+By default, rendering a property causes a `PropertyDomainEvent` to be fired, though the xref:refguide:applib:index/annotation/Property.adoc#domainEvent[@Property#domainEvent()] attribute allows a custom subclass to be specified if necessary.
 Similarly, rendering a collection causes a `CollectionDomainEvent` to be fired, and rendering an action causes an `ActionDomainEvent` to be fired.
 
 In fact, each event can be fired up to five times, with the event's `getEventPhase()` method indicating to the subscriber the phase:
@@ -52,9 +52,9 @@ xref:userguide:fun:ui.adoc#object-titles-and-icons[Normally] the code to return 
 However, UI events allow this title and icon to be provided instead by a subscriber.
 UI events have higher precedence than the other mechanisms of supplying a title.
 
-If annotated with xref:refguide:applib:index/annotation/DomainObjectLayout.adoc#titleUiEvent[`@DomainObjectLayout#titleUiEvent()`], the appropriate (subclass of) `TitleUiEvent` will be emitted.
-Similarly for xref:refguide:applib:index/annotation/DomainObjectLayout.adoc#iconUiEvent[`#iconUiEvent()`].
-In addition, it is possible to use events to obtain a CSS class to render with the domain object, using xref:refguide:applib:index/annotation/DomainObjectLayout.adoc#cssClassUiEvent[`#cssClassUiEvent()`], and to select an alternate xref:userguide:fun:ui.adoc#layout-file[layout file] using xref:refguide:applib:index/annotation/DomainObjectLayout.adoc#layoutUiEvent[`#layoutUiEvent()`].
+If annotated with xref:refguide:applib:index/annotation/DomainObjectLayout.adoc#titleUiEvent[@DomainObjectLayout#titleUiEvent()], the appropriate (subclass of) `TitleUiEvent` will be emitted.
+Similarly for xref:refguide:applib:index/annotation/DomainObjectLayout.adoc#iconUiEvent[#iconUiEvent()].
+In addition, it is possible to use events to obtain a CSS class to render with the domain object, using xref:refguide:applib:index/annotation/DomainObjectLayout.adoc#cssClassUiEvent[#cssClassUiEvent()], and to select an alternate xref:userguide:fun:ui.adoc#layout-file[layout file] using xref:refguide:applib:index/annotation/DomainObjectLayout.adoc#layoutUiEvent[#layoutUiEvent()].
 
 There are two use cases where this feature is useful:
 
@@ -105,7 +105,7 @@ The (already persistent) entity has just been flushed to the database
 +
 The (already persistent) entity is about to be deleted from the database
 
-For example, if annotated with xref:refguide:applib:index/annotation/DomainObject.adoc#updatingLifecycleEvent[`@DomainObjectLayout#updatingLifecycleEvent`], the appropriate (subclass of) `ObjectUpdatingEvent` will be emitted.
+For example, if annotated with xref:refguide:applib:index/annotation/DomainObject.adoc#updatingLifecycleEvent[@DomainObjectLayout#updatingLifecycleEvent], the appropriate (subclass of) `ObjectUpdatingEvent` will be emitted.
 
 There is no lifecycle event for "entity creating" because (obviously) the framework doesn't know about newly created objects until they have been created.
 Similarly, there is no lifecycle event for entities that have been removed because it is not valid to "touch" a domain entity once deleted.

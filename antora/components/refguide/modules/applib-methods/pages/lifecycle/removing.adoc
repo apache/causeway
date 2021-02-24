@@ -7,9 +7,9 @@
 
 The `removing()` lifecycle callback method is called when a (persistent) object is just about to be deleted from the object store
 
-An alternative means to interact with the lifecycle is by setting up a subscriber on the xref:refguide:applib:index/annotation/DomainObject.adoc#removingLifecycleEvent[`@DomainObject#removingLifecycleEvent()`] event.
+An alternative means to interact with the lifecycle is by setting up a subscriber on the xref:refguide:applib:index/annotation/DomainObject.adoc#removingLifecycleEvent[@DomainObject#removingLifecycleEvent()] event.
 
-NOTE: Unlike the xref:refguide:applib-methods:lifecycle.adoc#persisting[`persisting()`] /xref:refguide:applib-methods:lifecycle.adoc#persisted[`persisted()`] andxref:refguide:applib-methods:lifecycle.adoc#updating[`updating()`] /xref:refguide:applib-methods:lifecycle.adoc#updated[`updated()`] callbacks,
+NOTE: Unlike the xref:refguide:applib-methods:lifecycle.adoc#persisting[persisting()] /xref:refguide:applib-methods:lifecycle.adoc#persisted[persisted()] andxref:refguide:applib-methods:lifecycle.adoc#updating[updating()] /xref:refguide:applib-methods:lifecycle.adoc#updated[updated()] callbacks,
 there is no `removed()` callback.
 That's because its not valid to interact with a persistent domain object once its been deleted.
 

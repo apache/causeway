@@ -74,6 +74,6 @@ public class Customer {
 }
 ----
 
-Actions that are safe and request-cacheable automatically use the xref:refguide:applib:index/services/queryresultscache/QueryResultsCache.adoc[`QueryResultsCache`] service to cache the result of the method.
+Actions that are safe and request-cacheable automatically use the xref:refguide:applib:index/services/queryresultscache/QueryResultsCache.adoc[QueryResultsCache] service to cache the result of the method.
 Note though that the results of this caching will only be apparent if the action is invoked from another method using the xref:refguide:applib:index/services/wrapper/WrapperFactory.adoc[WrapperFactory] service.
 

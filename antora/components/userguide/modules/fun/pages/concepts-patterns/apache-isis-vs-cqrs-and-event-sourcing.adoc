@@ -87,7 +87,7 @@ But in any case the roadmap is to support JPA as well as JDO, indeed as you read
 
 As with a CQRS architecture, Apache xref:userguide:fun:mixins.adoc[mixins] would be the obvious way to associate behaviour with an event sourced entity.
 These mixins would most likely delegate to an event sourcing framework such as link:https://axoniq.io/[Axon] to do the work.
-Also, in Apache Isis every business action (and indeed, property and collection) emits domain events through the xref:refguide:applib:index/services/eventbus/EventBusService.adoc[`EventBusService`], and can optionally also be published through the xref:refguide:applib:index/services/publishing/spi/ExecutionSubscriber.adoc[ExecutionSubscriber].
+Also, in Apache Isis every business action (and indeed, property and collection) emits domain events through the xref:refguide:applib:index/services/eventbus/EventBusService.adoc[EventBusService], and can optionally also be published through the xref:refguide:applib:index/services/publishing/spi/ExecutionSubscriber.adoc[ExecutionSubscriber].
 These features could also have a role to play in an event sourced system.
 
 

@@ -23,7 +23,7 @@ to obtain an alternative layout name with which to render the domain object.
 to obtain a title for the object
 
 The framework has a built-in event class (for each UI hint) that is raised by default; for example a `TitleUiEvent.Default` is raised to obtain a title for the object.
-Subscribers subscribe through the xref:refguide:applib:index/services/eventbus/EventBusService.adoc[`EventBusService`] and can use obtain a reference to the domain object from the event.
+Subscribers subscribe through the xref:refguide:applib:index/services/eventbus/EventBusService.adoc[EventBusService] and can use obtain a reference to the domain object from the event.
 From this they can, if they wish, specify the corresponding UI hint.
 
 This basic model can be influenced in a couple of ways:

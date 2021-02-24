@@ -83,7 +83,7 @@ public class Customer {
 
 TIP: For actions, `@Member#name()` element and xref:refguide:applib:index/annotation/Action.adoc#associateWith[@Action#associateWith()] element have the same effect.
 
-TIP: For actions associated with properties, the xref:refguide:applib:index/annotation/ActionLayout.adoc#position[`@ActionLayout#position()`] element indicates whether the action should be rendered beneath the property's field, or instead on the property's fieldset panel's header.
+TIP: For actions associated with properties, the xref:refguide:applib:index/annotation/ActionLayout.adoc#position[@ActionLayout#position()] element indicates whether the action should be rendered beneath the property's field, or instead on the property's fieldset panel's header.
 
 
 === Collections

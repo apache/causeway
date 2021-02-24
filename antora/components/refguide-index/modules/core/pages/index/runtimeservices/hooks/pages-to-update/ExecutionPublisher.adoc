@@ -4,11 +4,11 @@
 
 WARNING: TODO: this content has not yet been reviewed/updated for v2.0
 
-The (internal) `ExecutionPublisher` domain service acts as an internal facade to any configured xref:refguide:applib:index/services/publishing/spi/ExecutionSubscriber.adoc[`ExecutionSubscriber`] domain service(s).
+The (internal) `ExecutionPublisher` domain service acts as an internal facade to any configured xref:refguide:applib:index/services/publishing/spi/ExecutionSubscriber.adoc[ExecutionSubscriber] domain service(s).
 
 For published action invocations/ property edits, it provides an API for those member executions to call.
 
-For published objects, it provides an API for the framework to call at the end of the interaction; it obtains details of the changed objects (from the xref:core:runtime-services:ChangedObjectsService.adoc[`ChangedObjectsServiceInternal`]) and filters them to just those objects that are to be published; these are then passed through to any configured `ExecutionSubscriber` implementations.
+For published objects, it provides an API for the framework to call at the end of the interaction; it obtains details of the changed objects (from the xref:core:runtime-services:ChangedObjectsService.adoc[ChangedObjectsServiceInternal]) and filters them to just those objects that are to be published; these are then passed through to any configured `ExecutionSubscriber` implementations.
 
 
 == SPI and Implementation
@@ -26,9 +26,9 @@ public interface ExecutionPublisher {
 }
 ----
 <1> to publish an action invocation, as represented by the specified member `Execution` parameter and with the xref:refguide:applib:index/annotation/Action.adoc#executionPublishing[@Action#executionPublishing] annotation attribute or equivalent, to any configured xref:refguide:applib:index/services/publishing/spi/ExecutionSubscriber.adoc[ExecutionSubscriber].
-The `Execution` object will be an instance of `ActionInvocation` (see xref:refguide:applib:index/services/iactn/InteractionContext.adoc[`InteractionContext`] for details).
-<2> to publish a property edit, as as represented by the specified member `Execution` parameter and with the xref:refguide:applib:index/annotation/Property.adoc#publishing[`@Property#executionPublishing`] annotation attribute or equivalent, to any configured xref:refguide:applib:index/services/publishing/spi/ExecutionSubscriber.adoc[ExecutionSubscriber].
-The `Execution` object will be an instance of `PropertyEdit` (see xref:refguide:applib:index/services/iactn/InteractionContext.adoc[`InteractionContext`] for details).
+The `Execution` object will be an instance of `ActionInvocation` (see xref:refguide:applib:index/services/iactn/InteractionContext.adoc[InteractionContext] for details).
+<2> to publish a property edit, as as represented by the specified member `Execution` parameter and with the xref:refguide:applib:index/annotation/Property.adoc#publishing[@Property#executionPublishing] annotation attribute or equivalent, to any configured xref:refguide:applib:index/services/publishing/spi/ExecutionSubscriber.adoc[ExecutionSubscriber].
+The `Execution` object will be an instance of `PropertyEdit` (see xref:refguide:applib:index/services/iactn/InteractionContext.adoc[InteractionContext] for details).
 
 == Related Classes
 

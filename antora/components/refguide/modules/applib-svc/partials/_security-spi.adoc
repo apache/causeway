@@ -25,7 +25,7 @@ TIP: see also the xref:security:ROOT:about.adoc[Security Guide].
 
 |xref:refguide:applib:index/services/session/SessionLoggingService.adoc[SessionLoggingService]
 |Records each login and logout by end-users.
-|
+
 * xref:security:session-log:about.adoc[Session Log +
 (Security Guide)]
 

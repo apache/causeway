@@ -4,4 +4,4 @@
 
 == Related Services
 
-This service is the front-end UI (and delegates to) xref:refguide:applib:index/services/confview/ConfigurationViewService.adoc[`ConfigurationViewService`].
+This service is the front-end UI (and delegates to) xref:refguide:applib:index/services/confview/ConfigurationViewService.adoc[ConfigurationViewService].

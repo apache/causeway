@@ -8,7 +8,7 @@ These are:
 
 * instantiated
 +
-through xref:refguide:applib:index/services/factory/FactoryService.adoc[`FactoryService`].
+through xref:refguide:applib:index/services/factory/FactoryService.adoc[FactoryService].
 An event is also fired for view models
 
 * persisting
@@ -36,7 +36,7 @@ an already persistent entity has just been saved (``UPDATE``d) to the database
 an already persistent entity is about to be removed (``DELETE``d) from the database
 
 The framework has a built-in event class (for each lifecycle hint) that is raised by default; for example a `ObjectUpdatingEvent.Default` is raised when an object is about to be updated.
-Subscribers subscribe through the xref:refguide:applib:index/services/eventbus/EventBusService.adoc[`EventBusService`] and can use the event to obtain a reference to the object just created.
+Subscribers subscribe through the xref:refguide:applib:index/services/eventbus/EventBusService.adoc[EventBusService] and can use the event to obtain a reference to the object just created.
 
 This basic model can be influenced in a couple of ways:
 
@@ -175,7 +175,7 @@ public class ToDoItem {
 [NOTE]
 ====
 It's possible to instantiate objects without firing this lifecycle; just instantiate using its regular constructor, and then use the ``ServiceInjector``'s
-xref:refguide:applib:index/services/inject/ServiceInjector.adoc[`injectServicesInto(...)`] to manually inject any required domain services.
+xref:refguide:applib:index/services/inject/ServiceInjector.adoc[injectServicesInto(...)] to manually inject any required domain services.
 ====
 
 

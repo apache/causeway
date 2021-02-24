@@ -27,11 +27,11 @@ protected void execute(final ExecutionContext ec) {
 
 == Interaction with Shiro
 
-When `sudo(...)` is called the "effective user" is reported by  xref:refguide:applib:index/services/user/UserService.adoc[`UserService`].
+When `sudo(...)` is called the "effective user" is reported by  xref:refguide:applib:index/services/user/UserService.adoc[UserService].
 However, it does _not_ propagate through to the xref:security:ROOT:about.adoc[Shiro security mechanism], which continue to be evaluated according to the permissions of the current user.
 
 This can be a problem in certain use cases.
-For example if running a fixture script (which uses the xref:refguide:applib:index/services/wrapper/WrapperFactory.adoc[WrapperFactory]) from within an implementation of xref:refguide:applib:index/services/userreg/UserRegistrationService.adoc[`UserRegistrationService`], this is likely to result in ``HiddenException``s being thrown because there is no effective user.
+For example if running a fixture script (which uses the xref:refguide:applib:index/services/wrapper/WrapperFactory.adoc[WrapperFactory]) from within an implementation of xref:refguide:applib:index/services/userreg/UserRegistrationService.adoc[UserRegistrationService], this is likely to result in ``HiddenException``s being thrown because there is no effective user.
 
 In such cases, permission checking can simply be disabled by specifying `SudoService.ACCESS_ALL_ROLE` as one of the roles.
 For example:

@@ -6,7 +6,7 @@
 
 The benefits of using this method (instead of simply using the Java `new` keyword) are:
 
-* any services will be injected into the object immediately (otherwise they will not be injected until the framework becomes aware of the object, typically when it is persisted through the xref:refguide:applib:index/services/repository/RepositoryService.adoc[`RepositoryService`]
+* any services will be injected into the object immediately (otherwise they will not be injected until the framework becomes aware of the object, typically when it is persisted through the xref:refguide:applib:index/services/repository/RepositoryService.adoc[RepositoryService]
 
 * the default value for any properties (usually as specified by `defaultXxx()` supporting methods) or from the value type itself will be set and the `created()` callback will be called.
 

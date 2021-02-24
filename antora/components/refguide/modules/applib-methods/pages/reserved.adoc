@@ -13,33 +13,33 @@ The table below lists the reserved methods that are recognized as part of Apache
 |Method
 |Description
 
-|xref:refguide:applib-methods:reserved.adoc#cssClass[`cssClass()`]
+|xref:refguide:applib-methods:reserved.adoc#cssClass[cssClass()]
 |Provides a CSS class for this object instance.
 In conjunction with `static/css/application-css`, can therefore provide custom styling of an object instance wherever it is rendered.
 
-//|xref:refguide:applib-methods:reserved.adoc#disable[`disable(...)`]
+//|xref:refguide:applib-methods:reserved.adoc#disable[disable(...)]
 //|Disable all or some of an object's properties
 
-//|xref:refguide:applib-methods:reserved.adoc#getId[`getId()`]
+//|xref:refguide:applib-methods:reserved.adoc#getId[getId()]
 //|Provides an optional unique identifier of a service.
 //
 //If not provided, the service's fully-qualified class name is used.
 
-//|xref:refguide:applib-methods:reserved.adoc#hide[`hide(...)`]
+//|xref:refguide:applib-methods:reserved.adoc#hide[hide(...)]
 //|Hide all or some of an object's properties
 
-|xref:refguide:applib-methods:reserved.adoc#iconName[`iconName()`]
+|xref:refguide:applib-methods:reserved.adoc#iconName[iconName()]
 |Provides the name of the image to render, usually alongside the title, to represent the object.
 If not provided, then the class name is used to locate an image.
 
-|xref:refguide:applib-methods:reserved.adoc#layout[`layout()`]
+|xref:refguide:applib-methods:reserved.adoc#layout[layout()]
 |Provides an alternative layout to use, if available.
 If null or no such layout, then uses to the default layout.
 
-|xref:refguide:applib-methods:reserved.adoc#title[`title()`]
+|xref:refguide:applib-methods:reserved.adoc#title[title()]
 |Provides a title for the object. +
 
-//|xref:refguide:applib-methods:reserved.adoc#validate[`validate()`]
+//|xref:refguide:applib-methods:reserved.adoc#validate[validate()]
 //|Validate the object's state prior to persisting.
 
 |===

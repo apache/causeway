@@ -19,6 +19,6 @@ public class ToDoItem {
 
 [NOTE]
 ====
-The similar xref:refguide:applib:index/annotation/ActionLayout.adoc#cssClassFa[`@ActionLayout#cssClassFa`] annotation attribute is also used as a hint to apply CSS, specifically to add http://fortawesome.github.io/Font-Awesome/icons/[Font Awesome icons] on action menu items or buttons.
+The similar xref:refguide:applib:index/annotation/ActionLayout.adoc#cssClassFa[@ActionLayout#cssClassFa] annotation attribute is also used as a hint to apply CSS, specifically to add http://fortawesome.github.io/Font-Awesome/icons/[Font Awesome icons] on action menu items or buttons.
 ====
 

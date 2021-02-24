@@ -8,4 +8,4 @@ The core framework (xref:core:metamodel:about.adoc[MetaModel] module) provides a
 
 This implementation supports the following configuration properties:
 
-* xref:refguide:config:sections/isis.core.runtime-services.adoc#isis.core.runtime-services.application-features.init[`isis.core.runtime-services.application-features.init`]
+* xref:refguide:config:sections/isis.core.runtime-services.adoc#isis.core.runtime-services.application-features.init[isis.core.runtime-services.application-features.init]
