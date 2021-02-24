@@ -3706,12 +3706,12 @@ skinparam rectangle<<12>> {
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<24>> {
+skinparam rectangle<<13>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<13>> {
+skinparam rectangle<<24>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
@@ -5576,9 +5576,7 @@ o.a.i.testdomain.conf.Configuration_headless$HeadlessCommandSupport +
 o.a.i.testdomain.jdo.JdoInventoryDao +
 o.a.i.testdomain.jpa.JpaInventoryDao +
 o.a.i.testdomain.jpa.springdata.EmployeeRepository +
-o.a.i.testdomain.util.interaction.InteractionBoundaryProbe +
 o.a.i.testdomain.util.kv.KVStoreForTesting +
-o.a.i.testdomain.util.rest.RestEndpointService +
 ****
 
 .Dependencies

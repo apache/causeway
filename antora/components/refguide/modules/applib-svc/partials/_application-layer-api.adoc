@@ -49,7 +49,8 @@ Domain service APIs for the application layer allow the domain objects to contro
 
 
 |xref:refguide:applib:index/services/wrapper/WrapperFactory.adoc[WrapperFactory]
-|Interact with another domain object "as if" through the UI (enforcing business rules, firing domain events)
+|Interact with another domain object "as if" through the UI (enforcing business rules, firing domain events).
+It can also be used to dispatch actions asynchronously, to be run through a `java.util.concurrent.ExecutorService`.
 
 
 

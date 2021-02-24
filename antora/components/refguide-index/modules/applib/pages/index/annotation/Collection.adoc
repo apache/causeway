@@ -68,8 +68,8 @@ This is only provided as a fallback; usually the framework can infer the element
 
 include::hooks/Collection_010-examples-and-usage.adoc[]
 
-include::hooks/Collection_011_domainEvent.adoc[]
+include::hooks/Collection_021_domainEvent.adoc[]
 
-include::hooks/Collection_012_hidden.adoc[]
+include::hooks/Collection_022_hidden.adoc[]
 
-include::hooks/Collection_013_typeOf.adoc[]
+include::hooks/Collection_023_typeOf.adoc[]

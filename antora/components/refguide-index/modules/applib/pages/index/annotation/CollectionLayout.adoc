@@ -124,16 +124,16 @@ The purpose of this annotation is to provide a _java.util.Comparator_ such that 
 
 include::hooks/CollectionLayout_010-examples-and-usage.adoc[]
 
-include::hooks/CollectionLayout_011-cssClass.adoc[]
+include::hooks/CollectionLayout_021-defaultView.adoc[]
 
-include::hooks/CollectionLayout_012-defaultView.adoc[]
+include::hooks/CollectionLayout_022-paged.adoc[]
 
-include::hooks/CollectionLayout_013-describedAs.adoc[]
+include::hooks/CollectionLayout_023-describedAs.adoc[]
 
-include::hooks/CollectionLayout_014-hidden.adoc[]
+include::hooks/CollectionLayout_024-sortedBy.adoc[]
 
-include::hooks/CollectionLayout_015-named.adoc[]
+include::hooks/CollectionLayout_025-cssClass.adoc[]
 
-include::hooks/CollectionLayout_016-paged.adoc[]
+include::hooks/CollectionLayout_026-named.adoc[]
 
-include::hooks/CollectionLayout_017-sortedBy.adoc[]
+include::hooks/CollectionLayout_027-hidden.adoc[]

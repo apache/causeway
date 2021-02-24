@@ -105,3 +105,13 @@ The default value, `0` , means that no flags have been specified.
 Replacement text for the pattern in generated error message.
 
 include::hooks/Parameter_010-examples-and-usage.adoc[]
+
+include::hooks/Parameter_021-optionality.adoc[]
+
+include::hooks/Parameter_022-maxLength.adoc[]
+
+include::hooks/Parameter_023-mustSatisfy.adoc[]
+
+include::hooks/Parameter_024-regexPattern.adoc[]
+
+include::hooks/Parameter_025-fileAccept.adoc[]

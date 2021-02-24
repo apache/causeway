@@ -127,3 +127,17 @@ The typical entry length of a field, use to determine the optimum width for disp
 Note: the Wicket viewer does not use this information.
 
 include::hooks/ParameterLayout_010-examples-and-usage.adoc[]
+
+include::hooks/ParameterLayout_021-labelPosition.adoc[]
+
+include::hooks/ParameterLayout_022-multiLine.adoc[]
+
+include::hooks/ParameterLayout_023-describedAs.adoc[]
+
+include::hooks/ParameterLayout_024-cssClass.adoc[]
+
+include::hooks/ParameterLayout_025-renderDay.adoc[]
+
+include::hooks/ParameterLayout_026-named.adoc[]
+
+include::hooks/ParameterLayout_027-typicalLength.adoc[]

@@ -42,3 +42,7 @@ Provides a unique abbreviation for the object type's, eg "customer.CustomerServi
 This value, if specified, is used in the serialized form of the object's OID. An OID is used by the framework to unique identify an object over time (same concept as a URN).
 
 include::hooks/DomainService_010-examples-and-usage.adoc[]
+
+include::hooks/DomainService_021-objectType.adoc[]
+
+include::hooks/DomainService_022-nature.adoc[]

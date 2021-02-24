@@ -230,3 +230,27 @@ The default value, `0` , means that no flags have been specified.
 Replacement text for the pattern in generated error message.
 
 include::hooks/Property_010-examples-and-usage.adoc[]
+
+include::hooks/Property_021-optionality.adoc[]
+
+include::hooks/Property_022-editing.adoc[]
+
+include::hooks/Property_023-maxLength.adoc[]
+
+include::hooks/Property_024-mustSatisfy.adoc[]
+
+include::hooks/Property_025-projecting.adoc[]
+
+include::hooks/Property_026-domain-events.adoc[]
+
+include::hooks/Property_027-execution-publishing.adoc[]
+
+include::hooks/Property_028-command-processing.adoc[]
+
+include::hooks/Property_029-regexPattern.adoc[]
+
+include::hooks/Property_030-snapshot.adoc[]
+
+include::hooks/Property_031-fileAccept.adoc[]
+
+include::hooks/Property_033-hidden.adoc[]

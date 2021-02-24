@@ -180,3 +180,19 @@ For downloading xref:refguide:applib:index/value/Blob.adoc[Blob] or xref:refguid
 The value should be of the form "file_extension|audio/*|video/*|image/*|media_type".
 
 include::hooks/Action_010-examples-and-usage.adoc[]
+
+include::hooks/Action_021-associating.adoc[]
+
+include::hooks/Action_022-action-semantics.adoc[]
+
+include::hooks/Action_023-deployment-modes.adoc[]
+
+include::hooks/Action_024-domain-events.adoc[]
+
+include::hooks/Action_025-execution-publishing.adoc[]
+
+include::hooks/Action_026-command-processing.adoc[]
+
+include::hooks/Action_027-collection-types.adoc[]
+
+include::hooks/Action_030-see-also.adoc[]

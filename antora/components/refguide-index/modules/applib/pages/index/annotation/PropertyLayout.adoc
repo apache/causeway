@@ -178,3 +178,25 @@ The typical entry length of a field, use to determine the optimum width for disp
 Note: the Wicket viewer does not use this information.
 
 include::hooks/PropertyLayout_010-examples-and-usage.adoc[]
+
+include::hooks/PropertyLayout_021_labelPosition.adoc[]
+
+include::hooks/PropertyLayout_022_promptStyle.adoc[]
+
+include::hooks/PropertyLayout_023_multiLine.adoc[]
+
+include::hooks/PropertyLayout_024_navigable.adoc[]
+
+include::hooks/PropertyLayout_025_describedAs.adoc[]
+
+include::hooks/PropertyLayout_026_cssClass.adoc[]
+
+include::hooks/PropertyLayout_027_renderDay.adoc[]
+
+include::hooks/PropertyLayout_028_repainting.adoc[]
+
+include::hooks/PropertyLayout_029_named.adoc[]
+
+include::hooks/PropertyLayout_030_hidden.adoc[]
+
+include::hooks/PropertyLayout_31_typicalLength.adoc[]

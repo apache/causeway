@@ -20,7 +20,7 @@ interface ApplicationUser {
   AccountType getAccountType()
   void setAccountType(AccountType accountType)
   ApplicationPermissionValueSet getPermissionSet()
-  SortedSet<? extends ApplicationRole> getRoles()
+  Set<? extends ApplicationRole> getRoles()
   ApplicationUserStatus getStatus()
   void setStatus(ApplicationUserStatus disabled)
   void setAtPath(String atPath)

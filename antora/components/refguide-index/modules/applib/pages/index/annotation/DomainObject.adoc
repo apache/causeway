@@ -299,22 +299,22 @@ This subclass must provide a no-arg constructor; the fields are set reflectively
 
 include::hooks/DomainObject_010-examples-and-usage.adoc[]
 
-include::hooks/DomainObject_011-domain-events.adoc[]
+include::hooks/DomainObject_021-objectType.adoc[]
 
-include::hooks/DomainObject_012-_lifecycle-events.adoc[]
+include::hooks/DomainObject_022-nature.adoc[]
 
-include::hooks/DomainObject_013-autoCompleteRepository.adoc[]
+include::hooks/DomainObject_023-editing.adoc[]
 
-include::hooks/DomainObject_014-bounding.adoc[]
+include::hooks/DomainObject_024-domain-events.adoc[]
 
-include::hooks/DomainObject_015-editing.adoc[]
+include::hooks/DomainObject_025-lifecycle-events.adoc[]
 
-include::hooks/DomainObject_016-entityChangePublishing.adoc[]
+include::hooks/DomainObject_026-entityChangePublishing.adoc[]
 
-include::hooks/DomainObject_017-mixinMethod.adoc[]
+include::hooks/DomainObject_027-bounding.adoc[]
 
-include::hooks/DomainObject_018-nature.adoc[]
+include::hooks/DomainObject_028-autoCompleteRepository.adoc[]
 
-include::hooks/DomainObject_019-objectType.adoc[]
+include::hooks/DomainObject_029-mixinMethod.adoc[]
 
-include::hooks/DomainObject_030-see-also.adoc[]
+include::hooks/DomainObject_040-see-also.adoc[]
