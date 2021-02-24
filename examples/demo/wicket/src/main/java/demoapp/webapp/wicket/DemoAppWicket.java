@@ -23,6 +23,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Import;
 
+import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.extensions.viewer.wicket.pdfjs.ui.IsisModuleExtPdfjsUi;
 import org.apache.isis.valuetypes.asciidoc.metamodel.IsisModuleValAsciidocMetaModel;
 import org.apache.isis.valuetypes.asciidoc.persistence.jdo.dn5.IsisModuleValAsciidocPersistenceJdoDn5;
@@ -31,6 +32,7 @@ import org.apache.isis.valuetypes.markdown.persistence.jdo.dn5.IsisModuleValMark
 import org.apache.isis.valuetypes.markdown.ui.wkt.IsisModuleValMarkdownUiWkt;
 import org.apache.isis.valuetypes.sse.ui.wkt.IsisModuleValSseUiWkt;
 import org.apache.isis.viewer.wicket.viewer.IsisModuleViewerWicketViewer;
+import org.apache.isis.viewer.wicket.viewer.integration.WebRequestCycleForIsis;
 
 import demoapp.web.DemoAppManifest;
 import demoapp.webapp.wicket.ui.custom.WhereInTheWorldPanelFactory;
@@ -70,8 +72,8 @@ public class DemoAppWicket extends SpringBootServletInitializer {
      */
     public static void main(String[] args) {
         //IsisPresets.prototyping();
-        //DebugLoggingPreset.PERSISTENCE.apply();
-        //DebugLoggingPreset.ISIS_SESSION.apply();
+        
+        //IsisPresets.logging(WebRequestCycleForIsis.class, "debug");
 
         SpringApplication.run(new Class[] { DemoAppWicket.class }, args);
 
