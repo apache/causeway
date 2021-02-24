@@ -33,7 +33,10 @@ import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.value.LocalResourcePath;
+import org.apache.isis.applib.value.OpenUrlStrategy;
 import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.security.authentication.Authentication;
 import org.apache.isis.core.security.authentication.AuthenticationContext;
 
@@ -48,6 +51,7 @@ public class LogoutMenu {
 
     private final List<LogoutHandler> logoutHandler;
     private final AuthenticationContext authenticationTracker;
+    private final IsisConfiguration configuration;
 
     public static class LogoutDomainEvent
         extends IsisModuleApplib.ActionDomainEvent<LogoutMenu> {}
@@ -76,10 +80,12 @@ public class LogoutMenu {
             : "login"
         )
         .orElse("login");
-        if("login".equals(redirect)) {
-            return new LoginRedirect();
+        switch(redirect) {
+        case "login": return new LoginRedirect();
+        case "logout":
+        default:
+            return createLogoutRedirect(); 
         }
-        return null; // redirects to the homepage
     }
     
     /** A pseudo model used to redirect to the login page.*/
@@ -90,12 +96,13 @@ public class LogoutMenu {
         public final static String OBJECT_TYPE = "isis.security.LoginRedirect";
     }
     
-    /** A pseudo model used to redirect to the logout page.*/
-    @DomainObject(
-            nature = Nature.VIEW_MODEL, 
-            objectType = LogoutRedirect.OBJECT_TYPE)  
-    public static class LogoutRedirect {
-        public final static String OBJECT_TYPE = "isis.security.LogoutRedirect";
+    private LocalResourcePath createLogoutRedirect() {
+        val logoutRedirect = "/logout"; 
+        
+        //TODO make this a config option 
+        //configuration.getSecurity().getLogoutRedirect(); 
+        
+        return new LocalResourcePath(logoutRedirect, OpenUrlStrategy.SAME_WINDOW);
     }
     
     
