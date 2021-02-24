@@ -20,6 +20,8 @@
 package org.apache.isis.viewer.wicket.viewer.integration;
 
 import java.lang.reflect.Constructor;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,7 +36,6 @@ import org.apache.wicket.Session;
 import org.apache.wicket.WicketRuntimeException;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.core.request.handler.ListenerInvocationNotAllowedException;
-import org.apache.wicket.core.request.handler.ListenerRequestHandler;
 import org.apache.wicket.core.request.handler.PageProvider;
 import org.apache.wicket.core.request.handler.RenderPageRequestHandler;
 import org.apache.wicket.core.request.handler.RenderPageRequestHandler.RedirectPolicy;
@@ -83,11 +84,16 @@ import lombok.extern.log4j.Log4j2;
 public class WebRequestCycleForIsis implements IRequestCycleListener {
     
     private static enum SessionLifecyclePhase {
-        ACTIVE,
-        EXPIRED;
-        public static boolean isExpired(final RequestCycle requestCycle) {
+        DONT_CARE,
+        EXPIRED,
+        ACTIVE_AFTER_EXPIRED;
+        static boolean isExpired(final RequestCycle requestCycle) {
             return Session.exists() 
                     && SessionLifecyclePhase.EXPIRED == requestCycle.getMetaData(SESSION_LIFECYCLE_PHASE_KEY);
+        }
+        static boolean isActiveAfterExpired() {
+            return Session.exists() 
+                    && SessionLifecyclePhase.ACTIVE_AFTER_EXPIRED == Session.get().getMetaData(SESSION_LIFECYCLE_PHASE_KEY);
         }
     }
 
@@ -137,9 +143,19 @@ public class WebRequestCycleForIsis implements IRequestCycleListener {
     @Override
     public void onRequestHandlerResolved(final RequestCycle requestCycle, final IRequestHandler handler) {
 
-        log.debug("onRequestHandlerResolved in (handler: {})", ()->handler.getClass().getName());
+        log.debug("onRequestHandlerResolved in (handler: {}, hasSession: {})", 
+                ()->handler.getClass().getName(),
+                ()->Session.exists() ? Session.get().hashCode() : "false");
 
-        if(handler instanceof RenderPageRequestHandler) {
+        // this nested class is hidden; it seems it is always used to create a new session after one has expired
+        if("org.apache.wicket.request.flow.ResetResponseException$ResponseResettingDecorator"
+                .equals(handler.getClass().getName())) {
+            if(SessionLifecyclePhase.isExpired(requestCycle)) {
+                log.debug("Transferring the 'expired' flag into the current session.");
+                Session.get().setMetaData(SESSION_LIFECYCLE_PHASE_KEY, SessionLifecyclePhase.ACTIVE_AFTER_EXPIRED);
+                Session.get().setAttribute("session-expiry-message-timeframe", LocalDateTime.now().plusNanos(1000_000_000L));
+            }
+        } else if(handler instanceof RenderPageRequestHandler) {
 
             val validationResult = getCommonContext().getSpecificationLoader().getValidationResult();
 
@@ -152,20 +168,22 @@ public class WebRequestCycleForIsis implements IRequestCycleListener {
                 }
                 throw new MetaModelInvalidException(validationResult.getAsLineNumberedString());
             }
-        }
-
-        if(SessionLifecyclePhase.isExpired(requestCycle)) {
             
-            // If a user clicks a menu item in an expired session, no action is executed, the session simply refreshes.
-            // Two requests make it here, and the first one uses ListenerRequestHandler as its first handler.
-            // The whole first request has to be ignored here, or the message would disappear before user can see it.
-            if (handler instanceof ListenerRequestHandler) {
-                // no-op
-            } else {
-                log.debug("handling RequestCycle that is flagged as 'expired'");
-                requestCycle.setMetaData(SESSION_LIFECYCLE_PHASE_KEY, SessionLifecyclePhase.ACTIVE);
-                getMessageBroker().ifPresent(broker -> 
-                    broker.addMessage(translate("Expired session was refreshed.")));
+            if(SessionLifecyclePhase.isActiveAfterExpired()) {
+                
+                val sessionExpiryMessageTimeframe = 
+                        (LocalDateTime) Session.get().getAttribute("session-expiry-message-timeframe");
+                if(sessionExpiryMessageTimeframe==null
+                        || LocalDateTime.now().isAfter(sessionExpiryMessageTimeframe) ) {
+                    log.debug("clear the session's active-after-expired flag (timeframe: {})", 
+                            sessionExpiryMessageTimeframe);
+                    Session.get().setMetaData(SESSION_LIFECYCLE_PHASE_KEY, SessionLifecyclePhase.DONT_CARE);    
+                } else {
+                    getMessageBroker().ifPresent(broker -> {
+                        log.debug("render 'expired' message");
+                        broker.addMessage(translate("Expired session was refreshed."));
+                    });    
+                }
             }
         }
         
@@ -180,7 +198,7 @@ public class WebRequestCycleForIsis implements IRequestCycleListener {
      */
     @Override
     public void onRequestHandlerExecuted(RequestCycle requestCycle, IRequestHandler handler) {
-        log.debug("onRequestHandlerExecuted: handler: {}", handler);
+        log.debug("onRequestHandlerExecuted: handler: {}", handler.getClass().getName());
 
         try {
 
@@ -200,9 +218,11 @@ public class WebRequestCycleForIsis implements IRequestCycleListener {
                 }
             }
 
+            log.debug("onRequestHandlerExecuted: isisRequestCycle.onRequestHandlerExecuted threw {}", 
+                    ex.getClass().getName());
+            
             // shouldn't return null given that we're in a session ...
-            PageProvider errorPageProvider = errorPageProviderFor(ex);
-            throw new RestartResponseException(errorPageProvider, RedirectPolicy.ALWAYS_REDIRECT);
+            throw new RestartResponseException(errorPageProviderFor(ex), RedirectPolicy.ALWAYS_REDIRECT);
         }
     }
 
@@ -233,7 +253,7 @@ public class WebRequestCycleForIsis implements IRequestCycleListener {
     @Override
     public IRequestHandler onException(RequestCycle cycle, Exception ex) {
 
-        log.debug("onException");
+        log.debug("onException {}", ex.getClass().getSimpleName());
 
         val validationResult = getCommonContext().getSpecificationLoader().getValidationResult();
         if(validationResult.hasFailures()) {
@@ -320,47 +340,51 @@ public class WebRequestCycleForIsis implements IRequestCycleListener {
         if(text == null) {
             return null;
         }
-        return getCommonContext().getTranslationService().translate(WebRequestCycleForIsis.class.getName(), text);
+        return getCommonContext().getTranslationService()
+                .translate(WebRequestCycleForIsis.class.getName(), text);
     }
 
     protected PageProvider errorPageProviderFor(Exception ex) {
         IRequestablePage errorPage = errorPageFor(ex);
-        return errorPage != null? new PageProvider(errorPage): null;
+        return errorPage != null
+                ? new PageProvider(errorPage)
+                : null;
     }
 
     // special case handling for PageExpiredException, otherwise infinite loop
     private static final ExceptionRecognizerForType pageExpiredExceptionRecognizer =
-            new ExceptionRecognizerForType(PageExpiredException.class, $->"Requested page is no longer available.");
+            new ExceptionRecognizerForType(
+                    PageExpiredException.class, 
+                    __->"Requested page is no longer available.");
 
     protected IRequestablePage errorPageFor(Exception ex) {
 
-        final Optional<Recognition> recognition;
-
-        if(isInInteraction()) {
-            val exceptionRecognizerService = getCommonContext().getServiceRegistry()
+        val commmonContext = getCommonContext();
+        
+        if(commmonContext==null) {
+            log.warn("Unable to obtain the IsisAppCommonContext (no session?)");
+            return null; 
+        } 
+        
+        val validationResult = commmonContext.getSpecificationLoader().getValidationResult();
+        if(validationResult.hasFailures()) {
+            return new MmvErrorPage(validationResult.getMessages("[%d] %s"));
+        }
+        
+        val exceptionRecognizerService = getCommonContext().getServiceRegistry()
             .lookupServiceElseFail(ExceptionRecognizerService.class);
 
-            recognition = exceptionRecognizerService
-                    .recognizeFromSelected(
-                            Can.<ExceptionRecognizer>ofSingleton(pageExpiredExceptionRecognizer)
-                            .addAll(exceptionRecognizerService.getExceptionRecognizers()),
-                            ex);
+        final Optional<Recognition> recognition = exceptionRecognizerService
+                .recognizeFromSelected(
+                        Can.<ExceptionRecognizer>ofSingleton(pageExpiredExceptionRecognizer)
+                        .addAll(exceptionRecognizerService.getExceptionRecognizers()),
+                        ex);
 
-        } else {
+        val exceptionModel = ExceptionModel.create(commmonContext, recognition, ex);
 
-            recognition = Optional.empty();
-
-            val validationResult = getCommonContext().getSpecificationLoader().getValidationResult();
-            if(validationResult.hasFailures()) {
-                return new MmvErrorPage(validationResult.getMessages("[%d] %s"));
-            }
-            // not sure whether this can ever happen now...
-            log.warn("Unable to obtain exceptionRecognizers (no session), "
-                    + "will be treated as unrecognized exception", ex);
-        }
-        val exceptionModel = ExceptionModel.create(getCommonContext(), recognition, ex);
-
-        return isSignedIn() ? new ErrorPage(exceptionModel) : newSignInPage(exceptionModel);
+        return isSignedIn() 
+                ? new ErrorPage(exceptionModel) 
+                : newSignInPage(exceptionModel);
     }
 
     /**
