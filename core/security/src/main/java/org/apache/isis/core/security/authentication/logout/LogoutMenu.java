@@ -98,8 +98,8 @@ public class LogoutMenu {
     private LocalResourcePath createLogoutRedirect() {
         val logoutRedirect = "/logout"; 
         
-        //TODO make this a config option 
-        //configuration.getSecurity().getLogoutRedirect(); 
+        //TODO make this a config option (or use the spring option, if there is any)
+        //configuration.getSecurity().getSpring().getLogoutRedirect(); 
         
         return new LocalResourcePath(logoutRedirect, OpenUrlStrategy.SAME_WINDOW);
     }

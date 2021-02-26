@@ -134,7 +134,7 @@ public class IsisConfiguration {
         @Data
         public static class Spring {
             /**
-             * The framework on initialization by default disables any{@code CsrfFilter}(s) it finds 
+             * The framework on initialization by default disables any {@code CsrfFilter}(s) it finds 
              * with <i>Spring Security</i> registered filters.
              * <p>
              * Setting this option to {@literal true} allows {@code CsrfFilter}(s) to be 
@@ -143,7 +143,7 @@ public class IsisConfiguration {
              * @see org.springframework.security.web.csrf.CsrfFilter
              * @see "https://www.baeldung.com/spring-security-registered-filters"
              */
-            private boolean allowCsrf = false;
+            private boolean allowCsrfFilters = false;
 
         }
         

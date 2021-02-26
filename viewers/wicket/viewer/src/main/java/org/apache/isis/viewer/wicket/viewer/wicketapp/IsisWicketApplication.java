@@ -155,7 +155,7 @@ implements
     private IsisSystemEnvironment systemEnvironment;
     private IsisConfiguration configuration;
 
-    private final IsisWicketApplication_Experimental experimental;
+    private final IsisWicketApplication_experimental experimental;
     private final IsisWicketApplication_newSession newSessionMixin;
     private final IsisWicketApplication_newPageFactory newPageFactoryMixin;
 
@@ -164,7 +164,7 @@ implements
     // /////////////////////////////////////////////////
 
     public IsisWicketApplication() {
-        experimental = new IsisWicketApplication_Experimental(this);
+        experimental = new IsisWicketApplication_experimental(this);
         newSessionMixin = new IsisWicketApplication_newSession(this);
         newPageFactoryMixin = new IsisWicketApplication_newPageFactory(this);
     }
@@ -227,6 +227,9 @@ implements
             settings = commonContext.lookupServiceElseFail(WicketViewerSettings.class);
             systemEnvironment = commonContext.lookupServiceElseFail(IsisSystemEnvironment.class);
         }
+        
+        //spent 2 hours on that one, does not work
+        //experimental.enableCsrfTokensForAjaxRequests(configuration);
 
         val backgroundInitializationTasks = 
                 _ConcurrentTaskList.named("Isis Application Background Initialization Tasks")
