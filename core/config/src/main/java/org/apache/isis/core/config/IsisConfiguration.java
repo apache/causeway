@@ -129,6 +129,24 @@ public class IsisConfiguration {
             private boolean autoLogoutIfAlreadyAuthenticated = false;
 
         }
+        
+        private final Spring spring = new Spring();
+        @Data
+        public static class Spring {
+            /**
+             * The framework on initialization by default disables any{@code CsrfFilter}(s) it finds 
+             * with <i>Spring Security</i> registered filters.
+             * <p>
+             * Setting this option to {@literal true} allows {@code CsrfFilter}(s) to be 
+             * configured. Yet EXPERIMENTAL.
+             * 
+             * @see org.springframework.security.web.csrf.CsrfFilter
+             * @see "https://www.baeldung.com/spring-security-registered-filters"
+             */
+            private boolean allowCsrf = false;
+
+        }
+        
     }
 
     private final Applib applib = new Applib();
