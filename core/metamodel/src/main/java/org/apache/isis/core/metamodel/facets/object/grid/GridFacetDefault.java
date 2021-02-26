@@ -18,9 +18,9 @@
  */
 package org.apache.isis.core.metamodel.facets.object.grid;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.annotation.Nullable;
 
@@ -58,8 +58,7 @@ implements GridFacet {
     private final _Lazy<LayoutFacet> layoutFacetLazy = _Lazy.threadSafe(()->
         getFacetHolder().getFacet(LayoutFacet.class));
     
-
-    private final Map<String, Grid> gridByLayoutName = new HashMap<>();
+    private final Map<String, Grid> gridByLayoutName = new ConcurrentHashMap<>();
     
     private GridFacetDefault(
             final FacetHolder facetHolder,
