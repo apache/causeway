@@ -18,6 +18,8 @@
  */
 package org.apache.isis.core.metamodel.facets.object.grid;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 import javax.annotation.Nullable;
@@ -50,7 +52,9 @@ implements GridFacet {
 
     private final GridService gridService;
 
-    private Grid grid;
+    private final Map<String, Grid> grid = new HashMap<>();
+    
+    private boolean hasLayoutFacet = false;
 
     private GridFacetDefault(
             final FacetHolder facetHolder,
@@ -61,12 +65,15 @@ implements GridFacet {
 
     @Override
     public Grid getGrid(final ManagedObject objectAdapterIfAny) {
-        if (this.grid == null || gridService.supportsReloading()) {
+        if (this.hasLayoutFacet || grid.isEmpty() || gridService.supportsReloading()) {
             val domainClass = getSpecification().getCorrespondingClass();
             final String layout = layout(objectAdapterIfAny);
-            this.grid = load(domainClass, layout);
+            if(! grid.containsKey(layout)) {
+            	grid.put(layout, load(domainClass, layout));
+            }
+            return grid.get(layout);
         }
-        return this.grid;
+        return grid.get(null);
     }
     
     // -- HELPER
@@ -81,6 +88,7 @@ implements GridFacet {
         if(layoutFacet == null) {
             return null;
         }
+        this.hasLayoutFacet = true;
         return layoutFacet.layout(objectAdapterIfAny);
     }
 
