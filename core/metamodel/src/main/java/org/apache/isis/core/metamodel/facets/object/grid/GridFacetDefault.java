@@ -68,7 +68,7 @@ implements GridFacet {
         if (this.hasLayoutFacet || grid.isEmpty() || gridService.supportsReloading()) {
             val domainClass = getSpecification().getCorrespondingClass();
             final String layout = layout(objectAdapterIfAny);
-            if(! grid.containsKey(layout)) {
+            if(! grid.containsKey(layout) || gridService.supportsReloading()) {
             	grid.put(layout, load(domainClass, layout));
             }
             return grid.get(layout);
