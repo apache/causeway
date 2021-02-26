@@ -64,7 +64,7 @@ public class IsisModuleSecuritySpring {
     
     @PostConstruct
     public void disableCsrf() {
-        if(isisConfiguration.getSecurity().getSpring().isAllowCsrf()) {
+        if(isisConfiguration.getSecurity().getSpring().isAllowCsrfFilters()) {
             return; // don't interfere
         }
         log.debug("About to disable any CSRF filters.");
