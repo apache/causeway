@@ -19,17 +19,14 @@
 
 package org.apache.isis.applib;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
-import java.util.StringTokenizer;
 import java.util.stream.Collectors;
 
+import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Strings;
 
 import lombok.Getter;
-import lombok.val;
 
 /**
  * @since 1.x revised for 2.0 {@index}
@@ -90,14 +87,6 @@ public class Identifier implements Comparable<Identifier> {
         return new Identifier(declaringClassName, actionName, parameterClassNames, Type.ACTION);
     }
 
-    /**
-     * Helper, used within constructor chaining
-     */
-    private static Can<String> classNamesOf(final Class<?>[] parameterClasses) {
-        return Can.ofArray(parameterClasses)
-        .map(Class::getName);
-    }
-
     // -- INSTANCE VARIABLES
 
     @Getter private final String className;
@@ -111,7 +100,7 @@ public class Identifier implements Comparable<Identifier> {
     @Getter private final String fullIdentityString;
     
     /**
-     * Member Identity String including parameters if any w/ (class omitted).
+     * Member Identity String (class omitted), including parameters if any.
      */
     @Getter private final String memberNameAndParameterClassNamesIdentityString;
 
@@ -120,11 +109,6 @@ public class Identifier implements Comparable<Identifier> {
      * @see TranslationService
      */
     @Getter private final String translationContext;
-    
-    /**
-     * Immutable string representation {@link #toString()}.
-     */
-    private final String asString;
 
     // -- CONSTRUCTOR
 
@@ -150,9 +134,6 @@ public class Identifier implements Comparable<Identifier> {
         this.fullIdentityString = _Strings.isEmpty(memberName) 
                 ? className
                 : className + "#" + memberNameAndParameterClassNamesIdentityString;
-        
-        this.asString = fullIdentityString; 
-        
     }
 
     // -- NATURAL NAMES
@@ -206,46 +187,48 @@ public class Identifier implements Comparable<Identifier> {
 
     @Override
     public String toString() {
-        return asString;
+        return fullIdentityString;
     }
     
     // -- PARSING
 
-    /**
-     * Factory method.
-     */
-    public static Identifier fromIdentityString(final String asString) {
-        if (asString == null) {
-            throw new IllegalArgumentException("expected: non-null identity string");
-        }
-
-        final int indexOfHash = asString.indexOf("#");
-        final int indexOfOpenBracket = asString.indexOf("(");
-        final int indexOfCloseBracket = asString.indexOf(")");
-        val className = asString.substring(0, indexOfHash == -1 ? asString.length() : indexOfHash);
-        if (indexOfHash == -1 || indexOfHash == (asString.length() - 1)) {
-            return classIdentifier(className);
-        }
-        String name = null;
-        if (indexOfOpenBracket == -1) {
-            name = asString.substring(indexOfHash + 1);
-            return propertyOrCollectionIdentifier(className, name);
-        }
-        name = asString.substring(indexOfHash + 1, indexOfOpenBracket);
-        final String allParms = asString.substring(indexOfOpenBracket + 1, indexOfCloseBracket).trim();
-        
-        final List<String> parmList = new ArrayList<String>();
-        if (allParms.length() > 0) {
-            // use StringTokenizer for .NET compatibility
-            val tokens = new StringTokenizer(allParms, ",", false);
-            while (tokens.hasMoreTokens()) {
-                parmList.add(tokens.nextToken());
-            }
-        }
-        return actionIdentifier(className, name, Can.ofCollection(parmList));
-    }
+//    public static Identifier parse(final String fullIdentityString) {
+//        if (fullIdentityString == null) {
+//            throw new IllegalArgumentException("expected: non-null identity string");
+//        }
+//
+//        final int indexOfHash = fullIdentityString.indexOf("#");
+//        final int indexOfOpenBracket = fullIdentityString.indexOf("(");
+//        final int indexOfCloseBracket = fullIdentityString.indexOf(")");
+//        val className = fullIdentityString.substring(0, indexOfHash == -1 ? fullIdentityString.length() : indexOfHash);
+//        if (indexOfHash == -1 || indexOfHash == (fullIdentityString.length() - 1)) {
+//            return classIdentifier(className);
+//        }
+//        String name = null;
+//        if (indexOfOpenBracket == -1) {
+//            name = fullIdentityString.substring(indexOfHash + 1);
+//            return propertyOrCollectionIdentifier(className, name);
+//        }
+//        name = fullIdentityString.substring(indexOfHash + 1, indexOfOpenBracket);
+//        final String allParms = fullIdentityString.substring(indexOfOpenBracket + 1, indexOfCloseBracket).trim();
+//        
+//        final List<String> parmList = new ArrayList<String>();
+//        if (allParms.length() > 0) {
+//            // use StringTokenizer for .NET compatibility
+//            val tokens = new StringTokenizer(allParms, ",", false);
+//            while (tokens.hasMoreTokens()) {
+//                parmList.add(tokens.nextToken());
+//            }
+//        }
+//        return actionIdentifier(className, name, Can.ofCollection(parmList));
+//    }
 
     // -- HELPER
+    
+    private static Can<String> classNamesOf(final Class<?>[] parameterClasses) {
+        return Can.ofArray(parameterClasses)
+        .map(Class::getName);
+    }
     
     private static final char SPACE = ' ';
     
