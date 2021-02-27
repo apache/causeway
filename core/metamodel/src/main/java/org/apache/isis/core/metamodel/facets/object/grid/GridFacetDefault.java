@@ -37,6 +37,7 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
+import lombok.NonNull;
 import lombok.val;
 
 public class GridFacetDefault
@@ -113,13 +114,13 @@ implements GridFacet {
         return layoutFacetLazy.get()!=null;
     }
 
-    private Grid load(final @Nullable String layoutName) {
+    private Grid load(final @NonNull String layoutName) {
         
         val domainClass = getSpecification().getCorrespondingClass();
 
         val grid = Optional.ofNullable(
                 // loads from object's XML if available
-                gridService.load(domainClass, layoutName)) 
+                gridService.load(domainClass, _Strings.emptyToNull(layoutName))) 
                 // loads from default-XML if available
                 .orElseGet(()->gridService.defaultGridFor(domainClass)); 
         return gridService.normalize(grid);

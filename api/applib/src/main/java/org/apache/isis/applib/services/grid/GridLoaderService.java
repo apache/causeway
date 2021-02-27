@@ -18,6 +18,8 @@
  */
 package org.apache.isis.applib.services.grid;
 
+import javax.annotation.Nullable;
+
 import org.apache.isis.applib.layout.grid.Grid;
 
 /**
@@ -60,7 +62,7 @@ public interface GridLoaderService {
      * Returns a new instance of a {@link Grid} for the specified domain class, eg from a
      * <code>layout.xml</code> file, else <code>null</code>.
      */
-    default Grid load(final Class<?> domainClass) {
+    default Grid load(Class<?> domainClass) {
         return load(domainClass, null);
     }
 
@@ -76,7 +78,7 @@ public interface GridLoaderService {
      * </p>
      */
     Grid load(
-            final Class<?> domainClass,
-            String layout);
+            Class<?> domainClass,
+            @Nullable String layout);
 
 }
