@@ -115,7 +115,11 @@ public class Identifier implements Comparable<Identifier> {
      */
     @Getter private final String memberNameAndParameterClassNamesIdentityString;
 
-    @Getter private final String classAndMemberNameIdentityString;
+    /**
+     * Context to be used for i18n translation.
+     * @see TranslationService
+     */
+    @Getter private final String translationContext;
     
     /**
      * Immutable string representation {@link #toString()}.
@@ -140,7 +144,7 @@ public class Identifier implements Comparable<Identifier> {
                         ? "(" + parameterClassNames.stream().collect(Collectors.joining(",")) + ")" 
                         : "");
         
-        this.classAndMemberNameIdentityString = 
+        this.translationContext = 
                 className + "#" + memberName + (type.isAction() ? "()" : "");
 
         this.fullIdentityString = _Strings.isEmpty(memberName) 

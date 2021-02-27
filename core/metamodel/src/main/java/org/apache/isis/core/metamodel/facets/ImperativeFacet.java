@@ -144,12 +144,12 @@ public interface ImperativeFacet extends Facet {
                     if(intentToReturn == null) {
                         intentToReturn = intent;
                     } else if(intentToReturn != intent) {
-                        throw new IllegalArgumentException(member.getIdentifier().getClassAndMemberNameIdentityString() +  ": more than one ImperativeFacet for method " + method.getName() + " , with inconsistent intents: " + imperativeFacets.toString());
+                        throw new IllegalArgumentException(member.getIdentifier().toString() +  ": more than one ImperativeFacet for method " + method.getName() + " , with inconsistent intents: " + imperativeFacets.toString());
                     }
                 }
                 return intentToReturn;
             }
-            throw new IllegalArgumentException(member.getIdentifier().getClassAndMemberNameIdentityString() +  ": unable to determine intent of " + method.getName());
+            throw new IllegalArgumentException(member.getIdentifier().toString() +  ": unable to determine intent of " + method.getName());
         }
 
         public static void appendAttributesTo(ImperativeFacet facet, final Map<String, Object> attributeMap) {
