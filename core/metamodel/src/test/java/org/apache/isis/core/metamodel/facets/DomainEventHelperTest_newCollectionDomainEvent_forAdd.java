@@ -29,6 +29,7 @@ import static org.junit.Assert.assertSame;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.events.domain.AbstractDomainEvent;
 import org.apache.isis.applib.events.domain.CollectionDomainEvent;
+import org.apache.isis.applib.id.TypeIdentifier;
 
 public class DomainEventHelperTest_newCollectionDomainEvent_forAdd {
 
@@ -43,7 +44,8 @@ public class DomainEventHelperTest_newCollectionDomainEvent_forAdd {
     public void defaultEventType() throws Exception {
         final SomeDomainObject sdo = new SomeDomainObject();
         final SomeReferencedObject other = new SomeReferencedObject();
-        final Identifier identifier = Identifier.propertyOrCollectionIdentifier(SomeDomainObject.class, "references");
+        final Identifier identifier = Identifier.propertyOrCollectionIdentifier(
+                TypeIdentifier.fqcn(SomeDomainObject.class), "references");
 
         final CollectionDomainEvent<Object, Object> ev = Utils.domainEventHelper().newCollectionDomainEvent(
                 CollectionDomainEvent.Default.class, null, identifier, sdo, CollectionDomainEvent.Of.ADD_TO, other);
@@ -57,7 +59,8 @@ public class DomainEventHelperTest_newCollectionDomainEvent_forAdd {
     public void collectionAddedToDefaultEventType() throws Exception {
         final SomeDomainObject sdo = new SomeDomainObject();
         final SomeReferencedObject other = new SomeReferencedObject();
-        final Identifier identifier = Identifier.propertyOrCollectionIdentifier(SomeDomainObject.class, "references");
+        final Identifier identifier = Identifier.propertyOrCollectionIdentifier(
+                TypeIdentifier.fqcn(SomeDomainObject.class), "references");
 
         final CollectionDomainEvent<Object, Object> ev = Utils.domainEventHelper().newCollectionDomainEvent(
                 CollectionDomainEvent.Default.class, AbstractDomainEvent.Phase.EXECUTED, identifier, sdo, CollectionDomainEvent.Of.ADD_TO, other);
@@ -71,7 +74,8 @@ public class DomainEventHelperTest_newCollectionDomainEvent_forAdd {
     public void customEventType() throws Exception {
         final SomeDomainObject sdo = new SomeDomainObject();
         final SomeReferencedObject other = new SomeReferencedObject();
-        final Identifier identifier = Identifier.propertyOrCollectionIdentifier(SomeDomainObject.class, "references");
+        final Identifier identifier = Identifier.propertyOrCollectionIdentifier(
+                TypeIdentifier.fqcn(SomeDomainObject.class), "references");
 
         final CollectionDomainEvent<SomeDomainObject, SomeReferencedObject> ev = Utils.domainEventHelper().newCollectionDomainEvent(
                 SomeDomainObjectCollectionDomainEvent.class, AbstractDomainEvent.Phase.EXECUTED, identifier, sdo, CollectionDomainEvent.Of.ADD_TO, other);

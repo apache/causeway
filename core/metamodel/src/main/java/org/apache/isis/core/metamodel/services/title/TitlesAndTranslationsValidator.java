@@ -19,6 +19,7 @@
 package org.apache.isis.core.metamodel.services.title;
 
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.id.TypeIdentifier;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.title.TitleService;
 import org.apache.isis.commons.internal.base._Blackhole;
@@ -51,16 +52,19 @@ public class TitlesAndTranslationsValidator extends MetaModelValidatorAbstract {
         val serviceRegistry = super.getMetaModelContext().getServiceRegistry();
         val specificationLoader = super.getMetaModelContext().getSpecificationLoader();
         val titleService = serviceRegistry.lookupServiceElseFail(TitleService.class);
+        
 
         serviceRegistry.streamRegisteredBeans()
         .forEach(managedBeanAdapter->{
 
             val serviceInstanceIfAny = managedBeanAdapter.getInstance().getFirst();
             val domainService = serviceInstanceIfAny.orElse(null);
+            val objectType = managedBeanAdapter.getId();
             
             if(domainService == null) {
                 
-                val deficiencyOrigin = Identifier.classIdentifier(managedBeanAdapter.getBeanClass());
+                val deficiencyOrigin = Identifier.classIdentifier(
+                        TypeIdentifier.eager(managedBeanAdapter.getBeanClass(), objectType));
                 val facetHolder = specificationLoader.loadSpecification(managedBeanAdapter.getBeanClass());
                 
                 super.onFailure(
@@ -80,7 +84,8 @@ public class TitlesAndTranslationsValidator extends MetaModelValidatorAbstract {
 
                 e.printStackTrace();
                 
-                val deficiencyOrigin = Identifier.classIdentifier(managedBeanAdapter.getBeanClass());
+                val deficiencyOrigin = Identifier.classIdentifier(
+                        TypeIdentifier.eager(managedBeanAdapter.getBeanClass(), objectType));
                 val facetHolder = specificationLoader.loadSpecification(managedBeanAdapter.getBeanClass());
 
                 super.onFailure(
@@ -116,7 +121,8 @@ public class TitlesAndTranslationsValidator extends MetaModelValidatorAbstract {
 
                     } catch (Exception e) {
 
-                        val deficiencyOrigin = Identifier.classIdentifier(correspondingClass);
+                        val deficiencyOrigin = Identifier.classIdentifier(
+                                TypeIdentifier.eager(correspondingClass, objSpec.getSpecId().asString()));
                         val facetHolder = objSpec;
 
                         super.onFailure(
@@ -137,8 +143,8 @@ public class TitlesAndTranslationsValidator extends MetaModelValidatorAbstract {
         val specificationLoader = super.getMetaModelContext().getSpecificationLoader();
         val translationService = serviceRegistry.lookupServiceElseFail(TranslationService.class);
         
-        // as used by the Wicket UI
-        final String context = "org.apache.isis.core.runtime.system.session.IsisInteractionFactory";
+        // as used by the Wicket UI?
+        final String context = "org.apache.isis.core.interaction.session.InteractionFactory";
         final MessageRegistry messageRegistry = new MessageRegistry();
         for (String message : messageRegistry.listMessages()) {
 
@@ -149,8 +155,9 @@ public class TitlesAndTranslationsValidator extends MetaModelValidatorAbstract {
 
             } catch (Exception e) {
 
-                val deficiencyOrigin = Identifier.classIdentifier(MessageRegistry.class);
                 val facetHolder = specificationLoader.loadSpecification(MessageRegistry.class);
+                val deficiencyOrigin = Identifier.classIdentifier(
+                        TypeIdentifier.eager(MessageRegistry.class, facetHolder.getSpecId().asString()));
 
                 super.onFailure(
                         facetHolder, 

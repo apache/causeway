@@ -27,6 +27,7 @@ import java.util.Set;
 import java.util.stream.Stream;
 
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.id.TypeIdentifier;
 import org.apache.isis.applib.services.metamodel.BeanSort;
 import org.apache.isis.commons.collections.ImmutableEnumSet;
 import org.apache.isis.commons.internal.collections._Lists;
@@ -55,7 +56,6 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
 
     private ObjectAction action;
     public List<ObjectAssociation> fields = _Lists.newArrayList();
-    private final String name;
     private Set<ObjectSpecification> subclasses = Collections.emptySet();
     private String title;
     /**
@@ -64,10 +64,8 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
     private ObjectSpecId specId;
 
     private ObjectSpecification elementSpecification;
-
-    public ObjectSpecificationStub(final Class<?> type) {
-        this(type.getName());
-    }
+    private final Class<?> correspondingClass;
+    private final String name;
 
     @Override
     public Optional<? extends ObjectMember> getMember(final String memberId) {
@@ -84,16 +82,13 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
 
     @Override
     public Class<?> getCorrespondingClass() {
-        try {
-            return Class.forName(name);
-        } catch (final ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
+        return correspondingClass;
     }
 
-    public ObjectSpecificationStub(final String name) {
-        this.name = name;
+    public ObjectSpecificationStub(final Class<?> correspondingClass) {
+        this.correspondingClass = correspondingClass;
         title = "";
+        name = correspondingClass.getCanonicalName();
     }
 
     @Override
@@ -262,7 +257,7 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
 
     @Override
     public Identifier getIdentifier() {
-        return Identifier.classIdentifier(name);
+        return Identifier.classIdentifier(TypeIdentifier.fqcn(correspondingClass));
     }
 
     @Override

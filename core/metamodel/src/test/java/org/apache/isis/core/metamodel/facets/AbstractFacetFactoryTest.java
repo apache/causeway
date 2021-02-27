@@ -26,6 +26,7 @@ import org.jmock.Expectations;
 import org.junit.Rule;
 
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.id.TypeIdentifier;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.commons.collections.ImmutableEnumSet;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
@@ -93,7 +94,7 @@ public abstract class AbstractFacetFactoryTest extends TestCase {
         // PRODUCTION
 
         facetHolder = new IdentifiedHolderImpl(
-                Identifier.propertyOrCollectionIdentifier(Customer.class, "firstName"));
+                Identifier.propertyOrCollectionIdentifier(TypeIdentifier.fqcn(Customer.class), "firstName"));
         facetedMethod = FacetedMethod.createForProperty(Customer.class, "firstName");
         facetedMethodParameter = new FacetedMethodParameter(
                 FeatureType.ACTION_PARAMETER_SCALAR, facetedMethod.getOwningType(), facetedMethod.getMethod(), String.class

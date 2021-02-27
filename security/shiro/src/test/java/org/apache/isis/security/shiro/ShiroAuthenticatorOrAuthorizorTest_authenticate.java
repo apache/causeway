@@ -99,18 +99,23 @@ public class ShiroAuthenticatorOrAuthorizorTest_authenticate {
         assertThat(authentication.getUserName(), is("lonestarr"));
         assertThat(authentication.getValidationCode(), is("test code"));
 
-        Identifier changeAddressIdentifier = Identifier.actionIdentifier("com.mycompany.myapp.Customer", "changeAddress", String.class, String.class);
+        Identifier changeAddressIdentifier = Identifier.actionIdentifier(
+                TypeIdentifierTestFactory.customer(), "changeAddress", String.class, String.class);
         assertThat(authorizor.isVisible(authentication, changeAddressIdentifier), is(true));
 
-        Identifier changeEmailIdentifier = Identifier.actionIdentifier("com.mycompany.myapp.Customer", "changeEmail", String.class);
+        Identifier changeEmailIdentifier = Identifier.actionIdentifier(
+                TypeIdentifierTestFactory.customer(), "changeEmail", String.class);
         assertThat(authorizor.isVisible(authentication, changeEmailIdentifier), is(true));
 
-        Identifier submitOrderIdentifier = Identifier.actionIdentifier("com.mycompany.myapp.Order", "submit");
+        Identifier submitOrderIdentifier = Identifier.actionIdentifier(
+                TypeIdentifierTestFactory.order(), "submit");
         assertThat(authorizor.isVisible(authentication, submitOrderIdentifier), is(true));
 
-        Identifier cancelOrderIdentifier = Identifier.actionIdentifier("com.mycompany.myapp.Order", "cancel");
+        Identifier cancelOrderIdentifier = Identifier.actionIdentifier(
+                TypeIdentifierTestFactory.order(), "cancel");
         assertThat(authorizor.isVisible(authentication, cancelOrderIdentifier), is(false));
     }
 
+    
 
 }

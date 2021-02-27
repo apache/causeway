@@ -42,9 +42,9 @@ import lombok.val;
 @SuppressWarnings("unused")
 public class ActionAnnotationFacetFactoryTest_ActionInvocation extends AbstractFacetFactoryTest {
 
-    private final ObjectSpecification voidSpec = new ObjectSpecificationStub("VOID");
-    private final ObjectSpecification stringSpec = new ObjectSpecificationStub("java.lang.String");
-    private final ObjectSpecification customerSpec = new ObjectSpecificationStub("Customer");
+    private final ObjectSpecification voidSpec = new ObjectSpecificationStub(void.class);
+    private final ObjectSpecification stringSpec = new ObjectSpecificationStub(java.lang.String.class);
+    private final ObjectSpecification customerSpec = new ObjectSpecificationStub(Customer.class);
     private ActionAnnotationFacetFactory facetFactory;
 
     private void processInvocation(

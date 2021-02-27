@@ -189,7 +189,7 @@ public class JdoVersionAnnotationFacetFactoryTest_refineMetaModel {
                 
                 oneOf(mockChildType).getIdentifier();
                 inSequence(sequence);
-                will(returnValue(Identifier.classIdentifier("mocked")));
+                will(returnValue(Identifier.classIdentifier(TypeIdentifierTestFactory.customer())));
 
                 oneOf(mockChildType).getFullIdentifier();
                 inSequence(sequence);
@@ -252,7 +252,7 @@ public class JdoVersionAnnotationFacetFactoryTest_refineMetaModel {
                 
                 oneOf(mockChildType).getIdentifier();
                 inSequence(sequence);
-                will(returnValue(Identifier.classIdentifier("mocked")));
+                will(returnValue(Identifier.classIdentifier(TypeIdentifierTestFactory.customer())));
 
                 oneOf(mockChildType).getFullIdentifier();
                 inSequence(sequence);

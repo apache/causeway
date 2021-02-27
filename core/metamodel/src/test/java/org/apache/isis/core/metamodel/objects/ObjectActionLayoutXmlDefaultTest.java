@@ -37,6 +37,7 @@ import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacetAbstract;
+import org.apache.isis.core.metamodel.id.TypeIdentifierTestFactory;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.specimpl.ObjectActionDefault;
 import org.apache.isis.core.security.authentication.AuthenticationContext;
@@ -65,7 +66,7 @@ public class ObjectActionLayoutXmlDefaultTest {
         context.checking(new Expectations() {
             {
                 oneOf(mockFacetedMethod).getIdentifier();
-                will(returnValue(Identifier.actionIdentifier("Customer", "reduceheadcount")));
+                will(returnValue(Identifier.actionIdentifier(TypeIdentifierTestFactory.newCustomer(), "reduceheadcount")));
             }
         });
 
