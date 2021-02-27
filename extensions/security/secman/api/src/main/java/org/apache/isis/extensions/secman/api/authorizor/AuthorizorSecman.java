@@ -51,7 +51,7 @@ public class AuthorizorSecman implements Authorizor {
         .findByUsername(authentication.getUserName())
         .map(ApplicationUser::getPermissionSet)        
         .map(permissionSet->permissionSet.grants(
-                ApplicationFeatureId.forIdentifier(identifier), 
+                ApplicationFeatureId.fromIdentifier(identifier), 
                 ApplicationPermissionMode.VIEWING))
         .orElse(false);
     }
@@ -62,10 +62,9 @@ public class AuthorizorSecman implements Authorizor {
         .findByUsername(authentication.getUserName())
         .map(ApplicationUser::getPermissionSet)
         .map(permissionSet->permissionSet.grants(
-                ApplicationFeatureId.forIdentifier(identifier), 
+                ApplicationFeatureId.fromIdentifier(identifier), 
                 ApplicationPermissionMode.CHANGING))
         .orElse(false);
     }
-    
 
 }

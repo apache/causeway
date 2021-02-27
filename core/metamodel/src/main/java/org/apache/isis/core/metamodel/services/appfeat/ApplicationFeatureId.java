@@ -44,6 +44,7 @@ import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 
 import lombok.NonNull;
+import lombok.val;
 
 /**
  * Value type representing a package, class or member.
@@ -67,9 +68,18 @@ implements
 
     // -- FACTORY METHODS
 
-    public static ApplicationFeatureId forIdentifier(Identifier identifier) {
-        // TODO Auto-generated method stub
-        return null;
+    public static ApplicationFeatureId fromIdentifier(final @NonNull Identifier identifier) {
+        
+        val logicalTypeName = identifier.getTypeIdentifier().getLogicalTypeName();
+        
+        if(identifier.getType().isClass()) {
+            return newClass(logicalTypeName); 
+        }
+        if(identifier.getType().isPropertyOrCollection()) {
+            return newMember(logicalTypeName, identifier.getMemberName());
+        }
+        // its an action
+        return newMember(logicalTypeName, identifier.getMemberNameAndParameterClassNamesIdentityString());
     }
     
     public static ApplicationFeatureId newFeature(
