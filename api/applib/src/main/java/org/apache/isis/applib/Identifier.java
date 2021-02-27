@@ -22,6 +22,7 @@ package org.apache.isis.applib;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import org.apache.isis.applib.id.TypeIdentifier;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Strings;
@@ -45,53 +46,43 @@ public class Identifier implements Comparable<Identifier> {
 
     // -- FACTORY METHODS
 
-    public static Identifier classIdentifier(final Class<?> cls) {
-        return classIdentifier(cls.getName());
-    }
-
-    public static Identifier classIdentifier(final String className) {
-        return new Identifier(className, "", Can.empty(), Type.CLASS);
+    public static Identifier classIdentifier(final TypeIdentifier typeIdentifier) {
+        return new Identifier(typeIdentifier, "", Can.empty(), Type.CLASS);
     }
 
     public static Identifier propertyOrCollectionIdentifier(
-            final Class<?> declaringClass, 
+            final TypeIdentifier typeIdentifier,
             final String propertyOrCollectionName) {
-        return propertyOrCollectionIdentifier(declaringClass.getCanonicalName(), propertyOrCollectionName);
-    }
-
-    public static Identifier propertyOrCollectionIdentifier(
-            final String declaringClassName, 
-            final String propertyOrCollectionName) {
-        return new Identifier(
-                declaringClassName, propertyOrCollectionName, Can.empty(), Type.PROPERTY_OR_COLLECTION);
+        return new Identifier(typeIdentifier, propertyOrCollectionName, Can.empty(), Type.PROPERTY_OR_COLLECTION);
     }
 
     public static Identifier actionIdentifier(
-            final Class<?> declaringClass, 
+            final TypeIdentifier typeIdentifier,
             final String actionName, 
             final Class<?>... parameterClasses) {
-        return actionIdentifier(declaringClass.getCanonicalName(), actionName, classNamesOf(parameterClasses));
+        return actionIdentifier(typeIdentifier, actionName, classNamesOf(parameterClasses));
     }
 
     public static Identifier actionIdentifier(
-            final String declaringClassName, 
-            final String actionName, 
-            final Class<?>... parameterClasses) {
-        return actionIdentifier(declaringClassName, actionName, classNamesOf(parameterClasses));
-    }
-
-    public static Identifier actionIdentifier(
-            final String declaringClassName, 
+            final TypeIdentifier typeIdentifier,
             final String actionName, 
             final Can<String> parameterClassNames) {
-        return new Identifier(declaringClassName, actionName, parameterClassNames, Type.ACTION);
+        return new Identifier(typeIdentifier, actionName, parameterClassNames, Type.ACTION);
     }
 
-    // -- INSTANCE VARIABLES
+    // -- INSTANCE FIELDS
 
+    /**
+     * Unique alias for className. A logical name.
+     */
+    @Getter private final TypeIdentifier typeIdentifier;
+    
     @Getter private final String className;
+    
     @Getter private final String memberName;
+    
     private final Can<String> parameterClassNames;
+    
     @Getter private final Type type;
     
     /**
@@ -113,12 +104,13 @@ public class Identifier implements Comparable<Identifier> {
     // -- CONSTRUCTOR
 
     private Identifier(
-            final String className, 
+            final TypeIdentifier typeIdentifier,
             final String memberName, 
             final Can<String> parameterClassNames, 
             final Type type) {
         
-        this.className = className;
+        this.typeIdentifier = typeIdentifier;
+        this.className = typeIdentifier.getClassName();
         this.memberName = memberName;
         this.parameterClassNames = parameterClassNames;
         this.type = type;
@@ -189,39 +181,6 @@ public class Identifier implements Comparable<Identifier> {
     public String toString() {
         return fullIdentityString;
     }
-    
-    // -- PARSING
-
-//    public static Identifier parse(final String fullIdentityString) {
-//        if (fullIdentityString == null) {
-//            throw new IllegalArgumentException("expected: non-null identity string");
-//        }
-//
-//        final int indexOfHash = fullIdentityString.indexOf("#");
-//        final int indexOfOpenBracket = fullIdentityString.indexOf("(");
-//        final int indexOfCloseBracket = fullIdentityString.indexOf(")");
-//        val className = fullIdentityString.substring(0, indexOfHash == -1 ? fullIdentityString.length() : indexOfHash);
-//        if (indexOfHash == -1 || indexOfHash == (fullIdentityString.length() - 1)) {
-//            return classIdentifier(className);
-//        }
-//        String name = null;
-//        if (indexOfOpenBracket == -1) {
-//            name = fullIdentityString.substring(indexOfHash + 1);
-//            return propertyOrCollectionIdentifier(className, name);
-//        }
-//        name = fullIdentityString.substring(indexOfHash + 1, indexOfOpenBracket);
-//        final String allParms = fullIdentityString.substring(indexOfOpenBracket + 1, indexOfCloseBracket).trim();
-//        
-//        final List<String> parmList = new ArrayList<String>();
-//        if (allParms.length() > 0) {
-//            // use StringTokenizer for .NET compatibility
-//            val tokens = new StringTokenizer(allParms, ",", false);
-//            while (tokens.hasMoreTokens()) {
-//                parmList.add(tokens.nextToken());
-//            }
-//        }
-//        return actionIdentifier(className, name, Can.ofCollection(parmList));
-//    }
 
     // -- HELPER
     

@@ -33,6 +33,7 @@ import java.util.stream.Stream;
 import javax.enterprise.inject.Vetoed;
 
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.id.TypeIdentifier;
 import org.apache.isis.applib.services.metamodel.BeanSort;
 import org.apache.isis.commons.collections.ImmutableEnumSet;
 import org.apache.isis.commons.internal.base._Lazy;
@@ -185,7 +186,7 @@ implements ObjectSpecification {
     private final boolean isAbstract;
 
     // derived lazily, cached since immutable
-    protected ObjectSpecId specId;
+    private _Lazy<ObjectSpecId> specIdLazy = _Lazy.threadSafe(this::lookupSpecId);
 
     private ObjectSpecification superclassSpec;
 
@@ -212,7 +213,10 @@ implements ObjectSpecification {
 
         this.isAbstract = ClassExtensions.isAbstract(introspectedClass);
 
-        this.identifier = Identifier.classIdentifier(introspectedClass);
+        this.identifier = Identifier.classIdentifier(
+                TypeIdentifier.lazy(
+                        introspectedClass,
+                        ()->specIdLazy.get().asString()));
 
         this.facetProcessor = facetProcessor;
         this.postProcessor = postProcessor;
@@ -226,14 +230,15 @@ implements ObjectSpecification {
 
     @Override
     public ObjectSpecId getSpecId() {
-        if(specId == null) {
-            val objectSpecIdFacet = getFacet(ObjectSpecIdFacet.class);
-            if(objectSpecIdFacet == null) {
-                throw new IllegalStateException("could not find an ObjectSpecIdFacet for " + this.getFullIdentifier());
-            }
-            specId = objectSpecIdFacet.value();
+        return specIdLazy.get();
+    }
+        
+    private ObjectSpecId lookupSpecId() {
+        val objectSpecIdFacet = getFacet(ObjectSpecIdFacet.class);
+        if(objectSpecIdFacet == null) {
+            throw new IllegalStateException("could not find an ObjectSpecIdFacet for " + this.getFullIdentifier());
         }
-        return specId;
+        return objectSpecIdFacet.value();
     }
 
     /**

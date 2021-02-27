@@ -20,6 +20,7 @@ package org.apache.isis.core.metamodel.specloader.specimpl;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.applib.id.TypeIdentifier;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -57,7 +58,7 @@ public class OneToManyAssociationMixedIn extends OneToManyAssociationDefault imp
     /**
      * The domain object type being mixed in to (being supplemented).
      */
-    private final ObjectSpecification mixedInType;
+    private final ObjectSpecification mixeeSpec;
 
 
     /**
@@ -85,7 +86,7 @@ public class OneToManyAssociationMixedIn extends OneToManyAssociationDefault imp
 
     public OneToManyAssociationMixedIn(
             final ObjectActionDefault mixinAction,
-            final ObjectSpecification mixedInType,
+            final ObjectSpecification mixeeSpec,
             final Class<?> mixinType,
             final String mixinMethodName) {
 
@@ -93,7 +94,7 @@ public class OneToManyAssociationMixedIn extends OneToManyAssociationDefault imp
 
         this.mixinType = mixinType;
         this.mixinAction = mixinAction;
-        this.mixedInType = mixedInType;
+        this.mixeeSpec = mixeeSpec;
 
         //
         // ensure the mixedIn collection cannot be modified, and derive its TypeOfFaccet
@@ -128,7 +129,9 @@ public class OneToManyAssociationMixedIn extends OneToManyAssociationDefault imp
         val memberParameterNames = mixinIdentifier.getMemberParameterClassNames();
 
         identifier = Identifier.actionIdentifier(
-                mixedInType.getCorrespondingClass().getName(), 
+                TypeIdentifier.eager(
+                        mixeeSpec.getCorrespondingClass(), 
+                        mixeeSpec.getSpecId().asString()), 
                 getId(), 
                 memberParameterNames);
     }
@@ -176,7 +179,7 @@ public class OneToManyAssociationMixedIn extends OneToManyAssociationDefault imp
 
     @Override
     public ObjectSpecification getOnType() {
-        return mixedInType;
+        return mixeeSpec;
     }
 
     @Override

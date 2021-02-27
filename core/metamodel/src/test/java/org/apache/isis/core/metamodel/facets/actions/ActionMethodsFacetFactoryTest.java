@@ -62,7 +62,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
     private JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(JUnitRuleMockery2.Mode.INTERFACES_AND_CLASSES);
 
-    private final ObjectSpecification voidSpec = new ObjectSpecificationStub("VOID");
+    private final ObjectSpecification voidSpec = new ObjectSpecificationStub(void.class);
 //    private final ObjectSpecification stringSpec = new ObjectSpecificationStub("java.lang.String");
 //    private final ObjectSpecification customerSpec = new ObjectSpecificationStub("Customer");
 

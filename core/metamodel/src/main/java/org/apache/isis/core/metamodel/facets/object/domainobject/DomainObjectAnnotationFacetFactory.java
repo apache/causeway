@@ -39,6 +39,7 @@ import org.apache.isis.applib.events.lifecycle.ObjectPersistingEvent;
 import org.apache.isis.applib.events.lifecycle.ObjectRemovingEvent;
 import org.apache.isis.applib.events.lifecycle.ObjectUpdatedEvent;
 import org.apache.isis.applib.events.lifecycle.ObjectUpdatingEvent;
+import org.apache.isis.applib.id.TypeIdentifier;
 import org.apache.isis.commons.having.HasUniqueId;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.collections._Multimaps;
@@ -220,7 +221,7 @@ implements MetaModelRefiner, PostConstructMethodCache, ObjectSpecIdFacetFactory 
         }
         autoCompleteMethodInvalid.onFailure(
                 facetHolder,
-                Identifier.classIdentifier(cls),
+                Identifier.classIdentifier(TypeIdentifier.fqcn(cls)),
                 "%s annotation on %s specifies method '%s' that does not exist in repository '%s'",
                 annotationName, cls.getName(), methodName, repositoryClass.getName());
         return null;

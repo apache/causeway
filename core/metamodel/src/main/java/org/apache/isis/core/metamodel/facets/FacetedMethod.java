@@ -25,6 +25,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.id.TypeIdentifier;
 import org.apache.isis.commons.internal.collections._Collections;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.commons.StringExtensions;
@@ -34,6 +35,8 @@ import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.collparam.semantics.CollectionSemanticsFacet;
 import org.apache.isis.core.metamodel.facets.collparam.semantics.CollectionSemanticsFacetDefault;
+
+import lombok.val;
 
 /**
  * non-final only so it can be mocked if need be.
@@ -165,7 +168,12 @@ public class FacetedMethod extends TypedHolderDefault implements IdentifiedHolde
         super(featureType, type);
         this.owningType = declaringType;
         this.method = method;
-        this.identifier = featureType.identifierFor(declaringType, method);
+        
+        val typeIdentifier = TypeIdentifier.lazy(
+                declaringType,
+                ()->getSpecificationLoader().loadSpecification(declaringType).getSpecId().asString());
+        
+        this.identifier = featureType.identifierFor(typeIdentifier, method);
         this.parameters = parameters;
     }
 

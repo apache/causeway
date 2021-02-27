@@ -29,6 +29,7 @@ import org.junit.Before;
 import org.junit.Rule;
 
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.id.TypeIdentifier;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
@@ -116,7 +117,8 @@ public abstract class AbstractFacetFactoryJUnit4TestCase {
 
         }});
 
-        facetHolder = new AbstractFacetFactoryTest.IdentifiedHolderImpl(Identifier.propertyOrCollectionIdentifier(Customer.class, "firstName"));
+        facetHolder = new AbstractFacetFactoryTest.IdentifiedHolderImpl(
+                Identifier.propertyOrCollectionIdentifier(TypeIdentifier.fqcn(Customer.class), "firstName"));
         facetedMethod = FacetedMethod.createForProperty(AbstractFacetFactoryTest.Customer.class, "firstName");
         facetedMethodParameter = new FacetedMethodParameter(FeatureType.ACTION_PARAMETER_SCALAR, facetedMethod.getOwningType(), facetedMethod.getMethod(), String.class);
         

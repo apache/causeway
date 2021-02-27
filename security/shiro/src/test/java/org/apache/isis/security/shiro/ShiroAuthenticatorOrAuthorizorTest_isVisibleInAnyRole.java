@@ -85,11 +85,11 @@ public class ShiroAuthenticatorOrAuthorizorTest_isVisibleInAnyRole {
         Authentication authentication = authenticator.authenticate(ar, "test code");
 
         // when, then
-        Identifier changeAddressIdentifier = Identifier.actionIdentifier("com.mycompany.myapp.Customer", "changeAddress", String.class, String.class);
+        Identifier changeAddressIdentifier = Identifier.actionIdentifier(
+                TypeIdentifierTestFactory.customer(), "changeAddress", String.class, String.class);
         assertThat(authorizor.isVisible(authentication, changeAddressIdentifier), is(true));
 
     }
-
 
     @Test
     public void vetoingOverridden() throws Exception {
@@ -102,7 +102,8 @@ public class ShiroAuthenticatorOrAuthorizorTest_isVisibleInAnyRole {
         Authentication authentication = authenticator.authenticate(ar, "test code");
 
         // when, then
-        Identifier removeCustomerIdentifier = Identifier.actionIdentifier("com.mycompany.myapp.Customer", "remove");
+        Identifier removeCustomerIdentifier = Identifier.actionIdentifier(
+                TypeIdentifierTestFactory.customer(), "remove");
         assertThat(authorizor.isVisible(authentication, removeCustomerIdentifier), is(true));
     }
 
