@@ -50,7 +50,7 @@ extends FacetFactoryAbstract {
     public void process(final ProcessMethodContext processMethodContext) {
         final IdentifiedHolder holder = processMethodContext.getFacetHolder();
 
-        final String context = holder.getIdentifier().getClassAndMemberNameIdentityString();
+        final String context = holder.getIdentifier().getTranslationContext();
         translateName(holder, context);
         translateDescription(holder, context);
     }

@@ -71,7 +71,7 @@ implements MetaModelRefiner {
                             objectAction.getIdentifier(),
                             "%s: action is bookmarkable but action semantics are not explicitly indicated as being safe.  " +
                                     "Either add @Action(semantics=SemanticsOf.SAFE) or @Action(semantics=SemanticsOf.SAFE_AND_REQUEST_CACHEABLE), or remove @ActionLayout(bookmarking=...).",
-                            objectAction.getIdentifier().getClassAndMemberNameIdentityString());
+                            objectAction.getIdentifier().toString());
                 }
             });
 
