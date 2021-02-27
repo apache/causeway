@@ -18,8 +18,6 @@
  */
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
-import java.util.List;
-
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.commons.collections.Can;
@@ -127,9 +125,12 @@ public class OneToManyAssociationMixedIn extends OneToManyAssociationDefault imp
 
         // calculate the identifier
         final Identifier mixinIdentifier = mixinAction.getFacetedMethod().getIdentifier();
-        List<String> memberParameterNames = mixinIdentifier.getMemberParameterNames();
+        val memberParameterNames = mixinIdentifier.getMemberParameterClassNames();
 
-        identifier = Identifier.actionIdentifier(mixedInType.getCorrespondingClass().getName(), getId(), memberParameterNames);
+        identifier = Identifier.actionIdentifier(
+                mixedInType.getCorrespondingClass().getName(), 
+                getId(), 
+                memberParameterNames);
     }
 
     @Override

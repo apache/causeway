@@ -63,7 +63,7 @@ public class PropertyValidateFacetViaMethodFactory extends MethodPrefixBasedFace
         val facetHolder = processMethodContext.getFacetHolder();
         val translationService = getTranslationService();
         // sadness: same as in TranslationFactory
-        val translationContext = facetHolder.getIdentifier().toClassAndNameIdentityString();
+        val translationContext = facetHolder.getIdentifier().getClassAndMemberNameIdentityString();
         super.addFacet(
                 new PropertyValidateFacetViaMethod(
                         validateMethod, translationService, translationContext, facetHolder));

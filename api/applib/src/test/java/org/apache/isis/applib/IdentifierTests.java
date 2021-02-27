@@ -20,7 +20,6 @@
 package org.apache.isis.applib;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -29,6 +28,8 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
+
+import org.apache.isis.commons.collections.Can;
 
 public class IdentifierTests {
 
@@ -56,14 +57,16 @@ public class IdentifierTests {
     public void memberParameterNames() {
         final Class<?> domainClass = SomeDomainClass.class;
         identifier = Identifier.actionIdentifier(domainClass, "placeOrder", int.class, String.class);
-        assertThat(identifier.getMemberParameterNames(), is(Arrays.asList("int", "java.lang.String")));
+        assertThat(identifier.getMemberParameterClassNames(), is(Can.of("int", "java.lang.String")));
     }
 
     @Test
     public void paramsIdentityString() {
         final Class<?> domainClass = SomeDomainClass.class;
         identifier = Identifier.actionIdentifier(domainClass, "placeOrder", int.class, String.class, BigDecimal.class);
-        assertThat(identifier.toParmsIdentityString(), is("(int,java.lang.String,java.math.BigDecimal)"));
+        assertThat(
+                identifier.getFullIdentityString(), 
+                is("org.apache.isis.applib.SomeDomainClass#placeOrder(int,java.lang.String,java.math.BigDecimal)"));
     }
 
 }

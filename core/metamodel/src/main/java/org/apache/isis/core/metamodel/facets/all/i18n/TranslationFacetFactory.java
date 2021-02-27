@@ -40,7 +40,7 @@ extends FacetFactoryAbstract {
         final FacetHolder facetHolder = processClassContext.getFacetHolder();
         if(facetHolder instanceof IdentifiedHolder) {
             final IdentifiedHolder holder = (IdentifiedHolder) facetHolder;
-            final String context = holder.getIdentifier().toClassIdentityString();
+            final String context = holder.getIdentifier().getClassName();
             translateName(holder, context);
             translateDescription(holder, context);
         }
@@ -50,7 +50,7 @@ extends FacetFactoryAbstract {
     public void process(final ProcessMethodContext processMethodContext) {
         final IdentifiedHolder holder = processMethodContext.getFacetHolder();
 
-        final String context = holder.getIdentifier().toClassAndNameIdentityString();
+        final String context = holder.getIdentifier().getClassAndMemberNameIdentityString();
         translateName(holder, context);
         translateDescription(holder, context);
     }
@@ -59,7 +59,7 @@ extends FacetFactoryAbstract {
     public void processParams(final ProcessParameterContext processParameterContext) {
         final IdentifiedHolder holder = processParameterContext.getFacetHolder();
 
-        final String context = holder.getIdentifier().toFullIdentityString();
+        final String context = holder.getIdentifier().getFullIdentityString();
         translateName(holder, context);
         translateDescription(holder, context);
     }

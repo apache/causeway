@@ -294,10 +294,10 @@ implements FacetHolder {
                 .filter(action->{
                     final Identifier identifier = action.getIdentifier();
 
-                    if (id.equals(identifier.toNameParmsIdentityString())) {
+                    if (id.equals(identifier.getMemberNameAndParameterClassNamesIdentityString())) {
                         return true;
                     }
-                    if (id.equals(identifier.toNameIdentityString())) {
+                    if (id.equals(identifier.getMemberName())) {
                         return true;
                     }
                     return false;

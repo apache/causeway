@@ -176,7 +176,7 @@ public class PageParameterUtil {
     private static String determineActionId(final ObjectAction objectAction) {
         final Identifier identifier = objectAction.getIdentifier();
         if (identifier != null) {
-            return identifier.toNameParmsIdentityString();
+            return identifier.getMemberNameAndParameterClassNamesIdentityString();
         }
         // fallback (used for action sets)
         return objectAction.getId();

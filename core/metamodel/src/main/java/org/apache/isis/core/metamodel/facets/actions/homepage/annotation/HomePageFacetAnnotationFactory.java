@@ -105,12 +105,12 @@ implements MetaModelRefiner {
                     
                     final Set<String> homepageActionIdSet = actionsHavingHomePageFacet.values().stream()
                             .map(ObjectAction::getIdentifier)
-                            .map(Identifier::toClassAndNameIdentityString)
+                            .map(Identifier::getClassAndMemberNameIdentityString)
                             .collect(Collectors.toCollection(HashSet::new));
                     
                     for (val objectAction : actionsHavingHomePageFacet.values()) {
                         val actionIdentifier = objectAction.getIdentifier(); 
-                        val actionId = actionIdentifier.toClassAndNameIdentityString();
+                        val actionId = actionIdentifier.getClassAndMemberNameIdentityString();
                         val colission = homepageActionIdSet.stream()
                                 .filter(not(actionId::equals))
                                 .collect(Collectors.joining(", "));

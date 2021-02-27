@@ -69,7 +69,7 @@ public class DisabledObjectFacetViaMethodFactory extends MethodPrefixBasedFacetF
 
         val translationService = getTranslationService();
         // sadness: same logic as in I18nFacetFactory
-        val translationContext = ((IdentifiedHolder)facetHolder).getIdentifier().toClassIdentityString();
+        val translationContext = ((IdentifiedHolder)facetHolder).getIdentifier().getClassName();
         FacetUtil.addFacet(new DisabledObjectFacetViaMethod(method, translationService, translationContext, facetHolder));
 
         processClassContext.removeMethod(method);

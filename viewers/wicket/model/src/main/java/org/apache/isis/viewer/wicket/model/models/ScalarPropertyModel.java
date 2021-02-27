@@ -18,7 +18,6 @@
  */
 package org.apache.isis.viewer.wicket.model.models;
 
-import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.interactions.managed.InteractionVeto;
@@ -95,7 +94,7 @@ implements PropertyUiModel {
 
     @Override
     public String getIdentifier() {
-        return getMetaModel().getIdentifier().toNameIdentityString();
+        return getMetaModel().getIdentifier().getMemberName();
     }
     
     @Override

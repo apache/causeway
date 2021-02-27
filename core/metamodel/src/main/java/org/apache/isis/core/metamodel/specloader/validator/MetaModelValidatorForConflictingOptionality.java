@@ -38,7 +38,7 @@ public class MetaModelValidatorForConflictingOptionality extends MetaModelValida
         if(facet != null) {
             val holder = (IdentifiedHolder) facet.getFacetHolder();
             val identifier = holder.getIdentifier();
-            super.onFailure(holder, identifier, "%s : %s", message, identifier.toFullIdentityString());
+            super.onFailure(holder, identifier, "%s : %s", message, identifier.getFullIdentityString());
         }
         return facet;
     }

@@ -36,7 +36,7 @@ class ServiceAndAction {
 
     @Override
     public String toString() {
-        return serviceName + " ~ " + objectAction.getIdentifier().toFullIdentityString();
+        return serviceName + " ~ " + objectAction.getIdentifier().getFullIdentityString();
     }
 
 }

@@ -41,7 +41,7 @@ class MetaModelValidatorForDeprecatedMethodPrefix extends MetaModelValidatorForD
 
         final IdentifiedHolder identifiedHolder = (IdentifiedHolder) facet.getFacetHolder();
         final Identifier identifier = identifiedHolder.getIdentifier();
-        final String id = identifier.toFullIdentityString();
+        final String id = identifier.getFullIdentityString();
         return String.format(
                 "%s%s: method prefix '%s' is deprecated",
                 id,
