@@ -21,8 +21,8 @@ package org.apache.isis.core.metamodel.facets.object.disabled;
 
 import java.lang.reflect.Method;
 
-import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.Identifier.Type;
+import org.apache.isis.applib.id.Identifier;
+import org.apache.isis.applib.id.Identifier.Type;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;

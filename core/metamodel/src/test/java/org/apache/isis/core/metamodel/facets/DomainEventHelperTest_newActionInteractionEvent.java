@@ -26,8 +26,8 @@ import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertSame;
 
-import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.events.domain.ActionDomainEvent;
+import org.apache.isis.applib.id.Identifier;
 import org.apache.isis.applib.id.TypeIdentifier;
 
 import static junit.framework.Assert.assertEquals;

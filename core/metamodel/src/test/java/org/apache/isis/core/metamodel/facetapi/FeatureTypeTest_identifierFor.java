@@ -27,7 +27,7 @@ import org.junit.Test;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.id.Identifier;
 import org.apache.isis.applib.id.TypeIdentifier;
 
 public class FeatureTypeTest_identifierFor {

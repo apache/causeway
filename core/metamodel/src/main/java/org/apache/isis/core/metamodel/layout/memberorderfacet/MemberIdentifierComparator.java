@@ -22,7 +22,7 @@ package org.apache.isis.core.metamodel.layout.memberorderfacet;
 import java.io.Serializable;
 import java.util.Comparator;
 
-import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.id.Identifier;
 import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 

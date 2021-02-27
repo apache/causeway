@@ -25,12 +25,12 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.events.domain.AbstractDomainEvent;
 import org.apache.isis.applib.events.domain.ActionDomainEvent;
 import org.apache.isis.applib.events.domain.CollectionDomainEvent;
 import org.apache.isis.applib.events.domain.PropertyDomainEvent;
 import org.apache.isis.applib.exceptions.UnrecoverableException;
+import org.apache.isis.applib.id.Identifier;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.assertions._Assert;

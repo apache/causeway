@@ -26,7 +26,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Stream;
 
-import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.id.Identifier;
 import org.apache.isis.applib.id.TypeIdentifier;
 import org.apache.isis.applib.services.metamodel.BeanSort;
 import org.apache.isis.commons.collections.ImmutableEnumSet;

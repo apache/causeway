@@ -18,7 +18,7 @@
  */
 package org.apache.isis.core.metamodel.specloader.validator;
 
-import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.id.Identifier;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.core.metamodel.facets.FacetFactory;

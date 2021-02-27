@@ -19,7 +19,7 @@
 
 package org.apache.isis.core.security.authorization.standard;
 
-import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.id.Identifier;
 import org.apache.isis.core.security.authentication.Authentication;
 
 public interface Authorizor {

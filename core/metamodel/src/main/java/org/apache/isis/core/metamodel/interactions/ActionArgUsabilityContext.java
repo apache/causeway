@@ -19,9 +19,9 @@
 
 package org.apache.isis.core.metamodel.interactions;
 
-import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.events.ActionArgumentUsabilityEvent;
+import org.apache.isis.applib.id.Identifier;
 import org.apache.isis.applib.services.wrapper.events.ActionArgumentEvent;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.consent.InteractionContextType;

@@ -24,8 +24,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.Identifier.Type;
+import org.apache.isis.applib.id.Identifier;
+import org.apache.isis.applib.id.Identifier.Type;
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;

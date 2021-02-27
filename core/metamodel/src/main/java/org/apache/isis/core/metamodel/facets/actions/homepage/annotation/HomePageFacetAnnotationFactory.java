@@ -24,8 +24,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.HomePage;
+import org.apache.isis.applib.id.Identifier;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;

@@ -29,7 +29,7 @@
  * {@link org.apache.isis.applib.AbstractFactoryAndRepository repositories}.
  *
  * <p>
- * In addition, it contains a {@link org.apache.isis.applib.Identifier class}
+ * In addition, it contains a {@link org.apache.isis.applib.id.Identifier class}
  * that represents the identifier of an object or object member, used for
  * example in the <tt>events</tt> package as well as internally within the
  * framework.

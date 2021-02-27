@@ -18,8 +18,8 @@
  */
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
-import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.applib.id.Identifier;
 import org.apache.isis.applib.id.TypeIdentifier;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Strings;

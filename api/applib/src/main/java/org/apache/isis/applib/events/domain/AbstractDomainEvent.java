@@ -21,8 +21,8 @@ package org.apache.isis.applib.events.domain;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.events.EventObjectBase;
+import org.apache.isis.applib.id.Identifier;
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.applib.util.ToString;

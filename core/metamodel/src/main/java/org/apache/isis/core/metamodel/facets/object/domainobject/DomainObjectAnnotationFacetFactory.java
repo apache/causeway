@@ -26,7 +26,6 @@ import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 
-import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.events.domain.ActionDomainEvent;
@@ -39,6 +38,7 @@ import org.apache.isis.applib.events.lifecycle.ObjectPersistingEvent;
 import org.apache.isis.applib.events.lifecycle.ObjectRemovingEvent;
 import org.apache.isis.applib.events.lifecycle.ObjectUpdatedEvent;
 import org.apache.isis.applib.events.lifecycle.ObjectUpdatingEvent;
+import org.apache.isis.applib.id.Identifier;
 import org.apache.isis.applib.id.TypeIdentifier;
 import org.apache.isis.commons.having.HasUniqueId;
 import org.apache.isis.commons.internal.collections._Maps;

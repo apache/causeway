@@ -19,11 +19,11 @@
 package org.apache.isis.core.metamodel.facets.object;
 
 
-import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.RecreatableDomainObject;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.Nature;
+import org.apache.isis.applib.id.Identifier;
 import org.apache.isis.applib.id.TypeIdentifier;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;

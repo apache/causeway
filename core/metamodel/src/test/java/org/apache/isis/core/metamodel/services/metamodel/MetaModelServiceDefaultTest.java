@@ -40,7 +40,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.id.Identifier;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.metamodel.DomainMember;
 import org.apache.isis.applib.services.metamodel.DomainModel;
