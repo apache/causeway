@@ -93,23 +93,23 @@ public class ShiroAuthenticatorOrAuthorizorTest_authenticate {
         assertThat(authenticator.canAuthenticate(AuthenticationRequestPassword.class), is(true));
 
         AuthenticationRequest ar = new AuthenticationRequestPassword("lonestarr", "vespa");
-        Authentication isisAuthSession = authenticator.authenticate(ar, "test code");
+        Authentication authentication = authenticator.authenticate(ar, "test code");
 
-        assertThat(isisAuthSession, is(not(nullValue())));
-        assertThat(isisAuthSession.getUserName(), is("lonestarr"));
-        assertThat(isisAuthSession.getValidationCode(), is("test code"));
+        assertThat(authentication, is(not(nullValue())));
+        assertThat(authentication.getUserName(), is("lonestarr"));
+        assertThat(authentication.getValidationCode(), is("test code"));
 
         Identifier changeAddressIdentifier = Identifier.actionIdentifier("com.mycompany.myapp.Customer", "changeAddress", String.class, String.class);
-        assertThat(authorizor.isVisibleInAnyRole(changeAddressIdentifier), is(true));
+        assertThat(authorizor.isVisible(authentication, changeAddressIdentifier), is(true));
 
         Identifier changeEmailIdentifier = Identifier.actionIdentifier("com.mycompany.myapp.Customer", "changeEmail", String.class);
-        assertThat(authorizor.isVisibleInAnyRole(changeEmailIdentifier), is(true));
+        assertThat(authorizor.isVisible(authentication, changeEmailIdentifier), is(true));
 
         Identifier submitOrderIdentifier = Identifier.actionIdentifier("com.mycompany.myapp.Order", "submit");
-        assertThat(authorizor.isVisibleInAnyRole(submitOrderIdentifier), is(true));
+        assertThat(authorizor.isVisible(authentication, submitOrderIdentifier), is(true));
 
         Identifier cancelOrderIdentifier = Identifier.actionIdentifier("com.mycompany.myapp.Order", "cancel");
-        assertThat(authorizor.isVisibleInAnyRole(cancelOrderIdentifier), is(false));
+        assertThat(authorizor.isVisible(authentication, cancelOrderIdentifier), is(false));
     }
 
 

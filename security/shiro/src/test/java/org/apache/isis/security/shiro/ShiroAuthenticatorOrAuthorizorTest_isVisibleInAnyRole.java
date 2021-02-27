@@ -34,6 +34,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.config.IsisConfiguration;
+import org.apache.isis.core.security.authentication.Authentication;
 import org.apache.isis.core.security.authentication.AuthenticationRequest;
 import org.apache.isis.core.security.authentication.AuthenticationRequestPassword;
 import org.apache.isis.security.shiro.authentication.AuthenticatorShiro;
@@ -81,11 +82,11 @@ public class ShiroAuthenticatorOrAuthorizorTest_isVisibleInAnyRole {
         SecurityUtils.setSecurityManager(securityManager);
 
         AuthenticationRequest ar = new AuthenticationRequestPassword("darkhelmet", "ludicrousspeed");
-        authenticator.authenticate(ar, "test code");
+        Authentication authentication = authenticator.authenticate(ar, "test code");
 
         // when, then
         Identifier changeAddressIdentifier = Identifier.actionIdentifier("com.mycompany.myapp.Customer", "changeAddress", String.class, String.class);
-        assertThat(authorizor.isVisibleInAnyRole(changeAddressIdentifier), is(true));
+        assertThat(authorizor.isVisible(authentication, changeAddressIdentifier), is(true));
 
     }
 
@@ -98,11 +99,11 @@ public class ShiroAuthenticatorOrAuthorizorTest_isVisibleInAnyRole {
         SecurityUtils.setSecurityManager(securityManager);
 
         AuthenticationRequest ar = new AuthenticationRequestPassword("lonestarr", "vespa");
-        authenticator.authenticate(ar, "test code");
+        Authentication authentication = authenticator.authenticate(ar, "test code");
 
         // when, then
         Identifier removeCustomerIdentifier = Identifier.actionIdentifier("com.mycompany.myapp.Customer", "remove");
-        assertThat(authorizor.isVisibleInAnyRole(removeCustomerIdentifier), is(true));
+        assertThat(authorizor.isVisible(authentication, removeCustomerIdentifier), is(true));
     }
 
 

@@ -27,6 +27,7 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.core.security.authentication.Authentication;
 import org.apache.isis.core.security.authorization.standard.Authorizor;
 
 /**
@@ -39,22 +40,12 @@ import org.apache.isis.core.security.authorization.standard.Authorizor;
 public class AuthorizorBypass implements Authorizor {
 
     @Override
-    public boolean isUsableInRole(final String role, final Identifier identifier) {
+    public boolean isVisible(final Authentication authentication, final Identifier identifier) {
         return true;
     }
 
     @Override
-    public boolean isVisibleInRole(final String user, final Identifier identifier) {
-        return true;
-    }
-
-    @Override
-    public boolean isVisibleInAnyRole(Identifier identifier) {
-        return true;
-    }
-
-    @Override
-    public boolean isUsableInAnyRole(Identifier identifier) {
+    public boolean isUsable(final Authentication authentication, final Identifier identifier) {
         return true;
     }
 
