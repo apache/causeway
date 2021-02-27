@@ -34,7 +34,6 @@ import org.springframework.security.web.csrf.CsrfFilter;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
 import org.apache.isis.security.spring.authentication.AuthenticatorSpring;
-import org.apache.isis.security.spring.authorization.AuthorizorSpring;
 import org.apache.isis.security.spring.webmodule.WebModuleSpringSecurity;
 
 import lombok.extern.log4j.Log4j2;
@@ -51,7 +50,6 @@ import lombok.extern.log4j.Log4j2;
 
         // @Service's
         AuthenticatorSpring.class,
-        AuthorizorSpring.class,
         WebModuleSpringSecurity.class,
 
 })

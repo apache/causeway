@@ -30,6 +30,7 @@ import static java.util.Comparator.comparing;
 import static java.util.Comparator.naturalOrder;
 import static java.util.Comparator.nullsFirst;
 
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.Value;
 import org.apache.isis.applib.services.appfeat.ApplicationMemberType;
@@ -64,8 +65,13 @@ implements
     public static final ApplicationFeatureId PACKAGE_DEFAULT = 
             new ApplicationFeatureId(ApplicationFeatureType.PACKAGE, "default");
 
-    // -- factory methods
+    // -- FACTORY METHODS
 
+    public static ApplicationFeatureId forIdentifier(Identifier identifier) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+    
     public static ApplicationFeatureId newFeature(
             final ApplicationFeatureType featureType, 
             final String fullyQualifiedName) {
@@ -493,7 +499,6 @@ implements
     public ApplicationFeatureId withNamespace(final @NonNull String namespace) {
         return newFeature(namespace, this.getTypeSimpleName(), this.getMemberName()); 
     }
-
 
 
 }
