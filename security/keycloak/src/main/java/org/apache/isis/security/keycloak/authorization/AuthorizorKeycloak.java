@@ -27,6 +27,7 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.core.security.authentication.Authentication;
 import org.apache.isis.core.security.authorization.standard.Authorizor;
 
 /**
@@ -39,22 +40,12 @@ import org.apache.isis.core.security.authorization.standard.Authorizor;
 public class AuthorizorKeycloak implements Authorizor {
 
     @Override
-    public boolean isVisibleInRole(String role, Identifier identifier) {
-        return isVisibleInAnyRole(identifier);
-    }
-
-    @Override
-    public boolean isUsableInRole(String role, Identifier identifier) {
-        return isUsableInAnyRole(identifier);
-    }
-
-    @Override
-    public boolean isVisibleInAnyRole(Identifier identifier) {
+    public boolean isVisible(final Authentication authentication, Identifier identifier) {
         return isPermitted(identifier, "r");
     }
 
     @Override
-    public boolean isUsableInAnyRole(Identifier identifier) {
+    public boolean isUsable(final Authentication authentication, Identifier identifier) {
         return isPermitted(identifier, "w");
     }
 

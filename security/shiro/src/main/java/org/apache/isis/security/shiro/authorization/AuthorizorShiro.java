@@ -34,10 +34,12 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.commons.functional.Result;
+import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.security.authentication.Authentication;
 import org.apache.isis.core.security.authentication.standard.Authenticator;
 import org.apache.isis.core.security.authorization.standard.Authorizor;
 import org.apache.isis.security.shiro.context.ShiroSecurityContext;
@@ -64,16 +66,16 @@ public class AuthorizorShiro implements Authorizor {
     @Inject private SpecificationLoader specificationLoader;
 
     @Override
-    public boolean isVisibleInAnyRole(Identifier identifier) {
-        return isPermitted(identifier, "r");
+    public boolean isVisible(final Authentication authentication, final Identifier identifier) {
+        return isPermitted(authentication.getUserName(), identifier, "r");
     }
 
     @Override
-    public boolean isUsableInAnyRole(Identifier identifier) {
-        return isPermitted(identifier, "w");
+    public boolean isUsable(final Authentication authentication, final Identifier identifier) {
+        return isPermitted(authentication.getUserName(), identifier, "w");
     }
 
-    private boolean isPermitted(Identifier identifier, String qualifier) {
+    private boolean isPermitted(String userName, Identifier identifier, String qualifier) {
 
         RealmSecurityManager securityManager = getSecurityManager();
         if(securityManager == null) {
@@ -82,11 +84,11 @@ public class AuthorizorShiro implements Authorizor {
             return true;
         }
 
-        String permission = asPermissionsString(identifier) + ":" + qualifier;
-
-        Subject subject = SecurityUtils.getSubject();
-
+        final Subject subject = SecurityUtils.getSubject();
+        final String permission = asPermissionsString(identifier) + ":" + qualifier;
+        
         try {
+            _Assert.assertEquals(userName, subject.getPrincipal().toString());
             return subject.isPermitted(permission);
         } finally {
             IsisPermission.resetVetoedPermissions();
@@ -106,24 +108,6 @@ public class AuthorizorShiro implements Authorizor {
             className = fullyQualifiedLogicalTypeName;
         }
         return packageName + ":" + className + ":" + identifier.getMemberName();
-    }
-
-    /**
-     * Returns <tt>false</tt> because the checking across all roles is done in
-     * {@link #isVisibleInAnyRole(Identifier)}, which is always called prior to this.
-     */
-    @Override
-    public boolean isVisibleInRole(String role, Identifier identifier) {
-        return false;
-    }
-
-    /**
-     * Returns <tt>false</tt> because the checking across all roles is done in
-     * {@link #isUsableInAnyRole(Identifier)}, which is always called prior to this.
-     */
-    @Override
-    public boolean isUsableInRole(String role, Identifier identifier) {
-        return false;
     }
 
     // -- DEPS

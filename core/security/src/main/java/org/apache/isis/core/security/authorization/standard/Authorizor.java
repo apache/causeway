@@ -20,20 +20,11 @@
 package org.apache.isis.core.security.authorization.standard;
 
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.core.security.authentication.Authentication;
 
 public interface Authorizor {
 
-    boolean isVisibleInAnyRole(final Identifier identifier);
-    boolean isUsableInAnyRole(final Identifier identifier);
-
-    /**
-     * Checked for each of the user's roles.
-     */
-    boolean isVisibleInRole(final String role, final Identifier identifier);
-
-    /**
-     * Checked for each of the user's roles.
-     */
-    boolean isUsableInRole(final String role, final Identifier identifier);
+    boolean isVisible(Authentication authentication, Identifier identifier);
+    boolean isUsable(Authentication authentication, Identifier identifier);
 
 }

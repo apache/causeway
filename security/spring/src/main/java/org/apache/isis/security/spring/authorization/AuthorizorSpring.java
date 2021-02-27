@@ -19,6 +19,9 @@
 
 package org.apache.isis.security.spring.authorization;
 
+import java.util.function.Predicate;
+
+import javax.annotation.Nullable;
 import javax.inject.Named;
 
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -27,7 +30,10 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.core.security.authentication.Authentication;
 import org.apache.isis.core.security.authorization.standard.Authorizor;
+
+import lombok.NonNull;
 
 /**
  * @since 2.0 {@index}
@@ -39,23 +45,32 @@ import org.apache.isis.core.security.authorization.standard.Authorizor;
 public class AuthorizorSpring implements Authorizor {
 
     @Override
-    public boolean isUsableInRole(final String role, final Identifier identifier) {
-        return true;
+    public boolean isVisible(
+            final Authentication authentication, 
+            final Identifier identifier) {
+        // TODO ask SecMan to resolve this
+        return false;
     }
 
     @Override
-    public boolean isVisibleInRole(final String user, final Identifier identifier) {
-        return true;
+    public boolean isUsable(
+            final Authentication authentication, 
+            final Identifier identifier) {
+        // TODO ask SecMan to resolve this
+        return false;
     }
 
-    @Override
-    public boolean isVisibleInAnyRole(Identifier identifier) {
-        return true;
-    }
+    // -- HELPER
 
-    @Override
-    public boolean isUsableInAnyRole(Identifier identifier) {
-        return true;
-    }
+    //@Inject private UserService userService;
+//    private boolean anyMatchOnRoles(
+//            final @Nullable Authentication authentication, 
+//            final @NonNull Predicate<String> predicate) {
+//        if(authentication==null || authentication.getUser()==null) {
+//            return false;
+//        }
+//        return authentication.getUser().streamRoleNames()
+//                .anyMatch(predicate);
+//    }
 
 }
