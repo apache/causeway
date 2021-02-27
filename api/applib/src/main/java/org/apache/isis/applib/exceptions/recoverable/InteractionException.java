@@ -19,8 +19,8 @@
 
 package org.apache.isis.applib.exceptions.recoverable;
 
-import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.exceptions.RecoverableException;
+import org.apache.isis.applib.id.Identifier;
 import org.apache.isis.applib.services.wrapper.events.InteractionEvent;
 
 public abstract class InteractionException extends RecoverableException {

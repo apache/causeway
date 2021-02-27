@@ -19,8 +19,8 @@
 
 package org.apache.isis.applib.services.wrapper.events;
 
-import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.events.EventObjectBase;
+import org.apache.isis.applib.id.Identifier;
 import org.apache.isis.commons.collections.Can;
 
 /**

@@ -19,7 +19,7 @@
 
 package org.apache.isis.applib.services.wrapper.events;
 
-import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.id.Identifier;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 
 /**

@@ -18,7 +18,7 @@
  */
 package org.apache.isis.persistence.jdo.metamodel.facets.object.query;
 
-import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.id.Identifier;
 import org.apache.isis.applib.id.TypeIdentifier;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;

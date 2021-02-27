@@ -22,7 +22,7 @@ import java.util.stream.IntStream;
 
 import javax.annotation.Nullable;
 
-import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.id.Identifier;
 import org.apache.isis.commons.binding.Bindable;
 import org.apache.isis.commons.binding.Observable;
 import org.apache.isis.commons.collections.Can;

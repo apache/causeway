@@ -31,8 +31,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
-import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.applib.id.Identifier;
 import org.apache.isis.commons.functional.Result;
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.context._Context;

@@ -21,8 +21,8 @@ package org.apache.isis.core.metamodel.specloader.specimpl;
 
 import java.util.ArrayList;
 
-import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.exceptions.unrecoverable.DomainModelException;
+import org.apache.isis.applib.id.Identifier;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.commons.ClassExtensions;

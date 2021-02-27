@@ -25,7 +25,7 @@ import java.util.Optional;
 import org.jmock.Expectations;
 import org.junit.Rule;
 
-import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.id.Identifier;
 import org.apache.isis.applib.id.TypeIdentifier;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.commons.collections.ImmutableEnumSet;

@@ -17,12 +17,11 @@
  *  under the License.
  */
 
-package org.apache.isis.applib;
+package org.apache.isis.applib.id;
 
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import org.apache.isis.applib.id.TypeIdentifier;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Strings;
@@ -72,9 +71,6 @@ public class Identifier implements Comparable<Identifier> {
 
     // -- INSTANCE FIELDS
 
-    /**
-     * Unique alias for className. A logical name.
-     */
     @Getter private final TypeIdentifier typeIdentifier;
     
     @Getter private final String className;

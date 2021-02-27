@@ -25,7 +25,7 @@ import org.mockito.Mockito;
 
 import static org.mockito.Mockito.when;
 
-import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.id.Identifier;
 import org.apache.isis.applib.id.TypeIdentifier;
 import org.apache.isis.applib.services.i18n.Mode;
 import org.apache.isis.applib.services.i18n.TranslationService;

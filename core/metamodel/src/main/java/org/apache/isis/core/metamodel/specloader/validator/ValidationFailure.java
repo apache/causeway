@@ -24,7 +24,7 @@ import java.util.Objects;
 import static java.util.Comparator.naturalOrder;
 import static java.util.Comparator.nullsFirst;
 
-import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.id.Identifier;
 
 import lombok.NonNull;
 import lombok.Value;
