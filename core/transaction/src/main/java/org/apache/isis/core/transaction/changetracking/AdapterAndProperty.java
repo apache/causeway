@@ -61,7 +61,7 @@ final class AdapterAndProperty {
     }
 
     public String getMemberId() {
-        return property.getIdentifier().toClassAndNameIdentityString();
+        return property.getIdentifier().getClassAndMemberNameIdentityString();
     }
 
     Object getPropertyValue() {

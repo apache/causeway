@@ -171,13 +171,13 @@ implements MetaModelRefiner {
                                 association,
                                 association.getIdentifier(),
                                 "%s: incompatible usage of Isis' @Optional annotation and @javax.jdo.annotations.Column; use just @javax.jdo.annotations.Column(allowsNull=\"...\")",
-                                association.getIdentifier().toClassAndNameIdentityString());
+                                association.getIdentifier().getClassAndMemberNameIdentityString());
                     } else {
                         validator.onFailure(
                                 association,
                                 association.getIdentifier(),
                                 "%s: incompatible Isis' default of required/optional properties vs JDO; add @javax.jdo.annotations.Column(allowsNull=\"...\")",
-                                association.getIdentifier().toClassAndNameIdentityString());
+                                association.getIdentifier().getClassAndMemberNameIdentityString());
                     }
                 }
 
@@ -192,13 +192,13 @@ implements MetaModelRefiner {
                                 association,
                                 association.getIdentifier(),
                                 "%s: incompatible usage of Isis' @Optional annotation and @javax.jdo.annotations.Column; use just @javax.jdo.annotations.Column(allowsNull=\"...\")",
-                                association.getIdentifier().toClassAndNameIdentityString());
+                                association.getIdentifier().getClassAndMemberNameIdentityString());
                     } else {
                         validator.onFailure(
                                 association,
                                 association.getIdentifier(),
                                 "%s: incompatible default handling of required/optional properties between Isis and JDO; add @javax.jdo.annotations.Column(allowsNull=\"...\")",
-                                association.getIdentifier().toClassAndNameIdentityString());
+                                association.getIdentifier().getClassAndMemberNameIdentityString());
                     }
                 }
             }

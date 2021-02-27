@@ -43,7 +43,10 @@ public class ActionMemento implements Serializable {
     private transient ObjectAction action;
 
     public ActionMemento(final ObjectAction action) {
-        this(action.getOnType().getSpecId(), action.getType(), action.getIdentifier().toNameParmsIdentityString(), action);
+        this(action.getOnType().getSpecId(), 
+                action.getType(), 
+                action.getIdentifier().getMemberNameAndParameterClassNamesIdentityString(), 
+                action);
     }
 
     public ActionMemento(

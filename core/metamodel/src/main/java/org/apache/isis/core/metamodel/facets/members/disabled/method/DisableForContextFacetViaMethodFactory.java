@@ -85,7 +85,7 @@ extends MethodPrefixBasedFacetFactoryAbstract  {
         final FacetHolder facetHolder = processMethodContext.getFacetHolder();
         final TranslationService translationService = getTranslationService();
         // sadness: same logic as in I18nFacetFactory
-        final String translationContext = ((IdentifiedHolder)facetHolder).getIdentifier().toClassAndNameIdentityString();
+        final String translationContext = ((IdentifiedHolder)facetHolder).getIdentifier().getClassAndMemberNameIdentityString();
         super.addFacet(new DisableForContextFacetViaMethod(disableMethod, translationService, translationContext, facetHolder));
     }
 

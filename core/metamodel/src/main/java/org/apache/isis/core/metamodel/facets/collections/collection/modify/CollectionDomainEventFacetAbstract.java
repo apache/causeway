@@ -49,7 +49,7 @@ public abstract class CollectionDomainEventFacetAbstract extends SingleClassValu
 
         this.translationService = getTranslationService();
         // sadness: same as in TranslationFactory
-        this.translationContext = ((IdentifiedHolder)holder).getIdentifier().toClassAndNameIdentityString();
+        this.translationContext = ((IdentifiedHolder)holder).getIdentifier().getClassAndMemberNameIdentityString();
 
         domainEventHelper = DomainEventHelper.ofServiceRegistry(getServiceRegistry());
     }

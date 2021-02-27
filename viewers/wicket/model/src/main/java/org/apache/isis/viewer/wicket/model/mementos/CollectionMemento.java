@@ -39,7 +39,7 @@ public class CollectionMemento implements Serializable {
     private static ObjectSpecification owningSpecFor(OneToManyAssociation association) {
         
         val specificationLoader = association.getMetaModelContext().getSpecificationLoader();
-        val specId = ObjectSpecId.of(association.getIdentifier().toClassIdentityString());
+        val specId = ObjectSpecId.of(association.getIdentifier().getClassName());
         return specificationLoader.lookupBySpecIdElseLoad(specId);
     }
 
@@ -51,7 +51,7 @@ public class CollectionMemento implements Serializable {
     private transient OneToManyAssociation collection;
 
     public CollectionMemento(final OneToManyAssociation collection) {
-        this(owningSpecFor(collection).getSpecId(), collection.getIdentifier().toNameIdentityString(), collection);
+        this(owningSpecFor(collection).getSpecId(), collection.getIdentifier().getMemberName(), collection);
     }
 
     private CollectionMemento(final ObjectSpecId owningType, final String id, final OneToManyAssociation collection) {

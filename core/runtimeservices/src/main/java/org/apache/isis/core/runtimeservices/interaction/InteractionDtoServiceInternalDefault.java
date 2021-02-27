@@ -83,7 +83,7 @@ public class InteractionDtoServiceInternalDefault implements InteractionDtoServi
                 .map(RootOid::asBookmark)
                 .orElseThrow(()->_Exceptions.noSuchElement("Object provides no Bookmark: %s", targetAdapter));
 
-        final String actionIdentifier = objectAction.getIdentifier().toClassAndNameIdentityString();
+        final String actionIdentifier = objectAction.getIdentifier().getClassAndMemberNameIdentityString();
         final String actionId = actionIdentifier.substring(actionIdentifier.indexOf('#')+1);
         final String targetTitle = targetBookmark.toString() + ": " + actionId;
 
@@ -129,7 +129,7 @@ public class InteractionDtoServiceInternalDefault implements InteractionDtoServi
                 .map(RootOid::asBookmark)
                 .orElseThrow(()->_Exceptions.noSuchElement("Object provides no Bookmark: %s", targetAdapter));
 
-        final String propertyIdentifier = property.getIdentifier().toClassAndNameIdentityString();
+        final String propertyIdentifier = property.getIdentifier().getClassAndMemberNameIdentityString();
         final String propertyId = propertyIdentifier.substring(propertyIdentifier.indexOf('#')+1);
         final String targetTitle = targetBookmark.toString() + ": " + propertyId;
 

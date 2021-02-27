@@ -63,7 +63,7 @@ public abstract class MustSatisfySpecificationFacetAbstract extends FacetAbstrac
 
         final TranslationService translationService = getTranslationService();
         // sadness: same as in TranslationFactory
-        final String translationContext = ((IdentifiedHolder) holder).getIdentifier().toClassAndNameIdentityString();
+        final String translationContext = ((IdentifiedHolder) holder).getIdentifier().getClassAndMemberNameIdentityString();
 
         specificationEvaluator = new SpecificationEvaluator(translationService, translationContext);
     }

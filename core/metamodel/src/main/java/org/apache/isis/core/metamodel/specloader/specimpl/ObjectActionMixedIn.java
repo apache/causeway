@@ -18,8 +18,6 @@
  */
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
-import java.util.List;
-
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.collections.CanVector;
@@ -90,8 +88,11 @@ public class ObjectActionMixedIn extends ObjectActionDefault implements MixedInM
 
         // calculate the identifier
         final Identifier mixinIdentifier = mixinAction.getFacetedMethod().getIdentifier();
-        List<String> memberParameterNames = mixinIdentifier.getMemberParameterNames();
-        identifier = Identifier.actionIdentifier(getOnType().getCorrespondingClass().getName(), getId(), memberParameterNames);
+        val memberParameterClassNames = mixinIdentifier.getMemberParameterClassNames();
+        identifier = Identifier.actionIdentifier(
+                getOnType().getCorrespondingClass().getName(), 
+                getId(), 
+                memberParameterClassNames);
     }
 
     @Override

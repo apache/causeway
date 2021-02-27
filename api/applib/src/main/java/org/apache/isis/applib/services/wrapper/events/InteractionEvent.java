@@ -19,10 +19,9 @@
 
 package org.apache.isis.applib.services.wrapper.events;
 
-import java.util.List;
-
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.events.EventObjectBase;
+import org.apache.isis.commons.collections.Can;
 
 /**
  * <i>Supported only by {@link org.apache.isis.applib.services.wrapper.WrapperFactory} service, </i> 
@@ -106,14 +105,14 @@ public abstract class InteractionEvent extends EventObjectBase<Object> {
      * Convenience method that returns the {@link Identifier#getClassName()
      * class name} of the {@link #getIdentifier() identifier}.
      */
-    public List<String> getMemberParameterNames() {
-        return identifier.getMemberParameterNames();
+    public Can<String> getMemberParameterNames() {
+        return identifier.getMemberParameterClassNames();
     }
 
     /**
      * As per {@link #getMemberParameterNames()}, but naturalized.
      */
-    public List<String> getMemberParameterNaturalNames() {
+    public Can<String> getMemberParameterNaturalNames() {
         return identifier.getMemberParameterNaturalNames();
     }
 

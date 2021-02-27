@@ -52,7 +52,7 @@ public class ValidateObjectFacetMethodFactory extends MethodPrefixBasedFacetFact
         if (method != null) {
             val translationService = getTranslationService();
             // sadness: same as in TranslationFactory
-            val translationContext = ((IdentifiedHolder)facetHolder).getIdentifier().toClassIdentityString();
+            val translationContext = ((IdentifiedHolder)facetHolder).getIdentifier().getClassName();
             FacetUtil.addFacet(new ValidateObjectFacetMethod(method, translationService, translationContext, facetHolder));
             processClassContext.removeMethod(method);
         }

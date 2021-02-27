@@ -81,7 +81,7 @@ public class ActionParameterValidationFacetViaMethodFactory extends MethodPrefix
             
             // add facets directly to parameters, not to actions
             val paramAsHolder = parameters.get(paramNum);
-            val translationContext = paramAsHolder.getIdentifier().toFullIdentityString();
+            val translationContext = paramAsHolder.getIdentifier().getFullIdentityString();
             val ppmFactory = searchResult.getPpmFactory();
             val translationService = getMetaModelContext().getTranslationService();
 

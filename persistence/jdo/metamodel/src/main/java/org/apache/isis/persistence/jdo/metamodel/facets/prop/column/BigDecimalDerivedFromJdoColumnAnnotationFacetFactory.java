@@ -152,7 +152,7 @@ implements MetaModelRefiner {
                                     association,
                                     association.getIdentifier(),
                                     "%s: @javax.jdo.annotations.Column(length=...) different from @javax.validation.constraint.Digits(...); should equal the sum of its integer and fraction attributes",
-                                    association.getIdentifier().toClassAndNameIdentityString());
+                                    association.getIdentifier().getClassAndMemberNameIdentityString());
                         }
 
                         if(notNullButNotEqual(facet.getScale(), underlying.getScale())) {
@@ -160,7 +160,7 @@ implements MetaModelRefiner {
                                     association,
                                     association.getIdentifier(),
                                     "%s: @javax.jdo.annotations.Column(scale=...) different from @javax.validation.constraint.Digits(fraction=...)",
-                                    association.getIdentifier().toClassAndNameIdentityString());
+                                    association.getIdentifier().getClassAndMemberNameIdentityString());
                         }
                     }
                 }

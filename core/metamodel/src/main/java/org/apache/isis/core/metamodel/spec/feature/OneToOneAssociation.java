@@ -63,7 +63,7 @@ public interface OneToOneAssociation extends ObjectAssociation, OneToOneFeature,
 
     default String getCssClass(String prefix) {
         final String ownerSpecId = getOnType().getSpecId().asString().replace(".", "-");
-        final String memberId = getIdentifier().toNameIdentityString();
+        final String memberId = getIdentifier().getMemberName();
         return prefix + ownerSpecId + "-" + memberId;
     }
 

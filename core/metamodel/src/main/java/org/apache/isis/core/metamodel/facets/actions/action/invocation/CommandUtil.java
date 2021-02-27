@@ -57,7 +57,7 @@ public class CommandUtil {
     }
 
     public static String memberIdentifierFor(final ObjectMember objectMember) {
-        return objectMember.getIdentifier().toClassAndNameIdentityString();
+        return objectMember.getIdentifier().getClassAndMemberNameIdentityString();
     }
 
     public static String logicalMemberIdentifierFor(final ObjectMember objectMember) {
@@ -81,7 +81,7 @@ public class CommandUtil {
     private static String logicalMemberIdentifierFor(
             final ObjectSpecification onType, final ObjectMember objectMember) {
         final String objectType = onType.getSpecId().asString();
-        final String localId = objectMember.getIdentifier().toNameIdentityString();
+        final String localId = objectMember.getIdentifier().getMemberName();
         return objectType + "#" + localId;
     }
 

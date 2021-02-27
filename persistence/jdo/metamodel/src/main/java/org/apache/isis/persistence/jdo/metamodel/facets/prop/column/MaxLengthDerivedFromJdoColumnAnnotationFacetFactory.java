@@ -144,7 +144,7 @@ implements MetaModelRefiner {
                                     association,
                                     association.getIdentifier(),
                                     "%s: inconsistent lengths specified in Isis' @Property(maxLength=...) and @javax.jdo.annotations.Column(length=...); use just @javax.jdo.annotations.Column(length=...)",
-                                    association.getIdentifier().toClassAndNameIdentityString());
+                                    association.getIdentifier().getClassAndMemberNameIdentityString());
                         }
                     }
                 });

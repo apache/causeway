@@ -37,7 +37,7 @@ public class PropertyMemento implements Serializable {
         
         val specificationLoader = property.getMetaModelContext().getSpecificationLoader();
         return specificationLoader.lookupBySpecIdElseLoad(
-                ObjectSpecId.of(property.getIdentifier().toClassIdentityString()));
+                ObjectSpecId.of(property.getIdentifier().getClassName()));
     }
 
     private final ObjectSpecId owningSpecId;
@@ -47,7 +47,7 @@ public class PropertyMemento implements Serializable {
     public PropertyMemento(final OneToOneAssociation property) {
         this(
                 owningSpecFor(property).getSpecId(),
-                property.getIdentifier().toNameIdentityString(),
+                property.getIdentifier().getMemberName(),
                 property.getSpecification().getSpecId()
                 );
     }

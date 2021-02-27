@@ -41,7 +41,7 @@ class MetaModelValidatorForDeprecatedAnnotation extends MetaModelValidatorForDep
 
         final IdentifiedHolder facetHolder = (IdentifiedHolder) facet.getFacetHolder();
         final Identifier identifier = facetHolder.getIdentifier();
-        final String id = identifier.toFullIdentityString();
+        final String id = identifier.getFullIdentityString();
         return String.format(
                 "%s%s: annotation '%s' is deprecated",
                 id,
