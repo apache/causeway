@@ -47,23 +47,27 @@ public class AuthorizorSecman implements Authorizor {
     
     @Override
     public boolean isVisible(final Authentication authentication, final Identifier identifier) {
-        return applicationUserRepository
-        .findByUsername(authentication.getUserName())
-        .map(ApplicationUser::getPermissionSet)        
-        .map(permissionSet->permissionSet.grants(
-                ApplicationFeatureId.fromIdentifier(identifier), 
-                ApplicationPermissionMode.VIEWING))
-        .orElse(false);
+        return grants(authentication, identifier, ApplicationPermissionMode.VIEWING);
     }
 
     @Override
     public boolean isUsable(final Authentication authentication, final Identifier identifier) {
+        return grants(authentication, identifier, ApplicationPermissionMode.CHANGING);
+    }
+    
+    // -- HELPER
+    
+    private boolean grants(
+            final Authentication authentication, 
+            final Identifier identifier, 
+            final ApplicationPermissionMode permissionMode) {
+        
         return applicationUserRepository
         .findByUsername(authentication.getUserName())
         .map(ApplicationUser::getPermissionSet)
         .map(permissionSet->permissionSet.grants(
                 ApplicationFeatureId.fromIdentifier(identifier), 
-                ApplicationPermissionMode.CHANGING))
+                permissionMode))
         .orElse(false);
     }
 
