@@ -23,7 +23,7 @@ Currently only one such `.js` file can be registered.
 [WARNING]
 ====
 Just because something is possible, it doesn't necessarily mean we encourage it.
-Please be aware that there is no formal API for any custom javascript that you might implement to target; future versions of Apache Isis might break your code.
+Please be aware that there is no formal API for any custom JavaScript that you might implement to target; future versions of Apache Isis might break your code.
 
 As an alternative, consider using the `ComponentFactory` API described in the xref:vw:ROOT:extending.adoc[Extending] chapter.
 ====

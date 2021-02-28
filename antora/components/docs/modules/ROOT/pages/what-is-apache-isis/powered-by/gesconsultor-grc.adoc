@@ -44,7 +44,7 @@ Alternatively, a custom drag-n-drop visual interface can be used:
 
 image::what-is-apache-isis/powered-by/gesconsultor-grc/fig-2-custom-drag-n-drop-interface.png[width="800px"]
 
-This is implemented with the Dojo javascript library, interfacing to Apache Isis-managed domain objects.
+This is implemented with the Dojo JavaScript library, interfacing to Apache Isis-managed domain objects.
 
 
 

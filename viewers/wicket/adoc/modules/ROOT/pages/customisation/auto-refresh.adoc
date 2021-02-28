@@ -22,7 +22,7 @@ public class MyDomainObject {
 }
 ----
 
-* Then, use javascript in `scripts/application.js` (under `src/main/webapp/`) to reload:
+* Then, use JavaScript in `scripts/application.js` (under `src/main/webapp/`) to reload:
 +
 [source,javascript]
 ----
