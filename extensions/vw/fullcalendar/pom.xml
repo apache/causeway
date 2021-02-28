@@ -32,7 +32,7 @@
     <packaging>pom</packaging>
 
     <description>
-        A component for Apache Isis' Wicket viewer, displaying collections of objects that have a date on a fullcalendar.io (javascript widget).
+        A component for Apache Isis' Wicket viewer, displaying collections of objects that have a date on a fullcalendar.io (JavaScript widget).
     </description>
 
     <modules>
