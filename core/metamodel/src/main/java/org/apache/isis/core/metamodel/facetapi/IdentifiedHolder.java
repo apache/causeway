@@ -19,13 +19,13 @@
 
 package org.apache.isis.core.metamodel.facetapi;
 
-import org.apache.isis.applib.id.Identifier;
+import org.apache.isis.applib.id.FeatureIdentifier;
 
 public interface IdentifiedHolder extends FacetHolder {
 
     /**
      * Identifier of this feature.
      */
-    Identifier getIdentifier();
+    FeatureIdentifier getIdentifier();
 
 }

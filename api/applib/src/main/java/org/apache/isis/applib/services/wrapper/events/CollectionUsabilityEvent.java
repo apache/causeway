@@ -19,7 +19,7 @@
 
 package org.apache.isis.applib.services.wrapper.events;
 
-import org.apache.isis.applib.id.Identifier;
+import org.apache.isis.applib.id.FeatureIdentifier;
 
 /**
  * <i>Supported only by {@link org.apache.isis.applib.services.wrapper.WrapperFactory} service, </i> represents a check as to whether a collection is usable or has been disabled.
@@ -33,7 +33,7 @@ import org.apache.isis.applib.id.Identifier;
  */
 public class CollectionUsabilityEvent extends UsabilityEvent {
 
-    public CollectionUsabilityEvent(final Object source, final Identifier identifier) {
+    public CollectionUsabilityEvent(final Object source, final FeatureIdentifier identifier) {
         super(source, identifier);
     }
 

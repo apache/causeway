@@ -19,7 +19,7 @@
 
 package org.apache.isis.applib.services.wrapper.events;
 
-import org.apache.isis.applib.id.Identifier;
+import org.apache.isis.applib.id.FeatureIdentifier;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 
 /**
@@ -34,7 +34,7 @@ import org.apache.isis.applib.services.wrapper.WrapperFactory;
  */
 public class ActionVisibilityEvent extends VisibilityEvent {
 
-    public ActionVisibilityEvent(final Object source, final Identifier actionIdentifier) {
+    public ActionVisibilityEvent(final Object source, final FeatureIdentifier actionIdentifier) {
         super(source, actionIdentifier);
     }
 

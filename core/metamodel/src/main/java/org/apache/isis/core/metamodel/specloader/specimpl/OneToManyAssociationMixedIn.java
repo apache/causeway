@@ -19,7 +19,7 @@
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.applib.id.Identifier;
+import org.apache.isis.applib.id.FeatureIdentifier;
 import org.apache.isis.applib.id.TypeIdentifier;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Strings;
@@ -68,7 +68,7 @@ public class OneToManyAssociationMixedIn extends OneToManyAssociationDefault imp
     @Getter(onMethod = @__(@Override))
     private final FacetHolder facetHolder = new FacetHolderImpl();
 
-    private final Identifier identifier;
+    private final FeatureIdentifier identifier;
 
     private static ObjectSpecification typeOfSpec(
             final ObjectActionDefault objectAction) {
@@ -125,10 +125,10 @@ public class OneToManyAssociationMixedIn extends OneToManyAssociationDefault imp
         }
 
         // calculate the identifier
-        final Identifier mixinIdentifier = mixinAction.getFacetedMethod().getIdentifier();
+        final FeatureIdentifier mixinIdentifier = mixinAction.getFacetedMethod().getIdentifier();
         val memberParameterNames = mixinIdentifier.getMemberParameterClassNames();
 
-        identifier = Identifier.actionIdentifier(
+        identifier = FeatureIdentifier.actionIdentifier(
                 TypeIdentifier.eager(
                         mixeeSpec.getCorrespondingClass(), 
                         mixeeSpec.getSpecId().asString()), 
@@ -163,7 +163,7 @@ public class OneToManyAssociationMixedIn extends OneToManyAssociationDefault imp
     }
 
     @Override
-    public Identifier getIdentifier() {
+    public FeatureIdentifier getIdentifier() {
         return identifier;
     }
 

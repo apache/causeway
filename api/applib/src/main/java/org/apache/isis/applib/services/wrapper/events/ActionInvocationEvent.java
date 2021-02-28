@@ -19,7 +19,7 @@
 
 package org.apache.isis.applib.services.wrapper.events;
 
-import org.apache.isis.applib.id.Identifier;
+import org.apache.isis.applib.id.FeatureIdentifier;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 
 /**
@@ -38,7 +38,7 @@ import org.apache.isis.applib.services.wrapper.WrapperFactory;
  */
 public class ActionInvocationEvent extends ValidityEvent {
 
-    public ActionInvocationEvent(final Object source, final Identifier actionIdentifier, final Object[] args) {
+    public ActionInvocationEvent(final Object source, final FeatureIdentifier actionIdentifier, final Object[] args) {
         super(source, actionIdentifier);
         this.args = args;
     }

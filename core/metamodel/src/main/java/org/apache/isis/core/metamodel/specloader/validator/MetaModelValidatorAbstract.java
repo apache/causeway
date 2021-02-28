@@ -19,7 +19,7 @@
 
 package org.apache.isis.core.metamodel.specloader.validator;
 
-import org.apache.isis.applib.id.Identifier;
+import org.apache.isis.applib.id.FeatureIdentifier;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.context.MetaModelContextAware;
@@ -49,7 +49,7 @@ implements MetaModelValidator, MetaModelContextAware {
     @Override
     public void onFailure(
             @NonNull FacetHolder facetHolder, 
-            @NonNull Identifier deficiencyOrigin,
+            @NonNull FeatureIdentifier deficiencyOrigin,
             @NonNull String deficiencyMessageFormat, 
             Object... args) {
         

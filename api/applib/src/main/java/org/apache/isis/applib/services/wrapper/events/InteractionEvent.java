@@ -20,7 +20,7 @@
 package org.apache.isis.applib.services.wrapper.events;
 
 import org.apache.isis.applib.events.EventObjectBase;
-import org.apache.isis.applib.id.Identifier;
+import org.apache.isis.applib.id.FeatureIdentifier;
 import org.apache.isis.commons.collections.Can;
 
 /**
@@ -36,11 +36,11 @@ import org.apache.isis.commons.collections.Can;
  */
 public abstract class InteractionEvent extends EventObjectBase<Object> {
 
-    private final Identifier identifier;
+    private final FeatureIdentifier identifier;
     private String reason;
     private Class<?> advisorClass;
 
-    public InteractionEvent(final Object source, final Identifier identifier) {
+    public InteractionEvent(final Object source, final FeatureIdentifier identifier) {
         super(source);
         this.identifier = identifier;
     }
@@ -54,15 +54,15 @@ public abstract class InteractionEvent extends EventObjectBase<Object> {
     }
 
     /**
-     * The {@link Identifier} of the feature of the object being interacted
+     * The {@link FeatureIdentifier} of the feature of the object being interacted
      * with.
      *
      * <p>
      * Will be consistent with the subclass of {@link InteractionEvent}. So for
-     * example a {@link PropertyModifyEvent} will have an {@link Identifier}
+     * example a {@link PropertyModifyEvent} will have an {@link FeatureIdentifier}
      * that identifies the property being modified.
      */
-    public Identifier getIdentifier() {
+    public FeatureIdentifier getIdentifier() {
         return identifier;
     }
 
@@ -77,7 +77,7 @@ public abstract class InteractionEvent extends EventObjectBase<Object> {
 
     /**
      * Convenience method that returns the
-     * {@link Identifier#getClassNaturalName() natural class name} of the
+     * {@link FeatureIdentifier#getClassNaturalName() natural class name} of the
      * {@link #getIdentifier() identifier}.
      */
     public String getClassNaturalName() {
@@ -85,7 +85,7 @@ public abstract class InteractionEvent extends EventObjectBase<Object> {
     }
 
     /**
-     * Convenience method that returns the {@link Identifier#getMemberName()
+     * Convenience method that returns the {@link FeatureIdentifier#getMemberName()
      * member name} of the {@link #getIdentifier() identifier}.
      *
      * @see #getIdentifier
@@ -102,7 +102,7 @@ public abstract class InteractionEvent extends EventObjectBase<Object> {
     }
 
     /**
-     * Convenience method that returns the {@link Identifier#getClassName()
+     * Convenience method that returns the {@link FeatureIdentifier#getClassName()
      * class name} of the {@link #getIdentifier() identifier}.
      */
     public Can<String> getMemberParameterNames() {

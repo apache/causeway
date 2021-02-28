@@ -32,7 +32,7 @@ import static java.util.Comparator.nullsFirst;
 
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.Value;
-import org.apache.isis.applib.id.Identifier;
+import org.apache.isis.applib.id.FeatureIdentifier;
 import org.apache.isis.applib.services.appfeat.ApplicationMemberType;
 import org.apache.isis.applib.util.Equality;
 import org.apache.isis.applib.util.Hashing;
@@ -68,7 +68,7 @@ implements
 
     // -- FACTORY METHODS
 
-    public static ApplicationFeatureId fromIdentifier(final @NonNull Identifier identifier) {
+    public static ApplicationFeatureId fromIdentifier(final @NonNull FeatureIdentifier identifier) {
         
         val logicalTypeName = identifier.getTypeIdentifier().getLogicalTypeName();
         

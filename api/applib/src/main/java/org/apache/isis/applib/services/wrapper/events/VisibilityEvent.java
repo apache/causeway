@@ -19,7 +19,7 @@
 
 package org.apache.isis.applib.services.wrapper.events;
 
-import org.apache.isis.applib.id.Identifier;
+import org.apache.isis.applib.id.FeatureIdentifier;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 
 /**
@@ -38,7 +38,7 @@ import org.apache.isis.applib.services.wrapper.WrapperFactory;
  */
 public abstract class VisibilityEvent extends InteractionEvent {
 
-    public VisibilityEvent(final Object source, final Identifier identifier) {
+    public VisibilityEvent(final Object source, final FeatureIdentifier identifier) {
         super(source, identifier);
     }
 

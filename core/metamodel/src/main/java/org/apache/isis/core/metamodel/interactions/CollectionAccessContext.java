@@ -19,7 +19,7 @@
 
 package org.apache.isis.core.metamodel.interactions;
 
-import org.apache.isis.applib.id.Identifier;
+import org.apache.isis.applib.id.FeatureIdentifier;
 import org.apache.isis.applib.services.wrapper.events.CollectionAccessEvent;
 import org.apache.isis.core.metamodel.consent.InteractionContextType;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -33,7 +33,7 @@ public class CollectionAccessContext extends AccessContext {
 
     public CollectionAccessContext(
             final InteractionHead head,
-            final Identifier identifier,
+            final FeatureIdentifier identifier,
             final InteractionInitiatedBy interactionInitiatedBy) {
         super(InteractionContextType.COLLECTION_READ, identifier, head, interactionInitiatedBy);
     }

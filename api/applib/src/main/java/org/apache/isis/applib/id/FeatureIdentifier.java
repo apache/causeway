@@ -31,7 +31,7 @@ import lombok.Getter;
 /**
  * @since 1.x revised for 2.0 {@index}
  */
-public class Identifier implements Comparable<Identifier> {
+public class FeatureIdentifier implements Comparable<FeatureIdentifier> {
 
     /**
      * What type of feature this identifies.
@@ -45,28 +45,28 @@ public class Identifier implements Comparable<Identifier> {
 
     // -- FACTORY METHODS
 
-    public static Identifier classIdentifier(final TypeIdentifier typeIdentifier) {
-        return new Identifier(typeIdentifier, "", Can.empty(), Type.CLASS);
+    public static FeatureIdentifier classIdentifier(final TypeIdentifier typeIdentifier) {
+        return new FeatureIdentifier(typeIdentifier, "", Can.empty(), Type.CLASS);
     }
 
-    public static Identifier propertyOrCollectionIdentifier(
+    public static FeatureIdentifier propertyOrCollectionIdentifier(
             final TypeIdentifier typeIdentifier,
             final String propertyOrCollectionName) {
-        return new Identifier(typeIdentifier, propertyOrCollectionName, Can.empty(), Type.PROPERTY_OR_COLLECTION);
+        return new FeatureIdentifier(typeIdentifier, propertyOrCollectionName, Can.empty(), Type.PROPERTY_OR_COLLECTION);
     }
 
-    public static Identifier actionIdentifier(
+    public static FeatureIdentifier actionIdentifier(
             final TypeIdentifier typeIdentifier,
             final String actionName, 
             final Class<?>... parameterClasses) {
         return actionIdentifier(typeIdentifier, actionName, classNamesOf(parameterClasses));
     }
 
-    public static Identifier actionIdentifier(
+    public static FeatureIdentifier actionIdentifier(
             final TypeIdentifier typeIdentifier,
             final String actionName, 
             final Can<String> parameterClassNames) {
-        return new Identifier(typeIdentifier, actionName, parameterClassNames, Type.ACTION);
+        return new FeatureIdentifier(typeIdentifier, actionName, parameterClassNames, Type.ACTION);
     }
 
     // -- INSTANCE FIELDS
@@ -77,7 +77,7 @@ public class Identifier implements Comparable<Identifier> {
     
     @Getter private final String memberName;
     
-    private final Can<String> parameterClassNames;
+    @Getter private final Can<String> memberParameterClassNames;
     
     @Getter private final Type type;
     
@@ -99,21 +99,21 @@ public class Identifier implements Comparable<Identifier> {
 
     // -- CONSTRUCTOR
 
-    private Identifier(
+    private FeatureIdentifier(
             final TypeIdentifier typeIdentifier,
             final String memberName, 
-            final Can<String> parameterClassNames, 
+            final Can<String> memberParameterClassNames, 
             final Type type) {
         
         this.typeIdentifier = typeIdentifier;
         this.className = typeIdentifier.getClassName();
         this.memberName = memberName;
-        this.parameterClassNames = parameterClassNames;
+        this.memberParameterClassNames = memberParameterClassNames;
         this.type = type;
          
         this.memberNameAndParameterClassNamesIdentityString =
                 memberName + (type.isAction() 
-                        ? "(" + parameterClassNames.stream().collect(Collectors.joining(",")) + ")" 
+                        ? "(" + memberParameterClassNames.stream().collect(Collectors.joining(",")) + ")" 
                         : "");
         
         this.translationContext = 
@@ -136,18 +136,14 @@ public class Identifier implements Comparable<Identifier> {
         return naturalName(memberName);
     }
 
-    public Can<String> getMemberParameterClassNames() {
-        return parameterClassNames;
-    }
-
     public Can<String> getMemberParameterNaturalNames() {
-        return naturalNames(parameterClassNames);
+        return naturalNames(memberParameterClassNames);
     }
 
     // -- OBJECT CONTRACT
 
     @Override
-    public int compareTo(final Identifier other) {
+    public int compareTo(final FeatureIdentifier other) {
         return toString().compareTo(other.toString());
     }
 
@@ -156,16 +152,16 @@ public class Identifier implements Comparable<Identifier> {
         if (this == obj) {
             return true;
         }
-        if (obj instanceof Identifier) {
-            return isEqualTo((Identifier) obj);
+        if (obj instanceof FeatureIdentifier) {
+            return isEqualTo((FeatureIdentifier) obj);
         }
         return false;
     }
 
-    public boolean isEqualTo(final Identifier other) {
+    public boolean isEqualTo(final FeatureIdentifier other) {
         return Objects.equals(this.className, other.className) 
                 && Objects.equals(this.memberName, other.memberName) 
-                && this.parameterClassNames.equals(other.parameterClassNames);
+                && this.memberParameterClassNames.equals(other.memberParameterClassNames);
     }
 
     @Override
@@ -231,7 +227,7 @@ public class Identifier implements Comparable<Identifier> {
     }
     
     private static Can<String> naturalNames(final Can<String> names) {
-        return names.map(Identifier::naturalName);
+        return names.map(FeatureIdentifier::naturalName);
     }
     
 }

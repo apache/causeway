@@ -19,7 +19,7 @@
 
 package org.apache.isis.applib.services.wrapper.events;
 
-import org.apache.isis.applib.id.Identifier;
+import org.apache.isis.applib.id.FeatureIdentifier;
 
 /**
  * <i>Supported only by {@link org.apache.isis.applib.services.wrapper.WrapperFactory} service, </i> represents a check as to whether an object is visible or has been hidden.
@@ -32,7 +32,7 @@ import org.apache.isis.applib.id.Identifier;
  */
 public class ObjectVisibilityEvent extends VisibilityEvent {
 
-    public ObjectVisibilityEvent(final Object source, final Identifier classIdentifier) {
+    public ObjectVisibilityEvent(final Object source, final FeatureIdentifier classIdentifier) {
         super(source, classIdentifier);
     }
 

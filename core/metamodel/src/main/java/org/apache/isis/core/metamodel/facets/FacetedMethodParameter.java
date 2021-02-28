@@ -20,7 +20,7 @@ package org.apache.isis.core.metamodel.facets;
 
 import java.lang.reflect.Method;
 
-import org.apache.isis.applib.id.Identifier;
+import org.apache.isis.applib.id.FeatureIdentifier;
 import org.apache.isis.applib.id.TypeIdentifier;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
@@ -31,7 +31,7 @@ public class FacetedMethodParameter
 extends TypedHolderDefault 
 implements IdentifiedHolder {
 
-    private final Identifier identifier;
+    private final FeatureIdentifier identifier;
 
     public FacetedMethodParameter(
             final FeatureType featureType,
@@ -50,7 +50,7 @@ implements IdentifiedHolder {
     }
 
     @Override
-    public Identifier getIdentifier() {
+    public FeatureIdentifier getIdentifier() {
         return identifier;
     }
 

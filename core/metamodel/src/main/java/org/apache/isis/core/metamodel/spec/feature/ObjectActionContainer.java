@@ -24,7 +24,7 @@ import java.util.stream.Stream;
 
 import javax.annotation.Nullable;
 
-import org.apache.isis.applib.id.Identifier;
+import org.apache.isis.applib.id.FeatureIdentifier;
 import org.apache.isis.commons.collections.ImmutableEnumSet;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.spec.ActionType;
@@ -67,8 +67,8 @@ public interface ObjectActionContainer {
      * Get the action object represented by the specified identity string. (mixed-in included)
      * <p>
      * The identity string can be either fully specified with parameters (as per
-     * {@link Identifier#toNameParmsIdentityString()} or in abbreviated form (
-     * {@link Identifier#toNameIdentityString()}).
+     * {@link FeatureIdentifier#toNameParmsIdentityString()} or in abbreviated form (
+     * {@link FeatureIdentifier#toNameIdentityString()}).
      *
      * @see #getDeclaredAction(String)
      */

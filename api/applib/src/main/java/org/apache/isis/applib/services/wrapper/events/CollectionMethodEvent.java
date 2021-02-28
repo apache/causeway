@@ -19,7 +19,7 @@
 
 package org.apache.isis.applib.services.wrapper.events;
 
-import org.apache.isis.applib.id.Identifier;
+import org.apache.isis.applib.id.FeatureIdentifier;
 
 /**
  * <i>Supported only by {@link org.apache.isis.applib.services.wrapper.WrapperFactory} service, </i> represents an interaction with a collection object itself.
@@ -33,7 +33,7 @@ public class CollectionMethodEvent extends AccessEvent {
     private final Object[] args;
     private final Object returnValue;
 
-    public CollectionMethodEvent(final Object source, final Identifier collectionIdentifier, final Object domainObject, final String methodName, final Object[] args, final Object returnValue) {
+    public CollectionMethodEvent(final Object source, final FeatureIdentifier collectionIdentifier, final Object domainObject, final String methodName, final Object[] args, final Object returnValue) {
         super(source, collectionIdentifier);
         this.domainObject = domainObject;
         this.methodName = methodName;

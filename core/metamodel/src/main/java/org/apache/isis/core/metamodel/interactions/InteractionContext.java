@@ -20,7 +20,7 @@
 package org.apache.isis.core.metamodel.interactions;
 
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.applib.id.Identifier;
+import org.apache.isis.applib.id.FeatureIdentifier;
 import org.apache.isis.applib.services.wrapper.events.InteractionEvent;
 import org.apache.isis.core.metamodel.consent.InteractionContextType;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -88,7 +88,7 @@ public abstract class InteractionContext {
      * the {@link #getTarget() target} object's specification. Otherwise will be
      * the identifier of the member.
      */
-    @Getter private final Identifier identifier;
+    @Getter private final FeatureIdentifier identifier;
     
     /**
      * Model that holds the object involved with the interaction.
@@ -103,7 +103,7 @@ public abstract class InteractionContext {
     protected InteractionContext(
             final InteractionContextType interactionType,
             final InteractionInitiatedBy invocationMethod,
-            final Identifier identifier,
+            final FeatureIdentifier identifier,
             final InteractionHead head,
             final Where where) {
         this.interactionType = interactionType;

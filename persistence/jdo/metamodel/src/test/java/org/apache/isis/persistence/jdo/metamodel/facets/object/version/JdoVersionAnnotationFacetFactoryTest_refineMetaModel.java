@@ -29,7 +29,7 @@ import org.junit.Test;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-import org.apache.isis.applib.id.Identifier;
+import org.apache.isis.applib.id.FeatureIdentifier;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2.Mode;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
@@ -189,7 +189,7 @@ public class JdoVersionAnnotationFacetFactoryTest_refineMetaModel {
                 
                 oneOf(mockChildType).getIdentifier();
                 inSequence(sequence);
-                will(returnValue(Identifier.classIdentifier(TypeIdentifierTestFactory.customer())));
+                will(returnValue(FeatureIdentifier.classIdentifier(TypeIdentifierTestFactory.customer())));
 
                 oneOf(mockChildType).getFullIdentifier();
                 inSequence(sequence);
@@ -252,7 +252,7 @@ public class JdoVersionAnnotationFacetFactoryTest_refineMetaModel {
                 
                 oneOf(mockChildType).getIdentifier();
                 inSequence(sequence);
-                will(returnValue(Identifier.classIdentifier(TypeIdentifierTestFactory.customer())));
+                will(returnValue(FeatureIdentifier.classIdentifier(TypeIdentifierTestFactory.customer())));
 
                 oneOf(mockChildType).getFullIdentifier();
                 inSequence(sequence);

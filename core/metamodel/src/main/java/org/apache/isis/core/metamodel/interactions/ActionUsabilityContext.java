@@ -20,7 +20,7 @@
 package org.apache.isis.core.metamodel.interactions;
 
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.applib.id.Identifier;
+import org.apache.isis.applib.id.FeatureIdentifier;
 import org.apache.isis.applib.services.wrapper.events.ActionUsabilityEvent;
 import org.apache.isis.core.metamodel.consent.InteractionContextType;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -40,7 +40,7 @@ implements ActionInteractionContext {
     public ActionUsabilityContext(
             final InteractionHead head,
             final ObjectAction objectAction,
-            final Identifier id,
+            final FeatureIdentifier id,
             final InteractionInitiatedBy interactionInitiatedBy,
             final Where where) {
         super(InteractionContextType.ACTION_USABLE, head, id, interactionInitiatedBy, where);

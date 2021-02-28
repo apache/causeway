@@ -19,7 +19,7 @@
 
 package org.apache.isis.applib.services.wrapper.events;
 
-import org.apache.isis.applib.id.Identifier;
+import org.apache.isis.applib.id.FeatureIdentifier;
 
 /**
  * <i>Supported only by {@link org.apache.isis.applib.services.wrapper.WrapperFactory} service, </i> represents a check to determine whether a member of an object is usable or
@@ -36,7 +36,7 @@ import org.apache.isis.applib.id.Identifier;
  */
 public abstract class UsabilityEvent extends InteractionEvent {
 
-    public UsabilityEvent(final Object source, final Identifier identifier) {
+    public UsabilityEvent(final Object source, final FeatureIdentifier identifier) {
         super(source, identifier);
     }
 

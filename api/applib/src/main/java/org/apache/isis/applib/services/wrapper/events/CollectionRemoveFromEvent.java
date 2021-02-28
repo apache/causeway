@@ -19,7 +19,7 @@
 
 package org.apache.isis.applib.services.wrapper.events;
 
-import org.apache.isis.applib.id.Identifier;
+import org.apache.isis.applib.id.FeatureIdentifier;
 
 /**
  * <i>Supported only by {@link org.apache.isis.applib.services.wrapper.WrapperFactory} service, </i> represents a check as to whether a particular object to be removed from a
@@ -36,7 +36,7 @@ import org.apache.isis.applib.id.Identifier;
 
     private final Object proposed;
 
-    public CollectionRemoveFromEvent(final Object source, final Identifier collectionIdentifier, final Object proposed) {
+    public CollectionRemoveFromEvent(final Object source, final FeatureIdentifier collectionIdentifier, final Object proposed) {
         super(source, collectionIdentifier);
         this.proposed = proposed;
     }

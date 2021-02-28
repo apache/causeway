@@ -24,8 +24,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.isis.applib.id.Identifier;
-import org.apache.isis.applib.id.Identifier.Type;
+import org.apache.isis.applib.id.FeatureIdentifier;
+import org.apache.isis.applib.id.FeatureIdentifier.Type;
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -63,7 +63,7 @@ public class DisabledObjectFacetViaMethod extends DisabledObjectFacetAbstract im
     }
 
     @Override
-    public String disabledReason(final ManagedObject owningAdapter, final Identifier identifier) {
+    public String disabledReason(final ManagedObject owningAdapter, final FeatureIdentifier identifier) {
         final Type type = identifier.getType();
         final Object returnValue = ManagedObjects.InvokeUtil.invoke(method, owningAdapter, type);
         if(returnValue instanceof String) {

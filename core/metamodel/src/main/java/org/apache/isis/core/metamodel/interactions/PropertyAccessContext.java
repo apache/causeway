@@ -19,7 +19,7 @@
 
 package org.apache.isis.core.metamodel.interactions;
 
-import org.apache.isis.applib.id.Identifier;
+import org.apache.isis.applib.id.FeatureIdentifier;
 import org.apache.isis.applib.services.wrapper.events.PropertyAccessEvent;
 import org.apache.isis.core.metamodel.consent.InteractionContextType;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -37,7 +37,7 @@ extends AccessContext {
 
     public PropertyAccessContext(
             final InteractionHead head,
-            final Identifier id,
+            final FeatureIdentifier id,
             final ManagedObject value,
             final InteractionInitiatedBy interactionInitiatedBy) {
         super(InteractionContextType.PROPERTY_READ, id, head, interactionInitiatedBy);

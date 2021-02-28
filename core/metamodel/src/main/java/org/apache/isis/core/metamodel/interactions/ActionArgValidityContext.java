@@ -19,7 +19,7 @@
 
 package org.apache.isis.core.metamodel.interactions;
 
-import org.apache.isis.applib.id.Identifier;
+import org.apache.isis.applib.id.FeatureIdentifier;
 import org.apache.isis.applib.services.wrapper.events.ActionArgumentEvent;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.consent.InteractionContextType;
@@ -46,7 +46,7 @@ implements ProposedHolder, ActionInteractionContext {
     public ActionArgValidityContext(
             final InteractionHead head,
             final ObjectAction objectAction,
-            final Identifier id,
+            final FeatureIdentifier id,
             final Can<ManagedObject> args,
             final int position,
             final InteractionInitiatedBy interactionInitiatedBy) {

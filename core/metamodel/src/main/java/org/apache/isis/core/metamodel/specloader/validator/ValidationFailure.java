@@ -24,7 +24,7 @@ import java.util.Objects;
 import static java.util.Comparator.naturalOrder;
 import static java.util.Comparator.nullsFirst;
 
-import org.apache.isis.applib.id.Identifier;
+import org.apache.isis.applib.id.FeatureIdentifier;
 
 import lombok.NonNull;
 import lombok.Value;
@@ -37,7 +37,7 @@ import lombok.Value;
 @Value(staticConstructor = "of")
 public final class ValidationFailure implements Comparable<ValidationFailure> {
 
-    @NonNull private Identifier origin;
+    @NonNull private FeatureIdentifier origin;
     @NonNull private String message;
 
     private static final Comparator<ValidationFailure> comparator = Comparator

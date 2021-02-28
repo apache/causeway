@@ -32,7 +32,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
-import org.apache.isis.applib.id.Identifier;
+import org.apache.isis.applib.id.FeatureIdentifier;
 import org.apache.isis.commons.functional.Result;
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.context._Context;
@@ -66,16 +66,16 @@ public class AuthorizorShiro implements Authorizor {
     @Inject private SpecificationLoader specificationLoader;
 
     @Override
-    public boolean isVisible(final Authentication authentication, final Identifier identifier) {
+    public boolean isVisible(final Authentication authentication, final FeatureIdentifier identifier) {
         return isPermitted(authentication.getUserName(), identifier, "r");
     }
 
     @Override
-    public boolean isUsable(final Authentication authentication, final Identifier identifier) {
+    public boolean isUsable(final Authentication authentication, final FeatureIdentifier identifier) {
         return isPermitted(authentication.getUserName(), identifier, "w");
     }
 
-    private boolean isPermitted(String userName, Identifier identifier, String qualifier) {
+    private boolean isPermitted(String userName, FeatureIdentifier identifier, String qualifier) {
 
         RealmSecurityManager securityManager = getSecurityManager();
         if(securityManager == null) {
@@ -95,7 +95,7 @@ public class AuthorizorShiro implements Authorizor {
         }
     }
 
-    private String asPermissionsString(Identifier identifier) {
+    private String asPermissionsString(FeatureIdentifier identifier) {
         String fullyQualifiedLogicalTypeName = asFeatureFqns(identifier);
         int lastDot = fullyQualifiedLogicalTypeName.lastIndexOf('.');
         String packageName;
@@ -126,7 +126,7 @@ public class AuthorizorShiro implements Authorizor {
      * @deprecated while this is technically correct, we should not need to call the SpecificationLoader
      * on every permission check
      */
-    private String asFeatureFqns(Identifier identifier) {
+    private String asFeatureFqns(FeatureIdentifier identifier) {
         val className = identifier.getClassName();
         return Result.of(()->_Context.loadClass(className))
                 .<String>mapSuccess(this::asFeatureFqns)

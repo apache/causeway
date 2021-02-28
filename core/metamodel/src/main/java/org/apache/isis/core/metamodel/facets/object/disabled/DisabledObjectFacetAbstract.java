@@ -19,7 +19,7 @@
 
 package org.apache.isis.core.metamodel.facets.object.disabled;
 
-import org.apache.isis.applib.id.Identifier;
+import org.apache.isis.applib.id.FeatureIdentifier;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -39,10 +39,10 @@ public abstract class DisabledObjectFacetAbstract extends FacetAbstract implemen
     @Override
     public String disables(final UsabilityContext ic) {
         final ManagedObject toDisable = ic.getTarget();
-        final Identifier identifier = ic.getIdentifier();
+        final FeatureIdentifier identifier = ic.getIdentifier();
         return toDisable != null ? disabledReason(toDisable, identifier) : null;
     }
 
-    protected abstract String disabledReason(ManagedObject toDisable, Identifier identifier);
+    protected abstract String disabledReason(ManagedObject toDisable, FeatureIdentifier identifier);
 
 }

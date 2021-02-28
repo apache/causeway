@@ -18,7 +18,7 @@
  */
 package org.apache.isis.persistence.jdo.metamodel.facets.object.query;
 
-import org.apache.isis.applib.id.Identifier;
+import org.apache.isis.applib.id.FeatureIdentifier;
 import org.apache.isis.applib.id.TypeIdentifier;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -59,7 +59,7 @@ class VisitorForVariablesClause extends VisitorForClauseAbstract {
         if(persistenceCapableFacet == null) {
             validator.onFailure(
                     objectSpec,
-                    Identifier.classIdentifier(TypeIdentifier.fqcn(cls)),
+                    FeatureIdentifier.classIdentifier(TypeIdentifier.fqcn(cls)),
                     "%s: error in JDOQL query, class name for '%s' clause is not annotated as @PersistenceCapable (JDOQL : %s)",
                     cls.getName(), clause, query);
             return;

@@ -27,7 +27,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertSame;
 
 import org.apache.isis.applib.events.domain.ActionDomainEvent;
-import org.apache.isis.applib.id.Identifier;
+import org.apache.isis.applib.id.FeatureIdentifier;
 import org.apache.isis.applib.id.TypeIdentifier;
 
 import static junit.framework.Assert.assertEquals;
@@ -43,7 +43,7 @@ public class DomainEventHelperTest_newActionInteractionEvent {
     @Test
     public void defaultEventType() throws Exception {
         final SomeDomainObject sdo = new SomeDomainObject();
-        final Identifier identifier = Identifier.actionIdentifier(TypeIdentifier.fqcn(SomeDomainObject.class), "foo", new Class[]{int.class, String.class});
+        final FeatureIdentifier identifier = FeatureIdentifier.actionIdentifier(TypeIdentifier.fqcn(SomeDomainObject.class), "foo", new Class[]{int.class, String.class});
 
         Utils.domainEventHelper();
         final ActionDomainEvent<Object> ev = DomainEventHelper.newActionDomainEvent(
@@ -58,7 +58,7 @@ public class DomainEventHelperTest_newActionInteractionEvent {
     @Test
     public void actionInvokedEventDefaultEventType() throws Exception {
         final SomeDomainObject sdo = new SomeDomainObject();
-        final Identifier identifier = Identifier.actionIdentifier(TypeIdentifier.fqcn(SomeDomainObject.class), "foo", new Class[]{int.class, String.class});
+        final FeatureIdentifier identifier = FeatureIdentifier.actionIdentifier(TypeIdentifier.fqcn(SomeDomainObject.class), "foo", new Class[]{int.class, String.class});
 
         Utils.domainEventHelper();
         final ActionDomainEvent<Object> ev = DomainEventHelper.newActionDomainEvent(
@@ -73,7 +73,7 @@ public class DomainEventHelperTest_newActionInteractionEvent {
     @Test
     public void customEventType() throws Exception {
         final SomeDomainObject sdo = new SomeDomainObject();
-        final Identifier identifier = Identifier.actionIdentifier(TypeIdentifier.fqcn(SomeDomainObject.class), "foo", new Class[]{int.class, String.class});
+        final FeatureIdentifier identifier = FeatureIdentifier.actionIdentifier(TypeIdentifier.fqcn(SomeDomainObject.class), "foo", new Class[]{int.class, String.class});
 
         Utils.domainEventHelper();
         final ActionDomainEvent<SomeDomainObject> ev = DomainEventHelper.newActionDomainEvent(

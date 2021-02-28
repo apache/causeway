@@ -19,7 +19,7 @@
 
 package org.apache.isis.core.metamodel.specloader.validator;
 
-import org.apache.isis.applib.id.Identifier;
+import org.apache.isis.applib.id.FeatureIdentifier;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.all.deficiencies.DeficiencyFacet;
 
@@ -30,7 +30,7 @@ public interface MetaModelValidator {
 
     default void onFailure(
             @NonNull FacetHolder facetHolder,
-            @NonNull Identifier deficiencyOrigin,
+            @NonNull FeatureIdentifier deficiencyOrigin,
             @NonNull String deficiencyMessageFormat,
             Object ...args) {
         

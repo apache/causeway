@@ -22,7 +22,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.isis.applib.events.EventObjectBase;
-import org.apache.isis.applib.id.Identifier;
+import org.apache.isis.applib.id.FeatureIdentifier;
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.applib.util.ToString;
@@ -49,7 +49,7 @@ public abstract class AbstractDomainEvent<S> extends EventObjectBase<S> {
 
     public AbstractDomainEvent(
             final S source,
-            final Identifier identifier) {
+            final FeatureIdentifier identifier) {
         super(source);
         this.identifier = identifier;
     }
@@ -135,12 +135,12 @@ public abstract class AbstractDomainEvent<S> extends EventObjectBase<S> {
      * If the no-arg constructor is used, then the framework will populate this field reflectively.
      */
     @Getter
-    private Identifier identifier;
+    private FeatureIdentifier identifier;
 
     /**
      * Not API, set by the framework if the no-arg constructor is used.
      */
-    public void setIdentifier(final Identifier identifier) {
+    public void setIdentifier(final FeatureIdentifier identifier) {
         this.identifier = identifier;
     }
 

@@ -19,7 +19,7 @@
 
 package org.apache.isis.core.metamodel.interactions;
 
-import org.apache.isis.applib.id.Identifier;
+import org.apache.isis.applib.id.FeatureIdentifier;
 import org.apache.isis.applib.services.wrapper.events.ParseValueEvent;
 import org.apache.isis.core.metamodel.consent.InteractionContextType;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -38,7 +38,7 @@ implements ProposedHolder {
 
     public ParseValueContext(
             final InteractionHead head,
-            final Identifier identifier,
+            final FeatureIdentifier identifier,
             final ManagedObject proposed,
             final InteractionInitiatedBy interactionInitiatedBy) {
         

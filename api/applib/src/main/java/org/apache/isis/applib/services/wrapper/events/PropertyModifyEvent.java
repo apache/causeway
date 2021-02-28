@@ -19,7 +19,7 @@
 
 package org.apache.isis.applib.services.wrapper.events;
 
-import org.apache.isis.applib.id.Identifier;
+import org.apache.isis.applib.id.FeatureIdentifier;
 
 /**
  * <i>Supported only by {@link org.apache.isis.applib.services.wrapper.WrapperFactory} service, </i> represents a check as to whether a particular value for a property is valid
@@ -34,7 +34,7 @@ public class PropertyModifyEvent extends ValidityEvent {
 
     private final Object proposed;
 
-    public PropertyModifyEvent(final Object source, final Identifier propertyIdentifier, final Object proposed) {
+    public PropertyModifyEvent(final Object source, final FeatureIdentifier propertyIdentifier, final Object proposed) {
         super(source, propertyIdentifier);
         this.proposed = proposed;
     }

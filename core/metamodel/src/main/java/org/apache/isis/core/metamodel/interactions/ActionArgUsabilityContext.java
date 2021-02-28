@@ -21,7 +21,7 @@ package org.apache.isis.core.metamodel.interactions;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.events.ActionArgumentUsabilityEvent;
-import org.apache.isis.applib.id.Identifier;
+import org.apache.isis.applib.id.FeatureIdentifier;
 import org.apache.isis.applib.services.wrapper.events.ActionArgumentEvent;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.consent.InteractionContextType;
@@ -47,7 +47,7 @@ implements ActionInteractionContext {
     public ActionArgUsabilityContext(
             final InteractionHead head,
             final ObjectAction objectAction,
-            final Identifier id,
+            final FeatureIdentifier id,
             final Can<ManagedObject> args,
             final int position,
             final InteractionInitiatedBy interactionInitiatedBy) {

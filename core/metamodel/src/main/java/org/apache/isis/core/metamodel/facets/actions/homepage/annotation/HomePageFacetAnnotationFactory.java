@@ -25,7 +25,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.apache.isis.applib.annotation.HomePage;
-import org.apache.isis.applib.id.Identifier;
+import org.apache.isis.applib.id.FeatureIdentifier;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -105,7 +105,7 @@ implements MetaModelRefiner {
                     
                     final Set<String> homepageActionIdSet = actionsHavingHomePageFacet.values().stream()
                             .map(ObjectAction::getIdentifier)
-                            .map(Identifier::getFullIdentityString)
+                            .map(FeatureIdentifier::getFullIdentityString)
                             .collect(Collectors.toCollection(HashSet::new));
                     
                     for (val objectAction : actionsHavingHomePageFacet.values()) {

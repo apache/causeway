@@ -19,7 +19,7 @@ package org.apache.isis.core.metamodel.progmodels.dflt;
 
 import java.util.stream.Collectors;
 
-import org.apache.isis.applib.id.Identifier;
+import org.apache.isis.applib.id.FeatureIdentifier;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.metamodel.BeanSort;
 import org.apache.isis.core.metamodel.authorization.standard.AuthorizationFacetFactory;
@@ -368,7 +368,7 @@ public final class ProgrammingModelFacetsJava8 extends ProgrammingModelAbstract 
 
                 val actionIds = actions.stream()
                 .map(ObjectAction::getIdentifier)
-                .map(Identifier::toString)
+                .map(FeatureIdentifier::toString)
                 .collect(Collectors.joining(", "));
 
                 validator.onFailure(objectSpec, objectSpec.getIdentifier(),

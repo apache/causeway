@@ -18,7 +18,7 @@
  */
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
-import org.apache.isis.applib.id.Identifier;
+import org.apache.isis.applib.id.FeatureIdentifier;
 import org.apache.isis.applib.id.TypeIdentifier;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.collections.CanVector;
@@ -62,7 +62,7 @@ public class ObjectActionMixedIn extends ObjectActionDefault implements MixedInM
     @Getter(onMethod = @__(@Override))
     private final FacetHolder facetHolder = new FacetHolderImpl();
 
-    private final Identifier identifier;
+    private final FeatureIdentifier identifier;
 
     public ObjectActionMixedIn(
             final Class<?> mixinType,
@@ -88,9 +88,9 @@ public class ObjectActionMixedIn extends ObjectActionDefault implements MixedInM
         }
 
         // calculate the identifier
-        final Identifier mixinIdentifier = mixinAction.getFacetedMethod().getIdentifier();
+        final FeatureIdentifier mixinIdentifier = mixinAction.getFacetedMethod().getIdentifier();
         val memberParameterClassNames = mixinIdentifier.getMemberParameterClassNames();
-        identifier = Identifier.actionIdentifier(
+        identifier = FeatureIdentifier.actionIdentifier(
                 TypeIdentifier.eager(
                         getOnType().getCorrespondingClass(),
                         getOnType().getSpecId().asString()),
@@ -177,7 +177,7 @@ public class ObjectActionMixedIn extends ObjectActionDefault implements MixedInM
      * @see ObjectMemberAbstract#getIdentifier()
      */
     @Override
-    public Identifier getIdentifier() {
+    public FeatureIdentifier getIdentifier() {
         return identifier;
     }
 

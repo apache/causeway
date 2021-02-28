@@ -19,7 +19,7 @@
 
 package org.apache.isis.applib.services.wrapper.events;
 
-import org.apache.isis.applib.id.Identifier;
+import org.apache.isis.applib.id.FeatureIdentifier;
 
 /**
  * <i>Supported only by {@link org.apache.isis.applib.services.wrapper.WrapperFactory} service, </i> represents an access (reading) of a property.
@@ -33,7 +33,7 @@ import org.apache.isis.applib.id.Identifier;
  */
 public class PropertyAccessEvent extends AccessEvent {
 
-    public PropertyAccessEvent(final Object source, final Identifier propertyIdentifier, final Object value) {
+    public PropertyAccessEvent(final Object source, final FeatureIdentifier propertyIdentifier, final Object value) {
         super(source, propertyIdentifier);
         this.value = value;
     }

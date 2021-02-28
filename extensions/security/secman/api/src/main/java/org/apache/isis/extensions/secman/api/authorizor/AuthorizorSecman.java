@@ -26,7 +26,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
-import org.apache.isis.applib.id.Identifier;
+import org.apache.isis.applib.id.FeatureIdentifier;
 import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.core.security.authentication.Authentication;
 import org.apache.isis.core.security.authorization.standard.Authorizor;
@@ -46,12 +46,12 @@ public class AuthorizorSecman implements Authorizor {
     @Inject ApplicationUserRepository<? extends ApplicationUser> applicationUserRepository;
     
     @Override
-    public boolean isVisible(final Authentication authentication, final Identifier identifier) {
+    public boolean isVisible(final Authentication authentication, final FeatureIdentifier identifier) {
         return grants(authentication, identifier, ApplicationPermissionMode.VIEWING);
     }
 
     @Override
-    public boolean isUsable(final Authentication authentication, final Identifier identifier) {
+    public boolean isUsable(final Authentication authentication, final FeatureIdentifier identifier) {
         return grants(authentication, identifier, ApplicationPermissionMode.CHANGING);
     }
     
@@ -59,7 +59,7 @@ public class AuthorizorSecman implements Authorizor {
     
     private boolean grants(
             final Authentication authentication, 
-            final Identifier identifier, 
+            final FeatureIdentifier identifier, 
             final ApplicationPermissionMode permissionMode) {
         
         return applicationUserRepository

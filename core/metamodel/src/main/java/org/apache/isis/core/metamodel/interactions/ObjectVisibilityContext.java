@@ -20,7 +20,7 @@
 package org.apache.isis.core.metamodel.interactions;
 
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.applib.id.Identifier;
+import org.apache.isis.applib.id.FeatureIdentifier;
 import org.apache.isis.applib.services.wrapper.events.ObjectVisibilityEvent;
 import org.apache.isis.core.metamodel.consent.InteractionContextType;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -37,7 +37,7 @@ implements ProposedHolder {
 
     public ObjectVisibilityContext(
             final ManagedObject targetAdapter,
-            final Identifier identifier,
+            final FeatureIdentifier identifier,
             final InteractionInitiatedBy interactionInitiatedBy,
             final Where where) {
         

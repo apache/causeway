@@ -20,7 +20,7 @@
 package org.apache.isis.core.metamodel.interactions;
 
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.applib.id.Identifier;
+import org.apache.isis.applib.id.FeatureIdentifier;
 import org.apache.isis.applib.services.wrapper.events.AccessEvent;
 import org.apache.isis.core.metamodel.consent.InteractionContextType;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -35,7 +35,7 @@ implements InteractionEventSupplier<AccessEvent> {
 
     public AccessContext(
             final InteractionContextType interactionType,
-            final Identifier identifier,
+            final FeatureIdentifier identifier,
             final InteractionHead head,
             final InteractionInitiatedBy interactionInitiatedBy) {
         super(interactionType, interactionInitiatedBy, identifier, head, Where.NOT_SPECIFIED);

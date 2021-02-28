@@ -19,7 +19,7 @@
 
 package org.apache.isis.applib.services.wrapper.events;
 
-import org.apache.isis.applib.id.Identifier;
+import org.apache.isis.applib.id.FeatureIdentifier;
 
 /**
  * <i>Supported only by {@link org.apache.isis.applib.services.wrapper.WrapperFactory} service, </i> represents an access (reading) of an object's title.
@@ -34,7 +34,7 @@ public class ObjectTitleEvent extends AccessEvent {
 
     private final String title;
 
-    public ObjectTitleEvent(final Object source, final Identifier classIdentifier, final String title) {
+    public ObjectTitleEvent(final Object source, final FeatureIdentifier classIdentifier, final String title) {
         super(source, classIdentifier);
         this.title = title;
     }

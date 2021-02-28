@@ -21,8 +21,8 @@ package org.apache.isis.core.metamodel.facets.object.disabled;
 
 import java.lang.reflect.Method;
 
-import org.apache.isis.applib.id.Identifier;
-import org.apache.isis.applib.id.Identifier.Type;
+import org.apache.isis.applib.id.FeatureIdentifier;
+import org.apache.isis.applib.id.FeatureIdentifier.Type;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
@@ -48,7 +48,7 @@ public class ObjectDisabledMethodFacetFactoryTest extends AbstractFacetFactoryTe
 
     public void testDisabledMethodPickedUpAndMethodRemoved() {
         final Class<?>[] params = new Class<?>[1];
-        params[0] = Identifier.Type.class;
+        params[0] = FeatureIdentifier.Type.class;
 
         class Customer {
             @SuppressWarnings("unused")

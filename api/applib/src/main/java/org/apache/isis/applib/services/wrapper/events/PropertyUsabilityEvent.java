@@ -19,7 +19,7 @@
 
 package org.apache.isis.applib.services.wrapper.events;
 
-import org.apache.isis.applib.id.Identifier;
+import org.apache.isis.applib.id.FeatureIdentifier;
 
 /**
  * <i>Supported only by {@link org.apache.isis.applib.services.wrapper.WrapperFactory} service, </i> represents a check as to whether a property is usable or has been disabled.
@@ -31,7 +31,7 @@ import org.apache.isis.applib.id.Identifier;
  */
 public class PropertyUsabilityEvent extends UsabilityEvent {
 
-    public PropertyUsabilityEvent(final Object source, final Identifier propertyIdentifier) {
+    public PropertyUsabilityEvent(final Object source, final FeatureIdentifier propertyIdentifier) {
         super(source, propertyIdentifier);
     }
 

@@ -24,7 +24,7 @@ import java.util.regex.Pattern;
 
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
-import org.apache.isis.applib.id.Identifier;
+import org.apache.isis.applib.id.FeatureIdentifier;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.primitives._Ints;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
@@ -174,7 +174,7 @@ public class PageParameterUtil {
     }
     
     private static String determineActionId(final ObjectAction objectAction) {
-        final Identifier identifier = objectAction.getIdentifier();
+        final FeatureIdentifier identifier = objectAction.getIdentifier();
         if (identifier != null) {
             return identifier.getMemberNameAndParameterClassNamesIdentityString();
         }

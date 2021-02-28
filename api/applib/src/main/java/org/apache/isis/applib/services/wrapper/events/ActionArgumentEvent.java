@@ -19,7 +19,7 @@
 
 package org.apache.isis.applib.services.wrapper.events;
 
-import org.apache.isis.applib.id.Identifier;
+import org.apache.isis.applib.id.FeatureIdentifier;
 
 /**
  * <i>Supported only by {@link org.apache.isis.applib.services.wrapper.WrapperFactory} service, </i> represents a check as to whether a particular argument for an action is valid
@@ -40,7 +40,7 @@ public class ActionArgumentEvent extends ValidityEvent {
     private final int position;
     private final Object proposed;
 
-    public ActionArgumentEvent(final Object source, final Identifier actionIdentifier, final Object[] args, final int position) {
+    public ActionArgumentEvent(final Object source, final FeatureIdentifier actionIdentifier, final Object[] args, final int position) {
         super(source, actionIdentifier);
         this.args = args;
         this.position = position;
