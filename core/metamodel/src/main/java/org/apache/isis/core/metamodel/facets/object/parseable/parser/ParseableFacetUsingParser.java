@@ -21,10 +21,10 @@ package org.apache.isis.core.metamodel.facets.object.parseable.parser;
 
 import java.util.IllegalFormatException;
 
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.adapters.ParsingException;
 import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
-import org.apache.isis.applib.id.FeatureIdentifier;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.consent.InteractionResultSet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
@@ -78,7 +78,7 @@ implements ParseableFacet {
                 && getFacetHolder().containsFacet(ValueFacet.class)) {
             
             val entryAdapter = getObjectManager().adapt(entry);
-            final FeatureIdentifier identifier = getIdentified().getIdentifier();
+            final Identifier identifier = getIdentified().getIdentifier();
             final ParseValueContext parseValueContext =
                     new ParseValueContext(
                             InteractionHead.simple(contextAdapter), identifier, entryAdapter, interactionInitiatedBy

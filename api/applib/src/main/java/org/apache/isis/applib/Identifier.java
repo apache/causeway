@@ -17,11 +17,12 @@
  *  under the License.
  */
 
-package org.apache.isis.applib.id;
+package org.apache.isis.applib;
 
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import org.apache.isis.applib.id.TypeIdentifier;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Strings;
@@ -34,14 +35,13 @@ import lombok.val;
  * Combines {@link TypeIdentifier} and member identification (from properties, collections or actions),
  * to a fully qualified <i>feature</i> identifier.
  * <p> 
- * For {@link FeatureIdentifier}(s) of type {@link FeatureIdentifier.Type#CLASS} member information is 
+ * For {@link Identifier}(s) of type {@link Identifier.Type#CLASS} member information is 
  * left empty.   
  *  
- * @apiNote Revised from former {@code Identifier (v1.x)}.
- * @since 2.0 {@index}
+ * @since 1.x revised for 2.0 {@index}
  * @see TypeIdentifier
  */
-public class FeatureIdentifier implements Comparable<FeatureIdentifier> {
+public class Identifier implements Comparable<Identifier> {
 
     /**
      * What type of feature this identifies.
@@ -55,29 +55,29 @@ public class FeatureIdentifier implements Comparable<FeatureIdentifier> {
 
     // -- FACTORY METHODS
 
-    public static FeatureIdentifier classIdentifier(final TypeIdentifier typeIdentifier) {
-        return new FeatureIdentifier(typeIdentifier, "", Can.empty(), Type.CLASS);
+    public static Identifier classIdentifier(final TypeIdentifier typeIdentifier) {
+        return new Identifier(typeIdentifier, "", Can.empty(), Type.CLASS);
     }
 
-    public static FeatureIdentifier propertyOrCollectionIdentifier(
+    public static Identifier propertyOrCollectionIdentifier(
             final TypeIdentifier typeIdentifier,
             final String propertyOrCollectionName) {
-        return new FeatureIdentifier(typeIdentifier, propertyOrCollectionName, Can.empty(), 
+        return new Identifier(typeIdentifier, propertyOrCollectionName, Can.empty(), 
                 Type.PROPERTY_OR_COLLECTION);
     }
 
-    public static FeatureIdentifier actionIdentifier(
+    public static Identifier actionIdentifier(
             final TypeIdentifier typeIdentifier,
             final String actionName, 
             final Class<?>... parameterClasses) {
         return actionIdentifier(typeIdentifier, actionName, classNamesOf(parameterClasses));
     }
 
-    public static FeatureIdentifier actionIdentifier(
+    public static Identifier actionIdentifier(
             final TypeIdentifier typeIdentifier,
             final String actionName, 
             final Can<String> parameterClassNames) {
-        return new FeatureIdentifier(typeIdentifier, actionName, parameterClassNames, Type.ACTION);
+        return new Identifier(typeIdentifier, actionName, parameterClassNames, Type.ACTION);
     }
 
     // -- INSTANCE FIELDS
@@ -110,7 +110,7 @@ public class FeatureIdentifier implements Comparable<FeatureIdentifier> {
 
     // -- CONSTRUCTOR
 
-    private FeatureIdentifier(
+    private Identifier(
             final TypeIdentifier typeIdentifier,
             final String memberName, 
             final Can<String> memberParameterClassNames, 
@@ -162,7 +162,7 @@ public class FeatureIdentifier implements Comparable<FeatureIdentifier> {
     // -- OBJECT CONTRACT
 
     @Override
-    public int compareTo(final FeatureIdentifier other) {
+    public int compareTo(final Identifier other) {
         return toString().compareTo(other.toString());
     }
 
@@ -171,13 +171,13 @@ public class FeatureIdentifier implements Comparable<FeatureIdentifier> {
         if (this == obj) {
             return true;
         }
-        if (obj instanceof FeatureIdentifier) {
-            return isEqualTo((FeatureIdentifier) obj);
+        if (obj instanceof Identifier) {
+            return isEqualTo((Identifier) obj);
         }
         return false;
     }
 
-    public boolean isEqualTo(final FeatureIdentifier other) {
+    public boolean isEqualTo(final Identifier other) {
         return Objects.equals(this.className, other.className) 
                 && Objects.equals(this.memberName, other.memberName) 
                 && this.memberParameterClassNames.equals(other.memberParameterClassNames);
@@ -250,7 +250,7 @@ public class FeatureIdentifier implements Comparable<FeatureIdentifier> {
     }
     
     private static Can<String> naturalNames(final Can<String> names) {
-        return names.map(FeatureIdentifier::naturalName);
+        return names.map(Identifier::naturalName);
     }
     
 }

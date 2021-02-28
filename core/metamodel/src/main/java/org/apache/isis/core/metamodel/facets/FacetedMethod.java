@@ -24,7 +24,7 @@ import java.lang.reflect.Type;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.isis.applib.id.FeatureIdentifier;
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.id.TypeIdentifier;
 import org.apache.isis.commons.internal.collections._Collections;
 import org.apache.isis.commons.internal.collections._Lists;
@@ -152,7 +152,7 @@ public class FacetedMethod extends TypedHolderDefault implements IdentifiedHolde
 
     private final Class<?> owningType;
     private final Method method;
-    private final FeatureIdentifier identifier;
+    private final Identifier identifier;
     private final List<FacetedMethodParameter> parameters;
 
     public List<FacetedMethodParameter> getParameters() {
@@ -200,7 +200,7 @@ public class FacetedMethod extends TypedHolderDefault implements IdentifiedHolde
     }
 
     @Override
-    public FeatureIdentifier getIdentifier() {
+    public Identifier getIdentifier() {
         return identifier;
     }
 

@@ -19,7 +19,7 @@
 
 package org.apache.isis.applib.services.wrapper.events;
 
-import org.apache.isis.applib.id.FeatureIdentifier;
+import org.apache.isis.applib.Identifier;
 
 /**
  * <i>Supported only by {@link org.apache.isis.applib.services.wrapper.WrapperFactory} service, </i> represents a check as to whether the proposed values of the value type is
@@ -39,14 +39,14 @@ public class ParseValueEvent extends ValidityEvent {
 
     private final String proposed;
 
-    public ParseValueEvent(final Object source, final FeatureIdentifier classIdentifier, final String proposed) {
+    public ParseValueEvent(final Object source, final Identifier classIdentifier, final String proposed) {
         super(coalesce(source, proposed), classIdentifier);
         this.proposed = proposed;
     }
 
     /**
      * Will be the source provided in the
-     * {@link #ParseValueEvent(Object, FeatureIdentifier, String) constructor} if not
+     * {@link #ParseValueEvent(Object, Identifier, String) constructor} if not
      * null, otherwise will fallback to the proposed value.
      */
     @Override

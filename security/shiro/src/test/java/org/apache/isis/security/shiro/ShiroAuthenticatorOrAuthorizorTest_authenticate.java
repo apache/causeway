@@ -34,7 +34,7 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-import org.apache.isis.applib.id.FeatureIdentifier;
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2.Mode;
@@ -99,19 +99,19 @@ public class ShiroAuthenticatorOrAuthorizorTest_authenticate {
         assertThat(authentication.getUserName(), is("lonestarr"));
         assertThat(authentication.getValidationCode(), is("test code"));
 
-        FeatureIdentifier changeAddressIdentifier = FeatureIdentifier.actionIdentifier(
+        Identifier changeAddressIdentifier = Identifier.actionIdentifier(
                 TypeIdentifierTestFactory.customer(), "changeAddress", String.class, String.class);
         assertThat(authorizor.isVisible(authentication, changeAddressIdentifier), is(true));
 
-        FeatureIdentifier changeEmailIdentifier = FeatureIdentifier.actionIdentifier(
+        Identifier changeEmailIdentifier = Identifier.actionIdentifier(
                 TypeIdentifierTestFactory.customer(), "changeEmail", String.class);
         assertThat(authorizor.isVisible(authentication, changeEmailIdentifier), is(true));
 
-        FeatureIdentifier submitOrderIdentifier = FeatureIdentifier.actionIdentifier(
+        Identifier submitOrderIdentifier = Identifier.actionIdentifier(
                 TypeIdentifierTestFactory.order(), "submit");
         assertThat(authorizor.isVisible(authentication, submitOrderIdentifier), is(true));
 
-        FeatureIdentifier cancelOrderIdentifier = FeatureIdentifier.actionIdentifier(
+        Identifier cancelOrderIdentifier = Identifier.actionIdentifier(
                 TypeIdentifierTestFactory.order(), "cancel");
         assertThat(authorizor.isVisible(authentication, cancelOrderIdentifier), is(false));
     }

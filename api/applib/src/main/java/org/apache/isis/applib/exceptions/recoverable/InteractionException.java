@@ -19,8 +19,8 @@
 
 package org.apache.isis.applib.exceptions.recoverable;
 
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.exceptions.RecoverableException;
-import org.apache.isis.applib.id.FeatureIdentifier;
 import org.apache.isis.applib.services.wrapper.events.InteractionEvent;
 
 public abstract class InteractionException extends RecoverableException {
@@ -62,7 +62,7 @@ public abstract class InteractionException extends RecoverableException {
      * {@link InteractionEvent#getIdentifier() identifier} of the wrapped
      * {@link #getInteractionEvent() interaction event}.
      */
-    public FeatureIdentifier getIdentifier() {
+    public Identifier getIdentifier() {
         return interactionEvent.getIdentifier();
     }
 

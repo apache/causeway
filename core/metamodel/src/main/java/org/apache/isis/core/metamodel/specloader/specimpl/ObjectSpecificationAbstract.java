@@ -32,7 +32,7 @@ import java.util.stream.Stream;
 
 import javax.enterprise.inject.Vetoed;
 
-import org.apache.isis.applib.id.FeatureIdentifier;
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.id.TypeIdentifier;
 import org.apache.isis.applib.services.metamodel.BeanSort;
 import org.apache.isis.commons.collections.ImmutableEnumSet;
@@ -182,7 +182,7 @@ implements ObjectSpecification {
     private final Class<?> correspondingClass;
     private final String fullName;
     private final String shortName;
-    private final FeatureIdentifier identifier;
+    private final Identifier identifier;
     private final boolean isAbstract;
 
     // derived lazily, cached since immutable
@@ -213,7 +213,7 @@ implements ObjectSpecification {
 
         this.isAbstract = ClassExtensions.isAbstract(introspectedClass);
 
-        this.identifier = FeatureIdentifier.classIdentifier(
+        this.identifier = Identifier.classIdentifier(
                 TypeIdentifier.lazy(
                         introspectedClass,
                         ()->specIdLazy.get().asString()));
@@ -612,7 +612,7 @@ implements ObjectSpecification {
     }
 
     @Override
-    public FeatureIdentifier getIdentifier() {
+    public Identifier getIdentifier() {
         return identifier;
     }
 

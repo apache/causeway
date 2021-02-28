@@ -28,11 +28,11 @@ import java.util.stream.Stream;
 
 import javax.annotation.Nullable;
 
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.applib.id.FeatureIdentifier;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.Clob;
 import org.apache.isis.commons.collections.Can;
@@ -312,7 +312,7 @@ public interface ObjectAction extends ObjectMember {
 
         public static String actionIdentifierFor(final ObjectAction action) {
             @SuppressWarnings("unused")
-            final FeatureIdentifier identifier = action.getIdentifier();
+            final Identifier identifier = action.getIdentifier();
 
             final String className = action.getOnType().getSpecId().asString().replace(".","-");
             final String actionId = action.getId();

@@ -19,7 +19,7 @@
 
 package org.apache.isis.core.metamodel.interactions;
 
-import org.apache.isis.applib.id.FeatureIdentifier;
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.wrapper.events.PropertyModifyEvent;
 import org.apache.isis.core.metamodel.consent.InteractionContextType;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -38,7 +38,7 @@ implements ProposedHolder {
 
     public PropertyModifyContext(
             final InteractionHead head,
-            final FeatureIdentifier id,
+            final Identifier id,
             final ManagedObject proposed,
             final InteractionInitiatedBy interactionInitiatedBy) {
         super(InteractionContextType.PROPERTY_MODIFY, head, id, interactionInitiatedBy);

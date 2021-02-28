@@ -19,7 +19,7 @@
 
 package org.apache.isis.core.metamodel.interactions;
 
-import org.apache.isis.applib.id.FeatureIdentifier;
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.wrapper.events.ObjectTitleEvent;
 import org.apache.isis.core.metamodel.consent.InteractionContextType;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -37,7 +37,7 @@ extends AccessContext {
 
     public ObjectTitleContext(
             final ManagedObject targetAdapter,
-            final FeatureIdentifier identifier,
+            final Identifier identifier,
             final String title,
             final InteractionInitiatedBy interactionInitiatedBy) {
         

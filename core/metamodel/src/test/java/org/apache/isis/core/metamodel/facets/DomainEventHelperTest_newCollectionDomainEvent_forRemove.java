@@ -26,9 +26,9 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertSame;
 
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.events.domain.AbstractDomainEvent;
 import org.apache.isis.applib.events.domain.CollectionDomainEvent;
-import org.apache.isis.applib.id.FeatureIdentifier;
 import org.apache.isis.applib.id.TypeIdentifier;
 
 public class DomainEventHelperTest_newCollectionDomainEvent_forRemove {
@@ -44,7 +44,7 @@ public class DomainEventHelperTest_newCollectionDomainEvent_forRemove {
     public void defaultEventType() throws Exception {
         SomeDomainObject sdo = new SomeDomainObject();
         SomeReferencedObject other = new SomeReferencedObject();
-        FeatureIdentifier identifier = FeatureIdentifier.propertyOrCollectionIdentifier(
+        Identifier identifier = Identifier.propertyOrCollectionIdentifier(
                 TypeIdentifier.fqcn(SomeDomainObject.class), "references");
 
         final CollectionDomainEvent<Object, Object> ev = Utils.domainEventHelper().newCollectionDomainEvent(
@@ -59,7 +59,7 @@ public class DomainEventHelperTest_newCollectionDomainEvent_forRemove {
     public void collectionRemovedFromDefaultEventType() throws Exception {
         SomeDomainObject sdo = new SomeDomainObject();
         SomeReferencedObject other = new SomeReferencedObject();
-        FeatureIdentifier identifier = FeatureIdentifier.propertyOrCollectionIdentifier(
+        Identifier identifier = Identifier.propertyOrCollectionIdentifier(
                 TypeIdentifier.fqcn(SomeDomainObject.class), "references");
 
         final CollectionDomainEvent<Object, Object> ev = Utils.domainEventHelper().newCollectionDomainEvent(
@@ -74,7 +74,7 @@ public class DomainEventHelperTest_newCollectionDomainEvent_forRemove {
     public void customEventType() throws Exception {
         SomeDomainObject sdo = new SomeDomainObject();
         SomeReferencedObject other = new SomeReferencedObject();
-        FeatureIdentifier identifier = FeatureIdentifier.propertyOrCollectionIdentifier(
+        Identifier identifier = Identifier.propertyOrCollectionIdentifier(
                 TypeIdentifier.fqcn(SomeDomainObject.class), "references");
 
         final CollectionDomainEvent<SomeDomainObject, SomeReferencedObject> ev = Utils.domainEventHelper().newCollectionDomainEvent(

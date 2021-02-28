@@ -19,8 +19,8 @@
 
 package org.apache.isis.core.metamodel.interactions;
 
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.applib.id.FeatureIdentifier;
 import org.apache.isis.applib.services.wrapper.events.UsabilityEvent;
 import org.apache.isis.core.metamodel.consent.InteractionContextType;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -36,7 +36,7 @@ implements InteractionEventSupplier<UsabilityEvent> {
     public UsabilityContext(
             final InteractionContextType interactionType,
             final InteractionHead head,
-            final FeatureIdentifier identifier,
+            final Identifier identifier,
             final InteractionInitiatedBy interactionInitiatedBy,
             final Where where) {
         super(interactionType, interactionInitiatedBy, identifier, head, where);

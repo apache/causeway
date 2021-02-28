@@ -29,7 +29,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
 
-import org.apache.isis.applib.id.FeatureIdentifier;
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2.Mode;
 import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
@@ -66,7 +66,7 @@ public class ObjectActionLayoutXmlDefaultTest {
         context.checking(new Expectations() {
             {
                 oneOf(mockFacetedMethod).getIdentifier();
-                will(returnValue(FeatureIdentifier.actionIdentifier(TypeIdentifierTestFactory.newCustomer(), "reduceheadcount")));
+                will(returnValue(Identifier.actionIdentifier(TypeIdentifierTestFactory.newCustomer(), "reduceheadcount")));
             }
         });
 

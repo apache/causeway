@@ -19,7 +19,7 @@
 
 package org.apache.isis.applib.events;
 
-import org.apache.isis.applib.id.FeatureIdentifier;
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.wrapper.events.UsabilityEvent;
 
 /**
@@ -40,7 +40,7 @@ public class ActionArgumentUsabilityEvent extends UsabilityEvent {
     private final int position;
 
     public ActionArgumentUsabilityEvent(
-            final Object source, final FeatureIdentifier actionIdentifier,
+            final Object source, final Identifier actionIdentifier,
             final Object[] args, final int position) {
         super(source, actionIdentifier);
         this.args = args;

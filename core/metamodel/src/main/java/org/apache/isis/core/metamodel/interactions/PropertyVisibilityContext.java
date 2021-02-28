@@ -19,8 +19,8 @@
 
 package org.apache.isis.core.metamodel.interactions;
 
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.applib.id.FeatureIdentifier;
 import org.apache.isis.applib.services.wrapper.events.PropertyVisibilityEvent;
 import org.apache.isis.core.metamodel.consent.InteractionContextType;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -34,7 +34,7 @@ public class PropertyVisibilityContext extends VisibilityContext {
 
     public PropertyVisibilityContext(
             final InteractionHead head,
-            final FeatureIdentifier identifier,
+            final Identifier identifier,
             final InteractionInitiatedBy interactionInitiatedBy,
             final Where where) {
         super(InteractionContextType.PROPERTY_VISIBLE, head, identifier, interactionInitiatedBy, where);

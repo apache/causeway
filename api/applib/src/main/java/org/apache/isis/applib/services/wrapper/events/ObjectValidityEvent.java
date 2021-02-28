@@ -19,7 +19,7 @@
 
 package org.apache.isis.applib.services.wrapper.events;
 
-import org.apache.isis.applib.id.FeatureIdentifier;
+import org.apache.isis.applib.Identifier;
 
 /**
  * <i>Supported only by {@link org.apache.isis.applib.services.wrapper.WrapperFactory} service, </i> represents a check as to whether the current values of the
@@ -34,7 +34,7 @@ import org.apache.isis.applib.id.FeatureIdentifier;
  */
 public class ObjectValidityEvent extends ValidityEvent {
 
-    public ObjectValidityEvent(final Object source, final FeatureIdentifier classIdentifier) {
+    public ObjectValidityEvent(final Object source, final Identifier classIdentifier) {
         super(source, classIdentifier);
     }
 

@@ -26,7 +26,7 @@ import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.stream.Stream;
 
-import org.apache.isis.applib.id.FeatureIdentifier;
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.metamodel.BeanSort;
 import org.apache.isis.commons.collections.ImmutableEnumSet;
 import org.apache.isis.commons.internal.base._Lazy;
@@ -292,7 +292,7 @@ implements FacetHolder {
 
         return candidateActions
                 .filter(action->{
-                    final FeatureIdentifier identifier = action.getIdentifier();
+                    final Identifier identifier = action.getIdentifier();
 
                     if (id.equals(identifier.getMemberNameAndParameterClassNamesIdentityString())) {
                         return true;

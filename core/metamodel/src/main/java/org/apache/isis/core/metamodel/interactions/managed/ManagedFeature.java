@@ -22,7 +22,7 @@ import java.util.Optional;
 
 import javax.annotation.Nullable;
 
-import org.apache.isis.applib.id.FeatureIdentifier;
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -30,7 +30,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 public interface ManagedFeature {
 
-    FeatureIdentifier getIdentifier();
+    Identifier getIdentifier();
     
     /**
      * @return The feature's display name, as rendered with the UI. 

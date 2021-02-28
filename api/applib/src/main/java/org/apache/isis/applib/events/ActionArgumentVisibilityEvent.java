@@ -19,7 +19,7 @@
 
 package org.apache.isis.applib.events;
 
-import org.apache.isis.applib.id.FeatureIdentifier;
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.wrapper.events.VisibilityEvent;
 
 /**
@@ -39,7 +39,7 @@ public class ActionArgumentVisibilityEvent extends VisibilityEvent {
     private final int position;
 
     public ActionArgumentVisibilityEvent(
-            final Object source, final FeatureIdentifier actionIdentifier,
+            final Object source, final Identifier actionIdentifier,
             final Object[] args, final int position) {
         super(source, actionIdentifier);
         this.args = args;

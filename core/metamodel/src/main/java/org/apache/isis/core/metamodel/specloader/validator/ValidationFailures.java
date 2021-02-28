@@ -26,7 +26,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.apache.isis.applib.id.FeatureIdentifier;
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Sets;
 
@@ -36,7 +36,7 @@ public final class ValidationFailures implements Iterable<ValidationFailure> {
 
     private final Set<ValidationFailure> failures = _Sets.newConcurrentHashSet();
 
-    public void add(FeatureIdentifier origin, String pattern, Object... arguments) {
+    public void add(Identifier origin, String pattern, Object... arguments) {
         val message = String.format(pattern, arguments);
         failures.add(ValidationFailure.of(origin, message));
     }

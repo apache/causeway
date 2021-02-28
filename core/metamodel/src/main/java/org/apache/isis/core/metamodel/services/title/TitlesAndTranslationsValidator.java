@@ -18,7 +18,7 @@
  */
 package org.apache.isis.core.metamodel.services.title;
 
-import org.apache.isis.applib.id.FeatureIdentifier;
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.id.TypeIdentifier;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.title.TitleService;
@@ -63,7 +63,7 @@ public class TitlesAndTranslationsValidator extends MetaModelValidatorAbstract {
             
             if(domainService == null) {
                 
-                val deficiencyOrigin = FeatureIdentifier.classIdentifier(
+                val deficiencyOrigin = Identifier.classIdentifier(
                         TypeIdentifier.eager(managedBeanAdapter.getBeanClass(), objectType));
                 val facetHolder = specificationLoader.loadSpecification(managedBeanAdapter.getBeanClass());
                 
@@ -84,7 +84,7 @@ public class TitlesAndTranslationsValidator extends MetaModelValidatorAbstract {
 
                 e.printStackTrace();
                 
-                val deficiencyOrigin = FeatureIdentifier.classIdentifier(
+                val deficiencyOrigin = Identifier.classIdentifier(
                         TypeIdentifier.eager(managedBeanAdapter.getBeanClass(), objectType));
                 val facetHolder = specificationLoader.loadSpecification(managedBeanAdapter.getBeanClass());
 
@@ -121,7 +121,7 @@ public class TitlesAndTranslationsValidator extends MetaModelValidatorAbstract {
 
                     } catch (Exception e) {
 
-                        val deficiencyOrigin = FeatureIdentifier.classIdentifier(
+                        val deficiencyOrigin = Identifier.classIdentifier(
                                 TypeIdentifier.eager(correspondingClass, objSpec.getSpecId().asString()));
                         val facetHolder = objSpec;
 
@@ -156,7 +156,7 @@ public class TitlesAndTranslationsValidator extends MetaModelValidatorAbstract {
             } catch (Exception e) {
 
                 val facetHolder = specificationLoader.loadSpecification(MessageRegistry.class);
-                val deficiencyOrigin = FeatureIdentifier.classIdentifier(
+                val deficiencyOrigin = Identifier.classIdentifier(
                         TypeIdentifier.eager(MessageRegistry.class, facetHolder.getSpecId().asString()));
 
                 super.onFailure(

@@ -18,7 +18,7 @@
  */
 package org.apache.isis.core.metamodel.specloader.validator;
 
-import org.apache.isis.applib.id.FeatureIdentifier;
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
@@ -40,7 +40,7 @@ class MetaModelValidatorForDeprecatedMethodPrefix extends MetaModelValidatorForD
         final boolean inherited = isInherited(processMethodContext);
 
         final IdentifiedHolder identifiedHolder = (IdentifiedHolder) facet.getFacetHolder();
-        final FeatureIdentifier identifier = identifiedHolder.getIdentifier();
+        final Identifier identifier = identifiedHolder.getIdentifier();
         final String id = identifier.getFullIdentityString();
         return String.format(
                 "%s%s: method prefix '%s' is deprecated",

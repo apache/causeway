@@ -25,7 +25,7 @@ import java.util.Optional;
 import org.jmock.Expectations;
 import org.junit.Rule;
 
-import org.apache.isis.applib.id.FeatureIdentifier;
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.id.TypeIdentifier;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.repository.EntityState;
@@ -80,14 +80,14 @@ public abstract class AbstractFacetFactoryTest extends TestCase {
 
     public static class IdentifiedHolderImpl extends FacetHolderImpl implements IdentifiedHolder {
 
-        private FeatureIdentifier identifier;
+        private Identifier identifier;
 
-        public IdentifiedHolderImpl(final FeatureIdentifier identifier) {
+        public IdentifiedHolderImpl(final Identifier identifier) {
             this.identifier = identifier;
         }
 
         @Override
-        public FeatureIdentifier getIdentifier() {
+        public Identifier getIdentifier() {
             return identifier;
         }
     }
@@ -99,7 +99,7 @@ public abstract class AbstractFacetFactoryTest extends TestCase {
         // PRODUCTION
 
         facetHolder = new IdentifiedHolderImpl(
-                FeatureIdentifier.propertyOrCollectionIdentifier(TypeIdentifier.fqcn(Customer.class), "firstName"));
+                Identifier.propertyOrCollectionIdentifier(TypeIdentifier.fqcn(Customer.class), "firstName"));
         facetedMethod = FacetedMethod.createForProperty(Customer.class, "firstName");
         facetedMethodParameter = new FacetedMethodParameter(
                 FeatureType.ACTION_PARAMETER_SCALAR, facetedMethod.getOwningType(), facetedMethod.getMethod(), String.class

@@ -28,8 +28,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.OrderPrecedence;
-import org.apache.isis.applib.id.FeatureIdentifier;
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.core.security.authentication.Authentication;
 import org.apache.isis.core.security.authentication.standard.Authenticator;
@@ -57,16 +57,16 @@ import lombok.val;
 public class AuthorizorShiro implements Authorizor {
 
     @Override
-    public boolean isVisible(final Authentication authentication, final FeatureIdentifier identifier) {
+    public boolean isVisible(final Authentication authentication, final Identifier identifier) {
         return isPermitted(authentication.getUserName(), identifier, "r");
     }
 
     @Override
-    public boolean isUsable(final Authentication authentication, final FeatureIdentifier identifier) {
+    public boolean isUsable(final Authentication authentication, final Identifier identifier) {
         return isPermitted(authentication.getUserName(), identifier, "w");
     }
 
-    private boolean isPermitted(String userName, FeatureIdentifier identifier, String qualifier) {
+    private boolean isPermitted(String userName, Identifier identifier, String qualifier) {
 
         RealmSecurityManager securityManager = getSecurityManager();
         if(securityManager == null) {
@@ -86,7 +86,7 @@ public class AuthorizorShiro implements Authorizor {
         }
     }
 
-    private String asPermissionsString(FeatureIdentifier identifier) {
+    private String asPermissionsString(Identifier identifier) {
         val logicalTypeName = identifier.getTypeIdentifier().getLogicalTypeNameFormatted(":", ":");
         return logicalTypeName + ":" + identifier.getMemberName();
     }

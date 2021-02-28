@@ -28,8 +28,8 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.OrderPrecedence;
-import org.apache.isis.applib.id.FeatureIdentifier;
 import org.apache.isis.applib.services.sudo.SudoService;
 import org.apache.isis.core.security.authentication.Authentication;
 import org.apache.isis.core.security.authorization.standard.Authorizor;
@@ -61,7 +61,7 @@ public class AuthorizationManager {
      */
     public boolean isUsable(
             final Authentication authentication, 
-            final FeatureIdentifier identifier) {
+            final Identifier identifier) {
         if (isPerspectiveMember(identifier)) {
             return true;
         }
@@ -84,7 +84,7 @@ public class AuthorizationManager {
      */
     public boolean isVisible(
             final Authentication authentication, 
-            final FeatureIdentifier identifier) {
+            final Identifier identifier) {
         if (isPerspectiveMember(identifier)) {
             return true;
         }
@@ -111,7 +111,7 @@ public class AuthorizationManager {
         return session.getUser().hasRoleName(SudoService.ACCESS_ALL_ROLE.getName());
     }
     
-    private boolean isPerspectiveMember(final FeatureIdentifier identifier) {
+    private boolean isPerspectiveMember(final Identifier identifier) {
         return (identifier.getClassName().equals(""));
     }
 

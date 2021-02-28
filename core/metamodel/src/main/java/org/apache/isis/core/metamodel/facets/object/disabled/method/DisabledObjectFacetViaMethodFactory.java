@@ -19,7 +19,7 @@
 
 package org.apache.isis.core.metamodel.facets.object.disabled.method;
 
-import org.apache.isis.applib.id.FeatureIdentifier;
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -58,7 +58,7 @@ public class DisabledObjectFacetViaMethodFactory extends MethodPrefixBasedFacetF
     public void process(final ProcessClassContext processClassContext) {
         val cls = processClassContext.getCls();
         val facetHolder = processClassContext.getFacetHolder();
-        val paramTypes = new Class<?>[] {FeatureIdentifier.Type.class};
+        val paramTypes = new Class<?>[] {Identifier.Type.class};
 
         val method = MethodFinderUtils.findMethod_returningText(
                 cls, MethodLiteralConstants.DISABLED,

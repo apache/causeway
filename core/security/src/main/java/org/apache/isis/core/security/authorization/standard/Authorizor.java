@@ -19,12 +19,12 @@
 
 package org.apache.isis.core.security.authorization.standard;
 
-import org.apache.isis.applib.id.FeatureIdentifier;
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.security.authentication.Authentication;
 
 public interface Authorizor {
 
-    boolean isVisible(Authentication authentication, FeatureIdentifier identifier);
-    boolean isUsable(Authentication authentication, FeatureIdentifier identifier);
+    boolean isVisible(Authentication authentication, Identifier identifier);
+    boolean isUsable(Authentication authentication, Identifier identifier);
 
 }

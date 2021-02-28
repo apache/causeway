@@ -25,8 +25,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.OrderPrecedence;
-import org.apache.isis.applib.id.FeatureIdentifier;
 import org.apache.isis.core.security.authentication.Authentication;
 import org.apache.isis.core.security.authorization.standard.Authorizor;
 
@@ -40,16 +40,16 @@ import org.apache.isis.core.security.authorization.standard.Authorizor;
 public class AuthorizorKeycloak implements Authorizor {
 
     @Override
-    public boolean isVisible(final Authentication authentication, FeatureIdentifier identifier) {
+    public boolean isVisible(final Authentication authentication, Identifier identifier) {
         return isPermitted(identifier, "r");
     }
 
     @Override
-    public boolean isUsable(final Authentication authentication, FeatureIdentifier identifier) {
+    public boolean isUsable(final Authentication authentication, Identifier identifier) {
         return isPermitted(identifier, "w");
     }
 
-    private boolean isPermitted(FeatureIdentifier identifier, String qualifier) {
+    private boolean isPermitted(Identifier identifier, String qualifier) {
         return true;
     }
 

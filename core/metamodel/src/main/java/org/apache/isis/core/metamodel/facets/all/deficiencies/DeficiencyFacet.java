@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
-import org.apache.isis.applib.id.FeatureIdentifier;
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -49,7 +49,7 @@ public final class DeficiencyFacet implements Facet {
     
     @Value(staticConstructor = "of")
     public static final class Deficiency {
-        @NonNull @Getter private FeatureIdentifier deficiencyOrigin;
+        @NonNull @Getter private Identifier deficiencyOrigin;
         @NonNull @Getter private String deficiencyMessage;
     }
     
@@ -62,7 +62,7 @@ public final class DeficiencyFacet implements Facet {
      */
     public static DeficiencyFacet appendTo(
             @NonNull FacetHolder facetHolder, 
-            @NonNull FeatureIdentifier deficiencyOrigin, 
+            @NonNull Identifier deficiencyOrigin, 
             @NonNull String deficiencyMessage) {
         
         val deficiencyFacet = computeIfAbsent(facetHolder.getFacet(DeficiencyFacet.class), 

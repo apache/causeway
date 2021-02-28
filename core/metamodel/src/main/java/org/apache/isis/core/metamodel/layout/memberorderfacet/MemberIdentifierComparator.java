@@ -22,7 +22,7 @@ package org.apache.isis.core.metamodel.layout.memberorderfacet;
 import java.io.Serializable;
 import java.util.Comparator;
 
-import org.apache.isis.applib.id.FeatureIdentifier;
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 
@@ -36,8 +36,8 @@ public class MemberIdentifierComparator implements Comparator<IdentifiedHolder>,
 
     @Override
     public int compare(final IdentifiedHolder o1, final IdentifiedHolder o2) {
-        final FeatureIdentifier identifier1 = o1.getIdentifier();
-        final FeatureIdentifier identifier2 = o2.getIdentifier();
+        final Identifier identifier1 = o1.getIdentifier();
+        final Identifier identifier2 = o2.getIdentifier();
         return identifier1.compareTo(identifier2);
     }
 

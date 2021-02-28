@@ -27,8 +27,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.events.domain.PropertyDomainEvent;
-import org.apache.isis.applib.id.FeatureIdentifier;
 import org.apache.isis.applib.id.TypeIdentifier;
 
 import static junit.framework.Assert.assertEquals;
@@ -44,7 +44,7 @@ public class DomainEventHelperTest_newPropertyDomainEvent_forClear {
     public void defaultEventType() throws Exception {
 
         SomeDomainObject sdo = new SomeDomainObject();
-        FeatureIdentifier identifier = FeatureIdentifier.propertyOrCollectionIdentifier(
+        Identifier identifier = Identifier.propertyOrCollectionIdentifier(
                 TypeIdentifier.fqcn(SomeDomainObject.class), "someDateProperty");
         LocalDate oldValue = LocalDate.of(2013,4,1);
         LocalDate newValue = null;
@@ -63,7 +63,7 @@ public class DomainEventHelperTest_newPropertyDomainEvent_forClear {
     public void customEventType() throws Exception {
 
         SomeDomainObject sdo = new SomeDomainObject();
-        FeatureIdentifier identifier = FeatureIdentifier.propertyOrCollectionIdentifier(
+        Identifier identifier = Identifier.propertyOrCollectionIdentifier(
                 TypeIdentifier.fqcn(SomeDomainObject.class), "someDateProperty");
         LocalDate oldValue = LocalDate.of(2013,4,1);
         LocalDate newValue = null;

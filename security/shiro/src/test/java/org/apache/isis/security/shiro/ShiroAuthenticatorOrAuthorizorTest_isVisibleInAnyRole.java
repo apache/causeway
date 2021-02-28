@@ -32,7 +32,7 @@ import org.junit.Test;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-import org.apache.isis.applib.id.FeatureIdentifier;
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2.Mode;
@@ -85,7 +85,7 @@ public class ShiroAuthenticatorOrAuthorizorTest_isVisibleInAnyRole {
         Authentication authentication = authenticator.authenticate(ar, "test code");
 
         // when, then
-        FeatureIdentifier changeAddressIdentifier = FeatureIdentifier.actionIdentifier(
+        Identifier changeAddressIdentifier = Identifier.actionIdentifier(
                 TypeIdentifierTestFactory.customer(), "changeAddress", String.class, String.class);
         assertThat(authorizor.isVisible(authentication, changeAddressIdentifier), is(true));
 
@@ -102,7 +102,7 @@ public class ShiroAuthenticatorOrAuthorizorTest_isVisibleInAnyRole {
         Authentication authentication = authenticator.authenticate(ar, "test code");
 
         // when, then
-        FeatureIdentifier removeCustomerIdentifier = FeatureIdentifier.actionIdentifier(
+        Identifier removeCustomerIdentifier = Identifier.actionIdentifier(
                 TypeIdentifierTestFactory.customer(), "remove");
         assertThat(authorizor.isVisible(authentication, removeCustomerIdentifier), is(true));
     }

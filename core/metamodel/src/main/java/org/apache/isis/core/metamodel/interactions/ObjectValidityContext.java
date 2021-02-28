@@ -19,7 +19,7 @@
 
 package org.apache.isis.core.metamodel.interactions;
 
-import org.apache.isis.applib.id.FeatureIdentifier;
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.wrapper.events.ObjectValidityEvent;
 import org.apache.isis.core.metamodel.consent.InteractionContextType;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -36,7 +36,7 @@ implements ProposedHolder {
 
     public ObjectValidityContext(
             final ManagedObject targetAdapter,
-            final FeatureIdentifier identifier,
+            final Identifier identifier,
             final InteractionInitiatedBy interactionInitiatedBy) {
         
         super(InteractionContextType.OBJECT_VALIDATE, 

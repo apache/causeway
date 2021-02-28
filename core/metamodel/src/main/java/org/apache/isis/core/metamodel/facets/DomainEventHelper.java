@@ -25,12 +25,12 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.events.domain.AbstractDomainEvent;
 import org.apache.isis.applib.events.domain.ActionDomainEvent;
 import org.apache.isis.applib.events.domain.CollectionDomainEvent;
 import org.apache.isis.applib.events.domain.PropertyDomainEvent;
 import org.apache.isis.applib.exceptions.UnrecoverableException;
-import org.apache.isis.applib.id.FeatureIdentifier;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.assertions._Assert;
@@ -120,7 +120,7 @@ public class DomainEventHelper {
                 // all other phases, create a new event
                 final S source = uncheckedCast(UnwrapUtil.single(head.getTarget()));
                 final Object[] arguments = UnwrapUtil.multipleAsArray(argumentAdapters);
-                final FeatureIdentifier identifier = identified.getIdentifier();
+                final Identifier identifier = identified.getIdentifier();
                 event = newActionDomainEvent(eventType, identifier, source, arguments);
 
                 // copy over if have
@@ -164,7 +164,7 @@ public class DomainEventHelper {
 
     static <S> ActionDomainEvent<S> newActionDomainEvent(
             final Class<? extends ActionDomainEvent<S>> type,
-            final FeatureIdentifier identifier,
+            final Identifier identifier,
             final S source,
             final Object... arguments) 
         throws IllegalArgumentException,
@@ -190,7 +190,7 @@ public class DomainEventHelper {
         val updateEventConstructor = constructors
                 .filter(paramCount(3)
                         .and(paramAssignableFrom(0, source.getClass()))
-                        .and(paramAssignableFrom(1, FeatureIdentifier.class))
+                        .and(paramAssignableFrom(1, Identifier.class))
                         .and(paramAssignableFrom(2, Object[].class))
                         )
                 .getFirst()
@@ -201,7 +201,7 @@ public class DomainEventHelper {
             return uncheckedCast(event);    
         }
         
-        throw new NoSuchMethodException(type.getName()+".<init>(? super " + source.getClass().getName() + ", " + FeatureIdentifier.class.getName() + ", [Ljava.lang.Object;)");
+        throw new NoSuchMethodException(type.getName()+".<init>(? super " + source.getClass().getName() + ", " + Identifier.class.getName() + ", [Ljava.lang.Object;)");
     }
 
     // same as in ActionDomainEvent's constructor.
@@ -234,7 +234,7 @@ public class DomainEventHelper {
                 // all other phases, create a new event
                 
                 final S source = uncheckedCast(UnwrapUtil.single(head.getTarget()));
-                final FeatureIdentifier identifier = identified.getIdentifier();
+                final Identifier identifier = identified.getIdentifier();
                 
                 event = newPropertyDomainEvent(eventType, identifier, source, oldValue, newValue);
 
@@ -263,7 +263,7 @@ public class DomainEventHelper {
 
     static <S,T> PropertyDomainEvent<S,T> newPropertyDomainEvent(
             final @NonNull Class<? extends PropertyDomainEvent<S, T>> type,
-            final @NonNull FeatureIdentifier identifier,
+            final @NonNull Identifier identifier,
             final S source,
             final T oldValue,
             final T newValue) throws NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException  {
@@ -288,7 +288,7 @@ public class DomainEventHelper {
         val updateEventConstructors = constructors
                 .filter(paramCount(4)
                         .and(paramAssignableFrom(0, source.getClass()))
-                        .and(paramAssignableFrom(1, FeatureIdentifier.class))
+                        .and(paramAssignableFrom(1, Identifier.class))
                         .and(paramAssignableFromValue(2, oldValue))
                         .and(paramAssignableFromValue(3, newValue))
                         );
@@ -299,7 +299,7 @@ public class DomainEventHelper {
         }
 
         // else
-        throw new NoSuchMethodException(type.getName()+".<init>(? super " + source.getClass().getName() + ", " + FeatureIdentifier.class.getName() + ", java.lang.Object, java.lang.Object)");
+        throw new NoSuchMethodException(type.getName()+".<init>(? super " + source.getClass().getName() + ", " + Identifier.class.getName() + ", java.lang.Object, java.lang.Object)");
     }
 
 
@@ -324,7 +324,7 @@ public class DomainEventHelper {
             } else {
                 // all other phases, create a new event
                 final S source = uncheckedCast(UnwrapUtil.single(head.getTarget()));
-                final FeatureIdentifier identifier = identified.getIdentifier();
+                final Identifier identifier = identified.getIdentifier();
                 event = newCollectionDomainEvent(eventType, phase, identifier, source, of, reference);
 
                 // copy over if have
@@ -345,7 +345,7 @@ public class DomainEventHelper {
     <S, T> CollectionDomainEvent<S, T> newCollectionDomainEvent(
             final Class<? extends CollectionDomainEvent<S, T>> type,
                     final AbstractDomainEvent.Phase phase,
-                    final FeatureIdentifier identifier,
+                    final Identifier identifier,
                     final S source,
                     final CollectionDomainEvent.Of of,
                     final T value)
@@ -372,7 +372,7 @@ public class DomainEventHelper {
         val updateEventConstructors = constructors
                 .filter(paramCount(4)
                         .and(paramAssignableFrom(0, source.getClass()))
-                        .and(paramAssignableFrom(1, FeatureIdentifier.class))
+                        .and(paramAssignableFrom(1, Identifier.class))
                         .and(paramAssignableFrom(2, CollectionDomainEvent.Of.class))
                         .and(paramAssignableFromValue(3, value))
                         );
@@ -392,7 +392,7 @@ public class DomainEventHelper {
                 val eventConstructors = constructors
                         .filter(paramCount(3)
                                 .and(paramAssignableFrom(0, source.getClass()))
-                                .and(paramAssignableFrom(1, FeatureIdentifier.class))
+                                .and(paramAssignableFrom(1, Identifier.class))
                                 .and(paramAssignableFromValue(2, value))
                                 );
                 for (val constructor : eventConstructors) {
@@ -403,7 +403,7 @@ public class DomainEventHelper {
         }
         
         // else
-        throw new NoSuchMethodException(type.getName()+".<init>(? super " + source.getClass().getName() + ", " + FeatureIdentifier.class.getName() + ", java.lang.Object)");
+        throw new NoSuchMethodException(type.getName()+".<init>(? super " + source.getClass().getName() + ", " + Identifier.class.getName() + ", java.lang.Object)");
     }
 
     private static <T> T invokeConstructor(

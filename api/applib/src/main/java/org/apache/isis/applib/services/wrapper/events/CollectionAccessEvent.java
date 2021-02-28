@@ -19,7 +19,7 @@
 
 package org.apache.isis.applib.services.wrapper.events;
 
-import org.apache.isis.applib.id.FeatureIdentifier;
+import org.apache.isis.applib.Identifier;
 
 /**
  * <i>Supported only by {@link org.apache.isis.applib.services.wrapper.WrapperFactory} service, </i> represents an access (reading) of a collection.
@@ -34,7 +34,7 @@ import org.apache.isis.applib.id.FeatureIdentifier;
  */
 public class CollectionAccessEvent extends AccessEvent {
 
-    public CollectionAccessEvent(final Object source, final FeatureIdentifier collectionIdentifier) {
+    public CollectionAccessEvent(final Object source, final Identifier collectionIdentifier) {
         super(source, collectionIdentifier);
     }
 

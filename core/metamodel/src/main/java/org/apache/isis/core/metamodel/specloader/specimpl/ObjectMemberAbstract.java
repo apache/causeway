@@ -23,8 +23,8 @@ import java.util.Objects;
 import java.util.UUID;
 import java.util.function.Function;
 
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.applib.id.FeatureIdentifier;
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.core.metamodel.commons.StringExtensions;
 import org.apache.isis.core.metamodel.consent.Consent;
@@ -92,7 +92,7 @@ implements ObjectMember, HasMetaModelContext, HasFacetHolder {
     }
 
     @Override
-    public FeatureIdentifier getIdentifier() {
+    public Identifier getIdentifier() {
         return getFacetedMethod().getIdentifier();
     }
 

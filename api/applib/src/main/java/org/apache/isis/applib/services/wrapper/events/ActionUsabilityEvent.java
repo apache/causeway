@@ -19,7 +19,7 @@
 
 package org.apache.isis.applib.services.wrapper.events;
 
-import org.apache.isis.applib.id.FeatureIdentifier;
+import org.apache.isis.applib.Identifier;
 
 /**
  * <i>Supported only by {@link org.apache.isis.applib.services.wrapper.WrapperFactory} service, </i> represents a check as to whether an action is usable or has been disabled.
@@ -31,7 +31,7 @@ import org.apache.isis.applib.id.FeatureIdentifier;
  */
 public class ActionUsabilityEvent extends UsabilityEvent {
 
-    public ActionUsabilityEvent(final Object source, final FeatureIdentifier actionIdentifier) {
+    public ActionUsabilityEvent(final Object source, final Identifier actionIdentifier) {
         super(source, actionIdentifier);
     }
 

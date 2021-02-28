@@ -29,13 +29,12 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-import org.apache.isis.applib.id.FeatureIdentifier;
 import org.apache.isis.applib.id.TypeIdentifier;
 import org.apache.isis.commons.collections.Can;
 
 public class IdentifierTests {
 
-    private FeatureIdentifier identifier;
+    private Identifier identifier;
 
     @Before
     public void setUp() {
@@ -43,7 +42,7 @@ public class IdentifierTests {
 
     @Test
     public void canInstantiateClassIdentifier() {
-        identifier = FeatureIdentifier.classIdentifier(TypeIdentifier.fqcn(SomeDomainClass.class));
+        identifier = Identifier.classIdentifier(TypeIdentifier.fqcn(SomeDomainClass.class));
         assertThat(identifier, is(not(nullValue())));
     }
 
@@ -51,21 +50,21 @@ public class IdentifierTests {
     public void classIdentifierClassNameIsSet() {
         final Class<?> domainClass = SomeDomainClass.class;
         final String domainClassFullyQualifiedName = domainClass.getCanonicalName();
-        identifier = FeatureIdentifier.classIdentifier(TypeIdentifier.fqcn(domainClass));
+        identifier = Identifier.classIdentifier(TypeIdentifier.fqcn(domainClass));
         assertThat(identifier.getClassName(), is(domainClassFullyQualifiedName));
     }
 
     @Test
     public void memberParameterNames() {
         final Class<?> domainClass = SomeDomainClass.class;
-        identifier = FeatureIdentifier.actionIdentifier(TypeIdentifier.fqcn(domainClass), "placeOrder", int.class, String.class);
+        identifier = Identifier.actionIdentifier(TypeIdentifier.fqcn(domainClass), "placeOrder", int.class, String.class);
         assertThat(identifier.getMemberParameterClassNames(), is(Can.of("int", "java.lang.String")));
     }
 
     @Test
     public void paramsIdentityString() {
         final Class<?> domainClass = SomeDomainClass.class;
-        identifier = FeatureIdentifier.actionIdentifier(TypeIdentifier.fqcn(domainClass), "placeOrder", int.class, String.class, BigDecimal.class);
+        identifier = Identifier.actionIdentifier(TypeIdentifier.fqcn(domainClass), "placeOrder", int.class, String.class, BigDecimal.class);
         assertThat(
                 identifier.getFullIdentityString(), 
                 is("org.apache.isis.applib.SomeDomainClass#placeOrder(int,java.lang.String,java.math.BigDecimal)"));
