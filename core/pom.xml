@@ -58,7 +58,7 @@
 		<pmd.ruleset>${coreBaseDir}/codequality/pmd.xml</pmd.ruleset>
 
 		<license.additional-notes>In addition, Apache Isis uses some
-			Javascript libraries:
+			JavaScript libraries:
 
 			* Twitter Bootstrap, licensed under MIT [1]
 			*

@@ -2178,7 +2178,7 @@ public class IsisConfiguration {
                 /**
                  */
                 /**
-                 * URL of file to read any custom Javascript, relative to <code>static</code> package on the class path.
+                 * URL of file to read any custom JavaScript, relative to <code>static</code> package on the class path.
                  *
                  * <p>
                  *     A typical value is <code>js/application.js</code>.  This will result in this file being read

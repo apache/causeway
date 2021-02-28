@@ -53,7 +53,7 @@ The xref:refguide:config:about.adoc[Configuration Guide] includes a xref:refguid
 //
 //Configuration properties that identify the application, in the sign-in page, welcome and about pages.
 //
-//These also include top-level overrides for CSS and Javascript.
+//These also include top-level overrides for CSS and JavaScript.
 //
 //.Application Identity
 //[cols="2a,1,3a", options="header"]
@@ -103,7 +103,7 @@ The xref:refguide:config:about.adoc[Configuration Guide] includes a xref:refguid
 //`application.js`
 //|File name +
 //(_`scripts/application.js`_)
-//|File to read any custom Javascript, relative to `src/main/webapp` directory.
+//|File to read any custom JavaScript, relative to `src/main/webapp` directory.
 //
 //|`isis.viewer.wicket.` +
 //`application.name`

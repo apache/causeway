@@ -45,7 +45,7 @@ There are three main use cases for deploying Apache Isis as a RESTful web servic
 
 * to allow a custom UI to be built against the RESTful API
 +
-For example, using a Javascript framework such as Angular/Ionic/ReactJs/Vue etc, or JavaFX
+For example, using a JavaScript framework such as Angular/Ionic/ReactJs/Vue etc, or JavaFX
 
 * to enable integration between systems
 +

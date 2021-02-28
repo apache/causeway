@@ -8,7 +8,7 @@ WARNING: TODO: this content has not yet been reviewed/updated for v2.0
 
 The `ContentNegotiationService` is a plug-in point for the xref:vro:ROOT:about.adoc[RestfulObjects viewer] so that it can generate representations according to HTTP `Accept` header of the request.  This idea is discussed in section 34.1 of the link:http://restfulobjects.org[Restful Objects spec] v1.0.
 
-The principal motivation is to allow more flexible representations to be generated for REST clients that (perhaps through their use of a certain Javascript library, say) expect, or at least works best with, a certain style of representation.
+The principal motivation is to allow more flexible representations to be generated for REST clients that (perhaps through their use of a certain JavaScript library, say) expect, or at least works best with, a certain style of representation.
 
 Another use case is to support "third party" REST clients over which you have no control.  In this scenario you _must not_ naively expose entities through the RO viewer, because over time those entities will inevitably evolve and change their structure.  If the entities were exposed directly then those REST clients will break.
 
