@@ -7,10 +7,8 @@
 .AuthorizorBypass.java
 ----
 class AuthorizorBypass {
-  boolean isUsableInRole(final String role, final Identifier identifier)
-  boolean isVisibleInRole(final String user, final Identifier identifier)
-  boolean isVisibleInAnyRole(Identifier identifier)
-  boolean isUsableInAnyRole(Identifier identifier)
+  boolean isVisible(final Authentication authentication, final Identifier identifier)
+  boolean isUsable(final Authentication authentication, final Identifier identifier)
 }
 ----
 

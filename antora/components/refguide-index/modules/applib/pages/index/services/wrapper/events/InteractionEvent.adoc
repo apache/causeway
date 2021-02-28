@@ -18,8 +18,8 @@ class InteractionEvent {
   String getClassNaturalName()     // <.>
   String getMemberName()     // <.>
   String getMemberNaturalName()     // <.>
-  List<String> getMemberParameterNames()     // <.>
-  List<String> getMemberParameterNaturalNames()     // <.>
+  Can<String> getMemberParameterNames()     // <.>
+  Can<String> getMemberParameterNaturalNames()     // <.>
   String getReason()     // <.>
   String getReasonMessage()     // <.>
   Class<?> getAdvisorClass()     // <.>

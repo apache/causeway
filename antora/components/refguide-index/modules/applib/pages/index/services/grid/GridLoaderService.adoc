@@ -12,8 +12,8 @@ interface GridLoaderService {
   boolean supportsReloading()     // <.>
   void remove(Class<?> domainClass)     // <.>
   boolean existsFor(Class<?> domainClass)     // <.>
-  Grid load(final Class<?> domainClass)     // <.>
-  Grid load(final Class<?> domainClass, String layout)     // <.>
+  Grid load(Class<?> domainClass)     // <.>
+  Grid load(Class<?> domainClass, String layout)     // <.>
 }
 ----
 

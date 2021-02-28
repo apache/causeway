@@ -93,6 +93,7 @@ Applications can discover the prototyping mode by injecting the `IsisSystemEnvir
 
 
 
+[#specifying-components]
 == Specifying components
 
 Components are pluggable parts of the Apache Isis framework that are responsible for the presentation layer, for security, or for persistence.
@@ -129,26 +130,27 @@ It looks like this:
 ----
 @Configuration
 @Import({
-        IsisModuleCoreRuntimeServices.class,                    // <1>
-        IsisModuleSecurityShiro.class,                          // <2>
-        IsisModuleJdoDataNucleus5.class,                        // <3>
-        IsisModuleViewerRestfulObjectsJaxrsResteasy4.class,     // <4>
-        IsisModuleViewerWicketViewer.class,                     // <5>
+        IsisModuleCoreRuntimeServices.class,                    // <.>
+        IsisModuleSecurityShiro.class,                          // <.>
+        IsisModuleJdoDataNucleus5.class,                        // <.>
+        IsisModuleViewerRestfulObjectsJaxrsResteasy4.class,     // <.>
+        IsisModuleViewerWicketViewer.class,                     // <.>
         ...
-        ApplicationModule.class,                                // <6>
+        ApplicationModule.class,                                // <.>
         ...
 })
 public class AppManifest {
 }
 ----
-<1> Mandatory - specifies the core of the Apache Isis framework
-<2> Enables the Shiro security mechanism.
+
+<.> Mandatory - specifies the core of the Apache Isis framework
+<.> Enables the Shiro security mechanism.
 There are several security implementations, precisely one must be selected
-<3> Enables JDO/DataNucleus for persistence.
+<.> Enables JDO/DataNucleus for persistence.
 Optional (though if omitted then only xref:userguide:fun:overview.adoc#view-models[view models] may be used, with hand-rolled persistence).
-<4> Enables the xref:vro:ROOT:about.adoc[Restful Objects viewer] (ie REST API).
-<5> Enables the xref:vw:ROOT:about.adoc[Wicket viewer]
-<6> References the application's module(s), in this case just the one, `ApplicationModule`. +
+<.> Enables the xref:vro:ROOT:about.adoc[Restful Objects viewer] (ie REST API).
+<.> Enables the xref:vw:ROOT:about.adoc[Wicket viewer]
+<.> References the application's module(s), in this case just the one, `ApplicationModule`. +
 
 All of the components available are named in the form`IsisModuleXxx`, so they are easy to discover.
 
