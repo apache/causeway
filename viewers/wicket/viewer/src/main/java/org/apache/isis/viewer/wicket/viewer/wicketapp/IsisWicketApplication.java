@@ -476,7 +476,7 @@ implements
     // //////////////////////////////////////
 
     /**
-     * filters Javascript header contributions so rendered to bottom of page.
+     * filters JavaScript header contributions so rendered to bottom of page.
      *
      * <p>
      * Factored out for easy (informal) pluggability.

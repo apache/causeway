@@ -61,7 +61,7 @@ public class XEditableBehaviorWkt extends XEditableBehavior {
             private static final long serialVersionUID = 1L;
 
             /**
-             * what's bound to "validate" event in Javascript, and sent to the server
+             * what's bound to "validate" event in JavaScript, and sent to the server
              */
             @Override
             protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {

@@ -67,9 +67,9 @@ The link:https://github.com/apache/isis-antora[Antora UI bundle] (which defines 
 There are four steps:
 
 * reference the CSS
-* reference the Javascript
-* set up an input field for the `docsearch` Javascript function to hook into
-* run the `docsearch` Javascript function on page load
+* reference the JavaScript
+* set up an input field for the `docsearch` JavaScript function to hook into
+* run the `docsearch` JavaScript function on page load
 
 These are fully described in the link:https://docsearch.algolia.com/docs/dropdown[Algolia docs].
 There are other options for styling, see link:https://docsearch.algolia.com/docs/styling/[here].

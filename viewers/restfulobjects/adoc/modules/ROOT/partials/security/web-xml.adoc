@@ -64,7 +64,7 @@ The strategy is configured in `web.xml`; for example:
 </filter>
 ----
 <1> configure basic auth strategy
-<2> what to do if no session was found; we use `auto` so as to issue a 401 status code with basic authentication challenge if the request originated from a web browser.  (Prior to `1.11.0` this parameter was set either to `basicAuthChallenge` (which works when requested from web browser) or to `unauthorized` (which works when requested from a suitably coded custom Javascript app).
+<2> what to do if no session was found; we use `auto` so as to issue a 401 status code with basic authentication challenge if the request originated from a web browser.  (Prior to `1.11.0` this parameter was set either to `basicAuthChallenge` (which works when requested from web browser) or to `unauthorized` (which works when requested from a suitably coded custom JavaScript app).
 <3> which paths are allowed to be accessed directly, without a session.  The `/restful/swagger` path provides access to the SwaggerResource that dynamically generates swagger schema definition files from the Apache Isis metamodel.
 
 

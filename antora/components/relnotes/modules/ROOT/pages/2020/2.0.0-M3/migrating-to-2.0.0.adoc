@@ -760,7 +760,7 @@ Experimental feature to allow for submission of background-tasks, that themselve
 To make this work we introduce following components:
 
 - A SSE Servlet listening on '/sse' for client requests.
-- Client-Side Javascript that can subscribe 'EventStream's to the SSE Servlet
+- Client-Side JavaScript that can subscribe 'EventStream's to the SSE Servlet
 - An EventStreamSource interface for any designated background task to implement.
 - An EventStreamService, that allows for such EventStreamSource objects to be submitted for execution on a thread-pool.
 - An EventStreamSource is associated with an EventStream on which it may fire update events.
@@ -1192,7 +1192,7 @@ We do now provide JAXB XmlAdapters for Java built-in temporal types in 'applib':
 
 === Wicket-Viewer
 
-Instead of browser built-in tooltip rendering, the framework now provides tooltips using Javascript and CSS, currently with following stylesheet defaults:
+Instead of browser built-in tooltip rendering, the framework now provides tooltips using JavaScript and CSS, currently with following stylesheet defaults:
 
 ----
 .ui-tooltip {

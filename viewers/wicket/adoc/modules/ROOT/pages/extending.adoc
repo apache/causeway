@@ -9,7 +9,7 @@ The Wicket viewer allows you to customize the GUI in several (progressively more
 * the xref:vw:ROOT:customisation.adoc[customisation] chapter described:
 
 ** by xref:vw:ROOT:customisation.adoc#tweaking-css-classes[tweaking the UI using CSS]
-** by xref:vw:ROOT:customisation.adoc#custom-javascript[tweaking the UI using Javascript]
+** by xref:vw:ROOT:customisation.adoc#custom-javascript[tweaking the UI using JavaScript]
 
 * in this chapter we have a number of heavier-weight approaches:
 

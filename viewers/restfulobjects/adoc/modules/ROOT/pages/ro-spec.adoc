@@ -11,7 +11,7 @@ The Restful Objects spec can be downloaded from link:http://restfulobjects.org[h
 == Goals of the Spec
 
 The goal of Restful Objects is to allow domain models to be accessed through HTTP resources, returning a set of JSON representations.
-These representations can then be consumed by any client (e.g. Javascript, Java, .NET, Ruby, Python).
+These representations can then be consumed by any client (e.g. JavaScript, Java, .NET, Ruby, Python).
 
 Both the resources and representations are generalized so that they can be applied to any domain model, and by default all representations have media types designed to allow a completely generic client to be written, capable of working, unmodified, with any domain model that has a Restful Objects interface.
 
