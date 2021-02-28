@@ -22,9 +22,6 @@ import org.apache.isis.applib.id.TypeIdentifier;
 
 final class TypeIdentifierTestFactory {
 
-    private static class Customer {};
-    private static class Order {};
-    
     static TypeIdentifier customer() {
         return TypeIdentifier.fqcn(Customer.class);
     }
@@ -34,3 +31,6 @@ final class TypeIdentifierTestFactory {
     }
     
 }
+
+final class Customer {}
+final class Order {};

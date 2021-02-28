@@ -18,9 +18,6 @@
  */
 package org.apache.isis.security.shiro.authorization;
 
-import java.util.Optional;
-
-import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.apache.shiro.SecurityUtils;
@@ -33,12 +30,7 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.id.FeatureIdentifier;
-import org.apache.isis.commons.functional.Result;
 import org.apache.isis.commons.internal.assertions._Assert;
-import org.apache.isis.commons.internal.context._Context;
-import org.apache.isis.core.metamodel.spec.ObjectSpecId;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.security.authentication.Authentication;
 import org.apache.isis.core.security.authentication.standard.Authenticator;
 import org.apache.isis.core.security.authorization.standard.Authorizor;
@@ -51,7 +43,8 @@ import lombok.val;
  * in the role of {@link Authorizor}.
  *
  * <p>
- * However, although there are two objects, they are set up to share the same {@link SecurityManager Shiro SecurityManager}
+ * However, although there are two objects, they are set up to share the same 
+ * {@link SecurityManager Shiro SecurityManager}
  * (bound to a thread-local).
  * </p>
  *
@@ -62,8 +55,6 @@ import lombok.val;
 @Order(OrderPrecedence.EARLY)
 @Qualifier("Shiro")
 public class AuthorizorShiro implements Authorizor {
-
-    @Inject private SpecificationLoader specificationLoader;
 
     @Override
     public boolean isVisible(final Authentication authentication, final FeatureIdentifier identifier) {
@@ -96,18 +87,8 @@ public class AuthorizorShiro implements Authorizor {
     }
 
     private String asPermissionsString(FeatureIdentifier identifier) {
-        String fullyQualifiedLogicalTypeName = asFeatureFqns(identifier);
-        int lastDot = fullyQualifiedLogicalTypeName.lastIndexOf('.');
-        String packageName;
-        String className;
-        if(lastDot > 0) {
-            packageName =fullyQualifiedLogicalTypeName.substring(0, lastDot);
-            className = fullyQualifiedLogicalTypeName.substring(lastDot+1);
-        } else {
-            packageName = "";
-            className = fullyQualifiedLogicalTypeName;
-        }
-        return packageName + ":" + className + ":" + identifier.getMemberName();
+        val logicalTypeName = identifier.getTypeIdentifier().getLogicalTypeNameFormatted(":", ":");
+        return logicalTypeName + ":" + identifier.getMemberName();
     }
 
     // -- DEPS
@@ -118,26 +99,6 @@ public class AuthorizorShiro implements Authorizor {
      */
     protected RealmSecurityManager getSecurityManager() {
         return ShiroSecurityContext.getSecurityManager();
-    }
-
-    // -- HELPER
-
-    /**
-     * @deprecated while this is technically correct, we should not need to call the SpecificationLoader
-     * on every permission check
-     */
-    private String asFeatureFqns(FeatureIdentifier identifier) {
-        val className = identifier.getClassName();
-        return Result.of(()->_Context.loadClass(className))
-                .<String>mapSuccess(this::asFeatureFqns)
-                .presentElse(className);
-    }
-
-    private String asFeatureFqns(Class<?> cls) {
-        return Optional.ofNullable(specificationLoader.loadSpecification(cls))
-                .map(ObjectSpecification::getSpecId)
-                .map(ObjectSpecId::asString)
-                .orElseGet(()->cls.getName());
     }
 
 

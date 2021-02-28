@@ -51,6 +51,10 @@ public final class TypeIdentifier implements Comparable<TypeIdentifier> {
 
     // -- FACTORIES
     
+    /**
+     * Returns a new TypeIdentifier based on the corresponding class
+     * and a {@code logicalNameProvider} for lazy logical name lookup.  
+     */
     public static TypeIdentifier lazy(
             final @NonNull Class<?> correspondingClass, 
             final @NonNull Supplier<String> logicalNameProvider) {
@@ -58,6 +62,10 @@ public final class TypeIdentifier implements Comparable<TypeIdentifier> {
         return new TypeIdentifier(correspondingClass, logicalNameProvider);
     }
     
+    /**
+     * Returns a new TypeIdentifier based on the corresponding class
+     * and (ahead of time) known {@code logicalName}. 
+     */
     public static TypeIdentifier eager(
             final @NonNull Class<?> correspondingClass, 
             final String logicalName) {
@@ -66,7 +74,8 @@ public final class TypeIdentifier implements Comparable<TypeIdentifier> {
     }
     
     /**
-     * Use the corresponding Class's fully qualified name for the logicalName. 
+     * Use the corresponding class's fully qualified name for the {@code logicalName}. 
+     * Most likely used in testing scenarios.
      */
     public static TypeIdentifier fqcn(
             final @NonNull Class<?> correspondingClass) {
@@ -106,6 +115,28 @@ public final class TypeIdentifier implements Comparable<TypeIdentifier> {
             logicalName = requireNonEmpty(logicalNameProvider.get());
         }
         return logicalName;
+    }
+    
+    /**
+     * The logical type name consists of 2 parts, the <i>namespace</i> and the <i>logical simple name</i>.
+     * Returns a concatenation of <i>namespace</i>, {@code delimiter} and the <i>logical simple name</i>, 
+     * whereas in the absence of a <i>namespace</i> returns a concatenation of {@code root} and the 
+     * <i>logical simple name</i>.
+     * @param root
+     * @param delimiter
+     */
+    public String getLogicalTypeNameFormatted(
+            final @NonNull String root,
+            final @NonNull String delimiter) {
+        val logicalTypeName = getLogicalTypeName();
+        final int lastDot = logicalTypeName.lastIndexOf('.');
+        if(lastDot > 0) {
+            val namespace = logicalTypeName.substring(0, lastDot);
+            val simpleTypeName = logicalTypeName.substring(lastDot + 1);
+            return namespace + delimiter + simpleTypeName;
+        } else {
+            return root + logicalTypeName;
+        }
     }
     
     // -- OBJECT CONTRACT

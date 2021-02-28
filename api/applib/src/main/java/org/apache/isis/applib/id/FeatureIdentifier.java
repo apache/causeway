@@ -27,9 +27,19 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Strings;
 
 import lombok.Getter;
+import lombok.NonNull;
+import lombok.val;
 
 /**
- * @since 1.x revised for 2.0 {@index}
+ * Combines {@link TypeIdentifier} and member identification (from properties, collections or actions),
+ * to a fully qualified <i>feature</i> identifier.
+ * <p> 
+ * For {@link FeatureIdentifier}(s) of type {@link FeatureIdentifier.Type#CLASS} member information is 
+ * left empty.   
+ *  
+ * @apiNote Revised from former {@code Identifier (v1.x)}.
+ * @since 2.0 {@index}
+ * @see TypeIdentifier
  */
 public class FeatureIdentifier implements Comparable<FeatureIdentifier> {
 
@@ -52,7 +62,8 @@ public class FeatureIdentifier implements Comparable<FeatureIdentifier> {
     public static FeatureIdentifier propertyOrCollectionIdentifier(
             final TypeIdentifier typeIdentifier,
             final String propertyOrCollectionName) {
-        return new FeatureIdentifier(typeIdentifier, propertyOrCollectionName, Can.empty(), Type.PROPERTY_OR_COLLECTION);
+        return new FeatureIdentifier(typeIdentifier, propertyOrCollectionName, Can.empty(), 
+                Type.PROPERTY_OR_COLLECTION);
     }
 
     public static FeatureIdentifier actionIdentifier(
@@ -124,11 +135,19 @@ public class FeatureIdentifier implements Comparable<FeatureIdentifier> {
                 : className + "#" + memberNameAndParameterClassNamesIdentityString;
     }
 
+    // -- LOGICAL ID
+    
+    public String getLogicalIdentityString(final @NonNull String delimiter) {
+        return typeIdentifier.getLogicalTypeName() 
+                + delimiter 
+                + memberNameAndParameterClassNamesIdentityString;
+    }
+    
     // -- NATURAL NAMES
     
     public String getClassNaturalName() {
-        final String className = getClassName();
-        final String isolatedName = className.substring(className.lastIndexOf('.') + 1);
+        val className = getClassName();
+        val isolatedName = className.substring(className.lastIndexOf('.') + 1);
         return naturalName(isolatedName);
     }
 
@@ -136,7 +155,7 @@ public class FeatureIdentifier implements Comparable<FeatureIdentifier> {
         return naturalName(memberName);
     }
 
-    public Can<String> getMemberParameterNaturalNames() {
+    public Can<String> getMemberParameterClassNaturalNames() {
         return naturalNames(memberParameterClassNames);
     }
 
@@ -210,13 +229,17 @@ public class FeatureIdentifier implements Comparable<FeatureIdentifier> {
             nextCharacter = name.charAt(pos);
 
             if (previousCharacter != SPACE) {
-                if (Character.isUpperCase(character) && !Character.isUpperCase(previousCharacter)) {
+                if (Character.isUpperCase(character) 
+                        && !Character.isUpperCase(previousCharacter)) {
                     naturalName.append(SPACE);
                 }
-                if (Character.isUpperCase(character) && Character.isLowerCase(nextCharacter) && Character.isUpperCase(previousCharacter)) {
+                if (Character.isUpperCase(character) 
+                        && Character.isLowerCase(nextCharacter) 
+                        && Character.isUpperCase(previousCharacter)) {
                     naturalName.append(SPACE);
                 }
-                if (Character.isDigit(character) && !Character.isDigit(previousCharacter)) {
+                if (Character.isDigit(character) 
+                        && !Character.isDigit(previousCharacter)) {
                     naturalName.append(SPACE);
                 }
             }

@@ -113,7 +113,7 @@ public abstract class InteractionEvent extends EventObjectBase<Object> {
      * As per {@link #getMemberParameterNames()}, but naturalized.
      */
     public Can<String> getMemberParameterNaturalNames() {
-        return identifier.getMemberParameterNaturalNames();
+        return identifier.getMemberParameterClassNaturalNames();
     }
 
     /**
