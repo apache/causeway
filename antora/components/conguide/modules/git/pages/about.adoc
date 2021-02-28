@@ -131,7 +131,7 @@ There is one at the root of the git repo, but they can additionally appear in su
 
 See also:
 
-- link:https://help.github.com/articles/ignoring-files[github's help page]
+- link:https://help.github.com/articles/ignoring-files[GitHub's help page]
 - link:http://www.kernel.org/pub/software/scm/git/docs/gitignore.html[man page]
 
 == More advanced use cases
