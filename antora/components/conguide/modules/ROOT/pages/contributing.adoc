@@ -49,7 +49,7 @@ image::contributing/github-forking.png[width="600px"]
 An account isn't needed if you just clone straight from the http://github.com/apache/isis[github.com/apache/isis].
 
 Whether you've forked or not, you then need to clone the repo onto your computer.
-Github makes this very easy to do:
+GitHub makes this very easy to do:
 
 * for Windows users, we suggest you use github's 'Clone in Windows' feature
 * for Mac/Linux users, create a clone from the command line:
