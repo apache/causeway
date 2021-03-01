@@ -237,7 +237,7 @@ implements ObjectSpecification {
         if(objectSpecIdFacet == null) {
             throw new IllegalStateException("could not find an ObjectSpecIdFacet for " + this.getFullIdentifier());
         }
-        return LogicalType.eager(correspondingClass, objectSpecIdFacet.value().asString());
+        return LogicalType.eager(correspondingClass, objectSpecIdFacet.value());
     }
 
     /**
