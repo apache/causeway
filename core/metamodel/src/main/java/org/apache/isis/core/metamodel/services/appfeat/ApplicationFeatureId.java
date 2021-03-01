@@ -33,6 +33,7 @@ import static java.util.Comparator.nullsFirst;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.Value;
+import org.apache.isis.applib.id.TypeIdentifier;
 import org.apache.isis.applib.services.appfeat.ApplicationMemberType;
 import org.apache.isis.applib.util.Equality;
 import org.apache.isis.applib.util.Hashing;
@@ -52,6 +53,8 @@ import lombok.val;
  * This value is {@link Comparable}, the implementation of which considers 
  * {@link #getType() (feature) type}, {@link #getNamespace() logical package name}, 
  * {@link #getTypeSimpleName() class name} and {@link #getMemberName() member name}.
+ * 
+ * @deprecated use {@link Identifier} instead  
  */
 @Value
 public class ApplicationFeatureId 
