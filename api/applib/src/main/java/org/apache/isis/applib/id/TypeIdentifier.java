@@ -57,7 +57,7 @@ implements
     @ToString.Exclude
     private final Supplier<String> logicalNameProvider;
     
-    @ToString.Exclude // lazy, so don't use in toString
+    @ToString.Exclude // lazy, so don't use in toString (keep free from side-effects)
     private String logicalName;
 
     // -- FACTORIES
@@ -126,6 +126,34 @@ implements
             logicalName = requireNonEmpty(logicalNameProvider.get());
         }
         return logicalName;
+    }
+    
+    /**
+     * The logical type name consists of 2 parts, the <i>namespace</i> and the <i>logical simple name</i>.
+     * <p>
+     * Returns the <i>logical simple name</i> part.
+     * @implNote the result is not memoized, to keep it simple 
+     */
+    public String getLogicalTypeSimpleName() {
+        val logicalTypeName = getLogicalTypeName();
+        final int lastDot = logicalTypeName.lastIndexOf('.');
+        return lastDot >= 0
+            ? logicalTypeName.substring(lastDot + 1)
+            : logicalTypeName;
+    }
+    
+    /**
+     * The logical type name consists of 2 parts, the <i>namespace</i> and the <i>logical simple name</i>.
+     * <p>
+     * Returns the <i>namespace</i> part.
+     * @implNote the result is not memoized, to keep it simple
+     */
+    public String getNamespace() {
+        val logicalTypeName = getLogicalTypeName();
+        final int lastDot = logicalTypeName.lastIndexOf('.');
+        return lastDot >= 0
+            ? logicalTypeName.substring(0, lastDot)
+            : "";
     }
     
     /**
