@@ -18,6 +18,10 @@
  */
 package org.apache.isis.applib.id;
 
+import java.io.Externalizable;
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
 import java.util.Objects;
 import java.util.function.Supplier;
 
@@ -34,14 +38,23 @@ import lombok.val;
 
 /**
  * A generalization of Java's class type to also hold a logical name, which can be supplied lazily.
- * 
+ * @apiNote thread-safe and serializable
  * @since 2.0 {@index}
  */
 @ToString
-public final class TypeIdentifier implements Comparable<TypeIdentifier> {
+public final class TypeIdentifier 
+implements 
+    Comparable<TypeIdentifier>,
+    Externalizable {
 
+    /**
+     * Class this identifier represents.
+     * 
+     * @implNote in support of de-serialization cannot be declared final 
+     * (Java 15+ records will solve this issue)
+     */
     @Getter
-    private final Class<?> correspondingClass;
+    private /*final*/ Class<?> correspondingClass;
     
     @ToString.Exclude
     private final Supplier<String> logicalNameProvider;
@@ -172,6 +185,20 @@ public final class TypeIdentifier implements Comparable<TypeIdentifier> {
         return _Strings.compareNullsFirst(correspondingClass.getCanonicalName(), otherClassName);
     }
 
+    // -- SERIALIZATION
+    
+    @Override
+    public void writeExternal(ObjectOutput out) throws IOException {
+        out.writeObject(getCorrespondingClass());
+        out.writeUTF(getLogicalTypeName());
+    }
+
+    @Override
+    public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
+        this.correspondingClass = (Class<?>) in.readObject();
+        this.logicalName = in.readUTF();
+    }
+    
     // -- HELPER
     
     private String requireNonEmpty(final String logicalName) {
@@ -181,5 +208,6 @@ public final class TypeIdentifier implements Comparable<TypeIdentifier> {
         }
         return logicalName;
     }
+    
     
 }
