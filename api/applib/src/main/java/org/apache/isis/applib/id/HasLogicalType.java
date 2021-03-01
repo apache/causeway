@@ -16,21 +16,17 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.specloader;
+package org.apache.isis.applib.id;
 
-import java.util.Optional;
+/**
+ * @since 2.0 {@index}
+ */
+public interface HasLogicalType {
 
-import org.apache.isis.core.metamodel.spec.ObjectSpecId;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-
-import lombok.NonNull;
-
-interface SpecIdToClassResolver {
-
-    Optional<Class<?>> lookup(@NonNull ObjectSpecId specId);
+    LogicalType getLogicalType();
     
-    void register(@NonNull ObjectSpecification spec);
+    default String getLogicalTypeName() {
+        return getLogicalType().getLogicalTypeName();
+    }
     
-    void clear();
-
 }

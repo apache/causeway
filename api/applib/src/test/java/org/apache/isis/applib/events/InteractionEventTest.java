@@ -30,7 +30,7 @@ import static org.junit.Assert.assertEquals;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.id.TypeIdentifier;
+import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.services.wrapper.events.InteractionEvent;
 
 public class InteractionEventTest {
@@ -51,7 +51,7 @@ public class InteractionEventTest {
     public void setUp() {
         source = new Object();
         identifier = Identifier.actionIdentifier(
-                TypeIdentifier.fqcn(CustomerOrder.class), 
+                LogicalType.fqcn(CustomerOrder.class), 
                 "cancelOrder", new Class[] { String.class, boolean.class });
         advisorClass = this.getClass();
     }

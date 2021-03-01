@@ -39,7 +39,8 @@ import org.apache.isis.applib.events.lifecycle.ObjectPersistingEvent;
 import org.apache.isis.applib.events.lifecycle.ObjectRemovingEvent;
 import org.apache.isis.applib.events.lifecycle.ObjectUpdatedEvent;
 import org.apache.isis.applib.events.lifecycle.ObjectUpdatingEvent;
-import org.apache.isis.applib.id.TypeIdentifier;
+import org.apache.isis.applib.id.LogicalType;
+import org.apache.isis.applib.id.ObjectSpecId;
 import org.apache.isis.commons.having.HasUniqueId;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.collections._Multimaps;
@@ -74,7 +75,6 @@ import org.apache.isis.core.metamodel.facets.object.mixin.MetaModelValidatorForM
 import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
-import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForValidationFailures;
@@ -221,7 +221,7 @@ implements MetaModelRefiner, PostConstructMethodCache, ObjectSpecIdFacetFactory 
         }
         autoCompleteMethodInvalid.onFailure(
                 facetHolder,
-                Identifier.classIdentifier(TypeIdentifier.fqcn(cls)),
+                Identifier.classIdentifier(LogicalType.fqcn(cls)),
                 "%s annotation on %s specifies method '%s' that does not exist in repository '%s'",
                 annotationName, cls.getName(), methodName, repositoryClass.getName());
         return null;

@@ -33,6 +33,8 @@ import javax.annotation.Nullable;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.exceptions.UnrecoverableException;
+import org.apache.isis.applib.id.LogicalType;
+import org.apache.isis.applib.id.ObjectSpecId;
 import org.apache.isis.applib.services.metamodel.BeanSort;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Streams;
@@ -155,7 +157,16 @@ extends
      * <p>
      * The {@link ObjectSpecification} can be retrieved using {@link SpecificationLoader#lookupBySpecIdElseLoad(ObjectSpecId)}}.
      */
-    ObjectSpecId getSpecId();
+    @Deprecated
+    default ObjectSpecId getSpecId() {
+        throw _Exceptions.unsupportedOperation();
+    }
+    
+    LogicalType getLogicalType();
+    
+    default String getLogicalTypeName() {
+        return getLogicalType().getLogicalTypeName();
+    }
 
     /**
      * Returns an (immutable) "full" identifier for this specification.

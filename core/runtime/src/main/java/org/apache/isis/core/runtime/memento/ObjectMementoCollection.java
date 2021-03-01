@@ -20,11 +20,12 @@ package org.apache.isis.core.runtime.memento;
 
 import java.util.ArrayList;
 
+import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.Value;
 
 /**
@@ -38,8 +39,10 @@ public final class ObjectMementoCollection implements ObjectMemento {
     private static final long serialVersionUID = 1L;
 
     private final ArrayList<ObjectMemento> container; 
-    @Getter(onMethod = @__({@Override})) private final ObjectSpecId objectSpecId;
 
+    @Getter(onMethod_ = {@Override})
+    @NonNull private final LogicalType logicalType;
+    
     @Override
     public String asString() {
         return getContainer().toString();

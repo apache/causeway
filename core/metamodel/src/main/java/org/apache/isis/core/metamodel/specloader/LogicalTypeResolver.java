@@ -16,25 +16,21 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.wicket.ui.components.widgets.select2;
+package org.apache.isis.core.metamodel.specloader;
 
-import org.wicketstuff.select2.ChoiceProvider;
-import org.wicketstuff.select2.Select2Choice;
-import org.wicketstuff.select2.Select2MultiChoice;
-import org.wicketstuff.select2.Settings;
+import java.util.Optional;
 
-import org.apache.isis.applib.id.HasLogicalType;
-import org.apache.isis.core.runtime.memento.ObjectMemento;
+import org.apache.isis.applib.id.LogicalType;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
-/**
- * Represents functionality that is common to both {@link Select2Choice} and {@link Select2MultiChoice}, but for
- * which there is no suitable common supertype.
- *
- */
-public interface ChoiceExt extends HasLogicalType {
+import lombok.NonNull;
+
+interface LogicalTypeResolver {
+
+    Optional<LogicalType> lookup(@NonNull String logicalTypeName);
     
-    void setProvider(final ChoiceProvider<ObjectMemento> providerForChoices);
-    Settings getSettings();
-
+    void register(@NonNull ObjectSpecification spec);
     
+    void clear();
+
 }

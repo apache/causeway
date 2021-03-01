@@ -26,7 +26,7 @@ import org.mockito.Mockito;
 import static org.mockito.Mockito.when;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.id.TypeIdentifier;
+import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.services.i18n.Mode;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.inject.ServiceInjector;
@@ -91,7 +91,7 @@ abstract class MixinIntendedAs {
     protected FacetHolder runTypeContextOn(Class<?> type) {
 
         val facetHolder = new AbstractFacetFactoryTest.IdentifiedHolderImpl(
-              Identifier.classIdentifier(TypeIdentifier.fqcn(type)));
+              Identifier.classIdentifier(LogicalType.fqcn(type)));
         facetHolder.setMetaModelContext(metaModelContext);
 
         val processClassContext =

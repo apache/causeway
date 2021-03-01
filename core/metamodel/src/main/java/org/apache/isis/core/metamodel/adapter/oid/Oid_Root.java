@@ -23,40 +23,39 @@ import java.util.Objects;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.internal.codec._UrlDecoderUtil;
-import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.schema.common.v2.OidDto;
 
-import static org.apache.isis.commons.internal.base._With.requires;
-
+import lombok.Getter;
+import lombok.NonNull;
 import lombok.val;
 
 final class Oid_Root implements RootOid {
 
     private static final long serialVersionUID = 3L;
 
-    private final ObjectSpecId objectSpecId;
-    private final String identifier;
+    @Getter(onMethod_ = {@Override}) private final String logicalTypeName;
+    @Getter(onMethod_ = {@Override}) private final String identifier;
+    
     private final int hashCode;
 
     public static Oid_Root of(
-            ObjectSpecId objectSpecId, 
-            String identifier) {
-
-        return new Oid_Root(objectSpecId, identifier);
+            final @NonNull String logicalTypeName, 
+            final @NonNull String identifier) {
+        return new Oid_Root(logicalTypeName, identifier);
     }
 
-    private Oid_Root(ObjectSpecId objectSpecId, String identifier) {
+    private Oid_Root(
+            final String logicalTypeName, 
+            final String identifier) {
 
-        requires(objectSpecId, "objectSpecId");
-        requires(identifier, "identifier");
-
-        this.objectSpecId = objectSpecId;
+        this.logicalTypeName = logicalTypeName;
         this.identifier = identifier;
         this.hashCode = calculateHash();
 
     }
 
-    // -- deString'able, enString
+    // -- ENCODING 
+    
     public static Oid_Root deStringEncoded(final String urlEncodedOidStr) {
         final String oidStr = _UrlDecoderUtil.urlDecode(urlEncodedOidStr);
         return deString(oidStr);
@@ -71,35 +70,18 @@ final class Oid_Root implements RootOid {
         return Oid.marshaller().marshal(this);
     }
 
-    // -- Properties
-    @Override
-    public ObjectSpecId getObjectSpecId() {
-        return objectSpecId;
-    }
-
-    @Override
-    public String getIdentifier() {
-        return identifier;
-    }
-
     @Override
     public Bookmark asBookmark() {
-        val objectType = getObjectSpecId().asString();
-        val identifier = getIdentifier();
-        return Bookmark.of(objectType, identifier);
+        return Bookmark.of(logicalTypeName, getIdentifier());
     }
 
     @Override
     public OidDto asOidDto() {
-
         val oidDto = new OidDto();
-
-        oidDto.setType(getObjectSpecId().asString());
+        oidDto.setType(logicalTypeName);
         oidDto.setId(getIdentifier());
-
         return oidDto;
     }
-
 
     @Override
     public boolean equals(final Object other) {
@@ -116,7 +98,7 @@ final class Oid_Root implements RootOid {
     }
 
     public boolean equals(final Oid_Root other) {
-        return Objects.equals(objectSpecId, other.getObjectSpecId()) 
+        return Objects.equals(logicalTypeName, other.getLogicalTypeName()) 
                 && Objects.equals(identifier, other.getIdentifier());
     }
 
@@ -133,8 +115,7 @@ final class Oid_Root implements RootOid {
     // -- HELPER
 
     private int calculateHash() {
-        return Objects.hash(objectSpecId, identifier);
+        return Objects.hash(logicalTypeName, identifier);
     }
-
 
 }

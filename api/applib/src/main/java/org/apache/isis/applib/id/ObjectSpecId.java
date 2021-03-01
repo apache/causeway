@@ -16,13 +16,11 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.spec;
+package org.apache.isis.applib.id;
 
 import java.io.Serializable;
 
-import org.apache.isis.applib.id.TypeIdentifier;
 import org.apache.isis.commons.internal.base._Refs;
-import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
 
 import static org.apache.isis.commons.internal.base._With.requiresNotEmpty;
 
@@ -32,12 +30,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.Value;
 
 /**
- * Represents an {@link ObjectSpecification}, as determined by
- * an {@link ObjectSpecIdFacet}.
+ * Represents an {@link org.apache.isis.core.metamodel.spec.ObjectSpecification}, as determined by
+ * an {@link org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet}.
  *
  * <p>
  * Has value semantics.
- * @deprecated use {@link TypeIdentifier} instead
+ * @deprecated use {@link LogicalType} instead
  */
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 @Value

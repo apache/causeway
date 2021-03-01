@@ -18,8 +18,8 @@
  */
 package org.apache.isis.core.runtime.memento;
 
+import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -30,14 +30,14 @@ public class ObjectMementoForEmpty implements ObjectMemento {
 
     private static final long serialVersionUID = 1L;
     
-    @Getter(onMethod = @__(@Override))
-    @NonNull private ObjectSpecId objectSpecId;
+    @Getter(onMethod_ = {@Override})
+    @NonNull private LogicalType logicalType;
 
     @Override
     public String asString() {
-        return getObjectSpecId().asString();
+        return getLogicalTypeName();
     }
-
+    
     @Override
     public Bookmark asBookmarkIfSupported() {
         return null;

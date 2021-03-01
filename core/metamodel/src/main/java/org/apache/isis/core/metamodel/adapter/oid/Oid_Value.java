@@ -20,7 +20,6 @@
 package org.apache.isis.core.metamodel.adapter.oid;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.schema.common.v2.OidDto;
 
 final class Oid_Value implements RootOid {
@@ -40,7 +39,7 @@ final class Oid_Value implements RootOid {
     }
 
     @Override
-    public ObjectSpecId getObjectSpecId() {
+    public String getLogicalTypeName() {
         return null;
     }
 

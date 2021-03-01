@@ -38,6 +38,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.services.metamodel.BeanSort;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.collections.Can;
@@ -65,7 +66,6 @@ import org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutor
 import org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutorDefault;
 import org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutorForCollections;
 import org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutorRegistry;
-import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.facetprocessor.FacetProcessor;
 import org.apache.isis.core.metamodel.specloader.postprocessor.PostProcessor;
@@ -121,7 +121,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
     private FacetProcessor facetProcessor;
 
     private final SpecificationCache<ObjectSpecification> cache = new SpecificationCacheDefault<>();
-    private final SpecIdToClassResolver specIdToClassResolver = new SpecIdToClassResolverDefault();
+    private final LogicalTypeResolver logicalTypeResolver = new LogicalTypeResolverDefault();
 
     /**
      * We only ever mark the meta-model as fully introspected if in {@link #isFullIntrospect() full} 
@@ -318,7 +318,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
 
     @Override
     public void disposeMetaModel() {
-        specIdToClassResolver.clear();
+        logicalTypeResolver.clear();
         cache.clear();
         validationResult.clear();
         log.info("Metamodel disposed.");
@@ -429,17 +429,19 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
     }
 
     @Override
-    public Class<?> lookupType(final @NonNull ObjectSpecId objectSpecId) {
-        Class<?> cls = specIdToClassResolver.lookup(objectSpecId)
+    public LogicalType lookupLogicalType(final @NonNull String logicalTypeName) {
+        val logicalType = logicalTypeResolver.lookup(logicalTypeName)
                 .orElse(null);
-        if(cls!=null) {
-            return cls;
+        if(logicalType!=null) {
+            return logicalType;
         }
         
-        // falling back assuming the specId equals the fqn of the corresponding class
-        // which might not always be true, hence the warning
-        //TODO desired behavior could be made a config option, eg. to throw an exception here instead
-        cls = ClassUtil.forNameElseNull(objectSpecId.asString());
+        //TODO[2533] if the logicalTypeName is not available and instead a fqcn was passed in, that should also be supported 
+        
+        // falling back assuming the logicalTypeName equals the fqn of the corresponding class
+        // which might not always be true, 
+        
+        val cls = ClassUtil.forNameElseNull(logicalTypeName);
         if(cls!=null) {
 
 //TODO yet it seems we rely on this kind of fallback from several code paths, so lets not emit any warnings yet ...              
@@ -448,15 +450,15 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
 //                    + "discovered by Spring during bootstrapping of this application.", 
 //                    objectSpecId.getSpecId(),
 //                    cls.getName());
-            return cls;
+            return LogicalType.fqcn(cls);
         }
         
         // immediately fail to not cause any NPEs further down the path
         throw _Exceptions.unrecoverableFormatted(
-                "Lookup for ObjectSpecId '%s' failed, also found no matching fully qualified "
+                "Lookup of logical-type-name '%s' failed, also found no matching fully qualified "
                 + "class name to use instead. This indicates, that the class we are not finding here"
                 + " is not discovered by Spring during bootstrapping of this application.",
-                objectSpecId.asString());
+                logicalTypeName);
     }
     
     // -- VALIDATION STUFF
@@ -517,7 +519,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
         
         final ObjectSpecification spec = cache.computeIfAbsent(substitutedType, __->{
             val newSpec = createSpecification(substitutedType, beanClassifier.apply(type));
-            specIdToClassResolver.register(newSpec);
+            logicalTypeResolver.register(newSpec);
             return newSpec;
         });
 
@@ -627,6 +629,5 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
             spec = spec.superclass();
         }
     }
-
 
 }

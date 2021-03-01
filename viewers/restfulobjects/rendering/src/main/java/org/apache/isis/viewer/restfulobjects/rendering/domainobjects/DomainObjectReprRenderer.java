@@ -24,6 +24,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.apache.isis.applib.annotation.DomainServiceLayout;
+import org.apache.isis.applib.id.ObjectSpecId;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.facets.object.domainservicelayout.DomainServiceLayoutFacet;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
@@ -33,7 +34,6 @@ import org.apache.isis.core.metamodel.interactions.managed.ManagedProperty;
 import org.apache.isis.core.metamodel.services.ServiceUtil;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
-import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -193,10 +193,9 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
                 representation.mapPut("serviceId", ServiceUtil.idOfAdapter(objectAdapter));
             } else {
                 rootOidIfAny.ifPresent(rootOid->{
-                    Optional.ofNullable(rootOid.getObjectSpecId())
-                    .map(ObjectSpecId::asString)
-                    .ifPresent(objectSpecIdLiteral->
-                        representation.mapPut("domainType", objectSpecIdLiteral));
+                    Optional.ofNullable(rootOid.getLogicalTypeName())
+                    .ifPresent(domainType->
+                        representation.mapPut("domainType", domainType));
                     representation.mapPut("instanceId", rootOid.getIdentifier());
                 });
             }

@@ -30,6 +30,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.applib.id.ObjectSpecId;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.commanddto.processor.CommandDtoProcessor;
 import org.apache.isis.applib.services.grid.GridService;
@@ -43,7 +44,6 @@ import org.apache.isis.core.metamodel.facets.members.publish.command.CommandPubl
 import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
 import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureType;
-import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -70,8 +70,7 @@ public class MetaModelServiceDefault implements MetaModelService {
         if(objectType == null) {
             return null;
         }
-        final ObjectSpecId objectSpecId = ObjectSpecId.of(objectType);
-        final ObjectSpecification objectSpecification = specificationLoader.lookupBySpecIdElseLoad(objectSpecId);
+        final ObjectSpecification objectSpecification = specificationLoader.lookupBySpecIdElseLoad(objectType);
         return objectSpecification != null? objectSpecification.getCorrespondingClass(): null;
     }
 
@@ -221,7 +220,7 @@ public class MetaModelServiceDefault implements MetaModelService {
             return null;
         }
 
-        final ObjectSpecification spec = specificationLoader.lookupBySpecIdElseLoad(objectSpecId);
+        final ObjectSpecification spec = specificationLoader.lookupBySpecIdElseLoad(objectSpecId.asString());
         if(spec == null) {
             return null;
         }

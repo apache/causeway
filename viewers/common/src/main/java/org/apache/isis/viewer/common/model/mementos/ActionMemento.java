@@ -22,8 +22,8 @@ package org.apache.isis.viewer.common.model.mementos;
 import java.io.Serializable;
 import java.util.function.Supplier;
 
+import org.apache.isis.applib.id.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ActionType;
-import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
@@ -93,7 +93,7 @@ public class ActionMemento implements Serializable {
             String nameParmsId,
             SpecificationLoader specificationLoader) {
         
-        val objectSpec = specificationLoader.lookupBySpecIdElseLoad(owningType);
+        val objectSpec = specificationLoader.lookupBySpecIdElseLoad(owningType.asString());
         return objectSpec.getActionElseFail(nameParmsId, actionType);
     }
 

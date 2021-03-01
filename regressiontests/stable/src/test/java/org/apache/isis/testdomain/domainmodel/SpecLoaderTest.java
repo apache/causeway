@@ -64,12 +64,12 @@ class SpecLoaderTest {
         val spec1 = specificationLoader.loadSpecification(type);
         assertNotNull(spec1);
         
-        val specId = spec1.getSpecId();
+        val logicalType = spec1.getLogicalType();
         
-        val spec2 = specificationLoader.loadSpecification(specId);
+        val spec2 = specificationLoader.loadSpecification(logicalType);
         assertNotNull(spec2);
         
-        assertEquals(spec1.getSpecId(), spec2.getSpecId());
+        assertEquals(spec1.getLogicalType(), spec2.getLogicalType());
     }
     
     private static Stream<Class<?>> providePrimitiveTypes() {

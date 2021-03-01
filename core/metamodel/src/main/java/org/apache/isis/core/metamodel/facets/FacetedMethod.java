@@ -25,7 +25,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.id.TypeIdentifier;
+import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.commons.internal.collections._Collections;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.commons.StringExtensions;
@@ -169,7 +169,7 @@ public class FacetedMethod extends TypedHolderDefault implements IdentifiedHolde
         this.owningType = declaringType;
         this.method = method;
         
-        val typeIdentifier = TypeIdentifier.lazy(
+        val typeIdentifier = LogicalType.lazy(
                 declaringType,
                 ()->getSpecificationLoader().loadSpecification(declaringType).getSpecId().asString());
         

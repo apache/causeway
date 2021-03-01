@@ -29,7 +29,7 @@ import static org.junit.Assert.assertSame;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.events.domain.AbstractDomainEvent;
 import org.apache.isis.applib.events.domain.CollectionDomainEvent;
-import org.apache.isis.applib.id.TypeIdentifier;
+import org.apache.isis.applib.id.LogicalType;
 
 public class DomainEventHelperTest_newCollectionDomainEvent_forRemove {
 
@@ -45,7 +45,7 @@ public class DomainEventHelperTest_newCollectionDomainEvent_forRemove {
         SomeDomainObject sdo = new SomeDomainObject();
         SomeReferencedObject other = new SomeReferencedObject();
         Identifier identifier = Identifier.propertyOrCollectionIdentifier(
-                TypeIdentifier.fqcn(SomeDomainObject.class), "references");
+                LogicalType.fqcn(SomeDomainObject.class), "references");
 
         final CollectionDomainEvent<Object, Object> ev = Utils.domainEventHelper().newCollectionDomainEvent(
                 CollectionDomainEvent.Default.class, AbstractDomainEvent.Phase.EXECUTED, identifier, sdo, CollectionDomainEvent.Of.REMOVE_FROM, other);
@@ -60,7 +60,7 @@ public class DomainEventHelperTest_newCollectionDomainEvent_forRemove {
         SomeDomainObject sdo = new SomeDomainObject();
         SomeReferencedObject other = new SomeReferencedObject();
         Identifier identifier = Identifier.propertyOrCollectionIdentifier(
-                TypeIdentifier.fqcn(SomeDomainObject.class), "references");
+                LogicalType.fqcn(SomeDomainObject.class), "references");
 
         final CollectionDomainEvent<Object, Object> ev = Utils.domainEventHelper().newCollectionDomainEvent(
                 CollectionDomainEvent.Default.class, AbstractDomainEvent.Phase.EXECUTED, identifier, sdo, CollectionDomainEvent.Of.REMOVE_FROM, other);
@@ -75,7 +75,7 @@ public class DomainEventHelperTest_newCollectionDomainEvent_forRemove {
         SomeDomainObject sdo = new SomeDomainObject();
         SomeReferencedObject other = new SomeReferencedObject();
         Identifier identifier = Identifier.propertyOrCollectionIdentifier(
-                TypeIdentifier.fqcn(SomeDomainObject.class), "references");
+                LogicalType.fqcn(SomeDomainObject.class), "references");
 
         final CollectionDomainEvent<SomeDomainObject, SomeReferencedObject> ev = Utils.domainEventHelper().newCollectionDomainEvent(
                 SomeDomainObjectCollectionRemovedFromDomainEvent.class, AbstractDomainEvent.Phase.EXECUTED, identifier, sdo, CollectionDomainEvent.Of.REMOVE_FROM, other);

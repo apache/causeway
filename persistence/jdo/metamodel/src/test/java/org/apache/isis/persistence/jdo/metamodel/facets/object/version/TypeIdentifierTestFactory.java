@@ -18,14 +18,14 @@
  */
 package org.apache.isis.persistence.jdo.metamodel.facets.object.version;
 
-import org.apache.isis.applib.id.TypeIdentifier;
+import org.apache.isis.applib.id.LogicalType;
 
 final class TypeIdentifierTestFactory {
 
     private static class Customer {};
     
-    static TypeIdentifier customer() {
-        return TypeIdentifier.fqcn(Customer.class);
+    static LogicalType customer() {
+        return LogicalType.fqcn(Customer.class);
     }
     
 }

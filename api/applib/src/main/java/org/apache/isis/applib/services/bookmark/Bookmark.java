@@ -44,26 +44,22 @@ import lombok.val;
 @lombok.Value @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class Bookmark implements Serializable {
 
-    private static final long serialVersionUID = 2L;
+    private static final long serialVersionUID = 3L;
 
     protected static final String SEPARATOR = ":";
 
     /**
-     * corresponds directly to the object's specification-id
+     * Corresponds directly to the object's logical-type-name (aka. object-type).
      * @see RootOid
      */
-    @NonNull  private final String objectType;
+    @NonNull  private final String logicalTypeName;
     @NonNull  private final String identifier;
 
     @Nullable private final String hintId;
 
-    public static Bookmark of(String objectType, String identifier) {
-
-        return new Bookmark(objectType, identifier, /*hintId*/ null);
-
-        // ...
+    public static Bookmark of(String logicalTypeName, String identifier) {
+        return new Bookmark(logicalTypeName, identifier, /*hintId*/ null);
     }
-
 
     /**
      * Round-trip with {@link #toString()} representation.
@@ -88,7 +84,7 @@ public class Bookmark implements Serializable {
 
     public OidDto toOidDto() {
         val oidDto = new OidDto();
-        oidDto.setType(getObjectType());
+        oidDto.setType(getLogicalTypeName());
         oidDto.setId(getIdentifier());
         return oidDto;
     }
@@ -99,23 +95,32 @@ public class Bookmark implements Serializable {
     
     /**
      * The canonical form of the {@link Bookmark}, that is 
-     * &quot;{@link #getObjectType() objectType}{@value #SEPARATOR}{@link #getIdentifier()}&quot;.
+     * &quot;{@link #getLogicalTypeName() logical-type-name}{@value #SEPARATOR}{@link #getIdentifier()}&quot;.
      *
      * <p>
      * This is parseable by the {@link #parse(String)}.
      */
     @Override
     public String toString() {
-        return objectType + SEPARATOR + identifier;
+        return toStringUsingIdentifier(identifier);
     }
 
-
     public Bookmark withHintId(@NonNull String hintId) {
-        return new Bookmark(this.getObjectType(), this.getIdentifier(), hintId); 
+        return new Bookmark(this.getLogicalTypeName(), this.getIdentifier(), hintId); 
     }
 
     public String toStringUsingIdentifier(String id) {
-        return objectType + SEPARATOR + id;
+        return logicalTypeName + SEPARATOR + id;
     }
+    
+    // -- DEPRECATIONS 
+    
+    /**
+     * @deprecated use {@link #getLogicalTypeName()} instead
+     */
+    public String getObjectType() {
+        return getLogicalTypeName();
+    }
+    
 
 }

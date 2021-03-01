@@ -21,7 +21,7 @@ package org.apache.isis.viewer.wicket.model.mementos;
 
 import java.io.Serializable;
 
-import org.apache.isis.core.metamodel.spec.ObjectSpecId;
+import org.apache.isis.applib.id.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
@@ -39,8 +39,8 @@ public class CollectionMemento implements Serializable {
     private static ObjectSpecification owningSpecFor(OneToManyAssociation association) {
         
         val specificationLoader = association.getMetaModelContext().getSpecificationLoader();
-        val specId = ObjectSpecId.of(association.getIdentifier().getClassName());
-        return specificationLoader.lookupBySpecIdElseLoad(specId);
+        val logicalType = association.getIdentifier().getLogicalTypeName();
+        return specificationLoader.lookupBySpecIdElseLoad(logicalType);
     }
 
     private final ObjectSpecId owningType;
@@ -103,7 +103,7 @@ public class CollectionMemento implements Serializable {
             ObjectSpecId owningType,
             String id,
             final SpecificationLoader specificationLoader) {
-        return (OneToManyAssociation) specificationLoader.lookupBySpecIdElseLoad(owningType)
+        return (OneToManyAssociation) specificationLoader.lookupBySpecIdElseLoad(owningType.asString())
                 .getAssociationElseFail(id);
     }
 

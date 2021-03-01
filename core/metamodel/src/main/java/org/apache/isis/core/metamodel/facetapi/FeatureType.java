@@ -23,7 +23,7 @@ import java.beans.Introspector;
 import java.lang.reflect.Method;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.id.TypeIdentifier;
+import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.commons.collections.ImmutableEnumSet;
 import org.apache.isis.core.metamodel.commons.StringExtensions;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
@@ -43,25 +43,25 @@ public enum FeatureType {
          * The supplied method can be null; at any rate it will be ignored.
          */
         @Override
-        public Identifier identifierFor(final TypeIdentifier typeIdentifier, final Method method) {
+        public Identifier identifierFor(final LogicalType typeIdentifier, final Method method) {
             return Identifier.classIdentifier(typeIdentifier);
         }
     },
     PROPERTY("Property") {
         @Override
-        public Identifier identifierFor(final TypeIdentifier typeIdentifier, final Method method) {
+        public Identifier identifierFor(final LogicalType typeIdentifier, final Method method) {
             return propertyOrCollectionIdentifierFor(typeIdentifier, method);
         }
     },
     COLLECTION("Collection") {
         @Override
-        public Identifier identifierFor(final TypeIdentifier typeIdentifier, final Method method) {
+        public Identifier identifierFor(final LogicalType typeIdentifier, final Method method) {
             return propertyOrCollectionIdentifierFor(typeIdentifier, method);
         }
     },
     ACTION("Action") {
         @Override
-        public Identifier identifierFor(final TypeIdentifier typeIdentifier, final Method method) {
+        public Identifier identifierFor(final LogicalType typeIdentifier, final Method method) {
             final String fullMethodName = method.getName();
             final Class<?>[] parameterTypes = method.getParameterTypes();
             return Identifier.actionIdentifier(typeIdentifier, fullMethodName, parameterTypes);
@@ -72,7 +72,7 @@ public enum FeatureType {
          * Always returns <tt>null</tt>.
          */
         @Override
-        public Identifier identifierFor(final TypeIdentifier typeIdentifier, final Method method) {
+        public Identifier identifierFor(final LogicalType typeIdentifier, final Method method) {
             return null;
         }
     },
@@ -81,7 +81,7 @@ public enum FeatureType {
          * Always returns <tt>null</tt>.
          */
         @Override
-        public Identifier identifierFor(final TypeIdentifier typeIdentifier, final Method method) {
+        public Identifier identifierFor(final LogicalType typeIdentifier, final Method method) {
             return null;
         }
     };
@@ -121,7 +121,7 @@ public enum FeatureType {
     }
 
     private static Identifier propertyOrCollectionIdentifierFor(
-            final TypeIdentifier typeIdentifier, 
+            final LogicalType typeIdentifier, 
             final Method method) {
         
         final String capitalizedName = StringExtensions.asJavaBaseName(method.getName());
@@ -152,7 +152,7 @@ public enum FeatureType {
         return isProperty() || isCollection();
     }
 
-    public abstract Identifier identifierFor(TypeIdentifier typeIdentifier, Method method);
+    public abstract Identifier identifierFor(LogicalType typeIdentifier, Method method);
 
     @Override
     public String toString() {

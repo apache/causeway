@@ -27,7 +27,7 @@ import java.util.Set;
 import java.util.stream.Stream;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.id.TypeIdentifier;
+import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.services.metamodel.BeanSort;
 import org.apache.isis.commons.collections.ImmutableEnumSet;
 import org.apache.isis.commons.internal.collections._Lists;
@@ -42,7 +42,6 @@ import org.apache.isis.core.metamodel.interactions.ObjectTitleContext;
 import org.apache.isis.core.metamodel.interactions.ObjectValidityContext;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -50,18 +49,21 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.specloader.specimpl.IntrospectionState;
 
+import lombok.Synchronized;
 import lombok.val;
 
-public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSpecification {
+public class ObjectSpecificationStub 
+extends FacetHolderImpl
+implements ObjectSpecification {
 
     private ObjectAction action;
     public List<ObjectAssociation> fields = _Lists.newArrayList();
     private Set<ObjectSpecification> subclasses = Collections.emptySet();
     private String title;
     /**
-     * lazily derived, see {@link #getSpecId()} 
+     * lazily derived, see {@link #getLogicalType()} 
      */
-    private ObjectSpecId specId;
+    private LogicalType logicalType;
 
     private ObjectSpecification elementSpecification;
     private final Class<?> correspondingClass;
@@ -126,12 +128,14 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
         return name;
     }
 
+    @Synchronized
     @Override
-    public ObjectSpecId getSpecId() {
-        if(specId == null) {
-            specId = getFacet(ObjectSpecIdFacet.class).value();
+    public LogicalType getLogicalType() {
+        if(logicalType == null) {
+            val logicalTypeName = getFacet(ObjectSpecIdFacet.class).value().asString();
+            logicalType = LogicalType.eager(correspondingClass, logicalTypeName);
         }
-        return specId;
+        return logicalType;
     }
 
     @Override
@@ -257,7 +261,7 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
 
     @Override
     public Identifier getIdentifier() {
-        return Identifier.classIdentifier(TypeIdentifier.fqcn(correspondingClass));
+        return Identifier.classIdentifier(LogicalType.fqcn(correspondingClass));
     }
 
     @Override

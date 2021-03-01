@@ -34,6 +34,7 @@ import static org.junit.Assert.assertFalse;
 
 import org.apache.isis.applib.annotation.Bounding;
 import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.id.ObjectSpecId;
 import org.apache.isis.commons.having.HasUniqueId;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.metamodel.facets.EditingObjectsConfiguration;
@@ -58,7 +59,6 @@ import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFac
 import org.apache.isis.core.metamodel.facets.object.publish.entitychange.EntityChangePublishingFacet;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.choices.ChoicesFacet;
-import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 
 import lombok.val;
 

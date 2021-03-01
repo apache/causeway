@@ -43,8 +43,8 @@ import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.util.string.Strings;
 
 import org.apache.isis.applib.exceptions.unrecoverable.ObjectNotFoundException;
+import org.apache.isis.applib.id.ObjectSpecId;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
-import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.wicket.model.models.BookmarkTreeNode;
 import org.apache.isis.viewer.wicket.model.models.BookmarkedPagesModel;
@@ -164,8 +164,7 @@ public class BookmarkedPagesPanel extends PanelAbstract<BookmarkedPagesModel> {
                     ObjectSpecification objectSpec = null;
                     RootOid oid = node.getOidNoVer();
                     if(oid != null) {
-                        ObjectSpecId objectSpecId = oid.getObjectSpecId();
-                        objectSpec = getSpecificationLoader().lookupBySpecIdElseLoad(objectSpecId);
+                        objectSpec = getSpecificationLoader().lookupBySpecIdElseLoad(oid.getLogicalTypeName());
                     }
                     final ResourceReference imageResource = getImageResourceCache().resourceReferenceForSpec(objectSpec);
                     final Image image = new Image(ID_BOOKMARKED_PAGE_ICON, imageResource) {

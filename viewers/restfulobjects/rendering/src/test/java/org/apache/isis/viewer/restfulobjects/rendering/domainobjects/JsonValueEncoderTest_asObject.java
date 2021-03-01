@@ -34,9 +34,9 @@ import static org.junit.Assert.assertSame;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.applib.id.ObjectSpecId;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 
 public class JsonValueEncoderTest_asObject {

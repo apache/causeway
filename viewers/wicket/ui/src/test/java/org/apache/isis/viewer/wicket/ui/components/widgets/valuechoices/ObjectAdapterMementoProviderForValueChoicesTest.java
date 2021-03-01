@@ -30,9 +30,9 @@ import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.is;
 
+import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
-import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
@@ -40,6 +40,8 @@ import org.apache.isis.core.runtime.memento.ObjectMemento;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.ObjectAdapterMementoProviderForValueChoices;
+
+import lombok.val;
 
 public class ObjectAdapterMementoProviderForValueChoicesTest {
 
@@ -60,10 +62,12 @@ public class ObjectAdapterMementoProviderForValueChoicesTest {
 
     @Before
     public void setUp() throws Exception {
-        final ObjectSpecId fakeSpecId = ObjectSpecId.of("FAKE");
+        final String fakeSpecId = "FAKE";
+        
+        val fakeLocalType = LogicalType.lazy(getClass(), ()->fakeSpecId);
 
-        mockMemento1 = mock(fakeSpecId, "mockMemento1");
-        mockMemento2 = mock(fakeSpecId, "mockMemento2");
+        mockMemento1 = mock(fakeLocalType, "mockMemento1");
+        mockMemento2 = mock(fakeLocalType, "mockMemento2");
 
         mementos = Can.of(mockMemento1, mockMemento2);
         
@@ -78,7 +82,7 @@ public class ObjectAdapterMementoProviderForValueChoicesTest {
             allowing(mockCommonContext).getSpecificationLoader();
             will(returnValue(mockSpecificationLoader));
             
-            allowing(mockSpecificationLoader).lookupBySpecIdElseLoad(fakeSpecId);
+            allowing(mockSpecificationLoader).lookupBySpecIdElseLoad(fakeLocalType);
             will(returnValue(mockSpec));
 
             allowing(mockSpec).isEncodeable();
@@ -99,12 +103,12 @@ public class ObjectAdapterMementoProviderForValueChoicesTest {
     }
 
     private ObjectMemento mock(
-            final ObjectSpecId specId,
+            final LogicalType logicalType,
             final String id) {
         final ObjectMemento mock = context.mock(ObjectMemento.class, id);
         context.checking(new Expectations() {{
-            allowing(mock).getObjectSpecId();
-            will(returnValue(specId));
+            allowing(mock).getLogicalType();
+            will(returnValue(logicalType));
 
             allowing(mock).asString();
             will(returnValue(id));

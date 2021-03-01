@@ -24,17 +24,19 @@ import java.util.Collection;
 import org.apache.wicket.model.IModel;
 import org.wicketstuff.select2.Select2MultiChoice;
 
+import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.commons.internal.base._Casts;
-import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.runtime.memento.ObjectMemento;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.EmptyChoiceProvider;
 
+import lombok.Getter;
 import lombok.val;
 
 public class Select2MultiChoiceExt
 extends Select2MultiChoice<ObjectMemento>
-implements ChoiceExt {
+implements 
+    ChoiceExt {
 
     private static final long serialVersionUID = 1L;
 
@@ -46,8 +48,7 @@ implements ChoiceExt {
         return new Select2MultiChoiceExt(id, _Casts.uncheckedCast(modelObject), scalarModel);
     }
 
-    private final ObjectSpecId specId;
-    
+    @Getter(onMethod_ = {@Override}) private final LogicalType logicalType;
 
     Select2MultiChoiceExt(
             final String id,
@@ -55,17 +56,13 @@ implements ChoiceExt {
             final ScalarModel scalarModel) {
         
         super(id, model, EmptyChoiceProvider.INSTANCE);
-        specId = scalarModel.getTypeOfSpecification().getSpecId();
+        logicalType = scalarModel.getTypeOfSpecification().getLogicalType();
 
         getSettings().setCloseOnSelect(true);
 
         setOutputMarkupPlaceholderTag(true);
     }
 
-    @Override
-    public ObjectSpecId getSpecId() {
-        return specId;
-    }
     
     // -- bug in wicket 8.8.0 -------------------------------------------
     

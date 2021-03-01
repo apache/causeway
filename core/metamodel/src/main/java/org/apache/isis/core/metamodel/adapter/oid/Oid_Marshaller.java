@@ -20,7 +20,6 @@ package org.apache.isis.core.metamodel.adapter.oid;
 
 import java.util.Iterator;
 import java.util.List;
-import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
@@ -30,7 +29,6 @@ import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 
 import static org.apache.isis.commons.internal.base._Strings.splitThenStream;
 
@@ -176,7 +174,7 @@ final class Oid_Marshaller implements Oid.Marshaller, Oid.Unmarshaller {
             if(aggregateOidParts.isEmpty()) {
                 ensureCorrectType(oidStr, requestedType, RootOid.class);
                 return _Casts.uncheckedCast(
-                        Oid_Root.of(ObjectSpecId.of(rootObjectType), rootIdentifier));
+                        Oid_Root.of(rootObjectType, rootIdentifier));
             } else {
                 throw _Exceptions.illegalArgument("Aggregated OIDs are no longer supported");
             }
@@ -224,7 +222,7 @@ final class Oid_Marshaller implements Oid.Marshaller, Oid.Unmarshaller {
     @Override
     public final String marshal(RootOid rootOid) {
         _Assert.assertFalse(rootOid.isValue(), "cannot marshal values");
-        return rootOid.getObjectSpecId() + SEPARATOR + rootOid.getIdentifier();
+        return rootOid.getLogicalTypeName() + SEPARATOR + rootOid.getIdentifier();
     }
 
 }

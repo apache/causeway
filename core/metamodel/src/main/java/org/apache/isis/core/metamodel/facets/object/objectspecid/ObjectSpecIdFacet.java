@@ -19,8 +19,8 @@
 package org.apache.isis.core.metamodel.facets.object.objectspecid;
 
 
+import org.apache.isis.applib.id.ObjectSpecId;
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 
 
 /**

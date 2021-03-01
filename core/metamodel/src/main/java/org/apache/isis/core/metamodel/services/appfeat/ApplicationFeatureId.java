@@ -33,7 +33,7 @@ import static java.util.Comparator.nullsFirst;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.Value;
-import org.apache.isis.applib.id.TypeIdentifier;
+import org.apache.isis.applib.id.ObjectSpecId;
 import org.apache.isis.applib.services.appfeat.ApplicationMemberType;
 import org.apache.isis.applib.util.Equality;
 import org.apache.isis.applib.util.Hashing;
@@ -42,7 +42,6 @@ import org.apache.isis.applib.util.TitleBuffer;
 import org.apache.isis.applib.util.ToString;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 
 import lombok.NonNull;
 import lombok.val;
@@ -73,7 +72,7 @@ implements
 
     public static ApplicationFeatureId fromIdentifier(final @NonNull Identifier identifier) {
         
-        val logicalTypeName = identifier.getTypeIdentifier().getLogicalTypeName();
+        val logicalTypeName = identifier.getLogicalTypeName();
         
         if(identifier.getType().isClass()) {
             return newClass(logicalTypeName); 

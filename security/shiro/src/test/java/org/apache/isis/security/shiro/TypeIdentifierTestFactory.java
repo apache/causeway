@@ -18,16 +18,16 @@
  */
 package org.apache.isis.security.shiro;
 
-import org.apache.isis.applib.id.TypeIdentifier;
+import org.apache.isis.applib.id.LogicalType;
 
 final class TypeIdentifierTestFactory {
 
-    static TypeIdentifier customer() {
-        return TypeIdentifier.fqcn(Customer.class);
+    static LogicalType customer() {
+        return LogicalType.fqcn(Customer.class);
     }
     
-    static TypeIdentifier order() {
-        return TypeIdentifier.fqcn(Order.class);
+    static LogicalType order() {
+        return LogicalType.fqcn(Order.class);
     }
     
 }

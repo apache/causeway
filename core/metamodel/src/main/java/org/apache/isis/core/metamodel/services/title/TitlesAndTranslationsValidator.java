@@ -19,7 +19,7 @@
 package org.apache.isis.core.metamodel.services.title;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.id.TypeIdentifier;
+import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.title.TitleService;
 import org.apache.isis.commons.internal.base._Blackhole;
@@ -64,7 +64,7 @@ public class TitlesAndTranslationsValidator extends MetaModelValidatorAbstract {
             if(domainService == null) {
                 
                 val deficiencyOrigin = Identifier.classIdentifier(
-                        TypeIdentifier.eager(managedBeanAdapter.getBeanClass(), objectType));
+                        LogicalType.eager(managedBeanAdapter.getBeanClass(), objectType));
                 val facetHolder = specificationLoader.loadSpecification(managedBeanAdapter.getBeanClass());
                 
                 super.onFailure(
@@ -85,7 +85,7 @@ public class TitlesAndTranslationsValidator extends MetaModelValidatorAbstract {
                 e.printStackTrace();
                 
                 val deficiencyOrigin = Identifier.classIdentifier(
-                        TypeIdentifier.eager(managedBeanAdapter.getBeanClass(), objectType));
+                        LogicalType.eager(managedBeanAdapter.getBeanClass(), objectType));
                 val facetHolder = specificationLoader.loadSpecification(managedBeanAdapter.getBeanClass());
 
                 super.onFailure(
@@ -122,7 +122,7 @@ public class TitlesAndTranslationsValidator extends MetaModelValidatorAbstract {
                     } catch (Exception e) {
 
                         val deficiencyOrigin = Identifier.classIdentifier(
-                                TypeIdentifier.eager(correspondingClass, objSpec.getSpecId().asString()));
+                                LogicalType.eager(correspondingClass, objSpec.getSpecId().asString()));
                         val facetHolder = objSpec;
 
                         super.onFailure(
@@ -157,7 +157,7 @@ public class TitlesAndTranslationsValidator extends MetaModelValidatorAbstract {
 
                 val facetHolder = specificationLoader.loadSpecification(MessageRegistry.class);
                 val deficiencyOrigin = Identifier.classIdentifier(
-                        TypeIdentifier.eager(MessageRegistry.class, facetHolder.getSpecId().asString()));
+                        LogicalType.eager(MessageRegistry.class, facetHolder.getSpecId().asString()));
 
                 super.onFailure(
                         facetHolder, 
