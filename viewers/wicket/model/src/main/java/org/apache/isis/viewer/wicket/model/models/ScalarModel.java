@@ -160,7 +160,7 @@ implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext 
     }
 
     @Override
-    public Optional<LogicalType> getTypeOfSpecificationId() {
+    public Optional<LogicalType> getLogicalElementType() {
         return Optional.ofNullable(getScalarTypeSpec())
                 .map(ObjectSpecification::getLogicalType);
     }

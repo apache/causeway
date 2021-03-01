@@ -37,9 +37,8 @@ public interface HasLogicalType {
      * bytecode enhancement.
      *
      * <p> 
-     * TODO[2553] ... no longer true
      * The {@link ObjectSpecification} can be retrieved using 
-     * {@link SpecificationLoader#lookupBySpecIdElseLoad(String)}}.
+     * {@link SpecificationLoader#lookupBySpecIdElseLoad(String)}} passing the logical-type-name as argument.
      */
     default String getLogicalTypeName() {
         return getLogicalType().getLogicalTypeName();

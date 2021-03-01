@@ -34,7 +34,6 @@ import javax.enterprise.inject.Vetoed;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.id.LogicalType;
-import org.apache.isis.applib.id.ObjectSpecId;
 import org.apache.isis.applib.services.metamodel.BeanSort;
 import org.apache.isis.commons.collections.ImmutableEnumSet;
 import org.apache.isis.commons.internal.base._Lazy;
@@ -186,7 +185,7 @@ implements ObjectSpecification {
     private final boolean isAbstract;
 
     // derived lazily, cached since immutable
-    private _Lazy<ObjectSpecId> specIdLazy = _Lazy.threadSafe(this::lookupSpecId);
+    private _Lazy<LogicalType> logicalTypeLazy = _Lazy.threadSafe(this::lookupLogicalType);
 
     private ObjectSpecification superclassSpec;
 
@@ -216,7 +215,7 @@ implements ObjectSpecification {
         this.identifier = Identifier.classIdentifier(
                 LogicalType.lazy(
                         introspectedClass,
-                        ()->specIdLazy.get().asString()));
+                        ()->logicalTypeLazy.get().getLogicalTypeName()));
 
         this.facetProcessor = facetProcessor;
         this.postProcessor = postProcessor;
@@ -228,24 +227,17 @@ implements ObjectSpecification {
         return FeatureType.OBJECT;
     }
 
-//    @Override //TODO[2553] 
-//    @Deprecated //use getLogicalTypeName() instead
-//    public ObjectSpecId getSpecId() {
-//        return specIdLazy.get();
-//    }
-    
     @Override
     public LogicalType getLogicalType() {
-        //TODO[2553] add memoization
-        return LogicalType.eager(correspondingClass, specIdLazy.get().asString());
+        return logicalTypeLazy.get();
     }
         
-    private ObjectSpecId lookupSpecId() {
+    private LogicalType lookupLogicalType() {
         val objectSpecIdFacet = getFacet(ObjectSpecIdFacet.class);
         if(objectSpecIdFacet == null) {
             throw new IllegalStateException("could not find an ObjectSpecIdFacet for " + this.getFullIdentifier());
         }
-        return objectSpecIdFacet.value();
+        return LogicalType.eager(correspondingClass, objectSpecIdFacet.value().asString());
     }
 
     /**
