@@ -82,3 +82,5 @@ Action prompt is not supported.
 === buildResponse(IResourceContext, ObjectAndActionInvocation)
 
 Action invocation is supported provided it returns a single domain object or a list of domain objects (ie invocations returning void or scalar value are not supported). Action invocations returning a domain object will be rendered as a map with the RO v1.0 representation as a '$$ro' property within (same as _#buildResponse(IResourceContext, ManagedObject)_ ), while action invocations returning a list will be rendered as a list with the RO v1.0 representation as a map object with a single '$$ro' property (similar to _#buildResponse(IResourceContext, ManagedCollection)_ )
+
+include::hooks/ContentNegotiationServiceOrgApacheIsisV2_usage-notes.adoc[]

@@ -1,7 +1,9 @@
-= RepresentationService _(interface)_
+= RepresentationService
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
-Configure the Restful Objects viewer to emit custom representations (rather than the standard representations defined in the RO spec).
+Configures the Restful Objects viewer to emit custom representations (rather than the standard representations defined in the RO spec).
+
+The default implementations ultimately generate representations according to theRestful Objects specv1.0. It does this through a level of abstraction by delegating to implementations of the xref:refguide:viewer:index/restfulobjects/rendering/service/conneg/ContentNegotiationService.adoc[ContentNegotiationService] SPI. This provides a mechanism for altering representations according to the HTTP `Accept` header.
 
 This interface is EXPERIMENTAL and may change in the future.
 
@@ -10,12 +12,89 @@ This interface is EXPERIMENTAL and may change in the future.
 [source,java]
 .RepresentationService.java
 ----
-interface RepresentationService {
-  Response objectRepresentation(IResourceContext resourceContext, ManagedObject objectAdapter)
-  Response propertyDetails(IResourceContext resourceContext, ManagedProperty objectAndProperty)
-  Response collectionDetails(IResourceContext resourceContext, ManagedCollection objectAndCollection)
-  Response actionPrompt(IResourceContext resourceContext, ManagedAction objectAndAction)
-  Response actionResult(IResourceContext resourceContext, ObjectAndActionInvocation objectAndActionInvocation)
+class RepresentationService {
+  RepresentationService(List<ContentNegotiationService> contentNegotiationServices)
+  Response objectRepresentation(final IResourceContext resourceContext, final ManagedObject objectAdapter)     // <.>
+  Response propertyDetails(final IResourceContext resourceContext, final ManagedProperty objectAndProperty)     // <.>
+  Response collectionDetails(final IResourceContext resourceContext, final ManagedCollection objectAndCollection)     // <.>
+  Response actionPrompt(final IResourceContext resourceContext, final ManagedAction objectAndAction)     // <.>
+  Response actionResult(final IResourceContext resourceContext, final ObjectAndActionInvocation objectAndActionInvocation)     // <.>
+  void assertContentNegotiationServiceHandled(final Response.ResponseBuilder responseBuilder)
+  Response.ResponseBuilder buildResponse(Function<ContentNegotiationService, Response.ResponseBuilder> connegServiceBuildResponse)     // <.>
 }
 ----
 
+<.> xref:#objectRepresentation__IResourceContext_ManagedObject[objectRepresentation(IResourceContext, ManagedObject)]
++
+--
+Returns a representation of a single object.
+--
+<.> xref:#propertyDetails__IResourceContext_ManagedProperty[propertyDetails(IResourceContext, ManagedProperty)]
++
+--
+Returns a representation of a single property of an object.
+--
+<.> xref:#collectionDetails__IResourceContext_ManagedCollection[collectionDetails(IResourceContext, ManagedCollection)]
++
+--
+Returns a representation of a single collection of an object.
+--
+<.> xref:#actionPrompt__IResourceContext_ManagedAction[actionPrompt(IResourceContext, ManagedAction)]
++
+--
+Returns a representation of a single action (prompt) of an object.
+--
+<.> xref:#actionResult__IResourceContext_ObjectAndActionInvocation[actionResult(IResourceContext, ObjectAndActionInvocation)]
++
+--
+Returns a representation of a single action invocation of an object.
+--
+<.> xref:#buildResponse__Function[buildResponse(Function)]
++
+--
+Iterates over all _#contentNegotiationServices injected_ xref:refguide:viewer:index/restfulobjects/rendering/service/conneg/ContentNegotiationService.adoc[ContentNegotiationService] s to find one that returns a _Response.ResponseBuilder_ using the provided function.
+--
+
+== Members
+
+[#objectRepresentation__IResourceContext_ManagedObject]
+=== objectRepresentation(IResourceContext, ManagedObject)
+
+Returns a representation of a single object.
+
+By default this representation is as per section 14.4 of the RO spec, v1.0.
+
+[#propertyDetails__IResourceContext_ManagedProperty]
+=== propertyDetails(IResourceContext, ManagedProperty)
+
+Returns a representation of a single property of an object.
+
+By default this representation is as per section 16.4 of the RO spec, v1.0.
+
+[#collectionDetails__IResourceContext_ManagedCollection]
+=== collectionDetails(IResourceContext, ManagedCollection)
+
+Returns a representation of a single collection of an object.
+
+By default this representation is as per section 17.5 of the RO spec, v1.0.
+
+[#actionPrompt__IResourceContext_ManagedAction]
+=== actionPrompt(IResourceContext, ManagedAction)
+
+Returns a representation of a single action (prompt) of an object.
+
+By default this representation is as per section 18.2 of the RO spec, v1.0.
+
+[#actionResult__IResourceContext_ObjectAndActionInvocation]
+=== actionResult(IResourceContext, ObjectAndActionInvocation)
+
+Returns a representation of a single action invocation of an object.
+
+By default this representation is as per section 19.5 of the RO spec, v1.0.
+
+[#buildResponse__Function]
+=== buildResponse(Function)
+
+Iterates over all _#contentNegotiationServices injected_ xref:refguide:viewer:index/restfulobjects/rendering/service/conneg/ContentNegotiationService.adoc[ContentNegotiationService] s to find one that returns a _Response.ResponseBuilder_ using the provided function.
+
+There will always be at least one such service, namely the xref:refguide:viewer:index/restfulobjects/rendering/service/conneg/ContentNegotiationServiceForRestfulObjectsV1_0.adoc[ContentNegotiationServiceForRestfulObjectsV1_0] .

@@ -27,7 +27,7 @@ Apache Isis has two levels of permissions.
 _Read_ permission means that the user can view the object member; it will be rendered in the UI.  An action with only read permission will be shown disabled ("greyed out".
 _Write_ permission means that the object member can be changed.  For actions this means that they can be invoked.
 
-//WARNING: TODO: v2: this is out of date, because there is also a keycloak integration.
+//WARNING: TODO: v2: this is out of date, because there is also a keycloak integration and a Spring implementatoin.
 
 The framework provides an API for both authentication and authorization, and provides an implementation that integrates with link:http://shiro.apache.org[Apache Shiro].
 Shiro in turn uses the concept of a _realm_ as a source for both authentication and optionally authorization.

@@ -56,12 +56,9 @@ Importantly, this also minimizes the coupling between your code and Apache Isis,
 The framework also defines a number of "internal" services.
 These are not part of the framework's formal API, in that they use classes that are outside of the applib.
 These internal framework services should be thought of as part of the internal design of the framework, and are liable to change from release to release.
-//The internal framework services are documented in the xref:core:runtime-services:about.adoc[Framework Internal Services] guide.
+
 
 == Using the services
-
-WARNING: TODO: v2 - should extend this ... a good point to discuss also the @Import and pom.xml dependency.
-
 
 Apache Isis includes an extensive number of domain services for your domain objects to use; simply define the service as an annotated field and Apache Isis will inject the service into your object.
 
@@ -80,11 +77,15 @@ public class Customer {
         return !emailService.isConfigured();
     }
 
-    @Inject                                                            // <1>
+    @Inject                                                            // <.>
     EmailService emailService;
 }
 ----
-<1> Service automatically injected by the framework.
+
+<.> Service automatically injected by the framework.
+
+You may also need to `@Import` the module that contains the service into your application's `AppManifest` (though all of the services in core will be available automatically).
+
 
 For objects that are already persisted, the service is automatically injected just after the object is rehydrated by JDO/DataNucleus.
 

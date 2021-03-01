@@ -14,8 +14,8 @@ If the accept header specifies `application/xml` then the service additionally v
 ----
 class ContentNegotiationServiceXRoDomainType {
   public static final String X_RO_DOMAIN_TYPE;
-  Response.ResponseBuilder buildResponse(final IResourceContext renderContext, final ManagedObject objectAdapter)     // <.>
-  Response.ResponseBuilder buildResponse(final IResourceContext renderContext, final ObjectAndActionInvocation objectAndActionInvocation)     // <.>
+  Response.ResponseBuilder buildResponse(final IResourceContext resourceContext, final ManagedObject objectAdapter)     // <.>
+  Response.ResponseBuilder buildResponse(final IResourceContext resourceContext, final ObjectAndActionInvocation objectAndActionInvocation)     // <.>
 }
 ----
 
@@ -41,3 +41,5 @@ search for an accept header in form `application/xml;profile=urn:org.restfulobje
 === buildResponse(IResourceContext, ObjectAndActionInvocation)
 
 search for an accept header in form `application/xml;profile=urn:org.restfulobjects:repr-types/action-result;x-ro-domain-type=todoapp.dto.module.todoitem.ToDoItemDto` 
+
+include::hooks/ContentNegotiationServiceXRoDomainType_usage-notes.adoc[]

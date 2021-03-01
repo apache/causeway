@@ -44,35 +44,35 @@ public abstract class ContentNegotiationServiceAbstract implements ContentNegoti
 
     @Override
     public Response.ResponseBuilder buildResponse(
-            final IResourceContext renderContext2,
+            final IResourceContext resourceContext,
             final ManagedObject objectAdapter) {
         return null;
     }
 
     @Override
     public Response.ResponseBuilder buildResponse(
-            final IResourceContext renderContext2,
+            final IResourceContext resourceContext,
             final ManagedProperty objectAndProperty)  {
         return null;
     }
 
     @Override
     public Response.ResponseBuilder buildResponse(
-            final IResourceContext renderContext2,
+            final IResourceContext resourceContext,
             final ManagedCollection objectAndCollection) {
         return null;
     }
 
     @Override
     public Response.ResponseBuilder buildResponse(
-            final IResourceContext renderContext2,
+            final IResourceContext resourceContext,
             final ManagedAction objectAndAction)  {
         return null;
     }
 
     @Override
     public Response.ResponseBuilder buildResponse(
-            final IResourceContext renderContext2,
+            final IResourceContext resourceContext,
             final ObjectAndActionInvocation objectAndActionInvocation) {
         return null;
     }

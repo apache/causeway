@@ -14,7 +14,8 @@ We divide automated tests into two broad categories:
 
 * xref:testing:unittestsupport:about.adoc[unit tests] exercise a single unit (usually a method) of a domain object, in isolation.
 +
-Dependencies of that object are mocked out.  These are written by a developer and for a developer; they are to ensure that a particular "cog in the machine" works correctly
+Dependencies of that object are mocked out.
+These are written by a developer and for a developer; they are to ensure that a particular "cog in the machine" works correctly
 
 * xref:testing:integtestsupport:about.adoc[integration tests] exercise the application as a whole, usually focusing on one particular business operation (action).
 +
@@ -50,17 +51,17 @@ We call these _"BDD specs"_, and provide the xref:testing:specsupport:about.adoc
 The natural language specification then maps down onto some glue code that is used to drive the application.
 But the benefits of taking a BDD approach include the fact that your domain expert will be able to read the tests/specifications, and that when you run the specs, you also get documentation of the application's behaviour ("living documentation").
 
-It's up to you whether you use BDD specs for your apps; it will depend on your development process and company culture.  But if you don't then you certainly should write integration tests: acceptance criteria for user stories should be automated!
-
-
-
-
+It's up to you whether you use BDD specs for your apps; it will depend on your development process and company culture.
+But if you don't then you certainly should write integration tests: acceptance criteria for user stories should be automated!
 
 == Simulated UI (`WrapperFactory`)
 
-When we talk about integration tests/specs here, we mean tests that exercise the domain object logic, through to the actual database.  But we also want the tests to exercise the app from the users's perspective, which means including the user interface.
+When we talk about integration tests/specs here, we mean tests that exercise the domain object logic, through to the actual database.
+But we also want the tests to exercise the app from the users's perspective, which means including the user interface.
 
-For most other frameworks that would require having to test the application in a very heavy weight/fragile fashion using a tool such as link:http://docs.seleniumhq.org/[Selenium], driving a web browser to navigate .  In this regard though, Apache Isis has a significant trick up its sleeve.  Because Apache Isis implements the naked objects pattern, it means that the UI is generated automatically from declared domain-objects, -views and -services. This therefore allows for other implementations of the UI.
+For most other frameworks that would require having to test the application in a very heavy weight/fragile fashion using a tool such as link:http://docs.seleniumhq.org/[Selenium], driving a web browser to navigate . In this regard though, Apache Isis has a significant trick up its sleeve.
+Because Apache Isis implements the naked objects pattern, it means that the UI is generated automatically from declared domain-objects, -views and -services.
+This therefore allows for other implementations of the UI.
 
 The xref:refguide:applib:index/services/wrapper/WrapperFactory.adoc[WrapperFactory] domain service allows a test to wrap domain objects and thus to interact with said objects "as if" through the UI:
 
@@ -73,9 +74,6 @@ There's more discussion on the wrapper factory in the xref:testing:integtestsupp
 
 What this means is that an Apache Isis application can be tested end-to-end without having to deploy it onto a webserver; the whole app can be tested while running in-memory.
 Although integration tests re (necessarily) slower than unit tests, they are not any harder to write (in fact, in some respects they are easier).
-
-
-
 
 == Dependency Injection
 
@@ -92,7 +90,6 @@ CustomerRepository customers;
 
 Domain services are discovered by Spring Boot, either explicitly referenced in the link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/context/annotation/Import.html[@Import] annotation, or picked up from class path scanning of link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/context/annotation/ComponentScan.html[@ComponentScan].
 Any service annotated or meta-annotated with link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/stereotype/Component.html[@Component] can be discovered; this includes classes annotated with Apache Isis' xref:refguide:applib:index/annotation/DomainService.adoc[@DomainService].
-
 
 == Given/When/Then
 
@@ -112,9 +109,6 @@ And if there are too many mock expectations to set up, then "listen to the tests
 
 Where things get difficult though is the "given" for integration tests; which is the topic of the next section...
 
-
-
-
 == Fixture Management
 
 In the previous section we discussed using given/when/then as a form of organizing tests, and why you should keep your tests small.
@@ -126,9 +120,6 @@ The solution that Apache Isis provides is
 xref:testing:fixtures:about.adoc[fixture scripts], supported by a domain service (also) called xref:refguide:applib-cm:classes/super.adoc#FixtureScripts[Fixture Scripts].
 This defines a pattern (command pattern and composite pattern) with supporting classes to help ensure that the "data setup" for your tests are reusable and maintainable over time.
 
-
-
-
 == Fake data
 
 include::testing:fakedata:partial$intro.adoc[]
@@ -139,8 +130,6 @@ Apache Isis provides the xref:testing:fakedata:about.adoc[Fake Data] library to 
 ====
 Using fake data works very well with fixture scripts; the fixture script can invoke the business action with sensible (fake/random) defaults, and only require that the essential information is passed into it by the test.
 ====
-
-
 
 
 == Feature Toggles

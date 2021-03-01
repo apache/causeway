@@ -62,6 +62,9 @@ import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationSer
 import lombok.val;
 
 /**
+ * Rreturns representations according to the
+ * <a href="https://restfulobjects.org">Restful Objects</a> spec.
+ * 
  * @since 1.x {@index}
  */
 @Service

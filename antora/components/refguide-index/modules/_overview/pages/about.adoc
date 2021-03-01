@@ -33,7 +33,7 @@ package "App\n[Software System]" {
 .Projects/Modules (App)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description
+|Coordinates |Description 
 
 |Apache Isis Starter Parent
 [source,yaml]
@@ -126,7 +126,7 @@ package "Mavendeps\n[Software System]" {
 .Projects/Modules (Mavendeps)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description
+|Coordinates |Description 
 
 |Apache Isis Maven Deps
 [source,yaml]
@@ -408,7 +408,7 @@ package "Testing\n[Software System]" {
 .Projects/Modules (Testing)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description
+|Coordinates |Description 
 
 |Apache Isis Testing
 [source,yaml]
@@ -767,7 +767,7 @@ package "Examples\n[Software System]" {
 .Projects/Modules (Examples)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description
+|Coordinates |Description 
 
 |Demo - Parent
 [source,yaml]
@@ -1134,7 +1134,7 @@ package "Root\n[Software System]" {
 .Projects/Modules (Root)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description
+|Coordinates |Description 
 
 |Apache Isis (Aggregator)
 [source,yaml]
@@ -1213,7 +1213,7 @@ package "Commons\n[Software System]" {
 .Projects/Modules (Commons)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description
+|Coordinates |Description 
 
 |Apache Isis Commons
 [source,yaml]
@@ -1369,7 +1369,7 @@ package "Core\n[Software System]" {
 .Projects/Modules (Core)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description
+|Coordinates |Description 
 
 |Apache Isis Core
 [source,yaml]
@@ -1597,6 +1597,11 @@ org.hibernate.validator:hibernate-validator:jar:<managed> +
 org.jmock:jmock:jar:<managed> +
 ****
 
+.Document Index Entries
+****
+xref:refguide:core:index/metamodel/services/command/CommandDtoFactory.adoc[CommandDtoFactory], xref:refguide:core:index/metamodel/services/ixn/InteractionDtoFactory.adoc[InteractionDtoFactory], xref:refguide:core:index/metamodel/services/publishing/CommandPublisher.adoc[CommandPublisher], xref:refguide:core:index/metamodel/services/publishing/ExecutionPublisher.adoc[ExecutionPublisher]
+****
+
 |Apache Isis Core - Runtime
 [source,yaml]
 ----
@@ -1635,7 +1640,7 @@ Directory: /core/runtimeservices
 ****
 o.a.i.core.runtimeservices.bookmarks.BookmarkServiceDefault +
 o.a.i.core.runtimeservices.clock.ClockServiceDefault +
-o.a.i.core.runtimeservices.command.CommandDtoServiceInternalDefault +
+o.a.i.core.runtimeservices.command.CommandDtoFactoryDefault +
 o.a.i.core.runtimeservices.command.CommandExecutorServiceDefault +
 o.a.i.core.runtimeservices.confmenu.ConfigurationViewServiceDefault +
 o.a.i.core.runtimeservices.email.EmailServiceDefault +
@@ -1644,7 +1649,7 @@ o.a.i.core.runtimeservices.executor.MemberExecutorServiceDefault +
 o.a.i.core.runtimeservices.factory.FactoryServiceDefault +
 o.a.i.core.runtimeservices.homepage.HomePageResolverServiceDefault +
 o.a.i.core.runtimeservices.i18n.po.TranslationServicePo +
-o.a.i.core.runtimeservices.interaction.InteractionDtoServiceInternalDefault +
+o.a.i.core.runtimeservices.interaction.InteractionDtoFactoryDefault +
 o.a.i.core.runtimeservices.jaxb.JaxbServiceDefault +
 o.a.i.core.runtimeservices.menubars.MenuBarsLoaderServiceDefault +
 o.a.i.core.runtimeservices.menubars.bootstrap3.MenuBarsServiceBS3 +
@@ -1734,7 +1739,7 @@ org.apache.isis.core:isis-core-metamodel:jar:<managed> +
 
 .Document Index Entries
 ****
-xref:refguide:core:index/transaction/changetracking/EntityChangeTrackerDefault.adoc[EntityChangeTrackerDefault], xref:refguide:core:index/transaction/events/TransactionAfterCompletionEvent.adoc[TransactionAfterCompletionEvent]
+xref:refguide:core:index/transaction/changetracking/EntityChangeTracker.adoc[EntityChangeTracker], xref:refguide:core:index/transaction/changetracking/EntityChangeTrackerDefault.adoc[EntityChangeTrackerDefault], xref:refguide:core:index/transaction/changetracking/EntityChangesPublisher.adoc[EntityChangesPublisher], xref:refguide:core:index/transaction/changetracking/EntityPropertyChangePublisher.adoc[EntityPropertyChangePublisher], xref:refguide:core:index/transaction/events/TransactionAfterCompletionEvent.adoc[TransactionAfterCompletionEvent]
 ****
 
 |Apache Isis Core - WebApp
@@ -1891,7 +1896,7 @@ package "JDO\n[Software System]" {
 .Projects/Modules (JDO)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description
+|Coordinates |Description 
 
 |Apache Isis Persistence - JDO
 [source,yaml]
@@ -2115,7 +2120,7 @@ package "JPA\n[Software System]" {
 .Projects/Modules (JPA)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description
+|Coordinates |Description 
 
 |Apache Isis Persistence - JPA
 [source,yaml]
@@ -2248,7 +2253,7 @@ package "Security\n[Software System]" {
 .Projects/Modules (Security)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description
+|Coordinates |Description 
 
 |Apache Isis Security - Spring
 [source,yaml]
@@ -2309,7 +2314,7 @@ package "Bypass\n[Software System]" {
 .Projects/Modules (Bypass)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description
+|Coordinates |Description 
 
 |Apache Isis Security - Bypass
 [source,yaml]
@@ -2366,7 +2371,7 @@ package "Keycloak\n[Software System]" {
 .Projects/Modules (Keycloak)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description
+|Coordinates |Description 
 
 |Apache Isis Security - Keycloak
 [source,yaml]
@@ -2429,7 +2434,7 @@ package "Shiro\n[Software System]" {
 .Projects/Modules (Shiro)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description
+|Coordinates |Description 
 
 |Apache Isis Security - Shiro
 [source,yaml]
@@ -2494,7 +2499,7 @@ package "Viewer\n[Software System]" {
 .Projects/Modules (Viewer)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description
+|Coordinates |Description 
 
 |Apache Isis Viewer - Common Model
 [source,yaml]
@@ -2585,7 +2590,7 @@ package "Restful Objects\n[Software System]" {
 .Projects/Modules (Restful Objects)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description
+|Coordinates |Description 
 
 |Apache Isis Viewer - RO
 [source,yaml]
@@ -2660,7 +2665,7 @@ Directory: /viewers/restfulobjects/rendering
 |.Components
 ****
 o.a.i.viewer.restfulobjects.rendering.domainobjects.JsonValueEncoder +
-o.a.i.viewer.restfulobjects.rendering.service.RepresentationServiceContentNegotiator +
+o.a.i.viewer.restfulobjects.rendering.service.RepresentationService +
 o.a.i.viewer.restfulobjects.rendering.service.acceptheader.AcceptHeaderServiceForRest +
 o.a.i.viewer.restfulobjects.rendering.service.acceptheader.AcceptHeaderServiceForRest$RequestFilter +
 o.a.i.viewer.restfulobjects.rendering.service.acceptheader.AcceptHeaderServiceForRest$ResponseFilter +
@@ -2684,7 +2689,7 @@ org.apache.isis.viewer:isis-viewer-restfulobjects-applib:jar:<managed> +
 
 .Document Index Entries
 ****
-xref:refguide:viewer:index/restfulobjects/rendering/IsisModuleRestfulObjectsRendering.adoc[IsisModuleRestfulObjectsRendering], xref:refguide:viewer:index/restfulobjects/rendering/service/RepresentationService.adoc[RepresentationService], xref:refguide:viewer:index/restfulobjects/rendering/service/RepresentationServiceContentNegotiator.adoc[RepresentationServiceContentNegotiator], xref:refguide:viewer:index/restfulobjects/rendering/service/acceptheader/AcceptHeaderServiceForRest.adoc[AcceptHeaderServiceForRest], xref:refguide:viewer:index/restfulobjects/rendering/service/conneg/ContentNegotiationService.adoc[ContentNegotiationService], xref:refguide:viewer:index/restfulobjects/rendering/service/conneg/ContentNegotiationServiceAbstract.adoc[ContentNegotiationServiceAbstract], xref:refguide:viewer:index/restfulobjects/rendering/service/conneg/ContentNegotiationServiceForRestfulObjectsV1_0.adoc[ContentNegotiationServiceForRestfulObjectsV1_0], xref:refguide:viewer:index/restfulobjects/rendering/service/conneg/ContentNegotiationServiceOrgApacheIsisV1.adoc[ContentNegotiationServiceOrgApacheIsisV1], xref:refguide:viewer:index/restfulobjects/rendering/service/conneg/ContentNegotiationServiceOrgApacheIsisV2.adoc[ContentNegotiationServiceOrgApacheIsisV2], xref:refguide:viewer:index/restfulobjects/rendering/service/conneg/ContentNegotiationServiceXRoDomainType.adoc[ContentNegotiationServiceXRoDomainType], xref:refguide:viewer:index/restfulobjects/rendering/service/swagger/SwaggerServiceMenu.adoc[SwaggerServiceMenu]
+xref:refguide:viewer:index/restfulobjects/rendering/IResourceContext.adoc[IResourceContext], xref:refguide:viewer:index/restfulobjects/rendering/IsisModuleRestfulObjectsRendering.adoc[IsisModuleRestfulObjectsRendering], xref:refguide:viewer:index/restfulobjects/rendering/service/RepresentationService.adoc[RepresentationService], xref:refguide:viewer:index/restfulobjects/rendering/service/acceptheader/AcceptHeaderServiceForRest.adoc[AcceptHeaderServiceForRest], xref:refguide:viewer:index/restfulobjects/rendering/service/conneg/ContentNegotiationService.adoc[ContentNegotiationService], xref:refguide:viewer:index/restfulobjects/rendering/service/conneg/ContentNegotiationServiceAbstract.adoc[ContentNegotiationServiceAbstract], xref:refguide:viewer:index/restfulobjects/rendering/service/conneg/ContentNegotiationServiceForRestfulObjectsV1_0.adoc[ContentNegotiationServiceForRestfulObjectsV1_0], xref:refguide:viewer:index/restfulobjects/rendering/service/conneg/ContentNegotiationServiceOrgApacheIsisV1.adoc[ContentNegotiationServiceOrgApacheIsisV1], xref:refguide:viewer:index/restfulobjects/rendering/service/conneg/ContentNegotiationServiceOrgApacheIsisV2.adoc[ContentNegotiationServiceOrgApacheIsisV2], xref:refguide:viewer:index/restfulobjects/rendering/service/conneg/ContentNegotiationServiceXRoDomainType.adoc[ContentNegotiationServiceXRoDomainType], xref:refguide:viewer:index/restfulobjects/rendering/service/swagger/SwaggerServiceMenu.adoc[SwaggerServiceMenu]
 ****
 
 |Apache Isis Viewer - RO (Testing)
@@ -2793,7 +2798,7 @@ package "Wicket\n[Software System]" {
 .Projects/Modules (Wicket)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description
+|Coordinates |Description 
 
 |Apache Isis Viewer - Wicket
 [source,yaml]
@@ -2978,7 +2983,7 @@ package "Valuetypes\n[Software System]" {
 .Projects/Modules (Valuetypes)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description
+|Coordinates |Description 
 
 |Apache Isis Value types
 [source,yaml]
@@ -3164,7 +3169,7 @@ package "Asciidoc\n[Software System]" {
 .Projects/Modules (Asciidoc)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description
+|Coordinates |Description 
 
 |Apache Isis Val - Asciidoctor (parent)
 [source,yaml]
@@ -3392,7 +3397,7 @@ package "Markdown\n[Software System]" {
 .Projects/Modules (Markdown)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description
+|Coordinates |Description 
 
 |Apache Isis Val - Markdown (parent)
 [source,yaml]
@@ -3549,7 +3554,7 @@ package "Mappings\n[Software System]" {
 .Projects/Modules (Mappings)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description
+|Coordinates |Description 
 
 |Apache Isis Mappings
 [source,yaml]
@@ -3612,7 +3617,7 @@ package "JAX-RS Client Library\n[Software System]" {
 .Projects/Modules (JAX-RS Client Library)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description
+|Coordinates |Description 
 
 |Apache Isis Map - JaxRS Client (parent)
 [source,yaml]
@@ -3694,7 +3699,7 @@ package "REST Client\n[Software System]" {
 .Projects/Modules (REST Client)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description
+|Coordinates |Description 
 
 |Apache Isis Ext - REST Client (parent)
 [source,yaml]
@@ -3765,12 +3770,12 @@ skinparam rectangle<<12>> {
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<24>> {
+skinparam rectangle<<13>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<13>> {
+skinparam rectangle<<24>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
@@ -3912,7 +3917,7 @@ package "Extensions\n[Software System]" {
 .Projects/Modules (Extensions)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description
+|Coordinates |Description 
 
 |Apache Isis Extensions
 [source,yaml]
@@ -4381,7 +4386,7 @@ package "Core: Command Log\n[Software System]" {
 .Projects/Modules (Core: Command Log)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description
+|Coordinates |Description 
 
 |Apache Isis Ext - Command Log
 [source,yaml]
@@ -4471,7 +4476,7 @@ package "Core: Command Replay\n[Software System]" {
 .Projects/Modules (Core: Command Replay)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description
+|Coordinates |Description 
 
 |Apache Isis Ext - Command Replay
 [source,yaml]
@@ -4585,7 +4590,7 @@ package "Core: Model Annotation\n[Software System]" {
 .Projects/Modules (Core: Model Annotation)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description
+|Coordinates |Description 
 
 |Apache Isis Ext - @Model
 [source,yaml]
@@ -4652,7 +4657,7 @@ package "Core: Quartz\n[Software System]" {
 .Projects/Modules (Core: Quartz)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description
+|Coordinates |Description 
 
 |Apache Isis Ext - Quartz
 [source,yaml]
@@ -4798,7 +4803,7 @@ package "Subdomains\n[Software System]" {
 .Projects/Modules (Subdomains)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description
+|Coordinates |Description 
 
 |Apache Isis Subdomains
 [source,yaml]
@@ -4978,7 +4983,7 @@ package "Base\n[Software System]" {
 .Projects/Modules (Base)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description
+|Coordinates |Description 
 
 |Apache Isis Sub - Base (parent)
 [source,yaml]
@@ -5076,7 +5081,7 @@ package "Excel\n[Software System]" {
 .Projects/Modules (Excel)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description
+|Coordinates |Description 
 
 |Apache Isis Sub - Excel (parent)
 [source,yaml]
@@ -5212,7 +5217,7 @@ package "Spring\n[Software System]" {
 .Projects/Modules (Spring)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description
+|Coordinates |Description 
 
 |Apache Isis Sub - Spring (parent)
 [source,yaml]
@@ -5286,7 +5291,7 @@ package "XDocReport\n[Software System]" {
 .Projects/Modules (XDocReport)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description
+|Coordinates |Description 
 
 |Apache Isis Sub - XdocReport (parent)
 [source,yaml]
@@ -5401,7 +5406,7 @@ package "Tooling\n[Software System]" {
 .Projects/Modules (Tooling)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description
+|Coordinates |Description 
 
 |Apache Isis - Tooling
 [source,yaml]
@@ -5580,7 +5585,7 @@ package "Regression Tests\n[Software System]" {
 .Projects/Modules (Regression Tests)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description
+|Coordinates |Description 
 
 |Apache Isis - Regression Tests
 [source,yaml]
@@ -5682,7 +5687,7 @@ package "Incubator\n[Software System]" {
 .Projects/Modules (Incubator)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description
+|Coordinates |Description 
 
 |Apache Isis Incubator
 [source,yaml]
@@ -5730,7 +5735,7 @@ package "Kroviz Client\n[Software System]" {
 .Projects/Modules (Kroviz Client)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description
+|Coordinates |Description 
 
 |Apache Isis Inc - Client kroViz
 [source,yaml]
@@ -5794,7 +5799,7 @@ package "JavaFX Viewer\n[Software System]" {
 .Projects/Modules (JavaFX Viewer)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description
+|Coordinates |Description 
 
 |Apache Isis Inc - Viewer JavaFX
 [source,yaml]
@@ -5927,7 +5932,7 @@ package "Vaadin Viewer\n[Software System]" {
 .Projects/Modules (Vaadin Viewer)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description
+|Coordinates |Description 
 
 |Apache Isis Inc - Viewer Vaadin
 [source,yaml]
@@ -6067,7 +6072,7 @@ package "Legacy\n[Software System]" {
 .Projects/Modules (Legacy)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description
+|Coordinates |Description 
 
 |Apache Isis Legacy
 [source,yaml]

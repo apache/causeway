@@ -16,3 +16,4 @@ class ContentNegotiationServiceOrgApacheIsisV1 {
 }
 ----
 
+include::hooks/ContentNegotiationServiceOrgApacheIsisV1_usage-notes.adoc[]
