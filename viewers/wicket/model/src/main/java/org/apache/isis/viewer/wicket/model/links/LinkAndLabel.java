@@ -89,7 +89,7 @@ public final class LinkAndLabel extends LinkAndLabelAbstract {
             this.named = target.getNamed();
             this.actionHolder = (EntityModel) target.getActionHolder();
             // make sure we do this without side-effects
-            this.actionHolderLogicalType = actionHolder.getTypeOfSpecificationId()
+            this.actionHolderLogicalType = actionHolder.getLogicalElementType()
                     .orElseThrow(_Exceptions::unexpectedCodeReach); 
             this.objectActionId = target.getObjectAction().getId();
         }

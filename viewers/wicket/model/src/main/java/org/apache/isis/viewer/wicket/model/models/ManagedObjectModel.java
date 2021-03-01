@@ -25,7 +25,6 @@ import javax.annotation.Nullable;
 
 import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.id.LogicalType;
-import org.apache.isis.applib.id.ObjectSpecId;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.collections._Collections;
@@ -38,6 +37,7 @@ import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.core.runtime.memento.ObjectMemento;
 
 import lombok.NonNull;
+import lombok.Synchronized;
 import lombok.val;
 
 /**
@@ -104,7 +104,7 @@ extends ModelAbstract<ManagedObject> {
         
         val pojos = adapter.getPojo();
         memento = super.getMementoService()
-                .mementoForPojos(_Casts.uncheckedCast(pojos), getTypeOfSpecificationId()
+                .mementoForPojos(_Casts.uncheckedCast(pojos), getLogicalElementType()
                         .orElseGet(()->adapter.getElementSpecification().get().getLogicalType()));
     }
     
@@ -129,23 +129,25 @@ extends ModelAbstract<ManagedObject> {
     /**
      * free of side-effects, used for serialization
      * @implNote overriding this must be consistent with {@link #getTypeOfSpecification()}
-     * TODO[2553] rename to getLogicalElementType
      */
-    public Optional<LogicalType> getTypeOfSpecificationId() {
+    public Optional<LogicalType> getLogicalElementType() {
         return Optional.ofNullable(memento)
                 .map(ObjectMemento::getLogicalType);
     }
     
     private transient ObjectSpecification objectSpec;
+    private transient boolean isObjectSpecMemoized = false;
     /**
      * @implNote can be overridden by sub-models (eg {@link ScalarModel}) that know the type of
      * the adapter without there being one. Overriding this must be consistent 
-     * with {@link #getTypeOfSpecificationId()} 
+     * with {@link #getLogicalElementType()} 
      */
+    @Synchronized
     public ObjectSpecification getTypeOfSpecification() {
-        if(objectSpec==null) {
-            val specId = getTypeOfSpecificationId().orElse(null);
-            objectSpec = super.getSpecificationLoader().lookupBySpecIdElseLoad(specId); 
+        if(!isObjectSpecMemoized) {
+            val specId = getLogicalElementType().orElse(null);
+            objectSpec = super.getSpecificationLoader().lookupBySpecIdElseLoad(specId);
+            isObjectSpecMemoized = true;
         }
         return objectSpec;
     }
