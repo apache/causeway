@@ -28,7 +28,6 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-import org.apache.isis.applib.id.ObjectSpecId;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
 import org.apache.isis.core.metamodel.facets.ObjectSpecIdFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.objectspecid.classname.ObjectSpecIdFacetDerivedFromClassName;
@@ -56,7 +55,7 @@ public class ObjectSpecIdFacetDerivedFromClassNameFactoryTest extends AbstractFa
 
         assertThat(facet, is(not(nullValue())));
         assertThat(facet instanceof ObjectSpecIdFacetDerivedFromClassName, is(true));
-        assertThat(facet.value(), is(ObjectSpecId.of(Customer.class.getCanonicalName())));
+        assertThat(facet.value(), is(Customer.class.getCanonicalName()));
     }
 
 }

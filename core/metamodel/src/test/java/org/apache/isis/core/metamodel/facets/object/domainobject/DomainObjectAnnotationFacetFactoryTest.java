@@ -34,7 +34,6 @@ import static org.junit.Assert.assertFalse;
 
 import org.apache.isis.applib.annotation.Bounding;
 import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.id.ObjectSpecId;
 import org.apache.isis.commons.having.HasUniqueId;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.metamodel.facets.EditingObjectsConfiguration;
@@ -560,7 +559,7 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
             final ObjectSpecIdFacetForDomainObjectAnnotation facetForDomainObjectAnnotation =
                     (ObjectSpecIdFacetForDomainObjectAnnotation) facet;
 
-            assertThat(facetForDomainObjectAnnotation.value(), is(ObjectSpecId.of("CUS")));
+            assertThat(facetForDomainObjectAnnotation.value(), is("CUS"));
 
             expectNoMethodsRemoved();
         }
