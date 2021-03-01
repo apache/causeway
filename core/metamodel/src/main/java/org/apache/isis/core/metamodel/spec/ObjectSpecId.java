@@ -20,6 +20,7 @@ package org.apache.isis.core.metamodel.spec;
 
 import java.io.Serializable;
 
+import org.apache.isis.applib.id.TypeIdentifier;
 import org.apache.isis.commons.internal.base._Refs;
 import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
 
@@ -36,6 +37,7 @@ import lombok.Value;
  *
  * <p>
  * Has value semantics.
+ * @deprecated use {@link TypeIdentifier} instead
  */
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 @Value

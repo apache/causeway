@@ -32,6 +32,9 @@ import lombok.NonNull;
 import lombok.val;
 
 /**
+ * //TODO[2553] needs to be made Serializable, so can act as replacement for ApplicationFeatureId 
+ * 
+ * 
  * Combines {@link TypeIdentifier} and member identification (from properties, collections or actions),
  * to a fully qualified <i>feature</i> identifier.
  * <p> 
