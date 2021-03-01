@@ -25,6 +25,7 @@ import java.util.regex.Pattern;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.id.ObjectSpecId;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.primitives._Ints;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
@@ -33,7 +34,6 @@ import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
-import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;

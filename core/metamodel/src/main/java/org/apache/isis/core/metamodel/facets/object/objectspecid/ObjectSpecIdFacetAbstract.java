@@ -21,10 +21,10 @@ package org.apache.isis.core.metamodel.facets.object.objectspecid;
 
 import java.util.Map;
 
+import org.apache.isis.applib.id.ObjectSpecId;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 
 public abstract class ObjectSpecIdFacetAbstract extends
 FacetAbstract implements ObjectSpecIdFacet {

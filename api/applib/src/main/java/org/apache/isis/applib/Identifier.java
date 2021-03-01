@@ -23,7 +23,8 @@ import java.io.Serializable;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import org.apache.isis.applib.id.TypeIdentifier;
+import org.apache.isis.applib.id.HasLogicalType;
+import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Strings;
@@ -33,18 +34,19 @@ import lombok.NonNull;
 import lombok.val;
 
 /**
- * Combines {@link TypeIdentifier} and member identification (from properties, collections or actions),
+ * Combines {@link LogicalType} and member identification (from properties, collections or actions),
  * to a fully qualified <i>feature</i> identifier.
  * <p> 
  * For {@link Identifier}(s) of type {@link Identifier.Type#CLASS} member information is 
  * left empty.   
  *  
  * @since 1.x revised for 2.0 {@index}
- * @see TypeIdentifier
+ * @see LogicalType
  */
 public class Identifier 
 implements 
     Comparable<Identifier>,
+    HasLogicalType,
     Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -61,26 +63,26 @@ implements
 
     // -- FACTORY METHODS
 
-    public static Identifier classIdentifier(final TypeIdentifier typeIdentifier) {
+    public static Identifier classIdentifier(final LogicalType typeIdentifier) {
         return new Identifier(typeIdentifier, "", Can.empty(), Type.CLASS);
     }
 
     public static Identifier propertyOrCollectionIdentifier(
-            final TypeIdentifier typeIdentifier,
+            final LogicalType typeIdentifier,
             final String propertyOrCollectionName) {
         return new Identifier(typeIdentifier, propertyOrCollectionName, Can.empty(), 
                 Type.PROPERTY_OR_COLLECTION);
     }
 
     public static Identifier actionIdentifier(
-            final TypeIdentifier typeIdentifier,
+            final LogicalType typeIdentifier,
             final String actionName, 
             final Class<?>... parameterClasses) {
         return actionIdentifier(typeIdentifier, actionName, classNamesOf(parameterClasses));
     }
 
     public static Identifier actionIdentifier(
-            final TypeIdentifier typeIdentifier,
+            final LogicalType typeIdentifier,
             final String actionName, 
             final Can<String> parameterClassNames) {
         return new Identifier(typeIdentifier, actionName, parameterClassNames, Type.ACTION);
@@ -88,7 +90,7 @@ implements
 
     // -- INSTANCE FIELDS
 
-    @Getter private final TypeIdentifier typeIdentifier;
+    @Getter(onMethod_ = {@Override}) private final LogicalType logicalType;
     
     @Getter private final String className;
     
@@ -117,13 +119,13 @@ implements
     // -- CONSTRUCTOR
 
     private Identifier(
-            final TypeIdentifier typeIdentifier,
+            final LogicalType logicalType,
             final String memberName, 
             final Can<String> memberParameterClassNames, 
             final Type type) {
         
-        this.typeIdentifier = typeIdentifier;
-        this.className = typeIdentifier.getClassName();
+        this.logicalType = logicalType;
+        this.className = logicalType.getClassName();
         this.memberName = memberName;
         this.memberParameterClassNames = memberParameterClassNames;
         this.type = type;
@@ -144,7 +146,7 @@ implements
     // -- LOGICAL ID
     
     public String getLogicalIdentityString(final @NonNull String delimiter) {
-        return typeIdentifier.getLogicalTypeName() 
+        return getLogicalTypeName() 
                 + delimiter 
                 + memberNameAndParameterClassNamesIdentityString;
     }

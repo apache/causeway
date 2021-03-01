@@ -44,7 +44,6 @@ import org.apache.isis.commons.internal.memento._Mementos.SerializingAdapter;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.objectmanager.load.ObjectLoader;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
-import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 import lombok.val;
@@ -79,7 +78,7 @@ public class BookmarkServiceDefault implements BookmarkService, SerializingAdapt
             return null;
         }
         try {
-            val spec = specificationLoader.loadSpecification(ObjectSpecId.of(bookmark.getObjectType()));
+            val spec = specificationLoader.loadSpecification(bookmark);
             val identifier = bookmark.getIdentifier();
             val objectLoadRequest = ObjectLoader.Request.of(spec, identifier);
             

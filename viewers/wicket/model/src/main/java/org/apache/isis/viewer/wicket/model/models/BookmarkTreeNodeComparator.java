@@ -22,7 +22,6 @@ package org.apache.isis.viewer.wicket.model.models;
 import java.util.Comparator;
 
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
-import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 final class BookmarkTreeNodeComparator implements Comparator<BookmarkTreeNode> {
@@ -63,8 +62,7 @@ final class BookmarkTreeNodeComparator implements Comparator<BookmarkTreeNode> {
     }
 
     private String classNameOf(RootOid oid) {
-        ObjectSpecId objectSpecId = oid.getObjectSpecId();
-        return specificationLoader.lookupBySpecIdElseLoad(objectSpecId)
+        return specificationLoader.lookupBySpecIdElseLoad(oid.getLogicalTypeName())
                 .getIdentifier().getClassName();
     }
 

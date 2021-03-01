@@ -22,31 +22,31 @@ package org.apache.isis.core.metamodel.specloader;
 import java.util.Map;
 import java.util.Optional;
 
+import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
-import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 import lombok.NonNull;
 
-class SpecIdToClassResolverDefault implements SpecIdToClassResolver {
+class LogicalTypeResolverDefault implements LogicalTypeResolver {
 
-    private final Map<ObjectSpecId, Class<?>> classBySpecId = _Maps.newConcurrentHashMap();
+    private final Map<String, LogicalType> logicalTypeByName = _Maps.newConcurrentHashMap();
 
     @Override
     public void clear() {
-        classBySpecId.clear();
+        logicalTypeByName.clear();
     }
 
     @Override
-    public Optional<Class<?>> lookup(final @NonNull ObjectSpecId specId) {
-        return Optional.ofNullable(classBySpecId.get(specId));
+    public Optional<LogicalType> lookup(final @NonNull String logicalTypeName) {
+        return Optional.ofNullable(logicalTypeByName.get(logicalTypeName));
     }
     
     @Override
     public void register(final @NonNull ObjectSpecification spec) {
         if(hasUsableSpecId(spec)) {
-            classBySpecId.put(spec.getSpecId(), spec.getCorrespondingClass());
+            logicalTypeByName.put(spec.getLogicalTypeName(), spec.getLogicalType());
         }
     }
     

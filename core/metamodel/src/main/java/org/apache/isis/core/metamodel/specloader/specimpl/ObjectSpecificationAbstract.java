@@ -33,7 +33,8 @@ import java.util.stream.Stream;
 import javax.enterprise.inject.Vetoed;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.id.TypeIdentifier;
+import org.apache.isis.applib.id.LogicalType;
+import org.apache.isis.applib.id.ObjectSpecId;
 import org.apache.isis.applib.services.metamodel.BeanSort;
 import org.apache.isis.commons.collections.ImmutableEnumSet;
 import org.apache.isis.commons.internal.base._Lazy;
@@ -74,7 +75,6 @@ import org.apache.isis.core.metamodel.interactions.ObjectTitleContext;
 import org.apache.isis.core.metamodel.interactions.ObjectValidityContext;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -214,7 +214,7 @@ implements ObjectSpecification {
         this.isAbstract = ClassExtensions.isAbstract(introspectedClass);
 
         this.identifier = Identifier.classIdentifier(
-                TypeIdentifier.lazy(
+                LogicalType.lazy(
                         introspectedClass,
                         ()->specIdLazy.get().asString()));
 
@@ -228,9 +228,16 @@ implements ObjectSpecification {
         return FeatureType.OBJECT;
     }
 
-    @Override
+    @Override //TODO[2553] 
+    @Deprecated //use getLogicalTypeName() instead
     public ObjectSpecId getSpecId() {
         return specIdLazy.get();
+    }
+    
+    @Override
+    public LogicalType getLogicalType() {
+        //TODO[2553] add memoization
+        return LogicalType.eager(correspondingClass, specIdLazy.get().asString());
     }
         
     private ObjectSpecId lookupSpecId() {

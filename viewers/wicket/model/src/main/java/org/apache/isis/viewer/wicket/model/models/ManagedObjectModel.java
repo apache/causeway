@@ -24,6 +24,8 @@ import java.util.Optional;
 import javax.annotation.Nullable;
 
 import org.apache.isis.applib.annotation.BookmarkPolicy;
+import org.apache.isis.applib.id.LogicalType;
+import org.apache.isis.applib.id.ObjectSpecId;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.collections._Collections;
@@ -31,7 +33,6 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
-import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
 import org.apache.isis.core.runtime.memento.ObjectMemento;
@@ -104,7 +105,7 @@ extends ModelAbstract<ManagedObject> {
         val pojos = adapter.getPojo();
         memento = super.getMementoService()
                 .mementoForPojos(_Casts.uncheckedCast(pojos), getTypeOfSpecificationId()
-                        .orElseGet(()->adapter.getElementSpecification().get().getSpecId()));
+                        .orElseGet(()->adapter.getElementSpecification().get().getLogicalType()));
     }
     
     public final Bookmark asHintingBookmarkIfSupported() {
@@ -128,10 +129,11 @@ extends ModelAbstract<ManagedObject> {
     /**
      * free of side-effects, used for serialization
      * @implNote overriding this must be consistent with {@link #getTypeOfSpecification()}
+     * TODO[2553] rename to getLogicalElementType
      */
-    public Optional<ObjectSpecId> getTypeOfSpecificationId() {
+    public Optional<LogicalType> getTypeOfSpecificationId() {
         return Optional.ofNullable(memento)
-                .map(ObjectMemento::getObjectSpecId);
+                .map(ObjectMemento::getLogicalType);
     }
     
     private transient ObjectSpecification objectSpec;

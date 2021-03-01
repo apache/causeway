@@ -22,10 +22,11 @@ import java.util.function.Consumer;
 
 import javax.annotation.Nullable;
 
+import org.apache.isis.applib.id.LogicalType;
+import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutor;
-import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.specimpl.IntrospectionState;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
@@ -100,9 +101,9 @@ public interface SpecificationLoader {
      * @param domainTypes
      * @return true if a specification could be loaded for all types, false otherwise
      */
-    boolean loadSpecifications(final Class<?>... domainTypes);
+    boolean loadSpecifications(Class<?>... domainTypes);
 
-    Class<?> lookupType(ObjectSpecId objectSpecId);
+    LogicalType lookupLogicalType(@Nullable String logicalTypeName);
 
     /**
      * queue {@code objectSpec} for later validation
@@ -113,34 +114,56 @@ public interface SpecificationLoader {
     // -- SHORTCUTS
 
     @Nullable
-    default ObjectSpecification loadSpecification(@Nullable Class<?> domainType) {
+    default ObjectSpecification loadSpecification(
+            final @Nullable Class<?> domainType) {
         return loadSpecification(domainType, IntrospectionState.TYPE_INTROSPECTED);
     }
 
     @Nullable
-    default ObjectSpecification loadSpecification(@Nullable ObjectSpecId objectSpecId) {
-        return loadSpecification(objectSpecId, IntrospectionState.TYPE_INTROSPECTED);
+    default ObjectSpecification loadSpecification(
+            final @Nullable String logicalTypeName) {
+        return loadSpecification(logicalTypeName, IntrospectionState.TYPE_INTROSPECTED);
     }
     
     @Nullable
     default ObjectSpecification loadSpecification(
-            @Nullable ObjectSpecId objectSpecId, 
-            @NonNull IntrospectionState introspectionState) {
+            final @Nullable LogicalType logicalType) {
+        return loadSpecification(logicalType.getCorrespondingClass(), IntrospectionState.TYPE_INTROSPECTED);
+    }
+    
+    @Nullable
+    default ObjectSpecification loadSpecification(
+            final @Nullable Bookmark bookmark) {
+        return loadSpecification(bookmark.getLogicalTypeName(), IntrospectionState.TYPE_INTROSPECTED);
+    }
+    
+    @Nullable
+    default ObjectSpecification loadSpecification(
+            final @Nullable String logicalTypeName, 
+            final @NonNull  IntrospectionState introspectionState) {
 
-        if(objectSpecId==null) {
+        if(logicalTypeName==null) {
             return null;
         }
-        val type = lookupType(objectSpecId);
-        return loadSpecification(type, introspectionState);
+        val logicalType = lookupLogicalType(logicalTypeName);
+        return loadSpecification(logicalType.getCorrespondingClass(), introspectionState);
     }
 
     /**
      * Lookup a specification that has bean loaded before.
      * @param objectSpecId
+     * //TODO[2533] rename
      */
     @Nullable
-    default ObjectSpecification lookupBySpecIdElseLoad(@Nullable ObjectSpecId objectSpecId) {
-        return loadSpecification(objectSpecId, IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
+    default ObjectSpecification lookupBySpecIdElseLoad(
+            final @Nullable String logicalTypeName) {
+        return loadSpecification(logicalTypeName, IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
+    }
+    
+    @Nullable
+    default ObjectSpecification lookupBySpecIdElseLoad(
+            final @Nullable LogicalType logicalType) {
+        return loadSpecification(logicalType.getCorrespondingClass(), IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
     }
     
 }

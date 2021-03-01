@@ -16,25 +16,24 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.wicket.ui.components.widgets.select2;
+package org.apache.isis.core.metamodel.adapter.oid;
 
-import org.wicketstuff.select2.ChoiceProvider;
-import org.wicketstuff.select2.Select2Choice;
-import org.wicketstuff.select2.Select2MultiChoice;
-import org.wicketstuff.select2.Settings;
+import org.apache.isis.applib.id.LogicalType;
 
-import org.apache.isis.applib.id.HasLogicalType;
-import org.apache.isis.core.runtime.memento.ObjectMemento;
-
-/**
- * Represents functionality that is common to both {@link Select2Choice} and {@link Select2MultiChoice}, but for
- * which there is no suitable common supertype.
- *
- */
-public interface ChoiceExt extends HasLogicalType {
+public class LogicalTypeTestFactory {
     
-    void setProvider(final ChoiceProvider<ObjectMemento> providerForChoices);
-    Settings getSettings();
-
+    public static LogicalType cus() {
+        return LogicalType.lazy(Customer.class, ()->"CUS");
+    }
     
+    public static LogicalType cux() {
+        return LogicalType.lazy(Customer.class, ()->"CUX");
+    }
+    
+    public static LogicalType ord() {
+        return LogicalType.lazy(Order.class, ()->"ORD");
+    }
 }
+
+final class Customer {}
+final class Order {}

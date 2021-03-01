@@ -239,9 +239,9 @@ public abstract class ScalarPanelSelectAbstract extends ScalarPanelAbstract {
                     return;
                 }
                 val memento = proposedValueObjAsList.get(0);
-                val objectSpecId = memento.getObjectSpecId();
+                val logicalType = memento.getLogicalType();
                 proposedValue = ObjectMemento
-                        .wrapMementoList(proposedValueObjAsList, objectSpecId);
+                        .wrapMementoList(proposedValueObjAsList, logicalType);
             } else {
                 proposedValue = (ObjectMemento) proposedValueObj;
             }

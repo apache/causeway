@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.apache.isis.applib.annotation.PromptStyle;
+import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
@@ -31,7 +32,6 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
 import org.apache.isis.core.metamodel.facets.object.promptStyle.PromptStyleFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.common.model.feature.ScalarUiModel;
@@ -160,8 +160,9 @@ implements HasRenderingHints, ScalarUiModel, LinksProvider, FormExecutorContext 
     }
 
     @Override
-    public Optional<ObjectSpecId> getTypeOfSpecificationId() {
-        return Optional.of(getScalarTypeSpec().getSpecId());
+    public Optional<LogicalType> getTypeOfSpecificationId() {
+        return Optional.ofNullable(getScalarTypeSpec())
+                .map(ObjectSpecification::getLogicalType);
     }
     
 

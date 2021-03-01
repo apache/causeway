@@ -19,9 +19,8 @@
 package org.apache.isis.persistence.jdo.metamodel.facets.object.query;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.id.TypeIdentifier;
+import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
@@ -80,10 +79,10 @@ abstract class VisitorForClauseAbstract implements MetaModelValidatorVisiting.Vi
         }
 
         val cls = objectSpec.getCorrespondingClass();
-        if (getSpecificationLoader().loadSpecification(ObjectSpecId.of(classNameFromClause))==null) {
+        if (getSpecificationLoader().loadSpecification(classNameFromClause)==null) {
             validator.onFailure(
                     objectSpec,
-                    Identifier.classIdentifier(TypeIdentifier.fqcn(cls)),
+                    Identifier.classIdentifier(LogicalType.fqcn(cls)),
                     "%s: error in JDOQL query, class name for '%s' clause not recognized (JDOQL : %s)",
                     cls.getName(), clause, query);
             return;

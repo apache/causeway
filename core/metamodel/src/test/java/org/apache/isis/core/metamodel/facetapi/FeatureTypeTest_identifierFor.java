@@ -28,7 +28,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.id.TypeIdentifier;
+import org.apache.isis.applib.id.LogicalType;
 
 public class FeatureTypeTest_identifierFor {
 
@@ -58,7 +58,7 @@ public class FeatureTypeTest_identifierFor {
     public void property_whenMethodNameIs_XYyyZzz() throws Exception {
         final Method method = SomeDomainClass.class.getMethod("getABigDecimal");
         final Identifier identifierFor = FeatureType.PROPERTY.identifierFor(
-                TypeIdentifier.fqcn(SomeDomainClass.class), method);
+                LogicalType.fqcn(SomeDomainClass.class), method);
         assertThat(identifierFor.getMemberName(), is("ABigDecimal")); // very
         // odd
         // compared
@@ -81,7 +81,7 @@ public class FeatureTypeTest_identifierFor {
     public void property_whenMethodNameIs_XxxxYyyZzz() throws Exception {
         final Method method = SomeDomainClass.class.getMethod("getAnotherBigDecimal");
         final Identifier identifierFor = FeatureType.PROPERTY.identifierFor(
-                TypeIdentifier.fqcn(SomeDomainClass.class), method);
+                LogicalType.fqcn(SomeDomainClass.class), method);
         assertThat(identifierFor.getMemberName(), is("anotherBigDecimal"));
     }
 

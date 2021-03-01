@@ -20,6 +20,8 @@ package org.apache.isis.core.metamodel.spec;
 
 import org.junit.Test;
 
+import org.apache.isis.applib.id.ObjectSpecId;
+
 public class ObjectSpecIdTest_constructor {
 
     @Test

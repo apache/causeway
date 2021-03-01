@@ -19,7 +19,7 @@
 package org.apache.isis.core.metamodel.facets.object.mixin;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.id.TypeIdentifier;
+import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.commons.internal.reflection._Reflect;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForValidationFailures;
@@ -52,14 +52,14 @@ public class MetaModelValidatorForMixinTypes extends MetaModelValidatorForValida
         if(mixinContructors.getCardinality().isZero()) {
             onFailure(
                     facetHolder,
-                    Identifier.classIdentifier(TypeIdentifier.fqcn(candidateMixinType)),
+                    Identifier.classIdentifier(LogicalType.fqcn(candidateMixinType)),
                     "%s: annotated with %s annotation but does not have a public 1-arg constructor",
                     candidateMixinType.getName(), 
                     annotation);
         } else {
             onFailure(
                     facetHolder,
-                    Identifier.classIdentifier(TypeIdentifier.fqcn(candidateMixinType)),
+                    Identifier.classIdentifier(LogicalType.fqcn(candidateMixinType)),
                     "%s: annotated with %s annotation needs a single public 1-arg constructor but has %d",
                     candidateMixinType.getName(), 
                     annotation,

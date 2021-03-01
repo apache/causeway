@@ -51,10 +51,9 @@ public class ConverterForObjectAdapter implements IConverter<ManagedObject> {
     @Override
     public ManagedObject convertToObject(final String value, final Locale locale) {
         val rootOid = RootOid.deStringEncoded(value);
-        val objectSpecId = rootOid.getObjectSpecId(); 
         val spec = objectManager.getMetaModelContext()
                 .getSpecificationLoader()
-                .lookupBySpecIdElseLoad(objectSpecId);
+                .lookupBySpecIdElseLoad(rootOid.getLogicalTypeName());
         
         val objectLoadRequest = ObjectLoader.Request.of(spec, rootOid.getIdentifier());
         

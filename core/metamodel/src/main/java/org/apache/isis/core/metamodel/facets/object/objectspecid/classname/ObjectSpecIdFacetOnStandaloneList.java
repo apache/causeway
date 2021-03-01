@@ -19,9 +19,9 @@
 
 package org.apache.isis.core.metamodel.facets.object.objectspecid.classname;
 
+import org.apache.isis.applib.id.ObjectSpecId;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacetAbstract;
-import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 
 public class ObjectSpecIdFacetOnStandaloneList extends ObjectSpecIdFacetAbstract {
 

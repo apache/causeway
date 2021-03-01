@@ -29,7 +29,7 @@ import static org.junit.Assert.assertSame;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.events.domain.AbstractDomainEvent;
 import org.apache.isis.applib.events.domain.CollectionDomainEvent;
-import org.apache.isis.applib.id.TypeIdentifier;
+import org.apache.isis.applib.id.LogicalType;
 
 public class DomainEventHelperTest_newCollectionDomainEvent_forAdd {
 
@@ -45,7 +45,7 @@ public class DomainEventHelperTest_newCollectionDomainEvent_forAdd {
         final SomeDomainObject sdo = new SomeDomainObject();
         final SomeReferencedObject other = new SomeReferencedObject();
         final Identifier identifier = Identifier.propertyOrCollectionIdentifier(
-                TypeIdentifier.fqcn(SomeDomainObject.class), "references");
+                LogicalType.fqcn(SomeDomainObject.class), "references");
 
         final CollectionDomainEvent<Object, Object> ev = Utils.domainEventHelper().newCollectionDomainEvent(
                 CollectionDomainEvent.Default.class, null, identifier, sdo, CollectionDomainEvent.Of.ADD_TO, other);
@@ -60,7 +60,7 @@ public class DomainEventHelperTest_newCollectionDomainEvent_forAdd {
         final SomeDomainObject sdo = new SomeDomainObject();
         final SomeReferencedObject other = new SomeReferencedObject();
         final Identifier identifier = Identifier.propertyOrCollectionIdentifier(
-                TypeIdentifier.fqcn(SomeDomainObject.class), "references");
+                LogicalType.fqcn(SomeDomainObject.class), "references");
 
         final CollectionDomainEvent<Object, Object> ev = Utils.domainEventHelper().newCollectionDomainEvent(
                 CollectionDomainEvent.Default.class, AbstractDomainEvent.Phase.EXECUTED, identifier, sdo, CollectionDomainEvent.Of.ADD_TO, other);
@@ -75,7 +75,7 @@ public class DomainEventHelperTest_newCollectionDomainEvent_forAdd {
         final SomeDomainObject sdo = new SomeDomainObject();
         final SomeReferencedObject other = new SomeReferencedObject();
         final Identifier identifier = Identifier.propertyOrCollectionIdentifier(
-                TypeIdentifier.fqcn(SomeDomainObject.class), "references");
+                LogicalType.fqcn(SomeDomainObject.class), "references");
 
         final CollectionDomainEvent<SomeDomainObject, SomeReferencedObject> ev = Utils.domainEventHelper().newCollectionDomainEvent(
                 SomeDomainObjectCollectionDomainEvent.class, AbstractDomainEvent.Phase.EXECUTED, identifier, sdo, CollectionDomainEvent.Of.ADD_TO, other);

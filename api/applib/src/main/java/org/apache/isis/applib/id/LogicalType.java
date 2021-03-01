@@ -41,9 +41,9 @@ import lombok.val;
  * @since 2.0 {@index}
  */
 @ToString
-public final class TypeIdentifier 
+public final class LogicalType 
 implements 
-    Comparable<TypeIdentifier>,
+    Comparable<LogicalType>,
     Serializable {
     
     private static final long serialVersionUID = 1L;
@@ -66,29 +66,29 @@ implements
      * Returns a new TypeIdentifier based on the corresponding class
      * and a {@code logicalNameProvider} for lazy logical name lookup.  
      */
-    public static TypeIdentifier lazy(
+    public static LogicalType lazy(
             final @NonNull Class<?> correspondingClass, 
             final @NonNull Supplier<String> logicalNameProvider) {
         
-        return new TypeIdentifier(correspondingClass, logicalNameProvider);
+        return new LogicalType(correspondingClass, logicalNameProvider);
     }
     
     /**
      * Returns a new TypeIdentifier based on the corresponding class
      * and (ahead of time) known {@code logicalName}. 
      */
-    public static TypeIdentifier eager(
+    public static LogicalType eager(
             final @NonNull Class<?> correspondingClass, 
             final String logicalName) {
         
-        return new TypeIdentifier(correspondingClass, logicalName);
+        return new LogicalType(correspondingClass, logicalName);
     }
     
     /**
      * Use the corresponding class's fully qualified name for the {@code logicalName}. 
      * Most likely used in testing scenarios.
      */
-    public static TypeIdentifier fqcn(
+    public static LogicalType fqcn(
             final @NonNull Class<?> correspondingClass) {
         
         return eager(correspondingClass, correspondingClass.getName());
@@ -96,7 +96,7 @@ implements
     
     // -- HIDDEN CONSTRUTORS
     
-    private TypeIdentifier(
+    private LogicalType(
             final @NonNull Class<?> correspondingClass, 
             final @NonNull Supplier<String> logicalNameProvider) {
         
@@ -104,7 +104,7 @@ implements
         this.logicalNameProvider = logicalNameProvider;
     }
     
-    private TypeIdentifier(
+    private LogicalType(
             final @NonNull Class<?> correspondingClass, 
             final String logicalName) {
         
@@ -185,13 +185,13 @@ implements
         if (this == obj) {
             return true;
         }
-        if (obj instanceof TypeIdentifier) {
-            return isEqualTo((TypeIdentifier) obj);
+        if (obj instanceof LogicalType) {
+            return isEqualTo((LogicalType) obj);
         }
         return false;
     }
     
-    public boolean isEqualTo(final @Nullable TypeIdentifier other) {
+    public boolean isEqualTo(final @Nullable LogicalType other) {
         if(other==null) {
             return false;
         }
@@ -204,7 +204,7 @@ implements
     }
 
     @Override
-    public int compareTo(final @Nullable TypeIdentifier other) {
+    public int compareTo(final @Nullable LogicalType other) {
         val otherClassName = other!=null
                 ? other.getCorrespondingClass().getCanonicalName()
                 : null;
@@ -226,13 +226,13 @@ implements
         private final @NonNull Class<?> correspondingClass;
         private final @NonNull String logicalTypeName;
         
-        private SerializationProxy(TypeIdentifier typeIdentifier) {
+        private SerializationProxy(LogicalType typeIdentifier) {
             this.correspondingClass = typeIdentifier.getCorrespondingClass();
             this.logicalTypeName = typeIdentifier.getLogicalTypeName();
         }
 
         private Object readResolve() {
-            return TypeIdentifier.eager(correspondingClass, logicalTypeName);
+            return LogicalType.eager(correspondingClass, logicalTypeName);
         }
     }
     

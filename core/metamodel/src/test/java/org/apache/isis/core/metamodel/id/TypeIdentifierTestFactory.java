@@ -18,7 +18,7 @@
  */
 package org.apache.isis.core.metamodel.id;
 
-import org.apache.isis.applib.id.TypeIdentifier;
+import org.apache.isis.applib.id.LogicalType;
 
 import lombok.experimental.UtilityClass;
 
@@ -27,8 +27,8 @@ public final class TypeIdentifierTestFactory {
     
     private static class Customer {};
     
-    public static TypeIdentifier newCustomer() {
-        return TypeIdentifier.fqcn(Customer.class);
+    public static LogicalType newCustomer() {
+        return LogicalType.fqcn(Customer.class);
     }
 
 }

@@ -387,7 +387,7 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
     }
 
     private ManagedObject adapterFor(final RootOid oid) {
-        val objectSpec = specificationLoader.loadSpecification(oid.getObjectSpecId());
+        val objectSpec = specificationLoader.loadSpecification(oid.getLogicalTypeName());
         val loadRequest = ObjectLoader.Request.of(objectSpec, oid.getIdentifier());
         return objectSpec.getMetaModelContext().getObjectManager().loadObject(loadRequest);
     }

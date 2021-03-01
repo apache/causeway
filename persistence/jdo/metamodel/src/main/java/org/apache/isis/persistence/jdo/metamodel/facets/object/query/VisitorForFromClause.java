@@ -21,9 +21,8 @@ package org.apache.isis.persistence.jdo.metamodel.facets.object.query;
 import java.util.Objects;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.id.TypeIdentifier;
+import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.core.metamodel.spec.Hierarchical;
-import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
 
@@ -52,14 +51,14 @@ class VisitorForFromClause extends VisitorForClauseAbstract {
         if (Objects.equals(classNameFromClause, cls.getName())) {
             return;
         }
-        val fromSpec = getSpecificationLoader().loadSpecification(ObjectSpecId.of(classNameFromClause));
+        val fromSpec = getSpecificationLoader().loadSpecification(classNameFromClause);
         val subclasses = fromSpec.subclasses(Hierarchical.Depth.TRANSITIVE);
         if(subclasses.contains(objectSpec)) {
             return;
         }
         validator.onFailure(
                 objectSpec,
-                Identifier.classIdentifier(TypeIdentifier.fqcn(cls)),
+                Identifier.classIdentifier(LogicalType.fqcn(cls)),
                 "%s: error in JDOQL query, class name after '%s' clause should be same as class name on which annotated, or one of its supertypes (JDOQL : %s)",
                 cls.getName(), clause, query);
     }

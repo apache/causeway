@@ -37,7 +37,7 @@ class TypeIdentifierTest {
     @Test
     void eager() {
         
-        val original = TypeIdentifier.fqcn(SomeDomainClass.class);
+        val original = LogicalType.fqcn(SomeDomainClass.class);
         
         _SerializationTester.assertEqualsOnRoundtrip(original);
         
@@ -53,7 +53,7 @@ class TypeIdentifierTest {
     @Test
     void lazy() {
         
-        val original = TypeIdentifier.lazy(SomeDomainClass.class, ()->"hello");
+        val original = LogicalType.lazy(SomeDomainClass.class, ()->"hello");
         
         _SerializationTester.assertEqualsOnRoundtrip(original);
         

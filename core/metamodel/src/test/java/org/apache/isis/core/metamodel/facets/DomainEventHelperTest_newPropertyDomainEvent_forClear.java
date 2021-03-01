@@ -29,7 +29,7 @@ import static org.junit.Assert.assertSame;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.events.domain.PropertyDomainEvent;
-import org.apache.isis.applib.id.TypeIdentifier;
+import org.apache.isis.applib.id.LogicalType;
 
 import static junit.framework.Assert.assertEquals;
 
@@ -45,7 +45,7 @@ public class DomainEventHelperTest_newPropertyDomainEvent_forClear {
 
         SomeDomainObject sdo = new SomeDomainObject();
         Identifier identifier = Identifier.propertyOrCollectionIdentifier(
-                TypeIdentifier.fqcn(SomeDomainObject.class), "someDateProperty");
+                LogicalType.fqcn(SomeDomainObject.class), "someDateProperty");
         LocalDate oldValue = LocalDate.of(2013,4,1);
         LocalDate newValue = null;
 
@@ -64,7 +64,7 @@ public class DomainEventHelperTest_newPropertyDomainEvent_forClear {
 
         SomeDomainObject sdo = new SomeDomainObject();
         Identifier identifier = Identifier.propertyOrCollectionIdentifier(
-                TypeIdentifier.fqcn(SomeDomainObject.class), "someDateProperty");
+                LogicalType.fqcn(SomeDomainObject.class), "someDateProperty");
         LocalDate oldValue = LocalDate.of(2013,4,1);
         LocalDate newValue = null;
 

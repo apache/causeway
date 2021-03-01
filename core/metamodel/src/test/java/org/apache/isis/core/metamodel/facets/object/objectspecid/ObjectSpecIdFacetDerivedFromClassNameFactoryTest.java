@@ -28,11 +28,11 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 
+import org.apache.isis.applib.id.ObjectSpecId;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
 import org.apache.isis.core.metamodel.facets.ObjectSpecIdFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.objectspecid.classname.ObjectSpecIdFacetDerivedFromClassName;
 import org.apache.isis.core.metamodel.facets.object.objectspecid.classname.ObjectSpecIdFacetDerivedFromClassNameFactory;
-import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 
 public class ObjectSpecIdFacetDerivedFromClassNameFactoryTest extends AbstractFacetFactoryJUnit4TestCase {
 

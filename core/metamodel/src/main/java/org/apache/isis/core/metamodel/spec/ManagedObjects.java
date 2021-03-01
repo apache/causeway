@@ -34,6 +34,7 @@ import java.util.stream.Stream;
 import javax.annotation.Nullable;
 
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.applib.id.ObjectSpecId;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.repository.EntityState;
 import org.apache.isis.commons.collections.Can;
@@ -169,7 +170,7 @@ public final class ManagedObjects {
             @Nullable ManagedObject managedObject, 
             @NonNull final String separator) {
         return identify(managedObject)
-                .map(rootOid->rootOid.getObjectSpecId() + separator + rootOid.getIdentifier());
+                .map(rootOid->rootOid.getLogicalTypeName() + separator + rootOid.getIdentifier());
     }
 
     public static String stringifyElseFail(

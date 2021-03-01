@@ -18,16 +18,14 @@
  */
 package org.apache.isis.core.runtime.memento;
 
+import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 
 import lombok.NonNull;
 
 /**
  * @since 2.0
- * 
- *
  */
 public interface ObjectMementoService {
 
@@ -37,7 +35,7 @@ public interface ObjectMementoService {
 
     ObjectMemento mementoForPojo(Object pojo);
     
-    ObjectMemento mementoForPojos(Iterable<Object> iterablePojos, ObjectSpecId specId);
+    ObjectMemento mementoForPojos(Iterable<Object> iterablePojos, LogicalType logicalType);
 
     ManagedObject reconstructObject(ObjectMemento memento);
 
