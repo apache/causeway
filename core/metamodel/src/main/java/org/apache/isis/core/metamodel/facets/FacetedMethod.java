@@ -169,11 +169,11 @@ public class FacetedMethod extends TypedHolderDefault implements IdentifiedHolde
         this.owningType = declaringType;
         this.method = method;
         
-        val typeIdentifier = LogicalType.lazy(
+        val logicalType = LogicalType.lazy(
                 declaringType,
-                ()->getSpecificationLoader().loadSpecification(declaringType).getSpecId().asString());
+                ()->getSpecificationLoader().loadSpecification(declaringType).getLogicalTypeName());
         
-        this.identifier = featureType.identifierFor(typeIdentifier, method);
+        this.identifier = featureType.identifierFor(logicalType, method);
         this.parameters = parameters;
     }
 

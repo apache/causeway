@@ -30,7 +30,7 @@ public final class ServiceUtil {
     public static String idOfSpec(final ObjectSpecification serviceSpec) {
         _Assert.assertEquals( 
                 serviceSpec.getManagedBeanName(), 
-                serviceSpec.getSpecId().asString());
+                serviceSpec.getLogicalTypeName());
         return serviceSpec.getManagedBeanName();
     }
 

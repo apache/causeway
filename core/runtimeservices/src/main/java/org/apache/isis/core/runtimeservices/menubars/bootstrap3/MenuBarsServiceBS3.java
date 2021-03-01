@@ -283,7 +283,7 @@ public class MenuBarsServiceBS3 implements MenuBarsService {
                 }
 
                 ObjectAction objectAction = serviceAndAction.getObjectAction();
-                final String objectType = serviceAndAction.getServiceAdapter().getSpecification().getSpecId().asString();
+                final String objectType = serviceAndAction.getServiceAdapter().getSpecification().getLogicalTypeName();
                 ServiceActionLayoutData action = new ServiceActionLayoutData(objectType, objectAction.getId());
                 action.setNamed(objectAction.getName());
                 menuSection.getServiceActions().add(action);

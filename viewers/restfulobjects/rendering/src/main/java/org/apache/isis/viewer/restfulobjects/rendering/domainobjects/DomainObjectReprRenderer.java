@@ -24,7 +24,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.apache.isis.applib.annotation.DomainServiceLayout;
-import org.apache.isis.applib.id.ObjectSpecId;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.facets.object.domainservicelayout.DomainServiceLayoutFacet;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
@@ -412,7 +411,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
                 new DomainObjectReprRenderer(getResourceContext(), null, JsonRepresentation.newMap());
         final JsonRepresentation domainObjectRepr = renderer.with(objectAdapter).asPersistLinkArguments().render();
 
-        final String domainType = objectAdapter.getSpecification().getSpecId().asString();
+        final String domainType = objectAdapter.getSpecification().getLogicalTypeName();
         final LinkBuilder persistLinkBuilder = LinkBuilder.newBuilder(getResourceContext(), Rel.PERSIST.getName(), RepresentationType.DOMAIN_OBJECT, "objects/%s", domainType).withHttpMethod(RestfulHttpMethod.POST).withArguments(domainObjectRepr);
         getLinks().arrayAdd(persistLinkBuilder.build());
     }

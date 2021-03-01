@@ -25,7 +25,6 @@ import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
-import org.apache.isis.applib.id.ObjectSpecId;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -133,8 +132,7 @@ public abstract class AbstractRoleAndPermissionsFixtureScript extends FixtureScr
     
     private String asFeatureFqns(Class<?> cls) {
         return Optional.ofNullable(specificationLoader.loadSpecification(cls))
-                .map(ObjectSpecification::getSpecId)
-                .map(ObjectSpecId::asString)
+                .map(ObjectSpecification::getLogicalTypeName)
                 .orElseGet(()->cls.getName());
     }
 

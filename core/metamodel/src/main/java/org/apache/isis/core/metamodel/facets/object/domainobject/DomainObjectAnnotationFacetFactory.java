@@ -40,7 +40,6 @@ import org.apache.isis.applib.events.lifecycle.ObjectRemovingEvent;
 import org.apache.isis.applib.events.lifecycle.ObjectUpdatedEvent;
 import org.apache.isis.applib.events.lifecycle.ObjectUpdatingEvent;
 import org.apache.isis.applib.id.LogicalType;
-import org.apache.isis.applib.id.ObjectSpecId;
 import org.apache.isis.commons.having.HasUniqueId;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.collections._Multimaps;
@@ -480,16 +479,16 @@ implements MetaModelRefiner, PostConstructMethodCache, ObjectSpecIdFacetFactory 
     public void refineProgrammingModel(ProgrammingModel programmingModel) {
 
         if(getConfiguration().getCore().getMetaModel().getValidator().isEnsureUniqueObjectTypes()) {
-            addValidatorToEnsureUniqueObjectIds(programmingModel);
+            addValidatorToEnsureUniqueLogicalTypeNames(programmingModel);
         }
 
         programmingModel.addValidator(autoCompleteMethodInvalid);
         programmingModel.addValidator(mixinTypeValidator);
     }
 
-    private void addValidatorToEnsureUniqueObjectIds(ProgrammingModel pm) {
+    private void addValidatorToEnsureUniqueLogicalTypeNames(ProgrammingModel pm) {
 
-        final _Multimaps.ListMultimap<ObjectSpecId, ObjectSpecification> collidingSpecsById =
+        final _Multimaps.ListMultimap<String, ObjectSpecification> collidingSpecsByLogicalTypeName =
                 _Multimaps.newConcurrentListMultimap();
 
         final MetaModelValidatorVisiting.SummarizingVisitor ensureUniqueObjectIds =
@@ -497,15 +496,14 @@ implements MetaModelRefiner, PostConstructMethodCache, ObjectSpecIdFacetFactory 
 
                     @Override
                     public boolean visit(ObjectSpecification objSpec, MetaModelValidator validator) {
-                        val specId = objSpec.getSpecId();
-                        collidingSpecsById.putElement(specId, objSpec);
+                        collidingSpecsByLogicalTypeName.putElement(objSpec.getLogicalTypeName() , objSpec);
                         return true;
                     }
 
                     @Override
                     public void summarize(MetaModelValidator validator) {
-                        for (val specId : collidingSpecsById.keySet()) {
-                            val collidingSpecs = collidingSpecsById.get(specId);
+                        for (val logicalTypeName : collidingSpecsByLogicalTypeName.keySet()) {
+                            val collidingSpecs = collidingSpecsByLogicalTypeName.get(logicalTypeName);
                             val isCollision = collidingSpecs.size()>1;
                             if(isCollision) {
                                 val csv = asCsv(collidingSpecs);
@@ -514,8 +512,8 @@ implements MetaModelRefiner, PostConstructMethodCache, ObjectSpecIdFacetFactory 
                                     validator.onFailure(
                                             spec,
                                             spec.getIdentifier(),
-                                            "Object type '%s' mapped to multiple classes: %s",
-                                            specId.asString(),
+                                            "Logical-type-name (aka. object-type) '%s' mapped to multiple classes: %s",
+                                            logicalTypeName,
                                             csv);
                                 });
 
@@ -523,7 +521,7 @@ implements MetaModelRefiner, PostConstructMethodCache, ObjectSpecIdFacetFactory 
                             }
                         }
                         // so can be revalidated again if necessary.
-                        collidingSpecsById.clear();
+                        collidingSpecsByLogicalTypeName.clear();
                     }
 
                     private String asCsv(final List<ObjectSpecification> specList) {

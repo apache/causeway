@@ -254,7 +254,7 @@ public interface ObjectAction extends ObjectMember {
             final InteractionInitiatedBy interactionInitiatedBy);
 
     default String getCssClass(String prefix) {
-        final String ownerId = getOnType().getSpecId().asString().replace(".", "-");
+        final String ownerId = getOnType().getLogicalTypeName().replace(".", "-");
         return prefix + ownerId + "-" + getId();
     }
 
@@ -314,7 +314,7 @@ public interface ObjectAction extends ObjectMember {
             @SuppressWarnings("unused")
             final Identifier identifier = action.getIdentifier();
 
-            final String className = action.getOnType().getSpecId().asString().replace(".","-");
+            final String className = action.getOnType().getLogicalTypeName().replace(".","-");
             final String actionId = action.getId();
             return className + "-" + actionId;
         }

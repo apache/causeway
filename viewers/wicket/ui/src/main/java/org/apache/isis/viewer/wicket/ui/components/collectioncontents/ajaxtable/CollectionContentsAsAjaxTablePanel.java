@@ -277,7 +277,7 @@ implements CollectionCountProvider {
         final NamedFacet facet = property.getFacet(NamedFacet.class);
         final boolean escaped = facet == null || facet.escaped();
 
-        final String parentTypeName = property.getOnType().getSpecId().asString();
+        final String parentTypeName = property.getOnType().getLogicalTypeName();
         final String describedAs = mapIfPresentElse(property.getFacet(DescribedAsFacet.class), 
                 DescribedAsFacet::value, null);
 

@@ -93,7 +93,7 @@ public class ObjectActionMixedIn extends ObjectActionDefault implements MixedInM
         identifier = Identifier.actionIdentifier(
                 LogicalType.eager(
                         getOnType().getCorrespondingClass(),
-                        getOnType().getSpecId().asString()),
+                        getOnType().getLogicalTypeName()),
                 getId(), 
                 memberParameterClassNames);
     }

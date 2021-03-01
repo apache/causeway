@@ -41,12 +41,12 @@ implements IdentifiedHolder {
         
         super(featureType, type);
         
-        val typeIdentifier = LogicalType.lazy(
+        val logicalType = LogicalType.lazy(
                 declaringType,
-                ()->getSpecificationLoader().loadSpecification(declaringType).getSpecId().asString());
+                ()->getSpecificationLoader().loadSpecification(declaringType).getLogicalTypeName());
         
         // best we can do...
-        this.identifier = FeatureType.ACTION.identifierFor(typeIdentifier, method);
+        this.identifier = FeatureType.ACTION.identifierFor(logicalType, method);
     }
 
     @Override

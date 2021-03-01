@@ -121,8 +121,7 @@ public class TitlesAndTranslationsValidator extends MetaModelValidatorAbstract {
 
                     } catch (Exception e) {
 
-                        val deficiencyOrigin = Identifier.classIdentifier(
-                                LogicalType.eager(correspondingClass, objSpec.getSpecId().asString()));
+                        val deficiencyOrigin = Identifier.classIdentifier(objSpec.getLogicalType());
                         val facetHolder = objSpec;
 
                         super.onFailure(
@@ -155,12 +154,11 @@ public class TitlesAndTranslationsValidator extends MetaModelValidatorAbstract {
 
             } catch (Exception e) {
 
-                val facetHolder = specificationLoader.loadSpecification(MessageRegistry.class);
-                val deficiencyOrigin = Identifier.classIdentifier(
-                        LogicalType.eager(MessageRegistry.class, facetHolder.getSpecId().asString()));
+                val spec = specificationLoader.loadSpecification(MessageRegistry.class);
+                val deficiencyOrigin = Identifier.classIdentifier(spec.getLogicalType());
 
                 super.onFailure(
-                        facetHolder, 
+                        spec, 
                         deficiencyOrigin, 
                         "Failed to translate message %s from MessageRegistry", 
                         "" + message);

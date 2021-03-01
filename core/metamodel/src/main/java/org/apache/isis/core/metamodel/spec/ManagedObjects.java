@@ -34,7 +34,6 @@ import java.util.stream.Stream;
 import javax.annotation.Nullable;
 
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.applib.id.ObjectSpecId;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.repository.EntityState;
 import org.apache.isis.commons.collections.Can;
@@ -115,8 +114,7 @@ public final class ManagedObjects {
     
     public static Optional<String> getDomainType(ManagedObject managedObject) {
         return spec(managedObject)
-                .map(ObjectSpecification::getSpecId)
-                .map(ObjectSpecId::asString);
+                .map(ObjectSpecification::getLogicalTypeName);
     }
     
     // -- IDENTIFICATION
@@ -470,7 +468,7 @@ public final class ManagedObjects {
                         EntityState.PERSISTABLE_ATTACHED, 
                         entityState,
                         ()-> String.format("entity %s is required to be attached (not detached)", 
-                                managedObject.getSpecification().getSpecId()));
+                                managedObject.getSpecification().getLogicalTypeName()));
             }
             return managedObject;
         }
@@ -495,7 +493,7 @@ public final class ManagedObjects {
                     && !managedObject.isRootOidMemoized()) {
                 val msg = String.format("entity %s is required to have a memoized ID, "
                         + "otherwise cannot re-attach", 
-                        managedObject.getSpecification().getSpecId());
+                        managedObject.getSpecification().getLogicalTypeName());
                 log.error(msg); // in case exception gets swallowed
                 throw _Exceptions.illegalState(msg);
             }

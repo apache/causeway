@@ -25,7 +25,6 @@ import java.util.regex.Pattern;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.id.ObjectSpecId;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.primitives._Ints;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
@@ -140,10 +139,13 @@ public class PageParameterUtil {
             IsisAppCommonContext commonContext,
             PageParameters pageParameters) {
 
-        final ObjectSpecId owningSpec = ObjectSpecId.of(PageParameterNames.ACTION_OWNING_SPEC.getStringFrom(pageParameters));
+        val specLoader = commonContext.getSpecificationLoader();
+        val owningLogicalTypeName = PageParameterNames.ACTION_OWNING_SPEC.getStringFrom(pageParameters);
+        val owningLogicalType = specLoader.lookupLogicalType(owningLogicalTypeName);
+        
         final ActionType actionType = PageParameterNames.ACTION_TYPE.getEnumFrom(pageParameters, ActionType.class);
         final String actionNameParms = PageParameterNames.ACTION_ID.getStringFrom(pageParameters);
-        return new ActionMemento(owningSpec, actionType, actionNameParms, commonContext.getSpecificationLoader());
+        return new ActionMemento(owningLogicalType, actionType, actionNameParms, specLoader);
     }
     
     private static final Pattern KEY_VALUE_PATTERN = Pattern.compile("([^=]+)=(.+)");
