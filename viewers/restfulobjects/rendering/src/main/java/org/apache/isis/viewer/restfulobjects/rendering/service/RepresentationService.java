@@ -28,8 +28,18 @@ import org.apache.isis.viewer.restfulobjects.rendering.IResourceContext;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndActionInvocation;
 
 /**
- * Configure the Restful Objects viewer to emit custom representations (rather than the
+ * Configures the Restful Objects viewer to emit custom representations (rather than the
  * standard representations defined in the RO spec).
+ *
+ * <p>
+ *     The default implementations ultimately generate representations according
+ *     to the <a href="http://restfulobjects.org">Restful Objects spec</a> v1.0.
+ *     It does this through a level of abstraction by delegating to
+ *     implementations of the
+ *     {@link org.apache.isis.viewer.restfulobjects.rendering.service.conneg.ContentNegotiationService}
+ *     SPI.  This provides a mechanism for altering representations according
+ *     to the HTTP `Accept` header.
+ * </p>
  *
  * <p>
  * This interface is EXPERIMENTAL and may change in the future.

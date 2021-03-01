@@ -44,7 +44,7 @@ import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacet;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.interactions.InteractionHead;
-import org.apache.isis.core.metamodel.services.ixn.InteractionDtoServiceInternal;
+import org.apache.isis.core.metamodel.services.ixn.InteractionDtoFactory;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects.UnwrapUtil;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -215,8 +215,8 @@ implements ImperativeFacet {
         return serviceRegistry.lookupServiceElseFail(QueryResultsCache.class);
     }
 
-    private InteractionDtoServiceInternal getInteractionDtoServiceInternal() {
-        return serviceRegistry.lookupServiceElseFail(InteractionDtoServiceInternal.class);
+    private InteractionDtoFactory getInteractionDtoServiceInternal() {
+        return serviceRegistry.lookupServiceElseFail(InteractionDtoFactory.class);
     }
 
     @RequiredArgsConstructor

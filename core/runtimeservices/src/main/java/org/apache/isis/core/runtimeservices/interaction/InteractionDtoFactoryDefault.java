@@ -43,7 +43,7 @@ import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.services.command.CommandDtoFactory;
-import org.apache.isis.core.metamodel.services.ixn.InteractionDtoServiceInternal;
+import org.apache.isis.core.metamodel.services.ixn.InteractionDtoFactory;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -55,12 +55,18 @@ import org.apache.isis.schema.common.v2.ValueWithTypeDto;
 import org.apache.isis.schema.ixn.v2.ActionInvocationDto;
 import org.apache.isis.schema.ixn.v2.PropertyEditDto;
 
+/**
+* The design of this service is similar to
+* {@link org.apache.isis.core.runtimeservices.command.CommandDtoFactoryDefault}
+*
+* @see org.apache.isis.core.runtimeservices.command.CommandDtoFactoryDefault
+ */
 @Service
 @Named("isis.runtimeservices.InteractionDtoServiceInternalDefault")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")
-public class InteractionDtoServiceInternalDefault implements InteractionDtoServiceInternal {
+public class InteractionDtoFactoryDefault implements InteractionDtoFactory {
 
     @Inject private CommandDtoFactory commandDtoServiceInternal;
     @Inject private BookmarkService bookmarkService;

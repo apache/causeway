@@ -39,7 +39,7 @@ public enum Nature {
     NOT_SPECIFIED,
 
     /**
-     * A domain entity whose persistence is managed internally by Isis, 
+     * A domain entity whose persistence is managed internally by Isis,
      * using JPA or JDO as the persistence implementation.
      * <p>
      * Domain entities are considered to be part of the domain model layer.
@@ -55,7 +55,7 @@ public enum Nature {
      * <p>
      * The identity of a view model is determined solely by the state of object's properties.
      * Using this nature should be considered exactly equivalent to annotating with {@link ViewModel}.
-     *     
+     *
      * <p>
      * Note that collections are ignored; if their state is required to fully identify the view model, define the
      * view model using the JAXB {@link XmlRootElement} annotation instead (where the object's state is serialized
@@ -80,11 +80,8 @@ public enum Nature {
      */
     BEAN,
     ;
-    
+
     public boolean isEntity() {
         return this == Nature.ENTITY;
     }
-    
-    
 }
-//end::refguide[]

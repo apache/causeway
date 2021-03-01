@@ -25,23 +25,14 @@ import lombok.NonNull;
 
 /**
  * Notifies {@link CommandSubscriber}s.
- * @since 2.0
+ * @since 2.0 {@index}
  */
-//tag::refguide[]
 public interface CommandPublisher {
 
     /**
-     * &quot;Complete&quot; the command, providing an opportunity ot persist
-     * a memento of the command if the
-     * {@link Command#isSystemStateChanged() system state has changed}.
-     *
-     * <p>
-     *     The framework will automatically have set the {@link Command#getCompletedAt()} property.
-     * </p>
+     * &quot;Completes&quot; the command, meaning that all {@link CommandSubscriber}s
+     * are notified throuhg {@link CommandSubscriber#onCompleted(Command)}.
      */
-    // end::refguide[]
-    void complete(@NonNull Command command); // <.>
-    //tag::refguide[]
-    
+    void complete(@NonNull Command command);
+
 }
-// end::refguide[]

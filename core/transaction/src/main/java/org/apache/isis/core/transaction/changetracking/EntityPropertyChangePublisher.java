@@ -18,12 +18,25 @@
  */
 package org.apache.isis.core.transaction.changetracking;
 
+import org.apache.isis.applib.services.publishing.spi.EntityPropertyChange;
+
 /**
  * Notifies {@link org.apache.isis.applib.services.publishing.spi.EntityPropertyChangeSubscriber}s.
- * @since 2.0
+ *
+ * @see org.apache.isis.applib.services.publishing.spi.EntityPropertyChangeSubscriber
+ *
+ * @since 1.x but renamed/refactored for v2 {@index}
  */
 public interface EntityPropertyChangePublisher {
 
+    /**
+     * Notifies {@link org.apache.isis.applib.services.publishing.spi.EntityPropertyChangeSubscriber}s that
+     * a property of an entity has changed using the
+     * {@link org.apache.isis.applib.services.publishing.spi.EntityPropertyChangeSubscriber#onChanging(EntityPropertyChange)}
+     * callback.
+     *
+     * @param hasEnlistedEntityPropertyChanges
+     */
     void publishChangedProperties(HasEnlistedEntityPropertyChanges hasEnlistedEntityPropertyChanges);
 
 }

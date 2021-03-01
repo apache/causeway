@@ -20,6 +20,12 @@ package org.apache.isis.core.transaction.changetracking;
 
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
+/**
+ * Responsible for collecting the details of all changes to domain objects
+ * within a transaction.
+ *
+ * @since 1.x but renamed/refactored for v2 {@index}
+ */
 public interface EntityChangeTracker {
 
     /**
@@ -31,7 +37,7 @@ public interface EntityChangeTracker {
      * The post-modification values are captured when the transaction commits.
      */
     void enlistCreated(ManagedObject entity);
-    
+
     /**
      * Auditing and publishing support: for object stores to enlist an object that is about to be deleted,
      * capturing the pre-deletion value of the properties of the {@link ManagedObject}.
@@ -42,7 +48,7 @@ public interface EntityChangeTracker {
      * dummy value <tt>'[DELETED]'</tt> is used as the post-modification value.
      */
     void enlistDeleting(ManagedObject entity);
-    
+
     /**
      * Auditing and publishing support: for object stores to enlist an object that is about to be updated,
      * capturing the pre-modification values of the properties of the {@link ManagedObject}.
@@ -54,17 +60,17 @@ public interface EntityChangeTracker {
     void enlistUpdating(ManagedObject entity);
 
     /**
-     * Fires the appropriate event and lifecycle callback: {@literal LOADED} 
+     * Fires the appropriate event and lifecycle callback: {@literal LOADED}
      */
     void recognizeLoaded(ManagedObject entity);
 
     /**
-     * Fires the appropriate event and lifecycle callback: {@literal PERSISTING} 
+     * Fires the appropriate event and lifecycle callback: {@literal PERSISTING}
      */
     void recognizePersisting(ManagedObject entity);
 
     /**
-     * Fires the appropriate event and lifecycle callback: {@literal UPDATING} 
+     * Fires the appropriate event and lifecycle callback: {@literal UPDATING}
      */
     void recognizeUpdating(ManagedObject entity);
 

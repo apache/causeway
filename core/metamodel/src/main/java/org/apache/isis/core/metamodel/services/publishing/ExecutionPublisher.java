@@ -20,17 +20,35 @@ package org.apache.isis.core.metamodel.services.publishing;
 
 import java.util.function.Supplier;
 
+import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.services.iactn.Execution;
 import org.apache.isis.applib.services.publishing.spi.ExecutionSubscriber;
 
 /**
- * Notifies {@link ExecutionSubscriber}s.
- * @since 2.0
+ * Notifies {@link ExecutionSubscriber}s that an action has been executed
+ * or a property edited.
+ *
+ * @since 1.x but renamed/refactored for v2 {@index}
+ *
+ * @see ExecutionSubscriber
  */
 public interface ExecutionPublisher {
 
+    /**
+     * Notifies {@link ExecutionSubscriber}s of an action invocation through
+     * the {@link ExecutionSubscriber#onExecution(Execution)} callback.
+     *
+     * @see Action#executionPublishing()
+     */
     void publishActionInvocation(Execution<?,?> execution);
 
+    /**
+     * Notifies {@link ExecutionSubscriber}s of a property edit through
+     * the {@link ExecutionSubscriber#onExecution(Execution)} callback.
+     *
+     * @see Property#executionPublishing()
+     */
     void publishPropertyEdit(Execution<?,?> execution);
 
     /**

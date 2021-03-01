@@ -36,7 +36,7 @@ import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollect
 import org.apache.isis.core.metamodel.facets.properties.update.clear.PropertyClearFacet;
 import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
 import org.apache.isis.core.metamodel.interactions.InteractionHead;
-import org.apache.isis.core.metamodel.services.ixn.InteractionDtoServiceInternal;
+import org.apache.isis.core.metamodel.services.ixn.InteractionDtoFactory;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects.UnwrapUtil;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
@@ -282,8 +282,8 @@ extends SingleValueFacetAbstract<Class<? extends PropertyDomainEvent<?,?>>> {
         return uncheckedCast(value());
     }
 
-    private InteractionDtoServiceInternal getInteractionDtoServiceInternal() {
-        return getServiceRegistry().lookupServiceElseFail(InteractionDtoServiceInternal.class);
+    private InteractionDtoFactory getInteractionDtoServiceInternal() {
+        return getServiceRegistry().lookupServiceElseFail(InteractionDtoFactory.class);
     }
 
     @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {

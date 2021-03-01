@@ -18,14 +18,21 @@
  */
 package org.apache.isis.core.transaction.changetracking;
 
+import org.apache.isis.applib.services.publishing.spi.EntityChanges;
 import org.apache.isis.applib.services.publishing.spi.EntityChangesSubscriber;
 
 /**
  * Notifies {@link EntityChangesSubscriber}s.
- * @since 2.0
+ *
+ * @since 1.x but renamed/refactored for v2 {@index}
  */
 public interface EntityChangesPublisher {
 
+    /**
+     * Notifies {@link EntityChangesSubscriber}s of the changed entities within
+     * an {@link org.apache.isis.applib.services.iactn.Interaction}, calling
+     * the {@link EntityChangesSubscriber#onChanging(EntityChanges)} callback.
+     */
     void publishChangingEntities(HasEnlistedEntityChanges hasEnlistedEntityChanges);
 
 }

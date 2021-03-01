@@ -53,6 +53,12 @@ import org.apache.isis.schema.common.v2.OidsDto;
 
 import lombok.val;
 
+/**
+ * The design of this service is similar to
+ * {@link org.apache.isis.core.runtimeservices.interaction.InteractionDtoFactoryDefault}.
+ *
+ * @see org.apache.isis.core.runtimeservices.interaction.InteractionDtoFactoryDefault
+ */
 @Service
 @Named("isis.runtimeservices.CommandDtoFactoryDefault")
 @Order(OrderPrecedence.MIDPOINT)

@@ -58,7 +58,7 @@ import org.apache.isis.core.metamodel.facets.properties.property.modify.Property
 import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.services.events.MetamodelEventService;
-import org.apache.isis.core.metamodel.services.ixn.InteractionDtoServiceInternal;
+import org.apache.isis.core.metamodel.services.ixn.InteractionDtoFactory;
 import org.apache.isis.core.metamodel.services.publishing.ExecutionPublisher;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
@@ -88,7 +88,8 @@ implements MemberExecutorService {
     private final @Getter ObjectManager objectManager;
     private final @Getter ClockService clockService;
     private final @Getter Provider<MetricsService> metricsService;
-    private final @Getter InteractionDtoServiceInternal interactionDtoServiceInternal;
+    private final @Getter
+    InteractionDtoFactory interactionDtoFactory;
     private final @Getter Provider<ExecutionPublisher> executionPublisher;
     private final @Getter MetamodelEventService metamodelEventService;
     private final @Getter TransactionService transactionService;
@@ -164,7 +165,7 @@ implements MemberExecutorService {
         val returnedAdapter = objectManager.adapt(returnedPojo);
 
         // sync DTO with result
-        interactionDtoServiceInternal
+        interactionDtoFactory
         .updateResult(priorExecution.getDto(), owningAction, returnedPojo);
 
         // update Command (if required)
