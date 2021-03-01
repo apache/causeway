@@ -91,7 +91,7 @@ class DomainObjectResourceTest {
         val layoutDemo = factoryService.viewModel(LayoutDemo.class);
         val objectAdapter = objectManager.adapt(layoutDemo);
         val spec = objectAdapter.getSpecification();
-        val domainType = spec.getSpecId().asString();
+        val domainType = spec.getLogicalTypeName();
         val instanceId = objectManager.identifyObject(objectAdapter).getIdentifier(); //TODO also needs URL encoding
 
         val layoutResourceDescriptor = 
@@ -127,7 +127,7 @@ class DomainObjectResourceTest {
         val blobDemo = factoryService.viewModel(BlobDemo.class);
         val objectAdapter = objectManager.adapt(blobDemo);
         val spec = objectAdapter.getSpecification();
-        val domainType = spec.getSpecId().asString();
+        val domainType = spec.getLogicalTypeName();
         val instanceId = objectManager.identifyObject(objectAdapter).getIdentifier(); //TODO also needs URL encoding
 
         val layoutResourceDescriptor = 

@@ -113,7 +113,7 @@ public class BookmarkServiceDefault implements BookmarkService, SerializingAdapt
     @Override
     public Bookmark bookmarkFor(Class<?> cls, String identifier) {
         val spec = specificationLoader.loadSpecification(cls);
-        val objectType = spec.getSpecId().asString();
+        val objectType = spec.getLogicalTypeName();
         return Bookmark.of(objectType, identifier);
     }
 

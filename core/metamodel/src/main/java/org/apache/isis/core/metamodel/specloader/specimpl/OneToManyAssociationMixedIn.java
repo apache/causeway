@@ -131,7 +131,7 @@ public class OneToManyAssociationMixedIn extends OneToManyAssociationDefault imp
         identifier = Identifier.actionIdentifier(
                 LogicalType.eager(
                         mixeeSpec.getCorrespondingClass(), 
-                        mixeeSpec.getSpecId().asString()), 
+                        mixeeSpec.getLogicalTypeName()), 
                 getId(), 
                 memberParameterNames);
     }

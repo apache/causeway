@@ -228,11 +228,11 @@ implements ObjectSpecification {
         return FeatureType.OBJECT;
     }
 
-    @Override //TODO[2553] 
-    @Deprecated //use getLogicalTypeName() instead
-    public ObjectSpecId getSpecId() {
-        return specIdLazy.get();
-    }
+//    @Override //TODO[2553] 
+//    @Deprecated //use getLogicalTypeName() instead
+//    public ObjectSpecId getSpecId() {
+//        return specIdLazy.get();
+//    }
     
     @Override
     public LogicalType getLogicalType() {
@@ -479,16 +479,11 @@ implements ObjectSpecification {
     @Override
     public boolean isOfType(final ObjectSpecification other) {
         
-        // do the comparison using value types because of a possible aliasing/race condition
-        // in matchesParameterOf when building up contributed associations
-        if (other.getSpecId().equals(this.getSpecId())) {
-            return true;
-        }
-        
         val thisClass = this.getCorrespondingClass();
         val otherClass = other.getCorrespondingClass();
         
-        return otherClass.isAssignableFrom(thisClass);
+        return thisClass == otherClass 
+                || otherClass.isAssignableFrom(thisClass);
         
 //XXX legacy of ...        
 //        

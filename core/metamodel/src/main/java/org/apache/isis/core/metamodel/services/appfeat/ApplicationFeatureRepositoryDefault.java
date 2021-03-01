@@ -137,7 +137,7 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
             return;
         }
 
-        final String specIdString = spec.getSpecId().asString();
+        final String specIdString = spec.getLogicalTypeName();
         final ApplicationFeatureId classFeatureId = ApplicationFeatureId.newClass(specIdString);
 
         // add class to our map

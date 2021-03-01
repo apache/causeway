@@ -111,7 +111,7 @@ public class OneToOneAssociationMixedIn extends OneToOneAssociationDefault imple
         identifier = Identifier.actionIdentifier(
                 LogicalType.eager(
                         mixeeSpec.getCorrespondingClass(), 
-                        mixeeSpec.getSpecId().asString()),
+                        mixeeSpec.getLogicalTypeName()),
                 getId(), 
                 memberParameterClassNames);
     }

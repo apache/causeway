@@ -27,7 +27,6 @@ import javax.inject.Inject;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.DomainServiceLayout;
-import org.apache.isis.applib.id.ObjectSpecId;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facets.object.domainservicelayout.DomainServiceLayoutFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -50,8 +49,7 @@ public class MenuUiModelProvider {
         return metaModelContext.streamServiceAdapters()
                 .filter(with(menuBarSelect))
                 .map(ManagedObject::getSpecification)
-                .map(ObjectSpecification::getSpecId)
-                .map(ObjectSpecId::asString)
+                .map(ObjectSpecification::getLogicalTypeName)
                 .collect(Collectors.toList());
     }
 

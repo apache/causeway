@@ -97,8 +97,8 @@ implements GridFacet {
                     "getGrid(adapter) was called passing an adapter (specId: %s), "
                     + "for which this GridFacet (specId: %s) is not responsible; "
                     + "indicates that some framework internals are wired up in a wrong way",
-                    objectAdapter.getSpecification().getSpecId().asString(),
-                    getSpecification().getSpecId().asString());
+                    objectAdapter.getSpecification().getLogicalTypeName(),
+                    getSpecification().getLogicalTypeName());
         }
     }
 

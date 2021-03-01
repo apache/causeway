@@ -31,7 +31,7 @@ import org.apache.isis.viewer.restfulobjects.rendering.LinkFollowSpecs;
 public class PropertyDescriptionReprRenderer extends AbstractTypeMemberReprRenderer<PropertyDescriptionReprRenderer, OneToOneAssociation> {
 
     public static LinkBuilder newLinkToBuilder(final IResourceContext resourceContext, final Rel rel, final ObjectSpecification objectSpecification, final OneToOneAssociation property) {
-        final String domainType = objectSpecification.getSpecId().asString();
+        final String domainType = objectSpecification.getLogicalTypeName();
         final String propertyId = property.getId();
         final String url = "domain-types/" + domainType + "/properties/" + propertyId;
         return LinkBuilder.newBuilder(resourceContext, rel.getName(), RepresentationType.PROPERTY_DESCRIPTION, url);

@@ -80,7 +80,7 @@ public class CommandUtil {
 
     private static String logicalMemberIdentifierFor(
             final ObjectSpecification onType, final ObjectMember objectMember) {
-        final String objectType = onType.getSpecId().asString();
+        final String objectType = onType.getLogicalTypeName();
         final String localId = objectMember.getIdentifier().getMemberName();
         return objectType + "#" + localId;
     }

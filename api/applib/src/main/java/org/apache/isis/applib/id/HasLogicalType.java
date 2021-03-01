@@ -18,15 +18,31 @@
  */
 package org.apache.isis.applib.id;
 
+import org.apache.isis.applib.annotation.DomainObject;
+
 /**
  * @since 2.0 {@index}
  */
 public interface HasLogicalType {
 
     LogicalType getLogicalType();
-    
+
+    /**
+     * Returns the (unique) logical-type-name, as per the {@link ObjectSpecIdFacet}.
+     *
+     * <p>
+     * This will typically be the value of the {@link DomainObject#objectType()} annotation attribute.
+     * If none has been specified then will default to the fully qualified class name (with
+     * {@link ClassSubstitutorRegistry class name substituted} if necessary to allow for runtime 
+     * bytecode enhancement.
+     *
+     * <p> 
+     * TODO[2553] ... no longer true
+     * The {@link ObjectSpecification} can be retrieved using 
+     * {@link SpecificationLoader#lookupBySpecIdElseLoad(String)}}.
+     */
     default String getLogicalTypeName() {
         return getLogicalType().getLogicalTypeName();
     }
-    
+
 }

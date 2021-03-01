@@ -67,9 +67,9 @@ implements CollectionCountProvider, CollectionSelectorProvider {
         outerDiv.addOrReplace(new Label(StandaloneCollectionPanel.ID_ACTION_NAME, Model.of(action.getName())));
 
         CssClassAppender.appendCssClassTo(outerDiv,
-                CssClassAppender.asCssStyle("isis-" + action.getOnType().getSpecId().asString().replace('.', '-') + "-" + action.getId()));
+                CssClassAppender.asCssStyle("isis-" + action.getOnType().getLogicalTypeName().replace('.', '-') + "-" + action.getId()));
         CssClassAppender.appendCssClassTo(outerDiv,
-                CssClassAppender.asCssStyle("isis-" + entityCollectionModel.getTypeOfSpecification().getSpecId().asString().replace('.','-')));
+                CssClassAppender.asCssStyle("isis-" + entityCollectionModel.getTypeOfSpecification().getLogicalTypeName().replace('.','-')));
 
         // selector
         final CollectionSelectorHelper selectorHelper = new CollectionSelectorHelper(entityCollectionModel, getComponentFactoryRegistry());

@@ -239,7 +239,7 @@ public class ContentNegotiationServiceForRestfulObjectsV1_0 implements ContentNe
     }
 
     private static String actionOwningTypeFrom(final ObjectAndActionInvocation objectAndActionInvocation) {
-        return objectAndActionInvocation.getAction().getOnType().getSpecId().asString();
+        return objectAndActionInvocation.getAction().getOnType().getLogicalTypeName();
     }
 
     private static String actionIdFrom(final ObjectAndActionInvocation objectAndActionInvocation) {
@@ -286,7 +286,7 @@ public class ContentNegotiationServiceForRestfulObjectsV1_0 implements ContentNe
         final String title = titleFrom(collectionAdapters, elementSpec);
 
         final DomainObjectList list = new DomainObjectList(
-                title, elementSpec.getSpecId().asString(), actionOwningType, actionId, actionArguments);
+                title, elementSpec.getLogicalTypeName(), actionOwningType, actionId, actionArguments);
         for (val adapter : collectionAdapters) {
             list.getObjects().add(adapter.getPojo());
         }
