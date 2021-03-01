@@ -18,10 +18,9 @@
  */
 package org.apache.isis.applib.id;
 
-import java.io.Externalizable;
-import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectOutput;
+import java.io.InvalidObjectException;
+import java.io.ObjectInputStream;
+import java.io.Serializable;
 import java.util.Objects;
 import java.util.function.Supplier;
 
@@ -45,16 +44,15 @@ import lombok.val;
 public final class TypeIdentifier 
 implements 
     Comparable<TypeIdentifier>,
-    Externalizable {
+    Serializable {
+    
+    private static final long serialVersionUID = 1L;
 
     /**
-     * Class this identifier represents.
-     * 
-     * @implNote in support of de-serialization cannot be declared final 
-     * (Java 15+ records will solve this issue)
+     * Type ({@link Class} this identifier represents.
      */
     @Getter
-    private /*final*/ Class<?> correspondingClass;
+    private final Class<?> correspondingClass;
     
     @ToString.Exclude
     private final Supplier<String> logicalNameProvider;
@@ -185,18 +183,29 @@ implements
         return _Strings.compareNullsFirst(correspondingClass.getCanonicalName(), otherClassName);
     }
 
-    // -- SERIALIZATION
-    
-    @Override
-    public void writeExternal(ObjectOutput out) throws IOException {
-        out.writeObject(getCorrespondingClass());
-        out.writeUTF(getLogicalTypeName());
+    // -- SERIALIZATION PROXY
+
+    private Object writeReplace() {
+        return new SerializationProxy(this);
     }
 
-    @Override
-    public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
-        this.correspondingClass = (Class<?>) in.readObject();
-        this.logicalName = in.readUTF();
+    private void readObject(ObjectInputStream stream) throws InvalidObjectException {
+        throw new InvalidObjectException("Proxy required");
+    }
+
+    private static class SerializationProxy implements Serializable {
+        private static final long serialVersionUID = 1L;
+        private final @NonNull Class<?> correspondingClass;
+        private final @NonNull String logicalTypeName;
+        
+        private SerializationProxy(TypeIdentifier typeIdentifier) {
+            this.correspondingClass = typeIdentifier.getCorrespondingClass();
+            this.logicalTypeName = typeIdentifier.getLogicalTypeName();
+        }
+
+        private Object readResolve() {
+            return TypeIdentifier.eager(correspondingClass, logicalTypeName);
+        }
     }
     
     // -- HELPER

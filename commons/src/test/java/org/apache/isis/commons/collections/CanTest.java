@@ -27,7 +27,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.apache.isis.commons.SerializationTester;
+import org.apache.isis.commons.internal.testing._SerializationTester;
 
 import lombok.val;
 
@@ -35,7 +35,7 @@ class CanTest {
 
     @Test
     void tester_selftest() throws ClassNotFoundException, IOException {
-        SerializationTester.selftest();
+        _SerializationTester.selftest();
     }
     
     @Test
@@ -45,18 +45,18 @@ class CanTest {
     
     @Test
     void emptyCan_shouldBeSerializable() {
-        SerializationTester.assertEqualsOnRoundtrip(Can.empty());
-        SerializationTester.assertEqualsOnRoundtrip(Can.<String>of());
+        _SerializationTester.assertEqualsOnRoundtrip(Can.empty());
+        _SerializationTester.assertEqualsOnRoundtrip(Can.<String>of());
     }
     
     @Test
     void singletonCan_shouldBeSerializable() {
-        SerializationTester.assertEqualsOnRoundtrip(Can.<String>of("hi"));
+        _SerializationTester.assertEqualsOnRoundtrip(Can.<String>of("hi"));
     }
     
     @Test
     void multiCan_shouldBeSerializable() {
-        SerializationTester.assertEqualsOnRoundtrip(Can.<String>of("hi", "there"));
+        _SerializationTester.assertEqualsOnRoundtrip(Can.<String>of("hi", "there"));
     }
     
     // -- REVERTING

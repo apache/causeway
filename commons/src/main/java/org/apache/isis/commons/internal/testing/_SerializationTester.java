@@ -16,28 +16,28 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.commons;
+package org.apache.isis.commons.internal.testing;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
+import org.apache.isis.commons.internal.assertions._Assert;
 
+import lombok.SneakyThrows;
 import lombok.val;
 
 /**
  * in-memory serialization round-tripping
- * @since Jul 2, 2020
+ * @since 2.0
  *
  */
-public class SerializationTester {
+public class _SerializationTester {
 
-    public static byte[] marshall(Serializable object) throws IOException {
+    @SneakyThrows
+    public static byte[] marshall(Serializable object) {
         val bos = new ByteArrayOutputStream(16*4096); // 16k initial buffer size
         val oos = new ObjectOutputStream(bos);
         oos.writeObject(object);
@@ -46,7 +46,8 @@ public class SerializationTester {
         return bos.toByteArray();
     }
 
-    public static <T> T unmarshall(byte[] input) throws IOException, ClassNotFoundException {
+    @SneakyThrows
+    public static <T> T unmarshall(byte[] input) {
         val bis = new ByteArrayInputStream(input);
         val ois = new ObjectInputStream(bis);
         @SuppressWarnings("unchecked")
@@ -55,31 +56,22 @@ public class SerializationTester {
         return t;
     }
 
-    public static <T extends Serializable> T roundtrip(T object) throws IOException, ClassNotFoundException {
+    @SneakyThrows
+    public static <T extends Serializable> T roundtrip(T object) {
         val bytes = marshall(object);
         return unmarshall(bytes);
     }
 
+    @SneakyThrows
     public static <T extends Serializable> void assertEqualsOnRoundtrip(T object) {
-        T afterRoundtrip;
-        try {
-            afterRoundtrip = roundtrip(object);
-        } catch (ClassNotFoundException | IOException e) {
-            fail(e);
-            return;
-        }
-        assertEquals(object, afterRoundtrip);
+        T afterRoundtrip = roundtrip(object);
+        _Assert.assertEquals(object, afterRoundtrip);
     }
 
+    @SneakyThrows
     public static void selftest() {
-        String afterRoundtrip;
-        try {
-            afterRoundtrip = roundtrip("Hello World!");
-        } catch (ClassNotFoundException | IOException e) {
-            fail(e);
-            return;
-        }
-        assertEquals("Hello World!", afterRoundtrip);
+        String afterRoundtrip = roundtrip("Hello World!");
+        _Assert.assertEquals("Hello World!", afterRoundtrip);
         assertEqualsOnRoundtrip("Hello World!");
     }
 
