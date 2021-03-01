@@ -19,6 +19,7 @@
 
 package org.apache.isis.applib;
 
+import java.io.Serializable;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -32,9 +33,6 @@ import lombok.NonNull;
 import lombok.val;
 
 /**
- * //TODO[2553] needs to be made Serializable, so can act as replacement for ApplicationFeatureId 
- * 
- * 
  * Combines {@link TypeIdentifier} and member identification (from properties, collections or actions),
  * to a fully qualified <i>feature</i> identifier.
  * <p> 
@@ -44,7 +42,12 @@ import lombok.val;
  * @since 1.x revised for 2.0 {@index}
  * @see TypeIdentifier
  */
-public class Identifier implements Comparable<Identifier> {
+public class Identifier 
+implements 
+    Comparable<Identifier>,
+    Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     /**
      * What type of feature this identifies.
