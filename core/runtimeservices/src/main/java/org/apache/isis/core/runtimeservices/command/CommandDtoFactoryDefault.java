@@ -54,11 +54,11 @@ import org.apache.isis.schema.common.v2.OidsDto;
 import lombok.val;
 
 @Service
-@Named("isis.runtimeservices.CommandDtoServiceInternalDefault")
+@Named("isis.runtimeservices.CommandDtoFactoryDefault")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")
-public class CommandDtoServiceInternalDefault implements CommandDtoFactory {
+public class CommandDtoFactoryDefault implements CommandDtoFactory {
 
     @Inject BookmarkService bookmarkService;
     @Inject ClockService clockService;
@@ -112,24 +112,24 @@ public class CommandDtoServiceInternalDefault implements CommandDtoFactory {
         val actionParameters = objectAction.getParameters();
         for (int paramNum = 0; paramNum < actionParameters.size(); paramNum++) {
             final ObjectActionParameter actionParameter = actionParameters.getElseFail(paramNum);
-            
+
             final Object arg = argAdapters.get(paramNum)
                     .map(argAdapter->argAdapter != null? argAdapter.getPojo(): null)
                     .orElse(null);
-            
+
             // in case of non-scalar params returns the element type
             val paramTypeOrElementType = actionParameter.getSpecification().getCorrespondingClass();
-            
+
             val paramDto = actionParameter.getFeatureType() == FeatureType.ACTION_PARAMETER_COLLECTION
                     ? CommonDtoUtils.newParamDtoNonScalar(
-                            actionParameter.getName(), 
-                            paramTypeOrElementType, 
-                            arg, 
+                            actionParameter.getName(),
+                            paramTypeOrElementType,
+                            arg,
                             bookmarkService)
                     : CommonDtoUtils.newParamDto(
-                            actionParameter.getName(), 
-                            paramTypeOrElementType, 
-                            arg, 
+                            actionParameter.getName(),
+                            paramTypeOrElementType,
+                            arg,
                             bookmarkService);
 
             CommandDtoUtils.parametersFor(actionDto)
@@ -156,7 +156,7 @@ public class CommandDtoServiceInternalDefault implements CommandDtoFactory {
     }
 
     // -- HELPER
-    
+
     private CommandDto asCommandDto(final UUID uniqueId, final Can<ManagedObject> targetAdapters) {
 
         val dto = new CommandDto();
@@ -174,6 +174,6 @@ public class CommandDtoServiceInternalDefault implements CommandDtoFactory {
         }
         return dto;
     }
-    
+
 
 }

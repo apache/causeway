@@ -30,7 +30,7 @@ import org.apache.isis.core.codegen.bytebuddy.IsisModuleCoreCodegenByteBuddy;
 import org.apache.isis.core.runtime.IsisModuleCoreRuntime;
 import org.apache.isis.core.runtimeservices.bookmarks.BookmarkServiceDefault;
 import org.apache.isis.core.runtimeservices.clock.ClockServiceDefault;
-import org.apache.isis.core.runtimeservices.command.CommandDtoServiceInternalDefault;
+import org.apache.isis.core.runtimeservices.command.CommandDtoFactoryDefault;
 import org.apache.isis.core.runtimeservices.command.CommandExecutorServiceDefault;
 import org.apache.isis.core.runtimeservices.confmenu.ConfigurationViewServiceDefault;
 import org.apache.isis.core.runtimeservices.email.EmailServiceDefault;
@@ -77,7 +77,7 @@ import org.apache.isis.core.runtimeservices.xmlsnapshot.XmlSnapshotServiceDefaul
         EntityChangesPublisherDefault.class,
         EntityPropertyChangePublisherDefault.class,
         ClockServiceDefault.class,
-        CommandDtoServiceInternalDefault.class,
+        CommandDtoFactoryDefault.class,
         CommandExecutorServiceDefault.class,
         CommandPublisherDefault.class,
         ConfigurationViewServiceDefault.class,
@@ -106,7 +106,7 @@ import org.apache.isis.core.runtimeservices.xmlsnapshot.XmlSnapshotServiceDefaul
         WrapperFactoryDefault.class,
         XmlServiceDefault.class,
         XmlSnapshotServiceDefault.class,
-        
+
         // @Controller
         RoutingServiceDefault.class,
 
@@ -115,7 +115,7 @@ import org.apache.isis.core.runtimeservices.xmlsnapshot.XmlSnapshotServiceDefaul
 
         // @DomainService's
         TranslationServicePoMenu.class,
-        
+
         // Exception Recognizers
         ExceptionRecognizerForDataAccessException.class,
 
@@ -126,5 +126,5 @@ public class IsisModuleCoreRuntimeServices {
     public OrderComparator orderComparator() {
         return new AnnotationAwareOrderComparator();
     }
-    
+
 }
