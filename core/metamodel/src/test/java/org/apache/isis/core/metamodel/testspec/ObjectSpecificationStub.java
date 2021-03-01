@@ -132,7 +132,7 @@ implements ObjectSpecification {
     @Override
     public LogicalType getLogicalType() {
         if(logicalType == null) {
-            val logicalTypeName = getFacet(ObjectSpecIdFacet.class).value().asString();
+            val logicalTypeName = getFacet(ObjectSpecIdFacet.class).value();
             logicalType = LogicalType.eager(correspondingClass, logicalTypeName);
         }
         return logicalType;

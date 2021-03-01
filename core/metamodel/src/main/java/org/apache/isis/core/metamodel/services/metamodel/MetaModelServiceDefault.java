@@ -71,7 +71,9 @@ public class MetaModelServiceDefault implements MetaModelService {
             return null;
         }
         final ObjectSpecification objectSpecification = specificationLoader.lookupBySpecIdElseLoad(objectType);
-        return objectSpecification != null? objectSpecification.getCorrespondingClass(): null;
+        return objectSpecification != null
+                ? objectSpecification.getCorrespondingClass()
+                : null;
     }
 
     @Override
@@ -81,8 +83,7 @@ public class MetaModelServiceDefault implements MetaModelService {
         }
         final ObjectSpecification objectSpecification = specificationLoader.loadSpecification(domainType);
         final ObjectSpecIdFacet objectSpecIdFacet = objectSpecification.getFacet(ObjectSpecIdFacet.class);
-        final ObjectSpecId objectSpecId = objectSpecIdFacet.value();
-        return objectSpecId.asString();
+        return objectSpecIdFacet.value();
     }
 
     @Override

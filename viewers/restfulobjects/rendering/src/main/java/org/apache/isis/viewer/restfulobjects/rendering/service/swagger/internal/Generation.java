@@ -761,7 +761,7 @@ class Generation {
     }
 
     static String objectTypeFor(final ObjectSpecification objectSpec) {
-        return objectSpec.getFacet(ObjectSpecIdFacet.class).value().asString();
+        return objectSpec.getFacet(ObjectSpecIdFacet.class).value();
     }
 
     static StringProperty stringProperty() {
