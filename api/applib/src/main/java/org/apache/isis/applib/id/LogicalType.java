@@ -41,8 +41,10 @@ import lombok.val;
  * <p>
  * Equality is driven by the corresponding class exclusively, meaning the logical name is ignored 
  * in order to not cause any side-effects on logical name memoization eg. it happening too early.
- * Meta-model validators will take care, that there is no logical name ambiguity, that is, 
- * there can no LogicalTypes sharing the same corresponding class but having different logical names. 
+ * <p>
+ * Meta-model validators will take care, that there is no logical name ambiguity: 
+ * There cannot be any LogicalTypes sharing the same corresponding class while having different 
+ * logical names. 
  * 
  * @apiNote thread-safe and serializable
  * @since 2.0 {@index}
