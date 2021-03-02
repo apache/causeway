@@ -52,7 +52,6 @@ import lombok.val;
  * {@link #getType() (feature) type}, {@link #getNamespace() logical package name}, 
  * {@link #getTypeSimpleName() class name} and {@link #getMemberName() member name}.
  * 
- * @deprecated use {@link Identifier} instead  
  */
 @Value
 public class ApplicationFeatureId 
