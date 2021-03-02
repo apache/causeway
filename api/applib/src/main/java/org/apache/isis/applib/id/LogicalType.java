@@ -26,6 +26,7 @@ import java.util.function.Supplier;
 
 import javax.annotation.Nullable;
 
+import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 
@@ -37,6 +38,12 @@ import lombok.val;
 
 /**
  * A generalization of Java's class type to also hold a logical name, which can be supplied lazily.
+ * <p>
+ * Equality is driven by the corresponding class exclusively, meaning the logical name is ignored 
+ * in order to not cause any side-effects on logical name memoization eg. it happening too early.
+ * Meta-model validators will take care, that there is no logical name ambiguity, that is, 
+ * there can no LogicalTypes sharing the same corresponding class but having different logical names. 
+ * 
  * @apiNote thread-safe and serializable
  * @since 2.0 {@index}
  */
@@ -120,6 +127,25 @@ implements
         return getCorrespondingClass().getCanonicalName();
     }
     
+    /**
+     * Returns the (unique) logical-type-name, as per the 
+     * {@link ObjectSpecIdFacet}.
+     *
+     * <p>
+     * This will typically be the value of the {@link DomainObject#objectType()} annotation attribute.
+     * If none has been specified then will default to the fully qualified class name (with
+     * {@link ClassSubstitutorRegistry class name substituted} if necessary to allow for runtime 
+     * bytecode enhancement.
+     *
+     * <p> 
+     * The {@link ObjectSpecification} can be retrieved using 
+     * {@link SpecificationLoader#lookupBySpecIdElseLoad(String)}} passing the logical-type-name as argument.
+     * 
+     * @see ClassSubstitutorRegistry
+     * @see ObjectSpecIdFacet
+     * @see ObjectSpecification
+     * @see SpecificationLoader
+     */
     @Synchronized
     public String getLogicalTypeName() {
         if(logicalName == null) {
