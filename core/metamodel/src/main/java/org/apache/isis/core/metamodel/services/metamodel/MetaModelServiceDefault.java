@@ -21,6 +21,7 @@ package org.apache.isis.core.metamodel.services.metamodel;
 import java.util.Collections;
 import java.util.List;
 
+import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -65,19 +66,16 @@ public class MetaModelServiceDefault implements MetaModelService {
     @Inject private SpecificationLoader specificationLoader;
     @Inject private GridService gridService;
 
+    @Nullable
     @Override
-    public Class<?> fromObjectType(final String objectType) {
-        if(objectType == null) {
-            return null;
-        }
-        final ObjectSpecification objectSpecification = specificationLoader.lookupBySpecIdElseLoad(objectType);
-        return objectSpecification != null
-                ? objectSpecification.getCorrespondingClass()
-                : null;
+    public Class<?> fromObjectType(final @Nullable String objectType) {
+        return specificationLoader.specForLogicalTypeName(objectType)
+                .map(ObjectSpecification::getCorrespondingClass)
+                .orElse(null);
     }
 
     @Override
-    public String toObjectType(final Class<?> domainType) {
+    public String toObjectType(final @Nullable Class<?> domainType) {
         if(domainType == null) {
             return null;
         }
@@ -221,7 +219,7 @@ public class MetaModelServiceDefault implements MetaModelService {
             return null;
         }
 
-        final ObjectSpecification spec = specificationLoader.lookupBySpecIdElseLoad(logicalTypeName);
+        final ObjectSpecification spec = specificationLoader.specForLogicalTypeName(logicalTypeName).orElse(null);
         if(spec == null) {
             return null;
         }

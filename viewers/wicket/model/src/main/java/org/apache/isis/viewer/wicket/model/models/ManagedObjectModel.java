@@ -145,8 +145,8 @@ extends ModelAbstract<ManagedObject> {
     @Synchronized
     public ObjectSpecification getTypeOfSpecification() {
         if(!isObjectSpecMemoized) {
-            val specId = getLogicalElementType().orElse(null);
-            objectSpec = super.getSpecificationLoader().lookupBySpecIdElseLoad(specId);
+            val logicalType = getLogicalElementType().orElse(null);
+            objectSpec = super.getSpecificationLoader().specForLogicalType(logicalType).orElse(null);
             isObjectSpecMemoized = true;
         }
         return objectSpec;

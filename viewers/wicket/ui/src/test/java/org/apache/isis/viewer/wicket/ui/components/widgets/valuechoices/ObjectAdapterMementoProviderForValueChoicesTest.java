@@ -20,6 +20,7 @@ package org.apache.isis.viewer.wicket.ui.components.widgets.valuechoices;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Optional;
 
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
@@ -82,8 +83,8 @@ public class ObjectAdapterMementoProviderForValueChoicesTest {
             allowing(mockCommonContext).getSpecificationLoader();
             will(returnValue(mockSpecificationLoader));
             
-            allowing(mockSpecificationLoader).lookupBySpecIdElseLoad(fakeLocalType);
-            will(returnValue(mockSpec));
+            allowing(mockSpecificationLoader).specForLogicalType(fakeLocalType);
+            will(returnValue(Optional.of(mockSpec)));
 
             allowing(mockSpec).isEncodeable();
             will(returnValue(true));

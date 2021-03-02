@@ -113,10 +113,10 @@ public class Bookmark implements Serializable {
         return logicalTypeName + SEPARATOR + id;
     }
     
-    // -- DEPRECATIONS 
+    // -- ALIAS
     
     /**
-     * @deprecated use {@link #getLogicalTypeName()} instead
+     * Alias for {@link #getLogicalTypeName()}.
      */
     public String getObjectType() {
         return getLogicalTypeName();

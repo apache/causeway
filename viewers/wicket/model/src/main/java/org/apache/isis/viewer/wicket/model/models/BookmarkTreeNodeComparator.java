@@ -62,7 +62,7 @@ final class BookmarkTreeNodeComparator implements Comparator<BookmarkTreeNode> {
     }
 
     private String classNameOf(RootOid oid) {
-        return specificationLoader.lookupBySpecIdElseLoad(oid.getLogicalTypeName())
+        return specificationLoader.specForLogicalTypeNameElseFail(oid.getLogicalTypeName())
                 .getIdentifier().getClassName();
     }
 

@@ -38,10 +38,9 @@ public class CollectionMemento implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private static ObjectSpecification owningSpecFor(OneToManyAssociation association) {
-        
         val specificationLoader = association.getMetaModelContext().getSpecificationLoader();
         val logicalType = association.getIdentifier().getLogicalTypeName();
-        return specificationLoader.lookupBySpecIdElseLoad(logicalType);
+        return specificationLoader.specForLogicalTypeNameElseFail(logicalType);
     }
 
     @Getter private final LogicalType owningType;
@@ -100,7 +99,7 @@ public class CollectionMemento implements Serializable {
             LogicalType owningType,
             String id,
             final SpecificationLoader specificationLoader) {
-        return (OneToManyAssociation) specificationLoader.lookupBySpecIdElseLoad(owningType)
+        return (OneToManyAssociation) specificationLoader.specForLogicalTypeElseFail(owningType)
                 .getAssociationElseFail(id);
     }
 

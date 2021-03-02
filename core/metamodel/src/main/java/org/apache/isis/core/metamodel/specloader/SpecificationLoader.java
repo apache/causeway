@@ -18,6 +18,7 @@
  */
 package org.apache.isis.core.metamodel.specloader;
 
+import java.util.Optional;
 import java.util.function.Consumer;
 
 import javax.annotation.Nullable;
@@ -25,12 +26,16 @@ import javax.annotation.Nullable;
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutor;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.specimpl.IntrospectionState;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
+
+import static org.apache.isis.core.metamodel.specloader.specimpl.IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED;
 
 import lombok.NonNull;
 import lombok.val;
@@ -111,8 +116,87 @@ public interface SpecificationLoader {
      */
     void validateLater(ObjectSpecification objectSpec);
 
-    // -- SHORTCUTS
+    // -- SUPPORT FOR LOOKUP BY LOGICAL TYPE NAME
 
+    @Nullable
+    default ObjectSpecification loadSpecification(
+            final @Nullable String logicalTypeName, 
+            final @NonNull  IntrospectionState introspectionState) {
+
+        if(_Strings.isNullOrEmpty(logicalTypeName)) {
+            return null;
+        }
+        val logicalType = lookupLogicalType(logicalTypeName);
+        if(logicalType==null) {
+            return null;
+        }
+        return loadSpecification(logicalType.getCorrespondingClass(), introspectionState);
+    }
+    
+    // -- SHORTCUTS - 1
+
+    default Optional<ObjectSpecification> specForLogicalTypeName(
+            final @Nullable String logicalTypeName) {
+        return Optional.ofNullable(
+                loadSpecification(logicalTypeName, TYPE_AND_MEMBERS_INTROSPECTED));
+    }
+    
+    default Optional<ObjectSpecification> specForLogicalType(
+            final @Nullable LogicalType logicalType) {
+        return Optional.ofNullable(logicalType)
+                .map(LogicalType::getCorrespondingClass)
+                .flatMap(this::specForType);
+    }
+    
+    default Optional<ObjectSpecification> specForType(
+            final @Nullable Class<?> domainType) {
+        return Optional.ofNullable(
+                loadSpecification(domainType, TYPE_AND_MEMBERS_INTROSPECTED));
+    }
+
+    default Optional<ObjectSpecification> specForBookmark(
+            final @Nullable Bookmark bookmark) {
+        return Optional.ofNullable(bookmark)
+                .map(Bookmark::getLogicalTypeName)
+                .flatMap(this::specForLogicalTypeName);
+    }
+    
+    // -- SHORTCUTS - 2
+
+    default ObjectSpecification specForLogicalTypeNameElseFail(
+            final @Nullable String logicalTypeName) {
+        return specForLogicalTypeName(logicalTypeName)
+                .orElseThrow(()->_Exceptions.noSuchElement(
+                        "meta-model is not aware of an object-type named '%s'",
+                        _Strings.nullToEmpty(logicalTypeName)));
+    }
+    
+    default ObjectSpecification specForLogicalTypeElseFail(
+            final @Nullable LogicalType logicalType) {
+        return specForLogicalType(logicalType)
+                .orElseThrow(()->_Exceptions.noSuchElement(
+                        "meta-model is not aware of an object-type '%s'",
+                        logicalType));
+    }
+    
+    default ObjectSpecification specForTypeElseFail(
+            final @Nullable Class<?> domainType) {
+        return specForType(domainType)
+                .orElseThrow(()->_Exceptions.noSuchElement(
+                        "meta-model is not aware of a type '%s'",
+                        domainType));
+    }
+
+    default ObjectSpecification specForBookmarkElseFail(
+            final @Nullable Bookmark bookmark) {
+        return specForBookmark(bookmark)
+                .orElseThrow(()->_Exceptions.noSuchElement(
+                        "meta-model is not aware of a bookmark's (%s) object-type",
+                        bookmark));
+    }
+    
+    // -- CAUTION! (use only during meta-model initialization)
+    
     @Nullable
     default ObjectSpecification loadSpecification(
             final @Nullable Class<?> domainType) {
@@ -135,35 +219,6 @@ public interface SpecificationLoader {
     default ObjectSpecification loadSpecification(
             final @Nullable Bookmark bookmark) {
         return loadSpecification(bookmark.getLogicalTypeName(), IntrospectionState.TYPE_INTROSPECTED);
-    }
-    
-    @Nullable
-    default ObjectSpecification loadSpecification(
-            final @Nullable String logicalTypeName, 
-            final @NonNull  IntrospectionState introspectionState) {
-
-        if(logicalTypeName==null) {
-            return null;
-        }
-        val logicalType = lookupLogicalType(logicalTypeName);
-        return loadSpecification(logicalType.getCorrespondingClass(), introspectionState);
-    }
-
-    /**
-     * Lookup a specification that has bean loaded before.
-     * @param objectSpecId
-     * //TODO[2533] rename
-     */
-    @Nullable
-    default ObjectSpecification lookupBySpecIdElseLoad(
-            final @Nullable String logicalTypeName) {
-        return loadSpecification(logicalTypeName, IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
-    }
-    
-    @Nullable
-    default ObjectSpecification lookupBySpecIdElseLoad(
-            final @Nullable LogicalType logicalType) {
-        return loadSpecification(logicalType.getCorrespondingClass(), IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
     }
     
 }

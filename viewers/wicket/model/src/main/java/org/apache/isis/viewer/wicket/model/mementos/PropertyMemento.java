@@ -35,7 +35,7 @@ public class PropertyMemento implements Serializable {
 
     private static ObjectSpecification owningSpecFor(OneToOneAssociation property) {
         val specificationLoader = property.getMetaModelContext().getSpecificationLoader();
-        return specificationLoader.lookupBySpecIdElseLoad(property.getIdentifier().getLogicalType());
+        return specificationLoader.specForLogicalTypeElseFail(property.getIdentifier().getLogicalType());
     }
 
     private final LogicalType owningType;
@@ -80,7 +80,7 @@ public class PropertyMemento implements Serializable {
             String identifier,
             final SpecificationLoader specificationLoader) {
         
-        return (OneToOneAssociation) specificationLoader.lookupBySpecIdElseLoad(owningType)
+        return (OneToOneAssociation) specificationLoader.specForLogicalTypeElseFail(owningType)
                 .getAssociationElseFail(identifier);
     }
 

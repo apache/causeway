@@ -28,7 +28,6 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 import lombok.Getter;
-import lombok.val;
 
 /**
  * {@link Serializable} representation of a {@link ObjectAction}
@@ -90,8 +89,9 @@ public class ActionMemento implements Serializable {
             String nameParmsId,
             SpecificationLoader specificationLoader) {
         
-        val objectSpec = specificationLoader.lookupBySpecIdElseLoad(owningType);
-        return objectSpec.getActionElseFail(nameParmsId, actionType);
+        return specificationLoader
+                .specForLogicalTypeElseFail(owningType)
+                .getActionElseFail(nameParmsId, actionType);
     }
 
 }

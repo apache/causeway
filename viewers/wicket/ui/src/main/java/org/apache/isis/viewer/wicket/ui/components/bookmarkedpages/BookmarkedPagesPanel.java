@@ -163,7 +163,8 @@ public class BookmarkedPagesPanel extends PanelAbstract<BookmarkedPagesModel> {
                     ObjectSpecification objectSpec = null;
                     RootOid oid = node.getOidNoVer();
                     if(oid != null) {
-                        objectSpec = getSpecificationLoader().lookupBySpecIdElseLoad(oid.getLogicalTypeName());
+                        objectSpec = getSpecificationLoader().specForLogicalTypeName(oid.getLogicalTypeName())
+                                .orElse(null);
                     }
                     final ResourceReference imageResource = getImageResourceCache().resourceReferenceForSpec(objectSpec);
                     final Image image = new Image(ID_BOOKMARKED_PAGE_ICON, imageResource) {

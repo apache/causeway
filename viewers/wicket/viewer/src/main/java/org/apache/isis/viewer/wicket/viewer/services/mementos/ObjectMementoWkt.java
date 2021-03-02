@@ -180,9 +180,12 @@ final class ObjectMementoWkt implements HasLogicalType, Serializable {
                     ObjectMementoWkt memento,
                     MetaModelContext mmc) {
 
-                ObjectSpecification objectSpec = mmc.getSpecificationLoader()
-                        .lookupBySpecIdElseLoad(memento.logicalType);
-                EncodableFacet encodableFacet = objectSpec.getFacet(EncodableFacet.class);
+                EncodableFacet encodableFacet = mmc.getSpecificationLoader()
+                        .specForLogicalType(memento.logicalType)
+                        .map(spec->spec.getFacet(EncodableFacet.class))
+                        .orElseThrow(()->_Exceptions.unrecoverableFormatted(
+                                "logical type %s is expected to have a EncodableFacet", memento.logicalType));
+                
                 return encodableFacet.fromEncodedString(memento.encodableValue);
             }
 
@@ -281,7 +284,7 @@ final class ObjectMementoWkt implements HasLogicalType, Serializable {
                     ObjectMementoWkt memento,
                     MetaModelContext mmc) {
                 ObjectSpecification spec = mmc.getSpecificationLoader()
-                        .lookupBySpecIdElseLoad(memento.logicalType);
+                        .specForLogicalTypeElseFail(memento.logicalType);
                 return mmc.getObjectManager().getObjectSerializer()
                         .deserialize(spec, memento.serializedObject);
             }
@@ -401,10 +404,9 @@ final class ObjectMementoWkt implements HasLogicalType, Serializable {
 
         // -- // TODO[2112] do we ever need to create ENCODEABLE here?
         val logicalTypeName = rootOid.getLogicalTypeName();
-        val spec = specificationLoader.lookupBySpecIdElseLoad(logicalTypeName);
-        if(spec==null) {
-            throw _Exceptions.unrecoverableFormatted("cannot recreate spec from logicalTypeName %s", logicalTypeName);
-        }
+        val spec = specificationLoader.specForLogicalTypeName(logicalTypeName)
+                .orElseThrow(()->_Exceptions.unrecoverableFormatted(
+                        "cannot recreate spec from logicalTypeName %s", logicalTypeName));
         
         this.cardinality = Cardinality.SCALAR;
         this.logicalType = spec.getLogicalType();
@@ -506,7 +508,7 @@ final class ObjectMementoWkt implements HasLogicalType, Serializable {
     ManagedObject reconstructObject(MetaModelContext mmc) {
 
         val specificationLoader = mmc.getSpecificationLoader();
-        val spec = specificationLoader.lookupBySpecIdElseLoad(logicalType);
+        val spec = specificationLoader.specForLogicalType(logicalType).orElse(null);
         if(spec==null) {
             // eg. ill-formed request
             return null;

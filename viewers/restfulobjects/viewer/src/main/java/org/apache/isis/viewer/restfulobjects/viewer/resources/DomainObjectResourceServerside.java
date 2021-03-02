@@ -113,7 +113,9 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
             throw RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.BAD_REQUEST, "Body is not a map; got %s", objectRepr);
         }
 
-        final ObjectSpecification domainTypeSpec = getSpecificationLoader().lookupBySpecIdElseLoad(domainType);
+        val domainTypeSpec = getSpecificationLoader().specForLogicalTypeName(domainType)
+                .orElse(null);        
+        
         if (domainTypeSpec == null) {
             throw RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.BAD_REQUEST, "Could not determine type of domain object to persist (no class with domainType Id of '%s')", domainType);
         }
@@ -342,8 +344,9 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
             final String domainType,
             final String instanceId) {
         
-        val objectSpec = getSpecificationLoader().lookupBySpecIdElseLoad(domainType);
-        val gridFacet = objectSpec.getFacet(GridFacet.class);
+        val gridFacet = getSpecificationLoader().specForLogicalTypeName(domainType)
+        .map(spec->spec.getFacet(GridFacet.class))
+        .orElse(null);
 
         if(gridFacet == null) {
             return Optional.empty();

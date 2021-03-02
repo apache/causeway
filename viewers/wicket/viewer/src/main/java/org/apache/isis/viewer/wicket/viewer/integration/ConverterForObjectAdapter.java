@@ -53,14 +53,11 @@ public class ConverterForObjectAdapter implements IConverter<ManagedObject> {
         val rootOid = RootOid.deStringEncoded(value);
         val spec = objectManager.getMetaModelContext()
                 .getSpecificationLoader()
-                .lookupBySpecIdElseLoad(rootOid.getLogicalTypeName());
+                .specForLogicalTypeNameElseFail(rootOid.getLogicalTypeName());
         
         val objectLoadRequest = ObjectLoader.Request.of(spec, rootOid.getIdentifier());
         
         return objectManager.loadObject(objectLoadRequest);
-        
-        // legacy of
-        //return getPersistenceSession().adapterFor(rootOid);
     }
 
     /**
