@@ -3,7 +3,9 @@
 
 Generates a representation according to HTTP `Accept` header of the request.
 
-This idea is discussed in section 34.1 of the
+This idea is discussed in section 34.1 of theRestful Objects specv1.0.
+
+The principal motivation is to allow more flexible representations to be generated for REST clients that (perhaps through their use of a certain JavaScript library, say) expect, or at least works best with, a certain style of representation.
 
 == API
 

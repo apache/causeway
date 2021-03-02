@@ -32,8 +32,8 @@ import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.core.security.authentication.Authentication;
-import org.apache.isis.core.security.authentication.standard.Authenticator;
-import org.apache.isis.core.security.authorization.standard.Authorizor;
+import org.apache.isis.core.security.authentication.Authenticator;
+import org.apache.isis.core.security.authorization.Authorizor;
 import org.apache.isis.security.shiro.context.ShiroSecurityContext;
 
 import lombok.val;
@@ -43,7 +43,7 @@ import lombok.val;
  * in the role of {@link Authorizor}.
  *
  * <p>
- * However, although there are two objects, they are set up to share the same 
+ * However, although there are two objects, they are set up to share the same
  * {@link SecurityManager Shiro SecurityManager}
  * (bound to a thread-local).
  * </p>
@@ -77,7 +77,7 @@ public class AuthorizorShiro implements Authorizor {
 
         final Subject subject = SecurityUtils.getSubject();
         final String permission = asPermissionsString(identifier) + ":" + qualifier;
-        
+
         try {
             _Assert.assertEquals(userName, subject.getPrincipal().toString());
             return subject.isPermitted(permission);

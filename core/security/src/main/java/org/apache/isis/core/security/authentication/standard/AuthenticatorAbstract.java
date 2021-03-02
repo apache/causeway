@@ -22,6 +22,7 @@ package org.apache.isis.core.security.authentication.standard;
 import org.apache.isis.applib.services.user.UserMemento;
 import org.apache.isis.core.security.authentication.AuthenticationRequest;
 import org.apache.isis.core.security.authentication.Authentication;
+import org.apache.isis.core.security.authentication.Authenticator;
 
 import lombok.val;
 
@@ -33,14 +34,14 @@ public abstract class AuthenticatorAbstract implements Authenticator {
      */
     @Override
     public final Authentication authenticate(
-            final AuthenticationRequest request, 
+            final AuthenticationRequest request,
             final String validationCode) {
-        
+
         if (!isValid(request)) {
             return null;
         }
-        
-        val user = UserMemento.ofNameAndRoleNames(request.getName(), request.streamRoles()); 
+
+        val user = UserMemento.ofNameAndRoleNames(request.getName(), request.streamRoles());
         return SimpleAuthentication.of(user, validationCode);
     }
 

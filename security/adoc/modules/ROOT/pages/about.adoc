@@ -9,42 +9,31 @@ This guide describes the authentication and authorization features available to 
 
 
 
-
-
-
 == Terminology
-
-// TODO:v2: these words could perhaps move into the "security API" module, currently empty.
 
 Apache Isis has built-in support for authentication and authorization:
 
 * By "authentication" we mean logging into the application using some credentials, typically a username and password.
 Authentication also means looking up the set of roles to which a user belongs.
++
+The framework allows for different authentication mechanisms through the xref:refguide:core:index/security/authentication/Authenticator.adoc[Authenticator] SPI.
+.
 
-* By "authorization" we mean permissions: granting roles to have access to features (object member) of the app.
+* By "authorization" we mean permissions: granting roles to have access to features (domain object members) of the app.
++
+The framework allows for different authorization mechanisms through the xref:refguide:core:index/security/authorization/Authorizor.adoc[Authorizor] SPI.
 
-Apache Isis has two levels of permissions.
-_Read_ permission means that the user can view the object member; it will be rendered in the UI.  An action with only read permission will be shown disabled ("greyed out".
-_Write_ permission means that the object member can be changed.  For actions this means that they can be invoked.
+There are two levels of permissions:
 
-//WARNING: TODO: v2: this is out of date, because there is also a keycloak integration and a Spring implementatoin.
+* _Read_ permission means that the user can view the object member; it will be rendered in the UI.
++
+An action with only read permission will be shown disabled ("greyed out"); a property with read-only permission cannot be edited.
 
-The framework provides an API for both authentication and authorization, and provides an implementation that integrates with link:http://shiro.apache.org[Apache Shiro].
-Shiro in turn uses the concept of a _realm_ as a source for both authentication and optionally authorization.
+* _Write_ permission means that the object member can be changed.
++
+For actions this means that they can be invoked.
 
-//WARNING: TODO: v2: Spring Boot requires that shiro.ini is on classpath, not in WEB-INF.
-
-Shiro ships with a simple text-based realm -- the `IniRealm` -- which reads users (and password), user roles and role permissions from the `WEB-INF/shiro.ini` file.
-The xref:docs:starters:helloworld.adoc[HelloWorld] and xref:docs:starters:simpleapp.adoc[SimpleApp] starter apps are both configured to use this realm.
-
-Shiro also ships with an implementation of an LDAP-based realm; LDAP is often used to manage user/passwords and corresponding user groups.
-Apache Isis in turn extends this with its `IsisLdapRealm`, which provides more flexibility for both group/role and role/permissions management.
-
-In addition, the xref:security:ROOT:about.adoc[SecMan extension] provides an implementation of the Shiro `Realm` API.
-This extension also represents users, roles and permissions as domain objects, allowing them to be administered through Apache Isis itself.
-Moreover, it can also optionally delegate password management to a subsidiary (delegate) realm (usually LDAP as discussed above).
-
-In addition to Apache Isis' Shiro-based implementation of its authentication and authorization APIs, Isis also provides a "bypass" implementation, useful for quick-n-dirty prototyping when you want to in effect disable (bypass) security completely.
+If there is neither _read_ nor _write_ permissions then the feature will be invisible to the user.
 
 [NOTE]
 .What about auditing?
@@ -58,4 +47,45 @@ The xref:security:audit-trail:about.adoc[Audit Trail] module provides an impleme
 For xref:refguide:applib:index/services/publishing/spi/CommandSubscriber.adoc[CommandSubscriber] SPI can be also be used to capture actions.
 The xref:extensions:command-log:about.adoc[Command Log] extension provides a simple implementation of this SPI.
 ====
+
+
+== Implementations
+
+[#shiro]
+=== Shiro
+
+The framework provides an API for both authentication and authorization, and provides an implementation that integrates with link:http://shiro.apache.org[Apache Shiro].
+Shiro in turn uses the concept of a _realm_ as a source for both authentication and optionally authorization.
+
+Shiro ships with a simple text-based realm -- the `IniRealm` -- which reads users (and password), user roles and role permissions from the `WEB-INF/shiro.ini` file.
+The xref:docs:starters:helloworld.adoc[HelloWorld] and xref:docs:starters:simpleapp.adoc[SimpleApp] starter apps are both configured to use this realm.
+
+The Shiro framework ships with an implementation of an LDAP-based realm; LDAP is often used to manage user/passwords and corresponding user groups.
+Apache Isis extends Shiro's implementation this  `IsisLdapRealm`, which provides more flexibility for both group/role and role/permissions management.
+
+
+=== Bypass
+
+The framework provides a "bypass" implementation, useful for quick-n-dirty prototyping when you want to in effect disable (bypass) security completely.
+
+=== KeyCloak
+
+WARNING: TODO: v2 - not yet documented.
+
+=== Spring
+
+WARNING: TODO: v2 - WIP, not yet documented.
+
+== SecMan
+
+The xref:security:ROOT:about.adoc[SecMan extension]'s primary purpose is for authorisation, defining a database of roles and permissions associated with
+those roles.
+It also maps users to roles.
+
+As these users, roles and permissions are domain objects, they can be administered through Apache Isis itself.
+
+Because each user to be authorised must exist in the SecMan database, this means that it can also act as a secondary authenticator.
+It does this by providing an implementation of the Shiro `Realm` API.
+Using this design the password management can be handled to a subsidiary (delegate) Shiro realm (for example, LDAP, as discussed <<shiro, above>>).
+
 

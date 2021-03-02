@@ -28,7 +28,7 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.core.security.authentication.Authentication;
-import org.apache.isis.core.security.authorization.standard.Authorizor;
+import org.apache.isis.core.security.authorization.Authorizor;
 
 /**
  * @since 1.x {@index}

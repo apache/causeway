@@ -46,7 +46,7 @@ import org.apache.isis.core.security.authentication.AuthenticationRequest;
 import org.apache.isis.core.security.authentication.AuthenticationRequestPassword;
 import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
 import org.apache.isis.core.security.authentication.singleuser.SingleUserAuthentication;
-import org.apache.isis.core.security.authentication.standard.Authenticator;
+import org.apache.isis.core.security.authentication.Authenticator;
 import org.apache.isis.core.security.authentication.standard.RandomCodeGeneratorDefault;
 
 public class AuthenticatedWebSessionForIsis_Authenticate {
@@ -84,16 +84,16 @@ public class AuthenticatedWebSessionForIsis_Authenticate {
 
                 allowing(mockCommonContext).getInteractionTracker();
                 will(returnValue(mockIsisInteractionTracker));
-                
+
                 allowing(mockIsisInteractionTracker).currentAuthentication();
                 will(returnValue(Optional.of(new SingleUserAuthentication())));
-                
+
                 allowing(mockIsisInteractionFactory)
                 .runAuthenticated(with(new SingleUserAuthentication()), with(any(ThrowingRunnable.class)));
-                
+
                 allowing(mockIsisInteractionFactory)
                 .runAnonymous(with(any(ThrowingRunnable.class)));
-                
+
                 // ignore
 
                 // must provide explicit expectation, since Locale is final.
@@ -152,9 +152,9 @@ public class AuthenticatedWebSessionForIsis_Authenticate {
                 will(returnValue(null));
             }
         });
-        
+
         setupWebSession();
-        
+
         assertThat(webSession.authenticate("jsmith", "secret"), is(false));
         assertThat(webSession.getAuthentication(), is(nullValue()));
     }

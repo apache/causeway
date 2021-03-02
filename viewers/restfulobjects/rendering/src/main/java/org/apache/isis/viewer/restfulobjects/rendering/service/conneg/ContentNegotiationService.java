@@ -32,7 +32,7 @@ import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndAc
  *
  * <p>
  *  This idea is discussed in section 34.1 of the
- *  <a href="http://restfulobjects.org>Restful Objects spec</a> v1.0.
+ *  <a href="http://restfulobjects.org">Restful Objects spec</a> v1.0.
  * </p>
  *
  * <p>
@@ -41,6 +41,8 @@ import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndAc
  * JavaScript library, say) expect, or at least works best with, a certain
  * style of representation.
  * </p>
+ *
+ * @apiNote This domain service uses internal framework classes and so does not constitute a formal API/SPI for the framework
  *
  * @since 1.x {@index}
  */

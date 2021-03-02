@@ -14,8 +14,7 @@ include::hints-and-tips/are-you-sure.adoc[leveloffset=+1]
 include::hints-and-tips/custom-css.adoc[leveloffset=+1]
 include::hints-and-tips/replacing-default-service-implementations.adoc[leveloffset=+1]
 
-// incomplete, placeholder
-//include::hints-and-tips/vetoing-visibility.adoc[leveloffset=+1]
+include::hints-and-tips/vetoing-visibility.adoc[leveloffset=+1]
 
 include::hints-and-tips/transactions-and-errors.adoc[leveloffset=+1]
 include::hints-and-tips/persisted-title.adoc[leveloffset=+1]

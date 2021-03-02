@@ -1714,6 +1714,11 @@ org.junit.jupiter:junit-jupiter-engine:jar:<managed> +
 org.junit.vintage:junit-vintage-engine:jar:<managed> +
 ****
 
+.Document Index Entries
+****
+xref:refguide:core:index/security/authentication/Authentication.adoc[Authentication], xref:refguide:core:index/security/authentication/AuthenticationRequest.adoc[AuthenticationRequest], xref:refguide:core:index/security/authentication/Authenticator.adoc[Authenticator], xref:refguide:core:index/security/authorization/Authorizor.adoc[Authorizor]
+****
+
 |Apache Isis Core - Transaction
 [source,yaml]
 ----
@@ -2386,7 +2391,6 @@ Directory: /security/keycloak
 .Components
 ****
 o.a.i.security.keycloak.authentication.AuthenticatorKeycloak +
-o.a.i.security.keycloak.authorization.AuthorizorKeycloak +
 o.a.i.security.keycloak.webmodule.WebModuleKeycloak +
 ****
 
@@ -2400,7 +2404,7 @@ org.apache.isis.core:isis-core-webapp:jar:<managed> +
 
 .Document Index Entries
 ****
-xref:refguide:security:index/keycloak/IsisModuleSecurityKeycloak.adoc[IsisModuleSecurityKeycloak], xref:refguide:security:index/keycloak/authentication/AuthenticatorKeycloak.adoc[AuthenticatorKeycloak], xref:refguide:security:index/keycloak/authorization/AuthorizorKeycloak.adoc[AuthorizorKeycloak], xref:refguide:security:index/keycloak/webmodule/KeycloakFilter.adoc[KeycloakFilter], xref:refguide:security:index/keycloak/webmodule/WebModuleKeycloak.adoc[WebModuleKeycloak]
+xref:refguide:security:index/keycloak/IsisModuleSecurityKeycloak.adoc[IsisModuleSecurityKeycloak], xref:refguide:security:index/keycloak/authentication/AuthenticatorKeycloak.adoc[AuthenticatorKeycloak], xref:refguide:security:index/keycloak/webmodule/KeycloakFilter.adoc[KeycloakFilter], xref:refguide:security:index/keycloak/webmodule/WebModuleKeycloak.adoc[WebModuleKeycloak]
 ****
 |===
 
@@ -3750,12 +3754,12 @@ skinparam {
 }
 hide stereotype
 left to right direction
-skinparam rectangle<<22>> {
+skinparam rectangle<<11>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<11>> {
+skinparam rectangle<<22>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295

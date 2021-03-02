@@ -32,7 +32,7 @@ import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.sudo.SudoService;
 import org.apache.isis.core.security.authentication.Authentication;
-import org.apache.isis.core.security.authorization.standard.Authorizor;
+import org.apache.isis.core.security.authorization.Authorizor;
 
 /**
  * Authorizes the user in the current session view and use members of an object.
@@ -60,7 +60,7 @@ public class AuthorizationManager {
      * </p>
      */
     public boolean isUsable(
-            final Authentication authentication, 
+            final Authentication authentication,
             final Identifier identifier) {
         if (isPerspectiveMember(identifier)) {
             return true;
@@ -83,7 +83,7 @@ public class AuthorizationManager {
      * </p>
      */
     public boolean isVisible(
-            final Authentication authentication, 
+            final Authentication authentication,
             final Identifier identifier) {
         if (isPerspectiveMember(identifier)) {
             return true;
@@ -102,7 +102,7 @@ public class AuthorizationManager {
     }
 
     // -- HELPER
-    
+
     private static boolean containsSudoSuperuserRole(
             final @Nullable Authentication session) {
         if(session==null || session.getUser()==null) {
@@ -110,7 +110,7 @@ public class AuthorizationManager {
         }
         return session.getUser().hasRoleName(SudoService.ACCESS_ALL_ROLE.getName());
     }
-    
+
     private boolean isPerspectiveMember(final Identifier identifier) {
         return (identifier.getClassName().equals(""));
     }

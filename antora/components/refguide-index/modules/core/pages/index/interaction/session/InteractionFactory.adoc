@@ -30,7 +30,7 @@ If present, reuses the current top level _AuthenticationLayer_ , otherwise creat
 <.> xref:#openInteraction__Authentication[openInteraction(Authentication)]
 +
 --
-Returns a new or reused _AuthenticationLayer_ that is a holder of _Authentication_ on top of the current thread's authentication layer stack.
+Returns a new or reused _AuthenticationLayer_ that is a holder of xref:refguide:core:index/security/authentication/Authentication.adoc[Authentication] on top of the current thread's authentication layer stack.
 --
 <.> xref:#isInInteractionSession__[isInInteractionSession()]
 <.> xref:#callAuthenticated__Authentication_Callable[callAuthenticated(Authentication, Callable)]
@@ -69,7 +69,7 @@ If present, reuses the current top level _AuthenticationLayer_ , otherwise creat
 [#openInteraction__Authentication]
 === openInteraction(Authentication)
 
-Returns a new or reused _AuthenticationLayer_ that is a holder of _Authentication_ on top of the current thread's authentication layer stack.
+Returns a new or reused _AuthenticationLayer_ that is a holder of xref:refguide:core:index/security/authentication/Authentication.adoc[Authentication] on top of the current thread's authentication layer stack.
 
 If available reuses an existing _InteractionSession_ , otherwise creates a new one.
 
@@ -85,7 +85,7 @@ Executes a block of code with a new or reused _InteractionSession_ using a new o
 
 If there is currently no _InteractionSession_ a new one is created.
 
-If there is currently an _AuthenticationLayer_ that has an equal _Authentication_ to the given one, it is reused, otherwise a new one is created.
+If there is currently an _AuthenticationLayer_ that has an equal xref:refguide:core:index/security/authentication/Authentication.adoc[Authentication] to the given one, it is reused, otherwise a new one is created.
 
 [#runAuthenticated__Authentication_ThrowingRunnable]
 === runAuthenticated(Authentication, ThrowingRunnable)

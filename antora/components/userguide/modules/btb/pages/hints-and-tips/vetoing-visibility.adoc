@@ -5,11 +5,29 @@
 :page-partial:
 
 
-NOTE: FIXME - a write-up of the "vetoing subscriber" design pattern, eg as described in the  xref:refguide:applib:index/services/bookmark/BookmarkService.adoc[BookmarkService]
+The framework provides a number of actions (domain service menu items or mixins) that you may wish to suppress from the user interface.
+This can be done by implementing a "vetoing subscriber" design pattern.
 
+For example, the xref:refguide:applib:index/services/bookmark/BookmarkService.adoc[BookmarkService] has a related interface, xref:refguide:applib:index/services/bookmark/BookmarkHolder.adoc[BookmarkHolder], for objects that holds a reference to another domain object implicitly as a xref:refguide:applib:index/services/bookmark/Bookmark.adoc[Bookmark].
 
-eg if included an addon such as auditing or security.
+The xref:refguide:applib:index/services/bookmark/BookmarkHolder_object.adoc[BookmarkHolder_object] mixin surfaces the related domain object as an "object" property of the `BookmarkHolder`.
 
-solution is to write a domain event subscriber that vetoes the visibility
+If you want to suppress this property, a vetoing subscriber can listen to the associated domain event of the mixin:
 
-All the addons actions inherit from common base classes so this can be as broad-brush or fine-grained as required
+[source, java]
+.HideBookmarkHolderObjectProperty.java
+----
+import org.springframework.context.event.EventListener;
+import org.springframework.stereotype.Service;
+
+@Service
+public class HideBookmarkHolderObjectProperty {
+
+    @EventListener(BookmarkHolder_object.PropertyDomainEvent.class)
+    public void on(BookmarkHolder_object.PropertyDomainEvent ev) {
+        ev.hide();
+    }
+}
+----
+
+These domain events will often have a superclass, in which case the vetoing subscriber can be as broad-brush or fine-grained as required.

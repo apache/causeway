@@ -7,15 +7,14 @@
 WARNING: TODO: v2 - this code has not yet been brought into the framework.
 
 The _command-log_ module provides an implementation that persists ``Command``s using the xref:pjdo:ROOT:about.adoc[JDO/DataNucleus] object store.
-It further provides a number of supporting services:
 
-* `org.isisaddons.module.command.dom.CommandServiceJdoRepository` is a repository to search for persisted ``Command``s
-
-* `org.isisaddons.module.command.dom.CommandServiceJdoContributions` contributes actions for searching for persisted child and sibling ``Command``s.
-
-All of these can be activated by updating the `pom.xml` and updating the `AppManifest#getModules()` method.
-
-If contributions are not required in the UI, these can be suppressed either using security or by implementing a xref:userguide:btb:about.adoc#vetoing-visibility[vetoing subscriber].
+//It further provides a number of supporting services:
+//
+//* `org.isisaddons.module.command.dom.CommandServiceJdoRepository` is a repository to search for persisted ``Command``s
+//
+//* `org.isisaddons.module.command.dom.CommandServiceJdoContributions` contributes actions for searching for persisted child and sibling ``Command``s.
+//
+//If contributions are not required in the UI, these can be suppressed either using security or by implementing a xref:userguide:btb:hints-and-tips.adoc#vetoing-visibility[vetoing subscriber].
 
 
 

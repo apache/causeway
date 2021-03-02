@@ -39,7 +39,7 @@ import org.apache.isis.commons.internal.base._Timing;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.security.authentication.Authentication;
 import org.apache.isis.core.security.authentication.AuthenticationRequest;
-import org.apache.isis.core.security.authentication.standard.Authenticator;
+import org.apache.isis.core.security.authentication.Authenticator;
 import org.apache.isis.core.security.authentication.standard.RandomCodeGenerator;
 import org.apache.isis.core.security.authentication.standard.Registrar;
 
@@ -54,21 +54,21 @@ import lombok.val;
 public class AuthenticationManager {
 
     @Getter private final Can<Authenticator> authenticators;
-    
+
     private final Map<String, String> userByValidationCode = _Maps.newConcurrentHashMap();
     private final RandomCodeGenerator randomCodeGenerator;
     private final Can<Registrar> registrars;
 
     @Inject
     public AuthenticationManager(
-            final List<Authenticator> injectedAuthenticators,
+            final List<Authenticator> authenticators,
             final RandomCodeGenerator randomCodeGenerator) {
         this.randomCodeGenerator = randomCodeGenerator;
-        this.authenticators = Can.ofCollection(injectedAuthenticators);
-        if (authenticators.isEmpty()) {
+        this.authenticators = Can.ofCollection(authenticators);
+        if (this.authenticators.isEmpty()) {
             throw new NoAuthenticatorException("No authenticators specified");
         }
-        this.registrars = authenticators
+        this.registrars = this.authenticators
                 .filter(Registrar.class::isInstance)
                 .map(Registrar.class::cast);
     }
@@ -76,19 +76,19 @@ public class AuthenticationManager {
     // -- SESSION MANAGEMENT (including authenticate)
 
     public final Authentication authenticate(AuthenticationRequest request) {
-        
+
         if (request == null) {
             return null;
         }
 
         val compatibleAuthenticators = authenticators
                 .filter(authenticator->authenticator.canAuthenticate(request.getClass()));
-                
+
         if (compatibleAuthenticators.isEmpty()) {
             throw new NoAuthenticatorException(
                     "No authenticator available for processing " + request.getClass().getName());
         }
-        
+
         for (val authenticator : compatibleAuthenticators) {
             val authentication = authenticator.authenticate(request, getUnusedRandomCode());
             if (authentication != null) {
@@ -96,23 +96,23 @@ public class AuthenticationManager {
                 return authentication;
             }
         }
-        
+
         return null;
     }
-    
+
     private String getUnusedRandomCode() {
-        
+
         val stopWatch = _Timing.now();
-        
+
         String code;
         do {
-            
+
             // guard against infinite loop when unique code generation for some reason fails
             if(stopWatch.getMillis()>3000L) {
                 throw new NoAuthenticatorException(
                         "RandomCodeGenerator failed to produce a unique code within 3s.");
             }
-            
+
             code = randomCodeGenerator.generateRandomCode();
         } while (userByValidationCode.containsKey(code));
 
@@ -163,7 +163,7 @@ public class AuthenticationManager {
 
 
     // -- DEBUGGING
- 
+
     private static final ToString<AuthenticationManager> toString =
             ToString.<AuthenticationManager>toString("class", obj->obj.getClass().getSimpleName())
             .thenToString("authenticators", obj->""+obj.authenticators.size())

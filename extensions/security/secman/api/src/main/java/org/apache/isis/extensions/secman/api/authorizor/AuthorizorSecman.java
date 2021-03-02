@@ -29,7 +29,7 @@ import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.core.security.authentication.Authentication;
-import org.apache.isis.core.security.authorization.standard.Authorizor;
+import org.apache.isis.core.security.authorization.Authorizor;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionMode;
 import org.apache.isis.extensions.secman.api.user.ApplicationUser;
 import org.apache.isis.extensions.secman.api.user.ApplicationUserRepository;
@@ -44,7 +44,7 @@ import org.apache.isis.extensions.secman.api.user.ApplicationUserRepository;
 public class AuthorizorSecman implements Authorizor {
 
     @Inject ApplicationUserRepository<? extends ApplicationUser> applicationUserRepository;
-    
+
     @Override
     public boolean isVisible(final Authentication authentication, final Identifier identifier) {
         return grants(authentication, identifier, ApplicationPermissionMode.VIEWING);
@@ -54,19 +54,19 @@ public class AuthorizorSecman implements Authorizor {
     public boolean isUsable(final Authentication authentication, final Identifier identifier) {
         return grants(authentication, identifier, ApplicationPermissionMode.CHANGING);
     }
-    
+
     // -- HELPER
-    
+
     private boolean grants(
-            final Authentication authentication, 
-            final Identifier identifier, 
+            final Authentication authentication,
+            final Identifier identifier,
             final ApplicationPermissionMode permissionMode) {
-        
+
         return applicationUserRepository
         .findByUsername(authentication.getUserName())
         .map(ApplicationUser::getPermissionSet)
         .map(permissionSet->permissionSet.grants(
-                ApplicationFeatureId.fromIdentifier(identifier), 
+                ApplicationFeatureId.fromIdentifier(identifier),
                 permissionMode))
         .orElse(false);
     }
