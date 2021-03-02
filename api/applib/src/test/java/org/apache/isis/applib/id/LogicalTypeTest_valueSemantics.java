@@ -16,29 +16,29 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.spec;
+package org.apache.isis.applib.id;
 
-import org.junit.Test;
+import java.util.List;
 
-import org.apache.isis.applib.id.ObjectSpecId;
+import org.apache.isis.applib.SomeDomainClass;
+import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.core.internaltestsupport.contract.ValueTypeContractTestAbstract;
 
-public class ObjectSpecIdTest_constructor {
+public class LogicalTypeTest_valueSemantics 
+extends ValueTypeContractTestAbstract<LogicalType> {
 
-    @Test
-    public void happyCase() throws Exception {
-        @SuppressWarnings("unused")
-        final ObjectSpecId objectSpecId = ObjectSpecId.of("CUS");
+    @Override
+    protected List<LogicalType> getObjectsWithSameValue() {
+        return _Lists.of(
+                LogicalType.fqcn(SomeDomainClass.class),
+                LogicalType.lazy(SomeDomainClass.class, ()->SomeDomainClass.class.getName()));
     }
 
-    @Test(expected=IllegalArgumentException.class)
-    public void cannotBeEmpty() throws Exception {
-        ObjectSpecId.of("");
-    }
-
-
-    @Test(expected=NullPointerException.class)
-    public void cannotBeNull() throws Exception {
-        ObjectSpecId.of(null);
+    @Override
+    protected List<LogicalType> getObjectsWithDifferentValue() {
+        return _Lists.of(
+                LogicalType.fqcn(Object.class),
+                LogicalType.lazy(List.class, ()->List.class.getName()));
     }
 
 

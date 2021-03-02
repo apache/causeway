@@ -39,6 +39,7 @@ import org.apache.isis.applib.services.metamodel.Config;
 import org.apache.isis.applib.services.metamodel.DomainMember;
 import org.apache.isis.applib.services.metamodel.DomainModel;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.facets.members.publish.command.CommandPublishingFacet;
 import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
@@ -216,12 +217,12 @@ public class MetaModelServiceDefault implements MetaModelService {
         final ApplicationFeatureId featureId = ApplicationFeatureId
                 .newFeature(ApplicationFeatureType.MEMBER, memberIdentifier);
 
-        final ObjectSpecId objectSpecId = featureId.getObjectSpecId();
-        if(objectSpecId == null) {
+        final String logicalTypeName = featureId.getLogicalTypeName();
+        if(_Strings.isNullOrEmpty(logicalTypeName)) {
             return null;
         }
 
-        final ObjectSpecification spec = specificationLoader.lookupBySpecIdElseLoad(objectSpecId.asString());
+        final ObjectSpecification spec = specificationLoader.lookupBySpecIdElseLoad(logicalTypeName);
         if(spec == null) {
             return null;
         }
