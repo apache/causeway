@@ -33,7 +33,6 @@ import static java.util.Comparator.nullsFirst;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.Value;
-import org.apache.isis.applib.id.ObjectSpecId;
 import org.apache.isis.applib.services.appfeat.ApplicationMemberType;
 import org.apache.isis.applib.util.Equality;
 import org.apache.isis.applib.util.Hashing;

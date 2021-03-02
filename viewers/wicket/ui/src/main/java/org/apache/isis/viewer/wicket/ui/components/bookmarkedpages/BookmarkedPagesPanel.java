@@ -43,7 +43,6 @@ import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.util.string.Strings;
 
 import org.apache.isis.applib.exceptions.unrecoverable.ObjectNotFoundException;
-import org.apache.isis.applib.id.ObjectSpecId;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.wicket.model.models.BookmarkTreeNode;
