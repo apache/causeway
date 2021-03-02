@@ -18,21 +18,17 @@
  */
 package org.apache.isis.applib.id;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.apache.isis.applib.SomeDomainClass;
 import org.apache.isis.commons.internal.testing._SerializationTester;
 
 import lombok.val;
 
-class TypeIdentifierTest {
-
-    @BeforeEach
-    void setUp() throws Exception {
-    }
+class LogicalTypeTest {
 
     @Test
     void eager() {
@@ -65,6 +61,19 @@ class TypeIdentifierTest {
                 _SerializationTester.roundtrip(original).getLogicalTypeName(), 
                 original.getLogicalTypeName());
     }
+    
+    @Test
+    void cannotBeEmpty() throws Exception {
+        assertThrows(IllegalArgumentException.class, ()->LogicalType.eager(Object.class, ""));
+        assertThrows(IllegalArgumentException.class, ()->LogicalType.lazy(Object.class, ()->"").getLogicalTypeName());
+    }
 
+    @Test
+    void cannotBeNull()  {
+        assertThrows(NullPointerException.class, ()->LogicalType.lazy(null, ()->"x"));
+        assertThrows(NullPointerException.class, ()->LogicalType.lazy(Object.class, null));
+        assertThrows(NullPointerException.class, ()->LogicalType.eager(null, "x"));
+        assertThrows(IllegalArgumentException.class, ()->LogicalType.eager(Object.class, null));
+    }
 
 }

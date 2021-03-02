@@ -214,7 +214,7 @@ implements
     // -- objectSpecId (property)
 
     @Programmatic
-    public ObjectSpecId getObjectSpecId() {
+    public String getLogicalTypeName() {
         if (getTypeSimpleName() == null) {
             return null;
         }
@@ -225,7 +225,7 @@ implements
         }
         buf.append(getTypeSimpleName());
 
-        return ObjectSpecId.of(buf.toString());
+        return buf.toString();
     }
 
 
