@@ -16,30 +16,35 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.applib.services.confview;
 
 import java.util.Set;
 
-/**
- * Returns the configuration properties (as view models) such that they can
- * be rendered into the UI (in the Wicket Viewer, under the "Configuration"
- * menu).
- *
- * <p>
- *     This is the backing service used by {@link ConfigurationMenu}.
- * </p>
- *
- * @since 2.0 {@index}
- */
-public interface ConfigurationViewService {
+import javax.inject.Inject;
 
-    /**
-     * Returns all properties, each as an instance of {@link ConfigurationProperty} (a view model).
-     * Mask sensitive values if required.
-     */
-    Set<ConfigurationProperty> getVisibleConfigurationProperties();
+import org.apache.isis.applib.annotation.Collection;
+import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.Nature;
 
-    Set<ConfigurationProperty> getEnvironmentProperties();
+@DomainObject(
+        nature = Nature.VIEW_MODEL,
+        objectType = "isis.applib.ConfigurationViewmodel")
+public class ConfigurationViewmodel {
+    
+    @Inject private ConfigurationViewService configurationService;
+
+    public String title() {
+        return "Configuration";
+    }
+    
+    @Collection
+    public Set<ConfigurationProperty> getEnvironment(){
+        return configurationService.getEnvironmentProperties();
+    }
+    
+    @Collection
+    public Set<ConfigurationProperty> getConfiguration(){
+        return configurationService.getVisibleConfigurationProperties();
+    }
     
 }

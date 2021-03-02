@@ -1214,6 +1214,29 @@ public class IsisConfiguration {
     @Data
     public static class Core {
 
+        private final Config config = new Config();
+        @Data
+        public static class Config {
+            
+            public static enum ConfigurationPropertyVisibilityPolicy { 
+                NEVER_SHOW,
+                SHOW_ONLY_IN_PROTOTYPE,
+                ALWAYS_SHOW 
+            }
+            
+            /**
+             * Configuration values might contain sensitive data, hence per default, 
+             * configuration properties are only visible with the configuration-page
+             * when <i>prototyping</i>.
+             * <p> 
+             * Alternatively this policy can be set to either <b>always</b> show or <b>never</b> show.  
+             * @see ConfigurationPropertyVisibilityPolicy
+             */
+            private ConfigurationPropertyVisibilityPolicy configurationPropertyVisibilityPolicy 
+                = ConfigurationPropertyVisibilityPolicy.SHOW_ONLY_IN_PROTOTYPE;
+            
+        }
+        
         private final MetaModel metaModel = new MetaModel();
         @Data
         public static class MetaModel {
@@ -1252,7 +1275,7 @@ public class IsisConfiguration {
                  *     For now this is <i>experimental</i>. Leave this disabled (the default).
                  * </p>
                  */
-                private boolean parallelize = false; //TODO[ISIS-2382] concurrent spec-loading is broken
+                private boolean parallelize = false; //TODO[ISIS-2382] concurrent spec-loading is experimental
 
                 /**
                  * Whether all known types should be fully introspected as part of the bootstrapping, or should only be

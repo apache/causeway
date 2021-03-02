@@ -39,9 +39,10 @@ import org.apache.isis.applib.services.confview.ConfigurationViewService;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.core.config.environment.IsisSystemEnvironment;
 import org.apache.isis.core.config.IsisConfiguration;
+import org.apache.isis.core.config.IsisConfiguration.Core.Config.ConfigurationPropertyVisibilityPolicy;
 import org.apache.isis.core.config.RestEasyConfiguration;
+import org.apache.isis.core.config.environment.IsisSystemEnvironment;
 import org.apache.isis.core.config.util.ValueMaskingUtil;
 
 import lombok.val;
@@ -56,7 +57,10 @@ import lombok.extern.log4j.Log4j2;
 @Primary
 @Qualifier("Default")
 @Log4j2
-public class ConfigurationViewServiceDefault implements ConfigurationViewService, Object_openRestApi.RestfulPathProvider {
+public class ConfigurationViewServiceDefault 
+implements 
+    ConfigurationViewService, 
+    Object_openRestApi.RestfulPathProvider {
 
     private final IsisSystemEnvironment systemEnvironment;
     private final IsisConfiguration configuration;
@@ -73,7 +77,12 @@ public class ConfigurationViewServiceDefault implements ConfigurationViewService
     }
 
     @Override
-    public Set<ConfigurationProperty> allProperties() {
+    public Set<ConfigurationProperty> getEnvironmentProperties() {
+        return new TreeSet<>(env.get().values());
+    }
+    
+    @Override
+    public Set<ConfigurationProperty> getVisibleConfigurationProperties() {
         return new TreeSet<>(config.get().values());
     }
     
@@ -122,28 +131,65 @@ public class ConfigurationViewServiceDefault implements ConfigurationViewService
 
     // -- HELPER
 
+    private _Lazy<Map<String, ConfigurationProperty>> env = _Lazy.of(this::loadEnvironment);
+    
+    private Map<String, ConfigurationProperty> loadEnvironment() {
+        final Map<String, ConfigurationProperty> map = _Maps.newTreeMap();
+        add("Isis Version", IsisSystemEnvironment.VERSION, map);
+        add("Deployment Type", systemEnvironment.getDeploymentType().name(), map);
+        add("Unit Testing", ""+systemEnvironment.isUnitTesting(), map);
+        
+        addSystemProperty("java.version", map);
+        addSystemProperty("java.vm.name", map);
+        addSystemProperty("java.vm.vendor", map);
+        addSystemProperty("java.vm.version", map);
+        addSystemProperty("java.vm.info", map);
+        
+        return map;
+    }
+    
     private _Lazy<Map<String, ConfigurationProperty>> config = _Lazy.of(this::loadConfiguration);
 
     private Map<String, ConfigurationProperty> loadConfiguration() {
-
         final Map<String, ConfigurationProperty> map = _Maps.newTreeMap();
-
-        configuration.getAsMap().forEach((k, v)->add("isis." + k, v, map));
-        restEasyConfiguration.getAsMap().forEach((k, v)->add("resteasy." + k, v, map));
-
-        // for convenience add some additional info to the top ...
-        add("[ Isis Version ]", IsisSystemEnvironment.VERSION, map);
-        add("[ Deployment Type ]", systemEnvironment.getDeploymentType().name(), map);
-        add("[ Unit Testing ]", ""+systemEnvironment.isUnitTesting(), map);
-
+        if(isShowConfigurationProperties()) {
+            configuration.getAsMap().forEach((k, v)->add("isis." + k, v, map));
+            restEasyConfiguration.getAsMap().forEach((k, v)->add("resteasy." + k, v, map));    
+        } else {
+            // if properties are not visible, show at least the policy
+            add("Configuration Property Visibility Policy", 
+                    getConfigurationPropertyVisibilityPolicy().name(), map);
+        }
         return map;
     }
 
     private static void add(String key, String value, Map<String, ConfigurationProperty> map) {
-
         value = ValueMaskingUtil.maskIfProtected(key, value);
-
         map.put(key, new ConfigurationProperty(key, value));
+    }
+    
+    private static void addSystemProperty(String key, Map<String, ConfigurationProperty> map) {
+        add(key, System.getProperty(key, "<empty>"), map);
+    }
+
+    private boolean isShowConfigurationProperties() {
+        switch (getConfigurationPropertyVisibilityPolicy()) {
+        case NEVER_SHOW:
+            return false;
+        case SHOW_ONLY_IN_PROTOTYPE:
+            return systemEnvironment.getDeploymentType().isPrototyping();
+        case ALWAYS_SHOW:
+            return true;
+        default:
+            return false;
+        }
+    }
+    
+    private ConfigurationPropertyVisibilityPolicy getConfigurationPropertyVisibilityPolicy() {
+        return Optional.ofNullable(
+                configuration.getCore().getConfig().getConfigurationPropertyVisibilityPolicy())
+                // fallback to configuration default policy
+                .orElseGet(()->new IsisConfiguration.Core.Config().getConfigurationPropertyVisibilityPolicy());
     }
 
 
