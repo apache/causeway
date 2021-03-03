@@ -23,55 +23,21 @@ import org.apache.isis.commons.internal.base._Strings;
 public enum ApplicationFeatureSort {
     
     /** 
-     * logical namespace, leading part of the <i>object type</i> (aka logical type)
+     * logical namespace
      */
-    NAMESPACE {
-        @Override
-        void init(final ApplicationFeatureId feature, final String fullyQualifiedName) {
-            feature.setNamespace(fullyQualifiedName);
-            feature.setTypeSimpleName(null);
-            feature.setMemberName(null);
-            feature.sort = this;
-        }
-    },
+    NAMESPACE,
     
     /** 
-     * logical type, simple name of the <i>object type</i> (aka logical type)
+     * {@code namespace + "." + typeSimpleName} 
+     * makes up the fully qualified logical type
      */
-    TYPE {
-        @Override
-        void init(final ApplicationFeatureId feature, final String fullyQualifiedName) {
-            final int i = fullyQualifiedName.lastIndexOf(".");
-            if(i != -1) {
-                feature.setNamespace(fullyQualifiedName.substring(0, i));
-                feature.setTypeSimpleName(fullyQualifiedName.substring(i+1));
-            } else {
-                feature.setNamespace("");
-                feature.setTypeSimpleName(fullyQualifiedName);
-            }
-            feature.setMemberName(null);
-            feature.sort = this;
-        }
-    },
+    TYPE,
     
     /** 
      * {@code namespace + "." + typeSimpleName + "." + memberName} 
-     * make up the fully qualified logical member name
+     * makes up the fully qualified logical member
      */
-    MEMBER {
-        @Override
-        void init(final ApplicationFeatureId feature, final String fullyQualifiedName) {
-            final int i = fullyQualifiedName.lastIndexOf("#");
-            if(i == -1) {
-                throw new IllegalArgumentException("Malformed, expected a '#': " + fullyQualifiedName);
-            }
-            final String className = fullyQualifiedName.substring(0, i);
-            final String memberName = fullyQualifiedName.substring(i+1);
-            TYPE.init(feature, className);
-            feature.setMemberName(memberName);
-            feature.sort = this;
-        }
-    };
+    MEMBER;
 
     public boolean hideClassName() {
         return this == ApplicationFeatureSort.NAMESPACE;
@@ -80,8 +46,6 @@ public enum ApplicationFeatureSort {
     public boolean hideMember() {
         return this == ApplicationFeatureSort.NAMESPACE || this == ApplicationFeatureSort.TYPE;
     }
-
-    abstract void init(ApplicationFeatureId applicationFeatureId, String fullyQualifiedName);
 
     public static void ensurePackage(final ApplicationFeatureId feature) {
         if(feature.sort != ApplicationFeatureSort.NAMESPACE) {
@@ -110,6 +74,40 @@ public enum ApplicationFeatureSort {
     @Override
     public String toString() {
         return _Strings.capitalize(name());
+    }
+    
+    // -- REFACTORING
+    
+    static void initNamespace(final ApplicationFeatureId feature, final String fullyQualifiedName) {
+        feature.setNamespace(fullyQualifiedName);
+        feature.setTypeSimpleName(null);
+        feature.setMemberName(null);
+        feature.sort = NAMESPACE;
+    }
+    
+    static void initType(final ApplicationFeatureId feature, final String fullyQualifiedName) {
+        final int i = fullyQualifiedName.lastIndexOf(".");
+        if(i != -1) {
+            feature.setNamespace(fullyQualifiedName.substring(0, i));
+            feature.setTypeSimpleName(fullyQualifiedName.substring(i+1));
+        } else {
+            feature.setNamespace("");
+            feature.setTypeSimpleName(fullyQualifiedName);
+        }
+        feature.setMemberName(null);
+        feature.sort = TYPE;
+    }
+    
+    static void initMember(final ApplicationFeatureId feature, final String fullyQualifiedName) {
+        final int i = fullyQualifiedName.lastIndexOf("#");
+        if(i == -1) {
+            throw new IllegalArgumentException("Malformed, expected a '#': " + fullyQualifiedName);
+        }
+        final String className = fullyQualifiedName.substring(0, i);
+        final String memberName = fullyQualifiedName.substring(i+1);
+        initType(feature, className);
+        feature.setMemberName(memberName);
+        feature.sort = MEMBER;
     }
     
 

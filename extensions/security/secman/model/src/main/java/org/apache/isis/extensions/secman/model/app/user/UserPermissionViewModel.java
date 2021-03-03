@@ -186,7 +186,9 @@ public class UserPermissionViewModel implements ViewModel {
         final String viewingEvaluationCauseFeatureIdType = iterator.next();
         final ApplicationFeatureSort viewingEvaluationFeatureIdType =  !viewingEvaluationCauseFeatureIdType.isEmpty() ? ApplicationFeatureSort.valueOf(viewingEvaluationCauseFeatureIdType) : null;
         final String viewingEvaluationFeatureFqn = iterator.next();
-        this.viewingFeatureId = viewingEvaluationFeatureIdType != null? new ApplicationFeatureId(viewingEvaluationFeatureIdType,viewingEvaluationFeatureFqn) : null;
+        this.viewingFeatureId = viewingEvaluationFeatureIdType != null
+                ? ApplicationFeatureId.newFeature(viewingEvaluationFeatureIdType, viewingEvaluationFeatureFqn) 
+                : null;
 
         final String viewingEvaluationCauseRule = iterator.next();
         this.viewingRule = !viewingEvaluationCauseRule.isEmpty()? ApplicationPermissionRule.valueOf(viewingEvaluationCauseRule): null;
@@ -198,7 +200,9 @@ public class UserPermissionViewModel implements ViewModel {
         final String changingEvaluationCauseFeatureIdType = iterator.next();
         final ApplicationFeatureSort changingEvaluationFeatureIdType =  !changingEvaluationCauseFeatureIdType.isEmpty() ? ApplicationFeatureSort.valueOf(changingEvaluationCauseFeatureIdType) : null;
         final String changingEvaluationFeatureFqn = iterator.next();
-        this.changingFeatureId = changingEvaluationFeatureIdType != null? new ApplicationFeatureId(changingEvaluationFeatureIdType,changingEvaluationFeatureFqn) : null;
+        this.changingFeatureId = changingEvaluationFeatureIdType != null
+                ? ApplicationFeatureId.newFeature(changingEvaluationFeatureIdType, changingEvaluationFeatureFqn) 
+                : null;
 
         final String changingEvaluationCauseRule = iterator.next();
         this.changingRule = !changingEvaluationCauseRule.isEmpty()? ApplicationPermissionRule.valueOf(changingEvaluationCauseRule): null;
@@ -206,9 +210,8 @@ public class UserPermissionViewModel implements ViewModel {
         this.changingMode = !changingEvaluationCauseMode.isEmpty()? ApplicationPermissionMode.valueOf(changingEvaluationCauseMode): null;
 
         final ApplicationFeatureSort type = ApplicationFeatureSort.valueOf(iterator.next());
-        this.featureId = new ApplicationFeatureId(type, iterator.next());
+        this.featureId = ApplicationFeatureId.newFeature(type, iterator.next());
     }
-
 
 
     @Programmatic
