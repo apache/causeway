@@ -21,14 +21,10 @@ package org.apache.isis.core.metamodel.facets.collections.collection.modify;
 
 import org.apache.isis.applib.events.domain.AbstractDomainEvent;
 import org.apache.isis.applib.events.domain.CollectionDomainEvent;
-import org.apache.isis.applib.services.i18n.TranslatableString;
-import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.core.metamodel.facets.DomainEventHelper;
 import org.apache.isis.core.metamodel.facets.SingleClassValueFacetAbstract;
-import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 
 public abstract class CollectionDomainEventFacetAbstract
@@ -36,8 +32,6 @@ public abstract class CollectionDomainEventFacetAbstract
         implements CollectionDomainEventFacet {
 
     private final DomainEventHelper domainEventHelper;
-    private final TranslationService translationService;
-    private final String translationContext;
 
     public CollectionDomainEventFacetAbstract(
             final Class<? extends CollectionDomainEvent<?, ?>> eventType,
@@ -45,10 +39,6 @@ public abstract class CollectionDomainEventFacetAbstract
 
         super(CollectionDomainEventFacet.class, holder, eventType);
         this.eventType = eventType;
-
-        this.translationService = getTranslationService();
-        // sadness: same as in TranslationFactory
-        this.translationContext = ((IdentifiedHolder)holder).getIdentifier().getTranslationContext();
 
         domainEventHelper = DomainEventHelper.ofServiceRegistry(getServiceRegistry());
     }
@@ -79,25 +69,6 @@ public abstract class CollectionDomainEventFacetAbstract
                 );
         if (event != null && event.isHidden()) {
             return "Hidden by subscriber";
-        }
-        return null;
-    }
-
-    @Override
-    public String disables(final UsabilityContext ic) {
-
-        final CollectionDomainEvent<?, ?> event =
-                domainEventHelper.postEventForCollection(
-                        AbstractDomainEvent.Phase.DISABLE,
-                        getEventType(),
-                        getIdentified(), ic.getHead()
-                );
-        if (event != null && event.isDisabled()) {
-            final TranslatableString reasonTranslatable = event.getDisabledReasonTranslatable();
-            if(reasonTranslatable != null) {
-                return reasonTranslatable.translate(translationService, translationContext);
-            }
-            return event.getDisabledReason();
         }
         return null;
     }

@@ -28,7 +28,7 @@ import org.apache.isis.core.metamodel.interactions.ValidatingInteractionAdvisor;
  * Corresponds to <tt>@Collection(domainEvent=...)</tt> annotation in the Isis programming model.
  */
 public interface CollectionDomainEventFacet
-extends SingleClassValueFacet, HidingInteractionAdvisor, DisablingInteractionAdvisor {
+extends SingleClassValueFacet, HidingInteractionAdvisor {
 
 }
 
