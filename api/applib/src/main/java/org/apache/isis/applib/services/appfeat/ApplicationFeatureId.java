@@ -65,7 +65,7 @@ implements
     // -- CONSTANTS
 
     public static final ApplicationFeatureId NAMESPACE_DEFAULT = 
-            new ApplicationFeatureId(ApplicationFeatureType.NAMESPACE, "default");
+            new ApplicationFeatureId(ApplicationFeatureSort.NAMESPACE, "default");
 
     // -- FACTORY METHODS
 
@@ -84,7 +84,7 @@ implements
     }
     
     public static ApplicationFeatureId newFeature(
-            final ApplicationFeatureType featureType, 
+            final ApplicationFeatureSort featureType, 
             final String qualifiedName) {
         
         switch (featureType) {
@@ -113,44 +113,44 @@ implements
     }
 
     public static ApplicationFeatureId newNamespace(final String namespace) {
-        final ApplicationFeatureId featureId = new ApplicationFeatureId(ApplicationFeatureType.NAMESPACE);
+        final ApplicationFeatureId featureId = new ApplicationFeatureId(ApplicationFeatureSort.NAMESPACE);
         featureId.setNamespace(namespace);
         return featureId;
     }
 
     public static ApplicationFeatureId newType(final String logicalTypeName) {
-        return new ApplicationFeatureId(ApplicationFeatureType.TYPE, logicalTypeName);
+        return new ApplicationFeatureId(ApplicationFeatureSort.TYPE, logicalTypeName);
     }
 
     public static ApplicationFeatureId newMember(final String logicalTypeName, final String memberName) {
-        final ApplicationFeatureId featureId = new ApplicationFeatureId(ApplicationFeatureType.MEMBER);
-        ApplicationFeatureType.TYPE.init(featureId, logicalTypeName);
-        featureId.type = ApplicationFeatureType.MEMBER;
+        final ApplicationFeatureId featureId = new ApplicationFeatureId(ApplicationFeatureSort.MEMBER);
+        ApplicationFeatureSort.TYPE.init(featureId, logicalTypeName);
+        featureId.sort = ApplicationFeatureSort.MEMBER;
         featureId.setMemberName(memberName);
         return featureId;
     }
 
     public static ApplicationFeatureId newMember(final String fullyQualifiedName) {
-        return new ApplicationFeatureId(ApplicationFeatureType.MEMBER, fullyQualifiedName);
+        return new ApplicationFeatureId(ApplicationFeatureSort.MEMBER, fullyQualifiedName);
     }
 
     // -- CONSTRUCTOR
 
     private ApplicationFeatureId(final String asString) {
         final Iterator<String> iterator = _Strings.splitThenStream(asString, ":").iterator();
-        final ApplicationFeatureType type = ApplicationFeatureType.valueOf(iterator.next());
+        final ApplicationFeatureSort type = ApplicationFeatureSort.valueOf(iterator.next());
         type.init(this, iterator.next());
     }
 
     /**
-     * Must be called by {@link ApplicationFeatureType#init(ApplicationFeatureId, String)} 
+     * Must be called by {@link ApplicationFeatureSort#init(ApplicationFeatureId, String)} 
      * immediately afterwards to fully initialize.
      */
-    ApplicationFeatureId(final ApplicationFeatureType type) {
-        this.type = type;
+    ApplicationFeatureId(final ApplicationFeatureSort type) {
+        this.sort = type;
     }
 
-    public ApplicationFeatureId(final ApplicationFeatureType type, final String fullyQualifiedName) {
+    public ApplicationFeatureId(final ApplicationFeatureSort type, final String fullyQualifiedName) {
         type.init(this, fullyQualifiedName);
     }
 
@@ -168,13 +168,13 @@ implements
 
     // -- PROPERTIES
     
-    @Getter ApplicationFeatureType type;
+    @Getter ApplicationFeatureSort sort;
     
     /**
      * The {@link ApplicationFeatureId id} of the member's class.
      */
     public ApplicationFeatureId getParentClassId() {
-        ApplicationFeatureType.ensureMember(this);
+        ApplicationFeatureSort.ensureMember(this);
         final String classFqn = this.getNamespace() + "." + getTypeSimpleName();
         return newType(classFqn);
     }
@@ -224,9 +224,9 @@ implements
      */
     @Programmatic
     public ApplicationFeatureId getParentPackageId() {
-        ApplicationFeatureType.ensurePackageOrClass(this);
+        ApplicationFeatureSort.ensurePackageOrClass(this);
 
-        if(type == ApplicationFeatureType.TYPE) {
+        if(sort == ApplicationFeatureSort.TYPE) {
             return ApplicationFeatureId.newNamespace(getNamespace());
         } else {
             final String packageName = getNamespace(); // eg aaa.bbb.ccc
@@ -246,7 +246,7 @@ implements
 
     @Programmatic
     public String asString() {
-        return type.name() + ":" + getFullyQualifiedName();
+        return sort.name() + ":" + getFullyQualifiedName();
     }
 
     @Programmatic
@@ -283,7 +283,7 @@ implements
     }
 
     private ApplicationFeatureId getParentId() {
-        return type == ApplicationFeatureType.MEMBER
+        return sort == ApplicationFeatureSort.MEMBER
                 ? getParentClassId()
                 : getParentPackageId();
     }
@@ -303,35 +303,35 @@ implements
 
     // -- OBJECT CONTRACT
 
-    private static final Comparator<ApplicationFeatureId> byType =
-            comparing(ApplicationFeatureId::getType, nullsFirst(naturalOrder()));
-    private static final Comparator<ApplicationFeatureId> byPackageName =
+    private static final Comparator<ApplicationFeatureId> bySort =
+            comparing(ApplicationFeatureId::getSort, nullsFirst(naturalOrder()));
+    private static final Comparator<ApplicationFeatureId> byNamespace =
             comparing(ApplicationFeatureId::getNamespace, nullsFirst(naturalOrder()));
-    private static final Comparator<ApplicationFeatureId> byClassName =
+    private static final Comparator<ApplicationFeatureId> byTypeSimpleName =
             comparing(ApplicationFeatureId::getTypeSimpleName, nullsFirst(naturalOrder()));
     private static final Comparator<ApplicationFeatureId> byMemberName =
             comparing(ApplicationFeatureId::getMemberName, nullsFirst(naturalOrder()));
 
     private static final Comparator<ApplicationFeatureId> applicationFeatureIdOrdering =
-            Comparator.nullsFirst(byType)
-            .thenComparing(byPackageName)
-            .thenComparing(byClassName)
+            Comparator.nullsFirst(bySort)
+            .thenComparing(byNamespace)
+            .thenComparing(byTypeSimpleName)
             .thenComparing(byMemberName);
 
     private static final Equality<ApplicationFeatureId> equality =
-            ObjectContracts.checkEquals(ApplicationFeatureId::getType)
+            ObjectContracts.checkEquals(ApplicationFeatureId::getSort)
             .thenCheckEquals(ApplicationFeatureId::getNamespace)
             .thenCheckEquals(ApplicationFeatureId::getTypeSimpleName)
             .thenCheckEquals(ApplicationFeatureId::getMemberName);
 
     private static final Hashing<ApplicationFeatureId> hashing =
-            ObjectContracts.hashing(ApplicationFeatureId::getType)
+            ObjectContracts.hashing(ApplicationFeatureId::getSort)
             .thenHashing(ApplicationFeatureId::getNamespace)
             .thenHashing(ApplicationFeatureId::getTypeSimpleName)
             .thenHashing(ApplicationFeatureId::getMemberName);
 
     private static final ToString<ApplicationFeatureId> toString =
-            ObjectContracts.toString("type", ApplicationFeatureId::getType)
+            ObjectContracts.toString("sort", ApplicationFeatureId::getSort)
             .thenToString("namespace", ApplicationFeatureId::getNamespace)
             .thenToStringOmitIfAbsent("typeSimpleName", ApplicationFeatureId::getTypeSimpleName)
             .thenToStringOmitIfAbsent("memberName", ApplicationFeatureId::getMemberName);
@@ -370,22 +370,22 @@ implements
 
     @Deprecated // duplicate
     public static ApplicationFeatureId createNamespace(String namespace) {
-        val feat = new ApplicationFeatureId(ApplicationFeatureType.NAMESPACE);
-        ApplicationFeatureType.NAMESPACE.init(feat, namespace);
+        val feat = new ApplicationFeatureId(ApplicationFeatureSort.NAMESPACE);
+        ApplicationFeatureSort.NAMESPACE.init(feat, namespace);
         return feat;
     }
     
     @Deprecated // duplicate
     public static ApplicationFeatureId createType(String logicalTypeName) {
-        val feat = new ApplicationFeatureId(ApplicationFeatureType.TYPE);
-        ApplicationFeatureType.TYPE.init(feat, logicalTypeName);
+        val feat = new ApplicationFeatureId(ApplicationFeatureSort.TYPE);
+        ApplicationFeatureSort.TYPE.init(feat, logicalTypeName);
         return feat;
     }
     
     @Deprecated // duplicate
     public static ApplicationFeatureId createMember(String fqn) {
-        val feat = new ApplicationFeatureId(ApplicationFeatureType.MEMBER);
-        ApplicationFeatureType.MEMBER.init(feat, fqn);
+        val feat = new ApplicationFeatureId(ApplicationFeatureSort.MEMBER);
+        ApplicationFeatureSort.MEMBER.init(feat, fqn);
         return feat;
     }
 

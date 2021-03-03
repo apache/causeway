@@ -38,7 +38,7 @@ import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
-import org.apache.isis.applib.services.appfeat.ApplicationFeatureType;
+import org.apache.isis.applib.services.appfeat.ApplicationFeatureSort;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.applib.util.ToString;
@@ -149,18 +149,18 @@ public class UserPermissionViewModel implements ViewModel {
         username, 
         
         viewingEvaluationGranted,
-        viewingEvaluationCauseFeatureId != null? viewingEvaluationCauseFeatureId.getType(): "",
+        viewingEvaluationCauseFeatureId != null? viewingEvaluationCauseFeatureId.getSort(): "",
         viewingEvaluationCauseFeatureId != null? viewingEvaluationCauseFeatureId.getFullyQualifiedName(): "",
         viewingEvaluationCause != null? viewingEvaluationCause.getRule(): "",
         viewingEvaluationCause != null? viewingEvaluationCause.getMode(): "",
         
         changingEvaluationGranted,
-        changingEvaluationCauseFeatureId != null? changingEvaluationCauseFeatureId.getType(): "",
+        changingEvaluationCauseFeatureId != null? changingEvaluationCauseFeatureId.getSort(): "",
         changingEvaluationCauseFeatureId != null? changingEvaluationCauseFeatureId.getFullyQualifiedName(): "",
         changingEvaluationCause != null? changingEvaluationCause.getRule(): "",
         changingEvaluationCause != null? changingEvaluationCause.getMode(): "",
         
-        featureId.getType(), 
+        featureId.getSort(), 
         featureId.getFullyQualifiedName()
         );
     }
@@ -184,7 +184,7 @@ public class UserPermissionViewModel implements ViewModel {
 
         this.viewingGranted = Boolean.valueOf(iterator.next());
         final String viewingEvaluationCauseFeatureIdType = iterator.next();
-        final ApplicationFeatureType viewingEvaluationFeatureIdType =  !viewingEvaluationCauseFeatureIdType.isEmpty() ? ApplicationFeatureType.valueOf(viewingEvaluationCauseFeatureIdType) : null;
+        final ApplicationFeatureSort viewingEvaluationFeatureIdType =  !viewingEvaluationCauseFeatureIdType.isEmpty() ? ApplicationFeatureSort.valueOf(viewingEvaluationCauseFeatureIdType) : null;
         final String viewingEvaluationFeatureFqn = iterator.next();
         this.viewingFeatureId = viewingEvaluationFeatureIdType != null? new ApplicationFeatureId(viewingEvaluationFeatureIdType,viewingEvaluationFeatureFqn) : null;
 
@@ -196,7 +196,7 @@ public class UserPermissionViewModel implements ViewModel {
 
         this.changingGranted = Boolean.valueOf(iterator.next());
         final String changingEvaluationCauseFeatureIdType = iterator.next();
-        final ApplicationFeatureType changingEvaluationFeatureIdType =  !changingEvaluationCauseFeatureIdType.isEmpty() ? ApplicationFeatureType.valueOf(changingEvaluationCauseFeatureIdType) : null;
+        final ApplicationFeatureSort changingEvaluationFeatureIdType =  !changingEvaluationCauseFeatureIdType.isEmpty() ? ApplicationFeatureSort.valueOf(changingEvaluationCauseFeatureIdType) : null;
         final String changingEvaluationFeatureFqn = iterator.next();
         this.changingFeatureId = changingEvaluationFeatureIdType != null? new ApplicationFeatureId(changingEvaluationFeatureIdType,changingEvaluationFeatureFqn) : null;
 
@@ -205,7 +205,7 @@ public class UserPermissionViewModel implements ViewModel {
         final String changingEvaluationCauseMode = iterator.next();
         this.changingMode = !changingEvaluationCauseMode.isEmpty()? ApplicationPermissionMode.valueOf(changingEvaluationCauseMode): null;
 
-        final ApplicationFeatureType type = ApplicationFeatureType.valueOf(iterator.next());
+        final ApplicationFeatureSort type = ApplicationFeatureSort.valueOf(iterator.next());
         this.featureId = new ApplicationFeatureId(type, iterator.next());
     }
 

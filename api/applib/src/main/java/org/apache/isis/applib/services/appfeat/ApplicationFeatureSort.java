@@ -20,7 +20,7 @@ package org.apache.isis.applib.services.appfeat;
 
 import org.apache.isis.commons.internal.base._Strings;
 
-public enum ApplicationFeatureType {
+public enum ApplicationFeatureSort {
     
     /** 
      * logical namespace, leading part of the <i>object type</i> (aka logical type)
@@ -31,7 +31,7 @@ public enum ApplicationFeatureType {
             feature.setNamespace(fullyQualifiedName);
             feature.setTypeSimpleName(null);
             feature.setMemberName(null);
-            feature.type = this;
+            feature.sort = this;
         }
     },
     
@@ -50,7 +50,7 @@ public enum ApplicationFeatureType {
                 feature.setTypeSimpleName(fullyQualifiedName);
             }
             feature.setMemberName(null);
-            feature.type = this;
+            feature.sort = this;
         }
     },
     
@@ -69,40 +69,40 @@ public enum ApplicationFeatureType {
             final String memberName = fullyQualifiedName.substring(i+1);
             TYPE.init(feature, className);
             feature.setMemberName(memberName);
-            feature.type = this;
+            feature.sort = this;
         }
     };
 
     public boolean hideClassName() {
-        return this == ApplicationFeatureType.NAMESPACE;
+        return this == ApplicationFeatureSort.NAMESPACE;
     }
     
     public boolean hideMember() {
-        return this == ApplicationFeatureType.NAMESPACE || this == ApplicationFeatureType.TYPE;
+        return this == ApplicationFeatureSort.NAMESPACE || this == ApplicationFeatureSort.TYPE;
     }
 
     abstract void init(ApplicationFeatureId applicationFeatureId, String fullyQualifiedName);
 
     public static void ensurePackage(final ApplicationFeatureId feature) {
-        if(feature.type != ApplicationFeatureType.NAMESPACE) {
+        if(feature.sort != ApplicationFeatureSort.NAMESPACE) {
             throw new IllegalStateException("Can only be called for a package; " + feature.toString());
         }
     }
 
     public static void ensurePackageOrClass(final ApplicationFeatureId applicationFeatureId) {
-        if(applicationFeatureId.type != ApplicationFeatureType.NAMESPACE && applicationFeatureId.type != ApplicationFeatureType.TYPE) {
+        if(applicationFeatureId.sort != ApplicationFeatureSort.NAMESPACE && applicationFeatureId.sort != ApplicationFeatureSort.TYPE) {
             throw new IllegalStateException("Can only be called for a package or a class; " + applicationFeatureId.toString());
         }
     }
 
     public static void ensureClass(final ApplicationFeatureId feature) {
-        if(feature.type != ApplicationFeatureType.TYPE) {
+        if(feature.sort != ApplicationFeatureSort.TYPE) {
             throw new IllegalStateException("Can only be called for a class; " + feature.toString());
         }
     }
 
     public static void ensureMember(final ApplicationFeatureId feature) {
-        if(feature.type != ApplicationFeatureType.MEMBER) {
+        if(feature.sort != ApplicationFeatureSort.MEMBER) {
             throw new IllegalStateException("Can only be called for a member; " + feature.toString());
         }
     }

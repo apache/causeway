@@ -32,7 +32,7 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
-import org.apache.isis.applib.services.appfeat.ApplicationFeatureType;
+import org.apache.isis.applib.services.appfeat.ApplicationFeatureSort;
 import org.apache.isis.applib.services.appfeat.ApplicationMemberType;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.message.MessageService;
@@ -168,7 +168,7 @@ implements org.apache.isis.extensions.secman.api.permission.ApplicationPermissio
     public Collection<ApplicationPermission> findByRoleAndRuleAndFeatureTypeCached(
             org.apache.isis.extensions.secman.api.role.ApplicationRole role,
             ApplicationPermissionRule rule,
-            ApplicationFeatureType type) {
+            ApplicationFeatureSort type) {
         return queryResultsCacheProvider.get().execute(this::findByRoleAndRuleAndFeatureType, 
                 ApplicationPermissionRepository.class, "findByRoleAndRuleAndFeatureTypeCached", 
                 role, rule, type);
@@ -177,7 +177,7 @@ implements org.apache.isis.extensions.secman.api.permission.ApplicationPermissio
     public Collection<ApplicationPermission> findByRoleAndRuleAndFeatureType(
             org.apache.isis.extensions.secman.api.role.ApplicationRole role, 
             final ApplicationPermissionRule rule,
-            final ApplicationFeatureType type) {
+            final ApplicationFeatureSort type) {
         return repository.allMatches(Query.named(
                         ApplicationPermission.class, NamedQueryNames.PERMISSION_BY_ROLE_RULE_FEATURE)
                     .withParameter("role", role)
@@ -192,7 +192,7 @@ implements org.apache.isis.extensions.secman.api.permission.ApplicationPermissio
     public Optional<ApplicationPermission> findByRoleAndRuleAndFeatureCached(
             final org.apache.isis.extensions.secman.api.role.ApplicationRole role,
             final ApplicationPermissionRule rule,
-            final ApplicationFeatureType type,
+            final ApplicationFeatureSort type,
             final String featureFqn) {
         return queryResultsCacheProvider.get().execute(
                 this::findByRoleAndRuleAndFeature,
@@ -204,7 +204,7 @@ implements org.apache.isis.extensions.secman.api.permission.ApplicationPermissio
     public Optional<ApplicationPermission> findByRoleAndRuleAndFeature(
             final org.apache.isis.extensions.secman.api.role.ApplicationRole role,
             final ApplicationPermissionRule rule,
-            final ApplicationFeatureType type,
+            final ApplicationFeatureSort type,
             final String featureFqn) {
 
         return repository
@@ -230,7 +230,7 @@ implements org.apache.isis.extensions.secman.api.permission.ApplicationPermissio
         return repository.allMatches(
                 Query.named(
                         ApplicationPermission.class, NamedQueryNames.PERMISSION_BY_FEATURE)
-                .withParameter("featureType", featureId.getType())
+                .withParameter("featureType", featureId.getSort())
                 .withParameter("featureFqn", featureId.getFullyQualifiedName()))
                 .stream()
                 .collect(_Sets.toUnmodifiableSorted());
@@ -243,7 +243,7 @@ implements org.apache.isis.extensions.secman.api.permission.ApplicationPermissio
             final org.apache.isis.extensions.secman.api.role.ApplicationRole genericRole,
             final ApplicationPermissionRule rule,
             final ApplicationPermissionMode mode,
-            final ApplicationFeatureType featureType,
+            final ApplicationFeatureSort featureType,
             final String featureFqn) {
 
         val role = _Casts.<ApplicationRole>uncheckedCast(genericRole);
@@ -261,7 +261,7 @@ implements org.apache.isis.extensions.secman.api.permission.ApplicationPermissio
             final ApplicationRole role,
             final ApplicationPermissionRule rule,
             final ApplicationPermissionMode mode,
-            final ApplicationFeatureType featureType,
+            final ApplicationFeatureSort featureType,
             final String featureFqn) {
 
         ApplicationPermission permission = findByRoleAndRuleAndFeature(role, rule, featureType, featureFqn)
@@ -301,7 +301,7 @@ implements org.apache.isis.extensions.secman.api.permission.ApplicationPermissio
         
         val role = _Casts.<ApplicationRole>uncheckedCast(genericRole);
         
-        val featureType = featureId.getType();
+        val featureType = featureId.getSort();
         val featureFqn = featureId.getFullyQualifiedName();
 
         val feature = applicationFeatureRepository.findFeature(featureId);
@@ -347,7 +347,7 @@ implements org.apache.isis.extensions.secman.api.permission.ApplicationPermissio
 
         val permissions = allPermissions();
         for (val permission : permissions) {
-            final ApplicationFeatureType featureType = permission.getFeatureType();
+            final ApplicationFeatureSort featureType = permission.getFeatureType();
             final String featureFqn = permission.getFeatureFqn();
 
             switch (featureType) {

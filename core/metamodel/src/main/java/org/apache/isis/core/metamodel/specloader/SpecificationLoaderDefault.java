@@ -39,7 +39,7 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.id.LogicalType;
-import org.apache.isis.applib.services.appfeat.ApplicationFeatureType;
+import org.apache.isis.applib.services.appfeat.ApplicationFeatureSort;
 import org.apache.isis.applib.services.metamodel.BeanSort;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.collections.Can;
@@ -226,7 +226,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
         
         //XXX[ISIS-2403] these classes only get discovered by validators, so just preload their specs
         // (an optimization, not strictly required)
-        loadSpecifications(ApplicationFeatureType.class/*, ...*/);
+        loadSpecifications(ApplicationFeatureSort.class/*, ...*/);
 
         log.info(" - adding types from ValueTypeProviders");
 

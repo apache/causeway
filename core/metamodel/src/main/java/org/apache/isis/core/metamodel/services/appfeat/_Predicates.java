@@ -21,7 +21,7 @@ package org.apache.isis.core.metamodel.services.appfeat;
 import java.util.function.Predicate;
 
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
-import org.apache.isis.applib.services.appfeat.ApplicationFeatureType;
+import org.apache.isis.applib.services.appfeat.ApplicationFeatureSort;
 import org.apache.isis.applib.services.appfeat.ApplicationMemberType;
 
 final class _Predicates {
@@ -31,7 +31,7 @@ final class _Predicates {
         return new Predicate<ApplicationFeatureId>() {
             @Override
             public boolean test(final ApplicationFeatureId input) {
-                if(input.getType() != ApplicationFeatureType.TYPE) {
+                if(input.getSort() != ApplicationFeatureSort.TYPE) {
                     return false;
                 }
                 final ApplicationFeature feature = applicationFeatures.findFeature(input);
