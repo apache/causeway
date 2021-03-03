@@ -122,13 +122,13 @@ public class ApplicationFeature implements Comparable<ApplicationFeature> {
     private final SortedSet<ApplicationFeatureId> contents = _Sets.newTreeSet();
 
     public SortedSet<ApplicationFeatureId> getContents() {
-        ApplicationFeatureSort.ensurePackage(this.getFeatureId());
+        _Asserts.ensureNamespace(this.getFeatureId());
         return contents;
     }
 
     public void addToContents(final ApplicationFeatureId contentId) {
-        ApplicationFeatureSort.ensurePackage(this.getFeatureId());
-        ApplicationFeatureSort.ensurePackageOrClass(contentId);
+        _Asserts.ensureNamespace(this.getFeatureId());
+        _Asserts.ensureNamespaceOrType(contentId);
         this.contents.add(contentId);
     }
 
@@ -137,7 +137,7 @@ public class ApplicationFeature implements Comparable<ApplicationFeature> {
     private final SortedSet<ApplicationFeatureId> properties = _Sets.newTreeSet();
 
     public SortedSet<ApplicationFeatureId> getProperties() {
-        ApplicationFeatureSort.ensureClass(this.getFeatureId());
+        _Asserts.ensureType(this.getFeatureId());
         return properties;
     }
 
@@ -145,7 +145,7 @@ public class ApplicationFeature implements Comparable<ApplicationFeature> {
     private final SortedSet<ApplicationFeatureId> collections = _Sets.newTreeSet();
     
     public SortedSet<ApplicationFeatureId> getCollections() {
-        ApplicationFeatureSort.ensureClass(this.getFeatureId());
+        _Asserts.ensureType(this.getFeatureId());
         return collections;
     }
 
@@ -153,19 +153,19 @@ public class ApplicationFeature implements Comparable<ApplicationFeature> {
     private final SortedSet<ApplicationFeatureId> actions = _Sets.newTreeSet();
     
     public SortedSet<ApplicationFeatureId> getActions() {
-        ApplicationFeatureSort.ensureClass(this.getFeatureId());
+        _Asserts.ensureType(this.getFeatureId());
         return actions;
     }
     
     public void addToMembers(final ApplicationFeatureId memberId, final ApplicationMemberType memberType) {
-        ApplicationFeatureSort.ensureClass(this.getFeatureId());
-        ApplicationFeatureSort.ensureMember(memberId);
+        _Asserts.ensureType(this.getFeatureId());
+        _Asserts.ensureMember(memberId);
 
         membersOf(memberType).add(memberId);
     }
     
     public SortedSet<ApplicationFeatureId> membersOf(final ApplicationMemberType memberType) {
-        ApplicationFeatureSort.ensureClass(this.getFeatureId());
+        _Asserts.ensureType(this.getFeatureId());
         switch (memberType) {
         case PROPERTY:
             return properties;

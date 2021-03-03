@@ -37,6 +37,7 @@ import org.apache.isis.applib.util.Hashing;
 import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.applib.util.TitleBuffer;
 import org.apache.isis.applib.util.ToString;
+import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
@@ -112,29 +113,55 @@ implements
     }
 
     public static ApplicationFeatureId newNamespace(final String namespace) {
-        val feat = new ApplicationFeatureId(ApplicationFeatureSort.NAMESPACE);
-        ApplicationFeatureSort.initNamespace(feat, namespace);
-        return feat;
+        val feature = new ApplicationFeatureId(ApplicationFeatureSort.NAMESPACE);
+        feature.setNamespace(namespace);
+        feature.setTypeSimpleName(null);
+        feature.setMemberName(null);
+        return feature;
     }
 
     public static ApplicationFeatureId newType(final String logicalTypeName) {
         val feat = new ApplicationFeatureId(ApplicationFeatureSort.TYPE);
-        ApplicationFeatureSort.initType(feat, logicalTypeName);
+        initType(feat, logicalTypeName);
         return feat;
     }
 
     public static ApplicationFeatureId newMember(final String logicalTypeName, final String memberName) {
         final ApplicationFeatureId featureId = new ApplicationFeatureId(ApplicationFeatureSort.MEMBER);
-        ApplicationFeatureSort.initType(featureId, logicalTypeName);
-        featureId.sort = ApplicationFeatureSort.MEMBER;
+        initType(featureId, logicalTypeName);
         featureId.setMemberName(memberName);
         return featureId;
     }
 
     public static ApplicationFeatureId newMember(String fqn) {
         val feat = new ApplicationFeatureId(ApplicationFeatureSort.MEMBER);
-        ApplicationFeatureSort.initMember(feat, fqn);
+        initMember(feat, fqn);
         return feat;
+    }
+    
+    // -- FACTORY HELPERS
+    
+    private static void initType(final ApplicationFeatureId feature, final String fullyQualifiedName) {
+        final int i = fullyQualifiedName.lastIndexOf(".");
+        if(i != -1) {
+            feature.setNamespace(fullyQualifiedName.substring(0, i));
+            feature.setTypeSimpleName(fullyQualifiedName.substring(i+1));
+        } else {
+            feature.setNamespace("");
+            feature.setTypeSimpleName(fullyQualifiedName);
+        }
+        feature.setMemberName(null);
+    }
+    
+    private static void initMember(final ApplicationFeatureId feature, final String fullyQualifiedName) {
+        final int i = fullyQualifiedName.lastIndexOf("#");
+        if(i == -1) {
+            throw new IllegalArgumentException("Malformed, expected a '#': " + fullyQualifiedName);
+        }
+        final String className = fullyQualifiedName.substring(0, i);
+        final String memberName = fullyQualifiedName.substring(i+1);
+        initType(feature, className);
+        feature.setMemberName(memberName);
     }
     
     // -- CONSTRUCTOR
@@ -157,18 +184,27 @@ implements
 
     // -- PROPERTIES
     
-    @Getter ApplicationFeatureSort sort;
+    @Getter final @NonNull ApplicationFeatureSort sort;
     
     /**
      * The {@link ApplicationFeatureId id} of the member's class.
      */
     public ApplicationFeatureId getParentClassId() {
-        ApplicationFeatureSort.ensureMember(this);
-        final String classFqn = this.getNamespace() + "." + getTypeSimpleName();
-        return newType(classFqn);
+        _Assert.assertTrue(sort.isMember());
+        final String logicalTypeName = this.getNamespace() + "." + getTypeSimpleName();
+        return newType(logicalTypeName);
     }
     
     // -- PROPERTIES - NON UI
+    
+    @Programmatic 
+    @Getter @Setter private String namespace;
+
+    @Programmatic 
+    @Getter @Setter private String typeSimpleName;
+
+    @Programmatic 
+    @Getter @Setter private String memberName;
 
     @Programmatic
     public String getFullyQualifiedName() {
@@ -198,35 +234,24 @@ implements
         return buf.toString();
     }
 
-    @Programmatic 
-    @Getter @Setter private String namespace;
-
-    @Programmatic 
-    @Getter @Setter private String typeSimpleName;
-
-    @Programmatic 
-    @Getter @Setter private String memberName;
-
     /**
      * The {@link ApplicationFeatureId id} of the parent package of this
      * class or package.
      */
     @Programmatic
     public ApplicationFeatureId getParentPackageId() {
-        ApplicationFeatureSort.ensurePackageOrClass(this);
+        
+        _Assert.assertFalse(sort.isMember());
 
-        if(sort == ApplicationFeatureSort.TYPE) {
+        if(sort.isType()) {
             return ApplicationFeatureId.newNamespace(getNamespace());
         } else {
-            final String packageName = getNamespace(); // eg aaa.bbb.ccc
-
-            if(!packageName.contains(".")) {
+            val namespace = getNamespace(); // eg aaa.bbb.ccc
+            if(!namespace.contains(".")) {
                 return null; // parent is root
             }
-
-            final int cutOffPos = packageName.lastIndexOf('.');
-            final String parentPackageName = packageName.substring(0, cutOffPos);
-
+            final int cutOffPos = namespace.lastIndexOf('.');
+            final String parentPackageName = namespace.substring(0, cutOffPos);
             return newNamespace(parentPackageName);
         }
     }
