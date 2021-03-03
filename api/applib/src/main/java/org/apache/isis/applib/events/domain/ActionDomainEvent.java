@@ -29,16 +29,19 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * Subclass of {@link AbstractDomainEvent} for actions.
+ * Fired whenever the framework interacts with a domain object's action.
  *
  * <p>
- * The class has a number of responsibilities (in addition to those it inherits):
+ * This is the specialization of {@link AbstractDomainEvent}, for actions,
+ * which should then be further subclassed by domain application.
+ * </p>
+ *
+ * <p>
+ * The class has a number of responsibilities (in addition to those it
+ * inherits):
  * </p>
  *
  * <ul>
- *     <li>
- *          capture the target object being interacted with
- *     </li>
  *     <li>
  *          capture the arguments for each of the action's parameters
  *     </li>
@@ -49,8 +52,8 @@ import lombok.Setter;
  * </ul>
  *
  * <p>
- * The class itself is instantiated automatically by the framework whenever
- * interacting with a rendered object's action.
+ * The class itself is instantiated automatically by the framework using a
+ * no-arg constructor; fields are set reflectively.
  * </p>
  *
  * @since 1.x {@index}
@@ -63,7 +66,7 @@ public abstract class ActionDomainEvent<S> extends AbstractDomainEvent<S> {
      *
      * <p>
      * Whether this raises an event or not depends upon the
-     * <tt>isis.core.meta-model.annotation.action.domain-event.post-for-default</tt>
+     * <tt>isis.applib.annotation.action.domain-event.post-for-default</tt>
      * configuration property.
      * </p>
      */

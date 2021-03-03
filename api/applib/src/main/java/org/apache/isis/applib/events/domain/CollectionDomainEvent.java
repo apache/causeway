@@ -24,11 +24,16 @@ import org.apache.isis.applib.util.ToString;
 import lombok.Getter;
 
 /**
- * Subclass of {@link AbstractDomainEvent} for collections.
+ * Fired whenever the framework interacts with a domain object's collection.
  *
  * <p>
- * The class itself is instantiated automatically by the framework whenever
- * interacting with a rendered object's collection.
+ * This is the specialization of {@link AbstractDomainEvent}, for collections,
+ *  * which should then be further subclassed by domain application. .
+ * </p>
+ *
+ * <p>
+ * The class itself is instantiated automatically by the framework using a
+ * no-arg constructor; fields are set reflectively.
  * </p>
  *
  * @since 1.x {@index}
@@ -42,7 +47,7 @@ public abstract class CollectionDomainEvent<S,T> extends AbstractDomainEvent<S> 
      *
      * <p>
      * Whether this raises an event or not depends upon the
-     * <tt>isis.core.meta-model.annotation.collection.domain-event.post-for-default</tt>
+     * <tt>isis.applib.annotation.collection.domain-event.post-for-default</tt>
      * configuration property.
      * </p>
      */
