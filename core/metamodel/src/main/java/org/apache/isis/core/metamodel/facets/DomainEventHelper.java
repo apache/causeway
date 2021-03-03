@@ -67,7 +67,7 @@ public class DomainEventHelper {
     private final MetamodelEventService metamodelEventService;
 
     // -- postEventForAction
-    
+
     // variant using eventType and no existing event
     public ActionDomainEvent<?> postEventForAction(
             final AbstractDomainEvent.Phase phase,
@@ -77,12 +77,12 @@ public class DomainEventHelper {
             final InteractionHead head,
             final Can<ManagedObject> argumentAdapters,
             final ManagedObject resultAdapter) {
-        
-        return postEventForAction(phase, uncheckedCast(eventType), /*existingEvent*/null, 
-                objectAction, identified, 
+
+        return postEventForAction(phase, uncheckedCast(eventType), /*existingEvent*/null,
+                objectAction, identified,
                 head, argumentAdapters, resultAdapter);
     }
-    
+
     // variant using existing event and not eventType (is derived from event)
     public ActionDomainEvent<?> postEventForAction(
             final AbstractDomainEvent.Phase phase,
@@ -92,9 +92,9 @@ public class DomainEventHelper {
             final InteractionHead head,
             final Can<ManagedObject> argumentAdapters,
             final ManagedObject resultAdapter) {
-        
-        return postEventForAction(phase, 
-                uncheckedCast(existingEvent.getClass()), existingEvent, objectAction, identified, 
+
+        return postEventForAction(phase,
+                uncheckedCast(existingEvent.getClass()), existingEvent, objectAction, identified,
                 head, argumentAdapters, resultAdapter);
     }
 
@@ -107,7 +107,7 @@ public class DomainEventHelper {
             final InteractionHead head,
             final Can<ManagedObject> argumentAdapters,
             final ManagedObject resultAdapter) {
-        
+
         _Assert.assertTypeIsInstanceOf(eventType, ActionDomainEvent.class);
 
         try {
@@ -166,7 +166,7 @@ public class DomainEventHelper {
             final Class<? extends ActionDomainEvent<S>> type,
             final Identifier identifier,
             final S source,
-            final Object... arguments) 
+            final Object... arguments)
         throws IllegalArgumentException,
             NoSuchMethodException, SecurityException {
 
@@ -174,19 +174,19 @@ public class DomainEventHelper {
 
         val noArgConstructor = constructors.filter(paramCount(0)).getFirst().orElse(null);
         if(noArgConstructor!=null) {
-            
+
             final Object event = invokeConstructor(noArgConstructor);
             final ActionDomainEvent<S> ade = uncheckedCast(event);
-            
+
             ade.initSource(source);
             ade.setIdentifier(identifier);
             ade.setArguments(asList(arguments));
             return ade;
         }
-        
+
 
         // else
-        
+
         val updateEventConstructor = constructors
                 .filter(paramCount(3)
                         .and(paramAssignableFrom(0, source.getClass()))
@@ -195,12 +195,12 @@ public class DomainEventHelper {
                         )
                 .getFirst()
                 .orElse(null);
-        
+
         if(updateEventConstructor!=null) {
             val event = invokeConstructor(updateEventConstructor, source, identifier, arguments);
-            return uncheckedCast(event);    
+            return uncheckedCast(event);
         }
-        
+
         throw new NoSuchMethodException(type.getName()+".<init>(? super " + source.getClass().getName() + ", " + Identifier.class.getName() + ", [Ljava.lang.Object;)");
     }
 
@@ -221,7 +221,7 @@ public class DomainEventHelper {
             final InteractionHead head,
             final T oldValue,
             final T newValue) {
-        
+
         _Assert.assertTypeIsInstanceOf(eventType, PropertyDomainEvent.class);
 
         try {
@@ -232,10 +232,10 @@ public class DomainEventHelper {
                 event = existingEvent;
             } else {
                 // all other phases, create a new event
-                
+
                 final S source = uncheckedCast(UnwrapUtil.single(head.getTarget()));
                 final Identifier identifier = identified.getIdentifier();
-                
+
                 event = newPropertyDomainEvent(eventType, identifier, source, oldValue, newValue);
 
                 // copy over if have
@@ -271,7 +271,7 @@ public class DomainEventHelper {
         val constructors = _Reflect.getPublicConstructors(type);
 
         val noArgConstructors = constructors.filter(paramCount(0));
-        
+
         for (val constructor : noArgConstructors) {
             final Object event = invokeConstructor(constructor);
             final PropertyDomainEvent<S, T> pde = uncheckedCast(event);
@@ -292,7 +292,7 @@ public class DomainEventHelper {
                         .and(paramAssignableFromValue(2, oldValue))
                         .and(paramAssignableFromValue(3, newValue))
                         );
-        
+
         for (val constructor : updateEventConstructors) {
             val event = invokeConstructor(constructor, source, identifier, oldValue, newValue);
             return uncheckedCast(event);
@@ -308,14 +308,13 @@ public class DomainEventHelper {
     public <S, T> CollectionDomainEvent<S, T> postEventForCollection(
             AbstractDomainEvent.Phase phase,
             final Class<? extends CollectionDomainEvent<S, T>> eventType,
-                    final CollectionDomainEvent<S, T> existingEvent,
-                    final IdentifiedHolder identified,
-                    final InteractionHead head,
-                    final CollectionDomainEvent.Of of,
-                    final T reference) {
-        
+            final CollectionDomainEvent<S, T> existingEvent,
+            final IdentifiedHolder identified,
+            final InteractionHead head,
+            final T reference) {
+
         _Assert.assertTypeIsInstanceOf(eventType, CollectionDomainEvent.class);
-        
+
         try {
             final CollectionDomainEvent<S, T> event;
             if (existingEvent != null && phase.isExecuted()) {
@@ -325,7 +324,7 @@ public class DomainEventHelper {
                 // all other phases, create a new event
                 final S source = uncheckedCast(UnwrapUtil.single(head.getTarget()));
                 final Identifier identifier = identified.getIdentifier();
-                event = newCollectionDomainEvent(eventType, phase, identifier, source, of, reference);
+                event = newCollectionDomainEvent(eventType, phase, identifier, source, reference);
 
                 // copy over if have
                 head.getMixedIn()
@@ -344,72 +343,49 @@ public class DomainEventHelper {
 
     <S, T> CollectionDomainEvent<S, T> newCollectionDomainEvent(
             final Class<? extends CollectionDomainEvent<S, T>> type,
-                    final AbstractDomainEvent.Phase phase,
-                    final Identifier identifier,
-                    final S source,
-                    final CollectionDomainEvent.Of of,
-                    final T value)
-                            throws NoSuchMethodException, SecurityException, InstantiationException,
-                            IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+            final AbstractDomainEvent.Phase phase,
+            final Identifier identifier,
+            final S source,
+            final T value)
+            throws NoSuchMethodException, SecurityException,
+            IllegalArgumentException {
 
         val constructors = _Reflect.getPublicConstructors(type);
 
         val noArgConstructors = constructors.filter(paramCount(0));
-        
+
         for (val constructor : noArgConstructors) {
             final Object event = invokeConstructor(constructor);
             final CollectionDomainEvent<S, T> cde = uncheckedCast(event);
 
             cde.initSource(source);
             cde.setIdentifier(identifier);
-            cde.setOf(of);
             cde.setValue(value);
             return cde;
         }
-        
+
         // else
         // search for constructor accepting source, identifier, type, value
         val updateEventConstructors = constructors
                 .filter(paramCount(4)
                         .and(paramAssignableFrom(0, source.getClass()))
                         .and(paramAssignableFrom(1, Identifier.class))
-                        .and(paramAssignableFrom(2, CollectionDomainEvent.Of.class))
-                        .and(paramAssignableFromValue(3, value))
+                        .and(paramAssignableFromValue(2, value))
                         );
-        
+
         for (val constructor : updateEventConstructors) {
-            val event = invokeConstructor(constructor, source, identifier, of, value);
+            val event = invokeConstructor(constructor, source, identifier, value);
             return uncheckedCast(event);
         }
-        
-        // else
 
-        if(phase == AbstractDomainEvent.Phase.EXECUTED) {
-            if(of == CollectionDomainEvent.Of.ADD_TO 
-                    || of == CollectionDomainEvent.Of.REMOVE_FROM) {
-                // support for annotations @PostsCollectionAddedTo and @PostsCollectionRemovedFrom:
-                // search for constructor accepting source, identifier, value
-                val eventConstructors = constructors
-                        .filter(paramCount(3)
-                                .and(paramAssignableFrom(0, source.getClass()))
-                                .and(paramAssignableFrom(1, Identifier.class))
-                                .and(paramAssignableFromValue(2, value))
-                                );
-                for (val constructor : eventConstructors) {
-                    val event = invokeConstructor(constructor, source, identifier, value);
-                    return uncheckedCast(event);
-                }
-            }
-        }
-        
         // else
         throw new NoSuchMethodException(type.getName()+".<init>(? super " + source.getClass().getName() + ", " + Identifier.class.getName() + ", java.lang.Object)");
     }
 
     private static <T> T invokeConstructor(
-            @NonNull final Constructor<T> constructor, 
+            @NonNull final Constructor<T> constructor,
             final Object... args){
-        
+
         try {
             return constructor.newInstance(args);
         } catch (InstantiationException | IllegalAccessException | IllegalArgumentException
@@ -418,6 +394,6 @@ public class DomainEventHelper {
                     "failed to invoke constructor %s", constructor, e);
         }
     }
-    
+
 
 }

@@ -93,46 +93,12 @@ public abstract class CollectionDomainEvent<S,T> extends AbstractDomainEvent<S> 
     @Getter
     private T value;
 
-    public static enum Of {
-        /**
-         * The collection is being accessed
-         * ({@link AbstractDomainEvent.Phase#HIDE hide} and
-         * {@link AbstractDomainEvent.Phase#DISABLE disable}) checks.
-         */
-        ACCESS,
-
-        /**
-         * The collection is being added to
-         * ({@link AbstractDomainEvent.Phase#VALIDATE validity} check and
-         * {@link AbstractDomainEvent.Phase#EXECUTED execution}).
-         */
-        ADD_TO,
-
-        /**
-         * The collection is being removed from
-         * ({@link AbstractDomainEvent.Phase#VALIDATE validity} check and
-         * {@link AbstractDomainEvent.Phase#EXECUTED execution}).
-         */
-        REMOVE_FROM
-
-    }
-
-    @Getter
-    private Of of;
 
     /**
      * Not API, set by the framework.
      */
     public void setValue(T value) {
         this.value = value;
-    }
-    /**
-     * Not API; updates from {@link Of#ACCESS} to either {@link Of#ADD_TO}
-     * or {@link Of#REMOVE_FROM} when hits the
-     * {@link AbstractDomainEvent.Phase#VALIDATE validation phase}.
-     */
-    public void setOf(Of of) {
-        this.of = of;
     }
 
 
@@ -141,7 +107,6 @@ public abstract class CollectionDomainEvent<S,T> extends AbstractDomainEvent<S> 
     toString("source", CollectionDomainEvent::getSource)
     .thenToString("identifier", CollectionDomainEvent::getIdentifier)
     .thenToString("eventPhase", CollectionDomainEvent::getEventPhase)
-    .thenToString("of", CollectionDomainEvent::getOf)
     .thenToString("value", CollectionDomainEvent::getValue)
     ;
 
