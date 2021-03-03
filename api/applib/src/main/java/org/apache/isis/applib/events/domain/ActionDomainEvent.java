@@ -20,6 +20,7 @@ package org.apache.isis.applib.events.domain;
 
 import java.util.List;
 
+import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.applib.util.ToString;
@@ -28,47 +29,97 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
+ * Subclass of {@link AbstractDomainEvent} for actions.
+ *
+ * <p>
+ * The class has a number of responsibilities (in addition to those it inherits):
+ * </p>
+ *
+ * <ul>
+ *     <li>
+ *          capture the target object being interacted with
+ *     </li>
+ *     <li>
+ *          capture the arguments for each of the action's parameters
+ *     </li>
+ *     <li>
+ *          provide selected metadata about the action parameters from the
+ *          metamodel (names, types)
+ *     </li>
+ * </ul>
+ *
+ * <p>
+ * The class itself is instantiated automatically by the framework whenever
+ * interacting with a rendered object's action.
+ * </p>
+ *
  * @since 1.x {@index}
  */
 public abstract class ActionDomainEvent<S> extends AbstractDomainEvent<S> {
 
     /**
      * This class is the default for the
-     * {@link org.apache.isis.applib.annotation.Action#domainEvent()} annotation attribute.  Whether this
-     * raises an event or not depends upon the 
+     * {@link org.apache.isis.applib.annotation.Action#domainEvent()} annotation attribute.
+     *
+     * <p>
+     * Whether this raises an event or not depends upon the
      * <tt>isis.core.meta-model.annotation.action.domain-event.post-for-default</tt>
      * configuration property.
+     * </p>
      */
     public static class Default extends ActionDomainEvent<Object> {}
 
     /**
-     * Convenience class to use indicating that an event should <i>not</i> be posted 
-     * (irrespective of the configuration property setting for the {@link Default} event.
+     * Convenience class to use indicating that an event should <i>not</i> be
+     * posted (irrespective of the configuration property setting for the
+     * {@link Default} event.
      */
     public static class Noop extends ActionDomainEvent<Object> {}
 
     /**
-     * Convenience class meaning that an event <i>should</i> be posted (irrespective of the configuration
-     * property setting for the {@link Default} event..
+     * Convenience class meaning that an event <i>should</i> be posted
+     * (irrespective of the configuration property setting for the
+     * {@link Default} event..
      */
     public static class Doop extends ActionDomainEvent<Object> {}
 
     /**
-     * If used then the framework will set state via (non-API) setters.
-     *
-     * <p>
-     *     Recommended because it reduces the amount of boilerplate in the domain object classes.
-     * </p>
+     * Subtypes can define a no-arg constructor; the framework sets state
+     * via (non-API) setters.
      */
     public ActionDomainEvent() {
     }
 
+    /**
+     * The semantics of the action being invoked.
+     *
+     * <p>
+     *     Copied over from {@link Action#semantics()}
+     * </p>
+     */
     @Getter
     private SemanticsOf semantics;
 
+    /**
+     * The names of the parameters of the actions.
+     *
+     * @see #getParameterTypes()
+     * @see #getArguments()
+     */
     @Getter
     private List<String> parameterNames;
 
+    /**
+     * The types of the parameters of the actions.
+     *
+     * <p>
+     *     The {@link #getArguments() arguments} will be castable to the
+     *     parameter types here.
+     * </p>
+     *
+     * @see #getParameterNames()
+     * @see #getArguments()
+     */
     @Getter
     private List<Class<?>> parameterTypes;
 
@@ -79,17 +130,23 @@ public abstract class ActionDomainEvent<S> extends AbstractDomainEvent<S> {
     private Object mixedIn;
 
     /**
-     * The arguments being used to invoke the action;
-     * populated at {@link AbstractDomainEvent.Phase#VALIDATE} and subsequent phases
-     * (but null for {@link AbstractDomainEvent.Phase#HIDE hidden} and 
+     * The arguments being used to invoke the action.
+     *
+     * <p>
+     * Populated at {@link AbstractDomainEvent.Phase#VALIDATE} and subsequent
+     * phases (but null for {@link AbstractDomainEvent.Phase#HIDE hidden} and
      * {@link AbstractDomainEvent.Phase#DISABLE disable} phases).
+     * </p>
      *
      * <p>
      *     The argument values can also be modified by event handlers
-     *     during the {@link AbstractDomainEvent.Phase#EXECUTING} phase. The new value must be
-     *     the same type as the expected value; the framework performs
-     *     no sanity checks.
+     *     during the {@link AbstractDomainEvent.Phase#EXECUTING} phase. The
+     *     new value must be the same type as the expected value; the framework
+     *     performs no sanity checks.
      * </p>
+     *
+     * @see #getParameterNames()
+     * @see #getParameterTypes()
      */
     @Getter @Setter
     private List<Object> arguments;
@@ -108,33 +165,35 @@ public abstract class ActionDomainEvent<S> extends AbstractDomainEvent<S> {
     /**
      * Set by the framework.
      *
-     * Event subscribers can replace the value with some other value if they wish, though only in the
-     * {@link AbstractDomainEvent.Phase#EXECUTED} phase.
+     * <p>
+     * Event subscribers can replace the value with some other value if they
+     * wish, though only in the {@link AbstractDomainEvent.Phase#EXECUTED} phase.
+     * </p>
      */
     public void setReturnValue(final Object returnValue) {
         this.returnValue = returnValue;
     }
 
     /**
-     * Not API - set by the framework.
+     * @apiNote : NOT API, set by the framework
      */
     public void setSemantics(SemanticsOf semantics) {
         this.semantics = semantics;
     }
     /**
-     * Not API - set by the framework.
+     * @apiNote : NOT API, set by the framework
      */
     public void setParameterNames(final List<String> parameterNames) {
         this.parameterNames = parameterNames;
     }
     /**
-     * Not API - set by the framework.
+     * @apiNote : NOT API, set by the framework
      */
     public void setParameterTypes(final List<Class<?>> parameterTypes) {
         this.parameterTypes = parameterTypes;
     }
     /**
-     * Not API - set by the framework.
+     * @apiNote : NOT API, set by the framework
      */
     @Override
     public void setMixedIn(final Object mixedIn) {

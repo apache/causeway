@@ -5,18 +5,6 @@
 :page-partial:
 
 
-Subclass of xref:applib-classes:events.adoc#AbstractDomainEvent[AbstractDomainEvent] for collections.
-
-The class has a couple of responsibilities (in addition to those it inherits):
-
-* capture the target object being interacted with
-
-* indicate whether the interaction is to add or remove an object from the collection (or simply to indicate that the collection is being accessed/read)
-
-* capture the object reference being added or removed
-
-
-The class itself is instantiated automatically by the framework whenever interacting with a rendered object's collection.
 
 == API
 

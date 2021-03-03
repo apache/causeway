@@ -131,12 +131,10 @@ Apache Isis provides the xref:testing:fakedata:about.adoc[Fake Data] library to 
 Using fake data works very well with fixture scripts; the fixture script can invoke the business action with sensible (fake/random) defaults, and only require that the essential information is passed into it by the test.
 ====
 
-
 == Feature Toggles
 
 Writing automated tests is just good development practice.
-Also good practice is developing on the mainline (master, trunk); so that your continuous integration system really is integrating all code.
-Said another way: link:http://martinfowler.com/bliki/FeatureBranch.html[don't use branches]!
+Also good practice is developing on the mainline (main, trunk); so that your continuous integration system really is integrating all code.
 
 Sometimes, though, a feature will take longer to implement than your iteration cycle.
 In such a case, how do you use continuous integration to keep everyone working on the mainline without revealing a half-implemented feature on your releases?

@@ -24,37 +24,59 @@ import org.apache.isis.applib.util.ToString;
 import lombok.Getter;
 
 /**
+ * Subclass of {@link AbstractDomainEvent} for collections.
+ *
+ * <p>
+ * The class has a couple of responsibilities (in addition to those it
+ * inherits):
+ * </p>
+ *
+ * <ul>
+ *     <li>
+ *      capture the target object being interacted with
+ *     </li>
+ * </ul>
+ *
+ * <p>
+ * The class itself is instantiated automatically by the framework whenever
+ * interacting with a rendered object's collection.
+ * </p>
+ *
  * @since 1.x {@index}
  */
 public abstract class CollectionDomainEvent<S,T> extends AbstractDomainEvent<S> {
 
     /**
      * This class is the default for the
-     * {@link org.apache.isis.applib.annotation.Collection#domainEvent()} annotation attribute.  Whether this
-     * raises an event or not depends upon the <tt>isis.core.meta-model.annotation.collection.domain-event.post-for-default</tt>
+     * {@link org.apache.isis.applib.annotation.Collection#domainEvent()}
+     * annotation attribute.
+     *
+     * <p>
+     * Whether this raises an event or not depends upon the
+     * <tt>isis.core.meta-model.annotation.collection.domain-event.post-for-default</tt>
      * configuration property.
+     * </p>
      */
     public static class Default extends CollectionDomainEvent<Object, Object> { }
 
     /**
-     * Convenience class to use indicating that an event should <i>not</i> be posted (irrespective of the configuration
-     * property setting for the {@link Default} event.
+     * Convenience class to use indicating that an event should <i>not</i> be
+     * posted (irrespective of the configuration property setting for the
+     * {@link Default} event.
      */
     public static class Noop extends CollectionDomainEvent<Object, Object> {}
 
     /**
-     * Convenience class meaning that an event <i>should</i> be posted (irrespective of the configuration
-     * property setting for the {@link Default} event..
+     * Convenience class meaning that an event <i>should</i> be posted
+     * (irrespective of the configuration property setting for the
+     * {@link Default} event.
      */
     public static class Doop extends CollectionDomainEvent<Object, Object> {}
 
 
     /**
-     * If used then the framework will set state via (non-API) setters.
-     *
-     * <p>
-     *     Recommended because it reduces the amount of boilerplate in the domain object classes.
-     * </p>
+     * Subtypes can define a no-arg constructor; the framework sets state
+     * via (non-API) setters.
      */
     public CollectionDomainEvent() {
     }
@@ -62,10 +84,10 @@ public abstract class CollectionDomainEvent<S,T> extends AbstractDomainEvent<S> 
 
 
     /**
-     * The proposed reference to either add or remove (per {@link #getOf()}), populated at 
+     * The proposed reference to either add or remove (per {@link #getOf()}), populated at
      * {@link org.apache.isis.applib.events.domain.AbstractDomainEvent.Phase#VALIDATE}
-     * and subsequent phases (is null for 
-     * {@link org.apache.isis.applib.events.domain.AbstractDomainEvent.Phase#HIDE hidden} 
+     * and subsequent phases (is null for
+     * {@link org.apache.isis.applib.events.domain.AbstractDomainEvent.Phase#HIDE hidden}
      * and {@link org.apache.isis.applib.events.domain.AbstractDomainEvent.Phase#DISABLE disable} phases).
      */
     @Getter
@@ -105,7 +127,7 @@ public abstract class CollectionDomainEvent<S,T> extends AbstractDomainEvent<S> 
         this.value = value;
     }
     /**
-     * Not API; updates from {@link Of#ACCESS} to either {@link Of#ADD_TO} 
+     * Not API; updates from {@link Of#ACCESS} to either {@link Of#ADD_TO}
      * or {@link Of#REMOVE_FROM} when hits the
      * {@link AbstractDomainEvent.Phase#VALIDATE validation phase}.
      */

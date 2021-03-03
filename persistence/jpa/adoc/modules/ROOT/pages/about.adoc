@@ -4,5 +4,5 @@
 
 :page-toc: ~
 
-WARNING: TODO: v2 - in development.
+WARNING: TODO: v2 - to document.
 

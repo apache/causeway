@@ -50,11 +50,8 @@ public abstract class PropertyDomainEvent<S,T> extends AbstractDomainEvent<S> {
     public static class Doop extends PropertyDomainEvent<Object, Object> {}
 
     /**
-     * If used then the framework will set state via (non-API) setters.
-     *
-     * <p>
-     *     Recommended because it reduces the amount of boilerplate in the domain object classes.
-     * </p>
+     * Subtypes can define a no-arg constructor; the framework sets state
+     * via (non-API) setters.
      */
     public PropertyDomainEvent() {
     }

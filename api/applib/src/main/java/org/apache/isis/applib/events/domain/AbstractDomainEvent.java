@@ -21,6 +21,8 @@ package org.apache.isis.applib.events.domain;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.annotation.Nullable;
+
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.events.EventObjectBase;
 import org.apache.isis.applib.services.i18n.TranslatableString;
@@ -31,6 +33,24 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
 import lombok.Getter;
 
 /**
+ * Superclass for all domain events that are raised by the framework when
+ * interacting with actions, properties or collections.
+ *
+ * <p>
+ *     The main purpose of the class is to define the protocol by which
+ *     subscribers can influence an interaction (eg hide a collection,
+ *     disable a property, validate action arguments).
+ * </p>
+ *
+ * <p>
+ *     The class also provides a simple mechanism to allow adhoc sharing of
+ *     user data between different phases.
+ * </p>
+ *
+ * @see ActionDomainEvent
+ * @see PropertyDomainEvent
+ * @see CollectionDomainEvent
+ *
  * @since 1.x {@index}
  */
 public abstract class AbstractDomainEvent<S> extends EventObjectBase<S> {
@@ -55,7 +75,31 @@ public abstract class AbstractDomainEvent<S> extends EventObjectBase<S> {
     }
 
     /**
-     * Populated only for mixins; holds the underlying domain object that the mixin contributes to.
+     * The domain object raising this event.
+     *
+     * <p>
+     * For a "regular" action, property or collection then this will be the
+     * target domain object.
+     * </p>
+     *
+     * <p>
+     *     But for a "mixin" action, this will be an instance of the mixin
+     *     itself.
+     * </p>
+     */
+    @Nullable
+    @Override
+    public S getSource() {
+        return super.getSource();
+    }
+
+    /**
+     * Populated only for mixins; holds the underlying domain object that the
+     * mixin contributes to.
+     *
+     * <p>
+     * For a "regular" action, this will return <code>null</code>.
+     * </p>
      */
     @Getter
     private Object mixedIn;
@@ -69,7 +113,8 @@ public abstract class AbstractDomainEvent<S> extends EventObjectBase<S> {
 
 
     /**
-     * The subject of the event, which will be either the {@link #getSource() source} for a regular action, or the
+     * The subject of the event, which will be either the
+     * {@link #getSource() source} for a regular action, or the
      * {@link #getMixedIn() mixed-in} domain object for a mixin.
      */
     public Object getSubject() {
@@ -77,6 +122,10 @@ public abstract class AbstractDomainEvent<S> extends EventObjectBase<S> {
         return mixedIn != null ? mixedIn : getSource();
     }
 
+    /**
+     *
+     * {@index}
+     */
     public enum Phase {
 
         HIDE,
@@ -132,7 +181,8 @@ public abstract class AbstractDomainEvent<S> extends EventObjectBase<S> {
     }
 
     /**
-     * If the no-arg constructor is used, then the framework will populate this field reflectively.
+     * Identifier of the action, property or collection being interacted with.
+     *
      */
     @Getter
     private Identifier identifier;
@@ -144,21 +194,25 @@ public abstract class AbstractDomainEvent<S> extends EventObjectBase<S> {
         this.identifier = identifier;
     }
 
+    /**
+     * Used by the framework to determine if the member should be hidden (not
+     * rendered).
+     */
     @Getter
     private boolean hidden;
 
     /**
+     * API for subscribers to hide the member.
+     *
      * @see #veto(String, Object...)
      */
     public void hide() {
-
         this.hidden = true;
-
-        // ...
     }
 
     /**
-     * If {@link #isDisabled() disabled}, then either this method returns non-null or {@link #getDisabledReasonTranslatable()} will.
+     * If {@link #isDisabled() disabled}, then either this method returns
+     * non-null or {@link #getDisabledReasonTranslatable()} will.
      */
     @Getter
     private String disabledReason;
@@ -175,36 +229,47 @@ public abstract class AbstractDomainEvent<S> extends EventObjectBase<S> {
 
 
     /**
+     * API for subscribers to disable the member, specifying the reason why.
+     *
      * @see #disable(org.apache.isis.applib.services.i18n.TranslatableString)
      * @see #veto(String, Object...)
      */
     public void disable(final String reason) {
-
         this.disabledReason = reason;
-
-        // ...
     }
 
     /**
+     * API for subscribers to disable the member, specifying the reason why as
+     * a {@link TranslatableString}.
+     *
      * @see #disable(java.lang.String)
      * @see #veto(org.apache.isis.applib.services.i18n.TranslatableString)
      */
     public void disable(final TranslatableString reason) {
-
         this.disabledReasonTranslatable = reason;
-
-        // ...
     }
 
 
     /**
-     * If {@link #isInvalid() invalid}, then either this method returns non-null or {@link #getInvalidityReasonTranslatable()} will.
+     * Used by the framework to determine whether the interaction is invalid
+     * and should be blocked (eg pressing OK shows message).
+     *
+     * <p>
+     * If {@link #isInvalid() invalid}, then either this method returns
+     * non-null or {@link #getInvalidityReasonTranslatable()} will.
+     * </p>
      */
     @Getter
     private String invalidityReason;
 
     /**
-     * If {@link #isInvalid() invalid}, then either this method returns non-null or {@link #getInvalidityReason()} will.
+     * Used by the framework to determine whether the interaction is invalid
+     * and should be blocked (eg pressing OK shows message).
+     *
+     * <p>
+     * If {@link #isInvalid() invalid}, then either this method returns non-null
+     * or {@link #getInvalidityReason()} will.
+     * </p>
      */
     @Getter
     private TranslatableString invalidityReasonTranslatable;
@@ -214,36 +279,38 @@ public abstract class AbstractDomainEvent<S> extends EventObjectBase<S> {
     }
 
     /**
+     * API for subscribers to invalidate an interaction, eg invalid arguments
+     * to an action.
+     *
      * @see #invalidate(org.apache.isis.applib.services.i18n.TranslatableString)
      * @see #veto(String, Object...)
      */
     public void invalidate(final String reason) {
-
         this.invalidityReason = reason;
-
-        // ...
     }
 
     /**
+     * API for subscribers to invalidate an interaction, specifying the reason
+     * as a {@link TranslatableString}.
+     *
      * @see #invalidate(String)
      * @see #veto(org.apache.isis.applib.services.i18n.TranslatableString)
      */
     public void invalidate(final TranslatableString reason) {
-
         this.invalidityReasonTranslatable = reason;
-
-        // ...
     }
 
     /**
-     * Use instead of {@link #hide()}, {@link #disable(String)} and {@link #invalidate(String)}; just delegates to
+     * Use instead of {@link #hide()}, {@link #disable(String)} and
+     * {@link #invalidate(String)}; just delegates to
      * appropriate vetoing method based upon the {@link #getEventPhase() phase}.
      *
      * <p>
      *     If hiding, just pass <tt>null</tt> for the parameter.
      * </p>
      *
-     * @param reason - reason why the interaction is being invalidated (ignored if in {@link org.apache.isis.applib.events.domain.AbstractDomainEvent.Phase#HIDE hide} phase).
+     * @param reason - reason why the interaction is being invalidated (ignored
+     *              if in {@link org.apache.isis.applib.events.domain.AbstractDomainEvent.Phase#HIDE hide} phase).
      * @param args
      *
      * @see #veto(org.apache.isis.applib.services.i18n.TranslatableString)
@@ -272,8 +339,6 @@ public abstract class AbstractDomainEvent<S> extends EventObjectBase<S> {
         default:
             throw _Exceptions.unmatchedCase(getEventPhase());
         }
-
-        // ...
     }
 
     /**
@@ -306,8 +371,6 @@ public abstract class AbstractDomainEvent<S> extends EventObjectBase<S> {
         default:
             throw _Exceptions.unmatchedCase(getEventPhase());
         }
-
-        // ...
     }
 
     /**
@@ -323,6 +386,10 @@ public abstract class AbstractDomainEvent<S> extends EventObjectBase<S> {
     }
 
     /**
+     * Mechanism to allow subscribers to share arbitrary information between
+     * phases. One event instance is used for both the hide and disable phases,
+     * and a different event instance is shared between validate/pre-execute/post-execute.
+     *
      * Set user-data, for the use of a subsequent {@link #getEventPhase() phase}.
      */
     public void put(Object key, Object value) {

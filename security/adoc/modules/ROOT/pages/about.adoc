@@ -70,11 +70,11 @@ The framework provides a "bypass" implementation, useful for quick-n-dirty proto
 
 === KeyCloak
 
-WARNING: TODO: v2 - not yet documented.
+WARNING: TODO: v2 - to document.
 
 === Spring
 
-WARNING: TODO: v2 - WIP, not yet documented.
+WARNING: TODO: v2 - WIP, to document
 
 == SecMan
 

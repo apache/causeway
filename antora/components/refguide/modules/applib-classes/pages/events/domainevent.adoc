@@ -7,54 +7,43 @@
 This section catalogues the various domain event classes defined by Apache Isis.
 
 These events are broadcast on the xref:refguide:applib:index/services/eventbus/EventBusService.adoc[EventBusService].
-The domain events are broadcast as a result of being specified in the xref:refguide:applib:index/annotation/Action.adoc#domainEvent[@Action#domainEvent()],  xref:refguide:applib:index/annotation/Property.adoc#domainEvent[@Property#domainEvent()] or xref:refguide:applib:index/annotation/Collection.adoc#domainEvent[@Collection#domainEvent()] attributes.
+The domain events are broadcast as a result of being specified in the ,   or xref:refguide:applib:index/annotation/Collection.adoc#domainEvent[@Collection#domainEvent()] attributes.
 
 They are listed in the table below.
 
 .Domain Event Classes
-[cols="1a,2a,2a", options="header"]
+[cols="1a,2a,2a,2a", options="header"]
 |===
 
 |API
-|Implementation
-|Notes
+|Raised by
+|Fallback +
+Implementation
+|Published when
 
 
-|xref:applib-classes:events.adoc#AbstractDomainEvent[`o.a.i.applib.` +
-`AbstractDomainEvent`]
+|xref:refguide:applib:index/events/domain/AbstractDomainEvent.adoc[AbstractDomainEvent]
+|n/a
 |(abstract class)
 |Superclass of the other domain events, listed below in this table.
 
 
-|xref:applib-classes:events.adoc#ActionDomainEvent[`o.a.i.applib.` +
-`ActionDomainEvent`]
-|(abstract class). +
-`ActionDomainEvent.Default` is the concrete implementation used if no `@Action#domainEvent` attribute is specified
-|Broadcast whenever there is an interaction (hide/disable/validate/pre-execute/post-execute) with an object's action.
+|xref:refguide:applib:index/events/domain/ActionDomainEvent.adoc[ActionDomainEvent]
+|xref:refguide:applib:index/annotation/Action.adoc#domainEvent[@Action#domainEvent()]
+|`ActionDomainEvent.Default`
+|(hide/disable/validate/pre-execute/post-execute) with an object's action.
+
+|xref:refguide:applib:index/events/domain/CollectionDomainEvent.adoc[CollectionDomainEvent]
+|xref:refguide:applib:index/annotation/Collection.adoc#domainEvent[@Collection#domainEvent()]
+|`CollectionDomainEvent.Default`
+|hide an object's collection.
 
 
-|xref:applib-classes:events.adoc#CollectionDomainEvent[`o.a.i.applib.` +
-`CollectionDomainEvent`]
-|(abstract class). +
-`CollectionDomainEvent.Default` is the concrete implementation used if no `@Collection#domainEvent` attribute
-is specified.
-|Broadcast whenever there is an interaction (hide/disable/validate/access) with an object's collection.
-
-
-|xref:applib-classes:events.adoc#PropertyDomainEvent[`o.a.i.applib.` +
-`PropertyDomainEvent`]
-|(abstract class). +
-`PropertyDomainEvent.Default` is the concrete implementation used if no `@Propert#domainEvent` attribute is specified
-|Broadcast whenever there is an interaction (hide/disable/validate/access) with an object's property.
+|xref:refguide:applib:index/events/domain/PropertyDomainEvent.adoc[PropertyDomainEvent]
+|xref:refguide:applib:index/annotation/Property.adoc#domainEvent[@Property#domainEvent()]
+|`PropertyDomainEvent.Default`
+|hide/disable/validate/pre-edit/post-edit with an object's property.
 
 
 |===
 
-
-
-
-
-include::domainevent/AbstractDomainEvent.adoc[leveloffset=+1]
-include::domainevent/ActionDomainEvent.adoc[leveloffset=+1]
-include::domainevent/CollectionDomainEvent.adoc[leveloffset=+1]
-include::domainevent/PropertyDomainEvent.adoc[leveloffset=+1]
