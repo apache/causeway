@@ -28,6 +28,8 @@ import static java.util.Comparator.comparing;
 import static java.util.Comparator.naturalOrder;
 import static java.util.Comparator.nullsFirst;
 
+import javax.annotation.Nullable;
+
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.Value;
@@ -62,8 +64,8 @@ implements
 
     // -- CONSTANTS
 
-    public static final ApplicationFeatureId PACKAGE_DEFAULT = 
-            new ApplicationFeatureId(ApplicationFeatureType.PACKAGE, "default");
+    public static final ApplicationFeatureId NAMESPACE_DEFAULT = 
+            new ApplicationFeatureId(ApplicationFeatureType.NAMESPACE, "default");
 
     // -- FACTORY METHODS
 
@@ -72,7 +74,7 @@ implements
         val logicalTypeName = identifier.getLogicalTypeName();
         
         if(identifier.getType().isClass()) {
-            return newClass(logicalTypeName); 
+            return newType(logicalTypeName); 
         }
         if(identifier.getType().isPropertyOrCollection()) {
             return newMember(logicalTypeName, identifier.getMemberName());
@@ -83,46 +85,46 @@ implements
     
     public static ApplicationFeatureId newFeature(
             final ApplicationFeatureType featureType, 
-            final String fullyQualifiedName) {
+            final String qualifiedName) {
         
         switch (featureType) {
-        case PACKAGE:
-            return newPackage(fullyQualifiedName);
-        case CLASS:
-            return newClass(fullyQualifiedName);
+        case NAMESPACE:
+            return newNamespace(qualifiedName);
+        case TYPE:
+            return newType(qualifiedName);
         case MEMBER:
-            return newMember(fullyQualifiedName);
+            return newMember(qualifiedName);
         }
         throw new IllegalArgumentException("Unknown feature type " + featureType);
     }
 
     public static ApplicationFeatureId newFeature(
-            final String packageFqn, 
-            final String className,
-            final String memberName) {
-        if(className == null) {
-            return newPackage(packageFqn);
+            final @NonNull  String namespace, 
+            final @Nullable String logicalTypeSimpleName,
+            final @Nullable String memberName) {
+        if(logicalTypeSimpleName == null) {
+            return newNamespace(namespace);
         }
-        final String classFqn = packageFqn + "." + className;
+        val logicalTypeName = namespace + "." + logicalTypeSimpleName;
         if(memberName == null) {
-            return newClass(classFqn);
+            return newType(logicalTypeName);
         }
-        return newMember(classFqn, memberName);
+        return newMember(logicalTypeName, memberName);
     }
 
-    public static ApplicationFeatureId newPackage(final String packageFqn) {
-        final ApplicationFeatureId featureId = new ApplicationFeatureId(ApplicationFeatureType.PACKAGE);
-        featureId.setNamespace(packageFqn);
+    public static ApplicationFeatureId newNamespace(final String namespace) {
+        final ApplicationFeatureId featureId = new ApplicationFeatureId(ApplicationFeatureType.NAMESPACE);
+        featureId.setNamespace(namespace);
         return featureId;
     }
 
-    public static ApplicationFeatureId newClass(final String classFqn) {
-        return new ApplicationFeatureId(ApplicationFeatureType.CLASS, classFqn);
+    public static ApplicationFeatureId newType(final String logicalTypeName) {
+        return new ApplicationFeatureId(ApplicationFeatureType.TYPE, logicalTypeName);
     }
 
-    public static ApplicationFeatureId newMember(final String classFqn, final String memberName) {
+    public static ApplicationFeatureId newMember(final String logicalTypeName, final String memberName) {
         final ApplicationFeatureId featureId = new ApplicationFeatureId(ApplicationFeatureType.MEMBER);
-        ApplicationFeatureType.CLASS.init(featureId, classFqn);
+        ApplicationFeatureType.TYPE.init(featureId, logicalTypeName);
         featureId.type = ApplicationFeatureType.MEMBER;
         featureId.setMemberName(memberName);
         return featureId;
@@ -152,7 +154,7 @@ implements
         type.init(this, fullyQualifiedName);
     }
 
-    // -- IDENTIFICATION
+    // -- TITLE
     
     /**
      * having a title() method (rather than using @Title annotation) is necessary as a workaround to be able to use
@@ -165,6 +167,19 @@ implements
     }
 
     // -- PROPERTIES
+    
+    @Getter ApplicationFeatureType type;
+    
+    /**
+     * The {@link ApplicationFeatureId id} of the member's class.
+     */
+    public ApplicationFeatureId getParentClassId() {
+        ApplicationFeatureType.ensureMember(this);
+        final String classFqn = this.getNamespace() + "." + getTypeSimpleName();
+        return newType(classFqn);
+    }
+    
+    // -- PROPERTIES - NON UI
 
     @Programmatic
     public String getFullyQualifiedName() {
@@ -194,8 +209,6 @@ implements
         return buf.toString();
     }
 
-    @Getter ApplicationFeatureType type;
-
     @Programmatic 
     @Getter @Setter private String namespace;
 
@@ -213,8 +226,8 @@ implements
     public ApplicationFeatureId getParentPackageId() {
         ApplicationFeatureType.ensurePackageOrClass(this);
 
-        if(type == ApplicationFeatureType.CLASS) {
-            return ApplicationFeatureId.newPackage(getNamespace());
+        if(type == ApplicationFeatureType.TYPE) {
+            return ApplicationFeatureId.newNamespace(getNamespace());
         } else {
             final String packageName = getNamespace(); // eg aaa.bbb.ccc
 
@@ -225,17 +238,8 @@ implements
             final int cutOffPos = packageName.lastIndexOf('.');
             final String parentPackageName = packageName.substring(0, cutOffPos);
 
-            return newPackage(parentPackageName);
+            return newNamespace(parentPackageName);
         }
-    }
-
-    /**
-     * The {@link ApplicationFeatureId id} of the member's class.
-     */
-    public ApplicationFeatureId getParentClassId() {
-        ApplicationFeatureType.ensureMember(this);
-        final String classFqn = this.getNamespace() + "." + getTypeSimpleName();
-        return newClass(classFqn);
     }
 
     // -- ENCODING / DECODING
@@ -264,22 +268,24 @@ implements
         return new ApplicationFeatureId(_Strings.base64UrlDecode(encodedString));
     }
 
-    // //////////////////////////////////////
-
     // -- pathIds, parentIds
 
     @Programmatic
     public List<ApplicationFeatureId> getPathIds() {
+        //TODO[2533] add memoization
         return pathIds(this);
     }
 
     @Programmatic
     public List<ApplicationFeatureId> getParentIds() {
+        //TODO[2533] add memoization
         return pathIds(getParentId());
     }
 
     private ApplicationFeatureId getParentId() {
-        return type == ApplicationFeatureType.MEMBER? getParentClassId(): getParentPackageId();
+        return type == ApplicationFeatureType.MEMBER
+                ? getParentClassId()
+                : getParentPackageId();
     }
 
     private static List<ApplicationFeatureId> pathIds(final ApplicationFeatureId id) {
@@ -326,8 +332,8 @@ implements
 
     private static final ToString<ApplicationFeatureId> toString =
             ObjectContracts.toString("type", ApplicationFeatureId::getType)
-            .thenToString("packageName", ApplicationFeatureId::getNamespace)
-            .thenToStringOmitIfAbsent("className", ApplicationFeatureId::getTypeSimpleName)
+            .thenToString("namespace", ApplicationFeatureId::getNamespace)
+            .thenToStringOmitIfAbsent("typeSimpleName", ApplicationFeatureId::getTypeSimpleName)
             .thenToStringOmitIfAbsent("memberName", ApplicationFeatureId::getMemberName);
 
 
@@ -354,7 +360,8 @@ implements
     // -- WITHERS
     
     /**
-     * Returns a new instance that is a clone of this, except for the namespace which is taken from the argument. 
+     * Returns a new instance that is a clone of this, except for the namespace,
+     * which is taken from the argument. 
      * @param namespace
      */
     public ApplicationFeatureId withNamespace(final @NonNull String namespace) {
@@ -362,16 +369,16 @@ implements
     }
 
     @Deprecated // duplicate
-    public static ApplicationFeatureId createPackage(String fqn) {
-        val feat = new ApplicationFeatureId(ApplicationFeatureType.PACKAGE);
-        ApplicationFeatureType.PACKAGE.init(feat, fqn);
+    public static ApplicationFeatureId createNamespace(String namespace) {
+        val feat = new ApplicationFeatureId(ApplicationFeatureType.NAMESPACE);
+        ApplicationFeatureType.NAMESPACE.init(feat, namespace);
         return feat;
     }
     
     @Deprecated // duplicate
-    public static ApplicationFeatureId createClass(String fqn) {
-        val feat = new ApplicationFeatureId(ApplicationFeatureType.CLASS);
-        ApplicationFeatureType.CLASS.init(feat, fqn);
+    public static ApplicationFeatureId createType(String logicalTypeName) {
+        val feat = new ApplicationFeatureId(ApplicationFeatureType.TYPE);
+        ApplicationFeatureType.TYPE.init(feat, logicalTypeName);
         return feat;
     }
     

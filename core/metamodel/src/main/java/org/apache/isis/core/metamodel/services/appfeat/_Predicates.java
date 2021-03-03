@@ -31,7 +31,7 @@ final class _Predicates {
         return new Predicate<ApplicationFeatureId>() {
             @Override
             public boolean test(final ApplicationFeatureId input) {
-                if(input.getType() != ApplicationFeatureType.CLASS) {
+                if(input.getType() != ApplicationFeatureType.TYPE) {
                     return false;
                 }
                 final ApplicationFeature feature = applicationFeatures.findFeature(input);

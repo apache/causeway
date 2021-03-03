@@ -67,9 +67,9 @@ public class ApplicationFeatureIdTest {
         @Test
         public void testNewPackage() throws Exception {
             // when
-            final ApplicationFeatureId applicationFeatureId = ApplicationFeatureId.newPackage("com.mycompany");
+            final ApplicationFeatureId applicationFeatureId = ApplicationFeatureId.newNamespace("com.mycompany");
             // then
-            assertThat(applicationFeatureId.getType(), is(ApplicationFeatureType.PACKAGE));
+            assertThat(applicationFeatureId.getType(), is(ApplicationFeatureType.NAMESPACE));
             assertThat(applicationFeatureId.getNamespace(), is("com.mycompany"));
             assertThat(applicationFeatureId.getTypeSimpleName(), is(nullValue()));
             assertThat(applicationFeatureId.getMemberName(), is(nullValue()));
@@ -81,9 +81,9 @@ public class ApplicationFeatureIdTest {
         @Test
         public void testNewClass() throws Exception {
             // when
-            final ApplicationFeatureId applicationFeatureId = ApplicationFeatureId.newClass("com.mycompany.Bar");
+            final ApplicationFeatureId applicationFeatureId = ApplicationFeatureId.newType("com.mycompany.Bar");
             // then
-            assertThat(applicationFeatureId.getType(), is(ApplicationFeatureType.CLASS));
+            assertThat(applicationFeatureId.getType(), is(ApplicationFeatureType.TYPE));
             assertThat(applicationFeatureId.getNamespace(), is("com.mycompany"));
             assertThat(applicationFeatureId.getTypeSimpleName(), is("Bar"));
             assertThat(applicationFeatureId.getMemberName(), is(nullValue()));
@@ -121,17 +121,17 @@ public class ApplicationFeatureIdTest {
         @Test
         public void whenPackage() throws Exception {
             // when
-            final ApplicationFeatureId applicationFeatureId = new ApplicationFeatureId(ApplicationFeatureType.PACKAGE, "com.mycompany");
+            final ApplicationFeatureId applicationFeatureId = new ApplicationFeatureId(ApplicationFeatureType.NAMESPACE, "com.mycompany");
             // then
-            assertThat(applicationFeatureId, is(ApplicationFeatureId.newPackage("com.mycompany")));
+            assertThat(applicationFeatureId, is(ApplicationFeatureId.newNamespace("com.mycompany")));
         }
 
         @Test
         public void whenClass() throws Exception {
             // when
-            final ApplicationFeatureId applicationFeatureId = new ApplicationFeatureId(ApplicationFeatureType.CLASS, "com.mycompany.Bar");
+            final ApplicationFeatureId applicationFeatureId = new ApplicationFeatureId(ApplicationFeatureType.TYPE, "com.mycompany.Bar");
             // then
-            assertThat(applicationFeatureId, is(ApplicationFeatureId.newClass("com.mycompany.Bar")));
+            assertThat(applicationFeatureId, is(ApplicationFeatureId.newType("com.mycompany.Bar")));
         }
 
         @Test
@@ -148,17 +148,17 @@ public class ApplicationFeatureIdTest {
         @Test
         public void whenPackage() throws Exception {
             // when
-            final ApplicationFeatureId applicationFeatureId = ApplicationFeatureId.newFeature(ApplicationFeatureType.PACKAGE, "com.mycompany");
+            final ApplicationFeatureId applicationFeatureId = ApplicationFeatureId.newFeature(ApplicationFeatureType.NAMESPACE, "com.mycompany");
             // then
-            assertThat(applicationFeatureId, is(ApplicationFeatureId.newPackage("com.mycompany")));
+            assertThat(applicationFeatureId, is(ApplicationFeatureId.newNamespace("com.mycompany")));
         }
 
         @Test
         public void whenClass() throws Exception {
             // when
-            final ApplicationFeatureId applicationFeatureId = ApplicationFeatureId.newFeature(ApplicationFeatureType.CLASS, "com.mycompany.Bar");
+            final ApplicationFeatureId applicationFeatureId = ApplicationFeatureId.newFeature(ApplicationFeatureType.TYPE, "com.mycompany.Bar");
             // then
-            assertThat(applicationFeatureId, is(ApplicationFeatureId.newClass("com.mycompany.Bar")));
+            assertThat(applicationFeatureId, is(ApplicationFeatureId.newType("com.mycompany.Bar")));
         }
 
         @Test
@@ -177,7 +177,7 @@ public class ApplicationFeatureIdTest {
             // when
             final ApplicationFeatureId applicationFeatureId = ApplicationFeatureId.newFeature("com.mycompany", null, null);
             // then
-            assertThat(applicationFeatureId, is(ApplicationFeatureId.newPackage("com.mycompany")));
+            assertThat(applicationFeatureId, is(ApplicationFeatureId.newNamespace("com.mycompany")));
         }
 
         @Test
@@ -185,7 +185,7 @@ public class ApplicationFeatureIdTest {
             // when
             final ApplicationFeatureId applicationFeatureId = ApplicationFeatureId.newFeature("com.mycompany", "Bar", null);
             // then
-            assertThat(applicationFeatureId, is(ApplicationFeatureId.newClass("com.mycompany.Bar")));
+            assertThat(applicationFeatureId, is(ApplicationFeatureId.newType("com.mycompany.Bar")));
         }
 
         @Test
@@ -203,7 +203,7 @@ public class ApplicationFeatureIdTest {
         public void whenPackageWithNoParent() throws Exception {
 
             // given
-            final ApplicationFeatureId applicationFeatureId = ApplicationFeatureId.newPackage("com");
+            final ApplicationFeatureId applicationFeatureId = ApplicationFeatureId.newNamespace("com");
 
             // when
             final List<ApplicationFeatureId> parentIds = applicationFeatureId.getParentIds();
@@ -216,29 +216,29 @@ public class ApplicationFeatureIdTest {
         public void whenPackageWithHasParent() throws Exception {
 
             // given
-            final ApplicationFeatureId applicationFeatureId = ApplicationFeatureId.newPackage("com.mycompany");
+            final ApplicationFeatureId applicationFeatureId = ApplicationFeatureId.newNamespace("com.mycompany");
 
             // when
             final List<ApplicationFeatureId> parentIds = applicationFeatureId.getParentIds();
 
             // then
-            assertThat(parentIds, contains(ApplicationFeatureId.newPackage("com")));
+            assertThat(parentIds, contains(ApplicationFeatureId.newNamespace("com")));
         }
 
         @Test
         public void whenPackageWithHasParents() throws Exception {
 
             // given
-            final ApplicationFeatureId applicationFeatureId = ApplicationFeatureId.newPackage("com.mycompany.bish.bosh");
+            final ApplicationFeatureId applicationFeatureId = ApplicationFeatureId.newNamespace("com.mycompany.bish.bosh");
 
             // when
             final List<ApplicationFeatureId> parentIds = applicationFeatureId.getParentIds();
 
             // then
             assertThat(parentIds, contains(
-                    ApplicationFeatureId.newPackage("com.mycompany.bish"),
-                    ApplicationFeatureId.newPackage("com.mycompany"),
-                    ApplicationFeatureId.newPackage("com")
+                    ApplicationFeatureId.newNamespace("com.mycompany.bish"),
+                    ApplicationFeatureId.newNamespace("com.mycompany"),
+                    ApplicationFeatureId.newNamespace("com")
                     ));
         }
 
@@ -246,15 +246,15 @@ public class ApplicationFeatureIdTest {
         public void whenClassWithParents() throws Exception {
 
             // given
-            final ApplicationFeatureId applicationFeatureId = ApplicationFeatureId.newClass("com.mycompany.Bar");
+            final ApplicationFeatureId applicationFeatureId = ApplicationFeatureId.newType("com.mycompany.Bar");
 
             // when
             final List<ApplicationFeatureId> parentIds = applicationFeatureId.getParentIds();
 
             // then
             assertThat(parentIds, contains(
-                    ApplicationFeatureId.newPackage("com.mycompany"),
-                    ApplicationFeatureId.newPackage("com")
+                    ApplicationFeatureId.newNamespace("com.mycompany"),
+                    ApplicationFeatureId.newNamespace("com")
                     ));
         }
 
@@ -269,9 +269,9 @@ public class ApplicationFeatureIdTest {
 
             // then
             assertThat(parentIds, contains(
-                    ApplicationFeatureId.newClass("com.mycompany.Bar"),
-                    ApplicationFeatureId.newPackage("com.mycompany"),
-                    ApplicationFeatureId.newPackage("com")
+                    ApplicationFeatureId.newType("com.mycompany.Bar"),
+                    ApplicationFeatureId.newNamespace("com.mycompany"),
+                    ApplicationFeatureId.newNamespace("com")
                     ));
         }
 
@@ -282,11 +282,11 @@ public class ApplicationFeatureIdTest {
         @Test
         public void givenPackageWhenParentIsNotRoot() throws Exception {
             // given
-            final ApplicationFeatureId applicationFeatureId = ApplicationFeatureId.newPackage("com.mycompany");
+            final ApplicationFeatureId applicationFeatureId = ApplicationFeatureId.newNamespace("com.mycompany");
             // when
             final ApplicationFeatureId parentPackageId = applicationFeatureId.getParentPackageId();
             // then
-            assertThat(parentPackageId.getType(), is(ApplicationFeatureType.PACKAGE));
+            assertThat(parentPackageId.getType(), is(ApplicationFeatureType.NAMESPACE));
             assertThat(parentPackageId.getNamespace(), is("com"));
             assertThat(parentPackageId.getTypeSimpleName(), is(nullValue()));
             assertThat(parentPackageId.getMemberName(), is(nullValue()));
@@ -295,7 +295,7 @@ public class ApplicationFeatureIdTest {
         @Test
         public void givenPackageWhenParentIsRoot() throws Exception {
             // given
-            final ApplicationFeatureId applicationFeatureId = ApplicationFeatureId.newPackage("com");
+            final ApplicationFeatureId applicationFeatureId = ApplicationFeatureId.newNamespace("com");
             // when
             final ApplicationFeatureId parentPackageId = applicationFeatureId.getParentPackageId();
             // then
@@ -305,7 +305,7 @@ public class ApplicationFeatureIdTest {
         @Test
         public void givenRootPackage() throws Exception {
             // given
-            final ApplicationFeatureId applicationFeatureId = ApplicationFeatureId.newPackage("");
+            final ApplicationFeatureId applicationFeatureId = ApplicationFeatureId.newNamespace("");
             // when
             final ApplicationFeatureId parentPackageId = applicationFeatureId.getParentPackageId();
             // then
@@ -315,13 +315,13 @@ public class ApplicationFeatureIdTest {
         @Test
         public void givenClass() throws Exception {
             // given
-            final ApplicationFeatureId applicationFeatureId = ApplicationFeatureId.newClass("com.mycompany.Bar");
+            final ApplicationFeatureId applicationFeatureId = ApplicationFeatureId.newType("com.mycompany.Bar");
 
             // when
             final ApplicationFeatureId parentPackageId = applicationFeatureId.getParentPackageId();
 
             // then
-            assertThat(parentPackageId.getType(), is(ApplicationFeatureType.PACKAGE));
+            assertThat(parentPackageId.getType(), is(ApplicationFeatureType.NAMESPACE));
             assertThat(parentPackageId.getNamespace(), is("com.mycompany"));
             assertThat(parentPackageId.getTypeSimpleName(), is(nullValue()));
             assertThat(parentPackageId.getMemberName(), is(nullValue()));
@@ -330,13 +330,13 @@ public class ApplicationFeatureIdTest {
         @Test
         public void givenClassInRootPackage() throws Exception {
             // given
-            final ApplicationFeatureId applicationFeatureId = ApplicationFeatureId.newClass("Bar");
+            final ApplicationFeatureId applicationFeatureId = ApplicationFeatureId.newType("Bar");
 
             // when
             final ApplicationFeatureId parentPackageId = applicationFeatureId.getParentPackageId();
 
             // then
-            assertThat(parentPackageId.getType(), is(ApplicationFeatureType.PACKAGE));
+            assertThat(parentPackageId.getType(), is(ApplicationFeatureType.NAMESPACE));
             assertThat(parentPackageId.getNamespace(), is(""));
             assertThat(parentPackageId.getTypeSimpleName(), is(nullValue()));
             assertThat(parentPackageId.getMemberName(), is(nullValue()));
@@ -368,7 +368,7 @@ public class ApplicationFeatureIdTest {
             final ApplicationFeatureId parentClassId = applicationFeatureId.getParentClassId();
 
             // then
-            assertThat(parentClassId.getType(), is(ApplicationFeatureType.CLASS));
+            assertThat(parentClassId.getType(), is(ApplicationFeatureType.TYPE));
             assertThat(parentClassId.getNamespace(), is("com.mycompany"));
             assertThat(parentClassId.getTypeSimpleName(), is("Bar"));
             assertThat(parentClassId.getMemberName(), is(nullValue()));
@@ -377,7 +377,7 @@ public class ApplicationFeatureIdTest {
         @Test
         public void givenPackage() throws Exception {
             // given
-            final ApplicationFeatureId applicationFeatureId = ApplicationFeatureId.newPackage("com");
+            final ApplicationFeatureId applicationFeatureId = ApplicationFeatureId.newNamespace("com");
 
             // then
             expectedException.expect(IllegalStateException.class);
@@ -390,7 +390,7 @@ public class ApplicationFeatureIdTest {
         public void givenClass() throws Exception {
 
             // given
-            final ApplicationFeatureId applicationFeatureId = ApplicationFeatureId.newClass("com.mycompany.Bar");
+            final ApplicationFeatureId applicationFeatureId = ApplicationFeatureId.newType("com.mycompany.Bar");
 
             // then
             expectedException.expect(IllegalStateException.class);
@@ -407,15 +407,15 @@ public class ApplicationFeatureIdTest {
             @Override
             protected List<ApplicationFeatureId> getObjectsWithSameValue() {
                 return Arrays.asList(
-                        ApplicationFeatureId.newPackage("com.mycompany"),
-                        ApplicationFeatureId.newPackage("com.mycompany"));
+                        ApplicationFeatureId.newNamespace("com.mycompany"),
+                        ApplicationFeatureId.newNamespace("com.mycompany"));
             }
 
             @Override
             protected List<ApplicationFeatureId> getObjectsWithDifferentValue() {
                 return Arrays.asList(
-                        ApplicationFeatureId.newPackage("com.mycompany2"),
-                        ApplicationFeatureId.newClass("com.mycompany.Foo"),
+                        ApplicationFeatureId.newNamespace("com.mycompany2"),
+                        ApplicationFeatureId.newType("com.mycompany.Foo"),
                         ApplicationFeatureId.newMember("com.mycompany.Foo#bar"));
             }
         }
@@ -425,15 +425,15 @@ public class ApplicationFeatureIdTest {
             @Override
             protected List<ApplicationFeatureId> getObjectsWithSameValue() {
                 return Arrays.asList(
-                        ApplicationFeatureId.newClass("com.mycompany.Foo"),
-                        ApplicationFeatureId.newClass("com.mycompany.Foo"));
+                        ApplicationFeatureId.newType("com.mycompany.Foo"),
+                        ApplicationFeatureId.newType("com.mycompany.Foo"));
             }
 
             @Override
             protected List<ApplicationFeatureId> getObjectsWithDifferentValue() {
                 return Arrays.asList(
-                        ApplicationFeatureId.newPackage("com.mycompany"),
-                        ApplicationFeatureId.newClass("com.mycompany.Foo2"),
+                        ApplicationFeatureId.newNamespace("com.mycompany"),
+                        ApplicationFeatureId.newType("com.mycompany.Foo2"),
                         ApplicationFeatureId.newMember("com.mycompany.Foo#bar"));
             }
         }
@@ -450,8 +450,8 @@ public class ApplicationFeatureIdTest {
             @Override
             protected List<ApplicationFeatureId> getObjectsWithDifferentValue() {
                 return Arrays.asList(
-                        ApplicationFeatureId.newPackage("com.mycompany"),
-                        ApplicationFeatureId.newClass("com.mycompany.Foo"),
+                        ApplicationFeatureId.newNamespace("com.mycompany"),
+                        ApplicationFeatureId.newType("com.mycompany.Foo"),
                         ApplicationFeatureId.newMember("com.mycompany.Foo#bar2"));
             }
         }
@@ -472,14 +472,14 @@ public class ApplicationFeatureIdTest {
 
         @Test
         public void classes() throws Exception {
-            feature1 = ApplicationFeatureId.newClass("com.mycompany.B");
+            feature1 = ApplicationFeatureId.newType("com.mycompany.B");
 
             assertThat(feature1.toString(), is(equalTo("ApplicationFeatureId{type=CLASS, packageName=com.mycompany, className=B}")));
         }
 
         @Test
         public void packages() throws Exception {
-            feature1 = ApplicationFeatureId.newPackage("com.b");
+            feature1 = ApplicationFeatureId.newNamespace("com.b");
 
             assertThat(feature1.toString(), is(equalTo("ApplicationFeatureId{type=PACKAGE, packageName=com.b}")));
         }
@@ -503,41 +503,41 @@ public class ApplicationFeatureIdTest {
             feature2 = ApplicationFeatureId.newMember("com.mycompany.Bar#a");
             assertThat(feature1.compareTo(feature2), is(greaterThan(0)));
 
-            feature2 = ApplicationFeatureId.newClass("com.mycompany.Bar");
+            feature2 = ApplicationFeatureId.newType("com.mycompany.Bar");
             assertThat(feature1.compareTo(feature2), is(greaterThan(0)));
 
-            feature2 = ApplicationFeatureId.newPackage("com.mycompany");
+            feature2 = ApplicationFeatureId.newNamespace("com.mycompany");
             assertThat(feature1.compareTo(feature2), is(greaterThan(0)));
         }
 
         @Test
         public void classes() throws Exception {
-            feature1 = ApplicationFeatureId.newClass("com.mycompany.B");
+            feature1 = ApplicationFeatureId.newType("com.mycompany.B");
 
-            feature2 = ApplicationFeatureId.newClass("com.mycompany.C");
+            feature2 = ApplicationFeatureId.newType("com.mycompany.C");
             assertThat(feature1.compareTo(feature2), is(lessThan(0)));
 
-            feature2 = ApplicationFeatureId.newClass("com.mycompany.B");
+            feature2 = ApplicationFeatureId.newType("com.mycompany.B");
             assertThat(feature1.compareTo(feature2), is(equalTo(0)));
 
-            feature2 = ApplicationFeatureId.newClass("com.mycompany.A");
+            feature2 = ApplicationFeatureId.newType("com.mycompany.A");
             assertThat(feature1.compareTo(feature2), is(greaterThan(0)));
 
-            feature2 = ApplicationFeatureId.newPackage("com.mycompany");
+            feature2 = ApplicationFeatureId.newNamespace("com.mycompany");
             assertThat(feature1.compareTo(feature2), is(greaterThan(0)));
         }
 
         @Test
         public void packages() throws Exception {
-            feature1 = ApplicationFeatureId.newPackage("com.b");
+            feature1 = ApplicationFeatureId.newNamespace("com.b");
 
-            feature2 = ApplicationFeatureId.newPackage("com.c");
+            feature2 = ApplicationFeatureId.newNamespace("com.c");
             assertThat(feature1.compareTo(feature2), is(lessThan(0)));
 
-            feature2 = ApplicationFeatureId.newPackage("com.b");
+            feature2 = ApplicationFeatureId.newNamespace("com.b");
             assertThat(feature1.compareTo(feature2), is(equalTo(0)));
 
-            feature2 = ApplicationFeatureId.newPackage("com.a");
+            feature2 = ApplicationFeatureId.newNamespace("com.a");
             assertThat(feature1.compareTo(feature2), is(greaterThan(0)));
         }
     }
@@ -557,12 +557,12 @@ public class ApplicationFeatureIdTest {
 
             @Test
             public void whenPackage() throws Exception {
-                assertThat(func.apply(ApplicationFeatureId.newPackage("com.mycompany")), is(nullValue()));
+                assertThat(func.apply(ApplicationFeatureId.newNamespace("com.mycompany")), is(nullValue()));
             }
 
             @Test
             public void whenClass() throws Exception {
-                assertThat(func.apply(ApplicationFeatureId.newClass("com.mycompany.Bar")), is("Bar"));
+                assertThat(func.apply(ApplicationFeatureId.newType("com.mycompany.Bar")), is("Bar"));
             }
 
             @Test
@@ -585,12 +585,12 @@ public class ApplicationFeatureIdTest {
 
             @Test
             public void whenPackage() throws Exception {
-                assertThat(func.apply(ApplicationFeatureId.newPackage("com.mycompany")), is(nullValue()));
+                assertThat(func.apply(ApplicationFeatureId.newNamespace("com.mycompany")), is(nullValue()));
             }
 
             @Test
             public void whenClass() throws Exception {
-                assertThat(func.apply(ApplicationFeatureId.newClass("com.mycompany.Bar")), is(nullValue()));
+                assertThat(func.apply(ApplicationFeatureId.newType("com.mycompany.Bar")), is(nullValue()));
             }
 
             @Test
@@ -628,7 +628,7 @@ public class ApplicationFeatureIdTest {
                 assertThat(
                         _Predicates.
                         isClassContaining(ApplicationMemberType.ACTION, mockApplicationFeatureRepository).
-                        test(ApplicationFeatureId.newPackage("com.mycompany")),
+                        test(ApplicationFeatureId.newNamespace("com.mycompany")),
                         is(false));
                 assertThat(
                         _Predicates.
@@ -639,7 +639,7 @@ public class ApplicationFeatureIdTest {
 
             @Test
             public void whenClassButFeatureNotFound() throws Exception {
-                final ApplicationFeatureId classFeature = ApplicationFeatureId.newClass("com.mycompany.Bar");
+                final ApplicationFeatureId classFeature = ApplicationFeatureId.newType("com.mycompany.Bar");
                 context.checking(new Expectations() {{
                     allowing(mockApplicationFeatureRepository).findFeature(classFeature);
                     will(returnValue(null));
@@ -653,7 +653,7 @@ public class ApplicationFeatureIdTest {
             }
             @Test
             public void whenClassAndFeatureNotFoundButHasNoMembersOfType() throws Exception {
-                final ApplicationFeatureId classFeature = ApplicationFeatureId.newClass("com.mycompany.Bar");
+                final ApplicationFeatureId classFeature = ApplicationFeatureId.newType("com.mycompany.Bar");
                 context.checking(new Expectations() {{
                     oneOf(mockApplicationFeatureRepository).findFeature(classFeature);
                     will(returnValue(mockApplicationFeature));
@@ -670,7 +670,7 @@ public class ApplicationFeatureIdTest {
             }
             @Test
             public void whenClassAndFeatureNotFoundAndHasMembersOfType() throws Exception {
-                final ApplicationFeatureId classFeature = ApplicationFeatureId.newClass("com.mycompany.Bar");
+                final ApplicationFeatureId classFeature = ApplicationFeatureId.newType("com.mycompany.Bar");
                 context.checking(new Expectations() {{
                     oneOf(mockApplicationFeatureRepository).findFeature(classFeature);
                     will(returnValue(mockApplicationFeature));

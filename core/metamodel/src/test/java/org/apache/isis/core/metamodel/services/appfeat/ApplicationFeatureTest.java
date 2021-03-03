@@ -39,9 +39,9 @@ public class ApplicationFeatureTest {
 
         @Test
         public void givenPackage_whenAddPackageAndClass() throws Exception {
-            final ApplicationFeature applicationFeature = new ApplicationFeature(ApplicationFeatureId.newPackage("com.mycompany"));
-            final ApplicationFeatureId packageFeatureId = ApplicationFeatureId.newPackage("com.mycompany.flob");
-            final ApplicationFeatureId classFeatureId = ApplicationFeatureId.newClass("com.mycompany.Bar");
+            final ApplicationFeature applicationFeature = new ApplicationFeature(ApplicationFeatureId.newNamespace("com.mycompany"));
+            final ApplicationFeatureId packageFeatureId = ApplicationFeatureId.newNamespace("com.mycompany.flob");
+            final ApplicationFeatureId classFeatureId = ApplicationFeatureId.newType("com.mycompany.Bar");
 
             applicationFeature.addToContents(packageFeatureId);
             applicationFeature.addToContents(classFeatureId);
@@ -55,7 +55,7 @@ public class ApplicationFeatureTest {
 
             expectedException.expect(IllegalStateException.class);
 
-            final ApplicationFeature applicationFeature = new ApplicationFeature(ApplicationFeatureId.newPackage("com.mycompany"));
+            final ApplicationFeature applicationFeature = new ApplicationFeature(ApplicationFeatureId.newNamespace("com.mycompany"));
             final ApplicationFeatureId memberFeatureId = ApplicationFeatureId.newMember("com.mycompany.Bar", "foo");
 
             applicationFeature.addToContents(memberFeatureId);
@@ -66,8 +66,8 @@ public class ApplicationFeatureTest {
 
             expectedException.expect(IllegalStateException.class);
 
-            final ApplicationFeature applicationFeature = new ApplicationFeature(ApplicationFeatureId.newClass("com.mycompany.Bar"));
-            final ApplicationFeatureId classFeatureId = ApplicationFeatureId.newClass("com.mycompany.flob.Bar");
+            final ApplicationFeature applicationFeature = new ApplicationFeature(ApplicationFeatureId.newType("com.mycompany.Bar"));
+            final ApplicationFeatureId classFeatureId = ApplicationFeatureId.newType("com.mycompany.flob.Bar");
 
             applicationFeature.addToContents(classFeatureId);
         }
@@ -78,7 +78,7 @@ public class ApplicationFeatureTest {
             expectedException.expect(IllegalStateException.class);
 
             final ApplicationFeature applicationFeature = new ApplicationFeature(ApplicationFeatureId.newMember("com.mycompany.Bar", "foo"));
-            final ApplicationFeatureId classFeatureId = ApplicationFeatureId.newClass("com.mycompany.flob.Bar");
+            final ApplicationFeatureId classFeatureId = ApplicationFeatureId.newType("com.mycompany.flob.Bar");
 
             applicationFeature.addToContents(classFeatureId);
         }
@@ -95,7 +95,7 @@ public class ApplicationFeatureTest {
 
             expectedException.expect(IllegalStateException.class);
 
-            final ApplicationFeature applicationFeature = new ApplicationFeature(ApplicationFeatureId.newPackage("com.mycompany"));
+            final ApplicationFeature applicationFeature = new ApplicationFeature(ApplicationFeatureId.newNamespace("com.mycompany"));
             final ApplicationFeatureId memberFeatureId = ApplicationFeatureId.newMember("com.mycompany.Bar", "foo");
 
             applicationFeature.addToMembers(memberFeatureId, ApplicationMemberType.PROPERTY);
@@ -104,7 +104,7 @@ public class ApplicationFeatureTest {
         @Test
         public void givenClass_whenAddMember() throws Exception {
 
-            final ApplicationFeature applicationFeature = new ApplicationFeature(ApplicationFeatureId.newClass("com.mycompany.Bar"));
+            final ApplicationFeature applicationFeature = new ApplicationFeature(ApplicationFeatureId.newType("com.mycompany.Bar"));
             final ApplicationFeatureId memberFeatureId = ApplicationFeatureId.newMember("com.mycompany.Bar", "foo");
             final ApplicationFeatureId memberFeatureId2 = ApplicationFeatureId.newMember("com.mycompany.Bar", "boz");
 
@@ -120,8 +120,8 @@ public class ApplicationFeatureTest {
 
             expectedException.expect(IllegalStateException.class);
 
-            final ApplicationFeature applicationFeature = new ApplicationFeature(ApplicationFeatureId.newClass("com.mycompany.Bar"));
-            final ApplicationFeatureId packageFeatureId = ApplicationFeatureId.newPackage("com.mycompany");
+            final ApplicationFeature applicationFeature = new ApplicationFeature(ApplicationFeatureId.newType("com.mycompany.Bar"));
+            final ApplicationFeatureId packageFeatureId = ApplicationFeatureId.newNamespace("com.mycompany");
 
             applicationFeature.addToMembers(packageFeatureId, ApplicationMemberType.PROPERTY);
         }
@@ -131,8 +131,8 @@ public class ApplicationFeatureTest {
 
             expectedException.expect(IllegalStateException.class);
 
-            final ApplicationFeature applicationFeature = new ApplicationFeature(ApplicationFeatureId.newClass("com.mycompany.Bar"));
-            final ApplicationFeatureId classFeatureId = ApplicationFeatureId.newClass("com.mycompany.Bop");
+            final ApplicationFeature applicationFeature = new ApplicationFeature(ApplicationFeatureId.newType("com.mycompany.Bar"));
+            final ApplicationFeatureId classFeatureId = ApplicationFeatureId.newType("com.mycompany.Bop");
 
             applicationFeature.addToMembers(classFeatureId, ApplicationMemberType.PROPERTY);
         }
@@ -143,7 +143,7 @@ public class ApplicationFeatureTest {
             expectedException.expect(IllegalStateException.class);
 
             final ApplicationFeature applicationFeature = new ApplicationFeature(ApplicationFeatureId.newMember("com.mycompany.Bar", "foo"));
-            final ApplicationFeatureId classFeatureId = ApplicationFeatureId.newClass("com.mycompany.flob.Bar");
+            final ApplicationFeatureId classFeatureId = ApplicationFeatureId.newType("com.mycompany.flob.Bar");
 
             applicationFeature.addToMembers(classFeatureId, ApplicationMemberType.PROPERTY);
         }

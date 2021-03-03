@@ -89,7 +89,7 @@ public class ApplicationUser_filterPermissions {
             final ApplicationFeatureId inputFeatureId = input.getFeatureId();
 
             // recursive match on package
-            final ApplicationFeatureId packageId = ApplicationFeatureId.newPackage(packageFqn);
+            final ApplicationFeatureId packageId = ApplicationFeatureId.newNamespace(packageFqn);
             final List<ApplicationFeatureId> pathIds = inputFeatureId.getPathIds();
             if(!pathIds.contains(packageId)) {
                 return false;

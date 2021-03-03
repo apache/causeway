@@ -158,7 +158,7 @@ implements ApplicationFeatureRepository {
         }
 
         final String logicalTypeName = spec.getLogicalTypeName();
-        final ApplicationFeatureId classFeatureId = ApplicationFeatureId.newClass(logicalTypeName);
+        final ApplicationFeatureId classFeatureId = ApplicationFeatureId.newType(logicalTypeName);
 
         // add class to our map
         // (later on it may get removed if the class turns out to have no features,
@@ -373,9 +373,9 @@ implements ApplicationFeatureRepository {
     public ApplicationFeature findFeature(final ApplicationFeatureId featureId) {
         initializeIfRequired();
         switch (featureId.getType()) {
-        case PACKAGE:
+        case NAMESPACE:
             return findPackage(featureId);
-        case CLASS:
+        case TYPE:
             return findClass(featureId);
         case MEMBER:
             return findMember(featureId);
@@ -411,9 +411,9 @@ implements ApplicationFeatureRepository {
             return Collections.emptyList();
         }
         switch (featureType) {
-        case PACKAGE:
+        case NAMESPACE:
             return allPackages();
-        case CLASS:
+        case TYPE:
             return allClasses();
         case MEMBER:
             return allMembers();
@@ -468,7 +468,7 @@ implements ApplicationFeatureRepository {
     @Override
     public SortedSet<String> packageNames() {
         initializeIfRequired();
-        return stream(allFeatures(ApplicationFeatureType.PACKAGE))
+        return stream(allFeatures(ApplicationFeatureType.NAMESPACE))
                 .map(ApplicationFeature.Functions.GET_FQN)
                 .collect(_Sets.toUnmodifiableSorted());
     }
@@ -476,7 +476,7 @@ implements ApplicationFeatureRepository {
     @Override
     public SortedSet<String> packageNamesContainingClasses(final ApplicationMemberType memberType) {
         initializeIfRequired();
-        final Collection<ApplicationFeature> packages = allFeatures(ApplicationFeatureType.PACKAGE);
+        final Collection<ApplicationFeature> packages = allFeatures(ApplicationFeatureType.NAMESPACE);
 
         return stream(packages)
                 .filter(ApplicationFeature.Predicates.packageContainingClasses(memberType, this))
@@ -487,7 +487,7 @@ implements ApplicationFeatureRepository {
     @Override
     public SortedSet<String> classNamesContainedIn(final String packageFqn, final ApplicationMemberType memberType) {
         initializeIfRequired();
-        final ApplicationFeatureId packageId = ApplicationFeatureId.newPackage(packageFqn);
+        final ApplicationFeatureId packageId = ApplicationFeatureId.newNamespace(packageFqn);
         final ApplicationFeature pkg = findPackage(packageId);
         if (pkg == null) {
             return Collections.emptySortedSet();
@@ -502,7 +502,7 @@ implements ApplicationFeatureRepository {
     @Override
     public SortedSet<String> classNamesRecursivelyContainedIn(final String packageFqn) {
         initializeIfRequired();
-        final ApplicationFeatureId packageId = ApplicationFeatureId.newPackage(packageFqn);
+        final ApplicationFeatureId packageId = ApplicationFeatureId.newNamespace(packageFqn);
         final ApplicationFeature pkg = findPackage(packageId);
         if (pkg == null) {
             return Collections.emptySortedSet();
@@ -520,7 +520,7 @@ implements ApplicationFeatureRepository {
             final String className,
             final ApplicationMemberType memberType) {
         initializeIfRequired();
-        final ApplicationFeatureId classId = ApplicationFeatureId.newClass(packageFqn + "." + className);
+        final ApplicationFeatureId classId = ApplicationFeatureId.newType(packageFqn + "." + className);
         final ApplicationFeature cls = findClass(classId);
         if (cls == null) {
             return Collections.emptySortedSet();
