@@ -18,33 +18,34 @@
  */
 package org.apache.isis.core.metamodel.services.appfeat;
 
-import java.util.function.Predicate;
-
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureSort;
-import org.apache.isis.applib.services.appfeat.ApplicationMemberType;
 
 final class _Asserts {
 
-    public static Predicate<ApplicationFeatureId> isClassContaining(
-            final ApplicationMemberType memberType, final ApplicationFeatureRepositoryDefault applicationFeatures) {
-        return new Predicate<ApplicationFeatureId>() {
-            @Override
-            public boolean test(final ApplicationFeatureId input) {
-                if(input.getSort() != ApplicationFeatureSort.TYPE) {
-                    return false;
-                }
-                final ApplicationFeature feature = applicationFeatures.findFeature(input);
-                if(feature == null) {
-                    return false;
-                }
-                return memberType == null || !feature.membersOf(memberType).isEmpty();
-            }
-        };
+    public static void ensureNamespace(final ApplicationFeatureId feature) {
+        if(feature.getSort() != ApplicationFeatureSort.NAMESPACE) {
+            throw new IllegalStateException("Can only be called for a package; " + feature.toString());
+        }
     }
 
-    public static Predicate<ApplicationFeatureId> isClassRecursivelyWithin(final ApplicationFeatureId packageId) {
-        return (ApplicationFeatureId input) -> input.getParentIds().contains(packageId);
+    public static void ensureNamespaceOrType(final ApplicationFeatureId applicationFeatureId) {
+        if(applicationFeatureId.getSort() != ApplicationFeatureSort.NAMESPACE 
+                && applicationFeatureId.getSort() != ApplicationFeatureSort.TYPE) {
+            throw new IllegalStateException("Can only be called for a package or a class; " + applicationFeatureId.toString());
+        }
+    }
+
+    public static void ensureType(final ApplicationFeatureId feature) {
+        if(feature.getSort() != ApplicationFeatureSort.TYPE) {
+            throw new IllegalStateException("Can only be called for a class; " + feature.toString());
+        }
+    }
+
+    public static void ensureMember(final ApplicationFeatureId feature) {
+        if(feature.getSort() != ApplicationFeatureSort.MEMBER) {
+            throw new IllegalStateException("Can only be called for a member; " + feature.toString());
+        }
     }
 
 }

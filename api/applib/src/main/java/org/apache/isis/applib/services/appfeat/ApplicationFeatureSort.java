@@ -18,8 +18,10 @@
  */
 package org.apache.isis.applib.services.appfeat;
 
-import org.apache.isis.commons.internal.base._Strings;
-
+/**
+ * 
+ * @since 1.x revised for 2.0 {@index}
+ */
 public enum ApplicationFeatureSort {
     
     /** 
@@ -39,75 +41,21 @@ public enum ApplicationFeatureSort {
      */
     MEMBER;
 
-    public boolean hideClassName() {
+    public boolean isNamespace() {
         return this == ApplicationFeatureSort.NAMESPACE;
     }
     
-    public boolean hideMember() {
-        return this == ApplicationFeatureSort.NAMESPACE || this == ApplicationFeatureSort.TYPE;
+    public boolean isType() {
+        return this == ApplicationFeatureSort.TYPE;
     }
-
-    public static void ensurePackage(final ApplicationFeatureId feature) {
-        if(feature.sort != ApplicationFeatureSort.NAMESPACE) {
-            throw new IllegalStateException("Can only be called for a package; " + feature.toString());
-        }
-    }
-
-    public static void ensurePackageOrClass(final ApplicationFeatureId applicationFeatureId) {
-        if(applicationFeatureId.sort != ApplicationFeatureSort.NAMESPACE && applicationFeatureId.sort != ApplicationFeatureSort.TYPE) {
-            throw new IllegalStateException("Can only be called for a package or a class; " + applicationFeatureId.toString());
-        }
-    }
-
-    public static void ensureClass(final ApplicationFeatureId feature) {
-        if(feature.sort != ApplicationFeatureSort.TYPE) {
-            throw new IllegalStateException("Can only be called for a class; " + feature.toString());
-        }
-    }
-
-    public static void ensureMember(final ApplicationFeatureId feature) {
-        if(feature.sort != ApplicationFeatureSort.MEMBER) {
-            throw new IllegalStateException("Can only be called for a member; " + feature.toString());
-        }
+    
+    public boolean isMember() {
+        return this == ApplicationFeatureSort.MEMBER;
     }
 
     @Override
     public String toString() {
-        return _Strings.capitalize(name());
-    }
-    
-    // -- REFACTORING
-    
-    static void initNamespace(final ApplicationFeatureId feature, final String fullyQualifiedName) {
-        feature.setNamespace(fullyQualifiedName);
-        feature.setTypeSimpleName(null);
-        feature.setMemberName(null);
-        feature.sort = NAMESPACE;
-    }
-    
-    static void initType(final ApplicationFeatureId feature, final String fullyQualifiedName) {
-        final int i = fullyQualifiedName.lastIndexOf(".");
-        if(i != -1) {
-            feature.setNamespace(fullyQualifiedName.substring(0, i));
-            feature.setTypeSimpleName(fullyQualifiedName.substring(i+1));
-        } else {
-            feature.setNamespace("");
-            feature.setTypeSimpleName(fullyQualifiedName);
-        }
-        feature.setMemberName(null);
-        feature.sort = TYPE;
-    }
-    
-    static void initMember(final ApplicationFeatureId feature, final String fullyQualifiedName) {
-        final int i = fullyQualifiedName.lastIndexOf("#");
-        if(i == -1) {
-            throw new IllegalArgumentException("Malformed, expected a '#': " + fullyQualifiedName);
-        }
-        final String className = fullyQualifiedName.substring(0, i);
-        final String memberName = fullyQualifiedName.substring(i+1);
-        initType(feature, className);
-        feature.setMemberName(memberName);
-        feature.sort = MEMBER;
+        return name();
     }
     
 

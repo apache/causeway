@@ -199,7 +199,7 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
         return getFeatureId().getTypeSimpleName();
     }
     public boolean hideClassName() {
-        return getType().hideClassName();
+        return getType().isNamespace();
     }
 
     // -- memberName
@@ -219,7 +219,7 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
     }
 
     public boolean hideMemberName() {
-        return getType().hideMember();
+        return !getType().isMember();
     }
 
 
