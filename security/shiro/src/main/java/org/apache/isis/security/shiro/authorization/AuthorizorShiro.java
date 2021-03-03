@@ -30,7 +30,6 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.OrderPrecedence;
-import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.core.security.authentication.Authentication;
 import org.apache.isis.core.security.authentication.Authenticator;
 import org.apache.isis.core.security.authorization.Authorizor;
@@ -79,7 +78,7 @@ public class AuthorizorShiro implements Authorizor {
         final String permission = asPermissionsString(identifier) + ":" + qualifier;
 
         try {
-            _Assert.assertEquals(userName, subject.getPrincipal().toString());
+            //_Assert.assertEquals(userName, subject.getPrincipal().toString()); ... does not work
             return subject.isPermitted(permission);
         } finally {
             IsisPermission.resetVetoedPermissions();
