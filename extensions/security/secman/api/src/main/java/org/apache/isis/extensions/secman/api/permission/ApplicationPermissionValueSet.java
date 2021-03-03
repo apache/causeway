@@ -88,7 +88,7 @@ public class ApplicationPermissionValueSet implements Serializable {
      */
     private final _Multimaps.SetMultimap<ApplicationFeatureId, ApplicationPermissionValue> permissionsByFeature =
             _Multimaps.newSortedSetMultimap(
-                    Collections.reverseOrder(ApplicationFeatureId.Comparators.natural()),
+                    Collections.reverseOrder(),
                     null // natural element order
                     );
 
