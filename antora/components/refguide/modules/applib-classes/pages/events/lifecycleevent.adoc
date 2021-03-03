@@ -5,95 +5,74 @@
 :page-partial:
 
 
-This section catalogues the various lifecycle event classes defined by Apache Isis.
-These events are fired automatically when a domain object is loaded, created, updated and so forth.
+Lifecycle events are broadcast through the xref:refguide:applib:index/services/eventbus/EventBusService.adoc[EventBusService] when a domain entity is loaded, created, updated to/from the database.
 
-The lifecycle event classes are listed in the table below:
+They allow subscribers to trigger other operations as a result of these persistence operations.
+One use case is to maintain an alternate data store.
 
 
 .Lifecycle Event Classes
-[cols="1a,2a,2a", options="header"]
+[cols="2a,2a,2a", options="header"]
 |===
 
 |API
-|Implementation
-|Notes
+|Event class defined by
+|Raised when
 
 
-|xref:applib-classes:events.adoc#AbstractLifecycleEvent[`o.a.i.applib.` +
-`AbstractLifecycleEvent`]
-|(abstract class)
-|Superclass of the other lifecycle events, listed below in this table.
+|xref:refguide:applib:index/events/lifecycle/AbstractLifecycleEvent.adoc[AbstractLifecycleEvent]
+|n/a
+|n/a - superclass of the other lifecycle events.
 
 
-|xref:applib-classes:events.adoc#ObjectCreatedEvent[`o.a.i.applib.` +
-`ObjectCreatedEvent`]
-|(abstract class). +
-`ObjectCreatedEvent.Default` is the concrete implementation that is used.
-|Broadcast when an object is first instantiated using the xref:refguide:applib:index/services/factory/FactoryService.adoc[FactoryService]'s
-`#instantiate(...)` method.
+|xref:refguide:applib:index/events/lifecycle/ObjectCreatedEvent.adoc[ObjectCreatedEvent]
+|xref:refguide:applib:index/annotation/DomainObject.adoc#createdLifecycleEvent[DomainObject +
+#createdLifecycleEvent()]
+|entity is first instantiated using  xref:refguide:applib:index/services/factory/FactoryService.adoc[FactoryService] +
+
+Also raised for view models.
 
 
-|xref:applib-classes:events.adoc#ObjectLoadedEvent[`o.a.i.applib.` +
-`ObjectLoadedEvent`]
-|(abstract class). +
-`ObjectLoadedEvent.Default` is the concrete implementation that is used.
-|Broadcast when an object is retrieved from the database.
+|xref:refguide:applib:index/events/lifecycle/ObjectLoadedEvent.adoc[ObjectLoadedEvent]
+|xref:refguide:applib:index/annotation/DomainObject.adoc#loadedLifecycleEvent[DomainObject +
+#loadedLifecycleEvent()]
+|entity is retrieved from the database.
 
 
-|xref:applib-classes:events.adoc#ObjectPersistedEvent[`o.a.i.applib.` +
-`ObjectPersistedEvent`]
-|(abstract class). +
-`ObjectPersistedEvent.Default` is the concrete implementation that is used.
-|Broadcast when an object is first saved (inserted) into the database using the xref:refguide:applib:index/services/repository/RepositoryService.adoc[RepositoryService]'s
+|xref:refguide:applib:index/events/lifecycle/ObjectPersistedEvent.adoc[ObjectPersistedEvent]
+|xref:refguide:applib:index/annotation/DomainObject.adoc#persistedLifecycleEvent[DomainObject +
+#persistedLifecycleEvent()]
+|entity is first saved (inserted) into the database using the xref:refguide:applib:index/services/repository/RepositoryService.adoc[RepositoryService]'s
 `#persist(...)` method.
 
 
-|xref:applib-classes:events.adoc#ObjectPersistingEvent[`o.a.i.applib.` +
-`ObjectPersistingEvent`]
-|(abstract class). +
-`ObjectPersistingEvent.Default` is the concrete implementation that is used.
-|Broadcast when an object is about to be saved (inserted) into the database using the xref:refguide:applib:index/services/repository/RepositoryService.adoc[RepositoryService]'s
+|xref:refguide:applib:index/events/lifecycle/ObjectPersistingEvent.adoc[ObjectPersistingEvent]
+|xref:refguide:applib:index/annotation/DomainObject.adoc#persistingLifecycleEvent[DomainObject +
+#persistingLifecycleEvent()]
+|entity is about to be saved (inserted) into the database using the xref:refguide:applib:index/services/repository/RepositoryService.adoc[RepositoryService]'s
 `#persist(...)` method.
 
 
-|xref:applib-classes:events.adoc#ObjectRemovingEvent[`o.a.i.applib.` +
-`ObjectRemovingEvent`]
-|(abstract class). +
-`ObjectRemovingEvent.Default` is the concrete implementation that is used.
-|Broadcast when an object is about to be deleted from the database using the xref:refguide:applib:index/services/repository/RepositoryService.adoc[RepositoryService]'s
+|xref:refguide:applib:index/events/lifecycle/ObjectRemovingEvent.adoc[ObjectRemovingEvent]
+|xref:refguide:applib:index/annotation/DomainObject.adoc#removingLifecycleEvent[DomainObject +
+#removingLifecycleEvent()]
+|entity is about to be deleted from the database using the xref:refguide:applib:index/services/repository/RepositoryService.adoc[RepositoryService]'s
 `#remove(...)` method.
 
 
-|xref:applib-classes:events.adoc#ObjectUpdatedEvent[`o.a.i.applib.` +
-`ObjectUpdatedEvent`]
-|(abstract class). +
-`ObjectUpdatedEvent.Default` is the concrete implementation that is used.
-|Broadcast when an object has just been updated in the database.
-This is done either explicitly when the current transaction is flushed using the xref:refguide:applib:index/services/repository/RepositoryService.adoc[RepositoryService]'s `#flush(...)` method, else is done implicitly when the transaction commits at the end of the user request.
+|xref:refguide:applib:index/events/lifecycle/ObjectUpdatedEvent.adoc[ObjectUpdatedEvent]
+|xref:refguide:applib:index/annotation/DomainObject.adoc#updatingLifecycleEvent[DomainObject +
+#updatingLifecycleEvent()]
+|entity has just been updated in the database.
 
 
-|xref:applib-classes:events.adoc#ObjectUpdatingEvent[`o.a.i.applib.` +
-`ObjectUpdatingEvent`]
-|``o.a.i.core`` +
-``events.lifecycle`` +
-``isis-applib``
-|(abstract class). +
-`ObjectUpdatingEvent.Default` is the concrete implementation that is used.
-|Broadcast when an object is about to be updated in the database.
-This is done either explicitly when the current transaction is flushed using the xref:refguide:applib:index/services/repository/RepositoryService.adoc[RepositoryService]'s `#flush(...)` method, else is done implicitly when the transaction commits at the end of the user request.
+|xref:refguide:applib:index/events/lifecycle/ObjectUpdatingEvent.adoc[ObjectUpdatingEvent]
+|xref:refguide:applib:index/annotation/DomainObject.adoc#updatedLifecycleEvent[DomainObject +
+#updatedLifecycleEvent()]
+|entity is about to be updated in the database.
 
 
 |===
 
 
 
-
-include::lifecycleevent/AbstractLifecycleEvent.adoc[leveloffset=+1]
-include::lifecycleevent/ObjectCreatedEvent.adoc[leveloffset=+1]
-include::lifecycleevent/ObjectLoadedEvent.adoc[leveloffset=+1]
-include::lifecycleevent/ObjectPersistedEvent.adoc[leveloffset=+1]
-include::lifecycleevent/ObjectPersistingEvent.adoc[leveloffset=+1]
-include::lifecycleevent/ObjectRemovingEvent.adoc[leveloffset=+1]
-include::lifecycleevent/ObjectUpdatedEvent.adoc[leveloffset=+1]
-include::lifecycleevent/ObjectUpdatingEvent.adoc[leveloffset=+1]

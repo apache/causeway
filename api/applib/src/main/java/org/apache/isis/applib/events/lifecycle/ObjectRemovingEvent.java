@@ -19,6 +19,14 @@
 package org.apache.isis.applib.events.lifecycle;
 
 /**
+ * Broadcast when an entity is about to be removed (deleted) into the database
+ * either explicitly using the
+ * {@link org.apache.isis.applib.services.repository.RepositoryService}, or
+ * implicitly, for example due to cascade delete or similar
+ * persistence mechanisms.
+ *
+ * @see ObjectRemovingEvent
+ *
  * @since 1.x {@index}
  */
 public abstract class ObjectRemovingEvent<S> extends AbstractLifecycleEvent<S> {

@@ -21,13 +21,38 @@ package org.apache.isis.applib.events.ui;
 import java.util.EventObject;
 
 /**
- * Emitted for subscribers to obtain a cssClass hint (equivalent to the <tt>iconName()</tt> supporting method).
+ * Emitted for subscribers to provide a cssClass hint (equivalent to the
+ * <tt>iconName()</tt> supporting method).
+ *
+ * <p>
+ * The class has a number of responsibilities:
+ * </p>
+ *
+ * <ul>
+ *     <li>
+ *       capture the target object being interacted with
+ *     </li>
+ *     <li>
+ *      capture the icon (name), if any, as specified to one of the subscribers
+ *     </li>
+ * </ul>
+ *
+ * <p>
+ * The class itself is instantiated automatically by the framework.
+ * </p>
+ *
+ *
+ * *
+ *
+ *
+ * If the domain object defines its own xref:refguide:applib-methods:reserved.adoc#iconName[iconName()] supporting method, or if it has the
+ * xref:refguide:applib:index/annotation/DomainObjectLayout.adoc#cssClassFa[@DomainObjectLayout#cssClassFa()] attribute, then these will take precedence.
+ * </p>
  *
  * @since 1.x {@index}
  */
 public abstract class IconUiEvent<S> extends AbstractUiEvent<S> {
 
-    // -- constructors
     /**
      * If used then the framework will set state via (non-API) setters.
      *
@@ -45,21 +70,24 @@ public abstract class IconUiEvent<S> extends AbstractUiEvent<S> {
 
 
 
-    // -- Default class
     /**
      * This class is the default for the
-     * {@link org.apache.isis.applib.annotation.DomainObjectLayout#iconUiEvent()} annotation attribute.  Whether this
-     * raises an event or not depends upon the <tt>isis.core.meta-model.annotation.domain-object-layout.icon-ui-event.post-for-default</tt>
+     * {@link org.apache.isis.applib.annotation.DomainObjectLayout#iconUiEvent()}
+     * annotation element.
+     *
+     * <p>
+     * Whether this raises an event or not depends upon the
+     * <tt>isis.applib.annotation.domain-object-layout.icon-ui-event.post-for-default</tt>
      * configuration property.
+     * </p>
      */
     public static class Default extends IconUiEvent<Object> { }
 
 
-    // -- Noop class
-
     /**
-     * Convenience class to use indicating that an event should <i>not</i> be posted (irrespective of the configuration
-     * property setting for the {@link Default} event.
+     * Convenience class to use indicating that an event should <i>not</i> be
+     * posted (irrespective of the configuration property setting for the
+     * {@link Default} event.
      */
     public static class Noop extends IconUiEvent<Object> { }
 
@@ -67,8 +95,9 @@ public abstract class IconUiEvent<S> extends AbstractUiEvent<S> {
     // -- Doop class
 
     /**
-     * Convenience class meaning that an event <i>should</i> be posted (irrespective of the configuration
-     * property setting for the {@link Default} event..
+     * Convenience class meaning that an event <i>should</i> be posted
+     * (irrespective of the configuration property setting for the
+     * {@link Default} event..
      */
     public static class Doop extends IconUiEvent<Object> { }
 

@@ -4,58 +4,50 @@
 :page-partial:
 
 
-This section catalogues the various UI event classes defined by Apache Isis.
+UI events are broadcast on the xref:refguide:applib:index/services/eventbus/EventBusService.adoc[EventBusService] as the result of rendering a domain object.
 
-These events are broadcast on the xref:refguide:applib:index/services/eventbus/EventBusService.adoc[EventBusService].  The domain
-events are broadcast as a result of being specified in the xref:refguide:applib:index/annotation/DomainObjectLayout.adoc#titleUiEvent[@DomainObjectLayout#titleUiEvent()],  xref:refguide:applib:index/annotation/DomainObjectLayout.adoc#iconUiEvent[@DomainObjectLayout#iconUiEvent()] or xref:refguide:applib:index/annotation/DomainObjectLayout.adoc#cssClassUiEvent[@DomainObjectLayout#cssClassUiEvent()] attributes.
+They allow subscribers to change various presentation aspects of the rendered object.
 
-They are listed in the table below.
+Note that if the domain object defines its own layout preferences (for example, a xref:refguide:applib-methods:reserved.adoc#title[title()] supporting method) then these will take precedence.
+
+
 
 .UI Event Classes
-[cols="1a,2a,2a", options="header"]
+[cols="2a,2a,2a,2a", options="header"]
 |===
 
 |API
-|Implementation
-|Notes
+|Event class defined by
+|Raised when
+|Overridden by
 
 
-|xref:applib-classes:events.adoc#TitleUiEvent[`o.a.i.applib.` +
-`TitleUiEvent`]
-|(abstract class). +
-`TitleUiEvent.Default` is the concrete implementation used if no `@DomainObjectLayout#titleUiEvent` attribute is specified
-|Broadcast whenever there is a requirement to obtain a title for a domain object.
-Note that if the domain object defines its own xref:refguide:applib-methods:reserved.adoc#title[title()] supporting method, or has xref:refguide:applib:index/annotation/Title.adoc[@Title] annotation(s) on its properties, then these will take precedence.
+|xref:refguide:applib:index/events/ui/TitleUiEvent.adoc[TitleUiEvent]
+|xref:refguide:applib:index/annotation/DomainObjectLayout.adoc#titleUiEvent[@DomainObjectLayout#titleUiEvent()]
+|\... rendering the title for a domain object.
+|xref:refguide:applib-methods:reserved.adoc#title[title()] +
+xref:refguide:applib:index/annotation/Title.adoc[@Title]
 
-|xref:applib-classes:events.adoc#IconUiEvent[`o.a.i.applib.` +
-`IconUiEvent`]
-|(abstract class). +
-`IconUiEvent.Default` is the concrete implementation used if no `@DomainObjectLayout#iconUiEvent` attribute is specified
-|Broadcast whenever there is a requirement to obtain an icon (or rather, the name of an icon) for a domain object.
-Note that if the domain object defines its own xref:refguide:applib-methods:reserved.adoc#iconName[iconName()] supporting method, or if it has the xref:refguide:applib:index/annotation/DomainObjectLayout.adoc#cssClassFa[@DomainObjectLayout#cssClassFa()] attribute, then these will take precedence.
 
-|xref:applib-classes:events.adoc#CssClassUiEvent[`o.a.i.applib.` +
-`CssClassUiEvent`]
-|(abstract class). +
-`CssClassUiEvent.Default` is the concrete implementation used if no `@DomainObjectLayout#cssClassUiEvent` attribute is specified
-|Broadcast whenever there is a requirement to obtain a CSS class hint for a domain object.
-Note that if the domain object defines its own xref:refguide:applib-methods:reserved.adoc#cssClass[cssClass()] supporting method then this
-will take precedence.
 
-|xref:applib-classes:events.adoc#LayoutUiEvent[`o.a.i.applib.` +
-`LayoutUiEvent`]
-|(abstract class). +
-`LayoutUiEvent.Default` is the concrete implementation used if no `@DomainObjectLayout#layoutUiEvent` attribute is specified
-|Broadcast whenever there is a requirement to obtain an alternative layout for a domain object.
-Note that if the domain object defines its own xref:refguide:applib-methods:reserved.adoc#layout[layout()] supporting method then this
-will take precedence.
+|xref:refguide:applib:index/events/ui/IconUiEvent.adoc[IconUiEvent]
+|xref:refguide:applib:index/annotation/DomainObjectLayout.adoc#iconUiEvent[@DomainObjectLayout#iconUiEvent()]
+|\... rendering an icon for a domain object.
+|xref:refguide:applib-methods:reserved.adoc#iconName[iconName()]
+
+
+|xref:refguide:applib:index/events/ui/CssClassUiEvent.adoc[CssClassUiEvent]
+|xref:refguide:applib:index/annotation/DomainObjectLayout.adoc#cssClassUiEvent[@DomainObjectLayout#cssClassUiEvent()]
+|\... obtaining a CSS class hint for a domain object.
+|xref:refguide:applib-methods:reserved.adoc#cssClass[cssClass()]
+
+|xref:refguide:applib:index/events/ui/LayoutUiEvent.adoc[LayoutUiEvent]
+|xref:refguide:applib:index/annotation/DomainObjectLayout.adoc#layoutUiEvent[@DomainObjectLayout#layoutUiEvent()]
+|\... obtain an alternative layout for a domain object.
+|xref:refguide:applib-methods:reserved.adoc#layout[layout()]
 
 |===
 
 
 
 
-
-include::uievent/TitleUiEvent.adoc[leveloffset=+1]
-include::uievent/IconUiEvent.adoc[leveloffset=+1]
-include::uievent/CssClassUiEvent.adoc[leveloffset=+1]

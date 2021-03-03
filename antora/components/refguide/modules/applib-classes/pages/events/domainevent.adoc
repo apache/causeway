@@ -4,43 +4,38 @@
 :page-partial:
 
 
-This section catalogues the various domain event classes defined by Apache Isis.
+Domain events are broadcast through the xref:refguide:applib:index/services/eventbus/EventBusService.adoc[EventBusService] whenever the framework interacts with the domain object members.
 
-These events are broadcast through the xref:refguide:applib:index/services/eventbus/EventBusService.adoc[EventBusService] whenever the framework interacts with the domain object members
+They allow subscribers to change either veto the interaction, or to trigger other operations as a result of the interaction.
+
 
 
 .Domain Event Classes
-[cols="1a,2a,2a,2a", options="header"]
+[cols="2a,2a,2a", options="header"]
 |===
 
 |API
-|Raised by
-|Fallback +
-Implementation
+|Event class defined by
 |Published when
 
 
 |xref:refguide:applib:index/events/domain/AbstractDomainEvent.adoc[AbstractDomainEvent]
 |n/a
-|(abstract class)
-|Superclass of the other domain events, listed below in this table.
+|n/a - superclass of the other domain events.
 
 
 |xref:refguide:applib:index/events/domain/ActionDomainEvent.adoc[ActionDomainEvent]
 |xref:refguide:applib:index/annotation/Action.adoc#domainEvent[@Action#domainEvent()]
-|`ActionDomainEvent.Default`
-|(hide/disable/validate/pre-execute/post-execute) with an object's action.
+|interact with (hide, disable, validate, pre-execute, post-execute) an object's action.
 
 |xref:refguide:applib:index/events/domain/CollectionDomainEvent.adoc[CollectionDomainEvent]
 |xref:refguide:applib:index/annotation/Collection.adoc#domainEvent[@Collection#domainEvent()]
-|`CollectionDomainEvent.Default`
 |hide an object's collection.
 
 
 |xref:refguide:applib:index/events/domain/PropertyDomainEvent.adoc[PropertyDomainEvent]
 |xref:refguide:applib:index/annotation/Property.adoc#domainEvent[@Property#domainEvent()]
-|`PropertyDomainEvent.Default`
-|hide/disable/validate/pre-edit/post-edit with an object's property.
+|interact with (hide, disable, validate, pre-edit, post-edit) an object's property.
 
 
 |===

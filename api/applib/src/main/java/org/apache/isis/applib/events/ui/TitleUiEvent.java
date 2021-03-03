@@ -25,7 +25,25 @@ import org.apache.isis.applib.services.i18n.TranslatableString;
 import lombok.Getter;
 
 /**
- * Emitted for subscribers to obtain a cssClass hint (equivalent to the <tt>title()</tt> supporting method).
+ * Emitted for subscribers to obtain a title hint (equivalent to the
+ * <tt>title()</tt> supporting method).
+ *
+ * <p>
+ * The class has a number of responsibilities:
+ * </p>
+ *
+ * <ul>
+ *     <li>
+ *          capture the target object being interacted with
+ *     </li>
+ *     <li>
+ *          capture the title, if any, as specified to one of the subscribers
+ *     </li>
+ * </ul>
+ *
+ * <p>
+ *  The class itself is instantiated automatically by the framework.
+ * </p>
  *
  * @since 1.x {@index}
  */
@@ -33,21 +51,28 @@ public abstract class TitleUiEvent<S> extends AbstractUiEvent<S> {
 
     /**
      * This class is the default for the
-     * {@link org.apache.isis.applib.annotation.DomainObjectLayout#titleUiEvent()} annotation attribute.  Whether this
-     * raises an event or not depends upon the <tt>isis.core.meta-model.annotation.domain-object-layout.title-ui-event.post-for-default</tt>
+     * {@link org.apache.isis.applib.annotation.DomainObjectLayout#titleUiEvent()}
+     * annotation element.
+     *
+     * <p>
+     * Whether this raises an event or not depends upon the
+     * <tt>isis.applib.annotation.domain-object-layout.title-ui-event.post-for-default</tt>
      * configuration property.
+     * </p>
      */
     public static class Default extends TitleUiEvent<Object> {}
 
     /**
-     * Convenience class to use indicating that an event should <i>not</i> be posted (irrespective of the configuration
-     * property seting for the {@link Default} event.
+     * Convenience class to use indicating that an event should <i>not</i> be
+     * posted (irrespective of the configuration property seting for the
+     * {@link Default} event.
      */
     public static class Noop extends TitleUiEvent<Object> {}
 
     /**
-     * Convenience class meaning that an event <i>should</i> be posted (irrespective of the configuration
-     * property setting for the {@link Default} event..
+     * Convenience class meaning that an event <i>should</i> be posted
+     * (irrespective of the configuration property setting for the
+     * {@link Default} event.
      */
     public static class Doop extends TitleUiEvent<Object> {}
 
