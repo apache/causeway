@@ -36,7 +36,9 @@ import org.apache.isis.extensions.secman.api.user.ApplicationUserStatus;
 
 import lombok.RequiredArgsConstructor;
 
-@Action(domainEvent = NewLocalUserDomainEvent.class, associateWith = "allUsers")
+@Action(
+        domainEvent = NewLocalUserDomainEvent.class, 
+        associateWith = "allUsers")
 @RequiredArgsConstructor
 public class ApplicationUserManager_newLocalUser {
     
@@ -46,7 +48,7 @@ public class ApplicationUserManager_newLocalUser {
     @Inject private RepositoryService repository;
     
     @SuppressWarnings("unused")
-    private final ApplicationUserManager holder;
+    private final ApplicationUserManager target;
 
     @Model
     public ApplicationUser act(

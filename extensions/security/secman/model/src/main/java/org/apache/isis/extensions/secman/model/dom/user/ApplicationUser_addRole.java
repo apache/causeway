@@ -34,25 +34,27 @@ import org.apache.isis.extensions.secman.api.user.ApplicationUser.AddRoleDomainE
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
-@Action(domainEvent = AddRoleDomainEvent.class, associateWith = "roles")
+@Action(
+        domainEvent = AddRoleDomainEvent.class, 
+        associateWith = "roles")
 @ActionLayout(named="Add")
 @RequiredArgsConstructor
 public class ApplicationUser_addRole {
     
     @Inject private ApplicationRoleRepository<? extends ApplicationRole> applicationRoleRepository;
     
-    private final ApplicationUser holder;
+    private final ApplicationUser target;
 
     @MemberOrder(sequence = "1")
     public ApplicationUser act(final ApplicationRole role) {
-        applicationRoleRepository.addRoleToUser(role, holder);
-        return holder;
+        applicationRoleRepository.addRoleToUser(role, target);
+        return target;
     }
 
     public Collection<? extends ApplicationRole> choices0Act() {
         val allRoles = applicationRoleRepository.allRoles();
         val applicationRoles = _Sets.newTreeSet(allRoles);
-        applicationRoles.removeAll(holder.getRoles());
+        applicationRoles.removeAll(target.getRoles());
         return applicationRoles;
     }
 

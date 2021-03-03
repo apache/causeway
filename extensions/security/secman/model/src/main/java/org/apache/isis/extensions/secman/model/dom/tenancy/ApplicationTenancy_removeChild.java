@@ -30,24 +30,26 @@ import org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancyRepositor
 
 import lombok.RequiredArgsConstructor;
 
-@Action(domainEvent = RemoveChildDomainEvent.class, associateWith = "children", 
-associateWithSequence = "2")
+@Action(
+        domainEvent = RemoveChildDomainEvent.class, 
+        associateWith = "children", 
+        associateWithSequence = "2")
 @RequiredArgsConstructor
 public class ApplicationTenancy_removeChild {
     
     @Inject private ApplicationTenancyRepository<? extends ApplicationTenancy> applicationTenancyRepository;
 
-    private final ApplicationTenancy holder;
+    private final ApplicationTenancy target;
 
     @Model
     public ApplicationTenancy act(final ApplicationTenancy child) {
         applicationTenancyRepository.clearParentOnTenancy(child);
-        return holder;
+        return target;
     }
     
     @Model
     public Collection<? extends ApplicationTenancy> choices0Act() {
-        return applicationTenancyRepository.getChildren(holder);
+        return applicationTenancyRepository.getChildren(target);
     }
     
     @Model

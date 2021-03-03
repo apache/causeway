@@ -18,14 +18,23 @@
  */
 package org.apache.isis.extensions.secman.model.dom.role;
 
+import java.util.Map;
+import java.util.TreeSet;
+import java.util.stream.Collectors;
+
 import javax.enterprise.inject.Model;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.MemberOrder;
+import org.apache.isis.applib.annotation.MinLength;
+import org.apache.isis.applib.annotation.Optionality;
+import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
+import org.apache.isis.applib.annotation.PromptStyle;
+import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureRepository;
-import org.apache.isis.applib.services.appfeat.ApplicationFeatureType;
 import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeature;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermission;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionMode;
@@ -35,51 +44,82 @@ import org.apache.isis.extensions.secman.api.role.ApplicationRole;
 import org.apache.isis.extensions.secman.api.role.ApplicationRole.AddPermissionDomainEvent;
 
 import lombok.RequiredArgsConstructor;
+import lombok.Value;
+import lombok.val;
+import lombok.experimental.Accessors;
 
-@Action(
-        domainEvent = AddPermissionDomainEvent.class, 
-        associateWith = "permissions")
+//TODO[2560] wip
+//@Action(
+//        domainEvent = AddPermissionDomainEvent.class, 
+//        associateWith = "permissions")
+//@ActionLayout(promptStyle = PromptStyle.DIALOG_MODAL)
 @RequiredArgsConstructor
-public class ApplicationRole_addPackage {
+public class ApplicationRole_addPermission {
     
     @Inject private ApplicationFeatureRepository applicationFeatureRepository;
     @Inject private ApplicationPermissionRepository<? extends ApplicationPermission> applicationPermissionRepository;
     
-    private final ApplicationRole holder;
+    private final ApplicationRole target;
     
+    @Value @Accessors(fluent = true)           
+    public static class Parameters {
+        ApplicationPermissionRule rule; // ALLOW/VETO
+        ApplicationPermissionMode mode; // r/w
+        String feature;
+    }
+
     /**
-     * Adds a {@link ApplicationPermission permission}
-     * for this role to a
-     * {@link ApplicationFeatureType#PACKAGE package}
+     * Adds a {@link ApplicationPermission permission} for this role to a
      * {@link ApplicationFeature feature}.
      */
-    @MemberOrder(sequence = "1")
+    @MemberOrder(sequence = "3")
     public ApplicationRole act(
+            
+            @Parameter(optionality = Optionality.MANDATORY)
             @ParameterLayout(named="Rule")
             final ApplicationPermissionRule rule,
+            
+            @Parameter(optionality = Optionality.MANDATORY)
             @ParameterLayout(named="Mode")
             final ApplicationPermissionMode mode,
-            @ParameterLayout(named="Package", typicalLength= ApplicationFeature.TYPICAL_LENGTH_PKG_FQN)
-            final String packageFqn) {
+            
+            @Parameter(optionality = Optionality.MANDATORY)
+            @ParameterLayout(named="Feature")
+            final String featureName) {
         
-        applicationPermissionRepository
-            .newPermission(holder, rule, mode, ApplicationFeatureType.PACKAGE, packageFqn);
-        return holder;
+        val featureId = ApplicationFeatureId.parse(featureName);
+        
+        applicationPermissionRepository.newPermission(target, rule, mode, featureId);
+        return target;
     }
 
     @Model
-    public ApplicationPermissionRule default0Act() {
+    public ApplicationPermissionRule defaultRule(Parameters params) {
         return ApplicationPermissionRule.ALLOW;
     }
 
     @Model
-    public ApplicationPermissionMode default1Act() {
+    public ApplicationPermissionMode defaultMode(Parameters params) {
         return ApplicationPermissionMode.CHANGING;
     }
 
     @Model
-    public java.util.Collection<String> choices2Act() {
-        return applicationFeatureRepository.packageNames();
+    public java.util.Collection<String> autoComplete2Act(             
+            @MinLength(3) String search) {
+        
+        val idsByName = applicationFeatureRepository.getFeatureIdentifiersByName();
+        
+        return idsByName.entrySet().stream()
+        .filter(entry->matches(entry.getKey(), entry.getValue(), search))
+        .map(Map.Entry::getValue)
+        .map(ApplicationFeatureId::asString)
+        .collect(Collectors.toCollection(TreeSet::new));
     }
 
+    private boolean matches(String featureName, ApplicationFeatureId featureId, String search) {
+        //TODO yet not very smart
+        return featureName.contains(search);
+    }
+
+    
 }

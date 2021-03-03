@@ -35,25 +35,25 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ApplicationUser_updateEmailAddress {
     
-    private final ApplicationUser holder;
+    private final ApplicationUser target;
 
     @Model
     public ApplicationUser act(
             @Parameter(maxLength = ApplicationUser.MAX_LENGTH_EMAIL_ADDRESS)
             @ParameterLayout(named="Email")
             final String emailAddress) {
-        holder.setEmailAddress(emailAddress);
-        return holder;
+        target.setEmailAddress(emailAddress);
+        return target;
     }
 
     @Model
     public String default0Act() {
-        return holder.getEmailAddress();
+        return target.getEmailAddress();
     }
 
     @Model
     public String disableAct() {
-        return holder.isForSelfOrRunAsAdministrator()? null: "Can only update your own user record.";
+        return target.isForSelfOrRunAsAdministrator()? null: "Can only update your own user record.";
     }
 
 }

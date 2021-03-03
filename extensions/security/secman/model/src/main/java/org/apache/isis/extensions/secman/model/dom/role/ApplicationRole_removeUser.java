@@ -42,23 +42,23 @@ public class ApplicationRole_removeUser {
     @Inject private ApplicationRoleRepository<? extends ApplicationRole> applicationRoleRepository;
     @Inject private ApplicationUserRepository<? extends ApplicationUser> applicationUserRepository;
     
-    private final ApplicationRole holder;
+    private final ApplicationRole target;
 
     @Model
     public ApplicationRole act(final ApplicationUser applicationUser) {
-        applicationRoleRepository.removeRoleFromUser(holder, applicationUser);
-        return holder;
+        applicationRoleRepository.removeRoleFromUser(target, applicationUser);
+        return target;
     }
 
     @Model
     public Collection<? extends ApplicationUser> choices0Act() {
-        return applicationUserRepository.findByRole(holder);
+        return applicationUserRepository.findByRole(target);
     }
 
     @Model
     public String validateAct(final ApplicationUser applicationUser) {
         if(applicationUserRepository.isAdminUser(applicationUser) 
-                && applicationRoleRepository.isAdminRole(holder)) {
+                && applicationRoleRepository.isAdminRole(target)) {
             return "Cannot remove admin user from the admin role.";
         }
         return null;

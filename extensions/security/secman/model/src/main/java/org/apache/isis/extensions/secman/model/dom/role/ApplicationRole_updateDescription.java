@@ -31,11 +31,13 @@ import org.apache.isis.extensions.secman.api.role.ApplicationRole.UpdateDescript
 
 import lombok.RequiredArgsConstructor;
 
-@Action(domainEvent = UpdateDescriptionDomainEvent.class, associateWith = "description")
+@Action(
+        domainEvent = UpdateDescriptionDomainEvent.class, 
+        associateWith = "description")
 @RequiredArgsConstructor
 public class ApplicationRole_updateDescription {
     
-    private final ApplicationRole holder;
+    private final ApplicationRole target;
     
     @MemberOrder(sequence = "1")
     public ApplicationRole act(
@@ -48,13 +50,13 @@ public class ApplicationRole_updateDescription {
                     typicalLength=ApplicationRole.TYPICAL_LENGTH_DESCRIPTION)
             final String description) {
         
-        holder.setDescription(description);
-        return holder;
+        target.setDescription(description);
+        return target;
     }
 
     @Model
     public String default0Act() {
-        return holder.getDescription();
+        return target.getDescription();
     }
 
 

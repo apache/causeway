@@ -40,25 +40,25 @@ public class HasUsername_open {
 
     @Inject private ApplicationUserRepository<? extends ApplicationUser> applicationUserRepository;
     
-    private final HasUsername holder;
+    private final HasUsername target;
 
     public static class ActionDomainEvent extends IsisModuleExtSecmanApi.ActionDomainEvent<HasUsername_open> {}
 
     
     @MemberOrder(name = "User", sequence = "1") // associate with a 'User' property (if any)
     public ApplicationUser act() {
-        if (holder == null || holder.getUsername() == null) {
+        if (target == null || target.getUsername() == null) {
             return null;
         }
-        return applicationUserRepository.findByUsername(holder.getUsername()).orElse(null);
+        return applicationUserRepository.findByUsername(target.getUsername()).orElse(null);
     }
     
     public boolean hideAct() {
-        return holder instanceof ApplicationUser;
+        return target instanceof ApplicationUser;
     }
 
     public TranslatableString disableAct() {
-        if (holder == null || holder.getUsername() == null) {
+        if (target == null || target.getUsername() == null) {
             return TranslatableString.tr("No username");
         }
         return null;

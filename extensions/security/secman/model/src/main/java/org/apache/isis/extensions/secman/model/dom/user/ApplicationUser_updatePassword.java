@@ -46,7 +46,7 @@ public class ApplicationUser_updatePassword {
     @Inject private ApplicationUserRepository<? extends ApplicationUser> applicationUserRepository;
     @Inject private Optional<PasswordEncryptionService> passwordEncryptionService; // empty if no candidate is available
     
-    private final ApplicationUser holder;
+    private final ApplicationUser target;
 
     @Model
     public ApplicationUser act(
@@ -57,22 +57,22 @@ public class ApplicationUser_updatePassword {
             @ParameterLayout(named="Re-enter password")
             final Password newPasswordRepeat) {
         
-        applicationUserRepository.updatePassword(holder, newPassword.getPassword());
-        return holder;
+        applicationUserRepository.updatePassword(target, newPassword.getPassword());
+        return target;
     }
 
     @Model
     public boolean hideAct() {
-        return !applicationUserRepository.isPasswordFeatureEnabled(holder);
+        return !applicationUserRepository.isPasswordFeatureEnabled(target);
     }
 
     @Model
     public String disableAct() {
 
-        if(!holder.isForSelfOrRunAsAdministrator()) {
+        if(!target.isForSelfOrRunAsAdministrator()) {
             return "Can only update password for your own user account.";
         }
-        if (!holder.isHasPassword()) {
+        if (!target.isHasPassword()) {
             return "Password must be reset by administrator.";
         }
         return null;
@@ -84,15 +84,15 @@ public class ApplicationUser_updatePassword {
             final Password newPassword,
             final Password newPasswordRepeat) {
 
-        if(!applicationUserRepository.isPasswordFeatureEnabled(holder)) {
+        if(!applicationUserRepository.isPasswordFeatureEnabled(target)) {
             return "Password feature is not available for this User";
         }
 
         val encrypter = passwordEncryptionService.orElseThrow(_Exceptions::unexpectedCodeReach);
         
-        val encryptedPassword = holder.getEncryptedPassword();
+        val encryptedPassword = target.getEncryptedPassword();
         
-        if(holder.getEncryptedPassword() != null) {
+        if(target.getEncryptedPassword() != null) {
             if (!encrypter.matches(existingPassword.getPassword(), encryptedPassword)) {
                 return "Existing password is incorrect";
             }

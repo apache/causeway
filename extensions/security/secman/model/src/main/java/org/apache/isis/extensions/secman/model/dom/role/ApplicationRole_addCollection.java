@@ -27,19 +27,21 @@ import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureRepository;
+import org.apache.isis.applib.services.appfeat.ApplicationFeatureType;
 import org.apache.isis.applib.services.appfeat.ApplicationMemberType;
 import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeature;
-import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureType;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermission;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionMode;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionRepository;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionRule;
 import org.apache.isis.extensions.secman.api.role.ApplicationRole;
-import org.apache.isis.extensions.secman.api.role.ApplicationRole.AddCollectionDomainEvent;
+import org.apache.isis.extensions.secman.api.role.ApplicationRole.AddPermissionDomainEvent;
 
 import lombok.RequiredArgsConstructor;
 
-@Action(domainEvent = AddCollectionDomainEvent.class, associateWith = "permissions")
+@Action(
+        domainEvent = AddPermissionDomainEvent.class, 
+        associateWith = "permissions")
 @RequiredArgsConstructor
 public class ApplicationRole_addCollection {
     

@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.services.appfeat;
+package org.apache.isis.applib.services.appfeat;
 
 import java.io.Serializable;
 import java.util.Collections;
@@ -24,7 +24,6 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.function.Function;
-import java.util.function.Predicate;
 
 import static java.util.Comparator.comparing;
 import static java.util.Comparator.naturalOrder;
@@ -33,7 +32,6 @@ import static java.util.Comparator.nullsFirst;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.Value;
-import org.apache.isis.applib.services.appfeat.ApplicationMemberType;
 import org.apache.isis.applib.util.Equality;
 import org.apache.isis.applib.util.Hashing;
 import org.apache.isis.applib.util.ObjectContracts;
@@ -42,7 +40,9 @@ import org.apache.isis.applib.util.ToString;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 
+import lombok.Getter;
 import lombok.NonNull;
+import lombok.Setter;
 import lombok.val;
 
 /**
@@ -118,9 +118,7 @@ implements
     }
 
     public static ApplicationFeatureId newClass(final String classFqn) {
-        final ApplicationFeatureId featureId = new ApplicationFeatureId(ApplicationFeatureType.CLASS);
-        featureId.type.init(featureId, classFqn);
-        return featureId;
+        return new ApplicationFeatureId(ApplicationFeatureType.CLASS, classFqn);
     }
 
     public static ApplicationFeatureId newMember(final String classFqn, final String memberName) {
@@ -132,9 +130,7 @@ implements
     }
 
     public static ApplicationFeatureId newMember(final String fullyQualifiedName) {
-        final ApplicationFeatureId featureId = new ApplicationFeatureId(ApplicationFeatureType.MEMBER);
-        featureId.type.init(featureId, fullyQualifiedName);
-        return featureId;
+        return new ApplicationFeatureId(ApplicationFeatureType.MEMBER, fullyQualifiedName);
     }
 
     /**
@@ -151,10 +147,7 @@ implements
         return new ApplicationFeatureId(_Strings.base64UrlDecode(encodedString));
     }
 
-
-    // //////////////////////////////////////
-
-    // -- constructor
+    // -- CONSTRUCTOR
 
     private ApplicationFeatureId(final String asString) {
         final Iterator<String> iterator = _Strings.splitThenStream(asString, ":").iterator();
@@ -163,8 +156,8 @@ implements
     }
 
     /**
-     * Must be called by {@link ApplicationFeatureType#init(ApplicationFeatureId, String)} immediately afterwards
-     * to fully initialize.
+     * Must be called by {@link ApplicationFeatureType#init(ApplicationFeatureId, String)} 
+     * immediately afterwards to fully initialize.
      */
     ApplicationFeatureId(final ApplicationFeatureType type) {
         this.type = type;
@@ -174,11 +167,8 @@ implements
         type.init(this, fullyQualifiedName);
     }
 
-
-
-    // //////////////////////////////////////
-
-    // -- identification
+    // -- IDENTIFICATION
+    
     /**
      * having a title() method (rather than using @Title annotation) is necessary as a workaround to be able to use
      * wrapperFactory#unwrap(...) method, which is otherwise broken in Isis 1.6.0
@@ -189,10 +179,7 @@ implements
         return buf.toString();
     }
 
-
-    // //////////////////////////////////////
-
-    // -- fullyQualifiedName (property)
+    // -- PROPERTIES
 
     @Programmatic
     public String getFullyQualifiedName() {
@@ -206,10 +193,6 @@ implements
         }
         return buf.toString();
     }
-
-
-
-    // -- objectSpecId (property)
 
     @Programmatic
     public String getLogicalTypeName() {
@@ -226,67 +209,16 @@ implements
         return buf.toString();
     }
 
+    @Getter ApplicationFeatureType type;
 
+    @Programmatic 
+    @Getter @Setter private String namespace;
 
-    // //////////////////////////////////////
+    @Programmatic 
+    @Getter @Setter private String typeSimpleName;
 
-    // -- type (property)
-    ApplicationFeatureType type;
-
-    public ApplicationFeatureType getType() {
-        return type;
-    }
-
-
-    // //////////////////////////////////////
-
-    // -- namespace (property)
-    private String namespace;
-
-    @Programmatic
-    public String getNamespace() {
-        return namespace;
-    }
-
-    void setNamespace(final String namespace) {
-        this.namespace = namespace;
-    }
-
-
-    // //////////////////////////////////////
-
-    // -- className (property, optional)
-
-    private String typeSimpleName;
-
-    @Programmatic
-    public String getTypeSimpleName() {
-        return typeSimpleName;
-    }
-
-    void setTypeSimpleName(final String className) {
-        this.typeSimpleName = className;
-    }
-
-
-    // //////////////////////////////////////
-
-    // -- memberName (property, optional)
-    private String memberName;
-
-    @Programmatic
-    public String getMemberName() {
-        return memberName;
-    }
-
-    void setMemberName(final String memberName) {
-        this.memberName = memberName;
-    }
-
-
-    // //////////////////////////////////////
-
-    // -- Package or Class: getParentPackageId
+    @Programmatic 
+    @Getter @Setter private String memberName;
 
     /**
      * The {@link ApplicationFeatureId id} of the parent package of this
@@ -312,12 +244,6 @@ implements
         }
     }
 
-
-
-    // //////////////////////////////////////
-
-    // -- Member: getParentClassId
-
     /**
      * The {@link ApplicationFeatureId id} of the member's class.
      */
@@ -327,10 +253,7 @@ implements
         return newClass(classFqn);
     }
 
-
-    // //////////////////////////////////////
-
-    // -- asString, asEncodedString
+    // -- ENCODING
 
     @Programmatic
     public String asString() {
@@ -341,7 +264,6 @@ implements
     public String asEncodedString() {
         return _Strings.base64UrlEncode(asString());
     }
-    
 
     // //////////////////////////////////////
 
@@ -357,36 +279,6 @@ implements
         public static final Function<ApplicationFeatureId, String> GET_MEMBER_NAME = 
                 ApplicationFeatureId::getMemberName;
 
-    }
-
-
-    // //////////////////////////////////////
-
-    // -- Predicates
-
-    public static class Predicates {
-        private Predicates(){}
-
-        public static Predicate<ApplicationFeatureId> isClassContaining(
-                final ApplicationMemberType memberType, final ApplicationFeatureRepositoryDefault applicationFeatures) {
-            return new Predicate<ApplicationFeatureId>() {
-                @Override
-                public boolean test(final ApplicationFeatureId input) {
-                    if(input.getType() != ApplicationFeatureType.CLASS) {
-                        return false;
-                    }
-                    final ApplicationFeature feature = applicationFeatures.findFeature(input);
-                    if(feature == null) {
-                        return false;
-                    }
-                    return memberType == null || !feature.membersOf(memberType).isEmpty();
-                }
-            };
-        }
-
-        public static Predicate<ApplicationFeatureId> isClassRecursivelyWithin(final ApplicationFeatureId packageId) {
-            return (ApplicationFeatureId input) -> input.getParentIds().contains(packageId);
-        }
     }
 
 
@@ -441,10 +333,7 @@ implements
         return parentIds;
     }
 
-
-    // //////////////////////////////////////
-
-    // -- equals, hashCode, compareTo, toString
+    // -- OBJECT CONTRACT
 
     private static final Comparator<ApplicationFeatureId> byType =
             comparing(ApplicationFeatureId::getType, nullsFirst(naturalOrder()));
@@ -508,6 +397,27 @@ implements
      */
     public ApplicationFeatureId withNamespace(final @NonNull String namespace) {
         return newFeature(namespace, this.getTypeSimpleName(), this.getMemberName()); 
+    }
+
+    @Deprecated // duplicate
+    public static ApplicationFeatureId createPackage(String fqn) {
+        val feat = new ApplicationFeatureId(ApplicationFeatureType.PACKAGE);
+        ApplicationFeatureType.PACKAGE.init(feat, fqn);
+        return feat;
+    }
+    
+    @Deprecated // duplicate
+    public static ApplicationFeatureId createClass(String fqn) {
+        val feat = new ApplicationFeatureId(ApplicationFeatureType.CLASS);
+        ApplicationFeatureType.CLASS.init(feat, fqn);
+        return feat;
+    }
+    
+    @Deprecated // duplicate
+    public static ApplicationFeatureId createMember(String fqn) {
+        val feat = new ApplicationFeatureId(ApplicationFeatureType.MEMBER);
+        ApplicationFeatureType.MEMBER.init(feat, fqn);
+        return feat;
     }
 
 

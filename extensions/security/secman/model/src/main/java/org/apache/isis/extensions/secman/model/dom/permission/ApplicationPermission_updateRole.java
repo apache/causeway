@@ -31,23 +31,25 @@ import org.apache.isis.extensions.secman.api.role.ApplicationRoleRepository;
 
 import lombok.RequiredArgsConstructor;
 
-@Action(domainEvent = UpdateRoleDomainEvent.class, associateWith = "role")
+@Action(
+        domainEvent = UpdateRoleDomainEvent.class, 
+        associateWith = "role")
 @RequiredArgsConstructor
 public class ApplicationPermission_updateRole {
 
     @Inject private ApplicationRoleRepository<? extends ApplicationRole> applicationRoleRepository;
     
-    private final ApplicationPermission holder;
+    private final ApplicationPermission target;
     
     @Model
     public ApplicationPermission act(final ApplicationRole applicationRole) {
-        holder.setRole(applicationRole);
-        return holder;
+        target.setRole(applicationRole);
+        return target;
     }
 
     @Model
     public ApplicationRole default0Act() {
-        return holder.getRole();
+        return target.getRole();
     }
 
     @Model

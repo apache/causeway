@@ -26,8 +26,8 @@ import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.MemberOrder;
-import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureId;
-import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureType;
+import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
+import org.apache.isis.applib.services.appfeat.ApplicationFeatureType;
 
 @DomainObject(
         objectType = "isis.ext.secman.ApplicationPackage"

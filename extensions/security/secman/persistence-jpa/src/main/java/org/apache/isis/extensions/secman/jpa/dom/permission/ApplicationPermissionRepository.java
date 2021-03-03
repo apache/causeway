@@ -31,6 +31,8 @@ import javax.inject.Named;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.query.Query;
+import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
+import org.apache.isis.applib.services.appfeat.ApplicationFeatureType;
 import org.apache.isis.applib.services.appfeat.ApplicationMemberType;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.message.MessageService;
@@ -44,9 +46,7 @@ import org.apache.isis.commons.internal.collections._Multimaps;
 import org.apache.isis.commons.internal.collections._Multimaps.ListMultimap;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeature;
-import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureRepositoryDefault;
-import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureType;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionMode;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionRule;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionValue;
@@ -278,7 +278,7 @@ implements org.apache.isis.extensions.secman.api.permission.ApplicationPermissio
         repository.persist(permission);
         return permission;
     }
-
+    
     @Override
     public ApplicationPermission newPermission(
             final org.apache.isis.extensions.secman.api.role.ApplicationRole genericRole,
@@ -288,9 +288,19 @@ implements org.apache.isis.extensions.secman.api.permission.ApplicationPermissio
             final String featureClassName,
             final String featureMemberName) {
 
-        val role = _Casts.<ApplicationRole>uncheckedCast(genericRole);
-
         val featureId = ApplicationFeatureId.newFeature(featurePackage, featureClassName, featureMemberName);
+        return newPermission(genericRole, rule, mode, featureId);
+    }
+    
+    @Override
+    public ApplicationPermission newPermission(
+            final org.apache.isis.extensions.secman.api.role.ApplicationRole genericRole,
+            final ApplicationPermissionRule rule, 
+            final ApplicationPermissionMode mode, 
+            final ApplicationFeatureId featureId) {
+        
+        val role = _Casts.<ApplicationRole>uncheckedCast(genericRole);
+        
         val featureType = featureId.getType();
         val featureFqn = featureId.getFullyQualifiedName();
 

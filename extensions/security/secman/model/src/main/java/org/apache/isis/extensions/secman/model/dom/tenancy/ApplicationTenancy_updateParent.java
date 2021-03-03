@@ -39,19 +39,19 @@ public class ApplicationTenancy_updateParent {
     
     @Inject private ApplicationTenancyRepository<? extends ApplicationTenancy> applicationTenancyRepository;
     
-    private final ApplicationTenancy holder;
+    private final ApplicationTenancy target;
 
     @Model
     public ApplicationTenancy act(
             @Parameter(optionality = Optionality.OPTIONAL)
             final ApplicationTenancy parent) {
         
-        applicationTenancyRepository.setParentOnTenancy(holder, parent);
-        return holder;
+        applicationTenancyRepository.setParentOnTenancy(target, parent);
+        return target;
     }
 
     @Model
     public ApplicationTenancy default0Act() {
-        return holder.getParent();
+        return target.getParent();
     }
 }

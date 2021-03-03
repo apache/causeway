@@ -36,16 +36,16 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ApplicationUser_unlock {
     
-    private final ApplicationUser holder;
+    private final ApplicationUser target;
 
     @Model
     public ApplicationUser act() {
-        holder.setStatus(ApplicationUserStatus.ENABLED);
-        return holder;
+        target.setStatus(ApplicationUserStatus.ENABLED);
+        return target;
     }
     
     @Model
     public String disableAct() {
-        return holder.getStatus() == ApplicationUserStatus.ENABLED ? "Status is already set to ENABLE": null;
+        return target.getStatus() == ApplicationUserStatus.ENABLED ? "Status is already set to ENABLE": null;
     }
 }

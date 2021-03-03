@@ -41,7 +41,7 @@ public class ApplicationUser_resetPassword {
     
     @Inject private ApplicationUserRepository<? extends ApplicationUser> applicationUserRepository;
     
-    private final ApplicationUser holder;
+    private final ApplicationUser target;
 
     @Model
     public ApplicationUser act(
@@ -50,13 +50,13 @@ public class ApplicationUser_resetPassword {
             @ParameterLayout(named="Repeat password")
             final Password newPasswordRepeat) {
         
-        applicationUserRepository.updatePassword(holder, newPassword.getPassword());
-        return holder;
+        applicationUserRepository.updatePassword(target, newPassword.getPassword());
+        return target;
     }
 
     @Model
     public boolean hideAct() {
-        return !applicationUserRepository.isPasswordFeatureEnabled(holder);
+        return !applicationUserRepository.isPasswordFeatureEnabled(target);
     }
 
     @Model
@@ -64,7 +64,7 @@ public class ApplicationUser_resetPassword {
             final Password newPassword,
             final Password newPasswordRepeat) {
         
-        if(!applicationUserRepository.isPasswordFeatureEnabled(holder)) {
+        if(!applicationUserRepository.isPasswordFeatureEnabled(target)) {
             return "Password feature is not available for this User";
         }
         

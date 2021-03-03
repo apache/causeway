@@ -51,7 +51,7 @@ public class ApplicationRole_removePermissions {
     @Inject private RepositoryService repository;
     @Inject private ApplicationRoleRepository<? extends ApplicationRole> applicationRoleRepository;
     
-    private final ApplicationRole holder;
+    private final ApplicationRole target;
 
     @Model
     public ApplicationRole act(Collection<ApplicationPermission> permissions) {
@@ -60,14 +60,14 @@ public class ApplicationRole_removePermissions {
         .filter(this::canRemove)
         .forEach(repository::remove);
         
-        return holder;
+        return target;
     }
 
     private boolean canRemove(ApplicationPermission permission) {
-        if(!Objects.equals(permission.getRole(), holder)) {
+        if(!Objects.equals(permission.getRole(), target)) {
             return false;
         }
-        if(applicationRoleRepository.isAdminRole(holder) 
+        if(applicationRoleRepository.isAdminRole(target) 
                 && configBean.isStickyAdminNamespace(permission.getFeatureFqn())) {
             
             messageService.warnUser("Cannot remove top-level namespace permissions for the admin role.");

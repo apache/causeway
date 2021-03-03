@@ -36,24 +36,24 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ApplicationUser_updatePhoneNumber {
     
-    private final ApplicationUser holder;
+    private final ApplicationUser target;
 
     @Model
     public ApplicationUser act(
             @ParameterLayout(named="Phone")
             @Parameter(maxLength = ApplicationUser.MAX_LENGTH_PHONE_NUMBER, optionality = Optionality.OPTIONAL)
             final String phoneNumber) {
-        holder.setPhoneNumber(phoneNumber);
-        return holder;
+        target.setPhoneNumber(phoneNumber);
+        return target;
     }
 
     @Model
     public String disableAct() {
-        return holder.isForSelfOrRunAsAdministrator()? null: "Can only update your own user record.";
+        return target.isForSelfOrRunAsAdministrator()? null: "Can only update your own user record.";
     }
     
     @Model
     public String default0Act() {
-        return holder.getPhoneNumber();
+        return target.getPhoneNumber();
     }
 }

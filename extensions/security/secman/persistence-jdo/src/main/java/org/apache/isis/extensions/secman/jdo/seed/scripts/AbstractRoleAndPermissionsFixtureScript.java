@@ -25,8 +25,8 @@ import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
+import org.apache.isis.applib.services.appfeat.ApplicationFeatureType;
 import org.apache.isis.commons.internal.base._NullSafe;
-import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionMode;

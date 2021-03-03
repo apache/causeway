@@ -35,20 +35,20 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ApplicationUser_updateUsername {
     
-    private final ApplicationUser holder;
+    private final ApplicationUser target;
 
     @Model
     public ApplicationUser act(
             @Parameter(maxLength = ApplicationUser.MAX_LENGTH_USERNAME)
             @ParameterLayout(named="Username")
             final String username) {
-        holder.setUsername(username);
-        return holder;
+        target.setUsername(username);
+        return target;
     }
 
     @Model
     public String default0Act() {
-        return holder.getUsername();
+        return target.getUsername();
     }
 
 }

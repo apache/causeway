@@ -42,7 +42,7 @@ public class ApplicationUser_duplicate {
     @Inject private ApplicationUserRepository<? extends ApplicationUser> applicationUserRepository;
     @Inject private ApplicationRoleRepository<? extends ApplicationRole> applicationRoleRepository;
 
-    private final ApplicationUser holder;
+    private final ApplicationUser target;
 
     @Model
     public ApplicationUser act(
@@ -52,12 +52,12 @@ public class ApplicationUser_duplicate {
             final String emailAddress) {
         
         return applicationUserRepository
-                .newUser(username, holder.getAccountType(), user->{
+                .newUser(username, target.getAccountType(), user->{
         
                     user.setStatus(ApplicationUserStatus.DISABLED);
                     user.setEmailAddress(emailAddress);
         
-                    for (ApplicationRole role : holder.getRoles()) {
+                    for (ApplicationRole role : target.getRoles()) {
                         applicationRoleRepository.addRoleToUser(role, user);
                     }
                     

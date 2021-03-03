@@ -18,7 +18,10 @@
  */
 package org.apache.isis.applib.services.appfeat;
 
+import java.util.Map;
 import java.util.SortedSet;
+
+import org.apache.isis.applib.Identifier;
 
 /**
  * Provides the access to string representations of the packages, classes and
@@ -45,5 +48,7 @@ public interface ApplicationFeatureRepository  {
             String packageFqn,
             String className,
             ApplicationMemberType memberType);
+
+    Map<String, ApplicationFeatureId> getFeatureIdentifiersByName();
 
 }
