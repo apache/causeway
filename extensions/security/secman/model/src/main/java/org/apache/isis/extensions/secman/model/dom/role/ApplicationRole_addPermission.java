@@ -112,7 +112,7 @@ public class ApplicationRole_addPermission {
         return idsByName.entrySet().stream()
         .filter(entry->matches(entry.getKey(), entry.getValue(), search))
         .map(Map.Entry::getValue)
-        .map(ApplicationFeatureId::asString)
+        .map(ApplicationFeatureId::stringify)
         .collect(Collectors.toCollection(TreeSet::new));
     }
 

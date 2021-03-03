@@ -118,33 +118,6 @@ public class ApplicationFeatureIdTest {
 
     }
 
-    public static class Constructor_AFT_String extends ApplicationFeatureIdTest {
-
-        @Test
-        public void whenPackage() throws Exception {
-            // when
-            val applicationFeatureId = new ApplicationFeatureId(ApplicationFeatureSort.NAMESPACE, "com.mycompany");
-            // then
-            assertThat(applicationFeatureId, is(ApplicationFeatureId.newNamespace("com.mycompany")));
-        }
-
-        @Test
-        public void whenClass() throws Exception {
-            // when
-            val applicationFeatureId = new ApplicationFeatureId(ApplicationFeatureSort.TYPE, "com.mycompany.Bar");
-            // then
-            assertThat(applicationFeatureId, is(ApplicationFeatureId.newType("com.mycompany.Bar")));
-        }
-
-        @Test
-        public void whenMember() throws Exception {
-            // when
-            val applicationFeatureId = new ApplicationFeatureId(ApplicationFeatureSort.MEMBER, "com.mycompany.Bar#foo");
-            // then
-            assertThat(applicationFeatureId, is(ApplicationFeatureId.newMember("com.mycompany.Bar","foo")));
-        }
-    }
-
     public static class NewFeature_AFT_String extends ApplicationFeatureIdTest {
 
         @Test

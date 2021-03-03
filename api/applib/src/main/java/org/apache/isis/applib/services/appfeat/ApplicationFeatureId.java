@@ -21,7 +21,6 @@ package org.apache.isis.applib.services.appfeat;
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Iterator;
 import java.util.List;
 
 import static java.util.Comparator.comparing;
@@ -40,6 +39,7 @@ import org.apache.isis.applib.util.TitleBuffer;
 import org.apache.isis.applib.util.ToString;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -47,11 +47,11 @@ import lombok.Setter;
 import lombok.val;
 
 /**
- * Value type representing a package, class or member.
+ * Value type representing a namespace, type or member.
  * <p>
  * This value is {@link Comparable}, the implementation of which considers 
- * {@link #getType() (feature) type}, {@link #getNamespace() logical package name}, 
- * {@link #getTypeSimpleName() class name} and {@link #getMemberName() member name}.
+ * {@link #getSort() (feature) sort}, {@link #getNamespace() namespace}, 
+ * {@link #getTypeSimpleName() type simple name} and {@link #getMemberName() member name}.
  * 
  */
 @Value
@@ -64,8 +64,7 @@ implements
 
     // -- CONSTANTS
 
-    public static final ApplicationFeatureId NAMESPACE_DEFAULT = 
-            new ApplicationFeatureId(ApplicationFeatureSort.NAMESPACE, "default");
+    public static final ApplicationFeatureId NAMESPACE_DEFAULT = newNamespace("default");
 
     // -- FACTORY METHODS
 
@@ -84,10 +83,10 @@ implements
     }
     
     public static ApplicationFeatureId newFeature(
-            final ApplicationFeatureSort featureType, 
-            final String qualifiedName) {
+            final @NonNull ApplicationFeatureSort featureSort, 
+            final @NonNull String qualifiedName) {
         
-        switch (featureType) {
+        switch (featureSort) {
         case NAMESPACE:
             return newNamespace(qualifiedName);
         case TYPE:
@@ -95,7 +94,7 @@ implements
         case MEMBER:
             return newMember(qualifiedName);
         }
-        throw new IllegalArgumentException("Unknown feature type " + featureType);
+        throw _Exceptions.illegalArgument("Unknown feature sort '%s'", featureSort);
     }
 
     public static ApplicationFeatureId newFeature(
@@ -113,45 +112,35 @@ implements
     }
 
     public static ApplicationFeatureId newNamespace(final String namespace) {
-        final ApplicationFeatureId featureId = new ApplicationFeatureId(ApplicationFeatureSort.NAMESPACE);
-        featureId.setNamespace(namespace);
-        return featureId;
+        val feat = new ApplicationFeatureId(ApplicationFeatureSort.NAMESPACE);
+        ApplicationFeatureSort.initNamespace(feat, namespace);
+        return feat;
     }
 
     public static ApplicationFeatureId newType(final String logicalTypeName) {
-        return new ApplicationFeatureId(ApplicationFeatureSort.TYPE, logicalTypeName);
+        val feat = new ApplicationFeatureId(ApplicationFeatureSort.TYPE);
+        ApplicationFeatureSort.initType(feat, logicalTypeName);
+        return feat;
     }
 
     public static ApplicationFeatureId newMember(final String logicalTypeName, final String memberName) {
         final ApplicationFeatureId featureId = new ApplicationFeatureId(ApplicationFeatureSort.MEMBER);
-        ApplicationFeatureSort.TYPE.init(featureId, logicalTypeName);
+        ApplicationFeatureSort.initType(featureId, logicalTypeName);
         featureId.sort = ApplicationFeatureSort.MEMBER;
         featureId.setMemberName(memberName);
         return featureId;
     }
 
-    public static ApplicationFeatureId newMember(final String fullyQualifiedName) {
-        return new ApplicationFeatureId(ApplicationFeatureSort.MEMBER, fullyQualifiedName);
+    public static ApplicationFeatureId newMember(String fqn) {
+        val feat = new ApplicationFeatureId(ApplicationFeatureSort.MEMBER);
+        ApplicationFeatureSort.initMember(feat, fqn);
+        return feat;
     }
-
+    
     // -- CONSTRUCTOR
 
-    private ApplicationFeatureId(final String asString) {
-        final Iterator<String> iterator = _Strings.splitThenStream(asString, ":").iterator();
-        final ApplicationFeatureSort type = ApplicationFeatureSort.valueOf(iterator.next());
-        type.init(this, iterator.next());
-    }
-
-    /**
-     * Must be called by {@link ApplicationFeatureSort#init(ApplicationFeatureId, String)} 
-     * immediately afterwards to fully initialize.
-     */
-    ApplicationFeatureId(final ApplicationFeatureSort type) {
-        this.sort = type;
-    }
-
-    public ApplicationFeatureId(final ApplicationFeatureSort type, final String fullyQualifiedName) {
-        type.init(this, fullyQualifiedName);
+    private ApplicationFeatureId(final ApplicationFeatureSort sort) {
+        this.sort = sort;
     }
 
     // -- TITLE
@@ -245,27 +234,29 @@ implements
     // -- ENCODING / DECODING
 
     @Programmatic
-    public String asString() {
+    public String stringify() {
         return sort.name() + ":" + getFullyQualifiedName();
     }
 
-    @Programmatic
-    public String asEncodedString() {
-        return _Strings.base64UrlEncode(asString());
+    /**
+     * Round-trip with {@link #stringify()}
+     */
+    public static ApplicationFeatureId parse(final String stringified) {
+        return _Strings.splitThenApplyRequireNonEmpty(stringified, ":", (sort, fqn)->
+            newFeature(ApplicationFeatureSort.valueOf(sort), fqn))
+        .orElseThrow(()->_Exceptions.illegalArgument("cannot parse feature-id '%s'", stringified));
     }
     
-    /**
-     * Round-trip with {@link #asString()}
-     */
-    public static ApplicationFeatureId parse(final String asString) {
-        return new ApplicationFeatureId(asString);
+    @Programmatic
+    public String asEncodedString() {
+        return _Strings.base64UrlEncode(stringify());
     }
 
     /**
      * Round-trip with {@link #asEncodedString()}
      */
     public static ApplicationFeatureId parseEncoded(final String encodedString) {
-        return new ApplicationFeatureId(_Strings.base64UrlDecode(encodedString));
+        return parse(_Strings.base64UrlDecode(encodedString));
     }
 
     // -- pathIds, parentIds
@@ -368,26 +359,7 @@ implements
         return newFeature(namespace, this.getTypeSimpleName(), this.getMemberName()); 
     }
 
-    @Deprecated // duplicate
-    public static ApplicationFeatureId createNamespace(String namespace) {
-        val feat = new ApplicationFeatureId(ApplicationFeatureSort.NAMESPACE);
-        ApplicationFeatureSort.NAMESPACE.init(feat, namespace);
-        return feat;
-    }
-    
-    @Deprecated // duplicate
-    public static ApplicationFeatureId createType(String logicalTypeName) {
-        val feat = new ApplicationFeatureId(ApplicationFeatureSort.TYPE);
-        ApplicationFeatureSort.TYPE.init(feat, logicalTypeName);
-        return feat;
-    }
-    
-    @Deprecated // duplicate
-    public static ApplicationFeatureId createMember(String fqn) {
-        val feat = new ApplicationFeatureId(ApplicationFeatureSort.MEMBER);
-        ApplicationFeatureSort.MEMBER.init(feat, fqn);
-        return feat;
-    }
+
 
 
 }
