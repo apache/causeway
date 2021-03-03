@@ -39,10 +39,11 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureRepository;
-import org.apache.isis.applib.services.appfeat.ApplicationFeatureType;
+import org.apache.isis.applib.services.appfeat.ApplicationFeatureSort;
 import org.apache.isis.applib.services.appfeat.ApplicationMemberType;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.collections._Sets;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.metamodel.services.ApplicationFeaturesInitConfiguration;
 import org.apache.isis.core.metamodel.events.MetamodelEvent;
@@ -372,7 +373,7 @@ implements ApplicationFeatureRepository {
 
     public ApplicationFeature findFeature(final ApplicationFeatureId featureId) {
         initializeIfRequired();
-        switch (featureId.getType()) {
+        switch (featureId.getSort()) {
         case NAMESPACE:
             return findPackage(featureId);
         case TYPE:
@@ -380,7 +381,7 @@ implements ApplicationFeatureRepository {
         case MEMBER:
             return findMember(featureId);
         }
-        throw new IllegalArgumentException("Feature has unknown feature type " + featureId.getType());
+        throw _Exceptions.illegalArgument("Feature of unknown sort '%s'", featureId.getSort());
     }
 
 
@@ -405,7 +406,7 @@ implements ApplicationFeatureRepository {
 
     // -- allFeatures, allPackages, allClasses, allMembers
 
-    public Collection<ApplicationFeature> allFeatures(final ApplicationFeatureType featureType) {
+    public Collection<ApplicationFeature> allFeatures(final ApplicationFeatureSort featureType) {
         initializeIfRequired();
         if (featureType == null) {
             return Collections.emptyList();
@@ -468,7 +469,7 @@ implements ApplicationFeatureRepository {
     @Override
     public SortedSet<String> packageNames() {
         initializeIfRequired();
-        return stream(allFeatures(ApplicationFeatureType.NAMESPACE))
+        return stream(allFeatures(ApplicationFeatureSort.NAMESPACE))
                 .map(ApplicationFeature.Functions.GET_FQN)
                 .collect(_Sets.toUnmodifiableSorted());
     }
@@ -476,7 +477,7 @@ implements ApplicationFeatureRepository {
     @Override
     public SortedSet<String> packageNamesContainingClasses(final ApplicationMemberType memberType) {
         initializeIfRequired();
-        final Collection<ApplicationFeature> packages = allFeatures(ApplicationFeatureType.NAMESPACE);
+        final Collection<ApplicationFeature> packages = allFeatures(ApplicationFeatureSort.NAMESPACE);
 
         return stream(packages)
                 .filter(ApplicationFeature.Predicates.packageContainingClasses(memberType, this))

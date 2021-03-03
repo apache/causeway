@@ -25,7 +25,7 @@ import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureRepository;
-import org.apache.isis.applib.services.appfeat.ApplicationFeatureType;
+import org.apache.isis.applib.services.appfeat.ApplicationFeatureSort;
 import org.apache.isis.applib.services.appfeat.ApplicationMemberType;
 import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeature;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermission;
@@ -51,7 +51,7 @@ public class ApplicationRole_addAction {
     /**
      * Adds a {@link ApplicationPermission permission} for this role to a
      * {@link ApplicationMemberType#ACTION action}
-     * {@link ApplicationFeatureType#MEMBER member}
+     * {@link ApplicationFeatureSort#MEMBER member}
      * {@link ApplicationFeature feature}.
      */
     @MemberOrder(sequence = "3")

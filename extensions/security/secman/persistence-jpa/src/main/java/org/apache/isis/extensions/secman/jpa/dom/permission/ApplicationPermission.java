@@ -46,7 +46,7 @@ import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
-import org.apache.isis.applib.services.appfeat.ApplicationFeatureType;
+import org.apache.isis.applib.services.appfeat.ApplicationFeatureSort;
 import org.apache.isis.applib.services.appfeat.ApplicationMemberType;
 import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.applib.util.ObjectContracts.ObjectContract;
@@ -197,7 +197,7 @@ implements
             )
     @PropertyLayout(typicalLength=ApplicationPermission.TYPICAL_LENGTH_TYPE)
     public String getType() {
-        final Enum<?> e = getFeatureType() != ApplicationFeatureType.MEMBER 
+        final Enum<?> e = getFeatureType() != ApplicationFeatureSort.MEMBER 
                 ? getFeatureType() 
                         : getMemberType().orElse(null);
         return e != null ? e.name(): null;
@@ -226,11 +226,11 @@ implements
     @Column(nullable=false)
     @Enumerated(EnumType.STRING)
     @Setter
-    private ApplicationFeatureType featureType;
+    private ApplicationFeatureSort featureType;
 
     @Override
     @Programmatic
-    public ApplicationFeatureType getFeatureType() {
+    public ApplicationFeatureSort getFeatureType() {
         return featureType;
     }
 

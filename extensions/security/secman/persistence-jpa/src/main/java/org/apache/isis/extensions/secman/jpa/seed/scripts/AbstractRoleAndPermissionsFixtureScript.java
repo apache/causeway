@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
-import org.apache.isis.applib.services.appfeat.ApplicationFeatureType;
+import org.apache.isis.applib.services.appfeat.ApplicationFeatureSort;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionMode;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionRule;
@@ -69,7 +69,7 @@ public abstract class AbstractRoleAndPermissionsFixtureScript extends FixtureScr
             final ApplicationPermissionMode mode,
             final String... featureFqns) {
 
-        newPermissions(rule, mode, ApplicationFeatureType.NAMESPACE, Arrays.asList(featureFqns));
+        newPermissions(rule, mode, ApplicationFeatureSort.NAMESPACE, Arrays.asList(featureFqns));
     }
 
     /**
@@ -80,7 +80,7 @@ public abstract class AbstractRoleAndPermissionsFixtureScript extends FixtureScr
             final ApplicationPermissionMode mode,
             final Class<?>... classes) {
 
-        newPermissions(rule, mode, ApplicationFeatureType.TYPE, asFeatureFqns(classes));
+        newPermissions(rule, mode, ApplicationFeatureSort.TYPE, asFeatureFqns(classes));
     }
 
 
@@ -92,7 +92,7 @@ public abstract class AbstractRoleAndPermissionsFixtureScript extends FixtureScr
             final ApplicationPermissionMode mode,
             final Class<?> cls,
             final String... members) {
-        newPermissions(rule, mode, ApplicationFeatureType.MEMBER, asFeatureFqns(cls, members));
+        newPermissions(rule, mode, ApplicationFeatureSort.MEMBER, asFeatureFqns(cls, members));
     }
 
 
@@ -103,7 +103,7 @@ public abstract class AbstractRoleAndPermissionsFixtureScript extends FixtureScr
     private void newPermissions(
             final ApplicationPermissionRule rule,
             final ApplicationPermissionMode mode,
-            final ApplicationFeatureType featureType,
+            final ApplicationFeatureSort featureType,
             final Iterable<String> featureFqns) {
 
         if(featureFqns == null) {

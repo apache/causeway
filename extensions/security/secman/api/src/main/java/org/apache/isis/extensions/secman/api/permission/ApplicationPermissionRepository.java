@@ -22,7 +22,7 @@ import java.util.Collection;
 import java.util.Optional;
 
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
-import org.apache.isis.applib.services.appfeat.ApplicationFeatureType;
+import org.apache.isis.applib.services.appfeat.ApplicationFeatureSort;
 import org.apache.isis.extensions.secman.api.role.ApplicationRole;
 
 /**
@@ -35,7 +35,7 @@ public interface ApplicationPermissionRepository<P extends ApplicationPermission
     Optional<P> findByRoleAndRuleAndFeature(
             ApplicationRole holder,
             ApplicationPermissionRule rule,
-            ApplicationFeatureType type,
+            ApplicationFeatureSort type,
             String featureFqn);
 
     Collection<P> allPermissions();
@@ -45,7 +45,7 @@ public interface ApplicationPermissionRepository<P extends ApplicationPermission
     Collection<P> findByRoleAndRuleAndFeatureTypeCached(
             ApplicationRole holder,
             ApplicationPermissionRule rule,
-            ApplicationFeatureType type);
+            ApplicationFeatureSort type);
 
 
     /**
@@ -65,7 +65,7 @@ public interface ApplicationPermissionRepository<P extends ApplicationPermission
             ApplicationRole role,
             ApplicationPermissionRule rule,
             ApplicationPermissionMode mode,
-            ApplicationFeatureType featureType,
+            ApplicationFeatureSort featureType,
             String featureFqn);
 
     P newPermission(

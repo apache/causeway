@@ -24,7 +24,7 @@ import javax.inject.Inject;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.ParameterLayout;
-import org.apache.isis.applib.services.appfeat.ApplicationFeatureType;
+import org.apache.isis.applib.services.appfeat.ApplicationFeatureSort;
 import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeature;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermission;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionMode;
@@ -47,7 +47,7 @@ public class ApplicationRole_addClass {
 
     /**
      * Adds a {@link ApplicationPermission permission} for this role to a
-     * {@link ApplicationFeatureType#MEMBER member}
+     * {@link ApplicationFeatureSort#MEMBER member}
      * {@link ApplicationFeature feature}.
      */
     @MemberOrder(sequence = "1")
@@ -62,7 +62,7 @@ public class ApplicationRole_addClass {
             final String className) {
         
         applicationPermissionRepository.newPermission(
-                holder, rule, mode, ApplicationFeatureType.TYPE,
+                holder, rule, mode, ApplicationFeatureSort.TYPE,
                 packageFqn + "." + className);
         
         return holder;

@@ -24,7 +24,7 @@ import javax.enterprise.inject.Model;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.ParameterLayout;
-import org.apache.isis.applib.services.appfeat.ApplicationFeatureType;
+import org.apache.isis.applib.services.appfeat.ApplicationFeatureSort;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeature;
@@ -58,7 +58,7 @@ public class ApplicationRole_removePermission {
             @ParameterLayout(named="Rule")
             final ApplicationPermissionRule rule,
             @ParameterLayout(named="Type")
-            final ApplicationFeatureType type,
+            final ApplicationFeatureSort type,
             @ParameterLayout(named="Feature", typicalLength=ApplicationFeature.TYPICAL_LENGTH_MEMBER_NAME)
             final String featureFqn) {
         
@@ -76,7 +76,7 @@ public class ApplicationRole_removePermission {
             @ParameterLayout(named="Rule")
             final ApplicationPermissionRule rule,
             @ParameterLayout(named="Type")
-            final ApplicationFeatureType type,
+            final ApplicationFeatureSort type,
             @ParameterLayout(named="Feature", typicalLength=ApplicationFeature.TYPICAL_LENGTH_MEMBER_NAME)
             final String featureFqn) {
         if(applicationRoleRepository.isAdminRole(target) 
@@ -92,14 +92,14 @@ public class ApplicationRole_removePermission {
     }
     
     @Model
-    public ApplicationFeatureType default1Act() {
-        return ApplicationFeatureType.NAMESPACE;
+    public ApplicationFeatureSort default1Act() {
+        return ApplicationFeatureSort.NAMESPACE;
     }
 
     @Model
     public Collection<String> choices2Act(
             final ApplicationPermissionRule rule,
-            final ApplicationFeatureType type) {
+            final ApplicationFeatureSort type) {
         
         final Collection<? extends ApplicationPermission> permissions = applicationPermissionRepository
                 .findByRoleAndRuleAndFeatureTypeCached(target, rule, type);

@@ -30,7 +30,7 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Value;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureRepository;
-import org.apache.isis.applib.services.appfeat.ApplicationFeatureType;
+import org.apache.isis.applib.services.appfeat.ApplicationFeatureSort;
 import org.apache.isis.applib.services.appfeat.ApplicationMemberType;
 import org.apache.isis.applib.util.Equality;
 import org.apache.isis.applib.util.Hashing;
@@ -83,7 +83,7 @@ public class ApplicationFeature implements Comparable<ApplicationFeature> {
     private ApplicationFeatureId featureId;
 
     /**
-     * Only for {@link ApplicationFeatureType#MEMBER member}s.
+     * Only for {@link ApplicationFeatureSort#MEMBER member}s.
      */
     @Getter @Setter
     private ApplicationMemberType memberType;
@@ -122,13 +122,13 @@ public class ApplicationFeature implements Comparable<ApplicationFeature> {
     private final SortedSet<ApplicationFeatureId> contents = _Sets.newTreeSet();
 
     public SortedSet<ApplicationFeatureId> getContents() {
-        ApplicationFeatureType.ensurePackage(this.getFeatureId());
+        ApplicationFeatureSort.ensurePackage(this.getFeatureId());
         return contents;
     }
 
     public void addToContents(final ApplicationFeatureId contentId) {
-        ApplicationFeatureType.ensurePackage(this.getFeatureId());
-        ApplicationFeatureType.ensurePackageOrClass(contentId);
+        ApplicationFeatureSort.ensurePackage(this.getFeatureId());
+        ApplicationFeatureSort.ensurePackageOrClass(contentId);
         this.contents.add(contentId);
     }
 
@@ -137,7 +137,7 @@ public class ApplicationFeature implements Comparable<ApplicationFeature> {
     private final SortedSet<ApplicationFeatureId> properties = _Sets.newTreeSet();
 
     public SortedSet<ApplicationFeatureId> getProperties() {
-        ApplicationFeatureType.ensureClass(this.getFeatureId());
+        ApplicationFeatureSort.ensureClass(this.getFeatureId());
         return properties;
     }
 
@@ -145,7 +145,7 @@ public class ApplicationFeature implements Comparable<ApplicationFeature> {
     private final SortedSet<ApplicationFeatureId> collections = _Sets.newTreeSet();
     
     public SortedSet<ApplicationFeatureId> getCollections() {
-        ApplicationFeatureType.ensureClass(this.getFeatureId());
+        ApplicationFeatureSort.ensureClass(this.getFeatureId());
         return collections;
     }
 
@@ -153,19 +153,19 @@ public class ApplicationFeature implements Comparable<ApplicationFeature> {
     private final SortedSet<ApplicationFeatureId> actions = _Sets.newTreeSet();
     
     public SortedSet<ApplicationFeatureId> getActions() {
-        ApplicationFeatureType.ensureClass(this.getFeatureId());
+        ApplicationFeatureSort.ensureClass(this.getFeatureId());
         return actions;
     }
     
     public void addToMembers(final ApplicationFeatureId memberId, final ApplicationMemberType memberType) {
-        ApplicationFeatureType.ensureClass(this.getFeatureId());
-        ApplicationFeatureType.ensureMember(memberId);
+        ApplicationFeatureSort.ensureClass(this.getFeatureId());
+        ApplicationFeatureSort.ensureMember(memberId);
 
         membersOf(memberType).add(memberId);
     }
     
     public SortedSet<ApplicationFeatureId> membersOf(final ApplicationMemberType memberType) {
-        ApplicationFeatureType.ensureClass(this.getFeatureId());
+        ApplicationFeatureSort.ensureClass(this.getFeatureId());
         switch (memberType) {
         case PROPERTY:
             return properties;

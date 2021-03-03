@@ -27,7 +27,7 @@ import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
-import org.apache.isis.applib.services.appfeat.ApplicationFeatureType;
+import org.apache.isis.applib.services.appfeat.ApplicationFeatureSort;
 
 import lombok.val;
 
@@ -36,9 +36,9 @@ public class ApplicationFeatureTypeTest {
     public static class HideClassName extends ApplicationFeatureTypeTest {
         @Test
         public void all() throws Exception {
-            assertThat(ApplicationFeatureType.NAMESPACE.hideClassName(), is(true));
-            assertThat(ApplicationFeatureType.TYPE.hideClassName(), is(false));
-            assertThat(ApplicationFeatureType.MEMBER.hideClassName(), is(false));
+            assertThat(ApplicationFeatureSort.NAMESPACE.hideClassName(), is(true));
+            assertThat(ApplicationFeatureSort.TYPE.hideClassName(), is(false));
+            assertThat(ApplicationFeatureSort.MEMBER.hideClassName(), is(false));
         }
     }
 
@@ -46,9 +46,9 @@ public class ApplicationFeatureTypeTest {
 
         @Test
         public void all() throws Exception {
-            assertThat(ApplicationFeatureType.NAMESPACE.hideMember(), is(true));
-            assertThat(ApplicationFeatureType.TYPE.hideMember(), is(true));
-            assertThat(ApplicationFeatureType.MEMBER.hideMember(), is(false));
+            assertThat(ApplicationFeatureSort.NAMESPACE.hideMember(), is(true));
+            assertThat(ApplicationFeatureSort.TYPE.hideMember(), is(true));
+            assertThat(ApplicationFeatureSort.MEMBER.hideMember(), is(false));
         }
     }
 
@@ -102,17 +102,17 @@ public class ApplicationFeatureTypeTest {
 
         @Test
         public void whenPackage() throws Exception {
-            ApplicationFeatureType.ensurePackage(new ApplicationFeatureId(ApplicationFeatureType.NAMESPACE, "xxx"));
+            ApplicationFeatureSort.ensurePackage(new ApplicationFeatureId(ApplicationFeatureSort.NAMESPACE, "xxx"));
         }
         @Test
         public void whenClass() throws Exception {
             expectedException.expect(IllegalStateException.class);
-            ApplicationFeatureType.ensurePackage(new ApplicationFeatureId(ApplicationFeatureType.TYPE, "xxx"));
+            ApplicationFeatureSort.ensurePackage(new ApplicationFeatureId(ApplicationFeatureSort.TYPE, "xxx"));
         }
         @Test
         public void whenMember() throws Exception {
             expectedException.expect(IllegalStateException.class);
-            ApplicationFeatureType.ensurePackage(new ApplicationFeatureId(ApplicationFeatureType.MEMBER, "xxx#x"));
+            ApplicationFeatureSort.ensurePackage(new ApplicationFeatureId(ApplicationFeatureSort.MEMBER, "xxx#x"));
         }
     }
 
@@ -123,16 +123,16 @@ public class ApplicationFeatureTypeTest {
 
         @Test
         public void whenPackage() throws Exception {
-            ApplicationFeatureType.ensurePackageOrClass(new ApplicationFeatureId(ApplicationFeatureType.NAMESPACE, "xxx"));
+            ApplicationFeatureSort.ensurePackageOrClass(new ApplicationFeatureId(ApplicationFeatureSort.NAMESPACE, "xxx"));
         }
         @Test
         public void whenClass() throws Exception {
-            ApplicationFeatureType.ensurePackageOrClass(new ApplicationFeatureId(ApplicationFeatureType.TYPE, "xxx"));
+            ApplicationFeatureSort.ensurePackageOrClass(new ApplicationFeatureId(ApplicationFeatureSort.TYPE, "xxx"));
         }
         @Test
         public void whenMember() throws Exception {
             expectedException.expect(IllegalStateException.class);
-            ApplicationFeatureType.ensurePackageOrClass(new ApplicationFeatureId(ApplicationFeatureType.MEMBER, "xxx#x"));
+            ApplicationFeatureSort.ensurePackageOrClass(new ApplicationFeatureId(ApplicationFeatureSort.MEMBER, "xxx#x"));
         }
 
     }
@@ -144,16 +144,16 @@ public class ApplicationFeatureTypeTest {
         @Test
         public void whenPackage() throws Exception {
             expectedException.expect(IllegalStateException.class);
-            ApplicationFeatureType.ensureClass(new ApplicationFeatureId(ApplicationFeatureType.NAMESPACE, "xxx"));
+            ApplicationFeatureSort.ensureClass(new ApplicationFeatureId(ApplicationFeatureSort.NAMESPACE, "xxx"));
         }
         @Test
         public void whenClass() throws Exception {
-            ApplicationFeatureType.ensureClass(new ApplicationFeatureId(ApplicationFeatureType.TYPE, "xxx"));
+            ApplicationFeatureSort.ensureClass(new ApplicationFeatureId(ApplicationFeatureSort.TYPE, "xxx"));
         }
         @Test
         public void whenMember() throws Exception {
             expectedException.expect(IllegalStateException.class);
-            ApplicationFeatureType.ensureClass(new ApplicationFeatureId(ApplicationFeatureType.MEMBER, "xxx#x"));
+            ApplicationFeatureSort.ensureClass(new ApplicationFeatureId(ApplicationFeatureSort.MEMBER, "xxx#x"));
         }
 
     }
@@ -165,16 +165,16 @@ public class ApplicationFeatureTypeTest {
         @Test
         public void whenPackage() throws Exception {
             expectedException.expect(IllegalStateException.class);
-            ApplicationFeatureType.ensureMember(new ApplicationFeatureId(ApplicationFeatureType.NAMESPACE, "xxx"));
+            ApplicationFeatureSort.ensureMember(new ApplicationFeatureId(ApplicationFeatureSort.NAMESPACE, "xxx"));
         }
         @Test
         public void whenClass() throws Exception {
             expectedException.expect(IllegalStateException.class);
-            ApplicationFeatureType.ensureMember(new ApplicationFeatureId(ApplicationFeatureType.TYPE, "xxx"));
+            ApplicationFeatureSort.ensureMember(new ApplicationFeatureId(ApplicationFeatureSort.TYPE, "xxx"));
         }
         @Test
         public void whenMember() throws Exception {
-            ApplicationFeatureType.ensureMember(new ApplicationFeatureId(ApplicationFeatureType.MEMBER, "xxx#x"));
+            ApplicationFeatureSort.ensureMember(new ApplicationFeatureId(ApplicationFeatureSort.MEMBER, "xxx#x"));
         }
     }
 
@@ -182,7 +182,7 @@ public class ApplicationFeatureTypeTest {
 
         @Test
         public void happyCase() throws Exception {
-            assertThat(ApplicationFeatureType.NAMESPACE.toString(), is("PACKAGE"));
+            assertThat(ApplicationFeatureSort.NAMESPACE.toString(), is("NAMESPACE"));
         }
     }
 

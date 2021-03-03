@@ -34,7 +34,7 @@ import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
-import org.apache.isis.applib.services.appfeat.ApplicationFeatureType;
+import org.apache.isis.applib.services.appfeat.ApplicationFeatureSort;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.util.Equality;
 import org.apache.isis.applib.util.Hashing;
@@ -80,7 +80,7 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
     private static Class<? extends ApplicationFeatureViewModel> viewModelClassFor(
             final ApplicationFeatureId featureId,
             final ApplicationFeatureRepositoryDefault applicationFeatureRepository) {
-        switch (featureId.getType()) {
+        switch (featureId.getSort()) {
         case NAMESPACE:
             return ApplicationPackage.class;
         case TYPE:
@@ -166,8 +166,8 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
 
     // -- type (programmatic)
     @Programmatic
-    public ApplicationFeatureType getType() {
-        return getFeatureId().getType();
+    public ApplicationFeatureSort getType() {
+        return getFeatureId().getSort();
     }
 
     // -- packageName
@@ -236,7 +236,7 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
     @MemberOrder(name = "Parent", sequence = "2.6")
     public ApplicationFeatureViewModel getParent() {
         final ApplicationFeatureId parentId;
-        parentId = getType() == ApplicationFeatureType.MEMBER
+        parentId = getType() == ApplicationFeatureSort.MEMBER
                 ? getFeatureId().getParentClassId()
                 : getFeatureId().getParentPackageId();
         if(parentId == null) {

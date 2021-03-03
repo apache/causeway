@@ -27,7 +27,7 @@ import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
-import org.apache.isis.applib.services.appfeat.ApplicationFeatureType;
+import org.apache.isis.applib.services.appfeat.ApplicationFeatureSort;
 
 @DomainObject(
         objectType = "isis.ext.secman.ApplicationPackage"
@@ -69,7 +69,7 @@ public class ApplicationPackage extends ApplicationFeatureViewModel {
         return asViewModels(contents);
     }
     public boolean hideContents() {
-        return getType() != ApplicationFeatureType.NAMESPACE;
+        return getType() != ApplicationFeatureSort.NAMESPACE;
     }
 
 

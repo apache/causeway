@@ -32,7 +32,7 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
-import org.apache.isis.applib.services.appfeat.ApplicationFeatureType;
+import org.apache.isis.applib.services.appfeat.ApplicationFeatureSort;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.commanddto.processor.CommandDtoProcessor;
 import org.apache.isis.applib.services.grid.GridService;
@@ -212,7 +212,7 @@ public class MetaModelServiceDefault implements MetaModelService {
     @Override
     public CommandDtoProcessor commandDtoProcessorFor(final String memberIdentifier) {
         final ApplicationFeatureId featureId = ApplicationFeatureId
-                .newFeature(ApplicationFeatureType.MEMBER, memberIdentifier);
+                .newFeature(ApplicationFeatureSort.MEMBER, memberIdentifier);
 
         final String logicalTypeName = featureId.getLogicalTypeName();
         if(_Strings.isNullOrEmpty(logicalTypeName)) {
