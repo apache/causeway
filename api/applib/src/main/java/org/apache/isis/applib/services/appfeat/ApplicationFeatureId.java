@@ -23,7 +23,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
-import java.util.function.Function;
 
 import static java.util.Comparator.comparing;
 import static java.util.Comparator.naturalOrder;
@@ -264,23 +263,6 @@ implements
     public String asEncodedString() {
         return _Strings.base64UrlEncode(asString());
     }
-
-    // //////////////////////////////////////
-
-    // -- Functions
-
-    public static class Functions {
-
-        private Functions(){}
-
-        public static final Function<ApplicationFeatureId, String> GET_CLASS_NAME = 
-                ApplicationFeatureId::getTypeSimpleName;
-
-        public static final Function<ApplicationFeatureId, String> GET_MEMBER_NAME = 
-                ApplicationFeatureId::getMemberName;
-
-    }
-
 
     // //////////////////////////////////////
 
