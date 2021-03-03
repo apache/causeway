@@ -54,6 +54,7 @@ import lombok.val;
  * {@link #getSort() (feature) sort}, {@link #getNamespace() namespace}, 
  * {@link #getTypeSimpleName() type simple name} and {@link #getMemberName() member name}.
  * 
+ * @since 1.x revised for 2.0 {@index}
  */
 @Value
 public class ApplicationFeatureId 
