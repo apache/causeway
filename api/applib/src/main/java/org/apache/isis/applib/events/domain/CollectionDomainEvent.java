@@ -27,17 +27,6 @@ import lombok.Getter;
  * Subclass of {@link AbstractDomainEvent} for collections.
  *
  * <p>
- * The class has a couple of responsibilities (in addition to those it
- * inherits):
- * </p>
- *
- * <ul>
- *     <li>
- *      capture the target object being interacted with
- *     </li>
- * </ul>
- *
- * <p>
  * The class itself is instantiated automatically by the framework whenever
  * interacting with a rendered object's collection.
  * </p>
@@ -83,31 +72,11 @@ public abstract class CollectionDomainEvent<S,T> extends AbstractDomainEvent<S> 
 
 
 
-    /**
-     * The proposed reference to either add or remove (per {@link #getOf()}), populated at
-     * {@link org.apache.isis.applib.events.domain.AbstractDomainEvent.Phase#VALIDATE}
-     * and subsequent phases (is null for
-     * {@link org.apache.isis.applib.events.domain.AbstractDomainEvent.Phase#HIDE hidden}
-     * and {@link org.apache.isis.applib.events.domain.AbstractDomainEvent.Phase#DISABLE disable} phases).
-     */
-    @Getter
-    private T value;
-
-
-    /**
-     * Not API, set by the framework.
-     */
-    public void setValue(T value) {
-        this.value = value;
-    }
-
-
     private static final ToString<CollectionDomainEvent<?,?>> toString =
             ObjectContracts.<CollectionDomainEvent<?,?>>
     toString("source", CollectionDomainEvent::getSource)
     .thenToString("identifier", CollectionDomainEvent::getIdentifier)
     .thenToString("eventPhase", CollectionDomainEvent::getEventPhase)
-    .thenToString("value", CollectionDomainEvent::getValue)
     ;
 
     @Override

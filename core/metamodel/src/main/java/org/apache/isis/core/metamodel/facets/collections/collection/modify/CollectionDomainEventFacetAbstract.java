@@ -74,9 +74,9 @@ public abstract class CollectionDomainEventFacetAbstract
         final CollectionDomainEvent<?, ?> event =
                 domainEventHelper.postEventForCollection(
                         AbstractDomainEvent.Phase.HIDE,
-                        getEventType(), null,
-                        getIdentified(), ic.getHead(),
-                        null);
+                        getEventType(),
+                        getIdentified(), ic.getHead()
+                );
         if (event != null && event.isHidden()) {
             return "Hidden by subscriber";
         }
@@ -89,9 +89,9 @@ public abstract class CollectionDomainEventFacetAbstract
         final CollectionDomainEvent<?, ?> event =
                 domainEventHelper.postEventForCollection(
                         AbstractDomainEvent.Phase.DISABLE,
-                        getEventType(), null,
-                        getIdentified(), ic.getHead(),
-                        null);
+                        getEventType(),
+                        getIdentified(), ic.getHead()
+                );
         if (event != null && event.isDisabled()) {
             final TranslatableString reasonTranslatable = event.getDisabledReasonTranslatable();
             if(reasonTranslatable != null) {

@@ -306,31 +306,24 @@ public class DomainEventHelper {
     // -- postEventForCollection, newCollectionDomainEvent
 
     public <S, T> CollectionDomainEvent<S, T> postEventForCollection(
-            AbstractDomainEvent.Phase phase,
+            final AbstractDomainEvent.Phase phase,
             final Class<? extends CollectionDomainEvent<S, T>> eventType,
-            final CollectionDomainEvent<S, T> existingEvent,
             final IdentifiedHolder identified,
-            final InteractionHead head,
-            final T reference) {
+            final InteractionHead head) {
 
         _Assert.assertTypeIsInstanceOf(eventType, CollectionDomainEvent.class);
 
         try {
             final CollectionDomainEvent<S, T> event;
-            if (existingEvent != null && phase.isExecuted()) {
-                // reuse existing event from the executing phase
-                event = existingEvent;
-            } else {
-                // all other phases, create a new event
-                final S source = uncheckedCast(UnwrapUtil.single(head.getTarget()));
-                final Identifier identifier = identified.getIdentifier();
-                event = newCollectionDomainEvent(eventType, phase, identifier, source, reference);
 
-                // copy over if have
-                head.getMixedIn()
-                .ifPresent(mixedInAdapter->
-                    event.setMixedIn(mixedInAdapter.getPojo()));
-            }
+            final S source = uncheckedCast(UnwrapUtil.single(head.getTarget()));
+            final Identifier identifier = identified.getIdentifier();
+            event = newCollectionDomainEvent(eventType, phase, identifier, source);
+
+            // copy over if have
+            head.getMixedIn()
+            .ifPresent(mixedInAdapter->
+                event.setMixedIn(mixedInAdapter.getPojo()));
 
             event.setEventPhase(phase);
 
@@ -345,8 +338,7 @@ public class DomainEventHelper {
             final Class<? extends CollectionDomainEvent<S, T>> type,
             final AbstractDomainEvent.Phase phase,
             final Identifier identifier,
-            final S source,
-            final T value)
+            final S source)
             throws NoSuchMethodException, SecurityException,
             IllegalArgumentException {
 
@@ -360,21 +352,19 @@ public class DomainEventHelper {
 
             cde.initSource(source);
             cde.setIdentifier(identifier);
-            cde.setValue(value);
             return cde;
         }
 
         // else
-        // search for constructor accepting source, identifier, type, value
+        // search for constructor accepting source, identifier
         val updateEventConstructors = constructors
                 .filter(paramCount(4)
                         .and(paramAssignableFrom(0, source.getClass()))
                         .and(paramAssignableFrom(1, Identifier.class))
-                        .and(paramAssignableFromValue(2, value))
                         );
 
         for (val constructor : updateEventConstructors) {
-            val event = invokeConstructor(constructor, source, identifier, value);
+            val event = invokeConstructor(constructor, source, identifier);
             return uncheckedCast(event);
         }
 
