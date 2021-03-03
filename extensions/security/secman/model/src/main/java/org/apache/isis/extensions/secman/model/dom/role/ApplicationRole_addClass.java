@@ -62,7 +62,7 @@ public class ApplicationRole_addClass {
             final String className) {
         
         applicationPermissionRepository.newPermission(
-                holder, rule, mode, ApplicationFeatureType.CLASS,
+                holder, rule, mode, ApplicationFeatureType.TYPE,
                 packageFqn + "." + className);
         
         return holder;

@@ -50,7 +50,7 @@ public class ApplicationRole_addPackage {
     /**
      * Adds a {@link ApplicationPermission permission}
      * for this role to a
-     * {@link ApplicationFeatureType#PACKAGE package}
+     * {@link ApplicationFeatureType#NAMESPACE package}
      * {@link ApplicationFeature feature}.
      */
     @MemberOrder(sequence = "1")
@@ -63,7 +63,7 @@ public class ApplicationRole_addPackage {
             final String packageFqn) {
         
         applicationPermissionRepository
-            .newPermission(holder, rule, mode, ApplicationFeatureType.PACKAGE, packageFqn);
+            .newPermission(holder, rule, mode, ApplicationFeatureType.NAMESPACE, packageFqn);
         return holder;
     }
 

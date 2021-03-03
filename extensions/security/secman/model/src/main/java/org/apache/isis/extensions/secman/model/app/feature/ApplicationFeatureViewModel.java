@@ -81,9 +81,9 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
             final ApplicationFeatureId featureId,
             final ApplicationFeatureRepositoryDefault applicationFeatureRepository) {
         switch (featureId.getType()) {
-        case PACKAGE:
+        case NAMESPACE:
             return ApplicationPackage.class;
-        case CLASS:
+        case TYPE:
             return ApplicationClass.class;
         case MEMBER:
             final ApplicationFeature feature = applicationFeatureRepository.findFeature(featureId);
@@ -104,7 +104,7 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
     }
 
     public ApplicationFeatureViewModel() {
-        this(ApplicationFeatureId.PACKAGE_DEFAULT);
+        this(ApplicationFeatureId.NAMESPACE_DEFAULT);
     }
 
     ApplicationFeatureViewModel(final ApplicationFeatureId featureId) {

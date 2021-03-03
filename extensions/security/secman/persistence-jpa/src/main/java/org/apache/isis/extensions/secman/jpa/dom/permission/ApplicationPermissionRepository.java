@@ -352,12 +352,12 @@ implements org.apache.isis.extensions.secman.api.permission.ApplicationPermissio
 
             switch (featureType) {
 
-            case PACKAGE:
+            case NAMESPACE:
                 if(!packageNames.contains(featureFqn)) {
                     orphaned.add(permission);
                 }
                 break;
-            case CLASS:
+            case TYPE:
                 if(!availableClasses.contains(featureFqn)) {
                     orphaned.add(permission);
                 }

@@ -99,7 +99,7 @@ public class UserPermissionViewModel implements ViewModel {
     }
 
     public UserPermissionViewModel() {
-        setFeatureId(ApplicationFeatureId.PACKAGE_DEFAULT);
+        setFeatureId(ApplicationFeatureId.NAMESPACE_DEFAULT);
     }
 
 

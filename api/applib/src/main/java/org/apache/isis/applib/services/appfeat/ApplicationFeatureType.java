@@ -23,9 +23,9 @@ import org.apache.isis.commons.internal.base._Strings;
 public enum ApplicationFeatureType {
     
     /** 
-     * logical package aka <i>object namespace</i>
+     * logical namespace, leading part of the <i>object type</i> (aka logical type)
      */
-    PACKAGE {
+    NAMESPACE {
         @Override
         void init(final ApplicationFeatureId feature, final String fullyQualifiedName) {
             feature.setNamespace(fullyQualifiedName);
@@ -36,9 +36,9 @@ public enum ApplicationFeatureType {
     },
     
     /** 
-     * logical class aka <i>object type</i>
+     * logical type, simple name of the <i>object type</i> (aka logical type)
      */
-    CLASS {
+    TYPE {
         @Override
         void init(final ApplicationFeatureId feature, final String fullyQualifiedName) {
             final int i = fullyQualifiedName.lastIndexOf(".");
@@ -67,36 +67,36 @@ public enum ApplicationFeatureType {
             }
             final String className = fullyQualifiedName.substring(0, i);
             final String memberName = fullyQualifiedName.substring(i+1);
-            CLASS.init(feature, className);
+            TYPE.init(feature, className);
             feature.setMemberName(memberName);
             feature.type = this;
         }
     };
 
     public boolean hideClassName() {
-        return this == ApplicationFeatureType.PACKAGE;
+        return this == ApplicationFeatureType.NAMESPACE;
     }
     
     public boolean hideMember() {
-        return this == ApplicationFeatureType.PACKAGE || this == ApplicationFeatureType.CLASS;
+        return this == ApplicationFeatureType.NAMESPACE || this == ApplicationFeatureType.TYPE;
     }
 
     abstract void init(ApplicationFeatureId applicationFeatureId, String fullyQualifiedName);
 
     public static void ensurePackage(final ApplicationFeatureId feature) {
-        if(feature.type != ApplicationFeatureType.PACKAGE) {
+        if(feature.type != ApplicationFeatureType.NAMESPACE) {
             throw new IllegalStateException("Can only be called for a package; " + feature.toString());
         }
     }
 
     public static void ensurePackageOrClass(final ApplicationFeatureId applicationFeatureId) {
-        if(applicationFeatureId.type != ApplicationFeatureType.PACKAGE && applicationFeatureId.type != ApplicationFeatureType.CLASS) {
+        if(applicationFeatureId.type != ApplicationFeatureType.NAMESPACE && applicationFeatureId.type != ApplicationFeatureType.TYPE) {
             throw new IllegalStateException("Can only be called for a package or a class; " + applicationFeatureId.toString());
         }
     }
 
     public static void ensureClass(final ApplicationFeatureId feature) {
-        if(feature.type != ApplicationFeatureType.CLASS) {
+        if(feature.type != ApplicationFeatureType.TYPE) {
             throw new IllegalStateException("Can only be called for a class; " + feature.toString());
         }
     }

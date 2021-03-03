@@ -69,7 +69,7 @@ public class ApplicationPackage extends ApplicationFeatureViewModel {
         return asViewModels(contents);
     }
     public boolean hideContents() {
-        return getType() != ApplicationFeatureType.PACKAGE;
+        return getType() != ApplicationFeatureType.NAMESPACE;
     }
 
 

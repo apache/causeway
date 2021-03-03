@@ -93,7 +93,7 @@ public class ApplicationRole_removePermission {
     
     @Model
     public ApplicationFeatureType default1Act() {
-        return ApplicationFeatureType.PACKAGE;
+        return ApplicationFeatureType.NAMESPACE;
     }
 
     @Model

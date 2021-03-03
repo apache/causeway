@@ -101,10 +101,10 @@ public interface ApplicationPermission {
         .ifPresent(featureId->{
 
             switch (featureId.getType()) {
-            case PACKAGE:
+            case NAMESPACE:
                 buf.append(getFeatureFqn());              // com.mycompany
                 break;
-            case CLASS:
+            case TYPE:
                 // abbreviate if required because otherwise title overflows on action prompt.
                 if(getFeatureFqn().length() < 30) {
                     buf.append(getFeatureFqn());          // com.mycompany.Bar

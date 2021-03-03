@@ -73,7 +73,7 @@ public abstract class AbstractRoleAndPermissionsFixtureScript extends FixtureScr
             final ApplicationPermissionMode mode,
             final String... featureFqns) {
 
-        newPermissions(rule, mode, ApplicationFeatureType.PACKAGE, Arrays.asList(featureFqns));
+        newPermissions(rule, mode, ApplicationFeatureType.NAMESPACE, Arrays.asList(featureFqns));
     }
 
     /**
@@ -84,7 +84,7 @@ public abstract class AbstractRoleAndPermissionsFixtureScript extends FixtureScr
             final ApplicationPermissionMode mode,
             final Class<?>... classes) {
 
-        newPermissions(rule, mode, ApplicationFeatureType.CLASS, asFeatureFqns(classes));
+        newPermissions(rule, mode, ApplicationFeatureType.TYPE, asFeatureFqns(classes));
     }
 
 
