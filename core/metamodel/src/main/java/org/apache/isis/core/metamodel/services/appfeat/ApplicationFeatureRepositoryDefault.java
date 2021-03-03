@@ -495,7 +495,7 @@ implements ApplicationFeatureRepository {
         final SortedSet<ApplicationFeatureId> contents = pkg.getContents();
         return contents.stream()
                 .filter(_Predicates.isClassContaining(memberType, this))
-                .map(ApplicationFeatureId.Functions.GET_CLASS_NAME)
+                .map(ApplicationFeatureId::getTypeSimpleName)
                 .collect(_Sets.toUnmodifiableSorted());
     }
 
@@ -510,7 +510,7 @@ implements ApplicationFeatureRepository {
         final Set<ApplicationFeatureId> classIds = this.classFeatures.keySet();
         return classIds.stream()
                 .filter(_Predicates.isClassRecursivelyWithin(packageId))
-                .map(ApplicationFeatureId.Functions.GET_CLASS_NAME)
+                .map(ApplicationFeatureId::getTypeSimpleName)
                 .collect(_Sets.toUnmodifiableSorted());
     }
 
@@ -527,7 +527,7 @@ implements ApplicationFeatureRepository {
         }
         final SortedSet<ApplicationFeatureId> featureIds = cls.membersOf(memberType);
         return featureIds.stream()
-                .map(ApplicationFeatureId.Functions.GET_MEMBER_NAME)
+                .map(ApplicationFeatureId::getMemberName)
                 .collect(_Sets.toUnmodifiableSorted());
     }
     

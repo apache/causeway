@@ -547,7 +547,7 @@ public class ApplicationFeatureIdTest {
 
         public static class GET_CLASS_NAME extends FunctionsTest {
 
-            private Function<ApplicationFeatureId, String> func = ApplicationFeatureId.Functions.GET_CLASS_NAME;
+            private Function<ApplicationFeatureId, String> func = ApplicationFeatureId::getTypeSimpleName;
 
             @Test
             public void whenNull() throws Exception {
@@ -574,7 +574,8 @@ public class ApplicationFeatureIdTest {
 
         public static class GET_MEMBER_NAME extends FunctionsTest {
 
-            private Function<ApplicationFeatureId, String> func = ApplicationFeatureId.Functions.GET_MEMBER_NAME;
+            private Function<ApplicationFeatureId, String> func = 
+                    ApplicationFeatureId::getMemberName;
 
             @Test
             public void whenNull() throws Exception {
