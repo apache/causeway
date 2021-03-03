@@ -212,7 +212,7 @@ implements ApplicationFeatureRepository {
 
 
     ApplicationFeatureId addClassParent(final ApplicationFeatureId classFeatureId) {
-        final ApplicationFeatureId parentPackageId = classFeatureId.getParentPackageId();
+        final ApplicationFeatureId parentPackageId = classFeatureId.getParentNamespaceFeatureId();
         final ApplicationFeature parentPackage = findPackageElseCreate(parentPackageId);
 
         parentPackage.addToContents(classFeatureId);
@@ -220,7 +220,7 @@ implements ApplicationFeatureRepository {
     }
 
     void addParents(final ApplicationFeatureId classOrPackageId) {
-        final ApplicationFeatureId parentPackageId = classOrPackageId.getParentPackageId();
+        final ApplicationFeatureId parentPackageId = classOrPackageId.getParentNamespaceFeatureId();
         if (parentPackageId == null) {
             return;
         }

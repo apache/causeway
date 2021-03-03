@@ -142,8 +142,8 @@ public class ApplicationPermissionValueSet implements Serializable {
     public Evaluation evaluate(
             final ApplicationFeatureId featureId,
             final ApplicationPermissionMode mode) {
-        final List<ApplicationFeatureId> pathIds = featureId.getPathIds();
-        for (final ApplicationFeatureId pathId : pathIds) {
+        
+        for (final ApplicationFeatureId pathId : featureId.getPathIds()) {
             final Collection<ApplicationPermissionValue> permissionValues = permissionsByFeature.get(pathId);
             final Evaluation evaluation = permissionsEvaluationService.evaluate(featureId, mode, permissionValues);
             if(evaluation != null) {
