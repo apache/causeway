@@ -132,20 +132,6 @@ implements
         return new ApplicationFeatureId(ApplicationFeatureType.MEMBER, fullyQualifiedName);
     }
 
-    /**
-     * Round-trip with {@link #asString()}
-     */
-    public static ApplicationFeatureId parse(final String asString) {
-        return new ApplicationFeatureId(asString);
-    }
-
-    /**
-     * Round-trip with {@link #asEncodedString()}
-     */
-    public static ApplicationFeatureId parseEncoded(final String encodedString) {
-        return new ApplicationFeatureId(_Strings.base64UrlDecode(encodedString));
-    }
-
     // -- CONSTRUCTOR
 
     private ApplicationFeatureId(final String asString) {
@@ -252,7 +238,7 @@ implements
         return newClass(classFqn);
     }
 
-    // -- ENCODING
+    // -- ENCODING / DECODING
 
     @Programmatic
     public String asString() {
@@ -263,26 +249,20 @@ implements
     public String asEncodedString() {
         return _Strings.base64UrlEncode(asString());
     }
-
-    // //////////////////////////////////////
-
-    // -- Comparators
-    public static final class Comparators {
-        private Comparators(){}
-        public static Comparator<ApplicationFeatureId> natural() {
-            return new ApplicationFeatureIdComparator();
-        }
-
-        static class ApplicationFeatureIdComparator implements Comparator<ApplicationFeatureId>, Serializable {
-            private static final long serialVersionUID = 1L;
-
-            @Override
-            public int compare(final ApplicationFeatureId o1, final ApplicationFeatureId o2) {
-                return o1.compareTo(o2);
-            }
-        }
+    
+    /**
+     * Round-trip with {@link #asString()}
+     */
+    public static ApplicationFeatureId parse(final String asString) {
+        return new ApplicationFeatureId(asString);
     }
 
+    /**
+     * Round-trip with {@link #asEncodedString()}
+     */
+    public static ApplicationFeatureId parseEncoded(final String encodedString) {
+        return new ApplicationFeatureId(_Strings.base64UrlDecode(encodedString));
+    }
 
     // //////////////////////////////////////
 
