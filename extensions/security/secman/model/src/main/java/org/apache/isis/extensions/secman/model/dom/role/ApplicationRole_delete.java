@@ -32,7 +32,9 @@ import org.apache.isis.extensions.secman.api.role.ApplicationRoleRepository;
 
 import lombok.RequiredArgsConstructor;
 
-@Action(domainEvent = DeleteDomainEvent.class, semantics = SemanticsOf.IDEMPOTENT_ARE_YOU_SURE)
+@Action(
+        domainEvent = DeleteDomainEvent.class, 
+        semantics = SemanticsOf.IDEMPOTENT_ARE_YOU_SURE)
 @RequiredArgsConstructor
 public class ApplicationRole_delete {
     

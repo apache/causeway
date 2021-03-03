@@ -34,7 +34,7 @@ import lombok.RequiredArgsConstructor;
 
 @Action(
         domainEvent = DeleteDomainEvent.class,
-        semantics = SemanticsOf.NON_IDEMPOTENT_ARE_YOU_SURE,
+        semantics = SemanticsOf.IDEMPOTENT_ARE_YOU_SURE,
         associateWithSequence = "1")
 @RequiredArgsConstructor
 public class ApplicationUser_delete {
