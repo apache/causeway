@@ -237,8 +237,8 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
     public ApplicationFeatureViewModel getParent() {
         final ApplicationFeatureId parentId;
         parentId = getType() == ApplicationFeatureSort.MEMBER
-                ? getFeatureId().getParentClassId()
-                : getFeatureId().getParentPackageId();
+                ? getFeatureId().getParentTypeFeatureId()
+                : getFeatureId().getParentNamespaceFeatureId();
         if(parentId == null) {
             return null;
         }
@@ -275,7 +275,7 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
     @Programmatic
     public ApplicationFeatureViewModel getParentPackage() {
         return Functions.asViewModelForId(applicationFeatureRepository, factory)
-                .apply(getFeatureId().getParentPackageId());
+                .apply(getFeatureId().getParentNamespaceFeatureId());
     }
 
 

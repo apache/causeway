@@ -19,9 +19,8 @@
 package org.apache.isis.applib.services.appfeat;
 
 import java.io.Serializable;
-import java.util.Collections;
 import java.util.Comparator;
-import java.util.List;
+import java.util.function.Consumer;
 
 import static java.util.Comparator.comparing;
 import static java.util.Comparator.naturalOrder;
@@ -37,6 +36,7 @@ import org.apache.isis.applib.util.Hashing;
 import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.applib.util.TitleBuffer;
 import org.apache.isis.applib.util.ToString;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
@@ -44,7 +44,7 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
 
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.Setter;
+import lombok.Synchronized;
 import lombok.val;
 
 /**
@@ -102,6 +102,7 @@ implements
             final @NonNull  String namespace, 
             final @Nullable String logicalTypeSimpleName,
             final @Nullable String memberName) {
+        
         if(logicalTypeSimpleName == null) {
             return newNamespace(namespace);
         }
@@ -113,55 +114,51 @@ implements
     }
 
     public static ApplicationFeatureId newNamespace(final String namespace) {
-        val feature = new ApplicationFeatureId(ApplicationFeatureSort.NAMESPACE);
-        feature.setNamespace(namespace);
-        feature.setTypeSimpleName(null);
-        feature.setMemberName(null);
-        return feature;
-    }
-
-    public static ApplicationFeatureId newType(final String logicalTypeName) {
-        val feat = new ApplicationFeatureId(ApplicationFeatureSort.TYPE);
-        initType(feat, logicalTypeName);
-        return feat;
-    }
-
-    public static ApplicationFeatureId newMember(final String logicalTypeName, final String memberName) {
-        final ApplicationFeatureId featureId = new ApplicationFeatureId(ApplicationFeatureSort.MEMBER);
-        initType(featureId, logicalTypeName);
-        featureId.setMemberName(memberName);
+        val featureId = new ApplicationFeatureId(ApplicationFeatureSort.NAMESPACE);
+        featureId.namespace = namespace;
+        featureId.typeSimpleName = null;
+        featureId.memberName = null;
         return featureId;
     }
 
-    public static ApplicationFeatureId newMember(String fqn) {
-        val feat = new ApplicationFeatureId(ApplicationFeatureSort.MEMBER);
-        initMember(feat, fqn);
-        return feat;
+    public static ApplicationFeatureId newType(final String logicalTypeName) {
+        val featureId = new ApplicationFeatureId(ApplicationFeatureSort.TYPE);
+        initType(featureId, logicalTypeName);
+        return featureId;
     }
-    
-    // -- FACTORY HELPERS
-    
-    private static void initType(final ApplicationFeatureId feature, final String fullyQualifiedName) {
-        final int i = fullyQualifiedName.lastIndexOf(".");
-        if(i != -1) {
-            feature.setNamespace(fullyQualifiedName.substring(0, i));
-            feature.setTypeSimpleName(fullyQualifiedName.substring(i+1));
-        } else {
-            feature.setNamespace("");
-            feature.setTypeSimpleName(fullyQualifiedName);
-        }
-        feature.setMemberName(null);
+
+    public static ApplicationFeatureId newMember(final String logicalTypeName, final String memberName) {
+        val featureId = new ApplicationFeatureId(ApplicationFeatureSort.MEMBER);
+        initType(featureId, logicalTypeName);
+        featureId.memberName = memberName;
+        return featureId;
     }
-    
-    private static void initMember(final ApplicationFeatureId feature, final String fullyQualifiedName) {
+
+    public static ApplicationFeatureId newMember(String fullyQualifiedName) {
+        val featureId = new ApplicationFeatureId(ApplicationFeatureSort.MEMBER);
         final int i = fullyQualifiedName.lastIndexOf("#");
         if(i == -1) {
             throw new IllegalArgumentException("Malformed, expected a '#': " + fullyQualifiedName);
         }
-        final String className = fullyQualifiedName.substring(0, i);
-        final String memberName = fullyQualifiedName.substring(i+1);
-        initType(feature, className);
-        feature.setMemberName(memberName);
+        val logicalTypeName = fullyQualifiedName.substring(0, i);
+        val memberName = fullyQualifiedName.substring(i + 1);
+        initType(featureId, logicalTypeName);
+        featureId.memberName = memberName;
+        return featureId;
+    }
+    
+    // -- FACTORY HELPERS
+    
+    private static void initType(final ApplicationFeatureId featureId, final String fullyQualifiedName) {
+        final int i = fullyQualifiedName.lastIndexOf(".");
+        if(i != -1) {
+            featureId.namespace = fullyQualifiedName.substring(0, i);
+            featureId.typeSimpleName = fullyQualifiedName.substring(i+1);
+        } else {
+            featureId.namespace = "";
+            featureId.typeSimpleName = fullyQualifiedName;
+        }
+        featureId.memberName = null;
     }
     
     // -- CONSTRUCTOR
@@ -187,9 +184,9 @@ implements
     @Getter final @NonNull ApplicationFeatureSort sort;
     
     /**
-     * The {@link ApplicationFeatureId id} of the member's class.
+     * The {@link ApplicationFeatureId id} of the member's logical type.
      */
-    public ApplicationFeatureId getParentClassId() {
+    public ApplicationFeatureId getParentTypeFeatureId() {
         _Assert.assertTrue(sort.isMember());
         final String logicalTypeName = this.getNamespace() + "." + getTypeSimpleName();
         return newType(logicalTypeName);
@@ -198,13 +195,13 @@ implements
     // -- PROPERTIES - NON UI
     
     @Programmatic 
-    @Getter @Setter private String namespace;
+    @Getter private String namespace;
 
     @Programmatic 
-    @Getter @Setter private String typeSimpleName;
+    @Getter private String typeSimpleName;
 
     @Programmatic 
-    @Getter @Setter private String memberName;
+    @Getter private String memberName;
 
     @Programmatic
     public String getFullyQualifiedName() {
@@ -239,7 +236,7 @@ implements
      * class or package.
      */
     @Programmatic
-    public ApplicationFeatureId getParentPackageId() {
+    public ApplicationFeatureId getParentNamespaceFeatureId() {
         
         _Assert.assertFalse(sort.isMember());
 
@@ -286,35 +283,43 @@ implements
 
     // -- pathIds, parentIds
 
-    @Programmatic
-    public List<ApplicationFeatureId> getPathIds() {
-        //TODO[2533] add memoization
-        return pathIds(this);
-    }
-
-    @Programmatic
-    public List<ApplicationFeatureId> getParentIds() {
-        //TODO[2533] add memoization
-        return pathIds(getParentId());
-    }
-
-    private ApplicationFeatureId getParentId() {
-        return sort == ApplicationFeatureSort.MEMBER
-                ? getParentClassId()
-                : getParentPackageId();
-    }
-
-    private static List<ApplicationFeatureId> pathIds(final ApplicationFeatureId id) {
-        final List<ApplicationFeatureId> featureIds = _Lists.newArrayList();
-        return Collections.unmodifiableList(appendParents(id, featureIds));
-    }
-
-    private static List<ApplicationFeatureId> appendParents(final ApplicationFeatureId featureId, final List<ApplicationFeatureId> parentIds) {
-        if(featureId != null) {
-            parentIds.add(featureId);
-            appendParents(featureId.getParentId(), parentIds);
+    private transient Can<ApplicationFeatureId> pathIds;
+    
+    @Programmatic @Synchronized
+    public Can<ApplicationFeatureId> getPathIds() {
+        if(pathIds==null) {
+            pathIds = pathIds(this);
         }
-        return parentIds;
+        return pathIds;
+    }
+
+    @Programmatic
+    public Can<ApplicationFeatureId> getParentFeatureIds() {
+        val parent = getParentFeatureId();
+        return parent!=null
+                ? getParentFeatureId().getPathIds()
+                : Can.empty();
+    }
+
+    private ApplicationFeatureId getParentFeatureId() {
+        return sort.isMember()
+                ? getParentTypeFeatureId()
+                : getParentNamespaceFeatureId();
+    }
+
+    private static Can<ApplicationFeatureId> pathIds(final ApplicationFeatureId featureId) {
+        val featureIds = _Lists.<ApplicationFeatureId>newArrayList();
+        visitSelfAndParents(featureId, featureIds::add);
+        return Can.ofCollection(featureIds);
+    }
+
+    private static void visitSelfAndParents(
+            final ApplicationFeatureId featureId, 
+            final Consumer<ApplicationFeatureId> onNext) {
+        if(featureId != null) {
+            onNext.accept(featureId);
+            visitSelfAndParents(featureId.getParentFeatureId(), onNext);
+        }
     }
 
     // -- OBJECT CONTRACT

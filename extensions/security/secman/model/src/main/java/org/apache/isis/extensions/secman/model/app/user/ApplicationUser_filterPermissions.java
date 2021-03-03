@@ -84,19 +84,19 @@ public class ApplicationUser_filterPermissions {
     }
 
 
-    static Predicate<ApplicationFeature> within(final String packageFqn, final String className) {
+    static Predicate<ApplicationFeature> within(final String namespace, final String logicalTypeSimpleName) {
         return (ApplicationFeature input) -> {
             final ApplicationFeatureId inputFeatureId = input.getFeatureId();
 
             // recursive match on package
-            final ApplicationFeatureId packageId = ApplicationFeatureId.newNamespace(packageFqn);
-            final List<ApplicationFeatureId> pathIds = inputFeatureId.getPathIds();
-            if(!pathIds.contains(packageId)) {
+            val namespaceId = ApplicationFeatureId.newNamespace(namespace);
+            if(!inputFeatureId.getPathIds().contains(namespaceId)) {
                 return false;
             }
 
             // match on class (if specified)
-            return className == null || Objects.equals(inputFeatureId.getTypeSimpleName(), className);
+            return logicalTypeSimpleName == null 
+                    || Objects.equals(inputFeatureId.getTypeSimpleName(), logicalTypeSimpleName);
         };
     }
 

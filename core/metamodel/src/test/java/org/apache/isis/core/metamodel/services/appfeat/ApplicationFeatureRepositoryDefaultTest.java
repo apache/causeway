@@ -289,7 +289,7 @@ public class ApplicationFeatureRepositoryDefaultTest {
             final ApplicationFeatureId classParentId = applicationFeatureRepository.addClassParent(classFeatureId);
 
             // then
-            Assert.assertThat(classParentId, is(equalTo(classFeatureId.getParentPackageId())));
+            Assert.assertThat(classParentId, is(equalTo(classFeatureId.getParentNamespaceFeatureId())));
             final ApplicationFeature classPackage = applicationFeatureRepository.findPackage(classParentId);
             assertThat(classPackage, is(newlyCreatedParent));
         }

@@ -18,6 +18,7 @@
  */
 package org.apache.isis.core.metamodel.services.appfeat;
 
+import java.util.Objects;
 import java.util.function.Predicate;
 
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
@@ -27,10 +28,10 @@ import org.apache.isis.applib.services.appfeat.ApplicationMemberType;
 final class _Predicates {
 
     public static Predicate<ApplicationFeatureId> isClassContaining(
-            final ApplicationMemberType memberType, final ApplicationFeatureRepositoryDefault applicationFeatures) {
-        return new Predicate<ApplicationFeatureId>() {
-            @Override
-            public boolean test(final ApplicationFeatureId input) {
+            final ApplicationMemberType memberType, 
+            final ApplicationFeatureRepositoryDefault applicationFeatures) {
+        
+        return (final ApplicationFeatureId input) -> {
                 if(input.getSort() != ApplicationFeatureSort.TYPE) {
                     return false;
                 }
@@ -38,13 +39,15 @@ final class _Predicates {
                 if(feature == null) {
                     return false;
                 }
-                return memberType == null || !feature.membersOf(memberType).isEmpty();
-            }
+                return memberType == null 
+                        || !feature.membersOf(memberType).isEmpty();
         };
     }
 
-    public static Predicate<ApplicationFeatureId> isClassRecursivelyWithin(final ApplicationFeatureId packageId) {
-        return (ApplicationFeatureId input) -> input.getParentIds().contains(packageId);
+    public static Predicate<ApplicationFeatureId> isClassRecursivelyWithin(
+            final ApplicationFeatureId packageId) {
+        return (final ApplicationFeatureId input) -> 
+            input.getPathIds().stream().skip(1L).anyMatch(id->Objects.equals(id, packageId));
     }
 
 }

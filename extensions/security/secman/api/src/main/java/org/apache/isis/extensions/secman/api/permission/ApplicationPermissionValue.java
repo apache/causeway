@@ -109,8 +109,7 @@ public class ApplicationPermissionValue implements Comparable<ApplicationPermiss
 
     private boolean onPathOf(final ApplicationFeatureId featureId) {
 
-        final List<ApplicationFeatureId> pathIds = featureId.getPathIds();
-        for (final ApplicationFeatureId pathId : pathIds) {
+        for (final ApplicationFeatureId pathId : featureId.getPathIds()) {
             if(getFeatureId().equals(pathId)) {
                 return true;
             }
