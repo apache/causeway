@@ -46,19 +46,19 @@ public class ApplicationRole_addUser {
     @Inject private ApplicationRoleRepository<? extends ApplicationRole> applicationRoleRepository;
     @Inject private ApplicationUserRepository<? extends ApplicationUser> applicationUserRepository;
     
-    private final ApplicationRole holder;
+    private final ApplicationRole target;
 
     @Model
     public ApplicationRole act(final ApplicationUser applicationUser) {
-        applicationRoleRepository.addRoleToUser(holder, applicationUser);
-        return holder;
+        applicationRoleRepository.addRoleToUser(target, applicationUser);
+        return target;
     }
 
     @Model
     public List<? extends ApplicationUser> autoComplete0Act(final String search) {
         final Collection<? extends ApplicationUser> matchingSearch = applicationUserRepository.find(search);
         final List<? extends ApplicationUser> list = _Lists.newArrayList(matchingSearch);
-        list.removeAll(applicationUserRepository.findByRole(holder));
+        list.removeAll(applicationUserRepository.findByRole(target));
         return list;
     }
 }

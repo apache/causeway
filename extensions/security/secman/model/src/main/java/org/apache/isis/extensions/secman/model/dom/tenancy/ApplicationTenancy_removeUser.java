@@ -33,8 +33,10 @@ import org.apache.isis.extensions.secman.api.user.ApplicationUserRepository;
 
 import lombok.RequiredArgsConstructor;
 
-@Action(domainEvent = RemoveUserDomainEvent.class, associateWith = "users", 
-associateWithSequence = "2")
+@Action(
+        domainEvent = RemoveUserDomainEvent.class, 
+        associateWith = "users", 
+        associateWithSequence = "2")
 @ActionLayout(named="Remove")
 @RequiredArgsConstructor
 public class ApplicationTenancy_removeUser {
@@ -42,17 +44,17 @@ public class ApplicationTenancy_removeUser {
     @Inject private ApplicationTenancyRepository<? extends ApplicationTenancy> applicationTenancyRepository;
     @Inject private ApplicationUserRepository<? extends ApplicationUser> applicationUserRepository;
     
-    private final ApplicationTenancy holder;
+    private final ApplicationTenancy target;
     
     @Model
     public ApplicationTenancy act(final ApplicationUser applicationUser) {
         applicationTenancyRepository.clearTenancyOnUser(applicationUser);
-        return holder;
+        return target;
     }
     
     @Model
     public Collection<? extends ApplicationUser> choices0Act() {
-        return applicationUserRepository.findByTenancy(holder);
+        return applicationUserRepository.findByTenancy(target);
     }
     
     @Model

@@ -31,6 +31,8 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
+import org.apache.isis.applib.services.appfeat.ApplicationFeatureType;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.commanddto.processor.CommandDtoProcessor;
 import org.apache.isis.applib.services.grid.GridService;
@@ -43,8 +45,6 @@ import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.facets.members.publish.command.CommandPublishingFacet;
 import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
-import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureId;
-import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;

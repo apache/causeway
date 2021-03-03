@@ -37,11 +37,11 @@ public class ApplicationTenancy_addChild {
     
     @Inject private ApplicationTenancyRepository<? extends ApplicationTenancy> applicationTenancyRepository;
     
-    private final ApplicationTenancy holder;
+    private final ApplicationTenancy target;
 
     @Model
     public ApplicationTenancy act(final ApplicationTenancy child) {
-        applicationTenancyRepository.setParentOnTenancy(child, holder);
-        return holder;
+        applicationTenancyRepository.setParentOnTenancy(child, target);
+        return target;
     }
 }

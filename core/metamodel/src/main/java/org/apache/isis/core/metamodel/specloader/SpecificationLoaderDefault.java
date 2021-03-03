@@ -39,6 +39,7 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.id.LogicalType;
+import org.apache.isis.applib.services.appfeat.ApplicationFeatureType;
 import org.apache.isis.applib.services.metamodel.BeanSort;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.collections.Can;
@@ -60,7 +61,6 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModelService;
 import org.apache.isis.core.metamodel.progmodels.dflt.ProgrammingModelFacetsJava8;
-import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureType;
 import org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutor;
 import org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutor.Substitution;
 import org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutorDefault;

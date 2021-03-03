@@ -36,20 +36,20 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ApplicationUser_updateAtPath {
     
-    private final ApplicationUser holder;
+    private final ApplicationUser target;
 
     @Model
     public ApplicationUser act(
             @Parameter(optionality = Optionality.OPTIONAL)
             @ParameterLayout(named = "AtPath")
             final String atPath) {
-        holder.setAtPath(atPath);
-        return holder;
+        target.setAtPath(atPath);
+        return target;
     }
 
     @Model
     public String default0Act() {
-        return holder.getAtPath();
+        return target.getAtPath();
     }
 
 

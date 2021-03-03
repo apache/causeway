@@ -46,19 +46,19 @@ public class ApplicationTenancy_addUser {
     @Inject private ApplicationTenancyRepository<? extends ApplicationTenancy> applicationTenancyRepository;
     @Inject private ApplicationUserRepository<? extends ApplicationUser> applicationUserRepository;
     
-    private final ApplicationTenancy holder;
+    private final ApplicationTenancy target;
 
     @Model
     public ApplicationTenancy act(final ApplicationUser applicationUser) {
-        applicationTenancyRepository.setTenancyOnUser(holder, applicationUser);
-        return holder;
+        applicationTenancyRepository.setTenancyOnUser(target, applicationUser);
+        return target;
     }
 
     @Model
     public List<? extends ApplicationUser> autoComplete0Act(final String search) {
         final Collection<? extends ApplicationUser> matchingSearch = applicationUserRepository.find(search);
         final List<? extends ApplicationUser> list = _Lists.newArrayList(matchingSearch);
-        list.removeAll(applicationUserRepository.findByTenancy(holder));
+        list.removeAll(applicationUserRepository.findByTenancy(target));
         return list;
     }
 }

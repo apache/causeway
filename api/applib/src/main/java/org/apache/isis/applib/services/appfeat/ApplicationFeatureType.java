@@ -16,9 +16,9 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.services.appfeat;
+package org.apache.isis.applib.services.appfeat;
 
-import org.apache.isis.core.metamodel.commons.StringExtensions;
+import org.apache.isis.commons.internal.base._Strings;
 
 public enum ApplicationFeatureType {
     
@@ -76,40 +76,41 @@ public enum ApplicationFeatureType {
     public boolean hideClassName() {
         return this == ApplicationFeatureType.PACKAGE;
     }
+    
     public boolean hideMember() {
         return this == ApplicationFeatureType.PACKAGE || this == ApplicationFeatureType.CLASS;
     }
 
     abstract void init(ApplicationFeatureId applicationFeatureId, String fullyQualifiedName);
 
-    static void ensurePackage(final ApplicationFeatureId feature) {
+    public static void ensurePackage(final ApplicationFeatureId feature) {
         if(feature.type != ApplicationFeatureType.PACKAGE) {
             throw new IllegalStateException("Can only be called for a package; " + feature.toString());
         }
     }
 
-    static void ensurePackageOrClass(final ApplicationFeatureId applicationFeatureId) {
+    public static void ensurePackageOrClass(final ApplicationFeatureId applicationFeatureId) {
         if(applicationFeatureId.type != ApplicationFeatureType.PACKAGE && applicationFeatureId.type != ApplicationFeatureType.CLASS) {
             throw new IllegalStateException("Can only be called for a package or a class; " + applicationFeatureId.toString());
         }
     }
 
-    static void ensureClass(final ApplicationFeatureId feature) {
+    public static void ensureClass(final ApplicationFeatureId feature) {
         if(feature.type != ApplicationFeatureType.CLASS) {
             throw new IllegalStateException("Can only be called for a class; " + feature.toString());
         }
     }
 
-    static void ensureMember(final ApplicationFeatureId feature) {
+    public static void ensureMember(final ApplicationFeatureId feature) {
         if(feature.type != ApplicationFeatureType.MEMBER) {
             throw new IllegalStateException("Can only be called for a member; " + feature.toString());
         }
     }
 
-
     @Override
     public String toString() {
-        return StringExtensions.capitalize(name());
+        return _Strings.capitalize(name());
     }
+    
 
 }

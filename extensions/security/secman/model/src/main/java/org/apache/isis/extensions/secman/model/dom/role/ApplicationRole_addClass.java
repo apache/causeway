@@ -24,18 +24,20 @@ import javax.inject.Inject;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.ParameterLayout;
+import org.apache.isis.applib.services.appfeat.ApplicationFeatureType;
 import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeature;
-import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureType;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermission;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionMode;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionRepository;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionRule;
 import org.apache.isis.extensions.secman.api.role.ApplicationRole;
-import org.apache.isis.extensions.secman.api.role.ApplicationRole.AddClassDomainEvent;
+import org.apache.isis.extensions.secman.api.role.ApplicationRole.AddPermissionDomainEvent;
 
 import lombok.RequiredArgsConstructor;
 
-@Action(domainEvent = AddClassDomainEvent.class, associateWith = "permissions")
+@Action(
+        domainEvent = AddPermissionDomainEvent.class, 
+        associateWith = "permissions")
 @RequiredArgsConstructor
 public class ApplicationRole_addClass {
     

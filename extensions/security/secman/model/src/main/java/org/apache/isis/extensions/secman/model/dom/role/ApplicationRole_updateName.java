@@ -27,11 +27,13 @@ import org.apache.isis.extensions.secman.api.role.ApplicationRole.UpdateNameDoma
 
 import lombok.RequiredArgsConstructor;
 
-@Action(domainEvent = UpdateNameDomainEvent.class, associateWith = "name")
+@Action(
+        domainEvent = UpdateNameDomainEvent.class, 
+        associateWith = "name")
 @RequiredArgsConstructor
 public class ApplicationRole_updateName {
     
-    private final ApplicationRole holder;
+    private final ApplicationRole target;
     
     @MemberOrder(sequence = "1")
     public ApplicationRole updateName(
@@ -39,12 +41,12 @@ public class ApplicationRole_updateName {
             @ParameterLayout(named="Name", typicalLength = ApplicationRole.TYPICAL_LENGTH_NAME)
             final String name) {
         
-        holder.setName(name);
-        return holder;
+        target.setName(name);
+        return target;
     }
 
     public String default0UpdateName() {
-        return holder.getName();
+        return target.getName();
     }
 
 }

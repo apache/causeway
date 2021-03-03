@@ -29,16 +29,16 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ApplicationPermission_allow {
 
-    private final ApplicationPermission holder;
+    private final ApplicationPermission target;
 
     //@MemberOrder(name = "Rule", sequence = "1")
     public ApplicationPermission act() {
-        holder.setRule(ApplicationPermissionRule.ALLOW);
-        return holder;
+        target.setRule(ApplicationPermissionRule.ALLOW);
+        return target;
     }
 
     public String disableAct() {
-        return holder.getRule() == ApplicationPermissionRule.ALLOW? "Rule is already set to ALLOW": null;
+        return target.getRule() == ApplicationPermissionRule.ALLOW? "Rule is already set to ALLOW": null;
     }
 
 }

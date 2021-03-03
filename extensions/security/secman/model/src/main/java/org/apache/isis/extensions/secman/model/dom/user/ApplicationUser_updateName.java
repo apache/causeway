@@ -36,7 +36,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ApplicationUser_updateName {
     
-    private final ApplicationUser holder;
+    private final ApplicationUser target;
 
     @Model
     public ApplicationUser act(
@@ -50,30 +50,30 @@ public class ApplicationUser_updateName {
             @ParameterLayout(named="Known As")
             final String knownAs
             ) {
-        holder.setFamilyName(familyName);
-        holder.setGivenName(givenName);
-        holder.setKnownAs(knownAs);
-        return holder;
+        target.setFamilyName(familyName);
+        target.setGivenName(givenName);
+        target.setKnownAs(knownAs);
+        return target;
     }
 
     @Model
     public String default0Act() {
-        return holder.getFamilyName();
+        return target.getFamilyName();
     }
 
     @Model
     public String default1Act() {
-        return holder.getGivenName();
+        return target.getGivenName();
     }
 
     @Model
     public String default2Act() {
-        return holder.getKnownAs();
+        return target.getKnownAs();
     }
 
     @Model
     public String disableAct() {
-        return holder.isForSelfOrRunAsAdministrator()? null: "Can only update your own user record.";
+        return target.isForSelfOrRunAsAdministrator()? null: "Can only update your own user record.";
     }
 
     @Model

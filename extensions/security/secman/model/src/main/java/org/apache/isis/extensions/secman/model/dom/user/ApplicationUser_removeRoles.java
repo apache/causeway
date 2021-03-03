@@ -49,7 +49,7 @@ public class ApplicationUser_removeRoles {
     @Inject private ApplicationRoleRepository<? extends ApplicationRole> applicationRoleRepository;
     @Inject private ApplicationUserRepository<? extends ApplicationUser> applicationUserRepository;
     
-    private final ApplicationUser holder;
+    private final ApplicationUser target;
 
     
     @Model
@@ -57,9 +57,9 @@ public class ApplicationUser_removeRoles {
         
         _NullSafe.stream(roles)
         .filter(this::canRemove)
-        .forEach(role->applicationRoleRepository.removeRoleFromUser(role, holder));
+        .forEach(role->applicationRoleRepository.removeRoleFromUser(role, target));
         
-        return holder;
+        return target;
     }
 
     @Model
@@ -67,7 +67,7 @@ public class ApplicationUser_removeRoles {
     public boolean canRemove(
             final ApplicationRole applicationRole) {
         
-        if(applicationUserRepository.isAdminUser(holder) 
+        if(applicationUserRepository.isAdminUser(target) 
                 && applicationRoleRepository.isAdminRole(applicationRole)) {
             messageService.warnUser("Cannot remove admin user from the admin role.");
             return false;

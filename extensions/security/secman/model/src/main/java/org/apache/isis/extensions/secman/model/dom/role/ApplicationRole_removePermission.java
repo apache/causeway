@@ -24,10 +24,10 @@ import javax.enterprise.inject.Model;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.ParameterLayout;
+import org.apache.isis.applib.services.appfeat.ApplicationFeatureType;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeature;
-import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureType;
 import org.apache.isis.extensions.secman.api.SecmanConfiguration;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermission;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionRepository;
@@ -51,7 +51,7 @@ public class ApplicationRole_removePermission {
     @Inject private ApplicationRoleRepository<? extends ApplicationRole> applicationRoleRepository;
     @Inject private ApplicationPermissionRepository<? extends ApplicationPermission> applicationPermissionRepository;
     
-    private final ApplicationRole holder;
+    private final ApplicationRole target;
 
     @Model
     public ApplicationRole act(
@@ -63,12 +63,12 @@ public class ApplicationRole_removePermission {
             final String featureFqn) {
         
         final ApplicationPermission permission = applicationPermissionRepository
-                .findByRoleAndRuleAndFeature(holder, rule, type, featureFqn)
+                .findByRoleAndRuleAndFeature(target, rule, type, featureFqn)
                 .orElse(null);
         if(permission != null) {
             repository.remove(permission);
         }
-        return holder;
+        return target;
     }
 
     @Model
@@ -79,7 +79,7 @@ public class ApplicationRole_removePermission {
             final ApplicationFeatureType type,
             @ParameterLayout(named="Feature", typicalLength=ApplicationFeature.TYPICAL_LENGTH_MEMBER_NAME)
             final String featureFqn) {
-        if(applicationRoleRepository.isAdminRole(holder) 
+        if(applicationRoleRepository.isAdminRole(target) 
                 && configBean.isStickyAdminNamespace(featureFqn)) {
             return "Cannot remove top-level namespace permissions for the admin role.";
         }
@@ -102,7 +102,7 @@ public class ApplicationRole_removePermission {
             final ApplicationFeatureType type) {
         
         final Collection<? extends ApplicationPermission> permissions = applicationPermissionRepository
-                .findByRoleAndRuleAndFeatureTypeCached(holder, rule, type);
+                .findByRoleAndRuleAndFeatureTypeCached(target, rule, type);
         return _Lists.map(
                 permissions,
                 ApplicationPermission::getFeatureFqn);

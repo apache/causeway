@@ -49,12 +49,12 @@ public class ApplicationTenancy_delete {
     @Inject private FactoryService factoryService;
     @Inject private RepositoryService repository;
 
-    private final ApplicationTenancy holder;
+    private final ApplicationTenancy target;
 
     
     @Model
     public Collection<? extends ApplicationTenancy> act() {
-        for (val user : applicationUserRepository.findByTenancy(holder)) {
+        for (val user : applicationUserRepository.findByTenancy(target)) {
             val updateAtPathMixin = factoryService.mixin(ApplicationUser_updateAtPath.class, user);
             updateAtPathMixin.act(null);
         }

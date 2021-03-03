@@ -42,16 +42,16 @@ public class ApplicationUser_delete {
     @Inject private ApplicationUserRepository<? extends ApplicationUser> applicationUserRepository;
     @Inject private RepositoryService repository;
     
-    private final ApplicationUser holder;
+    private final ApplicationUser target;
 
     @Model
     public Collection<? extends ApplicationUser> act() {
-        repository.removeAndFlush(holder);
+        repository.removeAndFlush(target);
         return applicationUserRepository.allUsers();
     }
 
     @Model
     public String disableAct() {
-        return applicationUserRepository.isAdminUser(holder)? "Cannot delete the admin user": null;
+        return applicationUserRepository.isAdminUser(target)? "Cannot delete the admin user": null;
     }
 }

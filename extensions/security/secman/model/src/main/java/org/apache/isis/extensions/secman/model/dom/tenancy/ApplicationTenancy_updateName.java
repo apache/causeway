@@ -28,24 +28,26 @@ import org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy.UpdateNa
 
 import lombok.RequiredArgsConstructor;
 
-@Action(domainEvent = UpdateNameDomainEvent.class, associateWith = "name", 
-associateWithSequence = "1")
+@Action(
+        domainEvent = UpdateNameDomainEvent.class, 
+        associateWith = "name",
+        associateWithSequence = "1")
 @RequiredArgsConstructor
 public class ApplicationTenancy_updateName {
     
-    private final ApplicationTenancy holder;
+    private final ApplicationTenancy target;
 
     @Model
     public ApplicationTenancy act(
             @Parameter(maxLength = ApplicationTenancy.MAX_LENGTH_NAME)
             @ParameterLayout(named="Name", typicalLength=ApplicationTenancy.TYPICAL_LENGTH_NAME)
             final String name) {
-        holder.setName(name);
-        return holder;
+        target.setName(name);
+        return target;
     }
 
     @Model
     public String default0Act() {
-        return holder.getName();
+        return target.getName();
     }
 }

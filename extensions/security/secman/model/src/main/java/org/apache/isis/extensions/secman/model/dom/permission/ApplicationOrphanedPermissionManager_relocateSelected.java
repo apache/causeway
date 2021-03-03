@@ -26,7 +26,7 @@ import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureId;
+import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureRepositoryDefault;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermission;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermission.RelocateNamespaceDomainEvent;

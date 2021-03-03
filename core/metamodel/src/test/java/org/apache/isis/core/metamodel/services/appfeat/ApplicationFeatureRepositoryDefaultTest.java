@@ -39,6 +39,7 @@ import static org.hamcrest.Matchers.containsInAnyOrder;
 
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.collections.Can;

@@ -51,7 +51,7 @@ public class ApplicationUser_permissions {
     @Inject private FactoryService factory;
     @Inject private ApplicationFeatureRepositoryDefault applicationFeatureRepository;
 
-    private final ApplicationUser holder;
+    private final ApplicationUser target;
 
     @Model
     public List<UserPermissionViewModel> coll() {
@@ -62,7 +62,7 @@ public class ApplicationUser_permissions {
     List<UserPermissionViewModel> asViewModels(final java.util.Collection<ApplicationFeature> features) {
         return _Lists.map(
                 features,
-                UserPermissionViewModel.Functions.asViewModel(holder, factory));
+                UserPermissionViewModel.Functions.asViewModel(target, factory));
     }
 
 

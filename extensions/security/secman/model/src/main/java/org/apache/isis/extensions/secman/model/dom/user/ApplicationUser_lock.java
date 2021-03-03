@@ -42,19 +42,19 @@ public class ApplicationUser_lock {
     @Inject private ApplicationUserRepository<? extends ApplicationUser> applicationUserRepository;
     @Inject private SecmanConfiguration configBean;
     
-    private final ApplicationUser holder;
+    private final ApplicationUser target;
 
     @Model
     public ApplicationUser act() {
-        holder.setStatus(ApplicationUserStatus.DISABLED);
-        return holder;
+        target.setStatus(ApplicationUserStatus.DISABLED);
+        return target;
     }
     
     @Model
     public String disableAct() {
-        if(applicationUserRepository.isAdminUser(holder)) {
+        if(applicationUserRepository.isAdminUser(target)) {
             return "Cannot disable the '" + configBean.getAdminUserName() + "' user.";
         }
-        return holder.getStatus() == ApplicationUserStatus.DISABLED ? "Status is already set to DISABLE": null;
+        return target.getStatus() == ApplicationUserStatus.DISABLED ? "Status is already set to DISABLE": null;
     }
 }

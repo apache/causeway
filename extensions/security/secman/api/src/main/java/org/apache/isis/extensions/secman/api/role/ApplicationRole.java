@@ -37,11 +37,8 @@ public interface ApplicationRole {
 
     public static class AddUserDomainEvent extends ActionDomainEvent {}
     public static class RemoveUserDomainEvent extends ActionDomainEvent {}
-    public static class AddActionDomainEvent extends ActionDomainEvent {}
-    public static class AddClassDomainEvent extends ActionDomainEvent {}
-    public static class AddCollectionDomainEvent extends ActionDomainEvent {}
-    public static class AddPackageDomainEvent extends ActionDomainEvent {}
-    public static class AddPropertyDomainEvent extends ActionDomainEvent {}
+    
+    public static class AddPermissionDomainEvent extends ActionDomainEvent {}
     public static class RemovePermissionDomainEvent extends ActionDomainEvent {}
 
     public static class DeleteDomainEvent extends ActionDomainEvent {}

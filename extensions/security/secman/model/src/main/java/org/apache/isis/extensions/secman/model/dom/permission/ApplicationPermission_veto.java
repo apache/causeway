@@ -25,19 +25,21 @@ import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionRul
 
 import lombok.RequiredArgsConstructor;
 
-@Action(domainEvent = VetoDomainEvent.class, associateWith = "rule")
+@Action(
+        domainEvent = VetoDomainEvent.class, 
+        associateWith = "rule")
 @RequiredArgsConstructor
 public class ApplicationPermission_veto {
 
-    private final ApplicationPermission holder;
+    private final ApplicationPermission target;
 
     //@MemberOrder(name = "Rule", sequence = "1")
     public ApplicationPermission act() {
-        holder.setRule(ApplicationPermissionRule.VETO);
-        return holder;
+        target.setRule(ApplicationPermissionRule.VETO);
+        return target;
     }
     public String disableAct() {
-        return holder.getRule() == ApplicationPermissionRule.VETO? "Rule is already set to VETO": null;
+        return target.getRule() == ApplicationPermissionRule.VETO? "Rule is already set to VETO": null;
     }
     
 

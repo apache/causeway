@@ -20,10 +20,13 @@ package org.apache.isis.core.metamodel.services.appfeat;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.SortedSet;
+import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
@@ -34,7 +37,9 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureRepository;
+import org.apache.isis.applib.services.appfeat.ApplicationFeatureType;
 import org.apache.isis.applib.services.appfeat.ApplicationMemberType;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.collections._Sets;
@@ -62,9 +67,11 @@ import lombok.extern.log4j.Log4j2;
 @Service
 @Named("isis.metamodel.ApplicationFeatureRepositoryDefault")
 @Log4j2
-public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRepository {
+public class ApplicationFeatureRepositoryDefault 
+implements ApplicationFeatureRepository {
 
     // -- caches
+    private Map<String, ApplicationFeatureId> featureIdentifiersByName;
     final SortedMap<ApplicationFeatureId, ApplicationFeature> packageFeatures = _Maps.newTreeMap();
     private final SortedMap<ApplicationFeatureId, ApplicationFeature> classFeatures = _Maps.newTreeMap();
     private final SortedMap<ApplicationFeatureId, ApplicationFeature> memberFeatures = _Maps.newTreeMap();
@@ -115,9 +122,22 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
             return;
         }
         initializationState = InitializationState.INITIALIZED;
+        
         for (val spec : specificationLoader.snapshotSpecifications()) {
             createApplicationFeaturesFor(spec);
         }
+        
+        val featuresByName = new HashMap<String, ApplicationFeatureId>();
+        visitFeatureIdentifierByName(packageFeatures, featuresByName::put);
+        visitFeatureIdentifierByName(classFeatures, featuresByName::put);
+        visitFeatureIdentifierByName(memberFeatures, featuresByName::put);
+        this.featureIdentifiersByName = Collections.unmodifiableMap(featuresByName);
+    }
+    
+    private void visitFeatureIdentifierByName(
+            final Map<ApplicationFeatureId, ApplicationFeature> map, 
+            final BiConsumer<String, ApplicationFeatureId> onEntry) {
+        map.forEach((k, v)->onEntry.accept(k.toString(), k));
     }
 
     void createApplicationFeaturesFor(final ObjectSpecification spec) {
@@ -137,8 +157,8 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
             return;
         }
 
-        final String specIdString = spec.getLogicalTypeName();
-        final ApplicationFeatureId classFeatureId = ApplicationFeatureId.newClass(specIdString);
+        final String logicalTypeName = spec.getLogicalTypeName();
+        final ApplicationFeatureId classFeatureId = ApplicationFeatureId.newClass(logicalTypeName);
 
         // add class to our map
         // (later on it may get removed if the class turns out to have no features,
@@ -335,41 +355,6 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
         return excluded;
     }
 
-//XXX[2286] .. replaced by check 'spec.getBeanSort().isUnknown()'
-//    /**
-//     * Ignore the (strict) super-classes of any services.
-//     * <p>
-//     * For example, we want to ignore <code>ExceptionRecognizerComposite</code>
-//     * because there is no service of that type (only of subtypes of that).
-//     * </p>
-//     */
-//    private boolean isSuperClassOfService(final ObjectSpecification spec) {
-//
-//        val specClass = spec.getCorrespondingClass();
-//
-//        // is this class a supertype or the actual type of one of the services?
-//        boolean serviceCls = false;
-//        for (final ManagedBeanAdapter bean : registeredServices.get()) {
-//            final Class<?> serviceClass = bean.getBeanClass();
-//            if (specClass.isAssignableFrom(serviceClass)) {
-//                serviceCls = true;
-//            }
-//        }
-//        if (!serviceCls) {
-//            return false;
-//        }
-//
-//        // yes it is.  In which case, is it the actual concrete class of one of those services?
-//        for (final Object registeredService : registeredServices.get()) {
-//            final Class<?> serviceClass = registeredService.getClass();
-//            if (serviceClass.isAssignableFrom(specClass)) {
-//                return false;
-//            }
-//        }
-//        // couldn't find a service of exactly this type, so ignore the spec.
-//        return true;
-//    }
-
     protected boolean isHidden(final ObjectSpecification spec) {
         final HiddenFacet facet = spec.getFacet(HiddenFacet.class);
         return facet != null &&
@@ -472,6 +457,12 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
         return actionFeatures.values();
     }
 
+    @Override
+    public Map<String, ApplicationFeatureId> getFeatureIdentifiersByName() {
+        initializeIfRequired();
+        return featureIdentifiersByName;
+    }
+    
     // -- packageNames, packageNamesContainingClasses, classNamesContainedIn, memberNamesOf
     
     @Override
@@ -503,7 +494,7 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
         }
         final SortedSet<ApplicationFeatureId> contents = pkg.getContents();
         return contents.stream()
-                .filter(ApplicationFeatureId.Predicates.isClassContaining(memberType, this))
+                .filter(_Predicates.isClassContaining(memberType, this))
                 .map(ApplicationFeatureId.Functions.GET_CLASS_NAME)
                 .collect(_Sets.toUnmodifiableSorted());
     }
@@ -518,7 +509,7 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
         }
         final Set<ApplicationFeatureId> classIds = this.classFeatures.keySet();
         return classIds.stream()
-                .filter(ApplicationFeatureId.Predicates.isClassRecursivelyWithin(packageId))
+                .filter(_Predicates.isClassRecursivelyWithin(packageId))
                 .map(ApplicationFeatureId.Functions.GET_CLASS_NAME)
                 .collect(_Sets.toUnmodifiableSorted());
     }
@@ -539,6 +530,6 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
                 .map(ApplicationFeatureId.Functions.GET_MEMBER_NAME)
                 .collect(_Sets.toUnmodifiableSorted());
     }
-
+    
 
 }

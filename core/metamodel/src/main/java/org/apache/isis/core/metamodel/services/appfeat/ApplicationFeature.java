@@ -28,7 +28,9 @@ import javax.enterprise.inject.Vetoed;
 import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Value;
+import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureRepository;
+import org.apache.isis.applib.services.appfeat.ApplicationFeatureType;
 import org.apache.isis.applib.services.appfeat.ApplicationMemberType;
 import org.apache.isis.applib.util.Equality;
 import org.apache.isis.applib.util.Hashing;
@@ -193,7 +195,7 @@ public class ApplicationFeature implements Comparable<ApplicationFeature> {
 
             return (final ApplicationFeature input) ->
             input.getContents().stream() // all the classes in this package
-            .anyMatch(ApplicationFeatureId.Predicates.isClassContaining(memberType, applicationFeatures));
+            .anyMatch(_Predicates.isClassContaining(memberType, applicationFeatures));
         }
     }
 
@@ -230,6 +232,7 @@ public class ApplicationFeature implements Comparable<ApplicationFeature> {
     public String toString() {
         return toString.toString(this);
     }
+    
 
 
 

@@ -38,25 +38,25 @@ public class ApplicationUser_updateAccountType {
     
     @Inject private ApplicationUserRepository<? extends ApplicationUser> applicationUserRepository;
     
-    private final ApplicationUser holder;
+    private final ApplicationUser target;
 
     @Model
     public ApplicationUser act(
             final AccountType accountType) {
-        holder.setAccountType(accountType);
-        return holder;
+        target.setAccountType(accountType);
+        return target;
     }
     
     @Model
     public String disableUpdateAccountType() {
-        return applicationUserRepository.isAdminUser(holder)
+        return applicationUserRepository.isAdminUser(target)
                 ? "Cannot change account type for admin user"
                         : null;
     }
     
     @Model
     public AccountType default0UpdateAccountType() {
-        return holder.getAccountType();
+        return target.getAccountType();
     }
 
 }
