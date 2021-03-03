@@ -25,8 +25,6 @@ import org.apache.isis.applib.util.Enums;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet;
 import org.apache.isis.core.metamodel.facets.actions.validate.ActionValidationFacet;
-import org.apache.isis.core.metamodel.facets.collections.validate.CollectionValidateAddToFacet;
-import org.apache.isis.core.metamodel.facets.collections.validate.CollectionValidateRemoveFromFacet;
 import org.apache.isis.core.metamodel.facets.properties.update.clear.PropertyClearFacet;
 import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
 import org.apache.isis.core.metamodel.facets.properties.validating.PropertyValidateFacet;

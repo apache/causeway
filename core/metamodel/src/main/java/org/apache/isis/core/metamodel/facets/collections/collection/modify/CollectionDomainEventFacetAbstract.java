@@ -28,13 +28,12 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.core.metamodel.facets.DomainEventHelper;
 import org.apache.isis.core.metamodel.facets.SingleClassValueFacetAbstract;
-import org.apache.isis.core.metamodel.interactions.CollectionAddToContext;
-import org.apache.isis.core.metamodel.interactions.ProposedHolder;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
-import org.apache.isis.core.metamodel.interactions.ValidityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 
-public abstract class CollectionDomainEventFacetAbstract extends SingleClassValueFacetAbstract implements CollectionDomainEventFacet {
+public abstract class CollectionDomainEventFacetAbstract
+        extends SingleClassValueFacetAbstract
+        implements CollectionDomainEventFacet {
 
     private final DomainEventHelper domainEventHelper;
     private final TranslationService translationService;
@@ -104,39 +103,5 @@ public abstract class CollectionDomainEventFacetAbstract extends SingleClassValu
         }
         return null;
     }
-
-    @Override
-    public String invalidates(final ValidityContext ic) {
-
-        // if this is a mixin, then this ain't true.
-        if(!(ic instanceof ProposedHolder)) {
-            return null;
-        }
-        final ProposedHolder catc = (ProposedHolder) ic;
-        final Object proposed = catc.getProposed().getPojo();
-
-        final CollectionDomainEvent.Of of =
-                ic instanceof CollectionAddToContext
-                ? CollectionDomainEvent.Of.ADD_TO
-                        : CollectionDomainEvent.Of.REMOVE_FROM;
-
-        final CollectionDomainEvent<?, ?> event =
-                domainEventHelper.postEventForCollection(
-                        AbstractDomainEvent.Phase.VALIDATE,
-                        getEventType(), null,
-                        getIdentified(), ic.getHead(),
-                        of,
-                        proposed);
-        if (event != null && event.isInvalid()) {
-            final TranslatableString reasonTranslatable = event.getInvalidityReasonTranslatable();
-            if(reasonTranslatable != null) {
-                return reasonTranslatable.translate(translationService, translationContext);
-            }
-            return event.getInvalidityReason();
-        }
-
-        return null;
-    }
-
 
 }
