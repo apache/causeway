@@ -77,7 +77,7 @@ public class ApplicationRole_addPermission {
      * Adds a {@link ApplicationPermission permission} for this role to a
      * {@link ApplicationFeature feature}.
      */
-    @MemberOrder(sequence = "3")
+    @MemberOrder(sequence = "0")
     public ApplicationRole act(
             
             @Parameter(optionality = Optionality.MANDATORY)
