@@ -33,7 +33,7 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureSort;
-import org.apache.isis.applib.services.appfeat.ApplicationMemberType;
+import org.apache.isis.applib.services.appfeat.ApplicationMemberSort;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.services.queryresultscache.QueryResultsCache;
@@ -338,9 +338,9 @@ implements org.apache.isis.extensions.secman.api.permission.ApplicationPermissio
         final Collection<String> packageNames = applicationFeatureRepository.packageNames();
         final Set<String> availableClasses = _Sets.newTreeSet();
         for (String packageName : packageNames) {
-            appendClasses(packageName, ApplicationMemberType.PROPERTY, availableClasses);
-            appendClasses(packageName, ApplicationMemberType.COLLECTION, availableClasses);
-            appendClasses(packageName, ApplicationMemberType.ACTION, availableClasses);
+            appendClasses(packageName, ApplicationMemberSort.PROPERTY, availableClasses);
+            appendClasses(packageName, ApplicationMemberSort.COLLECTION, availableClasses);
+            appendClasses(packageName, ApplicationMemberSort.ACTION, availableClasses);
         }
 
         val orphaned = _Lists.<ApplicationPermission>newArrayList();
@@ -387,8 +387,8 @@ implements org.apache.isis.extensions.secman.api.permission.ApplicationPermissio
     }
 
     private void appendClasses(
-            final String packageName, final ApplicationMemberType memberType, final Set<String> availableClasses) {
-        final Collection<String> classNames = applicationFeatureRepository.classNamesContainedIn(packageName, memberType);
+            final String packageName, final ApplicationMemberSort getMemberSort, final Set<String> availableClasses) {
+        final Collection<String> classNames = applicationFeatureRepository.classNamesContainedIn(packageName, getMemberSort);
         for (String className : classNames) {
             availableClasses.add(packageName + "." + className);
         }
@@ -396,19 +396,19 @@ implements org.apache.isis.extensions.secman.api.permission.ApplicationPermissio
 
     private List<String> memberNamesOf(final String packageName, final String className) {
         final List<String> memberNames = _Lists.newArrayList();
-        appendMembers(packageName, className, ApplicationMemberType.PROPERTY, memberNames);
-        appendMembers(packageName, className, ApplicationMemberType.COLLECTION, memberNames);
-        appendMembers(packageName, className, ApplicationMemberType.ACTION, memberNames);
+        appendMembers(packageName, className, ApplicationMemberSort.PROPERTY, memberNames);
+        appendMembers(packageName, className, ApplicationMemberSort.COLLECTION, memberNames);
+        appendMembers(packageName, className, ApplicationMemberSort.ACTION, memberNames);
         return memberNames;
     }
 
     private void appendMembers(
             final String packageName,
             final String className,
-            final ApplicationMemberType applicationMemberType,
+            final ApplicationMemberSort getMemberSort,
             final List<String> memberNames) {
         final Collection<String> memberNamesOf =
-                applicationFeatureRepository.memberNamesOf(packageName, className, applicationMemberType);
+                applicationFeatureRepository.memberNamesOf(packageName, className, getMemberSort);
         memberNames.addAll(memberNamesOf);
     }
 

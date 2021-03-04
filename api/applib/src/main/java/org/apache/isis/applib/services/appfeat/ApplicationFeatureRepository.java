@@ -21,8 +21,6 @@ package org.apache.isis.applib.services.appfeat;
 import java.util.Map;
 import java.util.SortedSet;
 
-import org.apache.isis.applib.Identifier;
-
 /**
  * Provides the access to string representations of the packages, classes and
  * class members (collectively: "application features") of the domain classes
@@ -35,11 +33,11 @@ public interface ApplicationFeatureRepository  {
     SortedSet<String> packageNames();
 
     SortedSet<String> packageNamesContainingClasses(
-            ApplicationMemberType memberType);
+            ApplicationMemberSort memberSort);
 
     SortedSet<String> classNamesContainedIn(
             String packageFqn,
-            ApplicationMemberType memberType);
+            ApplicationMemberSort memberSort);
 
     SortedSet<String> classNamesRecursivelyContainedIn(
             String packageFqn);
@@ -47,7 +45,7 @@ public interface ApplicationFeatureRepository  {
     SortedSet<String> memberNamesOf(
             String packageFqn,
             String className,
-            ApplicationMemberType memberType);
+            ApplicationMemberSort memberSort);
 
     Map<String, ApplicationFeatureId> getFeatureIdentifiersByName();
 

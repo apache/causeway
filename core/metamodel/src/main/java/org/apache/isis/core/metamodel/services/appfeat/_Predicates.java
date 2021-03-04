@@ -23,31 +23,31 @@ import java.util.function.Predicate;
 
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureSort;
-import org.apache.isis.applib.services.appfeat.ApplicationMemberType;
+import org.apache.isis.applib.services.appfeat.ApplicationMemberSort;
 
 final class _Predicates {
 
-    public static Predicate<ApplicationFeatureId> isClassContaining(
-            final ApplicationMemberType memberType, 
+    public static Predicate<ApplicationFeatureId> isLogicalTypeContaining(
+            final ApplicationMemberSort memberSort, 
             final ApplicationFeatureRepositoryDefault applicationFeatures) {
         
-        return (final ApplicationFeatureId input) -> {
-                if(input.getSort() != ApplicationFeatureSort.TYPE) {
+        return (final ApplicationFeatureId featureId) -> {
+                if(featureId.getSort() != ApplicationFeatureSort.TYPE) {
                     return false;
                 }
-                final ApplicationFeature feature = applicationFeatures.findFeature(input);
+                final ApplicationFeature feature = applicationFeatures.findFeature(featureId);
                 if(feature == null) {
                     return false;
                 }
-                return memberType == null 
-                        || !feature.membersOf(memberType).isEmpty();
+                return memberSort == null 
+                        || !feature.membersOf(memberSort).isEmpty();
         };
     }
 
-    public static Predicate<ApplicationFeatureId> isClassRecursivelyWithin(
-            final ApplicationFeatureId packageId) {
+    public static Predicate<ApplicationFeatureId> isLogicalTypeRecursivelyWithin(
+            final ApplicationFeatureId namespaceId) {
         return (final ApplicationFeatureId input) -> 
-            input.getPathIds().stream().skip(1L).anyMatch(id->Objects.equals(id, packageId));
+            input.getPathIds().stream().skip(1L).anyMatch(id->Objects.equals(id, namespaceId));
     }
 
 }

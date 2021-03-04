@@ -47,7 +47,7 @@ import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureSort;
-import org.apache.isis.applib.services.appfeat.ApplicationMemberType;
+import org.apache.isis.applib.services.appfeat.ApplicationMemberSort;
 import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.applib.util.ObjectContracts.ObjectContract;
 import org.apache.isis.commons.internal.base._Casts;
@@ -200,14 +200,14 @@ implements
     public String getSort() {
         final Enum<?> e = getFeatureSort() != ApplicationFeatureSort.MEMBER 
                 ? getFeatureSort() 
-                : getMemberType().orElse(null);
+                : getMemberSort().orElse(null);
         return e != null ? e.name(): null;
     }
 
     @Programmatic
-    private Optional<ApplicationMemberType> getMemberType() {
+    private Optional<ApplicationMemberSort> getMemberSort() {
         return getFeature()
-                .map(ApplicationFeature::getMemberType);
+                .map(ApplicationFeature::getMemberSort);
     }
 
 

@@ -28,7 +28,7 @@ import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureRepository;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureSort;
-import org.apache.isis.applib.services.appfeat.ApplicationMemberType;
+import org.apache.isis.applib.services.appfeat.ApplicationMemberSort;
 import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeature;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermission;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionMode;
@@ -54,7 +54,7 @@ public class ApplicationRole_addCollection {
 
     /**
      * Adds a {@link ApplicationPermission permission} for this role to a
-     * {@link ApplicationMemberType#COLLECTION collection}
+     * {@link ApplicationMemberSort#COLLECTION collection}
      * {@link ApplicationFeatureSort#MEMBER member}
      * {@link ApplicationFeature feature}.
      */
@@ -88,7 +88,7 @@ public class ApplicationRole_addCollection {
 
     @Model
     public Collection<String> choices2Act() {
-        return applicationFeatureRepository.packageNamesContainingClasses(ApplicationMemberType.COLLECTION);
+        return applicationFeatureRepository.packageNamesContainingClasses(ApplicationMemberSort.COLLECTION);
     }
     
     @Model
@@ -96,7 +96,7 @@ public class ApplicationRole_addCollection {
             final ApplicationPermissionRule rule,
             final ApplicationPermissionMode mode,
             final String packageFqn) {
-        return applicationFeatureRepository.classNamesContainedIn(packageFqn, ApplicationMemberType.COLLECTION);
+        return applicationFeatureRepository.classNamesContainedIn(packageFqn, ApplicationMemberSort.COLLECTION);
     }
 
     @Model
@@ -105,7 +105,7 @@ public class ApplicationRole_addCollection {
             final ApplicationPermissionMode mode,
             final String packageFqn,
             final String className) {
-        return applicationFeatureRepository.memberNamesOf(packageFqn, className, ApplicationMemberType.COLLECTION);
+        return applicationFeatureRepository.memberNamesOf(packageFqn, className, ApplicationMemberSort.COLLECTION);
     }
 
 }

@@ -28,7 +28,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
-import org.apache.isis.applib.services.appfeat.ApplicationMemberType;
+import org.apache.isis.applib.services.appfeat.ApplicationMemberSort;
 
 public class ApplicationFeatureTest {
 
@@ -98,7 +98,7 @@ public class ApplicationFeatureTest {
             final ApplicationFeature applicationFeature = new ApplicationFeature(ApplicationFeatureId.newNamespace("com.mycompany"));
             final ApplicationFeatureId memberFeatureId = ApplicationFeatureId.newMember("com.mycompany.Bar", "foo");
 
-            applicationFeature.addToMembers(memberFeatureId, ApplicationMemberType.PROPERTY);
+            applicationFeature.addToMembers(memberFeatureId, ApplicationMemberSort.PROPERTY);
         }
 
         @Test
@@ -108,8 +108,8 @@ public class ApplicationFeatureTest {
             final ApplicationFeatureId memberFeatureId = ApplicationFeatureId.newMember("com.mycompany.Bar", "foo");
             final ApplicationFeatureId memberFeatureId2 = ApplicationFeatureId.newMember("com.mycompany.Bar", "boz");
 
-            applicationFeature.addToMembers(memberFeatureId, ApplicationMemberType.PROPERTY);
-            applicationFeature.addToMembers(memberFeatureId2, ApplicationMemberType.PROPERTY);
+            applicationFeature.addToMembers(memberFeatureId, ApplicationMemberSort.PROPERTY);
+            applicationFeature.addToMembers(memberFeatureId2, ApplicationMemberSort.PROPERTY);
 
             assertThat(applicationFeature.getProperties().size(), is(2));
             assertThat(applicationFeature.getProperties(), containsInAnyOrder(memberFeatureId, memberFeatureId2));
@@ -123,7 +123,7 @@ public class ApplicationFeatureTest {
             final ApplicationFeature applicationFeature = new ApplicationFeature(ApplicationFeatureId.newType("com.mycompany.Bar"));
             final ApplicationFeatureId packageFeatureId = ApplicationFeatureId.newNamespace("com.mycompany");
 
-            applicationFeature.addToMembers(packageFeatureId, ApplicationMemberType.PROPERTY);
+            applicationFeature.addToMembers(packageFeatureId, ApplicationMemberSort.PROPERTY);
         }
 
         @Test
@@ -134,7 +134,7 @@ public class ApplicationFeatureTest {
             final ApplicationFeature applicationFeature = new ApplicationFeature(ApplicationFeatureId.newType("com.mycompany.Bar"));
             final ApplicationFeatureId classFeatureId = ApplicationFeatureId.newType("com.mycompany.Bop");
 
-            applicationFeature.addToMembers(classFeatureId, ApplicationMemberType.PROPERTY);
+            applicationFeature.addToMembers(classFeatureId, ApplicationMemberSort.PROPERTY);
         }
 
         @Test
@@ -145,7 +145,7 @@ public class ApplicationFeatureTest {
             final ApplicationFeature applicationFeature = new ApplicationFeature(ApplicationFeatureId.newMember("com.mycompany.Bar", "foo"));
             final ApplicationFeatureId classFeatureId = ApplicationFeatureId.newType("com.mycompany.flob.Bar");
 
-            applicationFeature.addToMembers(classFeatureId, ApplicationMemberType.PROPERTY);
+            applicationFeature.addToMembers(classFeatureId, ApplicationMemberSort.PROPERTY);
         }
     }
 

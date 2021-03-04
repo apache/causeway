@@ -89,7 +89,7 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
             final ApplicationFeature feature = applicationFeatureRepository.findFeature(featureId);
 
             if(feature != null) {
-                switch(feature.getMemberType()) {
+                switch(feature.getMemberSort()) {
                 case PROPERTY:
                     return ApplicationClassProperty.class;
                 case COLLECTION:

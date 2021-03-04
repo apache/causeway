@@ -22,9 +22,9 @@ import org.apache.isis.commons.internal.base._Strings;
 
 /**
  * 
- * @since 1.x {@index}
+ * @since 1.x renamed in 2.0 {@index}
  */
-public enum ApplicationMemberType {
+public enum ApplicationMemberSort {
     PROPERTY,
     COLLECTION,
     ACTION;

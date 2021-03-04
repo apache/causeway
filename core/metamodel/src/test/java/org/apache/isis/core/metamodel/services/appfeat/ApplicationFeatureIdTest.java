@@ -40,7 +40,7 @@ import static org.hamcrest.Matchers.lessThan;
 
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureSort;
-import org.apache.isis.applib.services.appfeat.ApplicationMemberType;
+import org.apache.isis.applib.services.appfeat.ApplicationMemberSort;
 import org.apache.isis.core.internaltestsupport.contract.ValueTypeContractTestAbstract;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 
@@ -590,7 +590,7 @@ public class ApplicationFeatureIdTest {
         public static class IsClassContaining extends PredicatesTest {
 
             @SuppressWarnings("unused")
-            private ApplicationMemberType memberType;
+            private ApplicationMemberSort memberType;
 
             @Mock
             private ApplicationFeatureRepositoryDefault mockApplicationFeatureRepository;
@@ -602,7 +602,7 @@ public class ApplicationFeatureIdTest {
                 expectedException.expect(NullPointerException.class);
 
                 _Predicates.
-                isClassContaining(ApplicationMemberType.ACTION, mockApplicationFeatureRepository).
+                isLogicalTypeContaining(ApplicationMemberSort.ACTION, mockApplicationFeatureRepository).
                 test(null);
             }
 
@@ -610,12 +610,12 @@ public class ApplicationFeatureIdTest {
             public void whenNotClass() throws Exception {
                 assertThat(
                         _Predicates.
-                        isClassContaining(ApplicationMemberType.ACTION, mockApplicationFeatureRepository).
+                        isLogicalTypeContaining(ApplicationMemberSort.ACTION, mockApplicationFeatureRepository).
                         test(ApplicationFeatureId.newNamespace("com.mycompany")),
                         is(false));
                 assertThat(
                         _Predicates.
-                        isClassContaining(ApplicationMemberType.ACTION, mockApplicationFeatureRepository).
+                        isLogicalTypeContaining(ApplicationMemberSort.ACTION, mockApplicationFeatureRepository).
                         test(ApplicationFeatureId.newMember("com.mycompany.Bar#foo")),
                         is(false));
             }
@@ -630,7 +630,7 @@ public class ApplicationFeatureIdTest {
 
                 assertThat(
                         _Predicates.
-                        isClassContaining(ApplicationMemberType.ACTION, mockApplicationFeatureRepository).
+                        isLogicalTypeContaining(ApplicationMemberSort.ACTION, mockApplicationFeatureRepository).
                         test(classFeature),
                         is(false));
             }
@@ -641,13 +641,13 @@ public class ApplicationFeatureIdTest {
                     oneOf(mockApplicationFeatureRepository).findFeature(classFeature);
                     will(returnValue(mockApplicationFeature));
 
-                    allowing(mockApplicationFeature).membersOf(ApplicationMemberType.ACTION);
+                    allowing(mockApplicationFeature).membersOf(ApplicationMemberSort.ACTION);
                     will(returnValue(new TreeSet<>()));
                 }});
 
                 assertThat(
                         _Predicates.
-                        isClassContaining(ApplicationMemberType.ACTION, mockApplicationFeatureRepository).
+                        isLogicalTypeContaining(ApplicationMemberSort.ACTION, mockApplicationFeatureRepository).
                         test(classFeature),
                         is(false));
             }
@@ -658,7 +658,7 @@ public class ApplicationFeatureIdTest {
                     oneOf(mockApplicationFeatureRepository).findFeature(classFeature);
                     will(returnValue(mockApplicationFeature));
 
-                    allowing(mockApplicationFeature).membersOf(ApplicationMemberType.ACTION);
+                    allowing(mockApplicationFeature).membersOf(ApplicationMemberSort.ACTION);
                     will(returnValue(new TreeSet<ApplicationFeatureId>() {{
                         add(ApplicationFeatureId.newMember("com.mycompany.Bar#foo"));
                     }}));
@@ -666,7 +666,7 @@ public class ApplicationFeatureIdTest {
 
                 assertThat(
                         _Predicates.
-                        isClassContaining(ApplicationMemberType.ACTION, mockApplicationFeatureRepository).
+                        isLogicalTypeContaining(ApplicationMemberSort.ACTION, mockApplicationFeatureRepository).
                         test(classFeature),
                         is(true));
             }

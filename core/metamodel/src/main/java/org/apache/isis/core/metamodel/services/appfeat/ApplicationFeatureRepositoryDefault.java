@@ -40,7 +40,7 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureRepository;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureSort;
-import org.apache.isis.applib.services.appfeat.ApplicationMemberType;
+import org.apache.isis.applib.services.appfeat.ApplicationMemberSort;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
@@ -255,7 +255,7 @@ implements ApplicationFeatureRepository {
             final Integer maxLength,
             final Integer typicalLength,
             final boolean derived) {
-        return newMember(classFeatureId, objectMember, ApplicationMemberType.PROPERTY, returnType, derived, maxLength, typicalLength, null);
+        return newMember(classFeatureId, objectMember, ApplicationMemberSort.PROPERTY, returnType, derived, maxLength, typicalLength, null);
     }
 
     private boolean newCollection(
@@ -263,7 +263,7 @@ implements ApplicationFeatureRepository {
             final ObjectMember objectMember,
             final Class<?> returnType,
             final boolean derived) {
-        return newMember(classFeatureId, objectMember, ApplicationMemberType.COLLECTION, returnType, derived, null, null, null);
+        return newMember(classFeatureId, objectMember, ApplicationMemberSort.COLLECTION, returnType, derived, null, null, null);
     }
 
     private boolean newAction(
@@ -271,13 +271,13 @@ implements ApplicationFeatureRepository {
             final ObjectMember objectMember,
             final Class<?> returnType,
             final SemanticsOf actionSemantics) {
-        return newMember(classFeatureId, objectMember, ApplicationMemberType.ACTION, returnType, null, null, null, actionSemantics);
+        return newMember(classFeatureId, objectMember, ApplicationMemberSort.ACTION, returnType, null, null, null, actionSemantics);
     }
 
     private boolean newMember(
             final ApplicationFeatureId classFeatureId,
             final ObjectMember objectMember,
-            final ApplicationMemberType memberType,
+            final ApplicationMemberSort memberType,
             final Class<?> returnType,
             final Boolean derived,
             final Integer maxLength,
@@ -293,7 +293,7 @@ implements ApplicationFeatureRepository {
     private void newMember(
             final ApplicationFeatureId classFeatureId,
             final String memberId,
-            final ApplicationMemberType memberType,
+            final ApplicationMemberSort memberSort,
             final Class<?> returnType,
             final Boolean derived,
             final Integer maxLength, final Integer typicalLength,
@@ -301,7 +301,7 @@ implements ApplicationFeatureRepository {
         final ApplicationFeatureId featureId = ApplicationFeatureId.newMember(classFeatureId.getFullyQualifiedName(), memberId);
 
         final ApplicationFeature memberFeature = newFeature(featureId);
-        memberFeature.setMemberType(memberType);
+        memberFeature.setMemberSort(memberSort);
 
         memberFeature.setReturnTypeName(returnType != null ? returnType.getSimpleName() : null);
         memberFeature.setDerived(derived);
@@ -312,14 +312,14 @@ implements ApplicationFeatureRepository {
         memberFeatures.put(featureId, memberFeature);
 
         // also cache per memberType
-        featuresMapFor(memberType).put(featureId, memberFeature);
+        featuresMapFor(memberSort).put(featureId, memberFeature);
 
         final ApplicationFeature classFeature = findClass(classFeatureId);
-        classFeature.addToMembers(featureId, memberType);
+        classFeature.addToMembers(featureId, memberSort);
     }
 
-    private SortedMap<ApplicationFeatureId, ApplicationFeature> featuresMapFor(final ApplicationMemberType memberType) {
-        switch (memberType) {
+    private SortedMap<ApplicationFeatureId, ApplicationFeature> featuresMapFor(final ApplicationMemberSort memberSort) {
+        switch (memberSort) {
         case PROPERTY:
             return propertyFeatures;
         case COLLECTION:
@@ -475,7 +475,7 @@ implements ApplicationFeatureRepository {
     }
 
     @Override
-    public SortedSet<String> packageNamesContainingClasses(final ApplicationMemberType memberType) {
+    public SortedSet<String> packageNamesContainingClasses(final ApplicationMemberSort memberType) {
         initializeIfRequired();
         final Collection<ApplicationFeature> packages = allFeatures(ApplicationFeatureSort.NAMESPACE);
 
@@ -486,7 +486,7 @@ implements ApplicationFeatureRepository {
     }
 
     @Override
-    public SortedSet<String> classNamesContainedIn(final String packageFqn, final ApplicationMemberType memberType) {
+    public SortedSet<String> classNamesContainedIn(final String packageFqn, final ApplicationMemberSort memberType) {
         initializeIfRequired();
         final ApplicationFeatureId packageId = ApplicationFeatureId.newNamespace(packageFqn);
         final ApplicationFeature pkg = findPackage(packageId);
@@ -495,7 +495,7 @@ implements ApplicationFeatureRepository {
         }
         final SortedSet<ApplicationFeatureId> contents = pkg.getContents();
         return contents.stream()
-                .filter(_Predicates.isClassContaining(memberType, this))
+                .filter(_Predicates.isLogicalTypeContaining(memberType, this))
                 .map(ApplicationFeatureId::getTypeSimpleName)
                 .collect(_Sets.toUnmodifiableSorted());
     }
@@ -510,7 +510,7 @@ implements ApplicationFeatureRepository {
         }
         final Set<ApplicationFeatureId> classIds = this.classFeatures.keySet();
         return classIds.stream()
-                .filter(_Predicates.isClassRecursivelyWithin(packageId))
+                .filter(_Predicates.isLogicalTypeRecursivelyWithin(packageId))
                 .map(ApplicationFeatureId::getTypeSimpleName)
                 .collect(_Sets.toUnmodifiableSorted());
     }
@@ -519,7 +519,7 @@ implements ApplicationFeatureRepository {
     public SortedSet<String> memberNamesOf(
             final String packageFqn,
             final String className,
-            final ApplicationMemberType memberType) {
+            final ApplicationMemberSort memberType) {
         initializeIfRequired();
         final ApplicationFeatureId classId = ApplicationFeatureId.newType(packageFqn + "." + className);
         final ApplicationFeature cls = findClass(classId);

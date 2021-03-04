@@ -28,7 +28,7 @@ import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureRepository;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureSort;
-import org.apache.isis.applib.services.appfeat.ApplicationMemberType;
+import org.apache.isis.applib.services.appfeat.ApplicationMemberSort;
 import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeature;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermission;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionMode;
@@ -55,7 +55,7 @@ public class ApplicationRole_addProperty {
     
     /**
      * Adds a {@link ApplicationPermission permission} for this role to a
-     * {@link ApplicationMemberType#PROPERTY property}
+     * {@link ApplicationMemberSort#PROPERTY property}
      * {@link ApplicationFeatureSort#MEMBER member}
      * {@link ApplicationFeature feature}.
      */
@@ -92,7 +92,7 @@ public class ApplicationRole_addProperty {
      */
     @Model
     public Collection<String> choices2Act() {
-        return applicationFeatureRepository.packageNamesContainingClasses(ApplicationMemberType.PROPERTY);
+        return applicationFeatureRepository.packageNamesContainingClasses(ApplicationMemberSort.PROPERTY);
     }
 
     /**
@@ -103,7 +103,7 @@ public class ApplicationRole_addProperty {
             final ApplicationPermissionRule rule,
             final ApplicationPermissionMode mode,
             final String packageFqn) {
-        return applicationFeatureRepository.classNamesContainedIn(packageFqn, ApplicationMemberType.PROPERTY);
+        return applicationFeatureRepository.classNamesContainedIn(packageFqn, ApplicationMemberSort.PROPERTY);
     }
 
     /**
@@ -115,7 +115,7 @@ public class ApplicationRole_addProperty {
             final ApplicationPermissionMode mode,
             final String packageFqn,
             final String className) {
-        return applicationFeatureRepository.memberNamesOf(packageFqn, className, ApplicationMemberType.PROPERTY);
+        return applicationFeatureRepository.memberNamesOf(packageFqn, className, ApplicationMemberSort.PROPERTY);
     }
 
 }

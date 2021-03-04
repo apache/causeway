@@ -31,7 +31,7 @@ import org.apache.isis.applib.annotation.Value;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureRepository;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureSort;
-import org.apache.isis.applib.services.appfeat.ApplicationMemberType;
+import org.apache.isis.applib.services.appfeat.ApplicationMemberSort;
 import org.apache.isis.applib.util.Equality;
 import org.apache.isis.applib.util.Hashing;
 import org.apache.isis.applib.util.ObjectContracts;
@@ -48,7 +48,7 @@ import lombok.experimental.UtilityClass;
  *
  * <p>
  *     Note that this is NOT a view model; instead it can be converted to a string using methods of
- *     {@link ApplicationFeatureRepository}, eg {@link ApplicationFeatureRepository#classNamesContainedIn(String, ApplicationMemberType)}.
+ *     {@link ApplicationFeatureRepository}, eg {@link ApplicationFeatureRepository#classNamesContainedIn(String, ApplicationMemberSort)}.
  * </p>
  */
 @Value
@@ -86,34 +86,34 @@ public class ApplicationFeature implements Comparable<ApplicationFeature> {
      * Only for {@link ApplicationFeatureSort#MEMBER member}s.
      */
     @Getter @Setter
-    private ApplicationMemberType memberType;
+    private ApplicationMemberSort memberSort;
 
     /**
-     * Only for {@link ApplicationMemberType#ACTION action}s.
+     * Only for {@link ApplicationMemberSort#ACTION action}s.
      */
     @Getter @Setter
     private String returnTypeName;
 
     /**
-     * Only for {@link ApplicationMemberType#PROPERTY} and {@link ApplicationMemberType#COLLECTION}
+     * Only for {@link ApplicationMemberSort#PROPERTY} and {@link ApplicationMemberSort#COLLECTION}
      */
     @Getter @Setter
     private Boolean derived;
 
     /**
-     * Only for {@link ApplicationMemberType#ACTION action}s.
+     * Only for {@link ApplicationMemberSort#ACTION action}s.
      */
     @Getter @Setter
     private Integer propertyMaxLength;
     
     /**
-     * Only for {@link ApplicationMemberType#ACTION action}s.
+     * Only for {@link ApplicationMemberSort#ACTION action}s.
      */
     @Getter @Setter
     private Integer propertyTypicalLength;
 
     /**
-     * Only for {@link ApplicationMemberType#ACTION action}s.
+     * Only for {@link ApplicationMemberSort#ACTION action}s.
      */
     @Getter @Setter
     private SemanticsOf actionSemantics;
@@ -157,16 +157,16 @@ public class ApplicationFeature implements Comparable<ApplicationFeature> {
         return actions;
     }
     
-    public void addToMembers(final ApplicationFeatureId memberId, final ApplicationMemberType memberType) {
+    public void addToMembers(final ApplicationFeatureId memberId, final ApplicationMemberSort memberSort) {
         _Asserts.ensureType(this.getFeatureId());
         _Asserts.ensureMember(memberId);
 
-        membersOf(memberType).add(memberId);
+        membersOf(memberSort).add(memberId);
     }
     
-    public SortedSet<ApplicationFeatureId> membersOf(final ApplicationMemberType memberType) {
+    public SortedSet<ApplicationFeatureId> membersOf(final ApplicationMemberSort memberSort) {
         _Asserts.ensureType(this.getFeatureId());
-        switch (memberType) {
+        switch (memberSort) {
         case PROPERTY:
             return properties;
         case COLLECTION:
@@ -190,12 +190,12 @@ public class ApplicationFeature implements Comparable<ApplicationFeature> {
     public static class Predicates {
 
         public static Predicate<ApplicationFeature> packageContainingClasses(
-                final ApplicationMemberType memberType, 
+                final ApplicationMemberSort memberSort, 
                 final ApplicationFeatureRepositoryDefault applicationFeatures) {
 
             return (final ApplicationFeature input) ->
             input.getContents().stream() // all the classes in this package
-            .anyMatch(_Predicates.isClassContaining(memberType, applicationFeatures));
+            .anyMatch(_Predicates.isLogicalTypeContaining(memberSort, applicationFeatures));
         }
     }
 
