@@ -20,7 +20,6 @@ package org.apache.isis.extensions.secman.api.permission;
 
 import java.io.Serializable;
 import java.util.Comparator;
-import java.util.List;
 
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;

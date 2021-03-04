@@ -65,7 +65,6 @@ public class DemoModule {
                 .adminUserName("sven")
                 .adminAdditionalNamespacePermission("demo")
                 .adminAdditionalNamespacePermission("isis")
-                .adminAdditionalNamespacePermission("org.apache.isis")
                 .build();
     }
 
