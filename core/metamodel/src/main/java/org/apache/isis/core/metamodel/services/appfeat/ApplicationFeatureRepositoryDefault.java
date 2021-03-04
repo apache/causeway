@@ -277,7 +277,7 @@ implements ApplicationFeatureRepository {
     private boolean newMember(
             final ApplicationFeatureId classFeatureId,
             final ObjectMember objectMember,
-            final ApplicationMemberSort memberType,
+            final ApplicationMemberSort memberSort,
             final Class<?> returnType,
             final Boolean derived,
             final Integer maxLength,
@@ -286,7 +286,7 @@ implements ApplicationFeatureRepository {
         if (objectMember.isAlwaysHidden()) {
             return false;
         }
-        newMember(classFeatureId, objectMember.getId(), memberType, returnType, derived, maxLength, typicalLength, actionSemantics);
+        newMember(classFeatureId, objectMember.getId(), memberSort, returnType, derived, maxLength, typicalLength, actionSemantics);
         return true;
     }
 
@@ -311,7 +311,7 @@ implements ApplicationFeatureRepository {
 
         memberFeatures.put(featureId, memberFeature);
 
-        // also cache per memberType
+        // also cache per memberSort
         featuresMapFor(memberSort).put(featureId, memberFeature);
 
         final ApplicationFeature classFeature = findClass(classFeatureId);
@@ -475,18 +475,18 @@ implements ApplicationFeatureRepository {
     }
 
     @Override
-    public SortedSet<String> packageNamesContainingClasses(final ApplicationMemberSort memberType) {
+    public SortedSet<String> packageNamesContainingClasses(final ApplicationMemberSort memberSort) {
         initializeIfRequired();
         final Collection<ApplicationFeature> packages = allFeatures(ApplicationFeatureSort.NAMESPACE);
 
         return stream(packages)
-                .filter(ApplicationFeature.Predicates.packageContainingClasses(memberType, this))
+                .filter(ApplicationFeature.Predicates.packageContainingClasses(memberSort, this))
                 .map(ApplicationFeature.Functions.GET_FQN)
                 .collect(_Sets.toUnmodifiableSorted());
     }
 
     @Override
-    public SortedSet<String> classNamesContainedIn(final String packageFqn, final ApplicationMemberSort memberType) {
+    public SortedSet<String> classNamesContainedIn(final String packageFqn, final ApplicationMemberSort memberSort) {
         initializeIfRequired();
         final ApplicationFeatureId packageId = ApplicationFeatureId.newNamespace(packageFqn);
         final ApplicationFeature pkg = findPackage(packageId);
@@ -495,7 +495,7 @@ implements ApplicationFeatureRepository {
         }
         final SortedSet<ApplicationFeatureId> contents = pkg.getContents();
         return contents.stream()
-                .filter(_Predicates.isLogicalTypeContaining(memberType, this))
+                .filter(_Predicates.isLogicalTypeContaining(memberSort, this))
                 .map(ApplicationFeatureId::getTypeSimpleName)
                 .collect(_Sets.toUnmodifiableSorted());
     }
@@ -519,14 +519,14 @@ implements ApplicationFeatureRepository {
     public SortedSet<String> memberNamesOf(
             final String packageFqn,
             final String className,
-            final ApplicationMemberSort memberType) {
+            final ApplicationMemberSort memberSort) {
         initializeIfRequired();
         final ApplicationFeatureId classId = ApplicationFeatureId.newType(packageFqn + "." + className);
         final ApplicationFeature cls = findClass(classId);
         if (cls == null) {
             return Collections.emptySortedSet();
         }
-        final SortedSet<ApplicationFeatureId> featureIds = cls.membersOf(memberType);
+        final SortedSet<ApplicationFeatureId> featureIds = cls.membersOf(memberSort);
         return featureIds.stream()
                 .map(ApplicationFeatureId::getMemberName)
                 .collect(_Sets.toUnmodifiableSorted());

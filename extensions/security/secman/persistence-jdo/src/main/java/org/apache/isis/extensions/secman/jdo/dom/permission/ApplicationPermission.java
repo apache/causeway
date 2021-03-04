@@ -169,7 +169,7 @@ public class ApplicationPermission implements org.apache.isis.extensions.secman.
                 .map(featureId -> applicationFeatureRepository.findFeature(featureId));
     }
 
-    // region > type (derived, memberType of associated feature)
+    // region > type (derived, memberSort of associated feature)
 
     public static class TypeDomainEvent extends PropertyDomainEvent<String> {}
 

@@ -590,7 +590,7 @@ public class ApplicationFeatureIdTest {
         public static class IsClassContaining extends PredicatesTest {
 
             @SuppressWarnings("unused")
-            private ApplicationMemberSort memberType;
+            private ApplicationMemberSort memberSort;
 
             @Mock
             private ApplicationFeatureRepositoryDefault mockApplicationFeatureRepository;

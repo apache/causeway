@@ -184,7 +184,7 @@ implements
                 .map(featureId -> applicationFeatureRepository.findFeature(featureId));
     }
 
-    // region > type (derived, memberType of associated feature)
+    // region > type (derived, memberSort of associated feature)
 
     public static class TypeDomainEvent extends PropertyDomainEvent<String> {}
 
