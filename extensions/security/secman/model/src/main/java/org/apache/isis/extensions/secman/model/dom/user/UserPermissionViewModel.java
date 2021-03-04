@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.secman.model.app.user;
+package org.apache.isis.extensions.secman.model.dom.user;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
@@ -55,7 +55,7 @@ import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionVal
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionValueSet;
 import org.apache.isis.extensions.secman.api.user.ApplicationUser;
 import org.apache.isis.extensions.secman.api.user.ApplicationUserRepository;
-import org.apache.isis.extensions.secman.model.app.feature.ApplicationFeatureViewModel;
+import org.apache.isis.extensions.secman.model.dom.features.ApplicationFeatureViewModel;
 
 import lombok.val;
 

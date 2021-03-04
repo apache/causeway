@@ -24,11 +24,11 @@ import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionMod
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionRule;
 import org.apache.isis.extensions.secman.jdo.dom.role.ApplicationRole;
 import org.apache.isis.extensions.secman.jdo.dom.user.ApplicationUser;
-import org.apache.isis.extensions.secman.model.app.user.MeService;
+import org.apache.isis.extensions.secman.model.dom.user.MeService;
 
 /**
  * Role for regular users of the security module, providing the ability to lookup their user account using the
- * {@link org.apache.isis.extensions.secman.model.app.user.MeService}, and for viewing and maintaining their user details.
+ * {@link org.apache.isis.extensions.secman.model.dom.user.MeService}, and for viewing and maintaining their user details.
  *
  * @since 2.0 {@index}
  */

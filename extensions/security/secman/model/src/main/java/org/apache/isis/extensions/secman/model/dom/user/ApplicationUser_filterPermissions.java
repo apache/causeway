@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.secman.model.app.user;
+package org.apache.isis.extensions.secman.model.dom.user;
 
 import java.util.Collection;
 import java.util.List;

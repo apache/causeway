@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.secman.model.app.feature;
+package org.apache.isis.extensions.secman.model.dom.features;
 
 import javax.inject.Inject;
 
