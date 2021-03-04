@@ -65,15 +65,15 @@ public class ApplicationRole_addProperty {
             final ApplicationPermissionRule rule,
             @ParameterLayout(named="Mode")
             final ApplicationPermissionMode mode,
-            @ParameterLayout(named="Package", typicalLength=ApplicationFeature.TYPICAL_LENGTH_PKG_FQN)
-            final String packageFqn,
-            @ParameterLayout(named="Class", typicalLength=ApplicationFeature.TYPICAL_LENGTH_CLS_NAME)
-            final String className,
+            @ParameterLayout(named="Namespace", typicalLength=ApplicationFeature.TYPICAL_LENGTH_PKG_FQN)
+            final String namespace,
+            @ParameterLayout(named="Type", typicalLength=ApplicationFeature.TYPICAL_LENGTH_CLS_NAME)
+            final String logicalTypeSimpleName,
             @ParameterLayout(named="Property", typicalLength=ApplicationFeature.TYPICAL_LENGTH_MEMBER_NAME)
             final String memberName) {
         
         applicationPermissionRepository
-            .newPermission(holder, rule, mode, packageFqn, className, memberName);
+            .newPermission(holder, rule, mode, namespace, logicalTypeSimpleName, memberName);
         return holder;
     }
 
@@ -102,8 +102,8 @@ public class ApplicationRole_addProperty {
     public Collection<String> choices3Act(
             final ApplicationPermissionRule rule,
             final ApplicationPermissionMode mode,
-            final String packageFqn) {
-        return applicationFeatureRepository.classNamesContainedIn(packageFqn, ApplicationMemberSort.PROPERTY);
+            final String namespace) {
+        return applicationFeatureRepository.classNamesContainedIn(namespace, ApplicationMemberSort.PROPERTY);
     }
 
     /**
@@ -113,9 +113,9 @@ public class ApplicationRole_addProperty {
     public Collection<String> choices4Act(
             final ApplicationPermissionRule rule,
             final ApplicationPermissionMode mode,
-            final String packageFqn,
-            final String className) {
-        return applicationFeatureRepository.memberNamesOf(packageFqn, className, ApplicationMemberSort.PROPERTY);
+            final String namespace,
+            final String logicalTypeSimpleName) {
+        return applicationFeatureRepository.memberNamesOf(namespace, logicalTypeSimpleName, ApplicationMemberSort.PROPERTY);
     }
 
 }

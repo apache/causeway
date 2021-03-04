@@ -24,6 +24,7 @@ import javax.inject.Inject;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.ParameterLayout;
+import org.apache.isis.applib.services.appfeat.ApplicationFeatureRepository;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureSort;
 import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeature;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermission;
@@ -40,15 +41,17 @@ import lombok.RequiredArgsConstructor;
         domainEvent = AddPermissionDomainEvent.class, 
         associateWith = "permissions")
 @RequiredArgsConstructor
-public class ApplicationRole_addClass {
+public class ApplicationRole_addNamespace {
     
+    @Inject private ApplicationFeatureRepository applicationFeatureRepository;
     @Inject private ApplicationPermissionRepository<? extends ApplicationPermission> applicationPermissionRepository;
     
     private final ApplicationRole holder;
-
+    
     /**
-     * Adds a {@link ApplicationPermission permission} for this role to a
-     * {@link ApplicationFeatureSort#MEMBER member}
+     * Adds a {@link ApplicationPermission permission}
+     * for this role to a
+     * {@link ApplicationFeatureSort#NAMESPACE package}
      * {@link ApplicationFeature feature}.
      */
     @MemberOrder(sequence = "1")
@@ -57,15 +60,11 @@ public class ApplicationRole_addClass {
             final ApplicationPermissionRule rule,
             @ParameterLayout(named="Mode")
             final ApplicationPermissionMode mode,
-            @ParameterLayout(named="Package", typicalLength=ApplicationFeature.TYPICAL_LENGTH_PKG_FQN)
-            final String packageFqn,
-            @ParameterLayout(named="Class", typicalLength=ApplicationFeature.TYPICAL_LENGTH_CLS_NAME)
-            final String className) {
+            @ParameterLayout(named="Namespace", typicalLength= ApplicationFeature.TYPICAL_LENGTH_PKG_FQN)
+            final String namespace) {
         
-        applicationPermissionRepository.newPermission(
-                holder, rule, mode, ApplicationFeatureSort.TYPE,
-                packageFqn + "." + className);
-        
+        applicationPermissionRepository
+            .newPermission(holder, rule, mode, ApplicationFeatureSort.NAMESPACE, namespace);
         return holder;
     }
 
@@ -77,6 +76,11 @@ public class ApplicationRole_addClass {
     @Model
     public ApplicationPermissionMode default1Act() {
         return ApplicationPermissionMode.CHANGING;
+    }
+
+    @Model
+    public java.util.Collection<String> choices2Act() {
+        return applicationFeatureRepository.packageNames();
     }
 
 }
