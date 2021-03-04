@@ -18,6 +18,8 @@
  */
 package org.apache.isis.extensions.secman.jpa.seed.scripts;
 
+import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.collections._Arrays;
 import org.apache.isis.extensions.secman.api.SecmanConfiguration;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionMode;
@@ -38,10 +40,11 @@ public class IsisExtSecmanAdminRoleAndPermissions extends AbstractRoleAndPermiss
 
     @Override
     protected void execute(ExecutionContext executionContext) {
-        newPackagePermissions(
+        newPermissions(
                 ApplicationPermissionRule.ALLOW,
                 ApplicationPermissionMode.CHANGING,
-                adminInitialPackagePermissions);
+                Can.ofArray(adminInitialPackagePermissions)
+                    .map(ApplicationFeatureId::newNamespace));
     }
 
 }

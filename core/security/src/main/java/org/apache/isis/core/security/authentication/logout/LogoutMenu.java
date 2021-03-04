@@ -43,12 +43,14 @@ import org.apache.isis.core.security.authentication.AuthenticationContext;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
-@Named("isis.security.LogoutMenu")
-@DomainService(objectType = "isis.security.LogoutMenu")
+@Named(LogoutMenu.OBJECT_TYPE)
+@DomainService(objectType = LogoutMenu.OBJECT_TYPE)
 @DomainServiceLayout(menuBar = DomainServiceLayout.MenuBar.TERTIARY)
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class LogoutMenu {
 
+    public static final String OBJECT_TYPE = "isis.security.LogoutMenu"; // referenced by secman seeding
+    
     private final List<LogoutHandler> logoutHandler;
     private final AuthenticationContext authenticationTracker;
     private final IsisConfiguration configuration;

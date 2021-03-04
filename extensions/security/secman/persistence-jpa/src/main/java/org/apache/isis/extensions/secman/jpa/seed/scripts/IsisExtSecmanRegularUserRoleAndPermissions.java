@@ -18,13 +18,14 @@
  */
 package org.apache.isis.extensions.secman.jpa.seed.scripts;
 
+import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.security.authentication.logout.LogoutMenu;
 import org.apache.isis.extensions.secman.api.SecmanConfiguration;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionMode;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionRule;
-import org.apache.isis.extensions.secman.jpa.dom.role.ApplicationRole;
-import org.apache.isis.extensions.secman.jpa.dom.user.ApplicationUser;
-import org.apache.isis.extensions.secman.model.dom.user.MeService;
+
+import lombok.val;
 
 /**
  * Role for regular users of the security module, providing the ability to lookup their user account using the
@@ -41,60 +42,45 @@ public class IsisExtSecmanRegularUserRoleAndPermissions extends AbstractRoleAndP
     @Override
     protected void execute(ExecutionContext executionContext) {
 
-        newMemberPermissions(
-                ApplicationPermissionRule.ALLOW,
-                ApplicationPermissionMode.CHANGING,
-                LogoutMenu.class,
-                "logout");
-
-        newMemberPermissions(
-                ApplicationPermissionRule.ALLOW,
-                ApplicationPermissionMode.CHANGING,
-                MeService.class,
-                "me");
-
-        newClassPermissions(
+        val allowViewing = Can.of(
+                ApplicationFeatureId.newType("isis.ext.secman.ApplicationUser"),
+                ApplicationFeatureId.newMember("isis.ext.secman.ApplicationRole", "name"),
+                ApplicationFeatureId.newMember("isis.ext.secman.ApplicationRole", "description")
+                );
+        
+        val allowChanging = Can.of(
+                ApplicationFeatureId.newMember(LogoutMenu.OBJECT_TYPE, "logout"),
+                ApplicationFeatureId.newMember("isis.ext.secman.MeService", "me"),
+                ApplicationFeatureId.newMember("isis.ext.secman.ApplicationUser", "updateName"),
+                ApplicationFeatureId.newMember("isis.ext.secman.ApplicationUser", "updatePassword"),
+                ApplicationFeatureId.newMember("isis.ext.secman.ApplicationUser", "updateEmailAddress"),
+                ApplicationFeatureId.newMember("isis.ext.secman.ApplicationUser", "updatePhoneNumber"),
+                ApplicationFeatureId.newMember("isis.ext.secman.ApplicationUser", "updateFaxNumber")
+                );
+        
+        val vetoViewing = Can.of(
+                ApplicationFeatureId.newMember("isis.ext.secman.ApplicationUser", "filterPermissions"),
+                ApplicationFeatureId.newMember("isis.ext.secman.ApplicationUser", "resetPassword"),
+                ApplicationFeatureId.newMember("isis.ext.secman.ApplicationUser", "lock"), // named 'enable' in the UI
+                ApplicationFeatureId.newMember("isis.ext.secman.ApplicationUser", "unlock"), // named 'disable' in the UI
+                ApplicationFeatureId.newMember("isis.ext.secman.ApplicationUser", "addRole"),
+                ApplicationFeatureId.newMember("isis.ext.secman.ApplicationUser", "removeRoles")
+                );
+        
+        newPermissions(
                 ApplicationPermissionRule.ALLOW,
                 ApplicationPermissionMode.VIEWING,
-                ApplicationUser.class);
-
-        newMemberPermissions(
+                allowViewing);
+        
+        newPermissions(
                 ApplicationPermissionRule.ALLOW,
                 ApplicationPermissionMode.CHANGING,
-                ApplicationUser.class,
-                "updateName",
-                "updatePassword",
-                "updateEmailAddress",
-                "updatePhoneNumber",
-                "updateFaxNumber");
-
-        newMemberPermissions(
+                allowChanging);
+        
+        newPermissions(
                 ApplicationPermissionRule.VETO,
                 ApplicationPermissionMode.VIEWING,
-                ApplicationUser.class,
-                "filterPermissions",
-                "resetPassword",
-                //"updateTenancy", // removed
-                "lock", // renamed as 'enable' in the UI
-                "unlock", // renamed as 'disable' in the UI
-                "addRole",
-                "removeRole");
-
-        newMemberPermissions(
-                ApplicationPermissionRule.ALLOW,
-                ApplicationPermissionMode.VIEWING,
-                ApplicationRole.class,
-                "name",
-                "description");
-
-        //        // for adhoc testing of #42
-        //        newMemberPermissions(
-        //                ApplicationPermissionRule.ALLOW,
-        //                ApplicationPermissionMode.CHANGING,
-        //                ApplicationUser.class,
-        //                "orphanedUpdateEmailAddress",
-        //                "orphanedUpdatePhoneNumber",
-        //                "orphanedUpdateFaxNumber");
+                vetoViewing);
 
     }
 
