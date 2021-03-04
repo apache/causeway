@@ -27,11 +27,20 @@ import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.applib.mixins.MixinConstants;
+import org.apache.isis.applib.mixins.layout.LayoutMixinConstants;
 
 import lombok.RequiredArgsConstructor;
 
 /**
+ * Contributes the value of the id (introduced by enhancing) as a property.
+ *
+ * <p>
+ * Only visible if the id can be cast to a long.
+ * </p>
+ *
+ * @see Persistable_datanucleusVersionLong
+ * @see Persistable_datanucleusVersionTimestamp
+ *
  * @since 2.0 {@index}
  */
 @Property(
@@ -49,7 +58,7 @@ public class Persistable_datanucleusIdLong {
     extends org.apache.isis.applib.IsisModuleApplib.PropertyDomainEvent
     <Persistable_datanucleusIdLong, Long> {}
 
-    @MemberOrder(name = MixinConstants.METADATA_LAYOUT_GROUPNAME, sequence = "800.1")
+    @MemberOrder(name = LayoutMixinConstants.METADATA_LAYOUT_GROUPNAME, sequence = "800.1")
     public Long prop() {
         final Object objectId = JDOHelper.getObjectId(persistable);
         if(objectId instanceof DatastoreId) {

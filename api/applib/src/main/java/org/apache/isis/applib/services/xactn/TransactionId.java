@@ -20,7 +20,8 @@ package org.apache.isis.applib.services.xactn;
 
 import java.util.UUID;
 
-import org.apache.isis.commons.having.HasUniqueId;
+import org.apache.isis.applib.mixins.system.HasInteractionId;
+import org.apache.isis.applib.mixins.system.HasTransactionId;
 
 import lombok.Value;
 
@@ -31,7 +32,7 @@ import lombok.Value;
  * <p>
  *     The transaction and
  *     {@link org.apache.isis.applib.services.iactn.Interaction} are associated
- *     by the {@link #getUniqueId() uniqueId}.
+ *     by the {@link #getInteractionId() uniqueId}.
  * </p>
  *
  * <p>
@@ -41,17 +42,27 @@ import lombok.Value;
  * @since 2.0 {@index}
  */
 @Value(staticConstructor = "of")
-public class TransactionId implements HasUniqueId {
+public class TransactionId implements HasTransactionId {
 
     /**
      * The unique identifier of the outer
      * {@link org.apache.isis.applib.services.iactn.Interaction}.
+     *
+     * <p>
+     *     Together with {@link #getSequence()}, this makes up the
+     *     implementation of {@link org.apache.isis.applib.mixins.system.HasTransactionId}
+     * </p>
      */
-    UUID uniqueId;
+    UUID interactionId;
 
     /**
      * Identifies the transaction (there could be multiple) within the
      * {@link org.apache.isis.applib.services.iactn.Interaction}.
+     *
+     * <p>
+     *     Together with {@link #getInteractionId()}, this makes up the
+     *     implementation of {@link org.apache.isis.applib.mixins.system.HasTransactionId}
+     * </p>
      */
     int sequence;
 

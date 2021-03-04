@@ -49,7 +49,6 @@ The xref:vw:ROOT:about.adoc[Wicket viewer] renders a separator between each sect
 +
 consisting of one or many actions (``ServiceActionLayoutData``s)
 
-
 == Components
 
 The service action class reside in the `org.apache.isis.applib.layout.component` package, consisting of just:
@@ -61,8 +60,6 @@ which correspond to the xref:refguide:applib:index/annotation/ActionLayout.adoc[
 
 This is similar to `ActionLayoutData` (of the xref:applib-classes:layout.adoc[object layout] classes), however it also identifies the domain service to which it belongs.
 (This isn't required for the object layouts because the owner in that case is implicit).
-
-
 
 == Link
 

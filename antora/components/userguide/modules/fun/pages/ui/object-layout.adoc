@@ -14,7 +14,7 @@ File-based layouts offer a number of benefits:
 
 * UI hints can be provided for xref:userguide:fun:mixins.adoc[mixin] contributions that are synthesised at runtime.
 
-It is also possible to download an initial `.layout.xml` - capturing any existing layout metadata - using the xref:refguide:applib:index/services/layout/LayoutService.adoc[LayoutService] (exposed on the prototyping menu) or using a xref:refguide:applib-cm:roles-mixins-contributees/mixins.adoc#Object[mixin action] contributed to every domain object.
+It is also possible to download an initial `.layout.xml` - capturing any existing layout metadata - using the xref:refguide:applib:index/services/layout/LayoutService.adoc[LayoutService] (exposed on the prototyping menu) or using a xref:refguide:applib-classes:mixins.adoc#java-lang-object[mixin action] contributed to every domain object.
 
 There are some downsides, though:
 
@@ -279,5 +279,5 @@ You can then remove the `@MemberOrder` and `@Action#associateWith` annotations f
 * if you want to use layout XML file ONLY to describe the grid, then download the "minimal" version.
 The grid regions will be empty in this version, and the framework will use the `@MemberOrder` and `@Action#associateWith` annotations to bind object members to those regions.
 
-If you want to adjust the layout XML for a single domain object, then you can use the xref:refguide:applib-cm:roles-mixins-contributees/mixins.adoc#downloadlayoutxml[mixin action] (contributed to every domain object).
+If you want to adjust the layout XML for a single domain object, then you can use the xref:refguide:applib-classes:mixins.adoc#[mixin action] (contributed to every domain object).
 

@@ -21,8 +21,8 @@ package org.apache.isis.applib.services.publishing.spi;
 import java.sql.Timestamp;
 import java.util.UUID;
 
-import org.apache.isis.commons.having.HasUniqueId;
-import org.apache.isis.commons.having.HasUsername;
+import org.apache.isis.applib.mixins.system.HasInteractionId;
+import org.apache.isis.applib.mixins.security.HasUsername;
 import org.apache.isis.schema.chg.v2.ChangesDto;
 
 /**
@@ -37,15 +37,15 @@ import org.apache.isis.schema.chg.v2.ChangesDto;
  * @since 2.0 {@index}
  */
 public interface EntityChanges
-        extends HasUniqueId,
+        extends HasInteractionId,
                 HasUsername {
 
     /**
-     * inherited from {@link HasUniqueId}, correlates back to the unique
+     * inherited from {@link HasInteractionId}, correlates back to the unique
      * identifier of the transaction in which these objects were changed.
      */
     @Override
-    UUID getUniqueId();
+    UUID getInteractionId();
 
     /**
      * Inherited from {@link HasUsername}, is the user that initiated the

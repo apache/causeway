@@ -16,12 +16,25 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.commons.having;
+package org.apache.isis.applib.mixins.updates;
 
 /**
+ * Allows domain entities that reference the user that updated them to be called
+ * by the (framework-provided) <code>TimestampService</code> whenever modified
+ * in a transaction with the current user.
+ *
+ * <p>
+ *     Note that this interface defines only a setter.  The
+ *     {@link org.apache.isis.applib.mixins.security.HasUsername} can be used
+ *     to expose this user name, allowing other modules to contribute behaviour
+ *     to that mixee.
+ * </p>
+ *
+ * @see org.apache.isis.applib.mixins.security.HasUsername
+ *
  * @since 2.0 {@index}
  */
-public interface HasUpdatedBy {
+public interface OnUpdatedBy {
 
     void setUpdatedBy(String updatedBy);
 

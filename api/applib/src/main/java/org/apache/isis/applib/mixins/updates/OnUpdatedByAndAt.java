@@ -16,27 +16,16 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.services;
-
-import org.apache.isis.applib.services.wrapper.WrapperFactory;
-import org.apache.isis.commons.having.HasUniqueId;
-import org.apache.isis.schema.ixn.v2.InteractionDto;
-import org.apache.isis.schema.ixn.v2.MemberExecutionDto;
+package org.apache.isis.applib.mixins.updates;
 
 /**
- * Extends {@link HasUniqueId}, where the {@link HasUniqueId#getUniqueId()} is interpreted as an
- * interaction (cf {@link InteractionDto}) that has at least one member execution (cf
- * {@link MemberExecutionDto}) 
- * and may (by way of {@link WrapperFactory}) contain
- * several.
+ * Combines {@link OnUpdatedBy} and {@link OnUpdatedAt}, as these are often
+ * implemented together.
  *
- * <p>
- *     Examples could include SPI services that persist published events and status messages.
- * </p>
- * 
- * @since 2.0 {@index}
+ * @since 2.x {@index}
  */
-public interface RepresentsInteractionMemberExecution extends HasUniqueId {
-
-    int getSequence();
+public interface OnUpdatedByAndAt
+extends
+        OnUpdatedBy,
+        OnUpdatedAt {
 }

@@ -26,11 +26,21 @@ import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.applib.mixins.MixinConstants;
+import org.apache.isis.applib.mixins.layout.LayoutMixinConstants;
 
 import lombok.RequiredArgsConstructor;
 
 /**
+ * Contributes the value of the version (introduced by enhancing, and used by
+ * the ORM for optimistic locking) as a property.
+ *
+ * <p>
+ * Only visible if the version can be cast to a long.
+ * </p>
+ *
+ * @see Persistable_datanucleusIdLong
+ * @see Persistable_datanucleusVersionTimestamp
+ *
  * @since 2.0 {@index}
  */
 @Property(
@@ -48,7 +58,7 @@ public class Persistable_datanucleusVersionLong {
     extends org.apache.isis.applib.IsisModuleApplib.PropertyDomainEvent
     <Persistable_datanucleusVersionLong, Long> {}
 
-    @MemberOrder(name = MixinConstants.METADATA_LAYOUT_GROUPNAME, sequence = "800.2")
+    @MemberOrder(name = LayoutMixinConstants.METADATA_LAYOUT_GROUPNAME, sequence = "800.2")
     public Long prop() {
         final Object version = JDOHelper.getVersion(persistable);
         return version != null && version instanceof Long ? (Long) version : null;

@@ -10,7 +10,7 @@ This is a further milestone release, consolidating the "re-platforming" of Apach
 Much of the emphasis in this release has been on stabilisation and regression testing.
 That said, there are some new features.
 The release includes support for a new (additional) link:https://cwiki.apache.org/confluence/display/ISIS/ActionParameters?focusedCommentId=158867933#comment-158867933[programming model for action parameters], allowing for more sophisticated management of parameters that interact with each other.
-On the flip side, support for contributed actions from domain services has been removed; use xref:refguide:applib-classes:roles-mixins-contributees/mixins.adoc[Mixins]instead.
+On the flip side, support for contributed actions from domain services has been removed; use xref:refguide:applib-classes:mixins.adoc[Mixins]instead.
 
 This release also has a reworking/simplification of the command service and background commands.
 This includes new extension modules to persist commands (xref:extensions:command-log:about.adoc[Command Log] and xref:extensions:command-replay:about.adoc[Command Replay], to assist regression testing.

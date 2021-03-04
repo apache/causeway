@@ -6,48 +6,16 @@
 
 The interfaces listed in this chapter act as contributees; they allow domain services to contribute actions/properties/collections to any domain objects that implement these interfaces.
 
-[[HasUniqueId]]
-== `HasUniqueId`
 
-The `HasUniqueId` interface is a mix-in for any domain objects that are uniquely identified, in particular to represent a system-level request or interaction.
-The canonical usage is where the unique identifier is actually a transaction id, as implemented by auditing entries or commands, or for xref:refguide:applib:index/services/iactn/InteractionContext.adoc[Interaction]s persisted as published events.
 
-The interface is defined is:
+== Usage Notes
 
-[source,java]
-----
-public interface HasUniqueId {
-    public UUID getUniqueId();                             // <.>
-    public void setUniqueId(final UUID uniqueId);
-}
-----
-<.> unique identifier (a GUID) of this request/interaction.
-
-Some of the extension/mapping modules that have domain entity/ies that implement this interface are:
-
-* xref:security:audit-trail:about.adoc[Auditer] module: `AuditEntry` entity
-* xref:extensions:command-log:about.adoc[Command Log] module: `CommandJdo` entity
-* xref:mappings:outbox-publisher:about.adoc[Outbox Publisher] module: `OutboxEvent` entity
-
-[#RepresentsInteractionMemberExecution]
-== `RepresentsInteractionMemberExecution`
-
-The `RepresentsInteractionMemberExecution` interface is a sub-interface of `HasUniqueId` that also includes a sequence property:
-
-[source,java]
-----
-public interface RepresentsInteractionMemberExecution extends HasUniqueId {
-    int getSequence();
-}
-----
-
-Here the (inherited) `getTransactionId()` is intended to be interpreted as an interaction (cf xref:refguide:schema:ixn.adoc[InteractionDto]) that has at least one member execution (cf xref:refguide:schema:about.adoc#ixn/memberExecutionDto.adoc[memberExecutionDto]).
-
-If the interaction (almost certainly an action) calls other actions by way of xref:refguide:applib:index/services/wrapper/WrapperFactory.adoc[WrapperFactory]), then there may be several member executions, each with a unique sequence number, within the same transaction Id.
+If the interaction is an action that in turn calls other actions by way of xref:refguide:applib:index/services/wrapper/WrapperFactory.adoc[WrapperFactory]), then there may be several member executions, each with a unique sequence number, within the same transaction Id.
 
 The purpose of this interface is to allow mixins to be defined, though the framework itself defines none.
 
 Currently the only implementation of this interface is that for `PublishedObjects` applib interface as defined by the xref:refguide:applib:index/services/publishing/spi/ExecutionSubscriber.adoc[ExecutionSubscriber].
+
 
 [[HasUserName]]
 == `HasUsername`

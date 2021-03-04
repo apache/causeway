@@ -16,19 +16,17 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.commons.having;
+package org.apache.isis.applib.mixins.layout;
 
-import java.util.UUID;
-
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 /**
- * @since 2.0 {@index}
+ * @since 1.x {@index}
  */
-public interface HasUniqueId {
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public final class LayoutMixinConstants {
 
-    /**
-     * A unique identifier (a GUID).
-     */
-    UUID getUniqueId();
 
+    public static final String METADATA_LAYOUT_GROUPNAME = "metadata";
 }

@@ -50,7 +50,7 @@ import org.apache.isis.applib.layout.grid.bootstrap3.BS3Row;
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3Tab;
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3TabGroup;
 import org.apache.isis.applib.layout.grid.bootstrap3.Size;
-import org.apache.isis.applib.mixins.MixinConstants;
+import org.apache.isis.applib.mixins.layout.LayoutMixinConstants;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
@@ -86,7 +86,7 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
 
     public static final String TNS = "http://isis.apache.org/applib/layout/grid/bootstrap3";
     public static final String SCHEMA_LOCATION = "http://isis.apache.org/applib/layout/grid/bootstrap3/bootstrap3.xsd";
-    
+
     @Inject private GridReaderUsingJaxb gridReader;
 
     public GridSystemServiceBS3() {
@@ -188,15 +188,15 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
         if(!gridModelIfValid.isPresent()) { // only present if valid
             return false;
         }
-        val gridModel = gridModelIfValid.get(); 
-        
+        val gridModel = gridModelIfValid.get();
+
         val layoutDataFactory = LayoutDataFactory.of(objectSpec);
 
-        // * surplus ... those defined in the grid model but not available with the meta-model 
-        // * missing ... those available with the meta-model but missing in the grid-model 
+        // * surplus ... those defined in the grid model but not available with the meta-model
+        // * missing ... those available with the meta-model but missing in the grid-model
         // (missing properties will be added to the first field-set of the specified column)
-        
-        val surplusAndMissingPropertyIds = 
+
+        val surplusAndMissingPropertyIds =
                 surplusAndMissing(propertyLayoutDataById.keySet(),  oneToOneAssociationById.keySet());
         val surplusPropertyIds = surplusAndMissingPropertyIds.getSurplus();
         val missingPropertyIds = surplusAndMissingPropertyIds.getMissing();
@@ -206,10 +206,10 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
         }
 
         // catalog which associations are bound to an existing field-set
-        // so that (below) we can determine which missing property IDs are not unbound vs 
+        // so that (below) we can determine which missing property IDs are not unbound vs
         // which should be included in the field-set that they are bound to.
         val boundAssociationIdsByFieldSetId = _Maps.<String, Set<String>>newHashMap();
-        
+
         for (val fieldSet : gridModel.fieldSets()) {
             val fieldSetId = fieldSet.getId();
             Set<String> boundAssociationIds = boundAssociationIdsByFieldSetId.get(fieldSetId);
@@ -234,7 +234,7 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
                     Set<String> boundAssociationIds =
                             boundAssociationIdsByFieldSetId.computeIfAbsent(id, k -> _Sets.newLinkedHashSet());
                     boundAssociationIds.add(otoa.getId());
-                } else if(id.equals(MixinConstants.METADATA_LAYOUT_GROUPNAME)) {
+                } else if(id.equals(LayoutMixinConstants.METADATA_LAYOUT_GROUPNAME)) {
                     unboundMetadataContributingIds.add(otoa.getId());
                 }
             }
@@ -252,7 +252,7 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
             for (final String fieldSetId : boundAssociationIdsByFieldSetId.keySet()) {
                 val fieldSet = gridModel.getFieldSet(fieldSetId);
                 val associationIds = boundAssociationIdsByFieldSetId.get(fieldSetId);
-                
+
                 val associations1To1Ids =
                         associationIds.stream()
                         .map(oneToOneAssociationById::get)
@@ -262,7 +262,7 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
                         .collect(Collectors.toList());
 
                 addPropertiesTo(
-                        fieldSet, 
+                        fieldSet,
                         associations1To1Ids,
                         layoutDataFactory::createPropertyLayoutData,
                         propertyLayoutDataById::put);
@@ -292,26 +292,26 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
         }
 
         if(!missingCollectionIds.isEmpty()) {
-            final List<OneToManyAssociation> sortedCollections = 
+            final List<OneToManyAssociation> sortedCollections =
                     _Lists.map(missingCollectionIds, oneToManyAssociationById::get);
-            
+
             sortedCollections.sort(ObjectMember.Comparators.byMemberOrderSequence());
 
-            final List<String> sortedMissingCollectionIds = 
+            final List<String> sortedMissingCollectionIds =
                     _Lists.map(sortedCollections, ObjectAssociation::getId);
 
             final BS3TabGroup bs3TabGroup = gridModel.getTabGroupForUnreferencedCollectionsRef();
             if(bs3TabGroup != null) {
                 addCollectionsTo(
-                        bs3TabGroup, 
-                        sortedMissingCollectionIds, 
+                        bs3TabGroup,
+                        sortedMissingCollectionIds,
                         objectSpec,
                         layoutDataFactory::createCollectionLayoutData);
             } else {
                 final BS3Col bs3Col = gridModel.getColForUnreferencedCollectionsRef();
                 if(bs3Col != null) {
                     addCollectionsTo(
-                        bs3Col, 
+                        bs3Col,
                         sortedMissingCollectionIds,
                         layoutDataFactory::createCollectionLayoutData,
                         collectionLayoutDataById::put);
@@ -324,12 +324,12 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
                 surplusAndMissing(actionLayoutDataById.keySet(), objectActionById.keySet());
         val surplusActionIds = surplusAndMissingActionIds.getSurplus();
         val possiblyMissingActionIds = surplusAndMissingActionIds.getMissing();
-        
+
         final List<String> associatedActionIds = _Lists.newArrayList();
 
-        final List<ObjectAction> sortedPossiblyMissingActions = 
+        final List<ObjectAction> sortedPossiblyMissingActions =
                 _Lists.map(possiblyMissingActionIds, objectActionById::get);
-        
+
         sortedPossiblyMissingActions.sort(ObjectMember.Comparators.byMemberOrderSequence());
 
         final List<String> sortedPossiblyMissingActionIds =
@@ -421,14 +421,14 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
             if(bs3Col != null) {
                 addActionsTo(
                         bs3Col,
-                        missingActionIds, 
+                        missingActionIds,
                         layoutDataFactory::createActionLayoutData,
                         actionLayoutDataById::put);
             } else {
                 final FieldSet fieldSet = gridModel.getFieldSetForUnreferencedActionsRef();
                 if(fieldSet != null) {
                     addActionsTo(
-                            fieldSet, 
+                            fieldSet,
                             missingActionIds,
                             layoutDataFactory::createActionLayoutData,
                             actionLayoutDataById::put);
@@ -444,12 +444,12 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
             final Collection<String> propertyIds,
             final Function<String, PropertyLayoutData> layoutFactory,
             final BiConsumer<String, PropertyLayoutData> onNewLayoutData) {
-        
+
         final Set<String> existingIds =
                 stream(fieldSet.getProperties())
                 .map(PropertyLayoutData::getId)
                 .collect(Collectors.toSet());
-        
+
         for (final String propertyId : propertyIds) {
             if(existingIds.contains(propertyId)) {
                 continue;
@@ -466,7 +466,7 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
             final Collection<String> collectionIds,
             final Function<String, CollectionLayoutData> layoutFactory,
             final BiConsumer<String, CollectionLayoutData> onNewLayoutData) {
-        
+
         for (final String collectionId : collectionIds) {
             val collectionLayoutData = layoutFactory.apply(collectionId);
             tabRowCol.getCollections().add(collectionLayoutData);
@@ -479,7 +479,7 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
             final Collection<String> collectionIds,
             final ObjectSpecification objectSpec,
             final Function<String, CollectionLayoutData> layoutFactory) {
-        
+
         for (final String collectionId : collectionIds) {
             final BS3Tab bs3Tab = new BS3Tab();
             bs3Tab.setName(objectSpec.getAssociationElseFail(collectionId).getName());
@@ -506,7 +506,7 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
             final Collection<String> actionIds,
             final Function<String, ActionLayoutData> layoutFactory,
             final BiConsumer<String, ActionLayoutData> onNewLayoutData) {
-        
+
         for (String actionId : actionIds) {
             val actionLayoutData = layoutFactory.apply(actionId);
             addActionTo(bs3Col, actionLayoutData);
@@ -519,7 +519,7 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
             final Collection<String> actionIds,
             final Function<String, ActionLayoutData> layoutFactory,
             final BiConsumer<String, ActionLayoutData> onNewLayoutData) {
-        
+
         for (String actionId : actionIds) {
             val actionLayoutData = layoutFactory.apply(actionId);
             addActionTo(fieldSet, actionLayoutData);
@@ -530,7 +530,7 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
     private void addActionTo(
             final ActionLayoutDataOwner owner,
             final ActionLayoutData actionLayoutData) {
-        
+
         List<ActionLayoutData> actions = owner.getActions();
         if(actions == null) {
             owner.setActions(actions = _Lists.newArrayList());
@@ -547,7 +547,7 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
         return Character.toLowerCase(c) + str.substring(1).replaceAll("\\s+", "");
     }
 
-        
+
 
 
 }

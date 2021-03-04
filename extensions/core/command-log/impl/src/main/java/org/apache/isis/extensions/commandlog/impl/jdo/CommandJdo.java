@@ -43,7 +43,7 @@ import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.jaxb.JavaSqlXMLGregorianCalendarMarshalling;
-import org.apache.isis.applib.services.DomainChangeRecord;
+import org.apache.isis.applib.mixins.system.DomainChangeRecord;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.CommandOutcomeHandler;
@@ -117,7 +117,7 @@ import lombok.val;
             value="SELECT "
                     + "FROM org.apache.isis.extensions.commandlog.impl.jdo.CommandJdo "
                     + "WHERE target == :target "
-                    + "&& timestamp >= :from " 
+                    + "&& timestamp >= :from "
                     + "&& timestamp <= :to "
                     + "ORDER BY this.timestamp DESC"),
     @javax.jdo.annotations.Query(
@@ -144,7 +144,7 @@ import lombok.val;
             name="findByTimestampBetween",
             value="SELECT "
                     + "FROM org.apache.isis.extensions.commandlog.impl.jdo.CommandJdo "
-                    + "WHERE timestamp >= :from " 
+                    + "WHERE timestamp >= :from "
                     + "&&    timestamp <= :to "
                     + "ORDER BY this.timestamp DESC"),
     @javax.jdo.annotations.Query(
@@ -272,8 +272,8 @@ public class CommandJdo
      * @param command
      */
     public CommandJdo(final Command command) {
-        
-        setUniqueIdStr(command.getUniqueId().toString());
+
+        setUniqueIdStr(command.getInteractionId().toString());
         setUsername(command.getUsername());
         setTimestamp(command.getTimestamp());
 
@@ -374,7 +374,7 @@ public class CommandJdo
     @Getter @Setter
     private String uniqueIdStr;
     @Programmatic
-    public UUID getUniqueId() {return UUID.fromString(getUniqueIdStr());}
+    public UUID getInteractionId() {return UUID.fromString(getUniqueIdStr());}
 
 
     public static class UsernameDomainEvent extends PropertyDomainEvent<String> { }
@@ -492,7 +492,7 @@ public class CommandJdo
     public static class DurationDomainEvent extends PropertyDomainEvent<BigDecimal> { }
     /**
      * The number of seconds (to 3 decimal places) that this interaction lasted.
-     * 
+     *
      * <p>
      * Populated only if it has {@link #getCompletedAt() completed}.
      */
@@ -594,7 +594,7 @@ public class CommandJdo
     @Override
     public String toString() {
         return ObjectContracts
-                .toString("uniqueId", CommandJdo::getUniqueId)
+                .toString("uniqueId", CommandJdo::getInteractionId)
                 .thenToString("username", CommandJdo::getUsername)
                 .thenToString("timestamp", CommandJdo::getTimestamp)
                 .thenToString("target", CommandJdo::getTarget)
@@ -631,7 +631,7 @@ public class CommandJdo
                 CommandJdo.this.setResult(resultBookmark.getValue().orElse(null));
                 CommandJdo.this.setException(resultBookmark.getFailure().orElse(null));
             }
-            
+
         };
     }
 

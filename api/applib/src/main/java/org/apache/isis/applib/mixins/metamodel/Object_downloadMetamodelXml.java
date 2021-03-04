@@ -28,7 +28,8 @@ import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.mixins.MixinConstants;
+import org.apache.isis.applib.mixins.dto.DtoMixinConstants;
+import org.apache.isis.applib.mixins.layout.LayoutMixinConstants;
 import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.services.metamodel.Config;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
@@ -59,13 +60,13 @@ public class Object_downloadMetamodelXml {
     public static class ActionDomainEvent
     extends org.apache.isis.applib.IsisModuleApplib.ActionDomainEvent<Object_downloadMetamodelXml> {}
 
-    @MemberOrder(name = MixinConstants.METADATA_LAYOUT_GROUPNAME, sequence = "700.2")
+    @MemberOrder(name = LayoutMixinConstants.METADATA_LAYOUT_GROUPNAME, sequence = "700.2")
     public Object act(
 
             // PARAM 0
             @ParameterLayout(
-                    named = MixinConstants.FILENAME_PROPERTY_NAME,
-                    describedAs = MixinConstants.FILENAME_PROPERTY_DESCRIPTION)
+                    named = DtoMixinConstants.FILENAME_PROPERTY_NAME,
+                    describedAs = DtoMixinConstants.FILENAME_PROPERTY_DESCRIPTION)
             final String fileName) {
 
         val pkg = holder.getClass().getPackage().getName();

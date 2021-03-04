@@ -67,20 +67,20 @@ public class Configuration_headless {
 
 //      private final Provider<InteractionContext> interactionContextProvider;
 //      private final CommandDispatcher commandDispatcher;
-        
+
         @Override
         public void beforeEnteringTransactionalBoundary(InteractionSession interactionSession) {
-            _Probe.errOut("Interaction HAS_STARTED conversationId=%s", interactionSession.getUniqueId());
+            _Probe.errOut("Interaction HAS_STARTED conversationId=%s", interactionSession.getInteractionId());
             setupCommandCreateIfMissing();
         }
-        
+
         @Override
         public void afterLeavingTransactionalBoundary(InteractionSession interactionSession) {
-            _Probe.errOut("Interaction IS_ENDING conversationId=%s", interactionSession.getUniqueId());
+            _Probe.errOut("Interaction IS_ENDING conversationId=%s", interactionSession.getInteractionId());
         }
-        
+
         public void setupCommandCreateIfMissing() {
-            
+
 //            val interactionContext = interactionContextProvider.get();
 //            @SuppressWarnings("unused")
 //            final Interaction interaction = Optional.ofNullable(interactionContext.getInteraction())
@@ -91,29 +91,29 @@ public class Configuration_headless {
 //                        return newInteraction;
 //                    });
         }
-        
+
     }
-    
+
     @Bean @Singleton
     public PlatformTransactionManager platformTransactionManager() {
         return new PlatformTransactionManager() {
-            
+
             @Override
             public void rollback(TransactionStatus status) throws TransactionException {
             }
-            
+
             @Override
             public TransactionStatus getTransaction(TransactionDefinition definition) throws TransactionException {
                 return null;
             }
-            
+
             @Override
             public void commit(TransactionStatus status) throws TransactionException {
             }
         };
     }
-    
-    
+
+
     @Bean @Singleton
     public MetricsService metricsService() {
         return new MetricsService() {

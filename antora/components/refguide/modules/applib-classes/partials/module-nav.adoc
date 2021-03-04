@@ -1,11 +1,10 @@
 
 * xref:applib-classes:about.adoc[Classes]
 ** xref:applib-classes:events.adoc[Events]
+** xref:applib-classes:mixees-and-mixins.adoc[Mixees and Mixins]
 ** xref:applib-classes:ViewModel.adoc[ViewModel] (interface)
 ** xref:applib-classes:value-types.adoc[Value Types]
 ** xref:applib-classes:spec.adoc[Specification pattern]
-** xref:applib-classes:i18n.adoc[i18n support]
-** xref:applib-classes:roles-mixins-contributees.adoc[Roles, Mixins and Contributees]
 ** xref:applib-classes:utility.adoc[Utility Classes]
 *** xref:applib:index/util/Enums.adoc[Enums]
 *** xref:applib:index/util/ObjectContracts.adoc[ObjectContracts]

@@ -34,7 +34,7 @@ import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.iactn.InteractionContext;
-import org.apache.isis.applib.services.iactn.Sequence;
+import org.apache.isis.applib.services.iactn.SequenceType;
 import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.applib.util.schema.CommandDtoUtils;
 import org.apache.isis.applib.util.schema.InteractionDtoUtils;
@@ -83,7 +83,7 @@ public class InteractionDtoFactoryDefault implements InteractionDtoFactory {
                 "action's parameter count and provided argument count must match");
 
         final Interaction interaction = interactionContextProvider.get().currentInteractionElseFail();
-        final int nextEventSequence = interaction.next(Sequence.INTERACTION.id());
+        final int nextEventSequence = interaction.next(SequenceType.EXECUTION);
 
         final Bookmark targetBookmark = targetAdapter.getRootOid()
                 .map(RootOid::asBookmark)
@@ -128,7 +128,7 @@ public class InteractionDtoFactoryDefault implements InteractionDtoFactory {
 
         final Interaction interaction = interactionContextProvider.get().currentInteractionElseFail();
 
-        final int nextEventSequence = interaction.next(Sequence.INTERACTION.id());
+        final int nextEventSequence = interaction.next(SequenceType.EXECUTION);
 
         final Bookmark targetBookmark = targetAdapter.getRootOid()
                 .map(RootOid::asBookmark)

@@ -16,20 +16,17 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.mixins;
-
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+package org.apache.isis.applib.mixins.updates;
 
 /**
- * @since 1.x {@index}
+ * Allows domain entities that keep track of when they were updated to be called
+ * by the (framework-provided) <code>TimestampService</code> whenever modified
+ * in a transaction.
+ *
+ * @since 2.0 {@index}
  */
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
-public final class MixinConstants {
+public interface OnUpdatedAt {
 
-    public static final String METADATA_LAYOUT_GROUPNAME = "metadata";
-    public static final String FILENAME_PROPERTY_NAME = "File name";
-    public static final String FILENAME_PROPERTY_DESCRIPTION = "File name extension can be omitted.";
-
+    void setUpdatedAt(java.sql.Timestamp updatedAt);
 
 }

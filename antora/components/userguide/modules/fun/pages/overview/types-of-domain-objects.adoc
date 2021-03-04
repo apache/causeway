@@ -214,7 +214,7 @@ These DTOs are still usable as "regular" view models; they will render in the xr
 In fact (as the xref:userguide:fun:view-models.adoc#jaxb[programming model] section below makes clear), these JAXB-annotated view models are in many regards the most powerful of all the alternative ways of writing view models.
 
 It's also worth noting that it is also possible to download the XML (or XSD) straight from the UI, useful during development.
-The view model simply needs to implement the xref:refguide:applib-cm:roles-mixins-contributees/mixins.adoc#Dto[Dto] marker interface; the framework has xref:refguide:applib-cm:roles-mixins-contributees/mixins.adoc#Dto[mixins] that contribute the download actions to the view model.
+The view model simply needs to implement the xref:refguide:applib:index/mixins/dto/Dto.adoc[Dto] marker interface; the framework has xref:refguide:applib-classes:mixins.adoc#Dto[mixins] that contribute the download actions to the view model.
 
 === For REST Clients
 

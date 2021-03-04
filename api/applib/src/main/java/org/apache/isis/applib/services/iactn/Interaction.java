@@ -19,18 +19,10 @@
 
 package org.apache.isis.applib.services.iactn;
 
-import java.util.List;
 import java.util.UUID;
 
-import org.apache.isis.applib.events.domain.ActionDomainEvent;
-import org.apache.isis.applib.events.domain.PropertyDomainEvent;
 import org.apache.isis.applib.services.command.Command;
-import org.apache.isis.commons.having.HasUniqueId;
-import org.apache.isis.schema.common.v2.InteractionType;
-import org.apache.isis.schema.ixn.v2.ActionInvocationDto;
-import org.apache.isis.schema.ixn.v2.PropertyEditDto;
-
-import lombok.Getter;
+import org.apache.isis.applib.mixins.system.HasInteractionId;
 
 /**
  * Represents an action invocation or property modification, resulting in some
@@ -60,11 +52,11 @@ import lombok.Getter;
  *
  * @since 1.x revised for 2.0 {@index}
  */
-public interface Interaction extends HasUniqueId {
+public interface Interaction extends HasInteractionId {
 
     /**
      * The unique identifier of this interaction (inherited from
-     * {@link HasUniqueId})
+     * {@link HasInteractionId})
      *
      * <p>
      *     This can be used to correlate audit records and transactions
@@ -74,7 +66,7 @@ public interface Interaction extends HasUniqueId {
      * @return
      */
     @Override
-    UUID getUniqueId();
+    UUID getInteractionId();
 
     /**
      * Represents the <i>intention</i> to perform this interaction.
@@ -94,12 +86,9 @@ public interface Interaction extends HasUniqueId {
 
 
     /**
-     * Generates numbers in a named sequence.
-     *
-     * The name of the sequence can be arbitrary, though note that the framework also uses this capability to
-     * generate sequence numbers corresponding to the sequences enumerated by the {@link Sequence} enum.
+     * Framework use only: generates numbers for a named sequence type.
      */
-    int next(final String sequenceId);
+    int next(final SequenceType sequenceType);
 
 
 }

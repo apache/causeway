@@ -23,7 +23,7 @@ import java.util.Optional;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.events.domain.ActionDomainEvent;
-import org.apache.isis.commons.having.HasUniqueId;
+import org.apache.isis.applib.mixins.system.HasInteractionId;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Collections;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -59,9 +59,9 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract {
 
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
-        
+
         val actionIfAny = processMethodContext.synthesizeOnMethodOrMixinType(Action.class);
-        
+
         processExplicit(processMethodContext, actionIfAny);
         processInvocation(processMethodContext, actionIfAny);
         processHidden(processMethodContext, actionIfAny);
@@ -76,7 +76,7 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract {
 
         processTypeOf(processMethodContext, actionIfAny);
         processAssociateWith(processMethodContext, actionIfAny);
-        
+
         processFileAccept(processMethodContext, actionIfAny);
     }
 
@@ -107,7 +107,7 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract {
             //
             // Set up ActionDomainEventFacet, which will act as the hiding/disabling/validating advisor
             //
-            
+
 
             // search for @Action(domainEvent=...), else use the default event type
             val actionDomainEventFacet =
@@ -154,7 +154,7 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract {
     private static Class<? extends ActionDomainEvent<?>> defaultFromDomainObjectIfRequired(
             final ObjectSpecification typeSpec,
             final Class<? extends ActionDomainEvent<?>> actionDomainEventType) {
-        
+
         if (actionDomainEventType == ActionDomainEvent.Default.class) {
             val typeFromDomainObject =
                     typeSpec.getFacet(ActionDomainEventDefaultFacetForDomainObjectAnnotation.class);
@@ -179,7 +179,7 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract {
         // search for @Action(restrictTo=...)
         val facet = PrototypeFacetForActionAnnotation.create(actionIfAny, facetedMethod,
                 ()->super.getSystemEnvironment().getDeploymentType());
-        
+
         super.addFacet(facet);
     }
 
@@ -193,7 +193,7 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract {
     }
 
     void processCommandPublishing(
-            final ProcessMethodContext processMethodContext, 
+            final ProcessMethodContext processMethodContext,
             final Optional<Action> actionIfAny) {
 
         val facetedMethod = processMethodContext.getFacetHolder();
@@ -201,8 +201,8 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract {
         //
         // this rule inspired by a similar rule for auditing and publishing, see DomainObjectAnnotationFacetFactory
         //
-        if(HasUniqueId.class.isAssignableFrom(processMethodContext.getCls())) {
-            // do not install on any implementation of HasUniqueId
+        if(HasInteractionId.class.isAssignableFrom(processMethodContext.getCls())) {
+            // do not install on any implementation of HasInteractionId
             // (ie commands, audit entries, published events).
             return;
         }
@@ -215,17 +215,17 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract {
     }
 
     void processExecutionPublishing(
-            final ProcessMethodContext processMethodContext, 
+            final ProcessMethodContext processMethodContext,
             final Optional<Action> actionIfAny) {
 
         val facetedMethod = processMethodContext.getFacetHolder();
-        
+
         //
         // this rule inspired by a similar rule for auditing and publishing, see DomainObjectAnnotationFacetFactory
         // and for commands, see above
         //
-        if(HasUniqueId.class.isAssignableFrom(processMethodContext.getCls())) {
-            // do not install on any implementation of HasUniqueId
+        if(HasInteractionId.class.isAssignableFrom(processMethodContext.getCls())) {
+            // do not install on any implementation of HasInteractionId
             // (ie commands, audit entries, published events).
             return;
         }
@@ -278,10 +278,10 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract {
                         new AssociatedWithFacetForActionAnnotation(associateWith, facetedMethod));
             }
         });
-        
+
 
     }
-    
+
     void processFileAccept(final ProcessMethodContext processMethodContext, Optional<Action> actionIfAny) {
 
         val holder = processMethodContext.getFacetHolder();

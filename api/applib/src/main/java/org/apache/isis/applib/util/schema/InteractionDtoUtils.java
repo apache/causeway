@@ -198,7 +198,7 @@ public final class InteractionDtoUtils {
             final Execution<?, ?> execution,
             final MemberExecutionDto executionDto) {
         final Interaction interaction = execution.getInteraction();
-        final String transactionId = interaction.getUniqueId().toString();
+        final String transactionId = interaction.getInteractionId().toString();
 
         return InteractionDtoUtils.newInteractionDto(transactionId, executionDto);
     }

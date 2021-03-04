@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.services;
+package org.apache.isis.applib.mixins.system;
 
 import javax.inject.Inject;
 
@@ -28,6 +28,14 @@ import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.services.metamodel.BeanSort;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
 
+/**
+ * Provides the ability to navigate to a domain object from a
+ * {@link DomainChangeRecord} which only holds the domain object by way of
+ * a {@link DomainChangeRecord#getTarget() target}
+ * {@link org.apache.isis.applib.services.bookmark.Bookmark}.
+ *
+ * @since v2.0 {@index}
+ */
 @Action(
         semantics = SemanticsOf.SAFE
         , associateWith = "target"

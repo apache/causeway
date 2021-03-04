@@ -30,7 +30,7 @@ import javax.persistence.ManyToOne;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.commons.having.HasUpdatedByAndAt;
+import org.apache.isis.applib.mixins.updates.OnUpdatedByAndAt;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -38,15 +38,15 @@ import lombok.Setter;
 @Entity
 @DomainObject(
         objectType = "testdomain.jpa.ProductComment")
-public class JpaProductComment implements HasUpdatedByAndAt {
+public class JpaProductComment implements OnUpdatedByAndAt {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Getter @Setter @Column(name = "id")
     private Long id;
-    
+
     // n:1 relation
-    @Property 
+    @Property
     @ManyToOne @JoinColumn(nullable = false)
     private @Getter @Setter JpaProduct product;
 
@@ -54,12 +54,12 @@ public class JpaProductComment implements HasUpdatedByAndAt {
     private @Getter @Setter String comment;
 
     // -- TIMESTAMPABLE
-    
+
     @Property
     private @Getter @Setter String updatedBy;
-    
+
     @Property
     private @Getter @Setter Timestamp updatedAt;
 
-    
+
 }

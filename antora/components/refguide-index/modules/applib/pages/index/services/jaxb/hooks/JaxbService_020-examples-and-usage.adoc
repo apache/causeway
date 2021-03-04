@@ -9,9 +9,5 @@
 This service is provided as a convenience for applications, but is also used internally by the framework to marshall xref:refguide:applib-ant:XmlRootElement.adoc[@XmlRootElement]-annotated
 xref:userguide:fun:overview.adoc#view-models[view models].
 
-The functionality to download XML and XSD schemas is also exposed in the UI through mixins of the xref:applib-classes:roles-mixins-contributees/mixins.adoc#Dto[Dto] interface.
+The functionality to download XML and XSD schemas is also exposed in the UI through mixins of the xref:applib-classes:mixins.adoc#Dto[Dto] interface.
 
-
-== See also
-
-* xref:refguide:applib:index/services/jaxb/IsisSchemas.adoc[IsisSchemas]

@@ -28,7 +28,7 @@ import javax.annotation.Nullable;
 import org.apache.isis.applib.annotation.EntityChangeKind;
 import org.apache.isis.applib.jaxb.JavaSqlXMLGregorianCalendarMarshalling;
 import org.apache.isis.applib.services.iactn.Interaction;
-import org.apache.isis.applib.services.iactn.Sequence;
+import org.apache.isis.applib.services.iactn.SequenceType;
 import org.apache.isis.applib.services.publishing.spi.EntityChanges;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Maps;
@@ -84,8 +84,8 @@ class ChangingEntitiesFactory {
             final int numberEntityPropertiesModified,
             final Map<ManagedObject, EntityChangeKind> changeKindByEnlistedAdapter) {
 
-        val uniqueId = interaction.getUniqueId();
-        final int nextEventSequence = interaction.next(Sequence.INTERACTION.id());
+        val uniqueId = interaction.getInteractionId();
+        final int nextEventSequence = interaction.next(SequenceType.TRANSACTION);
 
         return new SimpleChangingEntities(
                     uniqueId, nextEventSequence,

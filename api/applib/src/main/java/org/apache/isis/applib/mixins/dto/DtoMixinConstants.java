@@ -16,10 +16,17 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.commons.having;
+package org.apache.isis.applib.mixins.dto;
 
-public interface HasUpdatedByAndAt 
-extends 
-    HasUpdatedBy, 
-    HasUpdatedAt {
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
+/**
+ * @since 1.x {@index}
+ */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public final class DtoMixinConstants {
+
+    public static final String FILENAME_PROPERTY_NAME = "File name";
+    public static final String FILENAME_PROPERTY_DESCRIPTION = "File name extension can be omitted.";
 }

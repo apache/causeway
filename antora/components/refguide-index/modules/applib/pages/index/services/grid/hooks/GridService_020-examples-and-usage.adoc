@@ -12,7 +12,7 @@ Dynamic reloading is disabled in production mode.
 
 == See also
 
-This service is called by xref:refguide:applib:index/services/layout/LayoutService.adoc[LayoutService], exposed in the UI through `LayoutServiceMenu` (to download the layout XML as a zip file for all domain objects) and the xref:applib-classes:roles-mixins-contributees/mixins.adoc#Object[downloadLayoutXml()] mixin (to download the layout XML for a single domain
+This service is called by xref:refguide:applib:index/services/layout/LayoutService.adoc[LayoutService], exposed in the UI through `LayoutServiceMenu` (to download the layout XML as a zip file for all domain objects) and the xref:applib-classes:mixins.adoc#java-lang-object[downloadLayoutXml()] mixin (to download the layout XML for a single domain
 object).
 
 This service delegates to:

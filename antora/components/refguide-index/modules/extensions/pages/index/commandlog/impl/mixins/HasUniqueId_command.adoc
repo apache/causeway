@@ -11,7 +11,7 @@ This mixin contributes a `command` action to any (non-command) implementation of
 class HasUniqueId_command {
   @Inject
 CommandJdoRepository commandServiceRepository;
-  HasUniqueId_command(final HasUniqueId hasUniqueId)
+  HasUniqueId_command(final HasUniqueId hasInteractionId)
   CommandJdo act()
   boolean hideAct()     // <.>
   String disableAct()

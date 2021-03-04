@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.services;
+package org.apache.isis.applib.mixins.system;
 
 import java.sql.Timestamp;
 import java.util.UUID;
@@ -27,17 +27,23 @@ import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.commons.having.HasUniqueId;
-import org.apache.isis.commons.having.HasUsername;
+import org.apache.isis.applib.mixins.security.HasUsername;
 
 
 /**
- * An abstraction of some sort of recorded change to a domain object: commands, audit entries or published events.
- * 
+ * Allows domain objects that represents some sort of recorded change to a
+ * domain object (commands, audit entries, published interactions) to act
+ * as a mixee in order that other modules can contribute behaviour.
+ *
  * @since 2.0 {@index}
  */
-public interface DomainChangeRecord extends HasUniqueId, HasUsername {
+public interface DomainChangeRecord extends HasInteractionId, HasUsername {
 
+    /**
+     * Enumerates the different types of changes recognised.
+     *
+     * @since 2.0 {@index}
+     */
     enum ChangeType {
         COMMAND,
         AUDIT_ENTRY,
@@ -58,11 +64,13 @@ public interface DomainChangeRecord extends HasUniqueId, HasUsername {
 
 
     /**
-     * The unique identifier (a GUID) of the transaction in which this change occurred.
+     * The unique identifier (a GUID) of the
+     * {@link org.apache.isis.applib.services.iactn.Interaction} within which
+     * this change occurred.
      */
     @Property
     @MemberOrder(name="Identifiers",sequence = "50")
-    UUID getUniqueId();
+    UUID getInteractionId();
 
 
     /**

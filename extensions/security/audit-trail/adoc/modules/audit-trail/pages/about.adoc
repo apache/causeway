@@ -15,7 +15,7 @@ The module also provides:
 * `AuditingServiceRepository` service to to search for persisted `AuditEntry``s.
 None of its actions are visible in the user interface (they are all `@Programmatic`).
 
-* `AuditingServiceContributions` which contributes collections to the xref:refguide:applib-cm:roles-mixins-contributees/contributee.adoc#HasUniqueId[HasUniqueId] interface.
+* `AuditingServiceContributions` which contributes collections to the xref:refguide:applib-classes:mixins.adoc[HasUniqueId] interface.
 This will therefore display all audit entries that occurred in a given request/transaction, in other words whenever a command, a published event or another audit entry is displayed.
 
 These services can be activated by updating the `pom.xml` and updating the `AppManifest#getModules()` method.

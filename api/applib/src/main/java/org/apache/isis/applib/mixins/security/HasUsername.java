@@ -16,22 +16,30 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.commons.having;
+package org.apache.isis.applib.mixins.security;
+
+import org.apache.isis.applib.mixins.updates.OnUpdatedBy;
 
 /**
- * Mix-in interface for objects (usually created by service implementations) that are be persistable,
- * and so can be associated with a username, usually of the user that has performed some operation.
+ * Allows domain objects that were created, updated or are otherwise associated
+ * with a named user to act as a mixee in order that other modules may
+ * contribute behaviour.
  *
  * <p>
- * Other services can then use this username as a means to contributed actions/collections to render such additional
- * information relating to the activities of the user.
- * 
+ *     The {@link OnUpdatedBy}
+ *     interface is for entities to be automatically updated by the
+ *     framework when persisted.
+ * </p>
+ *
+ * @see OnUpdatedBy
+ *
  * @since 2.0 {@index}
  */
 public interface HasUsername {
 
     /**
-     * The user that created this object.
+     * The user that created, updated or is otherwise associated with this
+     * object.
      */
     String getUsername();
 

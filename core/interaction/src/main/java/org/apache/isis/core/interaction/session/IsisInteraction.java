@@ -29,6 +29,7 @@ import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.iactn.ActionInvocation;
 import org.apache.isis.applib.services.iactn.Execution;
 import org.apache.isis.applib.services.iactn.PropertyEdit;
+import org.apache.isis.applib.services.iactn.SequenceType;
 import org.apache.isis.applib.services.metrics.MetricsService;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
@@ -51,8 +52,8 @@ public class IsisInteraction implements InternalInteraction {
     private final Command command;
 
     @Override
-    public UUID getUniqueId() {
-        return command.getUniqueId();
+    public UUID getInteractionId() {
+        return command.getInteractionId();
     }
 
     private final List<Execution<?,?>> executionGraphs = _Lists.newArrayList();
@@ -199,17 +200,16 @@ public class IsisInteraction implements InternalInteraction {
         currentExecution = newExecution;
     }
 
-    private final Map<String, LongAdder> maxBySequence = _Maps.newHashMap();
+    private final Map<SequenceType, LongAdder> maxBySequence = _Maps.newHashMap();
 
     @Override
-    public int next(final String sequenceId) {
-
-        final LongAdder adder = maxBySequence.computeIfAbsent(sequenceId, this::newAdder);
+    public int next(final SequenceType sequenceType) {
+        final LongAdder adder = maxBySequence.computeIfAbsent(sequenceType, this::newAdder);
         adder.increment();
         return adder.intValue();
     }
 
-    private LongAdder newAdder(String ignore) {
+    private LongAdder newAdder(final SequenceType ignore) {
         final LongAdder adder = new LongAdder();
         adder.decrement();
         return adder;

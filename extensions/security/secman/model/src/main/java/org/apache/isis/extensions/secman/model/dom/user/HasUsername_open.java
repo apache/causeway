@@ -24,7 +24,7 @@ import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.i18n.TranslatableString;
-import org.apache.isis.commons.having.HasUsername;
+import org.apache.isis.applib.mixins.security.HasUsername;
 import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
 import org.apache.isis.extensions.secman.api.user.ApplicationUser;
 import org.apache.isis.extensions.secman.api.user.ApplicationUserRepository;
@@ -39,12 +39,12 @@ import lombok.RequiredArgsConstructor;
 public class HasUsername_open {
 
     @Inject private ApplicationUserRepository<? extends ApplicationUser> applicationUserRepository;
-    
+
     private final HasUsername target;
 
     public static class ActionDomainEvent extends IsisModuleExtSecmanApi.ActionDomainEvent<HasUsername_open> {}
 
-    
+
     @MemberOrder(name = "User", sequence = "1") // associate with a 'User' property (if any)
     public ApplicationUser act() {
         if (target == null || target.getUsername() == null) {
@@ -52,7 +52,7 @@ public class HasUsername_open {
         }
         return applicationUserRepository.findByUsername(target.getUsername()).orElse(null);
     }
-    
+
     public boolean hideAct() {
         return target instanceof ApplicationUser;
     }
@@ -63,6 +63,6 @@ public class HasUsername_open {
         }
         return null;
     }
-    
+
 
 }

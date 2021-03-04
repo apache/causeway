@@ -16,13 +16,25 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.commons.having;
+package org.apache.isis.applib.mixins.system;
+
+import java.util.UUID;
+
+import org.apache.isis.applib.services.iactn.Interaction;
+
 
 /**
+ * Allows domain objects that represent or are associated with a system
+ * {@link Interaction} to act as a mixee in order that other modules can
+ * contribute behaviour.
+ *
  * @since 2.0 {@index}
  */
-public interface HasUpdatedAt {
+public interface HasInteractionId {
 
-    void setUpdatedAt(java.sql.Timestamp updatedAt);
+    /**
+     * A unique identifier (a GUID).
+     */
+    UUID getInteractionId();
 
 }

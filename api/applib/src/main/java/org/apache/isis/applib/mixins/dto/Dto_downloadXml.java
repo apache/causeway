@@ -26,7 +26,6 @@ import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.mixins.MixinConstants;
 import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.value.Clob;
 import org.apache.isis.applib.value.NamedWithMimeType.CommonMimeType;
@@ -35,6 +34,15 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 /**
+ * Mixin that provides the ability to download a view model as XML.
+ *
+ * <p>
+ *  Requires that the view model is a JAXB view model, and implements the
+ *  {@link Dto} marker interface.
+ * </p>
+ *
+ * @see Dto_downloadXsd
+ *
  * @since 1.x {@index}
  */
 @Action(
@@ -59,21 +67,17 @@ public class Dto_downloadXml {
 
             // PARAM 0
             @ParameterLayout(
-                    named = MixinConstants.FILENAME_PROPERTY_NAME,
-                    describedAs = MixinConstants.FILENAME_PROPERTY_DESCRIPTION)
+                    named = DtoMixinConstants.FILENAME_PROPERTY_NAME,
+                    describedAs = DtoMixinConstants.FILENAME_PROPERTY_DESCRIPTION)
             final String fileName) {
 
         val xmlString = jaxbService.toXml(holder);
         return Clob.of(fileName, CommonMimeType.XML, xmlString);
     }
 
-    // -- PARAM 0
-
     public String default0Act() {
         return holder.getClass().getName();
     }
-
-    // -- DEPENDENCIES
 
     @Inject JaxbService jaxbService;
 

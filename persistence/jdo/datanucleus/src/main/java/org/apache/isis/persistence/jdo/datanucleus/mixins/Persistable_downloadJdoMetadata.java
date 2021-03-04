@@ -33,7 +33,7 @@ import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.mixins.MixinConstants;
+import org.apache.isis.applib.mixins.layout.LayoutMixinConstants;
 import org.apache.isis.applib.value.Clob;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.persistence.jdo.applib.services.JdoSupportService;
@@ -41,6 +41,10 @@ import org.apache.isis.persistence.jdo.applib.services.JdoSupportService;
 import lombok.RequiredArgsConstructor;
 
 /**
+ * Provides the ability to download the JDO
+ * <a href="http://www.datanucleus.org/products/datanucleus/jdo/metadata_xml.html">class metadata</a>
+ * as XML.
+ *
  * @since 2.0 {@index}
  */
 @Action(
@@ -61,7 +65,7 @@ public class Persistable_downloadJdoMetadata {
 
     public static class ActionDomainEvent extends org.apache.isis.applib.IsisModuleApplib.ActionDomainEvent<Persistable_downloadJdoMetadata> {}
 
-    @MemberOrder(name = MixinConstants.METADATA_LAYOUT_GROUPNAME, sequence = "710.1")
+    @MemberOrder(name = LayoutMixinConstants.METADATA_LAYOUT_GROUPNAME, sequence = "710.1")
     public Clob act(
             @ParameterLayout(named = "File name")
             final String fileName) throws JAXBException, IOException {

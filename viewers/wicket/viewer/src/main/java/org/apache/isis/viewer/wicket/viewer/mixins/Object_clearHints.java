@@ -32,6 +32,31 @@ import org.apache.isis.viewer.wicket.viewer.services.HintStoreUsingWicketSession
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
+/**
+ * Provides the ability for the end-user to discard these UI hints so that the
+ * object is rendered in its initial state:
+ *
+ * <p>
+ * When a domain object is rendered the end-user can select different tabs,
+ * and for collections can sort the columns, navigate to second pages, or
+ * select different views of collections.
+ * If the user revisits that object, the Wicket viewer (at least) will remember
+ * these hints and render the domain object in the same state.
+ * </p>
+ *
+ * <p>
+ * These rendering hints are also included if the user copies the URL using
+ * the anchor link (to right hand of the object's title).
+ * </p>
+ *
+ * <p>
+ *     This mixin - contributed to <code>java.lang.Object</code> and therefore
+ *     to allo domain objects - provides the ability for the end user to clear
+ *     any hints that might have been set for the domain object being rendered.
+ * </p>
+ *
+ * @see HintStore {@index}
+ */
 @Action(
         domainEvent = Object_clearHints.ActionDomainEvent.class,
         semantics = SemanticsOf.IDEMPOTENT,

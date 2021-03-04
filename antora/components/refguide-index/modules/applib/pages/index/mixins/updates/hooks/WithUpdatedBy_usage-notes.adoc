@@ -1,28 +1,15 @@
-[[Timestampable]]
-= `Timestampable`
-
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :page-partial:
 
 
-The `Timestampable` role interface is a convenience that combines the xref:applib-classes:about.adoc#HoldsUpdatedAt[HoldsUpdatedAt] and xref:applib-classes:about.adoc#HoldsUpdatedBy[HoldsUpdatedBy] interfaces.
-It is defined as:
 
-// TODO: v2: use include::[]
+== See also
 
-[source,java]
-----
-public interface Timestampable
-    extends HoldsUpdatedAt, HoldsUpdatedBy {
-}
-----
+* xref:refguide:applib:index/services/user/UserService.adoc[UserService]
++
+used to obtain the current user.
 
-The interface no additional methods of its own.
+* xref:refguide:applib:index/mixins/updates/OnUpdatedAt.adoc[OnUpdatedAt]
 
+* xref:refguide:applib:index/mixins/updates/OnUpdatedByAndAt.adoc[OnUpdatedByAndAt]
 
-
-== Alternatives
-
-An alternative way to maintain a timestamp is to use JDO's `@Version` annotation.
-With this approach, it is the JDO/DataNucleus that maintains the version, rather than the framework's `TimestampService`.
-See xref:applib-classes:about.adoc#HoldsUpdatedBy[HoldsUpdatedBy] for further details.

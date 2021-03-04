@@ -19,6 +19,28 @@
 package org.apache.isis.applib.mixins.dto;
 
 /**
+ * Allows JAXB-annotated view models to act as a mixee in order that other
+ * modules (and the core framework) can contribute behaviour.
+ *
+ * <p>
+ *     A JAXB view model is one annotated with
+ *     {@link javax.xml.bind.annotation.XmlRootElement}.
+ * </p>
+ *
+ * <p>
+ *     The two mixin behaviours contributed by the core framework are the
+ *     ability to download the view model as XML (using {@link Dto_downloadXml})
+ *     and to download the XSD schema for that XML (using
+ *     {@link Dto_downloadXsd}).
+ * </p>
+ *
+ * <p>
+ * The interface is just a marker interface (with no members).
+ * </p>
+ *
+ * @see Dto_downloadXml
+ * @see Dto_downloadXsd
+ *
  * @since 1.x {@index}
  */
 public interface Dto {

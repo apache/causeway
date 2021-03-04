@@ -26,11 +26,21 @@ import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.applib.mixins.MixinConstants;
+import org.apache.isis.applib.mixins.layout.LayoutMixinConstants;
 
 import lombok.RequiredArgsConstructor;
 
 /**
+ * Contributes the value of the version (introduced by enhancing, and used by
+ * the ORM for optimistic locking) as a property.
+ *
+ * <p>
+ * Only visible if the version can be cast to a {@link java.sql.Timestamp}.
+ * </p>
+ *
+ * @see Persistable_datanucleusIdLong
+ * @see Persistable_datanucleusVersionLong
+ *
  * @since 2.0 {@index}
  */
 @Property(
@@ -48,7 +58,7 @@ public class Persistable_datanucleusVersionTimestamp {
     extends org.apache.isis.applib.IsisModuleApplib.PropertyDomainEvent
     <Persistable_datanucleusVersionTimestamp, java.sql.Timestamp> {}
 
-    @MemberOrder(name = MixinConstants.METADATA_LAYOUT_GROUPNAME, sequence = "800.2")
+    @MemberOrder(name = LayoutMixinConstants.METADATA_LAYOUT_GROUPNAME, sequence = "800.2")
     public java.sql.Timestamp prop() {
         final Object version = JDOHelper.getVersion(persistable);
         return version != null && version instanceof java.sql.Timestamp ? (java.sql.Timestamp) version : null;

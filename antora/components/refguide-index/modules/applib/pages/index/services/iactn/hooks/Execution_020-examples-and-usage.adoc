@@ -12,7 +12,7 @@ This supports several use cases:
 
 ** they enable profiling of the running application (which actions are invoked then most often, what is their response time)
 
-** if auditing is configured (using xref:refguide:applib:index/services/publishing/spi/EntityPropertyChangeSubscriber.adoc[EntityPropertyChangeSubscriber]), they provide better audit information, since the parent xref:refguide:applib:index/services/iactn/Interaction.adoc[Interaction] captures the 'cause' of an interaction and can be correlated to the audit records (the "effect" of the interaction) by way of the xref:applib-classes:roles-mixins-contributees/contributee.adoc#HasUniqueId[uniqueId] that both share.
+** if auditing is configured (using xref:refguide:applib:index/services/publishing/spi/EntityPropertyChangeSubscriber.adoc[EntityPropertyChangeSubscriber]), they provide better audit information, since the parent xref:refguide:applib:index/services/iactn/Interaction.adoc[Interaction] captures the 'cause' of an interaction and can be correlated to the audit records (the "effect" of the interaction) by way of the xref:applib-classes:mixins.adoc[uniqueId] that both share.
 
 
 == See also

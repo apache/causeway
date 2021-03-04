@@ -1,10 +1,10 @@
-= Mixins (and Mixees)
+= Mixees and Mixins
 
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :page-partial:
 
 
-This section defines a number of interfaces that define a contract for some framework-defined mixins.
+This section defines a number of "mixee" interfaces that define a contract for some framework-defined mixins.
 
 [TIP]
 ====
@@ -29,7 +29,7 @@ The framework provides a number of mixins that contributes to `java.lang.Object`
 [[Dto]]
 == Dto
 
-JAXB view models can optionally implement the `Dto` interface.
+JAXB view models can optionally implement the xref:refguide:applib:index/mixins/dto/Dto.adoc[Dto] interface.
 Two mixins contribute to this interface:
 
 * xref:refguide:applib:index/mixins/dto/Dto_downloadXml.adoc[Dto_downloadXml]
@@ -64,4 +64,33 @@ As a developer you do not need to write any code to obtain the mixins that contr
 These mixin properties/actions are all associated with the "Metadata" fieldset.
 
 
+== Security
 
+Domain objects that are created, updated or otherwise associated with a user can implement the xref:refguide:applib:index/mixins/security/HasUsername.adoc[HasUsername] mixee interface.
+
+A number of extension modules related to security, such as xref:security:secman:about.adoc[SecMan] module, contribute to this interface.
+
+
+== System
+
+Domain objects that are associated to an xref:refguide:applib:index/services/iactn/Interaction.adoc[Interaction] or to a nested xref:refguide:applib:index/services/xactn/TransactionId.adoc[transaction] can express this relationship by implementing the xref:refguide:applib:index/mixins/system/HasInteractionId_see-also.adoc
+
+
+== Updates
+
+The following interfaces define a contract for the framework to update:
+
+* xref:refguide:applib:index/mixins/updates/OnUpdatedAt.adoc[OnUpdatedAt]
++
+For domain entities that keep track of when they were last updated.
+
+* xref:refguide:applib:index/mixins/updates/OnUpdatedBy.adoc[OnUpdatedBy]
++
+For domain entities that keep track of which user last updated them.
+
+* xref:refguide:applib:index/mixins/mixins/updates/OnUpdatedByAndAt.adoc[OnUpdatedByAndAt]
++
+Simply a combination of xref:refguide:applib:index/mixins/mixins/updates/OnUpdatedAt.adoc[HasUpdatedAt] and xref:refguide:applib:index/mixins/mixins/updates/OnUpdatedBy.adoc[HasUpdatedBy]
+
+Note that these are not quite the same thing as regular mixee interfaces, in that they do not expose getters to be leveraged by a mixin.
+Rather, these expose callback such that the framework can populate them at the appropriate juncture.

@@ -46,13 +46,13 @@ public class ActionAnnotationFacetFactoryTest_executionPublishing extends Action
         val actionIfAny = processMethodContext.synthesizeOnMethod(Action.class);
         facetFactory.processExecutionPublishing(processMethodContext, actionIfAny);
     }
-    
+
     @Test
     public void given_HasUniqueId_thenIgnored() {
 
-        final Method actionMethod = findMethod(SomeHasUniqueId.class, "someAction");
+        final Method actionMethod = findMethod(SomeHasInteractionId.class, "someAction");
 
-        processExecutionPublishing(facetFactory, new ProcessMethodContext(SomeHasUniqueId.class, null, actionMethod, mockMethodRemover, facetedMethod));
+        processExecutionPublishing(facetFactory, new ProcessMethodContext(SomeHasInteractionId.class, null, actionMethod, mockMethodRemover, facetedMethod));
 
         assertFalse(ExecutionPublishingFacet.isPublishingEnabled(facetedMethod));
 

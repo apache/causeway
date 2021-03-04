@@ -57,11 +57,11 @@ import org.apache.isis.schema.cmd.v2.CommandDto;
 import lombok.NonNull;
 import lombok.val;
 
-public abstract class ObjectMemberAbstract 
+public abstract class ObjectMemberAbstract
 implements ObjectMember, HasMetaModelContext, HasFacetHolder {
 
     protected ObjectSpecification specificationOf(final Class<?> type) {
-        return type != null 
+        return type != null
                 ? getMetaModelContext().getSpecificationLoader().loadSpecification(type)
                 : null;
     }
@@ -181,7 +181,7 @@ implements ObjectMember, HasMetaModelContext, HasFacetHolder {
             final ManagedObject target,
             final InteractionInitiatedBy interactionInitiatedBy,
             final Where where) {
-        
+
         val visibilityContext = createVisibleInteractionContext(target, interactionInitiatedBy, where);
         return InteractionUtils.isVisibleResult(this, visibilityContext).createConsent();
     }
@@ -211,7 +211,7 @@ implements ObjectMember, HasMetaModelContext, HasFacetHolder {
             final ManagedObject target,
             final InteractionInitiatedBy interactionInitiatedBy,
             final Where where) {
-        
+
         val usabilityContext = createUsableInteractionContext(target, interactionInitiatedBy, where);
         return InteractionUtils.isUsableResult(this, usabilityContext).createConsent();
     }
@@ -245,7 +245,7 @@ implements ObjectMember, HasMetaModelContext, HasFacetHolder {
     ManagedObject mixinAdapterFor(
             @NonNull final Class<?> mixinType,
             @NonNull final ManagedObject mixedInAdapter) {
-        
+
         val spec = getSpecificationLoader().loadSpecification(mixinType);
         val mixinFacet = spec.getFacet(MixinFacet.class);
         val mixinPojo = mixinFacet.instantiate(Objects.requireNonNull(mixedInAdapter.getPojo()));
@@ -325,7 +325,7 @@ implements ObjectMember, HasMetaModelContext, HasFacetHolder {
             // guard here to prevent subsequent mixin actions from
             // trampling over the command's DTO
         } else {
-            val dto = commandDtoFactory.apply(command.getUniqueId());
+            val dto = commandDtoFactory.apply(command.getInteractionId());
             command.updater().setCommandDto(dto);
         }
 

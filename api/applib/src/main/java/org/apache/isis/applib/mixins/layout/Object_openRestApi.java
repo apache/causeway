@@ -27,7 +27,6 @@ import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.mixins.MixinConstants;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.value.LocalResourcePath;
 
@@ -35,6 +34,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 /**
+ * Provides the ability to navigate to the corresponding URL of this domain
+ * object in the REST API provided by the <i>Restful Objects</i> viewer.
+ *
  * @since 1.x {@index}
  */
 @Action(
@@ -54,7 +56,7 @@ public class Object_openRestApi {
 
     private final Object holder;
 
-    @MemberOrder(name = MixinConstants.METADATA_LAYOUT_GROUPNAME, sequence = "750.1")
+    @MemberOrder(name = LayoutMixinConstants.METADATA_LAYOUT_GROUPNAME, sequence = "750.1")
     public LocalResourcePath act() {
         val bookmark = bookmarkService.bookmarkForElseThrow(holder);
         val objType = bookmark.getObjectType();

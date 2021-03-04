@@ -26,7 +26,7 @@ import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.command.Command;
-import org.apache.isis.commons.having.HasUniqueId;
+import org.apache.isis.applib.mixins.system.HasInteractionId;
 import org.apache.isis.extensions.commandlog.impl.IsisModuleExtCommandLogImpl;
 import org.apache.isis.extensions.commandlog.impl.jdo.CommandJdo;
 import org.apache.isis.extensions.commandlog.impl.jdo.CommandJdoRepository;
@@ -34,7 +34,7 @@ import org.apache.isis.extensions.commandlog.impl.jdo.CommandJdoRepository;
 
 /**
  * This mixin contributes a <tt>command</tt> action to any (non-command) implementation of
- * {@link org.apache.isis.commons.having.HasUniqueId}; that is: audit entries, and published events.  Thus, it
+ * {@link HasInteractionId}; that is: audit entries, and published events.  Thus, it
  * is possible to navigate from the effect back to the cause.
  *
  * @since 2.0 {@index}
@@ -48,9 +48,9 @@ public class HasUniqueId_command {
     public static class ActionDomainEvent
             extends IsisModuleExtCommandLogImpl.ActionDomainEvent<HasUniqueId_command> { }
 
-    private final HasUniqueId hasUniqueId;
-    public HasUniqueId_command(final HasUniqueId hasUniqueId) {
-        this.hasUniqueId = hasUniqueId;
+    private final HasInteractionId hasInteractionId;
+    public HasUniqueId_command(final HasInteractionId hasInteractionId) {
+        this.hasInteractionId = hasInteractionId;
     }
 
 
@@ -63,14 +63,14 @@ public class HasUniqueId_command {
      * {@link Command#getParent() parent} property.
      */
     public boolean hideAct() {
-        return (hasUniqueId instanceof CommandJdo);
+        return (hasInteractionId instanceof CommandJdo);
     }
     public String disableAct() {
         return findCommand() == null ? "No command found for unique Id": null;
     }
 
     private CommandJdo findCommand() {
-        final UUID transactionId = hasUniqueId.getUniqueId();
+        final UUID transactionId = hasInteractionId.getInteractionId();
         return commandServiceRepository
                 .findByUniqueId(transactionId)
                 .orElse(null);

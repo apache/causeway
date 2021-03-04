@@ -26,7 +26,7 @@ import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.mixins.MixinConstants;
+import org.apache.isis.applib.mixins.dto.DtoMixinConstants;
 import org.apache.isis.applib.services.layout.LayoutService;
 import org.apache.isis.applib.services.layout.Style;
 import org.apache.isis.applib.value.Clob;
@@ -36,6 +36,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 /**
+ * Provides a mixin to download the layout XML for any domain object.
+ *
  * @since 1.x {@index}
  */
 @Action(
@@ -55,11 +57,11 @@ public class Object_downloadLayoutXml {
 
     private final Object holder;
 
-    @MemberOrder(name = MixinConstants.METADATA_LAYOUT_GROUPNAME, sequence = "700.1")
+    @MemberOrder(name = LayoutMixinConstants.METADATA_LAYOUT_GROUPNAME, sequence = "700.1")
     public Object act(
             @ParameterLayout(
-                    named = MixinConstants.FILENAME_PROPERTY_NAME,
-                    describedAs = MixinConstants.FILENAME_PROPERTY_DESCRIPTION)
+                    named = DtoMixinConstants.FILENAME_PROPERTY_NAME,
+                    describedAs = DtoMixinConstants.FILENAME_PROPERTY_DESCRIPTION)
             final String fileName,
             final Style style) {
 

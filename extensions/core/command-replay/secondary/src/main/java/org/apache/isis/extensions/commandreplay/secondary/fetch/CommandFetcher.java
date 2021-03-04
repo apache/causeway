@@ -87,7 +87,7 @@ public class CommandFetcher {
     private CommandsDto fetchCommands(final CommandJdo previousHwmIfAny)
             throws StatusException {
 
-        final UUID transactionId = previousHwmIfAny != null ? previousHwmIfAny.getUniqueId() : null;
+        final UUID transactionId = previousHwmIfAny != null ? previousHwmIfAny.getInteractionId() : null;
 
         log.debug("finding commands on primary ...");
 

@@ -25,12 +25,15 @@ import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.mixins.MixinConstants;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
 
 import lombok.RequiredArgsConstructor;
 
 /**
+ *  Provides the ability to discard the current internal metamodel data for
+ *  the domain class of the rendered object, and recreate from code and other
+ *  sources (most notably, layout XML data).
+ *
  * @since 1.x {@index}
  */
 @Action(
@@ -50,7 +53,7 @@ public class Object_rebuildMetamodel {
 
     private final Object holder;
 
-    @MemberOrder(name = MixinConstants.METADATA_LAYOUT_GROUPNAME, sequence = "800.1")
+    @MemberOrder(name = LayoutMixinConstants.METADATA_LAYOUT_GROUPNAME, sequence = "800.1")
     public Object act() {
         metaModelService.rebuild(holder.getClass());
         return holder;

@@ -27,7 +27,7 @@ import javax.validation.constraints.Pattern;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.events.domain.PropertyDomainEvent;
-import org.apache.isis.commons.having.HasUniqueId;
+import org.apache.isis.applib.mixins.system.HasInteractionId;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -242,8 +242,8 @@ implements MetaModelRefiner {
         //
         // this rule inspired by a similar rule for auditing and publishing, see DomainObjectAnnotationFacetFactory
         //
-        if(HasUniqueId.class.isAssignableFrom(processMethodContext.getCls())) {
-            // do not install on any implementation of HasUniqueId
+        if(HasInteractionId.class.isAssignableFrom(processMethodContext.getCls())) {
+            // do not install on any implementation of HasInteractionId
             // (ie commands, audit entries, published events).
             return;
         }
@@ -277,8 +277,8 @@ implements MetaModelRefiner {
         // this rule inspired by a similar rule for auditing and publishing, see DomainObjectAnnotationFacetFactory
         // and for commands, see above
         //
-        if(HasUniqueId.class.isAssignableFrom(processMethodContext.getCls())) {
-            // do not install on any implementation of HasUniqueId
+        if(HasInteractionId.class.isAssignableFrom(processMethodContext.getCls())) {
+            // do not install on any implementation of HasInteractionId
             // (ie commands, audit entries, published events).
             return;
         }

@@ -28,7 +28,6 @@ import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.mixins.MixinConstants;
 import org.apache.isis.applib.services.jaxb.IsisSchemas;
 import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.services.message.MessageService;
@@ -41,6 +40,21 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 /**
+ * Mixin that provides the ability to download the XSD schema for a view model
+ * can be downloaded as XML.
+ *
+ * <p>
+ *  Requires that the view model is a JAXB view model, and implements the
+ *  {@link Dto} marker interface.
+ * </p>
+ *
+ * <p>
+ * If the domain object's JAXB annotations reference only a single XSD schema
+ * then this will return that XML text as a {@link Clob} of that XSD.
+ * If there are multiple XSD schemas referenced then the action will return a
+ * zip of those schemas, wrapped up in a {@link Blob}.
+ * </p>
+ *
  * @since 1.x {@index}
  */
 @Action(
@@ -59,16 +73,19 @@ public class Dto_downloadXsd {
     public static class ActionDomainEvent
     extends org.apache.isis.applib.IsisModuleApplib.ActionDomainEvent<Dto_downloadXsd> {}
 
+    /**
+     * The {@link IsisSchemas} parameter can be used to optionally ignore the
+     * common Apache Isis schemas; useful if there is only one other XSD schema
+     * referenced by the DTO.
+     */
     @MemberOrder(sequence = "500.2")
     public Object act(
 
-            // PARAM 0
             @ParameterLayout(
-                    named = MixinConstants.FILENAME_PROPERTY_NAME,
-                    describedAs = MixinConstants.FILENAME_PROPERTY_DESCRIPTION)
+                    named = DtoMixinConstants.FILENAME_PROPERTY_NAME,
+                    describedAs = DtoMixinConstants.FILENAME_PROPERTY_DESCRIPTION)
             final String fileName,
 
-            // PARAM 1
             final IsisSchemas isisSchemas) {
 
         val schemaMap = jaxbService.toXsd(holder, isisSchemas);
@@ -100,25 +117,17 @@ public class Dto_downloadXsd {
 
     }
 
-    // -- PARAM 0
-
     public String default0Act() {
         return holder.getClass().getName();
     }
-
-    // -- PARAM 1
 
     public IsisSchemas default1Act() {
         return IsisSchemas.IGNORE;
     }
 
-    // -- HELPER
-
     private static String zipEntryNameFor(final String namespaceUri) {
         return namespaceUri + ".xsd";
     }
-
-    // -- DEPENDENCIES
 
     @Inject MessageService messageService;
     @Inject JaxbService jaxbService;

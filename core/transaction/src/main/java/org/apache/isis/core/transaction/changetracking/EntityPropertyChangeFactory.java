@@ -30,13 +30,13 @@ import lombok.experimental.UtilityClass;
 
 @UtilityClass
 class EntityPropertyChangeFactory {
-    
+
     public static EntityPropertyChange createEntityPropertyChange(
             final java.sql.Timestamp timestamp,
             final String user,
             final TransactionId txId,
             final PropertyChangeRecord propertyChangeRecord) {
-        
+
         val adapterAndProperty = propertyChangeRecord.getAdapterAndProperty();
         val spec = adapterAndProperty.getAdapter().getSpecification();
 
@@ -50,11 +50,11 @@ class EntityPropertyChangeFactory {
 
         final String targetClass = CommandUtil.targetClassNameFor(spec);
 
-        final UUID transactionId = txId.getUniqueId();
+        final UUID transactionId = txId.getInteractionId();
         final int sequence = txId.getSequence();
 
         return EntityPropertyChange.of(
-                transactionId, sequence, targetClass, target, 
+                transactionId, sequence, targetClass, target,
                 memberId, propertyId, preValue, postValue, user, timestamp);
     }
 }

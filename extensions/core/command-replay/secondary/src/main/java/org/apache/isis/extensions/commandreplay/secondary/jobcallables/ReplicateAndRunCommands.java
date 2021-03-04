@@ -95,7 +95,7 @@ public class ReplicateAndRunCommands implements Callable<SecondaryStatus> {
                     // give up if there was a failure; admin will need to fix issue and retry
                     if (hwm.getReplayState() != null &&
                             hwm.getReplayState().isFailed()) {
-                        log.info("Command {} hit replay error", hwm.getUniqueId());
+                        log.info("Command {} hit replay error", hwm.getInteractionId());
                         return;
                     }
                 } else {
@@ -133,7 +133,7 @@ public class ReplicateAndRunCommands implements Callable<SecondaryStatus> {
 
         commandsToReplay.forEach(commandJdo -> {
 
-            log.info("replaying {}", commandJdo.getUniqueId());
+            log.info("replaying {}", commandJdo.getInteractionId());
 
             //
             // run command

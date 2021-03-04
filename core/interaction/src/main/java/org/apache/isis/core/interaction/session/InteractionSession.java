@@ -24,8 +24,8 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.function.Function;
 
+import org.apache.isis.applib.mixins.system.HasInteractionId;
 import org.apache.isis.applib.services.iactn.Interaction;
-import org.apache.isis.commons.having.HasUniqueId;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.commons.ToString;
@@ -51,10 +51,10 @@ import lombok.Setter;
  * @see InteractionFactory
  */
 public class InteractionSession
-implements HasUniqueId {
+implements HasInteractionId {
 
     @Getter private final long startedAtSystemNanos;
-    
+
     /**
      * The {@link MessageBroker} that holds messages for this session.
      */
@@ -64,7 +64,7 @@ implements HasUniqueId {
      * The {@link MetaModelContext} that holds services for this session.
      */
     @Getter private final MetaModelContext metaModelContext;
-    
+
     public InteractionSession(
             @NonNull final MetaModelContext mmc) {
 
@@ -89,21 +89,21 @@ implements HasUniqueId {
 //    }
 
     // -- INTERACTION ON CLOSE HANDLER
-    
+
     @Setter private Runnable onClose;
-    
+
     // -- INTERACTION SCOPED SESSION ATTRIBUTE
-    
+
     private Map<Class<?>, Object> attributes = null;
     private boolean closed = false;
-	
+
 	@Getter private Interaction interaction;
 
     /** add type specific session data */
     public <T> T putAttribute(Class<? super T> type, T value) {
         return _Casts.uncheckedCast(attributes().put(type, value));
     }
-    
+
     /** conditionally add type specific session data */
     public <T> T computeAttributeIfAbsent(Class<? super T> type, Function<Class<?>, ? extends T> mappingFunction) {
         return _Casts.uncheckedCast(attributes().computeIfAbsent(type, mappingFunction));
@@ -115,14 +115,14 @@ implements HasUniqueId {
                 ? _Casts.uncheckedCast(attributes.get(type))
                 : null;
     }
-    
+
     /** remove type specific session data */
     public void removeAttribute(Class<?> type) {
         if(attributes!=null) {
             attributes.remove(type);
         }
     }
-    
+
     /** Do not use, is called by the framework internally. */
     public void close() {
         if(onClose!=null) {
@@ -132,7 +132,7 @@ implements HasUniqueId {
         attributes = null;
         closed = true;
     }
-    
+
 //    /**
 //     * Copies all attributes to the target session.
 //     * @param target
@@ -143,24 +143,24 @@ implements HasUniqueId {
 //        }
 //        target.attributes().putAll(attributes);
 //    }
-    
+
     private Map<Class<?>, Object> attributes() {
         if(closed) {
             throw _Exceptions.illegalState(
                     "IsisInteraction was already closed, cannot access UserData any longer.");
         }
-        return (attributes==null) 
-                ? attributes = new HashMap<>() 
+        return (attributes==null)
+                ? attributes = new HashMap<>()
                 : attributes;
     }
-    
+
     @Override
-    public UUID getUniqueId() {
-        return getInteraction().getUniqueId();
+    public UUID getInteractionId() {
+        return getInteraction().getInteractionId();
     }
-    
+
     // -- TO STRING
-    
+
     @Override
     public String toString() {
         final ToString asString = new ToString(this);

@@ -7,7 +7,7 @@
 
 The service's functionality is exposed in the UI through a mixin (per object) and a menu action (for all objects):
 
-* the xref:applib-classes:roles-mixins-contributees/mixins.adoc#Object[`Object` mixin] provides the ability to download the XML layout for any domain object (entity or view model).
+* the xref:applib-classes:mixins.adoc#java-lang-object[Object] mixin provides the ability to download the XML layout for any domain object (entity or view model).
 
 * the `LayoutServiceMenu` provides the ability to download all XML layouts as a single ZIP file (in any of the three styles).
 
