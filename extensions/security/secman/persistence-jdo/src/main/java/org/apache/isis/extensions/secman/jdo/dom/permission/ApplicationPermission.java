@@ -199,7 +199,7 @@ public class ApplicationPermission implements org.apache.isis.extensions.secman.
     // -- FEATURE SORT
 
     /**
-     * The {@link ApplicationFeatureId#getType() feature type} of the
+     * The {@link ApplicationFeatureId#getSort() feature sort} of the
      * feature.
      *
      * <p>

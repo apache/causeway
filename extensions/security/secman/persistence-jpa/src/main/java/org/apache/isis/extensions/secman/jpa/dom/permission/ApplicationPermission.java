@@ -189,7 +189,7 @@ implements
     public static class TypeDomainEvent extends PropertyDomainEvent<String> {}
 
     /**
-     * Combines {@link #getFeatureSort() feature type} and member type.
+     * Combines {@link #getFeatureSort() feature sort} and member sort.
      */
     @Property(
             domainEvent = TypeDomainEvent.class,
