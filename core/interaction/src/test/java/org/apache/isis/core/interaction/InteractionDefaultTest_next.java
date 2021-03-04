@@ -26,6 +26,7 @@ import org.junit.Test;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
+import org.apache.isis.applib.services.iactn.SequenceType;
 import org.apache.isis.core.interaction.session.IsisInteraction;
 
 import lombok.val;
@@ -36,13 +37,13 @@ public class InteractionDefaultTest_next {
     public void test() {
         val interaction = new IsisInteraction(UUID.randomUUID());
 
-        assertThat(interaction.next("foo"), is(0));
-        assertThat(interaction.next("foo"), is(1));
-        assertThat(interaction.next("bar"), is(0));
-        assertThat(interaction.next("bar"), is(1));
-        assertThat(interaction.next("foo"), is(2));
-        assertThat(interaction.next("bar"), is(2));
-        assertThat(interaction.next("bar"), is(3));
+        assertThat(interaction.next(SequenceType.EXECUTION), is(0));
+        assertThat(interaction.next(SequenceType.EXECUTION), is(1));
+        assertThat(interaction.next(SequenceType.TRANSACTION), is(0));
+        assertThat(interaction.next(SequenceType.TRANSACTION), is(1));
+        assertThat(interaction.next(SequenceType.EXECUTION), is(2));
+        assertThat(interaction.next(SequenceType.TRANSACTION), is(2));
+        assertThat(interaction.next(SequenceType.TRANSACTION), is(3));
     }
 
 }

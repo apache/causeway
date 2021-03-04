@@ -51,8 +51,6 @@ public class DomainEventHelperTest_newCollectionDomainEvent_forRemove {
                 CollectionDomainEvent.Default.class, AbstractDomainEvent.Phase.EXECUTED, identifier, sdo);
         assertSame(ev.getSource(), sdo);
         assertThat(ev.getIdentifier(), is(identifier));
-        assertThat(ev.getOf(), is(CollectionDomainEvent.Of.REMOVE_FROM));
-        assertSame(ev.getValue(), other);
     }
 
     @Test
@@ -66,8 +64,6 @@ public class DomainEventHelperTest_newCollectionDomainEvent_forRemove {
                 CollectionDomainEvent.Default.class, AbstractDomainEvent.Phase.EXECUTED, identifier, sdo);
         assertSame(ev.getSource(), sdo);
         assertThat(ev.getIdentifier(), is(identifier));
-        assertThat(ev.getOf(), is(CollectionDomainEvent.Of.REMOVE_FROM));
-        assertSame(ev.getValue(), other);
     }
 
     @Test
@@ -81,8 +77,6 @@ public class DomainEventHelperTest_newCollectionDomainEvent_forRemove {
                 SomeDomainObjectCollectionRemovedFromDomainEvent.class, AbstractDomainEvent.Phase.EXECUTED, identifier, sdo);
         assertThat(ev.getSource(), is(sdo));
         assertThat(ev.getIdentifier(), is(identifier));
-        assertThat(ev.getOf(), is(CollectionDomainEvent.Of.REMOVE_FROM));
-        assertThat(ev.getValue(), is(other));
     }
 
 }
