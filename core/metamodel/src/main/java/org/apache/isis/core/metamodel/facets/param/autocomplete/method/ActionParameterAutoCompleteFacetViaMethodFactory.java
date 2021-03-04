@@ -33,7 +33,8 @@ import org.apache.isis.core.metamodel.facets.param.autocomplete.ActionParameterA
 
 import lombok.val;
 
-public class ActionParameterAutoCompleteFacetViaMethodFactory extends MethodPrefixBasedFacetFactoryAbstract {
+public class ActionParameterAutoCompleteFacetViaMethodFactory 
+extends MethodPrefixBasedFacetFactoryAbstract {
 
     private static final String PREFIX = MethodLiteralConstants.AUTO_COMPLETE_PREFIX;
 

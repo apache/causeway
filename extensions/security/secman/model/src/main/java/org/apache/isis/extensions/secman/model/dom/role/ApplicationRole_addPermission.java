@@ -25,11 +25,14 @@ import java.util.stream.Collectors;
 import javax.enterprise.inject.Model;
 import javax.inject.Inject;
 
+import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.MinLength;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
+import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureRepository;
 import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeature;
@@ -38,6 +41,7 @@ import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionMod
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionRepository;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionRule;
 import org.apache.isis.extensions.secman.api.role.ApplicationRole;
+import org.apache.isis.extensions.secman.api.role.ApplicationRole.AddPermissionDomainEvent;
 
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
@@ -45,10 +49,10 @@ import lombok.val;
 import lombok.experimental.Accessors;
 
 //TODO[2560] wip
-//@Action(
-//        domainEvent = AddPermissionDomainEvent.class, 
-//        associateWith = "permissions")
-//@ActionLayout(promptStyle = PromptStyle.DIALOG_MODAL)
+@Action(
+        domainEvent = AddPermissionDomainEvent.class, 
+        associateWith = "permissions")
+@ActionLayout(promptStyle = PromptStyle.DIALOG_MODAL)
 @RequiredArgsConstructor
 public class ApplicationRole_addPermission {
     
@@ -81,9 +85,9 @@ public class ApplicationRole_addPermission {
             
             @Parameter(optionality = Optionality.MANDATORY)
             @ParameterLayout(named="Feature")
-            final String featureName) {
+            final String feature) {
         
-        val featureId = ApplicationFeatureId.parse(featureName);
+        val featureId = ApplicationFeatureId.parse(feature);
         
         applicationPermissionRepository.newPermission(target, rule, mode, featureId);
         return target;
@@ -100,7 +104,8 @@ public class ApplicationRole_addPermission {
     }
 
     @Model
-    public java.util.Collection<String> autoComplete2Act(             
+    public java.util.Collection<String> autoCompleteFeature(
+            Parameters params,
             @MinLength(3) String search) {
         
         val idsByName = applicationFeatureRepository.getFeatureIdentifiersByName();
