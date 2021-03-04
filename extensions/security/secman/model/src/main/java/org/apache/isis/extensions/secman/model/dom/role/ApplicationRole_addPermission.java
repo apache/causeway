@@ -19,20 +19,23 @@
 package org.apache.isis.extensions.secman.model.dom.role;
 
 import java.util.Map;
+import java.util.Objects;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 import javax.enterprise.inject.Model;
 import javax.inject.Inject;
 
+import org.apache.isis.applib.ViewModel;
 import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.MinLength;
+import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
-import org.apache.isis.applib.annotation.PromptStyle;
+import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureRepository;
 import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeature;
@@ -43,16 +46,18 @@ import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionRul
 import org.apache.isis.extensions.secman.api.role.ApplicationRole;
 import org.apache.isis.extensions.secman.api.role.ApplicationRole.AddPermissionDomainEvent;
 
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
 import lombok.val;
 import lombok.experimental.Accessors;
 
-//TODO[2560] wip
 @Action(
         domainEvent = AddPermissionDomainEvent.class, 
         associateWith = "permissions")
-@ActionLayout(promptStyle = PromptStyle.DIALOG_MODAL)
 @RequiredArgsConstructor
 public class ApplicationRole_addPermission {
     
@@ -65,7 +70,7 @@ public class ApplicationRole_addPermission {
     public static class Parameters {
         ApplicationPermissionRule rule; // ALLOW/VETO
         ApplicationPermissionMode mode; // r/w
-        String feature;
+        AppFeat feature;
     }
 
     /**
@@ -85,11 +90,9 @@ public class ApplicationRole_addPermission {
             
             @Parameter(optionality = Optionality.MANDATORY)
             @ParameterLayout(named="Feature")
-            final String feature) {
+            final AppFeat feature) {
         
-        val featureId = ApplicationFeatureId.parse(feature);
-        
-        applicationPermissionRepository.newPermission(target, rule, mode, featureId);
+        applicationPermissionRepository.newPermission(target, rule, mode, feature.getFeatureId());
         return target;
     }
 
@@ -104,7 +107,7 @@ public class ApplicationRole_addPermission {
     }
 
     @Model
-    public java.util.Collection<String> autoCompleteFeature(
+    public java.util.Collection<AppFeat> autoCompleteFeature(
             Parameters params,
             @MinLength(3) String search) {
         
@@ -113,7 +116,7 @@ public class ApplicationRole_addPermission {
         return idsByName.entrySet().stream()
         .filter(entry->matches(entry.getKey(), entry.getValue(), search))
         .map(Map.Entry::getValue)
-        .map(ApplicationFeatureId::stringify)
+        .map(AppFeat::new)
         .collect(Collectors.toCollection(TreeSet::new));
     }
 
@@ -121,6 +124,67 @@ public class ApplicationRole_addPermission {
         //TODO yet not very smart
         return featureName.contains(search);
     }
+    
+    // -- FEATURE VIEW MODEL WRAPPING A VALUE TYPE 
 
+    /**
+     * Viewmodel wrapper around value type {@link ApplicationFeatureId}. Introduced,
+     * because at the time of writing, 
+     * autoComplete/choices do not support value types.
+     */
+    @DomainObject(
+            nature = Nature.VIEW_MODEL, 
+            objectType = "isis.ext.secman.AppFeat")
+    @AllArgsConstructor @NoArgsConstructor @EqualsAndHashCode
+    public static class AppFeat 
+    implements 
+        Comparable<AppFeat>,
+        ViewModel {
+        
+        @Property
+        @Getter  
+        private ApplicationFeatureId featureId;
+        
+        public String title() {
+            return toString();
+        }
+        
+        @Override
+        public int compareTo(AppFeat o) {
+            val thisId = this.getFeatureId();
+            val otherId = o!=null ? o.getFeatureId() : null;
+            if(Objects.equals(thisId, otherId)) {
+                return 0;
+            }
+            if(thisId==null) {
+                return -1;
+            }
+            if(otherId==null) {
+                return 1;
+            }
+            return this.getFeatureId().compareTo(o.getFeatureId());
+        }
+        
+        @Override
+        public String toString() {
+            return featureId!=null 
+                    ? featureId.getSort().name() + ": " + featureId.getFullyQualifiedName()
+                    : "<no id>";
+        }
+
+        @Override
+        public String viewModelMemento() {
+            return featureId!=null 
+                    ? featureId.asEncodedString() 
+                    : "<no id>";
+        }
+
+        @Override
+        public void viewModelInit(String memento) {
+            featureId = ApplicationFeatureId.parseEncoded(memento); // fail by intention if memento is '<no id>'
+        }
+        
+    }
+    
     
 }

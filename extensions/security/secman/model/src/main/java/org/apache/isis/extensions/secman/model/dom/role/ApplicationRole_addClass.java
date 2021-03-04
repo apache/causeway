@@ -35,6 +35,7 @@ import org.apache.isis.extensions.secman.api.role.ApplicationRole.AddPermissionD
 
 import lombok.RequiredArgsConstructor;
 
+//probably obsolete since ApplicationRole_addPermission
 @Action(
         domainEvent = AddPermissionDomainEvent.class, 
         associateWith = "permissions")
