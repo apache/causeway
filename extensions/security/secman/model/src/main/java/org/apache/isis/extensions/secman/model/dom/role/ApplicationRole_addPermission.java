@@ -21,6 +21,7 @@ package org.apache.isis.extensions.secman.model.dom.role;
 import java.util.Map;
 import java.util.Objects;
 import java.util.TreeSet;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import javax.enterprise.inject.Model;
@@ -28,6 +29,7 @@ import javax.inject.Inject;
 
 import org.apache.isis.applib.ViewModel;
 import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.MinLength;
@@ -38,6 +40,7 @@ import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureRepository;
+import org.apache.isis.commons.internal.functions._Predicates;
 import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeature;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermission;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionMode;
@@ -58,6 +61,7 @@ import lombok.experimental.Accessors;
 @Action(
         domainEvent = AddPermissionDomainEvent.class, 
         associateWith = "permissions")
+@ActionLayout(named="Remove")
 @RequiredArgsConstructor
 public class ApplicationRole_addPermission {
     
@@ -89,7 +93,11 @@ public class ApplicationRole_addPermission {
             final ApplicationPermissionMode mode,
             
             @Parameter(optionality = Optionality.MANDATORY)
-            @ParameterLayout(named="Feature")
+            @ParameterLayout(
+                    named = "Feature",
+                    describedAs = "To refine the search by sort (namespace, type, member), "
+                            + "use one of "
+                            + "sort:n sort:t sort:m.")
             final AppFeat feature) {
         
         applicationPermissionRepository.newPermission(target, rule, mode, feature.getFeatureId());
@@ -108,22 +116,52 @@ public class ApplicationRole_addPermission {
 
     @Model
     public java.util.Collection<AppFeat> autoCompleteFeature(
-            Parameters params,
-            @MinLength(3) String search) {
+            final Parameters params,
+            final @MinLength(3) String search) {
+        
+        final Predicate<ApplicationFeatureId> searchRefine; 
+        final String searchTerm;
+        
+        if(search.startsWith("sort:n")) {
+            searchRefine = this::isNamespace;
+            searchTerm = search.substring(6).trim();
+        } else if(search.startsWith("sort:t")) {
+            searchRefine = this::isType;
+            searchTerm = search.substring(6).trim();
+        } else if(search.startsWith("sort:m")) {
+            searchRefine = this::isMember;
+            searchTerm = search.substring(6).trim();
+        } else {
+            searchRefine = _Predicates.alwaysTrue();
+            searchTerm = search.trim();
+        }
         
         val idsByName = applicationFeatureRepository.getFeatureIdentifiersByName();
         
         return idsByName.entrySet().stream()
-        .filter(entry->matches(entry.getKey(), entry.getValue(), search))
+        .filter(entry->searchRefine.test(entry.getValue()))
+        .filter(entry->matches(entry.getKey(), entry.getValue(), searchTerm))
         .map(Map.Entry::getValue)
         .map(AppFeat::new)
         .collect(Collectors.toCollection(TreeSet::new));
     }
 
     private boolean matches(String featureName, ApplicationFeatureId featureId, String search) {
-        //TODO yet not very smart
         return featureName.contains(search);
     }
+    
+    private boolean isNamespace(ApplicationFeatureId featureId) {
+        return featureId.getSort().isNamespace();
+    }
+    
+    private boolean isType(ApplicationFeatureId featureId) {
+        return featureId.getSort().isType();
+    }
+    
+    private boolean isMember(ApplicationFeatureId featureId) {
+        return featureId.getSort().isMember();
+    }
+    
     
     // -- FEATURE VIEW MODEL WRAPPING A VALUE TYPE 
 
