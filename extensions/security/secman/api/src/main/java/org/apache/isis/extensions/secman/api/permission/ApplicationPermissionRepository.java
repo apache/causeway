@@ -65,7 +65,7 @@ public interface ApplicationPermissionRepository<P extends ApplicationPermission
             ApplicationRole role,
             ApplicationPermissionRule rule,
             ApplicationPermissionMode mode,
-            ApplicationFeatureSort featureType,
+            ApplicationFeatureSort featureSort,
             String featureFqn);
 
     P newPermission(

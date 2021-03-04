@@ -164,7 +164,7 @@ implements org.apache.isis.extensions.secman.api.permission.ApplicationPermissio
                         ApplicationPermission.class, "findByRoleAndRuleAndFeatureType")
                     .withParameter("role", role)
                     .withParameter("rule", rule)
-                    .withParameter("featureType", type))
+                    .withParameter("featureSort", type))
                 .stream()
                 .collect(_Sets.toUnmodifiableSorted());
     }
@@ -174,19 +174,19 @@ implements org.apache.isis.extensions.secman.api.permission.ApplicationPermissio
     public Optional<ApplicationPermission> findByRoleAndRuleAndFeatureCached(
             final org.apache.isis.extensions.secman.api.role.ApplicationRole role,
             final ApplicationPermissionRule rule,
-            final ApplicationFeatureSort type,
+            final ApplicationFeatureSort featureSort,
             final String featureFqn) {
         return queryResultsCacheProvider.get().execute(
                 this::findByRoleAndRuleAndFeature,
                 ApplicationPermissionRepository.class, "findByRoleAndRuleAndFeatureCached",
-                role, rule, type, featureFqn);
+                role, rule, featureSort, featureFqn);
     }
 
     @Override
     public Optional<ApplicationPermission> findByRoleAndRuleAndFeature(
             final org.apache.isis.extensions.secman.api.role.ApplicationRole role,
             final ApplicationPermissionRule rule,
-            final ApplicationFeatureSort type,
+            final ApplicationFeatureSort featureSort,
             final String featureFqn) {
 
         return repository
@@ -194,7 +194,7 @@ implements org.apache.isis.extensions.secman.api.permission.ApplicationPermissio
                                 ApplicationPermission.class, "findByRoleAndRuleAndFeature")
                         .withParameter("role", role)
                         .withParameter("rule", rule)
-                        .withParameter("featureType", type)
+                        .withParameter("featureSort", featureSort)
                         .withParameter("featureFqn", featureFqn ));
     }
 
@@ -212,7 +212,7 @@ implements org.apache.isis.extensions.secman.api.permission.ApplicationPermissio
         return repository.allMatches(
                 Query.named(
                         ApplicationPermission.class, "findByFeature")
-                .withParameter("featureType", featureId.getSort())
+                .withParameter("featureSort", featureId.getSort())
                 .withParameter("featureFqn", featureId.getFullyQualifiedName()))
                 .stream()
                 .collect(_Sets.toUnmodifiableSorted());
@@ -225,28 +225,28 @@ implements org.apache.isis.extensions.secman.api.permission.ApplicationPermissio
             final org.apache.isis.extensions.secman.api.role.ApplicationRole genericRole,
             final ApplicationPermissionRule rule,
             final ApplicationPermissionMode mode,
-            final ApplicationFeatureSort featureType,
+            final ApplicationFeatureSort featureSort,
             final String featureFqn) {
 
         val role = _Casts.<ApplicationRole>uncheckedCast(genericRole);
 
-        final ApplicationFeatureId featureId = ApplicationFeatureId.newFeature(featureType, featureFqn);
+        final ApplicationFeatureId featureId = ApplicationFeatureId.newFeature(featureSort, featureFqn);
         final ApplicationFeature feature = featureRepository.findFeature(featureId);
         if(feature == null) {
-            messages.warnUser("No such " + featureType.name().toLowerCase() + ": " + featureFqn);
+            messages.warnUser("No such " + featureSort.name().toLowerCase() + ": " + featureFqn);
             return null;
         }
-        return newPermissionNoCheck(role, rule, mode, featureType, featureFqn);
+        return newPermissionNoCheck(role, rule, mode, featureSort, featureFqn);
     }
 
     public ApplicationPermission newPermissionNoCheck(
             final ApplicationRole role,
             final ApplicationPermissionRule rule,
             final ApplicationPermissionMode mode,
-            final ApplicationFeatureSort featureType,
+            final ApplicationFeatureSort featureSort,
             final String featureFqn) {
 
-        ApplicationPermission permission = findByRoleAndRuleAndFeature(role, rule, featureType, featureFqn)
+        ApplicationPermission permission = findByRoleAndRuleAndFeature(role, rule, featureSort, featureFqn)
                 .orElse(null);
         if (permission != null) {
             return permission;
@@ -255,7 +255,7 @@ implements org.apache.isis.extensions.secman.api.permission.ApplicationPermissio
         permission.setRole(role);
         permission.setRule(rule);
         permission.setMode(mode);
-        permission.setFeatureType(featureType);
+        permission.setFeatureSort(featureSort);
         permission.setFeatureFqn(featureFqn);
         repository.persist(permission);
         return permission;
@@ -282,12 +282,12 @@ implements org.apache.isis.extensions.secman.api.permission.ApplicationPermissio
             final ApplicationFeatureId featureId) {
 
         val role = _Casts.<ApplicationRole>uncheckedCast(genericRole);
-        val featureType = featureId.getSort();
+        val featureSort = featureId.getSort();
         val featureFqn = featureId.getFullyQualifiedName();
 
         val feature = featureRepository.findFeature(featureId);
         if(feature == null) {
-            messages.warnUser("No such " + featureType.name().toLowerCase() + ": " + featureFqn);
+            messages.warnUser("No such " + featureSort.name().toLowerCase() + ": " + featureFqn);
             return null;
         }
 
@@ -295,7 +295,7 @@ implements org.apache.isis.extensions.secman.api.permission.ApplicationPermissio
         permission.setRole(role);
         permission.setRule(rule);
         permission.setMode(mode);
-        permission.setFeatureType(featureType);
+        permission.setFeatureSort(featureSort);
         permission.setFeatureFqn(featureFqn);
         repository.persist(permission);
 
@@ -327,10 +327,10 @@ implements org.apache.isis.extensions.secman.api.permission.ApplicationPermissio
         val orphaned = _Lists.<ApplicationPermission>newArrayList();
 
         for (val permission : allPermissions()) {
-            final ApplicationFeatureSort featureType = permission.getFeatureType();
+            final ApplicationFeatureSort featureSort = permission.getFeatureSort();
             final String featureFqn = permission.getFeatureFqn();
 
-            switch (featureType) {
+            switch (featureSort) {
 
             case NAMESPACE:
                 if(!packageNames.contains(featureFqn)) {

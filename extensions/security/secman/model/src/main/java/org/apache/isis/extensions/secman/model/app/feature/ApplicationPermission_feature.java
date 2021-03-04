@@ -49,7 +49,7 @@ public class ApplicationPermission_feature {
 
     @MemberOrder(name="Feature", sequence = "4")
     public ApplicationFeatureViewModel prop(final ApplicationPermission permission) {
-        if(permission.getFeatureType() == null) {
+        if(permission.getFeatureSort() == null) {
             return null;
         }
         final ApplicationFeatureId featureId = getFeatureId(permission);
@@ -57,7 +57,7 @@ public class ApplicationPermission_feature {
     }
 
     private static ApplicationFeatureId getFeatureId(final ApplicationPermission permission) {
-        return ApplicationFeatureId.newFeature(permission.getFeatureType(), permission.getFeatureFqn());
+        return ApplicationFeatureId.newFeature(permission.getFeatureSort(), permission.getFeatureFqn());
     }
 
     @Inject RepositoryService repository;

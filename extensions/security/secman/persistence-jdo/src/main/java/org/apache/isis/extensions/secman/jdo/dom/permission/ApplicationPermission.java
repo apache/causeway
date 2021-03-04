@@ -82,7 +82,7 @@ import lombok.experimental.UtilityClass;
             name = "findByFeature", language = "JDOQL",
             value = "SELECT "
                     + "FROM org.apache.isis.extensions.secman.jdo.dom.permission.ApplicationPermission "
-                    + "WHERE featureType == :featureType "
+                    + "WHERE featureSort == :featureSort "
                     + "   && featureFqn == :featureFqn"),
     @javax.jdo.annotations.Query(
             name = "findByRoleAndRuleAndFeature", language = "JDOQL",
@@ -90,7 +90,7 @@ import lombok.experimental.UtilityClass;
                     + "FROM org.apache.isis.extensions.secman.jdo.dom.permission.ApplicationPermission "
                     + "WHERE role == :role "
                     + "   && rule == :rule "
-                    + "   && featureType == :featureType "
+                    + "   && featureSort == :featureSort "
                     + "   && featureFqn == :featureFqn "),
     @javax.jdo.annotations.Query(
             name = "findByRoleAndRuleAndFeatureType", language = "JDOQL",
@@ -98,11 +98,12 @@ import lombok.experimental.UtilityClass;
                     + "FROM org.apache.isis.extensions.secman.jdo.dom.permission.ApplicationPermission "
                     + "WHERE role == :role "
                     + "   && rule == :rule "
-                    + "   && featureType == :featureType "),
+                    + "   && featureSort == :featureSort "),
 })
 @javax.jdo.annotations.Uniques({
     @javax.jdo.annotations.Unique(
-            name = "ApplicationPermission_role_feature_rule_UNQ", members = { "role", "featureType", "featureFqn", "rule" })
+            name = "ApplicationPermission_role_feature_rule_UNQ", 
+            members = { "role", "featureSort", "featureFqn", "rule" })
 })
 @DomainObject(
         objectType = "isis.ext.secman.ApplicationPermission"
@@ -173,16 +174,17 @@ public class ApplicationPermission implements org.apache.isis.extensions.secman.
     public static class TypeDomainEvent extends PropertyDomainEvent<String> {}
 
     /**
-     * Combines {@link #getFeatureType() feature type} and member type.
+     * Combines {@link #getFeatureSort() feature type} and member type.
      */
     @Property(
             domainEvent = TypeDomainEvent.class,
             editing = Editing.DISABLED
             )
     @PropertyLayout(typicalLength=ApplicationPermission.TYPICAL_LENGTH_TYPE)
-    public String getType() {
-        final Enum<?> e = getFeatureType() != ApplicationFeatureSort.MEMBER 
-                ? getFeatureType() 
+    @Override
+    public String getSort() {
+        final Enum<?> e = getFeatureSort() != ApplicationFeatureSort.MEMBER 
+                ? getFeatureSort() 
                 : getMemberType().orElse(null);
         return e != null ? e.name(): null;
     }
@@ -194,7 +196,7 @@ public class ApplicationPermission implements org.apache.isis.extensions.secman.
     }
 
 
-    // -- featureType
+    // -- FEATURE SORT
 
     /**
      * The {@link ApplicationFeatureId#getType() feature type} of the
@@ -209,12 +211,12 @@ public class ApplicationPermission implements org.apache.isis.extensions.secman.
      */
     @javax.jdo.annotations.Column(allowsNull="false")
     @Setter
-    private ApplicationFeatureSort featureType;
+    private ApplicationFeatureSort featureSort;
 
     @Override
     @Programmatic
-    public ApplicationFeatureSort getFeatureType() {
-        return featureType;
+    public ApplicationFeatureSort getFeatureSort() {
+        return featureSort;
     }
 
 
@@ -228,11 +230,11 @@ public class ApplicationPermission implements org.apache.isis.extensions.secman.
      * of the feature.
      *
      * <p>
-     *     The combination of the {@link #getFeatureType() feature type} and the fully qualified name is used to build
+     *     The combination of the {@link #getFeatureSort() feature type} and the fully qualified name is used to build
      *     the corresponding {@link #getFeature() feature} (view model).
      * </p>
      *
-     * @see #getFeatureType()
+     * @see #getFeatureSort()
      */
     @javax.jdo.annotations.Column(allowsNull="false")
     @Property(
@@ -248,7 +250,7 @@ public class ApplicationPermission implements org.apache.isis.extensions.secman.
     private static final ObjectContract<ApplicationPermission> contract	= 
             ObjectContracts.contract(ApplicationPermission.class)
             .thenUse("role", ApplicationPermission::getRole)
-            .thenUse("featureType", ApplicationPermission::getFeatureType)
+            .thenUse("featureSort", ApplicationPermission::getFeatureSort)
             .thenUse("featureFqn", ApplicationPermission::getFeatureFqn)
             .thenUse("mode", ApplicationPermission::getMode);
 

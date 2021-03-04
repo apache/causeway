@@ -64,7 +64,7 @@ public class ApplicationOrphanedPermissionManager_relocateSelected {
             final String targetNamespace) {
         
         val appFeatureId = ApplicationFeatureId.newFeature(
-                permission.getFeatureType(), 
+                permission.getFeatureSort(), 
                 permission.getFeatureFqn());
         
         val relocatedFqn = appFeatureId

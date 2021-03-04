@@ -105,7 +105,7 @@ public abstract class AbstractRoleAndPermissionsFixtureScript extends FixtureScr
     private void newPermissions(
             final ApplicationPermissionRule rule,
             final ApplicationPermissionMode mode,
-            final ApplicationFeatureSort featureType,
+            final ApplicationFeatureSort featureSort,
             final Iterable<String> featureFqns) {
 
         if(featureFqns == null) {
@@ -126,7 +126,7 @@ public abstract class AbstractRoleAndPermissionsFixtureScript extends FixtureScr
                     (org.apache.isis.extensions.secman.jdo.dom.role.ApplicationRole)securityRole,
                     rule,
                     mode,
-                    featureType, featureFqn);
+                    featureSort, featureFqn);
         }
     }
     

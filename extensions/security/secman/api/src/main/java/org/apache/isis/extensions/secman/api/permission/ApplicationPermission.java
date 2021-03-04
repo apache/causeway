@@ -124,7 +124,7 @@ public interface ApplicationPermission {
         return buf.toString();
     }
 
-    ApplicationFeatureSort getFeatureType();
+    ApplicationFeatureSort getFeatureSort();
 
     // -- ROLE
 
@@ -156,11 +156,11 @@ public interface ApplicationPermission {
     }
     void setMode(ApplicationPermissionMode changing);
 
-    // -- TYPE
+    // -- SORT
 
     @Property
     @MemberOrder(name="Feature", sequence = "5")
-    default String getType() {
+    default String getSort() {
         throw _Exceptions.unsupportedOperation("please implement me");
     }
 
@@ -177,8 +177,8 @@ public interface ApplicationPermission {
 
     @Programmatic
     default Optional<ApplicationFeatureId> createFeatureId() {
-        return Optional.of(getFeatureType())
-                .map(featureType -> ApplicationFeatureId.newFeature(featureType, getFeatureFqn()));
+        return Optional.of(getFeatureSort())
+                .map(featureSort -> ApplicationFeatureId.newFeature(featureSort, getFeatureFqn()));
     }
 
 

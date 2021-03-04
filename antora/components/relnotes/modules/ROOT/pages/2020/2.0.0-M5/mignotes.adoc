@@ -381,12 +381,37 @@ WARNING: check menubars.layout.xml for any occurrences
 
 Permission are now matched against logical packages, logical object types or logical object member names and use the former fully qualified names only as fallback.
 
+[WARNING]
+====
+SecMan database schema changed, namely the *ApplicationPermission* table! See table below.
+====
+
+[Source,sql]
+.SecMan database migration // adapt to your schema and db vendor!
+----
+UPDATE ApplicationPermission SET featureType='NAMESPACE' WHERE featureType like 'PACKAGE';
+UPDATE ApplicationPermission SET featureType='TYPE' WHERE featureType like 'CLASS';
+ALTER TABLE ApplicationPermission RENAME COLUMN `featureType` TO `featureSort`;
+----
+
 [cols="3m,3m,3a", options="header"]
 |===
 
 | What
 | Old
 | New
+
+| ApplicationPermission table column name
+| featureType
+| `featureSort`
+
+| ApplicationPermission#featureType/Sort entries
+| PACKAGE
+| `NAMESPACE`
+
+| ApplicationPermission#featureType/Sort entries
+| CLASS
+| `TYPE`
 
 | Domain Object namespaces in SecMan scope like eg. objectType = "isissecurity.ApplicationUser"
 | isissecurity

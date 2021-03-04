@@ -71,7 +71,7 @@ import lombok.experimental.UtilityClass;
         uniqueConstraints=
             @UniqueConstraint(
                     name = "ApplicationPermission_role_feature_rule_UNQ", 
-                    columnNames={"roleId", "featureType", "featureFqn", "rule"})
+                    columnNames={"roleId", "featureSort", "featureFqn", "rule"})
 )
 @NamedQueries({
     @NamedQuery(
@@ -91,7 +91,7 @@ import lombok.experimental.UtilityClass;
             name = NamedQueryNames.PERMISSION_BY_FEATURE, 
             query = "SELECT p "
                     + "FROM org.apache.isis.extensions.secman.jpa.dom.permission.ApplicationPermission p "
-                    + "WHERE p.featureType = :featureType "
+                    + "WHERE p.featureSort = :featureSort "
                     + "   AND p.featureFqn = :featureFqn"),
     @NamedQuery(
             name = NamedQueryNames.PERMISSION_BY_ROLE_RULE_FEATURE_FQN, 
@@ -99,7 +99,7 @@ import lombok.experimental.UtilityClass;
                   + "FROM org.apache.isis.extensions.secman.jpa.dom.permission.ApplicationPermission p "
                   + "WHERE p.role = :role "
                   + "   AND p.rule = :rule "
-                  + "   AND p.featureType = :featureType "
+                  + "   AND p.featureSort = :featureSort "
                   + "   AND p.featureFqn = :featureFqn "),
     @NamedQuery(
             name = NamedQueryNames.PERMISSION_BY_ROLE_RULE_FEATURE, 
@@ -107,7 +107,7 @@ import lombok.experimental.UtilityClass;
                   + "FROM org.apache.isis.extensions.secman.jpa.dom.permission.ApplicationPermission p "
                   + "WHERE p.role = :role "
                   + "   AND p.rule = :rule "
-                  + "   AND p.featureType = :featureType "),
+                  + "   AND p.featureSort = :featureSort "),
 })
 @EntityListeners(JpaEntityInjectionPointResolver.class)
 @DomainObject(
@@ -189,17 +189,18 @@ implements
     public static class TypeDomainEvent extends PropertyDomainEvent<String> {}
 
     /**
-     * Combines {@link #getFeatureType() feature type} and member type.
+     * Combines {@link #getFeatureSort() feature type} and member type.
      */
     @Property(
             domainEvent = TypeDomainEvent.class,
             editing = Editing.DISABLED
             )
     @PropertyLayout(typicalLength=ApplicationPermission.TYPICAL_LENGTH_TYPE)
-    public String getType() {
-        final Enum<?> e = getFeatureType() != ApplicationFeatureSort.MEMBER 
-                ? getFeatureType() 
-                        : getMemberType().orElse(null);
+    @Override
+    public String getSort() {
+        final Enum<?> e = getFeatureSort() != ApplicationFeatureSort.MEMBER 
+                ? getFeatureSort() 
+                : getMemberType().orElse(null);
         return e != null ? e.name(): null;
     }
 
@@ -210,7 +211,7 @@ implements
     }
 
 
-    // -- featureType
+    // -- featureSort
 
     /**
      * The {@link ApplicationFeatureId#getType() feature type} of the
@@ -226,12 +227,12 @@ implements
     @Column(nullable=false)
     @Enumerated(EnumType.STRING)
     @Setter
-    private ApplicationFeatureSort featureType;
+    private ApplicationFeatureSort featureSort;
 
     @Override
     @Programmatic
-    public ApplicationFeatureSort getFeatureType() {
-        return featureType;
+    public ApplicationFeatureSort getFeatureSort() {
+        return featureSort;
     }
 
 
@@ -245,11 +246,11 @@ implements
      * of the feature.
      *
      * <p>
-     *     The combination of the {@link #getFeatureType() feature type} and the fully qualified name is used to build
+     *     The combination of the {@link #getFeatureSort() feature type} and the fully qualified name is used to build
      *     the corresponding {@link #getFeature() feature} (view model).
      * </p>
      *
-     * @see #getFeatureType()
+     * @see #getFeatureSort()
      */
     @Column(nullable=false)
     @Property(
@@ -265,7 +266,7 @@ implements
     private static final ObjectContract<ApplicationPermission> contract	= 
             ObjectContracts.contract(ApplicationPermission.class)
             .thenUse("role", ApplicationPermission::getRole)
-            .thenUse("featureType", ApplicationPermission::getFeatureType)
+            .thenUse("featureSort", ApplicationPermission::getFeatureSort)
             .thenUse("featureFqn", ApplicationPermission::getFeatureFqn)
             .thenUse("mode", ApplicationPermission::getMode);
 
