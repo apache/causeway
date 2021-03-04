@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.secman.model.dom.feature;
+package org.apache.isis.extensions.secman.model.dom.permission;
 
 import javax.inject.Inject;
 
@@ -30,6 +30,7 @@ import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureRepositoryDefault;
 import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermission;
+import org.apache.isis.extensions.secman.model.dom.feature.ApplicationFeatureViewModel;
 
 import lombok.RequiredArgsConstructor;
 

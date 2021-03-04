@@ -403,17 +403,17 @@ For latest we use: https://raw.githubusercontent.com/apache/isis/master/antora/s
                 </mb3:serviceAction>
             </mb3:section>
             <mb3:section>
-                <mb3:serviceAction objectType="isis.ext.secman.ApplicationFeatureViewModels" id="allProperties">
-                    <cpt:named>All Properties</cpt:named>
+                <mb3:serviceAction objectType="isis.ext.secman.ApplicationFeatureViewModels" id="allNamespaces">
+                    <cpt:named>All Namespaces</cpt:named>
                 </mb3:serviceAction>
-                <mb3:serviceAction objectType="isis.ext.secman.ApplicationFeatureViewModels" id="allClasses">
-                    <cpt:named>All Classes</cpt:named>
-                </mb3:serviceAction>
-                <mb3:serviceAction objectType="isis.ext.secman.ApplicationFeatureViewModels" id="allPackages">
-                    <cpt:named>All Packages</cpt:named>
+                <mb3:serviceAction objectType="isis.ext.secman.ApplicationFeatureViewModels" id="allTypes">
+                    <cpt:named>All Types</cpt:named>
                 </mb3:serviceAction>
                 <mb3:serviceAction objectType="isis.ext.secman.ApplicationFeatureViewModels" id="allActions">
                     <cpt:named>All Actions</cpt:named>
+                </mb3:serviceAction>
+                <mb3:serviceAction objectType="isis.ext.secman.ApplicationFeatureViewModels" id="allProperties">
+                    <cpt:named>All Properties</cpt:named>
                 </mb3:serviceAction>
                 <mb3:serviceAction objectType="isis.ext.secman.ApplicationFeatureViewModels" id="allCollections">
                     <cpt:named>All Collections</cpt:named>

@@ -82,20 +82,20 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
             final ApplicationFeatureRepositoryDefault applicationFeatureRepository) {
         switch (featureId.getSort()) {
         case NAMESPACE:
-            return ApplicationPackage.class;
+            return ApplicationNamespace.class;
         case TYPE:
-            return ApplicationClass.class;
+            return ApplicationType.class;
         case MEMBER:
             final ApplicationFeature feature = applicationFeatureRepository.findFeature(featureId);
 
             if(feature != null) {
                 switch(feature.getMemberSort()) {
                 case PROPERTY:
-                    return ApplicationClassProperty.class;
+                    return ApplicationTypeProperty.class;
                 case COLLECTION:
-                    return ApplicationClassCollection.class;
+                    return ApplicationTypeCollection.class;
                 case ACTION:
-                    return ApplicationClassAction.class;
+                    return ApplicationTypeAction.class;
                 }
             }
 
@@ -166,40 +166,40 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
 
     // -- type (programmatic)
     @Programmatic
-    public ApplicationFeatureSort getType() {
+    public ApplicationFeatureSort getSort() {
         return getFeatureId().getSort();
     }
 
     // -- packageName
-    public static class PackageNameDomainEvent extends PropertyDomainEvent<ApplicationFeatureViewModel, String> {}
+    public static class NamespaceNameDomainEvent extends PropertyDomainEvent<ApplicationFeatureViewModel, String> {}
 
     @Property(
-            domainEvent = PackageNameDomainEvent.class
+            domainEvent = NamespaceNameDomainEvent.class
             )
     @PropertyLayout(typicalLength=ApplicationFeature.TYPICAL_LENGTH_PKG_FQN)
     @MemberOrder(name="Id", sequence = "2.2")
-    public String getPackageName() {
+    public String getNamespaceName() {
         return getFeatureId().getNamespace();
     }
 
     // -- className
 
-    public static class ClassNameDomainEvent extends PropertyDomainEvent<ApplicationFeatureViewModel, String> {}
+    public static class TypeSimpleNameDomainEvent extends PropertyDomainEvent<ApplicationFeatureViewModel, String> {}
 
     /**
      * For packages, will be null. Is in this class (rather than subclasses) so is shown in
-     * {@link ApplicationPackage#getContents() package contents}.
+     * {@link ApplicationNamespace#getContents() package contents}.
      */
     @Property(
-            domainEvent = ClassNameDomainEvent.class
+            domainEvent = TypeSimpleNameDomainEvent.class
             )
     @PropertyLayout(typicalLength=ApplicationFeature.TYPICAL_LENGTH_CLS_NAME)
     @MemberOrder(name="Id", sequence = "2.3")
-    public String getClassName() {
+    public String getTypeSimpleName() {
         return getFeatureId().getTypeSimpleName();
     }
     public boolean hideClassName() {
-        return getType().isNamespace();
+        return getSort().isNamespace();
     }
 
     // -- memberName
@@ -219,7 +219,7 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
     }
 
     public boolean hideMemberName() {
-        return !getType().isMember();
+        return !getSort().isMember();
     }
 
 
@@ -236,7 +236,7 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
     @MemberOrder(name = "Parent", sequence = "2.6")
     public ApplicationFeatureViewModel getParent() {
         final ApplicationFeatureId parentId;
-        parentId = getType() == ApplicationFeatureSort.MEMBER
+        parentId = getSort() == ApplicationFeatureSort.MEMBER
                 ? getFeatureId().getParentTypeFeatureId()
                 : getFeatureId().getParentNamespaceFeatureId();
         if(parentId == null) {
@@ -273,7 +273,7 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
      * The parent package feature of this class or package.
      */
     @Programmatic
-    public ApplicationFeatureViewModel getParentPackage() {
+    public ApplicationFeatureViewModel getParentNamespace() {
         return Functions.asViewModelForId(applicationFeatureRepository, factory)
                 .apply(getFeatureId().getParentNamespaceFeatureId());
     }

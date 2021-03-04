@@ -30,31 +30,31 @@ import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
 
 @DomainObject(
-        objectType = "isis.ext.secman.ApplicationClass"
+        objectType = "isis.ext.secman.ApplicationType"
         )
 @DomainObjectLayout(
         paged=100,
         bookmarking = BookmarkPolicy.AS_ROOT
         )
-public class ApplicationClass extends ApplicationFeatureViewModel {
+public class ApplicationType extends ApplicationFeatureViewModel {
 
     public static abstract class PropertyDomainEvent<T> 
-    extends ApplicationFeatureViewModel.PropertyDomainEvent<ApplicationClass, T> {}
+    extends ApplicationFeatureViewModel.PropertyDomainEvent<ApplicationType, T> {}
 
     public static abstract class CollectionDomainEvent<T> 
-    extends ApplicationFeatureViewModel.CollectionDomainEvent<ApplicationClass, T> {}
+    extends ApplicationFeatureViewModel.CollectionDomainEvent<ApplicationType, T> {}
 
     public static abstract class ActionDomainEvent 
-    extends ApplicationFeatureViewModel.ActionDomainEvent<ApplicationClass> {}
+    extends ApplicationFeatureViewModel.ActionDomainEvent<ApplicationType> {}
 
 
 
     // -- constructors
 
-    public ApplicationClass() {
+    public ApplicationType() {
     }
 
-    public ApplicationClass(final ApplicationFeatureId featureId) {
+    public ApplicationType(final ApplicationFeatureId featureId) {
         super(featureId);
     }
 
@@ -64,7 +64,7 @@ public class ApplicationClass extends ApplicationFeatureViewModel {
     // -- actions (collection)
 
     public static class ActionsDomainEvent 
-    extends CollectionDomainEvent<ApplicationClassAction> {}
+    extends CollectionDomainEvent<ApplicationTypeAction> {}
 
     @Collection(
             domainEvent = ActionsDomainEvent.class
@@ -73,7 +73,7 @@ public class ApplicationClass extends ApplicationFeatureViewModel {
             defaultView="table"
             )
     @MemberOrder(sequence = "20.1")
-    public List<ApplicationClassAction> getActions() {
+    public List<ApplicationTypeAction> getActions() {
         final SortedSet<ApplicationFeatureId> members = getFeature().getActions();
         return asViewModels(members);
     }
@@ -82,7 +82,7 @@ public class ApplicationClass extends ApplicationFeatureViewModel {
     // -- properties (collection)
 
     public static class PropertiesCollectionDomainEvent 
-    extends CollectionDomainEvent<ApplicationClassAction> {}
+    extends CollectionDomainEvent<ApplicationTypeAction> {}
 
 
     @Collection(
@@ -92,7 +92,7 @@ public class ApplicationClass extends ApplicationFeatureViewModel {
             defaultView="table"
             )
     @MemberOrder(sequence = "20.2")
-    public List<ApplicationClassProperty> getProperties() {
+    public List<ApplicationTypeProperty> getProperties() {
         final SortedSet<ApplicationFeatureId> members = getFeature().getProperties();
         return asViewModels(members);
     }
@@ -100,7 +100,7 @@ public class ApplicationClass extends ApplicationFeatureViewModel {
 
     // -- collections (collection)
     public static class CollectionsCollectionDomainEvent 
-    extends CollectionDomainEvent<ApplicationClassAction> {}
+    extends CollectionDomainEvent<ApplicationTypeAction> {}
 
     @Collection(
             domainEvent = CollectionsCollectionDomainEvent.class
@@ -109,7 +109,7 @@ public class ApplicationClass extends ApplicationFeatureViewModel {
             defaultView="table"
             )
     @MemberOrder(sequence = "20.3")
-    public List<ApplicationClassCollection> getCollections() {
+    public List<ApplicationTypeCollection> getCollections() {
         final SortedSet<ApplicationFeatureId> members = getFeature().getCollections();
         return asViewModels(members);
     }

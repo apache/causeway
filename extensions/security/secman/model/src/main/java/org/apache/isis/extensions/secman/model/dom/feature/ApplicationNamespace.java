@@ -30,32 +30,30 @@ import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureSort;
 
 @DomainObject(
-        objectType = "isis.ext.secman.ApplicationPackage"
+        objectType = "isis.ext.secman.ApplicationNamespace"
         )
 @DomainObjectLayout(paged=100)
-public class ApplicationPackage extends ApplicationFeatureViewModel {
+public class ApplicationNamespace extends ApplicationFeatureViewModel {
 
-    public static abstract class PropertyDomainEvent<T> extends ApplicationFeatureViewModel.PropertyDomainEvent<ApplicationClass, T> {}
+    public static abstract class PropertyDomainEvent<T> extends ApplicationFeatureViewModel.PropertyDomainEvent<ApplicationType, T> {}
 
-    public static abstract class CollectionDomainEvent<T> extends ApplicationFeatureViewModel.CollectionDomainEvent<ApplicationClass, T> {}
+    public static abstract class CollectionDomainEvent<T> extends ApplicationFeatureViewModel.CollectionDomainEvent<ApplicationType, T> {}
 
-    public static abstract class ActionDomainEvent extends ApplicationFeatureViewModel.ActionDomainEvent<ApplicationClass> {}
-
-
+    public static abstract class ActionDomainEvent extends ApplicationFeatureViewModel.ActionDomainEvent<ApplicationType> {}
 
     // -- constructors
 
-    public ApplicationPackage() {
+    public ApplicationNamespace() {
     }
 
-    public ApplicationPackage(final ApplicationFeatureId featureId) {
+    public ApplicationNamespace(final ApplicationFeatureId featureId) {
         super(featureId);
     }
 
 
     // -- contents (collection, for packages only)
 
-    public static class ContentsDomainEvent extends CollectionDomainEvent<ApplicationPackage> {}
+    public static class ContentsDomainEvent extends CollectionDomainEvent<ApplicationNamespace> {}
 
     @Collection(
             domainEvent = ContentsDomainEvent.class
@@ -69,7 +67,7 @@ public class ApplicationPackage extends ApplicationFeatureViewModel {
         return asViewModels(contents);
     }
     public boolean hideContents() {
-        return getType() != ApplicationFeatureSort.NAMESPACE;
+        return getSort() != ApplicationFeatureSort.NAMESPACE;
     }
 
 

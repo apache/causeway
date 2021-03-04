@@ -23,6 +23,7 @@ import java.util.Collection;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.SemanticsOf;
@@ -37,7 +38,8 @@ import lombok.val;
 @Action(
         associateWith = "orphanedPermissions",
         domainEvent = RelocateNamespaceDomainEvent.class, 
-        semantics = SemanticsOf.NON_IDEMPOTENT_ARE_YOU_SURE)
+        semantics = SemanticsOf.IDEMPOTENT_ARE_YOU_SURE)
+@ActionLayout(describedAs = "for the selected permissions renames the namespace")
 @RequiredArgsConstructor
 public class ApplicationOrphanedPermissionManager_relocateSelected {
 

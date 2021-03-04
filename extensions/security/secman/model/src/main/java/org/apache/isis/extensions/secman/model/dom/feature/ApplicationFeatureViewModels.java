@@ -48,11 +48,14 @@ import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureReposit
         )
 public class ApplicationFeatureViewModels  {
 
-    public static abstract class PropertyDomainEvent<T> extends IsisModuleExtSecmanApi.PropertyDomainEvent<ApplicationFeatureViewModels, T> {}
+    public static abstract class PropertyDomainEvent<T> 
+    extends IsisModuleExtSecmanApi.PropertyDomainEvent<ApplicationFeatureViewModels, T> {}
 
-    public static abstract class CollectionDomainEvent<T> extends IsisModuleExtSecmanApi.CollectionDomainEvent<ApplicationFeatureViewModels, T> {}
+    public static abstract class CollectionDomainEvent<T> 
+    extends IsisModuleExtSecmanApi.CollectionDomainEvent<ApplicationFeatureViewModels, T> {}
 
-    public static abstract class ActionDomainEvent extends IsisModuleExtSecmanApi.ActionDomainEvent<ApplicationFeatureViewModels> {}
+    public static abstract class ActionDomainEvent 
+    extends IsisModuleExtSecmanApi.ActionDomainEvent<ApplicationFeatureViewModels> {}
 
     // -- ICON NAME
 
@@ -62,10 +65,10 @@ public class ApplicationFeatureViewModels  {
 
     // -- ALL PACKAGES
 
-    public static class AllPackagesDomainEvent extends ActionDomainEvent {}
+    public static class AllNamespacesDomainEvent extends ActionDomainEvent {}
 
     @Action(
-            domainEvent = AllPackagesDomainEvent.class,
+            domainEvent = AllNamespacesDomainEvent.class,
             semantics = SemanticsOf.SAFE,
             restrictTo = RestrictTo.PROTOTYPING
             )
@@ -73,16 +76,16 @@ public class ApplicationFeatureViewModels  {
             cssClassFa = "fa-list"
             )
     @MemberOrder(sequence = "100.40.1")
-    public List<ApplicationPackage> allPackages() {
-        return asViewModels(applicationFeatureRepository.allPackages(), ApplicationPackage.class);
+    public List<ApplicationNamespace> allNamespaces() {
+        return asViewModels(applicationFeatureRepository.allPackages(), ApplicationNamespace.class);
     }
 
     // -- ALL CLASSES
 
-    public static class AllClassesDomainEvent extends ActionDomainEvent {}
+    public static class AllTypesDomainEvent extends ActionDomainEvent {}
 
     @Action(
-            domainEvent = AllClassesDomainEvent.class,
+            domainEvent = AllTypesDomainEvent.class,
             semantics = SemanticsOf.SAFE,
             restrictTo = RestrictTo.PROTOTYPING
             )
@@ -90,8 +93,8 @@ public class ApplicationFeatureViewModels  {
             cssClassFa = "fa-list"
             )
     @MemberOrder(sequence = "100.40.2")
-    public List<ApplicationClass> allClasses() {
-        return asViewModels(applicationFeatureRepository.allClasses(), ApplicationClass.class);
+    public List<ApplicationType> allTypes() {
+        return asViewModels(applicationFeatureRepository.allClasses(), ApplicationType.class);
     }
 
     // -- ALL ACTIONS
@@ -107,8 +110,8 @@ public class ApplicationFeatureViewModels  {
             cssClassFa = "fa-list"
             )
     @MemberOrder(sequence = "100.40.3")
-    public List<ApplicationClassAction> allActions() {
-        return asViewModels(applicationFeatureRepository.allActions(), ApplicationClassAction.class);
+    public List<ApplicationTypeAction> allActions() {
+        return asViewModels(applicationFeatureRepository.allActions(), ApplicationTypeAction.class);
     }
 
     // -- ALL PROPERTIES
@@ -124,8 +127,8 @@ public class ApplicationFeatureViewModels  {
             cssClassFa = "fa-list"
             )
     @MemberOrder(sequence = "100.40.4")
-    public List<ApplicationClassProperty> allProperties() {
-        return asViewModels(applicationFeatureRepository.allProperties(), ApplicationClassProperty.class);
+    public List<ApplicationTypeProperty> allProperties() {
+        return asViewModels(applicationFeatureRepository.allProperties(), ApplicationTypeProperty.class);
     }
 
     // -- ALL COLLECTIONS
@@ -141,8 +144,8 @@ public class ApplicationFeatureViewModels  {
             cssClassFa = "fa-list"
             )
     @MemberOrder(sequence = "100.40.5")
-    public List<ApplicationClassCollection> allCollections() {
-        return asViewModels(applicationFeatureRepository.allCollections(), ApplicationClassCollection.class);
+    public List<ApplicationTypeCollection> allCollections() {
+        return asViewModels(applicationFeatureRepository.allCollections(), ApplicationTypeCollection.class);
     }
 
     // -- HELPERS

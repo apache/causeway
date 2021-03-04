@@ -36,8 +36,8 @@ under the License.
     <bs3:row>
         <bs3:col span="6">
             <cpt:fieldSet name="Id" id="id" unreferencedProperties="true">
-                <cpt:property id="packageName"/>
-                <cpt:property id="className"/>
+                <cpt:property id="namespaceName"/>
+                <cpt:property id="typeSimpleName"/>
                 <cpt:property id="memberName"/>
             </cpt:fieldSet>
             <cpt:fieldSet name="Data Type" id="dataType">

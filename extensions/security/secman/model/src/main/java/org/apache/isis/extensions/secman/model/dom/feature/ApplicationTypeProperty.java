@@ -29,21 +29,21 @@ import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
         objectType = "isis.ext.secman.ApplicationClassProperty"
         )
 @DomainObjectLayout(paged=100)
-public class ApplicationClassProperty extends ApplicationClassMember {
+public class ApplicationTypeProperty extends ApplicationTypeMember {
 
-    public static abstract class PropertyDomainEvent<T> extends ApplicationClassMember.PropertyDomainEvent<ApplicationClassProperty, T> {}
+    public static abstract class PropertyDomainEvent<T> extends ApplicationTypeMember.PropertyDomainEvent<ApplicationTypeProperty, T> {}
 
-    public static abstract class CollectionDomainEvent<T> extends ApplicationClassMember.CollectionDomainEvent<ApplicationClassProperty, T> {}
+    public static abstract class CollectionDomainEvent<T> extends ApplicationTypeMember.CollectionDomainEvent<ApplicationTypeProperty, T> {}
 
-    public static abstract class ActionDomainEvent extends ApplicationClassMember.ActionDomainEvent<ApplicationClassProperty> {}
+    public static abstract class ActionDomainEvent extends ApplicationTypeMember.ActionDomainEvent<ApplicationTypeProperty> {}
 
 
 
     // -- constructors
-    public ApplicationClassProperty() {
+    public ApplicationTypeProperty() {
     }
 
-    public ApplicationClassProperty(final ApplicationFeatureId featureId) {
+    public ApplicationTypeProperty(final ApplicationFeatureId featureId) {
         super(featureId);
     }
 

@@ -36,13 +36,11 @@ under the License.
     <bs3:row>
         <bs3:col span="6">
             <cpt:fieldSet name="Id" id="id" unreferencedProperties="true">
-                <cpt:property id="packageName"/>
-                <cpt:property id="className"/>
+                <cpt:property id="namespaceName"/>
+                <cpt:property id="typeSimpleName"/>
                 <cpt:property id="memberName"/>
             </cpt:fieldSet>
-            <cpt:fieldSet name="Data Type" id="dataType">
-                <cpt:property id="returnType"/>
-            </cpt:fieldSet>
+            <cpt:fieldSet name="Data Type" id="dataType"/>
             <cpt:fieldSet name="Metadata" id="metadata"/>
         </bs3:col>
         <bs3:col span="6">
@@ -52,14 +50,13 @@ under the License.
             <cpt:fieldSet name="Contributed" id="contributed">
                 <cpt:property id="contributed"/>
             </cpt:fieldSet>
-            <cpt:fieldSet name="Detail" id="detail">
-                <cpt:property id="derived"/>
-                <cpt:property id="maxLength"/>
-                <cpt:property id="typicalLength"/>
-            </cpt:fieldSet>
+            <cpt:fieldSet name="Detail" id="detail"/>
         </bs3:col>
         <bs3:col span="12" unreferencedCollections="true">
             <cpt:collection id="permissions"/>
+            <cpt:collection id="actions"/>
+            <cpt:collection id="properties"/>
+            <cpt:collection id="collections"/>
         </bs3:col>
     </bs3:row>
 </bs3:grid>
