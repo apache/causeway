@@ -16,60 +16,62 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.extensions.secman.model.dom.features;
+package org.apache.isis.extensions.secman.model.dom.feature;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
 
 @DomainObject(
-        objectType = "isis.ext.secman.ApplicationClassAction"
+        objectType = "isis.ext.secman.ApplicationClassCollection"
         )
 @DomainObjectLayout(paged=100)
-public class ApplicationClassAction extends ApplicationClassMember {
+public class ApplicationClassCollection extends ApplicationClassMember {
 
-    public static abstract class PropertyDomainEvent<T> extends ApplicationClassMember.PropertyDomainEvent<ApplicationClassAction, T> {}
+    public static abstract class PropertyDomainEvent<T> extends ApplicationClassMember.PropertyDomainEvent<ApplicationClassCollection, T> {}
 
-    public static abstract class CollectionDomainEvent<T> extends ApplicationClassMember.CollectionDomainEvent<ApplicationClassAction, T> {}
+    public static abstract class CollectionDomainEvent<T> extends ApplicationClassMember.CollectionDomainEvent<ApplicationClassCollection, T> {}
 
-    public static abstract class ActionDomainEvent extends ApplicationClassMember.ActionDomainEvent<ApplicationClassAction> {}
+    public static abstract class ActionDomainEvent extends ApplicationClassMember.ActionDomainEvent<ApplicationClassCollection> {}
 
 
 
     // -- constructors
 
-    public ApplicationClassAction() {
-    }
+    public ApplicationClassCollection() {}
 
-    public ApplicationClassAction(final ApplicationFeatureId featureId) {
+    public ApplicationClassCollection(final ApplicationFeatureId featureId) {
         super(featureId);
     }
 
 
-    // -- returnTypeName (property)
 
-    public static class ReturnTypeDomainEvent extends PropertyDomainEvent<String> {}
+
+    // -- returnType
+
+    public static class ElementTypeDomainEvent extends PropertyDomainEvent<String> {}
 
     @Property(
-            domainEvent = ReturnTypeDomainEvent.class
+            domainEvent = ElementTypeDomainEvent.class
             )
     @MemberOrder(name="Data Type", sequence = "2.6")
-    public String getReturnType() {
+    public String getElementType() {
         return getFeature().getReturnTypeName();
     }
 
-    // -- actionSemantics (property)
-    public static class ActionSemanticsDomainEvent extends PropertyDomainEvent<SemanticsOf> {}
+
+    // -- derived
+
+    public static class DerivedDomainEvent extends PropertyDomainEvent<Boolean> {}
 
     @Property(
-            domainEvent = ActionSemanticsDomainEvent.class
+            domainEvent = DerivedDomainEvent.class
             )
-    @MemberOrder(name="Detail", sequence = "2.8")
-    public SemanticsOf getActionSemantics() {
-        return getFeature().getActionSemantics();
+    @MemberOrder(name="Detail", sequence = "2.7")
+    public boolean isDerived() {
+        return Boolean.TRUE.equals(getFeature().getDerived());
     }
 
 
