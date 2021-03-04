@@ -221,17 +221,17 @@ public class ApplicationFeatureRepositoryDefaultTest {
             applicationFeatureRepository.createApplicationFeaturesFor(mockSpec);
 
             // then
-            final ApplicationFeature orgPkg = applicationFeatureRepository.findPackage(ApplicationFeatureId.newNamespace("org"));
+            final ApplicationFeature orgPkg = applicationFeatureRepository.findNamespace(ApplicationFeatureId.newNamespace("org"));
             assertThat(orgPkg, is(notNullValue()));
-            final ApplicationFeature orgIsisaddonsPkg = applicationFeatureRepository.findPackage(ApplicationFeatureId.newNamespace("org.isisaddons"));
+            final ApplicationFeature orgIsisaddonsPkg = applicationFeatureRepository.findNamespace(ApplicationFeatureId.newNamespace("org.isisaddons"));
             assertThat(orgPkg, is(notNullValue()));
-            final ApplicationFeature featurePkg = applicationFeatureRepository.findPackage(ApplicationFeatureId.newNamespace("org.isisaddons.module.security.dom.feature"));
+            final ApplicationFeature featurePkg = applicationFeatureRepository.findNamespace(ApplicationFeatureId.newNamespace("org.isisaddons.module.security.dom.feature"));
             assertThat(orgPkg, is(notNullValue()));
             assertThat(orgPkg.getContents(), contains(orgIsisaddonsPkg.getFeatureId()));
             assertThat(featurePkg.getContents(), contains(ApplicationFeatureId.newType(Bar.class.getName())));
 
             // then
-            final ApplicationFeature barClass = applicationFeatureRepository.findClass(ApplicationFeatureId.newType(Bar.class.getName()));
+            final ApplicationFeature barClass = applicationFeatureRepository.findLogicalType(ApplicationFeatureId.newType(Bar.class.getName()));
             assertThat(barClass, is(Matchers.notNullValue()));
 
             // then the mockActThatIsHidden is not listed.
@@ -290,7 +290,7 @@ public class ApplicationFeatureRepositoryDefaultTest {
 
             // then
             Assert.assertThat(classParentId, is(equalTo(classFeatureId.getParentNamespaceFeatureId())));
-            final ApplicationFeature classPackage = applicationFeatureRepository.findPackage(classParentId);
+            final ApplicationFeature classPackage = applicationFeatureRepository.findNamespace(classParentId);
             assertThat(classPackage, is(newlyCreatedParent));
         }
 

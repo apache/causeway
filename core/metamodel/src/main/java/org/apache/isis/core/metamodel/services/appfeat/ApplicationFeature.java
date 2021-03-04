@@ -48,7 +48,7 @@ import lombok.experimental.UtilityClass;
  *
  * <p>
  *     Note that this is NOT a view model; instead it can be converted to a string using methods of
- *     {@link ApplicationFeatureRepository}, eg {@link ApplicationFeatureRepository#classNamesContainedIn(String, ApplicationMemberSort)}.
+ *     {@link ApplicationFeatureRepository}.
  * </p>
  */
 @Value

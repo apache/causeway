@@ -45,14 +45,11 @@ import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
-import org.apache.isis.applib.services.appfeat.ApplicationFeatureRepository;
 import org.apache.isis.applib.types.DescriptionType;
 import org.apache.isis.applib.util.Equality;
 import org.apache.isis.applib.util.Hashing;
 import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.applib.util.ToString;
-import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionMode;
-import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionRule;
 import org.apache.isis.extensions.secman.jpa.dom.constants.NamedQueryNames;
 import org.apache.isis.extensions.secman.jpa.dom.permission.ApplicationPermission;
 import org.apache.isis.extensions.secman.jpa.dom.permission.ApplicationPermissionRepository;
@@ -98,7 +95,6 @@ implements
     org.apache.isis.extensions.secman.api.role.ApplicationRole,
     Comparable<ApplicationRole> {
 
-    @Inject private transient ApplicationFeatureRepository applicationFeatureRepository;
     @Inject private transient ApplicationPermissionRepository applicationPermissionRepository;
 
     @Id
@@ -151,26 +147,6 @@ implements
     @MemberOrder(sequence = "10")
     public List<ApplicationPermission> getPermissions() {
         return applicationPermissionRepository.findByRole(this);
-    }
-
-
-
-
-    /**
-     * Package names that have classes in them.
-     */
-    public java.util.Collection<String> choices2AddClass() {
-        return applicationFeatureRepository.packageNamesContainingClasses(null);
-    }
-
-    /**
-     * Class names for selected package.
-     */
-    public java.util.Collection<String> choices3AddClass(
-            final ApplicationPermissionRule rule,
-            final ApplicationPermissionMode mode,
-            final String packageFqn) {
-        return applicationFeatureRepository.classNamesContainedIn(packageFqn, null);
     }
 
     // -- users (collection)

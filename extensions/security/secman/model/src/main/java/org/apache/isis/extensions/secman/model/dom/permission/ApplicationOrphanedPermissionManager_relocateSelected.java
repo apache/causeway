@@ -56,7 +56,7 @@ public class ApplicationOrphanedPermissionManager_relocateSelected {
     }
 
     public Collection<String> choices1Act() {
-        return applicationFeatureRepository.packageNames();
+        return applicationFeatureRepository.namespaceNames();
     }
     
     private void relocate(

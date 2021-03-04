@@ -316,12 +316,12 @@ implements org.apache.isis.extensions.secman.api.permission.ApplicationPermissio
     @Override
     public Collection<ApplicationPermission> findOrphaned() {
 
-        final Collection<String> packageNames = featureRepository.packageNames();
+        final Collection<String> namespaceNames = featureRepository.namespaceNames();
         final Set<String> availableClasses = _Sets.newTreeSet();
-        for (String packageName : packageNames) {
-            appendClasses(packageName, ApplicationMemberSort.PROPERTY, availableClasses);
-            appendClasses(packageName, ApplicationMemberSort.COLLECTION, availableClasses);
-            appendClasses(packageName, ApplicationMemberSort.ACTION, availableClasses);
+        for (String packageName : namespaceNames) {
+            appendLogicalTypes(packageName, ApplicationMemberSort.PROPERTY, availableClasses);
+            appendLogicalTypes(packageName, ApplicationMemberSort.COLLECTION, availableClasses);
+            appendLogicalTypes(packageName, ApplicationMemberSort.ACTION, availableClasses);
         }
 
         val orphaned = _Lists.<ApplicationPermission>newArrayList();
@@ -333,7 +333,7 @@ implements org.apache.isis.extensions.secman.api.permission.ApplicationPermissio
             switch (featureSort) {
 
             case NAMESPACE:
-                if(!packageNames.contains(featureFqn)) {
+                if(!namespaceNames.contains(featureFqn)) {
                     orphaned.add(permission);
                 }
                 break;
@@ -366,9 +366,11 @@ implements org.apache.isis.extensions.secman.api.permission.ApplicationPermissio
         return orphaned;
     }
 
-    private void appendClasses(
-            final String packageName, final ApplicationMemberSort getMemberSort, final Set<String> availableClasses) {
-        final Collection<String> classNames = featureRepository.classNamesContainedIn(packageName, getMemberSort);
+    private void appendLogicalTypes(
+            final String packageName, 
+            final ApplicationMemberSort memberSort, 
+            final Set<String> availableClasses) {
+        final Collection<String> classNames = featureRepository.classNamesContainedIn(packageName, memberSort);
         for (String className : classNames) {
             availableClasses.add(packageName + "." + className);
         }

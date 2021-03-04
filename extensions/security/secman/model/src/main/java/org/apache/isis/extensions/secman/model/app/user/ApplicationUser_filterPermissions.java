@@ -56,13 +56,16 @@ public class ApplicationUser_filterPermissions {
 
     @Model
     public List<UserPermissionViewModel> act(
-            @ParameterLayout(named="Package", typicalLength=ApplicationFeature.TYPICAL_LENGTH_PKG_FQN)
-            final String packageFqn,
+            
+            @ParameterLayout(named="Namespace", typicalLength=ApplicationFeature.TYPICAL_LENGTH_PKG_FQN)
+            final String namespace,
+            
             @Parameter(optionality = Optionality.OPTIONAL)
-            @ParameterLayout(named="Class",  typicalLength=ApplicationFeature.TYPICAL_LENGTH_CLS_NAME)
-            final String className) {
+            @ParameterLayout(named="Type", typicalLength=ApplicationFeature.TYPICAL_LENGTH_CLS_NAME)
+            final String logicalTypeSimpleName) {
+        
         val allMembers = applicationFeatureRepository.allMembers();
-        val filtered = _Lists.filter(allMembers, within(packageFqn, className));
+        val filtered = _Lists.filter(allMembers, within(namespace, logicalTypeSimpleName));
         return asViewModels(filtered);
     }
 
@@ -71,7 +74,7 @@ public class ApplicationUser_filterPermissions {
      */
     @Model
     public Collection<String> choices0Act() {
-        return applicationFeatureRepository.packageNames();
+        return applicationFeatureRepository.namespaceNames();
     }
 
 
@@ -79,8 +82,8 @@ public class ApplicationUser_filterPermissions {
      * Class names for selected package.
      */
     @Model
-    public Collection<String> choices1Act(final String packageFqn) {
-        return applicationFeatureRepository.classNamesRecursivelyContainedIn(packageFqn);
+    public Collection<String> choices1Act(final String namespace) {
+        return applicationFeatureRepository.classNamesRecursivelyContainedIn(namespace);
     }
 
 

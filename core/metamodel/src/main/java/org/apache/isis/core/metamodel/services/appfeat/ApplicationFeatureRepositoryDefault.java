@@ -235,7 +235,7 @@ implements ApplicationFeatureRepository {
     }
 
     private ApplicationFeature findPackageElseCreate(final ApplicationFeatureId parentPackageId) {
-        ApplicationFeature parentPackage = findPackage(parentPackageId);
+        ApplicationFeature parentPackage = findNamespace(parentPackageId);
         if (parentPackage == null) {
             parentPackage = newPackage(parentPackageId);
         }
@@ -314,7 +314,7 @@ implements ApplicationFeatureRepository {
         // also cache per memberSort
         featuresMapFor(memberSort).put(featureId, memberFeature);
 
-        final ApplicationFeature classFeature = findClass(classFeatureId);
+        final ApplicationFeature classFeature = findLogicalType(classFeatureId);
         classFeature.addToMembers(featureId, memberSort);
     }
 
@@ -375,9 +375,9 @@ implements ApplicationFeatureRepository {
         initializeIfRequired();
         switch (featureId.getSort()) {
         case NAMESPACE:
-            return findPackage(featureId);
+            return findNamespace(featureId);
         case TYPE:
-            return findClass(featureId);
+            return findLogicalType(featureId);
         case MEMBER:
             return findMember(featureId);
         }
@@ -385,13 +385,13 @@ implements ApplicationFeatureRepository {
     }
 
 
-    public ApplicationFeature findPackage(final ApplicationFeatureId featureId) {
+    public ApplicationFeature findNamespace(final ApplicationFeatureId featureId) {
         initializeIfRequired();
         return packageFeatures.get(featureId);
     }
 
 
-    public ApplicationFeature findClass(final ApplicationFeatureId featureId) {
+    public ApplicationFeature findLogicalType(final ApplicationFeatureId featureId) {
         initializeIfRequired();
         return classFeatures.get(featureId);
     }
@@ -464,36 +464,39 @@ implements ApplicationFeatureRepository {
         return featureIdentifiersByName;
     }
     
-    // -- packageNames, packageNamesContainingClasses, classNamesContainedIn, memberNamesOf
+    // -- namespaceNames, packageNamesContainingClasses, classNamesContainedIn, memberNamesOf
     
     @Override
-    public SortedSet<String> packageNames() {
+    public SortedSet<String> namespaceNames() {
         initializeIfRequired();
         return stream(allFeatures(ApplicationFeatureSort.NAMESPACE))
                 .map(ApplicationFeature.Functions.GET_FQN)
                 .collect(_Sets.toUnmodifiableSorted());
     }
 
-    @Override
-    public SortedSet<String> packageNamesContainingClasses(final ApplicationMemberSort memberSort) {
-        initializeIfRequired();
-        final Collection<ApplicationFeature> packages = allFeatures(ApplicationFeatureSort.NAMESPACE);
+//    @Override
+//    public SortedSet<String> namespaceNamesContainingSort(final ApplicationMemberSort memberSort) {
+//        initializeIfRequired();
+//        final Collection<ApplicationFeature> packages = allFeatures(ApplicationFeatureSort.NAMESPACE);
+//
+//        return stream(packages)
+//                .filter(ApplicationFeature.Predicates.packageContainingClasses(memberSort, this))
+//                .map(ApplicationFeature.Functions.GET_FQN)
+//                .collect(_Sets.toUnmodifiableSorted());
+//    }
 
-        return stream(packages)
-                .filter(ApplicationFeature.Predicates.packageContainingClasses(memberSort, this))
-                .map(ApplicationFeature.Functions.GET_FQN)
-                .collect(_Sets.toUnmodifiableSorted());
-    }
-
     @Override
-    public SortedSet<String> classNamesContainedIn(final String packageFqn, final ApplicationMemberSort memberSort) {
+    public SortedSet<String> classNamesContainedIn(
+            final String namespace, 
+            final ApplicationMemberSort memberSort) {
+        
         initializeIfRequired();
-        final ApplicationFeatureId packageId = ApplicationFeatureId.newNamespace(packageFqn);
-        final ApplicationFeature pkg = findPackage(packageId);
-        if (pkg == null) {
+        final ApplicationFeatureId namespaceId = ApplicationFeatureId.newNamespace(namespace);
+        final ApplicationFeature namespaceFeat = findNamespace(namespaceId);
+        if (namespaceFeat == null) {
             return Collections.emptySortedSet();
         }
-        final SortedSet<ApplicationFeatureId> contents = pkg.getContents();
+        final SortedSet<ApplicationFeatureId> contents = namespaceFeat.getContents();
         return contents.stream()
                 .filter(_Predicates.isLogicalTypeContaining(memberSort, this))
                 .map(ApplicationFeatureId::getTypeSimpleName)
@@ -504,7 +507,7 @@ implements ApplicationFeatureRepository {
     public SortedSet<String> classNamesRecursivelyContainedIn(final String packageFqn) {
         initializeIfRequired();
         final ApplicationFeatureId packageId = ApplicationFeatureId.newNamespace(packageFqn);
-        final ApplicationFeature pkg = findPackage(packageId);
+        final ApplicationFeature pkg = findNamespace(packageId);
         if (pkg == null) {
             return Collections.emptySortedSet();
         }
@@ -522,7 +525,7 @@ implements ApplicationFeatureRepository {
             final ApplicationMemberSort memberSort) {
         initializeIfRequired();
         final ApplicationFeatureId classId = ApplicationFeatureId.newType(packageFqn + "." + className);
-        final ApplicationFeature cls = findClass(classId);
+        final ApplicationFeature cls = findLogicalType(classId);
         if (cls == null) {
             return Collections.emptySortedSet();
         }
