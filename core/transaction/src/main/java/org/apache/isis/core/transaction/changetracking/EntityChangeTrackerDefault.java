@@ -20,6 +20,7 @@ package org.apache.isis.core.transaction.changetracking;
 
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.LongAdder;
 import java.util.function.Function;
 import java.util.stream.Stream;
@@ -162,6 +163,7 @@ implements
         }
 
         entityChangeEventCount.increment();
+        enableCommandPublishing();
 
         if(!EntityChangePublishingFacet.isPublishingEnabled(adapter.getSpecification())) {
             return false; // ignore entities that are not enabled for entity change publishing
@@ -180,10 +182,9 @@ implements
         whilePublishing();
         postPublishing();
     }
-
+    
     private void whilePublishing() {
         log.debug("about to publish entity changes");
-        prepareCommandPublishing();
         entityPropertyChangePublisher.publishChangedProperties(this);
         entityChangesPublisher.publishChangingEntities(this);
     }
@@ -197,11 +198,12 @@ implements
         numberEntitiesLoaded.reset();
     }
 
-    private void prepareCommandPublishing() {
-        val command = currentInteraction().getCommand();
-        command.updater().setSystemStateChanged(
-                command.isSystemStateChanged()
-                || entityChangeEventCount.longValue() > 0L);
+    private void enableCommandPublishing() {
+        val alreadySet = persitentChangesEncountered.getAndSet(true);
+        if(!alreadySet) {
+            val command = currentInteraction().getCommand();
+            command.updater().setSystemStateChanged(true);
+        }
     }
 
     @Override
@@ -376,6 +378,7 @@ implements
 
     private final LongAdder numberEntitiesLoaded = new LongAdder();
     private final LongAdder entityChangeEventCount = new LongAdder();
+    private final AtomicBoolean persitentChangesEncountered = new AtomicBoolean();
 
     //  -- HELPER
 
