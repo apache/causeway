@@ -18,7 +18,9 @@
  */
 package org.apache.isis.applib.services.appfeat;
 
+import java.util.Collections;
 import java.util.Optional;
+import java.util.OptionalInt;
 import java.util.SortedSet;
 
 import org.apache.isis.applib.annotation.SemanticsOf;
@@ -36,11 +38,60 @@ public interface ApplicationFeature {
     }
 
     /**
-     * Optionally the member sort, based on whether this feature is a member.
+     * Returns optionally the member sort, based on whether this feature is of sort 
+     * {@link ApplicationFeatureSort#MEMBER}.
      */
     Optional<ApplicationMemberSort> getMemberSort();
     
-    SortedSet<ApplicationFeatureId> membersOfSort(ApplicationMemberSort memberSort);
+    default SortedSet<ApplicationFeatureId> getMembersOfSort(final ApplicationMemberSort memberSort) {
+        switch (memberSort) {
+        case PROPERTY:
+            return getProperties();
+        case COLLECTION:
+            return getCollections();
+        case ACTION:
+            return getActions();
+        default:
+            return Collections.emptySortedSet();
+        }
+    }
+    
+    /**
+     * Returns optionally the action's return type, based on
+     * whether this feature is of sorts
+     * {@link ApplicationFeatureSort#MEMBER member} and 
+     * {@link ApplicationMemberSort#ACTION action}.
+     */
+    Optional<Class<?>> getActionReturnType();
+    
+    /**
+     * Returns optionally the action's semantics, based on
+     * whether this feature is of sorts
+     * {@link ApplicationFeatureSort#MEMBER member} and 
+     * {@link ApplicationMemberSort#ACTION action}.
+     */
+    Optional<SemanticsOf> getActionSemantics();
+
+    /** 
+     * @return {@code false} when not a property or collection 
+     */
+    boolean isPropertyOrCollectionDerived();
+
+    /**
+     * Returns optionally the property's semantics, based on
+     * whether this feature is of sorts
+     * {@link ApplicationFeatureSort#MEMBER member} and 
+     * {@link ApplicationMemberSort#PROPERTY property}.
+     */
+    OptionalInt getPropertyTypicalLength();
+
+    /**
+     * Returns optionally the property's max-length constraint, based on
+     * whether this feature is of sorts
+     * {@link ApplicationFeatureSort#MEMBER member} and 
+     * {@link ApplicationMemberSort#PROPERTY property}.
+     */
+    OptionalInt getPropertyMaxLength();
     
     SortedSet<ApplicationFeatureId> getContents();
 
@@ -49,17 +100,5 @@ public interface ApplicationFeature {
     SortedSet<ApplicationFeatureId> getCollections();
 
     SortedSet<ApplicationFeatureId> getActions();
-
-    // -- TODO probably non formal API, only used by secman ...
-
-    String getReturnTypeName();
-
-    SemanticsOf getActionSemantics();
-
-    Boolean getDerived();
-
-    Integer getPropertyTypicalLength();
-
-    Integer getPropertyMaxLength();
     
 }

@@ -23,12 +23,15 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.OptionalInt;
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.SortedSet;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
+import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -63,6 +66,7 @@ import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 import static org.apache.isis.commons.internal.base._NullSafe.stream;
 
+import lombok.NonNull;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
@@ -294,21 +298,21 @@ implements ApplicationFeatureRepository {
     private void newMember(
             final ApplicationFeatureId classFeatureId,
             final String memberId,
-            final ApplicationMemberSort memberSort,
-            final Class<?> returnType,
+            final @NonNull ApplicationMemberSort memberSort,
+            final @Nullable Class<?> returnType,
             final Boolean derived,
-            final Integer maxLength, final Integer typicalLength,
-            final SemanticsOf actionSemantics) {
+            final @Nullable Integer maxLength, final @Nullable Integer typicalLength,
+            final @Nullable SemanticsOf actionSemantics) {
         final ApplicationFeatureId featureId = ApplicationFeatureId.newMember(classFeatureId.getFullyQualifiedName(), memberId);
 
         final ApplicationFeatureDefault memberFeature = (ApplicationFeatureDefault)newFeature(featureId);
-        memberFeature.setMemberSort(memberSort);
+        memberFeature.setMemberSort(Optional.of(memberSort));
 
-        memberFeature.setReturnTypeName(returnType != null ? returnType.getSimpleName() : null);
-        memberFeature.setDerived(derived);
-        memberFeature.setPropertyMaxLength(maxLength);
-        memberFeature.setPropertyTypicalLength(typicalLength);
-        memberFeature.setActionSemantics(actionSemantics);
+        memberFeature.setActionReturnType(Optional.ofNullable(returnType));
+        memberFeature.setActionSemantics(Optional.ofNullable(actionSemantics));
+        memberFeature.setPropertyOrCollectionDerived(Boolean.TRUE.equals(derived));
+        memberFeature.setPropertyMaxLength(maxLength!=null ? OptionalInt.of(maxLength) : OptionalInt.empty());
+        memberFeature.setPropertyTypicalLength(typicalLength!=null ? OptionalInt.of(typicalLength) : OptionalInt.empty());
 
         memberFeatures.put(featureId, memberFeature);
 
@@ -516,7 +520,7 @@ implements ApplicationFeatureRepository {
         if (cls == null) {
             return Collections.emptySortedSet();
         }
-        final SortedSet<ApplicationFeatureId> featureIds = cls.membersOfSort(memberSort);
+        final SortedSet<ApplicationFeatureId> featureIds = cls.getMembersOfSort(memberSort);
         return featureIds.stream()
                 .map(ApplicationFeatureId::getMemberName)
                 .collect(_Sets.toUnmodifiableSorted());

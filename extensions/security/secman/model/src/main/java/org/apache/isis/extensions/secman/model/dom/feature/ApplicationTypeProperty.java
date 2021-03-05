@@ -25,6 +25,8 @@ import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
 
+import lombok.val;
+
 @DomainObject(
         objectType = "isis.ext.secman.ApplicationClassProperty"
         )
@@ -57,7 +59,9 @@ public class ApplicationTypeProperty extends ApplicationTypeMember {
             )
     @MemberOrder(name="Data Type", sequence = "2.6")
     public String getReturnType() {
-        return getFeature().getReturnTypeName();
+        return getFeature().getActionReturnType()
+                .map(Class::getSimpleName)
+                .orElse("<none>");
     }
 
 
@@ -70,7 +74,7 @@ public class ApplicationTypeProperty extends ApplicationTypeMember {
             )
     @MemberOrder(name="Detail", sequence = "2.7")
     public boolean isDerived() {
-        return Boolean.TRUE.equals(getFeature().getDerived());
+        return getFeature().isPropertyOrCollectionDerived();
     }
 
 
@@ -84,10 +88,16 @@ public class ApplicationTypeProperty extends ApplicationTypeMember {
             )
     @MemberOrder(name="Detail", sequence = "2.8")
     public Integer getMaxLength() {
-        return getFeature().getPropertyMaxLength();
+        val maxLen = getFeature().getPropertyMaxLength();
+        return maxLen.isPresent() 
+                ? maxLen.getAsInt()
+                : null; // unexpected code path, as this case should be hidden 
     }
 
     public boolean hideMaxLength() {
+        if(!getFeature().getPropertyMaxLength().isPresent()) {
+            return true;
+        }
         return !String.class.getSimpleName().equals(getReturnType());
     }
 
@@ -103,10 +113,16 @@ public class ApplicationTypeProperty extends ApplicationTypeMember {
             )
     @MemberOrder(name="Detail", sequence = "2.9")
     public Integer getTypicalLength() {
-        return getFeature().getPropertyTypicalLength();
+        val maxLen = getFeature().getPropertyTypicalLength();
+        return maxLen.isPresent() 
+                ? maxLen.getAsInt()
+                : null; // unexpected code path, as this case should be hidden 
     }
 
     public boolean hideTypicalLength() {
+        if(!getFeature().getPropertyTypicalLength().isPresent()) {
+            return true;
+        }
         return !String.class.getSimpleName().equals(getReturnType());
     }
 

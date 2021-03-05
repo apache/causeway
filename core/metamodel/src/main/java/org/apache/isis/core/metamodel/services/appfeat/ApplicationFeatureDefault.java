@@ -18,9 +18,9 @@
  */
 package org.apache.isis.core.metamodel.services.appfeat;
 
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.Optional;
+import java.util.OptionalInt;
 import java.util.SortedSet;
 
 import org.apache.isis.applib.annotation.SemanticsOf;
@@ -35,6 +35,7 @@ import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.applib.util.ToString;
 import org.apache.isis.commons.internal.collections._Sets;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
@@ -51,120 +52,69 @@ import lombok.Setter;
 @Value
 public class ApplicationFeatureDefault 
 implements 
-    ApplicationFeature,
-    Comparable<ApplicationFeature> {
+ApplicationFeature,
+Comparable<ApplicationFeature> {
 
     // -- CONSTRUCTORS
-    
-    public ApplicationFeatureDefault(final ApplicationFeatureId featureId) {
+
+    public ApplicationFeatureDefault(final @NonNull ApplicationFeatureId featureId) {
         this.featureId = featureId;
     }
-    
+
     // -- FIELDS
 
     @Getter(onMethod_ = {@Override})
-    private final ApplicationFeatureId featureId;
+    private final @NonNull ApplicationFeatureId featureId;
 
     @Getter(onMethod_ = {@Override})
-    private Optional<ApplicationMemberSort> memberSort = Optional.empty();
-    
-    void setMemberSort(final @NonNull ApplicationMemberSort memberSort) {
-        this.memberSort = Optional.of(memberSort);
-    }
+    @Setter(AccessLevel.PACKAGE)
+    private @NonNull Optional<ApplicationMemberSort> memberSort = Optional.empty();
 
-    /**
-     * Only for {@link ApplicationMemberSort#ACTION action}s.
-     */
-    @Getter @Setter
-    private String returnTypeName;
+    @Getter(onMethod_ = {@Override})
+    @Setter(AccessLevel.PACKAGE)
+    private @NonNull Optional<Class<?>> actionReturnType = Optional.empty();
 
-    /**
-     * Only for {@link ApplicationMemberSort#PROPERTY} and {@link ApplicationMemberSort#COLLECTION}
-     */
-    @Getter @Setter
-    private Boolean derived;
+    @Getter(onMethod_ = {@Override})
+    @Setter(AccessLevel.PACKAGE)
+    private @NonNull Optional<SemanticsOf> actionSemantics = Optional.empty();
 
-    /**
-     * Only for {@link ApplicationMemberSort#ACTION action}s.
-     */
-    @Getter @Setter
-    private Integer propertyMaxLength;
-    
-    /**
-     * Only for {@link ApplicationMemberSort#ACTION action}s.
-     */
-    @Getter @Setter
-    private Integer propertyTypicalLength;
+    @Getter(onMethod_ = {@Override})
+    @Setter(AccessLevel.PACKAGE)
+    private boolean propertyOrCollectionDerived = false;
 
-    /**
-     * Only for {@link ApplicationMemberSort#ACTION action}s.
-     */
-    @Getter @Setter
-    private SemanticsOf actionSemantics;
+    @Getter(onMethod_ = {@Override})
+    @Setter(AccessLevel.PACKAGE)
+    private @NonNull OptionalInt propertyMaxLength = OptionalInt.empty();
 
-    // -- NAMESPACE
-    
+    @Getter(onMethod_ = {@Override}) 
+    @Setter(AccessLevel.PACKAGE)
+    private @NonNull OptionalInt propertyTypicalLength = OptionalInt.empty();
+
+    @Getter(onMethod_ = {@Override})
     private final SortedSet<ApplicationFeatureId> contents = _Sets.newTreeSet();
 
-    @Override
-    public SortedSet<ApplicationFeatureId> getContents() {
-        return contents;
-    }
+    @Getter(onMethod_ = {@Override})
+    private final SortedSet<ApplicationFeatureId> properties = _Sets.newTreeSet();
 
+    @Getter(onMethod_ = {@Override})
+    private final SortedSet<ApplicationFeatureId> collections = _Sets.newTreeSet();
+
+    @Getter(onMethod_ = {@Override})
+    private final SortedSet<ApplicationFeatureId> actions = _Sets.newTreeSet();
+
+    // -- PACKAGE PRIVATE ACCESS
+    
     void addToContents(final ApplicationFeatureId contentId) {
         _Asserts.ensureNamespace(this.getFeatureId());
         _Asserts.ensureNamespaceOrType(contentId);
         this.contents.add(contentId);
-    }
-
-    // -- PROPERTIES
-    
-    private final SortedSet<ApplicationFeatureId> properties = _Sets.newTreeSet();
-
-    @Override
-    public SortedSet<ApplicationFeatureId> getProperties() {
-        return properties;
-    }
-
-    // -- COLLECTIONS
-    
-    private final SortedSet<ApplicationFeatureId> collections = _Sets.newTreeSet();
-    
-    @Override
-    public SortedSet<ApplicationFeatureId> getCollections() {
-        return collections;
-    }
-
-    // -- ACTIONS
-    
-    private final SortedSet<ApplicationFeatureId> actions = _Sets.newTreeSet();
-    
-    @Override
-    public SortedSet<ApplicationFeatureId> getActions() {
-        return actions;
     }
     
     void addToMembers(final ApplicationFeatureId memberId, final ApplicationMemberSort memberSort) {
         _Asserts.ensureType(this.getFeatureId());
         _Asserts.ensureMember(memberId);
 
-        membersOfSort(memberSort).add(memberId);
-    }
-    
-    // -- MEMBERS OF SORT
-    
-    @Override
-    public SortedSet<ApplicationFeatureId> membersOfSort(final ApplicationMemberSort memberSort) {
-        switch (memberSort) {
-        case PROPERTY:
-            return properties;
-        case COLLECTION:
-            return collections;
-        case ACTION:
-            return actions;
-        default:
-            return Collections.emptySortedSet();
-        }
+        getMembersOfSort(memberSort).add(memberId);
     }
 
     // -- OBJECT CONTRACT
@@ -200,8 +150,6 @@ implements
     public String toString() {
         return toString.toString(this);
     }
-    
-
 
 
 }

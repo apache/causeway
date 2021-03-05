@@ -41,7 +41,7 @@ final class _Predicates {
                     return false;
                 }
                 return memberSort == null 
-                        || !feature.membersOfSort(memberSort).isEmpty();
+                        || !feature.getMembersOfSort(memberSort).isEmpty();
         };
     }
 

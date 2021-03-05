@@ -58,7 +58,9 @@ public class ApplicationTypeCollection extends ApplicationTypeMember {
             )
     @MemberOrder(name="Data Type", sequence = "2.6")
     public String getElementType() {
-        return getFeature().getReturnTypeName();
+        return getFeature().getActionReturnType()
+                .map(Class::getSimpleName)
+                .orElse("<none>");
     }
 
 
@@ -71,7 +73,7 @@ public class ApplicationTypeCollection extends ApplicationTypeMember {
             )
     @MemberOrder(name="Detail", sequence = "2.7")
     public boolean isDerived() {
-        return Boolean.TRUE.equals(getFeature().getDerived());
+        return getFeature().isPropertyOrCollectionDerived();
     }
 
 

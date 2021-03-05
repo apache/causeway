@@ -37,8 +37,6 @@ public class ApplicationTypeAction extends ApplicationTypeMember {
 
     public static abstract class ActionDomainEvent extends ApplicationTypeMember.ActionDomainEvent<ApplicationTypeAction> {}
 
-
-
     // -- constructors
 
     public ApplicationTypeAction() {
@@ -58,7 +56,9 @@ public class ApplicationTypeAction extends ApplicationTypeMember {
             )
     @MemberOrder(name="Data Type", sequence = "2.6")
     public String getReturnType() {
-        return getFeature().getReturnTypeName();
+        return getFeature().getActionReturnType()
+                .map(Class::getSimpleName)
+                .orElse("<none>");
     }
 
     // -- actionSemantics (property)
@@ -69,7 +69,8 @@ public class ApplicationTypeAction extends ApplicationTypeMember {
             )
     @MemberOrder(name="Detail", sequence = "2.8")
     public SemanticsOf getActionSemantics() {
-        return getFeature().getActionSemantics();
+        return getFeature().getActionSemantics()
+                .orElse(null);
     }
 
 
