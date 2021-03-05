@@ -19,6 +19,7 @@
 package org.apache.isis.extensions.secman.model.dom.feature;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.SortedSet;
 import java.util.function.Function;
 
@@ -86,10 +87,14 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
         case TYPE:
             return ApplicationType.class;
         case MEMBER:
-            final ApplicationFeature feature = applicationFeatureRepository.findFeature(featureId);
+            
+            val memberSort = 
+            Optional.ofNullable(applicationFeatureRepository.findFeature(featureId))
+                .flatMap(ApplicationFeature::getMemberSort)
+                .orElse(null);
 
-            if(feature != null) {
-                switch(feature.getMemberSort()) {
+            if(memberSort != null) {
+                switch(memberSort) {
                 case PROPERTY:
                     return ApplicationTypeProperty.class;
                 case COLLECTION:

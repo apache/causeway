@@ -18,6 +18,7 @@
  */
 package org.apache.isis.applib.services.appfeat;
 
+import java.util.Optional;
 import java.util.SortedSet;
 
 import org.apache.isis.applib.annotation.SemanticsOf;
@@ -34,7 +35,10 @@ public interface ApplicationFeature {
         return getFeatureId().getFullyQualifiedName();
     }
 
-    ApplicationMemberSort getMemberSort();
+    /**
+     * Optionally the member sort, based on whether this feature is a member.
+     */
+    Optional<ApplicationMemberSort> getMemberSort();
     
     SortedSet<ApplicationFeatureId> membersOfSort(ApplicationMemberSort memberSort);
     

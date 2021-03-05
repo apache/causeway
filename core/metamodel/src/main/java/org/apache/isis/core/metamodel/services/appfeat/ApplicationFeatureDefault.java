@@ -18,7 +18,9 @@
  */
 package org.apache.isis.core.metamodel.services.appfeat;
 
+import java.util.Collections;
 import java.util.Comparator;
+import java.util.Optional;
 import java.util.SortedSet;
 
 import org.apache.isis.applib.annotation.SemanticsOf;
@@ -26,7 +28,6 @@ import org.apache.isis.applib.annotation.Value;
 import org.apache.isis.applib.services.appfeat.ApplicationFeature;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureRepository;
-import org.apache.isis.applib.services.appfeat.ApplicationFeatureSort;
 import org.apache.isis.applib.services.appfeat.ApplicationMemberSort;
 import org.apache.isis.applib.util.Equality;
 import org.apache.isis.applib.util.Hashing;
@@ -35,6 +36,7 @@ import org.apache.isis.applib.util.ToString;
 import org.apache.isis.commons.internal.collections._Sets;
 
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.Setter;
 
 /**
@@ -57,15 +59,18 @@ implements
     public ApplicationFeatureDefault(final ApplicationFeatureId featureId) {
         this.featureId = featureId;
     }
+    
+    // -- FIELDS
 
-    @Getter
+    @Getter(onMethod_ = {@Override})
     private final ApplicationFeatureId featureId;
 
-    /**
-     * Only for {@link ApplicationFeatureSort#MEMBER member}s.
-     */
-    @Getter @Setter
-    private ApplicationMemberSort memberSort;
+    @Getter(onMethod_ = {@Override})
+    private Optional<ApplicationMemberSort> memberSort = Optional.empty();
+    
+    void setMemberSort(final @NonNull ApplicationMemberSort memberSort) {
+        this.memberSort = Optional.of(memberSort);
+    }
 
     /**
      * Only for {@link ApplicationMemberSort#ACTION action}s.
@@ -97,66 +102,68 @@ implements
     @Getter @Setter
     private SemanticsOf actionSemantics;
 
-    // -- packages: Contents
+    // -- NAMESPACE
+    
     private final SortedSet<ApplicationFeatureId> contents = _Sets.newTreeSet();
 
     @Override
     public SortedSet<ApplicationFeatureId> getContents() {
-        _Asserts.ensureNamespace(this.getFeatureId());
         return contents;
     }
 
-    public void addToContents(final ApplicationFeatureId contentId) {
+    void addToContents(final ApplicationFeatureId contentId) {
         _Asserts.ensureNamespace(this.getFeatureId());
         _Asserts.ensureNamespaceOrType(contentId);
         this.contents.add(contentId);
     }
 
-
-    // -- classes: Properties, Collections, Actions
+    // -- PROPERTIES
+    
     private final SortedSet<ApplicationFeatureId> properties = _Sets.newTreeSet();
 
     @Override
     public SortedSet<ApplicationFeatureId> getProperties() {
-        _Asserts.ensureType(this.getFeatureId());
         return properties;
     }
 
-
+    // -- COLLECTIONS
+    
     private final SortedSet<ApplicationFeatureId> collections = _Sets.newTreeSet();
     
     @Override
     public SortedSet<ApplicationFeatureId> getCollections() {
-        _Asserts.ensureType(this.getFeatureId());
         return collections;
     }
 
-
+    // -- ACTIONS
+    
     private final SortedSet<ApplicationFeatureId> actions = _Sets.newTreeSet();
     
     @Override
     public SortedSet<ApplicationFeatureId> getActions() {
-        _Asserts.ensureType(this.getFeatureId());
         return actions;
     }
     
-    public void addToMembers(final ApplicationFeatureId memberId, final ApplicationMemberSort memberSort) {
+    void addToMembers(final ApplicationFeatureId memberId, final ApplicationMemberSort memberSort) {
         _Asserts.ensureType(this.getFeatureId());
         _Asserts.ensureMember(memberId);
 
         membersOfSort(memberSort).add(memberId);
     }
     
+    // -- MEMBERS OF SORT
+    
     @Override
     public SortedSet<ApplicationFeatureId> membersOfSort(final ApplicationMemberSort memberSort) {
-        _Asserts.ensureType(this.getFeatureId());
         switch (memberSort) {
         case PROPERTY:
             return properties;
         case COLLECTION:
             return collections;
-        default: // case ACTION:
+        case ACTION:
             return actions;
+        default:
+            return Collections.emptySortedSet();
         }
     }
 

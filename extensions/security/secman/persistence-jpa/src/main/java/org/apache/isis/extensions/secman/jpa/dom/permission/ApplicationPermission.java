@@ -207,7 +207,7 @@ implements
     @Programmatic
     private Optional<ApplicationMemberSort> getMemberSort() {
         return getFeature()
-                .map(ApplicationFeature::getMemberSort);
+                .flatMap(ApplicationFeature::getMemberSort);
     }
 
 
