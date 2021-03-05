@@ -26,6 +26,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.applib.services.appfeat.ApplicationFeature;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
 
 @Service
@@ -36,7 +37,7 @@ import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
 public class ApplicationFeatureFactory {
 
     public ApplicationFeature newApplicationFeature(ApplicationFeatureId featId) {
-        return new ApplicationFeature(featId); // value type
+        return new ApplicationFeatureDefault(featId); // value type
     }
 
 }

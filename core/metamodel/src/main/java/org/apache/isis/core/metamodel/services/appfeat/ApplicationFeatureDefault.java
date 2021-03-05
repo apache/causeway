@@ -23,6 +23,7 @@ import java.util.SortedSet;
 
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Value;
+import org.apache.isis.applib.services.appfeat.ApplicationFeature;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureRepository;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureSort;
@@ -46,18 +47,14 @@ import lombok.Setter;
  * </p>
  */
 @Value
-public class ApplicationFeature implements Comparable<ApplicationFeature> {
-
-    // -- CONSTANTS
-
-    // using same value for all to neaten up rendering
-    public static final int TYPICAL_LENGTH_PKG_FQN = 50;
-    public static final int TYPICAL_LENGTH_CLS_NAME = 50;
-    public static final int TYPICAL_LENGTH_MEMBER_NAME = 50;
+public class ApplicationFeatureDefault 
+implements 
+    ApplicationFeature,
+    Comparable<ApplicationFeature> {
 
     // -- CONSTRUCTORS
     
-    public ApplicationFeature(final ApplicationFeatureId featureId) {
+    public ApplicationFeatureDefault(final ApplicationFeatureId featureId) {
         this.featureId = featureId;
     }
 
@@ -103,6 +100,7 @@ public class ApplicationFeature implements Comparable<ApplicationFeature> {
     // -- packages: Contents
     private final SortedSet<ApplicationFeatureId> contents = _Sets.newTreeSet();
 
+    @Override
     public SortedSet<ApplicationFeatureId> getContents() {
         _Asserts.ensureNamespace(this.getFeatureId());
         return contents;
@@ -146,6 +144,7 @@ public class ApplicationFeature implements Comparable<ApplicationFeature> {
         membersOfSort(memberSort).add(memberId);
     }
     
+    @Override
     public SortedSet<ApplicationFeatureId> membersOfSort(final ApplicationMemberSort memberSort) {
         _Asserts.ensureType(this.getFeatureId());
         switch (memberSort) {
@@ -156,10 +155,6 @@ public class ApplicationFeature implements Comparable<ApplicationFeature> {
         default: // case ACTION:
             return actions;
         }
-    }
-
-    public String getFullyQualifiedName() {
-        return getFeatureId().getFullyQualifiedName();
     }
 
     // -- OBJECT CONTRACT

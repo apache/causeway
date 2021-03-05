@@ -37,6 +37,7 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.applib.services.appfeat.ApplicationFeature;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureRepository;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureSort;
@@ -213,7 +214,7 @@ implements ApplicationFeatureRepository {
 
     ApplicationFeatureId addClassParent(final ApplicationFeatureId classFeatureId) {
         final ApplicationFeatureId parentPackageId = classFeatureId.getParentNamespaceFeatureId();
-        final ApplicationFeature parentPackage = findPackageElseCreate(parentPackageId);
+        final ApplicationFeatureDefault parentPackage = (ApplicationFeatureDefault)findPackageElseCreate(parentPackageId);
 
         parentPackage.addToContents(classFeatureId);
         return parentPackageId;
@@ -225,7 +226,7 @@ implements ApplicationFeatureRepository {
             return;
         }
 
-        final ApplicationFeature parentPackage = findPackageElseCreate(parentPackageId);
+        final ApplicationFeatureDefault parentPackage = (ApplicationFeatureDefault)findPackageElseCreate(parentPackageId);
 
         // add this feature as part of the contents of its parent
         parentPackage.addToContents(classOrPackageId);
@@ -300,7 +301,7 @@ implements ApplicationFeatureRepository {
             final SemanticsOf actionSemantics) {
         final ApplicationFeatureId featureId = ApplicationFeatureId.newMember(classFeatureId.getFullyQualifiedName(), memberId);
 
-        final ApplicationFeature memberFeature = newFeature(featureId);
+        final ApplicationFeatureDefault memberFeature = (ApplicationFeatureDefault)newFeature(featureId);
         memberFeature.setMemberSort(memberSort);
 
         memberFeature.setReturnTypeName(returnType != null ? returnType.getSimpleName() : null);
@@ -314,7 +315,7 @@ implements ApplicationFeatureRepository {
         // also cache per memberSort
         featuresMapFor(memberSort).put(featureId, memberFeature);
 
-        final ApplicationFeature classFeature = findLogicalType(classFeatureId);
+        final ApplicationFeatureDefault classFeature = (ApplicationFeatureDefault)findLogicalType(classFeatureId);
         classFeature.addToMembers(featureId, memberSort);
     }
 
@@ -470,17 +471,6 @@ implements ApplicationFeatureRepository {
                 .map(ApplicationFeature::getFullyQualifiedName)
                 .collect(_Sets.toUnmodifiableSorted());
     }
-
-//    @Override
-//    public SortedSet<String> namespaceNamesContainingSort(final ApplicationMemberSort memberSort) {
-//        initializeIfRequired();
-//        final Collection<ApplicationFeature> packages = allFeatures(ApplicationFeatureSort.NAMESPACE);
-//
-//        return stream(packages)
-//                .filter(ApplicationFeature.Predicates.packageContainingClasses(memberSort, this))
-//                .map(ApplicationFeature.Functions.GET_FQN)
-//                .collect(_Sets.toUnmodifiableSorted());
-//    }
 
     @Override
     public SortedSet<String> classNamesContainedIn(

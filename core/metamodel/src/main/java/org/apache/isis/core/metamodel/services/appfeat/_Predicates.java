@@ -21,6 +21,7 @@ package org.apache.isis.core.metamodel.services.appfeat;
 import java.util.Objects;
 import java.util.function.Predicate;
 
+import org.apache.isis.applib.services.appfeat.ApplicationFeature;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureSort;
 import org.apache.isis.applib.services.appfeat.ApplicationMemberSort;

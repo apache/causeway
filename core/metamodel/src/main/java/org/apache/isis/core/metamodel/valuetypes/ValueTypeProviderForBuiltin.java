@@ -30,7 +30,7 @@ import org.apache.isis.applib.graph.SimpleEdge;
 import org.apache.isis.applib.graph.tree.LazyTreeNode;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeature;
+import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureDefault;
 import org.apache.isis.schema.common.v2.ValueType;
 
 @Component
@@ -48,7 +48,7 @@ public class ValueTypeProviderForBuiltin implements ValueTypeProvider {
                     ValueTypeDefinition.of(SimpleEdge.class, ValueType.STRING),
                     ValueTypeDefinition.of(LazyTreeNode.class, ValueType.STRING),
 
-                    ValueTypeDefinition.of(ApplicationFeature.class, ValueType.STRING)
+                    ValueTypeDefinition.of(ApplicationFeatureDefault.class, ValueType.STRING)
 
                 );
     }
