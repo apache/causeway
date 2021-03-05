@@ -4,7 +4,6 @@ include::core:commons:partial$module-nav.adoc[]
 include::core:codegen-bytebuddy:partial$module-nav.adoc[]
 include::core:metamodel:partial$module-nav.adoc[]
 include::core:runtime:partial$module-nav.adoc[]
-include::core:runtime-services:partial$module-nav.adoc[]
 include::core:webapp:partial$module-nav.adoc[]
 include::core:regressiontests:partial$module-nav.adoc[]
 

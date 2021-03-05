@@ -21,36 +21,33 @@ equivalent
 
 |created()
 |called when an object has just been created using xref:refguide:applib:index/services/factory/FactoryService.adoc[FactoryService#create(..)] or xref:refguide:applib:index/services/repository/RepositoryService.adoc[RepositoryService#detachedEntity(...)]
-|xref:applib-classes:events.adoc#ObjectCreatedEvent[ObjectCreatedEvent]
+|xref:refguide:applib:index/events/lifecycle/ObjectCreatedEvent.adoc[ObjectCreatedEvent]
 
 |loaded()
 |called when a (persistent) object has just been loaded from the object store.
-|xref:applib-classes:events.adoc#ObjectLoadedEvent[ObjectLoadedEvent]
+|xref:refguide:applib:index/events/lifecycle/ObjectLoadedEvent.adoc[ObjectLoadedEvent]
 
 |persisted()
 |called when object has just been persisted from the object store.
-|xref:applib-classes:events.adoc#ObjectPersistedEvent[ObjectPersistedEvent]
+|xref:refguide:applib:index/events/lifecycle/ObjectPersistedEvent.adoc[ObjectPersistedEvent]
 
 |persisting()
 |called when a (not-yet-persistent) object is just about to be persisted from the object store
-|xref:applib-classes:events.adoc#ObjectPersistingEvent[ObjectPersistingEvent]
+|xref:refguide:applib:index/events/lifecycle/ObjectPersistingEvent.adoc[ObjectPersistingEvent]
 
 |removing()
 |called when a (persistent) object is just about to be deleted from the object store
-|xref:applib-classes:events.adoc#ObjectRemovingEvent[ObjectRemovingEvent]
+|xref:refguide:applib:index/events/lifecycle/ObjectRemovingEvent.adoc[ObjectRemovingEvent]
 
 |updated()
 |called when a (persistent) object has just been updated in the object store
-|xref:applib-classes:events.adoc#ObjectUpdatedEvent[ObjectUpdatedEvent]
+|xref:refguide:applib:index/events/lifecycle/ObjectUpdatedEvent.adoc[ObjectUpdatedEvent]
 
 |updating()
 |called when a (persistent) object is just about to be updated in the object store
-|xref:applib-classes:events.adoc#ObjectUpdatingEvent[ObjectUpdatingEvent]
+|xref:refguide:applib:index/events/lifecycle/ObjectUpdatingEvent.adoc[ObjectUpdatingEvent]
 
 |===
 
-[TIP]
-====
-A more flexible/decoupled design is to implement a subscriber to the equivalent xref:applib-classes:about.adoc#lifecycle-events[lifecycle event]s.
-====
+Further discussion on using events and a subscriber (which will result in a more flexible/decoupled design) can be found xref:applib-classes:events.adoc#lifecycle-events[here].
 

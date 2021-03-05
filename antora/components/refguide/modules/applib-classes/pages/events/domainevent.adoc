@@ -11,7 +11,7 @@ They allow subscribers to change either veto the interaction, or to trigger othe
 
 
 .Domain Event Classes
-[cols="2a,2a,2a", options="header"]
+[cols="2m,2m,2a", options="header"]
 |===
 
 |API

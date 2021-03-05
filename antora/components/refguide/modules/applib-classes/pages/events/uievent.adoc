@@ -13,17 +13,17 @@ Note that if the domain object defines its own layout preferences (for example, 
 
 
 .UI Event Classes
-[cols="2a,2a,2a,2a", options="header"]
+[cols="2m,2a,2a,2m", options="header"]
 |===
 
 |API
-|Event class defined by
-|Raised when
+|Event class defined by xref:refguide:applib:index/annotation/DomainObjectLayout.adoc[@DomainObjectLayout]
+|Published when
 |Overridden by
 
 
 |xref:refguide:applib:index/events/ui/TitleUiEvent.adoc[TitleUiEvent]
-|xref:refguide:applib:index/annotation/DomainObjectLayout.adoc#titleUiEvent[@DomainObjectLayout#titleUiEvent()]
+|xref:refguide:applib:index/annotation/DomainObjectLayout.adoc#titleUiEvent[titleUiEvent()]
 |\... rendering the title for a domain object.
 |xref:refguide:applib-methods:reserved.adoc#title[title()] +
 xref:refguide:applib:index/annotation/Title.adoc[@Title]
@@ -31,18 +31,18 @@ xref:refguide:applib:index/annotation/Title.adoc[@Title]
 
 
 |xref:refguide:applib:index/events/ui/IconUiEvent.adoc[IconUiEvent]
-|xref:refguide:applib:index/annotation/DomainObjectLayout.adoc#iconUiEvent[@DomainObjectLayout#iconUiEvent()]
+|xref:refguide:applib:index/annotation/DomainObjectLayout.adoc#iconUiEvent[iconUiEvent()]
 |\... rendering an icon for a domain object.
 |xref:refguide:applib-methods:reserved.adoc#iconName[iconName()]
 
 
 |xref:refguide:applib:index/events/ui/CssClassUiEvent.adoc[CssClassUiEvent]
-|xref:refguide:applib:index/annotation/DomainObjectLayout.adoc#cssClassUiEvent[@DomainObjectLayout#cssClassUiEvent()]
+|xref:refguide:applib:index/annotation/DomainObjectLayout.adoc#cssClassUiEvent[cssClassUiEvent()]
 |\... obtaining a CSS class hint for a domain object.
 |xref:refguide:applib-methods:reserved.adoc#cssClass[cssClass()]
 
 |xref:refguide:applib:index/events/ui/LayoutUiEvent.adoc[LayoutUiEvent]
-|xref:refguide:applib:index/annotation/DomainObjectLayout.adoc#layoutUiEvent[@DomainObjectLayout#layoutUiEvent()]
+|xref:refguide:applib:index/annotation/DomainObjectLayout.adoc#layoutUiEvent[layoutUiEvent()]
 |\... obtain an alternative layout for a domain object.
 |xref:refguide:applib-methods:reserved.adoc#layout[layout()]
 

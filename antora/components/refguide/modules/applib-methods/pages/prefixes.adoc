@@ -14,7 +14,7 @@ Supporting methods are, therefore, each characterized by their own particular pr
 The table below lists the method prefixes that are recognized as part of Apache Isis' default programming model.
 
 .Recognized Method Prefixes
-[cols="2,1,1,1,1,1,4a",options="header"]
+[cols="2m,1,1,1,1,1,4a",options="header"]
 |===
 
 |Prefix
@@ -25,18 +25,6 @@ The table below lists the method prefixes that are recognized as part of Apache 
 |Action +
 Param
 |Description
-
-//|xref:refguide:applib-methods:prefixes.adoc#addTo[addTo...()]
-//|
-//|
-//|Y
-//|
-//|
-//|add object to a collection  +
-//
-//NOTE: Directly mutable collections are not currently supported by the xref:vw:ROOT:about.adoc[Wicket viewer].
-//
-//See also xref:refguide:applib-methods:prefixes.adoc#removeFrom[removeFrom...()]`
 
 
 |xref:refguide:applib-methods:prefixes.adoc#autoComplete[autoComplete...()]

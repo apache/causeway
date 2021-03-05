@@ -5,7 +5,7 @@
 
 
 Every object has a xref:userguide:fun:ui.adoc#object-layout[layout] .
-This may be specified using annotations such as xref:refguide:applib:index/annotation/MemberOrder.adoc[@MemberOrder], xref:refguide:applib:index/annotation/DomainObjectLayout.adoc[@DomainObjectLayout] and the like,  but it much more commonly specified using an xref:userguide:fun:ui.adoc#object-layout [XML layout file].
+This may be specified using annotations such as xref:refguide:applib:index/annotation/MemberOrder.adoc[@MemberOrder], xref:refguide:applib:index/annotation/DomainObjectLayout.adoc[@DomainObjectLayout] and the like, but it much more commonly specified using an xref:userguide:fun:ui.adoc#object-layout [XML layout file].
 
 The `layout` method allows the domain object to specify an alternate layout to its usual layout.
 
@@ -38,10 +38,3 @@ public class Customer {
 If `switchToEditMode()` action is invoked, then the UI will attempt to render the customer using a `Customer.layout.edit.xml` layout file (instead of the default `Customer.layout.xml`).
 
 
-== See also
-
-See also:
-
-* xref:refguide:applib-methods:reserved.adoc#title[title()]
-* xref:refguide:applib-methods:reserved.adoc#iconName[iconName()]
-* xref:refguide:applib-methods:reserved.adoc#cssClass[cssClass()]

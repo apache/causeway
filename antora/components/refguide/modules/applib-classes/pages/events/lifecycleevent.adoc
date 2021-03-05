@@ -12,12 +12,12 @@ One use case is to maintain an alternate data store.
 
 
 .Lifecycle Event Classes
-[cols="2a,2a,2a", options="header"]
+[cols="2m,2m,2a", options="header"]
 |===
 
 |API
-|Event class defined by
-|Raised when
+|Event class defined by xref:refguide:applib:index/annotation/DomainObject.adoc[@DomainObject]
+|Published when
 
 
 |xref:refguide:applib:index/events/lifecycle/AbstractLifecycleEvent.adoc[AbstractLifecycleEvent]
@@ -26,49 +26,42 @@ One use case is to maintain an alternate data store.
 
 
 |xref:refguide:applib:index/events/lifecycle/ObjectCreatedEvent.adoc[ObjectCreatedEvent]
-|xref:refguide:applib:index/annotation/DomainObject.adoc#createdLifecycleEvent[DomainObject +
-#createdLifecycleEvent()]
+|xref:refguide:applib:index/annotation/DomainObject.adoc#createdLifecycleEvent[createdLifecycleEvent()]
 |entity is first instantiated using  xref:refguide:applib:index/services/factory/FactoryService.adoc[FactoryService] +
 
 Also raised for view models.
 
 
 |xref:refguide:applib:index/events/lifecycle/ObjectLoadedEvent.adoc[ObjectLoadedEvent]
-|xref:refguide:applib:index/annotation/DomainObject.adoc#loadedLifecycleEvent[DomainObject +
-#loadedLifecycleEvent()]
+|xref:refguide:applib:index/annotation/DomainObject.adoc#loadedLifecycleEvent[loadedLifecycleEvent()]
 |entity is retrieved from the database.
 
 
 |xref:refguide:applib:index/events/lifecycle/ObjectPersistedEvent.adoc[ObjectPersistedEvent]
-|xref:refguide:applib:index/annotation/DomainObject.adoc#persistedLifecycleEvent[DomainObject +
-#persistedLifecycleEvent()]
+|xref:refguide:applib:index/annotation/DomainObject.adoc#persistedLifecycleEvent[persistedLifecycleEvent()]
 |entity is first saved (inserted) into the database using the xref:refguide:applib:index/services/repository/RepositoryService.adoc[RepositoryService]'s
 `#persist(...)` method.
 
 
 |xref:refguide:applib:index/events/lifecycle/ObjectPersistingEvent.adoc[ObjectPersistingEvent]
-|xref:refguide:applib:index/annotation/DomainObject.adoc#persistingLifecycleEvent[DomainObject +
-#persistingLifecycleEvent()]
+|xref:refguide:applib:index/annotation/DomainObject.adoc#persistingLifecycleEvent[persistingLifecycleEvent()]
 |entity is about to be saved (inserted) into the database using the xref:refguide:applib:index/services/repository/RepositoryService.adoc[RepositoryService]'s
 `#persist(...)` method.
 
 
 |xref:refguide:applib:index/events/lifecycle/ObjectRemovingEvent.adoc[ObjectRemovingEvent]
-|xref:refguide:applib:index/annotation/DomainObject.adoc#removingLifecycleEvent[DomainObject +
-#removingLifecycleEvent()]
+|xref:refguide:applib:index/annotation/DomainObject.adoc#removingLifecycleEvent[removingLifecycleEvent()]
 |entity is about to be deleted from the database using the xref:refguide:applib:index/services/repository/RepositoryService.adoc[RepositoryService]'s
 `#remove(...)` method.
 
 
 |xref:refguide:applib:index/events/lifecycle/ObjectUpdatedEvent.adoc[ObjectUpdatedEvent]
-|xref:refguide:applib:index/annotation/DomainObject.adoc#updatingLifecycleEvent[DomainObject +
-#updatingLifecycleEvent()]
+|xref:refguide:applib:index/annotation/DomainObject.adoc#updatingLifecycleEvent[updatingLifecycleEvent()]
 |entity has just been updated in the database.
 
 
 |xref:refguide:applib:index/events/lifecycle/ObjectUpdatingEvent.adoc[ObjectUpdatingEvent]
-|xref:refguide:applib:index/annotation/DomainObject.adoc#updatedLifecycleEvent[DomainObject +
-#updatedLifecycleEvent()]
+|xref:refguide:applib:index/annotation/DomainObject.adoc#updatedLifecycleEvent[updatedLifecycleEvent()]
 |entity is about to be updated in the database.
 
 

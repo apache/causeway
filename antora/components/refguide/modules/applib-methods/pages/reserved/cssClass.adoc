@@ -41,10 +41,3 @@ tr.done {
 }
 ----
 
-== See also
-
-See also:
-
-* xref:refguide:applib-methods:reserved.adoc#title[title()]
-* xref:refguide:applib-methods:reserved.adoc#iconName[iconName()]
-* xref:refguide:applib-methods:reserved.adoc#layout[layout()]

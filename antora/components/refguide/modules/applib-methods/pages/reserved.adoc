@@ -7,7 +7,7 @@
 The table below lists the reserved methods that are recognized as part of Apache Isis' default programming model.
 
 .Reserved Methods
-[cols="1,4a", options="header"]
+[cols="1m,4a", options="header"]
 |===
 
 |Method
@@ -16,17 +16,6 @@ The table below lists the reserved methods that are recognized as part of Apache
 |xref:refguide:applib-methods:reserved.adoc#cssClass[cssClass()]
 |Provides a CSS class for this object instance.
 In conjunction with `static/css/application-css`, can therefore provide custom styling of an object instance wherever it is rendered.
-
-//|xref:refguide:applib-methods:reserved.adoc#disable[disable(...)]
-//|Disable all or some of an object's properties
-
-//|xref:refguide:applib-methods:reserved.adoc#getId[getId()]
-//|Provides an optional unique identifier of a service.
-//
-//If not provided, the service's fully-qualified class name is used.
-
-//|xref:refguide:applib-methods:reserved.adoc#hide[hide(...)]
-//|Hide all or some of an object's properties
 
 |xref:refguide:applib-methods:reserved.adoc#iconName[iconName()]
 |Provides the name of the image to render, usually alongside the title, to represent the object.
@@ -39,19 +28,12 @@ If null or no such layout, then uses to the default layout.
 |xref:refguide:applib-methods:reserved.adoc#title[title()]
 |Provides a title for the object. +
 
-//|xref:refguide:applib-methods:reserved.adoc#validate[validate()]
-//|Validate the object's state prior to persisting.
-
 |===
 
 
 
 
 include::reserved/cssClass.adoc[leveloffset=+1]
-//include::reserved/disable.adoc[leveloffset=+1]
-//include::reserved/getId.adoc[leveloffset=+1]
-//include::reserved/hide.adoc[leveloffset=+1]
 include::reserved/iconName.adoc[leveloffset=+1]
 include::reserved/layout.adoc[leveloffset=+1]
 include::reserved/title.adoc[leveloffset=+1]
-//include::reserved/validate.adoc[leveloffset=+1]

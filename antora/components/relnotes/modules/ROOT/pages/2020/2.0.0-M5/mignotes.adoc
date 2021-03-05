@@ -105,7 +105,7 @@ javax.jdo. ...
 |===
 
 Framework functionality was removed to inspect the JDO meta-model for any schemas, such that these would be auto-created. This responsibility is now delegated to Spring.
-However, as a fallback we introduced configuration options, that allow explicit schema creation by the framework, for both JDO and JPA: 
+However, as a fallback we introduced configuration options, that allow explicit schema creation by the framework, for both JDO and JPA:
 
 [source,yaml]
 .application.yml
@@ -386,12 +386,19 @@ Permission are now matched against logical packages, logical object types or log
 SecMan database schema changed, namely the *ApplicationPermission* table! See table below.
 ====
 
-[Source,sql]
+[source,sql]
 .SecMan database migration // adapt to your schema and db vendor!
 ----
-UPDATE ApplicationPermission SET featureType='NAMESPACE' WHERE featureType like 'PACKAGE';
-UPDATE ApplicationPermission SET featureType='TYPE' WHERE featureType like 'CLASS';
-ALTER TABLE ApplicationPermission RENAME COLUMN `featureType` TO `featureSort`;
+UPDATE ApplicationPermission
+   SET featureType='NAMESPACE'
+ WHERE featureType like 'PACKAGE';
+
+UPDATE ApplicationPermission
+   SET featureType='TYPE'
+ WHERE featureType like 'CLASS';
+
+ALTER TABLE ApplicationPermission
+    RENAME COLUMN `featureType` TO `featureSort`;
 ----
 
 [cols="3m,3m,3a", options="header"]
