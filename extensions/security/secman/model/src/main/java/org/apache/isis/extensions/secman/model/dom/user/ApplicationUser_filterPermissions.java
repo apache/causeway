@@ -39,7 +39,6 @@ import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.extensions.secman.api.user.ApplicationUser;
 import org.apache.isis.extensions.secman.model.dom.feature.ApplicationFeatureChoices;
-import org.apache.isis.extensions.secman.model.dom.role.ApplicationRole_addPermission.Parameters;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -78,7 +77,6 @@ public class ApplicationUser_filterPermissions {
 
     @Model
     public java.util.Collection<ApplicationFeatureChoices.AppFeat> autoComplete0Act(
-            final Parameters params,
             final @MinLength(3) String search) {
         return ApplicationFeatureChoices.autoCompleteFeature(featureRepository, search);
     }
