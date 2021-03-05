@@ -23,6 +23,7 @@ import java.util.UUID;
 
 import org.apache.isis.applib.events.domain.ActionDomainEvent;
 import org.apache.isis.applib.jaxb.JavaSqlXMLGregorianCalendarMarshalling;
+import org.apache.isis.applib.mixins.security.HasUsername;
 import org.apache.isis.applib.mixins.system.HasInteractionId;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.commanddto.HasCommandDto;
@@ -32,7 +33,6 @@ import org.apache.isis.applib.services.publishing.spi.CommandSubscriber;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.wrapper.control.AsyncControl;
 import org.apache.isis.commons.functional.Result;
-import org.apache.isis.applib.mixins.security.HasUsername;
 import org.apache.isis.schema.cmd.v2.CommandDto;
 
 import lombok.Getter;
@@ -141,6 +141,7 @@ public class Command implements HasInteractionId, HasUsername, HasCommandDto {
      * Derived from {@link #getCommandDto()}, is the {@link Bookmark} of
      * the target object (entity or service) on which this action/edit was performed.
      */
+    @ToString.Include(name = "target")
     public Bookmark getTarget() {
         return commandDto != null
                 ? Bookmark.from(commandDto.getTargets().getOid().get(0))
@@ -151,6 +152,7 @@ public class Command implements HasInteractionId, HasUsername, HasCommandDto {
      * Derived from {@link #getCommandDto()}, holds a string
      * representation of the invoked action, or the edited property.
      */
+    @ToString.Include(name = "memberId")
     public String getLogicalMemberIdentifier() {
         return commandDto != null
                     ? commandDto.getMember().getLogicalMemberIdentifier()
@@ -251,7 +253,8 @@ public class Command implements HasInteractionId, HasUsername, HasCommandDto {
      */
     @Getter
     private boolean publishingEnabled;
-
+    
+    @ToString.Exclude
     private final Updater UPDATER = new Updater();
 
     public class Updater implements CommandOutcomeHandler {

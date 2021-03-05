@@ -38,6 +38,7 @@ import org.apache.isis.core.metamodel.services.publishing.CommandPublisher;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 
 @Service
 @Named("isis.runtimeservices.CommandPublisherDefault")
@@ -45,7 +46,7 @@ import lombok.RequiredArgsConstructor;
 @Primary
 @Qualifier("Internal")
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
-//@Log4j2
+@Log4j2
 public class CommandPublisherDefault implements CommandPublisher {
     
     private final List<CommandSubscriber> subscribers;
@@ -68,12 +69,15 @@ public class CommandPublisherDefault implements CommandPublisher {
         if(!command.isPublishingEnabled()) {
             return;
         }
+        
         if(command.getLogicalMemberIdentifier() == null) {
             // eg if seed fixtures
             return;
         }
+        
+        log.debug("PUSH command: %s to %s", command, enabledSubscribers);
 
-        subscribers.forEach(subscriber -> subscriber.onCompleted(command));
+        enabledSubscribers.forEach(subscriber -> subscriber.onCompleted(command));
     }
     
     // -- HELPER

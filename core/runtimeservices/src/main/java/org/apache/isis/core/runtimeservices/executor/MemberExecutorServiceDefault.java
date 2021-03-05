@@ -116,9 +116,9 @@ implements MemberExecutorService {
 
         val interaction = getInteractionElseFail();
         val command = interaction.getCommand();
-
-        command.updater().setPublishingEnabled(
-                CommandPublishingFacet.isPublishingEnabled(facetHolder));
+        
+        CommandPublishingFacet.ifPublishingEnabledForCommand(
+                command, owningAction, facetHolder, ()->command.updater().setPublishingEnabled(true));
 
         val actionId = owningAction.getIdentifier().getFullIdentityString();
         log.debug("about to invoke action {}", actionId);
@@ -196,8 +196,8 @@ implements MemberExecutorService {
             return head.getTarget();
         }
 
-        command.updater().setPublishingEnabled(
-                CommandPublishingFacet.isPublishingEnabled(facetHolder));
+        CommandPublishingFacet.ifPublishingEnabledForCommand(
+                command, owningProperty, facetHolder, ()->command.updater().setPublishingEnabled(true));
 
         val propertyId = owningProperty.getIdentifier().getMemberName();
 
