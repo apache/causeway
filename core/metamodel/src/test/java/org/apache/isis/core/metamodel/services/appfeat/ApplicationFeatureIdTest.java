@@ -20,11 +20,8 @@ package org.apache.isis.core.metamodel.services.appfeat;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.TreeSet;
 import java.util.function.Function;
 
-import org.jmock.Expectations;
-import org.jmock.auto.Mock;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -38,10 +35,8 @@ import static org.hamcrest.Matchers.emptyCollectionOf;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.lessThan;
 
-import org.apache.isis.applib.services.appfeat.ApplicationFeature;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureSort;
-import org.apache.isis.applib.services.appfeat.ApplicationMemberSort;
 import org.apache.isis.core.internaltestsupport.contract.ValueTypeContractTestAbstract;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 
@@ -585,94 +580,5 @@ public class ApplicationFeatureIdTest {
         }
 
     }
-
-    public static class PredicatesTest extends ApplicationFeatureIdTest {
-
-        public static class IsClassContaining extends PredicatesTest {
-
-            @SuppressWarnings("unused")
-            private ApplicationMemberSort memberSort;
-
-            @Mock
-            private ApplicationFeatureRepositoryDefault mockApplicationFeatureRepository;
-            @Mock
-            private ApplicationFeature mockApplicationFeature;
-
-            @Test
-            public void whenNull() throws Exception {
-                expectedException.expect(NullPointerException.class);
-
-                _Predicates.
-                isLogicalTypeContaining(ApplicationMemberSort.ACTION, mockApplicationFeatureRepository).
-                test(null);
-            }
-
-            @Test
-            public void whenNotClass() throws Exception {
-                assertThat(
-                        _Predicates.
-                        isLogicalTypeContaining(ApplicationMemberSort.ACTION, mockApplicationFeatureRepository).
-                        test(ApplicationFeatureId.newNamespace("com.mycompany")),
-                        is(false));
-                assertThat(
-                        _Predicates.
-                        isLogicalTypeContaining(ApplicationMemberSort.ACTION, mockApplicationFeatureRepository).
-                        test(ApplicationFeatureId.newMember("com.mycompany.Bar#foo")),
-                        is(false));
-            }
-
-            @Test
-            public void whenClassButFeatureNotFound() throws Exception {
-                final ApplicationFeatureId classFeature = ApplicationFeatureId.newType("com.mycompany.Bar");
-                context.checking(new Expectations() {{
-                    allowing(mockApplicationFeatureRepository).findFeature(classFeature);
-                    will(returnValue(null));
-                }});
-
-                assertThat(
-                        _Predicates.
-                        isLogicalTypeContaining(ApplicationMemberSort.ACTION, mockApplicationFeatureRepository).
-                        test(classFeature),
-                        is(false));
-            }
-            @Test
-            public void whenClassAndFeatureNotFoundButHasNoMembersOfType() throws Exception {
-                final ApplicationFeatureId classFeature = ApplicationFeatureId.newType("com.mycompany.Bar");
-                context.checking(new Expectations() {{
-                    oneOf(mockApplicationFeatureRepository).findFeature(classFeature);
-                    will(returnValue(mockApplicationFeature));
-
-                    allowing(mockApplicationFeature).getMembersOfSort(ApplicationMemberSort.ACTION);
-                    will(returnValue(new TreeSet<>()));
-                }});
-
-                assertThat(
-                        _Predicates.
-                        isLogicalTypeContaining(ApplicationMemberSort.ACTION, mockApplicationFeatureRepository).
-                        test(classFeature),
-                        is(false));
-            }
-            @Test
-            public void whenClassAndFeatureNotFoundAndHasMembersOfType() throws Exception {
-                final ApplicationFeatureId classFeature = ApplicationFeatureId.newType("com.mycompany.Bar");
-                context.checking(new Expectations() {{
-                    oneOf(mockApplicationFeatureRepository).findFeature(classFeature);
-                    will(returnValue(mockApplicationFeature));
-
-                    allowing(mockApplicationFeature).getMembersOfSort(ApplicationMemberSort.ACTION);
-                    will(returnValue(new TreeSet<ApplicationFeatureId>() {{
-                        add(ApplicationFeatureId.newMember("com.mycompany.Bar#foo"));
-                    }}));
-                }});
-
-                assertThat(
-                        _Predicates.
-                        isLogicalTypeContaining(ApplicationMemberSort.ACTION, mockApplicationFeatureRepository).
-                        test(classFeature),
-                        is(true));
-            }
-        }
-    }
-
 
 }

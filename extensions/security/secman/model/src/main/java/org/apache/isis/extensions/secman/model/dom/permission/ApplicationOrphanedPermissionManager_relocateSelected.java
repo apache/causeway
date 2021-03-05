@@ -19,6 +19,8 @@
 package org.apache.isis.extensions.secman.model.dom.permission;
 
 import java.util.Collection;
+import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
@@ -27,6 +29,7 @@ import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.services.appfeat.ApplicationFeature;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureRepository;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermission;
@@ -58,7 +61,9 @@ public class ApplicationOrphanedPermissionManager_relocateSelected {
     }
 
     public Collection<String> choices1Act() {
-        return featureRepository.namespaceNames();
+        return featureRepository.allNamespaces().stream()
+                    .map(ApplicationFeature::getFullyQualifiedName)
+                    .collect(Collectors.toCollection(TreeSet::new));
     }
     
     private void relocate(

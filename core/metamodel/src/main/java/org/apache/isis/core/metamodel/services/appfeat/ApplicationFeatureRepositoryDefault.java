@@ -25,9 +25,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.OptionalInt;
-import java.util.Set;
 import java.util.SortedMap;
-import java.util.SortedSet;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
@@ -46,7 +44,6 @@ import org.apache.isis.applib.services.appfeat.ApplicationFeatureRepository;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureSort;
 import org.apache.isis.applib.services.appfeat.ApplicationMemberSort;
 import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.metamodel.services.ApplicationFeaturesInitConfiguration;
@@ -63,8 +60,6 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-
-import static org.apache.isis.commons.internal.base._NullSafe.stream;
 
 import lombok.NonNull;
 import lombok.val;
@@ -467,29 +462,5 @@ implements ApplicationFeatureRepository {
         return featureIdentifiersByName;
     }
     
-    // -- namespaceNames, packageNamesContainingClasses, classNamesContainedIn, memberNamesOf
-    
-    @Override
-    public SortedSet<String> namespaceNames() {
-        initializeIfRequired();
-        return stream(allFeatures(ApplicationFeatureSort.NAMESPACE))
-                .map(ApplicationFeature::getFullyQualifiedName)
-                .collect(_Sets.toUnmodifiableSorted());
-    }
-
-    @Override
-    public SortedSet<String> classNamesRecursivelyContainedIn(final String packageFqn) {
-        initializeIfRequired();
-        final ApplicationFeatureId packageId = ApplicationFeatureId.newNamespace(packageFqn);
-        final ApplicationFeature pkg = findNamespace(packageId);
-        if (pkg == null) {
-            return Collections.emptySortedSet();
-        }
-        final Set<ApplicationFeatureId> classIds = this.typeFeatures.keySet();
-        return classIds.stream()
-                .filter(_Predicates.isLogicalTypeRecursivelyWithin(packageId))
-                .map(ApplicationFeatureId::getTypeSimpleName)
-                .collect(_Sets.toUnmodifiableSorted());
-    }
 
 }

@@ -20,7 +20,6 @@ package org.apache.isis.applib.services.appfeat;
 
 import java.util.Collection;
 import java.util.Map;
-import java.util.SortedSet;
 
 /**
  * Provides the access to string representations of the packages, classes and
@@ -30,13 +29,6 @@ import java.util.SortedSet;
  * @since 1.x revised for 2.0 {@index}
  */
 public interface ApplicationFeatureRepository  {
-
-    //TODO[2553] why return String, when AppFeatId is now API
-    SortedSet<String> namespaceNames();
-
-    //TODO[2553] remove or rename->logicalTypeSimpleNamesRecursivelyContainedInNamespace
-    SortedSet<String> classNamesRecursivelyContainedIn(
-            String packageFqn);
 
     Map<String, ApplicationFeatureId> getFeatureIdentifiersByName();
 

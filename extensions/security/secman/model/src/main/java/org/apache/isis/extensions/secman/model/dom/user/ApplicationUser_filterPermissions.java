@@ -27,6 +27,7 @@ import javax.enterprise.inject.Model;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.MinLength;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
@@ -37,7 +38,8 @@ import org.apache.isis.applib.services.appfeat.ApplicationFeatureRepository;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.extensions.secman.api.user.ApplicationUser;
-import org.apache.isis.extensions.secman.model.dom.feature.ApplicationFeatureConstants;
+import org.apache.isis.extensions.secman.model.dom.feature.ApplicationFeatureChoices;
+import org.apache.isis.extensions.secman.model.dom.role.ApplicationRole_addPermission.Parameters;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -58,37 +60,32 @@ public class ApplicationUser_filterPermissions {
     @Model
     public List<UserPermissionViewModel> act(
             
-            @ParameterLayout(named="Namespace", typicalLength=ApplicationFeatureConstants.TYPICAL_LENGTH_NAMESPACE)
-            final String namespace,
-            
-            @Parameter(optionality = Optionality.OPTIONAL)
-            @ParameterLayout(named="Type", typicalLength=ApplicationFeatureConstants.TYPICAL_LENGTH_TYPE_SIMPLE_NAME)
-            final String logicalTypeSimpleName) {
+            @Parameter(optionality = Optionality.MANDATORY)
+            @ParameterLayout(
+                    named = "Feature",
+                    describedAs = ApplicationFeatureChoices.DESCRIBED_AS)
+            final ApplicationFeatureChoices.AppFeat feature) {
+        
+        val featureId = feature.getFeatureId();
+        
+        final String namespace = featureId.getNamespace();
+        final String typeSimpleName = featureId.getTypeSimpleName();
         
         val allMembers = featureRepository.allMembers();
-        val filtered = _Lists.filter(allMembers, within(namespace, logicalTypeSimpleName));
+        val filtered = _Lists.filter(allMembers, within(namespace, typeSimpleName));
         return asViewModels(filtered);
     }
 
-    /**
-     * Package names that have classes in them.
-     */
     @Model
-    public Collection<String> choices0Act() {
-        return featureRepository.namespaceNames();
+    public java.util.Collection<ApplicationFeatureChoices.AppFeat> autoComplete0Act(
+            final Parameters params,
+            final @MinLength(3) String search) {
+        return ApplicationFeatureChoices.autoCompleteFeature(featureRepository, search);
     }
+    
+    // -- HELPER XXX left over from refactoring, could be simplified ..
 
-
-    /**
-     * Class names for selected package.
-     */
-    @Model
-    public Collection<String> choices1Act(final String namespace) {
-        return featureRepository.classNamesRecursivelyContainedIn(namespace);
-    }
-
-
-    static Predicate<ApplicationFeature> within(final String namespace, final String logicalTypeSimpleName) {
+    private static Predicate<ApplicationFeature> within(final String namespace, final String logicalTypeSimpleName) {
         return (ApplicationFeature input) -> {
             final ApplicationFeatureId inputFeatureId = input.getFeatureId();
 
@@ -104,7 +101,7 @@ public class ApplicationUser_filterPermissions {
         };
     }
 
-    List<UserPermissionViewModel> asViewModels(final Collection<ApplicationFeature> features) {
+    private List<UserPermissionViewModel> asViewModels(final Collection<ApplicationFeature> features) {
         return _Lists.map(
                 features,
                 UserPermissionViewModel.Functions.asViewModel(target, factory));
