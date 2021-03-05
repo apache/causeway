@@ -18,6 +18,7 @@
  */
 package org.apache.isis.applib.services.appfeat;
 
+import java.util.Collection;
 import java.util.Map;
 import java.util.SortedSet;
 
@@ -53,5 +54,19 @@ public interface ApplicationFeatureRepository  {
 
     
     Map<String, ApplicationFeatureId> getFeatureIdentifiersByName();
+
+    ApplicationFeature findFeature(ApplicationFeatureId featureId);
+
+    Collection<ApplicationFeature> allActions();
+
+    Collection<ApplicationFeature> allCollections();
+
+    Collection<ApplicationFeature> allProperties();
+
+    Collection<ApplicationFeature> allNamespaces();
+
+    Collection<ApplicationFeature> allTypes();
+    
+    Collection<ApplicationFeature> allMembers();
 
 }

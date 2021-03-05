@@ -28,7 +28,7 @@ import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
-import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureRepositoryDefault;
+import org.apache.isis.applib.services.appfeat.ApplicationFeatureRepository;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermission;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermission.RelocateNamespaceDomainEvent;
 
@@ -43,9 +43,9 @@ import lombok.val;
 @RequiredArgsConstructor
 public class ApplicationOrphanedPermissionManager_relocateSelected {
 
-    @Inject private ApplicationFeatureRepositoryDefault applicationFeatureRepository;
+    @Inject private ApplicationFeatureRepository featureRepository;
     
-    private final ApplicationOrphanedPermissionManager holder;
+    private final ApplicationOrphanedPermissionManager target;
     
     public ApplicationOrphanedPermissionManager act(
             final Collection<ApplicationPermission> permissions,
@@ -54,11 +54,11 @@ public class ApplicationOrphanedPermissionManager_relocateSelected {
             final String targetNamespace) {
         
         permissions.forEach(perm->relocate(perm, targetNamespace));
-        return holder;
+        return target;
     }
 
     public Collection<String> choices1Act() {
-        return applicationFeatureRepository.namespaceNames();
+        return featureRepository.namespaceNames();
     }
     
     private void relocate(

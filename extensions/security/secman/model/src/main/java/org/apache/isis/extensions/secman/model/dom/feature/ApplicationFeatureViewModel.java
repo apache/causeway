@@ -36,6 +36,7 @@ import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.appfeat.ApplicationFeature;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
+import org.apache.isis.applib.services.appfeat.ApplicationFeatureRepository;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureSort;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.util.Equality;
@@ -44,7 +45,6 @@ import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.applib.util.ToString;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureRepositoryDefault;
 import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermission;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionRepository;
@@ -66,13 +66,13 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
     public static abstract class ActionDomainEvent<S extends ApplicationFeatureViewModel> extends IsisModuleExtSecmanApi.ActionDomainEvent<S> {}
 
     @Inject private FactoryService factory;
-    @Inject private ApplicationFeatureRepositoryDefault applicationFeatureRepository;
+    @Inject private ApplicationFeatureRepository featureRepository;
     @Inject private ApplicationPermissionRepository<? extends ApplicationPermission> applicationPermissionRepository;
 
     // -- constructors
     public static ApplicationFeatureViewModel newViewModel(
             final ApplicationFeatureId featureId,
-            final ApplicationFeatureRepositoryDefault applicationFeatureRepository,
+            final ApplicationFeatureRepository applicationFeatureRepository,
             final FactoryService factoryService) {
         final Class<? extends ApplicationFeatureViewModel> cls = viewModelClassFor(featureId, applicationFeatureRepository);
         return factoryService.viewModel(cls, featureId.asEncodedString());
@@ -80,7 +80,7 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
 
     private static Class<? extends ApplicationFeatureViewModel> viewModelClassFor(
             final ApplicationFeatureId featureId,
-            final ApplicationFeatureRepositoryDefault applicationFeatureRepository) {
+            final ApplicationFeatureRepository applicationFeatureRepository) {
         switch (featureId.getSort()) {
         case NAMESPACE:
             return ApplicationNamespace.class;
@@ -158,7 +158,7 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
     // -- feature (property, programmatic)
     @Programmatic
     ApplicationFeature getFeature() {
-        return applicationFeatureRepository.findFeature(getFeatureId());
+        return featureRepository.findFeature(getFeatureId());
     }
 
 
@@ -247,12 +247,12 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
         if(parentId == null) {
             return null;
         }
-        final ApplicationFeature feature = applicationFeatureRepository.findFeature(parentId);
+        final ApplicationFeature feature = featureRepository.findFeature(parentId);
         if (feature == null) {
             return null;
         }
         final Class<? extends ApplicationFeatureViewModel> cls = 
-                viewModelClassFor(parentId, applicationFeatureRepository);
+                viewModelClassFor(parentId, featureRepository);
         return factory.viewModel(cls, parentId.asEncodedString());
     }
 
@@ -279,7 +279,7 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
      */
     @Programmatic
     public ApplicationFeatureViewModel getParentNamespace() {
-        return Functions.asViewModelForId(applicationFeatureRepository, factory)
+        return Functions.asViewModelForId(featureRepository, factory)
                 .apply(getFeatureId().getParentNamespaceFeatureId());
     }
 
@@ -315,7 +315,7 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
 
     // -- helpers
     <T extends ApplicationFeatureViewModel> List<T> asViewModels(final SortedSet<ApplicationFeatureId> members) {
-        val viewModelForId = Functions.<T>asViewModelForId(applicationFeatureRepository, factory);
+        val viewModelForId = Functions.<T>asViewModelForId(featureRepository, factory);
         return _Lists.map(members, viewModelForId);
     }
 
@@ -326,7 +326,7 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
         private Functions(){}
 
         public static <T extends ApplicationFeatureViewModel> Function<ApplicationFeatureId, T> asViewModelForId(
-                final ApplicationFeatureRepositoryDefault applicationFeatureRepository, 
+                final ApplicationFeatureRepository applicationFeatureRepository, 
                 final FactoryService factoryService) {
 
             return (ApplicationFeatureId input) -> 
@@ -335,7 +335,7 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
 
         }
         public static <T extends ApplicationFeatureViewModel> Function<ApplicationFeature, T> asViewModel(
-                final ApplicationFeatureRepositoryDefault applicationFeatureRepository, 
+                final ApplicationFeatureRepository applicationFeatureRepository, 
                 final FactoryService factoryService) {
 
             return (ApplicationFeature input) ->

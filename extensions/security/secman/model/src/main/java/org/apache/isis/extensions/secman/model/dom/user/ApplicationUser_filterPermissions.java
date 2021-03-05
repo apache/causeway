@@ -33,9 +33,9 @@ import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.appfeat.ApplicationFeature;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
+import org.apache.isis.applib.services.appfeat.ApplicationFeatureRepository;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureRepositoryDefault;
 import org.apache.isis.extensions.secman.api.user.ApplicationUser;
 import org.apache.isis.extensions.secman.model.dom.feature.ApplicationFeatureConstants;
 
@@ -51,7 +51,7 @@ import lombok.val;
 public class ApplicationUser_filterPermissions {
 
     @Inject private FactoryService factory;
-    @Inject private ApplicationFeatureRepositoryDefault applicationFeatureRepository;
+    @Inject private ApplicationFeatureRepository featureRepository;
 
     private final ApplicationUser target;
 
@@ -65,7 +65,7 @@ public class ApplicationUser_filterPermissions {
             @ParameterLayout(named="Type", typicalLength=ApplicationFeatureConstants.TYPICAL_LENGTH_TYPE_SIMPLE_NAME)
             final String logicalTypeSimpleName) {
         
-        val allMembers = applicationFeatureRepository.allMembers();
+        val allMembers = featureRepository.allMembers();
         val filtered = _Lists.filter(allMembers, within(namespace, logicalTypeSimpleName));
         return asViewModels(filtered);
     }
@@ -75,7 +75,7 @@ public class ApplicationUser_filterPermissions {
      */
     @Model
     public Collection<String> choices0Act() {
-        return applicationFeatureRepository.namespaceNames();
+        return featureRepository.namespaceNames();
     }
 
 
@@ -84,7 +84,7 @@ public class ApplicationUser_filterPermissions {
      */
     @Model
     public Collection<String> choices1Act(final String namespace) {
-        return applicationFeatureRepository.classNamesRecursivelyContainedIn(namespace);
+        return featureRepository.classNamesRecursivelyContainedIn(namespace);
     }
 
 

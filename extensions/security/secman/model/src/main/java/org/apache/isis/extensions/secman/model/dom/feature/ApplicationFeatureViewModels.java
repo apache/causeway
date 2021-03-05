@@ -32,10 +32,10 @@ import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.appfeat.ApplicationFeature;
+import org.apache.isis.applib.services.appfeat.ApplicationFeatureRepository;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureRepositoryDefault;
 import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
 
 @DomainService(
@@ -77,7 +77,7 @@ public class ApplicationFeatureViewModels  {
             )
     @MemberOrder(sequence = "100.40.1")
     public List<ApplicationNamespace> allNamespaces() {
-        return asViewModels(applicationFeatureRepository.allPackages(), ApplicationNamespace.class);
+        return asViewModels(featureRepository.allNamespaces(), ApplicationNamespace.class);
     }
 
     // -- ALL CLASSES
@@ -94,7 +94,7 @@ public class ApplicationFeatureViewModels  {
             )
     @MemberOrder(sequence = "100.40.2")
     public List<ApplicationType> allTypes() {
-        return asViewModels(applicationFeatureRepository.allClasses(), ApplicationType.class);
+        return asViewModels(featureRepository.allTypes(), ApplicationType.class);
     }
 
     // -- ALL ACTIONS
@@ -111,7 +111,7 @@ public class ApplicationFeatureViewModels  {
             )
     @MemberOrder(sequence = "100.40.3")
     public List<ApplicationTypeAction> allActions() {
-        return asViewModels(applicationFeatureRepository.allActions(), ApplicationTypeAction.class);
+        return asViewModels(featureRepository.allActions(), ApplicationTypeAction.class);
     }
 
     // -- ALL PROPERTIES
@@ -128,7 +128,7 @@ public class ApplicationFeatureViewModels  {
             )
     @MemberOrder(sequence = "100.40.4")
     public List<ApplicationTypeProperty> allProperties() {
-        return asViewModels(applicationFeatureRepository.allProperties(), ApplicationTypeProperty.class);
+        return asViewModels(featureRepository.allProperties(), ApplicationTypeProperty.class);
     }
 
     // -- ALL COLLECTIONS
@@ -145,7 +145,7 @@ public class ApplicationFeatureViewModels  {
             )
     @MemberOrder(sequence = "100.40.5")
     public List<ApplicationTypeCollection> allCollections() {
-        return asViewModels(applicationFeatureRepository.allCollections(), ApplicationTypeCollection.class);
+        return asViewModels(featureRepository.allCollections(), ApplicationTypeCollection.class);
     }
 
     // -- HELPERS
@@ -157,13 +157,13 @@ public class ApplicationFeatureViewModels  {
         return _Lists.map(
                 features,
                 ApplicationFeatureViewModel.Functions
-                .<T>asViewModel(applicationFeatureRepository, factory)
+                .<T>asViewModel(featureRepository, factory)
                 );
     }
 
     // -- DEPENDENCIES
 
-    @Inject ApplicationFeatureRepositoryDefault applicationFeatureRepository;
+    @Inject ApplicationFeatureRepository featureRepository;
     @Inject RepositoryService repository;
     @Inject FactoryService factory;
 

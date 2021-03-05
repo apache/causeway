@@ -39,13 +39,13 @@ import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.appfeat.ApplicationFeature;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
+import org.apache.isis.applib.services.appfeat.ApplicationFeatureRepository;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureSort;
 import org.apache.isis.applib.services.appfeat.ApplicationMemberSort;
 import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.applib.util.ObjectContracts.ObjectContract;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureRepositoryDefault;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionMode;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionRule;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionValue;
@@ -166,7 +166,7 @@ public class ApplicationPermission implements org.apache.isis.extensions.secman.
 
     private Optional<ApplicationFeature> getFeature() {
         return createFeatureId()
-                .map(featureId -> applicationFeatureRepository.findFeature(featureId));
+                .map(featureId -> featureRepository.findFeature(featureId));
     }
 
     // region > type (derived, memberSort of associated feature)
@@ -298,6 +298,6 @@ public class ApplicationPermission implements org.apache.isis.extensions.secman.
 
     }
 
-    @Inject private ApplicationFeatureRepositoryDefault applicationFeatureRepository;
+    @Inject private ApplicationFeatureRepository featureRepository;
 
 }

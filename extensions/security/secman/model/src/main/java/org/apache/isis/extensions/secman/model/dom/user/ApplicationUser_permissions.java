@@ -27,9 +27,9 @@ import javax.inject.Inject;
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.applib.services.appfeat.ApplicationFeature;
+import org.apache.isis.applib.services.appfeat.ApplicationFeatureRepository;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureRepositoryDefault;
 import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
 import org.apache.isis.extensions.secman.api.user.ApplicationUser;
 
@@ -49,7 +49,7 @@ public class ApplicationUser_permissions {
     extends IsisModuleExtSecmanApi.CollectionDomainEvent<ApplicationUser_permissions, UserPermissionViewModel> {}
     
     @Inject private FactoryService factory;
-    @Inject private ApplicationFeatureRepositoryDefault applicationFeatureRepository;
+    @Inject private ApplicationFeatureRepository applicationFeatureRepository;
 
     private final ApplicationUser target;
 

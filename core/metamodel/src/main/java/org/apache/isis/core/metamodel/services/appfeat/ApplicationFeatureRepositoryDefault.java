@@ -373,6 +373,7 @@ implements ApplicationFeatureRepository {
 
     // -- packageFeatures, classFeatures, memberFeatures
 
+    @Override
     public ApplicationFeature findFeature(final ApplicationFeatureId featureId) {
         initializeIfRequired();
         switch (featureId.getSort()) {
@@ -415,46 +416,46 @@ implements ApplicationFeatureRepository {
         }
         switch (featureType) {
         case NAMESPACE:
-            return allPackages();
+            return allNamespaces();
         case TYPE:
-            return allClasses();
+            return allTypes();
         case MEMBER:
             return allMembers();
         }
         throw new IllegalArgumentException("Unknown feature type " + featureType);
     }
 
-
-    public Collection<ApplicationFeature> allPackages() {
+    @Override
+    public Collection<ApplicationFeature> allNamespaces() {
         initializeIfRequired();
         return packageFeatures.values();
     }
 
-
-    public Collection<ApplicationFeature> allClasses() {
+    @Override
+    public Collection<ApplicationFeature> allTypes() {
         initializeIfRequired();
         return classFeatures.values();
     }
 
-
+    @Override
     public Collection<ApplicationFeature> allMembers() {
         initializeIfRequired();
         return memberFeatures.values();
     }
 
-
+    @Override
     public Collection<ApplicationFeature> allProperties() {
         initializeIfRequired();
         return propertyFeatures.values();
     }
 
-
+    @Override
     public Collection<ApplicationFeature> allCollections() {
         initializeIfRequired();
         return collectionFeatures.values();
     }
 
-
+    @Override
     public Collection<ApplicationFeature> allActions() {
         initializeIfRequired();
         return actionFeatures.values();

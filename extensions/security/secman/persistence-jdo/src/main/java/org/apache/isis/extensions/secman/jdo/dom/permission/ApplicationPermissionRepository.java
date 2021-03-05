@@ -32,6 +32,7 @@ import org.springframework.stereotype.Repository;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.services.appfeat.ApplicationFeature;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
+import org.apache.isis.applib.services.appfeat.ApplicationFeatureRepository;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureSort;
 import org.apache.isis.applib.services.appfeat.ApplicationMemberSort;
 import org.apache.isis.applib.services.factory.FactoryService;
@@ -45,7 +46,6 @@ import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Multimaps;
 import org.apache.isis.commons.internal.collections._Multimaps.ListMultimap;
 import org.apache.isis.commons.internal.collections._Sets;
-import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureRepositoryDefault;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionMode;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionRule;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionValue;
@@ -61,7 +61,7 @@ public class ApplicationPermissionRepository
 implements org.apache.isis.extensions.secman.api.permission.ApplicationPermissionRepository<ApplicationPermission> {
 
     @Inject private RepositoryService repository;
-    @Inject private ApplicationFeatureRepositoryDefault featureRepository;
+    @Inject private ApplicationFeatureRepository featureRepository;
     @Inject private FactoryService factory;
     @Inject private MessageService messages;
     

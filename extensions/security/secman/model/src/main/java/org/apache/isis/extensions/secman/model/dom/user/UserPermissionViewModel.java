@@ -39,13 +39,13 @@ import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.appfeat.ApplicationFeature;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
+import org.apache.isis.applib.services.appfeat.ApplicationFeatureRepository;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureSort;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.applib.util.ToString;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureRepositoryDefault;
 import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermission;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionMode;
@@ -81,7 +81,7 @@ public class UserPermissionViewModel implements ViewModel {
     
     @Inject private ApplicationUserRepository<? extends ApplicationUser> applicationUserRepository;
     @Inject private FactoryService factory;
-    @Inject private ApplicationFeatureRepositoryDefault applicationFeatureRepository;
+    @Inject private ApplicationFeatureRepository featureRepository;
     @Inject private ApplicationPermissionRepository<? extends ApplicationPermission> applicationPermissionRepository;
 
     // -- constructors, factory methods
@@ -298,7 +298,7 @@ public class UserPermissionViewModel implements ViewModel {
         if(getFeatureId() == null) {
             return null;
         }
-        return ApplicationFeatureViewModel.newViewModel(getFeatureId(), applicationFeatureRepository, factory);
+        return ApplicationFeatureViewModel.newViewModel(getFeatureId(), featureRepository, factory);
     }
 
 

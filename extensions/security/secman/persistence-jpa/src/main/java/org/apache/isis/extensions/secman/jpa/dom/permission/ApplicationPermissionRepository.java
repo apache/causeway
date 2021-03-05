@@ -33,6 +33,7 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.services.appfeat.ApplicationFeature;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
+import org.apache.isis.applib.services.appfeat.ApplicationFeatureRepository;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureSort;
 import org.apache.isis.applib.services.appfeat.ApplicationMemberSort;
 import org.apache.isis.applib.services.factory.FactoryService;
@@ -46,7 +47,6 @@ import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Multimaps;
 import org.apache.isis.commons.internal.collections._Multimaps.ListMultimap;
 import org.apache.isis.commons.internal.collections._Sets;
-import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureRepositoryDefault;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionMode;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionRule;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionValue;
@@ -64,7 +64,7 @@ public class ApplicationPermissionRepository
 implements org.apache.isis.extensions.secman.api.permission.ApplicationPermissionRepository<ApplicationPermission> {
 
     @Inject private RepositoryService repository;
-    @Inject private ApplicationFeatureRepositoryDefault applicationFeatureRepository;
+    @Inject private ApplicationFeatureRepository featureRepository;
     @Inject private FactoryService factory;
     @Inject private MessageService messages;
     
@@ -249,7 +249,7 @@ implements org.apache.isis.extensions.secman.api.permission.ApplicationPermissio
         val role = _Casts.<ApplicationRole>uncheckedCast(genericRole);
 
         final ApplicationFeatureId featureId = ApplicationFeatureId.newFeature(featureSort, featureFqn);
-        final ApplicationFeature feature = applicationFeatureRepository.findFeature(featureId);
+        final ApplicationFeature feature = featureRepository.findFeature(featureId);
         if(feature == null) {
             messages.warnUser("No such " + featureSort.name().toLowerCase() + ": " + featureFqn);
             return null;
@@ -304,7 +304,7 @@ implements org.apache.isis.extensions.secman.api.permission.ApplicationPermissio
         val featureSort = featureId.getSort();
         val featureFqn = featureId.getFullyQualifiedName();
 
-        val feature = applicationFeatureRepository.findFeature(featureId);
+        val feature = featureRepository.findFeature(featureId);
         if(feature == null) {
             messages.warnUser("No such " + featureSort.name().toLowerCase() + ": " + featureFqn);
             return null;
@@ -335,9 +335,9 @@ implements org.apache.isis.extensions.secman.api.permission.ApplicationPermissio
     @Override
     public Collection<ApplicationPermission> findOrphaned() {
 
-        applicationFeatureRepository.getFeatureIdentifiersByName();
+        featureRepository.getFeatureIdentifiersByName();
         
-        final Collection<String> namespaceNames = applicationFeatureRepository.namespaceNames();
+        final Collection<String> namespaceNames = featureRepository.namespaceNames();
         final Set<String> availableClasses = _Sets.newTreeSet();
         for (String packageName : namespaceNames) {
             appendLogicalTypes(packageName, ApplicationMemberSort.PROPERTY, availableClasses);
@@ -392,7 +392,7 @@ implements org.apache.isis.extensions.secman.api.permission.ApplicationPermissio
             final String packageName, 
             final ApplicationMemberSort memberSort, 
             final Set<String> availableClasses) {
-        final Collection<String> classNames = applicationFeatureRepository.classNamesContainedIn(packageName, memberSort);
+        final Collection<String> classNames = featureRepository.classNamesContainedIn(packageName, memberSort);
         for (String className : classNames) {
             availableClasses.add(packageName + "." + className);
         }
@@ -412,7 +412,7 @@ implements org.apache.isis.extensions.secman.api.permission.ApplicationPermissio
             final ApplicationMemberSort getMemberSort,
             final List<String> memberNames) {
         final Collection<String> memberNamesOf =
-                applicationFeatureRepository.memberNamesOf(packageName, className, getMemberSort);
+                featureRepository.memberNamesOf(packageName, className, getMemberSort);
         memberNames.addAll(memberNamesOf);
     }
 

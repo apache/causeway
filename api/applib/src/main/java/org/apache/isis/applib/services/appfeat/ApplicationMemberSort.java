@@ -18,8 +18,6 @@
  */
 package org.apache.isis.applib.services.appfeat;
 
-import org.apache.isis.commons.internal.base._Strings;
-
 /**
  * 
  * @since 1.x renamed in 2.0 {@index}
@@ -31,7 +29,7 @@ public enum ApplicationMemberSort {
 
     @Override
     public String toString() {
-        return _Strings.capitalize(name());
+        return name();
     }
 
 }

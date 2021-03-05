@@ -23,6 +23,7 @@ import java.util.function.Predicate;
 
 import org.apache.isis.applib.services.appfeat.ApplicationFeature;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
+import org.apache.isis.applib.services.appfeat.ApplicationFeatureRepository;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureSort;
 import org.apache.isis.applib.services.appfeat.ApplicationMemberSort;
 
@@ -30,7 +31,7 @@ final class _Predicates {
 
     public static Predicate<ApplicationFeatureId> isLogicalTypeContaining(
             final ApplicationMemberSort memberSort, 
-            final ApplicationFeatureRepositoryDefault applicationFeatures) {
+            final ApplicationFeatureRepository applicationFeatures) {
         
         return (final ApplicationFeatureId featureId) -> {
                 if(featureId.getSort() != ApplicationFeatureSort.TYPE) {

@@ -25,9 +25,9 @@ import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
+import org.apache.isis.applib.services.appfeat.ApplicationFeatureRepository;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.repository.RepositoryService;
-import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureRepositoryDefault;
 import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
 import org.apache.isis.extensions.secman.api.permission.ApplicationPermission;
 import org.apache.isis.extensions.secman.model.dom.feature.ApplicationFeatureViewModel;
@@ -46,7 +46,7 @@ public class ApplicationPermission_feature {
     public static class PropertyDomainEvent 
     extends IsisModuleExtSecmanApi.PropertyDomainEvent<ApplicationPermission_feature, ApplicationFeatureViewModel> {}
 
-    final ApplicationPermission holder;
+    final ApplicationPermission target;
 
     @MemberOrder(name="Feature", sequence = "4")
     public ApplicationFeatureViewModel prop(final ApplicationPermission permission) {
@@ -54,7 +54,7 @@ public class ApplicationPermission_feature {
             return null;
         }
         final ApplicationFeatureId featureId = getFeatureId(permission);
-        return ApplicationFeatureViewModel.newViewModel(featureId, applicationFeatureRepository, factory);
+        return ApplicationFeatureViewModel.newViewModel(featureId, featureRepository, factory);
     }
 
     private static ApplicationFeatureId getFeatureId(final ApplicationPermission permission) {
@@ -63,6 +63,6 @@ public class ApplicationPermission_feature {
 
     @Inject RepositoryService repository;
     @Inject FactoryService factory;
-    @Inject ApplicationFeatureRepositoryDefault applicationFeatureRepository;
+    @Inject ApplicationFeatureRepository featureRepository;
 
 }
