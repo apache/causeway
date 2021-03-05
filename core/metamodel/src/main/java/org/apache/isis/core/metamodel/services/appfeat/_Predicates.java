@@ -40,7 +40,7 @@ final class _Predicates {
                     return false;
                 }
                 return memberSort == null 
-                        || !feature.membersOf(memberSort).isEmpty();
+                        || !feature.membersOfSort(memberSort).isEmpty();
         };
     }
 

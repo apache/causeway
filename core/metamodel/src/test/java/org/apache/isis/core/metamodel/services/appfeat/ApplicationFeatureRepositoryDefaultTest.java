@@ -271,36 +271,12 @@ public class ApplicationFeatureRepositoryDefaultTest {
 
         }
 
-        @Test @Ignore // ApplicationFeature is a value not an entity, hence no longer created with the Factory Service
-        public void parentNotYetEncountered() throws Exception {
-
-            // given
-            final ApplicationFeatureId classFeatureId = ApplicationFeatureId.newType("com.mycompany.Bar");
-
-            // expecting
-            final ApplicationFeature newlyCreatedParent = new ApplicationFeature();
-
-            context.checking(new Expectations() {{
-                allowing(mockFactoryService).create(ApplicationFeature.class);
-                will(returnValue(newlyCreatedParent));
-            }});
-
-            // when
-            final ApplicationFeatureId classParentId = applicationFeatureRepository.addClassParent(classFeatureId);
-
-            // then
-            Assert.assertThat(classParentId, is(equalTo(classFeatureId.getParentNamespaceFeatureId())));
-            final ApplicationFeature classPackage = applicationFeatureRepository.findNamespace(classParentId);
-            assertThat(classPackage, is(newlyCreatedParent));
-        }
-
         @Test
         public void parentAlreadyEncountered() throws Exception {
 
             // given
             final ApplicationFeatureId packageId = ApplicationFeatureId.newNamespace("com.mycompany");
-            final ApplicationFeature pkg = new ApplicationFeature();
-            pkg.setFeatureId(packageId);
+            final ApplicationFeature pkg = new ApplicationFeature(packageId);
             applicationFeatureRepository.packageFeatures.put(packageId, pkg);
 
             final ApplicationFeatureId classFeatureId = ApplicationFeatureId.newType("com.mycompany.Bar");

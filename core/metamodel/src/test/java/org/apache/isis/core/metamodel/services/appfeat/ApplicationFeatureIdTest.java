@@ -641,7 +641,7 @@ public class ApplicationFeatureIdTest {
                     oneOf(mockApplicationFeatureRepository).findFeature(classFeature);
                     will(returnValue(mockApplicationFeature));
 
-                    allowing(mockApplicationFeature).membersOf(ApplicationMemberSort.ACTION);
+                    allowing(mockApplicationFeature).membersOfSort(ApplicationMemberSort.ACTION);
                     will(returnValue(new TreeSet<>()));
                 }});
 
@@ -658,7 +658,7 @@ public class ApplicationFeatureIdTest {
                     oneOf(mockApplicationFeatureRepository).findFeature(classFeature);
                     will(returnValue(mockApplicationFeature));
 
-                    allowing(mockApplicationFeature).membersOf(ApplicationMemberSort.ACTION);
+                    allowing(mockApplicationFeature).membersOfSort(ApplicationMemberSort.ACTION);
                     will(returnValue(new TreeSet<ApplicationFeatureId>() {{
                         add(ApplicationFeatureId.newMember("com.mycompany.Bar#foo"));
                     }}));

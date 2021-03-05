@@ -330,11 +330,8 @@ implements ApplicationFeatureRepository {
     }
 
     private ApplicationFeature newFeature(final ApplicationFeatureId featureId) {
-        final ApplicationFeature feature = applicationFeatureFactory.newApplicationFeature();
-        feature.setFeatureId(featureId);
-        return feature;
+        return applicationFeatureFactory.newApplicationFeature(featureId);
     }
-
 
     protected boolean exclude(final ObjectSpecification spec) {
 
@@ -529,7 +526,7 @@ implements ApplicationFeatureRepository {
         if (cls == null) {
             return Collections.emptySortedSet();
         }
-        final SortedSet<ApplicationFeatureId> featureIds = cls.membersOf(memberSort);
+        final SortedSet<ApplicationFeatureId> featureIds = cls.membersOfSort(memberSort);
         return featureIds.stream()
                 .map(ApplicationFeatureId::getMemberName)
                 .collect(_Sets.toUnmodifiableSorted());

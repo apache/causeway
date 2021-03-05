@@ -20,12 +20,7 @@ package org.apache.isis.core.metamodel.services.appfeat;
 
 import java.util.Comparator;
 import java.util.SortedSet;
-import java.util.function.Function;
-import java.util.function.Predicate;
 
-import javax.enterprise.inject.Vetoed;
-
-import org.apache.isis.applib.IsisModuleApplib;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Value;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
@@ -40,7 +35,6 @@ import org.apache.isis.commons.internal.collections._Sets;
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.experimental.UtilityClass;
 
 /**
  * Canonical application feature, identified by {@link ApplicationFeatureId},
@@ -54,33 +48,21 @@ import lombok.experimental.UtilityClass;
 @Value
 public class ApplicationFeature implements Comparable<ApplicationFeature> {
 
-    public static abstract class PropertyDomainEvent<T> 
-    extends IsisModuleApplib.PropertyDomainEvent<ApplicationFeature, T> {}
-
-    public static abstract class CollectionDomainEvent<T> 
-    extends IsisModuleApplib.CollectionDomainEvent<ApplicationFeature, T> {}
-
-    public static abstract class ActionDomainEvent 
-    extends IsisModuleApplib.ActionDomainEvent<ApplicationFeature> {}
-
-    // -- constants
+    // -- CONSTANTS
 
     // using same value for all to neaten up rendering
     public static final int TYPICAL_LENGTH_PKG_FQN = 50;
     public static final int TYPICAL_LENGTH_CLS_NAME = 50;
     public static final int TYPICAL_LENGTH_MEMBER_NAME = 50;
 
-
-    // -- constructors
-    public ApplicationFeature() {
-        this(null);
-    }
+    // -- CONSTRUCTORS
+    
     public ApplicationFeature(final ApplicationFeatureId featureId) {
-        setFeatureId(featureId);
+        this.featureId = featureId;
     }
 
-    @Getter @Setter
-    private ApplicationFeatureId featureId;
+    @Getter
+    private final ApplicationFeatureId featureId;
 
     /**
      * Only for {@link ApplicationFeatureSort#MEMBER member}s.
@@ -161,10 +143,10 @@ public class ApplicationFeature implements Comparable<ApplicationFeature> {
         _Asserts.ensureType(this.getFeatureId());
         _Asserts.ensureMember(memberId);
 
-        membersOf(memberSort).add(memberId);
+        membersOfSort(memberSort).add(memberId);
     }
     
-    public SortedSet<ApplicationFeatureId> membersOf(final ApplicationMemberSort memberSort) {
+    public SortedSet<ApplicationFeatureId> membersOfSort(final ApplicationMemberSort memberSort) {
         _Asserts.ensureType(this.getFeatureId());
         switch (memberSort) {
         case PROPERTY:
