@@ -37,6 +37,7 @@ import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureRepositoryDefault;
 import org.apache.isis.extensions.secman.api.user.ApplicationUser;
+import org.apache.isis.extensions.secman.model.dom.feature.ApplicationFeatureConstants;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -57,11 +58,11 @@ public class ApplicationUser_filterPermissions {
     @Model
     public List<UserPermissionViewModel> act(
             
-            @ParameterLayout(named="Namespace", typicalLength=ApplicationFeature.TYPICAL_LENGTH_PKG_FQN)
+            @ParameterLayout(named="Namespace", typicalLength=ApplicationFeatureConstants.TYPICAL_LENGTH_NAMESPACE)
             final String namespace,
             
             @Parameter(optionality = Optionality.OPTIONAL)
-            @ParameterLayout(named="Type", typicalLength=ApplicationFeature.TYPICAL_LENGTH_CLS_NAME)
+            @ParameterLayout(named="Type", typicalLength=ApplicationFeatureConstants.TYPICAL_LENGTH_TYPE_SIMPLE_NAME)
             final String logicalTypeSimpleName) {
         
         val allMembers = applicationFeatureRepository.allMembers();

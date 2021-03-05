@@ -116,6 +116,7 @@ implements
     // -- classes: Properties, Collections, Actions
     private final SortedSet<ApplicationFeatureId> properties = _Sets.newTreeSet();
 
+    @Override
     public SortedSet<ApplicationFeatureId> getProperties() {
         _Asserts.ensureType(this.getFeatureId());
         return properties;
@@ -124,6 +125,7 @@ implements
 
     private final SortedSet<ApplicationFeatureId> collections = _Sets.newTreeSet();
     
+    @Override
     public SortedSet<ApplicationFeatureId> getCollections() {
         _Asserts.ensureType(this.getFeatureId());
         return collections;
@@ -132,6 +134,7 @@ implements
 
     private final SortedSet<ApplicationFeatureId> actions = _Sets.newTreeSet();
     
+    @Override
     public SortedSet<ApplicationFeatureId> getActions() {
         _Asserts.ensureType(this.getFeatureId());
         return actions;

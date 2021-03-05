@@ -58,11 +58,4 @@ public interface ApplicationFeature {
 
     Integer getPropertyMaxLength();
     
-    // using same value for all to neaten up rendering
-    public static final int TYPICAL_LENGTH_PKG_FQN = 50;
-    public static final int TYPICAL_LENGTH_CLS_NAME = 50;
-    public static final int TYPICAL_LENGTH_MEMBER_NAME = 50;
-
-    
-    
 }

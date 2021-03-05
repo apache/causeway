@@ -176,7 +176,7 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
     @Property(
             domainEvent = NamespaceNameDomainEvent.class
             )
-    @PropertyLayout(typicalLength=ApplicationFeature.TYPICAL_LENGTH_PKG_FQN)
+    @PropertyLayout(typicalLength=ApplicationFeatureConstants.TYPICAL_LENGTH_NAMESPACE)
     @MemberOrder(name="Id", sequence = "2.2")
     public String getNamespaceName() {
         return getFeatureId().getNamespace();
@@ -193,7 +193,7 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
     @Property(
             domainEvent = TypeSimpleNameDomainEvent.class
             )
-    @PropertyLayout(typicalLength=ApplicationFeature.TYPICAL_LENGTH_CLS_NAME)
+    @PropertyLayout(typicalLength=ApplicationFeatureConstants.TYPICAL_LENGTH_TYPE_SIMPLE_NAME)
     @MemberOrder(name="Id", sequence = "2.3")
     public String getTypeSimpleName() {
         return getFeatureId().getTypeSimpleName();
@@ -212,7 +212,7 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
     @Property(
             domainEvent = MemberNameDomainEvent.class
             )
-    @PropertyLayout(typicalLength=ApplicationFeature.TYPICAL_LENGTH_MEMBER_NAME)
+    @PropertyLayout(typicalLength=ApplicationFeatureConstants.TYPICAL_LENGTH_MEMBER_NAME)
     @MemberOrder(name="Id", sequence = "2.4")
     public String getMemberName() {
         return getFeatureId().getMemberName();
