@@ -51,7 +51,7 @@ import lombok.val;
                 Configuration_usingJdo.class,
                 Configuration_usingCommandPublishing.class,
                 ApplicationLayerTestFactory.class
-        }, 
+        },
         properties = {
                 "logging.level.org.apache.isis.persistence.jdo.datanucleus5.persistence.IsisTransactionJdo=DEBUG",
                 "logging.level.org.apache.isis.core.runtimeservices.session.IsisInteractionFactoryDefault=DEBUG",
@@ -73,40 +73,40 @@ class JdoCommandPublishingTest extends IsisIntegrationTestAbstract {
     private void given() {
         CommandSubscriberForTesting.clearPublishedCommands(kvStore);
     }
-    
+
     private void verify(VerificationStage verificationStage) {
         switch(verificationStage) {
-        
+
         case FAILURE_CASE:
             assertHasCommandEntries(Can.empty());
             break;
         case POST_INTERACTION:
-        
-            
+
+
 //            Interaction interaction = null;
 //            String propertyId = "org.apache.isis.testdomain.jdo.entities.JdoBook#name";
 //            Object target = null;
 //            Object argValue = "Book #2";
 //            String targetMemberName = "name???";
 //            String targetClass = "org.apache.isis.testdomain.jdo.entities.JdoBook";
-            
+
             val propertyDto = new PropertyDto();
             propertyDto.setLogicalMemberIdentifier("testdomain.jdo.Book#name");
-            
+
             val command = new Command(UUID.randomUUID());
             val commandDto = new CommandDto();
-            commandDto.setTransactionId(command.getUniqueId().toString());
+            commandDto.setInteractionId(command.getInteractionId().toString());
             commandDto.setMember(propertyDto);
 
             command.updater().setCommandDto(commandDto);
-            
+
             assertHasCommandEntries(Can.of(command));
             break;
         default:
             // ignore ... no checks
         }
     }
-    
+
     // -- HELPER
 
     private void assertHasCommandEntries(Can<Command> expectedCommands) {
@@ -114,19 +114,19 @@ class JdoCommandPublishingTest extends IsisIntegrationTestAbstract {
         CollectionAssertions.assertComponentWiseEquals(
                 expectedCommands, actualCommands, this::commandDifference);
     }
-    
+
     private String commandDifference(Command a, Command b) {
         if(!Objects.equals(a.getLogicalMemberIdentifier(), b.getLogicalMemberIdentifier())) {
-            return String.format("differing member identifier %s != %s", 
+            return String.format("differing member identifier %s != %s",
                     a.getLogicalMemberIdentifier(), b.getLogicalMemberIdentifier());
         }
         if(!Objects.equals(a.getResult(), b.getResult())) {
-            return String.format("differing results %s != %s", 
+            return String.format("differing results %s != %s",
                     a.getResult(), b.getResult());
         }
         return null; // no difference
     }
-    
+
 
 
 }

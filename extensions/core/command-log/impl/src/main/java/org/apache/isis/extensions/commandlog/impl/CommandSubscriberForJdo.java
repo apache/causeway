@@ -57,7 +57,7 @@ public class CommandSubscriberForJdo implements CommandSubscriber {
         }
 
         val existingCommandJdoIfAny =
-                commandJdoRepository.findByUniqueId(command.getInteractionId());
+                commandJdoRepository.findByInteractionId(command.getInteractionId());
         if(existingCommandJdoIfAny.isPresent()) {
             if(log.isDebugEnabled()) {
                 // this isn't expected to happen ... we just log the fact if it does
@@ -75,7 +75,7 @@ public class CommandSubscriberForJdo implements CommandSubscriber {
             val parentJdo =
                 parent != null
                     ? commandJdoRepository
-                        .findByUniqueId(parent.getInteractionId())
+                        .findByInteractionId(parent.getInteractionId())
                         .orElse(null)
                     : null;
             commandJdo.setParent(parentJdo);

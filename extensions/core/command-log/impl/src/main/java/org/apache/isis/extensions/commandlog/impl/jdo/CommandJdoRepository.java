@@ -100,10 +100,10 @@ public class CommandJdoRepository {
     }
 
 
-    public Optional<CommandJdo> findByUniqueId(final UUID uniqueId) {
+    public Optional<CommandJdo> findByInteractionId(final UUID interactionId) {
         return repositoryService().firstMatch(
-                Query.named(CommandJdo.class, "findByUniqueIdStr")
-                    .withParameter("uniqueIdStr", uniqueId.toString()));
+                Query.named(CommandJdo.class, "findByInteractionIdStr")
+                    .withParameter("interactionIdStr", interactionId.toString()));
     }
 
     public List<CommandJdo> findByParent(final CommandJdo parent) {
@@ -189,10 +189,10 @@ public class CommandJdoRepository {
      * the application.
      *
      * This finder returns all (completed) {@link CommandJdo}s started after
-     * the command with the specified uniqueId.  The number of commands
+     * the command with the specified interactionId.  The number of commands
      * returned can be limited so that they can be applied in batches.
      *
-     * If the provided uniqueId is null, then only a single
+     * If the provided interactionId is null, then only a single
      * {@link CommandJdo command} is returned.  This is intended to support
      * the case when the secondary does not yet have any
      * {@link CommandJdo command}s replicated.  In practice this is unlikely;
@@ -201,24 +201,24 @@ public class CommandJdoRepository {
      * case there will already be a {@link CommandJdo command} representing the
      * current high water mark on the secondary system.
      *
-     * If the unique id is not null but the corresponding
+     * If the interactionid is not null but the corresponding
      * {@link CommandJdo command} is not found, then <tt>null</tt> is returned.
      * In the replay scenario the caller will probably interpret this as an
      * error because it means that the high water mark on the secondary is
      * inaccurate, referring to a non-existent {@link CommandJdo command} on
      * the primary.
      *
-     * @param uniqueId - the identifier of the {@link CommandJdo command} being
+     * @param interactionId - the identifier of the {@link CommandJdo command} being
      *                   the replay hwm (using {@link #findMostRecentReplayed()} on the
      *                   secondary), or null if no HWM was found there.
      * @param batchSize - to restrict the number returned (so that replay
      *                   commands can be batched).
      */
-    public List<CommandJdo> findSince(final UUID uniqueId, final Integer batchSize) {
-        if(uniqueId == null) {
+    public List<CommandJdo> findSince(final UUID interactionId, final Integer batchSize) {
+        if(interactionId == null) {
             return findFirst();
         }
-        final CommandJdo from = findByUniqueIdElseNull(uniqueId);
+        final CommandJdo from = findByInteractionIdElseNull(interactionId);
         if(from == null) {
             return Collections.emptyList();
         }
@@ -234,13 +234,13 @@ public class CommandJdoRepository {
     }
 
 
-    private CommandJdo findByUniqueIdElseNull(final UUID uniqueId) {
+    private CommandJdo findByInteractionIdElseNull(final UUID interactionId) {
         val tsq = jdoSupport.newTypesafeQuery(CommandJdo.class);
         val cand = QCommandJdo.candidate();
         val q = tsq.filter(
-                cand.uniqueIdStr.eq(tsq.parameter("uniqueIdStr", String.class))
+                cand.interactionIdStr.eq(tsq.parameter("interactionIdStr", String.class))
         );
-        q.setParameter("uniqueIdStr", uniqueId.toString());
+        q.setParameter("interactionIdStr", interactionId.toString());
         return q.executeUnique();
     }
 
@@ -333,7 +333,7 @@ public class CommandJdoRepository {
 
         final CommandJdo commandJdo = new CommandJdo();
 
-        commandJdo.setUniqueIdStr(dto.getTransactionId());
+        commandJdo.setInteractionIdStr(dto.getInteractionId());
         commandJdo.setTimestamp(JavaSqlXMLGregorianCalendarMarshalling.toTimestamp(dto.getTimestamp()));
         commandJdo.setUsername(dto.getUser());
 

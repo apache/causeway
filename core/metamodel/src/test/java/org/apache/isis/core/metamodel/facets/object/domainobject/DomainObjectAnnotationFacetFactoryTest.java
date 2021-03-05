@@ -123,7 +123,7 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
         }
 
         @Test
-        public void ignore_HasUniqueId() {
+        public void ignore_HasInteractionId() {
 
             allowingEntityChangePublishingToReturn(PublishingPolicies.EntityChangePublishingPolicy.ALL);
 

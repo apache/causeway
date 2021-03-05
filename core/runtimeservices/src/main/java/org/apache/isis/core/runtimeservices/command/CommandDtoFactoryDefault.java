@@ -72,12 +72,12 @@ public class CommandDtoFactoryDefault implements CommandDtoFactory {
 
     @Override
     public CommandDto asCommandDto(
-            final UUID uniqueId,
+            final UUID interactionId,
             final Can<ManagedObject> targetAdapters,
             final ObjectAction objectAction,
             final Can<ManagedObject> argAdapters) {
 
-        final CommandDto dto = asCommandDto(uniqueId, targetAdapters);
+        final CommandDto dto = asCommandDto(interactionId, targetAdapters);
 
         final ActionDto actionDto = new ActionDto();
         actionDto.setInteractionType(InteractionType.ACTION_INVOCATION);
@@ -90,12 +90,12 @@ public class CommandDtoFactoryDefault implements CommandDtoFactory {
 
     @Override
     public CommandDto asCommandDto(
-            final UUID uniqueId,
+            final UUID interactionId,
             final Can<ManagedObject> targetAdapters,
             final OneToOneAssociation property,
             final ManagedObject valueAdapterOrNull) {
 
-        final CommandDto dto = asCommandDto(uniqueId, targetAdapters);
+        final CommandDto dto = asCommandDto(interactionId, targetAdapters);
 
         final PropertyDto propertyDto = new PropertyDto();
         propertyDto.setInteractionType(InteractionType.PROPERTY_EDIT);
@@ -163,13 +163,13 @@ public class CommandDtoFactoryDefault implements CommandDtoFactory {
 
     // -- HELPER
 
-    private CommandDto asCommandDto(final UUID uniqueId, final Can<ManagedObject> targetAdapters) {
+    private CommandDto asCommandDto(final UUID interactionId, final Can<ManagedObject> targetAdapters) {
 
         val dto = new CommandDto();
         dto.setMajorVersion("2");
         dto.setMinorVersion("0");
 
-        dto.setTransactionId(uniqueId.toString());
+        dto.setInteractionId(interactionId.toString());
         dto.setUser(userService.currentUserNameElseNobody());
         dto.setTimestamp(clockService.getClock().xmlGregorianCalendar());
 

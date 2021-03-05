@@ -357,7 +357,7 @@ public class WrapperFactoryDefault implements WrapperFactory {
         val interactionLayer = currentInteractionLayer();
         val asyncAuth = authFrom(asyncControl, interactionLayer.getAuthentication());
         val command = interactionContextProvider.get().currentInteractionElseFail().getCommand();
-        val commandUniqueId = command.getInteractionId();
+        val commandInteractionId = command.getInteractionId();
 
         val targetAdapter = memberAndTarget.getTarget();
         val method = memberAndTarget.getMethod();
@@ -370,12 +370,12 @@ public class WrapperFactoryDefault implements WrapperFactory {
             case ACTION:
                 val action = memberAndTarget.getAction();
                 commandDto = commandDtoFactory
-                        .asCommandDto(commandUniqueId, targetList, action, argAdapters);
+                        .asCommandDto(commandInteractionId, targetList, action, argAdapters);
                 break;
             case PROPERTY:
                 val property = memberAndTarget.getProperty();
                 commandDto = commandDtoFactory
-                        .asCommandDto(commandUniqueId, targetList, property, argAdapters.getElseFail(0));
+                        .asCommandDto(commandInteractionId, targetList, property, argAdapters.getElseFail(0));
                 break;
             default:
                 // shouldn't happen, already catered for this case previously

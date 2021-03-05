@@ -23,8 +23,6 @@ import java.util.concurrent.Callable;
 
 import org.springframework.beans.factory.DisposableBean;
 
-import org.apache.isis.applib.services.MethodReferences;
-
 import lombok.Data;
 import lombok.Getter;
 

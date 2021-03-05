@@ -84,7 +84,7 @@ public class Command implements HasInteractionId, HasUsername, HasCommandDto {
      * Unique identifier for the command.
      *
      * <p>
-     *     Derived from {@link #getCommandDto()}'s {@link CommandDto#getTransactionId()}
+     *     Derived from {@link #getCommandDto()}'s {@link CommandDto#getInteractionId()}
      * </p>
      */
     @Getter
@@ -125,7 +125,7 @@ public class Command implements HasInteractionId, HasUsername, HasCommandDto {
      *
      * <p>
      *     When the framework sets this (through an internal API), it is
-     *     expected to have {@link CommandDto#getTransactionId()},
+     *     expected to have {@link CommandDto#getInteractionId()},
      *     {@link CommandDto#getUser()}, {@link CommandDto#getTimestamp()},
      *     {@link CommandDto#getTargets()} and {@link CommandDto#getMember()}
      *     to be populated.  The {@link #getInteractionId()}, {@link #getUsername()},
@@ -266,14 +266,14 @@ public class Command implements HasInteractionId, HasUsername, HasCommandDto {
         public void setCommandDto(final CommandDto commandDto) {
             Command.this.commandDto = commandDto;
 
-            // even though redundant, but must ensure commandUniqueId == dtoUniqueId
-            val commandUniqueId = Command.this.getInteractionId().toString();
-            val dtoUniqueId = commandDto.getTransactionId();
+            // should be redundant, but we ensure commandInteractionId == dtoInteractionId
+            val commandInteractionId = Command.this.getInteractionId().toString();
+            val dtoInteractionId = commandDto.getInteractionId();
 
-            if(!commandUniqueId.equals(dtoUniqueId)) {
-                log.warn("setting CommandDto on a Command has side-effects when "
-                        + "both their UniqueIds don't match");
-                commandDto.setTransactionId(commandUniqueId);
+            if(!commandInteractionId.equals(dtoInteractionId)) {
+                log.warn("setting CommandDto on a Command has side-effects if "
+                        + "their InteractionIds don't match; forcing CommandDto's Id to be same as Command's");
+                commandDto.setInteractionId(commandInteractionId);
             }
 
         }

@@ -44,8 +44,8 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class IsisInteraction implements InternalInteraction {
 
-    public IsisInteraction(final @NonNull UUID uniqueId) {
-        this.command = new Command(uniqueId);
+    public IsisInteraction(final @NonNull UUID interactionId) {
+        this.command = new Command(interactionId);
     }
 
     @Getter(onMethod_ = {@Override})

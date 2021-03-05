@@ -105,12 +105,12 @@ public class CommandFetcher {
     }
 
 
-    private URI buildUri(final UUID uniqueId) {
+    private URI buildUri(final UUID interactionId) {
         final UriBuilder uriBuilder = UriBuilder.fromUri(
-                uniqueId != null
+                interactionId != null
                         ? String.format(
-                            "%s%s?uniqueId=%s&batchSize=%d",
-                            secondaryConfig.getPrimaryBaseUrlRestful(), URL_SUFFIX, uniqueId, secondaryConfig.getBatchSize())
+                            "%s%s?interactionId=%s&batchSize=%d",
+                            secondaryConfig.getPrimaryBaseUrlRestful(), URL_SUFFIX, interactionId, secondaryConfig.getBatchSize())
                         : String.format(
                             "%s%s?batchSize=%d",
                             secondaryConfig.getPrimaryBaseUrlRestful(), URL_SUFFIX, secondaryConfig.getBatchSize())

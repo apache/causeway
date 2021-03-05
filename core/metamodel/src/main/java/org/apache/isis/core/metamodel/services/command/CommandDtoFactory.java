@@ -55,7 +55,7 @@ public interface CommandDtoFactory {
      * @see #asCommandDto(UUID, Can, OneToOneAssociation, ManagedObject)
      */
     CommandDto asCommandDto(
-            final UUID uniqueId,
+            final UUID interactionId,
             final Can<ManagedObject> targetAdapters,
             final ObjectAction objectAction,
             final Can<ManagedObject> argAdapters);
@@ -68,7 +68,7 @@ public interface CommandDtoFactory {
      * @see #asCommandDto(UUID, Can, ObjectAction, Can)
      */
     CommandDto asCommandDto(
-            final UUID uniqueId,
+            final UUID interactionId,
             final Can<ManagedObject> targetAdapters,
             final OneToOneAssociation association,
             final ManagedObject valueAdapterOrNull);

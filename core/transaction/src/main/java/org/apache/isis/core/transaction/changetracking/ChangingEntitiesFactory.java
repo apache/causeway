@@ -84,16 +84,16 @@ class ChangingEntitiesFactory {
             final int numberEntityPropertiesModified,
             final Map<ManagedObject, EntityChangeKind> changeKindByEnlistedAdapter) {
 
-        val uniqueId = interaction.getInteractionId();
+        val interactionId = interaction.getInteractionId();
         final int nextEventSequence = interaction.next(SequenceType.TRANSACTION);
 
         return new SimpleChangingEntities(
-                    uniqueId, nextEventSequence,
+                    interactionId, nextEventSequence,
                     userName, completedAt,
                     numberEntitiesLoaded,
                     numberEntityPropertiesModified,
                     ()->newDto(
-                            uniqueId, nextEventSequence,
+                            interactionId, nextEventSequence,
                             userName, completedAt,
                             numberEntitiesLoaded,
                             numberEntityPropertiesModified,
@@ -101,7 +101,7 @@ class ChangingEntitiesFactory {
     }
 
     private static ChangesDto newDto(
-            final UUID uniqueId, final int nextEventSequence,
+            final UUID interactionId, final int transactionSequenceNum,
             final String userName, final java.sql.Timestamp completedAt,
             final int numberEntitiesLoaded,
             final int numberEntityPropertiesModified,
@@ -125,8 +125,8 @@ class ChangingEntitiesFactory {
         changesDto.setMajorVersion("2");
         changesDto.setMinorVersion("0");
 
-        changesDto.setTransactionId(uniqueId.toString());
-        changesDto.setSequence(nextEventSequence);
+        changesDto.setInteractionId(interactionId.toString());
+        changesDto.setSequence(transactionSequenceNum);
 
         changesDto.setUser(userName);
         changesDto.setCompletedAt(JavaSqlXMLGregorianCalendarMarshalling.toXMLGregorianCalendar(completedAt));

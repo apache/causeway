@@ -41,20 +41,20 @@ import org.apache.isis.extensions.commandlog.impl.jdo.CommandJdoRepository;
  */
 @Action(
     semantics = SemanticsOf.SAFE
-    , domainEvent = HasUniqueId_command.ActionDomainEvent.class
+    , domainEvent = HasInteractionId_command.ActionDomainEvent.class
 )
-public class HasUniqueId_command {
+public class HasInteractionId_command {
 
     public static class ActionDomainEvent
-            extends IsisModuleExtCommandLogImpl.ActionDomainEvent<HasUniqueId_command> { }
+            extends IsisModuleExtCommandLogImpl.ActionDomainEvent<HasInteractionId_command> { }
 
     private final HasInteractionId hasInteractionId;
-    public HasUniqueId_command(final HasInteractionId hasInteractionId) {
+    public HasInteractionId_command(final HasInteractionId hasInteractionId) {
         this.hasInteractionId = hasInteractionId;
     }
 
 
-    @MemberOrder(name="transactionId", sequence="1")
+    @MemberOrder(name="interactionId", sequence="1")
     public CommandJdo act() {
         return findCommand();
     }
@@ -72,7 +72,7 @@ public class HasUniqueId_command {
     private CommandJdo findCommand() {
         final UUID transactionId = hasInteractionId.getInteractionId();
         return commandServiceRepository
-                .findByUniqueId(transactionId)
+                .findByInteractionId(transactionId)
                 .orElse(null);
     }
 

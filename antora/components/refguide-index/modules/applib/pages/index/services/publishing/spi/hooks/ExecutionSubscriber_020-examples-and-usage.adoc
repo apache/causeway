@@ -25,7 +25,7 @@ See also:
 +
 The xref:refguide:applib:index/services/command/Command.adoc[Command]  captures the __cause__ of an interaction (an action was invoked, a property was edited), while the xref:refguide:applib:index/services/publishing/spi/ExecutionSubscriber.adoc[ExecutionSubscriber] captures the __effect__ of that interaction in terms of events, while the xref:refguide:applib:index/services/publishing/spi/EntityPropertyChangeSubscriber.adoc[EntityPropertyChangeSubscriber] captures the effect of the interaction in terms of changed state.
 
-All of these services collaborate implicitly by way of the xref:refguide:commons:index//having/HasUniqueId.adoc[HasUniqueId] interface.
+All of these services collaborate implicitly by way of the xref:refguide:applib:index/mixins/system/HasInteractionId.adoc[HasInteractionId] interface.
 
 In contrast:
 

@@ -122,7 +122,7 @@ public class CommandServiceMenu {
     public CommandJdo findCommandById(
             @ParameterLayout(named="Transaction Id")
             final UUID transactionId) {
-        return commandServiceRepository.findByUniqueId(transactionId).orElse(null);
+        return commandServiceRepository.findByInteractionId(transactionId).orElse(null);
     }
     public boolean hideFindCommandById() {
         return commandServiceRepository == null;

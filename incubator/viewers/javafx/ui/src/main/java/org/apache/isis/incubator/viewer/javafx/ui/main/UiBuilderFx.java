@@ -45,7 +45,7 @@ import lombok.extern.log4j.Log4j2;
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 @Log4j2
 public class UiBuilderFx implements InteractionScopeAware {
-    
+
     private final ApplicationContext springContext;
     private final JavaFxViewerConfig viewerConfig;
 
@@ -70,32 +70,32 @@ public class UiBuilderFx implements InteractionScopeAware {
     public void beforeEnteringTransactionalBoundary(InteractionSession interactionSession) {
         //TODO this would be the place to indicate to the user, that a long running task has started
         //scene.getRoot().cursorProperty().set(Cursor.WAIT);
-        _Probe.errOut("Interaction HAS_STARTED conversationId=%s", interactionSession.getUniqueId());
+        _Probe.errOut("Interaction HAS_STARTED conversationId=%s", interactionSession.getInteractionId());
     }
-    
+
     @Override
     public void afterLeavingTransactionalBoundary(InteractionSession interactionSession) {
         //TODO this would be the place to indicate to the user, that a long running task has ended
         //scene.getRoot().cursorProperty().set(Cursor.DEFAULT);
-        _Probe.errOut("Interaction IS_ENDING conversationId=%s", interactionSession.getUniqueId());
+        _Probe.errOut("Interaction IS_ENDING interactionId=%s", interactionSession.getInteractionId());
     }
-    
+
     // -- HELPER
-        
+
     private void setupTitle(Stage stage) {
         val title = Optional.ofNullable(viewerConfig.getApplicationTitle())
                 .orElse("Unknonw Title");
         stage.setTitle(title);
     }
-    
+
     private void setupIcon(Stage stage) {
         val icon = viewerConfig.getApplicationIcon();
         if(icon==null) {
-            return; 
+            return;
         }
         stage.getIcons().add(icon);
     }
-    
-    
+
+
 
 }

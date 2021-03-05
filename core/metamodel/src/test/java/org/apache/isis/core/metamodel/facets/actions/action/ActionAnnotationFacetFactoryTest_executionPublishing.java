@@ -48,7 +48,7 @@ public class ActionAnnotationFacetFactoryTest_executionPublishing extends Action
     }
 
     @Test
-    public void given_HasUniqueId_thenIgnored() {
+    public void given_HasInteractionId_thenIgnored() {
 
         final Method actionMethod = findMethod(SomeHasInteractionId.class, "someAction");
 

@@ -180,7 +180,7 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
 
         log.info("Executing: {} {} {}",
                 dto.getMember().getLogicalMemberIdentifier(),
-                dto.getTimestamp(), dto.getTransactionId());
+                dto.getTimestamp(), dto.getInteractionId());
 
         final MemberDto memberDto = dto.getMember();
         final String memberId = memberDto.getMemberIdentifier();

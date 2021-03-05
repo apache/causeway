@@ -84,10 +84,10 @@ import lombok.val;
         table = "Command")
 @javax.jdo.annotations.Queries( {
     @javax.jdo.annotations.Query(
-            name="findByUniqueIdStr",
+            name="findByInteractionIdStr",
             value="SELECT "
                     + "FROM org.apache.isis.extensions.commandlog.impl.jdo.CommandJdo "
-                    + "WHERE uniqueIdStr == :uniqueIdStr "),
+                    + "WHERE interactionIdStr == :interactionIdStr "),
     @javax.jdo.annotations.Query(
             name="findByParent",
             value="SELECT "
@@ -110,7 +110,7 @@ import lombok.val;
             value="SELECT "
                     + "FROM org.apache.isis.extensions.commandlog.impl.jdo.CommandJdo "
                     + "WHERE target == :target "
-                    + "ORDER BY this.timestamp DESC, uniqueIdStr DESC "
+                    + "ORDER BY this.timestamp DESC "
                     + "RANGE 0,30"),
     @javax.jdo.annotations.Query(
             name="findByTargetAndTimestampBetween",
@@ -273,7 +273,7 @@ public class CommandJdo
      */
     public CommandJdo(final Command command) {
 
-        setUniqueIdStr(command.getInteractionId().toString());
+        setInteractionIdStr(command.getInteractionId().toString());
         setUsername(command.getUsername());
         setTimestamp(command.getTimestamp());
 
@@ -303,7 +303,7 @@ public class CommandJdo
             final ReplayState replayState,
             final int targetIndex) {
 
-        setUniqueIdStr(commandDto.getTransactionId());
+        setInteractionIdStr(commandDto.getInteractionId());
         setUsername(commandDto.getUser());
         setTimestamp(JavaSqlXMLGregorianCalendarMarshalling.toTimestamp(commandDto.getTimestamp()));
 
@@ -360,7 +360,7 @@ public class CommandJdo
     }
 
 
-    public static class UniqueIdDomainEvent extends PropertyDomainEvent<String> { }
+    public static class InteractionIdDomainEvent extends PropertyDomainEvent<String> { }
     /**
      * Implementation note: persisted as a string rather than a UUID as fails
      * to persist if using h2 (perhaps would need to be mapped differently).
@@ -368,13 +368,13 @@ public class CommandJdo
      */
     @javax.jdo.annotations.PrimaryKey
     @javax.jdo.annotations.Persistent
-    @javax.jdo.annotations.Column(allowsNull="false", name = "uniqueId", length = 36)
-    @Property(domainEvent = UniqueIdDomainEvent.class)
-    @PropertyLayout(named = "UniqueId")
+    @javax.jdo.annotations.Column(allowsNull="false", name = "interactionId", length = 36)
+    @Property(domainEvent = InteractionIdDomainEvent.class)
+    @PropertyLayout(named = "Interaction Id")
     @Getter @Setter
-    private String uniqueIdStr;
+    private String interactionIdStr;
     @Programmatic
-    public UUID getInteractionId() {return UUID.fromString(getUniqueIdStr());}
+    public UUID getInteractionId() {return UUID.fromString(getInteractionIdStr());}
 
 
     public static class UsernameDomainEvent extends PropertyDomainEvent<String> { }
@@ -594,7 +594,7 @@ public class CommandJdo
     @Override
     public String toString() {
         return ObjectContracts
-                .toString("uniqueId", CommandJdo::getInteractionId)
+                .toString("interactionId", CommandJdo::getInteractionId)
                 .thenToString("username", CommandJdo::getUsername)
                 .thenToString("timestamp", CommandJdo::getTimestamp)
                 .thenToString("target", CommandJdo::getTarget)
@@ -653,7 +653,7 @@ public class CommandJdo
 
         private List<String> ordered(List<String> propertyIds) {
             return Arrays.asList(
-                "timestamp", "target", "targetMember", "username", "complete", "resultSummary", "uniqueIdStr"
+                "timestamp", "target", "targetMember", "username", "complete", "resultSummary", "interactionIdStr"
             );
         }
     }

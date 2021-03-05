@@ -198,20 +198,20 @@ public final class InteractionDtoUtils {
             final Execution<?, ?> execution,
             final MemberExecutionDto executionDto) {
         final Interaction interaction = execution.getInteraction();
-        final String transactionId = interaction.getInteractionId().toString();
+        final String interactionId = interaction.getInteractionId().toString();
 
-        return InteractionDtoUtils.newInteractionDto(transactionId, executionDto);
+        return InteractionDtoUtils.newInteractionDto(interactionId, executionDto);
     }
 
     private static InteractionDto newInteractionDto(
-            final String transactionId,
+            final String interactionId,
             final MemberExecutionDto executionDto) {
         final InteractionDto interactionDto = new InteractionDto();
 
         interactionDto.setMajorVersion("1");
         interactionDto.setMinorVersion("0");
 
-        interactionDto.setTransactionId(transactionId);
+        interactionDto.setInteractionId(interactionId);
         interactionDto.setExecution(executionDto);
 
         executionDto.setInteractionType(
