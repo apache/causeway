@@ -1,6 +1,12 @@
 = AbstractDomainEvent
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
+Superclass for all domain events that are raised by the framework when interacting with actions, properties or collections.
+
+The main purpose of the class is to define the protocol by which subscribers can influence an interaction (eg hide a collection, disable a property, validate action arguments).
+
+The class also provides a simple mechanism to allow adhoc sharing of user data between different phases.
+
 == API
 
 [source,java]
@@ -9,6 +15,7 @@
 class AbstractDomainEvent<S> {
   AbstractDomainEvent()     // <.>
   AbstractDomainEvent(final S source, final Identifier identifier)
+  S getSource()     // <.>
   void setMixedIn(final Object mixedIn)     // <.>
   Object getSubject()     // <.>
   void setEventPhase(Phase phase)     // <.>
@@ -33,6 +40,11 @@ class AbstractDomainEvent<S> {
 --
 If used then the framework will set state via (non-API) setters.
 --
+<.> xref:#getSource__[getSource()]
++
+--
+The domain object raising this event.
+--
 <.> xref:#setMixedIn__Object[setMixedIn(Object)]
 +
 --
@@ -54,10 +66,30 @@ Not API, set by the framework.
 Not API, set by the framework if the no-arg constructor is used.
 --
 <.> xref:#hide__[hide()]
++
+--
+API for subscribers to hide the member.
+--
 <.> xref:#disable__String[disable(String)]
++
+--
+API for subscribers to disable the member, specifying the reason why.
+--
 <.> xref:#disable__TranslatableString[disable(TranslatableString)]
++
+--
+API for subscribers to disable the member, specifying the reason why as a xref:refguide:applib:index/services/i18n/TranslatableString.adoc[TranslatableString] .
+--
 <.> xref:#invalidate__String[invalidate(String)]
++
+--
+API for subscribers to invalidate an interaction, eg invalid arguments to an action.
+--
 <.> xref:#invalidate__TranslatableString[invalidate(TranslatableString)]
++
+--
+API for subscribers to invalidate an interaction, specifying the reason as a xref:refguide:applib:index/services/i18n/TranslatableString.adoc[TranslatableString] .
+--
 <.> xref:#veto__String_Object[veto(String, Object)]
 +
 --
@@ -76,7 +108,7 @@ Obtain user-data, as set by a previous _#getEventPhase() phase_ .
 <.> xref:#put__Object_Object[put(Object, Object)]
 +
 --
-Set user-data, for the use of a subsequent _#getEventPhase() phase_ .
+Mechanism to allow subscribers to share arbitrary information between phases. One event instance is used for both the hide and disable phases, and a different event instance is shared between validate/pre-execute/post-execute. Set user-data, for the use of a subsequent _#getEventPhase() phase_ .
 --
 
 == Members
@@ -87,6 +119,15 @@ Set user-data, for the use of a subsequent _#getEventPhase() phase_ .
 If used then the framework will set state via (non-API) setters.
 
 Because the xref:refguide:applib:index/events/EventObjectBase.adoc[EventObjectBase] superclass prohibits a null source, a dummy value is temporarily used.
+
+[#getSource__]
+=== getSource()
+
+The domain object raising this event.
+
+For a "regular" action, property or collection then this will be the target domain object.
+
+But for a "mixin" action, this will be an instance of the mixin itself.
 
 [#setMixedIn__Object]
 === setMixedIn(Object)
@@ -111,17 +152,27 @@ Not API, set by the framework if the no-arg constructor is used.
 [#hide__]
 === hide()
 
+API for subscribers to hide the member.
+
 [#disable__String]
 === disable(String)
+
+API for subscribers to disable the member, specifying the reason why.
 
 [#disable__TranslatableString]
 === disable(TranslatableString)
 
+API for subscribers to disable the member, specifying the reason why as a xref:refguide:applib:index/services/i18n/TranslatableString.adoc[TranslatableString] .
+
 [#invalidate__String]
 === invalidate(String)
 
+API for subscribers to invalidate an interaction, eg invalid arguments to an action.
+
 [#invalidate__TranslatableString]
 === invalidate(TranslatableString)
+
+API for subscribers to invalidate an interaction, specifying the reason as a xref:refguide:applib:index/services/i18n/TranslatableString.adoc[TranslatableString] .
 
 [#veto__String_Object]
 === veto(String, Object)
@@ -145,4 +196,4 @@ Obtain user-data, as set by a previous _#getEventPhase() phase_ .
 [#put__Object_Object]
 === put(Object, Object)
 
-Set user-data, for the use of a subsequent _#getEventPhase() phase_ .
+Mechanism to allow subscribers to share arbitrary information between phases. One event instance is used for both the hide and disable phases, and a different event instance is shared between validate/pre-execute/post-execute. Set user-data, for the use of a subsequent _#getEventPhase() phase_ .

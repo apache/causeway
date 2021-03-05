@@ -1,6 +1,12 @@
 = Dto_downloadXsd
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
+Mixin that provides the ability to download the XSD schema for a view model can be downloaded as XML.
+
+Requires that the view model is a JAXB view model, and implements the xref:refguide:applib:index/mixins/dto/Dto.adoc[Dto] marker interface.
+
+If the domain object's JAXB annotations reference only a single XSD schema then this will return that XML text as a xref:refguide:applib:index/value/Clob.adoc[Clob] of that XSD. If there are multiple XSD schemas referenced then the action will return a zip of those schemas, wrapped up in a xref:refguide:applib:index/value/Blob.adoc[Blob] .
+
 == API
 
 [source,java]
@@ -11,9 +17,21 @@ class Dto_downloadXsd {
 MessageService messageService;
   @Inject
 JaxbService jaxbService;
-  Object act(final String fileName, final IsisSchemas isisSchemas)
+  Object act(final String fileName, final IsisSchemas isisSchemas)     // <.>
   String default0Act()
   IsisSchemas default1Act()
 }
 ----
 
+<.> xref:#act__String_IsisSchemas[act(String, IsisSchemas)]
++
+--
+The _IsisSchemas_ parameter can be used to optionally ignore the common Apache Isis schemas; useful if there is only one other XSD schema referenced by the DTO.
+--
+
+== Members
+
+[#act__String_IsisSchemas]
+=== act(String, IsisSchemas)
+
+The _IsisSchemas_ parameter can be used to optionally ignore the common Apache Isis schemas; useful if there is only one other XSD schema referenced by the DTO.

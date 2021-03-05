@@ -11,7 +11,7 @@ The numbers of objects loaded, created, updated or deleted and the number of obj
 .EntityChanges.java
 ----
 interface EntityChanges {
-  UUID getUniqueId()     // <.>
+  UUID getInteractionId()     // <.>
   String getUsername()     // <.>
   Timestamp getCompletedAt()     // <.>
   int getNumberLoaded()     // <.>
@@ -23,15 +23,15 @@ interface EntityChanges {
 }
 ----
 
-<.> xref:#getUniqueId__[getUniqueId()]
+<.> xref:#getInteractionId__[getInteractionId()]
 +
 --
-inherited from xref:refguide:commons:index/having/HasUniqueId.adoc[HasUniqueId] , correlates back to the unique identifier of the transaction in which these objects were changed.
+inherited from xref:refguide:applib:index/mixins/system/HasInteractionId.adoc[HasInteractionId] , correlates back to the unique identifier of the transaction in which these objects were changed.
 --
 <.> xref:#getUsername__[getUsername()]
 +
 --
-Inherited from xref:refguide:commons:index/having/HasUsername.adoc[HasUsername] , is the user that initiated the transaction causing these objects to change.
+Inherited from xref:refguide:applib:index/mixins/security/HasUsername.adoc[HasUsername] , is the user that initiated the transaction causing these objects to change.
 --
 <.> xref:#getCompletedAt__[getCompletedAt()]
 +
@@ -71,15 +71,15 @@ Same details, but as an an instance of _ChangesDto_ .
 
 == Members
 
-[#getUniqueId__]
-=== getUniqueId()
+[#getInteractionId__]
+=== getInteractionId()
 
-inherited from xref:refguide:commons:index/having/HasUniqueId.adoc[HasUniqueId] , correlates back to the unique identifier of the transaction in which these objects were changed.
+inherited from xref:refguide:applib:index/mixins/system/HasInteractionId.adoc[HasInteractionId] , correlates back to the unique identifier of the transaction in which these objects were changed.
 
 [#getUsername__]
 === getUsername()
 
-Inherited from xref:refguide:commons:index/having/HasUsername.adoc[HasUsername] , is the user that initiated the transaction causing these objects to change.
+Inherited from xref:refguide:applib:index/mixins/security/HasUsername.adoc[HasUsername] , is the user that initiated the transaction causing these objects to change.
 
 [#getCompletedAt__]
 === getCompletedAt()

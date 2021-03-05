@@ -1,6 +1,17 @@
 = ActionDomainEvent
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
+Fired whenever the framework interacts with a domain object's action.
+
+This is the specialization of xref:refguide:applib:index/events/domain/AbstractDomainEvent.adoc[AbstractDomainEvent] , for actions, which should then be further subclassed by domain application.
+
+The class has a number of responsibilities (in addition to those it inherits):
+
+* capture the arguments for each of the action's parameters
+* provide selected metadata about the action parameters from the metamodel (names, types)
+
+The class itself is instantiated automatically by the framework using a no-arg constructor; fields are set reflectively.
+
 == API
 
 [source,java]
@@ -20,64 +31,40 @@ class ActionDomainEvent<S> {
 <.> xref:#ActionDomainEvent__[ActionDomainEvent()]
 +
 --
-If used then the framework will set state via (non-API) setters.
+Subtypes can define a no-arg constructor; the framework sets state via (non-API) setters.
 --
 <.> xref:#setReturnValue__Object[setReturnValue(Object)]
 +
 --
-Set by the framework. Event subscribers can replace the value with some other value if they wish, though only in the _AbstractDomainEvent.Phase#EXECUTED_ phase.
+Set by the framework.
 --
 <.> xref:#setSemantics__SemanticsOf[setSemantics(SemanticsOf)]
-+
---
-Not API - set by the framework.
---
 <.> xref:#setParameterNames__List[setParameterNames(List)]
-+
---
-Not API - set by the framework.
---
 <.> xref:#setParameterTypes__List[setParameterTypes(List)]
-+
---
-Not API - set by the framework.
---
 <.> xref:#setMixedIn__Object[setMixedIn(Object)]
-+
---
-Not API - set by the framework.
---
 
 == Members
 
 [#ActionDomainEvent__]
 === ActionDomainEvent()
 
-If used then the framework will set state via (non-API) setters.
-
-Recommended because it reduces the amount of boilerplate in the domain object classes.
+Subtypes can define a no-arg constructor; the framework sets state via (non-API) setters.
 
 [#setReturnValue__Object]
 === setReturnValue(Object)
 
-Set by the framework. Event subscribers can replace the value with some other value if they wish, though only in the _AbstractDomainEvent.Phase#EXECUTED_ phase.
+Set by the framework.
+
+Event subscribers can replace the value with some other value if they wish, though only in the _AbstractDomainEvent.Phase#EXECUTED_ phase.
 
 [#setSemantics__SemanticsOf]
 === setSemantics(SemanticsOf)
 
-Not API - set by the framework.
-
 [#setParameterNames__List]
 === setParameterNames(List)
-
-Not API - set by the framework.
 
 [#setParameterTypes__List]
 === setParameterTypes(List)
 
-Not API - set by the framework.
-
 [#setMixedIn__Object]
 === setMixedIn(Object)
-
-Not API - set by the framework.

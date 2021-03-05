@@ -17,14 +17,14 @@ For a given permission, there is an interaction between the xref:refguide:extens
 ----
 interface ApplicationPermission {
   String title()     // <.>
-  ApplicationFeatureType getFeatureType()
+  ApplicationFeatureSort getFeatureSort()
   ApplicationRole getRole()
   void setRole(ApplicationRole applicationRole)
   ApplicationPermissionRule getRule()
   void setRule(ApplicationPermissionRule rule)
   ApplicationPermissionMode getMode()
   void setMode(ApplicationPermissionMode changing)
-  String getType()
+  String getSort()
   String getFeatureFqn()
   void setFeatureFqn(String featureFqn)
   Optional<ApplicationFeatureId> createFeatureId()

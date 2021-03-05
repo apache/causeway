@@ -3,7 +3,7 @@
 
 Value type used to identify a transaction within the context of an outer _org.apache.isis.applib.services.iactn.Interaction_ .
 
-The transaction and _org.apache.isis.applib.services.iactn.Interaction_ are associated by the _#getUniqueId() uniqueId_ .
+The transaction and _org.apache.isis.applib.services.iactn.Interaction_ are associated by the _#getInteractionId() uniqueId_ .
 
 Obtainable from _TransactionService#currentTransactionId()_ .
 
@@ -13,14 +13,14 @@ Obtainable from _TransactionService#currentTransactionId()_ .
 .TransactionId.java
 ----
 class TransactionId {
-  UUID uniqueId;     // <.>
+  UUID interactionId;     // <.>
   int sequence;     // <.>
   String context;     // <.>
   TransactionId empty()     // <.>
 }
 ----
 
-<.> xref:#uniqueId[uniqueId]
+<.> xref:#interactionId[interactionId]
 +
 --
 The unique identifier of the outer _org.apache.isis.applib.services.iactn.Interaction_ .
@@ -43,15 +43,19 @@ Factory method that returns a nominally "empty" transaction identifier, used as 
 
 == Members
 
-[#uniqueId]
-=== uniqueId
+[#interactionId]
+=== interactionId
 
 The unique identifier of the outer _org.apache.isis.applib.services.iactn.Interaction_ .
+
+Together with _#getSequence()_ , this makes up the implementation of xref:refguide:applib:index/mixins/system/HasTransactionId.adoc[HasTransactionId]
 
 [#sequence]
 === sequence
 
 Identifies the transaction (there could be multiple) within the _org.apache.isis.applib.services.iactn.Interaction_ .
+
+Together with _#getInteractionId()_ , this makes up the implementation of xref:refguide:applib:index/mixins/system/HasTransactionId.adoc[HasTransactionId]
 
 [#context]
 === context

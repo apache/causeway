@@ -3,6 +3,13 @@
 
 Emitted for subscribers to obtain a layout hint (equivalent to the `layout()` supporting method).
 
+The class has a number of responsibilities:
+
+* capture the target object being interacted with
+* capture the layout, if any, as specified to one of the subscribers
+
+The class itself is instantiated automatically by the framework.
+
 == API
 
 [source,java]

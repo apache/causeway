@@ -9,11 +9,11 @@ Provides the access to string representations of the packages, classes and class
 .ApplicationFeatureRepository.java
 ----
 interface ApplicationFeatureRepository {
-  SortedSet<String> packageNames()
-  SortedSet<String> packageNamesContainingClasses(ApplicationMemberType memberType)
-  SortedSet<String> classNamesContainedIn(String packageFqn, ApplicationMemberType memberType)
+  SortedSet<String> namespaceNames()
+  SortedSet<String> classNamesContainedIn(String packageFqn, ApplicationMemberSort memberSort)
   SortedSet<String> classNamesRecursivelyContainedIn(String packageFqn)
-  SortedSet<String> memberNamesOf(String packageFqn, String className, ApplicationMemberType memberType)
+  SortedSet<String> memberNamesOf(String packageFqn, String className, ApplicationMemberSort memberSort)
+  Map<String, ApplicationFeatureId> getFeatureIdentifiersByName()
 }
 ----
 

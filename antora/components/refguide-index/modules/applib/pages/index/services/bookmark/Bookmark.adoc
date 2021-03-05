@@ -11,13 +11,14 @@ Analogous to the `RootOid` .
 .Bookmark.java
 ----
 class Bookmark {
-  Bookmark of(String objectType, String identifier)
+  Bookmark of(String logicalTypeName, String identifier)
   Optional<Bookmark> parse(String str)     // <.>
   OidDto toOidDto()
   Bookmark from(OidDto oidDto)
   String toString()     // <.>
   Bookmark withHintId(String hintId)
   String toStringUsingIdentifier(String id)
+  String getObjectType()     // <.>
 }
 ----
 
@@ -29,7 +30,12 @@ Round-trip with _#toString()_ representation.
 <.> xref:#toString__[toString()]
 +
 --
-The canonical form of the xref:refguide:applib:index/services/bookmark/Bookmark.adoc[Bookmark] , that is " _#getObjectType() objectType_ _#SEPARATOR_ _#getIdentifier()_ ".
+The canonical form of the xref:refguide:applib:index/services/bookmark/Bookmark.adoc[Bookmark] , that is " _#getLogicalTypeName() logical-type-name_ _#SEPARATOR_ _#getIdentifier()_ ".
+--
+<.> xref:#getObjectType__[getObjectType()]
++
+--
+Alias for _#getLogicalTypeName()_ .
 --
 
 == Members
@@ -42,6 +48,11 @@ Round-trip with _#toString()_ representation.
 [#toString__]
 === toString()
 
-The canonical form of the xref:refguide:applib:index/services/bookmark/Bookmark.adoc[Bookmark] , that is " _#getObjectType() objectType_ _#SEPARATOR_ _#getIdentifier()_ ".
+The canonical form of the xref:refguide:applib:index/services/bookmark/Bookmark.adoc[Bookmark] , that is " _#getLogicalTypeName() logical-type-name_ _#SEPARATOR_ _#getIdentifier()_ ".
 
 This is parseable by the _#parse(String)_ .
+
+[#getObjectType__]
+=== getObjectType()
+
+Alias for _#getLogicalTypeName()_ .

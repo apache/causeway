@@ -8,14 +8,15 @@
 ----
 interface ApplicationPermissionRepository<P> {
   Optional<P> findByUserAndPermissionValue(String username, ApplicationPermissionValue changingPermissionValue)
-  Optional<P> findByRoleAndRuleAndFeature(ApplicationRole holder, ApplicationPermissionRule rule, ApplicationFeatureType type, String featureFqn)
+  Optional<P> findByRoleAndRuleAndFeature(ApplicationRole holder, ApplicationPermissionRule rule, ApplicationFeatureSort type, String featureFqn)
   Collection<P> allPermissions()
   Collection<P> findOrphaned()
   Collection<P> findByFeatureCached(ApplicationFeatureId featureId)
-  Collection<P> findByRoleAndRuleAndFeatureTypeCached(ApplicationRole holder, ApplicationPermissionRule rule, ApplicationFeatureType type)
+  Collection<P> findByRoleAndRuleAndFeatureTypeCached(ApplicationRole holder, ApplicationPermissionRule rule, ApplicationFeatureSort type)
   P newApplicationPermission()     // <.>
   P newPermission(ApplicationRole role, ApplicationPermissionRule rule, ApplicationPermissionMode mode, String packageFqn, String className, String memberName)
-  P newPermission(ApplicationRole holder, ApplicationPermissionRule rule, ApplicationPermissionMode mode, ApplicationFeatureType featureType, String featureFqn)
+  P newPermission(ApplicationRole role, ApplicationPermissionRule rule, ApplicationPermissionMode mode, ApplicationFeatureSort featureSort, String featureFqn)
+  P newPermission(ApplicationRole role, ApplicationPermissionRule rule, ApplicationPermissionMode mode, ApplicationFeatureId featureId)
 }
 ----
 

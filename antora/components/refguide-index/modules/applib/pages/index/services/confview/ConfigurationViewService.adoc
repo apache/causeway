@@ -11,11 +11,12 @@ This is the backing service used by xref:refguide:applib:index/services/confview
 .ConfigurationViewService.java
 ----
 interface ConfigurationViewService {
-  Set<ConfigurationProperty> allProperties()     // <.>
+  Set<ConfigurationProperty> getVisibleConfigurationProperties()     // <.>
+  Set<ConfigurationProperty> getEnvironmentProperties()
 }
 ----
 
-<.> xref:#allProperties__[allProperties()]
+<.> xref:#getVisibleConfigurationProperties__[getVisibleConfigurationProperties()]
 +
 --
 Returns all properties, each as an instance of xref:refguide:applib:index/services/confview/ConfigurationProperty.adoc[ConfigurationProperty] (a view model). Mask sensitive values if required.
@@ -23,8 +24,8 @@ Returns all properties, each as an instance of xref:refguide:applib:index/servic
 
 == Members
 
-[#allProperties__]
-=== allProperties()
+[#getVisibleConfigurationProperties__]
+=== getVisibleConfigurationProperties()
 
 Returns all properties, each as an instance of xref:refguide:applib:index/services/confview/ConfigurationProperty.adoc[ConfigurationProperty] (a view model). Mask sensitive values if required.
 

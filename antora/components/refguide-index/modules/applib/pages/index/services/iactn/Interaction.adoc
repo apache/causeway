@@ -15,18 +15,18 @@ To confuse matters slightly, historically the xref:refguide:applib:index/service
 .Interaction.java
 ----
 interface Interaction {
-  UUID getUniqueId()     // <.>
+  UUID getInteractionId()     // <.>
   Command getCommand()     // <.>
   Execution<?, ?> getCurrentExecution()     // <.>
   Execution<?, ?> getPriorExecution()     // <.>
-  int next(final String sequenceId)     // <.>
+  int next(final SequenceType sequenceType)     // <.>
 }
 ----
 
-<.> xref:#getUniqueId__[getUniqueId()]
+<.> xref:#getInteractionId__[getInteractionId()]
 +
 --
-The unique identifier of this interaction (inherited from xref:refguide:commons:index/having/HasUniqueId.adoc[HasUniqueId] )
+The unique identifier of this interaction (inherited from xref:refguide:applib:index/mixins/system/HasInteractionId.adoc[HasInteractionId] )
 --
 <.> xref:#getCommand__[getCommand()]
 +
@@ -43,18 +43,18 @@ The current (most recently pushed) xref:refguide:applib:index/services/iactn/Exe
 --
 The execution that preceded the current one.
 --
-<.> xref:#next__String[next(String)]
+<.> xref:#next__SequenceType[next(SequenceType)]
 +
 --
-Generates numbers in a named sequence. The name of the sequence can be arbitrary, though note that the framework also uses this capability to generate sequence numbers corresponding to the sequences enumerated by the xref:refguide:applib:index/services/iactn/Sequence.adoc[Sequence] enum.
+Framework use only: generates numbers for a named sequence type.
 --
 
 == Members
 
-[#getUniqueId__]
-=== getUniqueId()
+[#getInteractionId__]
+=== getInteractionId()
 
-The unique identifier of this interaction (inherited from xref:refguide:commons:index/having/HasUniqueId.adoc[HasUniqueId] )
+The unique identifier of this interaction (inherited from xref:refguide:applib:index/mixins/system/HasInteractionId.adoc[HasInteractionId] )
 
 This can be used to correlate audit records and transactions happening as a consequence or within the interaction.
 
@@ -73,10 +73,10 @@ The current (most recently pushed) xref:refguide:applib:index/services/iactn/Exe
 
 The execution that preceded the current one.
 
-[#next__String]
-=== next(String)
+[#next__SequenceType]
+=== next(SequenceType)
 
-Generates numbers in a named sequence. The name of the sequence can be arbitrary, though note that the framework also uses this capability to generate sequence numbers corresponding to the sequences enumerated by the xref:refguide:applib:index/services/iactn/Sequence.adoc[Sequence] enum.
+Framework use only: generates numbers for a named sequence type.
 
 include::hooks/Interaction_010-implementation.adoc[]
 
