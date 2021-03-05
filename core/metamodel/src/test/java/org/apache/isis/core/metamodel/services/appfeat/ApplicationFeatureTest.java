@@ -150,12 +150,12 @@ public class ApplicationFeatureTest {
     }
 
 
-    public static class FunctionsTest extends ApplicationFeatureTest {
+    public static class MethodsTest extends ApplicationFeatureTest {
 
         @Test
-        public void GET_FQN() throws Exception {
+        public void getFullyQualifiedName() throws Exception {
             final ApplicationFeature input = new ApplicationFeature(ApplicationFeatureId.newMember("com.mycompany.Foo#bar"));
-            assertThat(ApplicationFeature.Functions.GET_FQN.apply(input), is("com.mycompany.Foo#bar"));
+            assertThat(input.getFullyQualifiedName(), is("com.mycompany.Foo#bar"));
         }
     }
 

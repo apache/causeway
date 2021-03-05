@@ -470,7 +470,7 @@ implements ApplicationFeatureRepository {
     public SortedSet<String> namespaceNames() {
         initializeIfRequired();
         return stream(allFeatures(ApplicationFeatureSort.NAMESPACE))
-                .map(ApplicationFeature.Functions.GET_FQN)
+                .map(ApplicationFeature::getFullyQualifiedName)
                 .collect(_Sets.toUnmodifiableSorted());
     }
 

@@ -176,30 +176,11 @@ public class ApplicationFeature implements Comparable<ApplicationFeature> {
         }
     }
 
-    // -- Functions
-
-    @Vetoed @UtilityClass
-    public static class Functions {
-
-        public static final Function<ApplicationFeature, String> GET_FQN = 
-                (ApplicationFeature input)->input.getFeatureId().getFullyQualifiedName();
-
+    public String getFullyQualifiedName() {
+        return getFeatureId().getFullyQualifiedName();
     }
 
-    @Vetoed @UtilityClass
-    public static class Predicates {
-
-        public static Predicate<ApplicationFeature> packageContainingClasses(
-                final ApplicationMemberSort memberSort, 
-                final ApplicationFeatureRepositoryDefault applicationFeatures) {
-
-            return (final ApplicationFeature input) ->
-            input.getContents().stream() // all the classes in this package
-            .anyMatch(_Predicates.isLogicalTypeContaining(memberSort, applicationFeatures));
-        }
-    }
-
-    // -- equals, hashCode, compareTo, toString
+    // -- OBJECT CONTRACT
 
     private static final Comparator<ApplicationFeature> comparator =
             Comparator.comparing(ApplicationFeature::getFeatureId);

@@ -334,7 +334,7 @@ implements
     private static final Comparator<ApplicationFeatureId> byMemberName =
             comparing(ApplicationFeatureId::getMemberName, nullsFirst(naturalOrder()));
 
-    private static final Comparator<ApplicationFeatureId> applicationFeatureIdOrdering =
+    private static final Comparator<ApplicationFeatureId> comparator =
             Comparator.nullsFirst(bySort)
             .thenComparing(byNamespace)
             .thenComparing(byTypeSimpleName)
@@ -361,7 +361,7 @@ implements
 
     @Override
     public int compareTo(final ApplicationFeatureId other) {
-        return applicationFeatureIdOrdering.compare(this, other);
+        return comparator.compare(this, other);
     }
 
     @Override
