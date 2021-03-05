@@ -78,8 +78,8 @@ implements ApplicationFeatureRepository {
 
     // -- caches
     private Map<String, ApplicationFeatureId> featureIdentifiersByName;
-    final SortedMap<ApplicationFeatureId, ApplicationFeature> packageFeatures = _Maps.newTreeMap();
-    private final SortedMap<ApplicationFeatureId, ApplicationFeature> classFeatures = _Maps.newTreeMap();
+    final SortedMap<ApplicationFeatureId, ApplicationFeature> namespaceFeatures = _Maps.newTreeMap();
+    private final SortedMap<ApplicationFeatureId, ApplicationFeature> typeFeatures = _Maps.newTreeMap();
     private final SortedMap<ApplicationFeatureId, ApplicationFeature> memberFeatures = _Maps.newTreeMap();
     private final SortedMap<ApplicationFeatureId, ApplicationFeature> propertyFeatures = _Maps.newTreeMap();
     private final SortedMap<ApplicationFeatureId, ApplicationFeature> collectionFeatures = _Maps.newTreeMap();
@@ -134,8 +134,8 @@ implements ApplicationFeatureRepository {
         }
         
         val featuresByName = new HashMap<String, ApplicationFeatureId>();
-        visitFeatureIdentifierByName(packageFeatures, featuresByName::put);
-        visitFeatureIdentifierByName(classFeatures, featuresByName::put);
+        visitFeatureIdentifierByName(namespaceFeatures, featuresByName::put);
+        visitFeatureIdentifierByName(typeFeatures, featuresByName::put);
         visitFeatureIdentifierByName(memberFeatures, featuresByName::put);
         this.featureIdentifiersByName = Collections.unmodifiableMap(featuresByName);
     }
@@ -143,7 +143,7 @@ implements ApplicationFeatureRepository {
     private void visitFeatureIdentifierByName(
             final Map<ApplicationFeatureId, ApplicationFeature> map, 
             final BiConsumer<String, ApplicationFeatureId> onEntry) {
-        map.forEach((k, v)->onEntry.accept(k.toString(), k));
+        map.forEach((k, v)->onEntry.accept(k.getFullyQualifiedName(), k));
     }
 
     void createApplicationFeaturesFor(final ObjectSpecification spec) {
@@ -170,7 +170,7 @@ implements ApplicationFeatureRepository {
         // (later on it may get removed if the class turns out to have no features,
         // but we require it in the map for the next bit).
         final ApplicationFeature classFeature = newFeature(classFeatureId);
-        classFeatures.put(classFeatureId, classFeature);
+        typeFeatures.put(classFeatureId, classFeature);
 
         // add members
         boolean addedMembers = false;
@@ -194,7 +194,7 @@ implements ApplicationFeatureRepository {
 
         if (!addedMembers) {
             // remove this class feature, since it turned out to have no members
-            classFeatures.remove(classFeatureId);
+            typeFeatures.remove(classFeatureId);
             return;
         }
 
@@ -249,7 +249,7 @@ implements ApplicationFeatureRepository {
 
     private ApplicationFeature newPackage(final ApplicationFeatureId packageId) {
         final ApplicationFeature parentPackage = newFeature(packageId);
-        packageFeatures.put(packageId, parentPackage);
+        namespaceFeatures.put(packageId, parentPackage);
         return parentPackage;
     }
 
@@ -390,13 +390,13 @@ implements ApplicationFeatureRepository {
 
     public ApplicationFeature findNamespace(final ApplicationFeatureId featureId) {
         initializeIfRequired();
-        return packageFeatures.get(featureId);
+        return namespaceFeatures.get(featureId);
     }
 
 
     public ApplicationFeature findLogicalType(final ApplicationFeatureId featureId) {
         initializeIfRequired();
-        return classFeatures.get(featureId);
+        return typeFeatures.get(featureId);
     }
 
 
@@ -428,13 +428,13 @@ implements ApplicationFeatureRepository {
     @Override
     public Collection<ApplicationFeature> allNamespaces() {
         initializeIfRequired();
-        return packageFeatures.values();
+        return namespaceFeatures.values();
     }
 
     @Override
     public Collection<ApplicationFeature> allTypes() {
         initializeIfRequired();
-        return classFeatures.values();
+        return typeFeatures.values();
     }
 
     @Override
@@ -478,24 +478,6 @@ implements ApplicationFeatureRepository {
     }
 
     @Override
-    public SortedSet<String> classNamesContainedIn(
-            final String namespace, 
-            final ApplicationMemberSort memberSort) {
-        
-        initializeIfRequired();
-        final ApplicationFeatureId namespaceId = ApplicationFeatureId.newNamespace(namespace);
-        final ApplicationFeature namespaceFeat = findNamespace(namespaceId);
-        if (namespaceFeat == null) {
-            return Collections.emptySortedSet();
-        }
-        final SortedSet<ApplicationFeatureId> contents = namespaceFeat.getContents();
-        return contents.stream()
-                .filter(_Predicates.isLogicalTypeContaining(memberSort, this))
-                .map(ApplicationFeatureId::getTypeSimpleName)
-                .collect(_Sets.toUnmodifiableSorted());
-    }
-
-    @Override
     public SortedSet<String> classNamesRecursivelyContainedIn(final String packageFqn) {
         initializeIfRequired();
         final ApplicationFeatureId packageId = ApplicationFeatureId.newNamespace(packageFqn);
@@ -503,29 +485,11 @@ implements ApplicationFeatureRepository {
         if (pkg == null) {
             return Collections.emptySortedSet();
         }
-        final Set<ApplicationFeatureId> classIds = this.classFeatures.keySet();
+        final Set<ApplicationFeatureId> classIds = this.typeFeatures.keySet();
         return classIds.stream()
                 .filter(_Predicates.isLogicalTypeRecursivelyWithin(packageId))
                 .map(ApplicationFeatureId::getTypeSimpleName)
                 .collect(_Sets.toUnmodifiableSorted());
     }
-
-    @Override
-    public SortedSet<String> memberNamesOf(
-            final String packageFqn,
-            final String className,
-            final ApplicationMemberSort memberSort) {
-        initializeIfRequired();
-        final ApplicationFeatureId classId = ApplicationFeatureId.newType(packageFqn + "." + className);
-        final ApplicationFeature cls = findLogicalType(classId);
-        if (cls == null) {
-            return Collections.emptySortedSet();
-        }
-        final SortedSet<ApplicationFeatureId> featureIds = cls.getMembersOfSort(memberSort);
-        return featureIds.stream()
-                .map(ApplicationFeatureId::getMemberName)
-                .collect(_Sets.toUnmodifiableSorted());
-    }
-    
 
 }

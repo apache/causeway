@@ -286,7 +286,7 @@ public class ApplicationFeatureRepositoryDefaultTest {
             // given
             final ApplicationFeatureId packageId = ApplicationFeatureId.newNamespace("com.mycompany");
             final ApplicationFeature pkg = newApplicationFeature(packageId);
-            applicationFeatureRepository.packageFeatures.put(packageId, pkg);
+            applicationFeatureRepository.namespaceFeatures.put(packageId, pkg);
 
             final ApplicationFeatureId classFeatureId = ApplicationFeatureId.newType("com.mycompany.Bar");
 

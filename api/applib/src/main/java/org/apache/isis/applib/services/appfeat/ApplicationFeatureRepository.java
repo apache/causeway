@@ -34,25 +34,10 @@ public interface ApplicationFeatureRepository  {
     //TODO[2553] why return String, when AppFeatId is now API
     SortedSet<String> namespaceNames();
 
-//    SortedSet<String> namespaceNamesContainingSort(
-//            ApplicationMemberSort memberSort);
-
-    //TODO[2553] remove, only used by orphaned search, which can be done much simpler
-    SortedSet<String> classNamesContainedIn(
-            String packageFqn,
-            ApplicationMemberSort memberSort);
-
     //TODO[2553] remove or rename->logicalTypeSimpleNamesRecursivelyContainedInNamespace
     SortedSet<String> classNamesRecursivelyContainedIn(
             String packageFqn);
 
-    //TODO[2553] why return String, when AppFeatId is now API
-    SortedSet<String> memberNamesOf(
-            String packageFqn,
-            String className,
-            ApplicationMemberSort memberSort);
-
-    
     Map<String, ApplicationFeatureId> getFeatureIdentifiersByName();
 
     ApplicationFeature findFeature(ApplicationFeatureId featureId);

@@ -180,7 +180,7 @@ implements
     // -- featureId (derived property)
 
     private Optional<ApplicationFeature> getFeature() {
-        return createFeatureId()
+        return asFeatureId()
                 .map(featureId -> featureRepository.findFeature(featureId));
     }
 
@@ -308,7 +308,7 @@ implements
         public static final Function<ApplicationPermission, ApplicationPermissionValue> AS_VALUE = 
                 (ApplicationPermission input) ->
                     new ApplicationPermissionValue(
-                            input.createFeatureId().orElseThrow(_Exceptions::noSuchElement), 
+                            input.asFeatureId().orElseThrow(_Exceptions::noSuchElement), 
                             input.getRule(), 
                             input.getMode());
 

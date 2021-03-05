@@ -206,7 +206,7 @@ implements
 
     @Programmatic
     public String getFullyQualifiedName() {
-        final StringBuilder buf = new StringBuilder();
+        val buf = new StringBuilder();
         buf.append(getNamespace());
         if(getTypeSimpleName() != null) {
             buf.append(".").append(getTypeSimpleName());
@@ -222,8 +222,7 @@ implements
         if (getTypeSimpleName() == null) {
             return null;
         }
-
-        final StringBuilder buf = new StringBuilder();
+        val buf = new StringBuilder();
         if(!_Strings.isNullOrEmpty(getNamespace())) {
             buf.append(getNamespace()).append(".");
         }

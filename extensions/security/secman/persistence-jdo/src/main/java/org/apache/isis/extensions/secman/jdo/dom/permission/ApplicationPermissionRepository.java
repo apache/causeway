@@ -21,8 +21,6 @@ package org.apache.isis.extensions.secman.jdo.dom.permission;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -34,14 +32,12 @@ import org.apache.isis.applib.services.appfeat.ApplicationFeature;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureRepository;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureSort;
-import org.apache.isis.applib.services.appfeat.ApplicationMemberSort;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.services.queryresultscache.QueryResultsCache;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._NullSafe;
-import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Multimaps;
 import org.apache.isis.commons.internal.collections._Multimaps.ListMultimap;
@@ -316,82 +312,25 @@ implements org.apache.isis.extensions.secman.api.permission.ApplicationPermissio
     @Override
     public Collection<ApplicationPermission> findOrphaned() {
 
-        final Collection<String> namespaceNames = featureRepository.namespaceNames();
-        final Set<String> availableClasses = _Sets.newTreeSet();
-        for (String packageName : namespaceNames) {
-            appendLogicalTypes(packageName, ApplicationMemberSort.PROPERTY, availableClasses);
-            appendLogicalTypes(packageName, ApplicationMemberSort.COLLECTION, availableClasses);
-            appendLogicalTypes(packageName, ApplicationMemberSort.ACTION, availableClasses);
-        }
+        val featureNamesKnownToTheMetamodel =  
+                featureRepository.getFeatureIdentifiersByName().keySet();
 
         val orphaned = _Lists.<ApplicationPermission>newArrayList();
 
         for (val permission : allPermissions()) {
-            final ApplicationFeatureSort featureSort = permission.getFeatureSort();
-            final String featureFqn = permission.getFeatureFqn();
-
-            switch (featureSort) {
-
-            case NAMESPACE:
-                if(!namespaceNames.contains(featureFqn)) {
-                    orphaned.add(permission);
-                }
-                break;
-            case TYPE:
-                if(!availableClasses.contains(featureFqn)) {
-                    orphaned.add(permission);
-                }
-                break;
-            case MEMBER:
-
-                final List<String> split = _Strings.splitThenStream(featureFqn, "#")
-                .collect(Collectors.toList());
-
-                final String fqClassName = split.get(0);
-                final String memberName = split.get(1);
-
-                final int lastDot = fqClassName.lastIndexOf('.');
-                final String packageName = fqClassName.substring(0, lastDot);
-                final String className = fqClassName.substring(lastDot + 1);
-
-                final List<String> memberNames = memberNamesOf(packageName, className);
-
-                if(!memberNames.contains(memberName)) {
-                    orphaned.add(permission);
-                }
-                break;
+            
+            val featId = permission.asFeatureId().orElse(null);
+            if(featId==null) {
+                orphaned.add(permission);
+                continue;
+            }
+            
+            if(!featureNamesKnownToTheMetamodel.contains(featId.getFullyQualifiedName())) {
+                orphaned.add(permission);
             }
         }
 
         return orphaned;
-    }
-
-    private void appendLogicalTypes(
-            final String packageName, 
-            final ApplicationMemberSort memberSort, 
-            final Set<String> availableClasses) {
-        final Collection<String> classNames = featureRepository.classNamesContainedIn(packageName, memberSort);
-        for (String className : classNames) {
-            availableClasses.add(packageName + "." + className);
-        }
-    }
-
-    private List<String> memberNamesOf(final String packageName, final String className) {
-        final List<String> memberNames = _Lists.newArrayList();
-        appendMembers(packageName, className, ApplicationMemberSort.PROPERTY, memberNames);
-        appendMembers(packageName, className, ApplicationMemberSort.COLLECTION, memberNames);
-        appendMembers(packageName, className, ApplicationMemberSort.ACTION, memberNames);
-        return memberNames;
-    }
-
-    private void appendMembers(
-            final String packageName,
-            final String className,
-            final ApplicationMemberSort getMemberSort,
-            final List<String> memberNames) {
-        final Collection<String> memberNamesOf =
-                featureRepository.memberNamesOf(packageName, className, getMemberSort);
-        memberNames.addAll(memberNamesOf);
     }
 
 

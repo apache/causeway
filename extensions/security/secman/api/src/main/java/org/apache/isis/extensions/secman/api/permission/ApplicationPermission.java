@@ -97,7 +97,7 @@ public interface ApplicationPermission {
         .append(" ").append(getMode().toString()) // Viewing|Changing
         .append(" of ");
 
-        createFeatureId()
+        asFeatureId()
         .ifPresent(featureId->{
 
             switch (featureId.getSort()) {
@@ -176,8 +176,8 @@ public interface ApplicationPermission {
     // -- HELPER
 
     @Programmatic
-    default Optional<ApplicationFeatureId> createFeatureId() {
-        return Optional.of(getFeatureSort())
+    default Optional<ApplicationFeatureId> asFeatureId() {
+        return Optional.ofNullable(getFeatureSort())
                 .map(featureSort -> ApplicationFeatureId.newFeature(featureSort, getFeatureFqn()));
     }
 

@@ -111,7 +111,10 @@ import lombok.experimental.UtilityClass;
 @DomainObjectLayout(
         bookmarking = BookmarkPolicy.AS_CHILD
         )
-public class ApplicationPermission implements org.apache.isis.extensions.secman.api.permission.ApplicationPermission, Comparable<ApplicationPermission> {
+public class ApplicationPermission 
+implements 
+    org.apache.isis.extensions.secman.api.permission.ApplicationPermission, 
+    Comparable<ApplicationPermission> {
 
     private static final int TYPICAL_LENGTH_TYPE = 7;  // ApplicationFeatureType.PACKAGE is longest
 
@@ -165,7 +168,7 @@ public class ApplicationPermission implements org.apache.isis.extensions.secman.
     // -- featureId (derived property)
 
     private Optional<ApplicationFeature> getFeature() {
-        return createFeatureId()
+        return asFeatureId()
                 .map(featureId -> featureRepository.findFeature(featureId));
     }
 
@@ -292,7 +295,7 @@ public class ApplicationPermission implements org.apache.isis.extensions.secman.
         public static final Function<ApplicationPermission, ApplicationPermissionValue> AS_VALUE = 
                 (ApplicationPermission input) ->
                     new ApplicationPermissionValue(
-                            input.createFeatureId().orElseThrow(_Exceptions::noSuchElement), 
+                            input.asFeatureId().orElseThrow(_Exceptions::noSuchElement), 
                             input.getRule(), 
                             input.getMode());
 
