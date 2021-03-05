@@ -29,6 +29,8 @@ import java.util.Map;
  * @since 1.x revised for 2.0 {@index}
  */
 public interface ApplicationFeatureRepository  {
+    
+    ApplicationFeature newApplicationFeature(ApplicationFeatureId featureId);
 
     Map<String, ApplicationFeatureId> getFeatureIdentifiersByName();
 

@@ -82,16 +82,13 @@ implements ApplicationFeatureRepository {
 
     private final IsisConfiguration configuration;
     private final SpecificationLoader specificationLoader;
-    private final ApplicationFeatureFactory applicationFeatureFactory;
 
     @Inject
     public ApplicationFeatureRepositoryDefault(
             IsisConfiguration configuration,
-            SpecificationLoader specificationLoader,
-            ApplicationFeatureFactory applicationFeatureFactory) {
+            SpecificationLoader specificationLoader) {
         this.configuration = configuration;
         this.specificationLoader = specificationLoader;
-        this.applicationFeatureFactory = applicationFeatureFactory;
     }
 
     // -- init
@@ -159,13 +156,13 @@ implements ApplicationFeatureRepository {
         }
 
         final String logicalTypeName = spec.getLogicalTypeName();
-        final ApplicationFeatureId classFeatureId = ApplicationFeatureId.newType(logicalTypeName);
+        final ApplicationFeatureId typeFeatureId = ApplicationFeatureId.newType(logicalTypeName);
 
         // add class to our map
         // (later on it may get removed if the class turns out to have no features,
         // but we require it in the map for the next bit).
-        final ApplicationFeature classFeature = newFeature(classFeatureId);
-        typeFeatures.put(classFeatureId, classFeature);
+        final ApplicationFeature typeFeature = newApplicationFeature(typeFeatureId);
+        typeFeatures.put(typeFeatureId, typeFeature);
 
         // add members
         boolean addedMembers = false;
@@ -174,28 +171,28 @@ implements ApplicationFeatureRepository {
             final Integer maxLength = returnType == String.class ? valueOf(property, MaxLengthFacet.class) : null;
             final Integer typicalLength = returnType == String.class ? valueOf(property, TypicalLengthFacet.class) : null;
             final boolean derived = !property.containsNonFallbackFacet(PropertySetterFacet.class);
-            addedMembers = newProperty(classFeatureId, property, returnType, maxLength, typicalLength, derived) || addedMembers;
+            addedMembers = newProperty(typeFeatureId, property, returnType, maxLength, typicalLength, derived) || addedMembers;
         }
         for (final ObjectAssociation collection : collections) {
             final boolean derived = false;
             final Class<?> elementType = correspondingClassFor(collection.getSpecification());
-            addedMembers = newCollection(classFeatureId, collection, elementType, derived) || addedMembers;
+            addedMembers = newCollection(typeFeatureId, collection, elementType, derived) || addedMembers;
         }
         for (final ObjectAction action : actions) {
             final Class<?> returnType = correspondingClassFor(action.getReturnType());
             final SemanticsOf actionSemantics = action.getSemantics();
-            addedMembers = newAction(classFeatureId, action, returnType, actionSemantics) || addedMembers;
+            addedMembers = newAction(typeFeatureId, action, returnType, actionSemantics) || addedMembers;
         }
 
         if (!addedMembers) {
             // remove this class feature, since it turned out to have no members
-            typeFeatures.remove(classFeatureId);
+            typeFeatures.remove(typeFeatureId);
             return;
         }
 
         // leave the class as is and (as there were indeed members for this class)
         // add all of its parent packages
-        final ApplicationFeatureId classParentPackageId = addClassParent(classFeatureId);
+        final ApplicationFeatureId classParentPackageId = addClassParent(typeFeatureId);
         addParents(classParentPackageId);
     }
 
@@ -243,7 +240,7 @@ implements ApplicationFeatureRepository {
     }
 
     private ApplicationFeature newPackage(final ApplicationFeatureId packageId) {
-        final ApplicationFeature parentPackage = newFeature(packageId);
+        final ApplicationFeature parentPackage = newApplicationFeature(packageId);
         namespaceFeatures.put(packageId, parentPackage);
         return parentPackage;
     }
@@ -300,7 +297,8 @@ implements ApplicationFeatureRepository {
             final @Nullable SemanticsOf actionSemantics) {
         final ApplicationFeatureId featureId = ApplicationFeatureId.newMember(classFeatureId.getFullyQualifiedName(), memberId);
 
-        final ApplicationFeatureDefault memberFeature = (ApplicationFeatureDefault)newFeature(featureId);
+        final ApplicationFeatureDefault memberFeature = 
+                (ApplicationFeatureDefault)newApplicationFeature(featureId);
         memberFeature.setMemberSort(Optional.of(memberSort));
 
         memberFeature.setActionReturnType(Optional.ofNullable(returnType));
@@ -327,10 +325,6 @@ implements ApplicationFeatureRepository {
         default: // case ACTION:
             return actionFeatures;
         }
-    }
-
-    private ApplicationFeature newFeature(final ApplicationFeatureId featureId) {
-        return applicationFeatureFactory.newApplicationFeature(featureId);
     }
 
     protected boolean exclude(final ObjectSpecification spec) {
@@ -365,7 +359,13 @@ implements ApplicationFeatureRepository {
         return className.startsWith("java") || className.startsWith("org.joda");
     }
 
-
+    // -- FACTORY
+    
+    @Override
+    public ApplicationFeature newApplicationFeature(ApplicationFeatureId featId) {
+        return new ApplicationFeatureDefault(featId); // value type
+    }
+    
     // -- packageFeatures, classFeatures, memberFeatures
 
     @Override

@@ -82,12 +82,9 @@ public class ApplicationFeatureRepositoryDefaultTest {
     @Before
     public void setUp() throws Exception {
 
-        final ApplicationFeatureFactory applicationFeatureFactory = new ApplicationFeatureFactory();
-
         applicationFeatureRepository = new ApplicationFeatureRepositoryDefault(
                 /*configuration*/ null, 
-                mockSpecificationLoader, 
-                applicationFeatureFactory);
+                mockSpecificationLoader);
 
         mockActThatIsHidden = context.mock(ObjectAction.class, "mockActThatIsHidden");
     }

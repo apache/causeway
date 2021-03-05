@@ -30,7 +30,6 @@ import org.apache.isis.core.metamodel.inspect.IsisModuleCoreMetamodelInspection;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManagerDefault;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModelInitFilterDefault;
 import org.apache.isis.core.metamodel.services.ServiceInjectorDefault;
-import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureFactory;
 import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureRepositoryDefault;
 import org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutorDefault;
 import org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutorForCollections;
@@ -81,7 +80,6 @@ import org.apache.isis.core.security.IsisModuleCoreSecurity;
         // @Service's
         ObjectManagerDefault.class,
         ServiceInjectorDefault.class,
-        ApplicationFeatureFactory.class,
         MetamodelEventService.class,
         ExceptionRecognizerForRecoverableException.class,
         GridLoaderServiceDefault.class,
