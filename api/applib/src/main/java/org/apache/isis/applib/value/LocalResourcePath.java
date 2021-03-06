@@ -33,15 +33,19 @@ import lombok.Getter;
 import lombok.NonNull;
 
 /**
- * Represents a local resource path, typically a relative path originating at this web-app's 
+ * Represents a local resource path, typically a relative path originating at this web-app's
  * root or context-root.
+ *
  * <p>
  * Action results of type {@link LocalResourcePath} are interpreted as
  * browser/client redirects, if applicable.
+ * </p>
+ *
  * <p>
- * {@link OpenUrlStrategy} gives control on whether the redirect URL should open in the same 
+ * {@link OpenUrlStrategy} gives control on whether the redirect URL should open in the same
  * or a new window/tap.
- * 
+ * </p>
+ *
  * @since 2.0 {@index}
  * @see OpenUrlStrategy
  */
@@ -57,18 +61,18 @@ public final class LocalResourcePath implements Serializable {
     public LocalResourcePath(final @Nullable String path) throws IllegalArgumentException {
         this(path, null);
     }
-    
+
     public LocalResourcePath(
-            final @Nullable String path, 
+            final @Nullable String path,
             final @Nullable OpenUrlStrategy openUrlStrategy) throws IllegalArgumentException {
 
         validate(path); // may throw IllegalArgumentException
 
-        this.path = path != null 
-                ? path 
+        this.path = path != null
+                ? path
                 : "";
-        this.openUrlStrategy = openUrlStrategy != null 
-                ? openUrlStrategy 
+        this.openUrlStrategy = openUrlStrategy != null
+                ? openUrlStrategy
                 : OpenUrlStrategy.NEW_WINDOW; // default
     }
 
@@ -94,7 +98,7 @@ public final class LocalResourcePath implements Serializable {
         }
         return (obj instanceof LocalResourcePath) && isEqualTo((LocalResourcePath) obj);
     }
-    
+
     @Override
     public int hashCode() {
         return path.hashCode();

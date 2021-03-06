@@ -3,6 +3,7 @@
 :page-partial:
 
 
+WARNING: TODO v2 - this documentation has not yet been updated.
 
 
 Unlike the Wicket viewer, the xref:vro:ROOT:about.adoc[Restful Objects viewer] does *not* provide any sort of login page; rather it provides a pluggable authentication strategy, delegated to by the `IsisSessionFilter` filter (set up by the framework's web bootstrapping).

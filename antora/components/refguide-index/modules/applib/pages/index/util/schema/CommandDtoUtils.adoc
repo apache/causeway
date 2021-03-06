@@ -7,7 +7,6 @@
 .CommandDtoUtils.java
 ----
 class CommandDtoUtils {
-  static JAXBContext jaxbContext;
   void init()
   JAXBContext getJaxbContext()
   CommandDto fromXml(final Reader reader)

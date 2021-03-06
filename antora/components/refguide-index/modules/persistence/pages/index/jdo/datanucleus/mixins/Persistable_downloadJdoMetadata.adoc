@@ -9,8 +9,6 @@ Provides the ability to download the JDOclass metadataas XML.
 .Persistable_downloadJdoMetadata.java
 ----
 class Persistable_downloadJdoMetadata {
-  @Inject
-JdoSupportService jdoSupport;
   Clob act(final String fileName)
   String default0Act()
 }

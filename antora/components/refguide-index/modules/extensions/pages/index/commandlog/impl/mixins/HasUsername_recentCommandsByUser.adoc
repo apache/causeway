@@ -7,8 +7,6 @@
 .HasUsername_recentCommandsByUser.java
 ----
 class HasUsername_recentCommandsByUser {
-  @Inject
-CommandJdoRepository commandServiceRepository;
   HasUsername_recentCommandsByUser(final HasUsername hasUsername)
   List<CommandJdo> coll()
   boolean hideColl()

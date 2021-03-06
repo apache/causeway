@@ -9,40 +9,10 @@ Provides the user and scenario specific environment for an xref:refguide:applib:
 .ExecutionContext.java
 ----
 class ExecutionContext {
-  @With
-@Getter
-@Builder.Default
-@NonNull
-UserMemento user;     // <.>
-  @With
-@Getter
-@Builder.Default
-@NonNull
-VirtualClock clock;     // <.>
-  @With
-@Getter
-@Builder.Default
-@NonNull
-Locale locale;
-  @With
-@Getter
-@Builder.Default
-@NonNull
-TimeZone timeZone;
   ExecutionContext ofUserWithSystemDefaults(final UserMemento user)     // <.>
 }
 ----
 
-<.> xref:#user[user]
-+
---
-The (programmatically) simulated (or actual) user.
---
-<.> xref:#clock[clock]
-+
---
-The (programmatically) simulated (or actual) clock.
---
 <.> xref:#ofUserWithSystemDefaults__UserMemento[ofUserWithSystemDefaults(UserMemento)]
 +
 --
@@ -50,16 +20,6 @@ Creates a new xref:refguide:applib:index/services/iactn/ExecutionContext.adoc[Ex
 --
 
 == Members
-
-[#user]
-=== user
-
-The (programmatically) simulated (or actual) user.
-
-[#clock]
-=== clock
-
-The (programmatically) simulated (or actual) clock.
 
 [#ofUserWithSystemDefaults__UserMemento]
 === ofUserWithSystemDefaults(UserMemento)

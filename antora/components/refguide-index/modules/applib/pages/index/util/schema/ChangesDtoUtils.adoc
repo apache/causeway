@@ -7,7 +7,6 @@
 .ChangesDtoUtils.java
 ----
 class ChangesDtoUtils {
-  static JAXBContext jaxbContext;
   void init()
   JAXBContext getJaxbContext()
   ChangesDto fromXml(final Reader reader)

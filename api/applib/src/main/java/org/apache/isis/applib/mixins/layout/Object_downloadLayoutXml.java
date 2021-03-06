@@ -36,7 +36,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 /**
- * Provides a mixin to download the layout XML for any domain object.
+ * Provides the ability to download the layout XML for any domain
+ * entity or view model.
  *
  * @since 1.x {@index}
  */
@@ -69,10 +70,17 @@ public class Object_downloadLayoutXml {
         return  Clob.of(fileName, CommonMimeType.XML, xmlString);
     }
 
+    /**
+     * Defaults to the (simple) name of the domain object's class, with a <code>.layout</code> suffix
+     */
     public String default0Act() {
         return holder.getClass().getSimpleName() + ".layout";
     }
 
+    /**
+     * Default style is {@link Style#NORMALIZED}.
+     * @return
+     */
     public Style default1Act() {
         return Style.NORMALIZED;
     }

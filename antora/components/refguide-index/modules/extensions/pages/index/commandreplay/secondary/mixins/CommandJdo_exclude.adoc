@@ -7,9 +7,6 @@
 .CommandJdo_exclude.java
 ----
 class CommandJdo_exclude {
-  final CommandJdo commandJdo;
-  @Inject
-Optional<SecondaryConfig> secondaryConfig;
   CommandJdo act()
   boolean hideAct()
   String disableAct()

@@ -55,7 +55,9 @@ import lombok.val;
  *     any hints that might have been set for the domain object being rendered.
  * </p>
  *
- * @see HintStore {@index}
+ * @see HintStore
+ *
+ * @since 1.x {@index}
  */
 @Action(
         domainEvent = Object_clearHints.ActionDomainEvent.class,
@@ -63,7 +65,7 @@ import lombok.val;
         commandPublishing = Publishing.DISABLED
 )
 @ActionLayout(
-        cssClassFa = "far fa-circle",
+        cssClassFa = "fa-circle",
         position = ActionLayout.Position.PANEL_DROPDOWN
 )
 @RequiredArgsConstructor

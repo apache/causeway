@@ -7,9 +7,6 @@
 .CommandFetcher.java
 ----
 class CommandFetcher {
-  static final String URL_SUFFIX;
-  @Inject
-SecondaryConfig secondaryConfig;
   List<CommandDto> fetchCommand(final CommandJdo previousHwmIfAny)     // <.>
 }
 ----

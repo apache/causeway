@@ -9,8 +9,6 @@ Value type representing an event on a calendar.
 .CalendarEvent.java
 ----
 class CalendarEvent {
-  // no default
-static final CalendarEvent DEFAULT_VALUE;
   CalendarEvent(final DateTime dateTime, final String calendarName, final String title)
   CalendarEvent(final DateTime dateTime, final String calendarName, final String title, final String notes)
   DateTime getDateTime()

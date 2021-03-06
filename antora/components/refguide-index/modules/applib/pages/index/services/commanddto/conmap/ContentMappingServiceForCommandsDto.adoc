@@ -7,8 +7,6 @@
 .ContentMappingServiceForCommandsDto.java
 ----
 class ContentMappingServiceForCommandsDto {
-  @Inject
-ContentMappingServiceForCommandDto contentMappingServiceForCommandDto;
   Object map(Object object, final List<MediaType> acceptableMediaTypes)
   CommandsDto map(final Object object)     // <.>
 }

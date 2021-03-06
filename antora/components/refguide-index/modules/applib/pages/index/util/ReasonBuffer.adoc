@@ -13,7 +13,6 @@ An alternative is to use the xref:refguide:applib:index/util/Reasons.adoc[Reason
 .ReasonBuffer.java
 ----
 class ReasonBuffer {
-  StringBuffer reasonBuffer;
   void append(final String reason)     // <.>
   void appendOnCondition(final boolean condition, final String reason)     // <.>
   String getReason()     // <.>

@@ -7,10 +7,6 @@
 .SheetPivoter.java
 ----
 class SheetPivoter {
-  int columnLabelOffsetX;
-  int valueRowOffsetY;
-  int decoRowOffsetX;
-  int valuesStartAtRownumber;
   void pivot(final Sheet pivotSourceSheet, final Sheet pivotTargetSheet)     // <.>
   List<Cell> getDistinctValuesInSourceSheetColumn(Sheet sourceSheet, Integer columnNumber)
 }

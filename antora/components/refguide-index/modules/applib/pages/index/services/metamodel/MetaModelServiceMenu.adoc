@@ -9,12 +9,6 @@ Provides a UI to allow domain model metadata (obtained from xref:refguide:applib
 .MetaModelServiceMenu.java
 ----
 class MetaModelServiceMenu {
-  final MimeType mimeTypeTextCsv;
-  final MimeType mimeTypeTextXml;
-  @Inject
-MetaModelService metaModelService;
-  @Inject
-JaxbService jaxbService;
   MetaModelServiceMenu()
   Clob downloadMetaModelCsv(final String csvFileName)
   String default0DownloadMetaModelCsv()

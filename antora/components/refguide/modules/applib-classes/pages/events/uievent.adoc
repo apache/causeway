@@ -8,7 +8,7 @@ UI events are broadcast on the xref:refguide:applib:index/services/eventbus/Even
 
 They allow subscribers to change various presentation aspects of the rendered object.
 
-Note that if the domain object defines its own layout preferences (for example, a xref:refguide:applib-methods:reserved.adoc#title[title()] supporting method) then these will take precedence.
+Note that if the domain object defines its own layout preferences (for example, a xref:refguide:applib-methods:ui-hints.adoc#title[title()] supporting method) then these will take precedence.
 
 
 
@@ -25,7 +25,7 @@ Note that if the domain object defines its own layout preferences (for example, 
 |xref:refguide:applib:index/events/ui/TitleUiEvent.adoc[TitleUiEvent]
 |xref:refguide:applib:index/annotation/DomainObjectLayout.adoc#titleUiEvent[titleUiEvent()]
 |\... rendering the title for a domain object.
-|xref:refguide:applib-methods:reserved.adoc#title[title()] +
+|xref:refguide:applib-methods:ui-hints.adoc#title[title()] +
 xref:refguide:applib:index/annotation/Title.adoc[@Title]
 
 
@@ -33,18 +33,18 @@ xref:refguide:applib:index/annotation/Title.adoc[@Title]
 |xref:refguide:applib:index/events/ui/IconUiEvent.adoc[IconUiEvent]
 |xref:refguide:applib:index/annotation/DomainObjectLayout.adoc#iconUiEvent[iconUiEvent()]
 |\... rendering an icon for a domain object.
-|xref:refguide:applib-methods:reserved.adoc#iconName[iconName()]
+|xref:refguide:applib-methods:ui-hints.adoc#iconName[iconName()]
 
 
 |xref:refguide:applib:index/events/ui/CssClassUiEvent.adoc[CssClassUiEvent]
 |xref:refguide:applib:index/annotation/DomainObjectLayout.adoc#cssClassUiEvent[cssClassUiEvent()]
 |\... obtaining a CSS class hint for a domain object.
-|xref:refguide:applib-methods:reserved.adoc#cssClass[cssClass()]
+|xref:refguide:applib-methods:ui-hints.adoc#cssClass[cssClass()]
 
 |xref:refguide:applib:index/events/ui/LayoutUiEvent.adoc[LayoutUiEvent]
 |xref:refguide:applib:index/annotation/DomainObjectLayout.adoc#layoutUiEvent[layoutUiEvent()]
 |\... obtain an alternative layout for a domain object.
-|xref:refguide:applib-methods:reserved.adoc#layout[layout()]
+|xref:refguide:applib-methods:ui-hints.adoc#layout[layout()]
 
 |===
 

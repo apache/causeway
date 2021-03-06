@@ -47,7 +47,7 @@ this is a convenient way of ensuring an event is fired even if the hook has been
 
 * if set to the "Noop" subclass, then an event will _not_ be fired.
 
-If the domain object implements the corresponding  xref:refguide:applib-methods:reserved.adoc[reserved method] directly (for example xref:refguide:applib-methods:reserved.adoc#title[title()], then that will take precedence.
+If the domain object implements the corresponding  xref:refguide:applib-methods:ui-hints.adoc[reserved method] directly (for example xref:refguide:applib-methods:ui-hints.adoc#title[title()], then that will take precedence.
 
 The table below summarises all the UI event hooks:
 
@@ -65,7 +65,7 @@ The table below summarises all the UI event hooks:
 m| CssClassUiEvent.Default +
 CssClassUiEvent.Doop +
 CssClassUiEvent.Noop
-|xref:refguide:applib-methods:reserved.adoc#cssClass[cssClass()]
+|xref:refguide:applib-methods:ui-hints.adoc#cssClass[cssClass()]
 
 | Icon Name
 |xref:refguide:config:sections/isis.applib.adoc#isis.applib.annotation.domain-object-layout.icon-ui-event.post-for-default[isis.applib.annotation.domain-object-layout.icon-ui-event.post-for-default]
@@ -73,7 +73,7 @@ CssClassUiEvent.Noop
 m| IconUiEvent.Default +
 IconUiEvent.Doop +
 IconUiEvent.Noop
-|xref:refguide:applib-methods:reserved.adoc#iconName[iconName()]
+|xref:refguide:applib-methods:ui-hints.adoc#iconName[iconName()]
 
 | Layout
 |xref:refguide:config:sections/isis.applib.adoc#isis.applib.annotation.domain-object-layout.layout-ui-event.post-for-default[isis.applib.annotation.domain-object-layout.layout-ui-event.post-for-default]
@@ -81,7 +81,7 @@ IconUiEvent.Noop
 m| LayoutUiEvent.Default +
 LayoutUiEvent.Doop +
 LayoutUiEvent.Noop
-|xref:refguide:applib-methods:reserved.adoc#layout[layout()]
+|xref:refguide:applib-methods:ui-hints.adoc#layout[layout()]
 
 | Title
 |xref:refguide:config:sections/isis.applib.adoc#isis.applib.annotation.domain-object-layout.title-ui-event.post-for-default[isis.applib.annotation.domain-object-layout.title-ui-event.post-for-default]
@@ -89,7 +89,7 @@ LayoutUiEvent.Noop
 m| TitleUiEvent.Default +
 TitleUiEvent.Doop +
 TitleUiEvent.Noop
-|xref:refguide:applib-methods:reserved.adoc#title[title()]
+|xref:refguide:applib-methods:ui-hints.adoc#title[title()]
 
 |===
 

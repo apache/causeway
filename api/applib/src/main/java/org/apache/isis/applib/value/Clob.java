@@ -34,32 +34,64 @@ import org.apache.isis.applib.jaxb.PrimitiveJaxbAdapters;
 import org.apache.isis.commons.internal.base._Strings;
 
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 /**
+ * Represents a character large object.
+ *
+ * <p>
+ * Conceptually you can consider it as a set of characters (an RTF or XML
+ * document, for example), though in fact it wraps three pieces of information:
+ * </p>
+ * <ul>
+ *     <li>
+ *         the set of characters
+ *     </li>
+ *     <li>
+ *         a name
+ *     </li>
+ *     <li>
+ *         a mime type
+ *     </li>
+ * </ul>
+ *
+ * @see Blob
  * @since 1.x {@index}
  */
 @Value(semanticsProviderName =
         "org.apache.isis.core.metamodel.facets.value.clobs.ClobValueSemanticsProvider")
 @XmlJavaTypeAdapter(Clob.JaxbToStringAdapter.class)   // for JAXB view model support
+@Log4j2
 public final class Clob implements NamedWithMimeType {
 
+    /**
+     * Computed for state:
+     *
+     * <p>
+     * <pre>
+     * private final MimeType mimeType;
+     * private final CharSequence chars;
+     * private final String name;
+     * </pre>
+     * </p>
+     */
     private static final long serialVersionUID = 8694189924062378527L;
 
     private final String name;
     private final MimeType mimeType;
     private final CharSequence chars;
-    
-    
+
+
     // -- FACTORIES
-    
+
     /**
      * Returns a new {@link Clob} of given {@code name}, {@code mimeType} and {@code content}.
      * <p>
-     * {@code name} may or may not include the desired filename extension, it 
-     * is guaranteed, that the resulting {@link Clob} has the appropriate extension 
+     * {@code name} may or may not include the desired filename extension, it
+     * is guaranteed, that the resulting {@link Clob} has the appropriate extension
      * as constraint by the given {@code mimeType}.
      * <p>
-     * For more fine-grained control use one of the {@link Clob} constructors directly. 
+     * For more fine-grained control use one of the {@link Clob} constructors directly.
      * @param name - may or may not include the desired filename extension
      * @param mimeType
      * @param content - chars
@@ -70,7 +102,7 @@ public final class Clob implements NamedWithMimeType {
         val fileName = _Strings.asFileNameWithExtension(name, proposedFileExtension);
         return new Clob(fileName, mimeType.getMimeType(), content);
     }
-    
+
     // --
 
     public Clob(String name, String primaryType, String subType, char[] chars) {

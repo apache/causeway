@@ -11,26 +11,12 @@ Returned by _ExceptionRecognizer#recognize(Throwable)_ when the exception recogn
 .Recognition.java
 ----
 class Recognition {
-  @NonNull
-Category category;     // <.>
-  @NonNull
-String reason;     // <.>
   Optional<Recognition> of(final Category category, final String reason)     // <.>
   String toMessage(TranslationService translationService)     // <.>
   String toMessageNoCategory(TranslationService translationService)     // <.>
 }
 ----
 
-<.> xref:#category[category]
-+
---
-Categorises the exception as per xref:refguide:applib:index/services/exceprecog/Category.adoc[Category] .
---
-<.> xref:#reason[reason]
-+
---
-The untranslated user-friendly reason for the exception.
---
 <.> xref:#of__Category_String[of(Category, String)]
 <.> xref:#toMessage__TranslationService[toMessage(TranslationService)]
 +
@@ -44,22 +30,6 @@ Translates the _#getReason() reason_ alone (ignoring the _#getCategory() categor
 --
 
 == Members
-
-[#category]
-=== category
-
-Categorises the exception as per xref:refguide:applib:index/services/exceprecog/Category.adoc[Category] .
-
-In essence, if an exception is recognized then it is also categorized. This lets the viewer act accordingly. If the implementation recognizes the exception then it returns a user-friendly message to be rendered (by the viewer) back to the user; otherwise it returns `null`. There is no need for the implementation to check for exception causes; the casual chain is unwrapped by Apache Isis core and each exception in the chain will also be passed through to the recognizer (from most specific to least). The recognizer implementation can therefore be as fine-grained or as coarse-grained as it wishes.
-
-This category can also optionally be used in the translation of the _#getReason() reason_ for the exception.
-
-[#reason]
-=== reason
-
-The untranslated user-friendly reason for the exception.
-
-The reason can also be translated (prepended or not by the translation of the _#getCategory() category_ using _#toMessage(TranslationService)_ or _#toMessageNoCategory(TranslationService)_ . .
 
 [#of__Category_String]
 === of(Category, String)

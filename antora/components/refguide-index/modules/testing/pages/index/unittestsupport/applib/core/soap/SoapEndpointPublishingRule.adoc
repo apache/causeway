@@ -7,7 +7,6 @@
 .SoapEndpointPublishingRule.java
 ----
 class SoapEndpointPublishingRule {
-  static final int INITIAL_PORT;     // <.>
   SoapEndpointPublishingRule(final Class<?> endpointClass, final String endpointAddress)
   SoapEndpointPublishingRule(Class<?>... endpointClasses)
   SoapEndpointPublishingRule(final List<Class<?>> endpointClasses)
@@ -19,15 +18,3 @@ class SoapEndpointPublishingRule {
 }
 ----
 
-<.> xref:#INITIAL_PORT[INITIAL_PORT]
-+
---
-For any endpoints where the address is not specified, ports are assigned starting from this.
---
-
-== Members
-
-[#INITIAL_PORT]
-=== INITIAL_PORT
-
-For any endpoints where the address is not specified, ports are assigned starting from this.

@@ -7,7 +7,6 @@
 .AbstractRandomValueGenerator.java
 ----
 class AbstractRandomValueGenerator {
-  final FakeDataService fake;
   AbstractRandomValueGenerator(final FakeDataService fake)
 }
 ----

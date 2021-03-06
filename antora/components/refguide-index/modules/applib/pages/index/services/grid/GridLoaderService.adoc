@@ -57,7 +57,7 @@ The default implementation enables reloading for prototyping mode, disables in p
 
 To support metamodel invalidation/rebuilding of spec.
 
-This is called by the _org.apache.isis.applib.mixins.layout.Object_rebuildMetamodel_ mixin action.
+This is called by the xref:refguide:applib:index/mixins/metamodel/Object_rebuildMetamodel.adoc[Object_rebuildMetamodel] mixin action.
 
 [#existsFor__Class]
 === existsFor(Class)

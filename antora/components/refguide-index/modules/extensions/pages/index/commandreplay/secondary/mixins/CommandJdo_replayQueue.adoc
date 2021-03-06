@@ -7,11 +7,6 @@
 .CommandJdo_replayQueue.java
 ----
 class CommandJdo_replayQueue {
-  final CommandJdo commandJdo;
-  @Inject
-SecondaryConfig secondaryConfig;
-  @Inject
-CommandJdoRepository commandJdoRepository;
   List<CommandJdo> coll()
   boolean hideColl()
 }

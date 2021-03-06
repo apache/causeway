@@ -33,7 +33,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
-import org.apache.isis.applib.mixins.layout.Object_openRestApi;
+import org.apache.isis.applib.mixins.rest.Object_openRestApi;
 import org.apache.isis.applib.services.confview.ConfigurationProperty;
 import org.apache.isis.applib.services.confview.ConfigurationViewService;
 import org.apache.isis.commons.internal.base._Lazy;
@@ -57,9 +57,9 @@ import lombok.extern.log4j.Log4j2;
 @Primary
 @Qualifier("Default")
 @Log4j2
-public class ConfigurationViewServiceDefault 
-implements 
-    ConfigurationViewService, 
+public class ConfigurationViewServiceDefault
+implements
+    ConfigurationViewService,
     Object_openRestApi.RestfulPathProvider {
 
     private final IsisSystemEnvironment systemEnvironment;
@@ -80,23 +80,23 @@ implements
     public Set<ConfigurationProperty> getEnvironmentProperties() {
         return new TreeSet<>(env.get().values());
     }
-    
+
     @Override
     public Set<ConfigurationProperty> getVisibleConfigurationProperties() {
         return new TreeSet<>(config.get().values());
     }
-    
+
     @PostConstruct
     public void postConstruct() {
-       log.info("\n\n" + toStringFormatted()); 
+       log.info("\n\n" + toStringFormatted());
     }
-    
+
     @Override
     public Optional<String> getRestfulPath() {
         return Optional.ofNullable(restEasyConfiguration.getJaxrs().getDefaultPath());
     }
-    
-    // -- DUMP AS STRING 
+
+    // -- DUMP AS STRING
 
     /**
      * to support config dumping, with sensitive data masked out
@@ -104,13 +104,13 @@ implements
     public String toStringFormatted() {
 
         val sb = new StringBuilder();
-        
-        String head = String.format("APACHE ISIS %s (%s) ", 
-                IsisSystemEnvironment.VERSION, 
+
+        String head = String.format("APACHE ISIS %s (%s) ",
+                IsisSystemEnvironment.VERSION,
                 systemEnvironment.getDeploymentType().name());
-        
+
         final Map<String, ConfigurationProperty> map = config.get();
-        
+
         final int fillCount = 46-head.length();
         final int fillLeft = fillCount/2;
         final int fillRight = fillCount-fillLeft;
@@ -132,32 +132,32 @@ implements
     // -- HELPER
 
     private _Lazy<Map<String, ConfigurationProperty>> env = _Lazy.of(this::loadEnvironment);
-    
+
     private Map<String, ConfigurationProperty> loadEnvironment() {
         final Map<String, ConfigurationProperty> map = _Maps.newTreeMap();
         add("Isis Version", IsisSystemEnvironment.VERSION, map);
         add("Deployment Type", systemEnvironment.getDeploymentType().name(), map);
         add("Unit Testing", ""+systemEnvironment.isUnitTesting(), map);
-        
+
         addSystemProperty("java.version", map);
         addSystemProperty("java.vm.name", map);
         addSystemProperty("java.vm.vendor", map);
         addSystemProperty("java.vm.version", map);
         addSystemProperty("java.vm.info", map);
-        
+
         return map;
     }
-    
+
     private _Lazy<Map<String, ConfigurationProperty>> config = _Lazy.of(this::loadConfiguration);
 
     private Map<String, ConfigurationProperty> loadConfiguration() {
         final Map<String, ConfigurationProperty> map = _Maps.newTreeMap();
         if(isShowConfigurationProperties()) {
             configuration.getAsMap().forEach((k, v)->add("isis." + k, v, map));
-            restEasyConfiguration.getAsMap().forEach((k, v)->add("resteasy." + k, v, map));    
+            restEasyConfiguration.getAsMap().forEach((k, v)->add("resteasy." + k, v, map));
         } else {
             // if properties are not visible, show at least the policy
-            add("Configuration Property Visibility Policy", 
+            add("Configuration Property Visibility Policy",
                     getConfigurationPropertyVisibilityPolicy().name(), map);
         }
         return map;
@@ -167,7 +167,7 @@ implements
         value = ValueMaskingUtil.maskIfProtected(key, value);
         map.put(key, new ConfigurationProperty(key, value));
     }
-    
+
     private static void addSystemProperty(String key, Map<String, ConfigurationProperty> map) {
         add(key, System.getProperty(key, "<empty>"), map);
     }
@@ -184,7 +184,7 @@ implements
             return false;
         }
     }
-    
+
     private ConfigurationPropertyVisibilityPolicy getConfigurationPropertyVisibilityPolicy() {
         return Optional.ofNullable(
                 configuration.getCore().getConfig().getConfigurationPropertyVisibilityPolicy())

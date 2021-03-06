@@ -7,7 +7,6 @@
 .XDocReportService.java
 ----
 class XDocReportService {
-  PdfOptions pdfOptions;
   void init()
   byte[] render(final byte[] templateBytes, final XDocReportModel dataModel, final OutputType outputType)
 }

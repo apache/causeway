@@ -7,7 +7,6 @@
 .Lorem.java
 ----
 class Lorem {
-  com.github.javafaker.Lorem javaFakerLorem;
   Lorem(final FakeDataService fakeDataService)
   List<String> words(int num)
   List<String> words()

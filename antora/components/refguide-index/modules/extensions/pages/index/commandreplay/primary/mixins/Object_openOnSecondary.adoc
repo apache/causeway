@@ -7,11 +7,6 @@
 .Object_openOnSecondary.java
 ----
 class Object_openOnSecondary {
-  final Object object;
-  @Inject
-PrimaryConfig primaryConfig;
-  @Inject
-BookmarkService bookmarkService;
   URL act()
   boolean hideAct()
 }

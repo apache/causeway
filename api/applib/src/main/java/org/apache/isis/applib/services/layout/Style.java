@@ -4,9 +4,13 @@ import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.layout.grid.Grid;
 
 /**
- * Mode of operation when downloading a layout file (while prototyping). It affects the way the file's
+ * Mode of operation when downloading a layout file (while prototyping).
+ *
+ * <p>
+ * It affects the way the file's
  * content is assembled. Once a layout file is in place, its layout data takes precedence over any
  * conflicting layout data from annotations.
+ * </p>
  *
  * @since 1.x {@index}
  */

@@ -13,13 +13,9 @@ If the domain object's JAXB annotations reference only a single XSD schema then 
 .Dto_downloadXsd.java
 ----
 class Dto_downloadXsd {
-  @Inject
-MessageService messageService;
-  @Inject
-JaxbService jaxbService;
   Object act(final String fileName, final IsisSchemas isisSchemas)     // <.>
-  String default0Act()
-  IsisSchemas default1Act()
+  String default0Act()     // <.>
+  IsisSchemas default1Act()     // <.>
 }
 ----
 
@@ -28,6 +24,16 @@ JaxbService jaxbService;
 --
 The _IsisSchemas_ parameter can be used to optionally ignore the common Apache Isis schemas; useful if there is only one other XSD schema referenced by the DTO.
 --
+<.> xref:#default0Act__[default0Act()]
++
+--
+Defaults to the fully qualified class name of the domain object.
+--
+<.> xref:#default1Act__[default1Act()]
++
+--
+Defaults to _IsisSchemas#IGNORE_
+--
 
 == Members
 
@@ -35,3 +41,13 @@ The _IsisSchemas_ parameter can be used to optionally ignore the common Apache I
 === act(String, IsisSchemas)
 
 The _IsisSchemas_ parameter can be used to optionally ignore the common Apache Isis schemas; useful if there is only one other XSD schema referenced by the DTO.
+
+[#default0Act__]
+=== default0Act()
+
+Defaults to the fully qualified class name of the domain object.
+
+[#default1Act__]
+=== default1Act()
+
+Defaults to _IsisSchemas#IGNORE_

@@ -7,7 +7,6 @@
 .AnnotationList.java
 ----
 class AnnotationList {
-  List<AnnotationTriplet> list;
   AnnotationList(List<AnnotationTriplet> list)
   List<AnnotationTriplet> getByAnnotation_OrderBy_OrderAscending(String annotation)
 }

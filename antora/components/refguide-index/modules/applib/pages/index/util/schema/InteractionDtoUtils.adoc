@@ -7,7 +7,6 @@
 .InteractionDtoUtils.java
 ----
 class InteractionDtoUtils {
-  static JAXBContext jaxbContext;
   void init()
   JAXBContext getJaxbContext()
   InteractionDto fromXml(final Reader reader)

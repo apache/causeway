@@ -7,8 +7,6 @@
 .CommandServiceMenu.java
 ----
 class CommandServiceMenu {
-  final CommandJdoRepository commandServiceRepository;
-  final ClockService clockService;
   List<CommandJdo> activeCommands()
   boolean hideActiveCommands()
   List<CommandJdo> findCommands(final LocalDate from, final LocalDate to)

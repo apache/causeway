@@ -10,10 +10,15 @@ Provides the access to string representations of the packages, classes and class
 ----
 interface ApplicationFeatureRepository {
   SortedSet<String> namespaceNames()
-  SortedSet<String> classNamesContainedIn(String packageFqn, ApplicationMemberSort memberSort)
   SortedSet<String> classNamesRecursivelyContainedIn(String packageFqn)
-  SortedSet<String> memberNamesOf(String packageFqn, String className, ApplicationMemberSort memberSort)
   Map<String, ApplicationFeatureId> getFeatureIdentifiersByName()
+  ApplicationFeature findFeature(ApplicationFeatureId featureId)
+  Collection<ApplicationFeature> allActions()
+  Collection<ApplicationFeature> allCollections()
+  Collection<ApplicationFeature> allProperties()
+  Collection<ApplicationFeature> allNamespaces()
+  Collection<ApplicationFeature> allTypes()
+  Collection<ApplicationFeature> allMembers()
 }
 ----
 

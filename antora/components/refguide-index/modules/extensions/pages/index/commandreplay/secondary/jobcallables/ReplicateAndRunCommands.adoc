@@ -11,18 +11,6 @@ This class is instantiated each time the Quartz job ( `_org.apache.isis.extensio
 .ReplicateAndRunCommands.java
 ----
 class ReplicateAndRunCommands {
-  @Inject
-CommandExecutorService commandExecutorService;
-  @Inject
-TransactionService transactionService;
-  @Inject
-CommandFetcher commandFetcher;
-  @Inject
-CommandJdoRepository commandJdoRepository;
-  @Inject
-CommandReplayAnalysisService analysisService;
-  @Inject
-Optional<ReplayCommandExecutionController> controller;
   SecondaryStatus call()
 }
 ----

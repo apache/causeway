@@ -7,7 +7,6 @@
 .Books.java
 ----
 class Books {
-  com.github.javafaker.Code javaFakerCode;
   Books(final FakeDataService fakeDataService)
   String isbn10()
   String isbn13()

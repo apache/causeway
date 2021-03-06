@@ -117,10 +117,16 @@ public class Dto_downloadXsd {
 
     }
 
+    /**
+     * Defaults to the fully qualified class name of the domain object.
+     */
     public String default0Act() {
         return holder.getClass().getName();
     }
 
+    /**
+     * Defaults to {@link IsisSchemas#IGNORE}
+     */
     public IsisSchemas default1Act() {
         return IsisSchemas.IGNORE;
     }

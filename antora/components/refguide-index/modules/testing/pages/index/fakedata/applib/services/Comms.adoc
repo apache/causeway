@@ -7,8 +7,6 @@
 .Comms.java
 ----
 class Comms {
-  final com.github.javafaker.Internet javaFakerInternet;
-  final com.github.javafaker.PhoneNumber javaFakerPhoneNumber;
   Comms(final FakeDataService fakeDataService)
   String emailAddress()
   String url()

@@ -7,10 +7,6 @@
 .CommandReplayOnSecondaryService.java
 ----
 class CommandReplayOnSecondaryService {
-  @Inject
-final CommandJdoRepository commandJdoRepository;
-  @Inject
-final JaxbService jaxbService;
   CommandJdo findMostRecentReplayed()
   void uploadCommands(final Clob commandsDtoAsXml)
 }

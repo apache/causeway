@@ -42,8 +42,13 @@ It also supports these Joda-Time classes:
 
 
 
-== Apache Isis-defined
+== Framework-defined
 
-include::value-types/Blob.adoc[leveloffset=+2]
-include::value-types/Clob.adoc[leveloffset=+2]
-include::value-types/Markup.adoc[leveloffset=+2]
+The framework also defines a number of custom value types:
+
+* xref:refguide:applib:index/value/Blob.adoc[Blob]
+* xref:refguide:applib:index/value/Clob.adoc[Clob]
+* xref:refguide:applib:index/value/Markup.adoc[Markup]
+* xref:refguide:applib:index/value/LocalResourcePath.adoc[LocalResourcePath]
+* xref:refguide:applib:index/value/Password.adoc[Password]
+

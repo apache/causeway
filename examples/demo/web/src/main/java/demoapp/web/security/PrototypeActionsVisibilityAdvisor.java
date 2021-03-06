@@ -27,8 +27,8 @@ import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.mixins.layout.Object_downloadLayoutXml;
-import org.apache.isis.applib.mixins.layout.Object_openRestApi;
-import org.apache.isis.applib.mixins.layout.Object_rebuildMetamodel;
+import org.apache.isis.applib.mixins.rest.Object_openRestApi;
+import org.apache.isis.applib.mixins.metamodel.Object_rebuildMetamodel;
 import org.apache.isis.applib.mixins.metamodel.Object_downloadMetamodelXml;
 import org.apache.isis.core.metamodel.inspect.Object_inspectMetamodel;
 

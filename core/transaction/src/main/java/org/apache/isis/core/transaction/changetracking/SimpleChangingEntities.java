@@ -34,7 +34,7 @@ import lombok.ToString;
  * Captures which objects were created, updated or deleted in the course of a transaction.
  */
 @ToString
-class SimpleChangingEntities implements EntityChanges, HasTransactionId {
+class SimpleChangingEntities implements EntityChanges {
 
     private UUID transactionUuid;
     private final int sequence;

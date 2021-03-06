@@ -11,8 +11,8 @@ There are some similarities to _org.apache.isis.core.metamodel.services.ixn.Inte
 .CommandDtoFactory.java
 ----
 interface CommandDtoFactory {
-  CommandDto asCommandDto(final UUID uniqueId, final Can<ManagedObject> targetAdapters, final ObjectAction objectAction, final Can<ManagedObject> argAdapters)     // <.>
-  CommandDto asCommandDto(final UUID uniqueId, final Can<ManagedObject> targetAdapters, final OneToOneAssociation association, final ManagedObject valueAdapterOrNull)     // <.>
+  CommandDto asCommandDto(final UUID interactionId, final Can<ManagedObject> targetAdapters, final ObjectAction objectAction, final Can<ManagedObject> argAdapters)     // <.>
+  CommandDto asCommandDto(final UUID interactionId, final Can<ManagedObject> targetAdapters, final OneToOneAssociation association, final ManagedObject valueAdapterOrNull)     // <.>
   void addActionArgs(final ObjectAction objectAction, final ActionDto actionDto, final Can<ManagedObject> argAdapters)     // <.>
   void addPropertyValue(final OneToOneAssociation property, final PropertyDto propertyDto, final ManagedObject valueAdapter)     // <.>
 }

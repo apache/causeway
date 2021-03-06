@@ -81,10 +81,6 @@ However, it _isn't_ valid for a domain entity to hold a reference to view model,
 For further details on mapping associations using xref:pjdo:ROOT:about.adoc[JDO/DataNucleus], see their link:http://www.datanucleus.org:15080/products/accessplatform_5_2/jdo/mapping.html[mapping guide].
 ====
 
-== Meta-annotations
-
-WARNING: TODO: v2
-
 [#optional-properties]
 == Optional Properties
 

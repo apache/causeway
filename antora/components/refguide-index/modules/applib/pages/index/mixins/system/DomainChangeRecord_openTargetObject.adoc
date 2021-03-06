@@ -9,13 +9,6 @@ Provides the ability to navigate to a domain object from a xref:refguide:applib:
 .DomainChangeRecord_openTargetObject.java
 ----
 class DomainChangeRecord_openTargetObject {
-  @Inject
-BookmarkService bookmarkService;
-  @Inject
-MessageService messageService;
-  @Inject
-MetaModelService metaModelService;
-  DomainChangeRecord_openTargetObject(DomainChangeRecord domainChangeRecord)
   Object openTargetObject()
   boolean hideOpenTargetObject()
   String disableOpenTargetObject()

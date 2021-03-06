@@ -11,8 +11,6 @@ It then delegates down to the default implementation.
 .CommandExecutorServiceWithTime.java
 ----
 class CommandExecutorServiceWithTime {
-  final CommandExecutorService delegate;
-  final TickingClockService tickingClockService;
   CommandExecutorServiceWithTime(final CommandExecutorService delegate, final TickingClockService tickingClockService)
   Bookmark executeCommand(final Command command)
   Bookmark executeCommand(final SudoPolicy sudoPolicy, final Command command)

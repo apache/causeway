@@ -21,6 +21,7 @@ package org.apache.isis.applib.services.grid;
 import javax.annotation.Nullable;
 
 import org.apache.isis.applib.layout.grid.Grid;
+import org.apache.isis.applib.mixins.metamodel.Object_rebuildMetamodel;
 
 /**
  * Provides the ability to load the XML layout (grid) for a domain class.
@@ -43,7 +44,7 @@ public interface GridLoaderService {
      * To support metamodel invalidation/rebuilding of spec.
      *
      * <p>
-     *     This is called by the {@link org.apache.isis.applib.mixins.layout.Object_rebuildMetamodel} mixin action.
+     *     This is called by the {@link Object_rebuildMetamodel} mixin action.
      * </p>
      */
     void remove(Class<?> domainClass);

@@ -7,9 +7,6 @@
 .ReplicateAndReplayJob.java
 ----
 class ReplicateAndReplayJob {
-  @Inject
-SecondaryConfig secondaryConfig;
-  Authentication authentication;
   void execute(final JobExecutionContext quartzContext)
 }
 ----

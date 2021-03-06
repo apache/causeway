@@ -49,7 +49,7 @@ Similarly if an action has a xref:refguide:applib-methods:prefixes.adoc[validate
 
 In addition, the following methods may also be called:
 
-* the xref:refguide:applib-methods:reserved.adoc#title[title()] and `toString()` methods
+* the xref:refguide:applib-methods:ui-hints.adoc#title[title()] and `toString()` methods
 * any xref:refguide:applib-methods:prefixes.adoc#default[default...()], xref:refguide:applib-methods:prefixes.adoc#choices[choices...()] or xref:refguide:applib-methods:prefixes.adoc#autoComplete[autoComplete...()] methods
 
 An exception will be thrown if any other methods are thrown.

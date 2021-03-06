@@ -7,8 +7,6 @@
 .PrimaryConfig.java
 ----
 class PrimaryConfig {
-  @Getter
-final String secondaryBaseUrlWicket;
   PrimaryConfig(final IsisConfiguration isisConfiguration)
   boolean isConfigured()
 }

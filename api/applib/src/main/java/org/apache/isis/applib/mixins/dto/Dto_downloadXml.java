@@ -75,6 +75,10 @@ public class Dto_downloadXml {
         return Clob.of(fileName, CommonMimeType.XML, xmlString);
     }
 
+    /**
+     *
+     * @return
+     */
     public String default0Act() {
         return holder.getClass().getName();
     }

@@ -7,10 +7,6 @@
 .IsisModuleExtCommandReplaySecondary.java
 ----
 class IsisModuleExtCommandReplaySecondary {
-  @Inject
-ApplicationContext applicationContext;
-  @Inject
-IsisConfiguration isisConfiguration;
   JobDetailFactoryBean replicateAndReplayJobDetailFactory()
   SimpleTriggerFactoryBean replicateAndReplayTriggerFactory(JobDetail job)
   SpringBeanJobFactory springBeanJobFactory()

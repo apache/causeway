@@ -28,6 +28,8 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import org.apache.isis.applib.annotation.Value;
 
 /**
+ * Represents a password that will not displayed to the UI but can be persisted.
+ *
  * @since 1.x {@index}
  */
 @Value(semanticsProviderName = "org.apache.isis.core.metamodel.facets.value.password.PasswordValueSemanticsProvider")
@@ -35,11 +37,11 @@ import org.apache.isis.applib.annotation.Value;
 // @XmlJavaTypeAdapter(Password.JaxbToStringAdapter.class) // TODO: not automatically registered because not secure enough.  Instead we should set up some sort of mechanism to encrypt.
 @lombok.Value
 public class Password implements Serializable {
-    
+
     private static final long serialVersionUID = 1L;
-    
+
     private static final String STARS = "********************";
-    
+
     private final String password;
 
     // in support of XML un-marshaling
@@ -47,7 +49,7 @@ public class Password implements Serializable {
     private Password() {
         this("");
     }
-    
+
     public Password(String password) {
         this.password = password;
     }

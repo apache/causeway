@@ -20,6 +20,7 @@ package org.apache.isis.applib.mixins.metamodel;
 
 import javax.inject.Inject;
 
+import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
@@ -31,6 +32,20 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 /**
+ * Contributes a property exposing the logical object type of the domain
+ * object, typically as specified by {@link DomainObject#objectType()}.
+ *
+ * <p>
+ *     The object type is also accessible from the
+ *     {@link org.apache.isis.applib.services.bookmark.Bookmark} of the
+ *     object.
+ * </p>
+ *
+ * @see DomainObject
+ * @see org.apache.isis.applib.mixins.metamodel.Object_objectIdentifier
+ * @see org.apache.isis.applib.services.bookmark.Bookmark
+ * @see org.apache.isis.applib.services.bookmark.BookmarkService
+ *
  * @since 1.x {@index}
  */
 @Property

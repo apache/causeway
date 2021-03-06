@@ -28,6 +28,8 @@ import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.services.metamodel.BeanSort;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
 
+import lombok.RequiredArgsConstructor;
+
 /**
  * Provides the ability to navigate to a domain object from a
  * {@link DomainChangeRecord} which only holds the domain object by way of
@@ -42,12 +44,11 @@ import org.apache.isis.applib.services.metamodel.MetaModelService;
         , associateWithSequence = "1"
 )
 @ActionLayout(named = "Open")
+@SuppressWarnings("CdiManagedBeanInconsistencyInspection")
+@RequiredArgsConstructor
 public class DomainChangeRecord_openTargetObject {
 
     private final DomainChangeRecord domainChangeRecord;
-    public DomainChangeRecord_openTargetObject(DomainChangeRecord domainChangeRecord) {
-        this.domainChangeRecord = domainChangeRecord;
-    }
 
     @Action(semantics = SemanticsOf.SAFE, associateWith = "target", associateWithSequence = "1")
     @ActionLayout(named = "Open")

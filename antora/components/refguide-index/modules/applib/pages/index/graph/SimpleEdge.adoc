@@ -9,8 +9,6 @@ Fundamental building block for graph structures.
 .SimpleEdge.java
 ----
 class SimpleEdge<T> {
-  Vertex<T> from;
-  Vertex<T> to;
 }
 ----
 

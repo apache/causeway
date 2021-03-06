@@ -13,28 +13,10 @@ Obtainable from _TransactionService#currentTransactionId()_ .
 .TransactionId.java
 ----
 class TransactionId {
-  UUID interactionId;     // <.>
-  int sequence;     // <.>
-  String context;     // <.>
   TransactionId empty()     // <.>
 }
 ----
 
-<.> xref:#interactionId[interactionId]
-+
---
-The unique identifier of the outer _org.apache.isis.applib.services.iactn.Interaction_ .
---
-<.> xref:#sequence[sequence]
-+
---
-Identifies the transaction (there could be multiple) within the _org.apache.isis.applib.services.iactn.Interaction_ .
---
-<.> xref:#context[context]
-+
---
-Identifies the persistence context that this xref:refguide:applib:index/services/xactn/TransactionId.adoc[TransactionId] was created for.
---
 <.> xref:#empty__[empty()]
 +
 --
@@ -42,27 +24,6 @@ Factory method that returns a nominally "empty" transaction identifier, used as 
 --
 
 == Members
-
-[#interactionId]
-=== interactionId
-
-The unique identifier of the outer _org.apache.isis.applib.services.iactn.Interaction_ .
-
-Together with _#getSequence()_ , this makes up the implementation of xref:refguide:applib:index/mixins/system/HasTransactionId.adoc[HasTransactionId]
-
-[#sequence]
-=== sequence
-
-Identifies the transaction (there could be multiple) within the _org.apache.isis.applib.services.iactn.Interaction_ .
-
-Together with _#getInteractionId()_ , this makes up the implementation of xref:refguide:applib:index/mixins/system/HasTransactionId.adoc[HasTransactionId]
-
-[#context]
-=== context
-
-Identifies the persistence context that this xref:refguide:applib:index/services/xactn/TransactionId.adoc[TransactionId] was created for.
-
-Useful when there are multiple persistence contexts configured. There are no constraints to format of this String, it is left for the implementation to ensure that the string is a uniqie identifier to the context.
 
 [#empty__]
 === empty()

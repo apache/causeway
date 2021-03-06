@@ -7,6 +7,9 @@ The `org.apache.isis.applib.util` package has a number of simple utility classes
 
 * xref:applib:index/util/Enums.adoc[Enums]
 * xref:applib:index/util/ObjectContracts.adoc[ObjectContracts]
+* xref:applib:index/util/JaxbUtil.adoc[JaxbUtil]
 * xref:applib:index/util/Reasons.adoc[Reasons]
+* xref:applib:index/util/ReasonBuffer.adoc[ReasonBuffer]
+* xref:applib:index/util/ReasonBuffer2.adoc[ReasonBuffer2]
 * xref:applib:index/util/TitleBuffer.adoc[TitleBuffer]
 

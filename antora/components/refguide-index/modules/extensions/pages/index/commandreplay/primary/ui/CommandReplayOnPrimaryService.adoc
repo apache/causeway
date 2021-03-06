@@ -7,22 +7,12 @@
 .CommandReplayOnPrimaryService.java
 ----
 class CommandReplayOnPrimaryService {
-  @Inject
-final CommandJdoRepository commandServiceRepository;
-  @Inject
-final JaxbService jaxbService;
-  @Inject
-final MessageService messageService;
-  @Inject
-final ContentMappingServiceForCommandsDto contentMappingServiceForCommandsDto;
-  @Inject
-final CommandRetrievalService commandRetrievalService;
-  List<CommandJdo> findCommands(final UUID uniqueId, final Integer batchSize)     // <.>
+  List<CommandJdo> findCommands(final UUID interactionId, final Integer batchSize)     // <.>
   Integer default1FindCommandsOnPrimaryFrom()
-  Clob downloadCommands(final UUID uniqueId, final Integer batchSize, final String filenamePrefix)     // <.>
+  Clob downloadCommands(final UUID interactionId, final Integer batchSize, final String filenamePrefix)     // <.>
   Integer default1DownloadCommands()
   String default2DownloadCommands()
-  Clob downloadCommandById(final UUID uniqueId, final String filenamePrefix)     // <.>
+  Clob downloadCommandById(final UUID interactionId, final String filenamePrefix)     // <.>
   String default1DownloadCommandById()
 }
 ----

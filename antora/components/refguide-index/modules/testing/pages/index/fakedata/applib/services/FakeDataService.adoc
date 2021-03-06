@@ -7,12 +7,6 @@
 .FakeDataService.java
 ----
 class FakeDataService {
-  final RandomService randomService;
-  final FakeValuesService fakeValuesService;
-  @Inject
-ClockService clockService;
-  @Inject
-RepositoryService repositoryService;
   FakeDataService()
   FakeDataService(final Random random)
   FakeDataService(final Random random, final Faker javaFaker)

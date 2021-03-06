@@ -7,8 +7,6 @@
 .AuthorizorSecman.java
 ----
 class AuthorizorSecman {
-  @Inject
-ApplicationUserRepository<? extends ApplicationUser> applicationUserRepository;
   boolean isVisible(final Authentication authentication, final Identifier identifier)
   boolean isUsable(final Authentication authentication, final Identifier identifier)
 }

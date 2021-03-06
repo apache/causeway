@@ -7,9 +7,7 @@
 .CommandRetrievalService.java
 ----
 class CommandRetrievalService {
-  @Inject
-CommandJdoRepository commandServiceRepository;
-  List<CommandJdo> findCommandsOnPrimaryFrom(final UUID uniqueId, final Integer batchSize)     // <.>
+  List<CommandJdo> findCommandsOnPrimaryFrom(final UUID interactionId, final Integer batchSize)     // <.>
   Integer default1FindCommandsOnPrimaryFrom()
 }
 ----

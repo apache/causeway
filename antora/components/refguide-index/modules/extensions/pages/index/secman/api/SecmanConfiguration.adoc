@@ -7,64 +7,8 @@
 .SecmanConfiguration.java
 ----
 class SecmanConfiguration {
-  @Getter
-@Builder.Default
-@NonNull
-final String regularUserRoleName;
-  @Getter
-@Builder.Default
-@NonNull
-final String fixtureRoleName;
-  @Getter
-@Builder.Default
-@NonNull
-final String adminRoleName;
-  @Getter
-@Builder.Default
-@NonNull
-final String adminUserName;
-  @Getter
-@Builder.Default
-@NonNull
-final String adminPassword;
-  @Getter
-@Builder.Default
-@NonNull
-final String[] adminStickyNamespacePermissions;     // <.>
-  @Getter
-@Singular
-final Set<String> adminAdditionalNamespacePermissions;
-  @Getter
-@Builder.Default
-final boolean autoEnableIfDelegatedAndAuthenticated;     // <.>
   Stream<String> streamAdminNamespacePermissions()
   boolean isStickyAdminNamespace(String featureFqn)
 }
 ----
 
-<.> xref:#adminStickyNamespacePermissions[adminStickyNamespacePermissions]
-+
---
-cannot be removed via user interface
---
-<.> xref:#autoEnableIfDelegatedAndAuthenticated[autoEnableIfDelegatedAndAuthenticated]
-+
---
-Delegated users, on first successful logon, are auto-created but disabled (by default).
---
-
-== Members
-
-[#adminStickyNamespacePermissions]
-=== adminStickyNamespacePermissions
-
-cannot be removed via user interface
-
-[#autoEnableIfDelegatedAndAuthenticated]
-=== autoEnableIfDelegatedAndAuthenticated
-
-Delegated users, on first successful logon, are auto-created but disabled (by default).
-
-This option allows to override this behavior, such that authenticated users are also auto-enabled.
-
-default: false

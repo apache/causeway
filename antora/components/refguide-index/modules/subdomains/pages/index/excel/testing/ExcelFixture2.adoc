@@ -9,27 +9,8 @@ This class should be executed using _org.apache.isis.testing.fixtures.applib.fix
 .ExcelFixture2.java
 ----
 class ExcelFixture2 {
-  @Getter
-@Setter
-WorksheetSpec.Matcher matcher;     // <.>
-  @Inject
-FactoryService factoryService;
-  @Inject
-ExcelService excelService;
   boolean equals(final Object o)
   int hashCode()
 }
 ----
 
-<.> xref:#matcher[matcher]
-+
---
-Input, mandatory ... how to process each sheet of the workbook.
---
-
-== Members
-
-[#matcher]
-=== matcher
-
-Input, mandatory ... how to process each sheet of the workbook.

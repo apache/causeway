@@ -13,7 +13,6 @@ IMPORTANT: the methods provided by this service are not thread-safe, because the
 .TickingClockService.java
 ----
 class TickingClockService {
-  final IsisConfiguration isisConfiguration;
   void init()
   boolean isInitialized()
   void at(Timestamp timestamp, Runnable runnable)     // <.>

@@ -12,6 +12,7 @@ The numbers of objects loaded, created, updated or deleted and the number of obj
 ----
 interface EntityChanges {
   UUID getInteractionId()     // <.>
+  int getSequence()     // <.>
   String getUsername()     // <.>
   Timestamp getCompletedAt()     // <.>
   int getNumberLoaded()     // <.>
@@ -26,7 +27,12 @@ interface EntityChanges {
 <.> xref:#getInteractionId__[getInteractionId()]
 +
 --
-inherited from xref:refguide:applib:index/mixins/system/HasInteractionId.adoc[HasInteractionId] , correlates back to the unique identifier of the transaction in which these objects were changed.
+inherited from xref:refguide:applib:index/mixins/system/HasTransactionId.adoc[HasTransactionId] and transitively from xref:refguide:applib:index/mixins/system/HasInteractionId.adoc[HasInteractionId] , correlates back to the unique identifier of the _org.apache.isis.applib.services.iactn.Interaction_ in which these objects were changed.
+--
+<.> xref:#getSequence__[getSequence()]
++
+--
+inherited from xref:refguide:applib:index/mixins/system/HasTransactionId.adoc[HasTransactionId] , with _#getInteractionId()_ it identifies the transaction within the _org.apache.isis.applib.services.iactn.Interaction_ in which these objects were changed.
 --
 <.> xref:#getUsername__[getUsername()]
 +
@@ -74,7 +80,12 @@ Same details, but as an an instance of _ChangesDto_ .
 [#getInteractionId__]
 === getInteractionId()
 
-inherited from xref:refguide:applib:index/mixins/system/HasInteractionId.adoc[HasInteractionId] , correlates back to the unique identifier of the transaction in which these objects were changed.
+inherited from xref:refguide:applib:index/mixins/system/HasTransactionId.adoc[HasTransactionId] and transitively from xref:refguide:applib:index/mixins/system/HasInteractionId.adoc[HasInteractionId] , correlates back to the unique identifier of the _org.apache.isis.applib.services.iactn.Interaction_ in which these objects were changed.
+
+[#getSequence__]
+=== getSequence()
+
+inherited from xref:refguide:applib:index/mixins/system/HasTransactionId.adoc[HasTransactionId] , with _#getInteractionId()_ it identifies the transaction within the _org.apache.isis.applib.services.iactn.Interaction_ in which these objects were changed.
 
 [#getUsername__]
 === getUsername()

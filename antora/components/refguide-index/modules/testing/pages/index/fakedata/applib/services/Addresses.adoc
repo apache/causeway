@@ -7,7 +7,6 @@
 .Addresses.java
 ----
 class Addresses {
-  com.github.javafaker.Address javaFakerAddress;
   Addresses(final FakeDataService fakeDataService)
   String streetName()
   String streetAddressNumber()

@@ -7,7 +7,6 @@
 .CreditCards.java
 ----
 class CreditCards {
-  final com.github.javafaker.Business javaFakerBusiness;
   CreditCards(final FakeDataService fakeDataService, final FakeValuesService fakeValuesService)
   String number()
   String type()

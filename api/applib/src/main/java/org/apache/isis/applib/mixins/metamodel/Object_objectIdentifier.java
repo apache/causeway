@@ -34,6 +34,20 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 /**
+ * Contributes a property exposing the internal identifier of the domain
+ * object, typically as specified by {@link DomainObject#objectType()}.
+ *
+ * <p>
+ *     The object identifier is also accessible from the
+ *     {@link org.apache.isis.applib.services.bookmark.Bookmark} of the
+ *     object.
+ * </p>
+ *
+ * @see DomainObject
+ * @see org.apache.isis.applib.mixins.metamodel.Object_objectType
+ * @see org.apache.isis.applib.services.bookmark.Bookmark
+ * @see org.apache.isis.applib.services.bookmark.BookmarkService
+ *
  * @since 1.x {@index}
  */
 @Property

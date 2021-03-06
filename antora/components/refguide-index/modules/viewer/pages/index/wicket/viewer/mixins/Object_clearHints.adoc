@@ -1,0 +1,22 @@
+= Object_clearHints
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+Provides the ability for the end-user to discard these UI hints so that the object is rendered in its initial state:
+
+When a domain object is rendered the end-user can select different tabs, and for collections can sort the columns, navigate to second pages, or select different views of collections. If the user revisits that object, the Wicket viewer (at least) will remember these hints and render the domain object in the same state.
+
+These rendering hints are also included if the user copies the URL using the anchor link (to right hand of the object's title).
+
+This mixin - contributed to `java.lang.Object` and therefore to allo domain objects - provides the ability for the end user to clear any hints that might have been set for the domain object being rendered.
+
+== API
+
+[source,java]
+.Object_clearHints.java
+----
+class Object_clearHints {
+  Object act()
+  boolean hideAct()
+}
+----
+

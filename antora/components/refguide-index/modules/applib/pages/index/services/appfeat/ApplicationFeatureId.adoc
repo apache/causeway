@@ -12,9 +12,6 @@ This value is _Comparable_ , the implementation of which considers _#getSort() (
 ----
 class ApplicationFeatureId {
   public static final ApplicationFeatureId NAMESPACE_DEFAULT;
-  @Getter
-@NonNull
-final ApplicationFeatureSort sort;
   ApplicationFeatureId fromIdentifier(final Identifier identifier)
   ApplicationFeatureId newFeature(final ApplicationFeatureSort featureSort, final String qualifiedName)
   ApplicationFeatureId newFeature(final String namespace, final String logicalTypeSimpleName, final String memberName)

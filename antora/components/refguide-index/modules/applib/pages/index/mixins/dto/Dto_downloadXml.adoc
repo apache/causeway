@@ -11,10 +11,14 @@ Requires that the view model is a JAXB view model, and implements the xref:refgu
 .Dto_downloadXml.java
 ----
 class Dto_downloadXml {
-  @Inject
-JaxbService jaxbService;
   Object act(final String fileName)
-  String default0Act()
+  String default0Act()     // <.>
 }
 ----
 
+<.> xref:#default0Act__[default0Act()]
+
+== Members
+
+[#default0Act__]
+=== default0Act()

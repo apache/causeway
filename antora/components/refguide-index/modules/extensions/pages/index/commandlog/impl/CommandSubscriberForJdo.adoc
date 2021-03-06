@@ -7,8 +7,6 @@
 .CommandSubscriberForJdo.java
 ----
 class CommandSubscriberForJdo {
-  @Inject
-final CommandJdoRepository commandJdoRepository;
   void onCompleted(Command command)
 }
 ----

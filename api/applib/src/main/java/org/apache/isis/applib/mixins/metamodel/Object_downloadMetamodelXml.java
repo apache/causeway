@@ -41,6 +41,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 /**
+ * Provides the ability to download the framework's internal
+ * metamodel for any domain entity or view model, in XML format.
+ *
  * @since 1.x {@index}
  */
 @Action(
@@ -62,8 +65,6 @@ public class Object_downloadMetamodelXml {
 
     @MemberOrder(name = LayoutMixinConstants.METADATA_LAYOUT_GROUPNAME, sequence = "700.2")
     public Object act(
-
-            // PARAM 0
             @ParameterLayout(
                     named = DtoMixinConstants.FILENAME_PROPERTY_NAME,
                     describedAs = DtoMixinConstants.FILENAME_PROPERTY_DESCRIPTION)
@@ -91,13 +92,15 @@ public class Object_downloadMetamodelXml {
         return Clob.of(fileName, CommonMimeType.XML, xmlString);
     }
 
-    // -- PARAM 0
 
+    /**
+     * Defaults to the simple name of the domain object's class.
+     */
     public String default0Act() {
         return holder.getClass().getSimpleName();
     }
 
-    // -- DEPENDENCIES
+
 
     @Inject MetaModelService metaModelService;
     @Inject JaxbService jaxbService;

@@ -8,7 +8,7 @@ This section defines a number of "mixee" interfaces that define a contract for s
 
 [TIP]
 ====
-See the xref:userguide:fun:overview.adoc#mixins[fundamentals user guide] for a discussion of mixins.
+See the xref:userguide:fun:overview.adoc#mixins[user guide] for a discussion of mixins.
 ====
 
 
@@ -17,12 +17,21 @@ See the xref:userguide:fun:overview.adoc#mixins[fundamentals user guide] for a d
 
 The framework provides a number of mixins that contributes to `java.lang.Object` (in other words, to every domain object):
 
-* core
-** xref:refguide:applib:index/mixins/layout/Object_downloadLayoutXml.adoc[Object_downloadLayoutXml]
+* layout
 ** xref:refguide:applib:index/mixins/layout/Object_downloadLayoutXml.adoc[Object_downloadLayoutXml]
 
+* Metamodel
+** xref:refguide:applib:index/mixins/metamodel/Object_downloadMetamodelXml.adoc[Object_downloadMetamodelXml]
+** xref:refguide:applib:index/mixins/metamodel/Object_rebuildMetamodel.adoc[Object_rebuildMetamodel]
+** xref:refguide:applib:index/mixins/metamodel/Object_objectType.adoc[Object_objectType] (property)
+** xref:refguide:applib:index/mixins/metamodel/Object_objectIdentifier.adoc[Object_objectIdentifier] (property)
+
 * Wicket viewer:
+
 ** xref:refguide:viewer:index/wicket/viewer/mixins/Object_clearHints.adoc[Object_clearHints]
+
+* REST viewer:
+** xref:refguide:applib:index/mixins/rest/Object_openRestApi.adoc[Object_openRestApi]
 
 
 
@@ -46,7 +55,7 @@ All JDO domain entities implement the DataNucleus `Persistable` role interface a
 
 Using this, the following mixins (actions and properties) are available for all JDO entities:
 
-* xref:refguide:persistence:index/jdo/datanucleus/mixins/Persistable_downloadJdoMetadata.adoc[Persistable_downloadJdoMetadata] (action)
+* xref:refguide:persistence:index/jdo/datanucleus/mixins/Persistable_downloadJdoMetadata.adoc[Persistable_downloadJdoMetadata]
 * xref:refguide:persistence:index/jdo/datanucleus/mixins/Persistable_datanucleusIdLong.adoc[Persistable_datanucleusIdLong] (property)
 +
 only visible if the JDO entity has datastore identity, and the `id` field introduced by enhancing can be cast to `Long`.
@@ -55,7 +64,7 @@ only visible if the JDO entity has datastore identity, and the `id` field introd
 +
 only visible if the entity is annotated with `javax.jdo.annotations.Version` and the `version` field introduced by enhancing can be cast to `Long`.
 
-* xref:refguide:persistence:index/jdo/datanucleus/mixins/Persistable_datanucleusVersionTimestamp.adoc[Persistable_datanucleusVersionLong] (property)
+* xref:refguide:persistence:index/jdo/datanucleus/mixins/Persistable_datanucleusVersionTimestamp.adoc[Persistable_datanucleusVersionTimestamp] (property)
 +
 only visible if the entity is annotated with `javax.jdo.annotations.Version` and the `version` field introduced by enhancing can be cast to `java.sql.Timestamp`.
 
@@ -73,7 +82,27 @@ A number of extension modules related to security, such as xref:security:secman:
 
 == System
 
-Domain objects that are associated to an xref:refguide:applib:index/services/iactn/Interaction.adoc[Interaction] or to a nested xref:refguide:applib:index/services/xactn/TransactionId.adoc[transaction] can express this relationship by implementing the xref:refguide:applib:index/mixins/system/HasInteractionId_see-also.adoc
+Domain objects that are associated to an xref:refguide:applib:index/services/iactn/Interaction.adoc[Interaction] can express this relationship by implementing the xref:refguide:applib:index/mixins/system/HasInteractionId.adoc[HasInteractionId] interface.
+
+Mixins that contribute to this mixee interface include:
+
+* xref:refguide:extensions:index/commandlog/impl/mixins/HasInteractionId_command.adoc[HasInteractionId_command]
++
+from xref:extensions:command-log:about.adoc[Comman Log] module.
+
+
+The closely related  xref:refguide:applib:index/mixins/system/HasTransactionId.adoc[HasTransactionId] (a subtype of xref:refguide:applib:index/mixins/system/HasInteractionId.adoc[HasInteractionId]) can be implemented by any domain objects associated with a particular transaction within the outer xref:refguide:applib:index/services/iactn/Interaction.adoc[Interaction].
+
+The xref:refguide:applib:index/mixins/system/DomainChangeRecord.adoc[DomainChangeRecord] is intended for domain objects representing commands, audit entries or executions (of action invocations/property edits).
+Extension modules that provide these capabilities can implement this domain object to allow the user to navigate between these different but related cross-cutting concerns.
+
+Mixins that contribute to this mixee interface include:
+
+** xref:refguide:applib:index/mixins/system/DomainChangeRecord_openTargetObject.adoc[DomainChangeRecord_openTargetObject]
++
+(provided by the core framework)
+
+
 
 
 == Updates
@@ -88,9 +117,9 @@ For domain entities that keep track of when they were last updated.
 +
 For domain entities that keep track of which user last updated them.
 
-* xref:refguide:applib:index/mixins/mixins/updates/OnUpdatedByAndAt.adoc[OnUpdatedByAndAt]
+* xref:refguide:applib:index/mixins/updates/OnUpdatedByAndAt.adoc[OnUpdatedByAndAt]
 +
-Simply a combination of xref:refguide:applib:index/mixins/mixins/updates/OnUpdatedAt.adoc[HasUpdatedAt] and xref:refguide:applib:index/mixins/mixins/updates/OnUpdatedBy.adoc[HasUpdatedBy]
+Simply a combination of xref:refguide:applib:index/mixins/updates/OnUpdatedAt.adoc[OnUpdatedAt] and xref:refguide:applib:index/mixins/updates/OnUpdatedBy.adoc[OnUpdatedBy]
 
 Note that these are not quite the same thing as regular mixee interfaces, in that they do not expose getters to be leveraged by a mixin.
 Rather, these expose callback such that the framework can populate them at the appropriate juncture.

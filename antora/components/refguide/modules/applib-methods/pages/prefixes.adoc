@@ -1,4 +1,4 @@
-= Supporting Method Prefixes
+= Supporting Methods
 
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :page-partial:
@@ -13,7 +13,7 @@ Supporting methods are, therefore, each characterized by their own particular pr
 
 The table below lists the method prefixes that are recognized as part of Apache Isis' default programming model.
 
-.Recognized Method Prefixes
+.Method Prefixes
 [cols="2m,1,1,1,1,1,4a",options="header"]
 |===
 
@@ -50,18 +50,6 @@ See also xref:refguide:applib-methods:prefixes.adoc#choices[choices...()]
 
 See also xref:refguide:applib-methods:prefixes.adoc#autoComplete[autoComplete...()].
 
-//|xref:refguide:applib-methods:prefixes.adoc#clear[clear...()]
-//|
-//|Y
-//|
-//|
-//|
-//|Clear a property (set it to null). +
-//
-//Allows business logic to be placed apart from the setter. +
-//
-//See also xref:refguide:applib-methods:prefixes.adoc#modify[modify...()]
-
 
 |xref:refguide:applib-methods:prefixes.adoc#default[default...()]
 |
@@ -97,30 +85,6 @@ See also xref:refguide:applib-methods:prefixes.adoc#set[set...()].
 |
 |Hides a property, a collection or an action.
 
-//|xref:refguide:applib-methods:prefixes.adoc#modify[modify...()]
-//|
-//|Y
-//|
-//|
-//|
-//|Modify a property (set it to a non-null) value. +
-//
-//Allows business logic to be placed apart from the setter. +
-//
-//See also xref:refguide:applib-methods:prefixes.adoc#clear[clear...()]`.
-
-//|xref:refguide:applib-methods:prefixes.adoc#removeFrom[removeFrom...()]
-//|
-//|
-//|Y
-//|
-//|
-//|remove object from a collection. +
-//
-//NOTE:Directly mutable collections are not currently supported by the xref:vw:ROOT:about.adoc[Wicket viewer].
-//
-//See also xref:refguide:applib-methods:prefixes.adoc#addTo[addTo...()]`
-
 
 |xref:refguide:applib-methods:prefixes.adoc#set[set...()]
 |
@@ -130,47 +94,6 @@ See also xref:refguide:applib-methods:prefixes.adoc#set[set...()].
 |
 |Sets the value of a property or a collection.
 
-//|xref:refguide:applib-methods:prefixes.adoc#validate[validate...()]
-//|Y
-//|
-//|
-//|Y
-//|Y
-//|Check that a proposed value of a property or a set of action parameters or a single action parameter is valid. +
-//
-//See also xref:refguide:applib-methods:prefixes.adoc#validateAddTo[validateAddTo...()] and xref:refguide:applib-methods:prefixes.adoc#validateRemoveFrom[validateRemoveFrom...()] to validate modifications to collections.
-
-//|xref:refguide:applib-methods:prefixes.adoc#validateAddTo[`validate +
-//AddTo...()`]
-//|
-//|Y
-//|
-//|
-//|
-//|Check that a proposed object to add to a collection is valid. +
-//
-//[NOTE]
-//====
-//Directly mutable collections are not currently supported by the xref:vw:ROOT:about.adoc[Wicket viewer].
-//====
-//
-//See also xref:refguide:applib-methods:prefixes.adoc#validateRemoveFrom[validateRemoveFrom...()], and xref:refguide:applib-methods:prefixes.adoc#validate[validate...()] for properties and actions.
-
-//|xref:refguide:applib-methods:prefixes.adoc#validateRemoveFrom[`validate +
-//RemoveFrom...()`]
-//|
-//|Y
-//|
-//|
-//|
-//|Check that a proposed object to remove from a collection is valid. +
-//
-//[NOTE]
-//====
-//Directly mutable collections are not currently supported by the xref:vw:ROOT:about.adoc[Wicket viewer].
-//====
-//
-//See also xref:refguide:applib-methods:prefixes.adoc#validateAddTo[validateAddTo...()], and xref:refguide:applib-methods:prefixes.adoc#validate[validate...()] for properties and actions.
 
 |===
 
@@ -184,17 +107,10 @@ A suitable error message is logged so that the issue can be easily diagnosed.
 ====
 
 
-//include::prefixes/addTo.adoc[leveloffset=+1]
 include::prefixes/autoComplete.adoc[leveloffset=+1]
 include::prefixes/choices.adoc[leveloffset=+1]
-//include::prefixes/clear.adoc[leveloffset=+1]
 include::prefixes/default.adoc[leveloffset=+1]
 include::prefixes/disable.adoc[leveloffset=+1]
 include::prefixes/get.adoc[leveloffset=+1]
 include::prefixes/hide.adoc[leveloffset=+1]
-//include::prefixes/modify.adoc[leveloffset=+1]
-//include::prefixes/removeFrom.adoc[leveloffset=+1]
 include::prefixes/set.adoc[leveloffset=+1]
-//include::prefixes/validate.adoc[leveloffset=+1]
-//include::prefixes/validateAddTo.adoc[leveloffset=+1]
-//include::prefixes/validateRemoveFrom.adoc[leveloffset=+1]

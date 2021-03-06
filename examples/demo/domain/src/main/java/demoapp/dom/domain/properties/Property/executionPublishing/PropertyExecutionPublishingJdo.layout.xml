@@ -36,7 +36,7 @@
 			</bs3:row>
 			<bs3:row>
 				<bs3:col span="12">
-					<cpt:collection id="interactionExecutions"/>
+					<cpt:collection id="interactions"/>
 				</bs3:col>
 			</bs3:row>
 			<bs3:row>

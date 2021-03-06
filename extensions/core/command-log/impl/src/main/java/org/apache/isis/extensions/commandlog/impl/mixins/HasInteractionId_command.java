@@ -31,6 +31,8 @@ import org.apache.isis.extensions.commandlog.impl.IsisModuleExtCommandLogImpl;
 import org.apache.isis.extensions.commandlog.impl.jdo.CommandJdo;
 import org.apache.isis.extensions.commandlog.impl.jdo.CommandJdoRepository;
 
+import lombok.RequiredArgsConstructor;
+
 
 /**
  * This mixin contributes a <tt>command</tt> action to any (non-command) implementation of
@@ -39,20 +41,18 @@ import org.apache.isis.extensions.commandlog.impl.jdo.CommandJdoRepository;
  *
  * @since 2.0 {@index}
  */
+@SuppressWarnings("CdiManagedBeanInconsistencyInspection")
 @Action(
     semantics = SemanticsOf.SAFE
     , domainEvent = HasInteractionId_command.ActionDomainEvent.class
 )
+@RequiredArgsConstructor
 public class HasInteractionId_command {
 
     public static class ActionDomainEvent
             extends IsisModuleExtCommandLogImpl.ActionDomainEvent<HasInteractionId_command> { }
 
     private final HasInteractionId hasInteractionId;
-    public HasInteractionId_command(final HasInteractionId hasInteractionId) {
-        this.hasInteractionId = hasInteractionId;
-    }
-
 
     @MemberOrder(name="interactionId", sequence="1")
     public CommandJdo act() {

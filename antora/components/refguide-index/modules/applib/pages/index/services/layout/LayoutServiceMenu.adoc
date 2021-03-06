@@ -9,8 +9,6 @@ Simply provides a UI to allow layouts (obtained from xref:refguide:applib:index/
 .LayoutServiceMenu.java
 ----
 class LayoutServiceMenu {
-  @Inject
-LayoutService layoutService;
   LayoutServiceMenu()
   Blob downloadLayouts(final Style style)
   Style default0DownloadLayouts()

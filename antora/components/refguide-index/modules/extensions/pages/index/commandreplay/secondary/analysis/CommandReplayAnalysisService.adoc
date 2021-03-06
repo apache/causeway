@@ -7,8 +7,6 @@
 .CommandReplayAnalysisService.java
 ----
 class CommandReplayAnalysisService {
-  @Inject
-List<CommandReplayAnalyser> analysers;
   void analyse(final CommandJdo commandJdo)     // <.>
 }
 ----

@@ -7,20 +7,6 @@
 .SecondaryConfig.java
 ----
 class SecondaryConfig {
-  @Getter
-final String primaryUser;
-  @Getter
-final String primaryPassword;
-  @Getter
-final String primaryBaseUrlRestful;
-  @Getter
-final String primaryBaseUrlWicket;
-  @Getter
-final int batchSize;
-  @Getter
-final String quartzUser;
-  @Getter
-final List<String> quartzRoles;
   SecondaryConfig(final IsisConfiguration isisConfiguration)
   boolean isConfigured()
 }

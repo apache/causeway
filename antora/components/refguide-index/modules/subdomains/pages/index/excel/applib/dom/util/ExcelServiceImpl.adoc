@@ -7,14 +7,6 @@
 .ExcelServiceImpl.java
 ----
 class ExcelServiceImpl {
-  @javax.inject.Inject
-BookmarkService bookmarkService;
-  @javax.inject.Inject
-SpecificationLoader specificationLoader;
-  @javax.inject.Inject
-ServiceInjector serviceInjector;
-  @javax.inject.Inject
-ObjectManager objectManager;
   Blob toExcel(final List<T> domainObjects, final Class<T> cls, final String sheetName, final String fileName)     // <.>
   Blob toExcel(final List<T> domainObjects, final Class<T> cls, final String sheetName, final String fileName, final InputStream in)     // <.>
   Blob toExcel(WorksheetContent worksheetContent, final String fileName)     // <.>

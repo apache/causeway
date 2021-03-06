@@ -7,10 +7,6 @@
 .ContentMappingServiceForCommandDto.java
 ----
 class ContentMappingServiceForCommandDto {
-  @Inject
-MetaModelService metaModelService;
-  @Inject
-List<CommandDtoProcessorService> commandDtoProcessorServices;
   Object map(final Object object, final List<MediaType> acceptableMediaTypes)
   CommandDto asProcessedDto(final Object object)
 }

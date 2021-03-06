@@ -30,7 +30,6 @@
 ** xref:refguide:applib:index/annotation/PropertyLayout.adoc[PropertyLayout]
 ** xref:refguide:applib:index/annotation/InteractionScope.adoc[RequestScoped]
 ** xref:refguide:applib:index/annotation/Title.adoc[Title]
-** xref:refguide:applib-ant:ViewModel.adoc[ViewModel]
 ** xref:refguide:applib-ant:XmlJavaTypeAdapter.adoc[XmlJavaTypeAdapter]
 ** xref:refguide:applib-ant:XmlRootElement.adoc[XmlRootElement]
 

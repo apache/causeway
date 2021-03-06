@@ -7,7 +7,6 @@
 .JavaSqlXMLGregorianCalendarMarshalling.java
 ----
 class JavaSqlXMLGregorianCalendarMarshalling {
-  static DatatypeFactory datatypeFactory;
   Timestamp toTimestamp(final XMLGregorianCalendar calendar)
   XMLGregorianCalendar toXMLGregorianCalendar(final Timestamp timestamp)
 }
