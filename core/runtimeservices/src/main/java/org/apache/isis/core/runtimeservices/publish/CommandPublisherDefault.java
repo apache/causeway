@@ -75,7 +75,7 @@ public class CommandPublisherDefault implements CommandPublisher {
             return;
         }
         
-        log.debug("PUSH command: %s to %s", command, enabledSubscribers);
+        log.debug("about to PUSH command: {} to {}", command, enabledSubscribers);
 
         enabledSubscribers.forEach(subscriber -> subscriber.onCompleted(command));
     }

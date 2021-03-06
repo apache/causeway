@@ -73,7 +73,8 @@ public interface ApplicationFeature {
     Optional<SemanticsOf> getActionSemantics();
 
     /** 
-     * @return {@code false} when not a property or collection 
+     * Returns whether the property or collection feature is derived.  
+     * @return always {@code false} when not a property or collection 
      */
     boolean isPropertyOrCollectionDerived();
 
