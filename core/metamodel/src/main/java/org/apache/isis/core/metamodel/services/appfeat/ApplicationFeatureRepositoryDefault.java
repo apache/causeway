@@ -155,6 +155,10 @@ implements ApplicationFeatureRepository {
             return;
         }
 
+        if(spec.getCorrespondingClass().getName().startsWith("scinda.dom.smodel.composite.CompositeFood")) {
+            System.out.println("got " + spec.getCorrespondingClass() + " -> " + spec.getLogicalTypeName());
+        }
+        
         final String logicalTypeName = spec.getLogicalTypeName();
         final ApplicationFeatureId typeFeatureId = ApplicationFeatureId.newType(logicalTypeName);
 
