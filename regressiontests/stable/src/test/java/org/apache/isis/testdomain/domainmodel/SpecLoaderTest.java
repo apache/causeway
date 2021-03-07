@@ -66,7 +66,7 @@ class SpecLoaderTest {
         
         val logicalType = spec1.getLogicalType();
         
-        val spec2 = specificationLoader.loadSpecification(logicalType);
+        val spec2 = specificationLoader.specForLogicalType(logicalType).orElse(null);
         assertNotNull(spec2);
         
         assertEquals(spec1.getLogicalType(), spec2.getLogicalType());
