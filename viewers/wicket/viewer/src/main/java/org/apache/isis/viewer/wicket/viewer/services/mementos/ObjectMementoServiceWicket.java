@@ -130,8 +130,10 @@ public class ObjectMementoServiceWicket implements ObjectMementoService {
         if(memento instanceof ObjectMementoForEmpty) {
             val objectMementoForEmpty = (ObjectMementoForEmpty) memento;
             val logicalType = objectMementoForEmpty.getLogicalType();
-            val spec = specificationLoader.loadSpecification(logicalType);
-            return ManagedObject.empty(spec);
+            val spec = specificationLoader.specForLogicalType(logicalType);
+            return spec.isPresent()
+                    ? ManagedObject.empty(spec.get())
+                    : ManagedObject.unspecified();
         }
         
         if(memento instanceof ObjectMementoCollection) {

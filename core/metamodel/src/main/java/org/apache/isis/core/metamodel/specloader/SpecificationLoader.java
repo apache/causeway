@@ -203,10 +203,4 @@ public interface SpecificationLoader {
         return loadSpecification(domainType, IntrospectionState.TYPE_INTROSPECTED);
     }
     
-    @Nullable
-    default ObjectSpecification loadSpecification(
-            final @Nullable LogicalType logicalType) {
-        return loadSpecification(logicalType.getCorrespondingClass(), IntrospectionState.TYPE_INTROSPECTED);
-    }
-    
 }

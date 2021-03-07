@@ -96,11 +96,11 @@ public final class LinkAndLabel extends LinkAndLabelAbstract {
 
         private Object readResolve() {
             val commonContext = CommonContextUtils.getCommonContext();
-            val actionHolderSpec = commonContext.getSpecificationLoader().loadSpecification(actionHolderLogicalType);
-            val objectMember = actionHolderSpec
-                    .getMember(objectActionId)
-                    .orElseThrow(()->
-                        _Exceptions.noSuchElement("could not restore objectAction from id %s", objectActionId));
+            val objectMember = commonContext.getSpecificationLoader()
+            .specForLogicalType(actionHolderLogicalType)
+            .flatMap(actionHolderSpec->actionHolderSpec.getMember(objectActionId))
+            .orElseThrow(()->
+                _Exceptions.noSuchElement("could not restore objectAction from id %s", objectActionId));
             return new LinkAndLabel(uiComponentFactory, named, actionHolder, (ObjectAction) objectMember);
         }
     }
