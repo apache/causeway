@@ -20,7 +20,9 @@ package org.apache.isis.persistence.jdo.metamodel.facets.object.query;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.id.LogicalType;
+import org.apache.isis.commons.functional.Result;
 import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
@@ -79,7 +81,13 @@ abstract class VisitorForClauseAbstract implements MetaModelValidatorVisiting.Vi
         }
 
         val cls = objectSpec.getCorrespondingClass();
-        if (getSpecificationLoader().loadSpecification(classNameFromClause)==null) {
+        
+        val fromSpecResult = Result.of(()->getSpecificationLoader()
+                .specForType(_Context.loadClass(classNameFromClause))
+                .orElse(null));
+            
+        if(fromSpecResult.isFailure() 
+                || !fromSpecResult.getValue().isPresent()) {
             validator.onFailure(
                     objectSpec,
                     Identifier.classIdentifier(LogicalType.fqcn(cls)),

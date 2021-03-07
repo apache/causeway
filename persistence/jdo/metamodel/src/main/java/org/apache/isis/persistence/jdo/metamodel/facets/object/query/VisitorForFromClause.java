@@ -22,6 +22,8 @@ import java.util.Objects;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.id.LogicalType;
+import org.apache.isis.commons.functional.Result;
+import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.core.metamodel.spec.Hierarchical;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
@@ -51,7 +53,22 @@ class VisitorForFromClause extends VisitorForClauseAbstract {
         if (Objects.equals(classNameFromClause, cls.getName())) {
             return;
         }
-        val fromSpec = getSpecificationLoader().loadSpecification(classNameFromClause);
+
+        val fromSpecResult = Result.of(()->getSpecificationLoader()
+                    .specForType(_Context.loadClass(classNameFromClause))
+                    .orElse(null));
+                
+        if(fromSpecResult.isFailure() 
+                || !fromSpecResult.getValue().isPresent()) {
+            validator.onFailure(
+                    objectSpec,
+                    Identifier.classIdentifier(LogicalType.fqcn(cls)),
+                    "%s: error in JDOQL query, class name after '%s' clause could not be loaded (JDOQL : %s)",
+                    cls.getName(), clause, query);
+            return;
+        }
+        
+        val fromSpec = fromSpecResult.getValue().get();
         val subclasses = fromSpec.subclasses(Hierarchical.Depth.TRANSITIVE);
         if(subclasses.contains(objectSpec)) {
             return;
