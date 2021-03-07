@@ -209,10 +209,4 @@ public interface SpecificationLoader {
         return loadSpecification(logicalType.getCorrespondingClass(), IntrospectionState.TYPE_INTROSPECTED);
     }
     
-    @Nullable
-    default ObjectSpecification loadSpecification(
-            final @Nullable Bookmark bookmark) {
-        return loadSpecification(bookmark.getLogicalTypeName(), IntrospectionState.TYPE_INTROSPECTED);
-    }
-    
 }

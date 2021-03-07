@@ -78,7 +78,7 @@ public class BookmarkServiceDefault implements BookmarkService, SerializingAdapt
             return null;
         }
         try {
-            val spec = specificationLoader.loadSpecification(bookmark);
+            val spec = specificationLoader.specForBookmark(bookmark).orElse(null);
             val identifier = bookmark.getIdentifier();
             val objectLoadRequest = ObjectLoader.Request.of(spec, identifier);
             
