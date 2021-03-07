@@ -155,9 +155,6 @@ implements ApplicationFeatureRepository {
             return;
         }
 
-        if(spec.getCorrespondingClass().getName().startsWith("scinda.dom.smodel.composite.CompositeFood")) {
-            System.out.println("got " + spec.getCorrespondingClass() + " -> " + spec.getLogicalTypeName());
-        }
         
         final String logicalTypeName = spec.getLogicalTypeName();
         final ApplicationFeatureId typeFeatureId = ApplicationFeatureId.newType(logicalTypeName);
@@ -292,14 +289,14 @@ implements ApplicationFeatureRepository {
     }
 
     private void newMember(
-            final ApplicationFeatureId classFeatureId,
+            final ApplicationFeatureId typeFeatureId,
             final String memberId,
             final @NonNull ApplicationMemberSort memberSort,
             final @Nullable Class<?> returnType,
             final Boolean derived,
             final @Nullable Integer maxLength, final @Nullable Integer typicalLength,
             final @Nullable SemanticsOf actionSemantics) {
-        final ApplicationFeatureId featureId = ApplicationFeatureId.newMember(classFeatureId.getFullyQualifiedName(), memberId);
+        final ApplicationFeatureId featureId = ApplicationFeatureId.newMember(typeFeatureId.getFullyQualifiedName(), memberId);
 
         final ApplicationFeatureDefault memberFeature = 
                 (ApplicationFeatureDefault)newApplicationFeature(featureId);
@@ -316,8 +313,8 @@ implements ApplicationFeatureRepository {
         // also cache per memberSort
         featuresMapFor(memberSort).put(featureId, memberFeature);
 
-        final ApplicationFeatureDefault classFeature = (ApplicationFeatureDefault)findLogicalType(classFeatureId);
-        classFeature.addToMembers(featureId, memberSort);
+        final ApplicationFeatureDefault typeFeature = (ApplicationFeatureDefault)findLogicalType(typeFeatureId);
+        typeFeature.addToMembers(featureId, memberSort);
     }
 
     private SortedMap<ApplicationFeatureId, ApplicationFeature> featuresMapFor(final ApplicationMemberSort memberSort) {

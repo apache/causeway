@@ -102,7 +102,7 @@ public class ApplicationUser_filterPermissions {
     private List<UserPermissionViewModel> asViewModels(final Collection<ApplicationFeature> features) {
         return _Lists.map(
                 features,
-                UserPermissionViewModel.Functions.asViewModel(target, factory));
+                UserPermissionViewModel.asViewModel(target, factory));
     }
 
 

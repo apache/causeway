@@ -62,7 +62,7 @@ public class ApplicationUser_permissions {
     List<UserPermissionViewModel> asViewModels(final java.util.Collection<ApplicationFeature> features) {
         return _Lists.map(
                 features,
-                UserPermissionViewModel.Functions.asViewModel(target, factory));
+                UserPermissionViewModel.asViewModel(target, factory));
     }
 
 

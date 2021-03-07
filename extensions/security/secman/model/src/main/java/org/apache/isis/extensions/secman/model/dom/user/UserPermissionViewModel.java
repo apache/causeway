@@ -387,29 +387,24 @@ public class UserPermissionViewModel implements ViewModel {
         return toString.toString(this);
     }
 
-    // -- Functions
+    // -- Factory
 
-    public static final class Functions {
+    public static Function<ApplicationFeature, UserPermissionViewModel> asViewModel(
+            final ApplicationUser user, 
+            final FactoryService factoryService) {
 
-        private Functions(){}
-
-        public static Function<ApplicationFeature, UserPermissionViewModel> asViewModel(
-                final ApplicationUser user, 
-                final FactoryService factoryService) {
-
-            return (final ApplicationFeature input) -> {
-                val permissionSet = user.getPermissionSet();
-                val changingEvaluation = permissionSet.evaluate(input.getFeatureId(), ApplicationPermissionMode.CHANGING);
-                val viewingEvaluation = permissionSet.evaluate(input.getFeatureId(), ApplicationPermissionMode.VIEWING);
-                return UserPermissionViewModel
-                        .newViewModel(
-                                input.getFeatureId(), 
-                                user, 
-                                viewingEvaluation, 
-                                changingEvaluation, 
-                                factoryService);
-            };
-        }
+        return (final ApplicationFeature feature) -> {
+            val permissionSet = user.getPermissionSet();
+            val changingEvaluation = permissionSet.evaluate(feature.getFeatureId(), ApplicationPermissionMode.CHANGING);
+            val viewingEvaluation = permissionSet.evaluate(feature.getFeatureId(), ApplicationPermissionMode.VIEWING);
+            return UserPermissionViewModel
+                    .newViewModel(
+                            feature.getFeatureId(), 
+                            user, 
+                            viewingEvaluation, 
+                            changingEvaluation, 
+                            factoryService);
+        };
     }
 
 
