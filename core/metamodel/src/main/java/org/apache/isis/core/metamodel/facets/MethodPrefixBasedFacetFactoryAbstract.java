@@ -98,7 +98,7 @@ implements MethodPrefixBasedFacetFactory {
         
         val noParamsOnly = getConfiguration().getCore().getMetaModel().getValidator().isNoParamsOnly();
 
-        programmingModel.addValidator(new MetaModelValidatorVisiting.Visitor() {
+        programmingModel.addValidatorSkipManagedBeans(new MetaModelValidatorVisiting.Visitor() {
 
             @Override
             public String toString() {

@@ -27,7 +27,8 @@ import org.apache.isis.core.metamodel.specloader.SpecificationLoaderDefault;
 import lombok.NonNull;
 import lombok.val;
 
-public class MetaModelValidatorVisiting extends MetaModelValidatorAbstract {
+public class MetaModelValidatorVisiting 
+extends MetaModelValidatorAbstract {
 
     @Override
     public String toString() {
@@ -53,11 +54,6 @@ public class MetaModelValidatorVisiting extends MetaModelValidatorAbstract {
     // -- IMPLEMENTATION
 
     public static MetaModelValidatorVisiting of(
-            final @NonNull Visitor visitor) {
-        return new MetaModelValidatorVisiting(visitor);
-    }
-
-    public static MetaModelValidatorVisiting of(
             final @NonNull Visitor visitor,
             final @NonNull Predicate<ObjectSpecification> includeIf) {
         return new MetaModelValidatorVisiting(visitor, includeIf);
@@ -69,17 +65,10 @@ public class MetaModelValidatorVisiting extends MetaModelValidatorAbstract {
 
     private MetaModelValidatorVisiting(
             final @NonNull Visitor visitor,
-            final @NonNull Predicate<ObjectSpecification> includeIf) {
+            final @NonNull Predicate<ObjectSpecification> includeIf
+            ) {
         this.visitor = visitor;
         this.includeIf = includeIf;
-    }
-
-    private MetaModelValidatorVisiting(
-            final @NonNull Visitor visitor) {
-        this(visitor,
-                // by default, exclude managed beans from validation
-                spec -> !spec.isManagedBean() && !spec.getBeanSort().isUnknown()
-        );
     }
 
     @Override
@@ -102,9 +91,14 @@ public class MetaModelValidatorVisiting extends MetaModelValidatorAbstract {
                     return; // in support of @Action not being forced, we need to relax 
             }
             
+            if(spec.isManagedBean()) {
+                System.err.printf("%s: (include: %b): %s\n", this.getClass(), includeIf.test(spec), spec);
+            }
+            
             if(!includeIf.test(spec)) {
                 return;
             }
+            
             visitor.visit(spec, this);
         });
     }

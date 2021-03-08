@@ -22,14 +22,15 @@ import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.commons.internal.reflection._Reflect;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForValidationFailures;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorAbstract;
 
 import static org.apache.isis.commons.internal.reflection._Reflect.Filter.paramCount;
 
 import lombok.NonNull;
 import lombok.val;
 
-public class MetaModelValidatorForMixinTypes extends MetaModelValidatorForValidationFailures {
+public class MetaModelValidatorForMixinTypes 
+extends MetaModelValidatorAbstract {
 
     private final String annotation;
 

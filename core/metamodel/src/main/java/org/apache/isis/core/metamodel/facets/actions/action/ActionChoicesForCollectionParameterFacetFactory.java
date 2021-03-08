@@ -153,7 +153,7 @@ implements MetaModelRefiner {
             }
         };
 
-        programmingModel.addValidator(vistingValidator);
+        programmingModel.addValidatorSkipManagedBeans(vistingValidator);
 
     }
 

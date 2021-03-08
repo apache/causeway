@@ -532,7 +532,7 @@ implements MetaModelRefiner, PostConstructMethodCache, ObjectSpecIdFacetFactory 
 
                 };
 
-        pm.addValidator(ensureUniqueObjectIds);
+        pm.addValidatorSkipManagedBeans(ensureUniqueObjectIds);
     }
 
 

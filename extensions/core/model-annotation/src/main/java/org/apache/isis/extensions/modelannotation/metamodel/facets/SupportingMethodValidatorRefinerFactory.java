@@ -56,7 +56,7 @@ implements MetaModelRefiner {
     @Override
     public void refineProgrammingModel(ProgrammingModel programmingModel) {
 
-        programmingModel.addValidator((spec, validationFailures) -> {
+        programmingModel.addValidatorSkipManagedBeans((spec, validationFailures) -> {
 
             final Class<?> type = spec.getCorrespondingClass();
 

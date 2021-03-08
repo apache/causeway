@@ -103,7 +103,7 @@ implements MetaModelRefiner {
 
     @Override
     public void refineProgrammingModel(ProgrammingModel programmingModel) {
-        programmingModel.addValidator(newValidatorVisitor());
+        programmingModel.addValidatorSkipManagedBeans(newValidatorVisitor());
     }
 
     private Visitor newValidatorVisitor() {

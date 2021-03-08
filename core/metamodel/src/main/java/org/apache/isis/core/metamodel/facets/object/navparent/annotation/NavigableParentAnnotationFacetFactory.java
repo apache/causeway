@@ -109,7 +109,7 @@ implements MetaModelRefiner {
     @Override
     public void refineProgrammingModel(ProgrammingModel programmingModel) {
 
-        programmingModel.addValidator((objectSpec, validate) -> {
+        programmingModel.addValidatorSkipManagedBeans((objectSpec, validate) -> {
 
 
             final Class<?> cls = objectSpec.getCorrespondingClass();

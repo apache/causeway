@@ -112,7 +112,7 @@ implements MetaModelRefiner, ObjectSpecIdFacetFactory {
             return;
         }
 
-        programmingModel.addValidator(
+        programmingModel.addValidatorSkipManagedBeans(
 
             new MetaModelValidatorVisiting.Visitor() {
                 

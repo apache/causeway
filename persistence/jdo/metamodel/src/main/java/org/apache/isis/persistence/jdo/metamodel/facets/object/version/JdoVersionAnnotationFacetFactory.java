@@ -65,7 +65,7 @@ implements MetaModelRefiner {
 
     @Override
     public void refineProgrammingModel(ProgrammingModel programmingModel) {
-        programmingModel.addValidator(newValidatorVisitor());
+        programmingModel.addValidatorSkipManagedBeans(newValidatorVisitor());
     }
 
     Visitor newValidatorVisitor() {

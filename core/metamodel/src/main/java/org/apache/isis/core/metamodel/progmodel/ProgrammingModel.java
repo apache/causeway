@@ -154,10 +154,18 @@ public interface ProgrammingModel {
         addValidator(ValidationOrder.A2_AFTER_BUILTIN, supplier.get(), markers);
     }
 
+    /** do not include managed beans */
+    default void addValidatorIncludeManagedBeans(MetaModelValidatorVisiting.Visitor visitor, Marker ... markers) {
+        addValidator(MetaModelValidatorVisiting.of(visitor, 
+                    spec -> !spec.getBeanSort().isUnknown()),
+                markers);
+    }
     
-    /** shortcut for see {@link #addValidator(MetaModelValidator, Marker...)} */
-    default void addValidator(MetaModelValidatorVisiting.Visitor visitor, Marker ... markers) {
-        addValidator(MetaModelValidatorVisiting.of(visitor), markers);
+    /** do not include managed beans */
+    default void addValidatorSkipManagedBeans(MetaModelValidatorVisiting.Visitor visitor, Marker ... markers) {
+        addValidator(MetaModelValidatorVisiting.of(visitor, 
+                    spec -> !spec.isManagedBean() && !spec.getBeanSort().isUnknown()),
+                markers);
     }
     
     default void addValidator(final MetaModelValidatorVisiting.Visitor visitor,

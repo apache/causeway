@@ -170,7 +170,7 @@ implements MetaModelRefiner {
         final List<TypeValidator> typeValidators = getTypeValidators(getConfiguration());
         final List<PropertyValidator> propertyValidators = getPropertyValidators(getConfiguration());
 
-        programmingModel.addValidator(
+        programmingModel.addValidatorSkipManagedBeans(
                 new MetaModelValidatorVisiting.Visitor() {
                     @Override
                     public boolean visit(

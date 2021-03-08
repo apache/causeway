@@ -30,7 +30,9 @@ import lombok.NonNull;
 import lombok.Setter;
 
 public abstract class MetaModelValidatorAbstract 
-implements MetaModelValidator, MetaModelContextAware {
+implements 
+    MetaModelValidator, 
+    MetaModelContextAware {
 
     protected final ValidationFailures failures = new ValidationFailures();
     

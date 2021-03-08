@@ -60,7 +60,7 @@ implements MetaModelRefiner {
             return; // continue
         }
 
-        programmingModel.addValidator((spec, validationFailures) -> {
+        programmingModel.addValidatorSkipManagedBeans((spec, validationFailures) -> {
             
             if(!(spec instanceof ObjectSpecificationAbstract)) {
                 return true; // continue
