@@ -1593,20 +1593,6 @@
 			</build>
 		</profile>
 
-		<!-- 
-		<profile>
-			<id>m2e</id>
-			<activation>
-				<property>
-					<name>m2e.version</name>
-				</property>
-			</activation>
-			<build>
-				<directory>target-ide</directory>
-			</build>
-		</profile>
- 		-->
-
 		<profile>
 			<id>owasp</id>
 			<activation>
