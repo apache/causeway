@@ -306,14 +306,14 @@ public class ApplicationFeatureIdTest {
         @Test
         public void givenClassInRootPackage() throws Exception {
             // given
-            val applicationFeatureId = ApplicationFeatureId.newType("Bar");
+            val applicationFeatureId = ApplicationFeatureId.newType("x.Bar");
 
             // when
             val parentPackageId = applicationFeatureId.getParentNamespaceFeatureId();
 
             // then
             assertThat(parentPackageId.getSort(), is(ApplicationFeatureSort.NAMESPACE));
-            assertThat(parentPackageId.getNamespace(), is(""));
+            assertThat(parentPackageId.getNamespace(), is("x"));
             assertThat(parentPackageId.getTypeSimpleName(), is(nullValue()));
             assertThat(parentPackageId.getMemberName(), is(nullValue()));
         }

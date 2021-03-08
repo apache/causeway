@@ -107,12 +107,12 @@ public class ApplicationFeatureTypeTest {
         @Test
         public void whenClass() throws Exception {
             expectedException.expect(IllegalStateException.class);
-            _Asserts.ensureNamespace(ApplicationFeatureId.newFeature(ApplicationFeatureSort.TYPE, "xxx"));
+            _Asserts.ensureNamespace(ApplicationFeatureId.newFeature(ApplicationFeatureSort.TYPE, "x.xxx"));
         }
         @Test
         public void whenMember() throws Exception {
             expectedException.expect(IllegalStateException.class);
-            _Asserts.ensureNamespace(ApplicationFeatureId.newFeature(ApplicationFeatureSort.MEMBER, "xxx#x"));
+            _Asserts.ensureNamespace(ApplicationFeatureId.newFeature(ApplicationFeatureSort.MEMBER, "x.xxx#x"));
         }
     }
 
@@ -127,12 +127,12 @@ public class ApplicationFeatureTypeTest {
         }
         @Test
         public void whenClass() throws Exception {
-            _Asserts.ensureNamespaceOrType(ApplicationFeatureId.newFeature(ApplicationFeatureSort.TYPE, "xxx"));
+            _Asserts.ensureNamespaceOrType(ApplicationFeatureId.newFeature(ApplicationFeatureSort.TYPE, "x.xxx"));
         }
         @Test
         public void whenMember() throws Exception {
             expectedException.expect(IllegalStateException.class);
-            _Asserts.ensureNamespaceOrType(ApplicationFeatureId.newFeature(ApplicationFeatureSort.MEMBER, "xxx#x"));
+            _Asserts.ensureNamespaceOrType(ApplicationFeatureId.newFeature(ApplicationFeatureSort.MEMBER, "x.xxx#x"));
         }
 
     }
@@ -148,12 +148,12 @@ public class ApplicationFeatureTypeTest {
         }
         @Test
         public void whenClass() throws Exception {
-            _Asserts.ensureType(ApplicationFeatureId.newFeature(ApplicationFeatureSort.TYPE, "xxx"));
+            _Asserts.ensureType(ApplicationFeatureId.newFeature(ApplicationFeatureSort.TYPE, "x.xxx"));
         }
         @Test
         public void whenMember() throws Exception {
             expectedException.expect(IllegalStateException.class);
-            _Asserts.ensureType(ApplicationFeatureId.newFeature(ApplicationFeatureSort.MEMBER, "xxx#x"));
+            _Asserts.ensureType(ApplicationFeatureId.newFeature(ApplicationFeatureSort.MEMBER, "x.xxx#x"));
         }
 
     }
@@ -170,11 +170,11 @@ public class ApplicationFeatureTypeTest {
         @Test
         public void whenClass() throws Exception {
             expectedException.expect(IllegalStateException.class);
-            _Asserts.ensureMember(ApplicationFeatureId.newFeature(ApplicationFeatureSort.TYPE, "xxx"));
+            _Asserts.ensureMember(ApplicationFeatureId.newFeature(ApplicationFeatureSort.TYPE, "x.xxx"));
         }
         @Test
         public void whenMember() throws Exception {
-            _Asserts.ensureMember(ApplicationFeatureId.newFeature(ApplicationFeatureSort.MEMBER, "xxx#x"));
+            _Asserts.ensureMember(ApplicationFeatureId.newFeature(ApplicationFeatureSort.MEMBER, "x.xxx#x"));
         }
     }
 
