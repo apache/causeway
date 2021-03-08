@@ -259,7 +259,7 @@ Partly that's because there's no need to check the incubator modules, it's also 
 +
 [source,bash,subs="attributes+"]
 ----
-pushd starters
+pushd ../starters
 mvn versions:set -DnewVersion=$ISISREL
 mvn install -DskipTests -o
 popd
