@@ -154,7 +154,7 @@ public interface ProgrammingModel {
         addValidator(ValidationOrder.A2_AFTER_BUILTIN, supplier.get(), markers);
     }
 
-    /** do not include managed beans */
+    /** do include managed beans */
     default void addValidatorIncludeManagedBeans(MetaModelValidatorVisiting.Visitor visitor, Marker ... markers) {
         addValidator(MetaModelValidatorVisiting.of(visitor, 
                     spec -> !spec.getBeanSort().isUnknown()),

@@ -91,10 +91,6 @@ extends MetaModelValidatorAbstract {
                     return; // in support of @Action not being forced, we need to relax 
             }
             
-            if(spec.isManagedBean()) {
-                System.err.printf("%s: (include: %b): %s\n", this.getClass(), includeIf.test(spec), spec);
-            }
-            
             if(!includeIf.test(spec)) {
                 return;
             }

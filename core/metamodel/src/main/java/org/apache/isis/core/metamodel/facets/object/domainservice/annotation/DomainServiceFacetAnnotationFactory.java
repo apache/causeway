@@ -82,8 +82,6 @@ implements MetaModelRefiner {
                     return;
                 }
 
-                System.err.println("validate " + objectSpec);
-                
                 final String associationNames = objectSpec
                         .streamAssociations(MixedIn.EXCLUDED)
                         .map(ObjectAssociation::getName)

@@ -26,7 +26,6 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVisiting;
 
-import lombok.SneakyThrows;
 import lombok.val;
 
 /**
@@ -39,7 +38,7 @@ import lombok.val;
 public class ObjectSpecIdMalformedValidator
 implements MetaModelRefiner {
 
-    @Override @SneakyThrows
+    @Override
     public void refineProgrammingModel(ProgrammingModel programmingModel) {
         
         programmingModel.addValidatorIncludeManagedBeans(
