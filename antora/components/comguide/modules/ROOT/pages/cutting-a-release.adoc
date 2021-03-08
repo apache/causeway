@@ -211,35 +211,69 @@ cd ../isis-release
 git push origin $ISISBRANCH -u
 ----
 
-* Finally switch to the `isis-parent` directory:
-+
-[source,bash,subs="attributes+"]
-----
-cd isis-parent
-----
 
 === Bump code to `$ISISREL`
 
 Search through the `.java` files for `{page-isisprev}`, and change to `{page-isisrel}`.
 
-=== Bump projects to `$ISISREL`
+At the time of writing there are just a couple of files that have the release hard-coded.
 
-We use `mvn versions:set` to manually bump the release version:
+=== Switch to the `isis-parent` directory
+
+The remainder of the release process is performed from the context of the `isis-parent` directory:
 
 [source,bash,subs="attributes+"]
 ----
-mvn versions:set -DnewVersion=$ISISREL
-mvn install -o -DskipTests
+cd isis-parent
+----
 
-pushd ../starters
+=== Bump projects to `$ISISREL`
+
+We use `mvn versions:set` to manually bump the release version.
+(After release, there is a xref:comguide:ROOT:cutting-a-release.adoc#reset-revision-property[similar step at the end] to reset back to a `-SNAPSHOT` version).
+
+(Still in the `isis-parent` directory), the steps are:
+
+* First we bump the framework's `pom.xml` files:
++
+[source,bash,subs="attributes+"]
+----
 mvn versions:set -DnewVersion=$ISISREL
+----
+
+* next we build the framework so that these versioned `pom.xml` files are available for the next step:
++
+[source,bash,subs="attributes+"]
+----
+mvn install -o -DskipTests -Dreleased
+----
++
+[NOTE]
+====
+The `released` system property is set to only sanity check the modules actually to be released (ignores the incubator modules).
+
+Partly that's because there's no need to check the incubator modules, it's also because the incubator modules require Java 11 (Java 8 is used for everything else)
+====
+
+* next we also update the starters (as used by applications built using the framework):
++
+[source,bash,subs="attributes+"]
+----
+pushd starters
+mvn versions:set -DnewVersion=$ISISREL
+mvn install -DskipTests -o
 popd
+----
+
+* finally we commit the changes:
++
+[source,bash,subs="attributes+"]
+----
 
 git add ..
 git commit -m "$ISISJIRA: bumps version to $ISISREL"
 ----
 
-NOTE: After release, there is a xref:comguide:ROOT:cutting-a-release.adoc#reset-revision-property[similar step at the end] to reset back to `2.0.0-SNAPSHOT`.
 
 
 === Sanity check
@@ -250,15 +284,9 @@ Delete all Isis artifacts from your local Maven repo, then build using the `-o` 
 [source,bash,subs="attributes+"]
 ----
 rm -rf ~/.m2/repository/org/apache/isis
-mvn clean install -o -Dreleased -P'!all'
+mvn clean install -o -Dreleased
+git clean -dfx
 ----
-
-[NOTE]
-====
-The `released` system property is set to only sanity check the modules actually to be released (ignores the incubator modules).
-
-Partly that's because there's no need to check the incubator modules, it's also because the incubator modules require Java 11 (Java 8 is used for everything else)
-====
 
 
 === Deploy
@@ -267,22 +295,16 @@ Since the `<version>` has already been updated, we just use `mvn deploy` to uplo
 We activate the (inherited) `apache-release` profile to bring in the `gpg` plugin for code signing.
 
 The build creates a zip of the directory, so before executing the release we remove any other files.
-Still in the `isis-parent` directory:
 
-[source,bash]
-----
-pushd ..
-git clean -dfx
-popd
-----
-
-To deploy (upload the artifacts), we use:
+Still in the `isis-parent` directory, we deploy (upload the artifacts) using:
 
 [source,bash,subs="attributes+"]
 ----
+
 mvn deploy \
     -Dapache-release \
     -Dgit
+popd
 ----
 
 When prompted, enter your GPG passphrase.
@@ -351,13 +373,12 @@ See xref:comguide:ROOT:key-generation.adoc[Key Generation] for more details.
 [#reset-revision-property]
 === Reset `revision` property
 
-At the beginning of the release process we bumped the version to the release version, ie `$ISISREL`.
+At the <<bump-code-to-isisrel,beginning>> of the release process we bumped the version to the release version, ie `$ISISREL`.
 With the release now deployed we now need to reset the revision back down to the base snapshot, ie `2.0.0-SNAPSHOT`.
 
 [NOTE]
 ====
-Previously we bumped to the next development snapshot.
-However, this approach doesn't play well with CI/CD when Apache Isis is mounted as a git submodule, so instead we always use `2.0.0-SNAPSHOT` for all development work.
+Bumping back to `2.0.0-SNAPSHOT` (rather than the next development snapshot) simplifies CI/CD scripts for teams that want to building Apache Isis from source using git submodules.
 ====
 
 Therefore (still in the `isis-parent` directory):
@@ -365,7 +386,7 @@ Therefore (still in the `isis-parent` directory):
 [source,bash,subs="attributes+"]
 ----
 mvn versions:set -DnewVersion=2.0.0-SNAPSHOT
-mvn install -DskipTests -o -Dreleased -P'!all'
+mvn install -DskipTests -o -Dreleased
 
 pushd ../starters
 mvn versions:set -DnewVersion=2.0.0-SNAPSHOT
