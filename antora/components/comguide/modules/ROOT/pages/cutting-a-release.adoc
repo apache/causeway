@@ -285,7 +285,7 @@ Delete all Isis artifacts from your local Maven repo, then build using the `-o` 
 ----
 rm -rf ~/.m2/repository/org/apache/isis
 mvn clean install -o -Dreleased
-git clean -dfx
+git clean -dfx ..
 ----
 
 
@@ -300,7 +300,6 @@ Still in the `isis-parent` directory, we deploy (upload the artifacts) using:
 
 [source,bash,subs="attributes+"]
 ----
-
 mvn deploy \
     -Dapache-release \
     -Dgit
