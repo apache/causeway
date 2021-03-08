@@ -159,6 +159,13 @@ implements
             featureId.namespace = "";
             featureId.typeSimpleName = fullyQualifiedName;
         }
+
+        // guard against empty namespace; there should be a meta-model validator that already catched that 
+        if(_Strings.isEmpty(featureId.namespace)) {
+            throw _Exceptions.illegalArgument(
+                    "fullyQualifiedName '%s' must include a non-empty namespace", fullyQualifiedName);
+        }
+        
         featureId.memberName = null;
     }
     

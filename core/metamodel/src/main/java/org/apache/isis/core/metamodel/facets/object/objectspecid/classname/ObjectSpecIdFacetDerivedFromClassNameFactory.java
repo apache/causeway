@@ -20,7 +20,6 @@
 package org.apache.isis.core.metamodel.facets.object.objectspecid.classname;
 
 import java.util.Collections;
-import java.util.stream.Stream;
 
 import javax.inject.Inject;
 import javax.xml.bind.annotation.XmlType;
@@ -38,7 +37,6 @@ import org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutor
 import org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutorRegistry;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVisiting;
 
@@ -109,8 +107,6 @@ implements MetaModelRefiner, ObjectSpecIdFacetFactory {
     @Override
     public void refineProgrammingModel(ProgrammingModel programmingModel) {
 
-
-
         val shouldCheck = getConfiguration().getCore().getMetaModel().getValidator().isExplicitObjectType();
         if(!shouldCheck) {
             return;
@@ -147,9 +143,9 @@ implements MetaModelRefiner, ObjectSpecIdFacetFactory {
                                         + "subsequently refactored). "
                                         + "Use @Discriminator, @DomainObject(objectType=...) or "
                                         + "@PersistenceCapable(schema=...) to specify explicitly.",
-                                        objectSpec.getFullIdentifier(),
+                                objectSpec.getFullIdentifier(),
                                 "isis.core.meta-model.validator.explicit-object-type");
-                    }
+                    } 
                 }
     
                 private boolean skip(ObjectSpecification objectSpec) {
