@@ -91,7 +91,9 @@ Without appropriate additional configuration, this would result in the generated
 Fortunately, Maven allows the missing information to be provided by configuring the `maven-remote-resources-plugin`.
 This is stored in the `src/main/appended-resources/supplemental-models.xml` file, relative to the root of each releasable module.
 
-It's first necessary to have built the framework locally at least once:
+It's first necessary to have built the framework locally at least once.
+
+In the root directory:
 
 [source,bash,subs="attributes+"]
 ----
@@ -106,7 +108,6 @@ mvn license:download-licenses
 groovy scripts/checkmissinglicenses.groovy
 ----
 
-WARNING: this groovy script assumes it is being run from the `isis-parent` directory.
 
 The Maven plugin creates a `license.xml` file in the `target/generated-resources` directory of each module.
 The script then searches for these `licenses.xml` files, and compares them against the contents of the `supplemental-models.xml` file.
