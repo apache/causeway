@@ -303,7 +303,6 @@ Still in the `isis-parent` directory, we deploy (upload the artifacts) using:
 mvn deploy \
     -Dapache-release \
     -Dgit
-popd
 ----
 
 When prompted, enter your GPG passphrase.
