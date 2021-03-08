@@ -1588,6 +1588,7 @@
 			</build>
 		</profile>
 
+		<!-- 
 		<profile>
 			<id>m2e</id>
 			<activation>
@@ -1599,7 +1600,7 @@
 				<directory>target-ide</directory>
 			</build>
 		</profile>
-
+ 		-->
 
 		<profile>
 			<id>owasp</id>
