@@ -21,6 +21,8 @@ node/
 node_modules/
 tsconfig.json
 types.d.ts
+.npmrc
+vaadin.ts
 
 #Gradle
 gradlew
