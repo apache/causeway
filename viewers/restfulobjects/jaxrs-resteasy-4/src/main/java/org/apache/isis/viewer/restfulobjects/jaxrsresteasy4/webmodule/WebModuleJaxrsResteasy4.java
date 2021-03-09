@@ -55,7 +55,7 @@ import lombok.val;
  *
  */
 @Service
-@Named("isis.viewer.ro.WebModuleJaxrsRestEasy4")
+@Named("isis.viewer.ro.WebModuleJaxrsRestEasy4") // CAUTION: SwaggerServiceMenu refers to this name
 @Order(OrderPrecedence.MIDPOINT - 80)
 @Qualifier("JaxrsRestEasy4")
 public final class WebModuleJaxrsResteasy4 extends WebModuleAbstract {
