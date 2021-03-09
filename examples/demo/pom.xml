@@ -52,6 +52,20 @@
 		</resources>
 
 		<plugins>
+		
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<inherited>true</inherited>
+				<configuration>
+					<delimiters>
+						<delimiter>${*}</delimiter>
+						<delimiter>@</delimiter>
+						<delimiter>#</delimiter>
+					</delimiters>
+				</configuration>
+			</plugin>
+		
 			<plugin>
 				<groupId>org.apache.rat</groupId>
 				<artifactId>apache-rat-plugin</artifactId>
