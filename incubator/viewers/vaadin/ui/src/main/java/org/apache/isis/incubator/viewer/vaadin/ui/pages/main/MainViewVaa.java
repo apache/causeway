@@ -55,8 +55,8 @@ import lombok.extern.log4j.Log4j2;
 @RouteAlias("")
 @JsModule("@vaadin/vaadin-lumo-styles/presets/compact.js")
 @PWA(name = "Example Project", shortName = "Example Project")
-//@Theme(value = Material.class, variant = Material.DARK)
-@Theme(value = Lumo.class, variant = Lumo.LIGHT)
+//@Theme(themeClass = Material.class, variant = Material.DARK)
+@Theme(themeClass = Lumo.class, variant = Lumo.LIGHT)
 @CssImport("./css/menu.css")
 @Log4j2
 public class MainViewVaa extends AppLayout 
