@@ -36,8 +36,7 @@ image::https://raw.githubusercontent.com/apache/isis/master/antora/components/do
 
 Apache Isis has lots of features to help you prototype and then fully test your application.
 One such are fixture scripts, which allow pre-canned data to be installed in the running application.
-This is great to act as the starting point for identifying new stories; later on when the feature is being implemented, the same fixture script can be re-used within that feature's integration tests.
-(More on tests later).
+This is great to act as the starting point for identifying new stories; later on when the feature is being implemented, the same fixture script can be re-used within that feature's integration tests (more on tests later).
 
 image::https://raw.githubusercontent.com/apache/isis/master/antora/components/docs/modules/ROOT/images/what-is-apache-isis/isis-in-pictures/020-install-fixtures.png[link="https://raw.githubusercontent.com/apache/isis/master/antora/components/docs/modules/ROOT/images/what-is-apache-isis/isis-in-pictures/020-install-fixtures.png"]
 
