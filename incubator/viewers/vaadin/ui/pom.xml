@@ -97,11 +97,6 @@
 
 		<dependency>
 			<groupId>com.vaadin</groupId>
-			<artifactId>vaadin</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>com.vaadin</groupId>
 			<artifactId>vaadin-spring</artifactId>
 			<exclusions>
 				<exclusion>

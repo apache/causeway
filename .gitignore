@@ -19,6 +19,8 @@ webpack.config.js
 webpack.generated.js
 node/
 node_modules/
+tsconfig.json
+types.d.ts
 
 #Gradle
 gradlew
