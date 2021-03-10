@@ -147,7 +147,7 @@
 		<dependency>
 			<groupId>io.swagger</groupId>
 			<artifactId>swagger-parser</artifactId>
-			<version>1.0.39</version>
+			<version>1.0.54</version>
 		</dependency>
 		<dependency>
 			<groupId>com.github.fge</groupId>
