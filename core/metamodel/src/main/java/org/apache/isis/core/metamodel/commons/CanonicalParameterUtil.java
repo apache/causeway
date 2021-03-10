@@ -25,6 +25,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.SortedSet;
 
@@ -37,6 +38,7 @@ import org.apache.isis.commons.internal.reflection._Reflect;
 
 import static org.apache.isis.commons.internal.base._NullSafe.isEmpty;
 
+import lombok.NonNull;
 import lombok.val;
 
 /**
@@ -151,29 +153,64 @@ public final class CanonicalParameterUtil {
                     expectedParamCount, actualParamCount), e);
         }
 
-        boolean paramTypeMismatchEncountered = false;
-        val sb = new StringBuilder();
-        for(int j=0;j<parameterTypes.length;++j) {
-            final Class<?> parameterType = parameterTypes[j];
-            final String parameterValueTypeLiteral = _Arrays.get(adaptedExecutionParameters, j)
-                    .map(Object::getClass)
-                    .map(Class::getName)
-                    .orElse("missing or null");
-
-            final String expected = parameterType.getName();
-            final String actual = parameterValueTypeLiteral;
-            paramTypeMismatchEncountered = paramTypeMismatchEncountered || !(expected.equals(actual));
-            sb.append(String.format("param-type[%d]: '%s', got '%s'\n",
-                    j, expected, actual));
-        }
-
-        if(paramTypeMismatchEncountered) {
-            sb.insert(0, "expected param type mismatch\n");
-            return new IllegalArgumentException(sb.toString(), e);
+        // if method or constructor was invoked with incompatible param types, then the Throwable
+        // we receive here is of type IllegalArgumentException; in which case we can provide additional
+        // information, but also at the expense of a potentially hiding the original cause, namely when the
+        // IllegalArgumentException has a different origin and the param incompatibility check is a 
+        // false positive
+        if(e instanceof IllegalArgumentException) {
+            boolean paramTypeMismatchEncountered = false;
+            val sb = new StringBuilder();
+            for(int j=0;j<parameterTypes.length;++j) {
+                final Class<?> parameterType = parameterTypes[j];
+                val incompatible = !isValueCompatibleWithType(
+                        _Arrays.get(adaptedExecutionParameters, j), 
+                        parameterTypes[j]);
+                
+                paramTypeMismatchEncountered = paramTypeMismatchEncountered 
+                        || incompatible;
+                
+                if(incompatible) {
+                    
+                    final String parameterValueTypeLiteral = _Arrays.get(adaptedExecutionParameters, j)
+                            .map(Object::getClass)
+                            .map(Class::getName)
+                            .orElse("missing or null");
+                    
+                    final String expected = parameterType.getName();
+                    final String actual = parameterValueTypeLiteral;
+                    
+                    sb.append(String.format("param-type[%d]: '%s', got '%s'\n",
+                        j, expected, actual));
+                }
+            }
+            if(paramTypeMismatchEncountered) {
+                sb.insert(0, "expected param type mismatch\n");
+                return new IllegalArgumentException(sb.toString(), e);
+            }
         }
 
         // re-throw more verbose
         return e;
+    }
+
+    private static boolean isValueCompatibleWithType(
+            final @NonNull Optional<Object> value, 
+            final @NonNull Class<?> type) {
+        
+        if(!value.isPresent()) {
+            // null is not compatible with an expected primitive type
+            // but null is compatible with any other expected type
+            return !type.isPrimitive(); 
+        }
+        
+        val runtimeType = value.get().getClass();
+        
+        if(ClassExtensions.equalsWhenBoxing(runtimeType, type)) {
+            return true;
+        }
+        
+        return type.isAssignableFrom(runtimeType);
     }
 
 
