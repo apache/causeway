@@ -22,6 +22,7 @@ import java.sql.Timestamp;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.events.domain.AbstractDomainEvent;
 import org.apache.isis.applib.jaxb.JavaSqlXMLGregorianCalendarMarshalling;
 import org.apache.isis.applib.services.clock.ClockService;
@@ -69,10 +70,10 @@ public abstract class Execution<T extends MemberExecutionDto, E extends Abstract
     private final InteractionType interactionType;
 
     /**
-     * Uniquely identifies the action or property (similar to Javadoc syntax).
+     * Uniquely identifies the action or property.
      */
     @Getter
-    private final String memberIdentifier;
+    private final Identifier memberIdentifier;
 
     /**
      * The target of the action invocation.
@@ -109,7 +110,7 @@ public abstract class Execution<T extends MemberExecutionDto, E extends Abstract
     protected Execution(
             final Interaction interaction,
             final InteractionType interactionType,
-            final String memberIdentifier,
+            final Identifier memberIdentifier,
             final Object target,
             final String targetMember,
             final String targetClass) {

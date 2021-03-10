@@ -20,6 +20,7 @@ package org.apache.isis.applib.services.iactn;
 
 import java.util.List;
 
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.events.domain.ActionDomainEvent;
 import org.apache.isis.schema.common.v2.InteractionType;
 import org.apache.isis.schema.ixn.v2.ActionInvocationDto;
@@ -36,7 +37,7 @@ public class ActionInvocation extends Execution<ActionInvocationDto, ActionDomai
 
     public ActionInvocation(
             final Interaction interaction,
-            final String memberId,
+            final Identifier memberId,
             final Object target,
             final List<Object> args,
             final String targetMember,

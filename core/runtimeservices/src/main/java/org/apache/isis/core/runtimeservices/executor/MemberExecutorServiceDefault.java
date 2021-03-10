@@ -120,7 +120,7 @@ implements MemberExecutorService {
         CommandPublishingFacet.ifPublishingEnabledForCommand(
                 command, owningAction, facetHolder, ()->command.updater().setPublishingEnabled(true));
 
-        val actionId = owningAction.getIdentifier().getFullIdentityString();
+        val actionId = owningAction.getIdentifier();
         log.debug("about to invoke action {}", actionId);
 
         val targetAdapter = head.getTarget();
@@ -199,7 +199,7 @@ implements MemberExecutorService {
         CommandPublishingFacet.ifPublishingEnabledForCommand(
                 command, owningProperty, facetHolder, ()->command.updater().setPublishingEnabled(true));
 
-        val propertyId = owningProperty.getIdentifier().getMemberName();
+        val propertyId = owningProperty.getIdentifier();
 
         val targetManagedObject = head.getTarget();
         val target = UnwrapUtil.single(targetManagedObject);

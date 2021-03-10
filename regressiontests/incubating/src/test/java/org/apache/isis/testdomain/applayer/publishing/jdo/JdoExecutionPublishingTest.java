@@ -30,6 +30,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
 import org.apache.isis.applib.services.iactn.Interaction;
+import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.services.iactn.ActionInvocation;
 import org.apache.isis.applib.services.iactn.PropertyEdit;
 import org.apache.isis.applib.services.iactn.Execution;
@@ -41,6 +43,7 @@ import org.apache.isis.testdomain.applayer.ApplicationLayerTestFactory.Verificat
 import org.apache.isis.testdomain.applayer.publishing.ExecutionSubscriberForTesting;
 import org.apache.isis.testdomain.applayer.publishing.conf.Configuration_usingExecutionPublishing;
 import org.apache.isis.testdomain.conf.Configuration_usingJdo;
+import org.apache.isis.testdomain.jdo.entities.JdoBook;
 import org.apache.isis.testdomain.util.CollectionAssertions;
 import org.apache.isis.testdomain.util.kv.KVStoreForTesting;
 import org.apache.isis.testing.integtestsupport.applib.IsisIntegrationTestAbstract;
@@ -82,10 +85,9 @@ class JdoExecutionPublishingTest extends IsisIntegrationTestAbstract {
             assertHasExecutionEntries(Can.empty());
             break;
         case POST_COMMIT:
-
-
             Interaction interaction = null;
-            String propertyId = "org.apache.isis.testdomain.jdo.entities.JdoBook#name";
+            Identifier propertyId = Identifier.propertyOrCollectionIdentifier(
+                    LogicalType.fqcn(JdoBook.class), "name");
             Object target = null;
             Object argValue = "Book #2";
             String targetMemberName = "name???";

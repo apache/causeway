@@ -18,6 +18,7 @@
  */
 package org.apache.isis.applib.services.iactn;
 
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.events.domain.PropertyDomainEvent;
 import org.apache.isis.schema.common.v2.InteractionType;
 import org.apache.isis.schema.ixn.v2.PropertyEditDto;
@@ -34,7 +35,7 @@ public class PropertyEdit extends Execution<PropertyEditDto, PropertyDomainEvent
 
     public PropertyEdit(
             final Interaction interaction,
-            final String memberId,
+            final Identifier memberId,
             final Object target,
             final Object newValue,
             final String targetMember,
