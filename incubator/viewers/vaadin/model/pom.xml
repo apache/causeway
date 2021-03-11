@@ -78,7 +78,7 @@
 		<dependency>
 			<groupId>io.swagger</groupId>
 			<artifactId>swagger-compat-spec-parser</artifactId>
-			<version>1.0.39</version>
+			<version>1.0.54</version>
 			<exclusions>
 				<exclusion>
 					<groupId>com.github.fge</groupId>
