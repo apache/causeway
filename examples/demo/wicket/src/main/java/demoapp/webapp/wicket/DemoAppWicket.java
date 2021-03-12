@@ -23,6 +23,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Import;
 
+import org.apache.isis.core.runtime.debug.XrayEnable;
 import org.apache.isis.extensions.viewer.wicket.pdfjs.ui.IsisModuleExtPdfjsUi;
 import org.apache.isis.valuetypes.asciidoc.metamodel.IsisModuleValAsciidocMetaModel;
 import org.apache.isis.valuetypes.asciidoc.persistence.jdo.dn5.IsisModuleValAsciidocPersistenceJdoDn5;
@@ -58,6 +59,8 @@ import demoapp.webapp.wicket.ui.custom.WhereInTheWorldPanelFactory;
     // Persistence (JDO/DN5)
     IsisModuleValAsciidocPersistenceJdoDn5.class,
     IsisModuleValMarkdownPersistenceJdoDn5.class,
+    
+    XrayEnable.class // for debugging only
 })
 //@Log4j2
 public class DemoAppWicket extends SpringBootServletInitializer {

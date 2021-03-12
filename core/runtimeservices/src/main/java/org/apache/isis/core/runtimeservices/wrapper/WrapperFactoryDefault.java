@@ -39,6 +39,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.bookmark.Bookmark;
@@ -74,6 +75,7 @@ import org.apache.isis.applib.services.wrapper.events.PropertyModifyEvent;
 import org.apache.isis.applib.services.wrapper.events.PropertyUsabilityEvent;
 import org.apache.isis.applib.services.wrapper.events.PropertyVisibilityEvent;
 import org.apache.isis.applib.services.wrapper.listeners.InteractionListener;
+import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.collections.ImmutableEnumSet;
 import org.apache.isis.commons.internal.base._Casts;
@@ -390,6 +392,7 @@ public class WrapperFactoryDefault implements WrapperFactory {
         val future = executorService.submit(
                 new ExecCommand<R>(
                         asyncAuth,
+                        Propagation.REQUIRES_NEW,
                         commandDto,
                         asyncControl.getReturnType(),
                         command,
@@ -585,13 +588,14 @@ public class WrapperFactoryDefault implements WrapperFactory {
     private static class ExecCommand<R> implements Callable<R> {
 
         private final Authentication authentication;
+        private final Propagation propagation;
         private final CommandDto commandDto;
         private final Class<R> returnType;
         private final Command parentCommand;
         private final ServiceInjector serviceInjector;
 
-        @Inject InteractionFactory isisInteractionFactory;
-        //@Inject TransactionService transactionService;
+        @Inject InteractionFactory interactionFactory;
+        @Inject TransactionService transactionService;
         @Inject CommandExecutorService commandExecutorService;
         @Inject Provider<InteractionContext> interactionContextProvider;
         @Inject BookmarkService bookmarkService;
@@ -601,23 +605,32 @@ public class WrapperFactoryDefault implements WrapperFactory {
         @Override
         public R call() {
             serviceInjector.injectServicesInto(this);
-
-            return isisInteractionFactory.callAuthenticated(authentication, () -> {
-                val childCommand = interactionContextProvider.get().currentInteractionElseFail().getCommand();
-                childCommand.updater().setParent(parentCommand);
-                //return transactionService.callWithinCurrentTransactionElseCreateNew(() -> {
-                        val bookmark = commandExecutorService.executeCommand(commandDto, childCommand.updater());
-                        if (bookmark == null) {
-                            return null;
-                        }
-                        R entity = bookmarkService.lookup(bookmark, returnType);
-                        if (metaModelService.sortOf(bookmark, RELAXED).isEntity()) {
-                            entity = repositoryService.detach(entity);
-                        }
-                        return entity;
-//                    })
-//                        .nullableOrElseFail();
-            });
+            return interactionFactory.callAuthenticated(authentication, this::updateDomainObjectHonoringTransactionalPropagation);
         }
+        
+        private R updateDomainObjectHonoringTransactionalPropagation() {
+            return transactionService.callTransactional(propagation, this::updateDomainObject)
+                    .optionalElseFail()
+                    .orElse(null);            
+        }
+        
+        private R updateDomainObject() {
+            
+            val childCommand = interactionContextProvider.get().currentInteractionElseFail().getCommand();
+            childCommand.updater().setParent(parentCommand);
+            
+            val bookmark = commandExecutorService.executeCommand(commandDto, childCommand.updater());
+            if (bookmark == null) {
+                return null;
+            }
+            R domainObject = bookmarkService.lookup(bookmark, returnType);
+            if (metaModelService.sortOf(bookmark, RELAXED).isEntity()) {
+                domainObject = repositoryService.detach(domainObject);
+            }
+            return domainObject;
+                        
+        }
+        
+        
     }
 }

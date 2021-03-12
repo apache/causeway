@@ -20,6 +20,8 @@ package org.apache.isis.testdomain.applayer;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
+import java.util.Stack;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
@@ -30,6 +32,7 @@ import javax.inject.Named;
 import javax.inject.Provider;
 import javax.jdo.JDOHelper;
 import javax.jdo.PersistenceManagerFactory;
+import javax.swing.tree.MutableTreeNode;
 
 import org.junit.jupiter.api.DynamicTest;
 import org.springframework.context.annotation.Import;
@@ -38,21 +41,26 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.wrapper.DisabledException;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.wrapper.control.SyncControl;
 import org.apache.isis.applib.services.xactn.TransactionService;
+import org.apache.isis.applib.services.xactn.TransactionState;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.debug._Probe;
+import org.apache.isis.commons.internal.debug.xray.XrayUi;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.functions._Functions.CheckedConsumer;
 import org.apache.isis.core.interaction.session.InteractionFactory;
+import org.apache.isis.core.interaction.session.InteractionTracker;
 import org.apache.isis.core.metamodel.interactions.managed.PropertyInteraction;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -70,6 +78,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.val;
 
+import io.smallrye.common.constraint.Assert;
+
 @Component
 @Import({
     ApplicationLayerTestFactory.PreCommitListener.class
@@ -83,7 +93,8 @@ public class ApplicationLayerTestFactory {
     private final ObjectManager objectManager;
     private final FixtureScripts fixtureScripts;
     private final PreCommitListener preCommitListener;
-    private final InteractionFactory isisInteractionFactory;
+    private final InteractionFactory interactionFactory;
+    private final InteractionTracker interactionTracker;
     private final Provider<EntityChangeTrackerDefault> entityChangeTrackerProvider;
     
     @Named("transaction-aware-pmf-proxy")
@@ -115,6 +126,7 @@ public class ApplicationLayerTestFactory {
     public List<DynamicTest> generateTests(
             final Runnable given,
             final Consumer<VerificationStage> verifier) {
+
         return _Lists.of(
 //                dynamicTest("No initial Transaction with Test Execution", 
 //                        this::no_initial_tx_context),
@@ -129,7 +141,10 @@ public class ApplicationLayerTestFactory {
                 interactionTest("Wrapper Async Execution w/o Rules", 
                         given, verifier, this::wrapperAsyncExecutionNoRules),
                 interactionTest("Wrapper Async Execution w/ Rules (expected to fail w/ DisabledException)", 
-                        given, verifier, this::wrapperAsyncExecutionWithFailure)
+                        given, verifier, this::wrapperAsyncExecutionWithFailure),
+                
+                dynamicTest("wait for viewer", XrayUi::waitForShutdown)
+                
                 );
     }
     
@@ -140,36 +155,21 @@ public class ApplicationLayerTestFactory {
         boolean run(Runnable given, Consumer<VerificationStage> verifier) throws Exception;
     }
     
-    private DynamicTest interactionTest(
-            final String displayName,
-            final Runnable given,
-            final Consumer<VerificationStage> verifier,
-            final InteractionTestRunner interactionTestRunner) {
-        return dynamicTest(displayName, ()->{
-            
-            val isSuccesfulRun = isisInteractionFactory.callAnonymous(()->
-                    interactionTestRunner.run(given, verifier));
-            
-            isisInteractionFactory.closeSessionStack();
-            
-            if(isSuccesfulRun) {
-                verifier.accept(VerificationStage.POST_INTERACTION);
-            }
-                        
-        });
-    }
-
     private DynamicTest programmaticTest(
             final String displayName,
             final Runnable given,
             final Consumer<VerificationStage> verifier,
             final InteractionTestRunner interactionTestRunner) {
+        
         return dynamicTest(displayName, ()->{
             
-            val isSuccessfulRun = isisInteractionFactory.callAnonymous(()->
-                        interactionTestRunner.run(given, verifier));
+            xrayAddTest(displayName);
+            
+            Assert.assertTrue(interactionFactory.isInInteractionSession());
+            
+            val isSuccessfulRun = interactionTestRunner.run(given, verifier);
                     
-            isisInteractionFactory.closeSessionStack();
+            interactionFactory.closeSessionStack();
             
             if(isSuccessfulRun) {
                 verifier.accept(VerificationStage.POST_INTERACTION_WHEN_PROGRAMMATIC);
@@ -178,14 +178,43 @@ public class ApplicationLayerTestFactory {
         });
     }
     
+    private DynamicTest interactionTest(
+            final String displayName,
+            final Runnable given,
+            final Consumer<VerificationStage> verifier,
+            final InteractionTestRunner interactionTestRunner) {
+        
+        return dynamicTest(displayName, ()->{
+
+            xrayAddTest(displayName);
+            
+            Assert.assertFalse(interactionFactory.isInInteractionSession());
+            assert_no_initial_tx_context();
+            
+            val isSuccesfulRun = interactionFactory.callAnonymous(()->{
+                val currentInteraction = interactionTracker.currentInteraction();
+                xrayEnterInteraction(currentInteraction);
+                val result = interactionTestRunner.run(given, verifier);
+                xrayExitInteraction();
+                return result;
+            });
+            
+            interactionFactory.closeSessionStack();
+            
+            if(isSuccesfulRun) {
+                verifier.accept(VerificationStage.POST_INTERACTION);
+            }
+                        
+        });
+    }
+    
 
     // -- TESTS - ENSURE TESTS ARE CORRECTLY INVOKED 
 
-//    boolean no_initial_tx_context() {
-//        val txState = transactionService.currentTransactionState();
-//        assertEquals(TransactionState.NONE, txState);
-//        return true;
-//    }
+    void assert_no_initial_tx_context() {
+        val txState = transactionService.currentTransactionState();
+        assertEquals(TransactionState.NONE, txState);
+    }
 
     // -- TESTS - WRAPPER SYNC
 
@@ -198,7 +227,7 @@ public class ApplicationLayerTestFactory {
         
         preCommitListener.setVerifier(verifier);
         
-        withBookDo(book->{
+        withBookDoTransactional(book->{
         
             given.run();
 
@@ -232,7 +261,7 @@ public class ApplicationLayerTestFactory {
         setupBookForJdo();
         
         // when
-        withBookDo(book->{
+        withBookDoTransactional(book->{
             
             given.run();
 
@@ -267,7 +296,7 @@ public class ApplicationLayerTestFactory {
         setupBookForJdo();
         
         // when
-        withBookDo(book->{
+        withBookDoTransactional(book->{
 
             given.run();
             
@@ -295,7 +324,7 @@ public class ApplicationLayerTestFactory {
         setupBookForJdo();
         
         // when
-        withBookDo(book->{
+        withBookDoTransactional(book->{
             
             given.run();
 
@@ -327,23 +356,25 @@ public class ApplicationLayerTestFactory {
 
         // given
         setupBookForJdo();
+        val asyncControl = returningVoid().withSkipRules(); // don't enforce rules
         
         // when
-        withBookDo(book->{
+        
+        withBookDoTransactional(book->{
 
             given.run();
             
             preCommitListener.setVerifier(verifier);
 
             // when - running asynchronous
-            val asyncControl = returningVoid().withSkipRules(); // don't enforce rules
-            wrapper.asyncWrap(book, asyncControl).setName("Book #2");
-
-            asyncControl.getFuture().get(10, TimeUnit.SECONDS);
-            
-            preCommitListener.setVerifier(null);
+            wrapper.asyncWrap(book, asyncControl)
+            .setName("Book #2");
             
         });
+        
+        asyncControl.getFuture().get(10, TimeUnit.SECONDS);
+        
+        preCommitListener.setVerifier(null);
 
         // then
         verifier.accept(VerificationStage.POST_COMMIT);
@@ -359,7 +390,7 @@ public class ApplicationLayerTestFactory {
         setupBookForJdo();
         
         // when
-        withBookDo(book->{
+        withBookDoTransactional(book->{
 
             given.run();
             
@@ -423,14 +454,62 @@ public class ApplicationLayerTestFactory {
         });
     }
     
-    private void withBookDo(CheckedConsumer<JdoBook> transactionalBookConsumer) {
+    private void withBookDoTransactional(CheckedConsumer<JdoBook> transactionalBookConsumer) {
+        
+        xrayEnterTansaction(Propagation.REQUIRES_NEW);
+        
         transactionService.runTransactional(Propagation.REQUIRES_NEW, ()->{
             val book = repository.allInstances(JdoBook.class).listIterator().next();
-            //val bookAdapter = objectManager.adapt(book);
-            //bookAdapter.getRootOid(); // memoize
             transactionalBookConsumer.accept(book);
+
+            //FIXME trigger publishing of entity changes (flush queue)
+            entityChangeTrackerProvider.get().onPreCommit(null);
         })
         .optionalElseFail();
+        
+        xrayExitTansaction();
+    }
+    
+    // -- XRAY
+    
+    private final Stack<MutableTreeNode> nodeStack = new Stack<>();
+
+    private void xrayAddTest(String name) {
+        XrayUi.updateModel(model->{
+            val newNode = model.addContainerNode(
+                    model.getRootNode(), 
+                    String.format("Test: %s", name));
+            nodeStack.clear();
+            nodeStack.push(newNode);    
+        });
+    }
+    
+    private void xrayEnterTansaction(Propagation propagation) {
+        XrayUi.updateModel(model->{
+            val newNode = model.addContainerNode(
+                    nodeStack.peek(), 
+                    String.format("Transactional %s", propagation.name()));
+            nodeStack.push(newNode);
+        });
+    }
+    
+    private void xrayExitTansaction() {
+        nodeStack.pop();
+    }
+    
+    private void xrayEnterInteraction(Optional<Interaction> currentInteraction) {
+        XrayUi.updateModel(model->{
+            val newNode = model.addContainerNode(
+                    nodeStack.peek(), 
+                    currentInteraction.isPresent()
+                        ? String.format("Interaction %s", currentInteraction.get().getInteractionId())
+                        : "Iteraction: none");
+            nodeStack.push(newNode);
+        });
+    }
+    
+    private void xrayExitInteraction() {
+        nodeStack.pop();
     }
 
 }

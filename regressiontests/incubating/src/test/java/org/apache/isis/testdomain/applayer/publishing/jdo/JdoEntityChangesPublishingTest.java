@@ -18,14 +18,6 @@
  */
 package org.apache.isis.testdomain.applayer.publishing.jdo;
 
-import static org.apache.isis.testdomain.applayer.publishing.EntityChangesSubscriberForTesting.clearPublishedEntries;
-import static org.apache.isis.testdomain.applayer.publishing.EntityChangesSubscriberForTesting.getCreated;
-import static org.apache.isis.testdomain.applayer.publishing.EntityChangesSubscriberForTesting.getDeleted;
-import static org.apache.isis.testdomain.applayer.publishing.EntityChangesSubscriberForTesting.getLoaded;
-import static org.apache.isis.testdomain.applayer.publishing.EntityChangesSubscriberForTesting.getModified;
-import static org.apache.isis.testdomain.applayer.publishing.EntityChangesSubscriberForTesting.getUpdated;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import java.util.List;
 
 import javax.inject.Inject;
@@ -36,7 +28,10 @@ import org.junit.jupiter.api.TestFactory;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import org.apache.isis.core.config.presets.IsisPresets;
+import org.apache.isis.core.runtime.debug.XrayEnable;
 import org.apache.isis.testdomain.applayer.ApplicationLayerTestFactory;
 import org.apache.isis.testdomain.applayer.ApplicationLayerTestFactory.VerificationStage;
 import org.apache.isis.testdomain.applayer.publishing.conf.Configuration_usingEntityChangesPublishing;
@@ -44,16 +39,25 @@ import org.apache.isis.testdomain.conf.Configuration_usingJdo;
 import org.apache.isis.testdomain.util.kv.KVStoreForTesting;
 import org.apache.isis.testing.integtestsupport.applib.IsisIntegrationTestAbstract;
 
+import static org.apache.isis.testdomain.applayer.publishing.EntityChangesSubscriberForTesting.clearPublishedEntries;
+import static org.apache.isis.testdomain.applayer.publishing.EntityChangesSubscriberForTesting.getCreated;
+import static org.apache.isis.testdomain.applayer.publishing.EntityChangesSubscriberForTesting.getDeleted;
+import static org.apache.isis.testdomain.applayer.publishing.EntityChangesSubscriberForTesting.getLoaded;
+import static org.apache.isis.testdomain.applayer.publishing.EntityChangesSubscriberForTesting.getModified;
+import static org.apache.isis.testdomain.applayer.publishing.EntityChangesSubscriberForTesting.getUpdated;
+
 @SpringBootTest(
         classes = {
                 Configuration_usingJdo.class,
                 Configuration_usingEntityChangesPublishing.class,
-                ApplicationLayerTestFactory.class
+                ApplicationLayerTestFactory.class,
+                XrayEnable.class
         }, 
         properties = {
                 "logging.level.org.apache.isis.persistence.jdo.datanucleus5.persistence.IsisTransactionJdo=DEBUG",
                 "logging.level.org.apache.isis.core.runtimeservices.session.IsisInteractionFactoryDefault=DEBUG",
                 "logging.level.org.apache.isis.persistence.jdo.integration.changetracking.JdoLifecycleListener=DEBUG",
+                "logging.level.org.apache.isis.testdomain.util.kv.KVStoreForTesting=DEBUG",
         })
 @TestPropertySource({
     IsisPresets.UseLog4j2Test
