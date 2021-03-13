@@ -191,7 +191,7 @@ public class ApplicationLayerTestFactory {
             Assert.assertFalse(interactionFactory.isInInteractionSession());
             assert_no_initial_tx_context();
             
-            val isSuccesfulRun = interactionFactory.callAnonymous(()->{
+            final boolean isSuccesfulRun = interactionFactory.callAnonymous(()->{
                 val currentInteraction = interactionTracker.currentInteraction();
                 xrayEnterInteraction(currentInteraction);
                 val result = interactionTestRunner.run(given, verifier);
