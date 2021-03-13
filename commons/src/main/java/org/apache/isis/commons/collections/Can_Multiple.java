@@ -56,6 +56,11 @@ final class Can_Multiple<T> implements Can<T> {
     }
     
     @Override
+    public Optional<T> getLast() {
+        return Optional.of(elements.get(size()-1));
+    }
+    
+    @Override
     public Cardinality getCardinality() {
         return Cardinality.MULTIPLE;
     }

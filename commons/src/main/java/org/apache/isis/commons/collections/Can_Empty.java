@@ -75,6 +75,11 @@ final class Can_Empty<T> implements Can<T> {
     }
     
     @Override
+    public Optional<T> getLast() {
+        return Optional.empty();
+    }
+    
+    @Override
     public Optional<T> get(int elementIndex) {
         return Optional.empty();
     }

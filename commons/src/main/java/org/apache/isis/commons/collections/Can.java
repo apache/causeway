@@ -130,6 +130,19 @@ extends Iterable<T>, Comparable<Can<T>>, Serializable {
     default T getFirstOrFail() {
         return getFirst().orElseThrow(_Exceptions::noSuchElement);
     }
+    
+    /**
+     * @return this Can's last element or an empty Optional if no such element
+     */
+    Optional<T> getLast();
+
+    /**
+     * Shortcut for {@code getLast().orElseThrow(_Exceptions::noSuchElement)}
+     * @throws NoSuchElementException if result is empty
+     */
+    default T getLastOrFail() {
+        return getLast().orElseThrow(_Exceptions::noSuchElement);
+    }
 
     /**
      * @return this Can's single element or an empty Optional if this Can has any cardinality other than ONE 
