@@ -18,6 +18,16 @@
  */
 package org.apache.isis.commons.internal.debug.xray;
 
-public interface XrayService {
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
+public class XrayEnable implements InitializingBean {
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        System.setProperty("java.awt.headless", "false");
+        XrayUi.start();
+    }
 
 }

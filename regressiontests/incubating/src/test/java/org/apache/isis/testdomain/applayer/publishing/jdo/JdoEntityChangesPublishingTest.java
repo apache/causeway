@@ -30,8 +30,8 @@ import org.springframework.test.context.TestPropertySource;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import org.apache.isis.commons.internal.debug.xray.XrayEnable;
 import org.apache.isis.core.config.presets.IsisPresets;
-import org.apache.isis.core.runtime.debug.XrayEnable;
 import org.apache.isis.testdomain.applayer.ApplicationLayerTestFactory;
 import org.apache.isis.testdomain.applayer.ApplicationLayerTestFactory.VerificationStage;
 import org.apache.isis.testdomain.applayer.publishing.conf.Configuration_usingEntityChangesPublishing;
