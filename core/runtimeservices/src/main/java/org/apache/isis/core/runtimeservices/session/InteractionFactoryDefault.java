@@ -202,7 +202,7 @@ implements
     private InteractionSession getOrCreateInteractionSession() {
     	
     	return authenticationStack.get().isEmpty()
-    			? new InteractionSession(metaModelContext)
+    			? new InteractionSession(metaModelContext, UUID.randomUUID())
 				: authenticationStack.get().firstElement().getInteractionSession();
     }
 
@@ -308,7 +308,7 @@ implements
     }
     
     private void postSessionOpened(InteractionSession session) {
-        conversationId.set(UUID.randomUUID());
+        conversationId.set(session.getInteractionId());
         interactionScopeAwareBeans.forEach(bean->bean.beforeEnteringTransactionalBoundary(session));
         txBoundaryHandler.onOpen(session);
         val isSynchronizationActive = TransactionSynchronizationManager.isSynchronizationActive();

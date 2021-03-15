@@ -66,11 +66,11 @@ implements HasInteractionId {
     @Getter private final MetaModelContext metaModelContext;
 
     public InteractionSession(
-            @NonNull final MetaModelContext mmc) {
+            @NonNull final MetaModelContext mmc, UUID conversationId) {
 
         this.metaModelContext = mmc;
         this.startedAtSystemNanos = System.nanoTime(); // used to measure time periods, so not using ClockService here
-        this.interaction = new IsisInteraction(UUID.randomUUID());
+        this.interaction = new IsisInteraction(conversationId);
     }
 
     // -- FLUSH

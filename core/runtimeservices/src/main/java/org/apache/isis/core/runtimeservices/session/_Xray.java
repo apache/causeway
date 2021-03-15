@@ -21,13 +21,13 @@ package org.apache.isis.core.runtimeservices.session;
 import java.util.Stack;
 
 import org.apache.isis.commons.internal.debug._Probe;
+import org.apache.isis.commons.internal.debug.xray.XrayDataModel;
 import org.apache.isis.commons.internal.debug.xray.XrayUi;
 import org.apache.isis.core.interaction.session.AuthenticationLayer;
 
 import lombok.val;
-import lombok.extern.log4j.Log4j2;
 
-@Log4j2
+//@Log4j2
 final class _Xray {
 
     static void newAuthenticationLayer(Stack<AuthenticationLayer> afterEnter) {
@@ -43,29 +43,34 @@ final class _Xray {
         
         XrayUi.updateModel(model->{
             
-            val nodeStackId = "ia-" + interactionId.toString();
-            val uiNodeStack = model.getNodeStack(nodeStackId);
+            val sequenceId = String.format("seq-%s", interactionId);
+            
+            val label = String.format("Interaction %s", interactionId);
             
             if(authStackSize==1) {
                 val uiThreadNode = model.getThreadNode(threadId);
                 
-                val uiTopAuthLayerNode = model.addContainerNode(
-                        uiThreadNode,
-                        String.format(
-                                "Interaction %s",
-                                interactionId));
+                val uiTopAuthLayerNode = model.addContainerNode(uiThreadNode, label);
                 
-                uiNodeStack.push(uiTopAuthLayerNode);
+                val sequenceData = model.addDataNode(
+                            uiTopAuthLayerNode, 
+                            new XrayDataModel.Sequence(sequenceId, "Sequence Diagam"))
+                        .getData();
+                
+                sequenceData.alias("thread", threadId);
+                sequenceData.alias("ia-0", label);
+                
+                sequenceData.enter("thread", "ia-0", "open");
+                
                 return;
             }
             
-            val uiParentNode = uiNodeStack.peek();
-            val newUiAuthLayerNode = model.addContainerNode(
-                    uiParentNode, 
-                    String.format(
-                            "Layer",
-                            interactionId));
-            uiNodeStack.push(newUiAuthLayerNode);
+            model.lookupSequence(sequenceId)
+            .ifPresent(sequence->{
+                val sequenceData = sequence.getData();
+                sequenceData.enter("ia-" + (authStackSize-2), "ia" + (authStackSize-1), "open");
+            });
+            
             
         });
         
@@ -77,17 +82,24 @@ final class _Xray {
             return;
         }
         
+        final int authStackSize = beforeClose.size();
         val interactionId = beforeClose.peek().getInteractionSession().getInteractionId();
+        val sequenceId = String.format("seq-%s", interactionId);
         
         XrayUi.updateModel(model->{
             
-            val nodeStackId = "ia-" + interactionId.toString();
-            val uiNodeStack = model.getNodeStack(nodeStackId);
-            if(uiNodeStack.isEmpty()) {
-                log.warn("inconsistent uiNodeStack size; already empty when trying to model layer exit");
-                return;
-            }
-            uiNodeStack.pop();
+            model.lookupSequence(sequenceId)
+            .ifPresent(sequence->{
+                val sequenceData = sequence.getData();
+                
+                if(authStackSize==1) {
+                    sequenceData.exit("ia-0", "thread", "close");
+                    return;
+                }
+                
+                sequenceData.exit("ia-" + (authStackSize-2) , "ia" + (authStackSize-1), "close");
+            });
+            
         });
         
     }

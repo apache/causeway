@@ -57,34 +57,30 @@ final class _Xray {
         
         val threadId = _Probe.currentThreadId();
         
+        val sequenceId = iaTracker.getConversationId()
+        .map(interactionId->String.format("seq-%s", interactionId))
+        .orElse(null);
+        
         XrayUi.updateModel(model->{
-        
-            val uiThreadNode = model.getThreadNode(threadId);
+    
+            // if no sequence diagram available, that we can append to,
+            // then at least add a node to the left tree
+            if(sequenceId==null
+                    || !model.lookupSequence(sequenceId).isPresent()) {
+                val uiThreadNode = model.getThreadNode(threadId);
+                model.addContainerNode(
+                        uiThreadNode,
+                        txInfo);
+                return;
+            }
             
-            model.addContainerNode(
-                    uiThreadNode,
-                    txInfo);
+            model.lookupSequence(sequenceId)
+            .ifPresent(sequence->{
+                val sequenceData = sequence.getData();
+                sequenceData.enter("thread", "tx", "before completion");
+            });
+            
         });
-        
-//        iaTracker.getConversationId()
-//        .ifPresent(interactionId->{
-//        
-//            XrayUi.updateModel(model->{
-//                
-//                val nodeStackId = "ia-" + interactionId.toString();
-//                val uiNodeStack = model.getNodeStack(nodeStackId);
-//                
-//                val uiParentNode = uiNodeStack.isEmpty() 
-//                        ? model.getRootNode() 
-//                        : uiNodeStack.peek();
-//                val newUiTxNode = model.addContainerNode(
-//                        uiParentNode, 
-//                        txInfo);
-//                uiNodeStack.push(newUiTxNode);
-//                
-//            });
-//            
-//        });
         
     }
 
@@ -97,34 +93,30 @@ final class _Xray {
         
         val threadId = _Probe.currentThreadId();
         
+        val sequenceId = iaTracker.getConversationId()
+        .map(interactionId->String.format("seq-%s", interactionId))
+        .orElse(null);
+        
         XrayUi.updateModel(model->{
-        
-            val uiThreadNode = model.getThreadNode(threadId);
+    
+            // if no sequence diagram available, that we can append to,
+            // then at least add a node to the left tree
+            if(sequenceId==null
+                    || !model.lookupSequence(sequenceId).isPresent()) {
+                val uiThreadNode = model.getThreadNode(threadId);
+                model.addContainerNode(
+                        uiThreadNode,
+                        txInfo);
+                return;
+            }
             
-            model.addContainerNode(
-                    uiThreadNode,
-                    txInfo);
+            model.lookupSequence(sequenceId)
+            .ifPresent(sequence->{
+                val sequenceData = sequence.getData();
+                sequenceData.exit("tx", "thread", txInfo);
+            });
+            
         });
-        
-//        iaTracker.getConversationId()
-//        .ifPresent(interactionId->{
-//        
-//            XrayUi.updateModel(model->{
-//                
-//                val nodeStackId = "ia-" + interactionId.toString();
-//                val uiNodeStack = model.getNodeStack(nodeStackId);
-//                
-//                val uiParentNode = uiNodeStack.isEmpty() 
-//                        ? model.getRootNode() 
-//                        : uiNodeStack.peek();
-//                val newUiTxNode = model.addContainerNode(
-//                        uiParentNode, 
-//                        txInfo);
-//                uiNodeStack.push(newUiTxNode);
-//                
-//            });
-//            
-//        });
         
     }
     

@@ -22,6 +22,7 @@ import java.util.Optional;
 import java.util.Stack;
 import java.util.UUID;
 
+import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.MutableTreeNode;
 
 public interface XrayModel {
@@ -40,6 +41,14 @@ public interface XrayModel {
     
     void remove(MutableTreeNode node);
     
+    // -- DATA LOOKUP
+    
+    default Optional<XrayDataModel.Sequence> lookupSequence(String sequenceId) {
+        return lookupNode(sequenceId)
+        .map(node->
+             (XrayDataModel.Sequence)((DefaultMutableTreeNode) node).getUserObject());
+    }
+    
     // -- STACKS
     
     Stack<MutableTreeNode> getNodeStack(String id);
@@ -56,6 +65,8 @@ public interface XrayModel {
         }
         
     }
+
+    
 
     
     

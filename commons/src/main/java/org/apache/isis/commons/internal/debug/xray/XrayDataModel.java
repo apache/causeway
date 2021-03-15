@@ -23,6 +23,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.UUID;
 
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
@@ -90,6 +91,10 @@ public abstract class XrayDataModel extends HasIdAndLabel {
         private final static Color COLOR_SILVER = new Color(0xf5, 0xf5, 0xf5);
         private final static Color BACKGROUND_COLOR = COLOR_SILVER;
         private final static Color BORDER_COLOR = Color.GRAY;
+        
+        public Sequence(String label) {
+            this(UUID.randomUUID().toString(), label);
+        }
        
         @Override
         public void render(JScrollPane panel) {
@@ -119,6 +124,10 @@ public abstract class XrayDataModel extends HasIdAndLabel {
             panel.setViewportView(canvas);
             
         }
+
+
+
+       
         
     }
     
