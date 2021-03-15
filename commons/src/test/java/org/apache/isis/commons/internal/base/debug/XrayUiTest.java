@@ -18,6 +18,8 @@
  */
 package org.apache.isis.commons.internal.base.debug;
 
+import javax.swing.JFrame;
+
 import org.apache.isis.commons.internal.debug.xray.XrayDataModel;
 import org.apache.isis.commons.internal.debug.xray.XrayModel;
 import org.apache.isis.commons.internal.debug.xray.XrayUi;
@@ -27,7 +29,7 @@ import lombok.val;
 class XrayUiTest {
 
     public static void main(String[] args) {
-        XrayUi.start();
+        XrayUi.start(JFrame.EXIT_ON_CLOSE);
         
         XrayUi.updateModel(XrayUiTest::populate);
     }
@@ -36,7 +38,7 @@ class XrayUiTest {
         
         val root = model.getRootNode();
         
-        val keyValueData = model.addDataNode(root, new XrayDataModel.KeyValue("KeyValue"));
+        val keyValueData = model.addDataNode(root, new XrayDataModel.KeyValue("1", "KeyValue"));
         keyValueData.getData().put("hi", "there");
         keyValueData.getData().put("how", "you");
         

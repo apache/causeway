@@ -18,8 +18,14 @@
  */
 package org.apache.isis.commons.internal.debug.xray;
 
+import java.util.Map;
+import java.util.Optional;
+import java.util.Stack;
+
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.MutableTreeNode;
+
+import org.apache.isis.commons.internal.collections._Maps;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -33,23 +39,63 @@ final class XrayModelSimple implements XrayModel {
     private final MutableTreeNode rootNode;
     
     @Override
+    public MutableTreeNode getThreadNode(String threadId) {
+        val threadNodeId = String.format("thread-%s", threadId);
+        return lookupNode(threadNodeId)
+                .orElseGet(()->addContainerNode(
+                        getRootNode(),
+                        String.format(
+                                "Thread %s",
+                                threadId),
+                        threadNodeId));
+    }
+    
+    @Override
     public MutableTreeNode addContainerNode(
-            final @NonNull MutableTreeNode parent, 
-            final @NonNull String name) {
-        val newNode = new DefaultMutableTreeNode(name);
+            final @NonNull MutableTreeNode parent,
+            final @NonNull String name,
+            final @NonNull String id) {
+        val newNode = new DefaultMutableTreeNode();
+        newNode.setUserObject(new HasIdAndLabel() {
+            @Override public String getId() { return id; }
+            @Override public String getLabel() { return name; }
+        });
         ((DefaultMutableTreeNode)parent).add(newNode);
+        nodesById.put(id, newNode);
         return newNode;
     }
 
     @Override
     public <T extends XrayDataModel> T addDataNode(
-            final @NonNull MutableTreeNode parent, 
+            final @NonNull MutableTreeNode parent,
             final @NonNull T dataModel) {
         val newNode = new DefaultMutableTreeNode();
         newNode.setUserObject(dataModel);
         ((DefaultMutableTreeNode)parent).add(newNode);
+        nodesById.put(dataModel.getId(), newNode);
         return dataModel;
     }
+
+    private final Map<String, MutableTreeNode> nodesById = _Maps.newConcurrentHashMap();
+    
+    @Override
+    public Optional<MutableTreeNode> lookupNode(String id) {
+        return Optional.ofNullable(nodesById.get(id)) ;
+    }
+
+    @Override
+    public void remove(MutableTreeNode node) {
+        val hasId = (HasIdAndLabel) ((DefaultMutableTreeNode)node).getUserObject();
+        nodesById.remove(hasId.getId());
+    }
+
+    private final Map<String, Stack<MutableTreeNode>> nodeStacksById = _Maps.newConcurrentHashMap();
+    
+    @Override
+    public Stack<MutableTreeNode> getNodeStack(String id) {
+        return nodeStacksById.computeIfAbsent(id, __->new Stack<MutableTreeNode>());
+    }
+
 
 
 }

@@ -19,6 +19,10 @@
 package org.apache.isis.commons.internal.debug.xray;
 
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.concurrent.CountDownLatch;
@@ -27,7 +31,9 @@ import java.util.function.Consumer;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTree;
@@ -35,6 +41,9 @@ import javax.swing.SwingUtilities;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.MutableTreeNode;
+
+import org.apache.isis.commons.collections.Can;
 
 import lombok.val;
 
@@ -50,11 +59,11 @@ public class XrayUi extends JFrame {
     private static AtomicBoolean startRequested = new AtomicBoolean();
     private static CountDownLatch latch = null;
 
-    public static void start() {
+    public static void start(int defaultCloseOperation) {
         val alreadyRequested = startRequested.getAndSet(true);
         if(!alreadyRequested) {
             latch = new CountDownLatch(1);
-            SwingUtilities.invokeLater(XrayUi::new);    
+            SwingUtilities.invokeLater(()->new XrayUi(defaultCloseOperation));    
         }
     }
 
@@ -80,8 +89,12 @@ public class XrayUi extends JFrame {
             e.printStackTrace();
         }
     }
-
-    protected XrayUi() {
+    
+    public static boolean isXrayEnabled() {
+        return startRequested.get();
+    }
+    
+    protected XrayUi(int defaultCloseOperation) {
 
         //create the root node
         root = new DefaultMutableTreeNode("X-ray");
@@ -96,7 +109,12 @@ public class XrayUi extends JFrame {
         val detailPanel = layoutUIAndGetDetailPanel(tree);
         
         tree.getSelectionModel().addTreeSelectionListener((TreeSelectionEvent e) -> {
-            val selectedNode = (DefaultMutableTreeNode) e.getNewLeadSelectionPath().getLastPathComponent();
+            
+            val selPath = e.getNewLeadSelectionPath();
+            if(selPath==null) {
+                return; // ignore event
+            }
+            val selectedNode = (DefaultMutableTreeNode) selPath.getLastPathComponent();
             val userObject = selectedNode.getUserObject();
             
             detailPanel.removeAll();
@@ -113,7 +131,38 @@ public class XrayUi extends JFrame {
             //System.out.println("selected: " + selectedNode.toString());
         });
         
-        this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        val popupMenu = new JPopupMenu();
+        val deleteAction = popupMenu.add(new JMenuItem("Delete"));
+        deleteAction.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                Can.ofArray(tree.getSelectionModel().getSelectionPaths())
+                .forEach(path->{
+                    val nodeToBeRemoved = (MutableTreeNode)path.getLastPathComponent(); 
+                    ((DefaultTreeModel)tree.getModel()).removeNodeFromParent(nodeToBeRemoved);
+                    xrayModel.remove(nodeToBeRemoved);
+                });
+
+            }
+        });
+        
+        tree.addMouseListener(new MouseListener() {
+            
+            @Override public void mouseReleased(MouseEvent e) {}
+            @Override public void mousePressed(MouseEvent e) {}
+            @Override public void mouseExited(MouseEvent e) {}
+            @Override public void mouseEntered(MouseEvent e) {}
+            
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (SwingUtilities.isRightMouseButton(e)) {
+                    popupMenu.show(e.getComponent(), e.getX(), e.getY());
+                }
+            }
+        });
+        
+        this.setDefaultCloseOperation(defaultCloseOperation);
         this.setTitle("X-ray Viewer");
         this.pack();
         this.setSize(800, 600);
@@ -156,6 +205,8 @@ public class XrayUi extends JFrame {
         
         return detailPanel;
     }
+
+    
     
 
     

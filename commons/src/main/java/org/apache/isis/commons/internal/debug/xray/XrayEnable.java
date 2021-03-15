@@ -18,6 +18,8 @@
  */
 package org.apache.isis.commons.internal.debug.xray;
 
+import javax.swing.JFrame;
+
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.annotation.Configuration;
 
@@ -27,7 +29,7 @@ public class XrayEnable implements InitializingBean {
     @Override
     public void afterPropertiesSet() throws Exception {
         System.setProperty("java.awt.headless", "false");
-        XrayUi.start();
+        XrayUi.start(JFrame.DO_NOTHING_ON_CLOSE);
     }
 
 }

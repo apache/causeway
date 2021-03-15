@@ -29,11 +29,7 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.confview.ConfigurationViewService;
 import org.apache.isis.applib.services.eventbus.EventBusService;
-import org.apache.isis.commons.internal.debug.xray.XrayDataModel;
-import org.apache.isis.commons.internal.debug.xray.XrayUi;
 import org.apache.isis.core.metamodel.events.MetamodelEvent;
-
-import lombok.val;
 
 /**
  * 
@@ -53,21 +49,7 @@ public class MetamodelEventService {
 
     public void fireBeforeMetamodelLoading() {
         
-        XrayUi.updateModel(model->{
-            
-            val root = model.getRootNode();
-            
-            val env = model.addDataNode(root, new XrayDataModel.KeyValue("Environment"));
-            configurationService.getEnvironmentProperties().forEach(item->{
-                env.getData().put(item.getKey(), item.getValue());    
-            });
-            
-            val config = model.addDataNode(root, new XrayDataModel.KeyValue("Config"));
-            configurationService.getVisibleConfigurationProperties().forEach(item->{
-                config.getData().put(item.getKey(), item.getValue());    
-            });
-            
-        });
+        _Xray.addConfiguration(configurationService);
         
         eventBusService.post(MetamodelEvent.BEFORE_METAMODEL_LOADING);
     }

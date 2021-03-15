@@ -21,7 +21,6 @@ package org.apache.isis.testdomain.applayer;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
-import java.util.Stack;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
@@ -32,7 +31,6 @@ import javax.inject.Named;
 import javax.inject.Provider;
 import javax.jdo.JDOHelper;
 import javax.jdo.PersistenceManagerFactory;
-import javax.swing.tree.MutableTreeNode;
 
 import org.junit.jupiter.api.DynamicTest;
 import org.springframework.context.annotation.Import;
@@ -128,8 +126,6 @@ public class ApplicationLayerTestFactory {
             final Consumer<VerificationStage> verifier) {
 
         return _Lists.of(
-//                dynamicTest("No initial Transaction with Test Execution", 
-//                        this::no_initial_tx_context),
                 programmaticTest("Programmatic Execution", 
                         given, verifier, this::programmaticExecution),
                 interactionTest("Interaction Api Execution", 
@@ -143,7 +139,7 @@ public class ApplicationLayerTestFactory {
                 interactionTest("Wrapper Async Execution w/ Rules (expected to fail w/ DisabledException)", 
                         given, verifier, this::wrapperAsyncExecutionWithFailure),
                 
-                dynamicTest("wait for viewer", XrayUi::waitForShutdown)
+                dynamicTest("wait for xray viewer", XrayUi::waitForShutdown)
                 
                 );
     }
@@ -472,44 +468,54 @@ public class ApplicationLayerTestFactory {
     
     // -- XRAY
     
-    private final Stack<MutableTreeNode> nodeStack = new Stack<>();
+    //private final Stack<MutableTreeNode> nodeStack = new Stack<>();
 
     private void xrayAddTest(String name) {
+        
+        val threadId = _Probe.currentThreadId();
+        
         XrayUi.updateModel(model->{
             val newNode = model.addContainerNode(
-                    model.getRootNode(), 
+                    model.getThreadNode(threadId), 
                     String.format("Test: %s", name));
-            nodeStack.clear();
-            nodeStack.push(newNode);    
-        });
+                
+        });  
+        
+//        XrayUi.updateModel(model->{
+//            val newNode = model.addContainerNode(
+//                    model.getRootNode(), 
+//                    String.format("Test: %s", name));
+//            nodeStack.clear();
+//            nodeStack.push(newNode);    
+//        });
     }
     
     private void xrayEnterTansaction(Propagation propagation) {
-        XrayUi.updateModel(model->{
-            val newNode = model.addContainerNode(
-                    nodeStack.peek(), 
-                    String.format("Transactional %s", propagation.name()));
-            nodeStack.push(newNode);
-        });
+//        XrayUi.updateModel(model->{
+//            val newNode = model.addContainerNode(
+//                    nodeStack.peek(),
+//                    String.format("Transactional %s", propagation.name()));
+//            nodeStack.push(newNode);
+//        });
     }
     
     private void xrayExitTansaction() {
-        nodeStack.pop();
+        //nodeStack.pop();
     }
     
     private void xrayEnterInteraction(Optional<Interaction> currentInteraction) {
-        XrayUi.updateModel(model->{
-            val newNode = model.addContainerNode(
-                    nodeStack.peek(), 
-                    currentInteraction.isPresent()
-                        ? String.format("Interaction %s", currentInteraction.get().getInteractionId())
-                        : "Iteraction: none");
-            nodeStack.push(newNode);
-        });
+//        XrayUi.updateModel(model->{
+//            val newNode = model.addContainerNode(
+//                    nodeStack.peek(), 
+//                    currentInteraction.isPresent()
+//                        ? String.format("Interaction %s", currentInteraction.get().getInteractionId())
+//                        : "Iteraction: none");
+//            nodeStack.push(newNode);
+//        });
     }
     
     private void xrayExitInteraction() {
-        nodeStack.pop();
+        //nodeStack.pop();
     }
 
 }

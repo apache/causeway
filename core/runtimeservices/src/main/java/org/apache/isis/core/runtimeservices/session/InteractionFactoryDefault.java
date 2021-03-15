@@ -52,6 +52,7 @@ import org.apache.isis.commons.functional.ThrowingRunnable;
 import org.apache.isis.commons.internal.concurrent._ConcurrentContext;
 import org.apache.isis.commons.internal.concurrent._ConcurrentTaskList;
 import org.apache.isis.commons.internal.debug._Probe;
+import org.apache.isis.commons.internal.debug.xray.XrayUi;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.interaction.integration.InteractionAwareTransactionalBoundaryHandler;
@@ -191,6 +192,10 @@ implements
                     _Probe.currentThreadId());
         }
         
+        if(XrayUi.isXrayEnabled()) {
+            _Xray.newAuthenticationLayer(authenticationStack.get());    
+        }
+        
         return authenticationLayer;
     }
     
@@ -323,7 +328,7 @@ implements
     
     private void closeSessionStackDownToStackSize(int downToStackSize) {
         
-        log.debug("about to close IsisInteraction stack down to size {} (conversation-id={}, total-sessions-on-stack={}, {})",
+        log.debug("about to close authenication stack down to size {} (conversation-id={}, total-sessions-on-stack={}, {})",
                 downToStackSize,
                 conversationId.get(), 
                 authenticationStack.get().size(),
@@ -335,7 +340,8 @@ implements
         		// keep the stack unmodified yet, to allow for callbacks to properly operate
         		preSessionClosed(stack.peek().getInteractionSession());
         	}
-            stack.pop();    
+        	_Xray.closeAuthenticationLayer(stack);
+            stack.pop();
         }
         if(downToStackSize == 0) {
             // cleanup thread-local

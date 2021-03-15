@@ -24,21 +24,18 @@ import java.util.TreeMap;
 import javax.swing.JPanel;
 
 import org.apache.isis.commons.internal.base._Refs;
+import org.apache.isis.commons.internal.debug.xray.XrayModel.HasIdAndLabel;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
-public abstract class XrayDataModel {
+public abstract class XrayDataModel extends HasIdAndLabel {
 
     public abstract void render(JPanel panel);
+    public abstract String getId();
     public abstract String getLabel();
-    
-    @Override
-    public String toString() {
-        return getLabel();
-    }
 
     // -- PREDEFINED DATA MODELS
     
@@ -48,6 +45,7 @@ public abstract class XrayDataModel {
     public static class KeyValue extends XrayDataModel {
         
         private final Map<String, String> data = new TreeMap<>();
+        private final String id;
         private final String label;
         
         @Override

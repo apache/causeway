@@ -18,12 +18,45 @@
  */
 package org.apache.isis.commons.internal.debug.xray;
 
+import java.util.Optional;
+import java.util.Stack;
+import java.util.UUID;
+
 import javax.swing.tree.MutableTreeNode;
 
 public interface XrayModel {
     
     MutableTreeNode getRootNode();
-    MutableTreeNode addContainerNode(MutableTreeNode parent, String name);
-    <T extends XrayDataModel>  T addDataNode(MutableTreeNode parent, T dataModel);
+    MutableTreeNode getThreadNode(String threadId);
+    
+    MutableTreeNode addContainerNode(MutableTreeNode parent, String name, String id);
+    default MutableTreeNode addContainerNode(MutableTreeNode parent, String name) {
+        return addContainerNode(parent, name, UUID.randomUUID().toString());
+    }
+    
+    <T extends XrayDataModel> T addDataNode(MutableTreeNode parent, T dataModel);
 
+    Optional<MutableTreeNode> lookupNode(String id);
+    
+    void remove(MutableTreeNode node);
+    
+    // -- STACKS
+    
+    Stack<MutableTreeNode> getNodeStack(String id);
+    
+    // -- ID AND LABEL
+    
+    abstract class HasIdAndLabel {
+        public abstract String getId();
+        public abstract String getLabel();
+        
+        @Override
+        public final String toString() {
+            return getLabel();
+        }
+        
+    }
+
+    
+    
 }
