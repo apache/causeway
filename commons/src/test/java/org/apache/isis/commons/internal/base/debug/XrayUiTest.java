@@ -38,9 +38,28 @@ class XrayUiTest {
         
         val root = model.getRootNode();
         
-        val keyValueData = model.addDataNode(root, new XrayDataModel.KeyValue("1", "KeyValue"));
+        val keyValueData = model.addDataNode(root, new XrayDataModel.KeyValue("id1", "KeyValue"));
         keyValueData.getData().put("hi", "there");
         keyValueData.getData().put("how", "you");
+        
+        val sequenceData = model.addDataNode(root, new XrayDataModel.Sequence("id2", "Sequence"))
+                .getData();
+        
+        sequenceData.alias("thread", "Thread-0");
+        sequenceData.alias("test", "JUnit Test");
+        sequenceData.alias("ix", "Interaction");
+        sequenceData.alias("tx", "Transaction");
+        sequenceData.alias("ex", "Execution (act/prop/coll)");
+        
+        sequenceData.enter("thread", "test"); 
+        sequenceData.enter("test", "ix", "run anonymous");
+        sequenceData.enter("ix", "tx", "require NEW");
+        sequenceData.enter("ix", "ex", "execute");
+
+        sequenceData.exit("ex", "ix");
+        sequenceData.exit("tx", "ix", "exit\n(after commit/rollback/unknown)");
+        sequenceData.exit("ix", "test", "exit");
+        sequenceData.exit("test", "thread", "exit");
         
         model.addContainerNode(root, "Container");
         

@@ -117,15 +117,17 @@ public class XrayUi extends JFrame {
             val selectedNode = (DefaultMutableTreeNode) selPath.getLastPathComponent();
             val userObject = selectedNode.getUserObject();
             
-            detailPanel.removeAll();
+            //detailPanel.removeAll();
             
             if(userObject instanceof XrayDataModel) {
                 ((XrayDataModel) userObject).render(detailPanel);
             } else {
-                detailPanel.add(new JLabel("Details"));
+                val infoPanel = new JPanel();
+                infoPanel.add(new JLabel("Details"));
+                detailPanel.setViewportView(infoPanel);
             }
             
-            detailPanel.doLayout();
+            detailPanel.revalidate();
             detailPanel.repaint();
             
             //System.out.println("selected: " + selectedNode.toString());
@@ -180,30 +182,32 @@ public class XrayUi extends JFrame {
         });
     }
 
-    private JPanel layoutUIAndGetDetailPanel(JTree masterTree) {
-        
-        val detailPanel = new JPanel();
+    private JScrollPane layoutUIAndGetDetailPanel(JTree masterTree) {
         
         JScrollPane masterScrollPane = new JScrollPane(masterTree);
-        JScrollPane detailScrollPane = new JScrollPane(detailPanel);
+        JScrollPane detailScrollPane = new JScrollPane();
         
         //Create a split pane with the two scroll panes in it.
         val splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
                                    masterScrollPane, detailScrollPane);
         splitPane.setOneTouchExpandable(true);
-        splitPane.setDividerLocation(150);
+        splitPane.setDividerLocation(260);
  
         //Provide minimum sizes for the two components in the split pane.
         Dimension minimumSize = new Dimension(100, 50);
         masterScrollPane.setMinimumSize(minimumSize);
         detailScrollPane.setMinimumSize(minimumSize);
+        
+        detailScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        detailScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        detailScrollPane.getVerticalScrollBar().setUnitIncrement(8);
  
         //Provide a preferred size for the split pane.
-        splitPane.setPreferredSize(new Dimension(400, 200));
+        splitPane.setPreferredSize(new Dimension(800, 600));
         
         getContentPane().add(splitPane);
         
-        return detailPanel;
+        return detailScrollPane;
     }
 
     
