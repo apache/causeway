@@ -23,6 +23,7 @@ import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.commons.internal.debug.xray.XrayDataModel;
 import org.apache.isis.commons.internal.debug.xray.XrayUi;
 import org.apache.isis.core.interaction.session.InteractionTracker;
+import org.apache.isis.core.runtime.util.XrayUtil;
 
 import lombok.val;
 
@@ -57,16 +58,16 @@ final class _Xray {
         
         val threadId = _Probe.currentThreadId();
         
-        val sequenceId = iaTracker.getConversationId()
-        .map(interactionId->String.format("seq-%s", interactionId))
+        val sequenceId = XrayUtil.currentSequenceId(iaTracker)
         .orElse(null);
         
         XrayUi.updateModel(model->{
     
+            val seq = model.lookupSequence(sequenceId);
+            
             // if no sequence diagram available, that we can append to,
             // then at least add a node to the left tree
-            if(sequenceId==null
-                    || !model.lookupSequence(sequenceId).isPresent()) {
+            if(!seq.isPresent()) {
                 val uiThreadNode = model.getThreadNode(threadId);
                 model.addContainerNode(
                         uiThreadNode,
@@ -74,8 +75,7 @@ final class _Xray {
                 return;
             }
             
-            model.lookupSequence(sequenceId)
-            .ifPresent(sequence->{
+            seq.ifPresent(sequence->{
                 val sequenceData = sequence.getData();
                 sequenceData.enter("thread", "tx", "before completion");
             });
@@ -93,16 +93,16 @@ final class _Xray {
         
         val threadId = _Probe.currentThreadId();
         
-        val sequenceId = iaTracker.getConversationId()
-        .map(interactionId->String.format("seq-%s", interactionId))
-        .orElse(null);
+        val sequenceId = XrayUtil.currentSequenceId(iaTracker)
+                .orElse(null);
         
         XrayUi.updateModel(model->{
     
+            val seq = model.lookupSequence(sequenceId);
+            
             // if no sequence diagram available, that we can append to,
             // then at least add a node to the left tree
-            if(sequenceId==null
-                    || !model.lookupSequence(sequenceId).isPresent()) {
+            if(!seq.isPresent()) {
                 val uiThreadNode = model.getThreadNode(threadId);
                 model.addContainerNode(
                         uiThreadNode,
@@ -110,8 +110,7 @@ final class _Xray {
                 return;
             }
             
-            model.lookupSequence(sequenceId)
-            .ifPresent(sequence->{
+            seq.ifPresent(sequence->{
                 val sequenceData = sequence.getData();
                 sequenceData.exit("tx", "thread", txInfo);
             });

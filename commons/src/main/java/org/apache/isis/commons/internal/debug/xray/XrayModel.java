@@ -22,8 +22,11 @@ import java.util.Optional;
 import java.util.Stack;
 import java.util.UUID;
 
+import javax.annotation.Nullable;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.MutableTreeNode;
+
+import org.apache.isis.commons.internal.base._Strings;
 
 public interface XrayModel {
     
@@ -43,10 +46,12 @@ public interface XrayModel {
     
     // -- DATA LOOKUP
     
-    default Optional<XrayDataModel.Sequence> lookupSequence(String sequenceId) {
-        return lookupNode(sequenceId)
-        .map(node->
-             (XrayDataModel.Sequence)((DefaultMutableTreeNode) node).getUserObject());
+    default Optional<XrayDataModel.Sequence> lookupSequence(final @Nullable String sequenceId) {
+        return _Strings.isNullOrEmpty(sequenceId)
+                ? Optional.empty()
+                : lookupNode(sequenceId)
+                    .map(node->
+                        (XrayDataModel.Sequence)((DefaultMutableTreeNode) node).getUserObject());
     }
     
     // -- STACKS
@@ -65,9 +70,6 @@ public interface XrayModel {
         }
         
     }
-
-    
-
     
     
 }

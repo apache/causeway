@@ -62,6 +62,7 @@ import org.apache.isis.core.interaction.session.InteractionTracker;
 import org.apache.isis.core.metamodel.interactions.managed.PropertyInteraction;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.runtime.util.XrayUtil;
 import org.apache.isis.core.transaction.changetracking.EntityChangeTrackerDefault;
 import org.apache.isis.core.transaction.events.TransactionBeforeCompletionEvent;
 import org.apache.isis.testdomain.jdo.JdoTestDomainPersona;
@@ -126,20 +127,35 @@ public class ApplicationLayerTestFactory {
             final Consumer<VerificationStage> verifier) {
 
         return _Lists.of(
-                programmaticTest("Programmatic Execution", 
-                        given, verifier, this::programmaticExecution),
-                interactionTest("Interaction Api Execution", 
-                        given, verifier, this::interactionApiExecution),
-                interactionTest("Wrapper Sync Execution w/o Rules", 
-                        given, verifier, this::wrapperSyncExecutionNoRules),
-                interactionTest("Wrapper Sync Execution w/ Rules (expected to fail w/ DisabledException)", 
-                        given, verifier, this::wrapperSyncExecutionWithFailure),
-                interactionTest("Wrapper Async Execution w/o Rules", 
-                        given, verifier, this::wrapperAsyncExecutionNoRules),
-                interactionTest("Wrapper Async Execution w/ Rules (expected to fail w/ DisabledException)", 
-                        given, verifier, this::wrapperAsyncExecutionWithFailure),
                 
-                dynamicTest("wait for xray viewer", XrayUi::waitForShutdown)
+                dynamicTest("close interaction session stack (if any)", interactionFactory::closeSessionStack),
+                
+                interactionTest("Programmatic Execution", 
+                        given, verifier, 
+                        VerificationStage.POST_INTERACTION_WHEN_PROGRAMMATIC, 
+                        this::programmaticExecution),
+                interactionTest("Interaction Api Execution", 
+                        given, verifier, 
+                        VerificationStage.POST_INTERACTION, 
+                        this::interactionApiExecution),
+                interactionTest("Wrapper Sync Execution w/o Rules", 
+                        given, verifier, 
+                        VerificationStage.POST_INTERACTION, 
+                        this::wrapperSyncExecutionNoRules),
+                interactionTest("Wrapper Sync Execution w/ Rules (expected to fail w/ DisabledException)", 
+                        given, verifier, 
+                        VerificationStage.POST_INTERACTION, 
+                        this::wrapperSyncExecutionWithFailure),
+                interactionTest("Wrapper Async Execution w/o Rules", 
+                        given, verifier, 
+                        VerificationStage.POST_INTERACTION, 
+                        this::wrapperAsyncExecutionNoRules),
+                interactionTest("Wrapper Async Execution w/ Rules (expected to fail w/ DisabledException)", 
+                        given, verifier, 
+                        VerificationStage.POST_INTERACTION, 
+                        this::wrapperAsyncExecutionWithFailure),
+                
+                dynamicTest("wait for xray viewer (if any)", XrayUi::waitForShutdown)
                 
                 );
     }
@@ -151,33 +167,11 @@ public class ApplicationLayerTestFactory {
         boolean run(Runnable given, Consumer<VerificationStage> verifier) throws Exception;
     }
     
-    private DynamicTest programmaticTest(
-            final String displayName,
-            final Runnable given,
-            final Consumer<VerificationStage> verifier,
-            final InteractionTestRunner interactionTestRunner) {
-        
-        return dynamicTest(displayName, ()->{
-            
-            xrayAddTest(displayName);
-            
-            Assert.assertTrue(interactionFactory.isInInteractionSession());
-            
-            val isSuccessfulRun = interactionTestRunner.run(given, verifier);
-                    
-            interactionFactory.closeSessionStack();
-            
-            if(isSuccessfulRun) {
-                verifier.accept(VerificationStage.POST_INTERACTION_WHEN_PROGRAMMATIC);
-            }
-
-        });
-    }
-    
     private DynamicTest interactionTest(
             final String displayName,
             final Runnable given,
             final Consumer<VerificationStage> verifier,
+            final VerificationStage onSuccess,
             final InteractionTestRunner interactionTestRunner) {
         
         return dynamicTest(displayName, ()->{
@@ -198,7 +192,7 @@ public class ApplicationLayerTestFactory {
             interactionFactory.closeSessionStack();
             
             if(isSuccesfulRun) {
-                verifier.accept(VerificationStage.POST_INTERACTION);
+                verifier.accept(onSuccess);
             }
                         
         });
@@ -458,7 +452,8 @@ public class ApplicationLayerTestFactory {
             val book = repository.allInstances(JdoBook.class).listIterator().next();
             transactionalBookConsumer.accept(book);
 
-            //FIXME trigger publishing of entity changes (flush queue)
+            //FIXME ... should not be required explicitly here
+            // trigger publishing of entity changes (flush queue)
             entityChangeTrackerProvider.get().onPreCommit(null);
         })
         .optionalElseFail();
@@ -468,54 +463,29 @@ public class ApplicationLayerTestFactory {
     
     // -- XRAY
     
-    //private final Stack<MutableTreeNode> nodeStack = new Stack<>();
-
     private void xrayAddTest(String name) {
         
-        val threadId = _Probe.currentThreadId();
+        val threadId = XrayUtil.currentThreadId();
         
         XrayUi.updateModel(model->{
-            val newNode = model.addContainerNode(
+            model.addContainerNode(
                     model.getThreadNode(threadId), 
                     String.format("Test: %s", name));
                 
         });  
         
-//        XrayUi.updateModel(model->{
-//            val newNode = model.addContainerNode(
-//                    model.getRootNode(), 
-//                    String.format("Test: %s", name));
-//            nodeStack.clear();
-//            nodeStack.push(newNode);    
-//        });
     }
     
     private void xrayEnterTansaction(Propagation propagation) {
-//        XrayUi.updateModel(model->{
-//            val newNode = model.addContainerNode(
-//                    nodeStack.peek(),
-//                    String.format("Transactional %s", propagation.name()));
-//            nodeStack.push(newNode);
-//        });
     }
     
     private void xrayExitTansaction() {
-        //nodeStack.pop();
     }
     
     private void xrayEnterInteraction(Optional<Interaction> currentInteraction) {
-//        XrayUi.updateModel(model->{
-//            val newNode = model.addContainerNode(
-//                    nodeStack.peek(), 
-//                    currentInteraction.isPresent()
-//                        ? String.format("Interaction %s", currentInteraction.get().getInteractionId())
-//                        : "Iteraction: none");
-//            nodeStack.push(newNode);
-//        });
     }
     
     private void xrayExitInteraction() {
-        //nodeStack.pop();
     }
 
 }

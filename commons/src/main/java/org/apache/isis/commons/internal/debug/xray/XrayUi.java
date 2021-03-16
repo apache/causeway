@@ -18,6 +18,7 @@
  */
 package org.apache.isis.commons.internal.debug.xray;
 
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -27,10 +28,12 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.net.URL;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
 
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
@@ -42,11 +45,14 @@ import javax.swing.JTree;
 import javax.swing.SwingUtilities;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.MutableTreeNode;
+import javax.swing.tree.TreeCellRenderer;
 
 import org.apache.isis.commons.collections.Can;
 
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 public class XrayUi extends JFrame {
@@ -144,6 +150,8 @@ public class XrayUi extends JFrame {
             }
         });
         
+        tree.setCellRenderer(new XrayTreeCellRenderer((DefaultTreeCellRenderer) tree.getCellRenderer()));
+        
         tree.addMouseListener(new MouseListener() {
             
             @Override public void mouseReleased(MouseEvent e) {}
@@ -230,7 +238,37 @@ public class XrayUi extends JFrame {
         return detailScrollPane;
     }
 
+    // -- CUSTOM TREE NODE ICONS
     
+    @RequiredArgsConstructor
+    class XrayTreeCellRenderer implements TreeCellRenderer {
+        
+        final DefaultTreeCellRenderer delegate; 
+
+        public Component getTreeCellRendererComponent(
+                JTree tree,
+                Object value, 
+                boolean selected, 
+                boolean expanded, 
+                boolean leaf, 
+                int row, 
+                boolean hasFocus) {
+            
+            val label = (DefaultTreeCellRenderer)
+                    delegate.getTreeCellRendererComponent(tree, value, selected, expanded, leaf, row, hasFocus);
+            
+            Object o = ((DefaultMutableTreeNode) value).getUserObject();
+            if (o instanceof XrayDataModel) {
+                XrayDataModel dataModel = (XrayDataModel) o;
+                URL imageUrl = getClass().getResource(dataModel.getIconResource());
+                if (imageUrl != null) {
+                    label.setIcon(new ImageIcon(imageUrl));
+                }
+                label.setText(dataModel.getLabel());
+            }
+            return label;
+        }
+    }
     
 
     

@@ -34,6 +34,7 @@ import org.apache.isis.commons.internal.base._Refs.IntReference;
 import org.apache.isis.commons.internal.debug.xray.sequence._Graphics.TextBlock;
 
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
@@ -51,13 +52,13 @@ public class SequenceDiagram {
         return this;
     }
 
-    public void enter(String from, String to, String label) {
+    public void enter(final @NonNull String from, final @NonNull String to, String label) {
         val p0 = participantsById.computeIfAbsent(from, id->new Participant(aliases.getOrDefault(id, id)));
         val p1 = participantsById.computeIfAbsent(to, id->new Participant(aliases.getOrDefault(id, id)));
         connections.add(new Connection(p0, p1, label, false));
     }
 
-    public void exit(String from, String to, String label) {
+    public void exit(final @NonNull String from, final @NonNull String to, String label) {
         val p1 = participantsById.computeIfAbsent(to, id->new Participant(aliases.getOrDefault(id, id)));
         val p0 = participantsById.computeIfAbsent(from, id->new Participant(aliases.getOrDefault(id, id)));
         connections.add(new Connection(p0, p1, label, true));

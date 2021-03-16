@@ -43,6 +43,7 @@ public abstract class XrayDataModel extends HasIdAndLabel {
     public abstract void render(JScrollPane detailPanel);
     public abstract String getId();
     public abstract String getLabel();
+    public abstract String getIconResource();
 
     // -- PREDEFINED DATA MODELS
     
@@ -53,8 +54,12 @@ public abstract class XrayDataModel extends HasIdAndLabel {
         
         @EqualsAndHashCode.Exclude
         private final Map<String, String> data = new TreeMap<>();
+        
         private final String id;
         private final String label;
+        
+        @EqualsAndHashCode.Exclude
+        private final String iconResource = "/xray/key-value.png";
         
         @Override
         public void render(JScrollPane panel) {
@@ -87,6 +92,9 @@ public abstract class XrayDataModel extends HasIdAndLabel {
         
         private final String id;
         private final String label;
+        
+        @EqualsAndHashCode.Exclude
+        private final String iconResource = "/xray/sequence.png";
         
         private final static Color COLOR_SILVER = new Color(0xf5, 0xf5, 0xf5);
         private final static Color BACKGROUND_COLOR = COLOR_SILVER;
@@ -124,9 +132,6 @@ public abstract class XrayDataModel extends HasIdAndLabel {
             panel.setViewportView(canvas);
             
         }
-
-
-
        
         
     }

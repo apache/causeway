@@ -23,6 +23,7 @@ import java.util.Stack;
 import org.apache.isis.commons.internal.debug.xray.XrayDataModel;
 import org.apache.isis.commons.internal.debug.xray.XrayUi;
 import org.apache.isis.core.interaction.session.AuthenticationLayer;
+import org.apache.isis.core.runtime.util.XrayUtil;
 
 import lombok.val;
 
@@ -40,28 +41,31 @@ final class _Xray {
         val interactionId = afterEnter.peek().getInteractionSession().getInteractionId();
         val executionContext = afterEnter.peek().getExecutionContext();
         
+        val threadId = XrayUtil.currentThreadId();
+        
         val ct = Thread.currentThread();
         val threadLabel = String.format("Thread-%d\n%s", ct.getId(), ct.getName());
         
         XrayUi.updateModel(model->{
             
-            val sequenceId = String.format("seq-%s", interactionId);
-            val iaLabel = String.format("Interaction\n%s", interactionId);
+            val sequenceId = XrayUtil.sequenceId(interactionId);
+            val iaLabel = String.format("Interaction-%s", interactionId);
+            val iaLabelMultiline = String.format("Interaction\n%s", interactionId);
             val iaOpeningLabel = String.format("open interaction\n%s", 
                     executionContext.getUser().toString().replace(", ", ",\n"));
             
             if(authStackSize==1) {
-                val uiThreadNode = model.getThreadNode(threadLabel);
+                val uiThreadNode = model.getThreadNode(threadId);
                 
-                val uiTopAuthLayerNode = model.addContainerNode(uiThreadNode, iaLabel);
+                //val uiTopAuthLayerNode = model.addContainerNode(uiThreadNode, iaLabel);
                 
                 val sequenceData = model.addDataNode(
-                            uiTopAuthLayerNode, 
-                            new XrayDataModel.Sequence(sequenceId, "Sequence Diagam"))
+                            uiThreadNode,//uiTopAuthLayerNode, 
+                            new XrayDataModel.Sequence(sequenceId, iaLabel))
                         .getData();
                 
                 sequenceData.alias("thread", threadLabel);
-                sequenceData.alias("ia-0", iaLabel);
+                sequenceData.alias("ia-0", iaLabelMultiline);
                 
                 sequenceData.enter("thread", "ia-0", iaOpeningLabel);
                 
@@ -87,7 +91,7 @@ final class _Xray {
         
         final int authStackSize = beforeClose.size();
         val interactionId = beforeClose.peek().getInteractionSession().getInteractionId();
-        val sequenceId = String.format("seq-%s", interactionId);
+        val sequenceId = XrayUtil.sequenceId(interactionId);
         
         XrayUi.updateModel(model->{
             

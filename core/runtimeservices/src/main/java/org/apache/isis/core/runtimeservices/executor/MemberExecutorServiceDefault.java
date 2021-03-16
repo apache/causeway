@@ -83,7 +83,7 @@ import lombok.extern.log4j.Log4j2;
 public class MemberExecutorServiceDefault
 implements MemberExecutorService {
 
-    private final @Getter InteractionTracker isisInteractionTracker;
+    private final @Getter InteractionTracker interactionTracker;
     private final @Getter IsisConfiguration configuration;
     private final @Getter ObjectManager objectManager;
     private final @Getter ClockService clockService;
@@ -96,7 +96,7 @@ implements MemberExecutorService {
 
     @Override
     public Optional<InternalInteraction> getInteraction() {
-        return isisInteractionTracker.currentInteraction()
+        return interactionTracker.currentInteraction()
                 .map(InternalInteraction.class::cast);
     }
 
@@ -119,6 +119,8 @@ implements MemberExecutorService {
         
         CommandPublishingFacet.ifPublishingEnabledForCommand(
                 command, owningAction, facetHolder, ()->command.updater().setPublishingEnabled(true));
+        
+        val xrayHandle = _Xray.enterInvocation(interaction);
 
         val actionId = owningAction.getIdentifier();
         log.debug("about to invoke action {}", actionId);
@@ -176,8 +178,9 @@ implements MemberExecutorService {
             executionPublisher.get().publishActionInvocation(priorExecution);
         }
 
-        return filteredIfRequired(method, returnedAdapter, interactionInitiatedBy);
-
+        val result = filteredIfRequired(method, returnedAdapter, interactionInitiatedBy);
+        _Xray.exitInvocation(xrayHandle);
+        return result;
     }
     @Override
     public ManagedObject setOrClearProperty(
@@ -199,6 +202,8 @@ implements MemberExecutorService {
         CommandPublishingFacet.ifPublishingEnabledForCommand(
                 command, owningProperty, facetHolder, ()->command.updater().setPublishingEnabled(true));
 
+        val xrayHandle = _Xray.enterInvocation(interaction);
+        
         val propertyId = owningProperty.getIdentifier();
 
         val targetManagedObject = head.getTarget();
@@ -234,7 +239,9 @@ implements MemberExecutorService {
             executionPublisher.get().publishPropertyEdit(priorExecution);
         }
 
-        return getObjectManager().adapt(targetPojo);
+        val result = getObjectManager().adapt(targetPojo);
+        _Xray.exitInvocation(xrayHandle);
+        return result;
 
     }
 
