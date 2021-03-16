@@ -20,7 +20,6 @@ package org.apache.isis.core.runtimeservices.session;
 
 import java.util.Stack;
 
-import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.commons.internal.debug.xray.XrayDataModel;
 import org.apache.isis.commons.internal.debug.xray.XrayUi;
 import org.apache.isis.core.interaction.session.AuthenticationLayer;
@@ -39,28 +38,32 @@ final class _Xray {
         // make defensive copies, so can use in another thread
         final int authStackSize = afterEnter.size();
         val interactionId = afterEnter.peek().getInteractionSession().getInteractionId();
-        val threadId = _Probe.currentThreadId();
+        val executionContext = afterEnter.peek().getExecutionContext();
+        
+        val ct = Thread.currentThread();
+        val threadLabel = String.format("Thread-%d\n%s", ct.getId(), ct.getName());
         
         XrayUi.updateModel(model->{
             
             val sequenceId = String.format("seq-%s", interactionId);
-            
-            val label = String.format("Interaction %s", interactionId);
+            val iaLabel = String.format("Interaction\n%s", interactionId);
+            val iaOpeningLabel = String.format("open interaction\n%s", 
+                    executionContext.getUser().toString().replace(", ", ",\n"));
             
             if(authStackSize==1) {
-                val uiThreadNode = model.getThreadNode(threadId);
+                val uiThreadNode = model.getThreadNode(threadLabel);
                 
-                val uiTopAuthLayerNode = model.addContainerNode(uiThreadNode, label);
+                val uiTopAuthLayerNode = model.addContainerNode(uiThreadNode, iaLabel);
                 
                 val sequenceData = model.addDataNode(
                             uiTopAuthLayerNode, 
                             new XrayDataModel.Sequence(sequenceId, "Sequence Diagam"))
                         .getData();
                 
-                sequenceData.alias("thread", threadId);
-                sequenceData.alias("ia-0", label);
+                sequenceData.alias("thread", threadLabel);
+                sequenceData.alias("ia-0", iaLabel);
                 
-                sequenceData.enter("thread", "ia-0", "open");
+                sequenceData.enter("thread", "ia-0", iaOpeningLabel);
                 
                 return;
             }
@@ -68,7 +71,7 @@ final class _Xray {
             model.lookupSequence(sequenceId)
             .ifPresent(sequence->{
                 val sequenceData = sequence.getData();
-                sequenceData.enter("ia-" + (authStackSize-2), "ia" + (authStackSize-1), "open");
+                sequenceData.enter("ia-" + (authStackSize-2), "ia" + (authStackSize-1), iaOpeningLabel);
             });
             
             

@@ -21,6 +21,7 @@ package org.apache.isis.applib.services.user;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.annotation.Nullable;
@@ -32,6 +33,7 @@ import org.apache.isis.commons.internal.collections._Lists;
 
 import lombok.Getter;
 import lombok.NonNull;
+import lombok.val;
 
 /**
  * Immutable serializable value holding details about a user and its roles.
@@ -146,11 +148,10 @@ public final class UserMemento implements Serializable {
 
     @Override
     public String toString() {
-        final StringBuilder buf = new StringBuilder();
-        for (final RoleMemento role : roles) {
-            buf.append(role.getName()).append(" ");
-        }
-        return "User [name=" + getName() + ",roles=" + buf.toString() + "]";
+        val rolesStringified = roles.stream()
+        .map(RoleMemento::getName)
+        .collect(Collectors.joining(", "));
+        return "User [name=" + getName() + ", roles=" + rolesStringified + "]";
     }
 
     @Override
