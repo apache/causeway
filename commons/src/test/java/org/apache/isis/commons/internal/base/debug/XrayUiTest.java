@@ -47,9 +47,9 @@ class XrayUiTest {
         
         sequenceData.alias("thread", "Thread-0");
         sequenceData.alias("test", "JUnit Test");
-        sequenceData.alias("ix", "Interaction");
+        sequenceData.alias("ix", "Interaction\nxxx-yyy-zzz");
         sequenceData.alias("tx", "Transaction");
-        sequenceData.alias("ex", "Execution (act/prop/coll)");
+        sequenceData.alias("ex", "Execution\n(act/prop/coll)");
         
         sequenceData.enter("thread", "test"); 
         sequenceData.enter("test", "ix", "run anonymous");

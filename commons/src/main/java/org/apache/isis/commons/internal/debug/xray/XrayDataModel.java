@@ -99,7 +99,7 @@ public abstract class XrayDataModel extends HasIdAndLabel {
         @Override
         public void render(JScrollPane panel) {
             
-            val dim = data.layout();
+            val dim = data.layout((Graphics2D)panel.getGraphics());
             
             val canvas = new JPanel() {
                 private static final long serialVersionUID = 1L;

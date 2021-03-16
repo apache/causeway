@@ -18,19 +18,20 @@
  */
 package org.apache.isis.commons.internal.debug.xray.sequence;
 
-import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.TreeMap;
 
 import org.apache.isis.commons.internal.base._Refs;
 import org.apache.isis.commons.internal.base._Refs.IntReference;
-import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.debug.xray.sequence._Graphics.TextBlock;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -72,29 +73,20 @@ public class SequenceDiagram {
 
     // -- RENDERING
 
-    private final static Color COLOR_LIGHTER_GREEN = new Color(0xd5, 0xe8, 0xd4);
-    private final static Color COLOR_DARKER_GREEN = new Color(0x82, 0xB3, 0x66);
-    private final static Color COLOR_DARKER_RED = new Color(0xB2, 0x00, 0x00);
-
-    private final static int CHAR_WIDTH = 6;
-    private final static int CHAR_HEIGTH = 20;
-
-    private final static Color PARTICIPANT_BACKGROUND_COLOR = COLOR_LIGHTER_GREEN;
-    private final static Color PARTICIPANT_BORDER_COLOR = COLOR_DARKER_GREEN;
+    private final static Color PARTICIPANT_BACKGROUND_COLOR = _Graphics.COLOR_LIGHTER_GREEN;
+    private final static Color PARTICIPANT_BORDER_COLOR = _Graphics.COLOR_DARKER_GREEN;
     private final static int PARTICIPANT_MARGIN_H = 20;
     private final static int PARTICIPANT_MARGIN_V = 5;
-    private final static int PARTICIPANT_PADDING_V = 3;
     private final static int PARTICIPANT_PADDING_H = 8;
-    private final static int PARTICIPANT_HEIGHT = 2*PARTICIPANT_PADDING_V + CHAR_HEIGTH;
+    private final static int PARTICIPANT_PADDING_V = 3;
+    private final static int PARTICIPANT_LINEGAP = 0;
+    private final static Optional<Font> PARTICIPANT_FONT = _Graphics.lookupFont("Verdana", 12.f);
+    
     private final static int CONNECTION_MARGIN_V = 5;
-
-    private final static BasicStroke STROKE_DEFAULT = new BasicStroke(1.0f);
-    private final static BasicStroke STROKE_DASHED = new BasicStroke(1, 
-            BasicStroke.CAP_BUTT, 
-            BasicStroke.JOIN_ROUND, 
-            1.0f, 
-            new float[] { 2f, 0f, 2f },
-            2f);
+    private final static int CONNECTION_LABEL_PADDING_H = 8;
+    private final static int CONNECTION_LABEL_PADDING_V = 3;
+    private final static int CONNECTION_LABEL_LINEGAP = 0;
+    private final static Optional<Font> CONNECTION_FONT = _Graphics.lookupFont("Courier New", 11.f);
 
     @Getter @RequiredArgsConstructor
     private static class Connection {
@@ -103,21 +95,26 @@ public class SequenceDiagram {
         final String label;
         final boolean dashedLine;
 
+        TextBlock textBlock;
+
         int y_top;
         int y_bottom;
         int height;
 
-        int x_text;
-        int y_text;
-
-        void layout(IntReference y_offset) {
+        void layout(Graphics2D g, IntReference y_offset) {
             y_top = y_offset.getValue() + CONNECTION_MARGIN_V;
-            height = _Strings.isEmpty(label)
-                    ? 10
-                    : 40;
+
+            textBlock = new TextBlock(label, 
+                    Math.min(from.getX_middle(), to.getX_middle()), 
+                    y_top);
+
+            val dim = textBlock.layout(g.getFontMetrics(), 
+                    CONNECTION_LABEL_PADDING_H, 
+                    CONNECTION_LABEL_PADDING_V, 
+                    CONNECTION_LABEL_LINEGAP);
+
+            height = dim.height;
             y_bottom = y_top + height;
-            x_text = Math.min(from.getX_middle(), to.getX_middle()) + 10;
-            y_text = y_bottom - 8;
 
             y_offset.update(x->y_bottom);
         }
@@ -135,104 +132,112 @@ public class SequenceDiagram {
         int y_bottom;
         int height;
 
-        int x_text;
-        int y_text;
+        TextBlock textBlock;
 
-        void layout(IntReference x_offset) {
+        void layout(Graphics2D g, IntReference x_offset) {
+
             x_left = x_offset.getValue();
-            width = 2 * PARTICIPANT_PADDING_H 
-                    + CHAR_WIDTH * label.length();
+            y_top = PARTICIPANT_MARGIN_V;
+
+            textBlock = new TextBlock(label, x_left, y_top);
+
+            val dim = textBlock.layout(g.getFontMetrics(), 
+                    PARTICIPANT_PADDING_H, 
+                    PARTICIPANT_PADDING_V, 
+                    PARTICIPANT_LINEGAP);
+
+            width = dim.width;
             x_right = x_left + width;
             x_middle = (x_left + x_right) >> 1;
 
-            height = 2*PARTICIPANT_PADDING_V + CHAR_HEIGTH;
-            y_top = PARTICIPANT_MARGIN_V;
+            height = dim.height;
             y_bottom = y_top + height;
 
-            x_text = x_left + PARTICIPANT_PADDING_H;
-            y_text = PARTICIPANT_MARGIN_V + PARTICIPANT_HEIGHT * 2 / 3;
             x_offset.update(x->x + width + PARTICIPANT_MARGIN_H);
         }
     }
 
-    public Dimension layout() {
+    public Dimension layout(Graphics2D g) {
+
+        PARTICIPANT_FONT.ifPresent(g::setFont);
         
         val x_offset = _Refs.intRef(PARTICIPANT_MARGIN_H);
         val y_offset = _Refs.intRef(0);
         participantsById.values().stream()
-                .peek(p->p.layout(x_offset))
-                .forEach(p->y_offset.update(x->Math.max(x, p.getHeight())));
+        .peek(p->p.layout(g, x_offset))
+        .forEach(p->y_offset.update(x->Math.max(x, p.getHeight())));
 
         final int width = x_offset.getValue();
 
         y_offset.update(x->x + PARTICIPANT_MARGIN_V);
 
-        connections.stream()
-        .forEach(c->c.layout(y_offset));
-
-        final int height = y_offset.update(x->x + 2 * PARTICIPANT_MARGIN_V);
+        CONNECTION_FONT.ifPresent(g::setFont);
         
+        connections.stream()
+        .forEach(c->c.layout(g, y_offset));
+
+        final int height = y_offset.update(x->x + 2*PARTICIPANT_MARGIN_V);
+
         return this.size = new Dimension(width, height);
     }
-    
+
     public void render(Graphics2D g) {
+
+        _Graphics.enableTextAntialiasing(g);
         
-      //      Font font = new Font("Sans", Font.PLAIN, 12);
-      //                ((Graphics2D)g).setFont(font);
+        PARTICIPANT_FONT.ifPresent(g::setFont);
 
-      participantsById.values().stream()
-      .forEach(p->{
+        participantsById.values().stream()
+        .forEach(p->{
 
-          g.setStroke(STROKE_DEFAULT);
+            // participant box
 
-          g.setColor(PARTICIPANT_BACKGROUND_COLOR);
-          g.fillRect(p.getX_left(), p.getY_top(), p.getWidth(), p.getHeight());
+            g.setStroke(_Graphics.STROKE_DEFAULT);
 
-          g.setColor(PARTICIPANT_BORDER_COLOR);
-          g.drawRect(p.getX_left(), p.getY_top(), p.getWidth(), p.getHeight());
+            g.setColor(PARTICIPANT_BACKGROUND_COLOR);
+            g.fillRect(p.getX_left(), p.getY_top(), p.getWidth(), p.getHeight());
 
-          g.setColor(Color.black);
-          g.drawString(p.getLabel(), p.getX_text(), p.getY_text());
+            g.setColor(PARTICIPANT_BORDER_COLOR);
+            g.drawRect(p.getX_left(), p.getY_top(), p.getWidth(), p.getHeight());
 
-          g.setColor(PARTICIPANT_BORDER_COLOR);
-          g.setStroke(STROKE_DASHED);
-          g.drawLine(p.getX_middle(), p.getY_bottom(), p.getX_middle(), size.height - PARTICIPANT_MARGIN_V);
-      });
+            // participant box label
 
-      connections.stream()
-      .forEach(c->{
+            g.setColor(Color.black);
+            p.getTextBlock().render(g);
 
-          g.setColor(COLOR_DARKER_RED);
+            // participant vertical time line
 
-          g.setStroke(c.isDashedLine()
-                  ? STROKE_DASHED
-                  : STROKE_DEFAULT);
+            g.setColor(PARTICIPANT_BORDER_COLOR);
+            g.setStroke(_Graphics.STROKE_DASHED);
+            g.drawLine(p.getX_middle(), p.getY_bottom(), p.getX_middle(), size.height - PARTICIPANT_MARGIN_V);
+        });
 
-          final int y = c.getY_bottom();
-          final int m0 = c.getFrom().getX_middle();
-          final int m1 = c.getTo().getX_middle();
-          final int dir = m1<m0 ? 1 : -1;
-
-          g.drawLine(m0, y, m1, y);
-
-          // arrow head
-
-          ((Graphics2D)g).setStroke(STROKE_DEFAULT);
-          for(int i=0; i<7; ++i) {
-              g.drawLine(m1 + i*dir, y, m1 + 8 * dir, y - 3);
-              g.drawLine(m1 + i*dir, y, m1 + 8 * dir, y + 3);
-          }
-
-          // text
-
-          if(_Strings.isNotEmpty(c.getLabel())) {
-              g.setColor(Color.black);
-              g.drawString(c.getLabel(), c.getX_text(), c.getY_text());    
-          }
-
-      });
+        CONNECTION_FONT.ifPresent(g::setFont);
         
+        connections.stream()
+        .forEach(c->{
+
+            // connection arrow
+
+            g.setColor(_Graphics.COLOR_DARKER_RED);
+
+            g.setStroke(c.isDashedLine()
+                    ? _Graphics.STROKE_DASHED
+                            : _Graphics.STROKE_DEFAULT);
+
+            _Graphics.arrowHorizontal(g, 
+                    c.getFrom().getX_middle(), 
+                    c.getTo().getX_middle(), 
+                    c.getY_bottom());
+
+            // connection label
+
+            g.setColor(Color.black);
+            c.getTextBlock().render(g);
+
+        });
+
     }
- 
+
 
 }
