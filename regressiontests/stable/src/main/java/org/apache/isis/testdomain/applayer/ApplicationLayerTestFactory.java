@@ -54,6 +54,7 @@ import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.applib.services.xactn.TransactionState;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.debug._Probe;
+import org.apache.isis.commons.internal.debug.xray.XrayModel;
 import org.apache.isis.commons.internal.debug.xray.XrayUi;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.functions._Functions.CheckedConsumer;
@@ -128,7 +129,10 @@ public class ApplicationLayerTestFactory {
 
         return _Lists.of(
                 
-                dynamicTest("close interaction session stack (if any)", interactionFactory::closeSessionStack),
+                dynamicTest("close interaction session stack (if any)", ()->{
+                    xrayAddTest("(close any interactions)");
+                    interactionFactory.closeSessionStack();
+                }),
                 
                 interactionTest("Programmatic Execution", 
                         given, verifier, 
@@ -465,7 +469,7 @@ public class ApplicationLayerTestFactory {
     
     private void xrayAddTest(String name) {
         
-        val threadId = XrayUtil.currentThreadId();
+        val threadId = XrayUtil.currentThreadAsMemento();
         
         XrayUi.updateModel(model->{
             model.addContainerNode(

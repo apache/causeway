@@ -21,6 +21,7 @@ package org.apache.isis.core.runtime.events;
 import org.apache.isis.applib.services.confview.ConfigurationViewService;
 import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.commons.internal.debug.xray.XrayDataModel;
+import org.apache.isis.commons.internal.debug.xray.XrayModel;
 import org.apache.isis.commons.internal.debug.xray.XrayUi;
 import org.apache.isis.core.interaction.session.InteractionTracker;
 import org.apache.isis.core.runtime.util.XrayUtil;
@@ -56,7 +57,7 @@ final class _Xray {
             return;
         }
         
-        val threadId = _Probe.currentThreadId();
+        val threadId = XrayUtil.currentThreadAsMemento();
         
         val sequenceId = XrayUtil.currentSequenceId(iaTracker)
         .orElse(null);
@@ -91,7 +92,7 @@ final class _Xray {
             return;
         }
         
-        val threadId = _Probe.currentThreadId();
+        val threadId = XrayUtil.currentThreadAsMemento();
         
         val sequenceId = XrayUtil.currentSequenceId(iaTracker)
                 .orElse(null);

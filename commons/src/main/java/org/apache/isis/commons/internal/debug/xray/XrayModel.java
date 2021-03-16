@@ -28,10 +28,18 @@ import javax.swing.tree.MutableTreeNode;
 
 import org.apache.isis.commons.internal.base._Strings;
 
+import lombok.Value;
+
 public interface XrayModel {
     
     MutableTreeNode getRootNode();
-    MutableTreeNode getThreadNode(String threadId);
+    default MutableTreeNode getThreadNode(final ThreadMemento threadMemento) {
+        return lookupNode(threadMemento.getId())
+                .orElseGet(()->addContainerNode(
+                        getRootNode(),
+                        threadMemento.getLabel(),
+                        threadMemento.getId()));
+    }
     
     MutableTreeNode addContainerNode(MutableTreeNode parent, String name, String id);
     default MutableTreeNode addContainerNode(MutableTreeNode parent, String name) {
@@ -71,5 +79,13 @@ public interface XrayModel {
         
     }
     
+    // -- THREAD UTIL
+    
+    @Value(staticConstructor = "of")
+    public static class ThreadMemento {
+        private final String id;
+        private final String label;
+        private final String multilinelabel;
+    }
     
 }

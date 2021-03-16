@@ -21,6 +21,7 @@ package org.apache.isis.core.runtimeservices.session;
 import java.util.Stack;
 
 import org.apache.isis.commons.internal.debug.xray.XrayDataModel;
+import org.apache.isis.commons.internal.debug.xray.XrayModel;
 import org.apache.isis.commons.internal.debug.xray.XrayUi;
 import org.apache.isis.core.interaction.session.AuthenticationLayer;
 import org.apache.isis.core.runtime.util.XrayUtil;
@@ -41,10 +42,7 @@ final class _Xray {
         val interactionId = afterEnter.peek().getInteractionSession().getInteractionId();
         val executionContext = afterEnter.peek().getExecutionContext();
         
-        val threadId = XrayUtil.currentThreadId();
-        
-        val ct = Thread.currentThread();
-        val threadLabel = String.format("Thread-%d\n%s", ct.getId(), ct.getName());
+        val threadId = XrayUtil.currentThreadAsMemento();
         
         XrayUi.updateModel(model->{
             
@@ -64,7 +62,7 @@ final class _Xray {
                             new XrayDataModel.Sequence(sequenceId, iaLabel))
                         .getData();
                 
-                sequenceData.alias("thread", threadLabel);
+                sequenceData.alias("thread", threadId.getMultilinelabel());
                 sequenceData.alias("ia-0", iaLabelMultiline);
                 
                 sequenceData.enter("thread", "ia-0", iaOpeningLabel);

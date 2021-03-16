@@ -21,6 +21,7 @@ package org.apache.isis.core.runtime.util;
 import java.util.Optional;
 import java.util.UUID;
 
+import org.apache.isis.commons.internal.debug.xray.XrayModel.ThreadMemento;
 import org.apache.isis.core.interaction.session.InteractionTracker;
 
 import lombok.NonNull;
@@ -41,14 +42,12 @@ public final class XrayUtil {
         return String.format("seq-%s", uuid);
     }
 
-    public static String currentThreadId() {
+    public static ThreadMemento currentThreadAsMemento() {
         val ct = Thread.currentThread();
-        return String.format("thread-%d-%s", ct.getId(), ct.getName());
-    }
-
-    public static String currentThreadLabel() {
-        val ct = Thread.currentThread();
-        return String.format("Thread-%d [%s])", ct.getId(), ct.getName());
+        return ThreadMemento.of(
+                String.format("thread-%d-%s", ct.getId(), ct.getName()), 
+                String.format("Thread-%d [%s]", ct.getId(), ct.getName()),
+                String.format("Thread-%d\n%s", ct.getId(), ct.getName())); 
     }
     
 }

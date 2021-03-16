@@ -39,18 +39,6 @@ final class XrayModelSimple implements XrayModel {
     private final MutableTreeNode rootNode;
     
     @Override
-    public MutableTreeNode getThreadNode(String threadId) {
-        val threadNodeId = String.format("thread-%s", threadId);
-        return lookupNode(threadNodeId)
-                .orElseGet(()->addContainerNode(
-                        getRootNode(),
-                        String.format(
-                                "Thread %s",
-                                threadId),
-                        threadNodeId));
-    }
-    
-    @Override
     public MutableTreeNode addContainerNode(
             final @NonNull MutableTreeNode parent,
             final @NonNull String name,
