@@ -37,7 +37,6 @@ import org.apache.isis.testdomain.applayer.ApplicationLayerTestFactory.Verificat
 import org.apache.isis.testdomain.applayer.publishing.conf.Configuration_usingEntityChangesPublishing;
 import org.apache.isis.testdomain.conf.Configuration_usingJdo;
 import org.apache.isis.testdomain.util.kv.KVStoreForTesting;
-import org.apache.isis.testing.integtestsupport.applib.IsisIntegrationTestAbstract;
 
 import static org.apache.isis.testdomain.applayer.publishing.EntityChangesSubscriberForTesting.clearPublishedEntries;
 import static org.apache.isis.testdomain.applayer.publishing.EntityChangesSubscriberForTesting.getCreated;
@@ -62,7 +61,7 @@ import static org.apache.isis.testdomain.applayer.publishing.EntityChangesSubscr
 @TestPropertySource({
     IsisPresets.UseLog4j2Test
 })
-class JdoEntityChangesPublishingTest extends IsisIntegrationTestAbstract {
+class JdoEntityChangesPublishingTest {
 
     @Inject private ApplicationLayerTestFactory testFactory;
     @Inject private KVStoreForTesting kvStore;

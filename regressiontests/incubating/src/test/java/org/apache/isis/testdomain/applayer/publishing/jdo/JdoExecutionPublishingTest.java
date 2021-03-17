@@ -29,12 +29,12 @@ import org.junit.jupiter.api.TestFactory;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
-import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.services.iactn.ActionInvocation;
-import org.apache.isis.applib.services.iactn.PropertyEdit;
 import org.apache.isis.applib.services.iactn.Execution;
+import org.apache.isis.applib.services.iactn.Interaction;
+import org.apache.isis.applib.services.iactn.PropertyEdit;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.config.presets.IsisPresets;
@@ -46,7 +46,6 @@ import org.apache.isis.testdomain.conf.Configuration_usingJdo;
 import org.apache.isis.testdomain.jdo.entities.JdoBook;
 import org.apache.isis.testdomain.util.CollectionAssertions;
 import org.apache.isis.testdomain.util.kv.KVStoreForTesting;
-import org.apache.isis.testing.integtestsupport.applib.IsisIntegrationTestAbstract;
 
 import lombok.val;
 
@@ -64,7 +63,7 @@ import lombok.val;
 @TestPropertySource({
     IsisPresets.UseLog4j2Test
 })
-class JdoExecutionPublishingTest extends IsisIntegrationTestAbstract {
+class JdoExecutionPublishingTest {
 
     @Inject private ApplicationLayerTestFactory testFactory;
     @Inject private KVStoreForTesting kvStore;

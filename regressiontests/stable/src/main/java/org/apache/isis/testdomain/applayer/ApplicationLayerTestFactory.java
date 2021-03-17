@@ -52,9 +52,8 @@ import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.wrapper.control.SyncControl;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.applib.services.xactn.TransactionState;
-import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.debug._Probe;
-import org.apache.isis.commons.internal.debug.xray.XrayModel;
 import org.apache.isis.commons.internal.debug.xray.XrayUi;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.functions._Functions.CheckedConsumer;
@@ -127,12 +126,7 @@ public class ApplicationLayerTestFactory {
             final Runnable given,
             final Consumer<VerificationStage> verifier) {
 
-        return _Lists.of(
-                
-                dynamicTest("close interaction session stack (if any)", ()->{
-                    xrayAddTest("(close any interactions)");
-                    interactionFactory.closeSessionStack();
-                }),
+        val dynamicTests = Can.<DynamicTest>of(
                 
                 interactionTest("Programmatic Execution", 
                         given, verifier, 
@@ -157,11 +151,16 @@ public class ApplicationLayerTestFactory {
                 interactionTest("Wrapper Async Execution w/ Rules (expected to fail w/ DisabledException)", 
                         given, verifier, 
                         VerificationStage.POST_INTERACTION, 
-                        this::wrapperAsyncExecutionWithFailure),
-                
-                dynamicTest("wait for xray viewer (if any)", XrayUi::waitForShutdown)
-                
+                        this::wrapperAsyncExecutionWithFailure)
                 );
+
+        return XrayUi.isXrayEnabled()
+                ? dynamicTests
+                        .add(dynamicTest("wait for xray viewer", XrayUi::waitForShutdown))
+                        .toList()
+                : dynamicTests
+                        .toList();
+        
     }
     
     // -- INTERACTION TEST FACTORY

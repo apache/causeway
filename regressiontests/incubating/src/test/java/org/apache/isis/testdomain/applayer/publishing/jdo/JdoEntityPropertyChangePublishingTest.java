@@ -39,7 +39,6 @@ import org.apache.isis.testdomain.applayer.publishing.conf.Configuration_usingEn
 import org.apache.isis.testdomain.conf.Configuration_usingJdo;
 import org.apache.isis.testdomain.util.CollectionAssertions;
 import org.apache.isis.testdomain.util.kv.KVStoreForTesting;
-import org.apache.isis.testing.integtestsupport.applib.IsisIntegrationTestAbstract;
 
 import lombok.val;
 
@@ -58,7 +57,7 @@ import lombok.val;
     IsisPresets.UseLog4j2Test
 })
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-class JdoEntityPropertyChangePublishingTest extends IsisIntegrationTestAbstract {
+class JdoEntityPropertyChangePublishingTest {
 
     @Inject private ApplicationLayerTestFactory testFactory;
     @Inject private KVStoreForTesting kvStore;
