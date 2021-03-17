@@ -294,11 +294,16 @@ public class JpaEntityFacetFactory extends FacetFactoryAbstract {
                 return EntityState.PERSISTABLE_ATTACHED;
             }
 
-            //TODO[2033] how to determine whether deleted? (even relevant?)
-//            if(isDeleted) {
-//                return EntityState.PERSISTABLE_DESTROYED;
-//            }
-            return EntityState.PERSISTABLE_DETACHED;
+            val primaryKey = getPersistenceUnitUtil(entityManager).getIdentifier(pojo);
+            if(primaryKey == null) {
+                return EntityState.PERSISTABLE_DETACHED;
+            }
+            
+            //XXX this find operation is potentially expensive, 
+            // compared to JDO, which does not require this extra step 
+            return entityManager.find(entityClass, primaryKey)==null
+                    ? EntityState.PERSISTABLE_DESTROYED
+                    : EntityState.PERSISTABLE_DETACHED;
         }
 
         @Override

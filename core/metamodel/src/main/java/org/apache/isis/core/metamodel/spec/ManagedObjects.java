@@ -410,13 +410,13 @@ public final class ManagedObjects {
         
         @NonNull
         public static EntityState getEntityState(@Nullable ManagedObject adapter) {
-            if(adapter==null) {
+            if(isNullOrUnspecifiedOrEmpty(adapter)) {
                 return EntityState.NOT_PERSISTABLE;
             }
             val spec = adapter.getSpecification();
             val pojo = adapter.getPojo();
             
-            if(spec==null || pojo==null || !spec.isEntity()) {
+            if(!spec.isEntity()) {
                 return EntityState.NOT_PERSISTABLE;
             }
 
