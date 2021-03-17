@@ -17,21 +17,29 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.properties.update.clear;
+package org.apache.isis.core.metamodel.facets.properties.update.modify;
 
-import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 
 /**
- * Mechanism for clearing a property of an object (that is, setting it to
- * <tt>null</tt>).
- *
- * <p>
- * In the standard Apache Isis Programming Model, typically corresponds to a
- * method named <tt>clearXxx</tt> (for a property <tt>getXxx</tt>). As a
- * fallback the standard model also supports invoking the <tt>setXxx</tt> method
- * with <tt>null</tt>.
+ * The mechanism by which the value of the property can be set.
+ * @see PropertySetterFacet
+ * @since 2.0
  */
-public interface PropertyClearFacet extends PropertyClearingAccessor, Facet {
+public interface PropertySettingAccessor {
 
-    
+    /**
+     * Sets the value of this property.
+     *
+     * <p>
+     *     If this is a view model, then the target will be cloned and effectively replaced.
+     * </p>
+     */
+    ManagedObject setProperty(
+            final OneToOneAssociation owningAssociation,
+            final ManagedObject inObject,
+            final ManagedObject value,
+            final InteractionInitiatedBy interactionInitiatedBy);
 }
