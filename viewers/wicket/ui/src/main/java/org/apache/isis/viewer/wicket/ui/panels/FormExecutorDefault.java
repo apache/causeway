@@ -134,13 +134,18 @@ implements FormExecutor {
             // (The DB exception might actually be thrown by the flush() that follows.
             //
             val resultAdapter = obtainResultAdapter();
+            
             // flush any queued changes; any concurrency or violation exceptions will actually be thrown here
             if(commonContext.getInteractionTracker().isInInteractionSession()) {
                 commonContext.getTransactionService().flushTransaction();
 
-                // update target, since version updated
-                targetAdapter = targetEntityModel.getManagedObject();
-                if(!EntityUtil.isDestroyed(targetAdapter)) {
+                if(EntityUtil.isDestroyed(targetAdapter)) {
+                    // if this was an entity delete action
+                    // then we don't re-fetch / re-create the targetAdapter  
+                    targetAdapter = ManagedObject.empty(targetAdapter.getSpecification());
+                } else {
+                    // update target, since version updated
+                    targetAdapter = targetEntityModel.getManagedObject();
                     targetEntityModel.resetPropertyModels();
                 }
             }
@@ -148,12 +153,9 @@ implements FormExecutor {
             // hook to close prompt etc.
             onExecuteAndProcessResults(targetIfAny);
 
-            final M model = this.model;
-            RedirectFacet redirectFacet = null;
-            if(model instanceof ActionModel) {
-                final ActionModel actionModel = (ActionModel) model;
-                redirectFacet = actionModel.getMetaModel().getFacet(RedirectFacet.class);
-            }
+            val redirectFacet =  model instanceof ActionModel
+                ? ((ActionModel) model).getMetaModel().getFacet(RedirectFacet.class)
+                : null;
 
             if (shouldRedirect(targetAdapter, resultAdapter, redirectFacet)
                     || hasBlobsOrClobs(page)

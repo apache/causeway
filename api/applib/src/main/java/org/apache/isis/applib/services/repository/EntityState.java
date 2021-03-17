@@ -46,7 +46,7 @@ public enum EntityState {
     PERSISTABLE_DETACHED,
     /**
      * Object with this state is an entity that has been removed from the
-     * database.  Objects in this state may no longer be interacted with.
+     * database. Objects in this state may no longer be interacted with.
      */
     PERSISTABLE_DESTROYED,
     ;
