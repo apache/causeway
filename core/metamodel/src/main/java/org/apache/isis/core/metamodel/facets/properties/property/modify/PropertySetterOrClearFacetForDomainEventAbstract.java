@@ -34,7 +34,9 @@ import org.apache.isis.core.metamodel.facets.SingleValueFacetAbstract;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.isis.core.metamodel.facets.properties.update.clear.PropertyClearFacet;
+import org.apache.isis.core.metamodel.facets.properties.update.clear.PropertyClearingAccessor;
 import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
+import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySettingAccessor;
 import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.services.ixn.InteractionDtoFactory;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -43,11 +45,15 @@ import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 
 import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
 
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 public abstract class PropertySetterOrClearFacetForDomainEventAbstract
-extends SingleValueFacetAbstract<Class<? extends PropertyDomainEvent<?,?>>> {
+extends SingleValueFacetAbstract<Class<? extends PropertyDomainEvent<?,?>>> 
+implements
+    PropertyClearingAccessor,
+    PropertySettingAccessor {
 
     private final DomainEventHelper domainEventHelper;
 
@@ -120,16 +126,20 @@ extends SingleValueFacetAbstract<Class<? extends PropertyDomainEvent<?,?>>> {
                 final InteractionInitiatedBy interactionInitiatedBy);
     }
 
+    @Override
     public ManagedObject clearProperty(
             final OneToOneAssociation owningProperty,
             final ManagedObject targetAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
-
+        
+        val emptyValueAdapter = ManagedObject.empty(owningProperty.getSpecification());
+        
         return setOrClearProperty(EditingVariant.CLEAR,
-                owningProperty, targetAdapter, /*newValueAdapter*/ null, interactionInitiatedBy);
+                owningProperty, targetAdapter, emptyValueAdapter, interactionInitiatedBy);
 
     }
 
+    @Override
     public ManagedObject setProperty(
             final OneToOneAssociation owningProperty,
             final ManagedObject targetAdapter,
@@ -142,11 +152,11 @@ extends SingleValueFacetAbstract<Class<? extends PropertyDomainEvent<?,?>>> {
     }
 
     private ManagedObject setOrClearProperty(
-            final EditingVariant style,
-            final OneToOneAssociation owningProperty,
-            final ManagedObject targetAdapter,
-            final ManagedObject newValueAdapter,
-            final InteractionInitiatedBy interactionInitiatedBy) {
+            final @NonNull EditingVariant style,
+            final @NonNull OneToOneAssociation owningProperty,
+            final @NonNull ManagedObject targetAdapter,
+            final @NonNull ManagedObject newValueAdapter,
+            final @NonNull InteractionInitiatedBy interactionInitiatedBy) {
 
         return getTransactionService()
                 .callWithinCurrentTransactionElseCreateNew(() ->
