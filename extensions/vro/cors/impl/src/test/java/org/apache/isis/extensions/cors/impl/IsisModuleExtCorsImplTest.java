@@ -24,6 +24,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.isis.core.config.IsisConfiguration;
+import org.apache.isis.core.config.RestEasyConfiguration;
 import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
 
 import lombok.val;
@@ -31,22 +32,24 @@ import lombok.val;
 class IsisModuleExtCorsImplTest {
 
     private IsisConfiguration isisDefaultConfiguration;
-    
+    private RestEasyConfiguration restEasyConfiguration;
+
     @BeforeEach
     void setUp() {
         isisDefaultConfiguration = MetaModelContext_forTesting
                 .buildDefault()
                 .getConfiguration();
+        restEasyConfiguration = new RestEasyConfiguration();
     }
-    
+
     @Test
     void defaultIsisConfiguration_shouldYieldCorsUrlPatternWithWildcard() {
         // given
         val isisModuleExtCorsImpl = new IsisModuleExtCorsImpl();
-        
+
         // when
-        val filterRegistration = isisModuleExtCorsImpl.createCorsFilterRegistration(isisDefaultConfiguration);
-        
+        val filterRegistration = isisModuleExtCorsImpl.createCorsFilterRegistration(isisDefaultConfiguration, restEasyConfiguration);
+
         // then
         assertTrue(filterRegistration.getUrlPatterns().contains("/restful/*"));
     }
