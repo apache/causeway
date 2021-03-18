@@ -81,6 +81,7 @@ public class SequenceDiagram {
     private final static int PARTICIPANT_PADDING_H = 8;
     private final static int PARTICIPANT_PADDING_V = 3;
     private final static int PARTICIPANT_LINEGAP = 0;
+    private final static int PARTICIPANT_MAX_CHAR_PER_LINE = 26;
     private final static Optional<Font> PARTICIPANT_FONT = _Graphics.lookupFont("Verdana", 12.f);
     
     private final static int CONNECTION_MARGIN_V = 5;
@@ -112,7 +113,8 @@ public class SequenceDiagram {
             val dim = textBlock.layout(g.getFontMetrics(), 
                     CONNECTION_LABEL_PADDING_H, 
                     CONNECTION_LABEL_PADDING_V, 
-                    CONNECTION_LABEL_LINEGAP);
+                    CONNECTION_LABEL_LINEGAP,
+                    Integer.MAX_VALUE);
 
             height = dim.height;
             y_bottom = y_top + height;
@@ -145,7 +147,8 @@ public class SequenceDiagram {
             val dim = textBlock.layout(g.getFontMetrics(), 
                     PARTICIPANT_PADDING_H, 
                     PARTICIPANT_PADDING_V, 
-                    PARTICIPANT_LINEGAP);
+                    PARTICIPANT_LINEGAP,
+                    PARTICIPANT_MAX_CHAR_PER_LINE);
 
             width = dim.width;
             x_right = x_left + width;

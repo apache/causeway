@@ -48,8 +48,7 @@ final class _Xray {
             return null;
         }
         
-        val participantLabel = owningAction.getIdentifier().getLogicalIdentityString("\n#")
-                .replace(".","\n  ."); // poor men's line breaking
+        val participantLabel = owningAction.getIdentifier().getLogicalIdentityString("\n#");
         val enteringLabel = argumentAdapters.isEmpty()
                 ? "action invocation (no args)"
                 : String.format("action invocation w/ %d args:\n  %s",
@@ -72,8 +71,7 @@ final class _Xray {
             return null;
         }
         
-        val participantLabel = owningProperty.getIdentifier().getLogicalIdentityString("\n#")
-                .replace(".","\n  ."); // poor men's line breaking
+        val participantLabel = owningProperty.getIdentifier().getLogicalIdentityString("\n#");
         val enteringLabel = String.format("property edit -> '%s'", 
                 ManagedObjects.UnwrapUtil.single(newValueAdapter));
         

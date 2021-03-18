@@ -116,11 +116,11 @@ final class _Graphics {
         int lineDescent;
         int lineHeight;
 
-        Dimension layout(FontMetrics metrics, int hPadding, int vPadding, int lineGap) {
+        Dimension layout(FontMetrics metrics, int hPadding, int vPadding, int lineGap, int maxCharsPerLine) {
             this.hPadding = hPadding;
             this.vPadding = vPadding;
             this.lineGap = lineGap;
-            lines = _Text.getLines(label);
+            lines = _Text.breakLines(_Text.getLines(label), maxCharsPerLine);
             if(lines.isEmpty()) {
                 return new Dimension(0, 0);
             }
