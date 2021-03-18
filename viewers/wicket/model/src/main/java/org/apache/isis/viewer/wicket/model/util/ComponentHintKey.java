@@ -42,29 +42,44 @@ public class ComponentHintKey implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public static ComponentHintKey create(IsisAppCommonContext commonContext, Provider<Component> pathProvider, String key) {
-        return new ComponentHintKey(commonContext.lookupServiceElseFail(HintStore.class), pathProvider, null, key, null);
+    public static ComponentHintKey create(
+            IsisAppCommonContext commonContext, 
+            Provider<Component> pathProvider, 
+            String key) {
+        return new ComponentHintKey(
+                commonContext.lookupServiceElseFail(HintStore.class), 
+                pathProvider, null, key, null);
     }
 
-    public static ComponentHintKey create(IsisAppCommonContext commonContext, Component path, String key) {
-        return new ComponentHintKey(commonContext.lookupServiceElseFail(HintStore.class), null, path, key, null);
+    public static ComponentHintKey create(
+            IsisAppCommonContext commonContext, 
+            Component path, 
+            String key) {
+        return new ComponentHintKey(
+                commonContext.lookupServiceElseFail(HintStore.class), 
+                null, path, key, null);
     }
 
-    public static ComponentHintKey create(HintStore hintStore, String fullKey) {
-        return new ComponentHintKey(hintStore, null, null, null, fullKey);
+    public static ComponentHintKey create(
+            HintStore hintStore, 
+            String fullKey) {
+        return new ComponentHintKey(hintStore, 
+                null, null, null, fullKey);
     }
 
     private transient HintStore hintStore;
-    private final Provider<Component> componentProvider;
-    private final Component component;
+    private final transient Provider<Component> componentProvider;
+    private Component component;
     private final String keyName;
     private final String fullKey;
-    
 
     public String getKey() {
         return fullKey != null
                 ? fullKey
-                        :  keyFor(component != null? component : componentProvider.get(), keyName);
+                : keyFor(component != null
+                        ? component 
+                        : (component = componentProvider.get()), // memoize for de-serialization
+                    keyName);
     }
 
     protected String keyFor(final Component component, final String keyName) {
@@ -82,7 +97,7 @@ public class ComponentHintKey implements Serializable {
             return;
         }
         if(value != null) {
-            hintStore.set(bookmark, getKey(), value);
+            getHintStore().set(bookmark, getKey(), value);
         } else {
             remove(bookmark);
         }
@@ -92,7 +107,7 @@ public class ComponentHintKey implements Serializable {
         if(bookmark == null) {
             return null;
         }
-        return hintStore.get(bookmark, getKey());
+        return getHintStore().get(bookmark, getKey());
     }
 
 
@@ -101,7 +116,7 @@ public class ComponentHintKey implements Serializable {
             return;
         }
         final String key = getKey();
-        hintStore.remove(bookmark, key);
+        getHintStore().remove(bookmark, key);
     }
 
     public void hintTo(
@@ -150,7 +165,7 @@ public class ComponentHintKey implements Serializable {
     private <X> X computeIfAbsent(Class<X> type, X existingIfAny) {
         return existingIfAny!=null
                 ? existingIfAny
-                        : CommonContextUtils.getCommonContext().lookupServiceElseFail(type);
+                : CommonContextUtils.getCommonContext().lookupServiceElseFail(type);
     }
 
 }
