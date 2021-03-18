@@ -344,6 +344,26 @@ Query.named(CommandJdo.class, "findByParent") +
 in a new-ed up (entity) instance is more flexible and also more error prone, eg. it allows the compiler to check
 validity of the used constructor rather than doing construction reflective at runtime
 
+== Wicket Viewer
+
+All descendants of `PanelAbstract` now need 2 generic type arguments instead of 1, 
+where the newly added is first and specifies the _IModel's_ generic type parameter.
+
+[source,java]
+.PanelAbstract
+----
+// PanelAbstract<T extends IModel<?>> extends PanelBase // <-- previously
+PanelAbstract<T, M extends IModel<T>> extends PanelBase<T> // <.> 
+----
+<.> solves methods clashing 'having same erasure yet neither overrides the other'
+
+[source,java]
+.Example Migration
+----
+// MyPanel extends PanelAbstract<IModel<String>> // <-- previously
+MyPanel extends PanelAbstract<String, IModel<String>> 
+----
+
 == Extensions
 
 Object type namespaces have been renamed.
