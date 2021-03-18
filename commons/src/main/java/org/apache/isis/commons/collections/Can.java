@@ -21,6 +21,7 @@ package org.apache.isis.commons.collections;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -282,6 +283,19 @@ extends Iterable<T>, Comparable<Can<T>>, Serializable {
         val elements = new ArrayList<T>();
         iterable.forEach(elements::add);
         
+        return ofCollection(elements);
+    }
+    
+    public static <T> Can<T> ofEnumeration(@Nullable Enumeration<T> enumeration) {
+        
+        if(enumeration==null) {
+            return empty();
+        }
+        
+        val elements = new ArrayList<T>();
+        while(enumeration.hasMoreElements()) {
+            elements.add(enumeration.nextElement());
+        }
         return ofCollection(elements);
     }
 
