@@ -19,10 +19,12 @@
 
 package org.apache.isis.viewer.wicket.ui.components.empty;
 
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
-public class EmptyCollectionPanel extends PanelAbstract<ActionModel> {
+public class EmptyCollectionPanel 
+extends PanelAbstract<ManagedObject, ActionModel> {
 
     private static final long serialVersionUID = 1L;
 

@@ -27,11 +27,12 @@ import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 /**
  * Package-level adapter for menu items and submenu-items.
  */
-abstract class CssMenuItemPanelAbstract<T extends IModel<?>> extends PanelAbstract<T> {
+abstract class CssMenuItemPanelAbstract<T, M extends IModel<T>> 
+extends PanelAbstract<T, M> {
 
     private static final long serialVersionUID = 1L;
 
-    public CssMenuItemPanelAbstract(final String id, final T model) {
+    public CssMenuItemPanelAbstract(final String id, final M model) {
         super(id, model);
         setRenderBodyOnly(true);
     }

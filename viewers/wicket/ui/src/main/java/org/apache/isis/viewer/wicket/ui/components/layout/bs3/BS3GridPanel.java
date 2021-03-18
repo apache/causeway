@@ -24,11 +24,13 @@ import org.apache.wicket.markup.repeater.RepeatingView;
 
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3Grid;
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3Row;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.components.layout.bs3.row.Row;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
-public class BS3GridPanel extends PanelAbstract<EntityModel> {
+public class BS3GridPanel 
+extends PanelAbstract<ManagedObject, EntityModel> {
 
     private static final long serialVersionUID = 1L;
 

@@ -36,6 +36,7 @@ import org.apache.wicket.model.Model;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.core.metamodel.commons.StringExtensions;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.viewer.wicket.model.hints.IsisSelectorEvent;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
@@ -52,7 +53,8 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
  * {@link org.apache.isis.viewer.wicket.ui.ComponentType#COLLECTION_CONTENTS} with a backing
  * {@link org.apache.isis.viewer.wicket.model.models.EntityCollectionModel}.
  */
-public class CollectionSelectorPanel extends PanelAbstract<EntityCollectionModel>  {
+public class CollectionSelectorPanel 
+extends PanelAbstract<List<ManagedObject>, EntityCollectionModel> {
 
     private static final long serialVersionUID = 1L;
 

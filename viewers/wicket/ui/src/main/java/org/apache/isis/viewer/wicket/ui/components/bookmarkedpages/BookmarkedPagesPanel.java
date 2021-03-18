@@ -19,6 +19,8 @@
 
 package org.apache.isis.viewer.wicket.ui.components.bookmarkedpages;
 
+import java.util.List;
+
 import javax.inject.Inject;
 
 import org.apache.wicket.Component;
@@ -53,7 +55,8 @@ import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 import org.apache.isis.viewer.wicket.ui.util.Links;
 
-public class BookmarkedPagesPanel extends PanelAbstract<BookmarkedPagesModel> {
+public class BookmarkedPagesPanel 
+extends PanelAbstract<List<BookmarkTreeNode>, BookmarkedPagesModel> {
 
     private static final long serialVersionUID = 1L;
 

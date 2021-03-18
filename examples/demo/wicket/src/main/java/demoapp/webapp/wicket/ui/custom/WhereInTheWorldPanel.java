@@ -24,6 +24,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.request.resource.ByteArrayResource;
 
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.common.model.object.ObjectUiModel;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
@@ -39,7 +40,8 @@ import demoapp.dom.featured.customui.geocoding.GeoapifyClient;
 import demoapp.dom.featured.customui.vm.WhereInTheWorldVm;
 
 //tag::class[]
-public class WhereInTheWorldPanel extends PanelAbstract<EntityModel>  {
+public class WhereInTheWorldPanel 
+extends PanelAbstract<ManagedObject, EntityModel>  {
 
     private static final long serialVersionUID = 1L;    // <.>
 

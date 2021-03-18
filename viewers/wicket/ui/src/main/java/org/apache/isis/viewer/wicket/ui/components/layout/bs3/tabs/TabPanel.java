@@ -22,6 +22,7 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3Row;
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3Tab;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.viewer.wicket.model.hints.HasUiHintDisambiguator;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.components.layout.bs3.Util;
@@ -31,7 +32,8 @@ import org.apache.isis.viewer.wicket.ui.panels.HasDynamicallyVisibleContent;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Components;
 
-public class TabPanel extends PanelAbstract<EntityModel>
+public class TabPanel 
+extends PanelAbstract<ManagedObject, EntityModel>
 implements HasUiHintDisambiguator, HasDynamicallyVisibleContent {
 
     private static final long serialVersionUID = 1L;

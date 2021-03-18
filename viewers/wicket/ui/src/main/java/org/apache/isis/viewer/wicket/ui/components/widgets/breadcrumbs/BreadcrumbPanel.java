@@ -45,7 +45,8 @@ import org.apache.isis.viewer.wicket.ui.errors.JGrowlUtil;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
-public class BreadcrumbPanel extends PanelAbstract<IModel<Void>> {
+public class BreadcrumbPanel 
+extends PanelAbstract<Void, IModel<Void>> {
 
     private static final long serialVersionUID = 1L;
 

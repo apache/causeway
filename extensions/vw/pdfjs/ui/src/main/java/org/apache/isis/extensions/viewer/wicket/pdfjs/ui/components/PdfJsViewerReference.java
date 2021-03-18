@@ -19,12 +19,15 @@
 package org.apache.isis.extensions.viewer.wicket.pdfjs.ui.components;
 
 import java.util.List;
+
 import org.apache.wicket.markup.head.HeaderItem;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.resource.JQueryPluginResourceReference;
 import org.wicketstuff.pdfjs.WicketStuffPdfJsReference;
 
 class PdfJsViewerReference extends JQueryPluginResourceReference {
+
+    private static final long serialVersionUID = 1L;
 
     public PdfJsViewerReference() {
         super(PdfJsViewerPanel.class, "PdfJsViewerPanel.js");

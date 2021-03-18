@@ -43,7 +43,8 @@ import lombok.val;
 /**
  * A panel for the default page header
  */
-public class HeaderPanel extends PanelAbstract<Model<String>> {
+public class HeaderPanel 
+extends PanelAbstract<String, Model<String>> {
 
     private static final long serialVersionUID = 1L;
     

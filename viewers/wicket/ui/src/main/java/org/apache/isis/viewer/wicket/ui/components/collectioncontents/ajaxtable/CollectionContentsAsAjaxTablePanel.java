@@ -65,7 +65,7 @@ import lombok.val;
  * collection of entity}s rendered using {@link AjaxFallbackDefaultDataTable}.
  */
 public class CollectionContentsAsAjaxTablePanel
-extends PanelAbstract<EntityCollectionModel> 
+extends PanelAbstract<List<ManagedObject>, EntityCollectionModel>
 implements CollectionCountProvider {
 
     private static final long serialVersionUID = 1L;

@@ -22,6 +22,7 @@ package org.apache.isis.viewer.wicket.ui.components.scalars.image;
 import org.apache.wicket.feedback.ComponentFeedbackMessageFilter;
 import org.apache.wicket.markup.html.basic.Label;
 
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
@@ -29,7 +30,8 @@ import lombok.val;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 
-public class JavaAwtImagePanel extends PanelAbstract<ScalarModel> {
+public class JavaAwtImagePanel
+extends PanelAbstract<ManagedObject, ScalarModel> {
 
     private static final long serialVersionUID = 1L;
 

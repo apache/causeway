@@ -29,7 +29,8 @@ import org.apache.wicket.model.util.ListModel;
  * Panel containing a list of {@link CssMenuItem}s acting as submenus of a
  * parent {@link CssMenuItem}.
  */
-class CssSubMenuItemsPanel extends CssMenuItemPanelAbstract<CssSubMenuItemsPanel.MyModel> {
+class CssSubMenuItemsPanel 
+extends CssMenuItemPanelAbstract<List<CssMenuItem>, CssSubMenuItemsPanel.MyModel> {
 
     private static final long serialVersionUID = 1L;
 

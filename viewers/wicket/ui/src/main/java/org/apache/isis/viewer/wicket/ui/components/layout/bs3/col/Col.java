@@ -35,6 +35,7 @@ import org.apache.isis.applib.layout.grid.bootstrap3.BS3Tab;
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3TabGroup;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
@@ -52,7 +53,9 @@ import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
 import lombok.val;
 
-public class Col extends PanelAbstract<EntityModel> implements HasDynamicallyVisibleContent {
+public class Col 
+extends PanelAbstract<ManagedObject, EntityModel> 
+implements HasDynamicallyVisibleContent {
 
     private static final long serialVersionUID = 1L;
 

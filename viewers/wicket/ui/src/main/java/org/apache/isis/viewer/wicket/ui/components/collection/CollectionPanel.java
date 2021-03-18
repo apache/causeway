@@ -57,7 +57,7 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel
  * of) {@link ScalarPanelAbstract}.
  */
 public class CollectionPanel 
-extends PanelAbstract<EntityCollectionModel> 
+extends PanelAbstract<List<ManagedObject>, EntityCollectionModel> 
 implements CollectionSelectorProvider, BulkActionsProvider {
 
     private static final long serialVersionUID = 1L;

@@ -25,17 +25,17 @@ import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 
+import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.util.Components;
 
 /**
  * Convenience adapter for {@link Panel}s built up using {@link ComponentType}s.
- * @param <T>
+ * 
  * @apiNote using raw-types here, to not further complicate generic type constraints on PanelAbstract
  */
-@SuppressWarnings("rawtypes")
-public abstract class PanelAbstract<T extends IModel<?>> 
-extends PanelBase/*<IModel<X>>*/ {
+public abstract class PanelAbstract<T, M extends IModel<T>> 
+extends PanelBase<T> {
 
     private static final long serialVersionUID = 1L;
     
@@ -49,16 +49,14 @@ extends PanelBase/*<IModel<X>>*/ {
         this(id, null);
     }
 
-    public PanelAbstract(final ComponentType componentType, final IModel<?> model) {
+    public PanelAbstract(final ComponentType componentType, final M model) {
         this(componentType.getWicketId(), model);
     }
 
-    @SuppressWarnings("unchecked")
-    public PanelAbstract(final String id, final IModel<?> model) {
+    public PanelAbstract(final String id, final M model) {
         super(id, model);
         this.componentType = ComponentType.lookup(id);
     }
-
 
     /**
      * Will be null if created using {@link #PanelAbstract(String, IModel)}.
@@ -67,10 +65,9 @@ extends PanelBase/*<IModel<X>>*/ {
         return componentType;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
-    public T getModel() {
-        return (T) getDefaultModel();
+    public M getModel() {
+        return _Casts.uncheckedCast(getDefaultModel());
     }
 
     /**

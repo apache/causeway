@@ -16,25 +16,26 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.viewer.wicket.ui.components.unknown;
 
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
+import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
 import lombok.val;
 
-public class UnknownModelPanel extends PanelAbstract<IModel<?>> {
+public class UnknownModelPanel 
+extends PanelAbstract<Object, IModel<Object>> {
 
     private static final long serialVersionUID = 1L;
 
     public UnknownModelPanel(final String id, IModel<?> model) {
-        super(id, model);
+        super(id, _Casts.uncheckedCast(model));
         buildGui(id);
     }
 

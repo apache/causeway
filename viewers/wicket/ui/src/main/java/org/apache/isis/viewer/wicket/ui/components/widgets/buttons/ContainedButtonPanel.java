@@ -36,7 +36,8 @@ import org.apache.isis.viewer.wicket.ui.util.Components;
 /**
  * A button contained within its own form.
  */
-public class ContainedButtonPanel extends PanelAbstract<Model<String>> {
+public class ContainedButtonPanel 
+extends PanelAbstract<String, Model<String>> {
 
     private static final long serialVersionUID = 1L;
 

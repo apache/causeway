@@ -19,6 +19,7 @@
 
 package org.apache.isis.viewer.wicket.ui.components.actions;
 
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.ui.components.property.PropertyEditFormPanel;
@@ -34,7 +35,8 @@ import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
  *     corresponding panel for property edits is {@link PropertyEditFormPanel}.
  * </p>
  */
-public class ActionParametersFormPanel extends PromptFormPanelAbstract<ActionModel> {
+public class ActionParametersFormPanel 
+extends PromptFormPanelAbstract<ManagedObject, ActionModel> {
 
     private static final long serialVersionUID = 1L;
 
