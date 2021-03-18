@@ -70,7 +70,7 @@ jobs:
         # -Dmaven.source.skip=true ... no need for the CI build to pull sources
         # -Djacoco.skip=true ... no need for the CI build to add test coverage reports
         # -T 1C ... 1 build thread per core
-        MVN_ADDITIONAL_OPTS: |
+        MVN_ADDITIONAL_OPTS: >-
           -Dmodule-all
           -Dmaven.source.skip=true
           -Denforcer.failFast=true
