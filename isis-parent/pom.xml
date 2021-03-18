@@ -820,10 +820,6 @@ under the License.
                         <goals>
                             <goal>prepare-agent</goal>
                         </goals>
-                        <configuration>
-			                <!-- Skip this phase if jacoco.skip property is set to true -->
-			                <skip>${jacoco.skip}</skip>
-			            </configuration>
                     </execution>
                     <execution>
                         <id>report</id>
@@ -831,10 +827,6 @@ under the License.
                         <goals>
                             <goal>report</goal>
                         </goals>
-                        <configuration>
-			                <!-- Skip this phase if jacoco.skip property is set to true -->
-			                <skip>${jacoco.skip}</skip>
-			            </configuration>
                     </execution>
                 </executions>
             </plugin>

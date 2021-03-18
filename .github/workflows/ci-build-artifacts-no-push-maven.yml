@@ -41,13 +41,14 @@ jobs:
     - name: Activate Cache for Maven Downloads
       uses: actions/cache@v2.1.4
       env:
-        cache-name: cache-maven-modules
+        # change the cache-name if we want to rebuild the cache
+        # currently there is no concept of cache clearing 
+        cache-name: maven-2021-03
       with:
         path: ~/.m2/repository
-        key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/pom.xml') }}
+        key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('**/pom.xml') }}
         restore-keys: |
-          ${{ runner.os }}-build-${{ env.cache-name }}-
-          ${{ runner.os }}-build-
+          ${{ runner.os }}-${{ env.cache-name }}-
           ${{ runner.os }}-
     
     - name: Setup Script Environment
