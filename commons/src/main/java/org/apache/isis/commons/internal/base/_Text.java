@@ -29,14 +29,17 @@ import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.StringTokenizer;
 import java.util.function.ToIntFunction;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import javax.annotation.Nullable;
 
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.assertions._Assert;
+import org.apache.isis.commons.internal.collections._Lists;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -80,6 +83,15 @@ public final class _Text {
      */
     public static Can<String> getLines(final @Nullable String text){
         return Can.ofStream(streamLines(text));
+    }
+    
+    public static Can<String> breakLines(Can<String> lines, int maxChars) {
+        if(lines.isEmpty()) {
+            return lines;
+        }
+        return lines.stream()
+        .flatMap(line->breakLine(line, maxChars))
+        .collect(Can.toCan());
     }
     
     /**
@@ -338,5 +350,47 @@ public final class _Text {
         return line->mapper.apply(indexRef[0]++, line);
     }
     
+    private static Stream<String> breakLine(String line, final int maxChars) {
+        line = line.trim();
+        if(line.length()<=maxChars) {
+            return Stream.of(line);
+        }
+        val tokens = Can.ofEnumeration(new StringTokenizer(line, " .-:/", true))
+                .map(String.class::cast);
+        
+        val constraintLines = _Lists.<String>newArrayList();
+        val partialSum = _Refs.intRef(0);
+        val partialCount = _Refs.intRef(0);
+        
+        val tokenIterator = tokens.iterator();
+        
+        tokens.stream()
+        .mapToInt(String::length)
+        .forEach(tokenLen->{
+          
+            final int nextLen = partialSum.getValue() + tokenLen;
+            if(nextLen <= maxChars) {
+                partialSum.update(x->nextLen);
+                partialCount.inc();
+            } else {
+                
+                constraintLines.add(
+                        IntStream.range(0, partialCount.getValue())
+                            .mapToObj(__->tokenIterator.next())
+                            .collect(Collectors.joining()));
+                
+                partialSum.update(x->tokenLen);
+                partialCount.setValue(1);
+            }
+        });
+        
+        // add remaining
+        constraintLines.add(
+                IntStream.range(0, partialCount.getValue())
+                    .mapToObj(__->tokenIterator.next())
+                    .collect(Collectors.joining()));
+        
+        return constraintLines.stream();
+    }
 
 }
