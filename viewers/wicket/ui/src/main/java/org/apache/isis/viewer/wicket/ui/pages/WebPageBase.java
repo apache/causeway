@@ -18,10 +18,13 @@
  */
 package org.apache.isis.viewer.wicket.ui.pages;
 
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.MetaDataHeaderItem;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.viewer.wicket.WebAppContextPath;
 import org.apache.isis.core.interaction.session.InteractionFactory;
@@ -48,10 +51,29 @@ implements HasCommonContext {
     protected WebPageBase(PageParameters parameters) {
         super(parameters);
     }
-    
+
     protected WebPageBase(final IModel<?> model) {
         super(model);
     }
+    
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        super.renderHead(response);
+        renderFavicon(response);
+    }
+
+    // -- FAVICON SUPPORT
+    
+    protected void renderFavicon(IHeaderResponse response) {
+        getIsisConfiguration().getViewer().getWicket().getApplication().getFaviconUrl()
+        .filter(_Strings::isNotEmpty)
+        .map(getWebAppContextPath()::prependContextPathIfLocal)
+        .ifPresent(faviconUrl->{
+            response.render(MetaDataHeaderItem.forLinkTag("icon", faviconUrl));    
+        });
+    }
+    
+    // -- DEPENDENCIES
     
     @Override
     public IsisAppCommonContext getCommonContext() {
@@ -74,13 +96,12 @@ implements HasCommonContext {
         return isisInteractionFactory = computeIfAbsent(InteractionFactory.class, isisInteractionFactory);
     }
     
-    
     // -- HELPER
     
     private <X> X computeIfAbsent(Class<X> type, X existingIfAny) {
         return existingIfAny!=null
                 ? existingIfAny
-                        : getCommonContext().lookupServiceElseFail(type);
+                : getCommonContext().lookupServiceElseFail(type);
     }
     
 }

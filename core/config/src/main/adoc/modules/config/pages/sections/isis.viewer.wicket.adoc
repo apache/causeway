@@ -73,15 +73,6 @@ A typical value is ``css``. This will result in this file being read from the ``
 
 
 |
-[[isis.viewer.wicket.application.favicon-content-type]]
-isis.viewer.wicket.application. +
-favicon-content-type
-
-|
-| Specifies the content type of the favIcon, if any.
-
-
-|
 [[isis.viewer.wicket.application.favicon-url]]
 isis.viewer.wicket.application. +
 favicon-url

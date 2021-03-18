@@ -2184,11 +2184,6 @@ public class IsisConfiguration {
                 private Optional<String> css = Optional.empty();
 
                 /**
-                 * Specifies the content type of the favIcon, if any.
-                 */
-                private Optional<String> faviconContentType = Optional.empty();
-
-                /**
                  * Specifies the URL to use of the favIcon.
                  *
                  * <p>

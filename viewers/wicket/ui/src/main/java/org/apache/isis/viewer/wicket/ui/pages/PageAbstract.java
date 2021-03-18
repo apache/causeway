@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.viewer.wicket.ui.pages;
 
 import java.util.Arrays;
@@ -77,7 +76,6 @@ import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistryAccessor;
 import org.apache.isis.viewer.wicket.ui.components.actionprompt.ActionPromptModalWindow;
 import org.apache.isis.viewer.wicket.ui.components.actionpromptsb.ActionPromptSidebar;
-import org.apache.isis.viewer.wicket.ui.components.widgets.favicon.Favicon;
 import org.apache.isis.viewer.wicket.ui.errors.ExceptionModel;
 import org.apache.isis.viewer.wicket.ui.errors.JGrowlBehaviour;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
@@ -96,7 +94,9 @@ import de.agilecoders.wicket.core.settings.ITheme;
  * Convenience adapter for {@link WebPage}s built up using {@link ComponentType}s.
  */
 @Log4j2
-public abstract class PageAbstract extends WebPageBase implements ActionPromptProvider {
+public abstract class PageAbstract 
+extends WebPageBase 
+implements ActionPromptProvider {
 
     private static final long serialVersionUID = 1L;
     
@@ -113,7 +113,6 @@ public abstract class PageAbstract extends WebPageBase implements ActionPromptPr
     private static final String ID_ACTION_PROMPT_MODAL_WINDOW = "actionPromptModalWindow";
     private static final String ID_ACTION_PROMPT_SIDEBAR = "actionPromptSidebar";
     private static final String ID_PAGE_TITLE = "pageTitle";
-    private static final String ID_FAVICON = "favicon";
     public static final String ID_MENU_LINK = "menuLink";
     public static final String UIHINT_FOCUS = "focus";
 
@@ -147,8 +146,6 @@ public abstract class PageAbstract extends WebPageBase implements ActionPromptPr
             getSession().bind();
 
             setTitle(title);
-
-            add(new Favicon(ID_FAVICON));
 
             themeDiv = new WebMarkupContainer(ID_THEME);
             add(themeDiv);
@@ -240,7 +237,7 @@ public abstract class PageAbstract extends WebPageBase implements ActionPromptPr
     protected void setTitle(final String title) {
         addOrReplace(new Label(ID_PAGE_TITLE, title != null
                 ? title
-                        : getIsisConfiguration().getViewer().getWicket().getApplication().getName()));
+                : getIsisConfiguration().getViewer().getWicket().getApplication().getName()));
     }
 
     private Class<? extends Page> getSignInPage() {
