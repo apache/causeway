@@ -21,7 +21,6 @@ package org.apache.isis.core.runtimeservices.session;
 import java.util.Stack;
 
 import org.apache.isis.commons.internal.debug.xray.XrayDataModel;
-import org.apache.isis.commons.internal.debug.xray.XrayModel;
 import org.apache.isis.commons.internal.debug.xray.XrayUi;
 import org.apache.isis.core.interaction.session.AuthenticationLayer;
 import org.apache.isis.core.runtime.util.XrayUtil;
@@ -108,5 +107,6 @@ final class _Xray {
         });
         
     }
+
 
 }

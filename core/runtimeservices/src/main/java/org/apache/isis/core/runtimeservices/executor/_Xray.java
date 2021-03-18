@@ -18,10 +18,18 @@
  */
 package org.apache.isis.core.runtimeservices.executor;
 
+import java.util.stream.Collectors;
+
 import javax.annotation.Nullable;
 
-import org.apache.isis.applib.services.iactn.Interaction;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.debug.xray.XrayUi;
+import org.apache.isis.core.metamodel.execution.InternalInteraction;
+import org.apache.isis.core.metamodel.interactions.InteractionHead;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.runtime.util.XrayUtil;
 
 import lombok.Builder;
@@ -30,24 +38,79 @@ import lombok.val;
 
 final class _Xray {
 
-    static Handle enterInvocation(Interaction interaction) {
-        if(!XrayUi.isXrayEnabled()
-                || interaction.getCurrentExecution()==null) {
+    static Handle enterActionInvocation(
+            final @NonNull InternalInteraction interaction, 
+            final @NonNull ObjectAction owningAction,
+            final @NonNull InteractionHead head, 
+            final @NonNull Can<ManagedObject> argumentAdapters) {
+        
+        if(!XrayUi.isXrayEnabled()) {
             return null;
         }
         
-        val mId = interaction.getCurrentExecution().getMemberIdentifier();
+        val participantLabel = owningAction.getIdentifier().getLogicalIdentityString("\n#")
+                .replace(".","\n  ."); // poor men's line breaking
+        val enteringLabel = argumentAdapters.isEmpty()
+                ? "action invocation (no args)"
+                : String.format("action invocation w/ %d args:\n  %s",
+                        argumentAdapters.size(),
+                        argumentAdapters.stream()
+                        .map(ManagedObjects.UnwrapUtil::single)
+                        .map(obj->"" + obj)
+                        .collect(Collectors.joining(",\n  ")));
         
-        val command = interaction.getCommand();
+        return enterInvocation(interaction, participantLabel, enteringLabel);
+    }
+    
+    public static Handle enterPropertyEdit(
+            final @NonNull InternalInteraction interaction, 
+            final @NonNull OneToOneAssociation owningProperty,
+            final @NonNull InteractionHead head, 
+            final @NonNull ManagedObject newValueAdapter) {
+        
+        if(!XrayUi.isXrayEnabled()) {
+            return null;
+        }
+        
+        val participantLabel = owningProperty.getIdentifier().getLogicalIdentityString("\n#")
+                .replace(".","\n  ."); // poor men's line breaking
+        val enteringLabel = String.format("property edit -> '%s'", 
+                ManagedObjects.UnwrapUtil.single(newValueAdapter));
+        
+        return enterInvocation(interaction, participantLabel, enteringLabel);
+    }
+    
+    private static Handle enterInvocation(
+            final InternalInteraction interaction,
+            final String participantLabel,
+            final String enteringLabel) {
+
+
+//        val execution = interaction.getCurrentExecution(); // XXX why not populated?
+//
+//        val command = interaction.getCommand();
+//        if(command==null
+//                || command.getCommandDto()==null
+//                || command.getCommandDto().getMember()==null) {
+//            return null;
+//        }
+//        
+//        // the act/prop/coll that is interacted with
+//        val memberDto = command.getCommandDto().getMember();
+//        
+//        val memberLogicalId = memberDto.getLogicalMemberIdentifier();
+//        
+//        val interactionDescription = memberDto.getInteractionType()==InteractionType.PROPERTY_EDIT
+//                ? String.format("property edit -> '%s'", 
+//                        CommonDtoUtils.<Object>getValue(((PropertyDto)memberDto).getNewValue()))
+//                : String.format("action invocation");
         
         val handle = Handle.builder()
                 .sequenceId(XrayUtil.sequenceId(interaction.getInteractionId()))
                 .caller("thread")
-                .callee(mId.getLogicalIdentityString("#"))
+                .callee(participantLabel)
                 .build();
         
-        val enteringLabel = String.format("invoking");
-
         XrayUi.updateModel(model->{
             model.lookupSequence(handle.sequenceId)
             .ifPresent(sequence->{
@@ -79,5 +142,9 @@ final class _Xray {
         final @NonNull String caller;
         final @NonNull String callee;
     }
+
+
+
+
 
 }
