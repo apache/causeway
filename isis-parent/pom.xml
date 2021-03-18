@@ -811,6 +811,8 @@ under the License.
 					</execution>
 				</executions>
 			</plugin>
+			<!-- stopped working with GitHub CI on 2021-03-18, 
+				could not find a way to disable
 			<plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
@@ -830,6 +832,7 @@ under the License.
                     </execution>
                 </executions>
             </plugin>
+            -->
 		</plugins>
 	</build>
 
