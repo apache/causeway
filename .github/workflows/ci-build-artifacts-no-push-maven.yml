@@ -51,6 +51,12 @@ jobs:
           ${{ runner.os }}-${{ env.cache-name }}-
           ${{ runner.os }}-
     
+    - name: Pull add. Dependencies f. Maven Plugins
+      run: |
+        mvn org.apache.maven.plugins:maven-dependency-plugin:3.1.2:get \
+        -DrepoUrl=http://download.java.net/maven/2/ \
+        -Dartifact=org.apache.velocity:velocity:1.7
+    
     - name: Setup Script Environment
       shell: bash
       run: |
