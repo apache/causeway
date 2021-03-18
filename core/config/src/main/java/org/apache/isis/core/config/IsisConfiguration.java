@@ -129,24 +129,24 @@ public class IsisConfiguration {
             private boolean autoLogoutIfAlreadyAuthenticated = false;
 
         }
-        
+
         private final Spring spring = new Spring();
         @Data
         public static class Spring {
             /**
-             * The framework on initialization by default disables any {@code CsrfFilter}(s) it finds 
+             * The framework on initialization by default disables any {@code CsrfFilter}(s) it finds
              * with <i>Spring Security</i> registered filters.
              * <p>
-             * Setting this option to {@literal true} allows {@code CsrfFilter}(s) to be 
+             * Setting this option to {@literal true} allows {@code CsrfFilter}(s) to be
              * configured. Yet EXPERIMENTAL.
-             * 
+             *
              * @see org.springframework.security.web.csrf.CsrfFilter
              * @see "https://www.baeldung.com/spring-security-registered-filters"
              */
             private boolean allowCsrfFilters = false;
 
         }
-        
+
     }
 
     private final Applib applib = new Applib();
@@ -1217,26 +1217,29 @@ public class IsisConfiguration {
         private final Config config = new Config();
         @Data
         public static class Config {
-            
-            public static enum ConfigurationPropertyVisibilityPolicy { 
+
+            public static enum ConfigurationPropertyVisibilityPolicy {
                 NEVER_SHOW,
                 SHOW_ONLY_IN_PROTOTYPE,
-                ALWAYS_SHOW 
+                ALWAYS_SHOW
             }
-            
+
             /**
-             * Configuration values might contain sensitive data, hence per default, 
+             * Configuration values might contain sensitive data, hence per default,
              * configuration properties are only visible with the configuration-page
              * when <i>prototyping</i>.
-             * <p> 
-             * Alternatively this policy can be set to either <b>always</b> show or <b>never</b> show.  
+             *
+             * <p>
+             * Alternatively this policy can be set to either <b>always</b> show or <b>never</b> show.
+             * </p>
+             *
              * @see ConfigurationPropertyVisibilityPolicy
              */
-            private ConfigurationPropertyVisibilityPolicy configurationPropertyVisibilityPolicy 
+            private ConfigurationPropertyVisibilityPolicy configurationPropertyVisibilityPolicy
                 = ConfigurationPropertyVisibilityPolicy.SHOW_ONLY_IN_PROTOTYPE;
-            
+
         }
-        
+
         private final MetaModel metaModel = new MetaModel();
         @Data
         public static class MetaModel {
@@ -1735,6 +1738,16 @@ public class IsisConfiguration {
         private final Restfulobjects restfulobjects = new Restfulobjects();
         @Data
         public static class Restfulobjects {
+
+            @Getter
+            private final Authentication authentication = new Authentication();
+            @Data
+            public static class Authentication {
+                /**
+                 * Defaults to <code>org.apache.isis.viewer.restfulobjects.viewer.webmodule.auth.AuthenticationStrategyBasicAuth</code>.
+                 */
+                private Optional<String> strategyClassName = Optional.empty();
+            }
 
             /**
              * Whether to enable the <code>x-ro-follow-links</code> support, to minimize round trips.

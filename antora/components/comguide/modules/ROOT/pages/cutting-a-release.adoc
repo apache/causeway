@@ -417,19 +417,34 @@ git fetch
 The remote tags aren't visible locally but can be seen link:https://github.com/apache/isis/tags[online].
 ====
 
+[#update-starter-apps]
 == Update starter apps
 
-For each starter app, we create a new branch and make the changes there, pushing the branch back if the sanity check passes.
+For each of the two starter apps, we maintain four branches:
 
+* `jdo` and `jpa`
++
+These are intended to reference the _most recently released_ version, the first demonstrating persistence using JDO, the second using JPA.
+These are the branches referenced from the home page and getting started pages of the website.
 
-* for helloworld, the steps are:
+* `jdo-SNAPSHOT` and `jpa-SNAPSHOT`
++
+These reference the most current snapshot nightly build.
+
+The general idea is that a release will fast-forward `jdo` to `jdo-SNAPSHOT` and similarly moves `jpa` up to `jpa-SNAPSHOT`, bumping to the newly released version of the framework in the process.
+
+In order that we don't break the starter apps while a release is being voted on, we do the changes in work branches, `$ISISBRANCH-jdo` and `$ISISBRANCH-jpa`:
+
+* for _helloworld_, we create a release branch for both variants:
+
+** for `jdo`:
 +
 [source,bash,subs="attributes+"]
 ----
-git checkout master
+git checkout jdo-SNAPSHOT
 git pull --ff-only
 
-git checkout -b $ISISBRANCH
+git checkout -b $ISISBRANCH-jdo
 
 mvn versions:update-parent -DparentVersion=$ISISREL # <.>
 mvn versions:set -DnewVersion=$ISISREL
@@ -437,50 +452,127 @@ mvn versions:set -DnewVersion=$ISISREL
 mvn clean install -o
 mvn spring-boot:run
 ----
-<.> requires the current parent to exist locally in `~/.m2/repository`.
-If this isn't the case, then manually edit instead.
-
-* for simple app, the steps are almost the same:
 +
-[source,bash,subs="attributes+"]
-----
-git checkout master
-git pull --ff-only
-
-git checkout -b $ISISBRANCH
-
-mvn versions:update-parent -DparentVersion=$ISISREL # <.>
-mvn versions:set -DnewVersion=$ISISREL
-
-mvn clean install -Dmetamodel.lockdown
-mvn -pl webapp test -Dmavendeps.lockdown -B         # <.>
-----
-<.> requires the current parent to exist locally in `~/.m2/repository`.
-If this isn't the case, then manually edit instead.
-<.> the -B flag is required to avoid control characters in generated output
+<.> the top-level `pom.xml` references the ASF staging repository, so this will pull down the release if not already present in `~/.m2/repository`.
 +
-Approve any failed lockdown tests (the mavendeps will fail first time around because the dependencies on Apache Isis itself have just be bumped).
-+
-Repeat, then run the app as a sanity check:
-+
-[source,bash,subs="attributes+"]
-----
-mvn -pl webapp spring-boot:run
-----
-+
-You could also check the output of the Cucumber tests, under:
-
-** `webapp/target/cucumber-reports` and
-** `webapp/target/cucumber-html-reports`.
-
-* For both apps, commit any changes and then push the release branch to origin once ok:
+Commit any changes and then push the branch to origin:
 +
 [source,bash,subs="attributes+"]
 ----
 git add .
-git commit -m "$ISISJIRA - updates to $ISISREL"
-git push -u origin $ISISBRANCH
+git commit -m "$ISISJIRA - updates to $ISISREL (jdo)"
+git push -u origin $ISISBRANCH-jdo
 ----
+
+** repeat for `jpa`:
++
+[source,bash,subs="attributes+"]
+----
+git checkout jpa-SNAPSHOT
+git pull --ff-only
+
+git checkout -b $ISISBRANCH-jpa
+
+mvn versions:update-parent -DparentVersion=$ISISREL
+mvn versions:set -DnewVersion=$ISISREL
+
+mvn clean install -o
+mvn spring-boot:run
+----
++
+Commit any changes and then push the branch to origin:
++
+[source,bash,subs="attributes+"]
+----
+git add .
+git commit -m "$ISISJIRA - updates to $ISISREL (jpa)"
+git push -u origin $ISISBRANCH-jpa
+----
+
+* for _simple app_, the steps are almost the same:
+
+** for `jdo`:
++
+--
+
+[source,bash,subs="attributes+"]
+----
+git checkout jdo-SNAPSHOT
+git pull --ff-only
+
+git checkout -b $ISISBRANCH-jdo
+
+mvn versions:update-parent -DparentVersion=$ISISREL # <.>
+mvn versions:set -DnewVersion=$ISISREL
+
+mvn clean install -Dmetamodel.lockdown -B -o        # <.>
+----
+
+<.> the top-level `pom.xml` references the ASF staging repository, so this will pull down the release if not already present in `~/.m2/repository`.
+<.> the -B flag is required to avoid control characters in generated output
+
+Approve any failed lockdown tests (the mavendeps will fail first time around because the dependencies on Apache Isis itself have just be bumped).
+
+You could also check the output of the Cucumber tests, under:
+
+*** `webapp-tests/target/cucumber-reports` and
+*** `webapp-tests/target/cucumber-html-reports`.
+
+
+Repeat, then run the app as a sanity check:
+
+[source,bash,subs="attributes+"]
+----
+mvn -pl webapp spring-boot:run
+----
+
+Commit any changes and then push the branch to origin:
+
+[source,bash,subs="attributes+"]
+----
+git add .
+git commit -m "$ISISJIRA - updates to $ISISREL (jdo)"
+git push -u origin $ISISBRANCH-jdo
+----
+--
+
+** repeat for `jpa`:
++
+--
+
+[source,bash,subs="attributes+"]
+----
+git checkout jpa-SNAPSHOT
+git pull --ff-only
+
+git checkout -b $ISISBRANCH-jpa
+
+mvn versions:update-parent -DparentVersion=$ISISREL
+mvn versions:set -DnewVersion=$ISISREL
+
+mvn clean install -Dmetamodel.lockdown -B -o
+----
+
+Approve any failed lockdown tests (the mavendeps will fail first time around because the dependencies on Apache Isis itself have just be bumped).
+
+Repeat, then run the app as a sanity check:
+
+[source,bash,subs="attributes+"]
+----
+mvn -pl webapp spring-boot:run
+----
+
+Commit any changes and then push the branch to origin:
+
+[source,bash,subs="attributes+"]
+----
+git add .
+git commit -m "$ISISJIRA - updates to $ISISREL (jpa)"
+git push -u origin $ISISBRANCH-jpa
+----
+
+--
+
 
 == Preview website
 
@@ -517,11 +609,13 @@ done
 popd
 ----
 
-* Back in the `isis` repo's worktree for `master` (as opposed to the `release` worktree, that is), generate the Antora site (from the top-level directory):
+* Back in the `isis` repo's `release` worktree, generate the Antora site (from the top-level directory).
++
+NOTE: this now needs to be run using Java 11 (because of the "projdoc" tooling).
 +
 [source,bash,subs="attributes+"]
 ----
-cd ../isis
+cd ../isis-release
 
 sh preview.sh
 ----

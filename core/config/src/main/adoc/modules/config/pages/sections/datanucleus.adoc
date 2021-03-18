@@ -1,0 +1,169 @@
+= DataNucleus
+:page-role: -toc -narrow
+
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+include::../section-hooks/datanucleus~pre.adoc[]
+
+[cols="3a,2a,5a", options="header"]
+|===
+|Property
+|Default
+|Description
+|
+[[datanucleus.cache.level2.mode]]
+datanucleus.cache.level2.mode
+
+| 
+| The mode of operation of the L2 cache, deciding which entities are cached.
+
+The default (UNSPECIFIED) is the same as DISABLE_SELECTIVE. NOTE: this config property isn't used by the framework, but is provided as a convenience for IDE autocomplete. @see https://www.datanucleus.org/products/accessplatform_5_2/jdo/persistence.html#pmf_properties[DataNucleus Config Property docs] @see https://www.datanucleus.org/products/accessplatform_5_2/jdo/persistence.html#cache_level2[DataNucleus Cache docs].
+
+
+|
+[[datanucleus.cache.level2.type]]
+datanucleus.cache.level2.type
+
+| 
+| Name of the type of Level 2 Cache to use.
+
+Can be used to interface with external caching products. Use "none" to turn off L2 caching; other values include "soft", "weak", "javax.cache".
+
+NOTE: this config property isn't used by the framework, but is provided as a convenience for IDE autocomplete. @see https://www.datanucleus.org/products/accessplatform_5_2/jdo/persistence.html#pmf_properties[DataNucleus Config Property docs] @see https://www.datanucleus.org/products/accessplatform_5_2/jdo/persistence.html#cache_level2[DataNucleus Cache docs].
+
+
+|
+[[datanucleus.identifier.case]]
+datanucleus.identifier.case
+
+| 
+| Which case to use in generated table/column identifier names. See also the Datastore Identifier Guide. RDBMS defaults to UPPERCASE.
+
+
+|
+[[datanucleus.manage-relationships]]
+datanucleus.manage-relationships
+
+| 
+| Whether DataNucleus will try to manage bidirectional relations, correcting the input objects so that all relations are consistent.
+
+This process runs when flush()/commit() is called. You can set it to false if you always set both sides of a relation when persisting/updating.
+
+NOTE: this config property isn't used by the framework, but is provided as a convenience for IDE autocomplete. @see https://www.datanucleus.org/products/accessplatform_5_2/jdo/persistence.html#pmf_properties[DataNucleus Config Property docs]
+
+
+|
+[[datanucleus.persistence-by-reachability-at-commit]]
+datanucleus. +
+persistence-by-reachability-at- +
+commit
+
+| 
+| Whether to run the "persistence-by-reachability" algorithm at commit time.
+
+This means that objects that were reachable at a call to makePersistent() but that are no longer persistent will be removed from persistence. For performance improvements, consider turning this off.
+
+NOTE: this config property isn't used by the framework, but is provided as a convenience for IDE autocomplete. @see https://www.datanucleus.org/products/accessplatform_5_2/jdo/persistence.html#pmf_properties[DataNucleus Config Property docs]
+
+
+|
+[[datanucleus.schema.auto-create-all]]
+datanucleus.schema.auto-create-all
+
+| 
+| Whether to automatically generate any schema, tables, columns, constraints that don’t exist.
+
+For more details, see https://www.datanucleus.org/products/accessplatform_5_2/jdo/persistence.html#pmf_properties[DataNucleus Config Property docs] and the https://www.datanucleus.org/products/accessplatform_5_2/jdo/persistence.html#schema[DataNucleus Schema Guide].
+
+
+|
+[[datanucleus.schema.auto-create-columns]]
+datanucleus.schema. +
+auto-create-columns
+
+| 
+| Whether to automatically generate any columns that don’t exist.
+
+For more details, see https://www.datanucleus.org/products/accessplatform_5_2/jdo/persistence.html#pmf_properties[DataNucleus Config Property docs] and the https://www.datanucleus.org/products/accessplatform_5_2/jdo/persistence.html#schema[DataNucleus Schema Guide].
+
+
+|
+[[datanucleus.schema.auto-create-constraints]]
+datanucleus.schema. +
+auto-create-constraints
+
+| 
+| Whether to automatically generate any constraints that don’t exist.
+
+For more details, see https://www.datanucleus.org/products/accessplatform_5_2/jdo/persistence.html#pmf_properties[DataNucleus Config Property docs] and the https://www.datanucleus.org/products/accessplatform_5_2/jdo/persistence.html#schema[DataNucleus Schema Guide].
+
+
+|
+[[datanucleus.schema.auto-create-database]]
+datanucleus.schema. +
+auto-create-database
+
+| 
+| Whether to automatically generate any database (catalog/schema) that doesn’t exist. This depends very much on whether the datastore in question supports this operation.
+
+For more details, see https://www.datanucleus.org/products/accessplatform_5_2/jdo/persistence.html#pmf_properties[DataNucleus Config Property docs] and the https://www.datanucleus.org/products/accessplatform_5_2/jdo/persistence.html#schema[DataNucleus Schema Guide].
+
+
+|
+[[datanucleus.schema.auto-create-tables]]
+datanucleus.schema. +
+auto-create-tables
+
+| 
+| Whether to automatically generate any tables that don’t exist.
+
+For more details, see https://www.datanucleus.org/products/accessplatform_5_2/jdo/persistence.html#pmf_properties[DataNucleus Config Property docs] and the https://www.datanucleus.org/products/accessplatform_5_2/jdo/persistence.html#schema[DataNucleus Schema Guide].
+
+
+|
+[[datanucleus.schema.validate-all]]
+datanucleus.schema.validate-all
+
+| 
+| Alias for defining ``validateTables``, ``validateColumns`` and ``validateConstraints`` as true.
+
+For more details, see https://www.datanucleus.org/products/accessplatform_5_2/jdo/persistence.html#pmf_properties[DataNucleus Config Property docs] and the https://www.datanucleus.org/products/accessplatform_5_2/jdo/persistence.html#schema[DataNucleus Schema Guide].
+
+
+|
+[[datanucleus.schema.validate-columns]]
+datanucleus.schema. +
+validate-columns
+
+| 
+| Whether to validate columns against the persistence definition. This refers to the column detail structure and NOT to whether the column exists or not.
+
+For more details, see https://www.datanucleus.org/products/accessplatform_5_2/jdo/persistence.html#pmf_properties[DataNucleus Config Property docs] and the https://www.datanucleus.org/products/accessplatform_5_2/jdo/persistence.html#schema[DataNucleus Schema Guide].
+
+
+|
+[[datanucleus.schema.validate-constraints]]
+datanucleus.schema. +
+validate-constraints
+
+| 
+| Whether to validate table constraints against the persistence definition.
+
+For more details, see https://www.datanucleus.org/products/accessplatform_5_2/jdo/persistence.html#pmf_properties[DataNucleus Config Property docs] and the https://www.datanucleus.org/products/accessplatform_5_2/jdo/persistence.html#schema[DataNucleus Schema Guide].
+
+
+|
+[[datanucleus.schema.validate-tables]]
+datanucleus.schema.validate-tables
+
+| 
+| Whether to validate tables against the persistence definition.
+
+For more details, see https://www.datanucleus.org/products/accessplatform_5_2/jdo/persistence.html#pmf_properties[DataNucleus Config Property docs] and the https://www.datanucleus.org/products/accessplatform_5_2/jdo/persistence.html#schema[DataNucleus Schema Guide].
+
+
+
+|===
+
+include::../section-hooks/datanucleus~post.adoc[]

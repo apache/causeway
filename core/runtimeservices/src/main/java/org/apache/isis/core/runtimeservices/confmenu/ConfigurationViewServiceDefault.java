@@ -41,10 +41,12 @@ import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.IsisConfiguration.Core.Config.ConfigurationPropertyVisibilityPolicy;
+import org.apache.isis.core.config.IsisModuleCoreConfig;
 import org.apache.isis.core.config.RestEasyConfiguration;
 import org.apache.isis.core.config.environment.IsisSystemEnvironment;
 import org.apache.isis.core.config.util.ValueMaskingUtil;
 
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
@@ -57,24 +59,15 @@ import lombok.extern.log4j.Log4j2;
 @Primary
 @Qualifier("Default")
 @Log4j2
+@RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class ConfigurationViewServiceDefault
 implements
-    ConfigurationViewService,
-    Object_openRestApi.RestfulPathProvider {
+    ConfigurationViewService {
 
     private final IsisSystemEnvironment systemEnvironment;
     private final IsisConfiguration configuration;
-    private final RestEasyConfiguration restEasyConfiguration;
+    private final IsisModuleCoreConfig isisModuleCoreConfig;
 
-    @Inject
-    public ConfigurationViewServiceDefault(
-            final IsisSystemEnvironment systemEnvironment,
-            final IsisConfiguration configuration,
-            final RestEasyConfiguration restEasyConfiguration) {
-        this.systemEnvironment = systemEnvironment;
-        this.configuration = configuration;
-        this.restEasyConfiguration = restEasyConfiguration;
-    }
 
     @Override
     public Set<ConfigurationProperty> getEnvironmentProperties() {
@@ -91,10 +84,6 @@ implements
        log.info("\n\n" + toStringFormatted());
     }
 
-    @Override
-    public Optional<String> getRestfulPath() {
-        return Optional.ofNullable(restEasyConfiguration.getJaxrs().getDefaultPath());
-    }
 
     // -- DUMP AS STRING
 
@@ -153,8 +142,9 @@ implements
     private Map<String, ConfigurationProperty> loadConfiguration() {
         final Map<String, ConfigurationProperty> map = _Maps.newTreeMap();
         if(isShowConfigurationProperties()) {
-            configuration.getAsMap().forEach((k, v)->add("isis." + k, v, map));
-            restEasyConfiguration.getAsMap().forEach((k, v)->add("resteasy." + k, v, map));
+            isisModuleCoreConfig.getIsisConfigProps().forEach((k, v)->add("isis." + k, v, map));
+            isisModuleCoreConfig.getResteasyConfigProps().forEach((k, v)->add("resteasy." + k, v, map));
+            isisModuleCoreConfig.getDataNucleusConfigProps().forEach((k, v)->add("datanucleus." + k, v, map));
         } else {
             // if properties are not visible, show at least the policy
             add("Configuration Property Visibility Policy",

@@ -19,6 +19,105 @@ isis.as-map
 | null
 
 
+|
+[[isis.datanucleus.cache.level2.mode]]
+isis.datanucleus.cache.level2.mode
+
+| 
+| The mode of operation of the L2 cache, deciding which entities are cached.
+
+The default (UNSPECIFIED) is the same as DISABLE_SELECTIVE.
+
+Seel also https://www.datanucleus.org/products/accessplatform_5_2/jdo/persistence.html#cache_level2[DataNucleus Cache docs].
+
+NOTE: this config property isn't used by the framework, but is provided as a convenience for IDE autocomplete. @see https://www.datanucleus.org/products/accessplatform_5_2/jdo/persistence.html#cache_level2
+
+
+|
+[[isis.datanucleus.cache.level2.type]]
+isis.datanucleus.cache.level2.type
+
+|  soft
+| Name of the type of Level 2 Cache to use.
+
+Can be used to interface with external caching products. Use "none" to turn off L2 caching; other values include "soft", "weak", "javax.cache".
+
+See also https://www.datanucleus.org/products/accessplatform_5_2/jdo/persistence.html#cache_level2[DataNucleus Cache docs].
+
+NOTE: this config property isn't used by the framework, but is provided as a convenience for IDE autocomplete. @see https://www.datanucleus.org/products/accessplatform_5_2/jdo/persistence.html#cache_level2
+
+
+|
+[[isis.datanucleus.identifier.identifier-case]]
+isis.datanucleus.identifier. +
+identifier-case
+
+| 
+| null
+
+
+|
+[[isis.datanucleus.manage-relationships]]
+isis.datanucleus. +
+manage-relationships
+
+|  true
+| Whether DataNucleus will try to manage bidirectional relations, correcting the input objects so that all relations are consistent.
+
+This process runs when flush()/commit() is called. You can set it to false if you always set both sides of a relation when persisting/updating.
+
+
+|
+[[isis.datanucleus.persistence-by-reachability-at-commit]]
+isis.datanucleus. +
+persistence-by-reachability-at- +
+commit
+
+|  true
+| Whether to run the "persistence-by-reachability" algorithm at commit time.
+
+This means that objects that were reachable at a call to makePersistent() but that are no longer persistent will be removed from persistence. For performance improvements, consider turning this off.
+
+
+|
+[[isis.datanucleus.schema.auto-create-all]]
+isis.datanucleus.schema. +
+auto-create-all
+
+| 
+| Whether DN should automatically create the database schema on bootstrapping.
+
+This should be set to ``true`` when running against an in-memory database, but set to ``false`` when running against a persistent database (use something like flyway instead to manage schema evolution).
+
+See also ``json`` (camelCasing instead of kebab-casing).
+
+NOTE: this config property isn't used by the core framework, but is used by one the flyway extension.
+
+
+|
+[[isis.datanucleus.schema.auto-create-database]]
+isis.datanucleus.schema. +
+auto-create-database
+
+| 
+| Previously we defaulted this property to "true", but that could cause the target database to be modified
+
+See also ``json`` (camelCasing instead of kebab-casing).
+
+NOTE: this config property isn't used by the framework, but is provided as a convenience for IDE autocomplete.
+
+
+|
+[[isis.datanucleus.schema.validate-all]]
+isis.datanucleus.schema. +
+validate-all
+
+|  true
+| See also ``json`` (camelCasing instead of kebab-casing).
+
+NOTE: this config property isn't used by the framework, but is provided as a convenience for IDE autocomplete.
+
+
 
 |===
 

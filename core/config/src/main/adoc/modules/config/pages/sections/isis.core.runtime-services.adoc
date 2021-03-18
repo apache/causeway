@@ -1,4 +1,4 @@
-= Core Runtime Services configurations
+= Core Runtime Services
 :page-role: -toc -narrow
 
 

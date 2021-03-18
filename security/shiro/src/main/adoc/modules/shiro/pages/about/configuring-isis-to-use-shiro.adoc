@@ -85,11 +85,11 @@ The Shiro environment (in essence, thread-locals holding the security credential
 </filter-mapping>
 ----
 
-Based on this Shiro will then read `WEB-INF/shiro.ini` file to configure its Realm definitions for authentication and authorization.
+Based on this Shiro will then read `shiro.ini` file to configure its Realm definitions for authentication and authorization.
 
 
 
-== `WEB-INF/shiro.ini`
+== `shiro.ini`
 
 The `shiro.ini` file is used to specify the realm(s) that Shiro will delegate to:
 

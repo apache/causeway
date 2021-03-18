@@ -39,6 +39,10 @@ Returns optionally the action's return type, based on whether this feature is of
 Returns optionally the action's semantics, based on whether this feature is of sorts _ApplicationFeatureSort#MEMBER member_ and _ApplicationMemberSort#ACTION action_ .
 --
 <.> xref:#isPropertyOrCollectionDerived__[isPropertyOrCollectionDerived()]
++
+--
+Returns whether the property or collection feature is derived.
+--
 <.> xref:#getPropertyTypicalLength__[getPropertyTypicalLength()]
 +
 --
@@ -69,6 +73,8 @@ Returns optionally the action's semantics, based on whether this feature is of s
 
 [#isPropertyOrCollectionDerived__]
 === isPropertyOrCollectionDerived()
+
+Returns whether the property or collection feature is derived.
 
 [#getPropertyTypicalLength__]
 === getPropertyTypicalLength()

@@ -53,7 +53,7 @@ The net effect is therefore what we would want: that a user with both `admin_rol
 
 
 
-Finally, the Apache Isis permission resolver is specified in `WEB-INF/shiro.ini` file:
+Finally, the Apache Isis permission resolver is specified in `shiro.ini` file:
 
 [source,ini]
 ----

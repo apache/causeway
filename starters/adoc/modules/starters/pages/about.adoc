@@ -9,9 +9,15 @@ To get started with a new application, download one of the two starter apps.
 
 The helloworld app is a very minimal app, intended just as a starting point to learn what the framework is all about.
 
-The source code is in this link:https://github.com/apache/isis-app-helloworld[git repo] which you can either fork, or just download as a zip:
+The source code is in this link:https://github.com/apache/isis-app-helloworld[git repo] which you can either fork, or just download as a zip, either:
 
-include::helloworld-script.adoc[]
+include::helloworld-script-jdo.adoc[]
+
+to use JDO for the ORM, or:
+
+include::helloworld-script-jpa.adoc[]
+
+to use JPA as the ORM.
 
 
 TIP: A much more complete explanation of the structure of the app (and how to use it) can be found *xref:docs:starters:helloworld.adoc[here]*.
@@ -22,9 +28,15 @@ TIP: A much more complete explanation of the structure of the app (and how to us
 This app has the same functionality as _HelloWorld_, but is structured so it can be used as a starting point for developing your own applications.
 It also includes some xref:testing:integtestsupport:about.adoc[integration tests], xref:testing:fixtures:about.adoc[fixtures], and xref:testing:specsupport:about.adoc[BDD (Cucumber)] specs.
 
-The source code can be found in this link:https://github.com/apache/isis-app-simpleapp[git repo] which you can either fork, or just download as a zip:
+The source code can be found in this link:https://github.com/apache/isis-app-simpleapp[git repo] which you can either fork, or just download as a zip, either:
 
-include::simpleapp-script.adoc[]
+include::simpleapp-script-jdo.adoc[]
+
+to use JDO for the ORM, or:
+
+include::simpleapp-script-jpa.adoc[]
+
+to use JPA as the ORM.
 
 
 TIP: A much more complete explanation of the structure of the app (and how to use it) can be found *xref:docs:starters:helloworld.adoc[here]*.

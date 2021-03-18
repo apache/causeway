@@ -1,43 +1,12 @@
 {
   "properties": [
     {
-      "name": "resteasy.jaxrs.app.registration",
-      "type": "java.lang.String",
-      "description": "How the implementation of the JAX-RS application is discovered."
-    },
-    {
-      "name": "resteasy.jaxrs.defaultPath",
-      "type": "java.lang.String",
-      "description": "The path at which the RO viewer should be mounted."
-    },
-    {
-      "name": "isis.value-types.primitives.integer.format",
-      "type": "java.lang.String"
-    },
-    {
-      "name": "isis.value-types.java-lang.byte.format",
-      "type": "java.lang.String"
+      "name": "datanucleus.identifier.case",
+      "type": "org.apache.isis.core.config.DatanucleusConfiguration.Identifier.Case",
+      "description": "Which case to use in generated table/column identifier names. See also the Datastore Identifier Guide. RDBMS defaults to UPPERCASE."
     }
   ],
   "hints": [
-    {
-      "name": "javax.jdo.PersistenceManagerFactoryClass",
-      "providers": [{
-        "name": "class-reference",
-        "parameters": {
-          "target": "javax.jdo.PersistenceManagerFactory"
-        }
-      }]
-    },
-    {
-      "name": "datanucleus.objectProvider.className",
-      "providers": [{
-        "name": "class-reference",
-        "parameters": {
-          "target": "org.datanucleus.state.StateManagerImpl"
-        }
-      }]
-    },
     {
       "name": "isis.testing.fixtures.initial-script",
       "providers": [{
@@ -53,6 +22,15 @@
         "name": "class-reference",
         "parameters": {
           "target": "org.apache.isis.viewer.wicket.ui.components.widgets.themepicker.IsisWicketThemeSupport"
+        }
+      }]
+    },
+    {
+      "name": "isis.viewer.wicket.app",
+      "providers": [{
+        "name": "class-reference",
+        "parameters": {
+          "target": "org.apache.isis.viewer.wicket.viewer.wicketapp.IsisWicketApplication"
         }
       }]
     }

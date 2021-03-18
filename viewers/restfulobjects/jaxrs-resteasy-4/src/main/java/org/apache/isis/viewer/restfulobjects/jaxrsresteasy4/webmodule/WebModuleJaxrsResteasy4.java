@@ -33,6 +33,7 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.RestEasyConfiguration;
 import org.apache.isis.core.webapp.modules.WebModuleAbstract;
 import org.apache.isis.core.webapp.modules.WebModuleContext;
@@ -44,7 +45,7 @@ import lombok.val;
 
 /**
  * WebModule that provides the RestfulObjects Viewer.
- * 
+ *
  * @since 2.0 {@index}
  *
  * @implNote CDI feels responsible to resolve injection points for any Servlet or Filter
@@ -61,8 +62,8 @@ import lombok.val;
 public final class WebModuleJaxrsResteasy4 extends WebModuleAbstract {
 
     private static final String INTERACTION_FILTER_NAME = "IsisRestfulObjectsInteractionFilter";
-    //private static final String ISIS_TRANSACTION_FILTER = "IsisTransactionFilterForRestfulObjects";
 
+    private final IsisConfiguration isisConfiguration;
     private final RestEasyConfiguration restEasyConfiguration;
 
     private final String restfulPath;
@@ -70,9 +71,11 @@ public final class WebModuleJaxrsResteasy4 extends WebModuleAbstract {
 
     @Inject
     public WebModuleJaxrsResteasy4(
+            final IsisConfiguration isisConfiguration,
             final RestEasyConfiguration restEasyConfiguration,
             final ServiceInjector serviceInjector) {
         super(serviceInjector);
+        this.isisConfiguration = isisConfiguration;
         this.restEasyConfiguration = restEasyConfiguration;
         this.restfulPath = this.restEasyConfiguration.getJaxrs().getDefaultPath() + "/";
         this.urlPattern = this.restfulPath + "*";
@@ -100,7 +103,8 @@ public final class WebModuleJaxrsResteasy4 extends WebModuleAbstract {
     @Override
     public Can<ServletContextListener> init(ServletContext ctx) throws ServletException {
 
-        val authenticationStrategyClassName = restEasyConfiguration.getAuthentication().getStrategyClassName()
+        val authenticationStrategyClassName = isisConfiguration.getViewer()
+                .getRestfulobjects().getAuthentication().getStrategyClassName()
                 .orElse(AuthenticationStrategyBasicAuth.class.getName());
 
         registerFilter(ctx, INTERACTION_FILTER_NAME, IsisRestfulObjectsInteractionFilter.class)

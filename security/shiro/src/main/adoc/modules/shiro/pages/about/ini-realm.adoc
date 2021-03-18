@@ -6,7 +6,7 @@
 
 The Shiro concept of a `Realm` allows different implementations of both the authentication and authorisation mechanism to be plugged in.
 
-Probably the simplest realm to use is Shiro's built-in `IniRealm`, which reads from the (same) `WEB-INF/shiro.ini` file.
+Probably the simplest realm to use is Shiro's built-in `IniRealm`, which reads from the (same) `shiro.ini` file.
 
 This is suitable for prototyping, but isn't intended for production use, if only because user/password credentials are stored in plain text.
 Nevertheless, it's a good starting point.
@@ -24,7 +24,7 @@ Apache Isis `Authenticator` component then interacts with the `Subject` in order
 
 == Shiro Configuration
 
-To use the built-in `IniRealm`, we add the following to `WEB-INF/shiro.ini`:
+To use the built-in `IniRealm`, we add the following to `shiro.ini`:
 
 [source,ini]
 ----

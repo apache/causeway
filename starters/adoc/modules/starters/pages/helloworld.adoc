@@ -5,35 +5,35 @@
 
 The quickest way to start learning about Apache Isis is to use the `helloworld` starter app.
 
-Using the instructions <<Downloading & Running,below>>, you can  download a tiny Apache Isis app, consisting of a simple one-class domain model, namely the `HelloWorldObject` entity and a supporting `HelloWorldObjects` repository domain service.
-Both the business logic and supporting bootstrapping classes are in a single Maven module (in different Java packages).
+There are two variations of the application (and so two branches in the git repo).
+One variation uses JDO as the ORM, the other uses JPA, so you can focus on whichever ORM you prefer.
+
+The application is also deployed online for you to try out,  link:https://helloworld.jdo.isis.incode.work[here (jdo)] and link:https://helloworld.jpa.isis.incode.work[here (jpa)].
+
+Using the instructions <<Downloading & Running,below>>, you can download a minimal Apache Isis app, consisting of a single domain entity (`HelloWorldObject`) with supporting domain services.
+Both the business logic and supporting bootstrapping classes are in a single Maven module.
 
 [TIP]
 ====
 We don't recommend that you use the helloworld starter app as the basis for your own applications.
 Instead, use the xref:docs:starters:simpleapp.adoc[SimpleApp starter app].
-It also creates a minimal application, but provides more structure and example tests, useful as you build out your own app.
+It also creates a minimal application, but provides more structure along with tests, useful as you build out your own app.
 ====
-
-You can also try out this application online, running link:https://helloworld.isis.incode.work[here].
 
 == Prerequisites
 
 Apache Isis is a Java based framework, so in terms of prerequisites, you'll need to install:
 
-* an LTS version of Java: either Java 8 JDK or Java 11 JDK
+* Java 11 JDK (or later)
++
+Apache Isis itself is compatible with Java 8, but the helloworld app itself is configured for Java 11.
+
 * link:http://maven.apache.org[Apache Maven] 3.5+
 
-You'll probably also want to use an IDE; the Apache Isis committers use either IntelliJ or Eclipse; in the xref:setupguide:ROOT:about.adoc[Setup Guide] we have detailed setup instructions for using these two IDEs.
-If you're a NetBeans user you should have no problems as it too has strong support for Maven.
+If using JDO as the ORM, you'll also need to run the Datanucleus enhancer (this post-processes the byte code of the entities).
+The xref:setupguide:ROOT:about.adoc[Setup Guide] explains how to do this for either IntelliJ and Eclipse.
 
-When building and running within an IDE, you'll also need to configure the Datanucleus enhancer.
-This is implemented as a Maven plugin, so in the case of IntelliJ, it's easy enough to run the enhancer as required.
-It should be just as straightforward for NetBeans too.
-
-For Eclipse the maven integration story is a little less refined.
-All is not lost, however; DataNucleus also has an implementation of the enhancer as an Eclipse plugin, which works well enough.
-
+If using JPA as the ORM, the equivalent process to enhancement is performed at run-time, so there are no special setup considerations.
 
 
 == Downloading & Running
@@ -42,9 +42,15 @@ Create a new directory, and `cd` into that directory.
 
 To build the app from the latest stable release, then run the following command:
 
-include::helloworld-script.adoc[]
+include::helloworld-script-jdo.adoc[]
 
-This should only take a few seconds to download, compile and run.
+to use JDO for the ORM, or:
+
+include::helloworld-script-jpa.adoc[]
+
+to use JPA as the ORM.
+
+Either way, this should only take a few seconds to download, compile and run.
 Then browse to link:http://localhost:8080[], and read on.
 
 
@@ -58,7 +64,7 @@ Choose the generic Wicket UI, and navigate to the login page:
 
 image::helloworld/using/020-login-to-wicket-viewer.png[width="600px"]
 
-The app itself is configured to run using xref:security:ROOT:about.adoc[shiro security], as configured in the `WEB-INF/shiro.ini` config file.
+The app itself is configured to run using xref:security:ROOT:about.adoc[shiro security], as configured in the `shiro.ini` config file.
 You can login with:
 
 * username: _sven_
@@ -86,7 +92,7 @@ hitting OK returns the created object:
 
 image::helloworld/using/060-created-object.png[width="600px"]
 
-The above functionality is implemented by this code:
+The above functionality is implemented by this code (in the `HelloWorldObjects` menu domain service):
 
 [source,java]
 ----
@@ -109,12 +115,12 @@ The `name` property is read-only, and can only be modified using the `updateName
 
 image::helloworld/using/070-update-name.png[width="600px"]
 
-The above functionality is implemented by this code:
+The above functionality is implemented by this code (in the `HelloWorldObject` entity):
 
 [source,java]
 ----
 @Action(semantics = SemanticsOf.IDEMPOTENT,
-        publishing = Publishing.ENABLED,        // <.>
+        publishing = Publishing.ENABLED,
         associateWith = "name")
 public HelloWorldObject updateName(
         @Name final String name) {
@@ -125,11 +131,6 @@ public String default0UpdateName() {
     return getName();
 }
 ----
-<.> Publishing enabled means that the action invocation is converted into XML and dispatched to all configured implementations of the xref:refguide:applib:index/services/publishing/spi/ExecutionSubscriber.adoc[ExecutionSubscriber] SPI.
-+
-The framework provides a default implementation that just logs the interaction:
-+
-image::helloworld/using/075-logged-action.png[width="600px"]
 
 
 ==== Edit a property
@@ -146,11 +147,9 @@ It's also possible to delete an object:
 
 image::helloworld/using/090-delete-object.png[width="600px"]
 
-The viewer displays a message confirming that the object has been deleted:
+The viewer should display a pop-up message confirming that the object has been deleted.
 
-image::helloworld/using/100-object-deleted.png[width="600px"]
-
-The above functionality is implemented by this code:
+The above functionality is implemented by this code (in the `HelloWorldObject` entity):
 
 [source,java]
 ----
@@ -168,6 +167,8 @@ public void delete() {
 
 === Swagger (Restful Objects)
 
+CAUTION: if invoking an action using Swagger returns a 401 (unauthorised), then navigate to the REST API directly (link:http://localhost:8080/restful[] to authenticate the browser first]).
+
 Using menu:Prototyping[Open Swagger UI] menu item (or just going back to the home page at link:http://localhost:8080[localhost:8080]) we can use link:https://swagger.io/[Swagger UI] as a front-end to the REST API provided by the Restful Objects viewer.
 
 image::helloworld/using/200-swagger-ui-before-reload.png[width="600px"]
@@ -181,7 +182,6 @@ For example, an object can be created using the resource that represents the `He
 
 image::helloworld/using/220-create-object-thru-rest-api.png[width="600px"]
 
-CAUTION: if invoking the action returns a 401 (unauthorised), then navigate to the REST API directly (link:http://localhost:8080/restful[] to authenticate the browser first]).
 
 The response indicates that the object was successfully created:
 
@@ -213,44 +213,57 @@ Under `src/main/java` we have:
 [source]
 ----
 src/main/java/
-  domainapp/                            <!--1-->
+  domainapp/                                    <!--.-->
     modules
-      hello/                            <!--2-->
-        dom/                            <!--3-->
-          hwo/                          <!--4-->
+      hello/                                    <!--.-->
+        dom/                                    <!--.-->
+          hwo/                                  <!--.-->
             HelloWorldObject.java
             HelloWorldObject.layout.xml
             HelloWorldObject.png
+            HelloWorldObjectRepository.java     <!--.-->
             HelloWorldObjects.java
-        types/                          <!--5-->
+        types/                                  <!--.-->
           Name.java
           Notes.java
-      HelloWorldModule.java             <!--6-->
+      HelloWorldModule.java                     <!--.-->
     webapp/
-      AppManifest.java                  <!--7-->
-      HelloWorldApp.java                <!--8-->
-  META-INF/
-    persistence.xml                     <!--9-->
+      AppManifest.java                          <!--.-->
+      HelloWorldApp.java                        <!--.-->
+  META-INF        /
+    persistence.xml                             <!--.-->
 ----
-<1> For simplicity, all the Java source files reside in a `domainapp` top-level package.
+
+<.> For simplicity, all the Java source files reside in a `domainapp` top-level package.
 Change as required.
-<2> Defines the 'hello' module.
+
+<.> Defines the 'hello' module.
 Apache Isis can be used for both microservice and monolithic architectures, but for the latter it encourages "modular monoliths" from the start.
-<3> The `dom` package holds the "domain object model" for this module.
+
+<.> The `dom` package holds the "domain object model" for this module.
 Modules may have other packages, common ones include ``types`` (as below), also ``api``s, ``contribution``s, ``fixture``s, ``spi``s
-<4> Holds classes for the `hwo` ("hello world object") entity/aggregate, consisting of the entity definition itself (`HelloWorldObject`) and a corresponding repository (`HelloWorldObjects`).
+
+<.> Holds classes for the `hwo` ("hello world object") entity/aggregate, consisting of the entity definition itself (`HelloWorldObject`) and a corresponding repository (`HelloWorldObjects`).
 The associated `.layout.xml` and `.png` are optional but provide metadata/resources for rendering (Maven is configured to also treat `src/main/java` as a resource location).
-<5> The `types` package contains meta-annotations to describe the usage of common value types such as ``String``s.
-<6> `HelloWorldModule` is a Spring link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/context/annotation/Configuration.html[@Configuration] which allows the domain services and entities of the module to be located. +
+
+<.> For the `jpa` branch only, uses Spring Data JPA to automatically provide the query implementation.
+
+<.> The `types` package contains meta-annotations to describe the usage of common value types such as ``String``s.
+
+<.> `HelloWorldModule` is a Spring link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/context/annotation/Configuration.html[@Configuration] which allows the domain services and entities of the module to be located. +
 This is discussed in more detail xref:#helloworldmodule[below].
-<7> `AppManifest` is the top-level Spring link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/context/annotation/Configuration.html[@Configuration] that specifies the components of Apache Isis to use, along with the modules making up the application itself (ie `HelloWorldModule`). +
+
+<.> `AppManifest` is the top-level Spring link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/context/annotation/Configuration.html[@Configuration] that specifies the components of Apache Isis to use, along with the modules making up the application itself (ie `HelloWorldModule`). +
 This is discussed in more detail xref:#appmanifest[below].
-<8> `HelloWorldApp` is the link:https://docs.spring.io/spring-boot/docs/current/api/org/springframework/boot/autoconfigure/SpringBootApplication.html[@SpringBootApplication] used to bootstrap the app.
+
+<.> `HelloWorldApp` is the link:https://docs.spring.io/spring-boot/docs/current/api/org/springframework/boot/autoconfigure/SpringBootApplication.html[@SpringBootApplication] used to bootstrap the app.
 It's pretty much boilerplate - the important piece is that it references `AppManifest`. +
 This is discussed in more detail xref:#helloworldapp[below].
-<9> The `persistence.xml` file is required when using the JDO/DataNucleus object store (though it is basically boilerplate, an empty file).
+
+<.> For the `jdo` branch only, the `persistence.xml` file is required boilerplate.
 
 
+[#helloworldmodule]
 ==== HelloWorldModule
 
 Every module within an Apache Isis application should have a module class.
@@ -263,18 +276,27 @@ In the case of `HelloWorldModule`, it is extremely simple:
 package domainapp.modules.hello;
 ... imports omitted ...
 @Configuration
-@Import({})                         // <1>
-@ComponentScan                      // <2>
+@Import({})                         // <.>
+@ComponentScan                      // <.>
+@EnableJpaRepositories              // <.>
+@EntityScan(                        // <.>
+    basePackageClasses = {
+        HelloWorldModule.class
+})
 public class HelloWorldModule {
 }
 ----
-<1> no dependencies.
+
+<.> no dependencies.
 If there were, these would be expressed in terms of module classes (each being a Spring `@Configuration`)
-<2> specifies this class' package as a root to scan for Spring link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/stereotype/Component.html[@Component]s.
 
-The scanning mechanism is leveraged by Apache Isis to pick up three types of classes:
+<.> specifies this class' package as a root to scan for Spring link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/stereotype/Component.html[@Component]s.
 
-This will pick up the `HelloWorldObjects` repository because it is annotated with the framework's xref:refguide:applib:index/annotation/DomainService.adoc[@DomainService] annotation (in turn meta-annotated with `@Component`).
+<.> for `jpa` branch only, enables Spring Data JPA repositories
+
+<.> for `jpa` branch only, to automatically discover JPA entities
+
+The scanning mechanism is also leveraged by Apache Isis to pick up three types of classes:
 
 * all domain services
 +
@@ -283,15 +305,14 @@ Because `@DomainService` is meta-annotated as a `@Component`, these are found au
 +
 Depending on their nature, domain services are used to build up the menu, or are available to call programmatically, eg repositories, or sometimes both.
 +
-In the helloworld starter app, the only domain service  is `HelloWorldObjects`.
+In the helloworld starter app, the main domain services is `HelloWorldObjects`.
 This appears in the menu, and also acts as a repository for the `HelloWorldObject` entity.
+The `jpa` branch also has the `HelloWorldRepository` Spring Data service.
 
 * all entities.
 +
-These are entities that are annotated with both xref:refguide:applib:index/annotation/DomainObject.adoc[@DomainObject] annotation and with `@javax.jdo.annotations.PersistenceCapable`.
-Because `@DomainObject` is meta-annotated as a `@Component`, these are found automatically by Spring.
-They are passed through to the JDO/DataNucleus object store, in order to create database mappings from the entities to relational tables.
-It is also annotated with xref:refguide:applib:index/annotation/DomainObject.adoc[@DomainObject]
+These are entities that are annotated with both xref:refguide:applib:index/annotation/DomainObject.adoc[@DomainObject] annotation and with the ORM-specific annotation.
+For `jdo` branch, this is `@javax.jdo.annotations.PersistenceCapable`; for the `jpa` branch this is `@javax.persistence.Entity`).
 +
 In the helloworld starter app, the only entity is `HelloWorldObject`.
 
@@ -303,43 +324,62 @@ The helloworld starter app doesn't provide any examples of these.
 
 
 
+[#appmanifest]
 ==== AppManifest
 
-The "app manifest" (the name has been retained from Apache Isis v1.x) is the top-level Spring `@Configuration`.
-In the case of the helloworld starter app, the `AppManifest` looks like this:
+The "app manifest" is the top-level Spring `@Configuration`.
+In the case of the helloworld starter app *for the `jdo` branch* the `AppManifest` looks like this:
 
 [source,java]
 .AppManifest.java
 ----
 @Configuration
 @Import({
-        IsisModuleCoreRuntimeServices.class,                    // <1>
-        IsisModuleSecurityShiro.class,                          // <2>
-        IsisModuleJdoDataNucleus5.class,                        // <3>
-        IsisModuleViewerRestfulObjectsJaxrsResteasy4.class,     // <4>
-        IsisModuleViewerWicketViewer.class,                     // <5>
+        IsisModuleCoreRuntimeServices.class,                // <.>
+        IsisModuleSecurityShiro.class,                      // <.>
+        IsisModuleJdoDataNucleus5.class,                    // <.>
+        IsisModuleViewerRestfulObjectsJaxrsResteasy4.class, // <.>
+        IsisModuleViewerWicketViewer.class,                 // <.>
 
-        IsisModuleTestingH2ConsoleUi.class,                     // <6>
+        IsisModuleTestingH2ConsoleUi.class,                 // <.>
 
-        HelloWorldModule.class                                  // <7>
+        HelloWorldModule.class                              // <.>
 })
-@PropertySource(IsisPresets.NoTranslations)                     // <8>
+@PropertySource(IsisPresets.NoTranslations)                 // <.>
 public class AppManifest {
 }
 ----
-<1> Mandatory - specifies the core of the Apache Isis framework
-<2> Enables the Shiro security mechanism.
+
+<.> Mandatory - specifies the core of the Apache Isis framework
+
+<.> Enables the Shiro security mechanism.
 There are several security implementations, precisely one must be selected
-<3> Enables JDO/DataNucleus for persistence.
+
+<.> Enables JDO/DataNucleus for persistence.
 Optional (though if omitted then only xref:userguide:fun:overview.adoc#view-models[view models] may be used, with hand-rolled persistence).
-<4> Enables the xref:vro:ROOT:about.adoc[Restful Objects viewer] (ie REST API).
-<5> Enables the xref:vw:ROOT:about.adoc[Wicket viewer]
-<6> Enables the H2 Console (menu from the "Prototyping" menu), applicable only if running against h2 in-memory database.
-<7> References the application's module(s), in this case just the one, `HelloWorldModule`.
-<8> Normally configuration properties are picked up from Spring Boot's `application.properties` or `application.yml` files, but additional properties can be overridden directly.
+
+<.> Enables the xref:vro:ROOT:about.adoc[Restful Objects viewer] (ie REST API).
+
+<.> Enables the xref:vw:ROOT:about.adoc[Wicket viewer]
+
+<.> Enables the H2 Console (menu from the "Prototyping" menu), applicable only if running against h2 in-memory database.
+
+<.> References the application's module(s), in this case just the one, `HelloWorldModule`.
+
+<.> Normally configuration properties are picked up from Spring Boot's `application.properties` or `application.yml` files, but additional properties can be overridden directly.
 This particular one disables the framework's i18n support using the `IsisPresets` convenience class.
 
+For the `jpa` branch the `AppManifest` is almost identical, just replacing:
 
+* `IsisModuleJdoDataNucleus5.class,`
+
+with:
+
+* `IsisModuleJpaEclipseLink.class,`
+
+This bootstraps the JPA as the ORM instead of JDO.
+
+[#helloworldapp]
 ==== HelloWorldApp
 
 The application is bootstrapped using `HelloWorldApp`, a regular `@SpringBootApplication`.
@@ -349,20 +389,21 @@ It is mostly boilerplate:
 ----
 @SpringBootApplication
 @Import({
-    AppManifest.class,                                          // <1>
+    AppManifest.class,                                          // <.>
 })
 public class HelloWorldApp
             extends SpringBootServletInitializer {
 
     public static void main(String[] args) {
-        IsisPresets.prototyping();                              // <2>
+        IsisPresets.prototyping();                              // <.>
         SpringApplication.run(
                 new Class[] { HelloWorldApp.class }, args);
     }
 }
 ----
-<1> references the `AppManifest` mentioned earlier
-<2> specifies prototyping mode.
+
+<.> references the `AppManifest` mentioned <<AppManifest,above>>.
+<.> specifies prototyping mode.
 This enables actions marked for prototyping to become available, useful during the early stages of development.
 +
 [TIP]
@@ -380,24 +421,32 @@ Under `src/main/resources` we have:
 ----
 src/main/resources
   config/
-    application.properties      <!--1-->
-  static/                       <!--2-->
-  templates/                    <!--3-->
-  application.yml               <!--4-->
-  banner.txt                    <!--5-->
-  log4j2-spring.xml             <!--6-->
-  menubars.layout.xml           <!--7-->
-  shiro.ini                     <!--8-->
+    application.properties      <!--.-->
+  static/                       <!--.-->
+  templates/                    <!--.-->
+  application.yml               <!--.-->
+  banner.txt                    <!--.-->
+  log4j2-spring.xml             <!--.-->
+  menubars.layout.xml           <!--.-->
+  shiro.ini                     <!--.-->
 ----
-<1> By convention, we use `config/application.properties` to hold configuration properties that change between environments (dev, test, prod).
+
+<.> By convention, we use `config/application.properties` to hold configuration properties that change between environments (dev, test, prod).
 Typically this just holds JDBC connection strings, etc.
-<2> The `static` package (a link:https://docs.spring.io/spring-boot/docs/current/reference/html/spring-boot-features.html#boot-features-spring-mvc-static-content[Spring convention]) provides access for static resources that are accessible from the webapp
-<3> The `templates` package holds a fallback error page, which is the link:https://www.baeldung.com/spring-thymeleaf-template-directory#change-default[default location] for pages rendered using Spring Boot's integration with Thymeleaf.
-<4> By convention, we use `application.yml` to hold configuration properties that do _not_ change between environments.
-<5> The `banner.txt` is shown when bootstrapping.
-<6> The `log4j2-spring.xml` configures log4j2 (the logging system used by Apache Isis)
-<7> The `menubars.layout.xml` arranges the actions of the domain services into menus.
-<8> The `shiro.ini` file configures Shiro security integration (see the `IsisModuleSecurityShiro` module imported in the `AppManifest`, above).
+
+<.> The `static` package (a link:https://docs.spring.io/spring-boot/docs/current/reference/html/spring-boot-features.html#boot-features-spring-mvc-static-content[Spring convention]) provides access for static resources that are accessible from the webapp
+
+<.> The `templates` package holds a fallback error page, which is the link:https://www.baeldung.com/spring-thymeleaf-template-directory#change-default[default location] for pages rendered using Spring Boot's integration with Thymeleaf.
+
+<.> By convention, we use `application.yml` to hold configuration properties that do _not_ change between environments.
+
+<.> The `banner.txt` is shown when bootstrapping.
+
+<.> The `log4j2-spring.xml` configures log4j2 (the logging system used by Apache Isis)
+
+<.> The `menubars.layout.xml` arranges the actions of the domain services into menus.
+
+<.> The `shiro.ini` file configures Shiro security integration (see the `IsisModuleSecurityShiro` module imported in the `AppManifest`, above).
 +
 [TIP]
 ====
@@ -473,7 +522,8 @@ Here's what the setup looks like in IntelliJ IDEA:
 
 image::helloworld/helloworld.png[width="600px"]
 
-which uses an IntelliJ feature to execute a different _Run Configuration_ for the DataNucleus enhancer beforehand:
+If using JDO as the ORM, then the DataNucleus enhancer must be run beforehand.
+With IntelliJ this can be done by setting up a different _Run Configuration_ to be executed beforehand:
 
 image::helloworld/helloworld-before-launch.png[width="600px"]
 
@@ -484,7 +534,6 @@ image::helloworld/helloworld-before-launch.png[width="600px"]
 Once you are familiar with the app, try modifying it.
 There is plenty more guidance on this site; start with the xref:userguide:fun:about.adoc[User Guide Fundamentals] and then look at the other guides linked to from the top-level menu or from the main xref:docs:ROOT:about.adoc[table of contents].
 
-// If you use IntelliJ IDEA or Eclipse, do also install thexref:setupguide:intellij:about.adoc#live-templates[live templates (for IntelliJ)] / xref:setupguide:eclipse:about.adoc#editor-templates[editor templates (for Eclipse)]; these will help you follow the Apache Isis naming conventions.
 
 If you run into issues, please don't hesitate to ask for help on the users mailing list or the Slack channel, as per the xref:docs:support:about.adoc[support page].
 

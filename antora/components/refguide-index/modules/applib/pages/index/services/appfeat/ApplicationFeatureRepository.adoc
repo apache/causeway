@@ -9,8 +9,7 @@ Provides the access to string representations of the packages, classes and class
 .ApplicationFeatureRepository.java
 ----
 interface ApplicationFeatureRepository {
-  SortedSet<String> namespaceNames()
-  SortedSet<String> classNamesRecursivelyContainedIn(String packageFqn)
+  ApplicationFeature newApplicationFeature(ApplicationFeatureId featureId)
   Map<String, ApplicationFeatureId> getFeatureIdentifiersByName()
   ApplicationFeature findFeature(ApplicationFeatureId featureId)
   Collection<ApplicationFeature> allActions()

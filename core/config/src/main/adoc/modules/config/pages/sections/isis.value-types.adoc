@@ -12,15 +12,6 @@ include::../section-hooks/isis.value-types~pre.adoc[]
 |Default
 |Description
 |
-[[isis.value-types.primitives.integer.format]]
-isis.value-types.primitives. +
-integer.format
-
-| 
-| null
-
-
-|
 [[isis.value-types.java-lang.byte.format]]
 isis.value-types.java-lang.byte. +
 format

@@ -612,23 +612,23 @@ Examples
           <div class="row">
             <div class="col-lg-6 text-left text-lg-left">
               <p class="cta-text text-center" style="margin-block-end: 0; ">
-                Learn about Apache Isis™ by running the minimal <a href="docs/latest/starters/helloworld.html">helloworld</a>&nbsp;starter&nbsp;app.
-                You can browse the app, running <a href="https://helloworld.isis.incode.work/" target="_blank">here</a>.
+                Learn about Apache Isis™ by running the minimal <a href="docs/latest/starters/helloworld.html">helloworld</a> starter&nbsp;app.
+                You can see the app running <a href="https://helloworld.jdo.isis.incode.work/" target="_blank">here (jdo)</a> and <a href="https://helloworld.jpa.isis.incode.work/" target="_blank">here (jpa)</a>.
               </p>
             </div>
             <div class="col-lg-6 text-left text-lg-left">
               <p class="cta-text text-center" style="margin-block-end: 0; ">
-                Develop your own Apache Isis™ app using the more structured <a href="docs/latest/starters/simpleapp.html">simpleapp</a>&nbsp;starter&nbsp;app.
-                You can browse the app, running <a href="https://simpleapp.isis.incode.work/" target="_blank">here</a>.
+                Develop your own Apache Isis™ app with the structured <a href="docs/latest/starters/simpleapp.html">simpleapp</a> starter&nbsp;app.
+                You can see the app running <a href="https://simpleapp.jdo.isis.incode.work/" target="_blank">here (jdo)</a> and <a href="https://simpleapp.jpa.isis.incode.work/" target="_blank">here (jpa)</a>.
               </p>
             </div>
           </div>
           <div class="row">
             <div class="col-lg-6 text-left text-lg-left">
               <p>
-              <pre id="helloworld-text">
+              <pre id="helloworld-jdo-text">
 APP=isis-app-helloworld
-BRANCH=master
+BRANCH=jdo
 curl https://codeload.github.com/apache/$APP/zip/$BRANCH | jar xv
 cd $APP-$BRANCH
 
@@ -638,9 +638,9 @@ mvn spring-boot:run</pre>
             </div>
             <div class="col-lg-6 text-left text-lg-left">
               <p>
-              <pre id="simpleapp-text">
+              <pre id="simpleapp-jdo-text">
 APP=isis-app-simpleapp
-BRANCH=master
+BRANCH=jdo
 curl https://codeload.github.com/apache/$APP/zip/$BRANCH | jar xv
 cd $APP-$BRANCH
 
@@ -652,12 +652,50 @@ mvn -pl webapp spring-boot:run</pre>
           <div class="row">
             <div class="col-lg-6 text-left text-lg-left">
               <p class="cta-text text-center" style="margin-block-end: 0; margin-top: -20px;">
-                <span id="helloworld-copy" style="cursor: pointer;"><img src="_/img/home/clipboard-copy.png" width="16" height="16"/>&nbsp;&nbsp;Copy text</span>
+                <span id="helloworld-jdo-copy" style="cursor: pointer;"><img src="_/img/home/clipboard-copy.png" width="16" height="16"/>&nbsp;&nbsp;Copy text for helloworld (jdo)</span>
               </p>
             </div>
             <div class="col-lg-6 text-left text-lg-left">
               <p class="cta-text text-center" style="margin-block-end: 0; margin-top: -20px;">
-                <span id="simpleapp-copy" style="cursor: pointer;"><img src="_/img/home/clipboard-copy.png" width="16" height="16"/>&nbsp;&nbsp;Copy text</span>
+                <span id="simpleapp-jdo-copy" style="cursor: pointer;"><img src="_/img/home/clipboard-copy.png" width="16" height="16"/>&nbsp;&nbsp;Copy text for simpleapp (jdo)</span>
+              </p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-6 text-left text-lg-left">
+              <p>
+              <pre id="helloworld-jpa-text">
+APP=isis-app-helloworld
+BRANCH=jpa
+curl https://codeload.github.com/apache/$APP/zip/$BRANCH | jar xv
+cd $APP-$BRANCH
+
+mvn clean install
+mvn spring-boot:run</pre>
+              </p>
+            </div>
+            <div class="col-lg-6 text-left text-lg-left">
+              <p>
+              <pre id="simpleapp-jpa-text">
+APP=isis-app-simpleapp
+BRANCH=jpa
+curl https://codeload.github.com/apache/$APP/zip/$BRANCH | jar xv
+cd $APP-$BRANCH
+
+mvn clean install
+mvn -pl webapp spring-boot:run</pre>
+              </p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-6 text-left text-lg-left">
+              <p class="cta-text text-center" style="margin-block-end: 0; margin-top: -20px;">
+                <span id="helloworld-jpa-copy" style="cursor: pointer;"><img src="_/img/home/clipboard-copy.png" width="16" height="16"/>&nbsp;&nbsp;Copy text for helloworld (jpa)</span>
+              </p>
+            </div>
+            <div class="col-lg-6 text-left text-lg-left">
+              <p class="cta-text text-center" style="margin-block-end: 0; margin-top: -20px;">
+                <span id="simpleapp-jpa-copy" style="cursor: pointer;"><img src="_/img/home/clipboard-copy.png" width="16" height="16"/>&nbsp;&nbsp;Copy text for simpleapp (jpa)</span>
               </p>
             </div>
           </div>
@@ -916,12 +954,12 @@ mvn -pl webapp jetty:run</pre>
 <script src="_/js/home/lib/sticky/sticky.js"></script>
 
 <script>
-    document.querySelector('#helloworld-copy').addEventListener('click', async event => {
+    document.querySelector('#helloworld-jdo-copy').addEventListener('click', async event => {
         if (!navigator.clipboard) {
-            document.querySelector('#helloworld-copy').remove();
+            document.querySelector('#helloworld-jdo-copy').remove();
             return
         }
-        const text = document.querySelector('#helloworld-text').innerHTML;
+        const text = document.querySelector('#helloworld-jdo-text').innerHTML;
         try {
             await navigator.clipboard.writeText(text);
             event.target.textContent = 'Copied to clipboard';
@@ -929,12 +967,38 @@ mvn -pl webapp jetty:run</pre>
             alert("Failed to copy :-(", err)
         }
     });
-    document.querySelector('#simpleapp-copy').addEventListener('click', async event => {
+    document.querySelector('#helloworld-jpa-copy').addEventListener('click', async event => {
         if (!navigator.clipboard) {
-            document.querySelector('#simpleapp-copy').remove();
+            document.querySelector('#helloworld-jpa-copy').remove();
             return
         }
-        const text = document.querySelector('#simpleapp-text').innerHTML;
+        const text = document.querySelector('#helloworld-jpa-text').innerHTML;
+        try {
+            await navigator.clipboard.writeText(text);
+            event.target.textContent = 'Copied to clipboard';
+        } catch (err) {
+            alert("Failed to copy :-(", err)
+        }
+    });
+    document.querySelector('#simpleapp-jdo-copy').addEventListener('click', async event => {
+        if (!navigator.clipboard) {
+            document.querySelector('#simpleapp-jdo-copy').remove();
+            return
+        }
+        const text = document.querySelector('#simpleapp-jdo-text').innerHTML;
+        try {
+            await navigator.clipboard.writeText(text);
+            event.target.textContent = 'Copied to clipboard';
+        } catch (err) {
+            alert("Failed to copy :-(", err)
+        }
+    })
+    document.querySelector('#simpleapp-jpa-copy').addEventListener('click', async event => {
+        if (!navigator.clipboard) {
+            document.querySelector('#simpleapp-jpa-copy').remove();
+            return
+        }
+        const text = document.querySelector('#simpleapp-jpa-text').innerHTML;
         try {
             await navigator.clipboard.writeText(text);
             event.target.textContent = 'Copied to clipboard';

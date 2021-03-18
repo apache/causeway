@@ -439,7 +439,12 @@ Artifact: isis-testing-fakedata-applib
 Type: jar
 Directory: /testing/fakedata/applib
 ----
-|.Dependencies
+|.Components
+****
+o.a.i.testing.fakedata.applib.services.FakeDataService +
+****
+
+.Dependencies
 ****
 com.github.javafaker:javafaker:jar:<managed> +
 org.apache.isis.commons:isis-commons:jar:<managed> +
@@ -540,7 +545,12 @@ Artifact: isis-testing-h2console-ui
 Type: jar
 Directory: /testing/h2console/ui
 ----
-|.Dependencies
+|.Components
+****
+o.a.i.testing.h2console.ui.webmodule.WebModuleH2Console +
+****
+
+.Dependencies
 ****
 com.h2database:h2:jar:<managed> +
 org.apache.isis.core:isis-core-webapp:jar:<managed> +
@@ -598,7 +608,12 @@ Artifact: isis-testing-integtestsupport-applib
 Type: jar
 Directory: /testing/integtestsupport/applib
 ----
-|.Dependencies
+|.Components
+****
+o.a.i.testing.integtestsupport.applib.IsisIntegrationTestAbstract$InteractionSupport +
+****
+
+.Dependencies
 ****
 com.approvaltests:approvaltests:jar:<managed> +
 com.h2database:h2:jar:<managed> +
@@ -1545,7 +1560,6 @@ o.a.i.core.metamodel.facets.schema.IsisSchemaValueTypeProvider +
 o.a.i.core.metamodel.objectmanager.ObjectManagerDefault +
 o.a.i.core.metamodel.progmodel.ProgrammingModelInitFilterDefault +
 o.a.i.core.metamodel.services.ServiceInjectorDefault +
-o.a.i.core.metamodel.services.appfeat.ApplicationFeatureFactory +
 o.a.i.core.metamodel.services.appfeat.ApplicationFeatureRepositoryDefault +
 o.a.i.core.metamodel.services.classsubstitutor.ClassSubstitutorDefault +
 o.a.i.core.metamodel.services.classsubstitutor.ClassSubstitutorForCollections +
@@ -3027,7 +3041,12 @@ Artifact: isis-valuetypes-sse-metamodel
 Type: jar
 Directory: /valuetypes/sse/metamodel
 ----
-|.Dependencies
+|.Components
+****
+o.a.i.valuetypes.sse.metamodel.facets.SseAnnotationFacetFactory$Register +
+****
+
+.Dependencies
 ****
 org.apache.isis.core:isis-core-metamodel:jar:<managed> +
 org.apache.isis.valuetypes:isis-valuetypes-sse-applib:jar:<managed> +
@@ -3055,7 +3074,15 @@ Artifact: isis-valuetypes-sse-ui-wkt
 Type: jar
 Directory: /valuetypes/sse/ui/wicket
 ----
-|.Dependencies
+|.Components
+****
+o.a.i.valuetypes.sse.ui.wkt.markup.ListeningMarkupPanelFactoriesForWicket$Parented +
+o.a.i.valuetypes.sse.ui.wkt.markup.ListeningMarkupPanelFactoriesForWicket$Standalone +
+o.a.i.valuetypes.sse.ui.wkt.services.SseServiceDefault +
+o.a.i.valuetypes.sse.ui.wkt.webmodule.WebModuleServerSentEvents +
+****
+
+.Dependencies
 ****
 org.apache.isis.valuetypes:isis-valuetypes-sse-metamodel:jar:<managed> +
 org.apache.isis.viewer:isis-viewer-wicket-ui:jar:<managed> +
@@ -3185,7 +3212,13 @@ Artifact: isis-valuetypes-asciidoc-metamodel
 Type: jar
 Directory: /valuetypes/asciidoc/metamodel
 ----
-|.Dependencies
+|.Components
+****
+o.a.i.valuetypes.asciidoc.metamodel.AsciiDocMetaModelRefiner +
+o.a.i.valuetypes.asciidoc.metamodel.AsciiDocValueTypeProvider +
+****
+
+.Dependencies
 ****
 org.apache.isis.core:isis-core-metamodel:jar:<managed> +
 org.apache.isis.valuetypes:isis-valuetypes-asciidoc-applib:jar:<managed> +
@@ -3254,7 +3287,12 @@ Artifact: isis-valuetypes-asciidoc-ui-vaa
 Type: jar
 Directory: /valuetypes/asciidoc/ui/vaadin
 ----
-|.Dependencies
+|.Components
+****
+o.a.i.valuetypes.asciidoc.ui.vaa.components.AsciiDocFieldFactoryVaa +
+****
+
+.Dependencies
 ****
 org.apache.isis.incubator.viewer:isis-viewer-vaadin-ui:jar:${project.version} +
 ****
@@ -3267,7 +3305,19 @@ Artifact: isis-valuetypes-asciidoc-ui-wkt
 Type: jar
 Directory: /valuetypes/asciidoc/ui/wicket
 ----
-|.Dependencies
+|.Components
+****
+o.a.i.valuetypes.asciidoc.ui.wkt.components.AsciiDocPanelFactoriesWkt$Parented +
+o.a.i.valuetypes.asciidoc.ui.wkt.components.AsciiDocPanelFactoriesWkt$Standalone +
+o.a.i.valuetypes.asciidoc.ui.wkt.components.schema.chg.v2.ChangesDtoPanelFactoriesWkt$Parented +
+o.a.i.valuetypes.asciidoc.ui.wkt.components.schema.chg.v2.ChangesDtoPanelFactoriesWkt$Standalone +
+o.a.i.valuetypes.asciidoc.ui.wkt.components.schema.cmd.v2.CommandDtoPanelFactoriesWkt$Parented +
+o.a.i.valuetypes.asciidoc.ui.wkt.components.schema.cmd.v2.CommandDtoPanelFactoriesWkt$Standalone +
+o.a.i.valuetypes.asciidoc.ui.wkt.components.schema.ixn.v2.InteractionDtoPanelFactoriesWkt$Parented +
+o.a.i.valuetypes.asciidoc.ui.wkt.components.schema.ixn.v2.InteractionDtoPanelFactoriesWkt$Standalone +
+****
+
+.Dependencies
 ****
 org.apache.isis.viewer:isis-viewer-wicket-ui:jar:<managed> +
 ****
@@ -3390,7 +3440,13 @@ Artifact: isis-valuetypes-markdown-metamodel
 Type: jar
 Directory: /valuetypes/markdown/metamodel
 ----
-|.Dependencies
+|.Components
+****
+o.a.i.valuetypes.markdown.metamodel.MarkdownMetaModelRefiner +
+o.a.i.valuetypes.markdown.metamodel.MarkdownValueTypeProvider +
+****
+
+.Dependencies
 ****
 org.apache.isis.core:isis-core-metamodel:jar:<managed> +
 org.apache.isis.valuetypes:isis-valuetypes-markdown-applib:jar:<managed> +
@@ -3697,12 +3753,12 @@ skinparam {
 }
 hide stereotype
 left to right direction
-skinparam rectangle<<22>> {
+skinparam rectangle<<11>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<11>> {
+skinparam rectangle<<22>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
@@ -3717,12 +3773,12 @@ skinparam rectangle<<12>> {
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<13>> {
+skinparam rectangle<<24>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<24>> {
+skinparam rectangle<<13>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
@@ -3931,7 +3987,12 @@ Artifact: isis-extensions-exceldownload-ui
 Type: jar
 Directory: /extensions/vw/exceldownload/ui
 ----
-|.Dependencies
+|.Components
+****
+o.a.i.extensions.viewer.wicket.exceldownload.ui.components.CollectionContentsAsExcelFactory +
+****
+
+.Dependencies
 ****
 org.apache.isis.viewer:isis-viewer-wicket-ui:jar:<managed> +
 org.apache.poi:poi-ooxml:jar:<managed> +
@@ -4056,7 +4117,12 @@ Artifact: isis-extensions-pdfjs-metamodel
 Type: jar
 Directory: /extensions/vw/pdfjs/metamodel
 ----
-|.Dependencies
+|.Components
+****
+o.a.i.extensions.viewer.wicket.pdfjs.metamodel.facet.PdfJsViewerFacetFromAnnotationFactory$Register +
+****
+
+.Dependencies
 ****
 de.agilecoders.wicket:wicket-bootstrap-core:jar:<managed> +
 org.apache.isis.core:isis-core-metamodel:jar:<managed> +
@@ -4071,7 +4137,12 @@ Artifact: isis-extensions-pdfjs-ui
 Type: jar
 Directory: /extensions/vw/pdfjs/ui
 ----
-|.Dependencies
+|.Components
+****
+o.a.i.extensions.viewer.wicket.pdfjs.ui.components.PdfJsViewerPanelComponentFactory +
+****
+
+.Dependencies
 ****
 org.apache.isis.extensions:isis-extensions-pdfjs-metamodel:jar:<managed> +
 org.apache.isis.viewer:isis-viewer-wicket-ui:jar:<managed> +
@@ -4865,7 +4936,12 @@ Artifact: isis-subdomains-zip-applib
 Type: jar
 Directory: /subdomains/zip/applib
 ----
-|.Dependencies
+|.Components
+****
+o.a.i.extensions.zip.dom.impl.ZipService +
+****
+
+.Dependencies
 ****
 org.apache.isis.commons:isis-commons:jar:<managed> +
 org.apache.isis.core:isis-applib:jar:<managed> +
@@ -4930,7 +5006,12 @@ Artifact: isis-subdomains-base-applib
 Type: jar
 Directory: /subdomains/base/applib
 ----
-|.Dependencies
+|.Components
+****
+o.a.i.subdomains.base.applib.services.calendar.CalendarService +
+****
+
+.Dependencies
 ****
 org.apache.isis.commons:isis-commons:jar:<managed> +
 org.apache.isis.core:isis-applib:jar:<managed> +
@@ -5025,7 +5106,12 @@ Artifact: isis-subdomains-excel-applib
 Type: jar
 Directory: /subdomains/excel/applib
 ----
-|.Dependencies
+|.Components
+****
+o.a.i.subdomains.excel.applib.dom.ExcelService +
+****
+
+.Dependencies
 ****
 org.apache.isis.core:isis-applib:jar:<managed> +
 org.apache.isis.core:isis-core-internaltestsupport:jar:<managed> +
@@ -5154,7 +5240,12 @@ Artifact: isis-subdomains-spring-applib
 Type: jar
 Directory: /subdomains/spring/applib
 ----
-|.Dependencies
+|.Components
+****
+o.a.i.subdomains.spring.applib.service.SpringBeansService +
+****
+
+.Dependencies
 ****
 org.apache.isis.core:isis-applib:jar:<managed> +
 org.apache.isis.core:isis-core-runtime:jar:<managed> +
@@ -5223,7 +5314,12 @@ Artifact: isis-subdomains-xdocreport-applib
 Type: jar
 Directory: /subdomains/xdocreport/applib
 ----
-|.Dependencies
+|.Components
+****
+o.a.i.subdomains.xdocreport.applib.service.XDocReportService +
+****
+
+.Dependencies
 ****
 fr.opensagres.xdocreport:fr.opensagres.xdocreport.converter.docx.xwpf:jar:<managed> +
 fr.opensagres.xdocreport:fr.opensagres.xdocreport.document.docx:jar:<managed> +
@@ -5540,7 +5636,24 @@ Artifact: isis-regressiontests-stable
 Type: jar
 Directory: /regressiontests/stable
 ----
-|.Dependencies
+|.Components
+****
+o.a.i.testdomain.applayer.ApplicationLayerTestFactory +
+o.a.i.testdomain.applayer.ApplicationLayerTestFactory$PreCommitListener +
+o.a.i.testdomain.applayer.publishing.CommandSubscriberForTesting +
+o.a.i.testdomain.applayer.publishing.EntityChangesSubscriberForTesting +
+o.a.i.testdomain.applayer.publishing.EntityPropertyChangeSubscriberForTesting +
+o.a.i.testdomain.applayer.publishing.ExecutionSubscriberForTesting +
+o.a.i.testdomain.conf.Configuration_headless$HeadlessCommandSupport +
+o.a.i.testdomain.jdo.JdoInventoryDao +
+o.a.i.testdomain.jpa.JpaInventoryDao +
+o.a.i.testdomain.jpa.springdata.EmployeeRepository +
+o.a.i.testdomain.util.interaction.InteractionBoundaryProbe +
+o.a.i.testdomain.util.kv.KVStoreForTesting +
+o.a.i.testdomain.util.rest.RestEndpointService +
+****
+
+.Dependencies
 ****
 org.apache.isis.extensions:isis-extensions-cors-impl:jar:<managed> +
 org.glassfish.jersey.ext:jersey-spring5:jar:<managed> +
@@ -5858,7 +5971,23 @@ Artifact: isis-viewer-vaadin-ui
 Type: jar
 Directory: /incubator/viewers/vaadin/ui
 ----
-|.Dependencies
+|.Components
+****
+o.a.i.incubator.viewer.vaadin.ui.auth.LogoutHandlerVaa +
+o.a.i.incubator.viewer.vaadin.ui.auth.VaadinAuthenticationHandler +
+o.a.i.incubator.viewer.vaadin.ui.components.UiComponentFactoryVaa +
+o.a.i.incubator.viewer.vaadin.ui.components.blob.BlobFieldFactory +
+o.a.i.incubator.viewer.vaadin.ui.components.clob.ClobFieldFactory +
+o.a.i.incubator.viewer.vaadin.ui.components.markup.MarkupFieldFactory +
+o.a.i.incubator.viewer.vaadin.ui.components.other.FallbackFieldFactory +
+o.a.i.incubator.viewer.vaadin.ui.components.temporal.TemporalFieldFactory +
+o.a.i.incubator.viewer.vaadin.ui.components.text.TextFieldFactory +
+o.a.i.incubator.viewer.vaadin.ui.components.text.uuid.UuidFieldFactory +
+o.a.i.incubator.viewer.vaadin.ui.pages.main.UiActionHandlerVaa +
+o.a.i.incubator.viewer.vaadin.ui.pages.main.UiContextVaaDefault +
+****
+
+.Dependencies
 ****
 com.vaadin:vaadin:jar:<managed> +
 com.vaadin:vaadin-spring:jar:<managed> +

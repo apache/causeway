@@ -5,7 +5,7 @@ Helper class to create properly concatenated reason string for use in method tha
 
 If no reasons are specified _#getReason()_ will return `null` , otherwise it will return a _String_ with all the valid reasons concatenated with a semi-colon separating each one.
 
-An alternative is to use the xref:refguide:applib:index/util/Reasons.adoc[Reasons] class.
+An alternative is to use the (very simple) xref:refguide:applib:index/util/Reasons.adoc[Reasons] class or the (much more sophisticated) xref:refguide:applib:index/util/ReasonBuffer2.adoc[ReasonBuffer2] .
 
 == API
 

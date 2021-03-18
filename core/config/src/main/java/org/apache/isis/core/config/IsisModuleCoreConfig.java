@@ -58,16 +58,19 @@ import org.apache.isis.core.config.viewer.wicket.WebAppContextPath;
         RestEasyConfiguration.class,
 })
 public class IsisModuleCoreConfig {
-    
+
     @ConfigurationProperties(prefix = "isis")
-    @Bean("isis-settings")
     public Map<String, String> getIsisConfigProps() {
         return new HashMap<>();
     }
 
     @ConfigurationProperties(prefix = "resteasy")
-    @Bean("resteasy-settings")
     public Map<String, String> getResteasyConfigProps() {
+        return new HashMap<>();
+    }
+
+    @ConfigurationProperties(prefix = "datanucleus")
+    public Map<String, String> getDataNucleusConfigProps() {
         return new HashMap<>();
     }
 

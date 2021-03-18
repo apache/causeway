@@ -1,10 +1,10 @@
-= JDO DataNucleus
+= Core Configuration
 :page-role: -toc -narrow
 
 
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
-include::../section-hooks/jdo-datanucleus~pre.adoc[]
+include::../section-hooks/isis.core.config~pre.adoc[]
 
 [cols="3a,2a,5a", options="header"]
 |===
@@ -12,17 +12,20 @@ include::../section-hooks/jdo-datanucleus~pre.adoc[]
 |Default
 |Description
 |
-[[datanucleus.class-metadata-loaded-listener]]
-datanucleus. +
-class-metadata-loaded-listener
+[[isis.core.config.configuration-property-visibility-policy]]
+isis.core.config. +
+configuration-property-visibility- +
+policy
 
-|  org.apache.isis.persistence.jdo. +
-datanucleus.config. +
-CreateSchemaObjectFromClassMetadata
-| (removed)
+| 
+| Configuration values might contain sensitive data, hence per default, configuration properties are only visible with the configuration-page when _prototyping_.
+
+Alternatively this policy can be set to either *always* show or *never* show.
+
+@see ConfigurationPropertyVisibilityPolicy
 
 
 
 |===
 
-include::../section-hooks/jdo-datanucleus~post.adoc[]
+include::../section-hooks/isis.core.config~post.adoc[]

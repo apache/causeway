@@ -18,16 +18,16 @@ image::configuration/configuring-shiro/jdbc/configure-shiro-to-use-custom-jdbc-r
 
 
 
-There's quite a lot of configuration required (in `WEB-INF/shiro.ini`) to set up a JDBC realm, so we'll break it out into sections.
+There's quite a lot of configuration required (in `shiro.ini`) to set up a JDBC realm, so we'll break it out into sections.
 
 First, we need to set up the connection to JDBC:
 
 [source,ini]
 ----
-jdbcRealm=org.apache.shiro.realm.jdbc.JdbcRealm        # <1>
+jdbcRealm=org.apache.shiro.realm.jdbc.JdbcRealm        # <.>
 
-jof = org.apache.shiro.jndi.JndiObjectFactory          # <2>
-jof.resourceName = jdbc/postgres                       # <3>
+jof = org.apache.shiro.jndi.JndiObjectFactory          # <.>
+jof.resourceName = jdbc/postgres                       # <.>
 jof.requiredType = javax.sql.DataSource
 jof.resourceRef = true
 

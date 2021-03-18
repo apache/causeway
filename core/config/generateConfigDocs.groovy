@@ -37,6 +37,7 @@ class Property {
     String type
     String description
     String sourceType
+    String sourceMethod
     Object defaultValue
     Boolean deprecated
     Object deprecation
@@ -59,11 +60,16 @@ groups+= new PropertyGroup() {{
 }}
 
 groups+= new PropertyGroup() {{
+    prefix = "isis.core.config"
+    name = "Core Configuration"
+    searchOrder = 100
+}}
+
+groups+= new PropertyGroup() {{
     prefix = "isis.core.meta-model"
     name = "Core MetaModel"
     searchOrder = 501
 }}
-
 
 groups+= new PropertyGroup() {{
     prefix = "isis.core.meta-model.introspector"
@@ -79,14 +85,14 @@ groups+= new PropertyGroup() {{
 
 groups+= new PropertyGroup() {{
     prefix = "isis.core.runtime"
-    name = "Core Runtime configurations"
+    name = "Core Runtime"
     properties: []
     searchOrder = 501
 }}
 
 groups+= new PropertyGroup() {{
     prefix = "isis.core.runtime-services"
-    name = "Core Runtime Services configurations"
+    name = "Core Runtime Services"
     properties: []
     searchOrder = 101
 }}
@@ -114,14 +120,7 @@ groups+= new PropertyGroup() {{
 
 groups+= new PropertyGroup() {{
     prefix = "datanucleus"
-    name = "JDO DataNucleus"
-    properties: []
-    searchOrder = 510
-}}
-
-groups+= new PropertyGroup() {{
-    prefix = "datanucleus-conf"
-    name = "DataNucleus Configuration"
+    name = "DataNucleus"
     properties: []
     searchOrder = 100
 }}
@@ -211,6 +210,10 @@ for (property in data.properties) {
     if(['isis.raw-key-value-map',
         'isis.environment'].contains(property.name)) {
         // ignore these special cases
+        continue
+    }
+    if(property.name.endsWith('.as-map')) {
+        // ignore this special case
         continue
     }
     eachGroup:

@@ -12,34 +12,34 @@ The LDAP database stores the user/passwords and user groups, while the `shiro.in
 
 == Shiro Configuration
 
-To use LDAP involves telling Shiro how to instantiate the realm.  This bootstrapping info lives in the `WEB-INF/shiro.ini`:
+To use LDAP involves telling Shiro how to instantiate the realm.  This bootstrapping info lives in the `shiro.ini`:
 
 [source,ini]
 ----
 contextFactory = org.apache.isis.security.shiro.IsisLdapContextFactory
 contextFactory.url = ldap://localhost:10389
-contextFactory.systemUsername = uid=admin,ou=system        # <1>
+contextFactory.systemUsername = uid=admin,ou=system        # <.>
 contextFactory.systemPassword = secret
-contextFactory.authenticationMechanism = CRAM-MD5          # <2>
+contextFactory.authenticationMechanism = CRAM-MD5          # <.>
 contextFactory.systemAuthenticationMechanism = simple
 
-ldapRealm = org.apache.isis.security.shiro.IsisLdapRealm   # <3>
+ldapRealm = org.apache.isis.security.shiro.IsisLdapRealm   # <.>
 ldapRealm.contextFactory = $contextFactory
 
-ldapRealm.searchBase = ou=groups,o=mojo                    # <4>
-ldapRealm.groupObjectClass = groupOfUniqueNames            # <5>
-ldapRealm.uniqueMemberAttribute = uniqueMember             # <6>
+ldapRealm.searchBase = ou=groups,o=mojo                    # <.>
+ldapRealm.groupObjectClass = groupOfUniqueNames            # <.>
+ldapRealm.uniqueMemberAttribute = uniqueMember             # <.>
 ldapRealm.uniqueMemberAttributeValueTemplate = uid={0}
 
 # optional mapping from physical groups to logical application roles
-ldapRealm.rolesByGroup = \                                 # <7>
+ldapRealm.rolesByGroup = \                                 # <.>
     LDN_USERS: user_role,\
     NYK_USERS: user_role,\
     HKG_USERS: user_role,\
     GLOBAL_ADMIN: admin_role,\
     DEMOS: self-install_role
 
-ldapRealm.permissionsByRole=\                              # <8>
+ldapRealm.permissionsByRole=\                              # <.>
    user_role = *:ToDoItemsJdo:*:*,\
                *:ToDoItem:*:*; \
    self-install_role = *:ToDoItemsFixturesService:install:* ; \
@@ -47,14 +47,14 @@ ldapRealm.permissionsByRole=\                              # <8>
 
 securityManager.realms = $ldapRealm
 ----
-<1> user accounts are searched using a dedicated service account
-<2> SASL (CRAM-MD5) authentication is used for this authentication
-<3> Apache Isis' implementation of the LDAP realm.
-<4> groups are searched under `ou=groups,o=mojo` (where `mojo` is the company name)
-<5> each group has an LDAP objectClass of `groupOfUniqueNames`
-<6> each group has a vector attribute of `uniqueMember`
-<7> groups looked up from LDAP can optionally be mapped to logical roles; otherwise groups are used as role names directly
-<8> roles are mapped in turn to permissions
+<.> user accounts are searched using a dedicated service account
+<.> SASL (CRAM-MD5) authentication is used for this authentication
+<.> Apache Isis' implementation of the LDAP realm.
+<.> groups are searched under `ou=groups,o=mojo` (where `mojo` is the company name)
+<.> each group has an LDAP objectClass of `groupOfUniqueNames`
+<.> each group has a vector attribute of `uniqueMember`
+<.> groups looked up from LDAP can optionally be mapped to logical roles; otherwise groups are used as role names directly
+<.> roles are mapped in turn to permissions
 
 The value of `uniqueMember` is in the form `uid=xxx`, with `xxx` being the uid of the user
 * users searched under `ou=system`

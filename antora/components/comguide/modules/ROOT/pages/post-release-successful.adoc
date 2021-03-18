@@ -492,6 +492,28 @@ git branch -d release-{page-isisrel}-RC1              # branch no longer needed
 
 In `site.yml` file, bump the version of `\{page-isisrel}` and also `\{page-isisprev}`, and commit.
 
+== Update starter projects
+
+As explained in xref:cutting-a-release.adoc#update-starter-apps[cutting a release],for each of the two starter apps, we maintain four branches:
+
+* `jdo` and `jpa`
++
+These are intended to reference the _most recently released_ version, the first demonstrating persistence using JDO, the second using JPA.
+These are the branches referenced from the home page and getting started pages of the website.
+
+* `jdo-SNAPSHOT` and `jpa-SNAPSHOT`
++
+These reference the most current snapshot nightly build.
+
+The general idea is that a release will fast-forward `jdo` to `jdo-SNAPSHOT` and similarly moves `jpa` up to `jpa-SNAPSHOT`, bumping to the newly released version of the framework in the process.
+
+In order that we don't break the starter apps while a release is being voted on, we do the changes in work branches, `$ISISBRANCH-jdo` and `$ISISBRANCH-jpa`.
+
+Now that the release is complete, tidy up these branches and then set up the `-SNAPSHOT` branches as required.
+
+IMPORTANT: The `jdo` and `jpa` branches should always work against the most recent release, whereas the `jdo-SNAPSHOT` and `jpa-SNAPSHOT` can reference more recently nightly builds if necessary.
+
+
 == Update the ASF Reporter website
 
 Log the new release in the link:https://reporter.apache.org/addrelease.html?isis[ASF Reporter website].
@@ -541,6 +563,8 @@ Copy-n-paste the above mailing list announcement should suffice.
 With the release complete, now is a good time to bump versions of dependencies (so that there is a full release cycle to identify any possible issues).
 
 You will probably want to create a new JIRA ticket for these updates (or if minor then use the "catch-all" JIRA ticket raised earlier for the next release).
+
+NOTE: We now use github's dependabot feature to keep on top of dependency updates, so this section is no longer quite so critical.
 
 === Merge in any changes from `org.apache:apache`
 

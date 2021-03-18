@@ -12,36 +12,15 @@ include::../section-hooks/resteasy~pre.adoc[]
 |Default
 |Description
 |
-[[resteasy.as-map]]
-resteasy.as-map
-
-| 
-| null
-
-
-|
-[[resteasy.authentication.strategy-class-name]]
-resteasy.authentication. +
-strategy-class-name
-
-| 
-| Defaults to ``AuthenticationStrategyBasicAuth``.
-
-
-|
-[[resteasy.environment]]
-resteasy.environment
-
-| 
-| null
-
-
-|
 [[resteasy.jaxrs.app.registration]]
 resteasy.jaxrs.app.registration
 
 | 
 | How the implementation of the JAX-RS application is discovered.
+
+There should be very little reason to change this from its default.
+
+@see https://github.com/resteasy/resteasy-spring-boot/blob/master/mds/USAGE.md[resteasy-spring-boot-starter docs]
 
 
 |
@@ -53,21 +32,7 @@ resteasy.jaxrs.default-path
 
 Note that this is used rather than ``prefix`` because there is _NO_ implementation of ``Application``, so we rely on it being automatically created.
 
-
-|
-[[resteasy.jaxrs.defaultPath]]
-resteasy.jaxrs.defaultPath
-
-| 
-| The path at which the RO viewer should be mounted.
-
-
-|
-[[resteasy.resteasy-settings]]
-resteasy.resteasy-settings
-
-| 
-| null
+@see https://github.com/resteasy/resteasy-spring-boot/blob/master/mds/USAGE.md[resteasy-spring-boot-starter docs]
 
 
 
