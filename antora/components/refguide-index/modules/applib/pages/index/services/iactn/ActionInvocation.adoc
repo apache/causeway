@@ -7,7 +7,7 @@
 .ActionInvocation.java
 ----
 class ActionInvocation {
-  ActionInvocation(final Interaction interaction, final String memberId, final Object target, final List<Object> args, final String targetMember, final String targetClass)
+  ActionInvocation(final Interaction interaction, final Identifier memberId, final Object target, final List<Object> args, final String targetMember, final String targetClass)
 }
 ----
 

@@ -1461,6 +1461,7 @@ Directory: /core/config
 
 .Components
 ****
+o.a.i.core.config.RestEasyConfiguration$RestfulPathProviderImpl +
 o.a.i.core.config.beans.IsisBeanFactoryPostProcessorForSpring +
 o.a.i.core.config.beans.IsisBeanTypeRegistryDefault +
 o.a.i.core.config.converters.PatternsConverter +
@@ -3272,8 +3273,8 @@ Directory: /valuetypes/asciidoc/ui
 |.Dependencies
 ****
 com.github.jnr:jnr-constants:jar:0.10.1 +
-com.github.jnr:jnr-enxio:jar:0.32.3 +
-com.github.jnr:jnr-posix:jar:3.1.4 +
+com.github.jnr:jnr-enxio:jar:0.32.4 +
+com.github.jnr:jnr-posix:jar:3.1.5 +
 org.apache.isis.core:isis-core-metamodel:jar:<managed> +
 org.apache.isis.valuetypes:isis-valuetypes-asciidoc-applib:jar:<managed> +
 org.asciidoctor:asciidoctorj:jar:${asciidoctorj.version} +
@@ -3763,12 +3764,12 @@ skinparam rectangle<<22>> {
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<23>> {
+skinparam rectangle<<12>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<12>> {
+skinparam rectangle<<23>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
@@ -5957,7 +5958,14 @@ Directory: /incubator/viewers/vaadin/model
 ----
 |.Dependencies
 ****
+com.github.fge:jackson-coreutils:jar:1.8 +
 com.vaadin:vaadin:jar:<managed> +
+io.swagger:swagger-compat-spec-parser:jar:1.0.39 +
+io.swagger:swagger-parser:jar:1.0.39 +
+io.swagger.core.v3:swagger-core:jar:2.0.5 +
+io.swagger.core.v3:swagger-models:jar:2.0.5 +
+io.swagger.parser.v3:swagger-parser-core:jar:2.0.5 +
+io.swagger.parser.v3:swagger-parser-v3:jar:2.0.5 +
 org.apache.isis.core:isis-core-internaltestsupport:jar:<managed> +
 org.apache.isis.core:isis-core-webapp:jar:<managed> +
 org.apache.isis.viewer:isis-viewer-common:jar:<managed> +
@@ -5989,7 +5997,6 @@ o.a.i.incubator.viewer.vaadin.ui.pages.main.UiContextVaaDefault +
 
 .Dependencies
 ****
-com.vaadin:vaadin:jar:<managed> +
 com.vaadin:vaadin-spring:jar:<managed> +
 commons-fileupload:commons-fileupload:jar:1.4 +
 org.apache.isis.core:isis-core-runtimeservices:jar:<managed> +

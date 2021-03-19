@@ -24,6 +24,8 @@ interface Can<T> {
   Stream<T> parallelStream()     // <.>
   Optional<T> getFirst()     // <.>
   T getFirstOrFail()     // <.>
+  Optional<T> getLast()     // <.>
+  T getLastOrFail()     // <.>
   Optional<T> getSingleton()     // <.>
   T getSingletonOrFail()     // <.>
   boolean contains(T element)     // <.>
@@ -90,6 +92,12 @@ For convenience allows the argument to be _null_ treating _null_ equivalent to _
 +
 --
 Shortcut for _getFirst().orElseThrow(_Exceptions::noSuchElement)_
+--
+<.> xref:#getLast__[getLast()]
+<.> xref:#getLastOrFail__[getLastOrFail()]
++
+--
+Shortcut for _getLast().orElseThrow(_Exceptions::noSuchElement)_
 --
 <.> xref:#getSingleton__[getSingleton()]
 <.> xref:#getSingletonOrFail__[getSingletonOrFail()]
@@ -227,6 +235,14 @@ For convenience allows the argument to be _null_ treating _null_ equivalent to _
 === getFirstOrFail()
 
 Shortcut for _getFirst().orElseThrow(_Exceptions::noSuchElement)_
+
+[#getLast__]
+=== getLast()
+
+[#getLastOrFail__]
+=== getLastOrFail()
+
+Shortcut for _getLast().orElseThrow(_Exceptions::noSuchElement)_
 
 [#getSingleton__]
 === getSingleton()
