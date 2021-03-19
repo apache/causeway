@@ -160,7 +160,7 @@
 		<objenesis.version>3.1</objenesis.version>
 		<ognl.version>3.2.18</ognl.version>
 
-		<pdfbox.version>2.0.22</pdfbox.version>
+		<pdfbox.version>2.0.23</pdfbox.version>
 		<picocontainer.version>2.15</picocontainer.version>
 		<poi.version>4.1.2</poi.version>
 
