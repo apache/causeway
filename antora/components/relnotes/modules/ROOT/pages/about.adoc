@@ -16,15 +16,15 @@ This table summarises all releases of Apache Isis v2.0 to date.
 | Bugs
 | Detail
 
-//| 2.0.0-M5
-//| not released yet (upcoming)
-//| Fifth milestone release for Apache Isis 2.0.0
-//| ?
-//| ?
-//| ?
-//|
-//* xref:relnotes:ROOT:2020/2.0.0-M5/relnotes.adoc[Release Notes]
-//* xref:relnotes:ROOT:2020/2.0.0-M5/mignotes.adoc[Migration Notes]
+| 2.0.0-M5
+| not released yet (upcoming)
+| Fifth milestone release for Apache Isis 2.0.0
+| ?
+| ?
+| ?
+|
+* xref:relnotes:ROOT:2021/2.0.0-M5/relnotes.adoc[Release Notes]
+* xref:relnotes:ROOT:2021/2.0.0-M5/mignotes.adoc[Migration Notes]
 
 | 2.0.0-M4
 | 17-10-2020
@@ -34,7 +34,7 @@ This table summarises all releases of Apache Isis v2.0 to date.
 | 54
 |
 * xref:relnotes:ROOT:2020/2.0.0-M4/relnotes.adoc[Release Notes]
-* xref:relnotes:ROOT:2018/2.0.0-M4/mignotes.adoc[Migration Notes]
+* xref:relnotes:ROOT:2020/2.0.0-M4/mignotes.adoc[Migration Notes]
 * link:https://issues.apache.org/jira/projects/ISIS/versions/12347808[JIRA Rel Notes]
 
 | 2.0.0-M3
@@ -45,6 +45,7 @@ This table summarises all releases of Apache Isis v2.0 to date.
 | 46
 |
 * xref:relnotes:ROOT:2020/2.0.0-M3/relnotes.adoc[Release Notes]
+* xref:relnotes:ROOT:2020/2.0.0-M3/mignotes.adoc[Migration Notes]
 * link:https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12311171&version=12344784[JIRA Rel Notes]
 
 | 2.0.0-M2

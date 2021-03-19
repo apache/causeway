@@ -61,7 +61,7 @@ To run the RAT tool, use:
 mvn clean
 
 pushd isis-parent
-mvn org.apache.rat:apache-rat-plugin:check -D rat.numUnapprovedLicenses=1000 -Dreleased -P'!all'
+mvn org.apache.rat:apache-rat-plugin:check -D rat.numUnapprovedLicenses=1000 -Dreleased
 popd
 
 for a in `/bin/find . -name rat.txt -print`; do grep '!???' $a; done > /tmp/rat-qn.txt
@@ -97,7 +97,7 @@ In the root directory:
 
 [source,bash,subs="attributes+"]
 ----
-mvn clean install -o
+mvn clean install -o -DskipTests
 ----
 
 Once this is done, capture the missing license information using:
@@ -137,6 +137,8 @@ Generate the website, ensuring that the config, examples, projdoc (system overvi
 ----
 sh preview.sh
 ----
+
+NOTE: this now needs to be run using Java 11 (because of the "projdoc" tooling).
 
 Check for any Asciidoc errors, and fix.
 

@@ -3,7 +3,6 @@
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :page-partial:
 
-WARNING: Not released yet.
 
 == Removal of Image Value Type
 
@@ -346,14 +345,14 @@ validity of the used constructor rather than doing construction reflective at ru
 
 == Wicket Viewer
 
-All descendants of `PanelAbstract` now need 2 generic type arguments instead of 1, 
+All descendants of `PanelAbstract` now need 2 generic type arguments instead of 1,
 where the newly added is first and specifies the _IModel's_ generic type parameter.
 
 [source,java]
 .PanelAbstract
 ----
 // PanelAbstract<T extends IModel<?>> extends PanelBase // <-- previously
-PanelAbstract<T, M extends IModel<T>> extends PanelBase<T> // <.> 
+PanelAbstract<T, M extends IModel<T>> extends PanelBase<T> // <.>
 ----
 <.> solves methods clashing 'having same erasure yet neither overrides the other'
 
@@ -361,7 +360,7 @@ PanelAbstract<T, M extends IModel<T>> extends PanelBase<T> // <.>
 .Example Migration
 ----
 // MyPanel extends PanelAbstract<IModel<String>> // <-- previously
-MyPanel extends PanelAbstract<String, IModel<String>> 
+MyPanel extends PanelAbstract<String, IModel<String>>
 ----
 
 == Extensions
