@@ -202,11 +202,26 @@ extends Iterable<T>, Comparable<Can<T>>, Serializable {
         return Can_Singleton.of(element);
     }
 
+    /**
+     * Var-arg version of {@link Can#ofArray(Object[])}.
+     * @param <T>
+     * @param array
+     * @return non-null
+     * @see Can#ofArray(Object[])
+     */
     @SafeVarargs
     public static <T> Can<T> of(T ... array) {
         return ofArray(array);
     }
     
+    /**
+     * Returns either a {@code Can} with all the elements from given {@code array} 
+     * or an empty {@code Can} if the {@code array} is {@code null}. Any elements
+     * equal to {@code null} are ignored and will not be contained in the resulting {@code Can}.
+     * @param <T>
+     * @param array
+     * @return non-null
+     */
     public static <T> Can<T> ofArray(@Nullable T[] array) {
 
         if(_NullSafe.size(array)==0) {
@@ -274,6 +289,14 @@ extends Iterable<T>, Comparable<Can<T>>, Serializable {
         return Can_Multiple.of(nonNullElements);
     }
     
+    /**
+     * Returns either a {@code Can} with all the elements from given {@code iterable} 
+     * or an empty {@code Can} if the {@code iterable} is {@code null}. Any elements
+     * equal to {@code null} are ignored and will not be contained in the resulting {@code Can}.
+     * @param <T>
+     * @param iterable
+     * @return non-null
+     */
     public static <T> Can<T> ofIterable(@Nullable Iterable<T> iterable) {
         
         if(iterable==null) {
@@ -286,6 +309,16 @@ extends Iterable<T>, Comparable<Can<T>>, Serializable {
         return ofCollection(elements);
     }
     
+    /**
+     * Returns either a {@code Can} with all the elements from given {@code enumeration} 
+     * or an empty {@code Can} if the {@code enumeration} is {@code null}. Any elements
+     * equal to {@code null} are ignored and will not be contained in the resulting {@code Can}.
+     * <p>
+     * As side-effect, consumes given {@code enumeration}.
+     * @param <T>
+     * @param enumeration
+     * @return non-null
+     */
     public static <T> Can<T> ofEnumeration(@Nullable Enumeration<T> enumeration) {
         
         if(enumeration==null) {
@@ -303,6 +336,8 @@ extends Iterable<T>, Comparable<Can<T>>, Serializable {
      * Returns either a {@code Can} with all the elements from given {@code stream} 
      * or an empty {@code Can} if the {@code stream} is {@code null}. Any elements
      * equal to {@code null} are ignored and will not be contained in the resulting {@code Can}.
+     * <p>
+     * As side-effect, consumes given {@code stream}.
      * @param <T>
      * @param stream
      * @return non-null
