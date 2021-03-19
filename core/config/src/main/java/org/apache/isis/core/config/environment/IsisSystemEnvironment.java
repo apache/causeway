@@ -43,11 +43,11 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
- * Represents configuration, that is required in an early bootstrapping phase. 
+ * Represents configuration, that is required in an early bootstrapping phase.
  * Regarded immutable during an application's life-cycle.
- * 
+ *
  * @since 2.0
- * @implNote acts as the framework's bootstrapping entry-point for Spring  
+ * @implNote acts as the framework's bootstrapping entry-point for Spring
  */
 @Service
 @Named("isis.config.IsisSystemEnvironment")
@@ -57,24 +57,24 @@ import lombok.extern.log4j.Log4j2;
 @Singleton
 @Log4j2
 public class IsisSystemEnvironment {
-    
-    public static final String VERSION = "2.0.0-M4"; // landed here, but could be anywhere else if reasonable
-    
+
+    public static final String VERSION = "2.0.0-M5"; // landed here, but could be anywhere else if reasonable
+
     @Inject private ApplicationContext springContext;
-    
+
     @Getter private _IocContainer iocContainer;
 
     // -- LIFE-CYCLE
-    
+
     @PostConstruct
     public void postConstruct() {
-        
+
         this.iocContainer = _IocContainer.spring(springContext);
-        
+
         log.info("postConstruct (hashCode = {})", this.hashCode());
-        
+
         // when NOT bootstrapped with Spring, postConstruct() never gets called
-        
+
         // when bootstrapped with Spring, postConstruct() must happen before any call to get() above,
         // otherwise we copy over settings from the primed instance already created with get() above,
         // then on the _Context replace the primed with this one
@@ -86,18 +86,18 @@ public class IsisSystemEnvironment {
         }
         _Context.putSingleton(IsisSystemEnvironment.class, this);
     }
-    
+
     @PreDestroy
     public void preDestroy() {
         log.info("preDestroy (hashCode = {})", this.hashCode());
     }
-    
+
     @EventListener(ContextRefreshedEvent.class)
     public void onContextRefreshed(ContextRefreshedEvent event) {
         // happens after all @PostConstruct
         log.info("onContextRefreshed");
     }
-    
+
     @EventListener(ContextClosedEvent.class)
     public void onContextAboutToClose(ContextClosedEvent event) {
         // happens before any @PostConstruct
@@ -107,22 +107,22 @@ public class IsisSystemEnvironment {
         this.iocContainer = null;
         _Context.clear();
     }
-    
+
     @EventListener(ApplicationFailedEvent.class)
     public void onContextRefreshed(ApplicationFailedEvent event) {
-        // happens eg. when DN finds non enhanced entity classes 
+        // happens eg. when DN finds non enhanced entity classes
         log.error("Application failed to start", event.getException());
     }
-    
-    
+
+
     // -- SHORTCUTS
-    
+
     public _IocContainer ioc() {
         return getIocContainer();
     }
-    
+
     // -- SETUP
-    
+
     /**
      * For framework internal unit tests.<p>
      * Let the framework know what context we are running on.
