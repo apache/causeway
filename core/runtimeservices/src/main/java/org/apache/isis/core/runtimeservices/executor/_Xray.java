@@ -24,6 +24,7 @@ import javax.annotation.Nullable;
 
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.debug.xray.XrayUi;
+import org.apache.isis.core.interaction.session.InteractionTracker;
 import org.apache.isis.core.metamodel.execution.InternalInteraction;
 import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -39,6 +40,7 @@ import lombok.val;
 final class _Xray {
 
     static Handle enterActionInvocation(
+            final @NonNull InteractionTracker iaTracker,
             final @NonNull InternalInteraction interaction, 
             final @NonNull ObjectAction owningAction,
             final @NonNull InteractionHead head, 
@@ -58,10 +60,11 @@ final class _Xray {
                         .map(obj->"" + obj)
                         .collect(Collectors.joining(",\n  ")));
         
-        return enterInvocation(interaction, participantLabel, enteringLabel);
+        return enterInvocation(iaTracker, interaction, participantLabel, enteringLabel);
     }
     
     public static Handle enterPropertyEdit(
+            final @NonNull InteractionTracker iaTracker,
             final @NonNull InternalInteraction interaction, 
             final @NonNull OneToOneAssociation owningProperty,
             final @NonNull InteractionHead head, 
@@ -75,13 +78,15 @@ final class _Xray {
         val enteringLabel = String.format("property edit -> '%s'", 
                 ManagedObjects.UnwrapUtil.single(newValueAdapter));
         
-        return enterInvocation(interaction, participantLabel, enteringLabel);
+        return enterInvocation(iaTracker, interaction, participantLabel, enteringLabel);
     }
     
     private static Handle enterInvocation(
+            final @NonNull InteractionTracker iaTracker,
             final InternalInteraction interaction,
             final String participantLabel,
             final String enteringLabel) {
+        
 
 
 //        val execution = interaction.getCurrentExecution(); // XXX why not populated?
@@ -103,9 +108,13 @@ final class _Xray {
 //                        CommonDtoUtils.<Object>getValue(((PropertyDto)memberDto).getNewValue()))
 //                : String.format("action invocation");
         
+        final int authStackSize = iaTracker.getAuthenticationLayerCount();
+        
         val handle = Handle.builder()
                 .sequenceId(XrayUtil.sequenceId(interaction.getInteractionId()))
-                .caller("thread")
+                .caller(authStackSize>0
+                    ? XrayUtil.nestedInteractionId(authStackSize)
+                    : "thread")
                 .callee(participantLabel)
                 .build();
         
@@ -113,7 +122,11 @@ final class _Xray {
             model.lookupSequence(handle.sequenceId)
             .ifPresent(sequence->{
                 val sequenceData = sequence.getData();
-                sequenceData.enter(handle.caller, handle.callee, enteringLabel);
+                
+                sequenceData.alias("executor", "Member-\nExecutorService-\n(Default)");
+                
+                sequenceData.enter(handle.caller, "executor");
+                sequenceData.enter("executor", handle.callee, enteringLabel);
             });
         });
         
@@ -129,7 +142,8 @@ final class _Xray {
             model.lookupSequence(handle.sequenceId)
             .ifPresent(sequence->{
                 val sequenceData = sequence.getData();
-                sequenceData.exit(handle.callee, handle.caller);
+                sequenceData.exit(handle.callee, "executor");
+                sequenceData.exit("executor", handle.caller);
             });
         });
     }

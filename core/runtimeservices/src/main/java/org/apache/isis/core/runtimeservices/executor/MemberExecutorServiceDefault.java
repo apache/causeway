@@ -88,8 +88,7 @@ implements MemberExecutorService {
     private final @Getter ObjectManager objectManager;
     private final @Getter ClockService clockService;
     private final @Getter Provider<MetricsService> metricsService;
-    private final @Getter
-    InteractionDtoFactory interactionDtoFactory;
+    private final @Getter InteractionDtoFactory interactionDtoFactory;
     private final @Getter Provider<ExecutionPublisher> executionPublisher;
     private final @Getter MetamodelEventService metamodelEventService;
     private final @Getter TransactionService transactionService;
@@ -120,7 +119,7 @@ implements MemberExecutorService {
         CommandPublishingFacet.ifPublishingEnabledForCommand(
                 command, owningAction, facetHolder, ()->command.updater().setPublishingEnabled(true));
         
-        val xrayHandle = _Xray.enterActionInvocation(interaction, owningAction, head, argumentAdapters);
+        val xrayHandle = _Xray.enterActionInvocation(interactionTracker, interaction, owningAction, head, argumentAdapters);
 
         val actionId = owningAction.getIdentifier();
         log.debug("about to invoke action {}", actionId);
@@ -202,7 +201,7 @@ implements MemberExecutorService {
         CommandPublishingFacet.ifPublishingEnabledForCommand(
                 command, owningProperty, facetHolder, ()->command.updater().setPublishingEnabled(true));
 
-        val xrayHandle = _Xray.enterPropertyEdit(interaction, owningProperty, head, newValueAdapter);
+        val xrayHandle = _Xray.enterPropertyEdit(interactionTracker, interaction, owningProperty, head, newValueAdapter);
         
         val propertyId = owningProperty.getIdentifier();
 
