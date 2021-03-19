@@ -18,19 +18,21 @@ datanucleus.cache.level2.mode
 | 
 | The mode of operation of the L2 cache, deciding which entities are cached.
 
-The default (UNSPECIFIED) is the same as DISABLE_SELECTIVE. NOTE: this config property isn't used by the framework, but is provided as a convenience for IDE autocomplete. @see https://www.datanucleus.org/products/accessplatform_5_2/jdo/persistence.html#pmf_properties[DataNucleus Config Property docs] @see https://www.datanucleus.org/products/accessplatform_5_2/jdo/persistence.html#cache_level2[DataNucleus Cache docs].
+The default (UNSPECIFIED) is the same as DISABLE_SELECTIVE.
+
+For more details, see https://www.datanucleus.org/products/accessplatform_5_2/jdo/persistence.html#pmf_properties[DataNucleus Config Property docs] and the https://www.datanucleus.org/products/accessplatform_5_2/jdo/persistence.html#cache_level2[DataNucleus Cache docs].
 
 
 |
 [[datanucleus.cache.level2.type]]
 datanucleus.cache.level2.type
 
-| 
+|  soft
 | Name of the type of Level 2 Cache to use.
 
 Can be used to interface with external caching products. Use "none" to turn off L2 caching; other values include "soft", "weak", "javax.cache".
 
-NOTE: this config property isn't used by the framework, but is provided as a convenience for IDE autocomplete. @see https://www.datanucleus.org/products/accessplatform_5_2/jdo/persistence.html#pmf_properties[DataNucleus Config Property docs] @see https://www.datanucleus.org/products/accessplatform_5_2/jdo/persistence.html#cache_level2[DataNucleus Cache docs].
+For more details, see https://www.datanucleus.org/products/accessplatform_5_2/jdo/persistence.html#pmf_properties[DataNucleus Config Property docs] and the https://www.datanucleus.org/products/accessplatform_5_2/jdo/persistence.html#cache_level2[DataNucleus Cache docs].
 
 
 |
@@ -45,12 +47,12 @@ datanucleus.identifier.case
 [[datanucleus.manage-relationships]]
 datanucleus.manage-relationships
 
-| 
+|  true
 | Whether DataNucleus will try to manage bidirectional relations, correcting the input objects so that all relations are consistent.
 
 This process runs when flush()/commit() is called. You can set it to false if you always set both sides of a relation when persisting/updating.
 
-NOTE: this config property isn't used by the framework, but is provided as a convenience for IDE autocomplete. @see https://www.datanucleus.org/products/accessplatform_5_2/jdo/persistence.html#pmf_properties[DataNucleus Config Property docs]
+For more details, see https://www.datanucleus.org/products/accessplatform_5_2/jdo/persistence.html#pmf_properties[DataNucleus Config Property docs].
 
 
 |
@@ -59,12 +61,12 @@ datanucleus. +
 persistence-by-reachability-at- +
 commit
 
-| 
+|  true
 | Whether to run the "persistence-by-reachability" algorithm at commit time.
 
 This means that objects that were reachable at a call to makePersistent() but that are no longer persistent will be removed from persistence. For performance improvements, consider turning this off.
 
-NOTE: this config property isn't used by the framework, but is provided as a convenience for IDE autocomplete. @see https://www.datanucleus.org/products/accessplatform_5_2/jdo/persistence.html#pmf_properties[DataNucleus Config Property docs]
+For more details, see https://www.datanucleus.org/products/accessplatform_5_2/jdo/persistence.html#pmf_properties[DataNucleus Config Property docs].
 
 
 |
