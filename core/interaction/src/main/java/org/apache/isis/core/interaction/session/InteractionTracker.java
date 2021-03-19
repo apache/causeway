@@ -63,6 +63,9 @@ extends InteractionContext, AuthenticationContext {
     
     /** @return the unique id of the current top-level request- or test-scoped Interaction*/
     Optional<UUID> getConversationId();
+    
+    /** @return authentication-layer-stack size */
+    int getAuthenticationLayerCount();
 
     // -- MESSAGE BROKER
 

@@ -154,6 +154,11 @@ implements
             ThreadLocal.withInitial(Stack::new);
     
     @Override
+    public int getAuthenticationLayerCount() {
+        return authenticationStack.get().size();
+    }
+    
+    @Override
     public AuthenticationLayer openInteraction() {
         return currentAuthenticationLayer()
                 // or else create an anonymous authentication layer

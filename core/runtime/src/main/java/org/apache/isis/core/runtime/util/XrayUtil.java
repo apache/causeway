@@ -50,4 +50,8 @@ public final class XrayUtil {
                 String.format("Thread-%d\n%s", ct.getId(), ct.getName())); 
     }
     
+    public static String nestedInteractionId(int authenticationStackSize) {
+        return "ia-" + (authenticationStackSize-1);
+    }
+    
 }

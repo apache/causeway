@@ -51,6 +51,8 @@ final class _Xray {
             val iaOpeningLabel = String.format("open interaction\n%s", 
                     executionContext.getUser().toString().replace(", ", ",\n"));
             
+            val uiInteractionId = XrayUtil.nestedInteractionId(authStackSize);
+            
             if(authStackSize==1) {
                 val uiThreadNode = model.getThreadNode(threadId);
                 
@@ -62,9 +64,9 @@ final class _Xray {
                         .getData();
                 
                 sequenceData.alias("thread", threadId.getMultilinelabel());
-                sequenceData.alias("ia-0", iaLabelMultiline);
+                sequenceData.alias(uiInteractionId, iaLabelMultiline);
                 
-                sequenceData.enter("thread", "ia-0", iaOpeningLabel);
+                sequenceData.enter("thread", uiInteractionId, iaOpeningLabel);
                 
                 return;
             }
@@ -72,7 +74,8 @@ final class _Xray {
             model.lookupSequence(sequenceId)
             .ifPresent(sequence->{
                 val sequenceData = sequence.getData();
-                sequenceData.enter("ia-" + (authStackSize-2), "ia" + (authStackSize-1), iaOpeningLabel);
+                sequenceData
+                .enter(XrayUtil.nestedInteractionId(authStackSize-1), uiInteractionId, iaOpeningLabel);
             });
             
             
@@ -92,16 +95,19 @@ final class _Xray {
         
         XrayUi.updateModel(model->{
             
+            val uiInteractionId = XrayUtil.nestedInteractionId(authStackSize);
+            
             model.lookupSequence(sequenceId)
             .ifPresent(sequence->{
                 val sequenceData = sequence.getData();
                 
                 if(authStackSize==1) {
-                    sequenceData.exit("ia-0", "thread", "close");
+                    sequenceData.exit(uiInteractionId, "thread", "close");
                     return;
                 }
                 
-                sequenceData.exit("ia-" + (authStackSize-2) , "ia" + (authStackSize-1), "close");
+                sequenceData
+                .exit(uiInteractionId, XrayUtil.nestedInteractionId(authStackSize-1), "close");
             });
             
         });
