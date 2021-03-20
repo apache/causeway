@@ -61,26 +61,44 @@ in other words, to confirm that the release was created by an Apache Isis commit
 
 * builds the framework code from source
 
-* downloads and builds the helloworld starter apps (from the correct release branch)
+* downloads and builds the helloworld starter app (for the `jdo` branch and also for the `jpa` branch)
 
 * ditto for the simpleapp starter app
 
-Assuming this completes successfully, you can then test the two starter applications:
+Assuming this completes successfully, you can then test the starter applications:
 
-* Test out helloworld using:
+* Test out helloworld (jdo) using:
 +
 [source,bash]
 ----
-pushd test-helloworld/isis-app-helloworld
+pushd isis-app-helloworld-jdo
 mvn spring-boot:run
 popd
 ----
 
-* Test out simpleapp using:
+* Test out helloworld (jpa) using:
 +
 [source,bash]
 ----
-pushd test-simpleapp/isis-app-simpleapp
+pushd isis-app-helloworld-jpa
+mvn spring-boot:run
+popd
+----
+
+* Test out simpleapp (jdo) using:
++
+[source,bash]
+----
+pushd isis-app-simpleapp-jdo
+mvn -pl webapp spring-boot:run
+popd
+----
+
+* Test out simpleapp (jpa) using:
++
+[source,bash]
+----
+pushd isis-app-simpleapp-jpa
 mvn -pl webapp spring-boot:run
 popd
 ----

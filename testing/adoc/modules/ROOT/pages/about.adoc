@@ -116,8 +116,7 @@ In the previous section we discussed using given/when/then as a form of organizi
 For integration tests though it can be difficult to keep the "given" short; there could be a lot of prerequisite data that needs to exist before you can actually exercise your system.
 Moreover, however we do set up that data, but we also want to do so in a way that is resilient to the system changing over time.
 
-The solution that Apache Isis provides is
-xref:testing:fixtures:about.adoc[fixture scripts], supported by a domain service (also) called xref:refguide:applib-cm:classes/super.adoc#FixtureScripts[Fixture Scripts].
+The solution that Apache Isis provides is xref:testing:fixtures:about.adoc[fixture scripts], supported by a domain service (also) called xref:testing:fixtures:services/FixtureScripts.adoc[FixtureScripts].
 This defines a pattern (command pattern and composite pattern) with supporting classes to help ensure that the "data setup" for your tests are reusable and maintainable over time.
 
 == Fake data

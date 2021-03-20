@@ -89,6 +89,7 @@ You are free, of course, to add additional "convenience" actions into it if you 
 
 Let's now look at the `FixtureScript` class, where there's a bit more going on.
 
+[#fixturescript]
 == `FixtureScript`
 
 A fixture script is ultimately just a block of code that can be executed, so it's up to you how you implement it to set up the system.

@@ -11,9 +11,8 @@ An alternative implementation might be more sophisticated (eg implementing an MR
 
 == See Also
 
-* The xref:vw:ROOT:about.adoc[Wicket viewer] exposes theclear hints"mixin action
-(`o.a.i.viewer.wicket.viewer.mixins.Object_clearHints`)
+* The xref:vw:ROOT:about.adoc[Wicket viewer] exposes the  xref:refguide:viewer:index/wicket/viewer/mixins/Object_clearHints.adoc["clear hints"] mixin action
 that is for use by end-users of the application to clear any UI hints that have accumulated for a domain object.
 
-* Mutable view models should implement the xref:HintIdProvider.adoc[] interface in order for hints to work.
+* Mutable view models should implement the xref:refguide:applib:index/services/hint/HintIdProvider.adoc[] in order for hints to work.
 

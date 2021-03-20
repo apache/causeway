@@ -62,10 +62,10 @@ See also xref:refguide:applib-methods:prefixes.adoc#autoComplete[autoComplete...
 |xref:refguide:applib-methods:prefixes.adoc#disable[disable...()]
 |Y
 |Y
-|Y
-|Y
 |
-|Disables (makes read-only) a property, a collection or an action.
+|Y
+|Y
+|Disables (makes read-only) a property, an action or (dynamically) an action parameter.
 
 |xref:refguide:applib-methods:prefixes.adoc#get[get...()]
 |
@@ -82,17 +82,26 @@ See also xref:refguide:applib-methods:prefixes.adoc#set[set...()].
 |Y
 |Y
 |Y
-|
-|Hides a property, a collection or an action.
+|Y
+|Hides a property, a collection, an action or (dynamically) an action parameter.
 
 
 |xref:refguide:applib-methods:prefixes.adoc#set[set...()]
 |
 |Y
+|
+|
+|
+|Sets the value of a property.
+
+
+|xref:refguide:applib-methods:prefixes.adoc#validate[validate...()]
+|
 |Y
 |
 |
-|Sets the value of a property or a collection.
+|Y
+|Validate the proposed value of a property or an action parameter.
 
 
 |===
@@ -114,3 +123,4 @@ include::prefixes/disable.adoc[leveloffset=+1]
 include::prefixes/get.adoc[leveloffset=+1]
 include::prefixes/hide.adoc[leveloffset=+1]
 include::prefixes/set.adoc[leveloffset=+1]
+include::prefixes/validate.adoc[leveloffset=+1]

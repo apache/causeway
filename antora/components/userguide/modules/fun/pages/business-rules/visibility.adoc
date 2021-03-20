@@ -86,9 +86,9 @@ In this case, the user can use the `shipTo(...)` action to specify where to ship
 However, if they check the first boolean parameter (ie, to ship the `Order` to the billing address already held on file), then the remaining parameters will all be hidden.
 
 
-== For more information
+== See also
 
-For more information, see the xref:refguide:applib-cm:methods.adoc#hide[hide...()] section in the appropriate reference guide.
+* xref:refguide:applib-methods:prefixes.adoc#hide[hide...()] method prefix
 
 
 
