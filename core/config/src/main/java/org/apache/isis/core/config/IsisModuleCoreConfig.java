@@ -23,10 +23,10 @@ import java.util.Map;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
+import org.apache.isis.core.config.applib.RestfulPathProvider;
 import org.apache.isis.core.config.beans.IsisBeanFactoryPostProcessorForSpring;
 import org.apache.isis.core.config.beans.IsisBeanTypeRegistryDefault;
 import org.apache.isis.core.config.converters.PatternsConverter;
@@ -46,6 +46,7 @@ import org.apache.isis.core.config.viewer.wicket.WebAppContextPath;
     IsisLocaleInitializer.class,
     IsisTimeZoneInitializer.class,
     PatternOptionalStringConstraintValidator.class,
+    RestfulPathProvider.class,
 
     // @Service's
     DataSourceIntrospectionService.class,

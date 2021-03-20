@@ -52,17 +52,6 @@ import lombok.Setter;
 @Validated
 public class RestEasyConfiguration {
 
-    @Component
-    @RequiredArgsConstructor(onConstructor_ = {@Inject})
-    public static class RestfulPathProviderImpl implements Object_openRestApi.RestfulPathProvider {
-
-        private final RestEasyConfiguration restEasyConfiguration;
-        @Override
-        public Optional<String> getRestfulPath() {
-            return Optional.ofNullable(restEasyConfiguration.getJaxrs().getDefaultPath());
-        }
-    }
-
     @Getter
     private final Jaxrs jaxrs = new Jaxrs();
     @Data
