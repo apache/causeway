@@ -22,7 +22,7 @@ The table below indicates which screencasts are in which playlist.
 [NOTE]
 ====
 These screencasts were recorded using v1.12.x.
-There have since been a number of UI improvements since these releases.
+There have been a number of UI improvements since these releases.
 ====
 
 

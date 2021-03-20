@@ -8,7 +8,7 @@ On this page we want to show you what an Apache Isis application looks like, run
 The screenshots below are taken from a "Todo" application.
 
 NOTE: these screenshots are based on an app running against v1.13  and v1.10 of the framework.
-There have since been a number of UI improvements since these releases.
+There have been a number of UI improvements since these releases.
 
 == Basics
 
