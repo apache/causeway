@@ -18,7 +18,6 @@
  */
 package org.apache.isis.core.config;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -37,6 +36,8 @@ import org.apache.isis.core.config.environment.IsisTimeZoneInitializer;
 import org.apache.isis.core.config.validators.PatternOptionalStringConstraintValidator;
 import org.apache.isis.core.config.viewer.wicket.WebAppContextPath;
 
+import lombok.Data;
+
 @Configuration
 @Import({
 
@@ -53,26 +54,21 @@ import org.apache.isis.core.config.viewer.wicket.WebAppContextPath;
     IsisBeanTypeRegistryDefault.class,
     IsisSystemEnvironment.class,
     WebAppContextPath.class,
+    
 })
 @EnableConfigurationProperties({
         IsisConfiguration.class,
         RestEasyConfiguration.class,
+        IsisModuleCoreConfig.ConfigProps.class,
 })
 public class IsisModuleCoreConfig {
 
-    @ConfigurationProperties(prefix = "isis")
-    public Map<String, String> getIsisConfigProps() {
-        return new HashMap<>();
-    }
-
-    @ConfigurationProperties(prefix = "resteasy")
-    public Map<String, String> getResteasyConfigProps() {
-        return new HashMap<>();
-    }
-
-    @ConfigurationProperties(prefix = "datanucleus")
-    public Map<String, String> getDataNucleusConfigProps() {
-        return new HashMap<>();
+    @ConfigurationProperties(prefix = "")
+    @Data
+    public static class ConfigProps {
+        private Map<String, String> isis;
+        private Map<String, String> resteasy;
+        private Map<String, String> datanucleus;
     }
 
 }

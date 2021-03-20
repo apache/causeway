@@ -33,7 +33,6 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
-import org.apache.isis.applib.mixins.rest.Object_openRestApi;
 import org.apache.isis.applib.services.confview.ConfigurationProperty;
 import org.apache.isis.applib.services.confview.ConfigurationViewService;
 import org.apache.isis.commons.internal.base._Lazy;
@@ -42,7 +41,6 @@ import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.IsisConfiguration.Core.Config.ConfigurationPropertyVisibilityPolicy;
 import org.apache.isis.core.config.IsisModuleCoreConfig;
-import org.apache.isis.core.config.RestEasyConfiguration;
 import org.apache.isis.core.config.environment.IsisSystemEnvironment;
 import org.apache.isis.core.config.util.ValueMaskingUtil;
 
@@ -66,8 +64,8 @@ implements
 
     private final IsisSystemEnvironment systemEnvironment;
     private final IsisConfiguration configuration;
-    private final IsisModuleCoreConfig isisModuleCoreConfig;
-
+    
+    private final IsisModuleCoreConfig.ConfigProps configProps;
 
     @Override
     public Set<ConfigurationProperty> getEnvironmentProperties() {
@@ -142,9 +140,9 @@ implements
     private Map<String, ConfigurationProperty> loadConfiguration() {
         final Map<String, ConfigurationProperty> map = _Maps.newTreeMap();
         if(isShowConfigurationProperties()) {
-            isisModuleCoreConfig.getIsisConfigProps().forEach((k, v)->add("isis." + k, v, map));
-            isisModuleCoreConfig.getResteasyConfigProps().forEach((k, v)->add("resteasy." + k, v, map));
-            isisModuleCoreConfig.getDataNucleusConfigProps().forEach((k, v)->add("datanucleus." + k, v, map));
+            configProps.getIsis().forEach((k, v)->add("isis." + k, v, map));
+            configProps.getResteasy().forEach((k, v)->add("resteasy." + k, v, map));
+            configProps.getDatanucleus().forEach((k, v)->add("datanucleus." + k, v, map));
         } else {
             // if properties are not visible, show at least the policy
             add("Configuration Property Visibility Policy",
