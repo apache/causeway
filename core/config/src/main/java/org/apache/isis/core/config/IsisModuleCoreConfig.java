@@ -18,6 +18,7 @@
  */
 package org.apache.isis.core.config;
 
+import java.util.Collections;
 import java.util.Map;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -63,12 +64,12 @@ import lombok.Data;
 })
 public class IsisModuleCoreConfig {
 
-    @ConfigurationProperties(prefix = "")
+    @ConfigurationProperties(prefix = "", ignoreUnknownFields = true)
     @Data
     public static class ConfigProps {
-        private Map<String, String> isis;
-        private Map<String, String> resteasy;
-        private Map<String, String> datanucleus;
+        private Map<String, String> isis = Collections.emptyMap();
+        private Map<String, String> resteasy = Collections.emptyMap();
+        private Map<String, String> datanucleus = Collections.emptyMap();
     }
 
 }
