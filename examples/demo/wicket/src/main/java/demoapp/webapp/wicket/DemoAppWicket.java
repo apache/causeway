@@ -60,7 +60,7 @@ import demoapp.webapp.wicket.ui.custom.WhereInTheWorldPanelFactory;
     IsisModuleValAsciidocPersistenceJdoDn5.class,
     IsisModuleValMarkdownPersistenceJdoDn5.class,
     
-    XrayEnable.class // for debugging only
+    //XrayEnable.class // for debugging only
 })
 //@Log4j2
 public class DemoAppWicket extends SpringBootServletInitializer {
