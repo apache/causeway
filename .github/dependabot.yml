@@ -8,21 +8,21 @@ updates:
 
   # Maintain dependencies for GitHub Actions
   - package-ecosystem: "github-actions"
-    target-branch: "edge"
+    target-branch: "master"
     directory: "/"
     schedule:
       interval: "daily"
 
   # Maintain dependencies for npm
   - package-ecosystem: "npm"
-    target-branch: "edge"
+    target-branch: "master"
     directory: "/"
     schedule:
       interval: "daily"
 
   # Maintain dependencies for Maven
   - package-ecosystem: "maven"
-    target-branch: "edge"
+    target-branch: "master"
     directory: "/" # Location of package manifests
     schedule:
       interval: "daily"
@@ -31,7 +31,7 @@ updates:
 
   # Maintain dependencies for Gradle
   - package-ecosystem: "gradle"
-    target-branch: "edge"
+    target-branch: "master"
     directory: "/" # Location of package manifests
     schedule:
       interval: "daily"
