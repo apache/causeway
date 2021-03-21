@@ -68,6 +68,9 @@ content:
       start_path: core/config/src/main/adoc # refguide
       branches: HEAD
     - url: .
+      start_path: core/interaction/src/main/adoc # core
+      branches: HEAD
+    - url: .
       start_path: core/internaltestsupport/src/main/adoc # core
       branches: HEAD
     - url: .
@@ -77,10 +80,16 @@ content:
       start_path: core/runtime/src/main/adoc # core
       branches: HEAD
     - url: .
-      start_path: core/webapp/src/main/adoc # core
+      start_path: core/runtimeservices/src/main/adoc # core
       branches: HEAD
     - url: .
       start_path: core/security/src/main/adoc # security
+      branches: HEAD
+    - url: .
+      start_path: core/transaction/src/main/adoc # core
+      branches: HEAD
+    - url: .
+      start_path: core/webapp/src/main/adoc # core
       branches: HEAD
 
 # examples
