@@ -157,7 +157,7 @@
 		<node.version>v12.14.0</node.version>
 		<npm.version>6.13.1</npm.version>
 
-		<objenesis.version>3.1</objenesis.version>
+		<objenesis.version>3.2</objenesis.version>
 		<ognl.version>3.2.19</ognl.version>
 
 		<pdfbox.version>2.0.23</pdfbox.version>
