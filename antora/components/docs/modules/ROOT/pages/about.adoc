@@ -89,8 +89,8 @@ _Other_
 
 _Viewers_
 
-* xref:vw:ROOT:about.adoc[Wicket UI]
-* xref:vro:ROOT:about.adoc[Restful Objects (REST API)]
+* xref:vw:ROOT:about.adoc[Web UI (Wicket)]
+* xref:vro:ROOT:about.adoc[REST API (Restful Objects)]
 
 _Security_
 
@@ -98,7 +98,8 @@ _Security_
 
 _Persistence_
 
-* xref:pjdo:ROOT:about.adoc[DataNucleus (JDO)]
+* xref:pjpa:ROOT:about.adoc[JPA (EclipseLink)]
+* xref:pjdo:ROOT:about.adoc[JDO (DataNucleus)]
 
 _Extensions_
 

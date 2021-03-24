@@ -217,11 +217,11 @@ content:
 
 # persistence
     - url: .
+      start_path: persistence/jpa/adoc # pjpa
+      branches: HEAD
+    - url: .
       start_path: persistence/jdo/adoc # pjdo
       branches: HEAD
-#    - url: .
-#      start_path: persistence/jpa/adoc # pjpa
-#      branches: HEAD
 
 # security
     - url: .
