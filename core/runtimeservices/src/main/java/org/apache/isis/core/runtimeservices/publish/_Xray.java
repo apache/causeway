@@ -115,7 +115,31 @@ final class _Xray {
             final @NonNull InteractionTracker iaTracker,
             final @NonNull Optional<EntityChanges> payload,
             final @NonNull Can<EntityChangesSubscriber> enabledSubscribers) {
-        return null;
+        
+        if(!XrayUi.isXrayEnabled()) {
+            return null;
+        }
+        
+        val enteringLabel = payload.isPresent() 
+                ? String.format("publishing entity-changes to %d subscriber(s)", enabledSubscribers.size())
+                : "not publishing entity-changes";
+        
+        val handleIfAny = XrayUtil.createSequenceHandle(iaTracker, "ec-publisher");
+        handleIfAny.ifPresent(handle->{
+            
+            handle.submit(sequenceData->{
+                
+                sequenceData.alias("ec-publisher", "EntityChanges-\nPublisher-\n(Default)");
+                
+                val callee = handle.getCallees().getFirstOrFail();
+                sequenceData.enter(handle.getCaller(), callee, enteringLabel);
+                sequenceData.activate(callee);
+            });
+            
+        });
+        
+        return handleIfAny.orElse(null);
+        
     }
     
     // -- ENTITY PROPERTY CHANGES
@@ -124,7 +148,31 @@ final class _Xray {
             final @NonNull InteractionTracker iaTracker,
             final @NonNull Can<EntityPropertyChange> payload,
             final @NonNull Can<EntityPropertyChangeSubscriber> enabledSubscribers) {
-        return null;
+        
+        if(!XrayUi.isXrayEnabled()) {
+            return null;
+        }
+        
+        val enteringLabel = !payload.isEmpty() 
+                ? String.format("publishing entity-property-changes to %d subscriber(s)", enabledSubscribers.size())
+                : "not publishing entity-property-changes";
+        
+        val handleIfAny = XrayUtil.createSequenceHandle(iaTracker, "epc-publisher");
+        handleIfAny.ifPresent(handle->{
+            
+            handle.submit(sequenceData->{
+                
+                sequenceData.alias("epc-publisher", "EntityProperty-\nChanges-Publisher-\n(Default)");
+                
+                val callee = handle.getCallees().getFirstOrFail();
+                sequenceData.enter(handle.getCaller(), callee, enteringLabel);
+                sequenceData.activate(callee);
+            });
+            
+        });
+        
+        return handleIfAny.orElse(null);
+        
     }
     
     // -- EXIT
