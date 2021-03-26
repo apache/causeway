@@ -29,9 +29,11 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.TreeMap;
 
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Refs;
 import org.apache.isis.commons.internal.base._Refs.IntReference;
 import org.apache.isis.commons.internal.debug.xray.sequence._Graphics.TextBlock;
+import org.apache.isis.commons.internal.primitives._Ints;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -44,6 +46,7 @@ public class SequenceDiagram {
 
     private final Map<String, Participant> participantsById = new LinkedHashMap<>();
     private final List<Connection> connections = new ArrayList<>();
+    private final List<Lifeline> lifelines = new ArrayList<>();
 
     private Dimension size;
 
@@ -55,13 +58,13 @@ public class SequenceDiagram {
     public void enter(final @NonNull String from, final @NonNull String to, String label) {
         val p0 = participantsById.computeIfAbsent(from, id->new Participant(aliases.getOrDefault(id, id)));
         val p1 = participantsById.computeIfAbsent(to, id->new Participant(aliases.getOrDefault(id, id)));
-        connections.add(new Connection(p0, p1, label, false));
+        connections.add(new Connection(connections.size(), p0, p1, label, false));
     }
 
     public void exit(final @NonNull String from, final @NonNull String to, String label) {
         val p1 = participantsById.computeIfAbsent(to, id->new Participant(aliases.getOrDefault(id, id)));
         val p0 = participantsById.computeIfAbsent(from, id->new Participant(aliases.getOrDefault(id, id)));
-        connections.add(new Connection(p0, p1, label, true));
+        connections.add(new Connection(connections.size(), p0, p1, label, true));
     }
 
     public void enter(String from, String to) {
@@ -70,6 +73,23 @@ public class SequenceDiagram {
 
     public void exit(String from, String to) {
         exit(from, to, null);
+    }
+    
+    public void activate(String participantId) {
+        val participant = participantsById
+                .computeIfAbsent(participantId, id->new Participant(aliases.getOrDefault(id, id)));
+        val latestConnection = Can.ofCollection(connections).getLast().orElse(null);
+        lifelines.add(new Lifeline(participant, latestConnection));
+    }
+
+    public void deactivate(String participantId) {
+        val participant = participantsById
+                .computeIfAbsent(participantId, id->new Participant(aliases.getOrDefault(id, id)));
+        val latestConnection = Can.ofCollection(connections).getLast().orElse(null);
+        Can.ofCollection(lifelines).reverse().stream()
+        .filter(lifeline->lifeline.getParticipant().equals(participant))
+        .findFirst()
+        .ifPresent(lifeline->lifeline.endAt = latestConnection);
     }
 
     // -- RENDERING
@@ -84,6 +104,9 @@ public class SequenceDiagram {
     private final static int PARTICIPANT_MAX_CHAR_PER_LINE = 26;
     private final static Optional<Font> PARTICIPANT_FONT = _Graphics.lookupFont("Verdana", 12.f);
     
+    private final static Color LIFELINE_BACKGROUND_COLOR = Color.WHITE;
+    private final static int LIFELINE_WIDTH = 8;
+    
     private final static int CONNECTION_MARGIN_V = 12;
     private final static int CONNECTION_LABEL_PADDING_H = 8;
     private final static int CONNECTION_LABEL_PADDING_V = 3;
@@ -92,6 +115,7 @@ public class SequenceDiagram {
 
     @Getter @RequiredArgsConstructor
     private static class Connection {
+        final int index;
         final Participant from;
         final Participant to;
         final String label;
@@ -99,15 +123,43 @@ public class SequenceDiagram {
 
         TextBlock textBlock;
 
+        int x_left;
+        int x_from;
+        int x_to;
+        
         int y_top;
         int y_bottom;
         int height;
 
-        void layout(Graphics2D g, IntReference y_offset) {
+        void layout(Graphics2D g, IntReference y_offset, List<Lifeline> lifelines) {
+            
+            x_from = from.getX_middle();
+            x_to = to.getX_middle();
+            
+            val fromConnectsLifeline = lifelines.stream()
+                    .filter(ll->ll.getParticipant().equals(from))
+                    .anyMatch(ll->ll.overlaps(this));
+            
+            val toConnectsLifeline = lifelines.stream()
+                    .filter(ll->ll.getParticipant().equals(to))
+                    .anyMatch(ll->ll.overlaps(this));
+            
+            final int dir = from.getX_middle() < to.getX_middle() 
+                    ? 1
+                    : -1;
+            if(fromConnectsLifeline) {
+                x_from+= dir * LIFELINE_WIDTH / 2;
+            }
+            if(toConnectsLifeline) {
+                x_to-= dir * LIFELINE_WIDTH / 2;
+            }
+            
+            x_left = Math.min(x_from, x_to);
+            
             y_top = y_offset.getValue() + CONNECTION_MARGIN_V;
-
+            
             textBlock = new TextBlock(label, 
-                    Math.min(from.getX_middle(), to.getX_middle()), 
+                    x_left, 
                     y_top);
 
             val dim = textBlock.layout(g.getFontMetrics(), 
@@ -160,6 +212,48 @@ public class SequenceDiagram {
             x_offset.update(x->x + width + PARTICIPANT_MARGIN_H);
         }
     }
+    
+    @Getter @RequiredArgsConstructor
+    private static class Lifeline {
+        final @NonNull Participant participant;
+        final Connection startAt;
+        Connection endAt;
+        
+        int x_left;
+        int x_right;
+        int width;
+        
+        int y_top;
+        int y_bottom;
+        int height;
+        
+        void layout(Graphics2D g, int min_y, int max_y) {
+            
+            width = LIFELINE_WIDTH;
+            x_left = participant.getX_middle() - LIFELINE_WIDTH / 2;
+            x_right = x_left + width;
+            
+            y_top = startAt !=null
+                    ? startAt.y_bottom
+                    : min_y;
+            y_bottom = endAt !=null
+                    ? endAt.y_bottom
+                    : max_y;
+            
+            height = y_bottom - y_top;
+        }
+
+        public boolean overlaps(Connection connection) {
+            val lowerBound = _Ints.Bound.inclusive(startAt != null
+                    ? startAt.index
+                    : -1);
+            val upperBound = _Ints.Bound.inclusive(endAt !=null
+                    ? endAt.index
+                    : Integer.MAX_VALUE);
+            return _Ints.Range.of(lowerBound, upperBound).contains(connection.index);
+        }
+    }
+    
 
     public Dimension layout(Graphics2D g) {
 
@@ -167,22 +261,31 @@ public class SequenceDiagram {
         
         val x_offset = _Refs.intRef(PARTICIPANT_MARGIN_H);
         val y_offset = _Refs.intRef(0);
+        
         participantsById.values().stream()
         .peek(p->p.layout(g, x_offset))
         .forEach(p->y_offset.update(x->Math.max(x, p.getHeight())));
-
+        
         final int width = x_offset.getValue();
 
         y_offset.update(x->x + PARTICIPANT_MARGIN_V);
 
-        CONNECTION_FONT.ifPresent(g::setFont);
+        final int y_offset_first_con = y_offset.getValue();
         
+        CONNECTION_FONT.ifPresent(g::setFont);
+
         connections.stream()
-        .forEach(c->c.layout(g, y_offset));
+        .forEach(c->c.layout(g, y_offset, lifelines));
 
+        final int y_offset_last_con = y_offset.getValue();
+        
         final int height = y_offset.update(x->x + 2*PARTICIPANT_MARGIN_V);
-
-        return this.size = new Dimension(width, height);
+        this.size = new Dimension(width, height);
+        
+        lifelines.stream()
+        .forEach(ll->ll.layout(g, y_offset_first_con - 3, y_offset_last_con + 3));
+        
+        return this.size;
     }
 
     public void render(Graphics2D g) {
@@ -216,6 +319,19 @@ public class SequenceDiagram {
             g.drawLine(p.getX_middle(), p.getY_bottom(), p.getX_middle(), size.height - PARTICIPANT_MARGIN_V);
         });
 
+        
+        g.setStroke(_Graphics.STROKE_DEFAULT);
+        
+        lifelines.stream()
+        .forEach(ll->{
+            
+            g.setColor(LIFELINE_BACKGROUND_COLOR);
+            g.fillRect(ll.getX_left(), ll.getY_top(), ll.getWidth(), ll.getHeight());
+
+            g.setColor(PARTICIPANT_BORDER_COLOR);
+            g.drawRect(ll.getX_left(), ll.getY_top(), ll.getWidth(), ll.getHeight());
+        });
+        
         CONNECTION_FONT.ifPresent(g::setFont);
         
         connections.stream()
@@ -227,11 +343,11 @@ public class SequenceDiagram {
 
             g.setStroke(c.isDashedLine()
                     ? _Graphics.STROKE_DASHED
-                            : _Graphics.STROKE_DEFAULT);
+                    : _Graphics.STROKE_DEFAULT);
 
             _Graphics.arrowHorizontal(g, 
-                    c.getFrom().getX_middle(), 
-                    c.getTo().getX_middle(), 
+                    c.getX_from(), 
+                    c.getX_to(), 
                     c.getY_bottom());
 
             // connection label

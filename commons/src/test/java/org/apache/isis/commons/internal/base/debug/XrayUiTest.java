@@ -52,13 +52,15 @@ class XrayUiTest {
         sequenceData.alias("ex", "Execution\n- act\n- prop\n- coll");
         
         sequenceData.enter("thread", "test"); 
-        sequenceData.enter("test", "ix", "run anonymous");
+        sequenceData.enter("test", "ix", "run anonymous"); 
+        sequenceData.activate("ix");
         sequenceData.enter("ix", "tx", "require NEW");
         sequenceData.enter("ix", "ex", "execute");
 
         sequenceData.exit("ex", "ix");
         sequenceData.exit("tx", "ix", "exit\n(after commit/rollback/unknown)");
-        sequenceData.exit("ix", "test", "exit");
+        sequenceData.exit("ix", "test", "exit"); 
+        sequenceData.deactivate("ix");
         sequenceData.exit("test", "thread", "exit");
         
         model.addContainerNode(root, "Container");
