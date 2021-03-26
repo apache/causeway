@@ -26,6 +26,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.config.IsisConfiguration;
+import org.apache.isis.core.config.environment.IsisSystemEnvironment;
 import org.apache.isis.core.config.viewer.wicket.WebAppContextPath;
 import org.apache.isis.core.interaction.session.InteractionFactory;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
@@ -42,7 +43,6 @@ implements HasCommonContext {
 
     private static final long serialVersionUID = 1L;
     
-    private transient IsisConfiguration isisConfiguration;
     private transient WebAppContextPath webAppContextPath;
     private transient PageClassRegistry pageClassRegistry;
     private transient IsisAppCommonContext commonContext;
@@ -65,7 +65,7 @@ implements HasCommonContext {
     // -- FAVICON SUPPORT
     
     protected void renderFavicon(IHeaderResponse response) {
-        getIsisConfiguration().getViewer().getWicket().getApplication().getFaviconUrl()
+        getConfiguration().getViewer().getWicket().getApplication().getFaviconUrl()
         .filter(_Strings::isNotEmpty)
         .map(getWebAppContextPath()::prependContextPathIfLocal)
         .ifPresent(faviconUrl->{
@@ -80,8 +80,8 @@ implements HasCommonContext {
         return commonContext = CommonContextUtils.computeIfAbsent(commonContext);
     }
     
-    public IsisConfiguration getIsisConfiguration() {
-        return isisConfiguration = computeIfAbsent(IsisConfiguration.class, isisConfiguration);
+    public IsisConfiguration getConfiguration() {
+        return getCommonContext().getConfiguration();
     }
 
     public WebAppContextPath getWebAppContextPath() {
@@ -94,6 +94,10 @@ implements HasCommonContext {
 
     public InteractionFactory getIsisInteractionFactory() {
         return isisInteractionFactory = computeIfAbsent(InteractionFactory.class, isisInteractionFactory);
+    }
+    
+    public IsisSystemEnvironment getSystemEnvironment() {
+        return getCommonContext().getSystemEnvironment();
     }
     
     // -- HELPER

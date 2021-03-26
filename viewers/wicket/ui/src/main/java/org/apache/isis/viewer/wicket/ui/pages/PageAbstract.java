@@ -47,9 +47,6 @@ import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.protocol.http.ClientProperties;
-import org.apache.wicket.protocol.http.WebSession;
-import org.apache.wicket.protocol.http.request.WebClientInfo;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
@@ -149,7 +146,7 @@ implements ActionPromptProvider {
 
             themeDiv = new WebMarkupContainer(ID_THEME);
             add(themeDiv);
-            String applicationName = getIsisConfiguration().getViewer().getWicket().getApplication().getName();
+            String applicationName = getConfiguration().getViewer().getWicket().getApplication().getName();
             if(applicationName != null) {
                 themeDiv.add(new CssClassAppender(CssClassAppender.asCssStyle(applicationName)));
             }
@@ -237,7 +234,7 @@ implements ActionPromptProvider {
     protected void setTitle(final String title) {
         addOrReplace(new Label(ID_PAGE_TITLE, title != null
                 ? title
-                : getIsisConfiguration().getViewer().getWicket().getApplication().getName()));
+                : getConfiguration().getViewer().getWicket().getApplication().getName()));
     }
 
     private Class<? extends Page> getSignInPage() {
@@ -263,19 +260,21 @@ implements ActionPromptProvider {
         final JGrowlBehaviour jGrowlBehaviour = new JGrowlBehaviour(getCommonContext());
         jGrowlBehaviour.renderFeedbackMessages(response);
 
-        getIsisConfiguration().getViewer().getWicket().getApplication().getCss()
-                .ifPresent(applicationCss -> {
-                    response.render(CssReferenceHeaderItem.forUrl(applicationCss));
-                });
-        getIsisConfiguration().getViewer().getWicket().getApplication().getJs()
-                .ifPresent(applicationJs -> {
-                    response.render(JavaScriptReferenceHeaderItem.forUrl(applicationJs));
-                } );
-
-        getCommonContext().getConfiguration().getViewer().getWicket().getLiveReloadUrl().ifPresent(liveReloadUrl -> {
+        getConfiguration().getViewer().getWicket().getApplication().getCss()
+        .ifPresent(applicationCss -> {
+            response.render(CssReferenceHeaderItem.forUrl(applicationCss));
+        });
+        
+        getConfiguration().getViewer().getWicket().getApplication().getJs()
+        .ifPresent(applicationJs -> {
+            response.render(JavaScriptReferenceHeaderItem.forUrl(applicationJs));
+        } );
+        
+        getConfiguration().getViewer().getWicket().getLiveReloadUrl().ifPresent(liveReloadUrl -> {
             response.render(JavaScriptReferenceHeaderItem.forUrl(liveReloadUrl));
         });
-        if(isModernBrowser()) {
+        
+        if(getSystemEnvironment().isPrototyping()) {
             addBootLint(response);
         }
 
@@ -303,24 +302,14 @@ implements ActionPromptProvider {
         return null;
     }
 
+    /**
+     * BootLint checks for malformed bootstrap CSS. It is probably only needed in PROTOTYPE mode.
+     */
     private void addBootLint(final IHeaderResponse response) {
         // rather than using the default BootlintHeaderItem.INSTANCE;
         // this allows us to assign 'form-control' class to an <a> (for x-editable styling)
-        response.render(new BootlintHeaderItem("bootlint.showLintReportForCurrentDocument(['E042'], {'problemFree': false});"));
-    }
-
-    private boolean isModernBrowser() {
-        return !isIePre9();
-    }
-
-    @SuppressWarnings("deprecation")
-    private boolean isIePre9() {
-        final WebClientInfo clientInfo = WebSession.get().getClientInfo();
-        final ClientProperties properties = clientInfo.getProperties();
-        if (properties.isBrowserInternetExplorer())
-            if (properties.getBrowserVersionMajor() < 9)
-                return true;
-        return false;
+        response.render(new BootlintHeaderItem(
+                "bootlint.showLintReportForCurrentDocument(['E042'], {'problemFree': false});"));
     }
 
     /**

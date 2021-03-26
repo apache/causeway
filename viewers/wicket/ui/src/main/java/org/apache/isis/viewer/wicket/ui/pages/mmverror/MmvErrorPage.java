@@ -69,11 +69,11 @@ public class MmvErrorPage extends WebPageBase {
     }
 
     private MarkupContainer addPageTitle() {
-        return add(new Label(ID_PAGE_TITLE, getIsisConfiguration().getViewer().getWicket().getApplication().getName()));
+        return add(new Label(ID_PAGE_TITLE, getConfiguration().getViewer().getWicket().getApplication().getName()));
     }
 
     private void addApplicationName() {
-        add(new Label(ID_APPLICATION_NAME, getIsisConfiguration().getViewer().getWicket().getApplication().getName()));
+        add(new Label(ID_APPLICATION_NAME, getConfiguration().getViewer().getWicket().getApplication().getName()));
     }
 
     private void addValidationErrors() {
@@ -95,10 +95,11 @@ public class MmvErrorPage extends WebPageBase {
         response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(Application.get().getJavaScriptLibrarySettings().getJQueryReference())));
         response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(BootstrapJavaScriptReference.instance())));
 
-        getIsisConfiguration().getViewer().getWicket().getApplication().getCss()
-                .ifPresent(css -> response.render(CssReferenceHeaderItem.forUrl(css)));
-        getIsisConfiguration().getViewer().getWicket().getApplication().getJs()
-                .ifPresent(js -> response.render(JavaScriptReferenceHeaderItem.forUrl(js)));
+        getConfiguration().getViewer().getWicket().getApplication().getCss()
+        .ifPresent(css -> response.render(CssReferenceHeaderItem.forUrl(css)));
+        
+        getConfiguration().getViewer().getWicket().getApplication().getJs()
+        .ifPresent(js -> response.render(JavaScriptReferenceHeaderItem.forUrl(js)));
     }
 
     @Override
