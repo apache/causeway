@@ -46,7 +46,7 @@ import lombok.extern.log4j.Log4j2;
 @Named("isis.runtimeservices.CommandPublisherDefault")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
-@Qualifier("Internal")
+@Qualifier("Default")
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 @Log4j2
 public class CommandPublisherDefault implements CommandPublisher {
@@ -54,7 +54,7 @@ public class CommandPublisherDefault implements CommandPublisher {
     private final List<CommandSubscriber> subscribers;
     private final InteractionTracker iaTracker;
     
-    private Can<CommandSubscriber> enabledSubscribers;
+    private Can<CommandSubscriber> enabledSubscribers = Can.empty();
     
     @PostConstruct
     public void init() {
@@ -73,7 +73,7 @@ public class CommandPublisherDefault implements CommandPublisher {
             enabledSubscribers.forEach(subscriber -> subscriber.onCompleted(command));    
         }
         
-        _Xray.exitCommandPublishing(handle);    
+        _Xray.exitPublishing(handle);    
     }
     
     // -- HELPER

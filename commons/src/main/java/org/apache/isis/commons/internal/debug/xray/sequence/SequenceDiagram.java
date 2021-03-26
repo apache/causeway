@@ -84,7 +84,7 @@ public class SequenceDiagram {
     private final static int PARTICIPANT_MAX_CHAR_PER_LINE = 26;
     private final static Optional<Font> PARTICIPANT_FONT = _Graphics.lookupFont("Verdana", 12.f);
     
-    private final static int CONNECTION_MARGIN_V = 5;
+    private final static int CONNECTION_MARGIN_V = 12;
     private final static int CONNECTION_LABEL_PADDING_H = 8;
     private final static int CONNECTION_LABEL_PADDING_V = 3;
     private final static int CONNECTION_LABEL_LINEGAP = 0;

@@ -21,10 +21,14 @@ package org.apache.isis.core.runtime.util;
 import java.util.Optional;
 import java.util.UUID;
 
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.debug.xray.XrayModel.ThreadMemento;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.interaction.session.InteractionTracker;
 
+import lombok.Builder;
 import lombok.NonNull;
+import lombok.Value;
 import lombok.val;
 
 public final class XrayUtil {
@@ -52,6 +56,37 @@ public final class XrayUtil {
     
     public static String nestedInteractionId(int authenticationStackSize) {
         return "ia-" + (authenticationStackSize-1);
+    }
+    
+    // -- SEQUENCE HANDLE
+    
+    public static Optional<SequenceHandle> createSequenceHandle(
+            final @NonNull InteractionTracker iaTracker,
+            final String ... callees) {
+
+        if(!iaTracker.isInInteractionSession()) {
+            return Optional.empty();
+        }
+        
+        final int authStackSize = iaTracker.getAuthenticationLayerCount();
+        val conversationId = iaTracker.getConversationId().orElseThrow(_Exceptions::unexpectedCodeReach);
+        
+        val handle = SequenceHandle.builder()
+                .sequenceId(XrayUtil.sequenceId(conversationId))
+                .caller(authStackSize>0
+                        ? XrayUtil.nestedInteractionId(authStackSize)
+                        : "thread")
+                .callees(Can.ofArray(callees))
+                .build();
+        
+        return Optional.of(handle);
+    }
+    
+    @Value @Builder
+    public static final class SequenceHandle {
+        final @NonNull String sequenceId;
+        final @NonNull String caller;
+        final @NonNull Can<String> callees;
     }
     
 }

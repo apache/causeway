@@ -18,97 +18,112 @@
  */
 package org.apache.isis.core.runtimeservices.publish;
 
-import java.util.UUID;
-
 import javax.annotation.Nullable;
 
 import org.apache.isis.applib.services.command.Command;
+import org.apache.isis.applib.services.iactn.Execution;
 import org.apache.isis.applib.services.publishing.spi.CommandSubscriber;
+import org.apache.isis.applib.services.publishing.spi.ExecutionSubscriber;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.debug.xray.XrayUi;
-import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.interaction.session.InteractionTracker;
 import org.apache.isis.core.runtime.util.XrayUtil;
+import org.apache.isis.core.runtime.util.XrayUtil.SequenceHandle;
 
-import lombok.Builder;
 import lombok.NonNull;
 import lombok.val;
 
 final class _Xray {
     
-    static Handle enterCommandPublishing(
+    // -- COMMAND
+    
+    static SequenceHandle enterCommandPublishing(
             final @NonNull InteractionTracker iaTracker,
             final @Nullable Command command,
             final boolean canPublish,
             final @NonNull Can<CommandSubscriber> enabledSubscribers) {
         
-        if(!XrayUi.isXrayEnabled()
-                || !iaTracker.isInInteractionSession()) {
+        if(!XrayUi.isXrayEnabled()) {
             return null;
         }
         
-        final int authStackSize = iaTracker.getAuthenticationLayerCount();
-        val conversationId = iaTracker.getConversationId().orElseThrow(_Exceptions::unexpectedCodeReach);
-        
-        val handle = createHandle(conversationId, authStackSize, "command-publisher");
         val enteringLabel = canPublish 
                 ? String.format("publishing command to %d subscriber(s)", enabledSubscribers.size())
                 : "not publishing command";
         
-        XrayUi.updateModel(model->{
-            model.lookupSequence(handle.sequenceId)
-            .ifPresent(sequence->{
-                val sequenceData = sequence.getData();
-                
-                sequenceData.alias(handle.callee, "Command-\nPublisher-\n(Default)");
-                sequenceData.enter(handle.caller, handle.callee, enteringLabel);
-                
+        val handleIfAny = XrayUtil.createSequenceHandle(iaTracker, "cmd-publisher");
+        handleIfAny.ifPresent(handle->{
+           
+            XrayUi.updateModel(model->{
+                model.lookupSequence(handle.getSequenceId())
+                .ifPresent(sequence->{
+                    val sequenceData = sequence.getData();
+                    
+                    sequenceData.alias("cmd-publisher", "Command-\nPublisher-\n(Default)");
+                    sequenceData.enter(handle.getCaller(), handle.getCallees().getFirstOrFail(), enteringLabel);
+                    
+                });
             });
+            
         });
         
-        return handle;
+        return handleIfAny.orElse(null);
+        
     }
-
-
-    public static void exitCommandPublishing(final @Nullable Handle handle) {
+    
+    // -- EXECUTION
+    
+    public static SequenceHandle enterExecutionPublishing(
+            final @NonNull InteractionTracker iaTracker,
+            final @Nullable Execution<?, ?> command,
+            final boolean canPublish,
+            final @NonNull Can<ExecutionSubscriber> enabledSubscribers) {
+        
+        if(!XrayUi.isXrayEnabled()) {
+            return null;
+        }
+        
+        val enteringLabel = canPublish 
+                ? String.format("publishing execution to %d subscriber(s)", enabledSubscribers.size())
+                : "not publishing execution";
+        
+        val handleIfAny = XrayUtil.createSequenceHandle(iaTracker, "exec-publisher");
+        handleIfAny.ifPresent(handle->{
+           
+            XrayUi.updateModel(model->{
+                model.lookupSequence(handle.getSequenceId())
+                .ifPresent(sequence->{
+                    val sequenceData = sequence.getData();
+                    
+                    sequenceData.alias("exec-publisher", "Execution-\nPublisher-\n(Default)");
+                    sequenceData.enter(handle.getCaller(), handle.getCallees().getFirstOrFail(), enteringLabel);
+                    
+                });
+            });
+            
+        });
+        
+        return handleIfAny.orElse(null);
+        
+    }
+    
+    // -- EXIT
+    
+    public static void exitPublishing(final @Nullable SequenceHandle handle) {
         
         if(handle==null) {
             return; // x-ray is not enabled
         }
         
         XrayUi.updateModel(model->{
-            model.lookupSequence(handle.sequenceId)
+            model.lookupSequence(handle.getSequenceId())
             .ifPresent(sequence->{
                 val sequenceData = sequence.getData();
-                sequenceData.exit(handle.callee, handle.caller);
+                sequenceData.exit(handle.getCallees().getFirstOrFail(), handle.getCaller());
             });
         });
         
     }
-    
-    // -- HELPER
-    
-    private static Handle createHandle(
-            final UUID interactionId,
-            final int authStackSize,
-            final String participantLabel) {
 
-        val handle = Handle.builder()
-                .sequenceId(XrayUtil.sequenceId(interactionId))
-                .caller(authStackSize>0
-                    ? XrayUtil.nestedInteractionId(authStackSize)
-                    : "thread")
-                .callee(participantLabel)
-                .build();
-        
-        return handle;
-    }
-    
-    @Builder
-    static final class Handle {
-        final @NonNull String sequenceId;
-        final @NonNull String caller;
-        final @NonNull String callee;
-    }
     
 }
