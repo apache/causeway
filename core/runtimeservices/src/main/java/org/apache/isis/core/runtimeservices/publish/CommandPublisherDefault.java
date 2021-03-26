@@ -34,10 +34,12 @@ import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.publishing.spi.CommandSubscriber;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.having.HasEnabling;
+import org.apache.isis.core.interaction.session.InteractionTracker;
 import org.apache.isis.core.metamodel.services.publishing.CommandPublisher;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Service
@@ -50,6 +52,7 @@ import lombok.extern.log4j.Log4j2;
 public class CommandPublisherDefault implements CommandPublisher {
     
     private final List<CommandSubscriber> subscribers;
+    private final InteractionTracker iaTracker;
     
     private Can<CommandSubscriber> enabledSubscribers;
     
@@ -60,30 +63,25 @@ public class CommandPublisherDefault implements CommandPublisher {
     }
 
     @Override
-    public void complete(final @NonNull Command command) { 
+    public void complete(final @NonNull Command command) {
         
-        if(!canPublish()) {
-            return;
-        }
-
-        if(!command.isPublishingEnabled()) {
-            return;
-        }
+        val canPublish = canPublish(command);
+        val handle = _Xray.enterCommandPublishing(iaTracker, command, canPublish, enabledSubscribers);
         
-        if(command.getLogicalMemberIdentifier() == null) {
-            // eg if seed fixtures
-            return;
+        if(canPublish) {
+            log.debug("about to PUBLISH command: {} to {}", command, enabledSubscribers);
+            enabledSubscribers.forEach(subscriber -> subscriber.onCompleted(command));    
         }
         
-        log.debug("about to PUSH command: {} to {}", command, enabledSubscribers);
-
-        enabledSubscribers.forEach(subscriber -> subscriber.onCompleted(command));
+        _Xray.exitCommandPublishing(handle);    
     }
     
     // -- HELPER
     
-    private boolean canPublish() {
-        return enabledSubscribers.isNotEmpty();
+    private boolean canPublish(final Command command) {
+        return enabledSubscribers.isNotEmpty()
+                && command.isPublishingEnabled()
+                && command.getLogicalMemberIdentifier() != null; // eg null when seed fixtures
     }
     
 
