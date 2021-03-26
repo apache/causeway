@@ -32,6 +32,7 @@ import org.springframework.test.context.TestPropertySource;
 
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.debug.xray.XrayEnable;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.schema.cmd.v2.CommandDto;
 import org.apache.isis.schema.cmd.v2.PropertyDto;
@@ -49,7 +50,8 @@ import lombok.val;
         classes = {
                 Configuration_usingJdo.class,
                 Configuration_usingCommandPublishing.class,
-                ApplicationLayerTestFactory.class
+                ApplicationLayerTestFactory.class,
+                XrayEnable.class
         },
         properties = {
                 "logging.level.org.apache.isis.persistence.jdo.datanucleus5.persistence.IsisTransactionJdo=DEBUG",

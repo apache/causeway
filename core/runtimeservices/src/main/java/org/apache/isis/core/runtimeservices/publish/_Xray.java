@@ -50,19 +50,19 @@ final class _Xray {
         final int authStackSize = iaTracker.getAuthenticationLayerCount();
         val conversationId = iaTracker.getConversationId().orElseThrow(_Exceptions::unexpectedCodeReach);
         
-        val handle = createHandle(conversationId, authStackSize, null, null);
-        val enteringLabel = "publishing";
+        val handle = createHandle(conversationId, authStackSize, "command-publisher");
+        val enteringLabel = canPublish 
+                ? String.format("publishing command to %d subscriber(s)", enabledSubscribers.size())
+                : "not publishing command";
         
         XrayUi.updateModel(model->{
             model.lookupSequence(handle.sequenceId)
             .ifPresent(sequence->{
                 val sequenceData = sequence.getData();
                 
-                sequenceData.alias("command-publisher", "Command-\nPublisher-\n(Default)");
+                sequenceData.alias(handle.callee, "Command-\nPublisher-\n(Default)");
+                sequenceData.enter(handle.caller, handle.callee, enteringLabel);
                 
-                sequenceData.enter(handle.caller, "command-publisher");
-                
-                sequenceData.enter("executor", handle.callee, enteringLabel);
             });
         });
         
@@ -80,8 +80,7 @@ final class _Xray {
             model.lookupSequence(handle.sequenceId)
             .ifPresent(sequence->{
                 val sequenceData = sequence.getData();
-                sequenceData.exit(handle.callee, "command-publisher");
-                sequenceData.exit("executor", handle.caller);
+                sequenceData.exit(handle.callee, handle.caller);
             });
         });
         
@@ -92,8 +91,7 @@ final class _Xray {
     private static Handle createHandle(
             final UUID interactionId,
             final int authStackSize,
-            final String participantLabel,
-            final String enteringLabel) {
+            final String participantLabel) {
 
         val handle = Handle.builder()
                 .sequenceId(XrayUtil.sequenceId(interactionId))
