@@ -19,6 +19,7 @@
 package org.apache.isis.core.transaction.changetracking;
 
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.LongAdder;
@@ -207,7 +208,7 @@ implements
     }
 
     @Override
-    public EntityChanges getEntityChanges(
+    public Optional<EntityChanges> getEntityChanges(
             final java.sql.Timestamp timestamp,
             final String userName) {
         return ChangingEntitiesFactory.createChangingEntities(timestamp, userName, this);

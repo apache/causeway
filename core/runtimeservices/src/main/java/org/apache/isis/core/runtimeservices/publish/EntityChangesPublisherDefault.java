@@ -19,6 +19,7 @@
 package org.apache.isis.core.runtimeservices.publish;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -31,10 +32,12 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.clock.ClockService;
+import org.apache.isis.applib.services.publishing.spi.EntityChanges;
 import org.apache.isis.applib.services.publishing.spi.EntityChangesSubscriber;
 import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.having.HasEnabling;
+import org.apache.isis.core.interaction.session.InteractionTracker;
 import org.apache.isis.core.transaction.changetracking.EntityChangesPublisher;
 import org.apache.isis.core.transaction.changetracking.HasEnlistedEntityChanges;
 
@@ -53,8 +56,9 @@ public class EntityChangesPublisherDefault implements EntityChangesPublisher {
     private final List<EntityChangesSubscriber> subscribers;
     private final ClockService clockService;
     private final UserService userService;
+    private final InteractionTracker iaTracker;
     
-    private Can<EntityChangesSubscriber> enabledSubscribers;
+    private Can<EntityChangesSubscriber> enabledSubscribers = Can.empty();
     
     @PostConstruct
     public void init() {
@@ -64,28 +68,26 @@ public class EntityChangesPublisherDefault implements EntityChangesPublisher {
 
     public void publishChangingEntities(HasEnlistedEntityChanges hasEnlistedEntityChanges) {
 
-        if(!canPublish()) {
-            return;
-        }
+        val payload = getPayload(hasEnlistedEntityChanges);
+        val handle = _Xray.enterEntityChangesPublishing(iaTracker, payload, enabledSubscribers);
         
-        val currentTime = clockService.getClock().javaSqlTimestamp();
-        val currentUser = userService.currentUserNameElseNobody();
+        payload.ifPresent(entityChanges->{
+            for (val subscriber : enabledSubscribers) {
+                subscriber.onChanging(entityChanges);
+            }
+        });
         
-        val entityChanges = hasEnlistedEntityChanges.getEntityChanges(currentTime, currentUser);
-        
-        if(entityChanges == null) {
-            return;
-        }
-        
-        for (val subscriber : enabledSubscribers) {
-            subscriber.onChanging(entityChanges);
-        }
+        _Xray.exitPublishing(handle);
     }
     
     // -- HELPER
     
-    private boolean canPublish() {
-        return enabledSubscribers.isNotEmpty();
+    private Optional<EntityChanges> getPayload(HasEnlistedEntityChanges hasEnlistedEntityChanges) {
+        return enabledSubscribers.isEmpty()
+                ? Optional.empty()
+                : hasEnlistedEntityChanges.getEntityChanges(
+                        clockService.getClock().javaSqlTimestamp(), // current time 
+                        userService.currentUserNameElseNobody()); // current user
     }
 
 }

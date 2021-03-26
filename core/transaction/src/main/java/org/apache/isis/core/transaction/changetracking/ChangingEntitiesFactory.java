@@ -21,9 +21,8 @@ package org.apache.isis.core.transaction.changetracking;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
-
-import javax.annotation.Nullable;
 
 import org.apache.isis.applib.annotation.EntityChangeKind;
 import org.apache.isis.applib.jaxb.JavaSqlXMLGregorianCalendarMarshalling;
@@ -46,22 +45,20 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 class ChangingEntitiesFactory {
 
-    @Nullable
-    public static EntityChanges createChangingEntities(
+    public static Optional<EntityChanges> createChangingEntities(
             final java.sql.Timestamp completedAt,
             final String userName,
             final EntityChangeTrackerDefault entityChangeTracker) {
 
+        if(entityChangeTracker.getChangeKindByEnlistedAdapter().isEmpty()) {
+            return Optional.empty();
+        }
+        
         // take a copy of enlisted adapters ... the JDO implementation of the PublishingService
         // creates further entities which would be enlisted;
         // taking copy of the map avoids ConcurrentModificationException
-
         val changeKindByEnlistedAdapter = new HashMap<>(
                 entityChangeTracker.getChangeKindByEnlistedAdapter());
-
-        if(changeKindByEnlistedAdapter.isEmpty()) {
-            return null;
-        }
 
         val changingEntities = newChangingEntities(
                 completedAt,
@@ -71,7 +68,7 @@ class ChangingEntitiesFactory {
                 entityChangeTracker.numberAuditedEntityPropertiesModified(),
                 changeKindByEnlistedAdapter);
 
-        return changingEntities;
+        return Optional.of(changingEntities);
     }
 
     // -- HELPER

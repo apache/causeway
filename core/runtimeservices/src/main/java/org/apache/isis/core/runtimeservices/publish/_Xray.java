@@ -18,11 +18,16 @@
  */
 package org.apache.isis.core.runtimeservices.publish;
 
+import java.util.Optional;
+
 import javax.annotation.Nullable;
 
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.iactn.Execution;
 import org.apache.isis.applib.services.publishing.spi.CommandSubscriber;
+import org.apache.isis.applib.services.publishing.spi.EntityChanges;
+import org.apache.isis.applib.services.publishing.spi.EntityChangesSubscriber;
+import org.apache.isis.applib.services.publishing.spi.EntityPropertyChangeSubscriber;
 import org.apache.isis.applib.services.publishing.spi.ExecutionSubscriber;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.debug.xray.XrayUi;
@@ -101,6 +106,24 @@ final class _Xray {
         
         return handleIfAny.orElse(null);
         
+    }
+    
+    // -- ENTITY CHANGES
+    
+    public static SequenceHandle enterEntityChangesPublishing(
+            final @NonNull InteractionTracker iaTracker,
+            final @NonNull Optional<EntityChanges> payload,
+            final @NonNull Can<EntityChangesSubscriber> enabledSubscribers) {
+        return null;
+    }
+    
+    // -- ENTITY PROPERTY CHANGES
+    
+    public static SequenceHandle enterEntityPropertyChangePublishing(
+            final @NonNull InteractionTracker iaTracker,
+            final boolean canPublish,
+            final @NonNull Can<EntityPropertyChangeSubscriber> enabledSubscribers) {
+        return null;
     }
     
     // -- EXIT
