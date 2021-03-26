@@ -54,15 +54,14 @@ final class _Xray {
         val handleIfAny = XrayUtil.createSequenceHandle(iaTracker, "cmd-publisher");
         handleIfAny.ifPresent(handle->{
            
-            XrayUi.updateModel(model->{
-                model.lookupSequence(handle.getSequenceId())
-                .ifPresent(sequence->{
-                    val sequenceData = sequence.getData();
-                    
-                    sequenceData.alias("cmd-publisher", "Command-\nPublisher-\n(Default)");
-                    sequenceData.enter(handle.getCaller(), handle.getCallees().getFirstOrFail(), enteringLabel);
-                    
-                });
+            handle.submit(sequence->{
+                val sequenceData = sequence.getData();
+                
+                sequenceData.alias("cmd-publisher", "Command-\nPublisher-\n(Default)");
+                
+                val callee = handle.getCallees().getFirstOrFail();
+                sequenceData.enter(handle.getCaller(), callee, enteringLabel);
+                sequenceData.activate(callee);
             });
             
         });
@@ -89,16 +88,15 @@ final class _Xray {
         
         val handleIfAny = XrayUtil.createSequenceHandle(iaTracker, "exec-publisher");
         handleIfAny.ifPresent(handle->{
-           
-            XrayUi.updateModel(model->{
-                model.lookupSequence(handle.getSequenceId())
-                .ifPresent(sequence->{
-                    val sequenceData = sequence.getData();
-                    
-                    sequenceData.alias("exec-publisher", "Execution-\nPublisher-\n(Default)");
-                    sequenceData.enter(handle.getCaller(), handle.getCallees().getFirstOrFail(), enteringLabel);
-                    
-                });
+            
+            handle.submit(sequence->{
+                val sequenceData = sequence.getData();
+                
+                sequenceData.alias("exec-publisher", "Execution-\nPublisher-\n(Default)");
+                
+                val callee = handle.getCallees().getFirstOrFail();
+                sequenceData.enter(handle.getCaller(), callee, enteringLabel);
+                sequenceData.activate(callee);
             });
             
         });
@@ -115,15 +113,13 @@ final class _Xray {
             return; // x-ray is not enabled
         }
         
-        XrayUi.updateModel(model->{
-            model.lookupSequence(handle.getSequenceId())
-            .ifPresent(sequence->{
-                val sequenceData = sequence.getData();
-                sequenceData.exit(handle.getCallees().getFirstOrFail(), handle.getCaller());
-            });
+        handle.submit(sequence->{
+            val sequenceData = sequence.getData();
+            val callee = handle.getCallees().getFirstOrFail();
+            sequenceData.exit(callee, handle.getCaller());
+            sequenceData.deactivate(callee);
         });
         
     }
-
     
 }

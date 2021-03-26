@@ -20,8 +20,11 @@ package org.apache.isis.core.runtime.util;
 
 import java.util.Optional;
 import java.util.UUID;
+import java.util.function.Consumer;
 
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.debug.xray.XrayUi;
+import org.apache.isis.commons.internal.debug.xray.XrayDataModel.Sequence;
 import org.apache.isis.commons.internal.debug.xray.XrayModel.ThreadMemento;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.interaction.session.InteractionTracker;
@@ -87,6 +90,14 @@ public final class XrayUtil {
         final @NonNull String sequenceId;
         final @NonNull String caller;
         final @NonNull Can<String> callees;
+        
+        public void submit(Consumer<Sequence> onSequenceEntry) {
+            XrayUi.updateModel(model->{
+                model.lookupSequence(getSequenceId())
+                .ifPresent(onSequenceEntry);
+            });
+        }
+        
     }
     
 }

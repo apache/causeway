@@ -67,6 +67,7 @@ final class _Xray {
                 sequenceData.alias(uiInteractionId, iaLabelMultiline);
                 
                 sequenceData.enter("thread", uiInteractionId, iaOpeningLabel);
+                sequenceData.activate(uiInteractionId);
                 
                 return;
             }
@@ -76,6 +77,7 @@ final class _Xray {
                 val sequenceData = sequence.getData();
                 sequenceData
                 .enter(XrayUtil.nestedInteractionId(authStackSize-1), uiInteractionId, iaOpeningLabel);
+                sequenceData.activate(uiInteractionId);
             });
             
             
@@ -108,6 +110,7 @@ final class _Xray {
                 
                 sequenceData
                 .exit(uiInteractionId, XrayUtil.nestedInteractionId(authStackSize-1), "close");
+                sequenceData.deactivate(uiInteractionId);
             });
             
         });

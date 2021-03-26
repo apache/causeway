@@ -32,14 +32,14 @@ import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.runtime.util.XrayUtil;
+import org.apache.isis.core.runtime.util.XrayUtil.SequenceHandle;
 
-import lombok.Builder;
 import lombok.NonNull;
 import lombok.val;
 
 final class _Xray {
 
-    static Handle enterActionInvocation(
+    static SequenceHandle enterActionInvocation(
             final @NonNull InteractionTracker iaTracker,
             final @NonNull InternalInteraction interaction, 
             final @NonNull ObjectAction owningAction,
@@ -63,7 +63,7 @@ final class _Xray {
         return enterInvocation(iaTracker, interaction, participantLabel, enteringLabel);
     }
     
-    public static Handle enterPropertyEdit(
+    public static SequenceHandle enterPropertyEdit(
             final @NonNull InteractionTracker iaTracker,
             final @NonNull InternalInteraction interaction, 
             final @NonNull OneToOneAssociation owningProperty,
@@ -81,79 +81,57 @@ final class _Xray {
         return enterInvocation(iaTracker, interaction, participantLabel, enteringLabel);
     }
     
-    private static Handle enterInvocation(
+    private static SequenceHandle enterInvocation(
             final @NonNull InteractionTracker iaTracker,
             final InternalInteraction interaction,
             final String participantLabel,
             final String enteringLabel) {
-        
 
-
-//        val execution = interaction.getCurrentExecution(); // XXX why not populated?
-//
-//        val command = interaction.getCommand();
-//        if(command==null
-//                || command.getCommandDto()==null
-//                || command.getCommandDto().getMember()==null) {
-//            return null;
-//        }
-//        
-//        // the act/prop/coll that is interacted with
-//        val memberDto = command.getCommandDto().getMember();
-//        
-//        val memberLogicalId = memberDto.getLogicalMemberIdentifier();
-//        
-//        val interactionDescription = memberDto.getInteractionType()==InteractionType.PROPERTY_EDIT
-//                ? String.format("property edit -> '%s'", 
-//                        CommonDtoUtils.<Object>getValue(((PropertyDto)memberDto).getNewValue()))
-//                : String.format("action invocation");
+        // val execution = interaction.getCurrentExecution(); // XXX why not populated?
         
-        final int authStackSize = iaTracker.getAuthenticationLayerCount();
-        
-        val handle = Handle.builder()
-                .sequenceId(XrayUtil.sequenceId(interaction.getInteractionId()))
-                .caller(authStackSize>0
-                    ? XrayUtil.nestedInteractionId(authStackSize)
-                    : "thread")
-                .callee(participantLabel)
-                .build();
-        
-        XrayUi.updateModel(model->{
-            model.lookupSequence(handle.sequenceId)
-            .ifPresent(sequence->{
+        val handleIfAny = XrayUtil.createSequenceHandle(iaTracker, "executor", participantLabel);
+        handleIfAny.ifPresent(handle->{
+           
+            handle.submit(sequence->{
                 val sequenceData = sequence.getData();
                 
                 sequenceData.alias("executor", "Member-\nExecutorService-\n(Default)");
                 
-                sequenceData.enter(handle.caller, "executor");
-                sequenceData.enter("executor", handle.callee, enteringLabel);
+                val callee1 = handle.getCallees().getFirstOrFail();
+                val callee2 = handle.getCallees().getLastOrFail();
+                
+                sequenceData.enter(handle.getCaller(), callee1);
+                sequenceData.activate(callee1);
+                
+                sequenceData.enter(callee1, callee2, enteringLabel);
+                sequenceData.activate(callee2);
             });
+            
         });
         
-        return handle;
+        return handleIfAny.orElse(null);
+ 
     }
 
-    static void exitInvocation(final @Nullable Handle handle) {
+    static void exitInvocation(final @Nullable SequenceHandle handle) {
         if(handle==null) {
             return; // x-ray is not enabled
         }
         
-        XrayUi.updateModel(model->{
-            model.lookupSequence(handle.sequenceId)
-            .ifPresent(sequence->{
-                val sequenceData = sequence.getData();
-                sequenceData.exit(handle.callee, "executor");
-                sequenceData.exit("executor", handle.caller);
-            });
+        handle.submit(sequence->{
+            val sequenceData = sequence.getData();
+            
+            val callee1 = handle.getCallees().getFirstOrFail();
+            val callee2 = handle.getCallees().getLastOrFail();
+            
+            sequenceData.exit(callee2, callee1);
+            sequenceData.deactivate(callee2);
+            
+            sequenceData.exit(callee1, handle.getCaller());
+            sequenceData.deactivate(callee1);
+            
         });
+        
     }
-    
-    @Builder
-    static final class Handle {
-        final @NonNull String sequenceId;
-        final @NonNull String caller;
-        final @NonNull String callee;
-    }
-
 
 }
