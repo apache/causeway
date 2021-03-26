@@ -54,8 +54,7 @@ final class _Xray {
         val handleIfAny = XrayUtil.createSequenceHandle(iaTracker, "cmd-publisher");
         handleIfAny.ifPresent(handle->{
            
-            handle.submit(sequence->{
-                val sequenceData = sequence.getData();
+            handle.submit(sequenceData->{
                 
                 sequenceData.alias("cmd-publisher", "Command-\nPublisher-\n(Default)");
                 
@@ -89,8 +88,7 @@ final class _Xray {
         val handleIfAny = XrayUtil.createSequenceHandle(iaTracker, "exec-publisher");
         handleIfAny.ifPresent(handle->{
             
-            handle.submit(sequence->{
-                val sequenceData = sequence.getData();
+            handle.submit(sequenceData->{
                 
                 sequenceData.alias("exec-publisher", "Execution-\nPublisher-\n(Default)");
                 
@@ -113,8 +111,7 @@ final class _Xray {
             return; // x-ray is not enabled
         }
         
-        handle.submit(sequence->{
-            val sequenceData = sequence.getData();
+        handle.submit(sequenceData->{
             val callee = handle.getCallees().getFirstOrFail();
             sequenceData.exit(callee, handle.getCaller());
             sequenceData.deactivate(callee);

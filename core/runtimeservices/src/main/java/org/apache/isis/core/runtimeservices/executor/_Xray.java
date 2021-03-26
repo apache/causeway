@@ -92,8 +92,7 @@ final class _Xray {
         val handleIfAny = XrayUtil.createSequenceHandle(iaTracker, "executor", participantLabel);
         handleIfAny.ifPresent(handle->{
            
-            handle.submit(sequence->{
-                val sequenceData = sequence.getData();
+            handle.submit(sequenceData->{
                 
                 sequenceData.alias("executor", "Member-\nExecutorService-\n(Default)");
                 
@@ -118,8 +117,7 @@ final class _Xray {
             return; // x-ray is not enabled
         }
         
-        handle.submit(sequence->{
-            val sequenceData = sequence.getData();
+        handle.submit(sequenceData->{
             
             val callee1 = handle.getCallees().getFirstOrFail();
             val callee2 = handle.getCallees().getLastOrFail();
