@@ -27,6 +27,7 @@ import org.apache.isis.applib.services.iactn.Execution;
 import org.apache.isis.applib.services.publishing.spi.CommandSubscriber;
 import org.apache.isis.applib.services.publishing.spi.EntityChanges;
 import org.apache.isis.applib.services.publishing.spi.EntityChangesSubscriber;
+import org.apache.isis.applib.services.publishing.spi.EntityPropertyChange;
 import org.apache.isis.applib.services.publishing.spi.EntityPropertyChangeSubscriber;
 import org.apache.isis.applib.services.publishing.spi.ExecutionSubscriber;
 import org.apache.isis.commons.collections.Can;
@@ -121,7 +122,7 @@ final class _Xray {
     
     public static SequenceHandle enterEntityPropertyChangePublishing(
             final @NonNull InteractionTracker iaTracker,
-            final boolean canPublish,
+            final @NonNull Can<EntityPropertyChange> payload,
             final @NonNull Can<EntityPropertyChangeSubscriber> enabledSubscribers) {
         return null;
     }

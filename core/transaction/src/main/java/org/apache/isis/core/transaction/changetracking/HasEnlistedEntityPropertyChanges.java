@@ -19,13 +19,13 @@
 package org.apache.isis.core.transaction.changetracking;
 
 import java.sql.Timestamp;
-import java.util.stream.Stream;
 
 import org.apache.isis.applib.services.publishing.spi.EntityPropertyChange;
 import org.apache.isis.applib.services.xactn.TransactionId;
+import org.apache.isis.commons.collections.Can;
 
 public interface HasEnlistedEntityPropertyChanges {
 
-    Stream<EntityPropertyChange> streamPropertyChanges(Timestamp timestamp, String user, TransactionId txId);
+    Can<EntityPropertyChange> getPropertyChanges(Timestamp timestamp, String user, TransactionId txId);
 
 }

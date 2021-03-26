@@ -24,7 +24,6 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.LongAdder;
 import java.util.function.Function;
-import java.util.stream.Stream;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -47,6 +46,7 @@ import org.apache.isis.applib.services.metrics.MetricsService;
 import org.apache.isis.applib.services.publishing.spi.EntityChanges;
 import org.apache.isis.applib.services.publishing.spi.EntityPropertyChange;
 import org.apache.isis.applib.services.xactn.TransactionId;
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.collections._Sets;
@@ -407,14 +407,15 @@ implements
     }
 
     @Override
-    public Stream<EntityPropertyChange> streamPropertyChanges(
+    public Can<EntityPropertyChange> getPropertyChanges(
             final java.sql.Timestamp timestamp,
             final String userName,
             final TransactionId txId) {
 
         return getPropertyChangeRecords().stream()
                 .map(propertyChangeRecord->EntityPropertyChangeFactory
-                        .createEntityPropertyChange(timestamp, userName, txId, propertyChangeRecord));
+                        .createEntityPropertyChange(timestamp, userName, txId, propertyChangeRecord))
+                .collect(Can.toCan());
     }
 
 }
