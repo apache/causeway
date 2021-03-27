@@ -56,15 +56,15 @@ public class SequenceDiagram {
     }
 
     public void enter(final @NonNull String from, final @NonNull String to, String label) {
-        val p0 = participantsById.computeIfAbsent(from, id->new Participant(aliases.getOrDefault(id, id)));
-        val p1 = participantsById.computeIfAbsent(to, id->new Participant(aliases.getOrDefault(id, id)));
-        connections.add(new Connection(connections.size(), p0, p1, label, false));
+        val p0 = participant(from);
+        val p1 = participant(to);
+        connections.add(newConnection(p0, p1, label, false));
     }
 
     public void exit(final @NonNull String from, final @NonNull String to, String label) {
-        val p1 = participantsById.computeIfAbsent(to, id->new Participant(aliases.getOrDefault(id, id)));
-        val p0 = participantsById.computeIfAbsent(from, id->new Participant(aliases.getOrDefault(id, id)));
-        connections.add(new Connection(connections.size(), p0, p1, label, true));
+        val p1 = participant(to);
+        val p0 = participant(from);
+        connections.add(newConnection(p0, p1, label, true));
     }
 
     public void enter(String from, String to) {
@@ -76,22 +76,72 @@ public class SequenceDiagram {
     }
     
     public void activate(String participantId) {
-        val participant = participantsById
-                .computeIfAbsent(participantId, id->new Participant(aliases.getOrDefault(id, id)));
-        val latestConnection = Can.ofCollection(connections).getLast().orElse(null);
+        val participant = participant(participantId);
+        val latestConnection = latestConnection();
         lifelines.add(new Lifeline(participant, latestConnection));
     }
 
     public void deactivate(String participantId) {
-        val participant = participantsById
-                .computeIfAbsent(participantId, id->new Participant(aliases.getOrDefault(id, id)));
-        val latestConnection = Can.ofCollection(connections).getLast().orElse(null);
+        val participant = participant(participantId);
+        val latestConnection = latestConnection();
         Can.ofCollection(lifelines).reverse().stream()
         .filter(lifeline->lifeline.getParticipant().equals(participant))
         .findFirst()
         .ifPresent(lifeline->lifeline.endAt = latestConnection);
     }
+    
+    // -- STYLE OVERRIDE
+    
+    private Color connectionArrowColor;
+    private Color connectionLabelColor;
+    
+    public void setConnectionArrowColor(Color connectionArrowColor) {
+        this.connectionArrowColor = connectionArrowColor;
+    }
+    
+    public void setConnectionLabelColor(Color connectionLabelColor) {
+        this.connectionLabelColor = connectionLabelColor;
+    }
 
+    // -- HELPER
+    
+    private Connection newConnection(
+            final Participant from, 
+            final Participant to, 
+            final String label, 
+            final boolean dashedLine) {
+        return new Connection(
+                connections.size(), 
+                from, 
+                to, 
+                label, 
+                dashedLine, 
+                getConnectionArrowColor(), 
+                getConnectionLabelColor());
+    }
+    
+    private Participant participant(String participantId) {
+        return participantsById
+                .computeIfAbsent(participantId, id->new Participant(aliases.getOrDefault(id, id)));
+    }
+    
+    private Connection latestConnection() {
+        return Can.ofCollection(connections).getLast().orElse(null);
+    }
+    
+    private Color getConnectionArrowColor() {
+        return connectionArrowColor!=null
+                ? connectionArrowColor
+                : CONNECTION_ARROW_COLOR;
+    }
+
+    private Color getConnectionLabelColor() {
+        return connectionLabelColor!=null
+                ? connectionLabelColor
+                : CONNECTION_LABEL_COLOR;
+    }
+    
+    
     // -- RENDERING
 
     private final static Color PARTICIPANT_BACKGROUND_COLOR = _Graphics.COLOR_LIGHTER_GREEN;
@@ -107,6 +157,8 @@ public class SequenceDiagram {
     private final static Color LIFELINE_BACKGROUND_COLOR = Color.WHITE;
     private final static int LIFELINE_WIDTH = 8;
     
+    private final static Color CONNECTION_ARROW_COLOR = _Graphics.COLOR_DARKER_RED;
+    private final static Color CONNECTION_LABEL_COLOR = Color.BLACK;
     private final static int CONNECTION_MARGIN_V = 12;
     private final static int CONNECTION_LABEL_PADDING_H = 8;
     private final static int CONNECTION_LABEL_PADDING_V = 3;
@@ -121,6 +173,9 @@ public class SequenceDiagram {
         final String label;
         final boolean dashedLine;
 
+        final Color arrowColor;
+        final Color labelColor;
+        
         TextBlock textBlock;
 
         int x_left;
@@ -325,6 +380,8 @@ public class SequenceDiagram {
         lifelines.stream()
         .forEach(ll->{
             
+            // lifeline box
+            
             g.setColor(LIFELINE_BACKGROUND_COLOR);
             g.fillRect(ll.getX_left(), ll.getY_top(), ll.getWidth(), ll.getHeight());
 
@@ -339,7 +396,7 @@ public class SequenceDiagram {
 
             // connection arrow
 
-            g.setColor(_Graphics.COLOR_DARKER_RED);
+            g.setColor(c.getArrowColor());
 
             g.setStroke(c.isDashedLine()
                     ? _Graphics.STROKE_DASHED
@@ -352,12 +409,14 @@ public class SequenceDiagram {
 
             // connection label
 
-            g.setColor(Color.black);
+            g.setColor(c.getLabelColor());
             c.getTextBlock().render(g);
 
         });
 
     }
+    
+
 
 
 }

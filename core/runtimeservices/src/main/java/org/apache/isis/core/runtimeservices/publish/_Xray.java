@@ -18,7 +18,9 @@
  */
 package org.apache.isis.core.runtimeservices.publish;
 
+import java.awt.Color;
 import java.util.Optional;
+import java.util.function.Supplier;
 
 import javax.annotation.Nullable;
 
@@ -46,16 +48,20 @@ final class _Xray {
     static SequenceHandle enterCommandPublishing(
             final @NonNull InteractionTracker iaTracker,
             final @Nullable Command command,
-            final boolean canPublish,
-            final @NonNull Can<CommandSubscriber> enabledSubscribers) {
+            final @NonNull Can<CommandSubscriber> enabledSubscribers,
+            final @NonNull Supplier<String> cannotPublishReasonSupplier) {
         
         if(!XrayUi.isXrayEnabled()) {
             return null;
         }
         
+        val cannotPublishReason = cannotPublishReasonSupplier.get();
+        val canPublish = cannotPublishReason==null;
         val enteringLabel = canPublish 
-                ? String.format("publishing command to %d subscriber(s)", enabledSubscribers.size())
-                : "not publishing command";
+                ? String.format("publishing command to %d subscriber(s):\n%s", 
+                        enabledSubscribers.size(),
+                        command.toString())
+                : String.format("not publishing command:\n%s", cannotPublishReason);
         
         val handleIfAny = XrayUtil.createSequenceHandle(iaTracker, "cmd-publisher");
         handleIfAny.ifPresent(handle->{
@@ -63,6 +69,11 @@ final class _Xray {
             handle.submit(sequenceData->{
                 
                 sequenceData.alias("cmd-publisher", "Command-\nPublisher-\n(Default)");
+                
+                if(!canPublish) {
+                    sequenceData.setConnectionArrowColor(Color.GRAY);
+                    sequenceData.setConnectionLabelColor(Color.GRAY);
+                }
                 
                 val callee = handle.getCallees().getFirstOrFail();
                 sequenceData.enter(handle.getCaller(), callee, enteringLabel);
@@ -79,17 +90,21 @@ final class _Xray {
     
     public static SequenceHandle enterExecutionPublishing(
             final @NonNull InteractionTracker iaTracker,
-            final @Nullable Execution<?, ?> command,
-            final boolean canPublish,
-            final @NonNull Can<ExecutionSubscriber> enabledSubscribers) {
+            final @Nullable Execution<?, ?> execution,
+            final @NonNull Can<ExecutionSubscriber> enabledSubscribers,
+            final @NonNull Supplier<String> cannotPublishReasonSupplier) {
         
         if(!XrayUi.isXrayEnabled()) {
             return null;
         }
         
-        val enteringLabel = canPublish 
-                ? String.format("publishing execution to %d subscriber(s)", enabledSubscribers.size())
-                : "not publishing execution";
+        val cannotPublishReason = cannotPublishReasonSupplier.get();
+        val canPublish = cannotPublishReason==null;
+        val enteringLabel = canPublish
+                ? String.format("publishing execution to %d subscriber(s):\n%s", 
+                        enabledSubscribers.size(),
+                        execution.toString())
+                : String.format("not publishing execution:\n%s", cannotPublishReason);
         
         val handleIfAny = XrayUtil.createSequenceHandle(iaTracker, "exec-publisher");
         handleIfAny.ifPresent(handle->{
@@ -97,6 +112,11 @@ final class _Xray {
             handle.submit(sequenceData->{
                 
                 sequenceData.alias("exec-publisher", "Execution-\nPublisher-\n(Default)");
+                
+                if(!canPublish) {
+                    sequenceData.setConnectionArrowColor(Color.GRAY);
+                    sequenceData.setConnectionLabelColor(Color.GRAY);
+                }
                 
                 val callee = handle.getCallees().getFirstOrFail();
                 sequenceData.enter(handle.getCaller(), callee, enteringLabel);
@@ -114,15 +134,20 @@ final class _Xray {
     public static SequenceHandle enterEntityChangesPublishing(
             final @NonNull InteractionTracker iaTracker,
             final @NonNull Optional<EntityChanges> payload,
-            final @NonNull Can<EntityChangesSubscriber> enabledSubscribers) {
+            final @NonNull Can<EntityChangesSubscriber> enabledSubscribers,
+            final @NonNull Supplier<String> cannotPublishReasonSupplier) {
         
         if(!XrayUi.isXrayEnabled()) {
             return null;
         }
         
-        val enteringLabel = payload.isPresent() 
-                ? String.format("publishing entity-changes to %d subscriber(s)", enabledSubscribers.size())
-                : "not publishing entity-changes";
+        val cannotPublishReason = cannotPublishReasonSupplier.get();
+        val canPublish = cannotPublishReason==null;
+        val enteringLabel = canPublish 
+                ? String.format("publishing entity-changes to %d subscriber(s):\n%s", 
+                        enabledSubscribers.size(),
+                        payload.map(Object::toString).orElse("null"))
+                : String.format("not publishing entity-changes:\n%s", cannotPublishReason);
         
         val handleIfAny = XrayUtil.createSequenceHandle(iaTracker, "ec-publisher");
         handleIfAny.ifPresent(handle->{
@@ -130,6 +155,11 @@ final class _Xray {
             handle.submit(sequenceData->{
                 
                 sequenceData.alias("ec-publisher", "EntityChanges-\nPublisher-\n(Default)");
+                
+                if(!canPublish) {
+                    sequenceData.setConnectionArrowColor(Color.GRAY);
+                    sequenceData.setConnectionLabelColor(Color.GRAY);
+                }
                 
                 val callee = handle.getCallees().getFirstOrFail();
                 sequenceData.enter(handle.getCaller(), callee, enteringLabel);
@@ -147,15 +177,20 @@ final class _Xray {
     public static SequenceHandle enterEntityPropertyChangePublishing(
             final @NonNull InteractionTracker iaTracker,
             final @NonNull Can<EntityPropertyChange> payload,
-            final @NonNull Can<EntityPropertyChangeSubscriber> enabledSubscribers) {
+            final @NonNull Can<EntityPropertyChangeSubscriber> enabledSubscribers,
+            final @NonNull Supplier<String> cannotPublishReasonSupplier) {
         
         if(!XrayUi.isXrayEnabled()) {
             return null;
         }
         
-        val enteringLabel = !payload.isEmpty() 
-                ? String.format("publishing entity-property-changes to %d subscriber(s)", enabledSubscribers.size())
-                : "not publishing entity-property-changes";
+        val cannotPublishReason = cannotPublishReasonSupplier.get();
+        val canPublish = cannotPublishReason==null;
+        val enteringLabel = canPublish
+                ? String.format("publishing entity-property-changes to %d subscriber(s):\n%s", 
+                        enabledSubscribers.size(),
+                        payload)
+                : String.format("not publishing entity-property-changes:\n%s", cannotPublishReason);
         
         val handleIfAny = XrayUtil.createSequenceHandle(iaTracker, "epc-publisher");
         handleIfAny.ifPresent(handle->{
@@ -163,6 +198,11 @@ final class _Xray {
             handle.submit(sequenceData->{
                 
                 sequenceData.alias("epc-publisher", "EntityProperty-\nChanges-Publisher-\n(Default)");
+                
+                if(!canPublish) {
+                    sequenceData.setConnectionArrowColor(Color.GRAY);
+                    sequenceData.setConnectionLabelColor(Color.GRAY);
+                }
                 
                 val callee = handle.getCallees().getFirstOrFail();
                 sequenceData.enter(handle.getCaller(), callee, enteringLabel);
@@ -187,6 +227,9 @@ final class _Xray {
             val callee = handle.getCallees().getFirstOrFail();
             sequenceData.exit(callee, handle.getCaller());
             sequenceData.deactivate(callee);
+            
+            sequenceData.setConnectionArrowColor(null);
+            sequenceData.setConnectionLabelColor(null);
         });
         
     }

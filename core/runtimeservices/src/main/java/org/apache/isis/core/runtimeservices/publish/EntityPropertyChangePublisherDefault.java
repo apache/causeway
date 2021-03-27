@@ -20,6 +20,7 @@ package org.apache.isis.core.runtimeservices.publish;
 
 import java.util.List;
 
+import javax.annotation.Nullable;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -42,6 +43,7 @@ import org.apache.isis.core.interaction.session.InteractionTracker;
 import org.apache.isis.core.transaction.changetracking.EntityPropertyChangePublisher;
 import org.apache.isis.core.transaction.changetracking.HasEnlistedEntityPropertyChanges;
 
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
@@ -73,7 +75,12 @@ public class EntityPropertyChangePublisherDefault implements EntityPropertyChang
             final HasEnlistedEntityPropertyChanges hasEnlistedEntityPropertyChanges) {
         
         val payload = getPayload(hasEnlistedEntityPropertyChanges);
-        val handle = _Xray.enterEntityPropertyChangePublishing(iaTracker, payload, enabledSubscribers);
+        val handle = _Xray.enterEntityPropertyChangePublishing(
+                iaTracker, 
+                payload,
+                enabledSubscribers,
+                ()->getCannotPublishReason(payload)
+                );
         
         payload.forEach(propertyChange->{
             for (val subscriber : enabledSubscribers) {
@@ -102,6 +109,15 @@ public class EntityPropertyChangePublisherDefault implements EntityPropertyChang
                 currentTime, 
                 currentUser,
                 currentTransactionId);
+    }
+    
+    // x-ray support
+    private @Nullable String getCannotPublishReason(final @NonNull Can<EntityPropertyChange> payload) {
+        return enabledSubscribers.isEmpty()
+                ? "no subscribers"
+                : payload.isEmpty()
+                        ? "no changes had been enlisted"
+                        : null;
     }
 
 }

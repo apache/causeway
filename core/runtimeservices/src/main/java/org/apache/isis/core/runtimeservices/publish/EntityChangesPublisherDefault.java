@@ -21,6 +21,7 @@ package org.apache.isis.core.runtimeservices.publish;
 import java.util.List;
 import java.util.Optional;
 
+import javax.annotation.Nullable;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -41,6 +42,7 @@ import org.apache.isis.core.interaction.session.InteractionTracker;
 import org.apache.isis.core.transaction.changetracking.EntityChangesPublisher;
 import org.apache.isis.core.transaction.changetracking.HasEnlistedEntityChanges;
 
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
@@ -69,7 +71,11 @@ public class EntityChangesPublisherDefault implements EntityChangesPublisher {
     public void publishChangingEntities(HasEnlistedEntityChanges hasEnlistedEntityChanges) {
 
         val payload = getPayload(hasEnlistedEntityChanges);
-        val handle = _Xray.enterEntityChangesPublishing(iaTracker, payload, enabledSubscribers);
+        val handle = _Xray.enterEntityChangesPublishing(
+                iaTracker, 
+                payload, 
+                enabledSubscribers,
+                ()->getCannotPublishReason(payload));
         
         payload.ifPresent(entityChanges->{
             for (val subscriber : enabledSubscribers) {
@@ -88,6 +94,15 @@ public class EntityChangesPublisherDefault implements EntityChangesPublisher {
                 : hasEnlistedEntityChanges.getEntityChanges(
                         clockService.getClock().javaSqlTimestamp(), // current time 
                         userService.currentUserNameElseNobody()); // current user
+    }
+    
+    // x-ray support
+    private @Nullable String getCannotPublishReason(final @NonNull Optional<EntityChanges> payload) {
+        return enabledSubscribers.isEmpty()
+                ? "no subscribers"
+                : !payload.isPresent()
+                        ? "no changes had been enlisted"
+                        : null;
     }
 
 }

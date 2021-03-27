@@ -20,6 +20,7 @@ package org.apache.isis.core.runtimeservices.publish;
 
 import java.util.List;
 
+import javax.annotation.Nullable;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -65,10 +66,13 @@ public class CommandPublisherDefault implements CommandPublisher {
     @Override
     public void complete(final @NonNull Command command) {
         
-        val canPublish = canPublish(command);
-        val handle = _Xray.enterCommandPublishing(iaTracker, command, canPublish, enabledSubscribers);
+        val handle = _Xray.enterCommandPublishing(
+                iaTracker, 
+                command, 
+                enabledSubscribers, 
+                ()->getCannotPublishReason(command));
         
-        if(canPublish) {
+        if(canPublish(command)) {
             log.debug("about to PUBLISH command: {} to {}", command, enabledSubscribers);
             enabledSubscribers.forEach(subscriber -> subscriber.onCompleted(command));    
         }
@@ -84,6 +88,20 @@ public class CommandPublisherDefault implements CommandPublisher {
                 && command.getLogicalMemberIdentifier() != null; // eg null when seed fixtures
     }
     
-
+    // x-ray support
+    private @Nullable String getCannotPublishReason(final @NonNull Command command) {
+        return enabledSubscribers.isEmpty()
+                ? "no subscribers"
+                : !command.isPublishingEnabled()
+                        ? String.format(
+                                "publishing not enabled for given command\n%s",
+                                command.toString())
+                        : command.getLogicalMemberIdentifier() == null
+                                ? String.format(
+                                        "no logical-member-id for given command\n%s",
+                                        command.toString())
+                                : null;
+    }
+    
 }
 

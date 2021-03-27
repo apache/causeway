@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.concurrent.atomic.LongAdder;
 import java.util.function.Supplier;
 
+import javax.annotation.Nullable;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -90,10 +91,13 @@ implements ExecutionPublisher {
 
     private void notifySubscribers(final Execution<?,?> execution) {
         
-        val canPublish = canPublish();
-        val handle = _Xray.enterExecutionPublishing(iaTracker, execution, canPublish, enabledSubscribers);
+        val handle = _Xray.enterExecutionPublishing(
+                iaTracker, 
+                execution, 
+                enabledSubscribers,
+                this::getCannotPublishReason);
         
-        if(canPublish) {
+        if(canPublish()) {
             for (val subscriber : enabledSubscribers) {
                 subscriber.onExecution(execution);
             }    
@@ -107,7 +111,18 @@ implements ExecutionPublisher {
 
     private boolean canPublish() {
         return enabledSubscribers.isNotEmpty()
-                && suppressionRequestCounter.longValue() < 1L;    }
+                && suppressionRequestCounter.longValue() < 1L;    
+    }
 
+    // x-ray support
+    private @Nullable String getCannotPublishReason() {
+        return enabledSubscribers.isEmpty()
+                ? "no subscribers"
+                : suppressionRequestCounter.longValue() > 0L
+                        ? String.format(
+                                "suppressed for block of executable code\nsuppression request depth %d",
+                                suppressionRequestCounter.longValue())
+                        : null;
+    }
 
 }
