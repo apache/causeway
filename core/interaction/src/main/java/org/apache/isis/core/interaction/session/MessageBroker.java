@@ -28,9 +28,19 @@ import org.apache.isis.commons.internal.collections._Lists;
 
 import lombok.val;
 
+/**        
+ * Holder of queued up messages, to be accessed/drained cross interaction boundary.
+ * 
+ * @implNote Serializable and thread-safe 
+ *  
+ * @since 1.x
+ */
 public class MessageBroker implements Serializable {
 
     private static final long serialVersionUID = 1L;
+
+    // serializable lock
+    private final Object $lock = new Object[0];
     
     private final List<String> messages = _Lists.newArrayList();
     private final List<String> warnings = _Lists.newArrayList();
@@ -42,9 +52,11 @@ public class MessageBroker implements Serializable {
     // -- RESET
 
     public void reset() {
-        warnings.clear();
-        messages.clear();
-        applicationError = null;
+        synchronized ($lock) {
+            warnings.clear();
+            messages.clear();
+            applicationError = null;    
+        }
     }
 
     // -- MESSAGES
@@ -54,7 +66,9 @@ public class MessageBroker implements Serializable {
     }
 
     public void addMessage(final String message) {
-        messages.add(message);
+        synchronized ($lock) {
+            messages.add(message);
+        }
     }
 
     // -- WARNINGS
@@ -64,32 +78,40 @@ public class MessageBroker implements Serializable {
     }
 
     public void addWarning(final String message) {
-        if(warnings.contains(message)) {
-            // just ignore it...
-            return;
+        synchronized ($lock) {
+            if(warnings.contains(message)) {
+                // just ignore it...
+                return;
+            }
+            warnings.add(message);
         }
-        warnings.add(message);
     }
 
     // -- APPLICATION ERROR
     
     public Optional<String> drainApplicationError() {
-        final String error = applicationError;
-        setApplicationError(null);
-        return Optional.ofNullable(error);
+        synchronized ($lock) {
+            final String error = applicationError;
+            setApplicationError(null);
+            return Optional.ofNullable(error);
+        }
     }
 
     public void setApplicationError(String applicationError) {
-        this.applicationError = applicationError;
+        synchronized ($lock) {
+            this.applicationError = applicationError;
+        }
     }
 
 
     // -- HELPERS
 
     private Can<String> copyAndClear(final List<String> messages) {
-        val copy = Can.ofCollection(messages);
-        messages.clear();
-        return copy;
+        synchronized ($lock) {
+            val copy = Can.ofCollection(messages);
+            messages.clear();
+            return copy;
+        }
     }
 
 }
