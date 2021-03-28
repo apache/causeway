@@ -243,6 +243,7 @@ For latest we use: https://raw.githubusercontent.com/apache/isis/master/antora/s
                 <mb3:named>Core</mb3:named>
                 <mb3:serviceAction objectType="demo.ServicesMenu" id="errorReportingService" />
                 <mb3:serviceAction objectType="demo.ServicesMenu" id="eventBusService" />
+                <mb3:serviceAction objectType="demo.ServicesMenu" id="messageService" />
                 <mb3:serviceAction objectType="demo.ServicesMenu" id="wrapperFactory"/>
                 <mb3:serviceAction objectType="demo.ServicesMenu" id="xmlSnapshot"/>
             </mb3:section>
