@@ -17,7 +17,7 @@
 
 name: userguide
 title: "User Guide"
-version: 2.0.0-M5
+version: latest
 start_page: ROOT:about.adoc
 nav:
 - modules/ROOT/nav.adoc
