@@ -552,3 +552,9 @@ Enjoy!
 link:https://blogs.apache.org/roller-ui/login.rol[Log onto] the http://blogs.apache.org/isis/[Apache blog] and create a new post.
 Copy-n-paste the above mailing list announcement should suffice.
 
+
+== Update BASELINE for nightly builds
+
+Nightly builds (non-ASF) are generated using CI definitions in the link:https://github.com/apache-isis-committers/isis-nightly[github.com/apache-isis-committers/isis-nightly] repo, published to the link:https://nexus.incode.work/repository/nightly-builds/[nightly-builds] repo of link:https://nexus.incode.work/[nexus.incode.work]:
+
+* bump the `BASELINE` variable in link:https://github.com/apache-isis-committers/isis-nightly/blob/0fdea0c4e7419b40acc9a03746e4c3cac3f262b2/.github/workflows/apache-isis-ci-nightly.yml#L15[apache-isis-ci-nightly.yml] (workflow file).
