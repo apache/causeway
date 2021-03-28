@@ -44,6 +44,7 @@ public class MessageServiceDemoVm implements HasAsciiDocDescription {
             position = Position.PANEL)
     @Action
     public MessageServiceDemoVm infoMessage(){
+        System.err.println("EXEC");
         messageService.informUser("Demo Info Message.");
         return this;
     }

@@ -58,7 +58,7 @@ implements HasInteractionId {
     /**
      * The {@link MessageBroker} that holds messages for this session.
      */
-    @Getter private final MessageBroker messageBroker = new MessageBroker();
+    @Getter private final MessageBroker messageBroker;
 
     /**
      * The {@link MetaModelContext} that holds services for this session.
@@ -66,11 +66,14 @@ implements HasInteractionId {
     @Getter private final MetaModelContext metaModelContext;
 
     public InteractionSession(
-            @NonNull final MetaModelContext mmc, UUID conversationId) {
+            final @NonNull MetaModelContext mmc,
+            final @NonNull MessageBroker messageBroker,
+            final @NonNull UUID interactionId) {
 
         this.metaModelContext = mmc;
+        this.messageBroker = messageBroker;
         this.startedAtSystemNanos = System.nanoTime(); // used to measure time periods, so not using ClockService here
-        this.interaction = new IsisInteraction(conversationId);
+        this.interaction = new IsisInteraction(interactionId);
     }
 
     // -- FLUSH

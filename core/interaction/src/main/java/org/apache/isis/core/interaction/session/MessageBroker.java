@@ -20,27 +20,26 @@
 package org.apache.isis.core.interaction.session;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
+import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.collections._Lists;
+
+import lombok.val;
 
 public class MessageBroker implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
-    // -- constructor, fields
-
+    
     private final List<String> messages = _Lists.newArrayList();
     private final List<String> warnings = _Lists.newArrayList();
     private String applicationError;
-
+    
     public MessageBroker() {
     }
 
-
-    // -- reset
+    // -- RESET
 
     public void reset() {
         warnings.clear();
@@ -48,11 +47,9 @@ public class MessageBroker implements Serializable {
         applicationError = null;
     }
 
+    // -- MESSAGES
 
-
-    // -- messages
-
-    public List<String> getMessages() {
+    public Can<String> drainMessages() {
         return copyAndClear(messages);
     }
 
@@ -60,11 +57,9 @@ public class MessageBroker implements Serializable {
         messages.add(message);
     }
 
+    // -- WARNINGS
 
-
-    // -- warnings
-
-    public List<String> getWarnings() {
+    public Can<String> drainWarnings() {
         return copyAndClear(warnings);
     }
 
@@ -76,13 +71,12 @@ public class MessageBroker implements Serializable {
         warnings.add(message);
     }
 
-
-
-    // -- applicationError
-    public String getApplicationError() {
+    // -- APPLICATION ERROR
+    
+    public Optional<String> drainApplicationError() {
         final String error = applicationError;
         setApplicationError(null);
-        return error;
+        return Optional.ofNullable(error);
     }
 
     public void setApplicationError(String applicationError) {
@@ -90,16 +84,12 @@ public class MessageBroker implements Serializable {
     }
 
 
+    // -- HELPERS
 
-    // -- helpers
-
-    private List<String> copyAndClear(final List<String> messages) {
-        final List<String> copy = Collections.unmodifiableList(new ArrayList<>(messages));
+    private Can<String> copyAndClear(final List<String> messages) {
+        val copy = Can.ofCollection(messages);
         messages.clear();
         return copy;
     }
-
-
-
 
 }

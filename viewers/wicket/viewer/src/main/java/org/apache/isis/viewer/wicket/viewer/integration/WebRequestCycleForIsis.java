@@ -479,11 +479,11 @@ public class WebRequestCycleForIsis implements IRequestCycleListener {
     }
 
     private boolean isInInteraction() {
-        return commonContext.getInteractionTracker().isInInteractionSession();
+        return getCommonContext().getInteractionTracker().isInInteractionSession();
     }
 
     private Optional<MessageBroker> getMessageBroker() {
-        return commonContext.getInteractionTracker().currentMessageBroker();
+        return getCommonContext().getInteractionTracker().currentMessageBroker();
     }
 
     private AuthenticatedWebSession getWicketAuthenticatedWebSession() {

@@ -33,6 +33,7 @@ import java.util.concurrent.Callable;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.inject.Provider;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
@@ -48,6 +49,7 @@ import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.util.schema.ChangesDtoUtils;
 import org.apache.isis.applib.util.schema.CommandDtoUtils;
 import org.apache.isis.applib.util.schema.InteractionDtoUtils;
+import org.apache.isis.commons.functional.Result;
 import org.apache.isis.commons.functional.ThrowingRunnable;
 import org.apache.isis.commons.internal.concurrent._ConcurrentContext;
 import org.apache.isis.commons.internal.concurrent._ConcurrentTaskList;
@@ -64,6 +66,7 @@ import org.apache.isis.core.interaction.session.InteractionFactory;
 import org.apache.isis.core.interaction.session.InteractionSession;
 import org.apache.isis.core.interaction.session.InteractionTracker;
 import org.apache.isis.core.interaction.session.IsisInteraction;
+import org.apache.isis.core.interaction.session.MessageBroker;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.services.publishing.CommandPublisher;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
@@ -103,6 +106,7 @@ implements
     @Inject ClockService clockService;
     @Inject CommandPublisher commandPublisher;
     @Inject List<InteractionScopeAware> interactionScopeAwareBeans;
+    @Inject Provider<MessageBroker> sessionScopedMessageBroker;
 
     private InteractionScopeLifecycleHandler interactionScopeLifecycleHandler;
 
@@ -207,7 +211,11 @@ implements
     private InteractionSession getOrCreateInteractionSession() {
     	
     	return authenticationStack.get().isEmpty()
-    			? new InteractionSession(metaModelContext, UUID.randomUUID())
+    			? new InteractionSession(
+    			        metaModelContext, 
+    			        Result.of(sessionScopedMessageBroker::get) // only available with web contexts (Spring)
+    			            .presentElse(new MessageBroker()), // fallback if no web context available (eg. JUnit)
+    			        UUID.randomUUID())
 				: authenticationStack.get().firstElement().getInteractionSession();
     }
 
