@@ -26,312 +26,312 @@ content:
 # antora
     - url: .
       start_path: antora/components/docs # docs
-      branches: 2.0.0-M5
+      branches: HEAD
     - url: .
       start_path: antora/components/comguide # comguide
-      branches: 2.0.0-M5
+      branches: HEAD
     - url: .
       start_path: antora/components/conguide # conguide
-      branches: 2.0.0-M5
+      branches: HEAD
     - url: .
       start_path: antora/components/relnotes # relnotes
-      branches: 2.0.0-M5
+      branches: HEAD
     - url: .
       start_path: antora/components/setupguide # setupguide
-      branches: 2.0.0-M5
+      branches: HEAD
     - url: .
       start_path: antora/components/refguide # refguide
-      branches: 2.0.0-M5
+      branches: HEAD
     - url: .
       start_path: antora/components/refguide-index # refguide
-      branches: 2.0.0-M5
+      branches: HEAD
     - url: .
       start_path: antora/components/userguide # userguide
-      branches: 2.0.0-M5
+      branches: HEAD
 
 # api
     - url: .
       start_path: api/schema/src/main/adoc # refguide
-      branches: 2.0.0-M5
+      branches: HEAD
 
 # core
     - url: .
       start_path: core/adoc  # core (design docs)
-      branches: 2.0.0-M5
+      branches: HEAD
     - url: .
       start_path: core/codegen-bytebuddy/src/main/adoc # core
-      branches: 2.0.0-M5
+      branches: HEAD
     - url: .
       start_path: commons/src/main/adoc # core
-      branches: 2.0.0-M5
+      branches: HEAD
     - url: .
       start_path: core/config/src/main/adoc # refguide
-      branches: 2.0.0-M5
+      branches: HEAD
     - url: .
       start_path: core/interaction/src/main/adoc # core
-      branches: 2.0.0-M5
+      branches: HEAD
     - url: .
       start_path: core/internaltestsupport/src/main/adoc # core
-      branches: 2.0.0-M5
+      branches: HEAD
     - url: .
       start_path: core/metamodel/src/main/adoc # core
-      branches: 2.0.0-M5
+      branches: HEAD
     - url: .
       start_path: core/runtime/src/main/adoc # core
-      branches: 2.0.0-M5
+      branches: HEAD
     - url: .
       start_path: core/runtimeservices/src/main/adoc # core
-      branches: 2.0.0-M5
+      branches: HEAD
     - url: .
       start_path: core/security/src/main/adoc # security
-      branches: 2.0.0-M5
+      branches: HEAD
     - url: .
       start_path: core/transaction/src/main/adoc # core
-      branches: 2.0.0-M5
+      branches: HEAD
     - url: .
       start_path: core/webapp/src/main/adoc # core
-      branches: 2.0.0-M5
+      branches: HEAD
 
 # examples
     - url: .
       start_path: examples/demo/domain/src/main/adoc # docs
-      branches: 2.0.0-M5
+      branches: HEAD
     - url: .
       start_path: regressiontests/adoc # core
-      branches: 2.0.0-M5
+      branches: HEAD
 
 # extensions
     - url: .
       start_path: extensions/adoc # extensions
-      branches: 2.0.0-M5
+      branches: HEAD
 
     - url: .
       start_path: extensions/core/command-log/adoc # extensions
-      branches: 2.0.0-M5
+      branches: HEAD
     - url: .
       start_path: extensions/core/command-replay/adoc # extensions
-      branches: 2.0.0-M5
+      branches: HEAD
     - url: .
       start_path: extensions/core/flyway/adoc # userguide
-      branches: 2.0.0-M5
+      branches: HEAD
     - url: .
       start_path: extensions/core/model-annotation/adoc # extensions
-      branches: 2.0.0-M5
+      branches: HEAD
     - url: .
       start_path: extensions/core/quartz/adoc # userguide
-      branches: 2.0.0-M5
+      branches: HEAD
 
     - url: .
       start_path: extensions/security/audit-trail/adoc # security
-      branches: 2.0.0-M5
+      branches: HEAD
     - url: .
       start_path: extensions/security/secman/adoc # security
-      branches: 2.0.0-M5
+      branches: HEAD
     - url: .
       start_path: extensions/security/session-log/adoc # security
-      branches: 2.0.0-M5
+      branches: HEAD
     - url: .
       start_path: extensions/security/shiro-realm-ldap/adoc # security
-      branches: 2.0.0-M5
+      branches: HEAD
 
     - url: .
       start_path: extensions/vro/cors/adoc # vro
-      branches: 2.0.0-M5
+      branches: HEAD
     - url: .
       start_path: extensions/vw/exceldownload/adoc # vw
-      branches: 2.0.0-M5
+      branches: HEAD
     - url: .
       start_path: extensions/vw/fullcalendar/adoc # vw
-      branches: 2.0.0-M5
+      branches: HEAD
     - url: .
       start_path: extensions/vw/gmap3/adoc # vw
-      branches: 2.0.0-M5
+      branches: HEAD
     - url: .
       start_path: extensions/vw/pdfjs/adoc # vw
-      branches: 2.0.0-M5
+      branches: HEAD
 
 # incubator
     - url: .
       start_path: incubator/adoc # incubator
-      branches: 2.0.0-M5
+      branches: HEAD
     - url: .
       start_path: incubator/clients/kroviz/adoc # incubator
-      branches: 2.0.0-M5
+      branches: HEAD
 #    - url: .
 #      start_path: incubator/viewers/javafx/adoc # incubator
-#      branches: 2.0.0-M5
+#      branches: HEAD
     - url: .
       start_path: incubator/viewers/vaadin/adoc # incubator
-      branches: 2.0.0-M5
+      branches: HEAD
     - url: .
       start_path: incubator/mappings/microprofile/src/main/adoc # incubator
-      branches: 2.0.0-M5
+      branches: HEAD
 
 # legacy
     - url: .
       start_path: legacy/adoc # legacy
-      branches: 2.0.0-M5
+      branches: HEAD
     - url: .
       start_path: legacy/extensions/core/applib/src/main/adoc # legacy
-      branches: 2.0.0-M5
+      branches: HEAD
     - url: .
       start_path: legacy/extensions/core/commons/src/main/adoc # legacy
-      branches: 2.0.0-M5
+      branches: HEAD
     - url: .
       start_path: legacy/extensions/core/metamodel/src/main/adoc # legacy
-      branches: 2.0.0-M5
+      branches: HEAD
     - url: .
       start_path: legacy/extensions/core/runtime/src/main/adoc # legacy
-      branches: 2.0.0-M5
+      branches: HEAD
     - url: .
       start_path: legacy/mappings/restclient/src/main/adoc # legacy
-      branches: 2.0.0-M5
+      branches: HEAD
     - url: .
       start_path: legacy/subdomains/servletapi/src/main/adoc # legacy
-      branches: 2.0.0-M5
+      branches: HEAD
 
 # mappings
     - url: .
       start_path: mappings/adoc # mappings
-      branches: 2.0.0-M5
+      branches: HEAD
     - url: .
       start_path: mappings/jaxrsclient/adoc # mappings
-      branches: 2.0.0-M5
+      branches: HEAD
     - url: .
       start_path: mappings/minio/adoc # mappings
-      branches: 2.0.0-M5
+      branches: HEAD
     - url: .
       start_path: mappings/outbox-publisher/adoc # mappings
-      branches: 2.0.0-M5
+      branches: HEAD
     - url: .
       start_path: mappings/restclient/adoc # mappings
-      branches: 2.0.0-M5
+      branches: HEAD
     - url: .
       start_path: mappings/slack/adoc # mappings
-      branches: 2.0.0-M5
+      branches: HEAD
 
 # mavendeps
     - url: .
       start_path: mavendeps/adoc # starters
-      branches: 2.0.0-M5
+      branches: HEAD
 
 # persistence
     - url: .
       start_path: persistence/jpa/adoc # pjpa
-      branches: 2.0.0-M5
+      branches: HEAD
     - url: .
       start_path: persistence/jdo/adoc # pjdo
-      branches: 2.0.0-M5
+      branches: HEAD
 
 # security
     - url: .
       start_path: security/adoc # security
-      branches: 2.0.0-M5
+      branches: HEAD
     - url: .
       start_path: security/bypass/src/main/adoc # security
-      branches: 2.0.0-M5
+      branches: HEAD
     - url: .
       start_path: security/shiro/src/main/adoc # security
-      branches: 2.0.0-M5
+      branches: HEAD
     - url: .
       start_path: security/keycloak/src/main/adoc # security
-      branches: 2.0.0-M5
+      branches: HEAD
 
 # starters
     - url: .
       start_path: starters/adoc # toc
-      branches: 2.0.0-M5
+      branches: HEAD
 
 # subdomains
     - url: .
       start_path: subdomains/adoc # subdomains
-      branches: 2.0.0-M5
+      branches: HEAD
     - url: .
       start_path: subdomains/base/adoc # subdomains
-      branches: 2.0.0-M5
+      branches: HEAD
     - url: .
       start_path: subdomains/docx/adoc # subdomains
-      branches: 2.0.0-M5
+      branches: HEAD
     - url: .
       start_path: subdomains/excel/adoc # subdomains
-      branches: 2.0.0-M5
+      branches: HEAD
     - url: .
       start_path: subdomains/freemarker/adoc # subdomains
-      branches: 2.0.0-M5
+      branches: HEAD
     - url: .
       start_path: subdomains/ognl/adoc # subdomains
-      branches: 2.0.0-M5
+      branches: HEAD
     - url: .
       start_path: subdomains/pdfbox/adoc # subdomains
-      branches: 2.0.0-M5
+      branches: HEAD
     - url: .
       start_path: subdomains/settings/adoc # subdomains
-      branches: 2.0.0-M5
+      branches: HEAD
     - url: .
       start_path: subdomains/spring/adoc # subdomains
-      branches: 2.0.0-M5
+      branches: HEAD
     - url: .
       start_path: subdomains/xdocreport/adoc # subdomains
-      branches: 2.0.0-M5
+      branches: HEAD
     - url: .
       start_path: subdomains/zip/adoc # subdomains
-      branches: 2.0.0-M5
+      branches: HEAD
 
 # testing
     - url: .
       start_path: testing/adoc # testing
-      branches: 2.0.0-M5
+      branches: HEAD
     - url: .
       start_path: testing/fakedata/adoc # testing
-      branches: 2.0.0-M5
+      branches: HEAD
     - url: .
       start_path: testing/fixtures/adoc # testing
-      branches: 2.0.0-M5
+      branches: HEAD
     - url: .
       start_path: testing/h2console/adoc # testing
-      branches: 2.0.0-M5
+      branches: HEAD
     - url: .
       start_path: testing/hsqldbmgr/adoc # testing
-      branches: 2.0.0-M5
+      branches: HEAD
     - url: .
       start_path: testing/integtestsupport/adoc # testing
-      branches: 2.0.0-M5
+      branches: HEAD
     - url: .
       start_path: testing/specsupport/adoc # testing
-      branches: 2.0.0-M5
+      branches: HEAD
     - url: .
       start_path: testing/unittestsupport/adoc # testing
-      branches: 2.0.0-M5
+      branches: HEAD
 
 # tooling
     - url: .
       start_path: tooling/adoc # toc
-      branches: 2.0.0-M5
+      branches: HEAD
     - url: .
       start_path: tooling/cli/adoc # cli
-      branches: 2.0.0-M5
+      branches: HEAD
 
 # valuetypes
     - url: .
       start_path: valuetypes/adoc # valuetypes
-      branches: 2.0.0-M5
+      branches: HEAD
     - url: .
       start_path: valuetypes/asciidoc/adoc # valuetypes
-      branches: 2.0.0-M5
+      branches: HEAD
     - url: .
       start_path: valuetypes/markdown/adoc # valuetypes
-      branches: 2.0.0-M5
+      branches: HEAD
     - url: .
       start_path: valuetypes/sse/adoc # valuetypes
-      branches: 2.0.0-M5
+      branches: HEAD
 
 # viewers
     - url: .
       start_path: viewers/restfulobjects/adoc # vro
-      branches: 2.0.0-M5
+      branches: HEAD
     - url: .
       start_path: viewers/wicket/adoc # vw
-      branches: 2.0.0-M5
+      branches: HEAD
 
 ui:
   bundle:
