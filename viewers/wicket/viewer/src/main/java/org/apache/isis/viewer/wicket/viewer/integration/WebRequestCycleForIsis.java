@@ -483,7 +483,7 @@ public class WebRequestCycleForIsis implements IRequestCycleListener {
     }
 
     private Optional<MessageBroker> getMessageBroker() {
-        return getCommonContext().getInteractionTracker().currentMessageBroker();
+        return getCommonContext().getMessageBroker();
     }
 
     private AuthenticatedWebSession getWicketAuthenticatedWebSession() {

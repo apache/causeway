@@ -28,6 +28,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.isis.applib.services.i18n.LocaleProvider;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.userreg.EmailNotificationService;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.viewer.wicket.WebAppContextPath;
 import org.apache.isis.core.interaction.session.InteractionFactory;
@@ -141,7 +142,9 @@ implements HasCommonContext {
     }
     
     protected MessageBroker getMessageBroker() {
-        return getCommonContext().getInteractionTracker().currentMessageBrokerElseFail();
+        return getCommonContext().getMessageBroker()
+        .orElseThrow(()->_Exceptions.illegalState(
+                "no MessageBroker available on current session"));
     }
     
     protected HeaderUiModel getHeaderModel() {

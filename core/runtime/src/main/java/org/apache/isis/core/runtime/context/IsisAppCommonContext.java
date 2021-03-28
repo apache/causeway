@@ -78,7 +78,7 @@ public class IsisAppCommonContext implements HasMetaModelContext {
     private final Function<Object, ManagedObject> pojoToAdapter = metaModelContext.getObjectManager()::adapt;
     
     public Optional<MessageBroker> getMessageBroker() {
-        return getInteractionTracker().currentMessageBroker();
+        return getMetaModelContext().getServiceRegistry().lookupService(MessageBroker.class);
     }
     
     // -- SHORTCUTS

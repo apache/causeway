@@ -457,7 +457,7 @@ implements FormExecutor {
     }
 
     protected Optional<MessageBroker> currentMessageBroker() {
-        return getCommonContext().getInteractionTracker().currentMessageBroker();
+        return getCommonContext().getMessageBroker();
     }
 
     protected WicketViewerSettings getSettings() {

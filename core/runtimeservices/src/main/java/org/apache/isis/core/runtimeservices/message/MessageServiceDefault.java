@@ -22,7 +22,9 @@ import java.util.Optional;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.inject.Provider;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
@@ -33,7 +35,6 @@ import org.apache.isis.applib.exceptions.RecoverableException;
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.message.MessageService;
-import org.apache.isis.core.interaction.session.InteractionTracker;
 import org.apache.isis.core.interaction.session.MessageBroker;
 
 @Service
@@ -44,7 +45,9 @@ import org.apache.isis.core.interaction.session.MessageBroker;
 public class MessageServiceDefault implements MessageService {
     
     @Inject private TranslationService translationService;
-    @Inject private InteractionTracker interactionTracker;
+    
+    @Autowired(required = false) 
+    private Provider<MessageBroker> sessionScopedMessageBroker;
 
     @Override
     public void informUser(final String message) {
@@ -119,9 +122,8 @@ public class MessageServiceDefault implements MessageService {
     }
 
     private Optional<MessageBroker> currentMessageBroker() {
-        return interactionTracker.currentMessageBroker();
+        return Optional.ofNullable(sessionScopedMessageBroker) // only available with web contexts (Spring)
+        .map(Provider::get);
     }
-
-    
 
 }

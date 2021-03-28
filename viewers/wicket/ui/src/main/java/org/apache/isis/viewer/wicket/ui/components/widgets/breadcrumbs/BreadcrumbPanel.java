@@ -126,7 +126,8 @@ extends PanelAbstract<Void, IModel<Void>> {
                         final String oidStr = breadcrumbChoice.getInput();
                         final EntityModel selectedModel = breadcrumbModel.lookup(oidStr);
                         if(selectedModel == null) {
-                            currentMessageBroker().ifPresent(messageBroker->{
+                            getCommonContext().getMessageBroker()
+                            .ifPresent(messageBroker->{
                                 messageBroker.addWarning("Cannot find object");
                                 String feedbackMsg = JGrowlUtil.asJGrowlCalls(messageBroker);
                                 target.appendJavaScript(feedbackMsg);    
@@ -137,11 +138,6 @@ extends PanelAbstract<Void, IModel<Void>> {
                         setResponsePage(EntityPage.class, selectedModel.getPageParametersWithoutUiHints());
                     }
 
-                    private Optional<MessageBroker> currentMessageBroker() {
-                        return getCommonContext().getInteractionTracker()
-                                .currentMessageBroker();
-                    }
-                    
                     private IsisAppCommonContext getCommonContext() {
                         return commonContext = CommonContextUtils.computeIfAbsent(commonContext);
                     }
