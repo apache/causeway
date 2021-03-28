@@ -303,6 +303,7 @@ If there are patches to the documentation, we move the branches.
 We therefore temporarily modify all of the `antora.yml` files (and update `index.html`) file and create a branch for this change; then we update `site.yml` with a reference to that new branch.
 All of this is changed afterwards.
 
+[#create-doc-branch]
 === Create doc branch
 
 First, we update all versions in `antora.yml`:
@@ -345,14 +346,7 @@ git revert HEAD
 
 Lastly, we update `index.html` and then `site.yml`
 
-* Update the home page of the website, `antora/supplemental-ui/index.html`
-+
-
-** update any mention of `master` -> `{page-isisrel}`
-+
-This should be the two sets of starter app instructions for helloworld and simpleapp.
-
-** update any mention of `latest` -> `{page-isisrel}`
+* With the home page of the website, `antora/supplemental-ui/index.html`, update any mention of `latest` -> `{page-isisrel}`
 +
 This should be in hyperlinks, `<a href="docs/...">`
 +
