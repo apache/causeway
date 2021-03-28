@@ -3,12 +3,12 @@ Web site: http://isis.apache.org/
 Description
 
   Apache Isis software is a framework for rapidly developing domain-driven apps
-  in Java. Write your business logic in entities, domain services and 
-  repositories, and the framework dynamically generates a representation of 
-  that domain model as a webapp or a RESTful API.  Licensed under ASL v2.0.  
+  in Java. Write your business logic in entities, domain services and
+  repositories, and the framework dynamically generates a representation of
+  that domain model as a webapp or a RESTful API.  Licensed under ASL v2.0.
   Suitable for prototyping or for production.
 
-  Isis was accepted into the Apache Incubator in Sept 2010 and graduated in 
+  Isis was accepted into the Apache Incubator in Sept 2010 and graduated in
   Oct 2012.  Its first release as a TLP was in Dec 2012.
 
   To participate in Apache Isis community, please join the either the slack
@@ -16,12 +16,14 @@ Description
   https://cwiki.apache.org/confluence/display/ISIS/Signing+up+to+Slack.
   to subscribe to the mailing lists, send an empty message to
   users-subscribe@isis.apache.org (for users) or to
-  dev-subscribe@isis.apache.org (for contributors).  Significant contributions 
-  over a sustained period of time can earn a contributor commit access to the 
+  dev-subscribe@isis.apache.org (for contributors).  Significant contributions
+  over a sustained period of time can earn a contributor commit access to the
   codebase.
 
 
 TLP releases:
+
+  * isis-2.0.0-M5                                  : 28 Mar 2021
 
   * isis-2.0.0-M4                                  : 17 Oct 2020
 
@@ -114,7 +116,7 @@ TLP releases:
   * isis-viewer-wicket-1.5.0                       : 08 Jun 2014
   * quickstart-wicket-restful_jdo-archetype-1.5.0  : 08 Jun 2014
   * simple-wicket-restful_jdo-archetype-1.5.0      : 08 Jun 2014
-  
+
   * isis-objectstore-jdo-1.4.1                     : 14 Mar 2014
   * isis-viewer-wicket-1.4.1                       : 14 Mar 2014
   * quickstart-wicket-restful_jdo-archetype-1.4.1  : 14 Mar 2014
@@ -140,7 +142,7 @@ TLP releases:
   * isis-viewer-wicket-1.3.0                       : 25 Oct 2013
   * quickstart-wicket-restful_jdo-archetype-1.3.0  : 25 Oct 2013
   * simple-wicket-restful_jdo-archetype-1.3.0      : 25 Oct 2013
-  
+
   * isis-1.2.0                                     : 31 May 2013
   * isis-objectstore-jdo-1.1.0                     : 31 May 2013
   * isis-security-file-1.0.1                       : 31 May 2013
@@ -148,22 +150,22 @@ TLP releases:
   * isis-viewer-restfulobjects-2.0.0               : 31 May 2013
   * isis-viewer-wicket-1.2.0                       : 31 May 2013
   * quickstart-wicket-restful_jdo-archetype-1.0.3  : 31 May 2013
- 
+
   * isis-1.1.0                                     : 31 Jan 2013
   * isis-security-shiro-1.1.0                      : 31 Jan 2013
   * isis-viewer-wicket-1.1.0                       : 31 Jan 2013
   * quickstart-wicket-restful_jdo-archetype-1.0.2  : 31 Jan 2013
- 
+
   * isis-security-shiro-1.0.0                      : 10 Jan 2013
   * quickstart-wicket-restful_jdo-archetype-1.0.1  : 10 Jan 2013
- 
+
   * isis-1.0.0                                     : 24 Dec 2012
   * isis-objectstore-jdo-1.0.0                     : 24 Dec 2012
   * isis-security-file-1.0.0                       : 24 Dec 2012
   * isis-viewer-restfulobjects-1.0.0               : 24 Dec 2012
   * isis-viewer-wicket-1.0.0                       : 24 Dec 2012
   * quickstart-wicket-restful_jdo-archetype-1.0.0  : 24 Dec 2012
- 
+
 Incubating releases:
 
   * 0.2.0-incubating                               : Jan 2012
@@ -171,7 +173,7 @@ Incubating releases:
 
 
 Resources:
- 
+
   item            type   URL
   -------------   -----  -----------------------------------------------------
   Source code     git    https://github.com/apache/isis.git
