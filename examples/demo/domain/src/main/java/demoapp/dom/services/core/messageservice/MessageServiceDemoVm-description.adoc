@@ -8,6 +8,8 @@ The framework supports 3 styles of messages that can be presented to the user wi
 ----
 class MyViewmodel {
 
+	@Inject private MessageService messageService;
+
 	@Action
 	public MyViewmodel infoMessage(){
 	    messageService.informUser("Info Message.");
@@ -28,6 +30,3 @@ class MyViewmodel {
 
 }
 ----
-
-See the link:${SOURCES_DEMO}/demoapp/dom/services/messageservice[sources].
-
