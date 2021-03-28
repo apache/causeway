@@ -17,7 +17,7 @@
 
 name: vw
 title: "Wicket Viewer"
-version: latest
+version: 2.0.0-M5
 start_page: ROOT:about.adoc
 nav:
 - modules/ROOT/nav.adoc
