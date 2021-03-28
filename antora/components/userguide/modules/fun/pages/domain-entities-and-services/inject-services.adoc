@@ -18,7 +18,7 @@ It is also possible to use Spring's own link:https://docs.spring.io/spring-frame
 Since the two annotations are effectively equivalent, we recommend using the JEE standard.
 ====
 
-However, not only does Apache Isis use Spring to autowire domain services into other services, the framework _also_ ensures that services are injected into any domain object (eg xref:overview.adoc#domain-entities[entity], xref:overview.adoc#view-models[view model], xref:overview.adoc#mixins[mixins], xref:testing:fixtures:about.adoc#fixture-scripts[fixture script], xref:refguide:applib-cm:classes.adoc#specification[specification] etc).
+However, not only does Apache Isis use Spring to autowire domain services into other services, the framework _also_ ensures that services are injected into any domain object (eg xref:overview.adoc#domain-entities[entity], xref:overview.adoc#view-models[view model], xref:overview.adoc#mixins[mixins], xref:testing:fixtures:about.adoc#fixture-scripts[fixture script], xref:refguide:applib:index/spec/Specification.adoc[specification] etc).
 This is key enabler to place functionality in the "right place", eg in a domain entity/view model itself, or in a mixin.
 
 

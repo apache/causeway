@@ -97,7 +97,7 @@ could return "Arthur C. Clarke".
 
 === Imperative style
 
-Alternatively, the title can be provided simply by implementing the xref:refguide:applib-cm:methods.adoc#title[title()] reserved method.
+Alternatively, the title can be provided simply by implementing the xref:refguide:applib-methods:ui-hints.adoc#title[title()] reserved method.
 
 For example:
 
@@ -200,7 +200,7 @@ public class InvoiceRun {
 
 === Imperative style
 
-To customise the icon on an instance-by-instance basis, we implement the reserved xref:refguide:applib-cm:methods.adoc#iconName[iconName()] method.
+To customise the icon on an instance-by-instance basis, we implement the reserved xref:refguide:applib-methods:ui-hints.adoc#iconName[iconName()] method.
 
 For example:
 
@@ -262,7 +262,7 @@ public class OrderSubscriptions {
 
 == Object CSS Styling
 
-It is also possible for an object to return a xref:refguide:applib-cm:methods.adoc#cssclass[CSS class].
+It is also possible for an object to return a xref:refguide:applib-methods:ui-hints.adoc#cssclass[CSS class].
 In conjunction with a viewer-specific customisation of CSS (eg for the xref:vw:ROOT:about.adoc[Wicket Viewer], seexref:vw:ROOT:customisation.adoc#tweaking-css-classes[here]) this can be used to apply arbitrary styling; for example each object could be rendered in a page with a different background colour.
 
 === Declarative style
@@ -278,7 +278,7 @@ One possible use case would be to render the most important object types with a 
 
 === Imperative style
 
-To specify a CSS class on an instance-by-instance basis, we implement the reserved xref:refguide:applib-cm:methods.adoc#cssclass[cssClass()] method.
+To specify a CSS class on an instance-by-instance basis, we implement the reserved xref:refguide:applib-methods:ui-hints.adoc#cssclass[cssClass()] method.
 
 For example:
 
@@ -353,7 +353,7 @@ More generally, for a given domain object `Xxx`, if it has specified a layout `y
 
 === Imperative style
 
-To specify the layout on an instance-by-instance basis, we implement the reserved xref:refguide:applib-cm:methods.adoc#layout[layout()] method.
+To specify the layout on an instance-by-instance basis, we implement the reserved xref:refguide:applib-methods:ui-hints.adoc#layout[layout()] method.
 
 For example:
 

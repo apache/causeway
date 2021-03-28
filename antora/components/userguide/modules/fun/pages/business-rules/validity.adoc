@@ -61,9 +61,9 @@ The framework validates each argument separately; only if all are valid does it 
 
 == For more information
 
-For more information, see the xref:refguide:applib-cm:methods.adoc#validate[validate...()] section in the appropriate reference guide.
+For more information, see the xref:refguide:applib-methods:prefixes.adoc#validate[validate...()] section in the appropriate reference guide.
 The reference guide also explains how to define validation declaratively, using the xref:refguide:applib:index/annotation/Parameter.adoc#mustSatisfy[@Parameter#mustSatisfy()] or xref:refguide:applib:index/annotation/Property.adoc#mustSatisfy[@Property#mustSatisfy()] attributes.
 
-It's also possible to return xref:userguide:btb:i18n.adoc#imperative-messages[locale-specific] strings, by returning xref:refguide:applib-cm:classes.adoc#TranslatableString[TranslatableString] instead of `java.lang.String`.
+It's also possible to return xref:userguide:btb:i18n.adoc[locale-specific] strings, by returning xref:refguide:applib:index/services/i18n/TranslatableString.adoc[TranslatableString] instead of `java.lang.String`.
 
 

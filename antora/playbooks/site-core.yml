@@ -29,13 +29,16 @@ content:
       branches: HEAD
 # core
     - url: .
-      start_path: core/adoc # core
+      start_path: core/adoc  # core (design docs)
       branches: HEAD
     - url: .
       start_path: core/codegen-bytebuddy/src/main/adoc # core
       branches: HEAD
     - url: .
       start_path: commons/src/main/adoc # core
+      branches: HEAD
+    - url: .
+      start_path: core/interaction/src/main/adoc # core
       branches: HEAD
     - url: .
       start_path: core/internaltestsupport/src/main/adoc # core
@@ -45,6 +48,12 @@ content:
       branches: HEAD
     - url: .
       start_path: core/runtime/src/main/adoc # core
+      branches: HEAD
+    - url: .
+      start_path: core/runtimeservices/src/main/adoc # core
+      branches: HEAD
+    - url: .
+      start_path: core/transaction/src/main/adoc # core
       branches: HEAD
     - url: .
       start_path: core/webapp/src/main/adoc # core

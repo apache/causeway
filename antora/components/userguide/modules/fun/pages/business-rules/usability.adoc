@@ -113,7 +113,7 @@ A non-`null` return string is taken as the _reason_ why the action argument cann
 
 == For more information
 
-For more information, see  xref:refguide:applib-cm:methods.adoc#disable[disable...()] section in the appropriate reference guide.
+For more information, see  xref:refguide:applib-methods:prefixes.adoc#disable[disable...()] section in the appropriate reference guide.
 
-It's also possible to return xref:userguide:btb:i18n.adoc#imperative-messages[locale-specific] strings, by returning xref:refguide:applib-cm:classes.adoc#TranslatableString[TranslatableString] instead of `java.lang.String`.
+It's also possible to return xref:userguide:btb:i18n.adoc#imperative-messages[locale-specific] strings, by returning xref:refguide:applib:index/services/i18n/TranslatableString.adoc[TranslatableString] instead of `java.lang.String`.
 

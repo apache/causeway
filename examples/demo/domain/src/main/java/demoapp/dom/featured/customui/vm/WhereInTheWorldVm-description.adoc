@@ -41,7 +41,7 @@ There are various subclasses available; as we want to replace the component for 
 [source,java]
 .WhereInTheWorldPanelFactory.java
 ----
-include::../wicket/WhereInTheWorldPanelFactory.java[tags=class]
+include::../../../../webapp/wicket/ui/custom/WhereInTheWorldPanelFactory.java[tags=class]
 ----
 <.> the framework use the chain-of-responsibility pattern to look for a component factory to render the domain object.
 This `@Order` precedence ensures that this custom implementation is consulted early on.

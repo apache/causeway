@@ -470,23 +470,11 @@ JQuery is available by default.
 Note that there is no `src/main/webapp/` or `WEB-INF/web.xml` - the servlets and filters are configured by Apache Isis automatically.
 
 
-=== src/test/java
+=== No src/test/java
 
-Under `src/test/java` we have:
+There are no tests in helloworld.
+You will find tests in the xref:docs:starters:simpleapp.adoc[SimpleApp starter app].
 
-[source]
-----
-src/test/java/
-  domainapp/
-    modules/
-      hello/
-        dom/
-          hwo/                          <!--1-->
-            HelloWorldObject_Test.java
-            HelloWorldObjects_Test.java
-----
-<1> These are very simple unit tests of `HelloWorldObject` and `HelloWorldObjects`, with the package structure the same as in `src/main/java`.
-They are written in JUnit 5 and use Mockito as the mocking library.
 
 === pom.xml
 

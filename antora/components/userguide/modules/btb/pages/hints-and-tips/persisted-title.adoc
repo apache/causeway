@@ -9,7 +9,7 @@
 Normally the title of an object is not persisted to the database, rather it is recomputed automatically from underlying properties.
 On occasion though you might want the title to also be persisted; either to make things easier for the DBA, or for an integration scenario, or to support full-text search.
 
-We can implement this feature by either overriding the  xref:refguide:applib-cm:methods/lifecycle.adoc[lifecycle methods] or (probably better) subscribing to the xref:refguide:applib-cm:classes/lifecycleevent.adoc[lifecycle events].
+We can implement this feature by either overriding the  xref:refguide:applib-methods:lifecycle.adoc[lifecycle methods] or (probably better) subscribing to the xref:refguide:applib-classes:events.adoc#lifecycle-events[lifecycle events].
 
 In the design we discuss here we make it a responsibility of the entities to persist the title as a property, by implementing a `ObjectWithPersistedTitle` interface:
 

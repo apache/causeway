@@ -43,7 +43,7 @@ If using an RDBMS for persistence then we strongly recommend that you implement 
 
 * second, `SortedSet` is preferable to `Set` because then the order is well-defined and predictable (to an end user, to the programmer).
 +
-The xref:refguide:applib-cm:classes/utility.adoc#ObjectContracts[ObjectContracts]  utility class substantially simplifies the task of implementing `Comparable` in your domain classes.
+The xref:refguide:applib:index/util/ObjectContracts.adoc[ObjectContracts]  utility class substantially simplifies the task of implementing `Comparable` in your domain classes.
 
 * third, if the relationship is bidirectional then the ORM (JDO/DataNucleus) will automatically maintain the relationship.
 

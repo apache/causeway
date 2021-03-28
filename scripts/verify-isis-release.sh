@@ -168,12 +168,12 @@ popd
 
 # Test out simpleapp (jdo) using:
 pushd isis-app-simpleapp-jdo
-mvn spring-boot:run
+mvn -pl webapp spring-boot:run
 popd
 
 # Test out simpleapp (jpa) using:
 pushd isis-app-simpleapp-jpa
-mvn spring-boot:run
+mvn -pl webapp spring-boot:run
 popd
 
 EOF

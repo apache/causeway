@@ -1461,7 +1461,7 @@ Directory: /core/config
 
 .Components
 ****
-o.a.i.core.config.RestEasyConfiguration$RestfulPathProviderImpl +
+o.a.i.core.config.applib.RestfulPathProvider +
 o.a.i.core.config.beans.IsisBeanFactoryPostProcessorForSpring +
 o.a.i.core.config.beans.IsisBeanTypeRegistryDefault +
 o.a.i.core.config.converters.PatternsConverter +
@@ -3764,12 +3764,12 @@ skinparam rectangle<<22>> {
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<12>> {
+skinparam rectangle<<23>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<23>> {
+skinparam rectangle<<12>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295

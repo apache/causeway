@@ -5,7 +5,6 @@
 
 
 
-
 The `disable...()` supporting method is called for properties, actions and action parameters.
 It allows the modification of the property to be vetoed (ie made read-only) and to prevent the invocation of the action ("grey it out").
 For parameters, it disables the entry into the parameter; this is for actions with dependencies between the parameters.
