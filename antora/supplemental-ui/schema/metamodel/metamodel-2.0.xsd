@@ -278,8 +278,8 @@
         </xs:sequence>
         <xs:attribute name="id" type="xs:string">
         	<xs:annotation>
-        		<xs:documentation>The facet type (fqcn) that is common to a set of concrete
-					facet implementations. These ids are usually known to the framework for
+        		<xs:documentation>The facet type (fqcn) that is common to a set of concrete 
+					facet implementations. These ids are usually known to the framework for 
 					there well defined semantics within the programming model.
 				</xs:documentation>
         	</xs:annotation></xs:attribute>

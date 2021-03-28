@@ -55,9 +55,9 @@
                         </xs:documentation>
                     </xs:annotation>
                 </xs:element>
-                <xs:element name="transactionId" type="xs:string">
+                <xs:element name="interactionId" type="xs:string">
                     <xs:annotation>
-                        <xs:documentation>Transaction id for this command, a unique identifier.
+                        <xs:documentation>Unique identifier of the interaction that gave rise to this command.
                         </xs:documentation>
                     </xs:annotation>
                 </xs:element>

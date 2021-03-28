@@ -47,7 +47,7 @@
                         </xs:documentation>
                     </xs:annotation>
                 </xs:element>
-                <xs:element name="transactionId" type="xs:string">
+                <xs:element name="interactionId" type="xs:string">
                     <xs:annotation>
                         <xs:documentation>Unique identifier of the interaction which this member was interacted with (action invoked/property edited); can be used to locate the corresponding Command object (which may have been persisted).
                         </xs:documentation>

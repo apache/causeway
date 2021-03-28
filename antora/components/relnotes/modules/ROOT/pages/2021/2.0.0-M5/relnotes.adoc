@@ -14,6 +14,8 @@ Data source URLs are now configured using Spring configuration properties (for e
 The xref:security:secman:about.adoc[SecMan] integration was extended to also provide a JPA implementation, and was also reworked to use logical type names rather than physical package names.
 The notion of xref:refguide:applib:index/id/LogicalType.adoc[LogicalType] was also formally added into the applib.
 
+One notable breaking change: the XSDs for schemas were changed, with `transactionId` being renamed to `interactionId`.
+
 Documentation tooling was also developed to automate large parts of the xref:refguide::about.adoc[Reference Guide], as well as to provide a xref:refguide:_overview:about.adoc[System Overview].
 
 
