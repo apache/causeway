@@ -95,11 +95,11 @@ public class CommandPublisherDefault implements CommandPublisher {
                 : !command.isPublishingEnabled()
                         ? String.format(
                                 "publishing not enabled for given command\n%s",
-                                command.toString())
+                                _Xray.toText(command))
                         : command.getLogicalMemberIdentifier() == null
                                 ? String.format(
                                         "no logical-member-id for given command\n%s",
-                                        command.toString())
+                                        _Xray.toText(command))
                                 : null;
     }
     

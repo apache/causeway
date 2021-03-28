@@ -355,7 +355,7 @@ public final class _Text {
         if(line.length()<=maxChars) {
             return Stream.of(line);
         }
-        val tokens = Can.ofEnumeration(new StringTokenizer(line, " .-:/", true))
+        val tokens = Can.ofEnumeration(new StringTokenizer(line, " .-:/_", true))
                 .map(String.class::cast);
         
         val constraintLines = _Lists.<String>newArrayList();

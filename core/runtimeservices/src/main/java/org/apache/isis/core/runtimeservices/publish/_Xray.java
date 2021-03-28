@@ -21,6 +21,7 @@ package org.apache.isis.core.runtimeservices.publish;
 import java.awt.Color;
 import java.util.Optional;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 import javax.annotation.Nullable;
 
@@ -33,6 +34,7 @@ import org.apache.isis.applib.services.publishing.spi.EntityPropertyChange;
 import org.apache.isis.applib.services.publishing.spi.EntityPropertyChangeSubscriber;
 import org.apache.isis.applib.services.publishing.spi.ExecutionSubscriber;
 import org.apache.isis.commons.collections.Can;
+import org.apache.isis.commons.internal.base._Text;
 import org.apache.isis.commons.internal.debug.xray.XrayUi;
 import org.apache.isis.core.interaction.session.InteractionTracker;
 import org.apache.isis.core.runtime.util.XrayUtil;
@@ -60,7 +62,7 @@ final class _Xray {
         val enteringLabel = canPublish 
                 ? String.format("publishing command to %d subscriber(s):\n%s", 
                         enabledSubscribers.size(),
-                        command.toString())
+                        toText(command))
                 : String.format("not publishing command:\n%s", cannotPublishReason);
         
         val handleIfAny = XrayUtil.createSequenceHandle(iaTracker, "cmd-publisher");
@@ -103,7 +105,7 @@ final class _Xray {
         val enteringLabel = canPublish
                 ? String.format("publishing execution to %d subscriber(s):\n%s", 
                         enabledSubscribers.size(),
-                        execution.toString())
+                        toText(execution))
                 : String.format("not publishing execution:\n%s", cannotPublishReason);
         
         val handleIfAny = XrayUtil.createSequenceHandle(iaTracker, "exec-publisher");
@@ -146,7 +148,7 @@ final class _Xray {
         val enteringLabel = canPublish 
                 ? String.format("publishing entity-changes to %d subscriber(s):\n%s", 
                         enabledSubscribers.size(),
-                        payload.map(Object::toString).orElse("null"))
+                        payload.map(x->toText(x)).orElse("null"))
                 : String.format("not publishing entity-changes:\n%s", cannotPublishReason);
         
         val handleIfAny = XrayUtil.createSequenceHandle(iaTracker, "ec-publisher");
@@ -189,7 +191,7 @@ final class _Xray {
         val enteringLabel = canPublish
                 ? String.format("publishing entity-property-changes to %d subscriber(s):\n%s", 
                         enabledSubscribers.size(),
-                        payload)
+                        toText(payload))
                 : String.format("not publishing entity-property-changes:\n%s", cannotPublishReason);
         
         val handleIfAny = XrayUtil.createSequenceHandle(iaTracker, "epc-publisher");
@@ -232,6 +234,29 @@ final class _Xray {
             sequenceData.setConnectionLabelColor(null);
         });
         
+    }
+    
+    // -- HELPER
+    
+    static String toText(Command command) {
+        return _Text.breakLines(Can.of(command.toString()), 80)
+                .stream()
+                .collect(Collectors.joining("\n "));
+    }
+    
+    static String toText(Execution<?, ?> execution) {
+        //TODO  
+        return execution.toString();
+    }
+    
+    static String toText(EntityChanges changes) {
+        //TODO  
+        return changes.toString();
+    }
+    
+    static String toText(Can<EntityPropertyChange> changes) {
+        //TODO  
+        return changes.toString();
     }
     
 }
