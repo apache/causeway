@@ -3764,12 +3764,12 @@ skinparam rectangle<<11>> {
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<12>> {
+skinparam rectangle<<23>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<23>> {
+skinparam rectangle<<12>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
