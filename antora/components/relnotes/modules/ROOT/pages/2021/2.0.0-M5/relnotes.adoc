@@ -16,7 +16,7 @@ The notion of xref:refguide:applib:index/id/LogicalType.adoc[LogicalType] was al
 
 One notable breaking change: the XSDs for schemas were changed, with `transactionId` being renamed to `interactionId`.
 
-Documentation tooling was also developed to automate large parts of the xref:refguide::about.adoc[Reference Guide], as well as to provide a xref:refguide:_overview:about.adoc[System Overview].
+Documentation tooling was also developed to automate large parts of the xref:refguide::about.adoc[Reference Guide], as well as to provide a xref:core:_overview:about.adoc[System Overview].
 
 
 

@@ -35,7 +35,8 @@ fi
 
 
 MODE=projdoc
-GENERATED_PATH="${PROJECT_ROOT_PATH}/antora/components/refguide-index"
+INDEX_PATH="${PROJECT_ROOT_PATH}/antora/components/refguide-index"
+OVERVIEW_PATH="${PROJECT_ROOT_PATH}/core/adoc"
 
 ##
 ## run java
@@ -50,7 +51,7 @@ echo ""
 if [ -z "${JAVA_CMD}" ]; then
   echo "projdoc gen: no java, skipping"
 else
-  java -jar "${PROJECT_ROOT_PATH}/tooling/cli/target/isis-tooling-cli.jar" -p "${PROJECT_ROOT_PATH}" -o "${GENERATED_PATH}" $MODE
+  java -jar "${PROJECT_ROOT_PATH}/tooling/cli/target/isis-tooling-cli.jar" -p "${PROJECT_ROOT_PATH}" -r "${OVERVIEW_PATH}" -o "${INDEX_PATH}" $MODE
 fi
 
 

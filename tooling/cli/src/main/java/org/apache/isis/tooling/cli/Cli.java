@@ -49,9 +49,14 @@ class Cli implements Callable<Integer> {
     private String projectRootPath;
 
     @Option(
+            names = {"-r", "--overview"},
+            description = "path to the overview file (default: NONE = write to std.out)")
+    private String overviewPath;
+
+    @Option(
             names = {"-o", "--output"},
-            description = "path to the output file (default: NONE = write to std.out)")
-    private String outputPath;
+            description = "path to the index files (default: NONE = write to std.out)")
+    private String indexPath;
 
     private _Lazy<CliConfig> configRef = _Lazy.threadSafe(()->CliConfig
             .read(projectRootPath!=null
@@ -68,9 +73,15 @@ class Cli implements Callable<Integer> {
                 : new File(".");
     }
 
-    public  File getOutputPath() {
-        return outputPath !=null
-                ? new File(outputPath)
+    public  File getOverviewPath() {
+        return overviewPath !=null
+                ? new File(overviewPath)
+                : new File(".");
+    }
+
+    public  File getIndexPath() {
+        return indexPath !=null
+                ? new File(indexPath)
                 : new File(".");
     }
 
