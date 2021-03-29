@@ -49,12 +49,12 @@ class Cli implements Callable<Integer> {
     private String projectRootPath;
 
     @Option(
-            names = {"-r", "--overview"},
+            names = {"-w", "--overview"},
             description = "path to the overview file (default: NONE = write to std.out)")
     private String overviewPath;
 
     @Option(
-            names = {"-o", "--output"},
+            names = {"-x", "--index"},
             description = "path to the index files (default: NONE = write to std.out)")
     private String indexPath;
 

@@ -36,8 +36,10 @@ which (currently) generates the following:
 Usage: cli [-hV] [-o=<outputPath>] [-p=<projectRootPath>] [COMMAND]
 CLI for the Apache Isis Tooling Ecosystem
   -h, --help      Show this help message and exit.
-  -o, --output=<outputPath>
-                  path to the output file (default: NONE = write to std.out)
+  -w, --overview=<overviewPath>
+                  path to write the overview file (default: NONE = write to std.out)
+  -x, --index=<indexPath>
+                  path to write the refguide index files (default: NONE = write to std.out)
   -p, --project=<projectRootPath>
                   path to the (multi-module) project root (default: current dir)
   -V, --version   Print version information and exit.
@@ -64,8 +66,12 @@ global: # <.>
   option ...
 command:
   overview: # <.>
+    option ...
+    option ...
     ...
   index:    # <.>
+    option ...
+    option ...
     ...
 ----
 
@@ -79,16 +85,11 @@ Inspect its https://github.com/apache/isis/blob/master/tooling/cli/src/main/java
 
 == Commands
 
-All commands accept two parameters:
+All commands accept the following common parameters:
 
 * `-p` indicates the location of the multi-project root `pom.xml`
 +
 in other words, the root of the git repo.
-
-* `-o` the output target root for generated _adoc_
-
-These are specified first in the command line.
-The command is then specified, along with any command-specific options.
 
 A number of global configuration options can be specified under the `global` entry in the `isis-tooling.yml` file.
 
@@ -96,28 +97,105 @@ A number of global configuration options can be specified under the `global` ent
 .isis-tooling.yml
 ----
 global:
-  outputRootFolder:                                                       # <.>
   licenseHeader: "Licensed to the Apache Software Foundation (ASF) ..."   # <.>
-  documentPagesPath: "pages"                                              # <.>
-  namespacePartsSkipCount: 3                                              # <.>
-  sections:                                                               # <.>
-    App: org.apache.isis.app.*
-    Mavendeps: org.apache.isis.mavendeps.*
-    ...
-    Core: org.apache.isis.core.*
-    Persistence: org.apache.isis.persistence
-    JDO: "org.apache.isis.persistence:isis-persistence-jdo.*"
-    JPA: "org.apache.isis.persistence:isis-persistence-jpa.*"
-    ...
+----
+<.> license header to include with each generated adoc file
+
+
+
+=== Project documentation (`projdoc`)
+
+This command generates both a <<system-overview-overview,system overview>> and generates the <<index-index,global index>>, and as such is the command that you will probably want to use most of the time.
+See those two commands for further details.
+
+
+==== Usage
+
+The `projdoc` command is usually invoked as follows:
+
+[source]
+----
+java -jar tooling/cli/target/isis-tooling-cli.jar \
+    -p . \
+    -w core/adoc \
+    -x antora/components/refguide-index \
+    projdoc
 ----
 
-<.> the output target root for generated _adoc_; corresponds to command line option `-o` (if empty the current dir is used)
-<.> license header to include with each generated adoc file
+where :
+
+* `-p` is a global options for all commands
+* `-w` is the option for the `overview` sub-command, specifying the output root path
+* `-x` is the option for the `index` sub-command
+* `projdoc` selects this sub-command (which simply runs both `overview` and `index` sub-commands)
+
+
+
+[[projdoc-configuration]]
+==== Configuration
+
+The `projdoc` command has no specific configuration.
+However, as it is effectively just the combination of the `overview` and `index` commands, note that those two commands _do_ have their own configuration settings; see <<overview-configuration,overview configuration>> and <<index-configuration,index configuration>> respectively.
+
+[#system-overview-overview]
+=== System Overview (`overview`)
+
+This command generates the _System Overview_ (`.adoc) page.
+
+This page summarises the contents of each section (defined by the `commands.overview.sections` configuration key), also with a link:https://c4model.com/[C4] diagram showing how the modules relate.
+
+
+==== Usage
+
+The `overview` command is usually invoked as follows:
+
+[source]
+----
+java -jar tooling/cli/target/isis-tooling-cli.jar \
+    -p . \
+    -v core/adoc \
+    overview
+----
+
+where :
+
+* `-p` is a global options for all commands
+* `-w` is the option for the `overview` sub-command, specifying the output root path
+* `overview` selects this sub-command
+
+There are no command-specific options.
+
+
+
+[[overview-configuration]]
+==== Configuration
+
+The `overview` command supports a number of command-specific configuration options:
+
+[source,yml]
+.isis-tooling.yml
+----
+commands:
+  overview:
+    rootFolder:                                                     # <.>
+    pagesPath: "modules/_overview/pages"                            # <.>
+    systemOverviewFilename: "about.adoc"                            # <.>
+    description: "These tables summarize all Maven artifacts ..."   # <.>
+    sections:                                                       # <.>
+      ...
+      Persistence: org.apache.isis.persistence
+      JDO: "org.apache.isis.persistence:isis-persistence-jdo.*"
+      JPA: "org.apache.isis.persistence:isis-persistence-jpa.*"
+      ...
+----
+<.> the output target root for generated overview _adoc_; corresponds to command line option `-v` (if empty the current dir is used)
 <.> sub-folder name for _adoc_ pages
-<.> how many namespace parts in a _fqn_ one wants to skip, eg. in `org.apache.isis.applib.Xxx` if we skip 3 namespace parts we'll end up with `applib.Xxx`
+<.> name of the _System Overview_ (adoc) file
+<.> _System Overview_ summary description text
 <.> Logical grouping of modules for the system overview, but also used to determine which modules to scan for index files.
 +
 If not specified the natural Maven project hierarchy is reflected as is.
+This is discussed in more detail below.
 
 The `sections` configuration key is used to group module artifacts into named sections.
 It consists of key:value pairs:
@@ -143,107 +221,10 @@ If a Maven module matches more than one section, then the more specific section 
 
 These different types of sections are exploited by the `overview` command, described <<system-overview-overview,below>>.
 
-=== Project documentation (`projdoc`)
-
-This command generates both a <<system-overview-overview,system overview>> and generates the <<index-index,global index>>, and as such is the command that you will probably want to use most of the time.
-See those two commands for further details.
-
-
-==== Usage
-
-The `projdoc` command is usually invoked as follows:
-
-[source]
-----
-java -jar tooling/cli/target/isis-tooling-cli.jar \
-    -p . \
-    -o antora/components/system/modules/generated \
-    projdoc
-----
-
-where :
-
-* `-p` and `-o` are the global options for all commands
-
-* `projdoc` selects this sub-command
-
-There are no command-specific options.
-
-
-[[projdoc-configuration]]
-==== Configuration
-
-The `projdoc` command has no specific configuration.
-However, as it is effectively just the combination of the `overview` and `index` commands, note that those two commands _do_ have their own configuration settings; see <<overview-configuration,overview configuration>> and <<index-configuration,index configuration>> respectively.
-
-[#system-overview-overview]
-=== System Overview (`overview`)
-
-This command generates the _System Overview_ (`.adoc) page.
-
-This page summarises the contents of each section (defined by the `global.sections` configuration key), also with a link:https://c4model.com/[C4] diagram showing how the modules relate.
-
-As described <<configuration-file,above>>, sections are defined that either match on a group or on a group and artifact.
-The overview command places these under a level 2 or a level 3 heading respectively.
+Sections that match on a groupID are placed under a level 2 heading, while sections matching on group and artifact are placed under a level 3 heading.
 By sequencing the sections correctly, this therefore allows a hierarchy to be created.
 
-For example,
-
-[source,yml]
-.isis-tooling.yml
-----
-global:
-  ...
-  sections:
-    ...
-    Persistence: org.apache.isis.persistence
-    JDO: "org.apache.isis.persistence:isis-persistence-jdo.*"
-    JPA: "org.apache.isis.persistence:isis-persistence-jpa.*"
-    ...
-----
-
-The `overview` command will render "Persistence" section at level 2 (because its pattern is only for a `groupId`), and then the "JDO" and "JPA" sections underneath at level 3 (because there patterns also include an `artifactId`).
-
-This way, sections can be defined that create a hierarchy.
-
-
-==== Usage
-
-The `overview` command is usually invoked as follows:
-
-[source]
-----
-java -jar tooling/cli/target/isis-tooling-cli.jar \
-    -p . \
-    -o antora/components/system/modules/generated \
-    overview
-----
-
-where :
-
-* `-p` and `-o` are the global options for all commands
-
-* `overview` selects this sub-command
-
-There are no command-specific options.
-
-
-
-[[overview-configuration]]
-==== Configuration
-
-The `overview` command supports a number of command-specific configuration options:
-
-[source,yml]
-.isis-tooling.yml
-----
-commands:
-  overview:
-    description: "These tables summarize all Maven artifacts ..."           # <.>
-    systemOverviewFilename: "system-overview.adoc"                          # <.>
-----
-<.> _System Overview_ head line
-<.> name of the _System Overview_ (adoc) file
+For example, in the config example above the sections defined will render "Persistence" section at level 2 (because its pattern is only for a `groupId`), and then the "JDO" and "JPA" sections underneath at level 3 (because there patterns also include an `artifactId`).
 
 
 
@@ -264,17 +245,16 @@ The `index` command is usually invoked as follows:
 ----
 java -jar tooling/cli/target/isis-tooling-cli.jar \
     -p . \
-    -o antora/components/system/modules/generated \
+    -x antora/components/refguide-index \
     index
 ----
 
 where :
 
-* `-p` and `-o` are the global options for all commands
-
+* `-p` is a global options for all commands
+* `-x` is the option for the `index` sub-command, specifying the output root path
 * `index` selects this sub-command
 
-There are no command-specific options.
 
 
 [[index-configuration]]
@@ -287,13 +267,18 @@ The `index` command supports a number of command-specific configuration options:
 ----
 commands:
   index:
+    rootFolder:                                                             # <.>
     documentGlobalIndexPath: "pages/index"                                  # <.>
     documentGlobalIndexXrefPageIdFormat: "system:generated:index/%s.adoc"   # <.>
+    namespacePartsSkipCount: 3                                              # <.>
     fixOrphanedAdocIncludeStatements: true                                  # <.>
+
 ----
+<.> the output target root for generated index _adoc_ files; corresponds to command line option `-x` (if empty the current dir is used)
 <.> sub-folder name for the _Document Global Index_
 <.> format for include statements via which other _adoc_ files may refer to the Document Global Index
-<.> whether to activate the `OrphanedIncludeStatementFixer`, discussed below.
+<.> how many namespace parts in a _fqn_ one wants to skip, eg. in `org.apache.isis.applib.Xxx` if we skip 3 namespace parts we'll end up with `applib.Xxx`
+<.> whether to activate the `OrphanedIncludeStatementFixer`.
 
 The CLI also has an experimental `OrphanedIncludeStatementFixer` that checks orphaned index references in all _adoc_ files and tries to fix them.
 

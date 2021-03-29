@@ -51,7 +51,7 @@ echo ""
 if [ -z "${JAVA_CMD}" ]; then
   echo "projdoc gen: no java, skipping"
 else
-  java -jar "${PROJECT_ROOT_PATH}/tooling/cli/target/isis-tooling-cli.jar" -p "${PROJECT_ROOT_PATH}" -r "${OVERVIEW_PATH}" -o "${INDEX_PATH}" $MODE
+  java -jar "${PROJECT_ROOT_PATH}/tooling/cli/target/isis-tooling-cli.jar" -p "${PROJECT_ROOT_PATH}" -w "${OVERVIEW_PATH}" -x "${INDEX_PATH}" $MODE
 fi
 
 
