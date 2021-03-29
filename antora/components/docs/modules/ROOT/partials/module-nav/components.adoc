@@ -5,7 +5,7 @@
 
 ** Overview
 
-*** xref:refguide:_overview:about.adoc[System Overview]
+*** xref:core:_overview:about.adoc[System Overview]
 
 ** Viewers
 

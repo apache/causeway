@@ -7,17 +7,17 @@ This page provides user/config guides for each of the main components of the fra
 
 == Overview
 
-xref:refguide:_overview:about.adoc[System Overview]
+xref:core:_overview:about.adoc[System Overview]
 
 == Viewers
 
 The framework provides two viewers that will automatically render the domain objects in your application into the presentation layer:
 
-* xref:vw:ROOT:about.adoc[Wicket]
+* xref:vw:ROOT:about.adoc[Web UI (Wicket)]
 +
-Provides a human-usable UI, styled using Bootstrap.
+Provides a human-usable UI, implemented using https://wicket.apache.org[Apache Wicket], and styled using Bootstrap.
 
-* xref:vro:ROOT:about.adoc[Restful Objects (REST API)]
+* xref:vro:ROOT:about.adoc[REST API (Restful Objects)]
 +
 Presents your domain objects in JSON representations, compliant either with link:http://restfulobjects.org[Restful Objects] specification or one of a number of other representations.
 

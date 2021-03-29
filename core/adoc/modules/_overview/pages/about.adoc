@@ -3754,12 +3754,12 @@ skinparam {
 }
 hide stereotype
 left to right direction
-skinparam rectangle<<11>> {
+skinparam rectangle<<22>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<22>> {
+skinparam rectangle<<11>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
@@ -3774,12 +3774,12 @@ skinparam rectangle<<12>> {
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<24>> {
+skinparam rectangle<<13>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<13>> {
+skinparam rectangle<<24>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295

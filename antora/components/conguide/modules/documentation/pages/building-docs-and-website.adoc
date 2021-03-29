@@ -44,15 +44,25 @@ Even if you don't use IntelliJ as your primary IDE, it's worth using it for writ
 
 == Build
 
-To build the website:
+The `preview.sh` script can be used to build the website, also calling the documentation tooling that automates documentation from code (the xref:core:_overview:about.adoc[System Overview], large parts of the xref:refguide::about.adoc[Reference Guide] and the xref:refguide:config:about.adoc[Configuration Guide]).
 
-* use `build-site.sh`; or even better ...
-* use `preview.sh`, to build and then preview in a web browser
+Use `preview.sh -h` to view options.
+The lower case flags skip steps, while the upper case flags exclude all steps except those indicated:
 
-Both scripts can be found at the root of this git repo.
+* `preview.sh`
++
+builds everything and serves up the site
+
+* `preview.sh -AS`
++
+runs only Antora generation and serves up the site
+
+* `preview.sh -ekcdl`
++
+does the same thing, by skipping the other 5 steps.
+
+The script can be found at the root of this git repo.
 
 
-== Updating the Generated System Overview
 
-The xref:refguide:_overview:about.adoc[System Overview] contains a set of `.adoc` files that are generated from Java classes.
 
