@@ -22,10 +22,6 @@ commands:
   overview:
     description: "These tables summarize all Maven artifacts available with _Apache Isis_."
 
-  index:
-
-    namespacePartsSkipCount: 3
-
     sections:
       App: org.apache.isis.app.*
       Mavendeps: org.apache.isis.mavendeps.*
@@ -98,6 +94,10 @@ commands:
       "Vaadin Viewer": "org.apache.isis.incubator.viewer:isis-viewer-vaadin.*"
 
       Legacy: org.apache.isis.legacy.*
+
+  index:
+
+    namespacePartsSkipCount: 3
 
     fixOrphanedAdocIncludeStatements: false
     skipTitleHeader: false
