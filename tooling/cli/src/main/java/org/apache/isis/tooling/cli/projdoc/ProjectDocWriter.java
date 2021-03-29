@@ -87,10 +87,9 @@ final class ProjectDocWriter {
                            !fileName.equals(overview.getSystemOverviewFilename());
                 })
                 .stream()
-                .peek(adocFile->log.debug("deleting file: {}", adocFile.getName()))
+                .peek(adocFile->log.debug("deleting file: {}", adocFile.getAbsolutePath()))
                 .peek(__->deleteCount.inc())
                 .forEach(_Files::deleteFile);
-
 
                 // write document index
                 for(val unit : j2aContext.getUnitIndex().values()) {
