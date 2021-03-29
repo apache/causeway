@@ -60,6 +60,7 @@ final class ProjectDocWriter {
         val currentUnit = _Refs.<J2AdocUnit>objectRef(null);
 
         val overviewPagesFolder = overview.getPagesFolder();
+        val indexRootFolder = index.getRootFolder();
 
         val deleteCount = _Refs.intRef(0);
         int writeCount = 0;
@@ -78,11 +79,9 @@ final class ProjectDocWriter {
             if(mode.includeIndex()) {
 
                 // delete all generated documents in the index
-                _Files.searchFiles(overviewPagesFolder, dir->true, file-> {
+                _Files.searchFiles(indexRootFolder, dir->true, file-> {
                     val fileName = file.getName();
                     val fileAbsolutePath = file.getAbsolutePath();
-                    final File parentFile = file.getParentFile();
-                    final String parentFileName = parentFile.getName();
                     return fileName.endsWith(".adoc") &&
                            !fileAbsolutePath.contains(File.separatorChar + "hooks" + File.separatorChar) &&
                            !fileName.equals(overview.getSystemOverviewFilename());
