@@ -140,8 +140,8 @@ _Process_
 
 _Design_
 
-* xref:refguide:_overview:about.adoc[System Overview]
 * xref:core:ROOT:about.adoc[Core Framework]
+** xref:core:_overview:about.adoc[System Overview]
 
 _Analysis_
 

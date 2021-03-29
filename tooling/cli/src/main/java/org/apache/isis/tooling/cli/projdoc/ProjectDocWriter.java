@@ -45,17 +45,21 @@ final class ProjectDocWriter {
             final @NonNull J2AdocContext j2aContext,
             final @NonNull ProjectDocModel.Mode mode) {
 
-        final BiConsumer<Document, File> docWriter = cliConfig.getGlobal().isDryRun()
-                ? (doc, file)->AsciiDocWriter.print(doc) // print to system out only (dry run)
-                : AsciiDocWriter::writeToFile;
-
-        val currentUnit = _Refs.<J2AdocUnit>objectRef(null);
         val global = cliConfig.getGlobal();
         val overview = cliConfig.getCommands().getOverview();
         val index = cliConfig.getCommands().getIndex();
 
-        //val rootFolder = global.getOutputRootFolder();
-        val pagesFolder = global.getDocumentPagesFolder();
+        final BiConsumer<Document, File> overviewDocWriter = overview.isDryRun()
+                ? (doc, file)->AsciiDocWriter.print(doc) // print to system out only (dry run)
+                : AsciiDocWriter::writeToFile;
+
+        final BiConsumer<Document, File> indexDocWriter = index.isDryRun()
+                ? (doc, file)->AsciiDocWriter.print(doc) // print to system out only (dry run)
+                : AsciiDocWriter::writeToFile;
+
+        val currentUnit = _Refs.<J2AdocUnit>objectRef(null);
+
+        val overviewPagesFolder = overview.getPagesFolder();
 
         val deleteCount = _Refs.intRef(0);
         int writeCount = 0;
@@ -65,16 +69,16 @@ final class ProjectDocWriter {
             if (mode.includeOverview()) {
 
                 // write system overview
-                val overviewFile = new File(pagesFolder, overview.getSystemOverviewFilename());
+                val overviewFile = new File(overviewPagesFolder, overview.getSystemOverviewFilename());
                 log.info("writing system overview: {}", overviewFile.getName());
-                docWriter.accept(overviewAdoc, overviewFile);
+                overviewDocWriter.accept(overviewAdoc, overviewFile);
                 ++writeCount;
             }
 
             if(mode.includeIndex()) {
 
                 // delete all generated documents in the index
-                _Files.searchFiles(pagesFolder, dir->true, file-> {
+                _Files.searchFiles(overviewPagesFolder, dir->true, file-> {
                     val fileName = file.getName();
                     val fileAbsolutePath = file.getAbsolutePath();
                     final File parentFile = file.getParentFile();
@@ -94,12 +98,12 @@ final class ProjectDocWriter {
 
                     currentUnit.setValue(unit);
 
-                    val adocIndexFile = adocDestinationFileForUnit(unit, global, overview, index);
+                    val adocIndexFile = adocDestinationFileForUnit(unit, index);
 
                     log.info("writing file: {}", adocIndexFile.getName());
 
                     final Document asciiDoc = unit.toAsciiDoc(j2aContext, adocIndexFile);
-                    docWriter.accept(
+                    indexDocWriter.accept(
                             asciiDoc,
                             adocIndexFile);
 
@@ -124,21 +128,20 @@ final class ProjectDocWriter {
     // generate output file based on unit's namespace and unit's name
     private static File adocDestinationFileForUnit(
             final @NonNull J2AdocUnit unit,
-            final @NonNull CliConfig.Global global,
-            final @NonNull CliConfig.Commands.Overview overview,
             final @NonNull CliConfig.Commands.Index index
-            ) {
+    ) {
+
 
         // eg: antora/components/refguide-index
-        final File outputRootFolder = global.getOutputRootFolder();
-        val indexFolder = outputRootFolder;
+        final File indexRootFolder = index.getRootFolder();
+        val indexFolder = indexRootFolder;
 
         val destFolderBuilder = _Refs.<File>objectRef(indexFolder);
 
         // eg org/apache/isis/applib/annotation
         unit.getNamespace().stream()
         // eg applib/annotation
-        .skip(global.getNamespacePartsSkipCount())
+        .skip(index.getNamespacePartsSkipCount())
         .findFirst()
         .ifPresent(moduleName-> {
             // applib
@@ -154,7 +157,7 @@ final class ProjectDocWriter {
         // eg org/apache/isis/applib/annotation
         unit.getNamespace().stream()
                 // eg applib/annotation
-        .skip(global.getNamespacePartsSkipCount() + 1)
+        .skip(index.getNamespacePartsSkipCount() + 1)
         .forEach(subDir-> {
             // annotation
             // ... so updates to antora/components/refguide-index/modules/applib/pages/index/annotation
