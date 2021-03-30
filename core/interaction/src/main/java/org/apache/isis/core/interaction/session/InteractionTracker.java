@@ -56,8 +56,8 @@ extends InteractionContext, AuthenticationContext {
         return currentAuthenticationLayer().map(AuthenticationLayer::getExecutionContext);
     }
     
-    /** @return the unique id of the current top-level request- or test-scoped Interaction*/
-    Optional<UUID> getConversationId();
+    /** @return the unique id of the current request- or test-scoped {@link Interaction}*/
+    Optional<UUID> getInteractionId();
     
     /** @return authentication-layer-stack size */
     int getAuthenticationLayerCount();

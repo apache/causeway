@@ -192,7 +192,7 @@ implements
         
         if(log.isDebugEnabled()) {
             log.debug("new authentication layer created (conversation-id={}, total-layers-on-stack={}, {})", 
-                    conversationId.get(), 
+                    interactionId.get(), 
                     authenticationStack.get().size(),
                     _Probe.currentThreadId());
         }
@@ -214,7 +214,7 @@ implements
     @Override
     public void closeSessionStack() {
         log.debug("about to close the authentication stack (conversation-id={}, total-layers-on-stack={}, {})", 
-                conversationId.get(), 
+                interactionId.get(), 
                 authenticationStack.get().size(),
                 _Probe.currentThreadId());
 
@@ -299,11 +299,11 @@ implements
 
     // -- CONVERSATION ID
     
-    private final ThreadLocal<UUID> conversationId = ThreadLocal.withInitial(()->null);
+    private final ThreadLocal<UUID> interactionId = ThreadLocal.withInitial(()->null);
     
     @Override
-    public Optional<UUID> getConversationId() {
-        return Optional.ofNullable(conversationId.get());
+    public Optional<UUID> getInteractionId() {
+        return Optional.ofNullable(interactionId.get());
     }
     
     // -- HELPER
@@ -313,7 +313,7 @@ implements
     }
     
     private void postSessionOpened(InteractionSession session) {
-        conversationId.set(session.getInteractionId());
+        interactionId.set(session.getInteractionId());
         interactionScopeAwareBeans.forEach(bean->bean.beforeEnteringTransactionalBoundary(session));
         txBoundaryHandler.onOpen(session);
         val isSynchronizationActive = TransactionSynchronizationManager.isSynchronizationActive();
@@ -335,7 +335,7 @@ implements
         
         log.debug("about to close authenication stack down to size {} (conversation-id={}, total-sessions-on-stack={}, {})",
                 downToStackSize,
-                conversationId.get(), 
+                interactionId.get(), 
                 authenticationStack.get().size(),
                 _Probe.currentThreadId());
         
@@ -351,7 +351,7 @@ implements
         if(downToStackSize == 0) {
             // cleanup thread-local
             authenticationStack.remove();
-            conversationId.remove();
+            interactionId.remove();
         }
     }
     

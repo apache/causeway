@@ -110,7 +110,7 @@ class InteractionScope implements Scope, InteractionScopeLifecycleHandler {
     @Override
     public String getConversationId() {
         // null by convention if not supported
-        return isisInteractionTracker.getConversationId()
+        return isisInteractionTracker.getInteractionId()
                 .map(UUID::toString)
                 .orElse(null);
     }

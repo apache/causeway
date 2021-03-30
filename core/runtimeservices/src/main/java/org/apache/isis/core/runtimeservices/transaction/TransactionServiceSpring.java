@@ -198,7 +198,7 @@ implements
     
     @Override
     public Optional<TransactionId> currentTransactionId() {
-        return interactionTracker.getConversationId()
+        return interactionTracker.getInteractionId()
                 .map(uuid->{
                     //XXX get current transaction's persistence context (once we support multiple contexts)
                     val persistenceContext = "";

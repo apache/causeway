@@ -41,7 +41,7 @@ public final class XrayUtil {
      * @param iaTracker
      */
     public static Optional<String> currentSequenceId(final @NonNull InteractionTracker iaTracker) {
-        return iaTracker.getConversationId()
+        return iaTracker.getInteractionId()
                 .map(XrayUtil::sequenceId);
     }
     
@@ -72,7 +72,7 @@ public final class XrayUtil {
         }
         
         final int authStackSize = iaTracker.getAuthenticationLayerCount();
-        val conversationId = iaTracker.getConversationId().orElseThrow(_Exceptions::unexpectedCodeReach);
+        val conversationId = iaTracker.getInteractionId().orElseThrow(_Exceptions::unexpectedCodeReach);
         
         val handle = SequenceHandle.builder()
                 .sequenceId(XrayUtil.sequenceId(conversationId))
