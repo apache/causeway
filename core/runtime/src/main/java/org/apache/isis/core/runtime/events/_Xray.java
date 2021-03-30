@@ -76,7 +76,8 @@ final class _Xray {
             
             seq.ifPresent(sequence->{
                 val sequenceData = sequence.getData();
-                sequenceData.enter("thread", "tx", "before completion");
+                sequenceData.alias("evb", "EventBus");
+                sequenceData.enter("tx", "evb", "tx: before completion");
             });
             
         });
@@ -111,7 +112,7 @@ final class _Xray {
             
             seq.ifPresent(sequence->{
                 val sequenceData = sequence.getData();
-                sequenceData.exit("tx", "thread", txInfo);
+                sequenceData.enter("tx", "evb", txInfo);
             });
             
         });

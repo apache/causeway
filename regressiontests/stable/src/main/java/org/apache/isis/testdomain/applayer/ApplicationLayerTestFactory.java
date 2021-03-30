@@ -18,6 +18,12 @@
  */
 package org.apache.isis.testdomain.applayer;
 
+import static org.apache.isis.applib.services.wrapper.control.AsyncControl.returningVoid;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.DynamicTest.dynamicTest;
+
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -28,7 +34,6 @@ import java.util.function.Consumer;
 
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.inject.Provider;
 import javax.jdo.JDOHelper;
 import javax.jdo.PersistenceManagerFactory;
 
@@ -38,11 +43,6 @@ import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.fail;
-import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.iactn.Interaction;
@@ -63,7 +63,6 @@ import org.apache.isis.core.metamodel.interactions.managed.PropertyInteraction;
 import org.apache.isis.core.metamodel.objectmanager.ObjectManager;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.runtime.util.XrayUtil;
-import org.apache.isis.core.transaction.changetracking.EntityChangeTrackerDefault;
 import org.apache.isis.core.transaction.events.TransactionBeforeCompletionEvent;
 import org.apache.isis.testdomain.jdo.JdoTestDomainPersona;
 import org.apache.isis.testdomain.jdo.entities.JdoBook;
@@ -71,13 +70,10 @@ import org.apache.isis.testdomain.jdo.entities.JdoInventory;
 import org.apache.isis.testdomain.jdo.entities.JdoProduct;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 
-import static org.apache.isis.applib.services.wrapper.control.AsyncControl.returningVoid;
-
+import io.smallrye.common.constraint.Assert;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.val;
-
-import io.smallrye.common.constraint.Assert;
 
 @Component
 @Import({
@@ -94,7 +90,6 @@ public class ApplicationLayerTestFactory {
     private final PreCommitListener preCommitListener;
     private final InteractionFactory interactionFactory;
     private final InteractionTracker interactionTracker;
-    private final Provider<EntityChangeTrackerDefault> entityChangeTrackerProvider;
     
     @Named("transaction-aware-pmf-proxy")
     private final PersistenceManagerFactory pmf;
@@ -227,9 +222,6 @@ public class ApplicationLayerTestFactory {
             // when - direct change (circumventing the framework)
             book.setName("Book #2");
             repository.persist(book);
-            
-            // trigger publishing of entity changes (flush queue)
-            entityChangeTrackerProvider.get().onPreCommit(null);
             
         });
         
@@ -441,9 +433,6 @@ public class ApplicationLayerTestFactory {
             
             pm.flush();
             
-            // trigger publishing of entity changes (flush queue)
-            entityChangeTrackerProvider.get().onPreCommit(null);
-            
         });
     }
     
@@ -455,9 +444,6 @@ public class ApplicationLayerTestFactory {
             val book = repository.allInstances(JdoBook.class).listIterator().next();
             transactionalBookConsumer.accept(book);
 
-            //FIXME ... should not be required explicitly here
-            // trigger publishing of entity changes (flush queue)
-            entityChangeTrackerProvider.get().onPreCommit(null);
         })
         .optionalElseFail();
         

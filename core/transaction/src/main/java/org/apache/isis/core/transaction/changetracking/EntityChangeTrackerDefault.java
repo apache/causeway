@@ -31,9 +31,9 @@ import javax.inject.Provider;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
+import org.springframework.context.event.EventListener;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.event.TransactionalEventListener;
 
 import org.apache.isis.applib.annotation.EntityChangeKind;
 import org.apache.isis.applib.annotation.InteractionScope;
@@ -174,12 +174,11 @@ implements
     }
 
     /**
-     * @apiNote intended to be called during pre-commit of a transaction by the framework internally
+     * TRANSACTION END BOUNDARY
+     * @apiNote intended to be called during before transaction completion by the framework internally
      */
-
-    /** TRANSACTION END BOUNDARY */
-    @TransactionalEventListener(TransactionBeforeCompletionEvent.class)
-    public void onPreCommit(TransactionBeforeCompletionEvent event) {
+    @EventListener(value = TransactionBeforeCompletionEvent.class)
+    public void onTransactionCompleting(TransactionBeforeCompletionEvent event) {
         whilePublishing();
         postPublishing();
     }
