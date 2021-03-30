@@ -26,7 +26,7 @@ import pl.treksoft.kvision.form.select.Select
 import pl.treksoft.kvision.utils.obj
 import pl.treksoft.kvision.utils.px
 import pl.treksoft.kvision.panel.SimplePanel
-import pl.treksoft.kvision.utils.px
+import pl.treksoft.kvision.utils.pc
 import kotlin.js.Date
 
 @Serializable
@@ -40,6 +40,7 @@ class DropdownSearch() : SimplePanel() {
     init {
         this.marginTop = 10.px
         this.marginLeft = 40.px
+        this.width = 100.pc
         val formPanel = formPanel<Form> {
             add(
                     Form::select, Select(

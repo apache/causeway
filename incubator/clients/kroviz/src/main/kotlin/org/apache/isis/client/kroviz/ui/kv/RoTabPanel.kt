@@ -23,12 +23,12 @@ import pl.treksoft.kvision.core.UNIT
 import pl.treksoft.kvision.panel.SimplePanel
 import pl.treksoft.kvision.panel.TabPanel
 import pl.treksoft.kvision.panel.VPanel
-import pl.treksoft.kvision.utils.pc
+import pl.treksoft.kvision.utils.perc
 
 class RoTabPanel : TabPanel() {
 
     init {
-        width = 100.pc
+        width = 100.perc
         marginTop = CssSize(40, UNIT.px)
     }
 
