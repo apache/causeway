@@ -23,7 +23,7 @@ import java.util.Stack;
 import org.apache.isis.commons.internal.debug.xray.XrayDataModel;
 import org.apache.isis.commons.internal.debug.xray.XrayUi;
 import org.apache.isis.core.interaction.session.AuthenticationLayer;
-import org.apache.isis.core.runtime.util.XrayUtil;
+import org.apache.isis.core.security.util.XrayUtil;
 
 import lombok.val;
 

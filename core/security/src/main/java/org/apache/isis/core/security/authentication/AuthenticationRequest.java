@@ -23,8 +23,6 @@ import java.util.stream.Stream;
 
 import javax.annotation.Nullable;
 
-import static org.apache.isis.commons.internal.base._NullSafe.stream;
-
 /**
  * Represents a request to authenticate the user identified by
  * {@link AuthenticationRequest#getName()}.

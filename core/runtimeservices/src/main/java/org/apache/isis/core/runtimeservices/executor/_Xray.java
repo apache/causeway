@@ -31,8 +31,8 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.isis.core.runtime.util.XrayUtil;
-import org.apache.isis.core.runtime.util.XrayUtil.SequenceHandle;
+import org.apache.isis.core.security.util.XrayUtil;
+import org.apache.isis.core.security.util.XrayUtil.SequenceHandle;
 
 import lombok.NonNull;
 import lombok.val;

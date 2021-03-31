@@ -52,9 +52,6 @@ extends InteractionContext, AuthenticationContext {
     default Optional<ExecutionContext> currentExecutionContext() {
         return currentAuthenticationLayer().map(AuthenticationLayer::getExecutionContext);
     }
-    
-    /** @return authentication-layer-stack size */
-    int getAuthenticationLayerCount();
 
     // -- AUTHENTICATION CONTEXT
     

@@ -16,18 +16,19 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.runtime.util;
+package org.apache.isis.core.security.util;
 
 import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Consumer;
 
+import org.apache.isis.applib.services.iactn.InteractionContext;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.debug.xray.XrayModel.ThreadMemento;
 import org.apache.isis.commons.internal.debug.xray.XrayUi;
 import org.apache.isis.commons.internal.debug.xray.sequence.SequenceDiagram;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.interaction.session.InteractionTracker;
+import org.apache.isis.core.security.authentication.AuthenticationContext;
 
 import lombok.Builder;
 import lombok.NonNull;
@@ -38,10 +39,10 @@ public final class XrayUtil {
 
     /**
      * Returns the sequence diagram data model's id, that is bound to the current thread and interaction.
-     * @param iaTracker
+     * @param iaContext
      */
-    public static Optional<String> currentSequenceId(final @NonNull InteractionTracker iaTracker) {
-        return iaTracker.getInteractionId()
+    public static Optional<String> currentSequenceId(final @NonNull InteractionContext iaContext) {
+        return iaContext.getInteractionId()
                 .map(XrayUtil::sequenceId);
     }
     
@@ -63,8 +64,10 @@ public final class XrayUtil {
     
     // -- SEQUENCE HANDLE
     
-    public static Optional<SequenceHandle> createSequenceHandle(
-            final @NonNull InteractionTracker iaTracker,
+    // Using parameter that implements multiple interfaces, because we have no access to InteractionTracker
+    public static <T extends InteractionContext & AuthenticationContext> 
+    Optional<SequenceHandle> createSequenceHandle(
+            final @NonNull T iaTracker,
             final String ... callees) {
 
         if(!iaTracker.isInInteraction()) {
@@ -72,10 +75,10 @@ public final class XrayUtil {
         }
         
         final int authStackSize = iaTracker.getAuthenticationLayerCount();
-        val conversationId = iaTracker.getInteractionId().orElseThrow(_Exceptions::unexpectedCodeReach);
+        val interactionId = iaTracker.getInteractionId().orElseThrow(_Exceptions::unexpectedCodeReach);
         
         val handle = SequenceHandle.builder()
-                .sequenceId(XrayUtil.sequenceId(conversationId))
+                .sequenceId(XrayUtil.sequenceId(interactionId))
                 .caller(authStackSize>0
                         ? XrayUtil.nestedInteractionId(authStackSize)
                         : "thread")
