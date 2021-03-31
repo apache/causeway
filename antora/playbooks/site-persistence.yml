@@ -27,6 +27,12 @@ content:
     - url: .
       start_path: antora/components/docs # docs
       branches: HEAD
+
+# core
+    - url: .
+      start_path: core/config/src/main/adoc # refguide
+      branches: HEAD
+
 # examples
     - url: .
       start_path: examples/demo/domain/src/main/adoc # docs

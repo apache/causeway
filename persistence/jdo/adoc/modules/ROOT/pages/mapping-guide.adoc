@@ -1,7 +1,15 @@
-= Other Resources
+= Mapping Guide
 
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
-:page-aliases: guides:ugvw:ugvw.adoc
 
-WARNING: TODO: document 3rd party tutorials and resources.
+The best resource for learning how to map JDO entities is the DataNucleus website.
+Take a look at:
 
+* link:https://www.datanucleus.org/products/accessplatform/jdo/mapping.html[JDO Mapping Guide]
+* link:https://www.datanucleus.org/products/accessplatform/jdo/annotations.html[JDO Annotations]
+
+In addition, we have a couple of articles on specific mapping use cases:
+
+* xref:pjdo:ROOT:mapping-guide/one-to-m-bidirectional-relationships.adoc[]
+* xref:pjdo:ROOT:mapping-guide/mandatory-properties-in-subtypes.adoc[]
+* xref:pjdo:ROOT:mapping-guide/mapping-to-a-view.adoc[]

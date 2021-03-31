@@ -4,7 +4,7 @@
 
 
 
-== Add dependency to pom.xml
+== Maven pom.xml
 
 === Dependency Management
 
@@ -142,6 +142,49 @@ The default value is to use SQL-99 syntax ("CREATE SCHEMA IF NOT EXISTS %S"), pa
 
 
 
+
+== Auto-create (or validate) tables
+
+When running against the h2 in-memory database (eg for prototype mode or integration tests), you'll probably want DataNucleus to automatically create the tables.
+
+This can be configured using the:
+
+* xref:refguide:config:sections/datanucleus.adoc#datanucleus.schema.auto-create-all[datanucleus.schema.autoCreateAll] configuration property.
+
+Conversely, if running in production then you will probably use xref:userguide:flyway:about.adoc[Flyway] to manage database migrations.
+In this case you'll just want to validate that the database table structure of the target database is in line with what DataNucleus expectss.
+
+You can do this using the:
+
+* xref:refguide:config:sections/datanucleus.adoc#datanucleus.schema.validate-all[datanucleus.schema.validateAll] configuration property.
+
+This will fail-fast if there is a mismatch.
+
+
+== Other Configuration Properties
+
+Additional configuration properties for DataNucleus itself can be specified directly under the `datanucleus.` configuration key.
+
+We recommend that some of these should be configured:
+
+* disable xref:configuring/disabling-persistence-by-reachability.adoc[persistence by reachability]
+
+
+
+See the xref:refguide:config:sections/datanucleus.adoc[datanucleus] section of the xref:refguide:config:about.adoc[Configuration Guide] for further details.
+
+
+Furthermore, DataNucleus will search for various other XML mapping files, eg `mappings.jdo`.
+A full list can be found http://www.datanucleus.org/products/datanucleus/jdo/metadata.html[here].
+
+[IMPORTANT]
+====
+DataNucleus properties must be specified using `camelCase`, not `kebab-case`.
+
+For example, use `datanucleus.schema.autoCreateAll` not `datanucleus.schema.auto-create-all`
+====
+
+
 [[persistence-xml]]
 == `persistence.xml`
 
@@ -174,30 +217,3 @@ xref:setupguide:eclipse:about.adoc#workaround-for-path-limits-the-dn-plugin-to-u
 
 See link:http://www.datanucleus.org/products/datanucleus/jdo/persistence.html#persistenceunit[DataNucleus' documentation] on `persistence.xml` to learn more.
 
-
-== Other Configuration Properties
-
-
-Additional configuration properties for DataNucleus itself can be specified directly under the `datanucleus.` configuration key.
-
-We recommend that some of these should be configured:
-
-* disable xref:configuring/disabling-persistence-by-reachability.adoc[persistence by reachability]
-
-
-
-See the xref:refguide:config:sections/datanucleus.adoc[datanucleus] section of the xref:refguide:config:about.adoc[Configuration Guide] for further details.
-
-
-Furthermore, DataNucleus will search for various other XML mapping files, eg `mappings.jdo`.
-A full list can be found http://www.datanucleus.org/products/datanucleus/jdo/metadata.html[here].
-
-[IMPORTANT]
-====
-DataNucleus properties must be specified using `camelCase`, not `kebab-case`.
-
-For example, use
-====
-
-
-//

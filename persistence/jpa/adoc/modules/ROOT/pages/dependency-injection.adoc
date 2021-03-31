@@ -1,14 +1,17 @@
-[[hints-and-tips]]
-= Hints and Tips
+= Dependency Injection
 
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
 
-This chapter provides some solutions for problems we've encountered ourselves or have been raised on the Apache Isis mailing lists.
+With Apache Isis it's common to inject domain services into domain entities; this allows behaviour to be pushed down into those entities.
 
-include::hints-and-tips/overriding-jdo-annotations.adoc[leveloffset=+1]
-include::hints-and-tips/subtype-entity-not-fully-populated.adoc[leveloffset=+1]
-include::hints-and-tips/java8.adoc[leveloffset=+1]
-include::hints-and-tips/diagnosing-n-plus-1.adoc[leveloffset=+1]
-include::hints-and-tips/typesafe-queries-and-fetchgroups.adoc[leveloffset=+1]
-include::hints-and-tips/jdoql-and-timestamps.adoc[leveloffset=+1]
+For JPA, this requires that the following boilerplate:
+
+[source,java]
+----
+import javax.persistence.EntityListeners;
+import org.apache.isis.persistence.jpa.applib.integration.JpaEntityInjectionPointResolver;
+
+@EntityListeners(JpaEntityInjectionPointResolver.class)
+public class SomeEntity ... { /* ... */ }
+----

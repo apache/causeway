@@ -9,14 +9,16 @@ In the same way that Java packages act as a namespace for domain objects, it's g
 
 We recommend all the entities within a module use the same schema, and moreover that the xref:refguide:applib:index/annotation/DomainObject.adoc#objectType[object type] also follows the same pattern.
 
-For example, xref:security:secman:about.adoc[SecMan]' JDO implementation resides in the `IsisModuleExtSecmanPersistenceJpa` module.
+For example, xref:security:secman:about.adoc[SecMan]' JPA implementation resides in the `IsisModuleExtSecmanPersistenceJpa` module.
 Its `ApplicationUser` entity is defined as:
 
 [source,java]
+.ApplicationUser.java
 ----
-@javax.jdo.annotations.PersistenceCapable(
+@Entity
+@Table(
         schema = "isisExtensionsSecman",
-        table = "ApplicationUser",
+        name = "ApplicationUser",
         ...
 )
 public class ApplicationUser ... { /* ... */ }
@@ -30,15 +32,6 @@ CREATE TABLE isisExtensionsSecman."ApplicationUser" (
     ...
 )
 ----
-
-
-
-[TIP]
-====
-If for some reason you don't want to use schemas (though we strongly recommend that you do), then note that you can override the `@PersistenceCapable` annotation by providing XML metadata (the `mappings.jdo` file).
-See the section on xref:pjdo:ROOT:setup-and-configuration.adoc[configuring DataNucleus Overriding Annotations] for more details.
-====
-
 
 include::refguide:config:partial$configuring-schemas.adoc[leveloffset=+1]
 

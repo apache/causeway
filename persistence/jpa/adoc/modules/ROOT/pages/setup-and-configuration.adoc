@@ -7,7 +7,7 @@
 This section describes how to include the JPA module and setup its configuration properties.
 
 
-== Add dependency to pom.xml
+== Maven pom.xml
 
 === Dependency Management
 
@@ -111,35 +111,13 @@ spring.datasource.password=simpleapp
 It is also possible to programmatically define a `DataSource`; see the link:https://docs.spring.io/spring-boot/docs/current/reference/html/howto.html#howto-data-access[Spring docs] for details.
 
 
-== Schemas
 
-In the same way that Java packages act as a namespace for domain objects, it's good practice to map domain entities to their own (database) schemas.
-(For more on database schemas, see for example link:https://crate.io/docs/sql-99/en/latest/chapters/17.html#create-schema-statement[here]).
+== Other Configuration Properties
 
-We recommend all the entities within a module use the same schema, and moreover that the xref:refguide:applib:index/annotation/DomainObject.adoc#objectType[object type] also follows the same pattern.
+The JPA object store also supports the following configuraiton properties:
 
-For example, xref:security:secman:about.adoc[SecMan]' JPA implementation resides in the `IsisModuleExtSecmanPersistenceJpa` module.
-Its `ApplicationUser` entity is defined as:
-
-[source,java]
-.ApplicationUser.java
-----
-@Entity
-@Table(
-        schema = "isisExtensionsSecman",
-        name = "ApplicationUser",
-        ...
-)
-public class ApplicationUser ... { /* ... */ }
-----
-
-which results in a `CREATE TABLE` statement of:
-
-[source,sql]
-----
-CREATE TABLE isisExtensionsSecman."ApplicationUser" (
-    ...
-)
-----
+* xref:refguide:config:sections/isis.persistence.schema.adoc#isis.persistence.schema.additional-orm-files[isis.persistence.schema.additional-orm-files]
++
+Lookup additional "mapping-files" in `META-INF/orm-_name_.xml` (equivalent to "mapping-file" entries in `persistence.xml`) and adds these to those that are already configured the _Spring Data_ way (if any).
 
 
