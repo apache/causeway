@@ -18,5 +18,3 @@ Take a look at:
 Although written for Hibernate, the JPA material should work fine.
 
 * link:https://www.baeldung.com/tag/jpa/[JPA Baeldung tags]
-** link:https://www.baeldung.com/jpa-entities[entities]
-

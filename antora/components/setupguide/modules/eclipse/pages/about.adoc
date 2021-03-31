@@ -75,6 +75,7 @@ Use File > Import, then Maven > Existing Maven Projects.
 
 However, you will have some compile errors until you enable annotation processing, discussed below.
 
+[#enable-annotation-processing]
 === Enable Annotation Processing
 
 Both DataNucleus and Project Lombok use annotation processors that must be enabled in Eclipse.
@@ -90,7 +91,7 @@ Then under _Java Compiler > Annotation Processing > Factory Path_ add the follow
 * `datanucleus-jdo-query-5.0.9.jar` (under `.m2/repository/org/datanucleus/datanucleus-jdo-query/5.0.9`)
 * `javax.jdo-3.2.0-m13.jar` (under `.m2/repository/org/datanucleus/javax.jdo/3.2.0-m13`)
 
-The specific versions depend on the DataNucleus version used in your project. You can easily check this in the Dependency Hierarchy tab of the POM.xml viewer in eclipse.
+The specific versions depend on the DataNucleus version used in your project.You can easily check this in the Dependency Hierarchy tab of the POM.xml viewer in eclipse.
 
 Eclipse should automatically add these directories as a source path; at this point all remaining compiler errors should disappear.
 

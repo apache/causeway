@@ -1,9 +1,8 @@
-[[IsisJdoSupport]]
-= `IsisJdoSupport`
-
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :page-partial:
 
+
+== Examples and Usage
 
 The `IsisJdoSupport` service provides a number of general purpose methods for working with the JDO/DataNucleus objectstore.
 In general these act at a lower-level of abstraction than the APIs normally used (specifically, those of xref:refguide:applib:index/services/repository/RepositoryService.adoc[RepositoryService]), but nevertheless deal with some of the most common use cases.
@@ -11,7 +10,7 @@ For service also provides access to the underlying JDO `PersistenceManager` for 
 
 The following sections discuss the functionality provided by the service, broken out into categories.
 
-== Executing SQL
+=== Executing SQL
 
 You can use the `IsisJdoSupportService` to perform arbitrary SQL SELECTs or UPDATEs:
 
@@ -50,7 +49,7 @@ As an alternative, consider using DataNucleus' link:http://www.datanucleus.org/p
 ====
 
 [#type-safe-jdoql-queries]
-== Type-safe JDOQL Queries
+=== Type-safe JDOQL Queries
 
 DataNucleus provides an link:http://www.datanucleus.org/products/accessplatform_4_0/jdo/jdoql_typesafe.html[extension to JDO], so that JDOQL queries can be built up and executed using a set of type-safe classes.
 
@@ -131,7 +130,8 @@ private static <T> List<T> executeListAndClose(final TypesafeQuery<T> query) {
 }
 ----
 
-== Fixture support
+
+=== Fixture support
 
 When writing xref:testing:integtestsupport:about.adoc[integration tests] you'll usually need to tear down some/all mutable transactional data before each test.
 One way to do that is to use the `executeUpdate(...)` method described xref:pjdo:ROOT:services/IsisJdoSupport.adoc#executing-sql[above].
@@ -169,7 +169,8 @@ JDO/DataNucleus seems to bump up the version of the object prior to its deletion
 Therefore to prevent this from happening (ie to _force_ the deletion of all instances), concurrency checking is temporarily disabled while this method is performed.
 ====
 
-== Reloading entities
+
+=== Reloading entities
 
 An link:http://www.datanucleus.org:15080/products/accessplatform_5_0/jdo/mapping.html#one_many_relations[(intentional) limitation] of JDO/DataNucleus is that persisting a child entity (in a 1:n bidirectional relationship) does not cause the parent's collection to be updated.
 
@@ -189,7 +190,8 @@ The `ensureLoaded(...)` method allows a collection of domain objects to be loade
 This can be valuable as a performance optimization to avoid multiple roundtrips to the database.
 Under the covers it uses the `PersistenceManager#retrieveAll(...)` API.
 
-== JDO `PersistenceManager`
+
+=== JDO `PersistenceManager`
 
 The functionality provided by `IsisJdoSupport` focus only on the most common use cases.
 If you require more flexibility than this, eg for dynamically constructed queries, then you can use the service to access the underlying JDO `PersistenceManager` API:
@@ -222,4 +224,3 @@ public class Orders {
 }
 ----
 
-TODO: v2: IsisJdoSupport_v3_2
