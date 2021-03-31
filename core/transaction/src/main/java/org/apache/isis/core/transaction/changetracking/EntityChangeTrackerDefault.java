@@ -323,6 +323,7 @@ implements
 
     @Override
     public void enlistCreated(ManagedObject entity) {
+        _Xray.enlistCreated(entity);
         val hasAlreadyBeenEnlisted = isEnlisted(entity);
         enlistCreatedInternal(entity);
 
@@ -334,6 +335,7 @@ implements
 
     @Override
     public void enlistDeleting(ManagedObject entity) {
+        _Xray.enlistDeleting(entity);
         enlistDeletingInternal(entity);
         CallbackFacet.Util.callCallback(entity, RemovingCallbackFacet.class);
         postLifecycleEventIfRequired(entity, RemovingLifecycleEventFacet.class);
@@ -341,6 +343,7 @@ implements
 
     @Override
     public void enlistUpdating(ManagedObject entity) {
+        _Xray.enlistUpdating(entity);
         val hasAlreadyBeenEnlisted = isEnlisted(entity);
         // we call this come what may;
         // additional properties may now have been changed, and the changeKind for publishing might also be modified
@@ -355,6 +358,7 @@ implements
 
     @Override
     public void recognizeLoaded(ManagedObject entity) {
+        _Xray.recognizeLoaded(entity);
         CallbackFacet.Util.callCallback(entity, LoadedCallbackFacet.class);
         postLifecycleEventIfRequired(entity, LoadedLifecycleEventFacet.class);
         numberEntitiesLoaded.increment();
@@ -362,12 +366,14 @@ implements
 
     @Override
     public void recognizePersisting(ManagedObject entity) {
+        _Xray.recognizePersisting(entity);        
         CallbackFacet.Util.callCallback(entity, PersistingCallbackFacet.class);
         postLifecycleEventIfRequired(entity, PersistingLifecycleEventFacet.class);
     }
 
     @Override
     public void recognizeUpdating(ManagedObject entity) {
+        _Xray.recognizeUpdating(entity);
         CallbackFacet.Util.callCallback(entity, UpdatedCallbackFacet.class);
         postLifecycleEventIfRequired(entity, UpdatedLifecycleEventFacet.class);
     }

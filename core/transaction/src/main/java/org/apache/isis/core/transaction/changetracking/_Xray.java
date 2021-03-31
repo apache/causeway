@@ -18,37 +18,51 @@
  */
 package org.apache.isis.core.transaction.changetracking;
 
+import org.apache.isis.commons.internal.debug.xray.XrayUi;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 final class _Xray {
 
     public static void enlistCreated(ManagedObject entity) {
+        if(!XrayUi.isXrayEnabled()) {
+            return;
+        }
         // TODO Auto-generated method stub
     }
 
     public static void enlistDeleting(ManagedObject entity) {
+        if(!XrayUi.isXrayEnabled()) {
+            return;
+        }
         // TODO Auto-generated method stub
-        
     }
 
     public static void enlistUpdating(ManagedObject entity) {
+        if(!XrayUi.isXrayEnabled()) {
+            return;
+        }
         // TODO Auto-generated method stub
-        
     }
 
     public static void recognizeLoaded(ManagedObject entity) {
+        if(!XrayUi.isXrayEnabled()) {
+            return;
+        }
         // TODO Auto-generated method stub
-        
     }
 
     public static void recognizePersisting(ManagedObject entity) {
+        if(!XrayUi.isXrayEnabled()) {
+            return;
+        }
         // TODO Auto-generated method stub
-        
     }
 
     public static void recognizeUpdating(ManagedObject entity) {
+        if(!XrayUi.isXrayEnabled()) {
+            return;
+        }
         // TODO Auto-generated method stub
-        
     }
 
 }
