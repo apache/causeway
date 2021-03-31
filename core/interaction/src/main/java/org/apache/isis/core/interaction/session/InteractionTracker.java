@@ -19,7 +19,6 @@
 package org.apache.isis.core.interaction.session;
 
 import java.util.Optional;
-import java.util.UUID;
 
 import org.apache.isis.applib.services.iactn.ExecutionContext;
 import org.apache.isis.applib.services.iactn.Interaction;
@@ -36,8 +35,6 @@ import org.apache.isis.core.security.authentication.AuthenticationContext;
 public interface InteractionTracker 
 extends InteractionContext, AuthenticationContext {
 
-    boolean isInInteraction();
-    
     /** @return the AuthenticationLayer that sits on top of the current 
      * request- or test-scoped InteractionSession's stack*/
     Optional<AuthenticationLayer> currentAuthenticationLayer();
@@ -55,9 +52,6 @@ extends InteractionContext, AuthenticationContext {
     default Optional<ExecutionContext> currentExecutionContext() {
         return currentAuthenticationLayer().map(AuthenticationLayer::getExecutionContext);
     }
-    
-    /** @return the unique id of the current request- or test-scoped {@link Interaction}*/
-    Optional<UUID> getInteractionId();
     
     /** @return authentication-layer-stack size */
     int getAuthenticationLayerCount();

@@ -47,7 +47,7 @@ import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.interaction.session.InteractionTracker;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.execution.InternalInteraction;
+import org.apache.isis.core.metamodel.execution.InteractionInternal;
 import org.apache.isis.core.metamodel.execution.MemberExecutorService;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
@@ -94,9 +94,9 @@ implements MemberExecutorService {
     private final @Getter TransactionService transactionService;
 
     @Override
-    public Optional<InternalInteraction> getInteraction() {
+    public Optional<InteractionInternal> getInteraction() {
         return interactionTracker.currentInteraction()
-                .map(InternalInteraction.class::cast);
+                .map(InteractionInternal.class::cast);
     }
 
     @Override
@@ -140,7 +140,7 @@ implements MemberExecutorService {
                 new ActionInvocation(
                         interaction, actionId, targetPojo, argumentPojos, targetMemberName,
                         targetClass);
-        final InternalInteraction.MemberExecutor<ActionInvocation> memberExecution =
+        final InteractionInternal.MemberExecutor<ActionInvocation> memberExecution =
                 actionExecutorFactory.createExecutor(
                         argumentAdapters, targetAdapter, owningAction,
                         targetAdapter, mixedInAdapter);

@@ -19,6 +19,7 @@
 package org.apache.isis.core.metamodel.execution;
 
 import java.util.concurrent.Callable;
+import java.util.concurrent.atomic.LongAdder;
 
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.command.Command;
@@ -31,7 +32,7 @@ import org.apache.isis.applib.services.metrics.MetricsService;
 /**
  * @since 2.0
  */
-public interface InternalInteraction extends Interaction {
+public interface InteractionInternal extends Interaction {
 
     /**
      * (Modeled after {@link Callable}), is the implementation
@@ -72,5 +73,34 @@ public interface InternalInteraction extends Interaction {
             final ClockService clockService,
             final MetricsService metricsService,
             final Command command);
+    
+    /**
+     * Framework internal use: holds current sequence number for executions.
+     */
+    LongAdder getExecutionSequence();
+    
+    /**
+     * Framework internal use: generates sequence of numbers for executions.
+     */
+    default int getThenIncrementExecutionSequence() {
+        final int counter = getExecutionSequence().intValue(); 
+        getExecutionSequence().increment();
+        return counter;
+    }
+    
+    /**
+     * Framework internal use: holds current sequence number for transactions.
+     */
+    LongAdder getTransactionSequence();
+    
+    /**
+     * Framework internal use: generates sequence of numbers for transactions.
+     */
+    default int getThenIncrementTransactionSequence() {
+        final int counter = getTransactionSequence().intValue(); 
+        getTransactionSequence().increment();
+        return counter;
+    }
+    
 
 }

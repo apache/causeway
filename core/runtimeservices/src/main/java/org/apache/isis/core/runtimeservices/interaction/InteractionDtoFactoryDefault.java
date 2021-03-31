@@ -34,7 +34,6 @@ import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.iactn.InteractionContext;
-import org.apache.isis.applib.services.iactn.SequenceType;
 import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.applib.util.schema.CommandDtoUtils;
 import org.apache.isis.applib.util.schema.InteractionDtoUtils;
@@ -42,6 +41,7 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.assertions._Assert;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
+import org.apache.isis.core.metamodel.execution.InteractionInternal;
 import org.apache.isis.core.metamodel.services.command.CommandDtoFactory;
 import org.apache.isis.core.metamodel.services.ixn.InteractionDtoFactory;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -54,6 +54,8 @@ import org.apache.isis.schema.cmd.v2.PropertyDto;
 import org.apache.isis.schema.common.v2.ValueWithTypeDto;
 import org.apache.isis.schema.ixn.v2.ActionInvocationDto;
 import org.apache.isis.schema.ixn.v2.PropertyEditDto;
+
+import lombok.val;
 
 /**
 * The design of this service is similar to
@@ -82,8 +84,8 @@ public class InteractionDtoFactoryDefault implements InteractionDtoFactory {
         _Assert.assertEquals(objectAction.getParameterCount(), argumentAdapters.size(),
                 "action's parameter count and provided argument count must match");
 
-        final Interaction interaction = interactionContextProvider.get().currentInteractionElseFail();
-        final int nextEventSequence = interaction.next(SequenceType.EXECUTION);
+        val interaction = interactionContextProvider.get().currentInteractionElseFail();
+        final int nextEventSequence = ((InteractionInternal) interaction).getThenIncrementExecutionSequence();
 
         final Bookmark targetBookmark = targetAdapter.getRootOid()
                 .map(RootOid::asBookmark)
@@ -127,9 +129,8 @@ public class InteractionDtoFactoryDefault implements InteractionDtoFactory {
             final ManagedObject newValueAdapterIfAny) {
 
         final Interaction interaction = interactionContextProvider.get().currentInteractionElseFail();
-
-        final int nextEventSequence = interaction.next(SequenceType.EXECUTION);
-
+        final int nextEventSequence = ((InteractionInternal) interaction).getThenIncrementExecutionSequence();
+        
         final Bookmark targetBookmark = targetAdapter.getRootOid()
                 .map(RootOid::asBookmark)
                 .orElseThrow(()->_Exceptions.noSuchElement("Object provides no Bookmark: %s", targetAdapter));

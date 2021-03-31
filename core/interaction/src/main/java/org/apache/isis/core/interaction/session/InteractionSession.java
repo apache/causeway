@@ -69,21 +69,6 @@ implements HasInteractionId {
         this.interaction = new IsisInteraction(interactionId);
     }
 
-    // -- FLUSH
-    //    void flush() {
-    //    	runtimeEventService.fireSessionFlushing(this);
-    //    }
-
-    // -- TRANSACTION
-
-//    public TransactionId getCurrentTransactionId() {
-//        return transactionService.currentTransactionId();
-//    }
-//
-//    public TransactionState getCurrentTransactionState() {
-//        return transactionService.currentTransactionState();
-//    }
-
     // -- INTERACTION ON CLOSE HANDLER
 
     @Setter private Runnable onClose;
@@ -128,17 +113,6 @@ implements HasInteractionId {
         attributes = null;
         closed = true;
     }
-
-//    /**
-//     * Copies all attributes to the target session.
-//     * @param target
-//     */
-//    public void copyAttributesTo(final @NonNull InteractionSession target) {
-//        if(_NullSafe.isEmpty(attributes)) {
-//            return;
-//        }
-//        target.attributes().putAll(attributes);
-//    }
 
     private Map<Class<?>, Object> attributes() {
         if(closed) {

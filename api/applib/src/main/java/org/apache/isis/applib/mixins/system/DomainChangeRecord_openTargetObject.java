@@ -44,7 +44,6 @@ import lombok.RequiredArgsConstructor;
         , associateWithSequence = "1"
 )
 @ActionLayout(named = "Open")
-@SuppressWarnings("CdiManagedBeanInconsistencyInspection")
 @RequiredArgsConstructor
 public class DomainChangeRecord_openTargetObject {
 

@@ -85,10 +85,4 @@ public interface Interaction extends HasInteractionId {
     Execution<?,?> getPriorExecution();
 
 
-    /**
-     * Framework use only: generates numbers for a named sequence type.
-     */
-    int next(final SequenceType sequenceType);
-
-
 }

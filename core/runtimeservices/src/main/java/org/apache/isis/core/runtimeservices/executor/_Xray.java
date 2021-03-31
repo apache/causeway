@@ -25,7 +25,7 @@ import javax.annotation.Nullable;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.debug.xray.XrayUi;
 import org.apache.isis.core.interaction.session.InteractionTracker;
-import org.apache.isis.core.metamodel.execution.InternalInteraction;
+import org.apache.isis.core.metamodel.execution.InteractionInternal;
 import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
@@ -41,7 +41,7 @@ final class _Xray {
 
     static SequenceHandle enterActionInvocation(
             final @NonNull InteractionTracker iaTracker,
-            final @NonNull InternalInteraction interaction, 
+            final @NonNull InteractionInternal interaction, 
             final @NonNull ObjectAction owningAction,
             final @NonNull InteractionHead head, 
             final @NonNull Can<ManagedObject> argumentAdapters) {
@@ -65,7 +65,7 @@ final class _Xray {
     
     public static SequenceHandle enterPropertyEdit(
             final @NonNull InteractionTracker iaTracker,
-            final @NonNull InternalInteraction interaction, 
+            final @NonNull InteractionInternal interaction, 
             final @NonNull OneToOneAssociation owningProperty,
             final @NonNull InteractionHead head, 
             final @NonNull ManagedObject newValueAdapter) {
@@ -83,7 +83,7 @@ final class _Xray {
     
     private static SequenceHandle enterInvocation(
             final @NonNull InteractionTracker iaTracker,
-            final InternalInteraction interaction,
+            final InteractionInternal interaction,
             final String participantLabel,
             final String enteringLabel) {
 

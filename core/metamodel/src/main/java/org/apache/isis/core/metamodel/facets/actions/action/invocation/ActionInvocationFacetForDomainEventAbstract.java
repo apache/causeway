@@ -37,7 +37,7 @@ import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Arrays;
 import org.apache.isis.core.metamodel.commons.CanonicalParameterUtil;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.execution.InternalInteraction;
+import org.apache.isis.core.metamodel.execution.InteractionInternal;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.DomainEventHelper;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
@@ -221,7 +221,7 @@ implements ImperativeFacet {
 
     @RequiredArgsConstructor
     private final class DomainEventMemberExecutor
-            implements InternalInteraction.MemberExecutor<ActionInvocation> {
+            implements InteractionInternal.MemberExecutor<ActionInvocation> {
 
         private final Can<ManagedObject> argumentAdapters;
         private final ManagedObject targetAdapter;

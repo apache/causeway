@@ -20,7 +20,6 @@ package org.apache.isis.core.interaction.session;
 
 import java.sql.Timestamp;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.atomic.LongAdder;
 
@@ -29,12 +28,10 @@ import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.iactn.ActionInvocation;
 import org.apache.isis.applib.services.iactn.Execution;
 import org.apache.isis.applib.services.iactn.PropertyEdit;
-import org.apache.isis.applib.services.iactn.SequenceType;
 import org.apache.isis.applib.services.metrics.MetricsService;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.metamodel.execution.InternalInteraction;
+import org.apache.isis.core.metamodel.execution.InteractionInternal;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -42,7 +39,7 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
-public class IsisInteraction implements InternalInteraction {
+public class IsisInteraction implements InteractionInternal {
 
     public IsisInteraction(final @NonNull UUID interactionId) {
         this.command = new Command(interactionId);
@@ -200,19 +197,11 @@ public class IsisInteraction implements InternalInteraction {
         currentExecution = newExecution;
     }
 
-    private final Map<SequenceType, LongAdder> maxBySequence = _Maps.newHashMap();
+    @Getter(onMethod_ = {@Override})
+    private final LongAdder executionSequence = new LongAdder();
+    
+    @Getter(onMethod_ = {@Override})
+    private final LongAdder transactionSequence = new LongAdder();
 
-    @Override
-    public int next(final SequenceType sequenceType) {
-        final LongAdder adder = maxBySequence.computeIfAbsent(sequenceType, this::newAdder);
-        adder.increment();
-        return adder.intValue();
-    }
-
-    private LongAdder newAdder(final SequenceType ignore) {
-        final LongAdder adder = new LongAdder();
-        adder.decrement();
-        return adder;
-    }
 
 }

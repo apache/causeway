@@ -26,7 +26,7 @@ import org.apache.isis.applib.events.domain.AbstractDomainEvent;
 import org.apache.isis.applib.events.domain.PropertyDomainEvent;
 import org.apache.isis.applib.services.iactn.PropertyEdit;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.execution.InternalInteraction;
+import org.apache.isis.core.metamodel.execution.InteractionInternal;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.DomainEventHelper;
@@ -172,7 +172,7 @@ implements
 
     @RequiredArgsConstructor
     private final class DomainEventMemberExecutor
-            implements InternalInteraction.MemberExecutor<PropertyEdit> {
+            implements InteractionInternal.MemberExecutor<PropertyEdit> {
 
         private final ManagedObject newValueAdapter;
         private final OneToOneAssociation owningProperty;

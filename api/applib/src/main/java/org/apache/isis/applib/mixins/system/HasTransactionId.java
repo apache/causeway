@@ -18,12 +18,6 @@
  */
 package org.apache.isis.applib.mixins.system;
 
-import org.apache.isis.applib.mixins.system.HasInteractionId;
-import org.apache.isis.applib.services.iactn.SequenceType;
-import org.apache.isis.applib.services.wrapper.WrapperFactory;
-import org.apache.isis.schema.ixn.v2.InteractionDto;
-import org.apache.isis.schema.ixn.v2.MemberExecutionDto;
-
 /**
  * Extends {@link HasInteractionId} to add a strictly monotonically increasing
  * sequence number so that each transaction within the overall
@@ -49,12 +43,9 @@ public interface HasTransactionId extends HasInteractionId {
      *
      * <p>
      *     The values in this sequence are ultimately obtained from the non-API
-     *     method
-     *     {@link org.apache.isis.applib.services.iactn.Interaction#next(SequenceType)},
-     *     with a {@link SequenceType} of {@link SequenceType#TRANSACTION}.
+     *     method 
+     *     {@link org.apache.isis.core.metamodel.execution.InteractionInternal#getTransactionSequence}.
      * </p>
-     *
-     * @return
      */
     int getSequence();
 }

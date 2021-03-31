@@ -27,12 +27,12 @@ import java.util.UUID;
 import org.apache.isis.applib.annotation.EntityChangeKind;
 import org.apache.isis.applib.jaxb.JavaSqlXMLGregorianCalendarMarshalling;
 import org.apache.isis.applib.services.iactn.Interaction;
-import org.apache.isis.applib.services.iactn.SequenceType;
 import org.apache.isis.applib.services.publishing.spi.EntityChanges;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.collections._Multimaps.ListMultimap;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
+import org.apache.isis.core.metamodel.execution.InteractionInternal;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.schema.chg.v2.ChangesDto;
@@ -80,7 +80,7 @@ final class _ChangingEntitiesFactory {
             final Map<ManagedObject, EntityChangeKind> changeKindByEnlistedAdapter) {
 
         val interactionId = interaction.getInteractionId();
-        final int nextEventSequence = interaction.next(SequenceType.TRANSACTION);
+        final int nextEventSequence = ((InteractionInternal) interaction).getThenIncrementTransactionSequence();
 
         return new _SimpleChangingEntities(
                     interactionId, nextEventSequence,

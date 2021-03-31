@@ -19,6 +19,7 @@
 package org.apache.isis.applib.services.iactn;
 
 import java.util.Optional;
+import java.util.UUID;
 
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 
@@ -39,11 +40,20 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
  */
 public interface InteractionContext {
 
-
+    /**
+     * Whether there is a currently active {@link Interaction} for the calling thread.
+     */
+    boolean isInInteraction();
+    
     /**
      * Optionally, the currently active {@link Interaction} for the calling thread.
      */
     Optional<Interaction> currentInteraction();
+    
+    /** 
+     * Unique id of the current request- or test-scoped {@link Interaction}.
+     */
+    Optional<UUID> getInteractionId();
 
     // -- SHORTCUTS
 
