@@ -12,7 +12,7 @@ export ANTORA_TARGET_SITE=antora/target/site
 #
 PLAYBOOK_FILE=antora/playbooks/site.yml
 
-while getopts 'ECDAKSLecdaksxyhfl:' opt
+while getopts 'ECDAKSLecdaksxylhf:' opt
 do
   case $opt in
     E) export SKIP_EXAMPLES=false

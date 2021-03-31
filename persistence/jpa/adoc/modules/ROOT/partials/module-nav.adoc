@@ -1,1 +1,3 @@
-* xref:pjpa:ROOT:other-resources.adoc[Other Resources]
+* xref:pjpa:ROOT:setup-and-configuration.adoc[Setup and Configuration]
+* xref:pjpa:ROOT:applib.adoc[JPA Applib]
+* xref:pjpa:ROOT:mapping-guide.adoc[Mapping Guide]

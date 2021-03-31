@@ -1,6 +1,7 @@
 
 
 * xref:pjdo:ROOT:setup-and-configuration.adoc[Setup and Configuration]
+** xref:pjdo:ROOT:configuring/disabling-persistence-by-reachability.adoc[Disabling Persistence by Reachability]
 * xref:pjdo:ROOT:jdo-mappings.adoc[JDO Mappings]
 * xref:pjdo:ROOT:db-schemas.adoc[DB Schemas]
 * xref:pjdo:ROOT:hints-and-tips.adoc[Hints-n-Tips]
