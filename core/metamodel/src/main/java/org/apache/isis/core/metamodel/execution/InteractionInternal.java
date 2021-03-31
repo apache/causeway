@@ -74,13 +74,30 @@ public interface InteractionInternal extends Interaction {
             final MetricsService metricsService,
             final Command command);
     
+   
     /**
-     * Framework internal use: holds current sequence number for executions.
+     * Numbers the executions (an action invocation or property edit) within
+     * a given {@link Interaction}.
+     *
+     * <p>
+     * Each {@link Interaction} is initiated by an execution of action
+     * invocation or a property edit.  Thereafter there could be multiple
+     * other executions as the result of nested calls using the
+     * {@link WrapperFactory}.
+     * </p>
+     *
+     * <p>
+     * Another possible reason is support for bulk action invocations.
+     * </p>
+     *
+     * @see Interaction
+     * @see WrapperFactory
      */
     LongAdder getExecutionSequence();
     
     /**
      * Framework internal use: generates sequence of numbers for executions.
+     * @see #getExecutionSequence()
      */
     default int getThenIncrementExecutionSequence() {
         final int counter = getExecutionSequence().intValue(); 
@@ -89,12 +106,23 @@ public interface InteractionInternal extends Interaction {
     }
     
     /**
-     * Framework internal use: holds current sequence number for transactions.
+     * Numbers the transactions within a given {@link Interaction}.
+     *
+     * <p>
+     * Each {@link Interaction} is executed within the context of a transaction, but
+     * the (occasionally) the transaction may be committed and a new one
+     * started as the result of the domain object using the
+     * {@link org.apache.isis.applib.services.xactn.TransactionService}.
+     * </p>
+     *
+     * @see Interaction
+     * @see org.apache.isis.applib.services.xactn.TransactionService
      */
     LongAdder getTransactionSequence();
     
     /**
      * Framework internal use: generates sequence of numbers for transactions.
+     * @see #getTransactionSequence()
      */
     default int getThenIncrementTransactionSequence() {
         final int counter = getTransactionSequence().intValue(); 
