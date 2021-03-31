@@ -10,4 +10,6 @@
 * xref:vro:ROOT:configuration-properties.adoc[Configuration Properties]
 * xref:vro:ROOT:security.adoc[Security]
 * xref:vro:ROOT:hints-and-tips.adoc[Hints-n-Tips]
+* xref:vro:ROOT:other-resources.adoc[Other Resources]
+
 

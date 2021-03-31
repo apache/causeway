@@ -70,6 +70,9 @@ content:
     - url: .
       start_path: security/keycloak/src/main/adoc # security
       branches: HEAD
+    - url: .
+      start_path: security/spring/src/main/adoc # security
+      branches: HEAD
 
 
 # starters

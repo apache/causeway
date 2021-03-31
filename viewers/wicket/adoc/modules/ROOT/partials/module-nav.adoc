@@ -7,6 +7,8 @@
 * xref:vw:ROOT:customisation.adoc[Customisation]
 * xref:vw:ROOT:extending.adoc[Extending]
 * xref:vw:ROOT:hints-and-tips.adoc[Hints-n-Tips]
+* xref:vw:ROOT:other-resources.adoc[Other Resources]
+
 
 
 

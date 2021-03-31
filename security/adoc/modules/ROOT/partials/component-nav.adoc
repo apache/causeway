@@ -4,14 +4,15 @@ include::security:core:partial$module-nav.adoc[]
 include::security:bypass:partial$module-nav.adoc[]
 include::security:shiro:partial$module-nav.adoc[]
 include::security:keycloak:partial$module-nav.adoc[]
+include::security:spring:partial$module-nav.adoc[]
 
 include::security:ROOT:partial$module-nav-end.adoc[]
 
 * Extensions
 
-// commented out the libraries that have not yet been brought over from incode-platform
-
-//include::security:audit-trail:partial$module-nav.adoc[]
 include::security:shiro-realm-ldap:partial$module-nav.adoc[]
 include::security:secman:partial$module-nav.adoc[]
+
+// commented out the libraries that have not yet been brought over from incode-platform
+//include::security:audit-trail:partial$module-nav.adoc[]
 //include::security:session-log:partial$module-nav.adoc[]
