@@ -64,7 +64,7 @@ import lombok.val;
 
 @javax.jdo.annotations.PersistenceCapable(
         identityType = IdentityType.DATASTORE,
-        schema = "isisSecman",
+        schema = "isisExtensionsSecman",
         table = "ApplicationUser")
 @javax.jdo.annotations.Inheritance(
         strategy = InheritanceStrategy.NEW_TABLE)
@@ -119,11 +119,6 @@ import lombok.val;
 @DomainObjectLayout(
         bookmarking = BookmarkPolicy.AS_ROOT
         )
-//@MemberGroupLayout(columnSpans = {4,4,4,12},
-//    left = {"Id", "Name", "Metadata"},
-//    middle= {"Contact Details"},
-//    right= {"Status", "AtPath"}
-//)
 public class ApplicationUser implements Comparable<ApplicationUser>,
 org.apache.isis.extensions.secman.api.user.ApplicationUser {
 

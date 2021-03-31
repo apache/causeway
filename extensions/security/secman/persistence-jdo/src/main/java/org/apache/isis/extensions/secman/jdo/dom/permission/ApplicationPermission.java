@@ -57,7 +57,7 @@ import lombok.experimental.UtilityClass;
 
 @javax.jdo.annotations.PersistenceCapable(
         identityType = IdentityType.DATASTORE,
-        schema = "isisSecman",
+        schema = "isisExtensionsSecman",
         table = "ApplicationPermission")
 @javax.jdo.annotations.Inheritance(
         strategy = InheritanceStrategy.NEW_TABLE)
@@ -102,7 +102,7 @@ import lombok.experimental.UtilityClass;
 })
 @javax.jdo.annotations.Uniques({
     @javax.jdo.annotations.Unique(
-            name = "ApplicationPermission_role_feature_rule_UNQ", 
+            name = "ApplicationPermission_role_feature_rule_UNQ",
             members = { "role", "featureSort", "featureFqn", "rule" })
 })
 @DomainObject(
@@ -111,9 +111,9 @@ import lombok.experimental.UtilityClass;
 @DomainObjectLayout(
         bookmarking = BookmarkPolicy.AS_CHILD
         )
-public class ApplicationPermission 
-implements 
-    org.apache.isis.extensions.secman.api.permission.ApplicationPermission, 
+public class ApplicationPermission
+implements
+    org.apache.isis.extensions.secman.api.permission.ApplicationPermission,
     Comparable<ApplicationPermission> {
 
     private static final int TYPICAL_LENGTH_TYPE = 7;  // ApplicationFeatureType.PACKAGE is longest
@@ -130,9 +130,9 @@ implements
             editing = Editing.DISABLED
             )
     @PropertyLayout(hidden = Where.REFERENCES_PARENT)
-    @Getter(onMethod = @__(@Override)) 
+    @Getter(onMethod = @__(@Override))
     private ApplicationRole role;
-    
+
     @Override
     public void setRole(org.apache.isis.extensions.secman.api.role.ApplicationRole applicationRole) {
         role = _Casts.<ApplicationRole>uncheckedCast(applicationRole);
@@ -147,7 +147,7 @@ implements
             domainEvent = RuleDomainEvent.class,
             editing = Editing.DISABLED
             )
-    @Getter(onMethod = @__(@Override)) 
+    @Getter(onMethod = @__(@Override))
     @Setter(onMethod = @__(@Override))
     private ApplicationPermissionRule rule;
 
@@ -161,7 +161,7 @@ implements
             domainEvent = ModeDomainEvent.class,
             editing = Editing.DISABLED
             )
-    @Getter(onMethod = @__(@Override)) 
+    @Getter(onMethod = @__(@Override))
     @Setter(onMethod = @__(@Override))
     private ApplicationPermissionMode mode;
 
@@ -186,8 +186,8 @@ implements
     @PropertyLayout(typicalLength=ApplicationPermission.TYPICAL_LENGTH_TYPE)
     @Override
     public String getSort() {
-        final Enum<?> e = getFeatureSort() != ApplicationFeatureSort.MEMBER 
-                ? getFeatureSort() 
+        final Enum<?> e = getFeatureSort() != ApplicationFeatureSort.MEMBER
+                ? getFeatureSort()
                 : getMemberSort().orElse(null);
         return e != null ? e.name(): null;
     }
@@ -250,7 +250,7 @@ implements
 
     // -- CONTRACT
 
-    private static final ObjectContract<ApplicationPermission> contract	= 
+    private static final ObjectContract<ApplicationPermission> contract	=
             ObjectContracts.contract(ApplicationPermission.class)
             .thenUse("role", ApplicationPermission::getRole)
             .thenUse("featureSort", ApplicationPermission::getFeatureSort)
@@ -292,11 +292,11 @@ implements
     @UtilityClass
     public static final class Functions {
 
-        public static final Function<ApplicationPermission, ApplicationPermissionValue> AS_VALUE = 
+        public static final Function<ApplicationPermission, ApplicationPermissionValue> AS_VALUE =
                 (ApplicationPermission input) ->
                     new ApplicationPermissionValue(
-                            input.asFeatureId().orElseThrow(_Exceptions::noSuchElement), 
-                            input.getRule(), 
+                            input.asFeatureId().orElseThrow(_Exceptions::noSuchElement),
+                            input.getRule(),
                             input.getMode());
 
     }
