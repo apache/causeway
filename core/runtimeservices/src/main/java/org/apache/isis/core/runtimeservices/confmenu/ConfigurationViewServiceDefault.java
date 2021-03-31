@@ -143,6 +143,7 @@ implements
             configProps.getIsis().forEach((k, v)->add("isis." + k, v, map));
             configProps.getResteasy().forEach((k, v)->add("resteasy." + k, v, map));
             configProps.getDatanucleus().forEach((k, v)->add("datanucleus." + k, v, map));
+            configProps.getEclipselink().forEach((k, v)->add("eclipselink." + k, v, map));
         } else {
             // if properties are not visible, show at least the policy
             add("Configuration Property Visibility Policy",

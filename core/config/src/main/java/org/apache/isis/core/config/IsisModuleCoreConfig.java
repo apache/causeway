@@ -70,6 +70,7 @@ public class IsisModuleCoreConfig {
         private Map<String, String> isis = Collections.emptyMap();
         private Map<String, String> resteasy = Collections.emptyMap();
         private Map<String, String> datanucleus = Collections.emptyMap();
+        private Map<String, String> eclipselink = Collections.emptyMap();
     }
 
 }

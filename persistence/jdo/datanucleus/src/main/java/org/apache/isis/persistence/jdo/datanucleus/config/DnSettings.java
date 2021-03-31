@@ -46,6 +46,7 @@ public class DnSettings {
 
     @Getter @Setter 
     private Map<String, String> datanucleus; //mapped by "datanucleus"
+    
     @Getter @Setter 
     private Map<String, String> javax; //mapped by "javax" filtered later for "javax.jdo"
     
@@ -97,32 +98,9 @@ public class DnSettings {
                 log.info("... and config properties for second '-nontx' JNDI datasource also found; {}", connectionFactory2Name);
             }
             // nothing further to do
-        } else {
-            // use JDBC connection properties; put if not present
-
-//XXX let Spring handle datasources instead            
-//            putIfNotPresent(props, "javax.jdo.option.ConnectionDriverName", "org.hsqldb.jdbcDriver");
-//            putIfNotPresent(props, "javax.jdo.option.ConnectionURL", "jdbc:hsqldb:mem:test");
-//            putIfNotPresent(props, "javax.jdo.option.ConnectionUserName", "sa");
-//            putIfNotPresent(props, "javax.jdo.option.ConnectionPassword", "");
-//
-//            if(log.isInfoEnabled()) {
-//                log.info("using JDBC connection '{}'", 
-//                        props.get("javax.jdo.option.ConnectionURL"));
-//            }
-        }
+        } 
         
     }
-
-//    private static void putIfNotPresent(
-//            final Map<String, Object> props,
-//            final String key,
-//            final String value) {
-//        
-//        if(!props.containsKey(key)) {
-//            props.put(key, value);
-//        }
-//    }
     
     
 }

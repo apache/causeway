@@ -19,17 +19,15 @@
 package org.apache.isis.persistence.jpa.eclipselink;
 
 import java.sql.SQLException;
-import java.util.HashMap;
 import java.util.Map;
 
 import javax.inject.Inject;
-import javax.inject.Provider;
 import javax.sql.DataSource;
 
-import org.eclipse.persistence.config.PersistenceUnitProperties;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration;
 import org.springframework.boot.autoconfigure.orm.jpa.JpaProperties;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.dao.DataAccessException;
@@ -42,10 +40,9 @@ import org.springframework.orm.jpa.vendor.EclipseLinkJpaDialect;
 import org.springframework.orm.jpa.vendor.EclipseLinkJpaVendorAdapter;
 import org.springframework.transaction.jta.JtaTransactionManager;
 
-import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.config.IsisConfiguration;
-import org.apache.isis.persistence.jpa.eclipselink.inject.BeanManagerForEntityListeners;
+import org.apache.isis.persistence.jpa.eclipselink.config.ElSettings;
 import org.apache.isis.persistence.jpa.integration.IsisModuleJpaIntegration;
 
 import lombok.SneakyThrows;
@@ -66,10 +63,11 @@ import lombok.extern.log4j.Log4j2;
 @Import({
     IsisModuleJpaIntegration.class
 })
+@EnableConfigurationProperties(ElSettings.class)
 @Log4j2
 public class IsisModuleJpaEclipselink extends JpaBaseConfiguration {
 
-    @Inject private Provider<ServiceInjector> serviceInjectorProvider;
+    @Inject private ElSettings elSettings;
 
     protected IsisModuleJpaEclipselink(
             IsisConfiguration isisConfiguration,
@@ -98,12 +96,7 @@ public class IsisModuleJpaEclipselink extends JpaBaseConfiguration {
 
     @Override
     protected Map<String, Object> getVendorProperties() {
-        HashMap<String, Object> jpaProps = new HashMap<>();
-        jpaProps.put(PersistenceUnitProperties.WEAVING, "false");
-//        jpaProps.put(PersistenceUnitProperties.SCHEMA_GENERATION_CREATE_DATABASE_SCHEMAS, "true");
-        jpaProps.put(PersistenceUnitProperties.DDL_GENERATION, PersistenceUnitProperties.CREATE_OR_EXTEND);
-        jpaProps.put(PersistenceUnitProperties.CDI_BEANMANAGER, new BeanManagerForEntityListeners(serviceInjectorProvider));
-        return jpaProps;
+        return elSettings.asMap();
     }
 
     /**
