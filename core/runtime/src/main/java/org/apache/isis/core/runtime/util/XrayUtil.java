@@ -67,7 +67,7 @@ public final class XrayUtil {
             final @NonNull InteractionTracker iaTracker,
             final String ... callees) {
 
-        if(!iaTracker.isInInteractionSession()) {
+        if(!iaTracker.isInInteraction()) {
             return Optional.empty();
         }
         

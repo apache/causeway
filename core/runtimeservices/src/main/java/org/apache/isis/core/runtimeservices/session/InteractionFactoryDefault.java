@@ -230,7 +230,7 @@ implements
     }
 
     @Override
-    public boolean isInInteractionSession() {
+    public boolean isInInteraction() {
         return !authenticationStack.get().isEmpty();
     }
 
@@ -276,7 +276,7 @@ implements
     
     @SneakyThrows
     public <R> R callAnonymous(@NonNull final Callable<R> callable) {
-        if(isInInteractionSession()) {
+        if(isInInteraction()) {
             serviceInjector.injectServicesInto(callable);
             return callable.call(); // reuse existing session
         }
@@ -289,7 +289,7 @@ implements
      */
     @SneakyThrows
     public void runAnonymous(@NonNull final ThrowingRunnable runnable) {
-        if(isInInteractionSession()) {
+        if(isInInteraction()) {
             serviceInjector.injectServicesInto(runnable);
             runnable.run(); // reuse existing session
             return;

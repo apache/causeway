@@ -29,35 +29,35 @@ public class PreAndPostValues_shouldAudit_Test {
 
     @Test
     public void just_created() {
-        final PreAndPostValues papv = PreAndPostValues.pre(IsisTransactionPlaceholder.NEW);
+        final _PreAndPostValues papv = _PreAndPostValues.pre(IsisTransactionPlaceholder.NEW);
         papv.setPost("Foo");
 
         assertTrue(papv.shouldAudit());
     }
     @Test
     public void just_deleted() {
-        final PreAndPostValues papv = PreAndPostValues.pre("Foo");
+        final _PreAndPostValues papv = _PreAndPostValues.pre("Foo");
         papv.setPost(IsisTransactionPlaceholder.DELETED);
 
         assertTrue(papv.shouldAudit());
     }
     @Test
     public void changed() {
-        final PreAndPostValues papv = PreAndPostValues.pre("Foo");
+        final _PreAndPostValues papv = _PreAndPostValues.pre("Foo");
         papv.setPost("Bar");
 
         assertTrue(papv.shouldAudit());
     }
     @Test
     public void unchanged() {
-        final PreAndPostValues papv = PreAndPostValues.pre("Foo");
+        final _PreAndPostValues papv = _PreAndPostValues.pre("Foo");
         papv.setPost("Foo");
 
         assertFalse(papv.shouldAudit());
     }
     @Test
     public void created_and_then_deleted() {
-        final PreAndPostValues papv = PreAndPostValues.pre(IsisTransactionPlaceholder.NEW);
+        final _PreAndPostValues papv = _PreAndPostValues.pre(IsisTransactionPlaceholder.NEW);
         papv.setPost(IsisTransactionPlaceholder.DELETED);
 
         assertFalse(papv.shouldAudit());

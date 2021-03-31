@@ -20,13 +20,11 @@ package org.apache.isis.core.transaction.changetracking;
 
 import lombok.NonNull;
 import lombok.Value;
-import lombok.experimental.PackagePrivate;
 
 @Value(staticConstructor = "of")
-@PackagePrivate
-final class PropertyChangeRecord {
+final class _PropertyChangeRecord {
 
-    private final @NonNull AdapterAndProperty adapterAndProperty;
-    private final @NonNull PreAndPostValues preAndPostValues;
+    private final @NonNull _AdapterAndProperty adapterAndProperty;
+    private final @NonNull _PreAndPostValues preAndPostValues;
     
 }

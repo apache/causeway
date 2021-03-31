@@ -23,7 +23,6 @@ import java.sql.Timestamp;
 import java.util.UUID;
 import java.util.function.Supplier;
 
-import org.apache.isis.applib.mixins.system.HasTransactionId;
 import org.apache.isis.applib.services.publishing.spi.EntityChanges;
 import org.apache.isis.schema.chg.v2.ChangesDto;
 
@@ -34,7 +33,7 @@ import lombok.ToString;
  * Captures which objects were created, updated or deleted in the course of a transaction.
  */
 @ToString
-class SimpleChangingEntities implements EntityChanges {
+final class _SimpleChangingEntities implements EntityChanges {
 
     private UUID transactionUuid;
     private final int sequence;
@@ -44,7 +43,7 @@ class SimpleChangingEntities implements EntityChanges {
     private final int numberEntityPropertiesModified;
     private final Supplier<ChangesDto> changesDtoSupplier;
 
-    public SimpleChangingEntities(
+    public _SimpleChangingEntities(
             final @NonNull UUID transactionUuid,
             final int sequence,
             final @NonNull String userName,

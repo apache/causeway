@@ -40,10 +40,8 @@ import org.apache.isis.schema.chg.v2.ObjectsDto;
 import org.apache.isis.schema.common.v2.OidsDto;
 
 import lombok.val;
-import lombok.experimental.UtilityClass;
 
-@UtilityClass
-class ChangingEntitiesFactory {
+final class _ChangingEntitiesFactory {
 
     public static Optional<EntityChanges> createChangingEntities(
             final java.sql.Timestamp completedAt,
@@ -84,7 +82,7 @@ class ChangingEntitiesFactory {
         val interactionId = interaction.getInteractionId();
         final int nextEventSequence = interaction.next(SequenceType.TRANSACTION);
 
-        return new SimpleChangingEntities(
+        return new _SimpleChangingEntities(
                     interactionId, nextEventSequence,
                     userName, completedAt,
                     numberEntitiesLoaded,

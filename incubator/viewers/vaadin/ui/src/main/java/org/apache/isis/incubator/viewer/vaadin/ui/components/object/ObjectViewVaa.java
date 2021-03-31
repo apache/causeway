@@ -85,7 +85,7 @@ public class ObjectViewVaa extends VerticalLayout {
             final ManagedObject managedObject) {
 
         log.info("binding object interaction to owner {}", managedObject.getSpecification().getIdentifier());
-        _Assert.assertTrue(uiContext.getIsisInteractionFactory().isInInteractionSession(), "requires an active interaction");
+        _Assert.assertTrue(uiContext.getIsisInteractionFactory().isInInteraction(), "requires an active interaction");
         
         val objectTitle = ManagedObjects.titleOf(managedObject);
 

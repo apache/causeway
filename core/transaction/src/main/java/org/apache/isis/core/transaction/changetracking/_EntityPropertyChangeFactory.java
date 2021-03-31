@@ -26,16 +26,14 @@ import org.apache.isis.applib.services.xactn.TransactionId;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.CommandUtil;
 
 import lombok.val;
-import lombok.experimental.UtilityClass;
 
-@UtilityClass
-class EntityPropertyChangeFactory {
+final class _EntityPropertyChangeFactory {
 
     public static EntityPropertyChange createEntityPropertyChange(
             final java.sql.Timestamp timestamp,
             final String user,
             final TransactionId txId,
-            final PropertyChangeRecord propertyChangeRecord) {
+            final _PropertyChangeRecord propertyChangeRecord) {
 
         val adapterAndProperty = propertyChangeRecord.getAdapterAndProperty();
         val spec = adapterAndProperty.getAdapter().getSpecification();
@@ -44,7 +42,7 @@ class EntityPropertyChangeFactory {
         final String propertyId = adapterAndProperty.getPropertyId();
         final String memberId = adapterAndProperty.getMemberId();
 
-        final PreAndPostValues papv = propertyChangeRecord.getPreAndPostValues();
+        final _PreAndPostValues papv = propertyChangeRecord.getPreAndPostValues();
         final String preValue = papv.getPreString();
         final String postValue = papv.getPostString();
 

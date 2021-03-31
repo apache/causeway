@@ -29,12 +29,10 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.ToString;
 import lombok.val;
-import lombok.experimental.PackagePrivate;
 
 @EqualsAndHashCode(of = {"bookmarkStr", "propertyId"})
-@PackagePrivate
 @ToString(of = {"bookmarkStr", "propertyId"})
-final class AdapterAndProperty {
+final class _AdapterAndProperty {
 
     @Getter private final ManagedObject adapter;
     @Getter private final ObjectAssociation property;
@@ -43,13 +41,13 @@ final class AdapterAndProperty {
     
     private final String bookmarkStr;
 
-    public static AdapterAndProperty of(
+    public static _AdapterAndProperty of(
             final @NonNull ManagedObject adapter, 
             final @NonNull ObjectAssociation property) {
-        return new AdapterAndProperty(adapter, property);
+        return new _AdapterAndProperty(adapter, property);
     }
 
-    private AdapterAndProperty(ManagedObject adapter, ObjectAssociation property) {
+    private _AdapterAndProperty(ManagedObject adapter, ObjectAssociation property) {
         
         this.adapter = adapter;
         this.property = property;

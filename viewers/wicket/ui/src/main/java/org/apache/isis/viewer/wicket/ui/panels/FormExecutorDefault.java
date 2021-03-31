@@ -136,7 +136,7 @@ implements FormExecutor {
             val resultAdapter = obtainResultAdapter();
             
             // flush any queued changes; any concurrency or violation exceptions will actually be thrown here
-            if(commonContext.getInteractionTracker().isInInteractionSession()) {
+            if(commonContext.getInteractionTracker().isInInteraction()) {
                 commonContext.getTransactionService().flushTransaction();
 
                 if(EntityUtil.isDestroyed(targetAdapter)) {

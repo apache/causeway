@@ -36,7 +36,7 @@ import org.apache.isis.core.security.authentication.AuthenticationContext;
 public interface InteractionTracker 
 extends InteractionContext, AuthenticationContext {
 
-    boolean isInInteractionSession();
+    boolean isInInteraction();
     
     /** @return the AuthenticationLayer that sits on top of the current 
      * request- or test-scoped InteractionSession's stack*/

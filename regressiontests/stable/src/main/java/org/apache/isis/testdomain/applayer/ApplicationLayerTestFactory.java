@@ -20,6 +20,7 @@ package org.apache.isis.testdomain.applayer;
 
 import static org.apache.isis.applib.services.wrapper.control.AsyncControl.returningVoid;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
@@ -70,7 +71,6 @@ import org.apache.isis.testdomain.jdo.entities.JdoInventory;
 import org.apache.isis.testdomain.jdo.entities.JdoProduct;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 
-import io.smallrye.common.constraint.Assert;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.val;
@@ -176,7 +176,7 @@ public class ApplicationLayerTestFactory {
 
             xrayAddTest(displayName);
             
-            Assert.assertFalse(interactionFactory.isInInteractionSession());
+            assertFalse(interactionFactory.isInInteraction());
             assert_no_initial_tx_context();
             
             final boolean isSuccesfulRun = interactionFactory.callAnonymous(()->{

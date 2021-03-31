@@ -24,10 +24,8 @@ import java.util.Objects;
 import org.apache.isis.core.transaction.changetracking.events.IsisTransactionPlaceholder;
 
 import lombok.val;
-import lombok.experimental.PackagePrivate;
 
-@PackagePrivate
-final class PreAndPostValues {
+final class _PreAndPostValues {
 
     private final Object pre;
     /**
@@ -44,14 +42,14 @@ final class PreAndPostValues {
      */
     private String postString;
 
-    public static PreAndPostValues pre(Object preValue) {
-        return new PreAndPostValues(preValue, null);
+    public static _PreAndPostValues pre(Object preValue) {
+        return new _PreAndPostValues(preValue, null);
     }
 
-    private PreAndPostValues(Object pre, Object post) {
+    private _PreAndPostValues(Object pre, Object post) {
         this.pre = pre;
         this.post = post;
-        this.preString = EntityChangeTrackerDefault.asString(pre);
+        this.preString = asString(pre);
     }
 
     /**
@@ -79,7 +77,7 @@ final class PreAndPostValues {
 
     public void setPost(Object post) {
         this.post = post;
-        this.postString = EntityChangeTrackerDefault.asString(post);
+        this.postString = asString(post);
     }
 
     @Override
@@ -100,9 +98,15 @@ final class PreAndPostValues {
         return !Objects.equals(getPre(), getPost());
     }
     
-    public static boolean shouldAudit(Map.Entry<?, PreAndPostValues> input) { 
+    public static boolean shouldAudit(Map.Entry<?, _PreAndPostValues> input) { 
         val preAndPostValues = input.getValue();
         return preAndPostValues.shouldAudit();
+    }
+    
+    // -- HELPER
+    
+    private static String asString(Object object) {
+        return object != null? object.toString(): null;
     }
     
 }

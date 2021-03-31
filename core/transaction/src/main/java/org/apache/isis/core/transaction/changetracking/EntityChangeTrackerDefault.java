@@ -107,14 +107,14 @@ implements
      * When {@link #getEntityAuditEntries()} is called, then this is cleared out and
      * {@link #changedObjectProperties} is non-null, containing the actual differences.
      */
-    private final Map<AdapterAndProperty, PreAndPostValues> enlistedEntityPropertiesForAuditing = _Maps.newLinkedHashMap();
+    private final Map<_AdapterAndProperty, _PreAndPostValues> enlistedEntityPropertiesForAuditing = _Maps.newLinkedHashMap();
 
     /**
      * Used for auditing; contains the pre- and post- values of every property of every object that actually changed.
      * <p>
      * Will be null until {@link #getEntityAuditEntries()} is called, thereafter contains the actual changes.
      */
-    private final _Lazy<Set<PropertyChangeRecord>> changedObjectPropertiesRef = _Lazy.threadSafe(this::capturePostValuesAndDrain);
+    private final _Lazy<Set<_PropertyChangeRecord>> changedObjectPropertiesRef = _Lazy.threadSafe(this::capturePostValuesAndDrain);
 
     @Getter(AccessLevel.PACKAGE)
     private final Map<ManagedObject, EntityChangeKind> changeKindByEnlistedAdapter = _Maps.newLinkedHashMap();
@@ -128,7 +128,7 @@ implements
             return;
         }
         enlistForChangeKindAuditing(adapter, EntityChangeKind.CREATE);
-        enlistForPreAndPostValueAuditing(adapter, aap->PreAndPostValues.pre(IsisTransactionPlaceholder.NEW));
+        enlistForPreAndPostValueAuditing(adapter, aap->_PreAndPostValues.pre(IsisTransactionPlaceholder.NEW));
     }
 
     private void enlistUpdatingInternal(final @NonNull ManagedObject adapter) {
@@ -136,7 +136,7 @@ implements
             return;
         }
         enlistForChangeKindAuditing(adapter, EntityChangeKind.UPDATE);
-        enlistForPreAndPostValueAuditing(adapter, aap->PreAndPostValues.pre(aap.getPropertyValue()));
+        enlistForPreAndPostValueAuditing(adapter, aap->_PreAndPostValues.pre(aap.getPropertyValue()));
     }
 
     private void enlistDeletingInternal(final @NonNull ManagedObject adapter) {
@@ -147,10 +147,10 @@ implements
         if(!enlisted) {
             return;
         }
-        enlistForPreAndPostValueAuditing(adapter, aap->PreAndPostValues.pre(aap.getPropertyValue()));
+        enlistForPreAndPostValueAuditing(adapter, aap->_PreAndPostValues.pre(aap.getPropertyValue()));
     }
 
-    private Set<PropertyChangeRecord> getPropertyChangeRecords() {
+    private Set<_PropertyChangeRecord> getPropertyChangeRecords() {
         // this code path has side-effects, it locks the result for this transaction,
         // such that cannot enlist on top of it
         return changedObjectPropertiesRef.get();
@@ -210,7 +210,7 @@ implements
     public Optional<EntityChanges> getEntityChanges(
             final java.sql.Timestamp timestamp,
             final String userName) {
-        return ChangingEntitiesFactory.createChangingEntities(timestamp, userName, this);
+        return _ChangingEntitiesFactory.createChangingEntities(timestamp, userName, this);
     }
 
     Interaction currentInteraction() {
@@ -218,10 +218,6 @@ implements
     }
 
     // -- HELPER
-
-    static String asString(Object object) {
-        return object != null? object.toString(): null;
-    }
 
     /**
      * @return <code>true</code> if successfully enlisted, <code>false</code> if was already enlisted
@@ -263,13 +259,13 @@ implements
 
     private void enlistForPreAndPostValueAuditing(
             final ManagedObject entity,
-            final Function<AdapterAndProperty, PreAndPostValues> pre) {
+            final Function<_AdapterAndProperty, _PreAndPostValues> pre) {
 
         log.debug("enlist entity's property changes for auditing {}", entity);
 
         entity.getSpecification().streamProperties(MixedIn.EXCLUDED)
         .filter(property->!property.isNotPersisted())
-        .map(property->AdapterAndProperty.of(entity, property))
+        .map(property->_AdapterAndProperty.of(entity, property))
         .filter(aap->!enlistedEntityPropertiesForAuditing.containsKey(aap)) // already enlisted, so ignore
         .forEach(aap->{
             enlistedEntityPropertiesForAuditing.put(aap, pre.apply(aap));
@@ -280,12 +276,12 @@ implements
      * For any enlisted Object Properties collects those, that are meant for auditing,
      * then clears enlisted objects.
      */
-    private Set<PropertyChangeRecord> capturePostValuesAndDrain() {
+    private Set<_PropertyChangeRecord> capturePostValuesAndDrain() {
 
         val postValues = enlistedEntityPropertiesForAuditing.entrySet().stream()
                 .peek(this::updatePostOn) // set post values of audits, which have been left empty up to now
-                .filter(PreAndPostValues::shouldAudit)
-                .map(entry->PropertyChangeRecord.of(entry.getKey(), entry.getValue()))
+                .filter(_PreAndPostValues::shouldAudit)
+                .map(entry->_PropertyChangeRecord.of(entry.getKey(), entry.getValue()))
                 .collect(_Sets.toUnmodifiable());
 
         enlistedEntityPropertiesForAuditing.clear();
@@ -294,7 +290,7 @@ implements
 
     }
 
-    private final void updatePostOn(Map.Entry<AdapterAndProperty, PreAndPostValues> enlistedEntry) {
+    private final void updatePostOn(Map.Entry<_AdapterAndProperty, _PreAndPostValues> enlistedEntry) {
         val adapterAndProperty = enlistedEntry.getKey();
         val preAndPostValues = enlistedEntry.getValue();
         val entity = adapterAndProperty.getAdapter();
@@ -412,7 +408,7 @@ implements
             final TransactionId txId) {
 
         return getPropertyChangeRecords().stream()
-                .map(propertyChangeRecord->EntityPropertyChangeFactory
+                .map(propertyChangeRecord->_EntityPropertyChangeFactory
                         .createEntityPropertyChange(timestamp, userName, txId, propertyChangeRecord))
                 .collect(Can.toCan());
     }
