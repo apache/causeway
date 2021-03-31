@@ -165,9 +165,9 @@ _Reading_
 
 _Academia_
 
-* link:../ug/fun/_attachments/core-concepts/Pawson-Naked-Objects-thesis.pdf[Naked Objects PhD] (Pawson)
-* https://esc.fnwi.uva.nl/thesis/centraal/files/f270412620.pdf[CLIsis: An interface for Visually Impaired Users] (Bachelors dissertation, Ginn)
-* https://esc.fnwi.uva.nl/thesis/centraal/files/f1051832702.pdf[Using blockchain to validate audit trail data in private business applications] (Masters dissertation, Kalis)
+* link:{attachmentsdir}/Pawson-Naked-Objects-thesis.pdf[Naked Objects] (PhD thesis, Pawson)
+* link:https://esc.fnwi.uva.nl/thesis/centraal/files/f270412620.pdf[CLIsis: An interface for Visually Impaired Users] (Bachelors dissertation, Ginn)
+* link:https://esc.fnwi.uva.nl/thesis/centraal/files/f1051832702.pdf[Using blockchain to validate audit trail data in private business applications] (Masters dissertation, Kalis)
 
 
 
