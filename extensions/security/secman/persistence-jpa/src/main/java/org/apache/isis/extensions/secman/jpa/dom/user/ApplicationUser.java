@@ -77,6 +77,7 @@ import lombok.val;
 
 @Entity
 @Table(
+        schema = "isisExtensionsSecman",
         name = "ApplicationUser",
         uniqueConstraints =
             @UniqueConstraint(
