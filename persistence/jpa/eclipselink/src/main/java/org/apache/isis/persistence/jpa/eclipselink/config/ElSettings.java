@@ -18,6 +18,7 @@
  */
 package org.apache.isis.persistence.jpa.eclipselink.config;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -46,13 +47,16 @@ import lombok.val;
 @Named("isis.persistence.jpa.ElSettings")
 @Primary
 @Qualifier("Eclipselink")
-@ConfigurationProperties(prefix = "")
+@ConfigurationProperties(
+        prefix = "", 
+        ignoreUnknownFields = true)
 public class ElSettings {
     
     @Inject private Provider<ServiceInjector> serviceInjectorProvider;
     
+    /** mapped by {@code eclipselink.*} */
     @Getter @Setter 
-    private Map<String, String> eclipselink; //mapped by "eclipselink"
+    private Map<String, String> eclipselink = Collections.emptyMap(); 
     
     public Map<String, Object> asMap() {
         return map.get();
