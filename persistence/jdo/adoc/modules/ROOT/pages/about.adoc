@@ -4,9 +4,10 @@
 
 
 The JDO/DataNucleus object store enables domain objects to be persisted to relational as well as NoSQL databases.
-The object store is implemented using link:http://datanucleus.org[DataNucleus] ORM.
+The object store is implemented using link:http://datanucleus.org[DataNucleus] ORM using the link:https://www.jcp.org/en/jsr/detail?id=243[JDO] API.
+DataNucleus is the reference implementation for JDO.
 
-This user guide discuss how to setup  the framework to use the JDO/DataNucleus object store, how to configure the ORM, and also provides some examples on common use cases.
+This component guide discuss how to setup the framework to use the JDO/DataNucleus object store, how to configure the ORM, and also provides some examples on common use cases.
 
 
 

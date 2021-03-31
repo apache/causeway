@@ -1,0 +1,1 @@
+* xref:pjpa:ROOT:other-resources.adoc[Other Resources]

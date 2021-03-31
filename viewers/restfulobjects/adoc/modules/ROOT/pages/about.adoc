@@ -12,7 +12,7 @@ Apache Isis' Restful Objects viewer is an implementation of the link:http://rest
 The Restful Objects viewer also provides a number of extensions specific to Apache Isis.
 Most significant of these is enhanced content negotiation support, making it easier to use the returned representations within bespoke clients using standard third-party configurations.
 
-This user guide discuss features, configuration and also how to extend the Restful Objects viewer.
+This component guide discuss features, configuration and also how to extend the Restful Objects viewer.
 
 
 

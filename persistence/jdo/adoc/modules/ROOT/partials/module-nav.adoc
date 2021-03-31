@@ -6,3 +6,4 @@
 * xref:pjdo:ROOT:hints-and-tips.adoc[Hints-n-Tips]
 * Domain Services
 ** xref:pjdo:ROOT:services/IsisJdoSupport.adoc[IsisJdoSupport]
+* xref:pjdo:ROOT:other-resources.adoc[Other Resources]
