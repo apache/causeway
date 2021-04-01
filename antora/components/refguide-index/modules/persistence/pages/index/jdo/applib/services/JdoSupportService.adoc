@@ -136,3 +136,5 @@ For RDBMS any single-valued member will be fetched in the original SQL query, bu
 === disableMultivaluedFetch(Query)
 
 Fetch Optimization
+
+include::hooks/JdoSupportService_010-examples-and-usage.adoc[]

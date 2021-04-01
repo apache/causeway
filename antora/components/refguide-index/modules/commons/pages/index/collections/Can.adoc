@@ -32,11 +32,10 @@ interface Can<T> {
   Can<T> empty()     // <.>
   Can<T> ofNullable(T element)     // <.>
   Can<T> ofSingleton(T element)     // <.>
-  Can<T> of(T... array)     // <.>
-  Can<T> ofArray(T[] array)     // <.>
+  Can<T> of(T... array)
+  Can<T> ofArray(T[] array)
   Can<T> ofCollection(Collection<T> collection)     // <.>
-  Can<T> ofIterable(Iterable<T> iterable)     // <.>
-  Can<T> ofEnumeration(Enumeration<T> enumeration)     // <.>
+  Can<T> ofIterable(Iterable<T> iterable)
   Can<T> ofStream(Stream<T> stream)     // <.>
   Can<T> ofInstance(Instance<T> instance)     // <.>
   Can<T> reverse()     // <.>
@@ -122,30 +121,10 @@ Returns either a _Can_ with the given _element_ or an empty _Can_ if the _elemen
 --
 Returns either a _Can_ with the given _element_ or throws if the _element_ is _null_ .
 --
-<.> xref:#of__T[of(T)]
-+
---
-Var-arg version of _Can#ofArray(Object[])_ .
---
-<.> xref:#ofArray__T[][ofArray(T[])]
-+
---
-Returns either a _Can_ with all the elements from given _array_ or an empty _Can_ if the _array_ is _null_ . Any elements equal to _null_ are ignored and will not be contained in the resulting _Can_ .
---
 <.> xref:#ofCollection__Collection[ofCollection(Collection)]
 +
 --
 Returns either a _Can_ with all the elements from given _collection_ or an empty _Can_ if the _collection_ is _null_ . Any elements equal to _null_ are ignored and will not be contained in the resulting _Can_ .
---
-<.> xref:#ofIterable__Iterable[ofIterable(Iterable)]
-+
---
-Returns either a _Can_ with all the elements from given _iterable_ or an empty _Can_ if the _iterable_ is _null_ . Any elements equal to _null_ are ignored and will not be contained in the resulting _Can_ .
---
-<.> xref:#ofEnumeration__Enumeration[ofEnumeration(Enumeration)]
-+
---
-Returns either a _Can_ with all the elements from given _enumeration_ or an empty _Can_ if the _enumeration_ is _null_ . Any elements equal to _null_ are ignored and will not be contained in the resulting _Can_ .
 --
 <.> xref:#ofStream__Stream[ofStream(Stream)]
 +
@@ -291,39 +270,15 @@ Returns either a _Can_ with the given _element_ or an empty _Can_ if the _elemen
 
 Returns either a _Can_ with the given _element_ or throws if the _element_ is _null_ .
 
-[#of__T]
-=== of(T)
-
-Var-arg version of _Can#ofArray(Object[])_ .
-
-[#ofArray__T[]]
-=== ofArray(T[])
-
-Returns either a _Can_ with all the elements from given _array_ or an empty _Can_ if the _array_ is _null_ . Any elements equal to _null_ are ignored and will not be contained in the resulting _Can_ .
-
 [#ofCollection__Collection]
 === ofCollection(Collection)
 
 Returns either a _Can_ with all the elements from given _collection_ or an empty _Can_ if the _collection_ is _null_ . Any elements equal to _null_ are ignored and will not be contained in the resulting _Can_ .
 
-[#ofIterable__Iterable]
-=== ofIterable(Iterable)
-
-Returns either a _Can_ with all the elements from given _iterable_ or an empty _Can_ if the _iterable_ is _null_ . Any elements equal to _null_ are ignored and will not be contained in the resulting _Can_ .
-
-[#ofEnumeration__Enumeration]
-=== ofEnumeration(Enumeration)
-
-Returns either a _Can_ with all the elements from given _enumeration_ or an empty _Can_ if the _enumeration_ is _null_ . Any elements equal to _null_ are ignored and will not be contained in the resulting _Can_ .
-
-As side-effect, consumes given _enumeration_ .
-
 [#ofStream__Stream]
 === ofStream(Stream)
 
 Returns either a _Can_ with all the elements from given _stream_ or an empty _Can_ if the _stream_ is _null_ . Any elements equal to _null_ are ignored and will not be contained in the resulting _Can_ .
-
-As side-effect, consumes given _stream_ .
 
 [#ofInstance__Instance]
 === ofInstance(Instance)

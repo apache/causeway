@@ -8,7 +8,7 @@
 ----
 class EntityChangeTrackerDefault {
   void onPreCommit(TransactionBeforeCompletionEvent event)     // <.>
-  Optional<EntityChanges> getEntityChanges(final java.sql.Timestamp timestamp, final String userName)
+  EntityChanges getEntityChanges(final java.sql.Timestamp timestamp, final String userName)
   Interaction currentInteraction()
   String asString(Object object)
   int numberEntitiesLoaded()
@@ -20,7 +20,7 @@ class EntityChangeTrackerDefault {
   void recognizeLoaded(ManagedObject entity)
   void recognizePersisting(ManagedObject entity)
   void recognizeUpdating(ManagedObject entity)
-  Can<EntityPropertyChange> getPropertyChanges(final java.sql.Timestamp timestamp, final String userName, final TransactionId txId)
+  Stream<EntityPropertyChange> streamPropertyChanges(final java.sql.Timestamp timestamp, final String userName, final TransactionId txId)
 }
 ----
 
