@@ -28,15 +28,13 @@ import org.apache.isis.applib.services.iactn.Execution;
 import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.iactn.PropertyEdit;
 import org.apache.isis.applib.services.metrics.MetricsService;
-import org.apache.isis.commons.having.HasTypeSpecificAttributes;
+import org.apache.isis.applib.services.wrapper.WrapperFactory;
 
 /**
  * @since 2.0
  */
 public interface InteractionInternal 
-extends 
-    Interaction, 
-    HasTypeSpecificAttributes {
+extends Interaction {
 
     /**
      * (Modeled after {@link Callable}), is the implementation

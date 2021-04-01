@@ -21,8 +21,9 @@ package org.apache.isis.applib.services.iactn;
 
 import java.util.UUID;
 
-import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.mixins.system.HasInteractionId;
+import org.apache.isis.applib.services.command.Command;
+import org.apache.isis.commons.having.HasTypeSpecificAttributes;
 
 /**
  * Represents an action invocation or property modification, resulting in some
@@ -52,7 +53,10 @@ import org.apache.isis.applib.mixins.system.HasInteractionId;
  *
  * @since 1.x revised for 2.0 {@index}
  */
-public interface Interaction extends HasInteractionId {
+public interface Interaction 
+extends 
+    HasInteractionId,
+    HasTypeSpecificAttributes {
 
     /**
      * The unique identifier of this interaction (inherited from
