@@ -18,6 +18,9 @@
  */
 package org.apache.isis.viewer.restfulobjects.testing;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -34,12 +37,9 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.springframework.web.context.WebApplicationContext;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
-
+import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.interaction.session.InteractionFactory;
-import org.apache.isis.core.interaction.session.InteractionSession;
 import org.apache.isis.core.interaction.session.InteractionTracker;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
@@ -66,7 +66,7 @@ public abstract class ResourceContext_ensureCompatibleAcceptHeader_ContractTest 
     @Mock HttpServletRequest mockHttpServletRequest;
     @Mock ServletContext mockServletContext;
     @Mock InteractionFactory mockIsisInteractionFactory;
-    @Mock InteractionSession mockInteractionSession;
+    @Mock Interaction mockInteraction;
     @Mock Authentication mockAuthentication;
     @Mock SpecificationLoader mockSpecificationLoader;
     @Mock WebApplicationContext webApplicationContext;

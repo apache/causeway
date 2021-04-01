@@ -16,26 +16,22 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.interaction.scope;
+package org.apache.isis.commons.having;
 
-import org.apache.isis.applib.services.iactn.Interaction;
+import java.util.function.Function;
 
-public interface InteractionScopeAware {
+public interface HasTypeSpecificAttributes {
 
-    default void beforeEnteringTransactionalBoundary(Interaction interaction) {
-        
-    }
-    
-    default void afterEnteringTransactionalBoundary(Interaction interaction, boolean isSynchronizationActive) {
-        
-    }
-    
-    default void beforeLeavingTransactionalBoundary(Interaction interaction, boolean isSynchronizationActive) {
-        
-    }
-    
-    default void afterLeavingTransactionalBoundary(Interaction interaction) {
-        
-    }
+    /** add type specific attribute */
+    <T> T putAttribute(Class<? super T> type, T value);
+
+    /** conditionally add type specific attribute */
+    <T> T computeAttributeIfAbsent(Class<? super T> type, Function<Class<?>, ? extends T> mappingFunction);
+
+    /** get type specific attribute */
+    <T> T getAttribute(Class<T> type);
+
+    /** remove type specific attribute */
+    void removeAttribute(Class<?> type);
     
 }

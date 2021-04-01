@@ -25,6 +25,7 @@ import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.core.interaction.session.InteractionTracker;
+import org.apache.isis.core.interaction.session.IsisInteraction;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -46,7 +47,8 @@ public class LineBreaker {
         log.info("about to shutdown the JVM");
 
         // allow for current interaction to complete gracefully
-        isisInteractionTracker.currentInteractionSession()
+        isisInteractionTracker.currentInteraction()
+        .map(IsisInteraction.class::cast)
         .ifPresent(interaction->{
             interaction.setOnClose(()->System.exit(0));
         });

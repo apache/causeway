@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.runtimeservices.session;
 
+import static org.apache.isis.commons.internal.base._With.requires;
+
 import java.io.File;
 import java.sql.Timestamp;
 import java.util.List;
@@ -42,6 +44,7 @@ import org.springframework.transaction.support.TransactionSynchronizationManager
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.clock.ClockService;
+import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.util.schema.ChangesDtoUtils;
 import org.apache.isis.applib.util.schema.CommandDtoUtils;
@@ -59,7 +62,6 @@ import org.apache.isis.core.interaction.scope.InteractionScopeBeanFactoryPostPro
 import org.apache.isis.core.interaction.scope.InteractionScopeLifecycleHandler;
 import org.apache.isis.core.interaction.session.AuthenticationLayer;
 import org.apache.isis.core.interaction.session.InteractionFactory;
-import org.apache.isis.core.interaction.session.InteractionSession;
 import org.apache.isis.core.interaction.session.InteractionTracker;
 import org.apache.isis.core.interaction.session.IsisInteraction;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
@@ -69,15 +71,13 @@ import org.apache.isis.core.runtime.events.MetamodelEventService;
 import org.apache.isis.core.security.authentication.Authentication;
 import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
 
-import static org.apache.isis.commons.internal.base._With.requires;
-
 import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
- * Is the factory of {@link InteractionSession}s.
+ * Is the factory of {@link Interaction}s.
  * 
  * @implNote holds a reference to the current session using a thread-local
  */
@@ -204,11 +204,11 @@ implements
         return authenticationLayer;
     }
     
-    private InteractionSession getOrCreateInteractionSession() {
+    private IsisInteraction getOrCreateInteractionSession() {
     	
     	return authenticationStack.get().isEmpty()
-    			? new InteractionSession(metaModelContext, UUID.randomUUID())
-				: authenticationStack.get().firstElement().getInteractionSession();
+    			? new IsisInteraction(UUID.randomUUID())
+				: authenticationStack.get().firstElement().getInteraction();
     }
 
     @Override
@@ -312,23 +312,23 @@ implements
     	return authenticationStack.get().size()==1; 
     }
     
-    private void postSessionOpened(InteractionSession session) {
-        interactionId.set(session.getInteractionId());
-        interactionScopeAwareBeans.forEach(bean->bean.beforeEnteringTransactionalBoundary(session));
-        txBoundaryHandler.onOpen(session);
+    private void postSessionOpened(IsisInteraction interaction) {
+        interactionId.set(interaction.getInteractionId());
+        interactionScopeAwareBeans.forEach(bean->bean.beforeEnteringTransactionalBoundary(interaction));
+        txBoundaryHandler.onOpen(interaction);
         val isSynchronizationActive = TransactionSynchronizationManager.isSynchronizationActive();
-        interactionScopeAwareBeans.forEach(bean->bean.afterEnteringTransactionalBoundary(session, isSynchronizationActive));
+        interactionScopeAwareBeans.forEach(bean->bean.afterEnteringTransactionalBoundary(interaction, isSynchronizationActive));
         interactionScopeLifecycleHandler.onTopLevelInteractionOpened();
     }
     
-    private void preSessionClosed(InteractionSession session) {
+    private void preSessionClosed(IsisInteraction interaction) {
         completeAndPublishCurrentCommand();
         interactionScopeLifecycleHandler.onTopLevelInteractionClosing(); // cleanup the isis-session scope
         val isSynchronizationActive = TransactionSynchronizationManager.isSynchronizationActive();
-        interactionScopeAwareBeans.forEach(bean->bean.beforeLeavingTransactionalBoundary(session, isSynchronizationActive));
-        txBoundaryHandler.onClose(session);
-        interactionScopeAwareBeans.forEach(bean->bean.afterLeavingTransactionalBoundary(session));
-        session.close(); // do this last
+        interactionScopeAwareBeans.forEach(bean->bean.beforeLeavingTransactionalBoundary(interaction, isSynchronizationActive));
+        txBoundaryHandler.onClose(interaction);
+        interactionScopeAwareBeans.forEach(bean->bean.afterLeavingTransactionalBoundary(interaction));
+        interaction.close(); // do this last
     }
     
     private void closeSessionStackDownToStackSize(int downToStackSize) {
@@ -343,7 +343,7 @@ implements
         while(stack.size()>downToStackSize) {
         	if(isInBaseLayer()) {
         		// keep the stack unmodified yet, to allow for callbacks to properly operate
-        		preSessionClosed(stack.peek().getInteractionSession());
+        		preSessionClosed(stack.peek().getInteraction());
         	}
         	_Xray.closeAuthenticationLayer(stack);
             stack.pop();

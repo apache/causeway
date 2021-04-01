@@ -38,7 +38,7 @@ final class _Xray {
 
         // make defensive copies, so can use in another thread
         final int authStackSize = afterEnter.size();
-        val interactionId = afterEnter.peek().getInteractionSession().getInteractionId();
+        val interactionId = afterEnter.peek().getInteraction().getInteractionId();
         val executionContext = afterEnter.peek().getExecutionContext();
         
         val threadId = XrayUtil.currentThreadAsMemento();
@@ -92,7 +92,7 @@ final class _Xray {
         }
         
         final int authStackSize = beforeClose.size();
-        val interactionId = beforeClose.peek().getInteractionSession().getInteractionId();
+        val interactionId = beforeClose.peek().getInteraction().getInteractionId();
         val sequenceId = XrayUtil.sequenceId(interactionId);
         
         XrayUi.updateModel(model->{

@@ -18,6 +18,9 @@
  */
 package org.apache.isis.viewer.restfulobjects.viewer.context;
 
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.MatcherAssert.assertThat;
+
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
@@ -28,13 +31,10 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.springframework.web.context.WebApplicationContext;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.MatcherAssert.assertThat;
-
 import org.apache.isis.commons.internal.codec._UrlDecoderUtil;
 import org.apache.isis.core.interaction.session.InteractionFactory;
-import org.apache.isis.core.interaction.session.InteractionSession;
 import org.apache.isis.core.interaction.session.InteractionTracker;
+import org.apache.isis.core.interaction.session.IsisInteraction;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2.Mode;
 import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
@@ -54,7 +54,7 @@ public class ResourceContext_getArg_Test {
 
     @Mock private HttpServletRequest mockHttpServletRequest;
     @Mock private ServletContext mockServletContext;
-    @Mock private InteractionSession mockIsisInteraction;
+    @Mock private IsisInteraction mockIsisInteraction;
     @Mock private InteractionFactory mockIsisInteractionFactory;
     @Mock private InteractionTracker mockIsisInteractionTracker;
     @Mock private AuthenticationManager mockAuthenticationManager;

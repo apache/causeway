@@ -44,11 +44,6 @@ extends InteractionContext, AuthenticationContext {
         .orElseThrow(()->_Exceptions.illegalState("No InteractionSession available on current thread"));
     }
     
-    /** @return the current request- or test-scoped InteractionSession*/
-    default Optional<InteractionSession> currentInteractionSession() {
-    	return currentAuthenticationLayer().map(AuthenticationLayer::getInteractionSession);
-    }
-    
     default Optional<ExecutionContext> currentExecutionContext() {
         return currentAuthenticationLayer().map(AuthenticationLayer::getExecutionContext);
     }
@@ -64,7 +59,7 @@ extends InteractionContext, AuthenticationContext {
     
     @Override
     default Optional<Interaction> currentInteraction(){
-    	return currentInteractionSession().map(InteractionSession::getInteraction);
+    	return currentAuthenticationLayer().map(AuthenticationLayer::getInteraction);
     }
 
     

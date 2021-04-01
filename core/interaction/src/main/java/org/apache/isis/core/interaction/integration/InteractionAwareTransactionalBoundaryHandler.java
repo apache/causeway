@@ -38,7 +38,7 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.functional.ThrowingRunnable;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.debug._Probe;
-import org.apache.isis.core.interaction.session.InteractionSession;
+import org.apache.isis.core.interaction.session.IsisInteraction;
 
 import lombok.NonNull;
 import lombok.Value;
@@ -62,7 +62,7 @@ public class InteractionAwareTransactionalBoundaryHandler {
     
     // -- OPEN
 
-    public void onOpen(final @NonNull InteractionSession session) {
+    public void onOpen(final @NonNull IsisInteraction interaction) {
 
         if (log.isDebugEnabled()) {
             log.debug("opening on {}", _Probe.currentThreadId());
@@ -73,7 +73,7 @@ public class InteractionAwareTransactionalBoundaryHandler {
         }
 
         val onCloseTasks = _Lists.<CloseTask>newArrayList(txManagers.size());
-        session.putAttribute(Handle.class, new Handle(onCloseTasks));
+        interaction.putAttribute(Handle.class, new Handle(onCloseTasks));
         
         txManagers.forEach(txManager->newTransactionOrParticipateInExisting(txManager, onCloseTasks::add));
         
@@ -81,7 +81,7 @@ public class InteractionAwareTransactionalBoundaryHandler {
 
     // -- CLOSE
 
-    public void onClose(final @NonNull InteractionSession session) {
+    public void onClose(final @NonNull IsisInteraction interaction) {
 
         if (log.isDebugEnabled()) {
             log.debug("closing on {}", _Probe.currentThreadId());
@@ -91,7 +91,7 @@ public class InteractionAwareTransactionalBoundaryHandler {
             return; // nothing to do 
         }
 
-        val onCloseTasks = Optional.ofNullable(session.getAttribute(Handle.class))
+        val onCloseTasks = Optional.ofNullable(interaction.getAttribute(Handle.class))
                 .map(Handle::getOnCloseTasks);
         
         onCloseTasks

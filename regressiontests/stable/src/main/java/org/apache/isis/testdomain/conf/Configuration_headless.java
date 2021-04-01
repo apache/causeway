@@ -34,11 +34,11 @@ import org.springframework.transaction.TransactionException;
 import org.springframework.transaction.TransactionStatus;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.metrics.MetricsService;
 import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.core.interaction.scope.InteractionScopeAware;
-import org.apache.isis.core.interaction.session.InteractionSession;
 import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
 import org.apache.isis.extensions.modelannotation.metamodel.IsisModuleExtModelAnnotation;
 import org.apache.isis.security.bypass.IsisModuleSecurityBypass;
@@ -69,14 +69,14 @@ public class Configuration_headless {
 //      private final CommandDispatcher commandDispatcher;
 
         @Override
-        public void beforeEnteringTransactionalBoundary(InteractionSession interactionSession) {
-            _Probe.errOut("Interaction HAS_STARTED conversationId=%s", interactionSession.getInteractionId());
+        public void beforeEnteringTransactionalBoundary(Interaction interaction) {
+            _Probe.errOut("Interaction HAS_STARTED conversationId=%s", interaction.getInteractionId());
             setupCommandCreateIfMissing();
         }
 
         @Override
-        public void afterLeavingTransactionalBoundary(InteractionSession interactionSession) {
-            _Probe.errOut("Interaction IS_ENDING conversationId=%s", interactionSession.getInteractionId());
+        public void afterLeavingTransactionalBoundary(Interaction interaction) {
+            _Probe.errOut("Interaction IS_ENDING conversationId=%s", interaction.getInteractionId());
         }
 
         public void setupCommandCreateIfMissing() {

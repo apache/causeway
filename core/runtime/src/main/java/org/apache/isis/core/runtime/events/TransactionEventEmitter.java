@@ -25,8 +25,8 @@ import org.springframework.transaction.support.TransactionSynchronization;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import org.apache.isis.applib.services.eventbus.EventBusService;
+import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.core.interaction.scope.InteractionScopeAware;
-import org.apache.isis.core.interaction.session.InteractionSession;
 import org.apache.isis.core.interaction.session.InteractionTracker;
 import org.apache.isis.core.transaction.events.TransactionAfterCompletionEvent;
 import org.apache.isis.core.transaction.events.TransactionBeforeCompletionEvent;
@@ -57,8 +57,8 @@ implements TransactionSynchronization, InteractionScopeAware {
     
     @Override
     public void afterEnteringTransactionalBoundary(
-            InteractionSession interactionSession, 
-            boolean isSynchronizationActive) {
+            final Interaction interaction, 
+            final boolean isSynchronizationActive) {
         if(isSynchronizationActive) {
             TransactionSynchronizationManager.registerSynchronization(this);
         }
