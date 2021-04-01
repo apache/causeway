@@ -336,6 +336,7 @@ content:
       start_path: viewers/wicket/adoc # vw
       branches: HEAD
 
+
 ui:
   bundle:
 #    url: ../isis-antora/build/ui-bundle.zip
