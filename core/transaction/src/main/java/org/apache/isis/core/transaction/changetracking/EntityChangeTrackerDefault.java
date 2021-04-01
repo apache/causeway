@@ -70,6 +70,7 @@ import org.apache.isis.core.metamodel.facets.object.publish.entitychange.EntityC
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ManagedObjects.EntityUtil;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
+import org.apache.isis.core.security.authentication.AuthenticationContext;
 import org.apache.isis.core.transaction.changetracking.events.IsisTransactionPlaceholder;
 import org.apache.isis.core.transaction.events.TransactionBeforeCompletionEvent;
 
@@ -100,6 +101,8 @@ implements
     @Inject private EntityChangesPublisher entityChangesPublisher;
     @Inject private EventBusService eventBusService;
     @Inject private Provider<InteractionContext> interactionContextProvider;
+    @Inject private Provider<AuthenticationContext> authenticationContextProvider;
+    
 
     /**
      * Used for auditing: this contains the pre- values of every property of every object enlisted.
@@ -323,7 +326,7 @@ implements
 
     @Override
     public void enlistCreated(ManagedObject entity) {
-        _Xray.enlistCreated(entity);
+        _Xray.enlistCreated(entity, interactionContextProvider, authenticationContextProvider);
         val hasAlreadyBeenEnlisted = isEnlisted(entity);
         enlistCreatedInternal(entity);
 
@@ -335,7 +338,7 @@ implements
 
     @Override
     public void enlistDeleting(ManagedObject entity) {
-        _Xray.enlistDeleting(entity);
+        _Xray.enlistDeleting(entity, interactionContextProvider, authenticationContextProvider);
         enlistDeletingInternal(entity);
         CallbackFacet.Util.callCallback(entity, RemovingCallbackFacet.class);
         postLifecycleEventIfRequired(entity, RemovingLifecycleEventFacet.class);
@@ -343,7 +346,7 @@ implements
 
     @Override
     public void enlistUpdating(ManagedObject entity) {
-        _Xray.enlistUpdating(entity);
+        _Xray.enlistUpdating(entity, interactionContextProvider, authenticationContextProvider);
         val hasAlreadyBeenEnlisted = isEnlisted(entity);
         // we call this come what may;
         // additional properties may now have been changed, and the changeKind for publishing might also be modified
@@ -358,7 +361,7 @@ implements
 
     @Override
     public void recognizeLoaded(ManagedObject entity) {
-        _Xray.recognizeLoaded(entity);
+        _Xray.recognizeLoaded(entity, interactionContextProvider, authenticationContextProvider);
         CallbackFacet.Util.callCallback(entity, LoadedCallbackFacet.class);
         postLifecycleEventIfRequired(entity, LoadedLifecycleEventFacet.class);
         numberEntitiesLoaded.increment();
@@ -366,14 +369,14 @@ implements
 
     @Override
     public void recognizePersisting(ManagedObject entity) {
-        _Xray.recognizePersisting(entity);        
+        _Xray.recognizePersisting(entity, interactionContextProvider, authenticationContextProvider);        
         CallbackFacet.Util.callCallback(entity, PersistingCallbackFacet.class);
         postLifecycleEventIfRequired(entity, PersistingLifecycleEventFacet.class);
     }
 
     @Override
     public void recognizeUpdating(ManagedObject entity) {
-        _Xray.recognizeUpdating(entity);
+        _Xray.recognizeUpdating(entity, interactionContextProvider, authenticationContextProvider);
         CallbackFacet.Util.callCallback(entity, UpdatedCallbackFacet.class);
         postLifecycleEventIfRequired(entity, UpdatedLifecycleEventFacet.class);
     }

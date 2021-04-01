@@ -63,6 +63,30 @@ public final class XrayUtil {
     }
     
     // -- SEQUENCE HANDLE
+
+    public static Optional<SequenceHandle> createSequenceHandle(
+            final @NonNull InteractionContext iaContext,
+            final @NonNull AuthenticationContext authContext,
+            final String ... callees) {
+        
+        if(!iaContext.isInInteraction()) {
+            return Optional.empty();
+        }
+        
+        final int authStackSize = authContext.getAuthenticationLayerCount();
+        val interactionId = iaContext.getInteractionId().orElseThrow(_Exceptions::unexpectedCodeReach);
+        
+        val handle = SequenceHandle.builder()
+                .sequenceId(XrayUtil.sequenceId(interactionId))
+                .caller(authStackSize>0
+                        ? XrayUtil.nestedInteractionId(authStackSize)
+                        : "thread")
+                .callees(Can.ofArray(callees))
+                .build();
+        
+        return Optional.of(handle);
+        
+    }
     
     // Using parameter that implements multiple interfaces, because we have no access to InteractionTracker
     public static <T extends InteractionContext & AuthenticationContext> 
@@ -74,18 +98,7 @@ public final class XrayUtil {
             return Optional.empty();
         }
         
-        final int authStackSize = iaTracker.getAuthenticationLayerCount();
-        val interactionId = iaTracker.getInteractionId().orElseThrow(_Exceptions::unexpectedCodeReach);
-        
-        val handle = SequenceHandle.builder()
-                .sequenceId(XrayUtil.sequenceId(interactionId))
-                .caller(authStackSize>0
-                        ? XrayUtil.nestedInteractionId(authStackSize)
-                        : "thread")
-                .callees(Can.ofArray(callees))
-                .build();
-        
-        return Optional.of(handle);
+        return createSequenceHandle(iaTracker, iaTracker, callees);
     }
     
     @Value @Builder
