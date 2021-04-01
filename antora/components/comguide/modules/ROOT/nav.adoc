@@ -1,14 +1,19 @@
 
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
-* xref:merging-a-pull-request.adoc[Merging a Pull Request]
-* xref:applying-patches.adoc[Applying Patches]
-* xref:cutting-a-release.adoc[Cutting a Release]
-* xref:verifying-releases.adoc[Verifying Releases]
-* xref:post-release-successful.adoc[Post Release (Successful)]
-* xref:post-release-unsuccessful.adoc[Post Release (Unsuccessful)]
-* xref:key-generation.adoc[Key Generation]
-* xref:algolia-search.adoc[Appendix: Algolia Search]
-* xref:release-process-prereqs.adoc[Appendix: Release Process Prereqs]
-* xref:policies.adoc[Appendix: Policies]
-* xref:pmc-notes.adoc[Appendix: PMC Notes]
+* Occasionally
+** xref:merging-a-pull-request.adoc[Merging a Pull Request]
+** xref:applying-patches.adoc[Applying Patches]
+** xref:updating-the-website.adoc[Updating the Website]
+* Release
+** xref:cutting-a-release.adoc[Cutting a Release]
+** xref:verifying-releases.adoc[Verifying Releases]
+** Post Release
+*** xref:post-release-successful.adoc[Post Release (Successful)]
+*** xref:post-release-unsuccessful.adoc[Post Release (Unsuccessful)]
+* Appendices
+** xref:key-generation.adoc[Key Generation]
+** xref:algolia-search.adoc[Algolia Search]
+** xref:release-process-prereqs.adoc[Release Process Prereqs]
+** xref:policies.adoc[Policies]
+** xref:pmc-notes.adoc[PMC Notes]
