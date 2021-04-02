@@ -18,13 +18,76 @@
  */
 package org.apache.isis.core.transaction.changetracking;
 
-import lombok.NonNull;
-import lombok.Value;
+import org.apache.isis.applib.services.bookmark.Bookmark;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects;
+import org.apache.isis.core.metamodel.spec.ManagedObjects.EntityUtil;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.core.transaction.changetracking.events.IsisTransactionPlaceholder;
 
-@Value(staticConstructor = "of")
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.ToString;
+import lombok.val;
+
+
+@EqualsAndHashCode(of = {"bookmarkStr", "propertyId"})
+@ToString(of = {"bookmarkStr", "propertyId"})
 final class _PropertyChangeRecord {
 
-    private final @NonNull _AdapterAndProperty adapterAndProperty;
-    private final @NonNull _PreAndPostValues preAndPostValues;
+    @Getter private final ManagedObject entity;
+    @Getter private final ObjectAssociation property;
+    @Getter private final Bookmark bookmark;
+    @Getter private final String propertyId;
+    @Getter private _PreAndPostValue preAndPostValue;
+    
+    private final String bookmarkStr;
+
+    public static _PropertyChangeRecord of(
+            final @NonNull ManagedObject entity, 
+            final @NonNull ObjectAssociation property) {
+        return new _PropertyChangeRecord(entity, property);
+    }
+
+    private _PropertyChangeRecord(ManagedObject entity, ObjectAssociation property) {
+        this.entity = entity;
+        this.property = property;
+        this.propertyId = property.getId();
+
+        this.bookmark = ManagedObjects.bookmarkElseFail(entity);
+        this.bookmarkStr = bookmark.toString();
+    }
+
+    public String getMemberId() {
+        return property.getIdentifier().getFullIdentityString();
+    }
+    
+    void setPreValue(Object pre) {
+        preAndPostValue = _PreAndPostValue.pre(pre);
+    }
+    
+    void updatePreValue() {
+        setPreValue(getPropertyValue());
+    }
+    
+    void updatePostValue() {
+        preAndPostValue = EntityUtil.isDestroyed(entity)
+                // don't touch the object!!!
+                // JDO, for example, will complain otherwise...
+                ? preAndPostValue.withPost(IsisTransactionPlaceholder.DELETED)
+                : preAndPostValue.withPost(getPropertyValue());
+    }
+    
+    // -- HELPER
+    
+    private Object getPropertyValue() {
+        val referencedAdapter = property.get(entity, InteractionInitiatedBy.FRAMEWORK);
+        return ManagedObjects.UnwrapUtil.single(referencedAdapter);
+    }
+
+
     
 }
+

@@ -29,7 +29,7 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 public interface EntityChangeTracker {
 
     /**
-     * Auditing and publishing support: for object stores to enlist an object that has just been created,
+     * Publishing support: for object stores to enlist an object that has just been created,
      * capturing a dummy value <tt>'[NEW]'</tt> for the pre-modification value.
      * <p>
      * Fires the appropriate event and lifecycle callback: {@literal PERSISTED}
@@ -39,7 +39,7 @@ public interface EntityChangeTracker {
     void enlistCreated(ManagedObject entity);
 
     /**
-     * Auditing and publishing support: for object stores to enlist an object that is about to be deleted,
+     * Publishing support: for object stores to enlist an object that is about to be deleted,
      * capturing the pre-deletion value of the properties of the {@link ManagedObject}.
      * <p>
      * Fires the appropriate event and lifecycle callback: {@literal REMOVING}
@@ -50,7 +50,7 @@ public interface EntityChangeTracker {
     void enlistDeleting(ManagedObject entity);
 
     /**
-     * Auditing and publishing support: for object stores to enlist an object that is about to be updated,
+     * Publishing support: for object stores to enlist an object that is about to be updated,
      * capturing the pre-modification values of the properties of the {@link ManagedObject}.
      * <p>
      * Fires the appropriate event and lifecycle callback: {@literal UPDATING}

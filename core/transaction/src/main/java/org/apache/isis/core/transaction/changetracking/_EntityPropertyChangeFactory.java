@@ -35,17 +35,13 @@ final class _EntityPropertyChangeFactory {
             final TransactionId txId,
             final _PropertyChangeRecord propertyChangeRecord) {
 
-        val adapterAndProperty = propertyChangeRecord.getAdapterAndProperty();
-        val spec = adapterAndProperty.getAdapter().getSpecification();
+        val spec = propertyChangeRecord.getEntity().getSpecification();
 
-        final Bookmark target = adapterAndProperty.getBookmark();
-        final String propertyId = adapterAndProperty.getPropertyId();
-        final String memberId = adapterAndProperty.getMemberId();
-
-        final _PreAndPostValues papv = propertyChangeRecord.getPreAndPostValues();
-        final String preValue = papv.getPreString();
-        final String postValue = papv.getPostString();
-
+        final Bookmark target = propertyChangeRecord.getBookmark();
+        final String propertyId = propertyChangeRecord.getPropertyId();
+        final String memberId = propertyChangeRecord.getMemberId();
+        final String preValue = propertyChangeRecord.getPreAndPostValue().getPreString();
+        final String postValue = propertyChangeRecord.getPreAndPostValue().getPostString();
         final String targetClass = CommandUtil.targetClassNameFor(spec);
 
         final UUID transactionId = txId.getInteractionId();

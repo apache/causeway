@@ -23,7 +23,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.LongAdder;
-import java.util.function.Function;
+import java.util.function.Consumer;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -68,7 +68,6 @@ import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatingCallbackFa
 import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatingLifecycleEventFacet;
 import org.apache.isis.core.metamodel.facets.object.publish.entitychange.EntityChangePublishingFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ManagedObjects.EntityUtil;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.security.authentication.AuthenticationContext;
 import org.apache.isis.core.transaction.changetracking.events.IsisTransactionPlaceholder;
@@ -105,19 +104,15 @@ implements
     
 
     /**
-     * Used for auditing: this contains the pre- values of every property of every object enlisted.
-     * <p>
-     * When {@link #getEntityAuditEntries()} is called, then this is cleared out and
-     * {@link #changedObjectProperties} is non-null, containing the actual differences.
+     * Used for publishing: this contains the pre- values of every property of every object enlisted.
      */
-    private final Map<_AdapterAndProperty, _PreAndPostValues> enlistedEntityPropertiesForAuditing = _Maps.newLinkedHashMap();
+    private final Set<_PropertyChangeRecord> entityPropertyChangeRecords = _Sets.newLinkedHashSet();
 
     /**
-     * Used for auditing; contains the pre- and post- values of every property of every object that actually changed.
-     * <p>
-     * Will be null until {@link #getEntityAuditEntries()} is called, thereafter contains the actual changes.
+     * Used for publishing; contains the pre- and post- values of every property of every object that actually changed.
      */
-    private final _Lazy<Set<_PropertyChangeRecord>> changedObjectPropertiesRef = _Lazy.threadSafe(this::capturePostValuesAndDrain);
+    private final _Lazy<Set<_PropertyChangeRecord>> entityPropertyChangeRecordsForPublishing 
+        = _Lazy.threadSafe(this::capturePostValuesAndDrain);
 
     @Getter(AccessLevel.PACKAGE)
     private final Map<ManagedObject, EntityChangeKind> changeKindByEnlistedAdapter = _Maps.newLinkedHashMap();
@@ -131,7 +126,7 @@ implements
             return;
         }
         enlistForChangeKindAuditing(adapter, EntityChangeKind.CREATE);
-        enlistForPreAndPostValueAuditing(adapter, aap->_PreAndPostValues.pre(IsisTransactionPlaceholder.NEW));
+        enlistForPreAndPostValueAuditing(adapter, record->record.setPreValue(IsisTransactionPlaceholder.NEW));
     }
 
     private void enlistUpdatingInternal(final @NonNull ManagedObject adapter) {
@@ -139,7 +134,7 @@ implements
             return;
         }
         enlistForChangeKindAuditing(adapter, EntityChangeKind.UPDATE);
-        enlistForPreAndPostValueAuditing(adapter, aap->_PreAndPostValues.pre(aap.getPropertyValue()));
+        enlistForPreAndPostValueAuditing(adapter, _PropertyChangeRecord::updatePreValue);
     }
 
     private void enlistDeletingInternal(final @NonNull ManagedObject adapter) {
@@ -150,18 +145,18 @@ implements
         if(!enlisted) {
             return;
         }
-        enlistForPreAndPostValueAuditing(adapter, aap->_PreAndPostValues.pre(aap.getPropertyValue()));
+        enlistForPreAndPostValueAuditing(adapter, _PropertyChangeRecord::updatePreValue);
     }
 
     private Set<_PropertyChangeRecord> getPropertyChangeRecords() {
         // this code path has side-effects, it locks the result for this transaction,
         // such that cannot enlist on top of it
-        return changedObjectPropertiesRef.get();
+        return entityPropertyChangeRecordsForPublishing.get();
     }
 
     private boolean isEntityEnabledForChangePublishing(final @NonNull ManagedObject adapter) {
 
-        if(changedObjectPropertiesRef.isMemoized()) {
+        if(entityPropertyChangeRecordsForPublishing.isMemoized()) {
             throw _Exceptions.illegalState("Cannot enlist additional changes for auditing, "
                     + "since changedObjectPropertiesRef was already prepared (memoized) for auditing.");
         }
@@ -182,11 +177,14 @@ implements
      */
     @EventListener(value = TransactionBeforeCompletionEvent.class)
     public void onTransactionCompleting(TransactionBeforeCompletionEvent event) {
-        whilePublishing();
-        postPublishing();
+        try {
+            doPublish();
+        } finally {
+            postPublishing();    
+        }
     }
     
-    private void whilePublishing() {
+    private void doPublish() {
         log.debug("about to publish entity changes");
         entityPropertyChangePublisher.publishChangedProperties(this);
         entityChangesPublisher.publishChangingEntities(this);
@@ -194,9 +192,9 @@ implements
 
     private void postPublishing() {
         log.debug("purging entity change records");
-        enlistedEntityPropertiesForAuditing.clear();
+        entityPropertyChangeRecords.clear();
         changeKindByEnlistedAdapter.clear();
-        changedObjectPropertiesRef.clear();
+        entityPropertyChangeRecordsForPublishing.clear();
         entityChangeEventCount.reset();
         numberEntitiesLoaded.reset();
     }
@@ -262,48 +260,35 @@ implements
 
     private void enlistForPreAndPostValueAuditing(
             final ManagedObject entity,
-            final Function<_AdapterAndProperty, _PreAndPostValues> pre) {
+            final Consumer<_PropertyChangeRecord> fun) {
 
         log.debug("enlist entity's property changes for auditing {}", entity);
 
         entity.getSpecification().streamProperties(MixedIn.EXCLUDED)
         .filter(property->!property.isNotPersisted())
-        .map(property->_AdapterAndProperty.of(entity, property))
-        .filter(aap->!enlistedEntityPropertiesForAuditing.containsKey(aap)) // already enlisted, so ignore
-        .forEach(aap->{
-            enlistedEntityPropertiesForAuditing.put(aap, pre.apply(aap));
+        .map(property->_PropertyChangeRecord.of(entity, property))
+        .filter(record->!entityPropertyChangeRecords.contains(record)) // already enlisted, so ignore
+        .forEach(record->{
+            fun.accept(record);
+            entityPropertyChangeRecords.add(record);
         });
     }
 
     /**
-     * For any enlisted Object Properties collects those, that are meant for auditing,
+     * For any enlisted Object Properties collects those, that are meant for publishing,
      * then clears enlisted objects.
      */
     private Set<_PropertyChangeRecord> capturePostValuesAndDrain() {
 
-        val postValues = enlistedEntityPropertiesForAuditing.entrySet().stream()
-                .peek(this::updatePostOn) // set post values of audits, which have been left empty up to now
-                .filter(_PreAndPostValues::shouldAudit)
-                .map(entry->_PropertyChangeRecord.of(entry.getKey(), entry.getValue()))
+        val postValues = entityPropertyChangeRecords.stream()
+                .peek(managedProperty->managedProperty.updatePostValue()) // set post values, which have been left empty up to now
+                .filter(managedProperty->managedProperty.getPreAndPostValue().shouldPublish())
                 .collect(_Sets.toUnmodifiable());
 
-        enlistedEntityPropertiesForAuditing.clear();
+        entityPropertyChangeRecords.clear();
 
         return postValues;
 
-    }
-
-    private final void updatePostOn(Map.Entry<_AdapterAndProperty, _PreAndPostValues> enlistedEntry) {
-        val adapterAndProperty = enlistedEntry.getKey();
-        val preAndPostValues = enlistedEntry.getValue();
-        val entity = adapterAndProperty.getAdapter();
-        if(EntityUtil.isDestroyed(entity)) {
-            // don't touch the object!!!
-            // JDO, for example, will complain otherwise...
-            preAndPostValues.setPost(IsisTransactionPlaceholder.DELETED);
-        } else {
-            preAndPostValues.setPost(adapterAndProperty.getPropertyValue());
-        }
     }
 
     // -- METRICS SERVICE

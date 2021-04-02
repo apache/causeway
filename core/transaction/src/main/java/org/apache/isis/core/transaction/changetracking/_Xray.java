@@ -89,7 +89,9 @@ final class _Xray {
                 what,
                 ManagedObjects.isNullOrUnspecifiedOrEmpty(entity)
                     ? "<empty>"
-                    : entity.getSpecification().getLogicalTypeName());
+                    : String.format("%s:\n%s", 
+                            entity.getSpecification().getLogicalTypeName(),
+                            "" + entity.getPojo()));
         
         XrayUtil.createSequenceHandle(iaContextProvider.get(), authContextProvider.get(), "ec-tracker")
         .ifPresent(handle->{
