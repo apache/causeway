@@ -20,21 +20,15 @@ package org.apache.isis.core.transaction.changetracking;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
 import org.apache.isis.applib.annotation.EntityChangeKind;
 import org.apache.isis.applib.jaxb.JavaSqlXMLGregorianCalendarMarshalling;
+import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.publishing.spi.EntityChanges;
-import org.apache.isis.commons.internal.base._NullSafe;
-import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.commons.internal.collections._Multimaps.ListMultimap;
-import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.execution.InteractionInternal;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.schema.chg.v2.ChangesDto;
 import org.apache.isis.schema.chg.v2.ObjectsDto;
 import org.apache.isis.schema.common.v2.OidsDto;
@@ -63,7 +57,7 @@ final class _ChangingEntitiesFactory {
                 userName,
                 entityChangeTracker.currentInteraction(),
                 entityChangeTracker.numberEntitiesLoaded(),
-                entityChangeTracker.numberAuditedEntityPropertiesModified(),
+                entityChangeTracker.propertyChangeRecordCount(),
                 changeKindByEnlistedAdapter);
 
         return Optional.of(changingEntities);
@@ -77,7 +71,7 @@ final class _ChangingEntitiesFactory {
             final Interaction interaction,
             final int numberEntitiesLoaded,
             final int numberEntityPropertiesModified,
-            final Map<ManagedObject, EntityChangeKind> changeKindByEnlistedAdapter) {
+            final Map<Bookmark, EntityChangeKind> changeKindByEnlistedAdapter) {
 
         val interactionId = interaction.getInteractionId();
         final int nextEventSequence = ((InteractionInternal) interaction).getThenIncrementTransactionSequence();
@@ -100,17 +94,30 @@ final class _ChangingEntitiesFactory {
             final String userName, final java.sql.Timestamp completedAt,
             final int numberEntitiesLoaded,
             final int numberEntityPropertiesModified,
-            final Map<ManagedObject, EntityChangeKind> changeKindByEnlistedAdapter) {
-
-        // calculate the inverse of 'changesByAdapter'
-        final ListMultimap<EntityChangeKind, ManagedObject> adaptersByChange =
-            _Maps.invertToListMultimap(changeKindByEnlistedAdapter);
+            final Map<Bookmark, EntityChangeKind> changeKindByEnlistedEntity) {
 
         val objectsDto = new ObjectsDto();
-
-        objectsDto.setCreated(oidsDtoFor(adaptersByChange, EntityChangeKind.CREATE));
-        objectsDto.setUpdated(oidsDtoFor(adaptersByChange, EntityChangeKind.UPDATE));
-        objectsDto.setDeleted(oidsDtoFor(adaptersByChange, EntityChangeKind.DELETE));
+        objectsDto.setCreated(new OidsDto());
+        objectsDto.setUpdated(new OidsDto());
+        objectsDto.setDeleted(new OidsDto());
+        
+        changeKindByEnlistedEntity.forEach((bookmark, kind)->{
+            val oidDto = bookmark.toOidDto();
+            if(oidDto==null) {
+                return;
+            }
+            switch(kind) {
+            case CREATE:
+                objectsDto.getCreated().getOid().add(oidDto);
+                return;
+            case UPDATE:
+                objectsDto.getUpdated().getOid().add(oidDto);
+                return;
+            case DELETE:
+                objectsDto.getDeleted().getOid().add(oidDto);
+                return;
+            }
+        });
 
         objectsDto.setLoaded(numberEntitiesLoaded);
         objectsDto.setPropertiesModified(numberEntityPropertiesModified);
@@ -129,24 +136,6 @@ final class _ChangingEntitiesFactory {
         changesDto.setObjects(objectsDto);
         return changesDto;
     }
-
-    private static OidsDto oidsDtoFor(
-            final ListMultimap<EntityChangeKind, ManagedObject> adaptersByChange,
-            final EntityChangeKind kind) {
-        val oidsDto = new OidsDto();
-
-        _NullSafe.stream(adaptersByChange.get(kind))
-        .map((final ManagedObject adapter) ->
-            ManagedObjects.identify(adapter)
-            .map(RootOid::asOidDto)
-            .orElse(null)
-        )
-        .filter(Objects::nonNull)
-        .forEach(oidsDto.getOid()::add);
-
-        return oidsDto;
-    }
-
 
 
 }

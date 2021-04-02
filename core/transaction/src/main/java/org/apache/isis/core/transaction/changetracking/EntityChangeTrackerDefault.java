@@ -39,6 +39,7 @@ import org.apache.isis.applib.annotation.EntityChangeKind;
 import org.apache.isis.applib.annotation.InteractionScope;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.events.lifecycle.AbstractLifecycleEvent;
+import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.eventbus.EventBusService;
 import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.iactn.InteractionContext;
@@ -68,6 +69,7 @@ import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatingCallbackFa
 import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatingLifecycleEventFacet;
 import org.apache.isis.core.metamodel.facets.object.publish.entitychange.EntityChangePublishingFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjects;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.security.authentication.AuthenticationContext;
 import org.apache.isis.core.transaction.changetracking.events.IsisTransactionPlaceholder;
@@ -115,17 +117,19 @@ implements
         = _Lazy.threadSafe(this::capturePostValuesAndDrain);
 
     @Getter(AccessLevel.PACKAGE)
-    private final Map<ManagedObject, EntityChangeKind> changeKindByEnlistedAdapter = _Maps.newLinkedHashMap();
+    private final Map<Bookmark, EntityChangeKind> changeKindByEnlistedAdapter = _Maps.newLinkedHashMap();
 
     private boolean isEnlisted(final @NonNull ManagedObject adapter) {
-        return changeKindByEnlistedAdapter.containsKey(adapter);
+        return ManagedObjects.bookmark(adapter)
+        .map(changeKindByEnlistedAdapter::containsKey)
+        .orElse(false);
     }
 
     private void enlistCreatedInternal(final @NonNull ManagedObject adapter) {
         if(!isEntityEnabledForChangePublishing(adapter)) {
             return;
         }
-        enlistForChangeKindAuditing(adapter, EntityChangeKind.CREATE);
+        enlistForChangeKindPublishing(adapter, EntityChangeKind.CREATE);
         enlistForPreAndPostValueAuditing(adapter, record->record.setPreValue(IsisTransactionPlaceholder.NEW));
     }
 
@@ -133,7 +137,7 @@ implements
         if(!isEntityEnabledForChangePublishing(adapter)) {
             return;
         }
-        enlistForChangeKindAuditing(adapter, EntityChangeKind.UPDATE);
+        enlistForChangeKindPublishing(adapter, EntityChangeKind.UPDATE);
         enlistForPreAndPostValueAuditing(adapter, _PropertyChangeRecord::updatePreValue);
     }
 
@@ -141,11 +145,10 @@ implements
         if(!isEntityEnabledForChangePublishing(adapter)) {
             return;
         }
-        final boolean enlisted = enlistForChangeKindAuditing(adapter, EntityChangeKind.DELETE);
-        if(!enlisted) {
-            return;
+        final boolean enlisted = enlistForChangeKindPublishing(adapter, EntityChangeKind.DELETE);
+        if(enlisted) {
+            enlistForPreAndPostValueAuditing(adapter, _PropertyChangeRecord::updatePreValue);            
         }
-        enlistForPreAndPostValueAuditing(adapter, _PropertyChangeRecord::updatePreValue);
     }
 
     private Set<_PropertyChangeRecord> getPropertyChangeRecords() {
@@ -223,20 +226,22 @@ implements
     /**
      * @return <code>true</code> if successfully enlisted, <code>false</code> if was already enlisted
      */
-    private boolean enlistForChangeKindAuditing(
+    private boolean enlistForChangeKindPublishing(
             final @NonNull ManagedObject entity,
             final @NonNull EntityChangeKind changeKind) {
 
-        val previousChangeKind = changeKindByEnlistedAdapter.get(entity);
+        val bookmark = ManagedObjects.bookmarkElseFail(entity);
+        
+        val previousChangeKind = changeKindByEnlistedAdapter.get(bookmark);
         if(previousChangeKind == null) {
-            changeKindByEnlistedAdapter.put(entity, changeKind);
+            changeKindByEnlistedAdapter.put(bookmark, changeKind);
             return true;
         }
         switch (previousChangeKind) {
         case CREATE:
             switch (changeKind) {
             case DELETE:
-                changeKindByEnlistedAdapter.remove(entity);
+                changeKindByEnlistedAdapter.remove(bookmark);
             case CREATE:
             case UPDATE:
                 return false;
@@ -245,7 +250,7 @@ implements
         case UPDATE:
             switch (changeKind) {
             case DELETE:
-                changeKindByEnlistedAdapter.put(entity, changeKind);
+                changeKindByEnlistedAdapter.put(bookmark, changeKind);
                 return true;
             case CREATE:
             case UPDATE:
@@ -303,7 +308,7 @@ implements
         return changeKindByEnlistedAdapter.size();
     }
 
-    int numberAuditedEntityPropertiesModified() {
+    int propertyChangeRecordCount() {
         return getPropertyChangeRecords().size();
     }
 
