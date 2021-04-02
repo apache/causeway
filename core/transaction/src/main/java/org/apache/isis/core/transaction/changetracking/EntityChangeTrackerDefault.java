@@ -106,12 +106,13 @@ implements
     
 
     /**
-     * Used for publishing: this contains the pre- values of every property of every object enlisted.
+     * Contains initial change records having set the pre-values of every property of every object that was enlisted.
      */
     private final Set<_PropertyChangeRecord> entityPropertyChangeRecords = _Sets.newLinkedHashSet();
 
     /**
-     * Used for publishing; contains the pre- and post- values of every property of every object that actually changed.
+     * Contains pre- and post- values of every property of every object that actually changed. A lazy snapshot,
+     * triggered by internal call to {@link #snapshotPropertyChangeRecords()}.
      */
     private final _Lazy<Set<_PropertyChangeRecord>> entityPropertyChangeRecordsForPublishing 
         = _Lazy.threadSafe(this::capturePostValuesAndDrain);
@@ -130,7 +131,7 @@ implements
             return;
         }
         enlistForChangeKindPublishing(adapter, EntityChangeKind.CREATE);
-        enlistForPreAndPostValueAuditing(adapter, record->record.setPreValue(IsisTransactionPlaceholder.NEW));
+        enlistForPreAndPostValuePublishing(adapter, record->record.setPreValue(IsisTransactionPlaceholder.NEW));
     }
 
     private void enlistUpdatingInternal(final @NonNull ManagedObject adapter) {
@@ -138,7 +139,7 @@ implements
             return;
         }
         enlistForChangeKindPublishing(adapter, EntityChangeKind.UPDATE);
-        enlistForPreAndPostValueAuditing(adapter, _PropertyChangeRecord::updatePreValue);
+        enlistForPreAndPostValuePublishing(adapter, _PropertyChangeRecord::updatePreValue);
     }
 
     private void enlistDeletingInternal(final @NonNull ManagedObject adapter) {
@@ -147,11 +148,11 @@ implements
         }
         final boolean enlisted = enlistForChangeKindPublishing(adapter, EntityChangeKind.DELETE);
         if(enlisted) {
-            enlistForPreAndPostValueAuditing(adapter, _PropertyChangeRecord::updatePreValue);            
+            enlistForPreAndPostValuePublishing(adapter, _PropertyChangeRecord::updatePreValue);            
         }
     }
 
-    private Set<_PropertyChangeRecord> getPropertyChangeRecords() {
+    private Set<_PropertyChangeRecord> snapshotPropertyChangeRecords() {
         // this code path has side-effects, it locks the result for this transaction,
         // such that cannot enlist on top of it
         return entityPropertyChangeRecordsForPublishing.get();
@@ -181,7 +182,6 @@ implements
     @EventListener(value = TransactionBeforeCompletionEvent.class)
     public void onTransactionCompleting(TransactionBeforeCompletionEvent event) {
         try {
-            _Xray.publish(interactionContextProvider, authenticationContextProvider);
             doPublish();
         } finally {
             postPublishing();    
@@ -189,6 +189,8 @@ implements
     }
     
     private void doPublish() {
+        _Xray.publish(this, interactionContextProvider, authenticationContextProvider);
+        
         log.debug("about to publish entity changes");
         entityPropertyChangePublisher.publishChangedProperties(this);
         entityChangesPublisher.publishChangingEntities(this);
@@ -264,7 +266,7 @@ implements
         return previousChangeKind == null;
     }
 
-    private void enlistForPreAndPostValueAuditing(
+    private void enlistForPreAndPostValuePublishing(
             final ManagedObject entity,
             final Consumer<_PropertyChangeRecord> fun) {
 
@@ -286,14 +288,14 @@ implements
      */
     private Set<_PropertyChangeRecord> capturePostValuesAndDrain() {
 
-        val postValues = entityPropertyChangeRecords.stream()
+        val records = entityPropertyChangeRecords.stream()
                 .peek(managedProperty->managedProperty.updatePostValue()) // set post values, which have been left empty up to now
                 .filter(managedProperty->managedProperty.getPreAndPostValue().shouldPublish())
                 .collect(_Sets.toUnmodifiable());
 
         entityPropertyChangeRecords.clear();
 
-        return postValues;
+        return records;
 
     }
 
@@ -310,7 +312,7 @@ implements
     }
 
     int propertyChangeRecordCount() {
-        return getPropertyChangeRecords().size();
+        return snapshotPropertyChangeRecords().size();
     }
 
     // -- ENTITY CHANGE TRACKING
@@ -407,7 +409,7 @@ implements
             final String userName,
             final TransactionId txId) {
 
-        return getPropertyChangeRecords().stream()
+        return snapshotPropertyChangeRecords().stream()
                 .map(propertyChangeRecord->_EntityPropertyChangeFactory
                         .createEntityPropertyChange(timestamp, userName, txId, propertyChangeRecord))
                 .collect(Can.toCan());

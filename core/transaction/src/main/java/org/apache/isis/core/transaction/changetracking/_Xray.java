@@ -18,6 +18,8 @@
  */
 package org.apache.isis.core.transaction.changetracking;
 
+import java.awt.Color;
+
 import javax.inject.Provider;
 
 import org.apache.isis.applib.services.iactn.InteractionContext;
@@ -32,6 +34,7 @@ import lombok.val;
 final class _Xray {
 
     public static void publish(
+            final EntityChangeTrackerDefault entityChangeTrackerDefault, 
             final Provider<InteractionContext> iaContextProvider,
             final Provider<AuthenticationContext> authContextProvider) {
         
@@ -39,7 +42,10 @@ final class _Xray {
             return;
         }
         
-        val enteringLabel = String.format("do publish");
+        final int propertyChangeRecordCount = entityChangeTrackerDefault.propertyChangeRecordCount();
+        
+        val enteringLabel = String.format("do publish %d entity change records",
+                propertyChangeRecordCount);
         
         XrayUtil.createSequenceHandle(iaContextProvider.get(), authContextProvider.get(), "ec-tracker")
         .ifPresent(handle->{
@@ -47,6 +53,11 @@ final class _Xray {
             handle.submit(sequenceData->{
                 
                 sequenceData.alias("ec-tracker", "EntityChange-\nTracker-\n(Default)");
+                
+                if(propertyChangeRecordCount==0) {
+                    sequenceData.setConnectionArrowColor(Color.GRAY);
+                    sequenceData.setConnectionLabelColor(Color.GRAY);
+                }
                 
                 val callee = handle.getCallees().getFirstOrFail();
                 sequenceData.enter(handle.getCaller(), callee, enteringLabel);
