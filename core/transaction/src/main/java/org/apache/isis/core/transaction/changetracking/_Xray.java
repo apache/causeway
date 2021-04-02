@@ -31,6 +31,31 @@ import lombok.val;
 
 final class _Xray {
 
+    public static void publish(
+            final Provider<InteractionContext> iaContextProvider,
+            final Provider<AuthenticationContext> authContextProvider) {
+        
+        if(!XrayUi.isXrayEnabled()) {
+            return;
+        }
+        
+        val enteringLabel = String.format("do publish");
+        
+        XrayUtil.createSequenceHandle(iaContextProvider.get(), authContextProvider.get(), "ec-tracker")
+        .ifPresent(handle->{
+            
+            handle.submit(sequenceData->{
+                
+                sequenceData.alias("ec-tracker", "EntityChange-\nTracker-\n(Default)");
+                
+                val callee = handle.getCallees().getFirstOrFail();
+                sequenceData.enter(handle.getCaller(), callee, enteringLabel);
+                //sequenceData.activate(callee);
+            });
+            
+        });
+    }
+    
     public static void enlistCreated(
             final ManagedObject entity, 
             final Provider<InteractionContext> iaContextProvider,
@@ -108,6 +133,8 @@ final class _Xray {
         });
 
     }
+
+
     
 
 }

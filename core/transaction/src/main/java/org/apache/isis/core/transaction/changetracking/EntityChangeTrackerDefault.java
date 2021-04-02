@@ -181,6 +181,7 @@ implements
     @EventListener(value = TransactionBeforeCompletionEvent.class)
     public void onTransactionCompleting(TransactionBeforeCompletionEvent event) {
         try {
+            _Xray.publish(interactionContextProvider, authenticationContextProvider);
             doPublish();
         } finally {
             postPublishing();    
@@ -267,7 +268,7 @@ implements
             final ManagedObject entity,
             final Consumer<_PropertyChangeRecord> fun) {
 
-        log.debug("enlist entity's property changes for auditing {}", entity);
+        log.debug("enlist entity's property changes for publishing {}", entity);
 
         entity.getSpecification().streamProperties(MixedIn.EXCLUDED)
         .filter(property->!property.isNotPersisted())
