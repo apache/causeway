@@ -35,7 +35,7 @@
 		<jar-plugin.automaticModuleName>org.apache.isis.mavendeps</jar-plugin.automaticModuleName>
 		<git-plugin.propertiesDir>org/apache/isis/mavendeps</git-plugin.propertiesDir>
 
-		<lombok.version>1.18.18</lombok.version>
+		<lombok.version>1.18.20</lombok.version>
 
 		<failOnMissingWebXml>false</failOnMissingWebXml>
 
