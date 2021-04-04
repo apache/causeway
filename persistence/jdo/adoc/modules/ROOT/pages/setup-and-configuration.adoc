@@ -4,6 +4,9 @@
 
 
 
+This section describes how to include the JDO module and setup its configuration properties.
+
+
 == Maven pom.xml
 
 === Dependency Management
