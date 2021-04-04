@@ -82,7 +82,8 @@ public class AppManifest {
 == DataSource
 
 The JPA object store uses Spring to provide a `javax.sql.DataSource`.
-Normally this is done by setting the `spring.datasource` configuration properties.
+Normally this is done by setting the `spring.datasource` configuration properties, as described in the
+link:https://docs.spring.io/spring-boot/docs/current/reference/html/spring-boot-features.html#boot-features-connect-to-production-database-configuration[Spring Boot] documentation.
 
 For example, the xref:docs:starters:simpleapp.adoc[SimpleApp] starter app defines these:
 
@@ -114,7 +115,7 @@ It is also possible to programmatically define a `DataSource`; see the link:http
 
 == Other Configuration Properties
 
-The JPA object store also supports the following configuraiton properties:
+The JPA object store also supports the following configuration properties:
 
 * xref:refguide:config:sections/isis.persistence.schema.adoc#isis.persistence.schema.additional-orm-files[isis.persistence.schema.additional-orm-files]
 +
