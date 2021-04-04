@@ -113,6 +113,25 @@ It is also possible to programmatically define a `DataSource`; see the link:http
 
 
 
+== EclipseLink Configuration Properties
+
+The following configuration properties are fixed and cannot (as of this release) be overridden:
+
+* link:https://www.eclipse.org/eclipselink/documentation/2.7/jpa/extensions/persistenceproperties_ref.htm#weaving[eclipselink.weaving]
++
+is set to `false`
+
+* link:https://www.eclipse.org/eclipselink/documentation/2.7/jpa/extensions/persistenceproperties_ref.htm#BABHEJJI[eclipselink.ddl-generation]
++
+is set to `create-or-extend-tables`
+
+* `javax.persistence.bean.manager`
++
+is set to an Apache Isis implementation, to assist with dependency injection into entities.
+
+To set other EclipseLink configuration properties is possible though not convenient: use a subclass of xref:refguide:persistence:index/jpa/eclipselink/IsisModuleJpaEclipselink.adoc[] and override `getVendorProperties()`.
+
+
 == Other Configuration Properties
 
 The JPA object store also supports the following configuration properties:

@@ -13,35 +13,37 @@ git checkout asf-site
 git pull --ff-only
 ----
 
-* still in the `isis-site` repo, delete all the files in `content/` _except_ for the `schema` and `versions` directories:
+* still in the `isis-site` repo, run the `copyover.sh` script:
 +
 [source,bash,subs="attributes+"]
 ----
+sh copyover.sh
+----
++
+This deletes all the files in `content/` _except_ for the `schema` and `versions` directories, and copies the generated Antora site to `isis-site` repo's `contents` directory:
++
+[source,bash,subs="attributes+"]
+----
+#!/usr/bin/env bash
 pushd content
 for a in $(ls -1 | grep -v schema | grep -v versions)
 do
     rm -rf $a
 done
 popd
-----
 
-* Copy the generated Antora site to `isis-site` repo's `contents` directory:
-+
-[source,bash,subs="attributes+"]
-----
-cd ../isis
-
+pushd ../isis
 cp -Rf antora/target/site/* ../isis-site/content/.
-----
-
-* Back in the `isis-site` repo, commit the changes and preview:
-+
-[source,bash,subs="attributes+"]
-----
-cd ../isis-site
+popd
 
 git add .
-git commit -m "$ISISJIRA : production changes to website"
+----
+
+* Commit the changes and preview:
++
+[source,bash,subs="attributes+"]
+----
+git commit -m "updates website"
 
 sh preview.sh
 ----
