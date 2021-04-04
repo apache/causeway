@@ -134,9 +134,12 @@ fi
 export ANTORA_CMD=antora
 
 SECONDS=0
-echo "\$PLAYBOOK_FILE = $PLAYBOOK_FILE"
-sh build-site.sh $PLAYBOOK_FILE || exit 1
-
+if [[ "$SKIP_ANTORA_GENERATION" == "true" ]]; then
+  echo "skipping antora generation"
+else
+  echo "\$PLAYBOOK_FILE = $PLAYBOOK_FILE"
+  sh build-site.sh $PLAYBOOK_FILE || exit 1
+fi
 
 if [[ "$SKIP_SERVE" == "true" ]]; then
   echo "skipping serving"

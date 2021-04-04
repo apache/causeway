@@ -74,10 +74,17 @@ content:
       start_path: security/spring/src/main/adoc # security
       branches: HEAD
 
-
 # starters
     - url: .
       start_path: starters/adoc # docs
+      branches: HEAD
+
+# viewers
+    - url: .
+      start_path: viewers/restfulobjects/adoc # vro
+      branches: HEAD
+    - url: .
+      start_path: viewers/wicket/adoc # vw
       branches: HEAD
 
 
