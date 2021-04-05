@@ -18,11 +18,6 @@
  */
 package org.apache.isis.core.config;
 
-import org.eclipse.persistence.config.ProfilerType;
-import org.eclipse.persistence.sessions.SessionProfiler;
-import org.eclipse.persistence.tools.profiler.PerformanceMonitor;
-import org.eclipse.persistence.tools.profiler.PerformanceProfiler;
-import org.eclipse.persistence.tools.profiler.QueryMonitor;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.validation.annotation.Validated;
 
@@ -364,11 +359,11 @@ public class EclipselinkConfiguration {
      * <b>Allowed Values:</b>
      * <ul>
      * <li>"<code>NoProfiler</code>" (DEFAULT)
-     * <li>"<code>PerformanceMonitor</code>" - use {@link PerformanceMonitor}
-     * <li>"<code>PerformanceProfiler</code>" - use {@link PerformanceProfiler}
-     * <li>"<code>QueryMonitor</code>" - use {@link QueryMonitor}
+     * <li>"<code>PerformanceMonitor</code>" - use {@link org.eclipse.persistence.tools.profiler.PerformanceMonitor}
+     * <li>"<code>PerformanceProfiler</code>" - use {@link org.eclipse.persistence.tools.profiler.PerformanceProfiler}
+     * <li>"<code>QueryMonitor</code>" - use {@link org.eclipse.persistence.tools.profiler.QueryMonitor}
      * <li>"<code>DMSProfiler</code>" - use {@link org.eclipse.persistence.tools.profiler.oracle.DMSPerformanceProfiler}
-     * <li>the fully qualified name for a class that implements {@link SessionProfiler} interface
+     * <li>the fully qualified name for a class that implements {@link org.eclipse.persistence.sessions.SessionProfiler} interface
      * </ul>
      *
      * @see <a href="https://www.eclipse.org/eclipselink/documentation/2.7/jpa/extensions/persistenceproperties_ref.htm#profiler">eclipselink.profiler</a> docs
