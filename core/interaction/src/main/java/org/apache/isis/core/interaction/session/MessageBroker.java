@@ -59,35 +59,31 @@ public class MessageBroker implements Serializable {
         }
     }
 
-    // -- MESSAGES
+    // -- MESSAGES & WARNINGS
 
     public Can<String> drainMessages() {
         return copyAndClear(messages);
     }
 
     public void addMessage(final String message) {
-        synchronized ($lock) {
-            if(messages.contains(message)) {
-                // just ignore it...
-                return;
-            }
-            messages.add(message);
-        }
+        addIfNotAlreadyPresent(this.messages, message);
     }
-
-    // -- WARNINGS
 
     public Can<String> drainWarnings() {
         return copyAndClear(warnings);
     }
 
-    public void addWarning(final String message) {
+    public void addWarning(final String warning) {
+        addIfNotAlreadyPresent(this.warnings, warning);
+    }
+
+    private void addIfNotAlreadyPresent(List<String> strings, String string) {
         synchronized ($lock) {
-            if(warnings.contains(message)) {
+            if (strings.contains(string)) {
                 // just ignore it...
                 return;
             }
-            warnings.add(message);
+            strings.add(string);
         }
     }
 
