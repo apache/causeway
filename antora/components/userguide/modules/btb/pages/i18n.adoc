@@ -46,7 +46,8 @@ This design tackles all the issues of ``ResourceBundle``s:
 * the `.po` message format is such that any given message text to translate need only be translated once, even if it appears in multiple places in the application (eg "Name")
 * the `.po` message format includes translations for (optional) plural form as well as singular form
 * there are lots of freely available editors https://www.google.co.uk/search?q=.po+file+editor[to be found], many summarized on this https://www.drupal.org/node/11131[Drupal.org] webpage. +
-+ In fact, there are also online communities/platforms of translators to assist with translating files.
++
+In fact, there are also online communities/platforms of translators to assist with translating files.
 One such is https://crowdin.com/[crowdin] (nb: this link does not imply endorsement).
 
 In Apache Isis' implementation, if the translation is missing from the `.po` file then the original message text from the `.pot` file will be returned.

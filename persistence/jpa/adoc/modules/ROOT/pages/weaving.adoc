@@ -1,12 +1,17 @@
-= JPA/Eclipselink
+= Weaving
 
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
 
+A responsibility of all ORMs is lazy loading of related objects (so as not to load all the data in one go), and tracking of objects as they are modified (to flush back to the database).
 
-The JPA/EclipseLink object store enables domain objects to be persisted to relational databases.
-The object store is implemented using the link:https://www.eclipse.org/eclipselink/[EclipseLink] ORM, using the link:https://www.jcp.org/en/jsr/detail?id=317[JPA] API.
-EclipseLink is the reference implementation for JPA.
+With JPA, this is typically accomplished dynamically at runtime, using a Java agent.
+The xref:docs:starters:simpleapp.adoc[SimpleApp] and xref:docs:starters:helloworld.adoc[HelloWorld] starter apps demonstrate this, bundling the `spring-instrument-5.3.5.jar` file.
+To run, use:
 
-This component guide discuss how to setup the framework to use the JPA/EclipseLink object store, how to configure the ORM, and also provides some examples on common use cases.
+[source,bash]
+----
+-javaagent:lib/spring-instrument-5.3.5.jar
+----
 
+as a JVM argument (where the system properties also are located.)

@@ -55,8 +55,9 @@ The property should be hidden when displayed as a column of a table showing a st
 The property should be hidden when displayed as a column of a table, either an object's * collection or a standalone list.
 This combines `PARENTED_TABLES` and `STANDALONE_TABLES`.
 
-* `Where.NOWHERE` +
-+ The property should not be hidden, overriding any other metadata/conventions that would normally cause the property to be hidden. +
+* `Where.NOWHERE`
++
+The property should not be hidden, overriding any other metadata/conventions that would normally cause the property to be hidden. +
 
 For example, if a property is annotated with xref:refguide:applib:index/annotation/Title.adoc[@Title], then normally this should be hidden from all tables.
 Annotating with `@Property(where=Where.NOWHERE)` overrides this.

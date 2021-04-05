@@ -8,35 +8,52 @@ This section tackles the topic of enabling access to an Apache Isis application 
 
 There are a number of use-cases:
 
-* integration from other systems, eg for a subscriber on a pub/sub mechanism such as Camel, pushing changes through an Apache Isis domain model.
+* implementing a REST end point that needs to reach into the Apache Isis runtime
 
-* leveraging an Apache Isis application within a batch process
+** this could be a custom UI
+** this could be to integrate from other systems, eg a subscriber on a pub/sub event bus, pushing changes through an Apache Isis domain model.
+
+* calling from Quartz for a background batch process
 
 Note that the calling thread runs in the same process space as the Apache Isis domain object model (must be physically linked to the JAR files containing the domain classes).
-For use cases where the calling thread runs in some other process space (eg migrating data from a legacy system), then the xref:vro:ROOT:about.adoc[Restful Objects viewer] is usually the way to go.
 
-The key to headless access is the `IsisInteractionFactory` service, a singleton managed by Spring.
-Use it as follows:
+The xref:docs:starters:simpleapp.adoc[SimpleApp] starter app demonstrates the pattern with a custom UI controller:
 
 [source,java]
 ----
-@Service
-@lombok.RequiredArgsConstructor(onConstructor_ = { @Inject })
-private static class HeadlessAccess {
+@RestController
+@RequiredArgsConstructor
+class CustomController {
 
-    final IsisInteractionFactory isisInteractionFactory;
-    final TransactionService transactionService;
+    private final InteractionFactory interactionFactory;
+    private final TransactionalProcessor transactionalProcessor;
+    private final SimpleObjects simpleObjects;
 
-    @Override
-    public R call(AuthenticationSession session, Supplier<R> supplier) {
-        return isisInteractionFactory.callAuthenticated(session, () -> {
-            return transactionService.executeWithinTransaction(() -> {
-                    return supplier.get();
-                });
-        });
+    @GetMapping("/custom/simpleObjects")
+    List<SimpleObject> all() {
+        return callAuthenticated(newAuthentication(), () -> simpleObjects.listAll())
+                .optionalElseFail() // <.>
+                .orElse(Collections.emptyList()); // <.>
+    }
+
+    private SimpleAuthentication newAuthentication() {
+        return SimpleAuthentication.validOf(UserMemento.ofName("sven")); // <.>
+    }
+
+    private <T> Result<T> callAuthenticated(
+            final Authentication authentication,
+            final Callable<T> task) {
+
+        return interactionFactory.callAuthenticated(
+                authentication,
+                () -> transactionalProcessor
+                      .callWithinCurrentTransactionElseCreateNew(task));
     }
 }
 ----
+<.> re-throws exception that has occurred, if any
+<.> handles null case, if required
+<.> a more sophisticated implementation could inspect the HTTP request
 
 The API described here is reasonably low-level, allowing code to interact very directly with the Apache Isis metamodel and runtime.
 Such callers should be considered trusted: they do not (by default) honour any business rules eg implicit in the Isis annotations or hide/disable/validate methods.

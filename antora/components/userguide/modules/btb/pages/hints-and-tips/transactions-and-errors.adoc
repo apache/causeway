@@ -7,10 +7,10 @@
 In Apache Isis, every interaction (action invocation or property edit) is automatically wrapped in a transaction, and any repository query automatically does a flush before hand.
 
 What that means is that there's no need to explicitly start or commit transactions in Apache Isis; this will be done for you.
-Indeed, if you do try to manage transactions (eg by reaching into the JDO `PersistenceManager` exposed by the xref:pjdo:ROOT:services/IsisJdoSupport.adoc[IsisJdoSupport] domain service, then you are likely to confuse the framework and get a stack trace for your trouble.
+Indeed, if you do try to manage transactions (eg by reaching into the JDO `PersistenceManager` exposed by the xref:refguide:persistence:index/jdo/applib/services/JdoSupportService.adoc[JdoSupportService] domain service, then you are likely to confuse the framework and get a stack trace for your trouble.
 
 However, you can complete a given transaction and start a new one.
-This is sometimes useful if writing a xref:testing:fixtures:about.adoc#fixture-scripts[fixture script] which is going to perform some sort of bulk migration of data from an old system.
+This is sometimes useful if writing a xref:testing:fixtures:about.adoc[fixture script] which is going to perform some sort of bulk migration of data from an old system.
 For this use case, use the xref:refguide:applib:index/services/xactn/TransactionService.adoc[TransactionService].
 
 For example:

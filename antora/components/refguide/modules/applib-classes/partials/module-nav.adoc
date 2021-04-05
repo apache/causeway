@@ -1,9 +1,14 @@
 
 * xref:applib-classes:about.adoc[Classes]
 
+** xref:applib-classes:events.adoc[]
+
 ** xref:applib-classes:non-persisted-objects.adoc[Non-persisted objects]
 *** xref:applib:index/ViewModel.adoc[ViewModel]
 *** xref:applib:index/RecreatableDomainObject.adoc[RecreatableDomainObject]
+
+** xref:applib-classes:layout.adoc[Layout]
+
 
 ** xref:applib-classes:value-types.adoc[Value Types]
 *** xref:applib:index/value/Blob.adoc[Blob]
@@ -47,10 +52,6 @@
 *** xref:refguide:applib:index/mixins/system/DomainChangeRecord_openTargetObject.adoc[DomainChangeRecord_openTargetObject]
 
 
-
 ** xref:applib-classes:spec.adoc[Specification pattern]
-
-
-** xref:applib-classes:layout.adoc[Layout]
 
 

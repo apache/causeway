@@ -117,7 +117,13 @@ java.lang.Exception: java.lang.NoClassDefFoundError: javax/jdo/query/Persistable
 
 If you see this specific error message then check that you added the `javax.jdo` JAR that matches the version of DataNucleus used in your project (see _Factory Path_ configuration above).
 
-== Configure DataNucleus
+
+
+== JPA: Configure Eclipselink Weaving
+
+CAUTION: TODO - to document
+
+== JDO: Configure DataNucleus Enhancer
 
 [TIP]
 ====

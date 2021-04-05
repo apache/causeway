@@ -9,11 +9,13 @@ The xref:refguide:applib:index/annotation/DomainObject.adoc#editing[editing()] e
 The default is `AS_CONFIGURED`, meaning that the xref:refguide:config:sections/isis.applib.adoc#isis.applib.annotation.domain-object.editing[isis.applib.annotation.domain-object.editing]
 configuration property is used to determine the whether the object is modifiable:
 
-* `true` +
-+ the object's properties and collections are modifiable.
+* `true`
++
+the object's properties and collections are modifiable.
 
-* `false` +
-+ the object's properties and collections are read-only, ie _not_ modifiable.
+* `false`
++
+the object's properties and collections are read-only, ie _not_ modifiable.
 
 If there is no configuration property in `application.properties` then object are assumed to be modifiable.
 

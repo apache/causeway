@@ -120,16 +120,23 @@ If you plan to use link:https://projectlombok.org[Project Lombok] to reduce boil
 
 Let's see how to run both the app and the tests.
 
-=== Running the App
-
 We run the application by creating a Run configuration, using `Run > Edit Configurations`.
 
-There is one complication.
+There is one complication, which is the ORM.
+If the app uses xref:pjpa:ROOT:about.adoc[JPA], then dynamic class weaving should be configured.
+If the app uses xref:pjdo:ROOT:about.adoc[JDO], then Datanucleus enhancer should be configured.
+
+
+=== Running the App (JPA)
+
+CAUTION: TODO - to document
+
+=== Running the App (JDO)
+
 DataNucleus requires that all entities are bytecode enhanced.
 When building from the command line using Maven, the `datanucleus:enhance` Maven plugin takes care of this.
-When building within IntelliJ, though, there is no similar plugin.
 
-However, this is easily solved: we can just have IntelliJ run the enhance as a separate run configuration before the run configuration that runs the app itself.
+We can just have IntelliJ run the enhance as a separate run configuration before the run configuration that runs the app itself.
 
 First, set up the run configuration to do the enhance:
 
@@ -153,6 +160,15 @@ You should now be able to run the app using `Run > Run Configuration`.
 The same configuration can also be used to debug the app if you so need.
 
 
+.Dynamic Enhancement ?
+[sidebar]
+****
+Rather than statically enhancing the classes, an alternative -- at least in theory -- is to enhance the classes dynamically, at runtime.
+
+This plugin (not tested) purports to support this: link:https://plugins.jetbrains.com/plugin/11119-datanucleus-runtime-enhancement[].
+****
+
+
 === Running the Unit Tests
 
 The easiest way to run the unit tests is just to right click on the relevant package in the _Project Window_, and choose run unit tests.
@@ -170,14 +186,15 @@ Thereafter, you should run units by selecting this configuration (if you use the
 
 === Running the Integration Tests
 
-Integration tests can be run in the same way as unit tests, however the module must also have been enhanced.
+Integration tests can be run in the same way as unit tests.
 
 One approach is to initially run the tests use the right click on the `integtests` module:
 
 .Running Integ Tests from Project Explorer
 image::110-running-the-app/045-running-integ-tests.png[width="400px"]
 
-The tests might fail because the entities won't have been enhanced.
+
+If the app uses JDO, then the tests might fail because the entities won't have been enhanced.
 However, we can then easily update the run configuration to run the datanucleus enhancer goal (same as when running the application):
 
 .Integration Tests Run Configuration

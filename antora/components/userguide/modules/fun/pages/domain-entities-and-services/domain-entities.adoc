@@ -10,7 +10,9 @@ As such, they are mapped to a persistent object store, typically an RDBMS, with 
 
 The vast majority of such entities will be annotated with `@DomainObject(nature=ENTITY)`.
 In addition they will also require ORM metadata.
-For example, xref:pjdo:ROOT:about.adoc[JDO/DataNucleus] requires the
+
+* for xref:pjpa:ROOT:about.adoc[JPA/Eclipselink], this requires the `javax.persistence.Entity` annotation
+* for xref:pjdo:ROOT:about.adoc[JDO/DataNucleus], this requires the
 `@javax.jdo.annotations.PersistenceCapable` annotation.
 
 TIP: It is also possible to specify ORM metadata using `.xml` files.
@@ -18,10 +20,29 @@ TIP: It is also possible to specify ORM metadata using `.xml` files.
 In this section we discuss the mechanics of writing domain objects that comply with Apache Isis' programming model.
 
 
-[#persistencecapable]
-== PersistenceCapable (JDO)
+== Entities (JPA)
 
-Focusing for now on the xref:pjdo:ROOT:about.adoc[JDO API], entities are flagged as being "persistence capable", indicating how the ORM should manage their identity:
+JPA entities are typically defined using the `@javax.persistence.Entity` annotation, with additional annotations to define their primary key, scalar properties and relationships to other entities.
+
+For some examples, see:
+
+* https://www.baeldung.com/jpa-entities[Baeldung article on JPA entities]
+* https://spring.io/guides/gs/accessing-data-jpa/[Spring Data tutorial]
+* https://docs.jboss.org/hibernate/annotations/3.5/reference/en/html/entity.html#entity-mapping[JBoss tutorial]
+
+See the xref:pjpa:ROOT:about.adoc[JPA/Eclipselink object store] for further information on annotating domain entities.
+
+
+== Entities (JDO)
+
+See the xref:pjdo:ROOT:about.adoc[JDO/DataNucleus object store] for further information on annotating domain entities.
+
+[#persistencecapable]
+=== PersistenceCapable
+
+NOTE: This section is specific to the xref:pjdo:ROOT:about.adoc[JDO API]
+
+With the xref:pjdo:ROOT:about.adoc[JDO API], entities are flagged as being "persistence capable", indicating how the ORM should manage their identity:
 
 [source,java]
 ----
@@ -64,7 +85,9 @@ It isn't necessary to include this annotation -- at least, not for entities -- b
 In particular, its strongly recommended that the `objectType` (which acts like an alias to the concrete domain class) is specified; note that it corresponds to the schema/table for DataNucleus' `@PersistenceCapable` annotation.
 
 
-== Key Properties
+=== Key Properties (JDO)
+
+NOTE: This section is specific to the xref:pjdo:ROOT:about.adoc[JDO API]
 
 All domain entities will have some sort of mandatory key properties.
 The example below is a very simple case, where the entity is identified by a `name` property.
@@ -124,7 +147,9 @@ The ORM will create a no-arg constructor to allow domain entity to be rehydrated
 <.> Use `java.util.Comparator#comparing()` to implement `Comparable` interface.
 
 
-== Queries
+=== Queries (JDO)
+
+NOTE: This section is specific to the xref:pjdo:ROOT:about.adoc[JDO API]
 
 When using JDO, it's also common for domain entities to have queries annotated on them.
 These are used by repository domain services to query for instances of the entity:
@@ -163,10 +188,10 @@ The corresponding repository method for the above query is:
 [source,java]
 ----
 public List<SimpleObject> findByName(String name) {
-    return repositoryService.allMatches(              // <.>
-            new QueryDefault<>(SimpleObject.class,    // <.>
-                        "findByName",                 // <.>
-                        "name", name                  // <.>
+    return repositoryService.allMatches(            // <.>
+            Query.named(SimpleObject.class,         // <.>
+                        "findByName")               // <.>
+                   .withParameter("name", name)     // <.>
             );
 }
 
@@ -179,8 +204,4 @@ RepositoryService repositoryService;
 <.> Corresponds to the `:name` parameter in the query JDOQL string
 
 
-[TIP]
-====
-See the xref:pjdo:ROOT:about.adoc[JDO/DataNucleus object store] for further information on annotating domain entities.
-====
 

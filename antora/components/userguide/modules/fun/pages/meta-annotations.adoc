@@ -4,7 +4,7 @@
 :page-partial:
 
 
-Apache Isis supports the use of meta-annotations, as does Spring Boot and the ORM (xref:pjdo:ROOT:about.adoc[JDO/DataNucleus] from DN 5.x, JPA also supports this as of v2.2).
+Apache Isis supports the use of meta-annotations, as does Spring Boot and the ORM (xref:pjdo:ROOT:about.adoc[JDO/DataNucleus] from DN 5.x, xref:pjpa:ROOT:about.adoc[JPA/EclipseLink] from Eclipse 2.7 supporting JPA 2.2).
 
 This allows you to define custom annotations that are more descriptive of your domain model, and meta-annotate your custom annotations with those of Apache Isis, Spring or the ORM.
 In your domain model, you can just use the custom annotation.

@@ -85,8 +85,9 @@ Domain services can also be used for a number of other purposes:
 
 * to provide additional non-UI functionality; an example being to perform an address geocoding lookup against the google-maps API, or to perform some calculation, or attach a barcode, send an email etc
 
-* to act as a subscribers to the event bus, potentially influencing events fired by some other module (a key technique for decoupling large applications) +
-+ This is discussed in more detail below, in the section on xref:userguide:fun:overview.adoc#events[events].
+* to act as a subscribers to the event bus, potentially influencing events fired by some other module (a key technique for decoupling large applications)
++
+This is discussed in more detail below, in the section on xref:userguide:fun:overview.adoc#events[events].
 
 * to implement an link:https://en.wikipedia.org/wiki/Service_provider_interface[SPI] of the Apache Isis framework, most notably cross-cutting concerns such as security, command profiling, auditing and publishing.
 

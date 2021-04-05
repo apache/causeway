@@ -41,8 +41,9 @@ git checkout -b ISIS-999
 git push origin ISIS-999
 ----
 
-* `rebase` the topic branch periodically on master. +
-+ How often you do this will depend on whether you are collaborating with others on the feature.
+* `rebase` the topic branch periodically on master.
++
+How often you do this will depend on whether you are collaborating with others on the feature.
 You need to ensure that your co-worker has no outstanding work before you do this; otherwise it'll create merge conflict hell for them:
 +
 [source,bash]

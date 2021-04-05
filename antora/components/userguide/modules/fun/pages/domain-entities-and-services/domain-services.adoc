@@ -62,8 +62,8 @@ public CustomerRepository {
 
     public List<Customer> findByName(String name) {
         return repositoryService.allMatches(                    // <.>
-                new QueryDefault<>(Customer.class,
-                            "findByName", "name", name);
+                Query.named(Customer.class, "findByName")
+                    .withParameter("name", name));
     }
 
     public Customer newCustomer(...) {
@@ -90,7 +90,7 @@ There is no need to annotate the actions; they are implicitly hidden because of 
 [TIP]
 ====
 JDO/Datanucleus also supports link:http://www.datanucleus.org:15080/products/accessplatform_5_2/jdo/query.html#jdoql_typed[type-safe queries].
-These can be executed through the xref:pjdo:ROOT:services/IsisJdoSupport.adoc[IsisJdoSupport] domain service.
+These can be executed through the xref:refguide:persistence:index/jdo/applib/services/JdoSupportService.adoc[JdoSupportService] domain service.
 ====
 
 == Menu

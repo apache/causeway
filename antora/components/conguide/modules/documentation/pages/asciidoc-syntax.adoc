@@ -761,6 +761,11 @@ For example, the `setting-up/concepts/concepts.adoc` file starts:
 
 Asciidoctor includes support for the link:http://plantuml.com/[plantuml], allowing simple UML diagrams to be easily sketched.
 
+[TIP]
+====
+for much more on the layout of plantuml diagrams, see https://crashedmind.github.io/PlantUMLHitchhikersGuide/layout/layout.html
+====
+
 For example:
 
 ....
@@ -784,8 +789,6 @@ Driver - Car : drives >
 Car *- Wheel : have 4 >
 Car -- Person : < owns
 ----
-
-
 
 
 == C4 diagrams

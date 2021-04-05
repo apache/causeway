@@ -39,6 +39,8 @@ When there is a dependency, this is expressed in two ways: first, as a "physical
 
 We can see this for example in the `testing` module of the Excel library (artifactId of `isis-submodules-excel-testing`), where:
 
+
+
 [plantuml]
 .Testing submodule depends upon Applib submodule
 ----
