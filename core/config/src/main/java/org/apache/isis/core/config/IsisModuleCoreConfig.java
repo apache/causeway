@@ -55,10 +55,16 @@ import lombok.Data;
     IsisBeanTypeRegistryDefault.class,
     IsisSystemEnvironment.class,
     WebAppContextPath.class,
-    
+
 })
 @EnableConfigurationProperties({
         IsisConfiguration.class,
+        DatanucleusConfiguration.class,
+        EclipselinkConfiguration.class,
+        EclipselinkConfiguration.Weaving.class,
+        EclipselinkConfiguration.DdlGeneration.class,
+        EclipselinkConfiguration.Jdbc.BatchWriting.class,
+        EclipselinkConfiguration.Jdbc.CacheStatements.class,
         RestEasyConfiguration.class,
         IsisModuleCoreConfig.ConfigProps.class,
 })

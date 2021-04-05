@@ -33,6 +33,110 @@
           "target": "org.apache.isis.viewer.wicket.viewer.wicketapp.IsisWicketApplication"
         }
       }]
+    },
+    {
+      "name": "eclipselink.cache.database-event-listener",
+      "providers": [{
+        "name": "class-reference",
+        "parameters": {
+          "target": "org.eclipse.persistence.platform.database.events.DatabaseEventListener"
+        }
+      }]
+    },
+    {
+      "name": "eclipselink.descriptor.customizer",
+      "providers": [{
+        "name": "class-reference",
+        "parameters": {
+          "target": "org.eclipse.persistence.descriptors.ClassDescriptor"
+        }
+      }]
+    },
+    {
+      "name": "eclipselink.session.customizer",
+      "providers": [{
+        "name": "class-reference",
+        "parameters": {
+          "target": "org.eclipse.persistence.config.SessionCustomizer"
+        }
+      }]
+    },
+    {
+      "name": "eclipselink.exception-handler",
+      "providers": [{
+        "name": "class-reference",
+        "parameters": {
+          "target": "org.eclipse.persistence.exceptions.ExceptionHandler"
+        }
+      }]
+    },
+    {
+      "name": "eclipselink.ddl-generation",
+      "values": [
+        {
+          "value": "create-tables"
+        },
+        {
+          "value": "create-or-extend-tables"
+        },
+        {
+          "value": "drop-and-create-tables"
+        },
+        {
+          "value": "none"
+        }
+      ]
+    },
+    {
+      "name": "eclipselink.ddl-generation.output-mode",
+      "values": [
+        {
+          "value": "both"
+        },
+        {
+          "value": "database"
+        },
+        {
+          "value": "sql-script"
+        }
+      ]
+    },
+    {
+      "name": "eclipselink.jdbc.batch-writing",
+      "values": [
+        {
+          "value": "jdbc"
+        },
+        {
+          "value": "buffered"
+        },
+        {
+          "value": "oracle-jdbc"
+        },
+        {
+          "value": "none"
+        }
+      ]
+    },
+    {
+      "name": "eclipselink.jpql.validation",
+      "values": [
+        {
+          "value": "EclipseLink"
+        },
+        {
+          "value": "JPA 1.0"
+        },
+        {
+          "value": "JPA 2.0"
+        },
+        {
+          "value": "JPA 2.1"
+        },
+        {
+          "value": "None"
+        }
+      ]
     }
   ]
 }

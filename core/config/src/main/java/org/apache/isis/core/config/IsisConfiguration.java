@@ -23,6 +23,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
@@ -3009,4 +3010,40 @@ public class IsisConfiguration {
             return superType.isAssignableFrom(candidateClass);
         }
     }
+
+    @Target({ FIELD, METHOD, PARAMETER, ANNOTATION_TYPE })
+    @Retention(RUNTIME)
+    @Constraint(validatedBy = OneOfValidator.class)
+    @Documented
+    public @interface OneOf {
+
+        String[] value();
+
+        String message()
+                default "{org.apache.isis.core.config.IsisConfiguration.OneOf.message}";
+
+        Class<?>[] groups() default { };
+
+        Class<? extends Payload>[] payload() default { };
+    }
+
+
+    public static class OneOfValidator implements ConstraintValidator<OneOf, String> {
+
+        private List<String> allowed;
+
+        @Override
+        public void initialize(final OneOf assignableFrom) {
+            val value = assignableFrom.value();
+            allowed = value != null? Collections.unmodifiableList(Arrays.asList(value)): Collections.emptyList();
+        }
+
+        @Override
+        public boolean isValid(
+                final String candidateValue,
+                final ConstraintValidatorContext constraintContext) {
+            return allowed.contains(candidateValue);
+        }
+    }
+
 }
