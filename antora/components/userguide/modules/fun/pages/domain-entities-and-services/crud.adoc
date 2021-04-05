@@ -113,12 +113,12 @@ repositoryService.persistAndFlush(customer);
 
 When an object is persisted the framework will emit `ObjectPersistingEvent` and `ObjectPersistedEvent` xref:userguide:fun:overview.adoc#lifecycle-events[lifecycle events].
 
-=== Persistence by Reachability
+=== Persistence by Reachability (JDO)
 
-It is also possible to configure ORM to automatically persist domain entities if they are associated with other already-persistent entities.
+If using xref:pjdo:ROOT:about.adoc[JDO/DataNucleus], it is possible to configure ORM to automatically persist domain entities if they are associated with other already-persistent entities.
 This avoid the need to explicitly call "persist".
 
-If using xref:pjdo:ROOT:about.adoc[JDO/DataNucleus], this is done using xref:refguide:config:sections/jdo-datanucleus-conf.adoc#datanucleus.persistenceByReachabilityAtCommit[persistence-by-reachability] configuration property:
+This is done using xref:refguide:config:sections/jdo-datanucleus-conf.adoc#datanucleus.persistenceByReachabilityAtCommit[persistence-by-reachability] configuration property:
 
 [source,ini]
 .application.properties
@@ -126,40 +126,60 @@ If using xref:pjdo:ROOT:about.adoc[JDO/DataNucleus], this is done using xref:ref
 datanucleus.persistenceByReachabilityAtCommit=true
 ----
 
-One downside is that the code is arguably less easy to debug.
+One downside is that the code is arguably less easy to debug, and there may be performance implications.
 
 
 [[finding]]
-== Finding Objects (JDO)
+== Finding Objects
 
-Retrieving domain entities depends on the ORM.
-In the case of xref:pjdo:ROOT:about.adoc[JDO/DataNucleus], it typically requires a JDOQL query defined on the domain entity, and a corresponding repository service for that domain entity type.
-This repository calls the framework-provided xref:refguide:applib:index/services/repository/RepositoryService.adoc[RepositoryService] to actually submit the query.
+Retrieving domain entities depends on the ORM, though the xref:refguide:applib:index/services/repository/RepositoryService.adoc[RepositoryService] can be used as an abstraction over either if required.
 
-For example:
+
+[[finding-jpa]]
+=== Finding Objects (JPA)
+
+The easiest way to retrieve domain entities if using JPA is to leverage the capabilities of Spring Data.
+
+For example, simply by declaring this interface:
 
 [source,java]
 ----
-@javax.jdo.annotations.Queries({
-    @javax.jdo.annotations.Query(                       // <.>
-        name = "findByName",                            // <.>
-        value = "SELECT "                               // <.>
-                + "FROM com.mydomain.myapp.Customer "   // <.>
-                + "WHERE name.indexOf(:name) >= 0 ")    // <.>
-})
+public interface UserRepository extends Repository<User, Long> {
+
+  List<User> findByEmailAddressAndLastname(String emailAddress, String lastname);
+}
+----
+
+and Spring Data will create an implementation based on naming conventions.
+See the link:https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#reference[Spring Data] documentation for further details.
+
+It is also possible to declare JPQL queries , either on the repository method (using `javax.persistence.Query`) or on the entity (using `javax.persistence.NamedQuery`).
+
+On the entity, declare a named query, eg:
+
+[source,java]
+----
+@javax.persistence.Entity
+@javax.persistence.NamedQueries({
+    @javax.persistence.NamedQuery(          // <.>
+        name = "Customer.findByNameLike",   // <.>
+        query = "SELECT c " +               // <.>
+                "FROM Customer c " +        // <.>
+                "WHERE c.name LIKE :name"   // <.>
+    )
+    })
 ...
 public class Customer {
     // ...
 }
 ----
-<.> There may be several `@Query` annotations, nested within a `@Queries` annotation) defines queries using JDOQL.
+<.> There may be several `@NamedQuery` annotations, nested within a `@NamedQueries` annotation, defining queries using JPQL.
 <.> Defines the name of the query.
-<.> The definition of the query, using JDOQL syntax.
-<.> The fully-qualified class name.
-Must correspond to the class on which the annotation is defined (the framework checks this automatically on bootstrapping).
-<.> In this particular query, is an implementation of a LIKE "name%" query.
+<.> The definition of the query, using JPQL syntax.
+<.> The table name
+<.> The predicate, expressed using SQL syntax.
 
-and
+and in the corresponding repository, use xref:refguide:applib:index/services/repository/RepositoryService.adoc[RepositoryService]:
 
 [source,java]
 ----
@@ -173,19 +193,74 @@ public class CustomerRepository {
     private final RepositoryService repositoryService;
 
     public List<Customer> findByName(String name) {
-        return repositoryService.allMatches(            // <.>
-                new QueryDefault<>(Customer.class,      // <.>
-                            "findByName",               // <.>
-                            "name",                     // <.>
-                            name);
+        return repositoryService.allMatches(                            // <.>
+                Query.named(Customer.class, "Customer.findByNameLike")  // <.>
+                     .withParameter("name", "%" + name + "%");          // <.>
     }
 
 }
 ----
-<1>    The xref:refguide:applib:index/services/repository/RepositoryService.adoc[RepositoryService] is a generic facade over the JDO/DataNucleus API.
-<2> Specifies the class that is annotated with @Query
-<3> Corresponds to the `@Query#name` attribute
-<4> Corresponds to the `:name` parameter in the query JDOQL string
+<.> The xref:refguide:applib:index/services/repository/RepositoryService.adoc[RepositoryService] is a generic facade over the ORM API.
+<.> Specifies the class that is annotated with @NamedQuery, along with the `@NamedQuery#name` attribute
+<.> The `:name` parameter in the query JPQL string, and its corresponding value
+
+
+[[finding-jdo]]
+=== Finding Objects (JDO)
+
+
+In the case of xref:pjdo:ROOT:about.adoc[JDO/DataNucleus], it typically requires a JDOQL query defined on the domain entity, and a corresponding repository service for that domain entity type.
+This repository calls the framework-provided xref:refguide:applib:index/services/repository/RepositoryService.adoc[RepositoryService] to actually submit the query.
+
+For example:
+
+[source,java]
+----
+@javax.jdo.annotations.PersistenceCapable
+@javax.jdo.annotations.Queries({
+    @javax.jdo.annotations.Query(                       // <.>
+        name = "findByName",                            // <.>
+        value = "SELECT "                               // <.>
+                + "FROM com.mydomain.myapp.Customer "   // <.>
+                + "WHERE name.indexOf(:name) >= 0 ")    // <.>
+})
+...
+public class Customer {
+    // ...
+}
+----
+<.> There may be several `@Query` annotations, nested within a `@Queries` annotation, defining queries using JDOQL.
+<.> Defines the name of the query.
+<.> The definition of the query, using JDOQL syntax.
+<.> The fully-qualified class name.
+Must correspond to the class on which the annotation is defined (the framework checks this automatically on bootstrapping).
+<.> The predicate, expressed using Java syntax.
+In this particular query, is an implementation of a LIKE "name%" query.
+
+and in the corresponding repository, use xref:refguide:applib:index/services/repository/RepositoryService.adoc[RepositoryService]:
+
+[source,java]
+----
+import org.springframework.stereotype.Repository;
+import lombok.RequiredArgsConstructor;
+
+@Repository
+@RequiredArgsConstructor(onConstructor_ = {@Inject} )
+public class CustomerRepository {
+
+    private final RepositoryService repositoryService;
+
+    public List<Customer> findByName(String name) {
+        return repositoryService.allMatches(                // <.>
+                Query.named(Customer.class, "findByName")   // <.>
+                     .withParameter("name", name);          // <.>
+    }
+
+}
+----
+<.> The xref:refguide:applib:index/services/repository/RepositoryService.adoc[RepositoryService] is a generic facade over the ORM API.
+<.> Specifies the class that is annotated with @Query, along with the `@Query#name` attribute
+<.> The `:name` parameter in the query JDOQL string, and its corresponding value
 
 Whenever a query is submitted, the framework will automatically "flush" any pending changes.
 This ensures that the database query runs against an up-to-date table so that all matching instances (with respect to the current transaction) are correctly retrieved.
@@ -194,9 +269,9 @@ When an object is loaded from the database the framework will emit `ObjectLoaded
 
 === Type-safe queries
 
-DataNucleus also supports type-safe queries; these can be executed using the xref:pjdo:ROOT:services/IsisJdoSupport.adoc[IsisJdoSupport] (JDO-specific) domain service.
+DataNucleus also supports type-safe queries; these can be executed using the xref:refguide:persistence:index/jdo/applib/services/JdoSupportService.adoc[JdoSupportService] (JDO-specific) domain service.
 
-See xref:pjdo:ROOT:services/IsisJdoSupport.adoc#type-safe-jdoql-queries[here] for further details.
+See xref:refguide:persistence:index/jdo/applib/services/JdoSupportService.adoc#type-safe-jdoql-queries[JdoSupportService] for further details.
 
 [[updating]]
 == Updating Objects
@@ -208,7 +283,7 @@ That said, it is possible to "flush" pending changes:
 
 * xref:refguide:applib:index/services/xactn/TransactionService.adoc[TransactionService] acts at the Apache Isis layer, and flushes any pending object persistence or object deletions
 
-* (if using xref:pjdo:ROOT:about.adoc[JDO/DataNucleus]), the xref:pjdo:ROOT:services/IsisJdoSupport.adoc[IsisJdoSupport] domain service can be used reach down to the underlying JDO API, and perform a flush of pending object updates also.
+* (if using xref:pjdo:ROOT:about.adoc[JDO/DataNucleus]), the xref:refguide:persistence:index/jdo/applib/services/JdoSupportService.adoc[JdoSupportService] domain service can be used reach down to the underlying JDO API, and perform a flush of pending object updates also.
 
 When an object is updated the framework will emit `ObjectUpdatingEvent` and `ObjectUpdatedEvent` xref:userguide:fun:overview.adoc#lifecycle-events[lifecycle events].
 

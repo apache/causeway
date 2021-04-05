@@ -57,6 +57,10 @@ public class MessageBroker implements Serializable {
     }
 
     public void addMessage(final String message) {
+        if(messages.contains(message)) {
+            // just ignore it...
+            return;
+        }
         messages.add(message);
     }
 
