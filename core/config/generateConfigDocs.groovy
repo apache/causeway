@@ -119,13 +119,6 @@ groups+= new PropertyGroup() {{
 }}
 
 groups+= new PropertyGroup() {{
-    prefix = "datanucleus"
-    name = "DataNucleus"
-    properties: []
-    searchOrder = 100
-}}
-
-groups+= new PropertyGroup() {{
     prefix = "isis.viewer.restfulobjects"
     name = "Restful Objects Viewer"
     searchOrder = 501
@@ -134,6 +127,31 @@ groups+= new PropertyGroup() {{
 groups+= new PropertyGroup() {{
     prefix = "isis.viewer.wicket"
     name = "Wicket Viewer"
+    searchOrder = 501
+}}
+
+groups+= new PropertyGroup() {{
+    prefix = "datanucleus"
+    name = "DataNucleus Configuration"
+    properties: []
+    searchOrder = 100
+}}
+
+groups+= new PropertyGroup() {{
+    prefix = "eclipselink"
+    name = "Eclipselink Configuration"
+    searchOrder = 501
+}}
+
+groups+= new PropertyGroup() {{
+    prefix = "resteasy"
+    name = "RestEasy Configuration"
+    searchOrder = 501
+}}
+
+groups+= new PropertyGroup() {{
+    prefix = "spring"
+    name = "Spring Configuration"
     searchOrder = 501
 }}
 
@@ -176,18 +194,6 @@ groups+= new PropertyGroup() {{
 groups+= new PropertyGroup() {{
     prefix = "isis.legacy"
     name = "Legacy"
-    searchOrder = 501
-}}
-
-groups+= new PropertyGroup() {{
-    prefix = "resteasy"
-    name = "RestEasy Configuration"
-    searchOrder = 501
-}}
-
-groups+= new PropertyGroup() {{
-    prefix = "spring"
-    name = "Spring Configuration"
     searchOrder = 501
 }}
 
