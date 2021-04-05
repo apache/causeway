@@ -28,11 +28,11 @@ import org.apache.isis.commons.internal.collections._Lists;
 
 import lombok.val;
 
-/**        
+/**
  * Holder of queued up messages, to be accessed/drained cross interaction boundary.
- * 
- * @implNote Serializable and thread-safe 
- *  
+ *
+ * @implNote Serializable and thread-safe
+ *
  * @since 1.x
  */
 public class MessageBroker implements Serializable {
@@ -41,11 +41,11 @@ public class MessageBroker implements Serializable {
 
     // serializable lock
     private final Object $lock = new Object[0];
-    
+
     private final List<String> messages = _Lists.newArrayList();
     private final List<String> warnings = _Lists.newArrayList();
     private String applicationError;
-    
+
     public MessageBroker() {
     }
 
@@ -55,7 +55,7 @@ public class MessageBroker implements Serializable {
         synchronized ($lock) {
             warnings.clear();
             messages.clear();
-            applicationError = null;    
+            applicationError = null;
         }
     }
 
@@ -67,6 +67,10 @@ public class MessageBroker implements Serializable {
 
     public void addMessage(final String message) {
         synchronized ($lock) {
+            if(messages.contains(message)) {
+                // just ignore it...
+                return;
+            }
             messages.add(message);
         }
     }
@@ -88,7 +92,7 @@ public class MessageBroker implements Serializable {
     }
 
     // -- APPLICATION ERROR
-    
+
     public Optional<String> drainApplicationError() {
         synchronized ($lock) {
             final String error = applicationError;
