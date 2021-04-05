@@ -12,6 +12,14 @@ include::../section-hooks/datanucleus~pre.adoc[]
 |Default
 |Description
 |
+[[datanucleus]]
+datanucleus
+
+| 
+| null
+
+
+|
 [[datanucleus.cache.level2.mode]]
 datanucleus.cache.level2.mode
 

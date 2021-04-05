@@ -12,6 +12,14 @@ include::../section-hooks/resteasy~pre.adoc[]
 |Default
 |Description
 |
+[[resteasy]]
+resteasy
+
+| 
+| null
+
+
+|
 [[resteasy.jaxrs.app.registration]]
 resteasy.jaxrs.app.registration
 
