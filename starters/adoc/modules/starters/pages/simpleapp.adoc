@@ -637,8 +637,12 @@ src/main/java/
          ApplicationModule.java                                 <.>
       custom/
         restapi/
-          CustomController.class    <.>
+          CustomController.class                                <.>
         CustomModule.class
+      quartz/
+        job/
+          SampleJob.class                                       <.>
+        QuartzModule.class
       AppManifest.java                                          <.>
       SimpleApp.java                                            <.>
 ----
@@ -661,7 +665,9 @@ This integrates with Spring Boot's link:https://docs.spring.io/spring-boot/docs/
 +
 Discussed in more detail below.
 
-<.> Demonstrates how to implement custom REST controller using business logic.
+<.> Demonstrates how to implement a custom REST controller, accessing the domain object model managed by Apache Isis.
+
+<.> Demonstrates how to run quartz as a background service, accessing the domain object model managed by Apache Isis.
 
 <.> `AppManifest` is the top-level Spring link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/context/annotation/Configuration.html[@Configuration] that specifies the components of Apache Isis to use, along with the modules making up the application itself (ie `ApplicationModule`, which depends in turn on `SimpleModule`, and `CustomModule`).
 +
@@ -706,7 +712,7 @@ It looks like this:
 @Import({
         IsisModuleCoreRuntimeServices.class,                    // <.>
         IsisModuleSecurityShiro.class,                          // <.>
-        IsisModuleJdoDataNucleus5.class,                        // <.>
+        IsisModuleJpaEclipseLink.class,                         // <.>
         IsisModuleViewerRestfulObjectsJaxrsResteasy4.class,     // <.>
         IsisModuleViewerWicketViewer.class,                     // <.>
 
@@ -717,6 +723,7 @@ It looks like this:
 
         ApplicationModule.class,                                // <.>
         CustomModule.class,                                     // <9>
+        QuartzModule.class,                                     // <9>
 
         DomainAppDemo.class                                     // <.>
 })
@@ -732,9 +739,9 @@ public class AppManifest {
 <.> Enables the Shiro security mechanism.
 There are several security implementations, precisely one must be selected
 
-<.> Enables JDO/DataNucleus for persistence.
+<.> Enables JPA/Eclipselink for persistence.
 +
-If using JPA as the ORM, replace with `IsisModuleJpaEclipseLink.class`.
+If using JDO as the ORM, replace with `IsisModuleJdoDataNucleus5`.
 
 <.> Enables the xref:vro:ROOT:about.adoc[Restful Objects viewer] (ie REST API).
 
@@ -746,7 +753,7 @@ If using JPA as the ORM, replace with `IsisModuleJpaEclipseLink.class`.
 
 <.> Enables the xref:userguide:flyway:about.adoc[Flyway] integration.
 
-<.> References the application's module(s), in this case `ApplicationModule` and `CustomModule`.
+<.> References the application's module(s), in this case `ApplicationModule` , `CustomModule` and `QuartzModule`.
 +
 `ApplicationModule` is discussed below.
 
