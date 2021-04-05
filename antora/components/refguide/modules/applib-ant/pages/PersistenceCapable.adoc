@@ -74,8 +74,9 @@ The rules of precedence for determining a domain object's object type are:
 
 1. xref:refguide:applib-ant:Discriminator.adoc[@Discriminator]
 2. `@DomainObject#objectType`
-3. xref:refguide:applib-ant:PersistenceCapable.adoc[@PersistenceCapable], if at least the `schema` attribute is defined.  +
-+ If both `schema` and `table` are defined, then the value is "`schema.table`".
+3. xref:refguide:applib-ant:PersistenceCapable.adoc[@PersistenceCapable], if at least the `schema` attribute is defined.
++
+If both `schema` and `table` are defined, then the value is "`schema.table`".
 If only `schema` is defined, then the value is "`schema.className`".
 
 4. Fully qualified class name of the entity.
