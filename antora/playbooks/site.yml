@@ -167,29 +167,6 @@ content:
       start_path: incubator/mappings/microprofile/src/main/adoc # incubator
       branches: HEAD
 
-# legacy
-    - url: .
-      start_path: legacy/adoc # legacy
-      branches: HEAD
-    - url: .
-      start_path: legacy/extensions/core/applib/src/main/adoc # legacy
-      branches: HEAD
-    - url: .
-      start_path: legacy/extensions/core/commons/src/main/adoc # legacy
-      branches: HEAD
-    - url: .
-      start_path: legacy/extensions/core/metamodel/src/main/adoc # legacy
-      branches: HEAD
-    - url: .
-      start_path: legacy/extensions/core/runtime/src/main/adoc # legacy
-      branches: HEAD
-    - url: .
-      start_path: legacy/mappings/restclient/src/main/adoc # legacy
-      branches: HEAD
-    - url: .
-      start_path: legacy/subdomains/servletapi/src/main/adoc # legacy
-      branches: HEAD
-
 # mappings
     - url: .
       start_path: mappings/adoc # mappings

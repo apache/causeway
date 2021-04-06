@@ -91,9 +91,6 @@ global:
     "JavaFX Viewer": "org.apache.isis.incubator.viewer:isis-viewer-javafx.*"
     "Vaadin Viewer": "org.apache.isis.incubator.viewer:isis-viewer-vaadin.*"
 
-    Legacy: org.apache.isis.legacy.*
-
-
 commands:
   overview:
     description: "These tables summarize all Maven artifacts available with _Apache Isis_."

@@ -93,8 +93,6 @@ commands:
       "JavaFX Viewer": "org.apache.isis.incubator.viewer:isis-viewer-javafx.*"
       "Vaadin Viewer": "org.apache.isis.incubator.viewer:isis-viewer-vaadin.*"
 
-      Legacy: org.apache.isis.legacy.*
-
   index:
 
     namespacePartsSkipCount: 3
