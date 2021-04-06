@@ -5,11 +5,10 @@
 
 
 
-Sometimes though you may want to extend or change the representations generated.  This might be because you want to
-write a RESTful client that uses a particular library (say a JavaScript library or web components) that can only handle representations in a certain form.
+Sometimes though you may want to extend or change the representations generated.
+This might be because you want to write a RESTful client that uses a particular library (say a JavaScript library or web components) that can only handle representations in a certain form.
 
-Or, you might want to have Apache Isis generate representations according to some other "standard", of which there are
-many:
+Or, you might want to have Apache Isis generate representations according to some other "standard", of which there are many:
 
 * Mike Kelly's http://stateless.co/hal_specification.html[HAL] specification
 * Mike Amundsen's http://amundsen.com/media-types/collection/[Collection+JSON] specification
@@ -24,13 +23,12 @@ A good discussion about the relative merits of several of these different hyperm
 Or, of course, you may have your own internal specification that you wish to use.
 
 Supporting any of these alternative representations can be achieved by providing a suitable implementation of
-`ContentNegotiationService`.  The existing implementations (eg `ContentNegotiationServiceSimplified`) can be used as a
-starting point.
+`ContentNegotiationService`.
+The existing implementations can be used as a starting point.
 
-[NOTE]
+[CAUTION]
 ====
-These will, admittedly, need to access the internal APIs for the Apache Isis metamodel, and you should be aware that
-these are not formal API; they may change over time.  That said, they are very stable and have not changed
-significantly over the last few years.
+Any custom implementations will need to access the internal APIs for the Apache Isis metamodel.
+You should be aware that these are not formal API.
 ====
 

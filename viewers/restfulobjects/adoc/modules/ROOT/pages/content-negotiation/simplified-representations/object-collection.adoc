@@ -5,9 +5,7 @@
 
 
 
-If a domain object collection (section 17) is accessed with this profile, then the resultant representation is as
-an array of elements of key/value for each referenced object, and again each element the containing the key/value
-pairs of the properties of that object (a grid, again). +
+If a domain object collection (link:https://www.restfulobjects.org/spec/1.0/section-c/chapter-17.html[section 17]) is accessed with this profile, then the resultant representation is as an array of elements of key/value for each referenced object, and again each element the containing the key/value pairs of the properties of that object (a grid, again).
 
 In addition, the representation defined by the RO spec is also included, as a special object with a single `$$ro`
 property.

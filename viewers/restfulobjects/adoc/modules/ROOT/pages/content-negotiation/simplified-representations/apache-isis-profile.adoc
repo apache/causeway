@@ -6,30 +6,29 @@
 
 
 
-The RO spec uses the standard `Accept` header for content negotiation, and defines its own "profile" for the standard
-representations; these take the form:
+The RO spec uses the standard `Accept` header for content negotiation, and defines its own "profile" for the standard representations; these take the form:
 
 [source]
 ----
 Accept: application/json;profile="urn:org.restfulobjects:repr-types/xxx"
 ----
 
-where "xxx" varies by resource.  The detail can be found in section 2.4.1 of the RO spec.
+where "xxx" varies by resource.
+The detail can be found in link:https://www.restfulobjects.org/spec/1.0/section-a/chapter-02.html#_2-4-1-representationtype-profile-parameter[section 2.4.1] of the RO spec.
 
-The Apache Isis viewer also defines its own "Isis" profile which enables the client to request simplified
-representations for the most frequently accessed resources.  This is done by specifying an `Accept` header of:
+The Apache Isis viewer also defines its own "Isis" profile which enables the client to request simplified representations for the most frequently accessed resources.
+This is done by specifying an `Accept` header of:
 
 [source]
 ----
 Accept: application/json;profile="urn:org.apache.isis/v1"
 ----
 
-Not every resource supports this header, but the most commonly accessed ones do.  In each case the server will set the
+Not every resource supports this header, but the most commonly accessed ones do.
+In each case the server will set the
 `Content-Type` header so that the client knows how to process the representation.
 
 The link:https://www.youtube.com/watch?v=HMSqapQDY_4[screencast] demonstrates the feature.
-
-
 
 The sections below explain in a little more detail what is returned when this profile is activated.
 

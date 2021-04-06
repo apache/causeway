@@ -24,7 +24,7 @@ include::vw:ROOT:partial$security/user-registration.adoc[]
 
 == Restful Objects Viewer
 
-include::vro:ROOT:partial$security/web-xml.adoc[]
+include::vro:ROOT:partial$security/webmodule.adoc[]
 
 [[vro-user-registration]]
 === User-registration

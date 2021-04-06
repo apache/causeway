@@ -1,15 +1,13 @@
 
 
-
+* xref:vro:ROOT:setup-and-configuration.adoc[Setup and Configuration]
 * xref:vro:ROOT:ro-spec.adoc[RO Spec]
-* xref:vro:ROOT:architecture.adoc[Architecture]
-* xref:vro:ROOT:layout-resources.adoc[Layout Resources]
-* xref:vro:ROOT:health-check.adoc[Health Check]
-* xref:vro:ROOT:simplified-representations.adoc[Simplified Representations]
-* xref:vro:ROOT:simplified-representations-v2.adoc[Simplified Representations v2]
-* xref:vro:ROOT:configuration-properties.adoc[Configuration Properties]
+* xref:vro:ROOT:content-negotiation.adoc[Content Negotiation]
+** xref:vro:ROOT:content-negotiation/apache-isis-v1-profile.adoc[Apache Isis v1 Profile]
+//** xref:vro:ROOT:content-negotiation/apache-isis-v2-profile.INCOMPLETE.adoc[Simplified Representations v2]
+** xref:vro:ROOT:content-negotiation/other-representations.adoc[Other Representations]
 * xref:vro:ROOT:security.adoc[Security]
+* xref:vro:ROOT:layout-resources.adoc[Layout Resources]
 * xref:vro:ROOT:hints-and-tips.adoc[Hints-n-Tips]
-* xref:vro:ROOT:other-resources.adoc[Other Resources]
 
 

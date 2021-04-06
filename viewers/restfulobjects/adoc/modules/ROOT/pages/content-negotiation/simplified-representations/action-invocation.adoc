@@ -5,7 +5,7 @@
 
 
 
-When an action is invoked, it can return a domain object, a list, a scalar, or return nothing.
+When an action is invoked (link:https://www.restfulobjects.org/spec/1.0/section-c/chapter-19.html[section 19]) it can return a domain object, a list, a scalar, or return nothing.
 
 == Returning an Object
 

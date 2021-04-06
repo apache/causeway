@@ -38,7 +38,8 @@ import lombok.val;
  * <li>it looks up from the {@link HttpSession} using the value
  * {@link AuthenticationStrategyDefault#HTTP_SESSION_AUTHENTICATION_SESSION_KEY}</li>
  * </ul>
- * 
+ *
+ * @since 2.0 {@index}
  */
 public class AuthenticationStrategyDefault extends AuthenticationStrategyAbstract {
 
@@ -46,14 +47,14 @@ public class AuthenticationStrategyDefault extends AuthenticationStrategyAbstrac
 
     @Override
     public Authentication lookupValid(
-            final HttpServletRequest httpServletRequest, 
+            final HttpServletRequest httpServletRequest,
             final HttpServletResponse httpServletResponse) {
 
         val authenticationManager = super.getAuthenticationManager(httpServletRequest);
         val httpSession = getHttpSession(httpServletRequest);
 
         // use previously authenticated session if available
-        val authentication = (Authentication) 
+        val authentication = (Authentication)
                 httpSession.getAttribute(HTTP_SESSION_AUTHENTICATION_SESSION_KEY);
         if (authentication != null) {
             val sessionValid = authenticationManager.isSessionValid(authentication);
@@ -70,7 +71,7 @@ public class AuthenticationStrategyDefault extends AuthenticationStrategyAbstrac
             final HttpServletRequest httpServletRequest,
             final HttpServletResponse httpServletResponse,
             final Authentication authentication) {
-        
+
         val httpSession = getHttpSession(httpServletRequest);
         if(authentication != null) {
             httpSession.setAttribute(

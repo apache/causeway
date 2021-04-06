@@ -16,7 +16,7 @@
 #  under the License.
 
 name: vw
-title: "Wicket Viewer"
+title: "Web UI (Wicket Viewer)"
 version: 2.0.0-M5
 start_page: ROOT:about.adoc
 nav:
