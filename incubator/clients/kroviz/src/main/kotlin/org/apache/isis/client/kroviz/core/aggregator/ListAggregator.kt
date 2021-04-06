@@ -42,7 +42,7 @@ class ListAggregator(actionTitle: String) : AggregatorWithLayout() {
     override fun update(logEntry: LogEntry, subType: String) {
 
         if (logEntry.state == EventState.DUPLICATE) {
-            console.log("[LA.update] TODO duplicates should not be propagated to handlers")
+            console.log("[ListAggregator.update] TODO duplicates should not be propagated to handlers")
         } else {
             when (val obj = logEntry.getTransferObject()) {
                 null -> log(logEntry)

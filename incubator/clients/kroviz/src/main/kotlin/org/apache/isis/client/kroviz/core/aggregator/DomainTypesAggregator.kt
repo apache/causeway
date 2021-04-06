@@ -49,9 +49,8 @@ class DomainTypesAggregator(val url: String) : BaseAggregator() {
     }
 
     private fun handleAction(obj: Action) {
-        //dsp.addData(obj)
-        console.log("[DomainTypesAggregator.handleAction] TBD: what shall we do with the action object?")
         console.log(obj)
+        throw Throwable("[DomainTypesAggregator.handleAction] not implemented yet")  //dsp.addData(obj)
     }
 
     private fun handleDomainType(obj: DomainType) {

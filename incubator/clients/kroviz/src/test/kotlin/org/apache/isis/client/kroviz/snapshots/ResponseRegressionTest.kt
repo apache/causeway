@@ -18,11 +18,12 @@
  */
 package org.apache.isis.client.kroviz.snapshots
 
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.apache.isis.client.kroviz.snapshots.demo2_0_0.Response2Handler
 import org.apache.isis.client.kroviz.to.Link
 import org.apache.isis.client.kroviz.to.Method
 import org.apache.isis.client.kroviz.ui.kv.UiManager
-import pl.treksoft.kvision.require
+import org.w3c.workers.Client
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -32,19 +33,20 @@ import kotlin.test.assertTrue
  * This is an integration test that requires <Demo> running on http://localhost:8080
  * automate via -> @link https://bmuschko.com/blog/docker-integration-testing/
  * compare json -> @link https://stackoverflow.com/questions/26049303/how-to-compare-two-json-have-the-same-properties-without-order
+ * eventually use HttpClient? -> @link https://blog.kotlin-academy.com/how-to-create-a-rest-api-client-and-its-integration-tests-in-kotlin-multiplatform-d76c9a1be348
  */
 class ResponseRegressionTest {
 
     @BeforeTest
     fun setup() {
-//        require("xmlhttprequest").XmlHttpRequest;
         val user = "sven"
         val pw = "pass"
         val url = "http://${user}:${pw}@localhost:8080/restful/"
         UiManager.login(url, user, pw)
     }
 
-    //@Test  // invoking HttpRequest does not work - yet
+    @ExperimentalCoroutinesApi
+    @Test
     fun testCompareSnapshotWithResponse() {
         //given
         val map = Response2Handler.map
@@ -52,6 +54,7 @@ class ResponseRegressionTest {
         //when
         console.log("[RRT.testCompareSnapshotWithResponse]")
         map.forEach { rh ->
+
             val handler = rh.value
             val jsonStr = rh.key.str
             val expected = handler.parse(jsonStr)
@@ -60,14 +63,25 @@ class ResponseRegressionTest {
             console.log(href)
 
             val link = Link(method = Method.GET.operation, href = href)
-            val response = SyncRequest().invoke(link, credentials)
-
+            val response = invoke(link, credentials)
             val actual = handler.parse(response)
-
             assertEquals(expected, actual)
+            console.log("[RRT.testCompareSnapshotWithResponse]")
+            console.log(expected == actual)
+
         }
         //then
         assertTrue(true, "no exception in loop")
+    }
+
+    @ExperimentalCoroutinesApi
+    private fun invoke(link: Link, credentials: String): String {
+        return TestRequest().fetch(link, credentials)
+    }
+
+    private fun invokeSync(link: Link, credentials: String): String {
+      //  val hc = Client("id", link.href)
+        return "Why must this be so complicated?"
     }
 
 }

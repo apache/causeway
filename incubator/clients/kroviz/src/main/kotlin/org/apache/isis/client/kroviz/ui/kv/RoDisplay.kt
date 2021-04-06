@@ -38,6 +38,9 @@ class RoDisplay(val displayModel: ObjectDM) : Displayable, VPanel() {
         val model = displayModel.data!!
         val tObject: TObject = model.delegate
         val grid = displayModel.grid!!
+        console.log("[RD.init] tObject / grid")
+        console.log(tObject)
+        console.log(grid)
         objectPanel = LayoutBuilder().create(grid, tObject, this)
         objectPanel.width = CssSize(100, UNIT.perc)
         add(objectPanel)

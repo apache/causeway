@@ -45,6 +45,7 @@ class ObjectAggregator(val actionTitle: String) : AggregatorWithLayout() {
             is TObject -> handleObject(obj)
             is ResultObject -> handleResultObject(obj)
             is Property -> handleProperty(obj)
+            is Collection -> handleCollection(obj)
             is Layout -> handleLayout(obj, dpm as ObjectDM)
             is Grid -> handleGrid(obj)
             is HttpError -> ErrorDialog(logEntry).open()
@@ -74,9 +75,13 @@ class ObjectAggregator(val actionTitle: String) : AggregatorWithLayout() {
         invoke(selfLink!!, this)
     }
 
-    fun handleResultObject(obj: ResultObject) {
-        console.log("[OA.handleResultObject] TODO implement")
+    fun handleResultObject(resultObject: ResultObject) {
+        (dpm as ObjectDM).addResult(resultObject)
+    }
+
+    fun handleCollection(obj: Collection) {
         console.log(obj)
+        throw Throwable("[ObjectAggregator.handleCollection] not implemented yet")
     }
 
     override fun getObject(): TObject? {
@@ -84,8 +89,8 @@ class ObjectAggregator(val actionTitle: String) : AggregatorWithLayout() {
     }
 
     private fun handleProperty(property: Property) {
-        console.log("[OA.handleProperty] TODO implement")
         console.log(property)
+        throw Throwable("[ObjectAggregator.handleProperty] not implemented yet")
     }
 
     private fun handleGrid(grid: Grid) {

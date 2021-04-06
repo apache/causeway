@@ -37,7 +37,6 @@ class FieldSetBuilder {
         console.log("[FSB.init]")
         val members = tObject.getProperties()
         val items = mutableListOf<FormItem>()
-        console.log("Members: " + members.size)
         console.log("Layout-Properties: " + fieldSetLayout.propertyList.size)
 
         for (p in fieldSetLayout.propertyList) {

@@ -20,7 +20,7 @@ package org.apache.isis.client.kroviz.utils
 
 import org.w3c.dom.Document
 import org.w3c.dom.Element
-import kotlin.browser.document
+import kotlinx.browser.document
 
 external fun encodeURIComponent(encodedURI: String): String
 

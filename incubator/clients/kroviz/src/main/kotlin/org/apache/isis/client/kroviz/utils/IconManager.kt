@@ -39,6 +39,7 @@ object IconManager {
             "Close" to "times",
             "Configuration" to "wrench",
             "Connect" to "plug",
+            "Console" to "terminal",
             "Create" to "plus",
             "Debug" to "bug",
             "Delete" to "trash",
