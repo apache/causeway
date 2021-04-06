@@ -16,7 +16,7 @@ Subscribers (which must be domain services) subscribe to events posted through t
 
 [WARNING]
 ====
-The xref:vw:ROOT:about.adoc[Wicket viewer] does _not_ currently support the modification of collections; they are rendered read-only.
+The xref:vw:ROOT:about.adoc[Web UI (Wicket viewer)] does _not_ currently support the modification of collections; they are rendered read-only.
 However, domain events are still relevant to determine if such collections should be hidden.
 
 The workaround is to create add/remove actions and use xref:refguide:applib:index/annotation/MemberOrder.adoc[UI hints] to render them close to the collection.

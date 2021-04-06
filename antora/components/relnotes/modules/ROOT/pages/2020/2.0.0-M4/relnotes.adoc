@@ -16,7 +16,7 @@ This release also has a reworking/simplification of the command service and back
 This includes new extension modules to persist commands (xref:extensions:command-log:about.adoc[Command Log] and xref:extensions:command-replay:about.adoc[Command Replay], to assist regression testing.
 
 Also in this release, the xref:incubator:kroviz:about.adoc[Kroviz client] has been brought into the incubator.
-This is a single-page app that runs within the browser to provide a UI similar to that of the xref:vw:ROOT:about.adoc[Wicket Viewer], but interacting with the domain application exclusively through the REST API provided by the xref:vro:ROOT:about.adoc[Restful Objects Viewer].
+This is a single-page app that runs within the browser to provide a UI similar to that of the xref:vw:ROOT:about.adoc[Web UI (Wicket viewer)], but interacting with the domain application exclusively through the REST API provided by the xref:vro:ROOT:about.adoc[REST API (Restful Objects viewer)].
 
 The release also includes some preliminary work preparing the way for support for JPA (as an alternative to xref:pjdo:ROOT:about.adoc[JDO/DataNucleus].
 This support is expected to be in the next milestone release.

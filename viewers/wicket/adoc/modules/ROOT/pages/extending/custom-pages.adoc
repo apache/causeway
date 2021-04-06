@@ -8,7 +8,7 @@
 In the vast majority of cases customization should be sufficient by xref:vw:ROOT:extending.adoc#replacing-page-elements[replacing elements of a page].
 However, it is also possible to define an entirely new page for a given page type.
 
-Isis defines eight page types (see the `org.apache.isis.viewer.wicket.model.models.PageType` enum):
+The Wicket viewer defines these page types (see the `org.apache.isis.viewer.wicket.model.models.PageType` enum):
 
 .PageType enum
 [cols="1,4", options="header"]
@@ -30,6 +30,9 @@ Isis defines eight page types (see the `org.apache.isis.viewer.wicket.model.mode
 
 | HOME
 | The home page, displaying either the welcome message or dashboard
+
+| HOME_AFTER_PAGETIMEOUT
+| Variation on home page after a timeout.
 
 | ABOUT
 | The about page, accessible from link top-right
@@ -55,40 +58,17 @@ Isis defines eight page types (see the `org.apache.isis.viewer.wicket.model.mode
 The `PageClassList` interface declares which class (subclass of `org.apache.wicket.Page` is used to render for each of these types.
 For example, Apache Isis' `WicketSignInPage` renders the signin page.
 
-To specify a different page class, create a custom subclass of `PageClassList`:
+To specify a different page class, create a new implementation of `PageClassList` and annotate with an earlier precedence than the default.
+If you are just tweaking the defaults, then its easiest to override `PageClassListDefault`:
 
 [source,java]
 ----
-@Singleton
+@Service
+@Order(OrderPrecedence.EARLY)
 public class MyPageClassList extends PageClassListDefault {
     protected Class<? extends Page> getSignInPageClass() {
         return MySignInPage.class;
     }
 }
 ----
-
-
-You then need to register your custom `PageClassList`.
-This is done by subclassing `IsisWicketApplication` (register the subclass in `web.xml`) and adjusting the Guice bindings of the guice `Module` returned by the `newIsisWicketModule()` method:
-
-[source,java]
-----
-public class MyAppApplication extends IsisWicketApplication {
-    @Override
-    protected Module newIsisWicketModule() {
-        final Module isisDefaults = super.newIsisWicketModule();
-        final Module myAppOverrides = new AbstractModule() {
-            @Override
-            protected void configure() {
-                ...
-                bind(PageClassList.class).to(MyPageClassList.class);
-                ...
-            }
-        };
-        return Modules.override(isisDefaults).with(myAppOverrides);
-    }
-}
-----
-
-
 

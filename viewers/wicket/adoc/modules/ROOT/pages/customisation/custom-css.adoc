@@ -1,5 +1,5 @@
-[[tweaking-css-classes]]
-= Tweaking CSS classes
+[[custom-css]]
+= Custom CSS
 
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
@@ -177,7 +177,7 @@ For example:
 ----
 <1> the parent class identifier
 <2> the collection identifier.
-This element's class also has the entity type within the collection (as xref:vw:ROOT:customisation/tweaking-css-classes.adoc#columns-in-tables_globally[discussed above]).
+This element's class also has the entity type within the collection (as xref:vw:ROOT:customisation/custom-css.adoc#columns-in-tables_globally[discussed above]).
 
 Using this, the `productRef` property could be targeted using:
 
@@ -221,7 +221,7 @@ For example:
 </div>
 ----
 <1> action identifier.
-This element's class also identifies the entity type within the collection (as xref:vw:ROOT:customisation/tweaking-css-classes.adoc#columns-in-tables_globally[discussed above]).
+This element's class also identifies the entity type within the collection (as xref:vw:ROOT:customisation/custom-css.adoc#columns-in-tables_globally[discussed above]).
 
 Using this, the `quantity` property could be targeted using:
 

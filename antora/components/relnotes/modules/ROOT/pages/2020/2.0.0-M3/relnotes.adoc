@@ -27,10 +27,10 @@ This milestone also introduces a number of new features:
 
 * New extensions:
 ** xref:userguide:flyway:about.adoc[Flyway] (integrating with Spring Boot's support)
-** xref:vro:cors:[CORS] for the REST API (xref:vro:ROOT:about.adoc[Restful Objects viewer])
-** xref:vw:pdfjs:about.adoc[pdf.js] (for xref:vw:ROOT:about.adoc[Wicket viewer])
-** xref:vw:fullcalendar:about.adoc[fullcalendar] (for xref:vw:ROOT:about.adoc[Wicket viewer])
-** xref:vw:exceldownload:about.adoc[excel download] (for xref:vw:ROOT:about.adoc[Wicket viewer])
+** xref:vro:cors:[CORS] for the REST API (xref:vro:ROOT:about.adoc[REST API (Restful Objects viewer)])
+** xref:vw:pdfjs:about.adoc[pdf.js] (for xref:vw:ROOT:about.adoc[Web UI (Wicket viewer)])
+** xref:vw:fullcalendar:about.adoc[fullcalendar] (for xref:vw:ROOT:about.adoc[Web UI (Wicket viewer)])
+** xref:vw:exceldownload:about.adoc[excel download] (for xref:vw:ROOT:about.adoc[Web UI (Wicket viewer)])
 
 Improvements:
 

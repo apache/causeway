@@ -8,7 +8,7 @@ The xref:refguide:applib:index/annotation/CollectionLayout.adoc#paged[paged()] e
 [WARNING]
 ====
 The xref:vro:ROOT:about.adoc[RestfulObjects viewer] currently does not support paging.
-The xref:vw:ROOT:about.adoc[Wicket viewer] _does_ support paging, but note that the paging is performed client-side rather than server-side.
+The xref:vw:ROOT:about.adoc[Web UI (Wicket viewer)] _does_ support paging, but note that the paging is performed client-side rather than server-side.
 
 We therefore recommend that large collections should instead be modelled as actions (to allow filtering to be applied to limit the number of rows).
 ====

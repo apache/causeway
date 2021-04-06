@@ -6,11 +6,11 @@
 
 The xref:refguide:applib:index/annotation/ActionLayout.adoc#bookmarking[bookmarking()] element indicates if an action (with safe xref:refguide:applib:index/annotation/Action.adoc#semantics[action semantics]) is automatically bookmarked.
 
-In the xref:vw:ROOT:about.adoc[Wicket viewer], a link to a bookmarked object is shown in the bookmarks panel.
+In the xref:vw:ROOT:about.adoc[Web UI (Wicket viewer)], a link to a bookmarked object is shown in the bookmarks panel.
 
 [TIP]
 ====
-The xref:vw:ROOT:about.adoc[Wicket viewer] supports `alt-[` as a shortcut for opening the bookmark panel.  `Esc` will close.
+The xref:vw:ROOT:about.adoc[Web UI (Wicket viewer)] supports `alt-[` as a shortcut for opening the bookmark panel.  `Esc` will close.
 ====
 
 

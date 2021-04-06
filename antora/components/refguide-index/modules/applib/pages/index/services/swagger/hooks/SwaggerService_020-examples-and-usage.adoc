@@ -4,7 +4,7 @@
 
 == Usage Notes
 
-Not all of the REST API exposed by the xref:vro:ROOT:about.adoc[Restful Objects viewer] is included in the Swagger schema definition files; the emphasis is those REST resources that are used to develop custom apps: domain objects, domain object collections and action invocations.
+Not all of the REST API exposed by the xref:vro:ROOT:about.adoc[REST API (Restful Objects viewer)] is included in the Swagger schema definition files; the emphasis is those REST resources that are used to develop custom apps: domain objects, domain object collections and action invocations.
 
 When combined with Apache Isis' own xref:vro:ROOT:simplified-representations.adoc[simplified representations], these are pretty much all that is needed  for this use case.
 
@@ -16,7 +16,7 @@ The service is_not_ (currently) used by the framework itself; it is provided as 
 
 * xref:refguide:viewer:index/restfulobjects/rendering/service/swagger/SwaggerServiceMenu.adoc[SwaggerServiceMenu]
 +
-part of the xref:vro:ROOT:about.adoc[Restful Objects viewer], this provides a prototype action that enables the swagger spec to be downloaded from theUI.
+part of the xref:vro:ROOT:about.adoc[REST API (Restful Objects viewer)], this provides a prototype action that enables the swagger spec to be downloaded from theUI.
 
 * xref:refguide:testing:index/integtestsupport/applib/swagger/SwaggerExporter.adoc[SwaggerExporter]
 +

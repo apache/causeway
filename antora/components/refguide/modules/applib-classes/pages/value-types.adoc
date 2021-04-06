@@ -52,3 +52,5 @@ The framework also defines a number of custom value types:
 * xref:refguide:applib:index/value/LocalResourcePath.adoc[LocalResourcePath]
 * xref:refguide:applib:index/value/Password.adoc[Password]
 
+In addition, there are a number of non-core value types that can be brought in individually.
+These can be found in the xref:valuetypes:ROOT:about.adoc[Value Type Catalog].

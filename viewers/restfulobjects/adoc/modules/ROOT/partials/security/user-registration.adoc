@@ -5,7 +5,7 @@
 
 WARNING: TODO - v2 : this documentation has not yet been updated.
 
-Unlike the Wicket viewer, the xref:vro:ROOT:about.adoc[Restful Objects viewer] does *not* provide any sort of login page; rather it provides a pluggable authentication strategy, delegated to by the `IsisSessionFilter` filter (set up by the framework's web bootstrapping).
+Unlike the Wicket viewer, the xref:vro:ROOT:about.adoc[REST API (Restful Objects viewer)] does *not* provide any sort of login page; rather it provides a pluggable authentication strategy, delegated to by the `IsisSessionFilter` filter (set up by the framework's web bootstrapping).
 The authentication strategy is responsible for ensuring that a session is available for the REST resource.
 
 The API of `AuthenticationSessionStrategy` is simply:

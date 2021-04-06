@@ -53,7 +53,7 @@ This can be configured in `authentication_shiro.properties` file:
 isis.security.shiro.autoLogoutIfAlreadyAuthenticated=false
 ----
 
-This configuration property only comes into effect for the xref:vro:ROOT:about.adoc[Restful Objects viewer]; if set then the Shiro subject - if found to be still authenticated - will be logged out anyway and then re-authenticated.
+This configuration property only comes into effect for the xref:vro:ROOT:about.adoc[REST API (Restful Objects viewer)]; if set then the Shiro subject - if found to be still authenticated - will be logged out anyway and then re-authenticated.
 
 [WARNING]
 ====

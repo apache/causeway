@@ -5,6 +5,6 @@
 
 == Implementation
 
-The xref:vw:ROOT:about.adoc[Wicket viewer] provides an implementation of this service (`TranslationsResolverWicket`) which leverages Apache Wicket APIs.  This searches for translation files in the standard `WEB-INF/` directory.
+The xref:vw:ROOT:about.adoc[Web UI (Wicket viewer)] provides an implementation of this service (`TranslationsResolverWicket`) which leverages Apache Wicket APIs.  This searches for translation files in the standard `WEB-INF/` directory.
 
 There is no equivalent implementation for the xref:vro:ROOT:about.adoc[RestfulObjects viewer].

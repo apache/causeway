@@ -6,12 +6,12 @@
 
 This requirement from the users mailing list:
 
-"Suppose you want to build a monitoring application, eg for an electricity grid. Data is updated in the background (eg via the Restful Objects REST API).
-What is needed is the ability to show an entity that includes a map, and have it auto-refresh every 5 seconds or so."
+* _"Suppose you want to build a monitoring application, eg for an electricity grid. Data is updated in the background (eg via the Restful Objects REST API).
+What is needed is the ability to show an entity that includes a map, and have it auto-refresh every 5 seconds or so."_
 
 Here's one (somewhat crude, but workable) way to accomplish this.
 
-* First, update the domain object to return custom CSS: +
+* First, update the domain object to return custom CSS:
 +
 [source,java]
 ----
@@ -22,9 +22,10 @@ public class MyDomainObject {
 }
 ----
 
-* Then, use JavaScript in `scripts/application.js` (under `src/main/webapp/`) to reload:
+* Then, use xref:customisation.adoc#custom-javascript[custom JavaScript] to reload:
 +
 [source,javascript]
+.scripts/application.js
 ----
 $(function() {
     if ($(".my-special-auto-updating-entity").length) {

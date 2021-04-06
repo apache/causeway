@@ -32,11 +32,11 @@ Its xref:refguide:applib:index/annotation/DomainService.adoc#nature[#nature()] a
 
 * `VIEW` (the default if not specified)
 +
-which indicates that the actions should appear on the menu of the xref:vw:ROOT:about.adoc[Wicket viewer], and as top-level actions for the REST API provided by the xref:vro:ROOT:about.adoc[Restful Objects viewer].
+which indicates that the actions should appear on the menu of the xref:vw:ROOT:about.adoc[Web UI (Wicket viewer)], and as top-level actions for the REST API provided by the xref:vro:ROOT:about.adoc[REST API (Restful Objects viewer)].
 
 * `REST`
 +
-which indicates that the actions should appear in the REST API provided by the xref:vro:ROOT:about.adoc[Restful Objects viewer], but not rendered by the xref:vw:ROOT:about.adoc[Wicket viewer].
+which indicates that the actions should appear in the REST API provided by the xref:vro:ROOT:about.adoc[REST API (Restful Objects viewer)], but not rendered by the xref:vw:ROOT:about.adoc[Web UI (Wicket viewer)].
 
 It's also possible to define a "programmatic" domain service, meaning one that is instantiated and injected by Spring Boot, but is not visible in the UI or REST API.
 For example, the xref:subdomains:docx:about.adoc[Docx Library] provides a domain service that performs mail merge using MS Word, but this domain service is not intended to appear in the UI.
@@ -97,10 +97,10 @@ These can be executed through the xref:refguide:persistence:index/jdo/applib/ser
 
 Menu services provide actions to be rendered on the menu.
 
-For the xref:vw:ROOT:about.adoc[Wicket Viewer], each service's actions appear as a collection of menu items of a named menu, and this menu is on one of the three menu bars provided by the Wicket viewer.
+For the xref:vw:ROOT:about.adoc[Web UI (Wicket viewer)], each service's actions appear as a collection of menu items of a named menu, and this menu is on one of the three menu bars provided by the Wicket viewer.
 Although these can be organised using annotations, it's usually easier to use a xref:vw:ROOT:menubars-layout.adoc#file-based[file-based layout file] (`menubars.layout.xml`).
 
-For the xref:vro:ROOT:about.adoc[Restful Objects Viewer], all menu services are shown in the services representation.
+For the xref:vro:ROOT:about.adoc[REST API (Restful Objects viewer)], all menu services are shown in the services representation.
 
 [source,java]
 ----

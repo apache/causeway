@@ -13,7 +13,7 @@ These classes fall into two main categories:
 * common component classes, that capture the layout metadata for an object's properties, collections and actions.
 These are bound (or associated) to the regions of the grid
 
-The framework provides an implementation of the grid classes modelled closely on link:http://getbootstrap.com[Bootstrap 3], along with xref:vw:ROOT:about.adoc[Wicket viewer] components capable of rendering that grid system.
+The framework provides an implementation of the grid classes modelled closely on link:http://getbootstrap.com[Bootstrap 3], along with xref:vw:ROOT:about.adoc[Web UI (Wicket viewer)] components capable of rendering that grid system.
 In principle it is also possible to extend the layout architecture for other grid systems.
 The component classes, though, are intended to be reusable across all grid systems.
 
@@ -21,7 +21,7 @@ The component classes, meanwhile, are broadly equivalent to the "layout" annotat
 
 All of the classes in this package are JAXB-annotated, meaning that they can be serialized to/from XML (the `component` classes in the `http://isis.apache.org/applib/layout/component` XSD namespace, the bootstrap 3 grid classes in the `http://isis.apache.org/applib/layout/grid/bootstrap3` XSD namespace).
 This ability to serialize to/from XML is used by the xref:refguide:applib:index/services/grid/GridLoaderService.adoc[GridLoaderService], the default implementation of which reads the grid layout for a domain class from a `.layout.xml` file on the classpath.
-It also allows the grid to be exposed through the REST API provided by the xref:vro:ROOT:about.adoc[Restful Objects viewer], as either XML or JSON.
+It also allows the grid to be exposed through the REST API provided by the xref:vro:ROOT:about.adoc[REST API (Restful Objects viewer)], as either XML or JSON.
 
 The various components (properties, collections, actions and domain object) also allow a link to be associated with each.
 These links are populated by the framework automatically when exposing the object layout grid through the REST API, pointing back to the standard Restful Objects resources.
@@ -105,7 +105,7 @@ These map to Bootstrap's link:http://getbootstrap.com/css/#responsive-utilities[
 As you can probably guess, the `BS3Grid` is the top-level object (that is, it is JAXB `@XmlRootElement`); this is the object that is serialized to/from XML.
 
 All of these classes also allow custom CSS to be specified; these are added to the CSS classes for the corresponding `<div`> in the rendered page.
-The xref:vw:ROOT:customisation.adoc#tweaking-css-classes[application.css] file can then be used for application-specific CSS, allowing arbitrary fine-tuning of the layout of the page.
+The xref:vw:ROOT:customisation.adoc#custom-css[application.css] file can then be used for application-specific CSS, allowing arbitrary fine-tuning of the layout of the page.
 
 The XSD for these classes is available at link:http://isis.apache.org/applib/layout/menubars/bootstrap3/menubars.xsd[].
 

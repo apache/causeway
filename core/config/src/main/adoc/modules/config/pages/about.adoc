@@ -19,7 +19,7 @@ This chapter describes the configuration properties available to configure an Ap
 Apache Isis distinguishes between the application being run in prototyping mode vs running in production mode.
 The framework calls this the "deployment type" (corresponding internally to the `DeploymentType` class).
 
-A similar concept appears in the link:https://wicket.apache.org[Apache Wicket] framework (which is the library with which the xref:vw:ROOT:about.adoc[Wicket viewer] is implemented, of course).
+A similar concept appears in the link:https://wicket.apache.org[Apache Wicket] framework (which is the library with which the xref:vw:ROOT:about.adoc[Web UI (Wicket viewer)] is implemented, of course).
 Wicket's term is the "configuration".
 
 .Wicket equivalent concepts
@@ -132,7 +132,7 @@ It looks like this:
 @Import({
         IsisModuleCoreRuntimeServices.class,                    // <.>
         IsisModuleSecurityShiro.class,                          // <.>
-        IsisModuleJdoDataNucleus5.class,                        // <.>
+        IsisModuleJpaEclipselink.class,                         // <.>
         IsisModuleViewerRestfulObjectsJaxrsResteasy4.class,     // <.>
         IsisModuleViewerWicketViewer.class,                     // <.>
         ...
@@ -146,10 +146,14 @@ public class AppManifest {
 <.> Mandatory - specifies the core of the Apache Isis framework
 <.> Enables the Shiro security mechanism.
 There are several security implementations, precisely one must be selected
-<.> Enables JDO/DataNucleus for persistence.
+<.> Enables xref:pjpa:ROOT:about.adoc[JPA/Eclipselink] for persistence.
++
+Alternatively, `IsisModuleJdoDataNucleus5.class` would be specified in order to use xref:pjdo:ROOT:about.adoc[JDO/DataNucleus] instead.
++
 Optional (though if omitted then only xref:userguide:fun:overview.adoc#view-models[view models] may be used, with hand-rolled persistence).
-<.> Enables the xref:vro:ROOT:about.adoc[Restful Objects viewer] (ie REST API).
-<.> Enables the xref:vw:ROOT:about.adoc[Wicket viewer]
+
+<.> Enables the xref:vro:ROOT:about.adoc[REST API (Restful Objects viewer)].
+<.> Enables the xref:vw:ROOT:about.adoc[Web UI (Wicket viewer)]
 <.> References the application's module(s), in this case just the one, `ApplicationModule`. +
 
 All of the components available are named in the form`IsisModuleXxx`, so they are easy to discover.
@@ -165,7 +169,13 @@ For that matter, so do some of the xref:subdomains:ROOT:about.adoc[subdomain] li
 
 The remainder of this guide lists the various configuration properties available, broken out into logical sections.
 
-=== `IsisConfiguration` domain service
+=== IsisConfiguration domain service
 
 Applications can discover the current configuration properties for the framework (under the `isis` top-level key) by injecting the `IsisConfiguration` domain service.
+There are similar domain services for xref:pjpa:ROOT:about.adoc[JPA/Eclipselink] (`EclipselinkConfiguration`), xref:pjdo:ROOT:about.adoc[JDO/DataNucleus] (`DatanucleusConfiguration`) and RestEasy (`RestEasyConfiguration`),  as used by xref:vro:ROOT:about.adoc[REST API (Restful Objects viewer)].
+
 Applications can also create their own configuration properties file; the xref:docs:starters:simpleapp.adoc[simpleapp] starter app provides an example.
+
+
+
+include::application-specific/application-css.adoc[leveloffset=+1]

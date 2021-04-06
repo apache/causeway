@@ -39,7 +39,7 @@ But then again, having a separate read model just so that the querying is very s
 It is possible though to use Apache Isis in a CQRS style.
 The entities would have no behaviour in and of themselves to modify their state, they would just be data structures.
 The behaviour (commands) would instead be implemented as xref:userguide:fun:mixins.adoc[mixins] that act upon those commands.
-In the UI (surfaced by the xref:vw:ROOT:about.adoc[Wicket viewer]) or in the REST API (surfaced by the xref:vro:ROOT:about.adoc[RestfulObjects viewer]) the behaviour appears to reside on the domain object; however the behaviour actually resides on separate classes and is mixed in (like a trait), only at runtime.
+In the UI (surfaced by the xref:vw:ROOT:about.adoc[Web UI (Wicket viewer)]) or in the REST API (surfaced by the xref:vro:ROOT:about.adoc[RestfulObjects viewer]) the behaviour appears to reside on the domain object; however the behaviour actually resides on separate classes and is mixed in (like a trait), only at runtime.
 However, this wouldn't be true CQRS because those mixins would modify those entities which would then be flushed back to the single database.
 
 Apache Isis' cross-cutting design does allow for denormalized data stores to be implemented.

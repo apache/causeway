@@ -1,0 +1,304 @@
+= Setup and Configuration
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+
+This section describes how to include the Wicket module and set its configuration properties.
+
+
+== Maven pom.xml
+
+=== Dependency Management
+
+If your application inherits from the Apache Isis starter app (`org.apache.isis.app:isis-app-starter-parent` then that will define the version automatically:
+
+[source,xml,subs="attributes+"]
+.pom.xml
+----
+<parent>
+    <groupId>org.apache.isis.app</groupId>
+    <artifactId>isis-app-starter-parent</artifactId>
+    <version>{page-isisrel}</version>
+    <relativePath/>
+</parent>
+----
+
+Alternatively, import the core BOM.
+This is usually done in the top-level parent pom of your application:
+
+[source,xml,subs="attributes+"]
+.pom.xml
+----
+<dependencyManagement>
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-core</artifactId>
+            <version>{page-isisrel}</version>
+            <version>2.0.0-SNAPSHOT</version>
+            <scope>import</scope>
+            <type>pom</type>
+        </dependency>
+    </dependencies>
+</dependencyManagement>
+----
+
+
+=== Dependency
+
+In the webapp module, add the following dependency:
+
+[source,xml]
+.pom.xml
+----
+<dependencies>
+    <dependency>
+        <groupId>org.apache.isis.mavendeps</groupId>
+        <artifactId>isis-mavendeps-webapp</artifactId>
+        <type>pom</type>
+    </dependency>
+</dependencies>
+----
+
+
+== Update AppManifest
+
+In your application's `AppManifest` (top-level Spring `@Configuration` used to bootstrap the app), import the
+
+[source,java]
+.AppManifest.java
+----
+@Configuration
+@Import({
+        ...
+        IsisModuleViewerWicketViewer.class,
+        ...
+})
+public class AppManifest {
+}
+----
+
+
+== Configuration Properties
+
+The xref:refguide:config:about.adoc[Configuration Guide] includes a xref:refguide:config:sections/isis.viewer.wicket.adoc[section] for the Wicket viewer.
+
+
+=== Application Identity
+
+Configuration properties that identify the application, in the sign-in page, welcome and about pages:
+
+* xref:refguide:config:sections/isis.viewer.wicket.adoc#isis.viewer.wicket.application.about[isis.viewer.wicket.application.about]
+* xref:refguide:config:sections/isis.viewer.wicket.adoc#isis.viewer.wicket.application.brand-logo-header[isis.viewer.wicket.application.brand-logo-header]
+* xref:refguide:config:sections/isis.viewer.wicket.adoc#isis.viewer.wicket.application.brand-logo-signin[isis.viewer.wicket.application.brand-logo-signin]
+* xref:refguide:config:sections/isis.viewer.wicket.adoc#isis.viewer.wicket.application.css[isis.viewer.wicket.application.css]
+* xref:refguide:config:sections/isis.viewer.wicket.adoc#isis.viewer.wicket.application.js[isis.viewer.wicket.application.js]
+* xref:refguide:config:sections/isis.viewer.wicket.adoc#isis.viewer.wicket.application.name[isis.viewer.wicket.application.name]
+* xref:refguide:config:sections/isis.viewer.wicket.adoc#isis.viewer.wicket.application.version[isis.viewer.wicket.application.version]
++
+This is discussed in more detail <<application-versioning,below>>.
+* xref:refguide:config:sections/isis.viewer.wicket.adoc#isis.viewer.wicket.welcome.text[isis.viewer.wicket.welcome.text]
+
+
+[#application-versioning]
+==== Application versioning
+
+If the xref:refguide:config:sections/isis.viewer.wicket.adoc#isis.viewer.wicket.application.version[isis.viewer.wicket.application.version] configuration property is present, then this will be shown in the footer on every page as well as on the about page.
+
+Maintaining this configuration property manually could be error prone, so an alternative approach is to configure your build system to generate a version identifier automatically.
+
+For example, the version `20181115.2011.EST-1862.8d8e1c16` consists of four parts:
+
+* the date of the build
+* the time of the build (to the nearest minute)
+* the branch
+* the git shaId
+
+This can be computed using a simple script, for example:
+
+[source,bash]
+----
+DATE=$(date +%Y%m%d.%H%M)
+BRANCH=$(echo $GIT_BRANCH | sed 's|^rel/||g' | sed 's|[.]|_|g' | awk -F/ '{ print $NF }')
+GIT_SHORT_COMMIT=$(echo $GIT_COMMIT | cut -c1-8)
+APPLICATION_VERSION=$DATE.$BRANCH.$GIT_SHORT_COMMIT
+----
+
+where `$GIT_BRANCH` and `$GIT_COMMIT` are provided by the CI server/build environment.
+
+This environment variable can be passed into the (Maven) build using a system property, for example:
+
+[source,bash]
+----
+mvn -DapplicationVersion=$APPLICATION_VERSION clean install
+----
+
+Suppose we now provide a file `application-version.properties` is in the same package as the app manifest file, but in the `src/main/resources` directory:
+
+[source,ini]
+.application-version.properties
+----
+isis.viewer.wicket.application.version=$\{applicationVersion}
+----
+
+then Maven will automatically interpolate the actual revision when this file is copied over to the build (ie `target/classes`) directory.
+
+The last step is for Spring Boot to also load this file.
+One way to do this is using the Spring link:https://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/context/annotation/PropertySource.html[@PropertySource] annotation on the top-level "app manifest":
+
+[source,java]
+----
+@Configuration
+@Import({
+        // ...
+        IsisModuleViewerWicketViewer.class,
+
+        // ...
+})
+@PropertySource("classpath:application-version.properties")     //<.>
+public class AppManifest {
+}
+----
+<.> picks up the additional configuration property.
+
+
+
+
+
+[#sign-in-sign-up-and-remember-me]
+=== Sign-in, Sign-up and Remember Me
+
+Configuration properties that influence the behaviour and appearance of the sign-in page.
+
+
+* xref:refguide:config:sections/isis.viewer.wicket.adoc#isis.viewer.wicket.remember-me.cookie-key[isis.viewer.wicket.remember-me.cookie-key]
+* xref:refguide:config:sections/isis.viewer.wicket.adoc#isis.viewer.wicket.remember-me.encryption-key[isis.viewer.wicket.remember-me.encryption-key]
+* xref:refguide:config:sections/isis.viewer.wicket.adoc#isis.viewer.wicket.remember-me.suppress[isis.viewer.wicket.remember-me.suppress]
+* xref:refguide:config:sections/isis.viewer.wicket.adoc#isis.viewer.wicket.suppress-password-reset[isis.viewer.wicket.suppress-password-reset]
+* xref:refguide:config:sections/isis.viewer.wicket.adoc#isis.viewer.wicket.suppress-sign-up[isis.viewer.wicket.suppress-sign-up]
+
+
+=== Header and Footer
+
+Configuration properties that influence the appearance of the header and footer panels:
+
+* xref:refguide:config:sections/isis.viewer.wicket.adoc#isis.viewer.wicket.credit[isis.viewer.wicket.credit]
++
+For example:
++
+[source,yaml]
+.application.yml
+----
+isis:
+  viewer:
+    wicket:
+      credit:
+        - url:  http://isis.apache.org
+          image: images/apache-isis/logo-48x48.png
+          name: Apache Isis
+----
+
+Up to three credits can be provided.
+
+See also the xref:vw:ROOT:setup-and-configuration.adoc#bookmarks-and-breadcrumbs[bookmarks and breadcrumbs] and xref:vw:ROOT:setup-and-configuration.adoc#themes
+[themes] configuration properties, because these also control UI elements that appear on the header/footer panels.
+
+
+[#presentation]
+=== Presentation
+
+These configuration properties that effect the overall presentation and appearance of the viewer:
+
+* xref:refguide:config:sections/isis.viewer.wicket.adoc#isis.viewer.wicket.max-title-length-in-tables[isis.viewer.wicket.max-title-length-in-tables]
+* xref:refguide:config:sections/isis.viewer.wicket.adoc#isis.viewer.wicket.max-title-length-in-parented-tables[isis.viewer.wicket.max-title-length-in-parented-tables]
+* xref:refguide:config:sections/isis.viewer.wicket.adoc#isis.viewer.wicket.max-title-length-in-standalone-tables[isis.viewer.wicket.max-title-length-in-standalone-tables]
+* xref:refguide:config:sections/isis.viewer.wicket.adoc#isis.viewer.wicket.prompt-style[isis.viewer.wicket.prompt-style]
+* xref:refguide:config:sections/isis.viewer.wicket.adoc#isis.viewer.wicket.dialog-mode[isis.viewer.wicket.dialog-mode]
+* xref:refguide:config:sections/isis.viewer.wicket.adoc#isis.viewer.wicket.dialog-mode-for-menu[isis.viewer.wicket.dialog-mode-for-menu]
+
+
+And these configuration properties provide defaults for xref:refguide:applib-ant:about.adoc[annotations] that also will effect the overall presentation and appearance of the viewer:
+
+* xref:refguide:config:sections/isis.applib.adoc#isis.applib.annotation.collection-layout.default-view[isis.applib.annotation.collection-layout.default-view]
+* xref:refguide:config:sections/isis.applib.adoc#isis.applib.annotation.collection-layout.paged[isis.applib.annotation.collection-layout.paged]
+* xref:refguide:config:sections/isis.applib.adoc#isis.applib.annotation.domain-object-layout.paged[isis.applib.annotation.domain-object-layout.paged]
+* xref:refguide:config:sections/isis.applib.adoc#isis.applib.annotation.property-layout.label-position[isis.applib.annotation.property-layout.label-position]
+
+
+
+
+[#bookmarks-and-breadcrumbs]
+=== Bookmarks and Breadcrumbs
+
+These configuration properties enable or disable the mechanisms for locating previously accessed objects.
+
+* xref:refguide:config:sections/isis.viewer.wicket.adoc#isis.viewer.wicket.breadcrumbs.max-parent-chain-length[isis.viewer.wicket.breadcrumbs.max-parent-chain-length]
+* xref:refguide:config:sections/isis.viewer.wicket.adoc#isis.viewer.wicket.bookmarked-pages.max-size[isis.viewer.wicket.bookmarked-pages.max-size]
+* xref:refguide:config:sections/isis.viewer.wicket.adoc#isis.viewer.wicket.bookmarked-pages.show-chooser[isis.viewer.wicket.bookmarked-pages.show-chooser]
+* xref:refguide:config:sections/isis.viewer.wicket.adoc#isis.viewer.wicket.bookmarked-pages.show-drop-down-on-footer[isis.viewer.wicket.bookmarked-pages.show-drop-down-on-footer]
+
+
+=== Themes
+
+These configuration properties control the switching of themes.
+
+* xref:refguide:config:sections/isis.viewer.wicket.adoc#isis.viewer.wicket.themes.enabled[isis.viewer.wicket.themes.enabled]
+* xref:refguide:config:sections/isis.viewer.wicket.adoc#isis.viewer.wicket.themes.initial[isis.viewer.wicket.themes.initial]
++
+[TIP]
+====
+Set this configuration property to different values for different environments (dev, test, prod) so you can know at a glance which environment you are connected to.
+====
+
+* xref:refguide:config:sections/isis.viewer.wicket.adoc#isis.viewer.wicket.themes.show-chooser[isis.viewer.wicket.themes.show-chooser]
+* xref:refguide:config:sections/isis.viewer.wicket.adoc#isis.viewer.wicket.themes.provider[isis.viewer.wicket.themes.provider]
+
+
+The Wicket viewer uses link:http://getbootstrap.com/[Bootstrap] styles and components (courtesy of the https://github.com/l0rdn1kk0n/wicket-bootstrap[Wicket Bootstrap] integration).
+You can also develop and install a custom themes (eg to fit your company's look-n-feel/interface guidelines); see the xref:vw:ROOT:extending.adoc#custom-bootstrap-theme[extending] chapter for further details.
+
+
+
+=== Date Formatting & Date Picker
+
+These configuration properties influence the way in which date/times are rendered and can be selected using the date/time pickers:
+
+* xref:refguide:config:sections/isis.viewer.wicket.adoc#isis.viewer.wicket.date-pattern[isis.viewer.wicket.date-pattern]
+* xref:refguide:config:sections/isis.viewer.wicket.adoc#isis.viewer.wicket.date-time-pattern[isis.viewer.wicket.date-time-pattern]
+* xref:refguide:config:sections/isis.viewer.wicket.adoc#isis.viewer.wicket.timestamp-pattern[isis.viewer.wicket.date-picker.timestamp-pattern]
+* xref:refguide:config:sections/isis.viewer.wicket.adoc#isis.viewer.wicket.date-picker.max-date[isis.viewer.wicket.date-picker.max-date]
++
+See link:http://eonasdan.github.io/bootstrap-datetimepicker/Options/#maxdate[datetimepicker reference docs] for further details.
+The string must be in ISO date format (see link:https://github.com/moment/moment/issues/1407[here]
+for further details).
+
+* xref:refguide:config:sections/isis.viewer.wicket.adoc#isis.viewer.wicket.date-picker.min-date[isis.viewer.wicket.date-picker.min-date]
+
+
+=== Debugging
+
+These configuration properties can assist with debugging the behaviour of the Wicket viewer itself:
+
+* xref:refguide:config:sections/isis.viewer.wicket.adoc#isis.viewer.wicket.ajax-debug-mode[isis.viewer.wicket.ajax-debug-mode]
+* xref:refguide:config:sections/isis.viewer.wicket.adoc#isis.viewer.wicket.development-utilities.enable[isis.viewer.wicket.development-utilities.enable]
+* xref:refguide:config:sections/isis.viewer.wicket.adoc#isis.viewer.wicket.live-reload-url[isis.viewer.wicket.live-reload-url]
+* xref:refguide:config:sections/isis.viewer.wicket.adoc#isis.viewer.wicket.strip-wicket-tags[isis.viewer.wicket.strip-wicket-tags]
+* xref:refguide:config:sections/isis.viewer.wicket.adoc#isis.viewer.wicket.wicket-source-plugin[isis.viewer.wicket.wicket-source-plugin]
++
+[WARNING]
+====
+Enabling this setting can significantly slow down rendering performance of the Wicket viewer.
+====
+
+
+=== Feature Toggles
+
+These configuration properties are used to enable/disable features that are either on the way to becoming the default behaviour (but can temporarily be disabled) or conversely for features that are to be removed (but can temporarily be left as enabled).
+
+* xref:refguide:config:sections/isis.viewer.wicket.adoc#isis.viewer.wicket.prevent-double-click-for-form-submit[isis.viewer.wicket.prevent-double-click-for-form-submit]
+* xref:refguide:config:sections/isis.viewer.wicket.adoc#isis.viewer.wicket.prevent-double-click-for-no-arg-action[isis.viewer.wicket.prevent-double-click-for-no-arg-action]
+* xref:refguide:config:sections/isis.viewer.wicket.adoc#isis.viewer.wicket.redirect-even-if-same-object[isis.viewer.wicket.redirect-even-if-same-object]
+* xref:refguide:config:sections/isis.viewer.wicket.adoc#isis.viewer.wicket.replace-disabled-tag-with-readonly-tag[isis.viewer.wicket.replace-disabled-tag-with-readonly-tag]
+* xref:refguide:config:sections/isis.viewer.wicket.adoc#isis.viewer.wicket.use-indicator-for-form-submit[isis.viewer.wicket.use-indicator-for-form-submit]
+* xref:refguide:config:sections/isis.viewer.wicket.adoc#isis.viewer.wicket.use-indicator-for-no-arg-action[isis.viewer.wicket.use-indicator-for-no-arg-action]
+

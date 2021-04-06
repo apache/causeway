@@ -4,7 +4,7 @@
 
 
 
-This section describes how to include the JDO module and setup its configuration properties.
+This section describes how to include the JDO module and set its configuration properties.
 
 
 == Maven pom.xml
@@ -189,7 +189,7 @@ For example, use `datanucleus.schema.autoCreateAll` not `datanucleus.schema.auto
 
 
 [[persistence-xml]]
-== `persistence.xml`
+== persistence.xml
 
 DataNucleus will for itself also read the `META-INF/persistence.xml`.
 In theory this can hold mappings and even connection strings.

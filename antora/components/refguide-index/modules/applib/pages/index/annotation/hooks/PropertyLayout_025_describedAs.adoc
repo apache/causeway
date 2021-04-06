@@ -7,7 +7,7 @@
 
 The xref:refguide:applib:index/annotation/PropertyLayout.adoc#describedAs[describedAs()] element is used to provide a short description of the property to the user.
 
-In the xref:vw:ROOT:about.adoc[Wicket viewer] it is displayed as a 'tool tip'.
+In the xref:vw:ROOT:about.adoc[Web UI (Wicket viewer)] it is displayed as a 'tool tip'.
 
 For example:
 

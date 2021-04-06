@@ -34,5 +34,5 @@ public class Customer {
 }
 ----
 
-NOTE: All that said, the xref:vw:ROOT:about.adoc[Wicket viewer] uses the maximum space available for all fields, so in effect ignores this element.
+NOTE: All that said, the xref:vw:ROOT:about.adoc[Web UI (Wicket viewer)] uses the maximum space available for all fields, so in effect ignores this element.
 

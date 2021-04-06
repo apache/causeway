@@ -9,7 +9,7 @@ These typically are for use directly within by the domain application itself.
 
 For convenience, some of the extensions catalogued here are incorporated in other guides:
 
-* in the xref:security:ROOT:about.adoc[security] guide, and the xref:vw:ROOT:about.adoc[wicket viewer] guide).
+* in the xref:security:ROOT:about.adoc[security] guide, and the xref:vw:ROOT:about.adoc[Web UI (Wicket viewer)] guide).
 +
 These extensions extend the capability of those components, or provide alternative implementations
 
