@@ -21,6 +21,7 @@ package org.apache.isis.core.metamodel.facets.object.title.methods;
 
 import java.lang.reflect.Method;
 
+import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.collections._Lists;
@@ -63,7 +64,7 @@ public class TitleFacetViaMethodsFactory extends MethodPrefixBasedFacetFactoryAb
             processClassContext.removeMethod(method);
             final TranslationService translationService = getTranslationService();
             // sadness: same as in TranslationFactory
-            final String translationContext = method.getDeclaringClass().getName() + "#" + method.getName() + "()";
+            final TranslationContext translationContext = TranslationContext.ofTitleMethod(method); // .getDeclaringClass().getName() + "#" + method.getName() + "()";
 
             final TitleFacetViaTitleMethod facet = new TitleFacetViaTitleMethod(method, translationService, translationContext, facetHolder);
             FacetUtil.addFacet(facet);

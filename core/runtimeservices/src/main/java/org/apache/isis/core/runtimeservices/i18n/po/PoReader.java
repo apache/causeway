@@ -27,6 +27,7 @@ import java.util.stream.Collectors;
 
 import org.apache.isis.applib.services.i18n.LocaleProvider;
 import org.apache.isis.applib.services.i18n.Mode;
+import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.applib.services.i18n.TranslationsResolver;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Strings;
@@ -91,7 +92,7 @@ class PoReader extends PoAbstract {
     }
 
     @Override
-    public String translate(final String context, final String msgId) {
+    public String translate(TranslationContext context, final String msgId) {
         if(translationsResolver == null) {
             // already logged as WARN (in constructor) if null.
             return msgId;
@@ -100,7 +101,7 @@ class PoReader extends PoAbstract {
     }
 
     @Override
-    String translate(final String context, final String msgId, final String msgIdPlural, final int num) {
+    String translate(TranslationContext context, final String msgId, final String msgIdPlural, final int num) {
 
         final String msgIdToUse;
         final ContextAndMsgId.Type type;
@@ -121,8 +122,7 @@ class PoReader extends PoAbstract {
         init();
     }
 
-    private String translate(
-            final String context, final String msgId, final ContextAndMsgId.Type type) {
+    private String translate(TranslationContext context, final String msgId, final ContextAndMsgId.Type type) {
 
         final Locale targetLocale;
         try {
@@ -142,7 +142,7 @@ class PoReader extends PoAbstract {
         final Map<ContextAndMsgId, String> translationsByKey = readAndCacheTranslationsIfRequired(targetLocale);
 
         // search for translation with a context
-        final ContextAndMsgId key = new ContextAndMsgId(context, msgId, type);
+        final ContextAndMsgId key = new ContextAndMsgId(context.stringify(), msgId, type);
         final String translation = lookupTranslation(translationsByKey, key);
         if (!_Strings.isNullOrEmpty(translation)) {
             return translation;

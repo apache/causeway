@@ -188,7 +188,7 @@ public final class TranslatableString {
      * @param translationService
      * @param context
      */
-    public String translate(final TranslationService translationService, final String context) {
+    public String translate(final TranslationService translationService, final TranslationContext context) {
 
         final String translatedText =
                 !isPluralForm()

@@ -26,6 +26,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.apache.isis.applib.services.factory.FactoryService;
+import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.spec.Specification;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -63,7 +64,7 @@ public abstract class MustSatisfySpecificationFacetAbstract extends FacetAbstrac
 
         final TranslationService translationService = getTranslationService();
         // sadness: same as in TranslationFactory
-        final String translationContext = ((IdentifiedHolder) holder).getIdentifier().getTranslationContext();
+        final TranslationContext translationContext = TranslationContext.ofIdentifier(((IdentifiedHolder) holder).getIdentifier()); // .getTranslationContext();
 
         specificationEvaluator = new SpecificationEvaluator(translationService, translationContext);
     }

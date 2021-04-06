@@ -25,6 +25,7 @@ import java.util.SortedMap;
 import java.util.SortedSet;
 
 import org.apache.isis.applib.services.i18n.Mode;
+import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.collections._Sets;
 
@@ -105,28 +106,28 @@ class PoWriter extends PoAbstract {
 
 
     @Override
-    public String translate(final String context, final String msgId) {
+    public String translate(final TranslationContext context, final String msgId) {
 
         if(msgId == null) {
             return null;
         }
         final Block block = blockFor(msgId);
         synchronized(block) {
-            block.contexts.add(context);
+            block.contexts.add(context.stringify());
         }
 
         return msgId;
     }
 
     @Override
-    String translate(final String context, final String msgId, final String msgIdPlural, final int num) {
+    String translate(final TranslationContext context, final String msgId, final String msgIdPlural, final int num) {
 
         if(msgId == null) {
             return null;
         }
         final Block block = blockFor(msgId);
         synchronized(block) {
-            block.contexts.add(context);
+            block.contexts.add(context.stringify());
             block.msgIdPlural = msgIdPlural;
         }
 

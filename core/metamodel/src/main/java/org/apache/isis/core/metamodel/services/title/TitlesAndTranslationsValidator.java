@@ -20,6 +20,7 @@ package org.apache.isis.core.metamodel.services.title;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.id.LogicalType;
+import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.title.TitleService;
 import org.apache.isis.commons.internal.base._Blackhole;
@@ -143,10 +144,14 @@ public class TitlesAndTranslationsValidator extends MetaModelValidatorAbstract {
         val translationService = serviceRegistry.lookupServiceElseFail(TranslationService.class);
         
         // as used by the Wicket UI?
-        final String context = "org.apache.isis.core.interaction.session.InteractionFactory";
+        // final TranslationContext context = "org.apache.isis.core.interaction.session.InteractionFactory";
+        
+        // see @ConfirmUiModel#translate()
+        final TranslationContext context = TranslationContext.ofClass(MessageRegistry.class);
+        
         final MessageRegistry messageRegistry = new MessageRegistry();
         for (String message : messageRegistry.listMessages()) {
-
+        	
             try {
 
                 val translatedMessage = translationService.translate(context, message);

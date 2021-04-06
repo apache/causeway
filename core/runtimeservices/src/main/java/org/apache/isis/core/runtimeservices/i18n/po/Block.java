@@ -23,6 +23,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.commons.internal.collections._Lists;
 
 class Block {

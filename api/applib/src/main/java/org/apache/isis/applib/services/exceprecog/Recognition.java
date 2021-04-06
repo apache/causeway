@@ -22,6 +22,7 @@ import java.util.Optional;
 
 import javax.annotation.Nullable;
 
+import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.applib.services.i18n.TranslationService;
 
 import lombok.NonNull;
@@ -131,8 +132,9 @@ public class Recognition {
         if (x == null || translationService == null) {
             return x;
         }
+        TranslationContext context = TranslationContext.ofClass(Recognition.class);
         return translationService.translate(
-                Recognition.class.getName(), x);
+        		context, x);
     }
 
 }
