@@ -21,6 +21,7 @@ package org.apache.isis.core.metamodel.facets.all.i18n;
 
 import java.util.Map;
 
+import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.core.metamodel.commons.StringExtensions;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
@@ -30,7 +31,7 @@ import org.apache.isis.core.metamodel.facets.object.plural.PluralFacet;
 public class PluralFacetTranslated extends FacetAbstract implements PluralFacet {
 
     private final TranslationService translationService;
-    private String context;
+    private TranslationContext context;
     private String originalText;
 
     public PluralFacetTranslated(final NamedFacetTranslated facet, final FacetHolder facetHolder) {

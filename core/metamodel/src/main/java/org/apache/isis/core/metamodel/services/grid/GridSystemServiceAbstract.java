@@ -35,6 +35,7 @@ import org.apache.isis.applib.layout.component.FieldSet;
 import org.apache.isis.applib.layout.component.PropertyLayoutData;
 import org.apache.isis.applib.layout.grid.Grid;
 import org.apache.isis.applib.services.grid.GridSystemService;
+import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.services.message.MessageService;
@@ -42,6 +43,7 @@ import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.core.config.environment.IsisSystemEnvironment;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
+import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.core.metamodel.facets.actions.layout.ActionPositionFacetForActionXml;
 import org.apache.isis.core.metamodel.facets.actions.layout.BookmarkPolicyFacetForActionXml;
 import org.apache.isis.core.metamodel.facets.actions.layout.CssClassFaFacetForActionXml;
@@ -51,6 +53,7 @@ import org.apache.isis.core.metamodel.facets.actions.layout.HiddenFacetForAction
 import org.apache.isis.core.metamodel.facets.actions.layout.NamedFacetForActionXml;
 import org.apache.isis.core.metamodel.facets.actions.layout.PromptStyleFacetForActionXml;
 import org.apache.isis.core.metamodel.facets.actions.layout.RedirectFacetFromActionXml;
+import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.collections.layout.CssClassFacetForCollectionXml;
 import org.apache.isis.core.metamodel.facets.collections.layout.DefaultViewFacetForCollectionXml;
 import org.apache.isis.core.metamodel.facets.collections.layout.DescribedAsFacetForCollectionXml;
@@ -210,6 +213,7 @@ implements GridSystemService<G> {
                 }
 
                 String memberOrderName = null;
+                TranslationContext translationContext = TranslationContext.ofIdentifierForMemberOrderName(objectAction.getIdentifier());
                 int memberOrderSequence;
                 if(actionLayoutDataOwner instanceof FieldSet) {
                     final FieldSet fieldSet = (FieldSet) actionLayoutDataOwner;
@@ -218,7 +222,7 @@ implements GridSystemService<G> {
                         final String propertyId = propertyLayoutData.getId();
                         // any will do; choose the first one that we know is valid
                         if(oneToOneAssociationById.containsKey(propertyId)) {
-                            memberOrderName = propertyLayoutData.getId();
+                            memberOrderName = propertyLayoutData.getId();                            
                             break;
                         }
                     }
@@ -234,11 +238,12 @@ implements GridSystemService<G> {
                 } else {
                     // don't add: any existing metadata should be preserved
                     memberOrderName = null;
+                    translationContext = null;
                     memberOrderSequence = actionDomainObjectSequence++;
                 }
                 if(memberOrderName != null) {
                     addOrReplaceFacet(
-                            new MemberOrderFacetXml(memberOrderName, "" + memberOrderSequence, translationService, objectAction));
+                            new MemberOrderFacetXml(translationContext, memberOrderName, "" + memberOrderSequence, translationService, objectAction));
                 }
 
                 // fix up the action position if required
@@ -265,7 +270,11 @@ implements GridSystemService<G> {
                 addOrReplaceFacet(CssClassFaFacetForActionXml.create(actionLayoutData, objectAction));
                 addOrReplaceFacet(DescribedAsFacetForActionXml.create(actionLayoutData, objectAction));
                 addOrReplaceFacet(HiddenFacetForActionXml.create(actionLayoutData, objectAction));
-                addOrReplaceFacet(NamedFacetForActionXml.create(actionLayoutData, objectAction));
+                // preserve translations
+                NamedFacet existingNamedFacet = objectAction.getFacet(NamedFacet.class);
+                if(existingNamedFacet == null) {
+                    addOrReplaceFacet(NamedFacetForActionXml.create(actionLayoutData, objectAction));
+                }
                 addOrReplaceFacet(PromptStyleFacetForActionXml.create(actionLayoutData, objectAction));
                 addOrReplaceFacet(RedirectFacetFromActionXml.create(actionLayoutData, objectAction));
             }
@@ -282,7 +291,11 @@ implements GridSystemService<G> {
                 addOrReplaceFacet(HiddenFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation));
                 addOrReplaceFacet(LabelAtFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation));
                 addOrReplaceFacet(MultiLineFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation));
-                addOrReplaceFacet(NamedFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation));
+                // preserve translations
+                NamedFacet existingNamedFacet = oneToOneAssociation.getFacet(NamedFacet.class);
+                if(existingNamedFacet == null) {
+                	addOrReplaceFacet(NamedFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation));
+                }
                 addOrReplaceFacet(PromptStyleFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation));
                 addOrReplaceFacet(RenderedAdjustedFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation));
                 addOrReplaceFacet(UnchangingFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation));
@@ -293,9 +306,13 @@ implements GridSystemService<G> {
                 // table columns are shown correctly (by fieldset, then property order within that fieldset).
                 final FieldSet fieldSet = propertyLayoutData.getOwner();
                 final String groupName = fieldSet.getName();
+                                
+                final IdentifiedHolder identifiedHolder = (IdentifiedHolder) oneToOneAssociation;
+                final TranslationContext translationContext = TranslationContext.ofIdentifierForMemberOrderName(identifiedHolder.getIdentifier());
+                // TranslationContext translationContext = TranslationContext.ofIdentifierForMemberOrderName(oneToOneAssociation.getIdentifier());
                 final String sequence = "" + (propertySequence.incrementAndGet());
                 addOrReplaceFacet(
-                        new MemberOrderFacetXml(groupName, sequence, translationService, oneToOneAssociation));
+                        new MemberOrderFacetXml(translationContext, groupName, sequence, translationService, oneToOneAssociation));
             }
 
             @Override
@@ -308,16 +325,21 @@ implements GridSystemService<G> {
                 addOrReplaceFacet(CssClassFacetForCollectionXml.create(collectionLayoutData, oneToManyAssociation));
                 addOrReplaceFacet(DefaultViewFacetForCollectionXml.create(collectionLayoutData, oneToManyAssociation));
                 addOrReplaceFacet(DescribedAsFacetForCollectionXml.create(collectionLayoutData, oneToManyAssociation));
-                addOrReplaceFacet(HiddenFacetForCollectionXml.create(collectionLayoutData, oneToManyAssociation));
-                addOrReplaceFacet(NamedFacetForCollectionXml.create(collectionLayoutData, oneToManyAssociation));
+                addOrReplaceFacet(HiddenFacetForCollectionXml.create(collectionLayoutData, oneToManyAssociation));                
+                // preserve translations
+                NamedFacet existingNamedFacet = oneToManyAssociation.getFacet(NamedFacet.class);
+                if(existingNamedFacet == null) {
+                    addOrReplaceFacet(NamedFacetForCollectionXml.create(collectionLayoutData, oneToManyAssociation));
+                }
                 addOrReplaceFacet(PagedFacetForCollectionXml.create(collectionLayoutData, oneToManyAssociation));
                 addOrReplaceFacet(SortedByFacetForCollectionXml.create(collectionLayoutData, oneToManyAssociation));
 
                 // @MemberOrder#name based on the collection's id (so that each has a single "member group")
                 final String groupName = collectionLayoutData.getId();
+                TranslationContext translationContext = TranslationContext.ofIdentifierForMemberOrderName(oneToManyAssociation.getIdentifier());
                 final String sequence = "" + collectionSequence++;
                 addOrReplaceFacet(
-                        new MemberOrderFacetXml(groupName, sequence, translationService, oneToManyAssociation));
+                        new MemberOrderFacetXml(translationContext, groupName, sequence, translationService, oneToManyAssociation));
             }
         });
     }

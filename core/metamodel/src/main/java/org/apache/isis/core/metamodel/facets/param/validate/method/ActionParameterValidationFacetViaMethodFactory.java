@@ -22,6 +22,7 @@ package org.apache.isis.core.metamodel.facets.param.validate.method;
 import java.util.EnumSet;
 
 import org.apache.isis.applib.exceptions.unrecoverable.MetaModelException;
+import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.MethodLiteralConstants;
@@ -81,7 +82,7 @@ public class ActionParameterValidationFacetViaMethodFactory extends MethodPrefix
             
             // add facets directly to parameters, not to actions
             val paramAsHolder = parameters.get(paramNum);
-            val translationContext = paramAsHolder.getIdentifier().getFullIdentityString();
+            val translationContext = TranslationContext.ofIdentifierFullIdentity(paramAsHolder.getIdentifier());
             val ppmFactory = searchResult.getPpmFactory();
             val translationService = getMetaModelContext().getTranslationService();
 

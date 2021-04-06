@@ -19,6 +19,7 @@
 package org.apache.isis.core.runtimeservices.i18n.po;
 
 import org.apache.isis.applib.services.i18n.Mode;
+import org.apache.isis.applib.services.i18n.TranslationContext;
 
 class PoDisabled extends PoAbstract {
 
@@ -27,12 +28,12 @@ class PoDisabled extends PoAbstract {
     }
 
     @Override
-    String translate(String context, String msgId) {
+    String translate(TranslationContext context, String msgId) {
         return msgId;
     }
 
     @Override
-    String translate(String context, String msgId, String msgIdPlural, int num) {
+    String translate(TranslationContext context, String msgId, String msgIdPlural, int num) {
         return msgId;
     }
 

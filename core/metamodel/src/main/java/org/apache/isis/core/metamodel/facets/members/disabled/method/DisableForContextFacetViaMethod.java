@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.isis.applib.services.i18n.TranslatableString;
+import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
@@ -38,12 +39,12 @@ implements ImperativeFacet {
 
     private final Method method;
     private final TranslationService translationService;
-    private final String translationContext;
+    private final TranslationContext translationContext;
 
     public DisableForContextFacetViaMethod(
             final Method method,
             final TranslationService translationService, 
-            final String translationContext,
+            final TranslationContext translationContext,
             final FacetHolder holder) {
         super(holder);
         this.method = method;

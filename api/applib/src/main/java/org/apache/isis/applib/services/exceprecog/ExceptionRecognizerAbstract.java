@@ -27,6 +27,7 @@ import javax.inject.Inject;
 
 import org.apache.isis.applib.exceptions.TranslatableException;
 import org.apache.isis.applib.services.i18n.TranslatableString;
+import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
@@ -117,7 +118,7 @@ public abstract class ExceptionRecognizerAbstract implements ExceptionRecognizer
             if(ex instanceof TranslatableException) {
                 final TranslatableException translatableException = (TranslatableException) ex;
                 final TranslatableString translatableMessage = translatableException.getTranslatableMessage();
-                final String translationContext = translatableException.getTranslationContext();
+                final TranslationContext translationContext = TranslationContext.ofTrEx(translatableException);
                 if(translatableMessage != null && translationContext != null) {
                     return translatableMessage.translate(translationService, translationContext);
                 }

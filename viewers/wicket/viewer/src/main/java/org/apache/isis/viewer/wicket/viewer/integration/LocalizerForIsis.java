@@ -32,6 +32,7 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 
+import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._Strings;
@@ -74,7 +75,7 @@ public class LocalizerForIsis extends Localizer {
 
     protected String translate(final String key, final Component component) {
         final Class<?> contextClass = determineContextClassElse(component, IsisWicketApplication.class);
-        final String context = contextClass.getName();
+        final TranslationContext context = TranslationContext.ofClass(contextClass);
         if(isisInteractionTracker.isInInteraction()) {
             return translate(key, context);
         } else {
@@ -141,7 +142,7 @@ public class LocalizerForIsis extends Localizer {
         return enclosingClass != null? enclosing(enclosingClass): cls;
     }
 
-    private String translate(final String key, final String context) {
+    private String translate(final String key, final TranslationContext context) {
         return translationService.translate(context, key);
     }
 

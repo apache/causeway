@@ -21,6 +21,7 @@ package org.apache.isis.core.metamodel.facets.members.order;
 
 import java.util.Map;
 
+import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -40,11 +41,12 @@ public abstract class MemberOrderFacetAbstract extends FacetAbstract implements 
     private final String sequence;
 
     public MemberOrderFacetAbstract(
+    		TranslationContext context,
             final String name,
             final String sequence,
             final TranslationService translationService,
             final FacetHolder holder) {
-        this(translatedValueElse(name, "", translationService, holder),
+        this(translatedValueElse(context, name, "", translationService, holder),
                 sequence,
                 holder);
     }
@@ -60,6 +62,7 @@ public abstract class MemberOrderFacetAbstract extends FacetAbstract implements 
     }
 
     private static String translatedValueElse(
+    		TranslationContext context,
             final String name,
             final String defaultValue,
             final TranslationService translationService,
@@ -68,8 +71,8 @@ public abstract class MemberOrderFacetAbstract extends FacetAbstract implements 
         if (nullOrEmpty) {
             return defaultValue;
         } else {
-            final IdentifiedHolder identifiedHolder = (IdentifiedHolder) holder;
-            final String context = identifiedHolder.getIdentifier().getClassName();
+            // final IdentifiedHolder identifiedHolder = (IdentifiedHolder) holder;
+            // final String context = identifiedHolder.getIdentifier().getClassName();
             return translationService.translate(context, name);
         }
     }

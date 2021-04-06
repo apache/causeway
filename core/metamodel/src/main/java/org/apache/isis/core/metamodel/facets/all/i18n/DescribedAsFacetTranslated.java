@@ -21,6 +21,7 @@ package org.apache.isis.core.metamodel.facets.all.i18n;
 
 import java.util.Map;
 
+import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
@@ -28,12 +29,12 @@ import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
 
 public class DescribedAsFacetTranslated extends FacetAbstract implements DescribedAsFacet {
 
-    private final String context;
+    private final TranslationContext context;
     private final String originalText;
     private final TranslationService translationService;
 
     public DescribedAsFacetTranslated(
-            final String context, final String originalText,
+            final TranslationContext context, final String originalText,
             final TranslationService translationService,
             final IdentifiedHolder holder) {
         super(DescribedAsFacet.class, holder, Derivation.NOT_DERIVED);

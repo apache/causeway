@@ -30,6 +30,7 @@ import org.apache.wicket.model.Model;
 
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3Tab;
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3TabGroup;
+import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.util.ComponentHintKey;
@@ -64,7 +65,10 @@ implements HasDynamicallyVisibleContent {
 
         for (val bs3Tab : tablist) {
             final RepeatingViewWithDynamicallyVisibleContent rv = TabPanel.newRows(entityModel, bs3Tab);
-            String translateContext = entityModel.getTypeOfSpecification().getFullIdentifier();
+            
+            TranslationContext translateContext = TranslationContext.ofIdentifierForTab(entityModel.getTypeOfSpecification().getIdentifier());
+            // String translateContext = entityModel.getTypeOfSpecification().getFullIdentifier();
+            
             String bs3TabName = bs3Tab.getName();
             String tabName = translationService.translate(translateContext, bs3TabName);
             tabs.add(new AbstractTab(Model.of(tabName)) {

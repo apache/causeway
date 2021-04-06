@@ -29,6 +29,7 @@ import org.jmock.api.Invocation;
 import org.junit.Rule;
 
 import org.apache.isis.applib.annotation.MemberOrder;
+import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
@@ -49,7 +50,7 @@ public class MemberOrderAnnotationFacetFactoryTest extends AbstractFacetFactoryT
         super.setUp();
 
         context.checking(new Expectations() {{
-            allowing(mockTranslationService).translate(with(any(String.class)), with(any(String.class)));
+            allowing(mockTranslationService).translate(with(any(TranslationContext.class)), with(any(String.class)));
             will(new Action() {
                 @Override
                 public Object invoke(final Invocation invocation) throws Throwable {

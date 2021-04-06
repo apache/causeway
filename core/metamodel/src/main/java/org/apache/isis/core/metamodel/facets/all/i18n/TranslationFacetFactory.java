@@ -19,6 +19,7 @@
 package org.apache.isis.core.metamodel.facets.all.i18n;
 
 
+import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -40,7 +41,7 @@ extends FacetFactoryAbstract {
         final FacetHolder facetHolder = processClassContext.getFacetHolder();
         if(facetHolder instanceof IdentifiedHolder) {
             final IdentifiedHolder holder = (IdentifiedHolder) facetHolder;
-            final String context = holder.getIdentifier().getClassName();
+            final TranslationContext context = TranslationContext.ofIdentifier(holder.getIdentifier()); // .getClassName();
             translateName(holder, context);
             translateDescription(holder, context);
         }
@@ -50,7 +51,7 @@ extends FacetFactoryAbstract {
     public void process(final ProcessMethodContext processMethodContext) {
         final IdentifiedHolder holder = processMethodContext.getFacetHolder();
 
-        final String context = holder.getIdentifier().getTranslationContext();
+        final TranslationContext context = TranslationContext.ofIdentifier(holder.getIdentifier()); // .getTranslationContext();
         translateName(holder, context);
         translateDescription(holder, context);
     }
@@ -59,14 +60,14 @@ extends FacetFactoryAbstract {
     public void processParams(final ProcessParameterContext processParameterContext) {
         final IdentifiedHolder holder = processParameterContext.getFacetHolder();
 
-        final String context = holder.getIdentifier().getFullIdentityString();
+        final TranslationContext context = TranslationContext.ofIdentifierFullIdentity(holder.getIdentifier()); // .getFullIdentityString();
         translateName(holder, context);
         translateDescription(holder, context);
     }
 
     // //////////////////////////////////////
 
-    void translateName(final IdentifiedHolder facetHolder, final String context) {
+    void translateName(final IdentifiedHolder facetHolder, final TranslationContext context) {
         final NamedFacet facet = facetHolder.getFacet(NamedFacet.class);
         if(facet == null) {
             // not expected...
@@ -84,7 +85,7 @@ extends FacetFactoryAbstract {
         super.addFacet(facetTranslated);
     }
 
-    void translateDescription(final FacetHolder facetHolder, final String context) {
+    void translateDescription(final FacetHolder facetHolder, final TranslationContext context) {
 
         final IdentifiedHolder holder = (IdentifiedHolder) facetHolder;
         final DescribedAsFacet facet = facetHolder.getFacet(DescribedAsFacet.class);
