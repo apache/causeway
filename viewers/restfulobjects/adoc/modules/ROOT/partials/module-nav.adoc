@@ -3,7 +3,7 @@
 * xref:vro:ROOT:setup-and-configuration.adoc[Setup and Configuration]
 * xref:vro:ROOT:ro-spec.adoc[RO Spec]
 * xref:vro:ROOT:content-negotiation.adoc[Content Negotiation]
-** xref:vro:ROOT:content-negotiation/apache-isis-v1-profile.adoc[Apache Isis v1 Profile]
+** xref:vro:ROOT:content-negotiation/apache-isis-v2-profile.adoc[Apache Isis v2 Profile]
 //** xref:vro:ROOT:content-negotiation/apache-isis-v2-profile.INCOMPLETE.adoc[Simplified Representations v2]
 ** xref:vro:ROOT:content-negotiation/other-representations.adoc[Other Representations]
 * xref:vro:ROOT:security.adoc[Security]

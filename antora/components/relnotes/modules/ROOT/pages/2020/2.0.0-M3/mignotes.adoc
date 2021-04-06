@@ -1247,7 +1247,7 @@ public static enum SuppressionType {
 where these are case-insensitive and may be combined to a comma-separated set.
  Eg. to suppress $$title and $$href one could simply request
 ----
-application/json;profile=urn:org.apache.isis/v1;suppress=title,href
+application/json;profile=urn:org.apache.isis/v2;suppress=title,href
 ----
 We do not break the previous behavior with 'suppress=true' being equivalent to 'suppress=ro'
 

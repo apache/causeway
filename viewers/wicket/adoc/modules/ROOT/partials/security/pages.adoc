@@ -4,9 +4,11 @@
 
 
 
-The xref:vw:ROOT:about.adoc[Web UI (Wicket viewer)] defines a relatively small number of pages (subclasses of `org.apache.wicket.markup.html.WebPage`):
+The xref:vw:ROOT:about.adoc[Web UI (Wicket viewer)] defines a relatively small number of pages (subclasses of `org.apache.wicket.markup.html.WebPage`).
+There are two main groups:
 
-image::security/WebPage-hierarchy.png[width=600px]
+* subclasses of `PageAbstract`, and
+* subclasses of `AccountManagementPageAbstract`
 
 The subclasses of `PageAbstract` are annotated with the Wicket annotation:
 

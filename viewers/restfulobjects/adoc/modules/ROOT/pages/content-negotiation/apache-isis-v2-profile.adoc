@@ -1,4 +1,4 @@
-= Simplified Representations
+= Apache Isis v2 Profile (Simplified Representation)
 
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
@@ -11,12 +11,12 @@ link:http://vitalets.github.io/angular-xeditable/[Angular XEditable],
 link:https://github.com/mgcrea/angular-strap[Angular Strap].
 
 Apache Isis also provides support for its own simplified representation for the most commonly-used representations.
-This is implemented using the `ContentNegotiationService` described in the
+This is implemented using the xref:refguide:viewer:index/restfulobjects/rendering/service/conneg/ContentNegotiationService.adoc[ContentNegotiationService] described in the
 xref:vro:ROOT:content-negotiation.adoc[architecture] chapter.
 
 
 
-include::simplified-representations/apache-isis-profile.adoc[leveloffset=+1]
+include::simplified-representations/accept-header.adoc[leveloffset=+1]
 include::simplified-representations/domain-object.adoc[leveloffset=+1]
 include::simplified-representations/object-collection.adoc[leveloffset=+1]
 include::simplified-representations/action-invocation.adoc[leveloffset=+1]

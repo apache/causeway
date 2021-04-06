@@ -54,7 +54,7 @@ xref:refguide:viewer:index/restfulobjects/rendering/service/conneg/ContentNegoti
 If the implementation does not recognize the value of the header, if can simply return `null`.
 +
 The framework provides a number of implementations; an implementation that handles the
-xref:vro:ROOT:content-negotiation/apache-isis-v1-profile.adoc[simplified representation] of the Apache Isis profile; an implementation that provides support for the `x-ro-domain-type` parameter, and a default/fallback implementation that returns the representations defined by the RO spec.
+xref:vro:ROOT:content-negotiation/apache-isis-v2-profile.adoc[simplified representation] of the Apache Isis profile; an implementation that provides support for the `x-ro-domain-type` parameter, and a default/fallback implementation that returns the representations defined by the RO spec.
 
 * xref:refguide:applib:index/services/conmap/ContentMappingService.adoc[ContentMappingService]
 +
@@ -75,7 +75,7 @@ class RepresentationService {}
 interface ContentNegotiationService {
 }
 class ContentNegotiationServiceSimplified {
-    // application/json;profile="urn:org.apache.isis/v1"
+    // application/json;profile="urn:org.apache.isis/v2"
 }
 class ContentNegotiationServiceXRoDomainType {
     // application/xml;x-ro-domain-type="xxx"

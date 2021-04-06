@@ -126,7 +126,7 @@ Nevertheless, those configuration properties are:
 
 [NOTE]
 ====
-If these configuration settings are set in conjunction with using the xref:vro:ROOT:content-negotiation/apache-isis-v1-profile.adoc#apache-isis-profile[Apache Isis profile], then the special `$$ro` property in the representations with reflect these settings.
+If these configuration settings are set in conjunction with using the xref:vro:ROOT:content-negotiation/apache-isis-v2-profile.adoc#apache-isis-profile[Apache Isis profile], then the special `$$ro` property in the representations with reflect these settings.
 ====
 
 

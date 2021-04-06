@@ -101,7 +101,7 @@ The `name` attribute can be used to override the name of the column.
 References to other objects are generally mapped as foreign key columns.
 If there are multiple references to a given type, then you will want to override the name that JDO/DataNucleus would otherwise default.
 
-For example (taken from link:http://github.com/estatio/estatio[estatio] app):
+For example:
 
 [source,java]
 ----

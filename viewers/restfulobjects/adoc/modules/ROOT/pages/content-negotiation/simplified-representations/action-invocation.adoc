@@ -22,7 +22,7 @@ with an `Accept` request header of:
 
 [source]
 ----
-Accept: application/json;profile="urn:org.apache.isis/v1"
+Accept: application/json;profile="urn:org.apache.isis/v2"
 ----
 
 returns the following representation:
@@ -49,7 +49,7 @@ with a `Content-Type` of:
 
 [source]
 ----
-Content-Type: application/json;profile="urn:org.apache.isis/v1";repr-type="object"
+Content-Type: application/json;profile="urn:org.apache.isis/v2";repr-type="object"
 ----
 
 \... in other words no different to a representation obtained of the returned domain object directly.
@@ -71,7 +71,7 @@ with an `Accept` request header of:
 
 [source]
 ----
-Accept: application/json;profile="urn:org.apache.isis/v1"
+Accept: application/json;profile="urn:org.apache.isis/v2"
 ----
 
 returns the following representation:
@@ -111,7 +111,7 @@ with a `Content-Type` header:
 
 [source]
 ----
-Content-Type: application/json;profile="urn:org.apache.isis/v1";repr-type="list"
+Content-Type: application/json;profile="urn:org.apache.isis/v2";repr-type="list"
 ----
 
 == Returning Scalar/Nothing

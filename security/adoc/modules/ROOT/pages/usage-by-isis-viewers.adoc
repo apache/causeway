@@ -26,7 +26,3 @@ include::vw:ROOT:partial$security/user-registration.adoc[]
 
 include::vro:ROOT:partial$security/webmodule.adoc[]
 
-[[vro-user-registration]]
-=== User-registration
-
-include::vro:ROOT:partial$security/user-registration.adoc[]

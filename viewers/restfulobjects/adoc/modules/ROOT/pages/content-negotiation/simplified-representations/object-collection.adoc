@@ -21,7 +21,7 @@ with an `Accept` request header of:
 
 [source]
 ----
-Accept: application/json;profile="urn:org.apache.isis/v1"
+Accept: application/json;profile="urn:org.apache.isis/v2"
 ----
 
 returns the following representation:
@@ -72,7 +72,7 @@ with a `Content-Type` header:
 
 [source]
 ----
-Content-Type: application/json;profile="urn:org.apache.isis/v1";repr-type="object-collection"
+Content-Type: application/json;profile="urn:org.apache.isis/v2";repr-type="object-collection"
 ----
 
 

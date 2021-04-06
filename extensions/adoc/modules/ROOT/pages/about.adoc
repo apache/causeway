@@ -17,32 +17,23 @@ This page catalogues all the available extensions, but they are incorporated int
 xref:userguide:fun:about.adoc[User Guide] +
 for core extensions:
 
-include::userguide:command-log:partial$module-nav.adoc[]
-include::userguide:command-replay:partial$module-nav.adoc[]
-include::userguide:flyway:partial$module-nav.adoc[]
-include::userguide:model-annotation:partial$module-nav.adoc[]
-include::userguide:quartz:partial$module-nav.adoc[]
+include::userguide:ROOT:partial$extensions.adoc[]
 
 |
 xref:security::about.adoc[Security] extensions:
 
-include::security:session-log:partial$module-nav.adoc[]
-include::security:shiro-realm-ldap:partial$module-nav.adoc[]
-include::security:secman:partial$module-nav.adoc[]
+include::security:ROOT:partial$extensions.adoc[]
 
 
 
 |xref:vro::about.adoc[Restful Objects] extensions:
 
-include::vro:cors:partial$module-nav.adoc[]
+include::vro:ROOT:partial$extensions.adoc[]
 
 
 |xref:vw::about.adoc[Wicket viewer] extensions:
 
-include::vw:exceldownload:partial$module-nav.adoc[]
-include::vw:fullcalendar:partial$module-nav.adoc[]
-include::vw:gmap3:partial$module-nav.adoc[]
-include::vw:pdfjs:partial$module-nav.adoc[]
+include::vw:ROOT:partial$extensions.adoc[]
 
 |===
 

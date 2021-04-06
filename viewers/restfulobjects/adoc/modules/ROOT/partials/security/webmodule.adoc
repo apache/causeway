@@ -5,13 +5,13 @@
 
 The xref:vro:ROOT:about.adoc[REST API (Restful Objects viewer)] does *not* provide a login page.
 Instead it defines the authentication strategy SPI, delegated to by a filter.
-(For more detail on how this is wired together, see xref:refguide:viewer:index/restfulobjects/jaxrsresteasy4/webmodule/WebModuleJaxrsResteasy4.adoc[WebModuleJaxrsResteasy4].)
+(For more detail on how this is wired together, see the implementation of the xref:refguide:viewer:index/restfulobjects/jaxrsresteasy4/webmodule/WebModuleJaxrsResteasy4.adoc[WebModuleJaxrsResteasy4] web module service).
 
 The SPI is:
 
-* xref:refguide:viewer:index/restfulobjects/viewer/webmodule/auth/AuthenticationSessionStrategy.adoc[AuthenticationSessionStrategy]
+* xref:refguide:viewer:index/restfulobjects/viewer/webmodule/auth/AuthenticationStrategy.adoc[AuthenticationStrategy]
 
-where xref:refguide:core:index/security/authentication/Authentication.adoc[Authentication] represents a signed-on user:
+where xref:refguide:core:index/security/authentication/Authentication.adoc[Authentication] represents a signed-on user.
 
 
 The strategy is defined using this configuration property:
@@ -19,7 +19,7 @@ The strategy is defined using this configuration property:
 * xref:refguide:config:sections/isis.viewer.restfulobjects.adoc#isis.viewer.restfulobjects.authentication.strategy-class-name[isis.viewer.restfulobjects.authentication.strategy-class-name]
 
 
-The framework currently provides only basic auth provided as a simple implementation, and this is the default.
+The framework currently provides only HTTP Basic Auth support as a simple implementation, this is also the default strategy if none is explicitly configured.
 
 
 
