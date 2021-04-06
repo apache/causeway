@@ -33,6 +33,7 @@ import org.springframework.stereotype.Service;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.exceptions.RecoverableException;
 import org.apache.isis.applib.services.i18n.TranslatableString;
+import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.core.interaction.session.MessageBroker;
@@ -66,7 +67,7 @@ public class MessageServiceDefault implements MessageService {
     @Override
     public String informUser(
             final TranslatableString message,
-            final String translationContext) {
+            final TranslationContext translationContext) {
         String translatedMessage = message.translate(translationService, translationContext);
         informUser(translatedMessage);
         return translatedMessage;
@@ -89,7 +90,7 @@ public class MessageServiceDefault implements MessageService {
     @Override
     public String warnUser(
             final TranslatableString message,
-            final String translationContext) {
+            final TranslationContext translationContext) {
         String translatedMessage = message.translate(translationService, translationContext);
         warnUser(translatedMessage);
         return translatedMessage;
@@ -111,14 +112,14 @@ public class MessageServiceDefault implements MessageService {
     @Override
     public String raiseError(
             final TranslatableString message,
-            final String translationContext) {
+            final TranslationContext translationContext) {
         final String translatedMessage = message.translate(translationService, translationContext);
         raiseError(translatedMessage);
         return translatedMessage;
     }
 
-    private static String context(final Class<?> contextClass, final String contextMethod) {
-        return contextClass.getName()+"#"+contextMethod;
+    private static TranslationContext context(final Class<?> contextClass, final String contextMethod) {
+        return TranslationContext.ofClassAndMethodName(contextClass, contextMethod);
     }
 
     private Optional<MessageBroker> currentMessageBroker() {

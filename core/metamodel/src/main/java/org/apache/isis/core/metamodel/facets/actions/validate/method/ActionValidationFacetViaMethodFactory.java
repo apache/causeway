@@ -22,6 +22,7 @@ package org.apache.isis.core.metamodel.facets.actions.validate.method;
 import java.util.EnumSet;
 
 import org.apache.isis.applib.exceptions.unrecoverable.MetaModelException;
+import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.ActionSupport;
@@ -75,7 +76,7 @@ extends MethodPrefixBasedFacetFactoryAbstract  {
 
             val ppmFactory = searchResult.getPpmFactory();
             val translationService = getTranslationService();
-            val translationContext = facetHolder.getIdentifier().getTranslationContext();
+            TranslationContext translationContext = TranslationContext.ofIdentifier(facetHolder.getIdentifier());
             super.addFacet(
                     new ActionValidationFacetViaMethod(
                             validateMethod, translationService, translationContext, ppmFactory, facetHolder));

@@ -27,6 +27,7 @@ import org.jmock.api.Action;
 import org.jmock.api.Invocation;
 import org.junit.Rule;
 
+import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.context._Context;
@@ -86,6 +87,8 @@ public class DeweyOrderSetTest extends TestCase {
 
     @Rule
     public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(JUnitRuleMockery2.Mode.INTERFACES_AND_CLASSES);
+    
+	static TranslationContext ctx = TranslationContext.ofSimpleStringIdentifier("test");
 
     @Override
     protected void setUp() {
@@ -94,7 +97,7 @@ public class DeweyOrderSetTest extends TestCase {
 
         mockTranslationService = context.mock(TranslationService.class);
         context.checking(new Expectations() {{
-            allowing(mockTranslationService).translate(with(any(String.class)), with(any(String.class)));
+            allowing(mockTranslationService).translate(with(any(TranslationContext.class)), with(any(String.class)));
             will(new Action() {
                 @Override
                 public Object invoke(final Invocation invocation) throws Throwable {
@@ -115,8 +118,9 @@ public class DeweyOrderSetTest extends TestCase {
     }
 
     public void testDefaultGroup() {
-        lastNameMember.addFacet(new MemberOrderFacetAnnotation("", "1", mockTranslationService, lastNameMember));
-        firstNameMember.addFacet(new MemberOrderFacetAnnotation("", "2", mockTranslationService, firstNameMember));
+    	    	
+        lastNameMember.addFacet(new MemberOrderFacetAnnotation(ctx, "", "1", mockTranslationService, lastNameMember));
+        firstNameMember.addFacet(new MemberOrderFacetAnnotation(ctx, "", "2", mockTranslationService, firstNameMember));
 
         final DeweyOrderSet orderSet = DeweyOrderSet.createOrderSet(lastNameAndFirstName);
         assertEquals("", orderSet.getGroupName());
@@ -125,8 +129,8 @@ public class DeweyOrderSetTest extends TestCase {
     }
 
     public void testDefaultGroupSize() {
-        lastNameMember.addFacet(new MemberOrderFacetAnnotation("", "1", mockTranslationService, lastNameMember));
-        firstNameMember.addFacet(new MemberOrderFacetAnnotation("", "2", mockTranslationService, firstNameMember));
+        lastNameMember.addFacet(new MemberOrderFacetAnnotation(ctx, "", "1", mockTranslationService, lastNameMember));
+        firstNameMember.addFacet(new MemberOrderFacetAnnotation(ctx, "", "2", mockTranslationService, firstNameMember));
 
         final DeweyOrderSet orderSet = DeweyOrderSet.createOrderSet(lastNameAndFirstName);
         assertEquals(2, orderSet.size());
@@ -135,8 +139,8 @@ public class DeweyOrderSetTest extends TestCase {
     }
 
     public void testDefaultGroupTwoMembersSorted() {
-        lastNameMember.addFacet(new MemberOrderFacetAnnotation("", "1", mockTranslationService, lastNameMember));
-        firstNameMember.addFacet(new MemberOrderFacetAnnotation("", "2", mockTranslationService, firstNameMember));
+        lastNameMember.addFacet(new MemberOrderFacetAnnotation(ctx, "", "1", mockTranslationService, lastNameMember));
+        firstNameMember.addFacet(new MemberOrderFacetAnnotation(ctx, "", "2", mockTranslationService, firstNameMember));
 
         final DeweyOrderSet orderSet = DeweyOrderSet.createOrderSet(lastNameAndFirstName);
         assertEquals(lastNameMember, orderSet.elementList().get(0));
@@ -144,8 +148,8 @@ public class DeweyOrderSetTest extends TestCase {
     }
 
     public void testTwoMembersAtDefaultGroupOtherWay() {
-        lastNameMember.addFacet(new MemberOrderFacetAnnotation("", "2", mockTranslationService, lastNameMember));
-        firstNameMember.addFacet(new MemberOrderFacetAnnotation("", "1", mockTranslationService, firstNameMember));
+        lastNameMember.addFacet(new MemberOrderFacetAnnotation(ctx, "", "2", mockTranslationService, lastNameMember));
+        firstNameMember.addFacet(new MemberOrderFacetAnnotation(ctx, "", "1", mockTranslationService, firstNameMember));
 
         final DeweyOrderSet orderSet = DeweyOrderSet.createOrderSet(lastNameAndFirstName);
         assertEquals(firstNameMember, orderSet.elementList().get(0));
@@ -153,11 +157,11 @@ public class DeweyOrderSetTest extends TestCase {
     }
 
     public void testWithChildGroupDefaultGroupName() {
-        lastNameMember.addFacet(new MemberOrderFacetAnnotation("", "1", mockTranslationService, lastNameMember));
-        firstNameMember.addFacet(new MemberOrderFacetAnnotation("", "2", mockTranslationService, firstNameMember));
-        houseNumberMember.addFacet(new MemberOrderFacetAnnotation("address", "1", mockTranslationService, houseNumberMember));
-        streetNameMember.addFacet(new MemberOrderFacetAnnotation("address", "2", mockTranslationService, streetNameMember));
-        postalTownMember.addFacet(new MemberOrderFacetAnnotation("address", "3", mockTranslationService, postalTownMember));
+        lastNameMember.addFacet(new MemberOrderFacetAnnotation(ctx, "", "1", mockTranslationService, lastNameMember));
+        firstNameMember.addFacet(new MemberOrderFacetAnnotation(ctx, "", "2", mockTranslationService, firstNameMember));
+        houseNumberMember.addFacet(new MemberOrderFacetAnnotation(ctx, "address", "1", mockTranslationService, houseNumberMember));
+        streetNameMember.addFacet(new MemberOrderFacetAnnotation(ctx, "address", "2", mockTranslationService, streetNameMember));
+        postalTownMember.addFacet(new MemberOrderFacetAnnotation(ctx, "address", "3", mockTranslationService, postalTownMember));
 
         final DeweyOrderSet orderSet = DeweyOrderSet.createOrderSet(nameAndAddressMembers);
         assertEquals("", orderSet.getGroupName());
@@ -166,11 +170,11 @@ public class DeweyOrderSetTest extends TestCase {
     }
 
     public void testWithChildGroupSize() {
-        lastNameMember.addFacet(new MemberOrderFacetAnnotation("", "1", mockTranslationService, lastNameMember));
-        firstNameMember.addFacet(new MemberOrderFacetAnnotation("", "2", mockTranslationService, firstNameMember));
-        houseNumberMember.addFacet(new MemberOrderFacetAnnotation("address", "1", mockTranslationService, houseNumberMember));
-        streetNameMember.addFacet(new MemberOrderFacetAnnotation("address", "2", mockTranslationService, streetNameMember));
-        postalTownMember.addFacet(new MemberOrderFacetAnnotation("address", "3", mockTranslationService, postalTownMember));
+        lastNameMember.addFacet(new MemberOrderFacetAnnotation(ctx, "", "1", mockTranslationService, lastNameMember));
+        firstNameMember.addFacet(new MemberOrderFacetAnnotation(ctx, "", "2", mockTranslationService, firstNameMember));
+        houseNumberMember.addFacet(new MemberOrderFacetAnnotation(ctx, "address", "1", mockTranslationService, houseNumberMember));
+        streetNameMember.addFacet(new MemberOrderFacetAnnotation(ctx, "address", "2", mockTranslationService, streetNameMember));
+        postalTownMember.addFacet(new MemberOrderFacetAnnotation(ctx, "address", "3", mockTranslationService, postalTownMember));
 
         final DeweyOrderSet orderSet = DeweyOrderSet.createOrderSet(nameAndAddressMembers);
         assertEquals(1, orderSet.children().size());
@@ -178,11 +182,11 @@ public class DeweyOrderSetTest extends TestCase {
     }
 
     public void testWithChildGroupChildsGroupName() {
-        lastNameMember.addFacet(new MemberOrderFacetAnnotation("", "1", mockTranslationService, lastNameMember));
-        firstNameMember.addFacet(new MemberOrderFacetAnnotation("", "2", mockTranslationService, firstNameMember));
-        houseNumberMember.addFacet(new MemberOrderFacetAnnotation("address", "1", mockTranslationService, houseNumberMember));
-        streetNameMember.addFacet(new MemberOrderFacetAnnotation("address", "2", mockTranslationService, streetNameMember));
-        postalTownMember.addFacet(new MemberOrderFacetAnnotation("address", "3", mockTranslationService, postalTownMember));
+        lastNameMember.addFacet(new MemberOrderFacetAnnotation(ctx, "", "1", mockTranslationService, lastNameMember));
+        firstNameMember.addFacet(new MemberOrderFacetAnnotation(ctx, "", "2", mockTranslationService, firstNameMember));
+        houseNumberMember.addFacet(new MemberOrderFacetAnnotation(ctx, "address", "1", mockTranslationService, houseNumberMember));
+        streetNameMember.addFacet(new MemberOrderFacetAnnotation(ctx, "address", "2", mockTranslationService, streetNameMember));
+        postalTownMember.addFacet(new MemberOrderFacetAnnotation(ctx, "address", "3", mockTranslationService, postalTownMember));
 
         final DeweyOrderSet orderSet = DeweyOrderSet.createOrderSet(nameAndAddressMembers);
         final List<?> children = orderSet.children();
@@ -193,11 +197,11 @@ public class DeweyOrderSetTest extends TestCase {
     }
 
     public void testWithChildGroupChildsGroupSize() {
-        lastNameMember.addFacet(new MemberOrderFacetAnnotation("", "1", mockTranslationService, lastNameMember));
-        firstNameMember.addFacet(new MemberOrderFacetAnnotation("", "2", mockTranslationService, firstNameMember));
-        houseNumberMember.addFacet(new MemberOrderFacetAnnotation("address", "1", mockTranslationService, houseNumberMember));
-        streetNameMember.addFacet(new MemberOrderFacetAnnotation("address", "2", mockTranslationService, streetNameMember));
-        postalTownMember.addFacet(new MemberOrderFacetAnnotation("address", "3", mockTranslationService, postalTownMember));
+        lastNameMember.addFacet(new MemberOrderFacetAnnotation(ctx, "", "1", mockTranslationService, lastNameMember));
+        firstNameMember.addFacet(new MemberOrderFacetAnnotation(ctx, "", "2", mockTranslationService, firstNameMember));
+        houseNumberMember.addFacet(new MemberOrderFacetAnnotation(ctx, "address", "1", mockTranslationService, houseNumberMember));
+        streetNameMember.addFacet(new MemberOrderFacetAnnotation(ctx, "address", "2", mockTranslationService, streetNameMember));
+        postalTownMember.addFacet(new MemberOrderFacetAnnotation(ctx, "address", "3", mockTranslationService, postalTownMember));
 
         final DeweyOrderSet orderSet = DeweyOrderSet.createOrderSet(nameAndAddressMembers);
         final DeweyOrderSet childOrderSet = orderSet.children().get(0);
@@ -206,11 +210,11 @@ public class DeweyOrderSetTest extends TestCase {
     }
 
     public void testWithChildGroupChildsGroupElementOrdering() {
-        lastNameMember.addFacet(new MemberOrderFacetAnnotation("", "1", mockTranslationService, lastNameMember));
-        firstNameMember.addFacet(new MemberOrderFacetAnnotation("", "2", mockTranslationService, firstNameMember));
-        houseNumberMember.addFacet(new MemberOrderFacetAnnotation("address", "6", mockTranslationService, houseNumberMember));
-        streetNameMember.addFacet(new MemberOrderFacetAnnotation("address", "5", mockTranslationService, streetNameMember));
-        postalTownMember.addFacet(new MemberOrderFacetAnnotation("address", "4", mockTranslationService, postalTownMember));
+        lastNameMember.addFacet(new MemberOrderFacetAnnotation(ctx, "", "1", mockTranslationService, lastNameMember));
+        firstNameMember.addFacet(new MemberOrderFacetAnnotation(ctx, "", "2", mockTranslationService, firstNameMember));
+        houseNumberMember.addFacet(new MemberOrderFacetAnnotation(ctx, "address", "6", mockTranslationService, houseNumberMember));
+        streetNameMember.addFacet(new MemberOrderFacetAnnotation(ctx, "address", "5", mockTranslationService, streetNameMember));
+        postalTownMember.addFacet(new MemberOrderFacetAnnotation(ctx, "address", "4", mockTranslationService, postalTownMember));
 
         final DeweyOrderSet orderSet = DeweyOrderSet.createOrderSet(nameAndAddressMembers);
         final DeweyOrderSet childOrderSet = orderSet.children().get(0);
@@ -220,11 +224,11 @@ public class DeweyOrderSetTest extends TestCase {
     }
 
     public void testWithChildGroupOrderedAtEnd() {
-        houseNumberMember.addFacet(new MemberOrderFacetAnnotation("address", "6", mockTranslationService, houseNumberMember));
-        streetNameMember.addFacet(new MemberOrderFacetAnnotation("address", "5", mockTranslationService, streetNameMember));
-        postalTownMember.addFacet(new MemberOrderFacetAnnotation("address", "4", mockTranslationService, postalTownMember));
-        lastNameMember.addFacet(new MemberOrderFacetAnnotation("", "3", mockTranslationService, lastNameMember));
-        firstNameMember.addFacet(new MemberOrderFacetAnnotation("", "2", mockTranslationService, firstNameMember));
+        houseNumberMember.addFacet(new MemberOrderFacetAnnotation(ctx, "address", "6", mockTranslationService, houseNumberMember));
+        streetNameMember.addFacet(new MemberOrderFacetAnnotation(ctx, "address", "5", mockTranslationService, streetNameMember));
+        postalTownMember.addFacet(new MemberOrderFacetAnnotation(ctx, "address", "4", mockTranslationService, postalTownMember));
+        lastNameMember.addFacet(new MemberOrderFacetAnnotation(ctx, "", "3", mockTranslationService, lastNameMember));
+        firstNameMember.addFacet(new MemberOrderFacetAnnotation(ctx, "", "2", mockTranslationService, firstNameMember));
 
         final DeweyOrderSet orderSet = DeweyOrderSet.createOrderSet(nameAndAddressMembers);
         assertEquals(firstNameMember, orderSet.elementList().get(0));
@@ -244,16 +248,16 @@ public class DeweyOrderSetTest extends TestCase {
     }
 
     public void testDefaultGroupMixOfAnnotatedAndNotSize() {
-        lastNameMember.addFacet(new MemberOrderFacetAnnotation("", "1", mockTranslationService, lastNameMember));
-        postalTownMember.addFacet(new MemberOrderFacetAnnotation("address", "2", mockTranslationService, postalTownMember));
+        lastNameMember.addFacet(new MemberOrderFacetAnnotation(ctx, "", "1", mockTranslationService, lastNameMember));
+        postalTownMember.addFacet(new MemberOrderFacetAnnotation(ctx, "address", "2", mockTranslationService, postalTownMember));
 
         final DeweyOrderSet orderSet = DeweyOrderSet.createOrderSet(lastNameFirstNameAndPostalTown);
         assertEquals(3, orderSet.elementList().size());
     }
 
     public void testDefaultGroupMixOfAnnotatedAndNotOrderedWithAnnotatedFirst() {
-        lastNameMember.addFacet(new MemberOrderFacetAnnotation("", "1", mockTranslationService, lastNameMember));
-        postalTownMember.addFacet(new MemberOrderFacetAnnotation("", "2", mockTranslationService, postalTownMember));
+        lastNameMember.addFacet(new MemberOrderFacetAnnotation(ctx, "", "1", mockTranslationService, lastNameMember));
+        postalTownMember.addFacet(new MemberOrderFacetAnnotation(ctx, "", "2", mockTranslationService, postalTownMember));
 
         final DeweyOrderSet orderSet = DeweyOrderSet.createOrderSet(lastNameFirstNameAndPostalTown);
 

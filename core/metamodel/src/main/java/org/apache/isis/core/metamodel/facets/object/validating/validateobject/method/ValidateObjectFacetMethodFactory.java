@@ -21,6 +21,7 @@ package org.apache.isis.core.metamodel.facets.object.validating.validateobject.m
 
 import java.lang.reflect.Method;
 
+import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
@@ -52,7 +53,7 @@ public class ValidateObjectFacetMethodFactory extends MethodPrefixBasedFacetFact
         if (method != null) {
             val translationService = getTranslationService();
             // sadness: same as in TranslationFactory
-            val translationContext = ((IdentifiedHolder)facetHolder).getIdentifier().getClassName();
+            TranslationContext translationContext = TranslationContext.ofIdentifier(((IdentifiedHolder)facetHolder).getIdentifier()); // .getClassName();
             FacetUtil.addFacet(new ValidateObjectFacetMethod(method, translationService, translationContext, facetHolder));
             processClassContext.removeMethod(method);
         }

@@ -88,7 +88,7 @@ public class TranslatableStringTest {
         public void singularForm() throws Exception {
             // given
             final String simpleText = "text to translate";
-            final String someContext = "someContext";
+            final TranslationContext someContext = TranslationContext.ofSimpleStringIdentifier("someContext");
             final String translation = "the translation";
 
             final TranslatableString ts = TranslatableString.tr(simpleText);
@@ -109,7 +109,7 @@ public class TranslatableStringTest {
             // given
             final String singularText = "singular text to translate";
             final String pluralText = "plural text to translate";
-            final String someContext = "someContext";
+            final TranslationContext someContext = TranslationContext.ofSimpleStringIdentifier("someContext");
             final String translation = "the translation";
 
             final TranslatableString ts = TranslatableString.trn(singularText, pluralText, 1);
@@ -130,7 +130,7 @@ public class TranslatableStringTest {
             // given
             final String singularText = "singular text to translate";
             final String pluralText = "plural text to translate";
-            final String someContext = "someContext";
+            final TranslationContext someContext = TranslationContext.ofSimpleStringIdentifier("someContext");
             final String translation = "the translation";
             final int number = 2; // != 1
 

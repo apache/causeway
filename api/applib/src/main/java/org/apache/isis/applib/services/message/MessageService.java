@@ -20,6 +20,7 @@
 package org.apache.isis.applib.services.message;
 
 import org.apache.isis.applib.services.i18n.TranslatableString;
+import org.apache.isis.applib.services.i18n.TranslationContext;
 
 /**
  * Allows domain objects to raise information, warning or error messages.
@@ -78,7 +79,7 @@ public interface MessageService {
      */
     String informUser(
             TranslatableString message,
-            final String translationContext);
+            final TranslationContext translationContext);
 
     /**
      * Warn the user about a situation with the specified message.
@@ -127,7 +128,7 @@ public interface MessageService {
      */
     String warnUser(
             TranslatableString message,
-            final String translationContext);
+            final TranslationContext translationContext);
 
     /**
      * Notify the user of an application error with the specified message.
@@ -176,6 +177,6 @@ public interface MessageService {
      */
     String raiseError(
             TranslatableString message,
-            final String translationContext);
+            final TranslationContext translationContext);
 
 }

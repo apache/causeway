@@ -27,6 +27,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.apache.isis.applib.services.i18n.TranslatableString;
+import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -41,13 +42,13 @@ implements ImperativeFacet {
 
     private final Method method;
     private final TranslationService translationService;
-    private final String translationContext;
+    private final TranslationContext translationContext;
     private final Optional<Constructor<?>> ppmFactory;
 
     public ActionParameterValidationFacetViaMethod(
             final Method method, 
             final TranslationService translationService, 
-            final String translationContext, 
+            final TranslationContext translationContext, 
             final Optional<Constructor<?>> ppmFactory, 
             final FacetHolder holder) {
         

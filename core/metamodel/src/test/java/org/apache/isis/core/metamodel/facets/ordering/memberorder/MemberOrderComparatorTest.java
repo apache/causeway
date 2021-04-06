@@ -25,6 +25,7 @@ import org.jmock.api.Action;
 import org.jmock.api.Invocation;
 import org.junit.Rule;
 
+import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
@@ -59,6 +60,8 @@ public class MemberOrderComparatorTest extends TestCase {
     @Rule
     public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(JUnitRuleMockery2.Mode.INTERFACES_AND_CLASSES);
 
+	static TranslationContext ctx = TranslationContext.ofSimpleStringIdentifier("test");
+    
     @Override
     protected void setUp() {
 
@@ -69,7 +72,7 @@ public class MemberOrderComparatorTest extends TestCase {
 
         mockTranslationService = context.mock(TranslationService.class);
         context.checking(new Expectations() {{
-            allowing(mockTranslationService).translate(with(any(String.class)), with(any(String.class)));
+            allowing(mockTranslationService).translate(with(any(TranslationContext.class)), with(any(String.class)));
             will(new Action() {
                 @Override
                 public Object invoke(final Invocation invocation) throws Throwable {
@@ -90,74 +93,74 @@ public class MemberOrderComparatorTest extends TestCase {
     }
 
     public void testDefaultGroupOneComponent() {
-        m1.addFacet(new MemberOrderFacetAnnotation("", "1", mockTranslationService, m1));
-        m2.addFacet(new MemberOrderFacetAnnotation("", "2", mockTranslationService, m2));
+        m1.addFacet(new MemberOrderFacetAnnotation(ctx, "", "1", mockTranslationService, m1));
+        m2.addFacet(new MemberOrderFacetAnnotation(ctx, "", "2", mockTranslationService, m2));
         assertEquals(-1, comparator.compare(m1, m2));
     }
 
     public void testDefaultGroupOneComponentOtherWay() {
-        m1.addFacet(new MemberOrderFacetAnnotation("", "2", mockTranslationService, m1));
-        m2.addFacet(new MemberOrderFacetAnnotation("", "1", mockTranslationService, m2));
+        m1.addFacet(new MemberOrderFacetAnnotation(ctx, "", "2", mockTranslationService, m1));
+        m2.addFacet(new MemberOrderFacetAnnotation(ctx, "", "1", mockTranslationService, m2));
         assertEquals(+1, comparator.compare(m1, m2));
     }
 
     public void testDefaultGroupOneComponentSame() {
-        m1.addFacet(new MemberOrderFacetAnnotation("", "1", mockTranslationService, m1));
-        m2.addFacet(new MemberOrderFacetAnnotation("", "1", mockTranslationService, m2));
+        m1.addFacet(new MemberOrderFacetAnnotation(ctx, "", "1", mockTranslationService, m1));
+        m2.addFacet(new MemberOrderFacetAnnotation(ctx, "", "1", mockTranslationService, m2));
         assertEquals(0, comparator.compare(m1, m2));
     }
 
     public void testDefaultGroupOneSideRunsOutOfComponentsFirst() {
-        m1.addFacet(new MemberOrderFacetAnnotation("", "1", mockTranslationService, m1));
-        m2.addFacet(new MemberOrderFacetAnnotation("", "1.1", mockTranslationService, m2));
+        m1.addFacet(new MemberOrderFacetAnnotation(ctx, "", "1", mockTranslationService, m1));
+        m2.addFacet(new MemberOrderFacetAnnotation(ctx, "", "1.1", mockTranslationService, m2));
         assertEquals(-1, comparator.compare(m1, m2));
     }
 
     public void testDefaultGroupOneSideRunsOutOfComponentsFirstOtherWay() {
-        m1.addFacet(new MemberOrderFacetAnnotation("", "1.1", mockTranslationService, m1));
-        m2.addFacet(new MemberOrderFacetAnnotation("", "1", mockTranslationService, m2));
+        m1.addFacet(new MemberOrderFacetAnnotation(ctx, "", "1.1", mockTranslationService, m1));
+        m2.addFacet(new MemberOrderFacetAnnotation(ctx, "", "1", mockTranslationService, m2));
         assertEquals(+1, comparator.compare(m1, m2));
     }
 
     public void testDefaultGroupOneSideRunsTwoComponents() {
-        m1.addFacet(new MemberOrderFacetAnnotation("", "1.1", mockTranslationService, m1));
-        m2.addFacet(new MemberOrderFacetAnnotation("", "1.2", mockTranslationService, m2));
+        m1.addFacet(new MemberOrderFacetAnnotation(ctx, "", "1.1", mockTranslationService, m1));
+        m2.addFacet(new MemberOrderFacetAnnotation(ctx, "", "1.2", mockTranslationService, m2));
         assertEquals(-1, comparator.compare(m1, m2));
     }
 
     public void testDefaultGroupOneSideRunsTwoComponentsOtherWay() {
-        m1.addFacet(new MemberOrderFacetAnnotation("", "1.2", mockTranslationService, m1));
-        m2.addFacet(new MemberOrderFacetAnnotation("", "1.1", mockTranslationService, m2));
+        m1.addFacet(new MemberOrderFacetAnnotation(ctx, "", "1.2", mockTranslationService, m1));
+        m2.addFacet(new MemberOrderFacetAnnotation(ctx, "", "1.1", mockTranslationService, m2));
         assertEquals(+1, comparator.compare(m1, m2));
     }
 
     public void testDefaultGroupOneSideRunsLotsOfComponents() {
-        m1.addFacet(new MemberOrderFacetAnnotation("", "1.2.5.8.3.3", mockTranslationService, m1));
-        m2.addFacet(new MemberOrderFacetAnnotation("", "1.2.5.8.3.4", mockTranslationService, m2));
+        m1.addFacet(new MemberOrderFacetAnnotation(ctx, "", "1.2.5.8.3.3", mockTranslationService, m1));
+        m2.addFacet(new MemberOrderFacetAnnotation(ctx, "", "1.2.5.8.3.4", mockTranslationService, m2));
         assertEquals(-1, comparator.compare(m1, m2));
     }
 
     public void testDefaultGroupOneSideRunsLotsOfComponentsOtherWay() {
-        m1.addFacet(new MemberOrderFacetAnnotation("", "1.2.5.8.3.4", mockTranslationService, m1));
-        m2.addFacet(new MemberOrderFacetAnnotation("", "1.2.5.8.3.3", mockTranslationService, m2));
+        m1.addFacet(new MemberOrderFacetAnnotation(ctx, "", "1.2.5.8.3.4", mockTranslationService, m1));
+        m2.addFacet(new MemberOrderFacetAnnotation(ctx, "", "1.2.5.8.3.3", mockTranslationService, m2));
         assertEquals(+1, comparator.compare(m1, m2));
     }
 
     public void testDefaultGroupOneSideRunsLotsOfComponentsSame() {
-        m1.addFacet(new MemberOrderFacetAnnotation("", "1.2.5.8.3.3", mockTranslationService, m1));
-        m2.addFacet(new MemberOrderFacetAnnotation("", "1.2.5.8.3.3", mockTranslationService, m2));
+        m1.addFacet(new MemberOrderFacetAnnotation(ctx, "", "1.2.5.8.3.3", mockTranslationService, m1));
+        m2.addFacet(new MemberOrderFacetAnnotation(ctx, "", "1.2.5.8.3.3", mockTranslationService, m2));
         assertEquals(0, comparator.compare(m1, m2));
     }
 
     public void testNamedGroupOneSideRunsLotsOfComponents() {
-        m1.addFacet(new MemberOrderFacetAnnotation("abc", "1.2.5.8.3.3", mockTranslationService, m1));
-        m2.addFacet(new MemberOrderFacetAnnotation("abc", "1.2.5.8.3.4", mockTranslationService, m2));
+        m1.addFacet(new MemberOrderFacetAnnotation(ctx, "abc", "1.2.5.8.3.3", mockTranslationService, m1));
+        m2.addFacet(new MemberOrderFacetAnnotation(ctx, "abc", "1.2.5.8.3.4", mockTranslationService, m2));
         assertEquals(-1, comparator.compare(m1, m2));
     }
 
     public void testEnsuresInSameGroup() {
-        m1.addFacet(new MemberOrderFacetAnnotation("abc", "1", mockTranslationService, m1));
-        m2.addFacet(new MemberOrderFacetAnnotation("def", "2", mockTranslationService, m2));
+        m1.addFacet(new MemberOrderFacetAnnotation(ctx, "abc", "1", mockTranslationService, m1));
+        m2.addFacet(new MemberOrderFacetAnnotation(ctx, "def", "2", mockTranslationService, m2));
         try {
             assertEquals(-1, comparator.compare(m1, m2));
             fail("Exception should have been thrown");
@@ -167,14 +170,14 @@ public class MemberOrderComparatorTest extends TestCase {
     }
 
     public void testEnsuresInSameGroupCanBeDisabled() {
-        m1.addFacet(new MemberOrderFacetAnnotation("abc", "1", mockTranslationService, m1));
-        m2.addFacet(new MemberOrderFacetAnnotation("def", "2", mockTranslationService, m2));
+        m1.addFacet(new MemberOrderFacetAnnotation(ctx, "abc", "1", mockTranslationService, m1));
+        m2.addFacet(new MemberOrderFacetAnnotation(ctx, "def", "2", mockTranslationService, m2));
         assertEquals(-1, laxComparator.compare(m1, m2));
     }
 
     public void testNonAnnotatedAfterAnnotated() {
         // don't annotate m1
-        m2.addFacet(new MemberOrderFacetAnnotation("def", "2", mockTranslationService, m2));
+        m2.addFacet(new MemberOrderFacetAnnotation(ctx, "def", "2", mockTranslationService, m2));
         assertEquals(+1, comparator.compare(m1, m2));
     }
 

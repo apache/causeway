@@ -19,6 +19,7 @@
 
 package org.apache.isis.core.metamodel.facets.properties.validating.method;
 
+import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.MethodFinder2;
@@ -63,7 +64,7 @@ public class PropertyValidateFacetViaMethodFactory extends MethodPrefixBasedFace
         val facetHolder = processMethodContext.getFacetHolder();
         val translationService = getTranslationService();
         // sadness: same as in TranslationFactory
-        val translationContext = facetHolder.getIdentifier().getTranslationContext();
+        val translationContext = TranslationContext.ofIdentifier(facetHolder.getIdentifier()); // .getTranslationContext();
         super.addFacet(
                 new PropertyValidateFacetViaMethod(
                         validateMethod, translationService, translationContext, facetHolder));
