@@ -79,7 +79,6 @@ _Integrate between Apps_
 _Other_
 
 *  xref:incubator:ROOT:about.adoc[Incubator]
-*  xref:legacy:ROOT:about.adoc[Legacy]
 
 
 |
@@ -123,7 +122,7 @@ _Releases_
 _Nightly Builds (not ASF)_
 
 * link:https://github.com/apache-isis-committers/isis-nightly[CI]
-* link:https://nexus.incode.cloud/[Maven Repo] (current)
+* link:https://nexus.incode.work/[Maven Repo] (current)
 * link:https://repo.incode.cloud/[Maven Repo] (v1 only)
 * link:https://apache-isis-committers.github.io/isis-nightly[Website preview]
 

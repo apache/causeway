@@ -88,7 +88,7 @@ Mixins that contribute to this mixee interface include:
 
 * xref:refguide:extensions:index/commandlog/impl/mixins/HasInteractionId_command.adoc[HasInteractionId_command]
 +
-from xref:extensions:command-log:about.adoc[Comman Log] module.
+from xref:userguide:command-log:about.adoc[Comman Log] module.
 
 
 The closely related  xref:refguide:applib:index/mixins/system/HasTransactionId.adoc[HasTransactionId] (a subtype of xref:refguide:applib:index/mixins/system/HasInteractionId.adoc[HasInteractionId]) can be implemented by any domain objects associated with a particular transaction within the outer xref:refguide:applib:index/services/iactn/Interaction.adoc[Interaction].

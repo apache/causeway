@@ -5,10 +5,6 @@
 
 The representations defined by the RO spec are very rich and enable complex client-side applications to be built.
 However, their sophistication can be an impediment to their use if one wishes to write a simple app using third-party components that expect to consume much simpler representations.
-Examples of such tools are
-link:http://angular-ui.github.io/bootstrap/[Angular Bootstrap],
-link:http://vitalets.github.io/angular-xeditable/[Angular XEditable],
-link:https://github.com/mgcrea/angular-strap[Angular Strap].
 
 Apache Isis also provides support for its own simplified representation for the most commonly-used representations.
 This is implemented using the xref:refguide:viewer:index/restfulobjects/rendering/service/conneg/ContentNegotiationService.adoc[ContentNegotiationService] described in the

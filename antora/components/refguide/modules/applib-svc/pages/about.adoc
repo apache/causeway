@@ -180,7 +180,7 @@ Note that it's possible for there to be more than one transaction per top-level 
 * At the end of the entire interaction footnote:[although rare, there can be multiple transactions in a single interaction], details of the top-level `Command` are sent to each xref:refguide:applib:index/services/publishing/spi/CommandSubscriber.adoc[CommandSubscriber].
 This captures whether the command succeeded or failed.
 +
-The xref:extensions:command-log:about.adoc[Command Log] extension uses this to persist a log of commands, for auditing or to support regression testing with the xref:extensions:command-replay:about.adoc[Command Replay] extension.
+The xref:userguide:command-log:about.adoc[Command Log] extension uses this to persist a log of commands, for auditing or to support regression testing with the xref:userguide:command-replay:about.adoc[Command Replay] extension.
 
 
 Implementations of xref:refguide:applib:index/services/publishing/spi/CommandSubscriber.adoc[CommandSubscriber] can use the `Command#getMemento()` method to obtain a XML equivalent of that `Command`, reified using the xref:refguide:schema:cmd.adoc[cmd.xsd] schema.

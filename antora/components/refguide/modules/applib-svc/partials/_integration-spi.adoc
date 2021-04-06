@@ -22,13 +22,13 @@ TIP: see also the xref:mappings:ROOT:about.adoc[Bounded Context Mappings] catalo
 
 |xref:refguide:applib:index/services/command/CommandExecutorService.adoc[CommandExecutorService]
 |Service used to execute commands.
-One use case is to replay commands from a primary onto a secondary (see xref:extensions:command-replay:about.adoc[Command Replay] ; another is in support of async commands (using
+One use case is to replay commands from a primary onto a secondary (see xref:userguide:command-replay:about.adoc[Command Replay] ; another is in support of async commands (using
 xref:refguide:applib:index/services/wrapper/WrapperFactory.adoc[WrapperFactory] ).
 
 
 |xref:refguide:applib:index/services/publishing/spi/CommandSubscriber.adoc[CommandSubscriber]
 |SPI to allow commands to be processed on completion.
-The xref:extensions:command-log:about.adoc[Command Log] extension implements the SPI in order to persists commands for audit or replay.
+The xref:userguide:command-log:about.adoc[Command Log] extension implements the SPI in order to persists commands for audit or replay.
 
 
 |xref:refguide:applib:index/services/publishing/spi/EntityChangesSubscriber.adoc[EntityChangesSubscriber]
