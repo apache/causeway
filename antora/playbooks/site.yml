@@ -163,9 +163,6 @@ content:
     - url: .
       start_path: incubator/viewers/vaadin/adoc # incubator
       branches: HEAD
-    - url: .
-      start_path: incubator/mappings/microprofile/src/main/adoc # incubator
-      branches: HEAD
 
 # mappings
     - url: .
