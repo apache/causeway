@@ -87,7 +87,6 @@
 				<module>antora</module>
 				<module>examples/demo</module>
 				<module>incubator</module>
-				<module>legacy</module>
 				<module>regressiontests</module>
 				<module>tooling</module>
 			</modules>
@@ -201,18 +200,6 @@
 			<modules>
 				<module>valuetypes/asciidoc/ui/vaadin</module>
 				<module>incubator/viewers/vaadin</module>
-			</modules>
-		</profile>
-
-		<profile>
-			<id>module-legacy</id>
-			<activation>
-				<property>
-					<name>module-legacy</name>
-				</property>
-			</activation>
-			<modules>
-				<module>legacy</module>
 			</modules>
 		</profile>
 

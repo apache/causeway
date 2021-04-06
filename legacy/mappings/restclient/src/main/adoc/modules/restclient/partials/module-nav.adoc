@@ -1,4 +1,0 @@
-* xref:legacy:restclient:about.adoc[REST Client]
-
-
-
