@@ -82,7 +82,7 @@ extends MethodPrefixBasedFacetFactoryAbstract  {
             
             // add facets directly to parameters, not to actions
             val paramAsHolder = parameters.get(paramNum);
-            TranslationContext translationContext = TranslationContext.ofIdentifierFullIdentity(paramAsHolder.getIdentifier()); // .getFullIdentityString();
+            val translationContext = TranslationContext.forTranslationContextHolder(paramAsHolder.getIdentifier());
             val ppmFactory = searchResult.getPpmFactory();
             val translationService = getMetaModelContext().getTranslationService();
             

@@ -20,7 +20,6 @@
 package org.apache.isis.core.metamodel.facets.members.order.annotprop;
 
 import org.apache.isis.applib.annotation.MemberOrder;
-import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
@@ -52,7 +51,7 @@ extends FacetFactoryAbstract  {
         
         if (annotation != null) {        	
             return new MemberOrderFacetAnnotation(
-            		TranslationContext.ofIdentifier(processMethodContext.getFacetHolder().getIdentifier()),
+            		processMethodContext.getFacetHolder().getIdentifier().getTranslationContext(),
                     annotation.name(),
                     annotation.sequence(),
                     getTranslationService(),

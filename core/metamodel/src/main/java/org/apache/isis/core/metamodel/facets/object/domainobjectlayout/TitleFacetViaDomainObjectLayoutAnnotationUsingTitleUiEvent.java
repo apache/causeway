@@ -133,9 +133,8 @@ public class TitleFacetViaDomainObjectLayoutAnnotationUsingTitleUiEvent extends 
 
     private static TranslationContext translationContextFor(final FacetHolder facetHolder) {
         if(facetHolder instanceof ObjectSpecification) {        	
-            val facetHolderAsSpec = (ObjectSpecification) facetHolder; // bit naughty...
-            // return facetHolderAsSpec.getCorrespondingClass().getCanonicalName();
-            return TranslationContext.ofIdentifier(facetHolderAsSpec.getIdentifier());
+            val facetHolderAsSpec = (ObjectSpecification) facetHolder;
+            return TranslationContext.forTranslationContextHolder(facetHolderAsSpec.getIdentifier());
         } 
         return null;
     }

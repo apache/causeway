@@ -18,6 +18,10 @@
  */
 package org.apache.isis.core.runtimeservices.i18n.po;
 
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+
 import java.util.List;
 import java.util.Locale;
 
@@ -27,10 +31,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.apache.isis.applib.services.i18n.LocaleProvider;
 import org.apache.isis.applib.services.i18n.TranslationContext;
@@ -81,7 +81,7 @@ public class PoReaderTest {
         public void singleContext() throws Exception {
 
             // given
-            final TranslationContext context = TranslationContext.ofSimpleStringIdentifier(
+            final TranslationContext context = TranslationContext.ofName(
                     "org.apache.isis.applib.services.bookmark.BookmarkHolderAssociationContributions#object()");
             final String msgId = "Work of art";
             final String msgStr = "Objet d'art";
@@ -90,7 +90,7 @@ public class PoReaderTest {
                 @Override
                 protected List<String> readPo(final Locale locale) {
                     final List<String> lines = _Lists.newArrayList();
-                    lines.add(String.format("#: %s", context.stringify()));
+                    lines.add(String.format("#: %s", context.getName()));
                     lines.add(String.format("msgid \"%s\"", msgId));
                     lines.add(String.format("msgstr \"%s\"", msgStr));
                     return lines;
@@ -108,9 +108,9 @@ public class PoReaderTest {
         public void multipleContext() throws Exception {
 
             // given
-            final TranslationContext context1 = TranslationContext.ofSimpleStringIdentifier(
+            final TranslationContext context1 = TranslationContext.ofName(
                     "fixture.simple.SimpleObjectsFixturesService#runFixtureScript(org.apache.isis.applib.fixturescripts.FixtureScript,java.lang.String)");
-            final TranslationContext context2 = TranslationContext.ofSimpleStringIdentifier(
+            final TranslationContext context2 = TranslationContext.ofName(
                     "org.apache.isis.applib.fixturescripts.FixtureScripts#runFixtureScript(org.apache.isis.applib.fixturescripts.FixtureScript,java.lang.String)");
             final String msgId = "Parameters";
             final String msgStr = "Paramètres";
@@ -119,8 +119,8 @@ public class PoReaderTest {
                 @Override
                 protected List<String> readPo(final Locale locale) {
                     final List<String> lines = _Lists.newArrayList();
-                    lines.add(String.format("#: %s", context1.stringify()));
-                    lines.add(String.format("#: %s", context2.stringify()));
+                    lines.add(String.format("#: %s", context1.getName()));
+                    lines.add(String.format("#: %s", context2.getName()));
                     lines.add(String.format("msgid \"%s\"", msgId));
                     lines.add(String.format("msgstr \"%s\"", msgStr));
                     return lines;
@@ -143,12 +143,12 @@ public class PoReaderTest {
         public void multipleBlocks() throws Exception {
 
             // given
-            final TranslationContext context1 = TranslationContext.ofSimpleStringIdentifier(
+            final TranslationContext context1 = TranslationContext.ofName(
                     "org.apache.isis.applib.services.bookmark.BookmarkHolderAssociationContributions#object()");
             final String msgid1 = "Work of art";
             final String msgstr1 = "Objet d'art";
 
-            final TranslationContext context2 = TranslationContext.ofSimpleStringIdentifier(
+            final TranslationContext context2 = TranslationContext.ofName(
                     "org.apache.isis.applib.services.bookmark.BookmarkHolderAssociationContributions#lookup()");
             final String msgid2 = "Lookup";
             final String msgstr2 = "Look up";
@@ -157,14 +157,14 @@ public class PoReaderTest {
                 @Override
                 protected List<String> readPo(final Locale locale) {
                     final List<String> lines = _Lists.newArrayList();
-                    lines.add(String.format("#: %s", context1.stringify()));
+                    lines.add(String.format("#: %s", context1.getName()));
                     lines.add(String.format("msgid \"%s\"", msgid1));
                     lines.add(String.format("msgstr \"%s\"", msgstr1));
 
                     lines.add(String.format(""));
                     lines.add(String.format("# "));
 
-                    lines.add(String.format("#: %s", context2.stringify()));
+                    lines.add(String.format("#: %s", context2.getName()));
                     lines.add(String.format("msgid \"%s\"", msgid2));
                     lines.add(String.format("msgstr \"%s\"", msgstr2));
 
@@ -190,7 +190,7 @@ public class PoReaderTest {
         public void withPlurals() throws Exception {
 
             // given
-            final TranslationContext context = TranslationContext.ofSimpleStringIdentifier(
+            final TranslationContext context = TranslationContext.ofName(
                     "org.apache.isis.applib.services.bookmark.BookmarkHolderAssociationContributions#object()");
             final String msgid = "Work of art";
             final String msgid_plural = "Works of art";
@@ -201,7 +201,7 @@ public class PoReaderTest {
                 @Override
                 protected List<String> readPo(final Locale locale) {
                     final List<String> lines = _Lists.newArrayList();
-                    lines.add(String.format("#: %s", context.stringify()));
+                    lines.add(String.format("#: %s", context.getName()));
                     lines.add(String.format("msgid \"%s\"", msgid));
                     lines.add(String.format("msgid_plural \"%s\"", msgid_plural));
                     lines.add(String.format("msgstr[0] \"%s\"", msgstr$0));
@@ -237,7 +237,7 @@ public class PoReaderTest {
                 }
             };
             
-            TranslationContext context = TranslationContext.ofSimpleStringIdentifier("someContext");
+            TranslationContext context = TranslationContext.ofName("someContext");
 
             // when
             final String translated = poReader.translate(context, "Something to translate");

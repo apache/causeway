@@ -21,7 +21,6 @@ package org.apache.isis.core.metamodel.services.title;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.services.i18n.TranslationContext;
-import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.title.TitleService;
 import org.apache.isis.commons.internal.base._Blackhole;
 import org.apache.isis.core.config.messages.MessageRegistry;
@@ -139,22 +138,21 @@ public class TitlesAndTranslationsValidator extends MetaModelValidatorAbstract {
         
     private void validateRegisteredMessageTranslation() {
         
-        val serviceRegistry = super.getMetaModelContext().getServiceRegistry();
         val specificationLoader = super.getMetaModelContext().getSpecificationLoader();
-        val translationService = serviceRegistry.lookupServiceElseFail(TranslationService.class);
+        val translationService = super.getMetaModelContext().getTranslationService();
         
         // as used by the Wicket UI?
         // final TranslationContext context = "org.apache.isis.core.interaction.session.InteractionFactory";
         
         // see @ConfirmUiModel#translate()
-        final TranslationContext context = TranslationContext.ofClass(MessageRegistry.class);
+        val translationContext = TranslationContext.forClassName(MessageRegistry.class);
         
-        final MessageRegistry messageRegistry = new MessageRegistry();
+        val messageRegistry = new MessageRegistry();
         for (String message : messageRegistry.listMessages()) {
         	
             try {
 
-                val translatedMessage = translationService.translate(context, message);
+                val translatedMessage = translationService.translate(translationContext, message);
                 _Blackhole.consume(translatedMessage);
 
             } catch (Exception e) {
