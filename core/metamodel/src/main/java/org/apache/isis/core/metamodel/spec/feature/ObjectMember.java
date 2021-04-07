@@ -27,6 +27,7 @@ import java.util.stream.Stream;
 import javax.annotation.meta.When;
 
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.compare._Comparators;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
@@ -237,12 +238,12 @@ public interface ObjectMember extends ObjectFeature {
                         
                         val groupFacet1 = m1.getFacet(LayoutGroupFacet.class);
                         val groupFacet2 = m2.getFacet(LayoutGroupFacet.class);
-                        val group1 = groupFacet1==null ? null : groupFacet1.getGroup();
-                        val group2 = groupFacet2==null ? null : groupFacet2.getGroup();
+                        val group1 = _Strings.nullToEmpty(groupFacet1==null ? null : groupFacet1.getGroup());
+                        val group2 = _Strings.nullToEmpty(groupFacet2==null ? null : groupFacet2.getGroup());
                         
                         if(!Objects.equals(group1, group2)) {
                             throw _Exceptions.illegalArgument(
-                                    "Not in same group when comparing: %s, %s", 
+                                    "Not in same group when comparing: '%s', '%s'", 
                                     group1, 
                                     group2);
                         }
