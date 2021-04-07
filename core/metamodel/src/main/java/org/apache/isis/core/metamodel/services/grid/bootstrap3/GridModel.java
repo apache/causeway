@@ -113,10 +113,6 @@ final class GridModel {
                 @Override
                 public void visit(final FieldSet fieldSet) {
                     String id = fieldSet.getId();
-                    if(id == null) {
-                        final String name = fieldSet.getName();
-                        fieldSet.setId(id = GridSystemServiceBS3.asId(name));
-                    }
                     if(gridModel.contains(id)) {
                         fieldSet.setMetadataError("There is another element in the grid with this id");
                         gridModel.duplicateIdDetected = true;

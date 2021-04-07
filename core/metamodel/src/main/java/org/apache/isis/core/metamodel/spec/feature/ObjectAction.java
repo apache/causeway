@@ -17,8 +17,9 @@
 
 package org.apache.isis.core.metamodel.spec.feature;
 
+import static org.apache.isis.commons.internal.base._NullSafe.stream;
+
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -54,13 +55,10 @@ import org.apache.isis.core.metamodel.facets.object.promptStyle.PromptStyleFacet
 import org.apache.isis.core.metamodel.facets.object.wizard.WizardFacet;
 import org.apache.isis.core.metamodel.interactions.InteractionHead;
 import org.apache.isis.core.metamodel.interactions.managed.ActionInteractionHead;
-import org.apache.isis.core.metamodel.layout.memberorderfacet.MemberOrderFacetComparator;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.specimpl.MixedInMember;
-
-import static org.apache.isis.commons.internal.base._NullSafe.stream;
 
 import lombok.NonNull;
 import lombok.val;
@@ -257,11 +255,10 @@ public interface ObjectAction extends ObjectMember {
         final String ownerId = getOnType().getLogicalTypeName().replace(".", "-");
         return prefix + ownerId + "-" + getId();
     }
-
-    // -- Util
+    
+    // -- UTIL
+    
     public static final class Util {
-
-        static final MemberOrderFacetComparator memberOrderFacetComparator = new MemberOrderFacetComparator(false);
 
         private Util() {
         }
@@ -382,15 +379,7 @@ public interface ObjectAction extends ObjectMember {
                 addActions(adapter, ActionType.PROTOTYPE, association, associatedActions);
             }
 
-            Collections.sort(associatedActions, new Comparator<ObjectAction>() {
-
-                @Override
-                public int compare(ObjectAction o1, ObjectAction o2) {
-                    final MemberOrderFacet m1 = o1.getFacet(MemberOrderFacet.class);
-                    final MemberOrderFacet m2 = o2.getFacet(MemberOrderFacet.class);
-                    return memberOrderFacetComparator.compare(m1, m2);
-                }
-            });
+            Collections.sort(associatedActions, Comparators.byMemberOrderSequence(false));
             return associatedActions;
         }
 
@@ -511,34 +500,6 @@ public interface ObjectAction extends ObjectMember {
             return (ObjectAction oa) -> oa.getType() == type;
         }
 
-        //        public static Predicate<ObjectAction> bulk() {
-        //            return new Predicate<ObjectAction>() {
-        //
-        //                @Override
-        //                public boolean test(ObjectAction oa) {
-        //
-        //                    final BulkFacet bulkFacet = oa.getFacet(BulkFacet.class);
-        //                    if(bulkFacet == null || bulkFacet.isNoop() || bulkFacet.value() == InvokeOn.OBJECT_ONLY) {
-        //                        return false;
-        //                    }
-        //                    if (oa.getParameterCount() != 0) {
-        //                        return false;
-        //                    }
-        //
-        //                    // currently don't support returning Blobs or Clobs
-        //                    // (because haven't figured out how to rerender the current page, but also to do a download)
-        //                    ObjectSpecification returnSpec = oa.getReturnType();
-        //                    if (returnSpec != null) {
-        //                        Class<?> returnType = returnSpec.getCorrespondingClass();
-        //                        if (returnType == Blob.class || returnType == Clob.class) {
-        //                            return false;
-        //                        }
-        //                    }
-        //                    return true;
-        //                }
-        //            };
-        //        }
-
         public static Predicate<ObjectAction> dynamicallyVisible(
                 final ManagedObject target,
                 final InteractionInitiatedBy interactionInitiatedBy,
@@ -549,13 +510,6 @@ public interface ObjectAction extends ObjectMember {
                 return visible.isAllowed();
             };
         }
-
-        //        public static Predicate<ObjectAction> notBulkOnly() {
-        //            return (ObjectAction t) -> {
-        //                    BulkFacet facet = t.getFacet(BulkFacet.class);
-        //                    return facet == null || facet.value() != InvokeOn.COLLECTION_ONLY;
-        //            };
-        //        }
 
         public static Predicate<ObjectAction> excludeWizardActions(final ObjectSpecification objectSpecification) {
             return wizardActions(objectSpecification).negate();

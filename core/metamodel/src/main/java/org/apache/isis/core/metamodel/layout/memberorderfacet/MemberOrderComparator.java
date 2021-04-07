@@ -21,15 +21,17 @@ package org.apache.isis.core.metamodel.layout.memberorderfacet;
 
 import java.util.Comparator;
 
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
-import org.apache.isis.core.metamodel.facets.members.order.MemberOrderFacet;
+import org.apache.isis.core.metamodel.facets.members.layout.order.LayoutOrderFacet;
 import org.apache.isis.core.metamodel.layout.DeweyOrderSet;
+import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
+
+import lombok.val;
 
 /**
- * Compares by {@link MemberOrderFacet} obtained from each {@link FacetedMethod}
- * ).
+ * Compares by {@link ObjectMember}(s) obtained based on their {@link LayoutOrderFacet}.
  *
  * <p>
  * Will also compare {@link DeweyOrderSet}s; these are put after any
@@ -45,19 +47,24 @@ import org.apache.isis.core.metamodel.layout.DeweyOrderSet;
  */
 public class MemberOrderComparator implements Comparator<Object> {
 
-    private final MemberOrderFacetComparator memberOrderFacetComparator;
+    private final Comparator<IdentifiedHolder> memberComparator;
     private final MemberIdentifierComparator memberIdentifierComparator = new MemberIdentifierComparator();
     private final OrderSetGroupNameComparator orderSetComparator = new OrderSetGroupNameComparator(true);
 
     public MemberOrderComparator(final boolean ensureGroupIsSame) {
-        memberOrderFacetComparator = new MemberOrderFacetComparator(ensureGroupIsSame);
+        memberComparator = ObjectMember.Comparators.byMemberOrderSequence(ensureGroupIsSame);
     }
-
 
     @Override
     public int compare(final Object o1, final Object o2) {
         if (o1 instanceof IdentifiedHolder && o2 instanceof IdentifiedHolder) {
-            return compare((IdentifiedHolder) o1, (IdentifiedHolder) o2);
+            val m1 = (IdentifiedHolder) o1;
+            val m2 = (IdentifiedHolder) o2;
+            final int memberOrderComparison = memberComparator.compare(m1, m2);
+            if(memberOrderComparison != 0) {
+                return memberOrderComparison;
+            }
+            return memberIdentifierComparator.compare(m1, m2);
         }
         if (o1 instanceof DeweyOrderSet && o2 instanceof DeweyOrderSet) {
             return orderSetComparator.compare((DeweyOrderSet) o1, (DeweyOrderSet) o2);
@@ -68,23 +75,10 @@ public class MemberOrderComparator implements Comparator<Object> {
         if (o1 instanceof DeweyOrderSet && o2 instanceof IdentifiedHolder) {
             return +1; // members before OrderSets.
         }
-        throw new IllegalArgumentException("can only compare IdentifiedHolders and DeweyOrderSets");
-    }
-
-    public int compare(final IdentifiedHolder o1, final IdentifiedHolder o2) {
-        final MemberOrderFacet m1 = getMemberOrder(o1);
-        final MemberOrderFacet m2 = getMemberOrder(o2);
-
-        final int memberOrderComparison = memberOrderFacetComparator.compare(m1, m2);
-        if(memberOrderComparison != 0) {
-            return memberOrderComparison;
-        }
-        return memberIdentifierComparator.compare(o1, o2);
-    }
-
-
-    private MemberOrderFacet getMemberOrder(final FacetHolder facetHolder) {
-        return facetHolder.getFacet(MemberOrderFacet.class);
+        throw _Exceptions.illegalArgument(
+                "can only compare IdentifiedHolders and DeweyOrderSets, got: %s, %s", 
+                o1==null ? null : o1.getClass().getName(), 
+                o2==null ? null : o2.getClass().getName());
     }
 
 }

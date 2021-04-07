@@ -70,7 +70,7 @@ Serializable {
     /**
      * As per &lt;div id=&quot;...&quot;&gt;...&lt;/div&gt; : must be unique across entire page.
      */
-    @XmlAttribute(required = false)
+    @XmlAttribute(required = true)
     public String getId() {
         return id;
     }

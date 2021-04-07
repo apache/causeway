@@ -45,4 +45,12 @@ public interface LayoutGroupFacet extends Facet {
      */
     public String getGroup();
     
+    /** 
+     * {@code true} for layouts originating from XML, 
+     * {@code false} for layouts originating from annotations.
+     */
+    public default boolean isExplicitBinding() {
+        return false;
+    }
+    
 }
