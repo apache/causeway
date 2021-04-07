@@ -127,14 +127,14 @@ public class Recognition {
     }
 
     private static String translate(
-            @Nullable String x,
+            @Nullable String text,
             @Nullable TranslationService translationService) {
-        if (x == null || translationService == null) {
-            return x;
+        if (text == null 
+                || translationService == null) {
+            return text;
         }
-        TranslationContext context = TranslationContext.ofClass(Recognition.class);
-        return translationService.translate(
-        		context, x);
+        val context = TranslationContext.forClassName(Recognition.class);
+        return translationService.translate(context, text);
     }
 
 }

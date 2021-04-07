@@ -48,7 +48,7 @@ public class ConfirmUiModel implements Serializable {
     
     public static ConfirmUiModel ofAreYouSure(TranslationService translationService, Placement placement) {
         
-    	TranslationContext context = TranslationContext.ofClass(MessageRegistry.class);
+    	val context = TranslationContext.forClassName(MessageRegistry.class);
     	
         val areYouSure = translate(translationService, context, MessageRegistry.MSG_ARE_YOU_SURE); 
         val confirm = translate(translationService, context, MessageRegistry.MSG_CONFIRM);

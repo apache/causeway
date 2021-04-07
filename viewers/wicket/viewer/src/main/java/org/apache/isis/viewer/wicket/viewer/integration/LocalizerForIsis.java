@@ -75,7 +75,7 @@ public class LocalizerForIsis extends Localizer {
 
     protected String translate(final String key, final Component component) {
         final Class<?> contextClass = determineContextClassElse(component, IsisWicketApplication.class);
-        final TranslationContext context = TranslationContext.ofClass(contextClass);
+        final TranslationContext context = TranslationContext.forClassName(contextClass);
         if(isisInteractionTracker.isInInteraction()) {
             return translate(key, context);
         } else {

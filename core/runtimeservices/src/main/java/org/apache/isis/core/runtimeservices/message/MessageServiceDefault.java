@@ -118,8 +118,10 @@ public class MessageServiceDefault implements MessageService {
         return translatedMessage;
     }
 
-    private static TranslationContext context(final Class<?> contextClass, final String contextMethod) {
-        return TranslationContext.ofClassAndMethodName(contextClass, contextMethod);
+    // -- HELPER
+    
+    private static TranslationContext context(final Class<?> contextClass, final String contextMethodName) {
+        return TranslationContext.forMethod(contextClass, contextMethodName);
     }
 
     private Optional<MessageBroker> currentMessageBroker() {

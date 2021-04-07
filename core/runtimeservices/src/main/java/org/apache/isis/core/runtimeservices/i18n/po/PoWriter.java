@@ -113,7 +113,7 @@ class PoWriter extends PoAbstract {
         }
         final Block block = blockFor(msgId);
         synchronized(block) {
-            block.contexts.add(context.stringify());
+            block.contexts.add(context.getName());
         }
 
         return msgId;
@@ -127,7 +127,7 @@ class PoWriter extends PoAbstract {
         }
         final Block block = blockFor(msgId);
         synchronized(block) {
-            block.contexts.add(context.stringify());
+            block.contexts.add(context.getName());
             block.msgIdPlural = msgIdPlural;
         }
 

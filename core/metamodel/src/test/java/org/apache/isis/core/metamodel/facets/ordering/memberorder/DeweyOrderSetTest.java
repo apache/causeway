@@ -88,7 +88,7 @@ public class DeweyOrderSetTest extends TestCase {
     @Rule
     public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(JUnitRuleMockery2.Mode.INTERFACES_AND_CLASSES);
     
-	static TranslationContext ctx = TranslationContext.ofSimpleStringIdentifier("test");
+	static TranslationContext ctx = TranslationContext.ofName("test");
 
     @Override
     protected void setUp() {

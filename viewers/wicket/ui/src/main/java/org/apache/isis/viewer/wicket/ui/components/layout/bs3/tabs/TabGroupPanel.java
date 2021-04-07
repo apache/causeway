@@ -34,12 +34,10 @@ import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.util.ComponentHintKey;
-import org.apache.isis.viewer.wicket.ui.components.layout.bs3.col.RepeatingViewWithDynamicallyVisibleContent;
 import org.apache.isis.viewer.wicket.ui.panels.HasDynamicallyVisibleContent;
 
-import lombok.val;
-
 import de.agilecoders.wicket.core.markup.html.bootstrap.tabs.AjaxBootstrapTabbedPanel;
+import lombok.val;
 
 // hmmm... not sure how to make this implement HasDynamicallyVisibleContent
 public class TabGroupPanel 
@@ -64,10 +62,8 @@ implements HasDynamicallyVisibleContent {
         val translationService = entityModel.getCommonContext().getTranslationService();
 
         for (val bs3Tab : tablist) {
-            final RepeatingViewWithDynamicallyVisibleContent rv = TabPanel.newRows(entityModel, bs3Tab);
-            
-            TranslationContext translateContext = TranslationContext.ofIdentifierForTab(entityModel.getTypeOfSpecification().getIdentifier());
-            // String translateContext = entityModel.getTypeOfSpecification().getFullIdentifier();
+            val repeatingViewWithDynamicallyVisibleContent = TabPanel.newRows(entityModel, bs3Tab);
+            val translateContext = TranslationContext.forTabIdentifier(entityModel.getTypeOfSpecification().getIdentifier());
             
             String bs3TabName = bs3Tab.getName();
             String tabName = translationService.translate(translateContext, bs3TabName);
@@ -76,12 +72,12 @@ implements HasDynamicallyVisibleContent {
 
                 @Override
                 public Panel getPanel(String panelId) {
-                    return new TabPanel(panelId, entityModel, bs3Tab, rv);
+                    return new TabPanel(panelId, entityModel, bs3Tab, repeatingViewWithDynamicallyVisibleContent);
                 }
 
                 @Override
                 public boolean isVisible() {
-                    return rv.isVisible();
+                    return repeatingViewWithDynamicallyVisibleContent.isVisible();
                 }
             });
         }

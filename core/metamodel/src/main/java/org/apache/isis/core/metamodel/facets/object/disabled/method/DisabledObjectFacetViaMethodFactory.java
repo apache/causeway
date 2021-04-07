@@ -24,7 +24,6 @@ import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.MethodFinderUtils;
@@ -70,8 +69,7 @@ public class DisabledObjectFacetViaMethodFactory extends MethodPrefixBasedFacetF
 
         val translationService = getTranslationService();
         // sadness: same logic as in I18nFacetFactory
-        // val translationContext = ((IdentifiedHolder)facetHolder).getIdentifier().getClassName();
-        TranslationContext translationContext = TranslationContext.ofDisabledObjectMethod(method);
+        val translationContext = TranslationContext.forMethod(method);
         
         FacetUtil.addFacet(new DisabledObjectFacetViaMethod(method, translationService, translationContext, facetHolder));
 

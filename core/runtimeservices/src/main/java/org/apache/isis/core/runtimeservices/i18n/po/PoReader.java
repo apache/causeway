@@ -142,7 +142,7 @@ class PoReader extends PoAbstract {
         final Map<ContextAndMsgId, String> translationsByKey = readAndCacheTranslationsIfRequired(targetLocale);
 
         // search for translation with a context
-        final ContextAndMsgId key = new ContextAndMsgId(context.stringify(), msgId, type);
+        final ContextAndMsgId key = new ContextAndMsgId(context.getName(), msgId, type);
         final String translation = lookupTranslation(translationsByKey, key);
         if (!_Strings.isNullOrEmpty(translation)) {
             return translation;

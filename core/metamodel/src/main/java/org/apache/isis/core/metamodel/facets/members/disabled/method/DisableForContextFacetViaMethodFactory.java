@@ -22,9 +22,7 @@ package org.apache.isis.core.metamodel.facets.members.disabled.method;
 import java.lang.reflect.Method;
 
 import org.apache.isis.applib.services.i18n.TranslationContext;
-import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.core.metamodel.facets.MethodFinder2;
@@ -83,10 +81,11 @@ extends MethodPrefixBasedFacetFactoryAbstract  {
 
         processMethodContext.removeMethod(disableMethod);
 
-        final FacetHolder facetHolder = processMethodContext.getFacetHolder();
-        final TranslationService translationService = getTranslationService();
+        val facetHolder = processMethodContext.getFacetHolder();
+        val translationService = getTranslationService();
         // sadness: same logic as in I18nFacetFactory
-        final TranslationContext translationContext = TranslationContext.ofIdentifier(((IdentifiedHolder)facetHolder).getIdentifier()); // .getTranslationContext();
+        val translationContext = TranslationContext
+                .forTranslationContextHolder(((IdentifiedHolder)facetHolder).getIdentifier());
         super.addFacet(new DisableForContextFacetViaMethod(disableMethod, translationService, translationContext, facetHolder));
     }
 

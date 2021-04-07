@@ -63,7 +63,8 @@ extends SingleClassValueFacetAbstract implements PropertyDomainEventFacet {
 
         this.translationService = getTranslationService();
         // sadness: same as in TranslationFactory
-        this.translationContext = TranslationContext.ofIdentifier(((IdentifiedHolder)holder).getIdentifier()); // .getTranslationContext();
+        this.translationContext = TranslationContext.forTranslationContextHolder(
+                ((IdentifiedHolder)holder).getIdentifier());
 
         domainEventHelper = DomainEventHelper.ofServiceRegistry(getServiceRegistry());
     }

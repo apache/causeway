@@ -359,7 +359,7 @@ public class WebRequestCycleForIsis implements IRequestCycleListener {
         }
         return getCommonContext().getTranslationService()
                 .translate(
-                		TranslationContext.ofClass(WebRequestCycleForIsis.class), 
+                		TranslationContext.forClassName(WebRequestCycleForIsis.class), 
                 		text);
     }
 

@@ -27,13 +27,14 @@ import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.exceptions.recoverable.TextEntryParseException;
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.services.i18n.TranslationContext;
-import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.util.Enums;
 import org.apache.isis.core.metamodel.commons.MethodExtensions;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.MethodFinderUtils;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
+
+import lombok.val;
 
 public class EnumValueSemanticsProvider<T extends Enum<T>> extends ValueSemanticsProviderAndFacetAbstract<T> implements EnumFacet {
 
@@ -113,11 +114,11 @@ public class EnumValueSemanticsProvider<T extends Enum<T>> extends ValueSemantic
 
     @Override
     protected String titleString(final Object object) {
-        final TranslationService translationService = getTranslationService();
+        val translationService = getTranslationService();
 
         if (titleMethod != null) {
             // sadness: same as in TranslationFactory
-            final TranslationContext translationContext = TranslationContext.ofTitleMethod(titleMethod);
+            val translationContext = TranslationContext.forMethod(titleMethod);
 
             try {
                 final Object returnValue = MethodExtensions.invoke(titleMethod, object);
@@ -135,8 +136,8 @@ public class EnumValueSemanticsProvider<T extends Enum<T>> extends ValueSemantic
         }
 
         // simply translate the enum constant's name
-        Enum<?> objectAsEnum = (Enum<?>) object;
-        final TranslationContext translationContext = TranslationContext.ofEnum(objectAsEnum); // object.getClass().getName() + "#" + objectAsEnum.name();
+        val objectAsEnum = (Enum<?>) object;
+        val translationContext = TranslationContext.forEnum(objectAsEnum);
         final String friendlyNameOfEnum = Enums.getFriendlyNameOf(objectAsEnum.name());
         return translationService.translate(translationContext, friendlyNameOfEnum);
     }

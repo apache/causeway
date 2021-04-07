@@ -28,8 +28,8 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.MethodLiteralConstants;
 import org.apache.isis.core.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.ParameterSupport;
-import org.apache.isis.core.metamodel.facets.ParameterSupport.SearchAlgorithm;
 import org.apache.isis.core.metamodel.facets.ParameterSupport.ParamSupportingMethodSearchRequest.ReturnType;
+import org.apache.isis.core.metamodel.facets.ParameterSupport.SearchAlgorithm;
 import org.apache.isis.core.metamodel.facets.param.validate.ActionParameterValidationFacet;
 
 import lombok.val;
@@ -82,7 +82,7 @@ public class ActionParameterValidationFacetViaMethodFactory extends MethodPrefix
             
             // add facets directly to parameters, not to actions
             val paramAsHolder = parameters.get(paramNum);
-            val translationContext = TranslationContext.ofIdentifierFullIdentity(paramAsHolder.getIdentifier());
+            val translationContext = TranslationContext.forTranslationContextHolder(paramAsHolder.getIdentifier());
             val ppmFactory = searchResult.getPpmFactory();
             val translationService = getMetaModelContext().getTranslationService();
 

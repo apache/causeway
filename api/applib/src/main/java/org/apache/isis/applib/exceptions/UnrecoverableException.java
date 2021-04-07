@@ -20,7 +20,10 @@
 package org.apache.isis.applib.exceptions;
 
 import org.apache.isis.applib.services.i18n.TranslatableString;
+import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.commons.internal.base._Strings;
+
+import lombok.Getter;
 
 /**
  * Indicates that an unexpected, non-recoverable (fatal) exception has occurred within
@@ -38,9 +41,12 @@ implements TranslatableException {
 
     private static final long serialVersionUID = 1L;
 
+    @Getter(onMethod_ = {@Override})
     private final TranslatableString translatableMessage;
-    private final String translationContext;
-
+    
+    @Getter(onMethod_ = {@Override}) 
+    private final TranslationContext translationContext;
+    
     public UnrecoverableException(final String msg) {
         this(msg, null, null, null, null);
     }
@@ -76,14 +82,13 @@ implements TranslatableException {
             final Throwable cause) {
         super(message, cause);
         this.translatableMessage = translatableMessage;
-        this.translationContext =
-                translationContextClass != null
-                ? (translationContextClass.getName() +
-                        (!_Strings.isNullOrEmpty(translationContextMethod)
+        this.translationContext = translationContextClass != null
+                ? TranslationContext.ofName(
+                        translationContextClass.getName() 
+                        + (_Strings.isNotEmpty(translationContextMethod)
                                 ? "#" + translationContextMethod
-                                : "")
-                        )
-                : null;
+                                : ""))
+                : TranslationContext.empty();
     }
 
     @Override
@@ -92,16 +97,5 @@ implements TranslatableException {
                 ? getTranslatableMessage().getPattern()
                 : super.getMessage();
     }
-
-    @Override
-    public TranslatableString getTranslatableMessage() {
-        return translatableMessage;
-    }
-
-    @Override
-    public String getTranslationContext() {
-        return translationContext;
-    }
-
 
 }

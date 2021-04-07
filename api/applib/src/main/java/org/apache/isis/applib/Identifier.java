@@ -25,6 +25,8 @@ import java.util.stream.Collectors;
 
 import org.apache.isis.applib.id.HasLogicalType;
 import org.apache.isis.applib.id.LogicalType;
+import org.apache.isis.applib.services.i18n.HasTranslationContext;
+import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Strings;
@@ -47,6 +49,7 @@ public class Identifier
 implements 
     Comparable<Identifier>,
     HasLogicalType,
+    HasTranslationContext,
     Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -114,7 +117,7 @@ implements
      * Context to be used for i18n translation.
      * @see TranslationService
      */
-    @Getter private final String translationContext;
+    @Getter(onMethod_ = {@Override}) private final TranslationContext translationContext;
 
     // -- CONSTRUCTOR
 
@@ -135,8 +138,8 @@ implements
                         ? "(" + memberParameterClassNames.stream().collect(Collectors.joining(",")) + ")" 
                         : "");
         
-        this.translationContext = 
-                className + "#" + memberName + (type.isAction() ? "()" : "");
+        this.translationContext = TranslationContext.ofName(
+                className + "#" + memberName + (type.isAction() ? "()" : ""));
 
         this.fullIdentityString = _Strings.isEmpty(memberName) 
                 ? className

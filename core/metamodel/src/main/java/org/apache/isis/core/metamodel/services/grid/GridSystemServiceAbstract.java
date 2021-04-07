@@ -213,7 +213,6 @@ implements GridSystemService<G> {
                 }
 
                 String memberOrderName = null;
-                TranslationContext translationContext = TranslationContext.ofIdentifierForMemberOrderName(objectAction.getIdentifier());
                 int memberOrderSequence;
                 if(actionLayoutDataOwner instanceof FieldSet) {
                     final FieldSet fieldSet = (FieldSet) actionLayoutDataOwner;
@@ -238,10 +237,10 @@ implements GridSystemService<G> {
                 } else {
                     // don't add: any existing metadata should be preserved
                     memberOrderName = null;
-                    translationContext = null;
                     memberOrderSequence = actionDomainObjectSequence++;
                 }
                 if(memberOrderName != null) {
+                    val translationContext = TranslationContext.forMemberOrderNameIdentifier(objectAction.getIdentifier());
                     addOrReplaceFacet(
                             new MemberOrderFacetXml(translationContext, memberOrderName, "" + memberOrderSequence, translationService, objectAction));
                 }
@@ -308,7 +307,7 @@ implements GridSystemService<G> {
                 final String groupName = fieldSet.getName();
                                 
                 final IdentifiedHolder identifiedHolder = (IdentifiedHolder) oneToOneAssociation;
-                final TranslationContext translationContext = TranslationContext.ofIdentifierForMemberOrderName(identifiedHolder.getIdentifier());
+                val translationContext = TranslationContext.forMemberOrderNameIdentifier(identifiedHolder.getIdentifier());
                 // TranslationContext translationContext = TranslationContext.ofIdentifierForMemberOrderName(oneToOneAssociation.getIdentifier());
                 final String sequence = "" + (propertySequence.incrementAndGet());
                 addOrReplaceFacet(
@@ -336,7 +335,7 @@ implements GridSystemService<G> {
 
                 // @MemberOrder#name based on the collection's id (so that each has a single "member group")
                 final String groupName = collectionLayoutData.getId();
-                TranslationContext translationContext = TranslationContext.ofIdentifierForMemberOrderName(oneToManyAssociation.getIdentifier());
+                val translationContext = TranslationContext.forMemberOrderNameIdentifier(oneToManyAssociation.getIdentifier());
                 final String sequence = "" + collectionSequence++;
                 addOrReplaceFacet(
                         new MemberOrderFacetXml(translationContext, groupName, sequence, translationService, oneToManyAssociation));
