@@ -36,10 +36,10 @@ import org.apache.isis.core.metamodel.layout.memberorderfacet.MemberOrderCompara
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
-public class MemberOrderComparatorTest extends TestCase {
+public class DeweyOrderComparatorTest extends TestCase {
 
     public static void main(final String[] args) {
-        junit.textui.TestRunner.run(new TestSuite(MemberOrderComparatorTest.class));
+        junit.textui.TestRunner.run(new TestSuite(DeweyOrderComparatorTest.class));
     }
 
     private MemberOrderComparator comparator, laxComparator;
