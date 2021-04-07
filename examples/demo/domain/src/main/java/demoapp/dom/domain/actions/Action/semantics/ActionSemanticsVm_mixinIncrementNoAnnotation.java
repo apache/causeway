@@ -27,12 +27,12 @@ import lombok.RequiredArgsConstructor;
 //tag::class[]
 @Action(
     associateWith = "propertyNoAnnotation"
-    , associateWithSequence = "2"
     // no semantics attribute              // <.>
 )
 @ActionLayout(
     named = "Increment (Mixin)"
     , describedAs = "@Action()"
+    , sequence = "2"
 )
 @RequiredArgsConstructor
 public class ActionSemanticsVm_mixinIncrementNoAnnotation {

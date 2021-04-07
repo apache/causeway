@@ -30,9 +30,10 @@ import lombok.RequiredArgsConstructor;
 
 @Action(
         domainEvent = UnlockDomainEvent.class, 
-        associateWith = "status",
-        associateWithSequence = "1")
-@ActionLayout(named="Enable") // symmetry with lock (disable)
+        associateWith = "status")
+@ActionLayout(
+        named="Enable", // symmetry with lock (disable)
+        sequence = "1")
 @RequiredArgsConstructor
 public class ApplicationUser_unlock {
     

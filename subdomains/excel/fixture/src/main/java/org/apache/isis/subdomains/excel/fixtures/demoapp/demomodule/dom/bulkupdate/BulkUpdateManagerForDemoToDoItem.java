@@ -177,8 +177,8 @@ public class BulkUpdateManagerForDemoToDoItem {
         return excelService.toExcel(new WorksheetContent(toDoItemViewModels, WORKSHEET_SPEC), fileName);
     }
 
-    @Action(associateWith = "toDoItems", associateWithSequence = "2")
-    @ActionLayout(named = "Import")
+    @Action(associateWith = "toDoItems")
+    @ActionLayout(named = "Import", sequence = "2")
     public List<BulkUpdateLineItemForDemoToDoItem> importBlob(
             @Parameter(fileAccept = ".xlsx")
             @ParameterLayout(named="Excel spreadsheet")

@@ -27,6 +27,7 @@ import javax.enterprise.inject.Model;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.MinLength;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
@@ -45,9 +46,8 @@ import lombok.val;
 
 @Action(
         semantics = SemanticsOf.SAFE,
-        associateWith = "permissions",
-        associateWithSequence = "1"
-        )
+        associateWith = "permissions")
+@ActionLayout(sequence = "1")
 @RequiredArgsConstructor
 public class ApplicationUser_filterPermissions {
 

@@ -30,12 +30,12 @@ import lombok.RequiredArgsConstructor;
 @Action(
     semantics = SemanticsOf.SAFE
     , associateWith = "otherText"
-    , associateWithSequence = "2"
     , hidden = Where.NOWHERE        // <.>
 )
 @ActionLayout(
     describedAs =
         "@Action(hidden = Where.NOWHERE)"
+    , sequence = "2"
 )
 @RequiredArgsConstructor
 public class ActionHiddenVm_mixinUpdateTextAndHiddenNowhere {

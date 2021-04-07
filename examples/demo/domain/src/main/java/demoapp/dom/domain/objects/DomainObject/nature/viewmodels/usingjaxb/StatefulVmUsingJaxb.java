@@ -29,6 +29,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
@@ -37,12 +38,11 @@ import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Title;
 
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.val;
-
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
 //tag::class[]
 @XmlRootElement(name = "root")                              // <.>
@@ -85,7 +85,8 @@ public class StatefulVmUsingJaxb implements HasAsciiDocDescription {
 //end::child[]
 
 //tag::addChild[]
-    @Action(associateWith = "children", associateWithSequence = "1", semantics = SemanticsOf.NON_IDEMPOTENT)
+    @Action(associateWith = "children", semantics = SemanticsOf.NON_IDEMPOTENT)
+    @ActionLayout(sequence = "1")
     public StatefulVmUsingJaxb addChild(final String name) {
         val child = new Child();
         child.setName(name);
@@ -93,7 +94,8 @@ public class StatefulVmUsingJaxb implements HasAsciiDocDescription {
         return this;
     }
 
-    @Action(associateWith = "children", associateWithSequence = "2", semantics = SemanticsOf.IDEMPOTENT)
+    @Action(associateWith = "children", semantics = SemanticsOf.IDEMPOTENT)
+    @ActionLayout(sequence = "2")
     public StatefulVmUsingJaxb removeChild(final Child child) {
         children.remove(child);
         return this;

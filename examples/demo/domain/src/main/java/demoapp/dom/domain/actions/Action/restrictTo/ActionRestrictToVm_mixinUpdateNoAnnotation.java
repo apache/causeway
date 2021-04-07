@@ -29,11 +29,11 @@ import lombok.RequiredArgsConstructor;
 @Action(
     semantics = SemanticsOf.SAFE
     , associateWith = "propertyNoAnnotation"
-    , associateWithSequence = "2"
     // no restrictTo attribute              // <.>
 )
 @ActionLayout(
     describedAs = "@Action()"
+    , sequence = "2"
 )
 @RequiredArgsConstructor
 public class ActionRestrictToVm_mixinUpdateNoAnnotation {

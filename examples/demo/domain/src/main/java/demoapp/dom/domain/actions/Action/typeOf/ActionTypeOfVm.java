@@ -72,11 +72,11 @@ public class ActionTypeOfVm implements HasAsciiDocDescription {
             semantics = SemanticsOf.SAFE
             , typeOf = ActionTypeOfChildVm.class     // <.>
             , associateWith = "children"
-            , associateWithSequence = "1"
     )
     @ActionLayout(
         describedAs =
             "@Action(typeOf = ActionTypeOfChildVm.class)"
+        , sequence = "1"
     )
     public List find(final String value) {          // <.>
         return getChildren().stream()
@@ -89,11 +89,11 @@ public class ActionTypeOfVm implements HasAsciiDocDescription {
     @Action(
             semantics = SemanticsOf.SAFE
             , associateWith = "children"
-            , associateWithSequence = "2"
     )
     @ActionLayout(
         describedAs =
             "@Action()"
+        , sequence = "2"
     )
     public List findButNoTypeOfAnnotation(final String value) {     // <.>
         return find(value);

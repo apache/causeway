@@ -31,11 +31,12 @@ import lombok.RequiredArgsConstructor;
     semantics = SemanticsOf.SAFE
     , domainEvent =
         ActionDomainEventVm_mixinUpdateText.DomainEvent.class           // <.>
-    , associateWith = "text", associateWithSequence = "2"
+    , associateWith = "text"
 )
 @ActionLayout(
     describedAs =
         "@Action(domainEvent = ActionDomainEventVm_mixinUpdateText.DomainEvent.class)"
+        , sequence = "2"
 )
 @RequiredArgsConstructor
 public class ActionDomainEventVm_mixinUpdateText {

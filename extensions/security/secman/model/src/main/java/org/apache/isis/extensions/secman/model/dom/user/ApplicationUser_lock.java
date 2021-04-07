@@ -33,9 +33,8 @@ import lombok.RequiredArgsConstructor;
 
 @Action(
         domainEvent = LockDomainEvent.class, 
-        associateWith = "status",
-        associateWithSequence = "2")
-@ActionLayout(named="Disable")
+        associateWith = "status")
+@ActionLayout(named="Disable", sequence = "2")
 @RequiredArgsConstructor
 public class ApplicationUser_lock {
     

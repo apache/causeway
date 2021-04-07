@@ -30,11 +30,11 @@ import lombok.RequiredArgsConstructor;
 @Action(
     semantics = SemanticsOf.SAFE
     , associateWith = "propertyForMetaAnnotations"
-    , associateWithSequence = "2"
 )
 @ActionLayout(
     describedAs =
         "@ActionRestrictToPrototypingMetaAnnotation"
+    , sequence = "2"
 )
 @RequiredArgsConstructor
 public class ActionRestrictToVm_mixinUpdateMetaAnnotated {

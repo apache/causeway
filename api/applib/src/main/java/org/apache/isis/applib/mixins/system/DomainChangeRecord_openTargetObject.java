@@ -40,17 +40,15 @@ import lombok.RequiredArgsConstructor;
  */
 @Action(
         semantics = SemanticsOf.SAFE
-        , associateWith = "target"
-        , associateWithSequence = "1"
-)
-@ActionLayout(named = "Open")
+        , associateWith = "target")
+@ActionLayout(named = "Open", sequence = "1")
 @RequiredArgsConstructor
 public class DomainChangeRecord_openTargetObject {
 
     private final DomainChangeRecord domainChangeRecord;
 
-    @Action(semantics = SemanticsOf.SAFE, associateWith = "target", associateWithSequence = "1")
-    @ActionLayout(named = "Open")
+    @Action(semantics = SemanticsOf.SAFE, associateWith = "target")
+    @ActionLayout(named = "Open", sequence = "1")
     public Object openTargetObject() {
         try {
             return bookmarkService != null

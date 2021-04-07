@@ -83,11 +83,11 @@ public class ActionExecutionPublishingJdo
         executionPublishing = Publishing.ENABLED       // <.>
         , semantics = SemanticsOf.IDEMPOTENT
         , associateWith = "property"
-        , associateWithSequence = "1"
     )
     @ActionLayout(
         named = "Update Property"
         , describedAs = "@Action(publishing = ENABLED)"
+        , sequence = "1"
     )
     public ActionExecutionPublishingJdo updatePropertyUsingAnnotation(final String value) {
         setProperty(value);
@@ -104,11 +104,11 @@ public class ActionExecutionPublishingJdo
     @Action(
         semantics = SemanticsOf.IDEMPOTENT
         , associateWith = "propertyMetaAnnotated"
-        , associateWithSequence = "1"
     )
     @ActionLayout(
         named = "Update Property"
         , describedAs = "@ActionPublishingEnabledMetaAnnotation"
+        , sequence = "1"
     )
     public ActionExecutionPublishingJdo updatePropertyUsingMetaAnnotation(final String value) {
         setPropertyMetaAnnotated(value);
@@ -125,13 +125,13 @@ public class ActionExecutionPublishingJdo
         executionPublishing = Publishing.ENABLED       // <.>
         , semantics = SemanticsOf.IDEMPOTENT
         , associateWith = "propertyMetaAnnotatedOverridden"
-        , associateWithSequence = "1"
     )
     @ActionLayout(
         named = "Update Property"
         , describedAs =
             "@ActionPublishingDisabledMetaAnnotation " +
             "@Action(publishing = ENABLED)"
+        , sequence = "1"
     )
     public ActionExecutionPublishingJdo updatePropertyUsingMetaAnnotationButOverridden(final String value) {
         setPropertyMetaAnnotatedOverridden(value);

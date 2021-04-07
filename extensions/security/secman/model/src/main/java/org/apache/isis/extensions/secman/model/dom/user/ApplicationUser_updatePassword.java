@@ -25,6 +25,7 @@ import javax.enterprise.inject.Model;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.value.Password;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
@@ -38,8 +39,8 @@ import lombok.val;
 
 @Action(
         domainEvent = UpdatePasswordDomainEvent.class, 
-        associateWith = "hasPassword",
-        associateWithSequence = "10")
+        associateWith = "hasPassword")
+@ActionLayout(sequence = "10")
 @RequiredArgsConstructor
 public class ApplicationUser_updatePassword {
     

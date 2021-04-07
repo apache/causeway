@@ -84,10 +84,10 @@ public class WrapperFactoryJdo
     @Action(
         semantics = SemanticsOf.IDEMPOTENT
         , associateWith = "propertyAsync"
-        , associateWithSequence = "1"
     )
     @ActionLayout(
         describedAs = "@Action()"
+        , sequence = "1"
     )
     public WrapperFactoryJdo updatePropertyAsync(final String value) {
         val control = AsyncControl.returningVoid().withSkipRules();
@@ -104,10 +104,10 @@ public class WrapperFactoryJdo
     @Action(
         semantics = SemanticsOf.IDEMPOTENT
         , associateWith = "propertyAsyncMixin"
-        , associateWithSequence = "1"
     )
     @ActionLayout(
         describedAs = "Calls the 'updatePropertyAsync' (mixin) action asynchronously"
+        , sequence = "1"
     )
     public WrapperFactoryJdo updatePropertyUsingAsyncWrapMixin(final String value) {
         val control = AsyncControl.returning(WrapperFactoryJdo.class).withSkipRules();

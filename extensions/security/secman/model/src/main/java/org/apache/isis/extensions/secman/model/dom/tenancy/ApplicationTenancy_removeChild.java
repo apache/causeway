@@ -24,6 +24,7 @@ import javax.enterprise.inject.Model;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy;
 import org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy.RemoveChildDomainEvent;
 import org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancyRepository;
@@ -32,8 +33,8 @@ import lombok.RequiredArgsConstructor;
 
 @Action(
         domainEvent = RemoveChildDomainEvent.class, 
-        associateWith = "children", 
-        associateWithSequence = "2")
+        associateWith = "children")
+@ActionLayout(sequence = "2")
 @RequiredArgsConstructor
 public class ApplicationTenancy_removeChild {
     

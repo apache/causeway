@@ -24,6 +24,7 @@ import javax.enterprise.inject.Model;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.extensions.secman.api.user.ApplicationUser;
@@ -34,8 +35,8 @@ import lombok.RequiredArgsConstructor;
 
 @Action(
         domainEvent = DeleteDomainEvent.class,
-        semantics = SemanticsOf.IDEMPOTENT_ARE_YOU_SURE,
-        associateWithSequence = "1")
+        semantics = SemanticsOf.IDEMPOTENT_ARE_YOU_SURE)
+@ActionLayout(sequence = "1")
 @RequiredArgsConstructor
 public class ApplicationUser_delete {
     

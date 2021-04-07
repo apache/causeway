@@ -31,10 +31,9 @@ import lombok.RequiredArgsConstructor;
 //tag::class[]
 @Action(
         semantics = SemanticsOf.IDEMPOTENT,
-        associateWith = "readOnlyOptionalProperty",
-        associateWithSequence = "1"
+        associateWith = "readOnlyOptionalProperty"
 )
-@ActionLayout(promptStyle = PromptStyle.INLINE, named = "Update")
+@ActionLayout(promptStyle = PromptStyle.INLINE, named = "Update", sequence = "1")
 @RequiredArgsConstructor
 public class JavaUtilUuidHolder_updateReadOnlyOptionalProperty {
 

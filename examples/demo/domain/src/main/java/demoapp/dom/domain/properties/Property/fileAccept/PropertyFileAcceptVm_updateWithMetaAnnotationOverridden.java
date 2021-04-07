@@ -19,6 +19,7 @@
 package demoapp.dom.domain.properties.Property.fileAccept;
 
 import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.SemanticsOf;
@@ -28,8 +29,9 @@ import lombok.RequiredArgsConstructor;
 
 @Action(
     semantics = SemanticsOf.IDEMPOTENT,
-    associateWith = "docxPropertyUsingMetaAnnotationButOverridden", associateWithSequence = "1"
+    associateWith = "docxPropertyUsingMetaAnnotationButOverridden"
 )
+@ActionLayout(sequence = "1")
 @RequiredArgsConstructor
 public class PropertyFileAcceptVm_updateWithMetaAnnotationOverridden {
 

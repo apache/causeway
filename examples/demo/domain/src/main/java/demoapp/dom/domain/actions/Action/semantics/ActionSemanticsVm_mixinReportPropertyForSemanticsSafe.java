@@ -32,11 +32,11 @@ import lombok.RequiredArgsConstructor;
 @Action(
     semantics = SemanticsOf.SAFE            // <.>
     , associateWith = "propertyForSafe"
-    , associateWithSequence = "2"
 )
 @ActionLayout(
     named = "Report (Mixin)"
     , describedAs = "@Action(semantics = SemanticsOf.SAFE)"
+    , sequence = "2"
 )
 @RequiredArgsConstructor
 public class ActionSemanticsVm_mixinReportPropertyForSemanticsSafe {

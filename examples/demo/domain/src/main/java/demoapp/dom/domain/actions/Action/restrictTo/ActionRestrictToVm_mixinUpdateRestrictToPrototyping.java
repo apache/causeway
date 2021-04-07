@@ -30,12 +30,12 @@ import lombok.RequiredArgsConstructor;
 @Action(
     semantics = SemanticsOf.SAFE
     , associateWith = "propertyForPrototyping"
-    , associateWithSequence = "2"
     , restrictTo = RestrictTo.PROTOTYPING       // <.>
 )
 @ActionLayout(
     describedAs =
         "@Action(restrictTo = RestrictTo.PROTOTYPING)"
+    , sequence = "2"
 )
 @RequiredArgsConstructor
 public class ActionRestrictToVm_mixinUpdateRestrictToPrototyping {

@@ -89,11 +89,11 @@ public class ActionCommandPublishingJdo
         commandPublishing = Publishing.ENABLED                  // <.>
         , semantics = SemanticsOf.IDEMPOTENT
         , associateWith = "property"
-        , associateWithSequence = "1"
     )
     @ActionLayout(
         named = "Update Property"
         , describedAs = "@Action(command = ENABLED)"
+        , sequence = "1"
     )
     public ActionCommandPublishingJdo updatePropertyUsingAnnotation(final String value) {
         // ...
@@ -112,11 +112,11 @@ public class ActionCommandPublishingJdo
         commandPublishing = Publishing.DISABLED                 // <.>
         , semantics = SemanticsOf.IDEMPOTENT
         , associateWith = "propertyCommandDisabled"
-        , associateWithSequence = "1"
     )
     @ActionLayout(
         named = "Update Property"
         , describedAs = "@Action(command = ENABLED)"
+        , sequence = "1"
     )
     public ActionCommandPublishingJdo updatePropertyCommandDisabledUsingAnnotation(final String value) {
         // ...
@@ -135,11 +135,11 @@ public class ActionCommandPublishingJdo
     @Action(
         semantics = SemanticsOf.IDEMPOTENT
         , associateWith = "propertyMetaAnnotated"
-        , associateWithSequence = "1"
     )
     @ActionLayout(
         named = "Update Property"
         , describedAs = "@ActionCommandEnabledMetaAnnotation"
+        , sequence = "1"
     )
     public ActionCommandPublishingJdo updatePropertyUsingMetaAnnotation(final String value) {
         // ...
@@ -159,12 +159,12 @@ public class ActionCommandPublishingJdo
         semantics = SemanticsOf.IDEMPOTENT
         , commandPublishing = Publishing.ENABLED                // <.>
         , associateWith = "propertyMetaAnnotatedOverridden"
-        , associateWithSequence = "1"
     )
     @ActionLayout(
         named = "Update Property"
         , describedAs =
             "@ActionCommandDisabledMetaAnnotation @Action(command = ENABLED)"
+        , sequence = "1"
     )
     public ActionCommandPublishingJdo updatePropertyUsingMetaAnnotationButOverridden(final String value) {
         // ...
