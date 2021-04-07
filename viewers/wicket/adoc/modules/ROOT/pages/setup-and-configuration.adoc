@@ -6,59 +6,7 @@
 This section describes how to include the Wicket viewer's module and set its configuration properties.
 
 
-== Maven pom.xml
-
-=== Dependency Management
-
-If your application inherits from the Apache Isis starter app (`org.apache.isis.app:isis-app-starter-parent` then that will define the version automatically:
-
-[source,xml,subs="attributes+"]
-.pom.xml
-----
-<parent>
-    <groupId>org.apache.isis.app</groupId>
-    <artifactId>isis-app-starter-parent</artifactId>
-    <version>{page-isisrel}</version>
-    <relativePath/>
-</parent>
-----
-
-Alternatively, import the core BOM.
-This is usually done in the top-level parent pom of your application:
-
-[source,xml,subs="attributes+"]
-.pom.xml
-----
-<dependencyManagement>
-    <dependencies>
-        <dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core</artifactId>
-            <version>{page-isisrel}</version>
-            <version>2.0.0-SNAPSHOT</version>
-            <scope>import</scope>
-            <type>pom</type>
-        </dependency>
-    </dependencies>
-</dependencyManagement>
-----
-
-
-=== Dependency
-
-In the webapp module of your application, add the following dependency:
-
-[source,xml]
-.pom.xml
-----
-<dependencies>
-    <dependency>
-        <groupId>org.apache.isis.mavendeps</groupId>
-        <artifactId>isis-mavendeps-webapp</artifactId>
-        <type>pom</type>
-    </dependency>
-</dependencies>
-----
+include::docs:mavendeps:partial$setup-and-configure-mavendeps-webapp.adoc[leveloffset=+1]
 
 
 == Update AppManifest

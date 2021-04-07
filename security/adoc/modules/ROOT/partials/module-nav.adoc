@@ -1,6 +1,4 @@
 
-* xref:security:ROOT:domain-services-api-for-applications.adoc[Domain Services API]
-
 // usage by isis viewers is in module-nav-end.adoc
 
 

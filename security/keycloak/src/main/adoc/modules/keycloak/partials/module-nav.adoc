@@ -1,4 +1,3 @@
 
 
-
 * xref:security:keycloak:about.adoc[Keycloak Implementation]

@@ -8,16 +8,38 @@ WARNING: TODO: this content has not yet been reviewed/updated for v2.0
 This guide describes the configuration of the Keycloak implementation of Apache Isis' `Authenticator and `Authorizor` APIs.
 
 
+include::docs:mavendeps:partial$setup-and-configure-mavendeps-webapp.adoc[leveloffset=+1]
 
-== FAQ
 
-How do I switch from using Shiro to using Keycloak?::
+== Update AppManifest
+
+In your application's `AppManifest` (top-level Spring `@Configuration` used to bootstrap the app), import the
+
+[source,java]
+.AppManifest.java
+----
+@Configuration
+@Import({
+        ...
+        IsisModuleSecurityKeycloak.class,
+        ...
+})
+public class AppManifest {
+}
+----
+
+Make sure that no other `IsisModuleSecurityXxx` module is imported.
+
+
+== Design
+
+The module configures a filter that expects Keycloak to set three `X-Auth-Xxx` headers:
+
+* `X-Auth-Userid` - is used as the username
+* `X-Auth-Roles` - is a comma-separated set of roles.
 +
-* First, update the webapp's `pom.xml` to reference `org.apache.isis.security:isis-security-keycloak-impl` (instead of `o.a.i.security:isis-security-shiro-impl`)
+The `org.apache.isis.viewer.wicket.roles.USER` role -- as required by xref:vw::about.adoc[Web UI (Wicket viewer)]  -- is automatically added to this list of roles.
 
-* Then change the `AppManifest` class to reference `IsisModuleSecurityKeycloak` instead of IsisModuleSecurityShiro`
+* `X-Auth-Subject` - is unused
 
-+
-This will result in the `KeycloakFilter` (link:https://github.com/apache/isis/blob/master/security/keycloak/src/main/java/org/apache/isis/security/keycloak/webmodule/KeycloakFilter.java[code here]) being configured. +
-
-As you can see, it expects for Keycloak to set three `X-Auth-Xxx` headers, and it just blindly trusts them to create an appropriate `AuthenticationSession`.
+The user and roles are accessible programmatically from the xref:refguide:applib:index/services/user/UserMemento.adoc[UserMemento] obtained from xref:refguide:applib:index/services/user/UserService.adoc[UserService] domain service.

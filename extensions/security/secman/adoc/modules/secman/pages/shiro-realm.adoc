@@ -4,13 +4,16 @@
 :page-partial:
 
 
-The SecMan extension includes a Shiro realm, which fits in as follows:
+WARNING: TODO - not yet reviewed for v2.
 
-The general configuration is as follows:
+Because each user to be authorised must exist in the SecMan database, this means that it can also act as a secondary authenticator.
+It does this by providing an implementation of the Shiro `Realm` API, which fits in as follows:
 
 image::shiro-realm/configure-shiro-to-use-isisaddons-security-module-realm.PNG[width="600px"]
 
 where the `IsisModuleSecurityRealm` realm is the implementation provided by the module.
+
+Using this design the password management can be handled to a subsidiary (delegate) Shiro realm (for example, using the xref:shiro-realm-ldap:about.adoc[]).
 
 In the configuration above user passwords are stored in the database.  The module uses link:http://www.mindrot.org/projects/jBCrypt/[jBCrypt] so that passwords are only stored in a (one-way) encrypted form in the database.
 

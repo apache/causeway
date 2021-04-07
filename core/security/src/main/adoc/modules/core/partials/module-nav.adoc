@@ -1,5 +1,5 @@
 
 
 
-* xref:security:core:about.adoc[API]
+* xref:security:core:about.adoc[Security Component SPI]
 
