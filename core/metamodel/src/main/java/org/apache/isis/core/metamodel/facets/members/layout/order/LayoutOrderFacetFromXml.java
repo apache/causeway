@@ -16,15 +16,21 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+package org.apache.isis.core.metamodel.facets.members.layout.order;
 
-package org.apache.isis.core.metamodel.facets.members.order;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
-import org.apache.isis.core.metamodel.facets.MultipleValueFacet;
+public class LayoutOrderFacetFromXml 
+extends LayoutOrderFacetAbstract {
 
-/**
- * @deprecated
- */
-public interface MemberOrderFacet extends MultipleValueFacet {
-    public String name();
-    public String sequence();
+    public static LayoutOrderFacetFromXml create(
+            final int sequenceAsInt, 
+            final FacetHolder holder) {
+        return new LayoutOrderFacetFromXml("" + sequenceAsInt, holder);
+    }
+
+    public LayoutOrderFacetFromXml(final String sequence, final FacetHolder holder) {
+        super(sequence, holder);
+    }
+
 }

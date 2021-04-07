@@ -35,6 +35,7 @@ import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.WhereValueFacet;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
+import org.apache.isis.core.metamodel.facets.members.layout.group.LayoutGroupFacet;
 import org.apache.isis.core.metamodel.facets.members.order.MemberOrderFacet;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.layout.memberorderfacet.MemberOrderComparator;
@@ -215,11 +216,12 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
         private static void addAssociationIntoGroup(
                 final Map<String, List<ObjectAssociation>> associationsByGroup,
                 final ObjectAssociation association) {
-            final MemberOrderFacet memberOrderFacet = association.getFacet(MemberOrderFacet.class);
-            if(memberOrderFacet != null) {
-                final String untranslatedName = memberOrderFacet.untranslatedName();
-                if(!_Strings.isNullOrEmpty(untranslatedName)) {
-                    getFrom(associationsByGroup, untranslatedName).add(association);
+            
+            val layoutGroupFacet = association.getFacet(LayoutGroupFacet.class);
+            if(layoutGroupFacet != null) {
+                val groupName = layoutGroupFacet.getGroup();
+                if(_Strings.isNotEmpty(groupName)) {
+                    getFrom(associationsByGroup, groupName).add(association);
                     return;
                 }
             }

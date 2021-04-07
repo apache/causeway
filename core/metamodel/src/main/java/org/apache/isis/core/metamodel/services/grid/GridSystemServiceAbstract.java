@@ -18,6 +18,8 @@
  */
 package org.apache.isis.core.metamodel.services.grid;
 
+import static org.apache.isis.core.metamodel.facetapi.FacetUtil.addOrReplaceFacet;
+
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -35,15 +37,14 @@ import org.apache.isis.applib.layout.component.FieldSet;
 import org.apache.isis.applib.layout.component.PropertyLayoutData;
 import org.apache.isis.applib.layout.grid.Grid;
 import org.apache.isis.applib.services.grid.GridSystemService;
-import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.services.message.MessageService;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.core.config.environment.IsisSystemEnvironment;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
-import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.core.metamodel.facets.actions.layout.ActionPositionFacetForActionXml;
 import org.apache.isis.core.metamodel.facets.actions.layout.BookmarkPolicyFacetForActionXml;
 import org.apache.isis.core.metamodel.facets.actions.layout.CssClassFaFacetForActionXml;
@@ -61,7 +62,8 @@ import org.apache.isis.core.metamodel.facets.collections.layout.HiddenFacetForCo
 import org.apache.isis.core.metamodel.facets.collections.layout.NamedFacetForCollectionXml;
 import org.apache.isis.core.metamodel.facets.collections.layout.PagedFacetForCollectionXml;
 import org.apache.isis.core.metamodel.facets.collections.layout.SortedByFacetForCollectionXml;
-import org.apache.isis.core.metamodel.facets.members.order.annotprop.MemberOrderFacetXml;
+import org.apache.isis.core.metamodel.facets.members.layout.group.LayoutGroupFacetFromXml;
+import org.apache.isis.core.metamodel.facets.members.layout.order.LayoutOrderFacetFromXml;
 import org.apache.isis.core.metamodel.facets.object.domainobjectlayout.BookmarkPolicyFacetForDomainObjectXml;
 import org.apache.isis.core.metamodel.facets.object.domainobjectlayout.CssClassFaFacetForDomainObjectXml;
 import org.apache.isis.core.metamodel.facets.object.domainobjectlayout.CssClassFacetForDomainObjectXml;
@@ -85,8 +87,6 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-
-import static org.apache.isis.core.metamodel.facetapi.FacetUtil.addOrReplaceFacet;
 
 import lombok.Value;
 import lombok.val;
@@ -239,10 +239,9 @@ implements GridSystemService<G> {
                     memberOrderName = null;
                     memberOrderSequence = actionDomainObjectSequence++;
                 }
-                if(memberOrderName != null) {
-                    val translationContext = TranslationContext.forMemberOrderNameIdentifier(objectAction.getIdentifier());
-                    addOrReplaceFacet(
-                            new MemberOrderFacetXml(translationContext, memberOrderName, "" + memberOrderSequence, translationService, objectAction));
+                addOrReplaceFacet(LayoutOrderFacetFromXml.create(memberOrderSequence, objectAction));
+                if(_Strings.isNotEmpty(memberOrderName)) {
+                    addOrReplaceFacet(LayoutGroupFacetFromXml.create(memberOrderName, objectAction));
                 }
 
                 // fix up the action position if required
@@ -300,17 +299,17 @@ implements GridSystemService<G> {
                 addOrReplaceFacet(UnchangingFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation));
                 addOrReplaceFacet(TypicalLengthFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation));
 
-                // @MemberOrder#name based on owning property group, @MemberOrder#sequence monotonically increasing
+                // Layout group-name based on owning property group, Layout sequence monotonically increasing
                 // nb for any given field set the sequence won't reset to zero; however this is what we want so that
                 // table columns are shown correctly (by fieldset, then property order within that fieldset).
                 final FieldSet fieldSet = propertyLayoutData.getOwner();
                 final String groupName = fieldSet.getName();
-                                
-                final IdentifiedHolder identifiedHolder = (IdentifiedHolder) oneToOneAssociation;
-                val translationContext = TranslationContext.forMemberOrderNameIdentifier(identifiedHolder.getIdentifier());
-                final String sequence = "" + (propertySequence.incrementAndGet());
-                addOrReplaceFacet(
-                        new MemberOrderFacetXml(translationContext, groupName, sequence, translationService, oneToOneAssociation));
+                
+                addOrReplaceFacet(LayoutOrderFacetFromXml.create(propertySequence.incrementAndGet(), oneToOneAssociation));
+                if(_Strings.isNotEmpty(groupName)) {
+                    addOrReplaceFacet(LayoutGroupFacetFromXml.create(groupName, oneToOneAssociation));
+                }
+                
             }
 
             @Override
@@ -332,12 +331,7 @@ implements GridSystemService<G> {
                 addOrReplaceFacet(PagedFacetForCollectionXml.create(collectionLayoutData, oneToManyAssociation));
                 addOrReplaceFacet(SortedByFacetForCollectionXml.create(collectionLayoutData, oneToManyAssociation));
 
-                // @MemberOrder#name based on the collection's id (so that each has a single "member group")
-                final String groupName = collectionLayoutData.getId();
-                val translationContext = TranslationContext.forMemberOrderNameIdentifier(oneToManyAssociation.getIdentifier());
-                final String sequence = "" + collectionSequence++;
-                addOrReplaceFacet(
-                        new MemberOrderFacetXml(translationContext, groupName, sequence, translationService, oneToManyAssociation));
+                addOrReplaceFacet(LayoutOrderFacetFromXml.create(collectionSequence++, oneToManyAssociation));
             }
         });
     }
