@@ -20,7 +20,6 @@
 package org.apache.isis.core.metamodel.spec.feature;
 
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
@@ -36,12 +35,10 @@ import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.WhereValueFacet;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.members.layout.group.LayoutGroupFacet;
-import org.apache.isis.core.metamodel.facets.members.order.MemberOrderFacet;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.layout.memberorderfacet.MemberOrderComparator;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.util.DeweyOrderComparator;
 
 import lombok.val;
 
@@ -164,36 +161,7 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
 
     }
 
-
-    // //////////////////////////////////////////////////////
-    // Comparators
-    // //////////////////////////////////////////////////////
-
-    @Vetoed
-    public static class Comparators {
-        /**
-         * Use {@link ObjectMember.Comparators#byMemberOrderSequence()} instead.
-         */
-        @Deprecated
-        public static Comparator<ObjectAssociation> byMemberOrderSequence() {
-            return new Comparator<ObjectAssociation>() {
-                private final DeweyOrderComparator deweyOrderComparator = new DeweyOrderComparator();
-                @Override
-                public int compare(final ObjectAssociation o1, final ObjectAssociation o2) {
-                    final MemberOrderFacet o1Facet = o1.getFacet(MemberOrderFacet.class);
-                    final MemberOrderFacet o2Facet = o2.getFacet(MemberOrderFacet.class);
-                    return o1Facet == null? +1:
-                        o2Facet == null? -1:
-                            deweyOrderComparator.compare(o1Facet.sequence(), o2Facet.sequence());
-                }
-            };
-        }
-
-    }
-
-    // //////////////////////////////////////////////////////
-    // Util
-    // //////////////////////////////////////////////////////
+    // -- UTIL
 
     @Vetoed
     public static class Util {
