@@ -33,17 +33,17 @@ import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
-import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
-import org.apache.isis.core.metamodel.facets.members.order.MemberOrderFacet;
-import org.apache.isis.core.metamodel.facets.members.order.annotprop.MemberOrderFacetAnnotation;
-import org.apache.isis.core.metamodel.facets.members.order.annotprop.MemberOrderFacetFactory;
+import org.apache.isis.core.metamodel.facets.members.layout.order.LayoutOrderFacet;
+import org.apache.isis.core.metamodel.facets.members.layout.order.LayoutOrderFacetFromActionLayoutAnnotation;
+import org.apache.isis.core.metamodel.facets.members.layout.order.LayoutOrderFacetFromCollectionLayoutAnnotation;
+import org.apache.isis.core.metamodel.facets.members.layout.order.LayoutOrderFacetFromPropertyLayoutAnnotation;
 
-public class MemberOrderAnnotationFacetFactoryTest 
+import lombok.val;
+
+public class LayoutOrderTest 
 extends AbstractFacetFactoryTest {
-
-    private MemberOrderFacetFactory facetFactory;
 
     @Rule
     public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(JUnitRuleMockery2.Mode.INTERFACES_AND_CLASSES);
@@ -66,16 +66,10 @@ extends AbstractFacetFactoryTest {
                 }
             });
         }});
-
-
-        facetFactory = new MemberOrderFacetFactory();
-        facetFactory.setMetaModelContext(super.metaModelContext);
-
     }
 
     @Override
     protected void tearDown() throws Exception {
-        facetFactory = null;
         super.tearDown();
     }
 
@@ -88,13 +82,13 @@ extends AbstractFacetFactoryTest {
         }
         final Method method = findMethod(Customer.class, "getFirstName");
 
+        val facetFactory = super.createPropertyLayoutFacetFactory();
         facetFactory.process(new ProcessMethodContext(Customer.class, null, method, methodRemover, facetedMethod));
 
-        final Facet facet = facetedMethod.getFacet(MemberOrderFacet.class);
+        val facet = facetedMethod.getFacet(LayoutOrderFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof MemberOrderFacetAnnotation);
-        final MemberOrderFacetAnnotation memberOrderFacetAnnotation = (MemberOrderFacetAnnotation) facet;
-        assertEquals("1", memberOrderFacetAnnotation.sequence());
+        assertTrue(facet instanceof LayoutOrderFacetFromPropertyLayoutAnnotation);
+        assertEquals("1", facet.getSequence());
 
         assertNoMethodsRemoved();
     }
@@ -114,13 +108,13 @@ extends AbstractFacetFactoryTest {
         }
         final Method method = findMethod(Customer.class, "getOrders");
 
+        val facetFactory = super.createCollectionLayoutFacetFactory();
         facetFactory.process(new ProcessMethodContext(Customer.class, null, method, methodRemover, facetedMethod));
 
-        final Facet facet = facetedMethod.getFacet(MemberOrderFacet.class);
+        val facet = facetedMethod.getFacet(LayoutOrderFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof MemberOrderFacetAnnotation);
-        final MemberOrderFacetAnnotation memberOrderFacetAnnotation = (MemberOrderFacetAnnotation) facet;
-        assertEquals("2", memberOrderFacetAnnotation.sequence());
+        assertTrue(facet instanceof LayoutOrderFacetFromCollectionLayoutAnnotation);
+        assertEquals("2", facet.getSequence());
 
         assertNoMethodsRemoved();
     }
@@ -133,13 +127,13 @@ extends AbstractFacetFactoryTest {
         }
         final Method method = findMethod(Customer.class, "someAction");
 
+        val facetFactory = super.createActionLayoutFacetFactory();
         facetFactory.process(new ProcessMethodContext(Customer.class, null, method, methodRemover, facetedMethod));
 
-        final Facet facet = facetedMethod.getFacet(MemberOrderFacet.class);
+        val facet = facetedMethod.getFacet(LayoutOrderFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof MemberOrderFacetAnnotation);
-        final MemberOrderFacetAnnotation memberOrderFacetAnnotation = (MemberOrderFacetAnnotation) facet;
-        assertEquals("3", memberOrderFacetAnnotation.sequence());
+        assertTrue(facet instanceof LayoutOrderFacetFromActionLayoutAnnotation);
+        assertEquals("3", facet.getSequence());
 
         assertNoMethodsRemoved();
     }

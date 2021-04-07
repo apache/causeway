@@ -38,6 +38,8 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
+import org.apache.isis.core.metamodel.facets.actions.layout.ActionLayoutFacetFactory;
+import org.apache.isis.core.metamodel.facets.collections.layout.CollectionLayoutFacetFactory;
 import org.apache.isis.core.metamodel.facets.properties.propertylayout.PropertyLayoutFacetFactory;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
@@ -176,5 +178,24 @@ public abstract class AbstractFacetFactoryTest extends TestCase {
             }  
         };
     }
+    
+    protected static CollectionLayoutFacetFactory createCollectionLayoutFacetFactory() { 
+        return new CollectionLayoutFacetFactory() {
+            @Override
+            public IsisConfiguration getConfiguration() {
+                return new IsisConfiguration(null);
+            }  
+        };
+    }
+    
+    protected static ActionLayoutFacetFactory createActionLayoutFacetFactory() { 
+        return new ActionLayoutFacetFactory() {
+            @Override
+            public IsisConfiguration getConfiguration() {
+                return new IsisConfiguration(null);
+            }  
+        };
+    }
+    
     
 }
