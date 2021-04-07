@@ -40,7 +40,8 @@ import org.apache.isis.core.metamodel.facets.members.order.MemberOrderFacet;
 import org.apache.isis.core.metamodel.facets.members.order.annotprop.MemberOrderFacetAnnotation;
 import org.apache.isis.core.metamodel.facets.members.order.annotprop.MemberOrderFacetFactory;
 
-public class MemberOrderAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
+public class MemberOrderAnnotationFacetFactoryTest 
+extends AbstractFacetFactoryTest {
 
     private MemberOrderFacetFactory facetFactory;
 

@@ -69,7 +69,12 @@ public @interface PropertyLayout {
     /**
      * Indicates the property group, as properties can be grouped together.
      * @apiNote similarly grouping of <i>Actions</i> is made available via {@link Action#associateWith()};
-     * currently for <i>Collections</i> there is no counterpart
+     * currently for <i>Collections</i> there is no counterpart.
+     * <p>
+     *     An alternative is to use the <code>Xxx.layout.xml</code> file,
+     *     where <code>Xxx</code> is the domain object name.
+     * </p>
+     * @see Action#associateWith()
      */
     String group()
             default "";
@@ -214,7 +219,12 @@ public @interface PropertyLayout {
     /**
      * The order of this member relative to other members in the same (layout) group, 
      * given in <i>Dewey-decimal</i> notation.
-     *
+     * <p>
+     *     An alternative is to use the <code>Xxx.layout.xml</code> file,
+     *     where <code>Xxx</code> is the domain object name.
+     * </p>
+     * @see ActionLayout#sequence()
+     * @see CollectionLayout#sequence()
      */
     String sequence()
             default "";

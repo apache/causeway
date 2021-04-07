@@ -30,6 +30,7 @@ import org.apache.isis.core.metamodel.facets.MultipleValueFacet;
  * of the member methods with the <tt>@MemberOrder</tt>.
  *
  * @see MemberOrderFacet
+ * @deprecated
  */
 public interface MemberOrderFacet extends MultipleValueFacet {
 

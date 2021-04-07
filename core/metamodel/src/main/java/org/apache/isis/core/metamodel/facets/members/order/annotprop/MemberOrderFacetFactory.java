@@ -19,7 +19,6 @@
 
 package org.apache.isis.core.metamodel.facets.members.order.annotprop;
 
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
@@ -43,23 +42,20 @@ extends FacetFactoryAbstract  {
 
     private MemberOrderFacet createFromAnnotationIfPossible(final ProcessMethodContext processMethodContext) {
         
-        final MemberOrder annotation = processMethodContext.synthesizeOnMethod(MemberOrder.class)
-                .orElse(null);
-                
-//        _Assert.assertEquals("expected same", annotation,
-//                Annotations.getAnnotation(processMethodContext.getMethod(), MemberOrder.class));
-        
-        if (annotation != null) {        	
-            return new MemberOrderFacetAnnotation(
-            		processMethodContext.getFacetHolder().getIdentifier().getTranslationContext(),
-                    annotation.name(),
-                    annotation.sequence(),
-                    getTranslationService(),
-                    processMethodContext.getFacetHolder());
-        }
-        else {
+//        final MemberOrder annotation = processMethodContext.synthesizeOnMethod(MemberOrder.class)
+//                .orElse(null);
+//                
+//        if (annotation != null) {        	
+//            return new MemberOrderFacetAnnotation(
+//            		processMethodContext.getFacetHolder().getIdentifier().getTranslationContext(),
+//                    annotation.name(),
+//                    annotation.sequence(),
+//                    getTranslationService(),
+//                    processMethodContext.getFacetHolder());
+//        }
+//        else {
             return null;
-        }
+//        }
     }
 
 }

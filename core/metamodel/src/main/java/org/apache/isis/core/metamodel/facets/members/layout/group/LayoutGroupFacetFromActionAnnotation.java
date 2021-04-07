@@ -16,32 +16,28 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
-package org.apache.isis.core.metamodel.facets.actions.layout;
+package org.apache.isis.core.metamodel.facets.members.layout.group;
 
 import java.util.Optional;
 
-import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.Redirect;
+import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.actions.redirect.RedirectFacet;
-import org.apache.isis.core.metamodel.facets.actions.redirect.RedirectFacetAbstract;
 
-public class RedirectFacetFromActionLayoutAnnotation extends RedirectFacetAbstract {
+public class LayoutGroupFacetFromActionAnnotation
+extends LayoutGroupFacetAbstract {
 
-    public static RedirectFacet create(
-            final Optional<ActionLayout> actionLayoutIfAny, 
+    public static LayoutGroupFacetFromActionAnnotation create(
+            final Optional<Action> actionIfAny, 
             final FacetHolder holder) {
         
-        return actionLayoutIfAny
-                .map(ActionLayout::redirectPolicy)
-                .map(redirect -> new RedirectFacetFromActionLayoutAnnotation(redirect, holder))
+        return actionIfAny
+                .map(Action::associateWith)
+                .map(group -> new LayoutGroupFacetFromActionAnnotation(group, holder))
                 .orElse(null);
     }
 
-    public RedirectFacetFromActionLayoutAnnotation(
-            final Redirect policy, final FacetHolder holder) {
-        super(policy, holder);
+    public LayoutGroupFacetFromActionAnnotation(final String group, final FacetHolder holder) {
+        super(group, holder);
     }
-
+    
 }
