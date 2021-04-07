@@ -34,4 +34,9 @@ extends LayoutGroupFacetAbstract {
         super(group, holder);
     }
     
+    @Override
+    public boolean isExplicitBinding() {
+        return true;
+    }
+    
 }

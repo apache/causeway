@@ -18,6 +18,8 @@
  */
 package org.apache.isis.core.metamodel.services.grid.bootstrap3;
 
+import static org.apache.isis.commons.internal.base._NullSafe.stream;
+
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -52,14 +54,12 @@ import org.apache.isis.applib.layout.grid.bootstrap3.BS3TabGroup;
 import org.apache.isis.applib.layout.grid.bootstrap3.Size;
 import org.apache.isis.applib.mixins.layout.LayoutMixinConstants;
 import org.apache.isis.commons.internal.base._NullSafe;
-import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.resources._Resources;
 import org.apache.isis.core.metamodel.facets.actions.position.ActionPositionFacet;
-import org.apache.isis.core.metamodel.facets.members.order.MemberOrderFacet;
-import org.apache.isis.core.metamodel.facets.members.order.annotprop.MemberOrderFacetAnnotation;
+import org.apache.isis.core.metamodel.facets.members.layout.group.LayoutGroupFacet;
 import org.apache.isis.core.metamodel.layout.LayoutFacetUtil.LayoutDataFactory;
 import org.apache.isis.core.metamodel.services.grid.GridReaderUsingJaxb;
 import org.apache.isis.core.metamodel.services.grid.GridSystemServiceAbstract;
@@ -70,8 +70,6 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
-
-import static org.apache.isis.commons.internal.base._NullSafe.stream;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
@@ -226,17 +224,18 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
         val unboundMetadataContributingIds = _Sets.<String>newHashSet();
 
         // along with any specified by existing metadata
-        for (OneToOneAssociation otoa : oneToOneAssociationById.values()) {
-            val memberOrderFacet = otoa.getFacet(MemberOrderFacet.class);
-            if(memberOrderFacet != null) {
-                val id = asId(memberOrderFacet.name());
-                if(gridModel.containsFieldSetId(id)) {
-                    Set<String> boundAssociationIds =
-                            boundAssociationIdsByFieldSetId.computeIfAbsent(id, k -> _Sets.newLinkedHashSet());
-                    boundAssociationIds.add(otoa.getId());
-                } else if(id.equals(LayoutMixinConstants.METADATA_LAYOUT_GROUPNAME)) {
-                    unboundMetadataContributingIds.add(otoa.getId());
-                }
+        for (final OneToOneAssociation oneToOneAssociation : oneToOneAssociationById.values()) {
+            val layoutGroupFacet = oneToOneAssociation.getFacet(LayoutGroupFacet.class);
+            if(layoutGroupFacet == null) {
+                continue;
+            }
+            val id = layoutGroupFacet.getGroup();
+            if(gridModel.containsFieldSetId(id)) {
+                Set<String> boundAssociationIds =
+                        boundAssociationIdsByFieldSetId.computeIfAbsent(id, k -> _Sets.newLinkedHashSet());
+                boundAssociationIds.add(oneToOneAssociation.getId());
+            } else if(id.equals(LayoutMixinConstants.METADATA_LAYOUT_GROUPNAME)) {
+                unboundMetadataContributingIds.add(oneToOneAssociation.getId());
             }
         }
 
@@ -257,7 +256,7 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
                         associationIds.stream()
                         .map(oneToOneAssociationById::get)
                         .filter(_NullSafe::isPresent)
-                        .sorted(ObjectMember.Comparators.byMemberOrderSequence())
+                        .sorted(ObjectMember.Comparators.byMemberOrderSequence(false))
                         .map(ObjectAssociation::getId)
                         .collect(Collectors.toList());
 
@@ -295,7 +294,7 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
             final List<OneToManyAssociation> sortedCollections =
                     _Lists.map(missingCollectionIds, oneToManyAssociationById::get);
 
-            sortedCollections.sort(ObjectMember.Comparators.byMemberOrderSequence());
+            sortedCollections.sort(ObjectMember.Comparators.byMemberOrderSequence(false));
 
             final List<String> sortedMissingCollectionIds =
                     _Lists.map(sortedCollections, ObjectAssociation::getId);
@@ -330,41 +329,38 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
         final List<ObjectAction> sortedPossiblyMissingActions =
                 _Lists.map(possiblyMissingActionIds, objectActionById::get);
 
-        sortedPossiblyMissingActions.sort(ObjectMember.Comparators.byMemberOrderSequence());
+        sortedPossiblyMissingActions.sort(ObjectMember.Comparators.byMemberOrderSequence(false));
 
         final List<String> sortedPossiblyMissingActionIds =
                 _Lists.map(sortedPossiblyMissingActions, ObjectMember::getId);
 
-        for (String actionId : sortedPossiblyMissingActionIds) {
-            final ObjectAction oa = objectActionById.get(actionId);
-            final MemberOrderFacet memberOrderFacet = oa.getFacet(MemberOrderFacet.class);
-            if(memberOrderFacet == null) {
+        for (final String actionId : sortedPossiblyMissingActionIds) {
+            val objectAction = objectActionById.get(actionId);
+            
+            val layoutGroupFacet = objectAction.getFacet(LayoutGroupFacet.class);
+            if(layoutGroupFacet == null) {
                 continue;
             }
-            final String memberOrderName = memberOrderFacet.name();
-            if (memberOrderName == null) {
+            final String layoutGroupName = layoutGroupFacet.getGroup();
+            if (layoutGroupName == null) {
                 continue;
             }
-            final String id = asId(memberOrderName);
 
-            if (oneToOneAssociationById.containsKey(id)) {
+            if (oneToOneAssociationById.containsKey(layoutGroupName)) {
                 associatedActionIds.add(actionId);
 
-                if(!(memberOrderFacet instanceof MemberOrderFacetAnnotation)) {
-                    // if binding not via annotation, then explicitly bind this
-                    // action to the property
-                    final PropertyLayoutData propertyLayoutData = propertyLayoutDataById.get(id);
+                if(layoutGroupFacet.isExplicitBinding()) {
+                    final PropertyLayoutData propertyLayoutData = propertyLayoutDataById.get(layoutGroupName);
                     final ActionLayoutData actionLayoutData = new ActionLayoutData(actionId);
-
-                    final ActionPositionFacet actionPositionFacet = oa.getFacet(ActionPositionFacet.class);
+                    final ActionPositionFacet actionPositionFacet = objectAction.getFacet(ActionPositionFacet.class);
                     final ActionLayoutDataOwner owner;
                     final ActionLayout.Position position;
                     if(actionPositionFacet != null) {
                         position = actionPositionFacet.position();
-                        owner = position == ActionLayout.Position.PANEL ||
-                                position == ActionLayout.Position.PANEL_DROPDOWN
+                        owner = position == ActionLayout.Position.PANEL
+                                || position == ActionLayout.Position.PANEL_DROPDOWN
                                 ? propertyLayoutData.getOwner()
-                                        : propertyLayoutData;
+                                : propertyLayoutData;
                     } else {
                         position = ActionLayout.Position.BELOW;
                         owner = propertyLayoutData;
@@ -375,15 +371,13 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
 
                 continue;
             }
-            if (oneToManyAssociationById.containsKey(id)) {
+            if (oneToManyAssociationById.containsKey(layoutGroupName)) {
                 associatedActionIds.add(actionId);
 
-                if(!(memberOrderFacet instanceof MemberOrderFacetAnnotation)) {
-                    // if binding not via annotation, then explicitly bind this
-                    // action to the property
-                    val collectionLayoutData = collectionLayoutDataById.get(id);
+                if(layoutGroupFacet.isExplicitBinding()) {
+                    val collectionLayoutData = collectionLayoutDataById.get(layoutGroupName);
                     if(collectionLayoutData==null) {
-                        log.warn("failed to lookup CollectionLayoutData by id '{}'", id);
+                        log.warn("failed to lookup CollectionLayoutData by layoutGroupName '{}'", layoutGroupName);
                     } else {
                         val actionLayoutData = new ActionLayoutData(actionId);
                         addActionTo(collectionLayoutData, actionLayoutData);
@@ -394,7 +388,7 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
             // if the @MemberOrder for the action references a field set (that has bound
             // associations), then don't mark it as missing, but instead explicitly add it to the
             // list of actions of that field-set.
-            final Set<String> boundAssociationIds = boundAssociationIdsByFieldSetId.get(id);
+            final Set<String> boundAssociationIds = boundAssociationIdsByFieldSetId.get(layoutGroupName);
             if(boundAssociationIds != null && !boundAssociationIds.isEmpty()) {
 
                 associatedActionIds.add(actionId);
@@ -402,7 +396,7 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
                 final ActionLayoutData actionLayoutData = new ActionLayoutData(actionId);
 
                 actionLayoutData.setPosition(ActionLayout.Position.PANEL_DROPDOWN);
-                final FieldSet fieldSet = gridModel.getFieldSet(id);
+                final FieldSet fieldSet = gridModel.getFieldSet(layoutGroupName);
                 addActionTo(fieldSet, actionLayoutData);
             }
         }
@@ -538,16 +532,5 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
         actions.add(actionLayoutData);
         actionLayoutData.setOwner(owner);
     }
-
-    static String asId(final String str) {
-        if(_Strings.isNullOrEmpty(str)) {
-            return str;
-        }
-        final char c = str.charAt(0);
-        return Character.toLowerCase(c) + str.substring(1).replaceAll("\\s+", "");
-    }
-
-
-
 
 }
