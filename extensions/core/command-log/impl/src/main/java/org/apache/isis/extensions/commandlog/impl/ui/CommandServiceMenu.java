@@ -35,7 +35,6 @@ import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.OrderPrecedence;
@@ -81,8 +80,7 @@ public class CommandServiceMenu {
 
     public static class ActiveCommandsDomainEvent extends ActionDomainEvent { }
     @Action(domainEvent = ActiveCommandsDomainEvent.class, semantics = SemanticsOf.SAFE)
-    @ActionLayout(bookmarking = BookmarkPolicy.AS_ROOT, cssClassFa = "fa-bolt")
-    @MemberOrder(sequence="10")
+    @ActionLayout(bookmarking = BookmarkPolicy.AS_ROOT, cssClassFa = "fa-bolt", sequence="10")
     public List<CommandJdo> activeCommands() {
         return commandServiceRepository.findCurrent();
     }
@@ -93,8 +91,7 @@ public class CommandServiceMenu {
 
     public static class FindCommandsDomainEvent extends ActionDomainEvent { }
     @Action(domainEvent = FindCommandsDomainEvent.class, semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa = "fa-search")
-    @MemberOrder(sequence="20")
+    @ActionLayout(cssClassFa = "fa-search", sequence="20")
     public List<CommandJdo> findCommands(
             @Parameter(optionality= Optionality.OPTIONAL)
             @ParameterLayout(named="From")
@@ -117,8 +114,7 @@ public class CommandServiceMenu {
 
     public static class FindCommandByIdDomainEvent extends ActionDomainEvent { }
     @Action(domainEvent = FindCommandByIdDomainEvent.class, semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa = "fa-crosshairs")
-    @MemberOrder(sequence="30")
+    @ActionLayout(cssClassFa = "fa-crosshairs", sequence="30")
     public CommandJdo findCommandById(
             @ParameterLayout(named="Transaction Id")
             final UUID transactionId) {
@@ -131,8 +127,7 @@ public class CommandServiceMenu {
 
     public static class TruncateLogDomainEvent extends ActionDomainEvent { }
     @Action(domainEvent = TruncateLogDomainEvent.class, semantics = SemanticsOf.IDEMPOTENT_ARE_YOU_SURE, restrictTo = RestrictTo.PROTOTYPING)
-    @ActionLayout(cssClassFa = "fa-trash")
-    @MemberOrder(sequence="40")
+    @ActionLayout(cssClassFa = "fa-trash", sequence="40")
     public void truncateLog() {
         commandServiceRepository.truncateLog();
     }

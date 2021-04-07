@@ -18,7 +18,6 @@
  */
 package demoapp.dom.types.primitive.doubles.holder;
 
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Where;
@@ -28,13 +27,12 @@ import lombok.RequiredArgsConstructor;
 
 //tag::class[]
 @Property()
-@PropertyLayout(hidden = Where.ALL_TABLES)
+@PropertyLayout(hidden = Where.ALL_TABLES, group = "contributed", sequence = "1")
 @RequiredArgsConstructor
 public class PrimitiveDoubleHolder_mixinProperty {
 
     private final PrimitiveDoubleHolder holder;
 
-    @MemberOrder(name = "contributed", sequence = "1")
     public double prop() {
         return holder.getReadOnlyProperty();
     }

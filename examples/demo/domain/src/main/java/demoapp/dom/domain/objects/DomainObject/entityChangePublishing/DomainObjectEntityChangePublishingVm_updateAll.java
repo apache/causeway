@@ -25,27 +25,24 @@ import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.SemanticsOf;
-
-import lombok.RequiredArgsConstructor;
 
 import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.annotated.disabled.DomainObjectEntityChangePublishingDisabledJdoEntities;
 import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.annotated.enabled.DomainObjectAuditingEnabledJdoEntities;
 import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.metaAnnot.enabled.DomainObjectEntityChangePublishingEnabledMetaAnnotatedJdoEntities;
 import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.metaAnnotOverridden.enabled.DomainObjectEntityChangePublishingEnabledMetaAnnotOverriddenJdoEntities;
+import lombok.RequiredArgsConstructor;
 
 //tag::class[]
 @Action(semantics = SemanticsOf.IDEMPOTENT)
 @ActionLayout(
-    describedAs = "Updates all publishing enabled entities and all publishing disabled entities"
-)
+    describedAs = "Updates all publishing enabled entities and all publishing disabled entities",
+    sequence = "2.0")
 @RequiredArgsConstructor
 public class DomainObjectEntityChangePublishingVm_updateAll {
 
     private final DomainObjectEntityChangePublishingVm domainObjectAuditingVm;
-
-    @MemberOrder(sequence = "2.0")
+    
     public DomainObjectEntityChangePublishingVm act(
             boolean publishingEnabled
             , boolean publishingDisabled

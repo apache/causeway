@@ -18,7 +18,6 @@
  */
 package demoapp.dom.types.javautil.javautildate.holder;
 
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Where;
@@ -28,13 +27,12 @@ import lombok.RequiredArgsConstructor;
 
 //tag::class[]
 @Property()
-@PropertyLayout(hidden = Where.ALL_TABLES)
+@PropertyLayout(hidden = Where.ALL_TABLES, group = "contributed", sequence = "1")
 @RequiredArgsConstructor
 public class JavaUtilDateHolder_mixinProperty {
 
     private final JavaUtilDateHolder holder;
 
-    @MemberOrder(name = "contributed", sequence = "1")
     public java.util.Date prop() {
         return holder.getReadOnlyProperty();
     }

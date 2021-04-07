@@ -28,20 +28,19 @@ import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.wrapper.control.AsyncControl;
 
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+import demoapp.dom.domain._commands.ExposePersistedCommands;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.val;
-
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.domain._commands.ExposePersistedCommands;
 
 //tag::class[]
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
@@ -71,12 +70,12 @@ public class WrapperFactoryJdo
 
 //tag::property[]
     @Property()
-    @MemberOrder(name = "async", sequence = "1")
+    @PropertyLayout(group = "async", sequence = "1")
     @Getter @Setter
     private String propertyAsync;
 
     @Property()
-    @MemberOrder(name = "async", sequence = "2")
+    @PropertyLayout(group = "async", sequence = "2")
     @Getter @Setter
     private String propertyAsyncMixin;
 //end::property[]

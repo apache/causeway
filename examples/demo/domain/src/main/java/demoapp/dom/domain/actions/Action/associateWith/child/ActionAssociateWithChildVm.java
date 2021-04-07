@@ -25,7 +25,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
@@ -56,8 +55,7 @@ public class ActionAssociateWithChildVm implements HasAsciiDocDescription {
     }
 
     @Property()
-    @PropertyLayout()
-    @MemberOrder(name = "annotation", sequence = "1")
+    @PropertyLayout(group = "annotation", sequence = "1")
     @XmlElement(required = false)
     @Getter @Setter
     private String value;

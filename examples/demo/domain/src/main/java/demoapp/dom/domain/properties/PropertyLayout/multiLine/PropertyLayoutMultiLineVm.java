@@ -26,16 +26,14 @@ import javax.xml.bind.annotation.XmlType;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import lombok.Getter;
 import lombok.Setter;
-
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
 //tag::class[]
 @XmlRootElement(name = "root")
@@ -57,9 +55,8 @@ public class PropertyLayoutMultiLineVm implements HasAsciiDocDescription {
     @PropertyLayout(
         multiLine = 5                           // <.>
         , describedAs =
-            "@PropertyLayout(multiLine = 5)"
-    )
-    @MemberOrder(name = "annotation", sequence = "1")
+            "@PropertyLayout(multiLine = 5)",
+        group = "annotation", sequence = "1")
     @XmlElement(required = false)
     @Getter @Setter
     private String propertyUsingAnnotation;
@@ -73,9 +70,8 @@ public class PropertyLayoutMultiLineVm implements HasAsciiDocDescription {
     @PropertyLayout(
         multiLine = 5
         , describedAs =
-            "@PropertyLayout(multiLine = 5)"
-    )
-    @MemberOrder(name = "annotation", sequence = "2")
+            "@PropertyLayout(multiLine = 5)",
+        group = "annotation", sequence = "2")
     @XmlElement(required = false)
     @Getter @Setter
     private String propertyUsingAnnotationReadOnly;
@@ -85,9 +81,8 @@ public class PropertyLayoutMultiLineVm implements HasAsciiDocDescription {
     @Property(optionality = Optionality.OPTIONAL)
     @PropertyLayout(                                        // <.>
         describedAs =
-            "<cpt:property id=\"...\" multiLine=\"5\"/>"
-    )
-    @MemberOrder(name = "layout-file", sequence = "1")
+            "<cpt:property id=\"...\" multiLine=\"5\"/>",
+        group = "layout-file", sequence = "1")
     @XmlElement(required = false)
     @Getter @Setter
     private String propertyUsingLayout;
@@ -97,9 +92,8 @@ public class PropertyLayoutMultiLineVm implements HasAsciiDocDescription {
     @MultiLine10MetaAnnotation                        // <.>
     @Property(optionality = Optionality.OPTIONAL)
     @PropertyLayout(
-        describedAs = "@MultiLine10MetaAnnotation"
-    )
-    @MemberOrder(name = "meta-annotated", sequence = "1")
+        describedAs = "@MultiLine10MetaAnnotation",
+        group = "meta-annotated", sequence = "1")
     @XmlElement(required = false)
     @Getter @Setter
     private String propertyUsingMetaAnnotation;
@@ -112,9 +106,8 @@ public class PropertyLayoutMultiLineVm implements HasAsciiDocDescription {
         multiLine = 3                                   // <.>
         , describedAs =
             "@MultiLine10MetaAnnotation " +
-            "@PropertyLayout(multiLine = 3)"
-    )
-    @MemberOrder(name = "meta-annotated-overridden", sequence = "1")
+            "@PropertyLayout(multiLine = 3)",
+        group = "meta-annotated-overridden", sequence = "1")
     @XmlElement(required = false)
     @Getter @Setter
     private String propertyUsingMetaAnnotationButOverridden;

@@ -20,7 +20,6 @@ package org.apache.isis.extensions.secman.model.dom.permission;
 
 import javax.inject.Inject;
 
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Where;
@@ -38,7 +37,8 @@ import lombok.RequiredArgsConstructor;
         domainEvent = ApplicationPermission_feature.PropertyDomainEvent.class
         )
 @PropertyLayout(
-        hidden=Where.REFERENCES_PARENT
+        hidden=Where.REFERENCES_PARENT,
+        group="Feature", sequence = "4"
         )
 @RequiredArgsConstructor
 public class ApplicationPermission_feature {
@@ -48,7 +48,6 @@ public class ApplicationPermission_feature {
 
     final ApplicationPermission target;
 
-    @MemberOrder(name="Feature", sequence = "4")
     public ApplicationFeatureViewModel prop(final ApplicationPermission permission) {
         if(permission.getFeatureSort() == null) {
             return null;

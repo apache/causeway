@@ -34,7 +34,6 @@ import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
@@ -85,10 +84,8 @@ public class MetaModelServiceMenu {
             )
     @ActionLayout(
             cssClassFa = "fa-download",
-            named = "Download Meta Model (CSV)"
-            )
-    @MemberOrder(sequence="500.500.2")
-    // ...
+            named = "Download Meta Model (CSV)",
+            sequence="500.500.2")
     public Clob downloadMetaModelCsv(
             @ParameterLayout(named = ".csv file name")
             final String csvFileName) {
@@ -117,10 +114,8 @@ public class MetaModelServiceMenu {
             )
     @ActionLayout(
             cssClassFa = "fa-download",
-            named = "Download Meta Model (XML)"
-            )
-    @MemberOrder(sequence="500.500.2")
-    // ...
+            named = "Download Meta Model (XML)",
+            sequence="500.500.2")
     public Clob downloadMetaModelXml(
             @ParameterLayout(named = ".xml file name")
             final String fileName,

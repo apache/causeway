@@ -19,7 +19,6 @@
 package org.apache.isis.extensions.secman.model.dom.role;
 
 import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.extensions.secman.api.role.ApplicationRole;
@@ -29,14 +28,14 @@ import lombok.RequiredArgsConstructor;
 
 @Action(
         domainEvent = UpdateNameDomainEvent.class, 
-        associateWith = "name")
+        associateWith = "name",
+        associateWithSequence = "1")
 @RequiredArgsConstructor
 public class ApplicationRole_updateName {
     
     private final ApplicationRole target;
     
-    @MemberOrder(sequence = "1")
-    public ApplicationRole updateName(
+    public ApplicationRole act(
             @Parameter(maxLength = ApplicationRole.MAX_LENGTH_NAME) 
             @ParameterLayout(named="Name", typicalLength = ApplicationRole.TYPICAL_LENGTH_NAME)
             final String name) {
@@ -45,7 +44,7 @@ public class ApplicationRole_updateName {
         return target;
     }
 
-    public String default0UpdateName() {
+    public String default0Act() {
         return target.getName();
     }
 

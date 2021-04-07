@@ -26,7 +26,6 @@ import javax.xml.bind.annotation.XmlType;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Property;
@@ -35,10 +34,9 @@ import org.apache.isis.applib.annotation.Repainting;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.extensions.viewer.wicket.pdfjs.applib.annotations.PdfJsViewer;
 
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import lombok.Getter;
 import lombok.Setter;
-
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
 //tag::class[]
 @XmlRootElement(name = "root")
@@ -58,9 +56,8 @@ public class PropertyLayoutRepaintingVm implements HasAsciiDocDescription {
     @PropertyLayout(
         describedAs =
             "Editable property " +
-            "(PDFs should not repaint if it changes)"
-    )
-    @MemberOrder(name = "edit", sequence = "1")
+            "(PDFs should not repaint if it changes)",
+        group = "edit", sequence = "1")
     @XmlElement(required = false)
     @Getter @Setter
     private String editMe;
@@ -70,9 +67,8 @@ public class PropertyLayoutRepaintingVm implements HasAsciiDocDescription {
     @PropertyLayout(
         repainting = Repainting.NO_REPAINT                  // <.>
         , describedAs =
-            "@PropertyLayout(repainting = NO_REPAINT)"
-    )
-    @MemberOrder(name = "annotation", sequence = "1")
+            "@PropertyLayout(repainting = NO_REPAINT)",
+        group = "annotation", sequence = "1")
     @XmlElement(required = true)
     @PdfJsViewer                                            // <.>
     @Getter @Setter
@@ -83,9 +79,8 @@ public class PropertyLayoutRepaintingVm implements HasAsciiDocDescription {
     @Property(optionality = Optionality.OPTIONAL)
     @PropertyLayout(                                        // <.>
         describedAs =
-            "<cpt:property id=\"...\" repainting = \"NO_REPAINT\"/>"
-    )
-    @MemberOrder(name = "layout-file", sequence = "1")
+            "<cpt:property id=\"...\" repainting = \"NO_REPAINT\"/>",
+        group = "layout-file", sequence = "1")
     @XmlElement(required = false)
 //    @PdfJsViewer
     @Getter @Setter
@@ -96,9 +91,8 @@ public class PropertyLayoutRepaintingVm implements HasAsciiDocDescription {
     @RepaintingNoRepaintMetaAnnotation                      // <.>
     @Property(optionality = Optionality.OPTIONAL)
     @PropertyLayout(
-        describedAs = "@RepaintingNoRepaintMetaAnnotation"
-    )
-    @MemberOrder(name = "meta-annotated", sequence = "1")
+        describedAs = "@RepaintingNoRepaintMetaAnnotation",
+        group = "meta-annotated", sequence = "1")
     @XmlElement(required = false)
 //    @PdfJsViewer
     @Getter @Setter
@@ -111,9 +105,8 @@ public class PropertyLayoutRepaintingVm implements HasAsciiDocDescription {
     @PropertyLayout(
         repainting = Repainting.NO_REPAINT                // <.>
         , describedAs =
-            "@RepaintingRepaintMetaAnnotation @PropertyLayout(...)"
-    )
-    @MemberOrder(name = "meta-annotated-overridden", sequence = "1")
+            "@RepaintingRepaintMetaAnnotation @PropertyLayout(...)",
+        group = "meta-annotated-overridden", sequence = "1")
     @XmlElement(required = false)
 //    @PdfJsViewer
     @Getter @Setter

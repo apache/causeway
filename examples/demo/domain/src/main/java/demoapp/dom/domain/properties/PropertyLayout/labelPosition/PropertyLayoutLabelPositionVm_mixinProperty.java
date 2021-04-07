@@ -19,7 +19,6 @@
 package demoapp.dom.domain.properties.PropertyLayout.labelPosition;
 
 import org.apache.isis.applib.annotation.LabelPosition;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Where;
@@ -32,7 +31,8 @@ import lombok.RequiredArgsConstructor;
     labelPosition = LabelPosition.TOP           // <.>
     , describedAs =
         "@PropertyLayout(labelPosition = TOP)"
-    , hidden = Where.ALL_TABLES
+    , hidden = Where.ALL_TABLES,
+    group = "contributed", sequence = "1"
 )
 @RequiredArgsConstructor
 public class PropertyLayoutLabelPositionVm_mixinProperty {
@@ -41,7 +41,6 @@ public class PropertyLayoutLabelPositionVm_mixinProperty {
 
     private final PropertyLayoutLabelPositionVm propertyLayoutLabelPositionVm;
 
-    @MemberOrder(name = "contributed", sequence = "1")
     public String prop() {
         return propertyLayoutLabelPositionVm.getPropertyUsingAnnotation();
     }

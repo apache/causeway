@@ -18,6 +18,8 @@
  */
 package demoapp.dom.domain.actions.Action.semantics;
 
+import static org.apache.isis.applib.services.wrapper.control.SyncControl.control;
+
 import javax.inject.Inject;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -29,21 +31,18 @@ import javax.xml.bind.annotation.XmlType;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 
-import static org.apache.isis.applib.services.wrapper.control.SyncControl.control;
-
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
 @XmlRootElement(name = "root")
 @XmlType
@@ -81,56 +80,56 @@ public class ActionSemanticsVm implements HasAsciiDocDescription {
     }
 
     @Property()
-    @MemberOrder(name = "not-annotated", sequence = "1")
+    @PropertyLayout(group = "not-annotated", sequence = "1")
     @XmlElement(required = true)
     @Getter @Setter
     private int propertyNoAnnotation;
 
     @Property()
-    @MemberOrder(name = "annotated-safe", sequence = "1")
+    @PropertyLayout(group = "annotated-safe", sequence = "1")
     @XmlElement(required = true)
     @Getter @Setter
     private int propertyForSafe;
 
     @Property()
-    @MemberOrder(name = "annotated-safe", sequence = "2")
+    @PropertyLayout(group = "annotated-safe", sequence = "2")
     @XmlElement(required = true)
     @Getter @Setter
     private int propertyForSafeAndRequestCacheable;
 
 
     @Property()
-    @MemberOrder(name = "annotated-idempotent", sequence = "1")
+    @PropertyLayout(group = "annotated-idempotent", sequence = "1")
     @XmlElement(required = true)
     @Getter @Setter
     private int propertyForIdempotent;
 
     @Property()
-    @MemberOrder(name = "annotated-idempotent", sequence = "2")
+    @PropertyLayout(group = "annotated-idempotent", sequence = "2")
     @XmlElement(required = true)
     @Getter @Setter
     private int propertyForIdempotentAreYouSure;
 
     @Property()
-    @MemberOrder(name = "annotated-non-idempotent", sequence = "5")
+    @PropertyLayout(group = "annotated-non-idempotent", sequence = "5")
     @XmlElement(required = true)
     @Getter @Setter
     private int propertyForNonIdempotent;
 
     @Property()
-    @MemberOrder(name = "annotated-non-idempotent", sequence = "6")
+    @PropertyLayout(group = "annotated-non-idempotent", sequence = "6")
     @XmlElement(required = true)
     @Getter @Setter
     private int propertyForNonIdempotentAreYouSure;
 
     @Property()
-    @MemberOrder(name = "meta-annotated", sequence = "1")
+    @PropertyLayout(group = "meta-annotated", sequence = "1")
     @XmlElement(required = true)
     @Getter @Setter
     private int propertyForMetaAnnotations;
 
     @Property()
-    @MemberOrder(name = "meta-annotated-overridden", sequence = "1")
+    @PropertyLayout(group = "meta-annotated-overridden", sequence = "1")
     @XmlElement(required = true)
     @Getter @Setter
     private int propertyForMetaAnnotationsOverridden;

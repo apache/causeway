@@ -26,8 +26,9 @@ import java.util.stream.Stream;
 
 import javax.annotation.Nullable;
 
+import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.MemberOrder;
+import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 
@@ -111,14 +112,14 @@ public final class UserMemento implements Serializable {
     /**
      * The user's login name.
      */
-    @MemberOrder(sequence = "1.1")
+    @PropertyLayout(sequence = "1.1")
     @Getter
     private final String name;
 
     /**
      * The roles associated with this user.
      */
-    @MemberOrder(sequence = "1.1")
+    @CollectionLayout(sequence = "1.2")
     private final List<RoleMemento> roles;
     public List<RoleMemento> getRoles() {
         return roles;

@@ -23,7 +23,6 @@ import javax.jdo.JDOHelper;
 import org.datanucleus.enhancement.Persistable;
 import org.datanucleus.identity.DatastoreId;
 
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Where;
@@ -58,7 +57,7 @@ public class Persistable_datanucleusIdLong {
     extends org.apache.isis.applib.IsisModuleApplib.PropertyDomainEvent
     <Persistable_datanucleusIdLong, Long> {}
 
-    @MemberOrder(name = LayoutMixinConstants.METADATA_LAYOUT_GROUPNAME, sequence = "800.1")
+    @PropertyLayout(group = LayoutMixinConstants.METADATA_LAYOUT_GROUPNAME, sequence = "800.1")
     public Long prop() {
         final Object objectId = JDOHelper.getObjectId(persistable);
         if(objectId instanceof DatastoreId) {

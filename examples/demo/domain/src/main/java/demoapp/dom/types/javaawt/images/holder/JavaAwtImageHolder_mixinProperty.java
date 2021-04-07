@@ -20,7 +20,6 @@ package demoapp.dom.types.javaawt.images.holder;
 
 import java.awt.image.BufferedImage;
 
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Where;
@@ -30,13 +29,12 @@ import lombok.RequiredArgsConstructor;
 
 //tag::class[]
 @Property()
-@PropertyLayout(hidden = Where.ALL_TABLES)
+@PropertyLayout(hidden = Where.ALL_TABLES, group = "contributed", sequence = "1")
 @RequiredArgsConstructor
 public class JavaAwtImageHolder_mixinProperty {
 
     private final JavaAwtImageHolder holder;
 
-    @MemberOrder(name = "contributed", sequence = "1")
     public BufferedImage prop() {
         return holder.getReadOnlyProperty();
     }

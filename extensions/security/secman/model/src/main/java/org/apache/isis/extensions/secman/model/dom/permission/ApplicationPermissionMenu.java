@@ -23,9 +23,9 @@ import java.util.Collection;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
@@ -65,7 +65,7 @@ public class ApplicationPermissionMenu {
             domainEvent=FindOrphanedPermissionsDomainEvent.class,
             semantics = SemanticsOf.SAFE
             )
-    @MemberOrder(sequence = "100.50.1")
+    @ActionLayout(sequence = "100.50.1")
     public ApplicationOrphanedPermissionManager findOrphanedPermissions() {
         return factoryService.viewModel(new ApplicationOrphanedPermissionManager());
     }
@@ -79,7 +79,7 @@ public class ApplicationPermissionMenu {
             semantics = SemanticsOf.SAFE,
             restrictTo = RestrictTo.PROTOTYPING
             )
-    @MemberOrder(sequence = "100.50.2")
+    @ActionLayout(sequence = "100.50.2")
     public Collection<? extends ApplicationPermission> allPermissions() {
         return applicationPermissionRepository.allPermissions();
     }

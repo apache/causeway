@@ -21,26 +21,24 @@ package demoapp.dom._infra.asciidocdesc;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.LabelPosition;
-import org.apache.isis.applib.annotation.MemberOrder;
-import org.apache.isis.applib.annotation.Snapshot;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
+import org.apache.isis.applib.annotation.Snapshot;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.valuetypes.asciidoc.applib.value.AsciiDoc;
 
+import demoapp.dom._infra.resources.MarkupVariableResolverService;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
-import demoapp.dom._infra.resources.MarkupVariableResolverService;
-
 @Property(snapshot = Snapshot.EXCLUDED)
-@RequiredArgsConstructor @SuppressWarnings("CdiManagedBeanInconsistencyInspection")
+@RequiredArgsConstructor 
 public class HasAsciiDocDescription_sources {
 
     private final HasAsciiDocDescription hasAsciiDocDescription;
 
-    @PropertyLayout(labelPosition = LabelPosition.NONE, hidden = Where.ALL_TABLES)
-    @MemberOrder(name = "sources", sequence = "1")
+    @PropertyLayout(labelPosition = LabelPosition.NONE, hidden = Where.ALL_TABLES,
+            group = "sources", sequence = "1")
     public AsciiDoc prop() {
         val packageName = hasAsciiDocDescription.getClass().getPackage().getName();
         val sourceLocation = packageName.replace('.', '/');

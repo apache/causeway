@@ -31,19 +31,17 @@ import javax.xml.bind.annotation.XmlType;
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Where;
 
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+import demoapp.dom.domain.properties.PropertyLayout.hidden.child.PropertyLayoutHiddenChildVm;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.domain.properties.PropertyLayout.hidden.child.PropertyLayoutHiddenChildVm;
 
 //tag::class[]
 @XmlRootElement(name = "root")
@@ -66,9 +64,8 @@ public class PropertyLayoutHiddenVm implements HasAsciiDocDescription {
     @PropertyLayout(
         hidden = Where.NOWHERE                           // <.>
         , describedAs =
-            "@PropertyLayout(hidden = Where.NOWHERE)"
-    )
-    @MemberOrder(name = "annotation", sequence = "1")
+            "@PropertyLayout(hidden = Where.NOWHERE)",
+        group = "annotation", sequence = "1")
     @XmlElement(required = false)
     @Getter @Setter
     private String propertyHiddenNowhereUsingAnnotation;
@@ -78,9 +75,8 @@ public class PropertyLayoutHiddenVm implements HasAsciiDocDescription {
     @Property(optionality = Optionality.OPTIONAL)
     @PropertyLayout(                                        // <.>
         describedAs =
-            "<cpt:property id=\"...\" hidden=\"NOWHERE\"/>"
-    )
-    @MemberOrder(name = "layout-file", sequence = "1")
+            "<cpt:property id=\"...\" hidden=\"NOWHERE\"/>",
+        group = "layout-file", sequence = "1")
     @XmlElement(required = false)
     @Getter @Setter
     private String propertyHiddenNowhereUsingLayout;
@@ -91,9 +87,8 @@ public class PropertyLayoutHiddenVm implements HasAsciiDocDescription {
     @PropertyLayout(
             hidden = Where.EVERYWHERE                       // <.>
             , describedAs =
-            "@PropertyLayout(hidden = Where.EVERYWHERE)"
-    )
-    @MemberOrder(name = "variants", sequence = "1")
+            "@PropertyLayout(hidden = Where.EVERYWHERE)",
+            group = "variants", sequence = "1")
     @XmlElement(required = false)
     @Getter @Setter
     private String propertyHiddenEverywhere;
@@ -104,9 +99,8 @@ public class PropertyLayoutHiddenVm implements HasAsciiDocDescription {
     @PropertyLayout(
             hidden = Where.ANYWHERE                       // <.>
             , describedAs =
-            "@PropertyLayout(hidden = Where.ANYWHERE)"
-    )
-    @MemberOrder(name = "variants", sequence = "2")
+            "@PropertyLayout(hidden = Where.ANYWHERE)",
+            group = "variants", sequence = "2")
     @XmlElement(required = false)
     @Getter @Setter
     private String propertyHiddenAnywhere;
@@ -124,9 +118,8 @@ public class PropertyLayoutHiddenVm implements HasAsciiDocDescription {
     @Property(optionality = Optionality.OPTIONAL)
     @HiddenEverywhereMetaAnnotation                        // <.>
     @PropertyLayout(
-        describedAs = "@HiddenEverywhereMetaAnnotation"
-    )
-    @MemberOrder(name = "meta-annotated", sequence = "1")
+        describedAs = "@HiddenEverywhereMetaAnnotation",
+        group = "meta-annotated", sequence = "1")
     @XmlElement(required = false)
     @Getter @Setter
     private String propertyUsingMetaAnnotation;
@@ -139,9 +132,8 @@ public class PropertyLayoutHiddenVm implements HasAsciiDocDescription {
         hidden = Where.NOWHERE                          // <.>
         , describedAs =
             "@HiddenEverywhereMetaAnnotation " +
-            "@PropertyLayout(hidden = Where.NOWHERE)"
-    )
-    @MemberOrder(name = "meta-annotated-overridden", sequence = "2")
+            "@PropertyLayout(hidden = Where.NOWHERE)",
+            group = "meta-annotated-overridden", sequence = "2")
     @XmlElement(required = false)
     @Getter @Setter
     private String propertyUsingMetaAnnotationButOverridden;

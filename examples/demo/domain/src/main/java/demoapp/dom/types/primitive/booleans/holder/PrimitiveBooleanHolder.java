@@ -18,7 +18,6 @@
  */
 package demoapp.dom.types.primitive.booleans.holder;
 
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 
@@ -27,16 +26,14 @@ public interface PrimitiveBooleanHolder {
 
 //end::class[]
     @Property
-    @PropertyLayout
-    @MemberOrder(name = "read-only-properties", sequence = "1") // TODO: doesn't seem to get picked up
+    @PropertyLayout(group = "read-only-properties", sequence = "1") // TODO: doesn't seem to get picked up
 //tag::class[]
     boolean isReadOnlyProperty();
     void setReadOnlyProperty(boolean c);
 
 //end::class[]
     @Property
-    @PropertyLayout
-    @MemberOrder(name = "editable-properties", sequence = "1") // TODO: doesn't seem to get picked up
+    @PropertyLayout(group = "editable-properties", sequence = "1") // TODO: doesn't seem to get picked up
 //tag::class[]
     boolean isReadWriteProperty();
     void setReadWriteProperty(boolean c);

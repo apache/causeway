@@ -24,7 +24,6 @@ import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.graph.tree.TreeNode;
@@ -42,10 +41,13 @@ import lombok.val;
 @Action(
         domainEvent = Object_inspectMetamodel.ActionDomainEvent.class,
         semantics = SemanticsOf.SAFE,
-        restrictTo = RestrictTo.PROTOTYPING)
+        restrictTo = RestrictTo.PROTOTYPING,
+        associateWith = LayoutMixinConstants.METADATA_LAYOUT_GROUPNAME
+        )
 @ActionLayout(
         cssClassFa = "fa-sitemap",
-        position = ActionLayout.Position.PANEL_DROPDOWN)
+        position = ActionLayout.Position.PANEL_DROPDOWN, 
+        sequence = "700.2.1")
 @RequiredArgsConstructor
 public class Object_inspectMetamodel {
 
@@ -57,7 +59,6 @@ public class Object_inspectMetamodel {
     public static class ActionDomainEvent
     extends org.apache.isis.applib.IsisModuleApplib.ActionDomainEvent<Object_inspectMetamodel> {}
 
-    @MemberOrder(name = LayoutMixinConstants.METADATA_LAYOUT_GROUPNAME, sequence = "700.2.1")
     public Object act() {
 
         val pkg = holder.getClass().getPackage().getName();

@@ -95,6 +95,7 @@ public @interface Action {
      *
      * @see Action#associateWith()
      */
+    @Deprecated //TODO update java-doc in other layout annotations  
     String associateWithSequence()
             default "1";
 

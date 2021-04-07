@@ -22,7 +22,6 @@ import java.util.List;
 
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.CollectionLayout;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.extensions.commandlog.impl.IsisModuleExtCommandLogImpl;
 
 
@@ -30,7 +29,8 @@ import org.apache.isis.extensions.commandlog.impl.IsisModuleExtCommandLogImpl;
     domainEvent = CommandJdo_childCommands.CollectionDomainEvent.class
 )
 @CollectionLayout(
-    defaultView = "table"
+    defaultView = "table",
+    sequence = "100.100"
 )
 public class CommandJdo_childCommands {
 
@@ -42,7 +42,6 @@ public class CommandJdo_childCommands {
         this.commandJdo = commandJdo;
     }
 
-    @MemberOrder(sequence = "100.100")
     public List<CommandJdo> coll() {
         return commandJdoRepository.findByParent(commandJdo);
     }

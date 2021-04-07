@@ -22,7 +22,6 @@ import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
@@ -51,8 +50,8 @@ import lombok.val;
         restrictTo = RestrictTo.PROTOTYPING
         )
 @ActionLayout(
-        cssClassFa = "fa-download"
-        )
+        cssClassFa = "fa-download",
+        sequence = "500.1")
 @RequiredArgsConstructor
 public class Dto_downloadXml {
 
@@ -61,8 +60,6 @@ public class Dto_downloadXml {
     public static class ActionDomainEvent
     extends org.apache.isis.applib.IsisModuleApplib.ActionDomainEvent<Dto_downloadXml> {}
 
-
-    @MemberOrder(sequence = "500.1")
     public Object act(
 
             // PARAM 0

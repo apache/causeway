@@ -29,7 +29,6 @@ import org.datanucleus.enhancement.Persistable;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
@@ -50,11 +49,13 @@ import lombok.RequiredArgsConstructor;
 @Action(
         domainEvent = Persistable_downloadJdoMetadata.ActionDomainEvent.class,
         semantics = SemanticsOf.SAFE,
-        restrictTo = RestrictTo.PROTOTYPING
+        restrictTo = RestrictTo.PROTOTYPING,
+        associateWith = LayoutMixinConstants.METADATA_LAYOUT_GROUPNAME 
         )
 @ActionLayout(
         cssClassFa = "fa-download",
-        position = ActionLayout.Position.PANEL_DROPDOWN
+        position = ActionLayout.Position.PANEL_DROPDOWN,
+        sequence = "710.1"
         )
 @RequiredArgsConstructor
 public class Persistable_downloadJdoMetadata {
@@ -65,7 +66,6 @@ public class Persistable_downloadJdoMetadata {
 
     public static class ActionDomainEvent extends org.apache.isis.applib.IsisModuleApplib.ActionDomainEvent<Persistable_downloadJdoMetadata> {}
 
-    @MemberOrder(name = LayoutMixinConstants.METADATA_LAYOUT_GROUPNAME, sequence = "710.1")
     public Clob act(
             @ParameterLayout(named = "File name")
             final String fileName) throws JAXBException, IOException {

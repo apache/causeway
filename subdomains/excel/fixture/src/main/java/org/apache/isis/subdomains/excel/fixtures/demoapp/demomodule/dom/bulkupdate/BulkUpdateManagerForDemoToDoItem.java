@@ -18,6 +18,9 @@
  */
 package org.apache.isis.subdomains.excel.fixtures.demoapp.demomodule.dom.bulkupdate;
 
+import static org.apache.isis.subdomains.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItem.Predicates.thoseCategorised;
+import static org.apache.isis.subdomains.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItem.Predicates.thoseCompleted;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -36,7 +39,6 @@ import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
@@ -51,8 +53,6 @@ import org.apache.isis.subdomains.excel.applib.dom.WorksheetSpec;
 import org.apache.isis.subdomains.excel.fixtures.demoapp.todomodule.dom.Category;
 import org.apache.isis.subdomains.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItem;
 import org.apache.isis.subdomains.excel.fixtures.demoapp.todomodule.dom.Subcategory;
-
-import static org.apache.isis.subdomains.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItem.Predicates.*;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -177,9 +177,8 @@ public class BulkUpdateManagerForDemoToDoItem {
         return excelService.toExcel(new WorksheetContent(toDoItemViewModels, WORKSHEET_SPEC), fileName);
     }
 
-    @Action
+    @Action(associateWith = "toDoItems", associateWithSequence = "2")
     @ActionLayout(named = "Import")
-    @MemberOrder(name="toDoItems", sequence="2")
     public List<BulkUpdateLineItemForDemoToDoItem> importBlob(
             @Parameter(fileAccept = ".xlsx")
             @ParameterLayout(named="Excel spreadsheet")

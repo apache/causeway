@@ -18,7 +18,6 @@
  */
 package demoapp.dom.domain.properties.PropertyLayout.typicalLength;
 
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 
@@ -29,7 +28,8 @@ import lombok.RequiredArgsConstructor;
 @PropertyLayout(
     typicalLength = 10                      // <.>
     , describedAs =
-        "@PropertyLayout(typicalLength = 10)"
+        "@PropertyLayout(typicalLength = 10)",
+    group = "contributed", sequence = "1"
 )
 @RequiredArgsConstructor
 public class PropertyLayoutTypicalLengthVm_mixinProperty {
@@ -38,7 +38,6 @@ public class PropertyLayoutTypicalLengthVm_mixinProperty {
 
     private final PropertyLayoutTypicalLengthVm propertyLayoutTypicalLengthVm;
 
-    @MemberOrder(name = "contributed", sequence = "1")
     public String prop() {
         return propertyLayoutTypicalLengthVm.getPropertyUsingAnnotation();
     }

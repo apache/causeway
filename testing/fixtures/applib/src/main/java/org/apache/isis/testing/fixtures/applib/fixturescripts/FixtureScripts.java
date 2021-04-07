@@ -36,7 +36,6 @@ import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
@@ -242,9 +241,8 @@ public class FixtureScripts {
             restrictTo = RestrictTo.PROTOTYPING
     )
     @ActionLayout(
-            cssClassFa="fa fa-chevron-right"
-    )
-    @MemberOrder(sequence="10")
+            cssClassFa="fa fa-chevron-right", 
+            sequence="10")
     public List<FixtureResult> runFixtureScript(
             @ParameterLayout(named = "Fixture script")
             final String fixtureScriptName,
@@ -319,9 +317,8 @@ public class FixtureScripts {
             restrictTo = RestrictTo.PROTOTYPING
     )
     @ActionLayout(
-            cssClassFa="fa fa-refresh"
-    )
-    @MemberOrder(sequence="20")
+            cssClassFa="fa fa-refresh", 
+            sequence="20")
     public Object recreateObjectsAndReturnFirst() {
         val recreateScriptClass =  getSpecification().getRecreateScriptClass();
         val recreateScript = findFixtureScriptNameFor(recreateScriptClass);

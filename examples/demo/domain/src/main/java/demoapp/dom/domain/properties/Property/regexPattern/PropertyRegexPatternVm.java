@@ -28,15 +28,13 @@ import javax.xml.bind.annotation.XmlType;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import lombok.Getter;
 import lombok.Setter;
-
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
 //tag::class[]
 @XmlRootElement(name = "root")
@@ -61,9 +59,8 @@ public class PropertyRegexPatternVm implements HasAsciiDocDescription {
     )
     @PropertyLayout(
         describedAs =
-            "@Property(regexPattern = \"^\\w+@\\w+[.]com$\"\")"
-    )
-    @MemberOrder(name = "annotation", sequence = "1")
+            "@Property(regexPattern = \"^\\w+@\\w+[.]com$\"\")",
+        group = "annotation", sequence = "1")
     @XmlElement(required = true)
     @Getter @Setter
     private String emailAddressPropertyUsingAnnotation;
@@ -73,9 +70,8 @@ public class PropertyRegexPatternVm implements HasAsciiDocDescription {
     @RegexPatternEmailComMetaAnnotation                             // <.>
     @Property()
     @PropertyLayout(
-        describedAs = "@RegexPatternEmailComMetaAnnotation"
-    )
-    @MemberOrder(name = "meta-annotated", sequence = "1")
+        describedAs = "@RegexPatternEmailComMetaAnnotation",
+        group = "meta-annotated", sequence = "1")
     @XmlElement(required = false)
     @Getter @Setter
     private String emailAddressPropertyUsingMetaAnnotation;
@@ -91,9 +87,8 @@ public class PropertyRegexPatternVm implements HasAsciiDocDescription {
     @PropertyLayout(
         describedAs =
             "@RegexPatternEmailComMetaAnnotation " +
-            "@Property(regexPattern = \"^\\w+@\\w+[.]org$\"\")"
-    )
-    @MemberOrder(name = "meta-annotated-overridden", sequence = "1")
+            "@Property(regexPattern = \"^\\w+@\\w+[.]org$\"\")",
+        group = "meta-annotated-overridden", sequence = "1")
     @XmlElement(required = true)
     @Getter @Setter
     private String emailAddressPropertyUsingMetaAnnotationButOverridden;

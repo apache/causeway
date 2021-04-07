@@ -31,7 +31,6 @@ import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.annotation.ParameterLayout;
@@ -98,8 +97,7 @@ public class CommandReplayOnPrimaryService {
      * @throws NotFoundException - if the command with specified transaction cannot be found.
      */
     @Action(domainEvent = FindCommandsDomainEvent.class, semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa = "fa-search")
-    @MemberOrder(sequence="40")
+    @ActionLayout(cssClassFa = "fa-search", sequence="40")
     public List<CommandJdo> findCommands(
             @Nullable
             @ParameterLayout(named="Interaction Id")
@@ -126,8 +124,7 @@ public class CommandReplayOnPrimaryService {
      * @throws NotFoundException - if the command with specified transaction cannot be found.
      */
     @Action(domainEvent = DownloadCommandsDomainEvent.class, semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa = "fa-download")
-    @MemberOrder(sequence="50")
+    @ActionLayout(cssClassFa = "fa-download", sequence="50")
     public Clob downloadCommands(
             @Nullable
             final UUID interactionId,
@@ -166,8 +163,7 @@ public class CommandReplayOnPrimaryService {
      * @throws NotFoundException - if the command with specified transaction cannot be found.
      */
     @Action(domainEvent = DownloadCommandByIdDomainEvent.class, semantics = SemanticsOf.SAFE)
-    @ActionLayout(cssClassFa = "fa-download")
-    @MemberOrder(sequence="50")
+    @ActionLayout(cssClassFa = "fa-download", sequence="50")
     public Clob downloadCommandById(
             final UUID interactionId,
             final String filenamePrefix) {

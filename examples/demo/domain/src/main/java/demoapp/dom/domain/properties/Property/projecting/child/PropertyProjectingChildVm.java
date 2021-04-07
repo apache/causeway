@@ -25,19 +25,18 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Projecting;
 import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.applib.annotation.Where;
 
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+import demoapp.dom.domain.properties.Property.projecting.jdo.PropertyProjectingChildJdo;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.domain.properties.Property.projecting.jdo.PropertyProjectingChildJdo;
 
 //tag::class[]
 @XmlRootElement(name = "child")
@@ -57,7 +56,7 @@ public class PropertyProjectingChildVm implements HasAsciiDocDescription {
 
 //tag::class[]
     @Title
-    @MemberOrder(name = "properties", sequence = "1")
+    @PropertyLayout(group = "properties", sequence = "1")
     public String getProperty() {
         return getBackingEntity().getName();
     }

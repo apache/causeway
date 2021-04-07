@@ -23,10 +23,10 @@ import java.util.UUID;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.MemberOrder;
+import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.mixins.system.HasInteractionId;
+import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.extensions.commandlog.impl.IsisModuleExtCommandLogImpl;
 import org.apache.isis.extensions.commandlog.impl.jdo.CommandJdo;
 import org.apache.isis.extensions.commandlog.impl.jdo.CommandJdoRepository;
@@ -41,11 +41,12 @@ import lombok.RequiredArgsConstructor;
  *
  * @since 2.0 {@index}
  */
-@SuppressWarnings("CdiManagedBeanInconsistencyInspection")
 @Action(
     semantics = SemanticsOf.SAFE
-    , domainEvent = HasInteractionId_command.ActionDomainEvent.class
+    , domainEvent = HasInteractionId_command.ActionDomainEvent.class,
+    associateWith = "interactionId"
 )
+@ActionLayout(sequence="1")
 @RequiredArgsConstructor
 public class HasInteractionId_command {
 
@@ -54,7 +55,6 @@ public class HasInteractionId_command {
 
     private final HasInteractionId hasInteractionId;
 
-    @MemberOrder(name="interactionId", sequence="1")
     public CommandJdo act() {
         return findCommand();
     }

@@ -19,7 +19,6 @@
 package demoapp.dom.types.javatime.javatimeoffsetdatetime.holder;
 
 import org.apache.isis.applib.annotation.LabelPosition;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.RenderDay;
@@ -33,9 +32,8 @@ public interface JavaTimeOffsetDateTimeHolder3 extends JavaTimeOffsetDateTimeHol
             renderDay = RenderDay.AS_DAY_BEFORE,                 // <.>
             describedAs = "@PropertyLayout(renderDay=AS_DAY_BEFORE)",
             labelPosition = LabelPosition.TOP,
-            hidden = Where.ALL_TABLES
-    )
-    @MemberOrder(name = "render-day", sequence = "1")            // <.>
+            hidden = Where.ALL_TABLES,
+            group = "render-day", sequence = "1")            // <.>
     default java.time.OffsetDateTime getReadOnlyPropertyDerivedRenderDayAsDayBefore() {
         return getReadOnlyProperty();
     }
@@ -45,9 +43,8 @@ public interface JavaTimeOffsetDateTimeHolder3 extends JavaTimeOffsetDateTimeHol
             renderDay = RenderDay.AS_DAY,                        // <.>
             describedAs = "@PropertyLayout(renderDay=AS_DAY)",
             labelPosition = LabelPosition.TOP,
-            hidden = Where.ALL_TABLES
-    )
-    @MemberOrder(name = "render-day", sequence = "2")
+            hidden = Where.ALL_TABLES,
+            group = "render-day", sequence = "2")
     default java.time.OffsetDateTime getReadOnlyPropertyDerivedRenderDayAsDay() {
         return getReadOnlyProperty();
     }
@@ -57,9 +54,8 @@ public interface JavaTimeOffsetDateTimeHolder3 extends JavaTimeOffsetDateTimeHol
             renderDay = RenderDay.NOT_SPECIFIED,                // <.>
             describedAs = "@PropertyLayout(renderDay=NOT_SPECIFIED)",
             labelPosition = LabelPosition.TOP,
-            hidden = Where.ALL_TABLES
-    )
-    @MemberOrder(name = "render-day", sequence = "3")
+            hidden = Where.ALL_TABLES,
+            group = "render-day", sequence = "3")
     default java.time.OffsetDateTime getReadOnlyPropertyDerivedRenderDayNotSpecified() {
         return getReadOnlyProperty();
     }

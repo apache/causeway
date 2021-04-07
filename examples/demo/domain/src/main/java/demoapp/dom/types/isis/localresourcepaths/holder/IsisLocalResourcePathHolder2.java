@@ -19,7 +19,6 @@
 package demoapp.dom.types.isis.localresourcepaths.holder;
 
 import org.apache.isis.applib.annotation.LabelPosition;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Where;
@@ -33,9 +32,8 @@ public interface IsisLocalResourcePathHolder2 extends IsisLocalResourcePathHolde
         labelPosition = LabelPosition.LEFT,                 // <.>
         describedAs =
             "@PropertyLayout(labelPosition=LEFT)",
-        hidden = Where.ALL_TABLES
-    )
-    @MemberOrder(name = "label-positions", sequence = "1")  // <.>
+        hidden = Where.ALL_TABLES,
+        group = "label-positions", sequence = "1")  // <.>
     default LocalResourcePath getReadOnlyPropertyDerivedLabelPositionLeft() {
         return getReadOnlyProperty();
     }
@@ -45,9 +43,8 @@ public interface IsisLocalResourcePathHolder2 extends IsisLocalResourcePathHolde
         labelPosition = LabelPosition.TOP,                  // <.>
         describedAs =
             "@PropertyLayout(labelPosition=TOP)",
-        hidden = Where.ALL_TABLES
-    )
-    @MemberOrder(name = "label-positions", sequence = "2")
+        hidden = Where.ALL_TABLES,
+        group = "label-positions", sequence = "2")
     default LocalResourcePath getReadOnlyPropertyDerivedLabelPositionTop() {
         return getReadOnlyProperty();
     }
@@ -57,9 +54,8 @@ public interface IsisLocalResourcePathHolder2 extends IsisLocalResourcePathHolde
         labelPosition = LabelPosition.RIGHT,                // <.>
         describedAs =
             "@PropertyLayout(labelPosition=RIGHT)",
-        hidden = Where.ALL_TABLES
-    )
-    @MemberOrder(name = "label-positions", sequence = "3")
+        hidden = Where.ALL_TABLES,
+        group = "label-positions", sequence = "3")
     default LocalResourcePath getReadOnlyPropertyDerivedLabelPositionRight() {
         return getReadOnlyProperty();
     }
@@ -69,9 +65,8 @@ public interface IsisLocalResourcePathHolder2 extends IsisLocalResourcePathHolde
         labelPosition = LabelPosition.NONE,                 // <.>
         describedAs =
             "@PropertyLayout(labelPosition=NONE)",
-        hidden = Where.ALL_TABLES
-    )
-    @MemberOrder(name = "label-positions", sequence = "4")
+        hidden = Where.ALL_TABLES,
+        group = "label-positions", sequence = "4")
     default LocalResourcePath getReadOnlyPropertyDerivedLabelPositionNone() {
         return getReadOnlyProperty();
     }

@@ -28,7 +28,6 @@ import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.util.ZipWriter;
@@ -62,9 +61,8 @@ public class JdoMetamodelMenu {
             )
     @ActionLayout(
             cssClassFa = "fa-download",
-            named = "Download JDO Metamodels (ZIP)"
-            )
-    @MemberOrder(sequence="500.670.1")
+            named = "Download JDO Metamodels (ZIP)",
+            sequence="500.670.1")
     public Blob downloadMetamodels() {
 
         final byte[] zipBytes = zip();

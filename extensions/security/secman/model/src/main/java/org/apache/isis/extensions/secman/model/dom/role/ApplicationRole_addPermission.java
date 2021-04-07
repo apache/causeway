@@ -23,7 +23,6 @@ import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.MinLength;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
@@ -44,7 +43,8 @@ import lombok.experimental.Accessors;
 
 @Action(
         domainEvent = AddPermissionDomainEvent.class, 
-        associateWith = "permissions")
+        associateWith = "permissions", 
+        associateWithSequence = "0")
 @ActionLayout(named="Add")
 @RequiredArgsConstructor
 public class ApplicationRole_addPermission {
@@ -65,7 +65,6 @@ public class ApplicationRole_addPermission {
      * Adds a {@link ApplicationPermission permission} for this role to a
      * {@link ApplicationFeature feature}.
      */
-    @MemberOrder(sequence = "0")
     public ApplicationRole act(
             
             @Parameter(optionality = Optionality.MANDATORY)

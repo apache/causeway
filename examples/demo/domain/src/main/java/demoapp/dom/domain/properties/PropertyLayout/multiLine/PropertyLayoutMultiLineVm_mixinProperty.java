@@ -18,7 +18,6 @@
  */
 package demoapp.dom.domain.properties.PropertyLayout.multiLine;
 
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 
@@ -29,7 +28,8 @@ import lombok.RequiredArgsConstructor;
 @PropertyLayout(
     multiLine = 5                           // <.>
     , describedAs =
-        "@PropertyLayout(multiLine = 5)"
+        "@PropertyLayout(multiLine = 5)",
+    group = "contributed", sequence = "1"
 )
 @RequiredArgsConstructor
 public class PropertyLayoutMultiLineVm_mixinProperty {
@@ -38,7 +38,6 @@ public class PropertyLayoutMultiLineVm_mixinProperty {
 
     private final PropertyLayoutMultiLineVm propertyLayoutMultiLineVm;
 
-    @MemberOrder(name = "contributed", sequence = "1")
     public String prop() {
         return propertyLayoutMultiLineVm.getPropertyUsingAnnotation();
     }

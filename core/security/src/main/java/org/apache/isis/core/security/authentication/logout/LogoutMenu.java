@@ -30,7 +30,6 @@ import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.value.LocalResourcePath;
@@ -63,9 +62,8 @@ public class LogoutMenu {
             semantics = SemanticsOf.SAFE
             )
     @ActionLayout(
-            cssClassFa = "fa-sign-out-alt"
-            )
-    @MemberOrder(sequence = "999")
+            cssClassFa = "fa-sign-out-alt",
+            sequence = "999")
     public Object logout(){
         _NullSafe.stream(logoutHandler)
             .filter(LogoutHandler::isHandlingCurrentThread)

@@ -18,7 +18,6 @@
  */
 package org.apache.isis.applib.services.layout;
 
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.layout.grid.Grid;
 
 /**

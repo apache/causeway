@@ -33,7 +33,7 @@ public class ApplicationPermission_viewing {
 
     private final ApplicationPermission target;
     
-    //@MemberOrder(name = "Mode", sequence = "1")
+    //@PropertyLayout(group = "Mode", sequence = "1")
     public ApplicationPermission act() {
         target.setMode(ApplicationPermissionMode.VIEWING);
         return target;

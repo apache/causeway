@@ -26,16 +26,15 @@ import javax.jdo.annotations.PersistenceCapable;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Title;
-
-import lombok.Getter;
-import lombok.Setter;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom.types.javatime.javatimeoffsetdatetime.holder.JavaTimeOffsetDateTimeHolder3;
+import lombok.Getter;
+import lombok.Setter;
 
 //tag::class[]
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
@@ -54,25 +53,25 @@ public class JavaTimeOffsetDateTimeJdo                                          
 
 //tag::class[]
     @Title(prepend = "java.time.OffsetDateTime JDO entity: ")
-    @MemberOrder(name = "read-only-properties", sequence = "1")
+    @PropertyLayout(group = "read-only-properties", sequence = "1")
     @Column(allowsNull = "false")                                               // <.>
     @Getter @Setter
     private java.time.OffsetDateTime readOnlyProperty;
 
     @Property(editing = Editing.ENABLED)                                        // <.>
-    @MemberOrder(name = "editable-properties", sequence = "1")
+    @PropertyLayout(group = "editable-properties", sequence = "1")
     @Column(allowsNull = "false")
     @Getter @Setter
     private java.time.OffsetDateTime readWriteProperty;
 
     @Property(optionality = Optionality.OPTIONAL)                               // <.>
-    @MemberOrder(name = "optional-properties", sequence = "1")
+    @PropertyLayout(group = "optional-properties", sequence = "1")
     @Column(allowsNull = "true")                                                // <.>
     @Getter @Setter
     private java.time.OffsetDateTime readOnlyOptionalProperty;
 
     @Property(editing = Editing.ENABLED, optionality = Optionality.OPTIONAL)
-    @MemberOrder(name = "optional-properties", sequence = "2")
+    @PropertyLayout(group = "optional-properties", sequence = "2")
     @Column(allowsNull = "true")
     @Getter @Setter
     private java.time.OffsetDateTime readWriteOptionalProperty;

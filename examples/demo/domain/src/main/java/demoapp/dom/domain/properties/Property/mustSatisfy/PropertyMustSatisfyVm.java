@@ -26,15 +26,13 @@ import javax.xml.bind.annotation.XmlType;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import lombok.Getter;
 import lombok.Setter;
-
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
 //tag::class[]
 @XmlRootElement(name = "root")
@@ -57,9 +55,8 @@ public class PropertyMustSatisfyVm implements HasAsciiDocDescription {
     )
     @PropertyLayout(
         describedAs =
-            "mustSatisfy = OfWorkingAgeSpecification.class"
-    )
-    @MemberOrder(name = "annotation", sequence = "1")
+            "mustSatisfy = OfWorkingAgeSpecification.class",
+        group = "annotation", sequence = "1")
     @XmlElement(required = true)
     @Getter @Setter
     private Integer customerAgePropertyUsingAnnotation;
@@ -69,9 +66,8 @@ public class PropertyMustSatisfyVm implements HasAsciiDocDescription {
     @MustSatisfyOfWorkingAgeMetaAnnotation                     // <.>
     @Property()
     @PropertyLayout(
-        describedAs = "@MustSatisfyOfWorkingAgeMetaAnnotation"
-    )
-    @MemberOrder(name = "meta-annotated", sequence = "1")
+        describedAs = "@MustSatisfyOfWorkingAgeMetaAnnotation",
+        group = "meta-annotated", sequence = "1")
     @XmlElement(required = true)
     @Getter @Setter
     private Integer customerAgePropertyUsingMetaAnnotation;
@@ -85,9 +81,8 @@ public class PropertyMustSatisfyVm implements HasAsciiDocDescription {
     @PropertyLayout(
         describedAs =
             "@MustSatisfyOfWorkingAgeMetaAnnotation " +
-            "@PropertyLayout(mustSatisfy = OfRetirementAgeSpecification.class)"
-    )
-    @MemberOrder(name = "meta-annotated-overridden", sequence = "1")
+            "@PropertyLayout(mustSatisfy = OfRetirementAgeSpecification.class)",
+        group = "meta-annotated-overridden", sequence = "1")
     @XmlElement(required = true)
     @Getter @Setter
     private Integer customerAgePropertyUsingMetaAnnotationButOverridden;

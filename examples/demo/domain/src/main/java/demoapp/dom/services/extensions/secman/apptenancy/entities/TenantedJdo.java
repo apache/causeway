@@ -24,9 +24,10 @@ import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.PersistenceCapable;
 
 import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.Editing;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Title;
 
@@ -44,11 +45,12 @@ public class TenantedJdo {
 
     @Title
     @Property(editing = Editing.ENABLED)
-    @MemberOrder(name = "General", sequence = "1")
+    @PropertyLayout(group = "General", sequence = "1")
     @Getter @Setter
     private String name;
 
-    @Action(associateWith = "name", associateWithSequence = "1", semantics = SemanticsOf.SAFE)
+    @Action(associateWith = "name", semantics = SemanticsOf.SAFE)
+    @ActionLayout(sequence = "1")
     public TenantedJdo updateName(final String name) {
         this.name = name;
         return this;

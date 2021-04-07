@@ -27,7 +27,6 @@ import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
@@ -73,9 +72,7 @@ public class ApplicationFeatureViewModels  {
             restrictTo = RestrictTo.PROTOTYPING
             )
     @ActionLayout(
-            cssClassFa = "fa-list"
-            )
-    @MemberOrder(sequence = "100.40.1")
+            cssClassFa = "fa-list", sequence = "100.40.1")
     public List<ApplicationNamespace> allNamespaces() {
         return asViewModels(featureRepository.allNamespaces(), ApplicationNamespace.class);
     }
@@ -90,9 +87,7 @@ public class ApplicationFeatureViewModels  {
             restrictTo = RestrictTo.PROTOTYPING
             )
     @ActionLayout(
-            cssClassFa = "fa-list"
-            )
-    @MemberOrder(sequence = "100.40.2")
+            cssClassFa = "fa-list", sequence = "100.40.2")
     public List<ApplicationType> allTypes() {
         return asViewModels(featureRepository.allTypes(), ApplicationType.class);
     }
@@ -107,9 +102,7 @@ public class ApplicationFeatureViewModels  {
             restrictTo = RestrictTo.PROTOTYPING
             )
     @ActionLayout(
-            cssClassFa = "fa-list"
-            )
-    @MemberOrder(sequence = "100.40.3")
+            cssClassFa = "fa-list", sequence = "100.40.3")
     public List<ApplicationTypeAction> allActions() {
         return asViewModels(featureRepository.allActions(), ApplicationTypeAction.class);
     }
@@ -124,9 +117,7 @@ public class ApplicationFeatureViewModels  {
             restrictTo = RestrictTo.PROTOTYPING
             )
     @ActionLayout(
-            cssClassFa = "fa-list"
-            )
-    @MemberOrder(sequence = "100.40.4")
+            cssClassFa = "fa-list", sequence = "100.40.4")
     public List<ApplicationTypeProperty> allProperties() {
         return asViewModels(featureRepository.allProperties(), ApplicationTypeProperty.class);
     }
@@ -141,9 +132,7 @@ public class ApplicationFeatureViewModels  {
             restrictTo = RestrictTo.PROTOTYPING
             )
     @ActionLayout(
-            cssClassFa = "fa-list"
-            )
-    @MemberOrder(sequence = "100.40.5")
+            cssClassFa = "fa-list", sequence = "100.40.5")
     public List<ApplicationTypeCollection> allCollections() {
         return asViewModels(featureRepository.allCollections(), ApplicationTypeCollection.class);
     }

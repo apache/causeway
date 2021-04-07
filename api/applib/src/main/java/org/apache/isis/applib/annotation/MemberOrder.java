@@ -34,6 +34,7 @@ import java.lang.annotation.Target;
  * </p>
  * @since 1.x {@index}
  */
+@Deprecated
 @Inherited
 @Target({ ElementType.METHOD, ElementType.FIELD })
 @Retention(RetentionPolicy.RUNTIME)

@@ -22,9 +22,7 @@ import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.extensions.commandlog.impl.IsisModuleExtCommandLogImpl;
@@ -36,7 +34,7 @@ import lombok.val;
     domainEvent = CommandJdo_openResultObject.ActionDomainEvent.class,
     associateWith = "result"
 )
-@ActionLayout(named = "Open")
+@ActionLayout(named = "Open", sequence="1")
 public class CommandJdo_openResultObject {
 
     public static class ActionDomainEvent
@@ -47,7 +45,6 @@ public class CommandJdo_openResultObject {
         this.commandJdo = commandJdo;
     }
 
-    @MemberOrder(name="result", sequence="1")
     public Object act() {
         val targetBookmark = bookmarkService.lookup(commandJdo.getResult());
         if(targetBookmark == null) {

@@ -27,7 +27,6 @@ import javax.xml.bind.annotation.XmlType;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Programmatic;
@@ -84,8 +83,7 @@ public class FixtureResult {
         this.objectBookmark = bookmarkService.bookmarkFor(object).toString();
     }
 
-    @PropertyLayout(named="Result class")
-    @MemberOrder(sequence="3")
+    @PropertyLayout(named="Result class", sequence="3")
     public String getClassName() {
         return getObjectBookmark() != null? getObject().getClass().getName(): null;
     }

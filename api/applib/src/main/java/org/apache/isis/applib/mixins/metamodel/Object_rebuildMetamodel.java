@@ -22,7 +22,6 @@ import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.mixins.layout.LayoutMixinConstants;
@@ -40,11 +39,13 @@ import lombok.RequiredArgsConstructor;
 @Action(
         domainEvent = Object_rebuildMetamodel.ActionDomainEvent.class,
         semantics = SemanticsOf.IDEMPOTENT,
-        restrictTo = RestrictTo.PROTOTYPING
+        restrictTo = RestrictTo.PROTOTYPING,
+        associateWith = LayoutMixinConstants.METADATA_LAYOUT_GROUPNAME
 )
 @ActionLayout(
         cssClassFa = "fa-sync",
-        position = ActionLayout.Position.PANEL
+        position = ActionLayout.Position.PANEL,
+        sequence = "800.1"
 )
 @RequiredArgsConstructor
 public class Object_rebuildMetamodel {
@@ -54,7 +55,6 @@ public class Object_rebuildMetamodel {
 
     private final Object holder;
 
-    @MemberOrder(name = LayoutMixinConstants.METADATA_LAYOUT_GROUPNAME, sequence = "800.1")
     public Object act() {
         metaModelService.rebuild(holder.getClass());
         return holder;

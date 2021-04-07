@@ -20,7 +20,7 @@ package org.apache.isis.applib.mixins.metamodel;
 
 import javax.inject.Inject;
 
-import org.apache.isis.applib.annotation.MemberOrder;
+import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Where;
@@ -51,7 +51,7 @@ import lombok.val;
  * @since 1.x {@index}
  */
 @Property
-@PropertyLayout(hidden = Where.ALL_TABLES)
+@PropertyLayout(hidden = Where.ALL_TABLES, group = LayoutMixinConstants.METADATA_LAYOUT_GROUPNAME, sequence = "700.2")
 @RequiredArgsConstructor
 public class Object_objectIdentifier {
 
@@ -63,7 +63,6 @@ public class Object_objectIdentifier {
     public static class ActionDomainEvent
     extends org.apache.isis.applib.IsisModuleApplib.ActionDomainEvent<Object_objectIdentifier> {}
 
-    @MemberOrder(name = LayoutMixinConstants.METADATA_LAYOUT_GROUPNAME, sequence = "700.2")
     public String prop() {
         val bookmark = bookmarkService.bookmarkForElseThrow(this.holder);
         val sort = mmService.sortOf(bookmark, MetaModelService.Mode.RELAXED);

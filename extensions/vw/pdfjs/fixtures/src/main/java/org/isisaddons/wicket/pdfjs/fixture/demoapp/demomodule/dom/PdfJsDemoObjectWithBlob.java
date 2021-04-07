@@ -71,7 +71,7 @@ public class PdfJsDemoObjectWithBlob implements Comparable<PdfJsDemoObjectWithBl
     private String name;
 
 
-    @MemberOrder(name = "name", sequence = "1")
+    @PropertyLayout(group = "name", sequence = "1")
     public PdfJsDemoObjectWithBlob updateName(String name) {
         setName(name);
         return this;
@@ -109,7 +109,7 @@ public class PdfJsDemoObjectWithBlob implements Comparable<PdfJsDemoObjectWithBl
 
 
     @Action(semantics = SemanticsOf.SAFE)
-    @MemberOrder(name = "url", sequence = "1")
+    @PropertyLayout(group = "url", sequence = "1")
     public URL openUrl() throws MalformedURLException {
         return new java.net.URL(getUrl());
     }

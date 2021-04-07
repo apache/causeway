@@ -28,7 +28,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3Col;
 
 /**

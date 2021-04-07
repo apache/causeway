@@ -20,8 +20,8 @@ package org.apache.isis.extensions.secman.model.dom.feature;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
 
@@ -54,7 +54,7 @@ public class ApplicationTypeAction extends ApplicationTypeMember {
     @Property(
             domainEvent = ReturnTypeDomainEvent.class
             )
-    @MemberOrder(name="Data Type", sequence = "2.6")
+    @PropertyLayout(group="Data Type", sequence = "2.6")
     public String getReturnType() {
         return getFeature().getActionReturnType()
                 .map(Class::getSimpleName)
@@ -67,7 +67,7 @@ public class ApplicationTypeAction extends ApplicationTypeMember {
     @Property(
             domainEvent = ActionSemanticsDomainEvent.class
             )
-    @MemberOrder(name="Detail", sequence = "2.8")
+    @PropertyLayout(group="Detail", sequence = "2.8")
     public SemanticsOf getActionSemantics() {
         return getFeature().getActionSemantics()
                 .orElse(null);

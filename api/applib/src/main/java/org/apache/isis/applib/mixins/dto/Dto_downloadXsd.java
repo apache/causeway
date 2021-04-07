@@ -24,7 +24,6 @@ import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
@@ -63,8 +62,8 @@ import lombok.val;
         restrictTo = RestrictTo.PROTOTYPING
         )
 @ActionLayout(
-        cssClassFa = "fa-download"
-        )
+        cssClassFa = "fa-download",
+        sequence = "500.2")
 @RequiredArgsConstructor
 public class Dto_downloadXsd {
 
@@ -78,7 +77,6 @@ public class Dto_downloadXsd {
      * common Apache Isis schemas; useful if there is only one other XSD schema
      * referenced by the DTO.
      */
-    @MemberOrder(sequence = "500.2")
     public Object act(
 
             @ParameterLayout(

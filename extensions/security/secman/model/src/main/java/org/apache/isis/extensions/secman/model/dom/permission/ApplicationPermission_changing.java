@@ -31,7 +31,7 @@ public class ApplicationPermission_changing {
 
     private final ApplicationPermission target;
 
-    //@MemberOrder(name = "Mode", sequence = "2")
+    //@PropertyLayout(group = "Mode", sequence = "2")
     public ApplicationPermission act() {
         target.setMode(ApplicationPermissionMode.CHANGING);
         return target;

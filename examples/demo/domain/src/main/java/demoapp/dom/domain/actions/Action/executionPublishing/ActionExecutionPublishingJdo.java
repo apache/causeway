@@ -27,17 +27,16 @@ import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom.domain._interactions.ExposeCapturedInteractions;
+import lombok.Getter;
+import lombok.Setter;
 
 //tag::class[]
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
@@ -64,17 +63,17 @@ public class ActionExecutionPublishingJdo
 
 //tag::property[]
     @Property()
-    @MemberOrder(name = "annotation", sequence = "1")
+    @PropertyLayout(group = "annotation", sequence = "1")
     @Getter @Setter
     private String property;
 
     @Property()
-    @MemberOrder(name = "meta-annotated", sequence = "1")
+    @PropertyLayout(group = "meta-annotated", sequence = "1")
     @Getter @Setter
     private String propertyMetaAnnotated;
 
     @Property()
-    @MemberOrder(name = "meta-annotated-overridden", sequence = "1")
+    @PropertyLayout(group = "meta-annotated-overridden", sequence = "1")
     @Getter @Setter
     private String propertyMetaAnnotatedOverridden;
 //end::property[]

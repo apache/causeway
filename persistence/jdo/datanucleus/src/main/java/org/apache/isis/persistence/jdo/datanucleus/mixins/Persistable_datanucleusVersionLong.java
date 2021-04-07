@@ -22,7 +22,6 @@ import javax.jdo.JDOHelper;
 
 import org.datanucleus.enhancement.Persistable;
 
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Where;
@@ -47,7 +46,9 @@ import lombok.RequiredArgsConstructor;
         domainEvent = Persistable_datanucleusVersionLong.PropertyDomainEvent.class)
 @PropertyLayout(
         named = "Version",
-        hidden = Where.ALL_TABLES
+        hidden = Where.ALL_TABLES,
+        group = LayoutMixinConstants.METADATA_LAYOUT_GROUPNAME, 
+        sequence = "800.2"
         )
 @RequiredArgsConstructor
 public class Persistable_datanucleusVersionLong {
@@ -58,7 +59,6 @@ public class Persistable_datanucleusVersionLong {
     extends org.apache.isis.applib.IsisModuleApplib.PropertyDomainEvent
     <Persistable_datanucleusVersionLong, Long> {}
 
-    @MemberOrder(name = LayoutMixinConstants.METADATA_LAYOUT_GROUPNAME, sequence = "800.2")
     public Long prop() {
         final Object version = JDOHelper.getVersion(persistable);
         return version != null && version instanceof Long ? (Long) version : null;

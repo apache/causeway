@@ -18,7 +18,6 @@
  */
 package demoapp.dom.domain.properties.Property.hidden.child;
 
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Where;
@@ -30,7 +29,8 @@ import lombok.RequiredArgsConstructor;
 @PropertyLayout(
     hidden = Where.ALL_TABLES                   // <.>
     , describedAs =
-        "@Property(hidden = ALL_TABLES)"
+        "@Property(hidden = ALL_TABLES)",
+    group = "contributed", sequence = "1"
 )
 @RequiredArgsConstructor
 public class PropertyHiddenChildVm_mixinProperty {
@@ -39,7 +39,6 @@ public class PropertyHiddenChildVm_mixinProperty {
 
     private final PropertyHiddenChildVm propertyHiddenChildVm;
 
-    @MemberOrder(name = "contributed", sequence = "1")
     public String prop() {
         return propertyHiddenChildVm.getPropertyHiddenNowhere();
     }

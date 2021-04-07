@@ -21,8 +21,8 @@ package org.apache.isis.extensions.secman.model.dom.feature;
 import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
 
 @DomainObject(
@@ -58,7 +58,7 @@ public abstract class ApplicationTypeMember extends ApplicationFeatureViewModel 
     @Property(
             domainEvent = MemberNameDomainEvent.class
             )
-    @MemberOrder(name="Id", sequence = "2.4")
+    @PropertyLayout(group="Id", sequence = "2.4")
     public String getMemberName() {
         return super.getMemberName();
     }

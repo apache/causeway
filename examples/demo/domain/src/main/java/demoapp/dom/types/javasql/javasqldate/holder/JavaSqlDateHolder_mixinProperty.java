@@ -18,7 +18,6 @@
  */
 package demoapp.dom.types.javasql.javasqldate.holder;
 
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Where;
@@ -28,13 +27,12 @@ import lombok.RequiredArgsConstructor;
 
 //tag::class[]
 @Property()
-@PropertyLayout(hidden = Where.ALL_TABLES)
+@PropertyLayout(hidden = Where.ALL_TABLES, group = "contributed", sequence = "1")
 @RequiredArgsConstructor
 public class JavaSqlDateHolder_mixinProperty {
 
     private final JavaSqlDateHolder holder;
 
-    @MemberOrder(name = "contributed", sequence = "1")
     public java.sql.Date prop() {
         return holder.getReadOnlyProperty();
     }

@@ -31,18 +31,17 @@ import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Property;
-
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.val;
+import org.apache.isis.applib.annotation.PropertyLayout;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom.services.core.xmlSnapshotService.child.XmlSnapshotChildVm;
 import demoapp.dom.services.core.xmlSnapshotService.peer.XmlSnapshotPeerVm;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.val;
 
 @XmlRootElement(name = "root")
 @XmlType
@@ -63,13 +62,13 @@ public class XmlSnapshotParentVm implements HasAsciiDocDescription {
     }
 
     @Property(editing = Editing.ENABLED)
-    @MemberOrder(name = "properties", sequence = "1")
+    @PropertyLayout(group = "properties", sequence = "1")
     @XmlElement(required = true)
     @Getter @Setter
     private String text;
 
     @Property(editing = Editing.DISABLED)
-    @MemberOrder(name = "properties", sequence = "3")
+    @PropertyLayout(group = "properties", sequence = "3")
     @XmlElement(required = false)
     @Getter @Setter
     private XmlSnapshotPeerVm peer;
