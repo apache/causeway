@@ -16,22 +16,22 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+package org.apache.isis.core.metamodel.facets.members.layout.group;
 
-package org.apache.isis.core.metamodel.facets.members.order.annotprop;
-
-import org.apache.isis.applib.services.i18n.TranslationContext;
-import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.members.order.MemberOrderFacetAbstract;
 
-public class MemberOrderFacetXml extends MemberOrderFacetAbstract {
+public class LayoutGroupFacetFromXml
+extends LayoutGroupFacetAbstract {
 
-    public MemberOrderFacetXml(
-    		TranslationContext context,
-    		final String name,
-            final String sequence,
-            final TranslationService translationService, final FacetHolder holder) {
-        super(context, name, sequence, translationService, holder);
+    public static LayoutGroupFacetFromXml create(
+            final String group,
+            final FacetHolder holder) {
+        
+        return new LayoutGroupFacetFromXml(group, holder);
     }
 
+    public LayoutGroupFacetFromXml(final String group, final FacetHolder holder) {
+        super(group, holder);
+    }
+    
 }

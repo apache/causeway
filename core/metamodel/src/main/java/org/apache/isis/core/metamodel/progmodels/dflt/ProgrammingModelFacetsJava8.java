@@ -46,7 +46,6 @@ import org.apache.isis.core.metamodel.facets.members.cssclassfa.annotprop.CssCla
 import org.apache.isis.core.metamodel.facets.members.describedas.annotprop.DescribedAsFacetOnMemberFactory;
 import org.apache.isis.core.metamodel.facets.members.disabled.method.DisableForContextFacetViaMethodFactory;
 import org.apache.isis.core.metamodel.facets.members.hidden.method.HideForContextFacetViaMethodFactory;
-import org.apache.isis.core.metamodel.facets.members.order.annotprop.MemberOrderFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.ViewModelSemanticCheckingFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.bookmarkable.BookmarkPolicyFacetFallbackFactory;
 import org.apache.isis.core.metamodel.facets.object.callbacks.CreatedCallbackFacetFactory;
@@ -219,8 +218,6 @@ public final class ProgrammingModelFacetsJava8 extends ProgrammingModelAbstract 
 
         addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, ValidateObjectFacetMethodFactory.class);
         addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, ObjectValidPropertiesFacetImplFactory.class);
-
-        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, MemberOrderFacetFactory.class);
 
         addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, BookmarkPolicyFacetFallbackFactory.class);
         addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, HomePageFacetAnnotationFactory.class);

@@ -102,18 +102,5 @@ implements Serializable {
     public static TranslationContext forTabIdentifier(Identifier identifier) {
         return ofName(identifier.getTranslationContext() + "~tabName");
     }
-    
-    @Deprecated // just a refactoring step
-    public static TranslationContext forMemberOrderNameIdentifier(Identifier identifier) {
-        return ofName(identifier.getTranslationContext() + "~memberOrderName");
-    }   
-
-    @Deprecated // just a refactoring step
-    public static TranslationContext forMemberOrderNameClass(Class<?> cls) {
-        return ofName(cls.getName() + "~memberOrderName");
-    }
-
-    
-	
 	
 }

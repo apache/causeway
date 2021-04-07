@@ -19,18 +19,16 @@
 
 package org.apache.isis.core.metamodel.facets.members.order;
 
-import java.util.Map;
-
 import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 
-public abstract class MemberOrderFacetAbstract extends FacetAbstract implements MemberOrderFacet {
-
+public abstract class MemberOrderFacetAbstract 
+extends FacetAbstract 
+implements MemberOrderFacet {
 
     public static Class<? extends Facet> type() {
         return MemberOrderFacet.class;
@@ -92,19 +90,8 @@ public abstract class MemberOrderFacetAbstract extends FacetAbstract implements 
     }
 
     @Override
-    public String untranslatedName() {
-        return originalName;
-    }
-
-    @Override
     public String sequence() {
         return sequence;
     }
 
-    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
-        super.appendAttributesTo(attributeMap);
-        attributeMap.put("name", name);
-        attributeMap.put("originalName", originalName);
-        attributeMap.put("sequence", sequence);
-    }
 }
