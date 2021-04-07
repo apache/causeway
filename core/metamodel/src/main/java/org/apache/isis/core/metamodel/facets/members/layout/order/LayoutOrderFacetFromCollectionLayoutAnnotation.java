@@ -17,31 +17,28 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.actions.layout;
+package org.apache.isis.core.metamodel.facets.members.layout.order;
 
 import java.util.Optional;
 
-import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.Redirect;
+import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.actions.redirect.RedirectFacet;
-import org.apache.isis.core.metamodel.facets.actions.redirect.RedirectFacetAbstract;
 
-public class RedirectFacetFromActionLayoutAnnotation extends RedirectFacetAbstract {
+public class LayoutOrderFacetFromCollectionLayoutAnnotation 
+extends LayoutOrderFacetAbstract {
 
-    public static RedirectFacet create(
-            final Optional<ActionLayout> actionLayoutIfAny, 
+    public static LayoutOrderFacetFromCollectionLayoutAnnotation create(
+            final Optional<CollectionLayout> actionLayoutIfAny, 
             final FacetHolder holder) {
         
         return actionLayoutIfAny
-                .map(ActionLayout::redirectPolicy)
-                .map(redirect -> new RedirectFacetFromActionLayoutAnnotation(redirect, holder))
+                .map(CollectionLayout::sequence)
+                .map(sequence -> new LayoutOrderFacetFromCollectionLayoutAnnotation(sequence, holder))
                 .orElse(null);
     }
 
-    public RedirectFacetFromActionLayoutAnnotation(
-            final Redirect policy, final FacetHolder holder) {
-        super(policy, holder);
+    public LayoutOrderFacetFromCollectionLayoutAnnotation(final String sequence, final FacetHolder holder) {
+        super(sequence, holder);
     }
 
 }

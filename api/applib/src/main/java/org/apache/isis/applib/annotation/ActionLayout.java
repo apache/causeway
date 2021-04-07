@@ -179,7 +179,12 @@ public @interface ActionLayout {
     /**
      * The order of this member relative to other members in the same (layout) group, 
      * given in <i>Dewey-decimal</i> notation.
-     *
+     * <p>
+     *     An alternative is to use the <code>Xxx.layout.xml</code> file,
+     *     where <code>Xxx</code> is the domain object name.
+     * </p>
+     * @see CollectionLayout#sequence()
+     * @see PropertyLayout#sequence()
      */
     String sequence()
             default "";

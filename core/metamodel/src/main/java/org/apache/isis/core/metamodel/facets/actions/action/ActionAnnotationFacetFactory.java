@@ -42,7 +42,7 @@ import org.apache.isis.core.metamodel.facets.actions.action.prototype.PrototypeF
 import org.apache.isis.core.metamodel.facets.actions.action.semantics.ActionSemanticsFacetForActionAnnotation;
 import org.apache.isis.core.metamodel.facets.actions.action.typeof.TypeOfFacetForActionAnnotation;
 import org.apache.isis.core.metamodel.facets.actions.fileaccept.FileAcceptFacetForActionAnnotation;
-import org.apache.isis.core.metamodel.facets.members.order.annotprop.MemberOrderFacetForActionAnnotation;
+import org.apache.isis.core.metamodel.facets.members.layout.group.LayoutGroupFacetFromActionAnnotation;
 import org.apache.isis.core.metamodel.facets.members.publish.command.CommandPublishingFacetForActionAnnotation;
 import org.apache.isis.core.metamodel.facets.members.publish.execution.ExecutionPublishingActionFacetForActionAnnotation;
 import org.apache.isis.core.metamodel.facets.object.domainobject.domainevents.ActionDomainEventDefaultFacetForDomainObjectAnnotation;
@@ -267,19 +267,13 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract {
         val facetedMethod = processMethodContext.getFacetHolder();
 
         // check for @Action(associateWith=...)
-
         actionIfAny.ifPresent(action->{
             val associateWith = action.associateWith();
-            if(!_Strings.isNullOrEmpty(associateWith)) {
-                val associateWithSequence = action.associateWithSequence();
-                super.addFacet(
-                        new MemberOrderFacetForActionAnnotation(associateWith, associateWithSequence, facetedMethod));
-                super.addFacet(
-                        new AssociatedWithFacetForActionAnnotation(associateWith, facetedMethod));
+            if(_Strings.isNotEmpty(associateWith)) {
+                super.addFacet(LayoutGroupFacetFromActionAnnotation.create(actionIfAny, facetedMethod));
+                super.addFacet(new AssociatedWithFacetForActionAnnotation(associateWith, facetedMethod));
             }
         });
-
-
     }
 
     void processFileAccept(final ProcessMethodContext processMethodContext, Optional<Action> actionIfAny) {
@@ -289,8 +283,6 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract {
         // check for @Action(fileAccept=...)
         val facet = FileAcceptFacetForActionAnnotation.create(actionIfAny, holder);
         super.addFacet(facet);
-
     }
-
 
 }

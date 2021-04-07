@@ -19,13 +19,11 @@
 
 package org.apache.isis.core.metamodel.facets.properties.propertylayout;
 
-import java.util.Optional;
-
 import org.apache.isis.applib.annotation.PropertyLayout;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.core.metamodel.facets.FacetedMethod;
+import org.apache.isis.core.metamodel.facets.members.layout.group.LayoutGroupFacetFromPropertyLayoutAnnotation;
+import org.apache.isis.core.metamodel.facets.members.layout.order.LayoutOrderFacetFromPropertyLayoutAnnotation;
 
 import lombok.val;
 
@@ -39,103 +37,58 @@ extends FacetFactoryAbstract {
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
 
-        val facetHolder = facetHolderFrom(processMethodContext);
-        val propertyLayoutIfAny = propertyLayoutsFrom(processMethodContext);
+        val facetHolder = processMethodContext.getFacetHolder();
+        val propertyLayoutIfAny = processMethodContext
+                .synthesizeOnMethodOrMixinType(PropertyLayout.class);
 
-        processCssClass(facetHolder, propertyLayoutIfAny);
-        processDescribedAs(facetHolder, propertyLayoutIfAny);
-        processPromptStyle(facetHolder, propertyLayoutIfAny);
-        processHidden(facetHolder, propertyLayoutIfAny);
-        processLabelAt(facetHolder, propertyLayoutIfAny);
-        processMultiLine(facetHolder, propertyLayoutIfAny);
-        processNamed(facetHolder, propertyLayoutIfAny);
-        processRenderedAdjusted(facetHolder, propertyLayoutIfAny);
-        processTypicalLength(facetHolder, propertyLayoutIfAny);
-        processUnchanging(facetHolder, propertyLayoutIfAny);
-    }
-
-    void processCssClass(final FacetHolder holder, final Optional<PropertyLayout> propertyLayout) {
         val cssClassFacet = CssClassFacetForPropertyLayoutAnnotation
-                .create(propertyLayout, holder);
+                .create(propertyLayoutIfAny, facetHolder);
         super.addFacet(cssClassFacet);
-    }
-
-    void processDescribedAs(
-            final FacetHolder holder,
-            final Optional<PropertyLayout> propertyLayout) {
         
-        val describedAsFacet = DescribedAsFacetForPropertyLayoutAnnotation.create(propertyLayout, holder);
+        val describedAsFacet = DescribedAsFacetForPropertyLayoutAnnotation
+                .create(propertyLayoutIfAny, facetHolder);
         super.addFacet(describedAsFacet);
 
-    }
-
-    void processPromptStyle(final FacetHolder holder, final Optional<PropertyLayout> propertyLayout) {
-
-        if(holder instanceof FacetedMethod) {
-            final FacetedMethod facetedMethod = (FacetedMethod) holder;
-            if(facetedMethod.getFeatureType() != FeatureType.PROPERTY) {
-                return;
-            }
-        }
-
-        val promptStyleFacet = PromptStyleFacetForPropertyLayoutAnnotation
-                .create(propertyLayout, getConfiguration(), holder);
-
-        super.addFacet(promptStyleFacet);
-    }
-
-    void processHidden(final FacetHolder holder, final Optional<PropertyLayout> propertyLayout) {
-        val hiddenFacet = HiddenFacetForPropertyLayoutAnnotation.create(propertyLayout, holder);
+        val hiddenFacet = HiddenFacetForPropertyLayoutAnnotation
+                .create(propertyLayoutIfAny, facetHolder);
         super.addFacet(hiddenFacet);
-    }
-
-    void processLabelAt(
-            final FacetHolder holder,
-            final Optional<PropertyLayout> propertyLayout) {
-        val labelAtFacet = LabelAtFacetForPropertyLayoutAnnotation.create(propertyLayout, holder);
+        
+        val labelAtFacet = LabelAtFacetForPropertyLayoutAnnotation
+                .create(propertyLayoutIfAny, facetHolder);
         super.addFacet(labelAtFacet);
-    }
-
-    void processMultiLine(final FacetHolder holder, final Optional<PropertyLayout> propertyLayout) {
-        val multiLineFacet = MultiLineFacetForPropertyLayoutAnnotation.create(propertyLayout, holder);
+        
+        val layoutGroupFacet = LayoutGroupFacetFromPropertyLayoutAnnotation
+                .create(propertyLayoutIfAny, facetHolder);
+        super.addFacet(layoutGroupFacet);
+        
+        val layoutOrderFacet = LayoutOrderFacetFromPropertyLayoutAnnotation
+                .create(propertyLayoutIfAny, facetHolder);
+        super.addFacet(layoutOrderFacet);
+        
+        val multiLineFacet = MultiLineFacetForPropertyLayoutAnnotation
+                .create(propertyLayoutIfAny, facetHolder);
         super.addFacet(multiLineFacet);
-    }
-
-    void processNamed(final FacetHolder holder, final Optional<PropertyLayout> propertyLayout) {
-        val namedFacet = NamedFacetForPropertyLayoutAnnotation.create(propertyLayout, holder);
+        
+        val namedFacet = NamedFacetForPropertyLayoutAnnotation
+                .create(propertyLayoutIfAny, facetHolder);
         super.addFacet(namedFacet);
-    }
-
-    void processRenderedAdjusted(
-            final FacetHolder holder,
-            final Optional<PropertyLayout> propertyLayout) {
+        
+        val promptStyleFacet = PromptStyleFacetForPropertyLayoutAnnotation
+                .create(propertyLayoutIfAny, getConfiguration(), facetHolder);
+        super.addFacet(promptStyleFacet);
+        
         val renderedAdjustedFacet = RenderedAdjustedFacetForPropertyLayoutAnnotation
-                .create(propertyLayout, holder);
+                .create(propertyLayoutIfAny, facetHolder);
         super.addFacet(renderedAdjustedFacet);
-    }
-
-    void processTypicalLength(
-            final FacetHolder holder,
-            final Optional<PropertyLayout> propertyLayout) {
+        
         val typicalLengthFacet = TypicalLengthFacetForPropertyLayoutAnnotation
-                .create(propertyLayout, holder);
+                .create(propertyLayoutIfAny, facetHolder);
         super.addFacet(typicalLengthFacet);
-    }
-
-    void processUnchanging(
-            final FacetHolder holder,
-            final Optional<PropertyLayout> propertyLayout) {
-        val unchangingFacet = UnchangingFacetForPropertyLayoutAnnotation.create(propertyLayout, holder);
+        
+        val unchangingFacet = UnchangingFacetForPropertyLayoutAnnotation
+                .create(propertyLayoutIfAny, facetHolder);
         super.addFacet(unchangingFacet);
+        
     }
-
-    FacetedMethod facetHolderFrom(final ProcessMethodContext processMethodContext) {
-        return processMethodContext.getFacetHolder();
-    }
-
-    Optional<PropertyLayout> propertyLayoutsFrom(final ProcessMethodContext processMethodContext) {
-        return processMethodContext.synthesizeOnMethodOrMixinType(PropertyLayout.class);
-    }
-
 
 }

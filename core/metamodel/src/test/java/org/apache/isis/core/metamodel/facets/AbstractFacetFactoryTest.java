@@ -29,6 +29,7 @@ import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.commons.collections.ImmutableEnumSet;
+import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.isis.core.metamodel._testing.MethodRemoverForTesting;
@@ -37,6 +38,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
+import org.apache.isis.core.metamodel.facets.properties.propertylayout.PropertyLayoutFacetFactory;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.security.authentication.Authentication;
@@ -164,4 +166,15 @@ public abstract class AbstractFacetFactoryTest extends TestCase {
         assertTrue(methodRemover.getRemoveMethodArgsCalls().isEmpty());
     }
 
+    // -- FACTORIES
+    
+    protected static PropertyLayoutFacetFactory createPropertyLayoutFacetFactory() { 
+        return new PropertyLayoutFacetFactory() {
+            @Override
+            public IsisConfiguration getConfiguration() {
+                return new IsisConfiguration(null);
+            }  
+        };
+    }
+    
 }

@@ -81,24 +81,6 @@ public @interface Action {
             default "";
 
     /**
-     * Specifies the sequence/order in the UI for an action that's been associated with a property or collection.
-     *
-     * <p>
-     *     This is an alternative to using {@link MemberOrder#sequence()}, but is ignored if
-     *     {@link Action#associateWith()} isn't also specified.
-     * </p>
-     *
-     * <p>
-     *     For example: <tt> @Action(associateWith="items", associateWithSequence="2.1") </tt>
-     * </p>
-     *
-     * @see Action#associateWith()
-     */
-    @Deprecated //TODO update java-doc in other layout annotations  
-    String associateWithSequence()
-            default "1";
-
-    /**
      * The {@link CommandDtoProcessor} to process this command's DTO.
      *
      * <p>

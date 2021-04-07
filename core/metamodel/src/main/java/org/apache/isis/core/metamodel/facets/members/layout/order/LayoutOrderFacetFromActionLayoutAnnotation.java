@@ -16,32 +16,28 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
-package org.apache.isis.core.metamodel.facets.actions.layout;
+package org.apache.isis.core.metamodel.facets.members.layout.order;
 
 import java.util.Optional;
 
 import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.Redirect;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.actions.redirect.RedirectFacet;
-import org.apache.isis.core.metamodel.facets.actions.redirect.RedirectFacetAbstract;
 
-public class RedirectFacetFromActionLayoutAnnotation extends RedirectFacetAbstract {
+public class LayoutOrderFacetFromActionLayoutAnnotation 
+extends LayoutOrderFacetAbstract {
 
-    public static RedirectFacet create(
+    public static LayoutOrderFacetFromActionLayoutAnnotation create(
             final Optional<ActionLayout> actionLayoutIfAny, 
             final FacetHolder holder) {
         
         return actionLayoutIfAny
-                .map(ActionLayout::redirectPolicy)
-                .map(redirect -> new RedirectFacetFromActionLayoutAnnotation(redirect, holder))
+                .map(ActionLayout::sequence)
+                .map(sequence -> new LayoutOrderFacetFromActionLayoutAnnotation(sequence, holder))
                 .orElse(null);
     }
 
-    public RedirectFacetFromActionLayoutAnnotation(
-            final Redirect policy, final FacetHolder holder) {
-        super(policy, holder);
+    public LayoutOrderFacetFromActionLayoutAnnotation(final String sequence, final FacetHolder holder) {
+        super(sequence, holder);
     }
 
 }
