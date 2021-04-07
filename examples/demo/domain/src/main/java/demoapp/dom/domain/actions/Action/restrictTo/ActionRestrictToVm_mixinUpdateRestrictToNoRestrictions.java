@@ -30,12 +30,12 @@ import lombok.RequiredArgsConstructor;
 @Action(
     semantics = SemanticsOf.SAFE
     , associateWith = "propertyForNoRestrictions"
-    , associateWithSequence = "2"
     , restrictTo = RestrictTo.NO_RESTRICTIONS     // <.>
 )
 @ActionLayout(
     describedAs =
         "@Action(restrictTo = RestrictTo.NO_RESTRICTIONS)"
+    , sequence = "2"
 )
 @RequiredArgsConstructor
 public class ActionRestrictToVm_mixinUpdateRestrictToNoRestrictions {

@@ -34,11 +34,12 @@ import demoapp.dom.domain.properties.Property.domainEvent.PropertyDomainEventVm;
 //tag::class[]
 @Action(
     semantics = SemanticsOf.IDEMPOTENT
-    , associateWith = "controlText", associateWithSequence = "1"
+    , associateWith = "controlText"
 )
 @ActionLayout(
     promptStyle = PromptStyle.INLINE_AS_IF_EDIT
     , redirectPolicy = Redirect.EVEN_IF_SAME                        // <.>
+    , sequence = "1"
 )
 @RequiredArgsConstructor
 public class PropertyDomainEventVm_controlTextEditing {

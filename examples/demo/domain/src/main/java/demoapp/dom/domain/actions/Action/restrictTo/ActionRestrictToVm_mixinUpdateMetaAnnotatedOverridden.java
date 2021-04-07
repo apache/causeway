@@ -31,13 +31,13 @@ import lombok.RequiredArgsConstructor;
 @Action(
     semantics = SemanticsOf.SAFE
     , associateWith = "propertyForMetaAnnotationsOverridden"
-    , associateWithSequence = "2"
     , restrictTo = RestrictTo.PROTOTYPING       // <.>
 )
 @ActionLayout(
     describedAs =
         "@ActionRestrictToNoRestrictionsMetaAnnotation " +
         "@Action(restrictTo = RestrictTo.PROTOTYPING)"
+    , sequence = "2"
 )
 @RequiredArgsConstructor
 public class ActionRestrictToVm_mixinUpdateMetaAnnotatedOverridden {

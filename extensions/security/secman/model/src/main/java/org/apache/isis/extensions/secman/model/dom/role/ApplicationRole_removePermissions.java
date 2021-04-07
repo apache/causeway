@@ -39,10 +39,8 @@ import lombok.RequiredArgsConstructor;
 
 @Action(
         domainEvent = RemovePermissionDomainEvent.class, 
-        associateWith = "permissions",
-        associateWithSequence = "10"
-        )
-@ActionLayout(named="Remove")
+        associateWith = "permissions")
+@ActionLayout(named="Remove", sequence = "10")
 @RequiredArgsConstructor
 public class ApplicationRole_removePermissions {
 

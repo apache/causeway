@@ -29,12 +29,12 @@ import lombok.RequiredArgsConstructor;
 @Action(
     semantics = SemanticsOf.IDEMPOTENT            // <.>
     , associateWith = "propertyForIdempotent"
-    , associateWithSequence = "2"
 )
 @ActionLayout(
     named = "Set to Value (Mixin)"
     , describedAs =
         "@Action(semantics = SemanticsOf.IDEMPOTENT)"
+    , sequence = "2"
 )
 @RequiredArgsConstructor
 public class ActionSemanticsVm_mixinSetToValueForPropertySemanticsIdempotent {

@@ -37,11 +37,8 @@ import lombok.RequiredArgsConstructor;
 
 @Action(
         domainEvent = RemoveRoleDomainEvent.class, 
-        associateWith = "roles",
-        associateWithSequence = "2")
-@ActionLayout(
-        named="Remove"
-        )
+        associateWith = "roles")
+@ActionLayout(named="Remove", sequence = "2")
 @RequiredArgsConstructor
 public class ApplicationUser_removeRoles {
     

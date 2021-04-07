@@ -22,6 +22,7 @@ import javax.enterprise.inject.Model;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy;
@@ -32,8 +33,8 @@ import lombok.RequiredArgsConstructor;
 
 @Action(
         domainEvent = UpdateParentDomainEvent.class, 
-        associateWith = "parent", 
-        associateWithSequence = "1")
+        associateWith = "parent")
+@ActionLayout(sequence = "1")
 @RequiredArgsConstructor
 public class ApplicationTenancy_updateParent {
     

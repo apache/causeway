@@ -35,9 +35,8 @@ import lombok.val;
 
 @Action(
         domainEvent = AddRoleDomainEvent.class, 
-        associateWith = "roles",
-        associateWithSequence = "1")
-@ActionLayout(named="Add")
+        associateWith = "roles")
+@ActionLayout(named="Add", sequence = "1")
 @RequiredArgsConstructor
 public class ApplicationUser_addRole {
     

@@ -19,6 +19,7 @@
 package demoapp.dom.domain.collections.Collection.domainEvent;
 
 import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
 import lombok.RequiredArgsConstructor;
@@ -30,8 +31,9 @@ import demoapp.dom.domain.collections.Collection.domainEvent.child.CollectionDom
 //tag::class[]
 @Action(
     semantics = SemanticsOf.NON_IDEMPOTENT,
-    associateWith = "children", associateWithSequence = "1"
+    associateWith = "children"
 )
+@ActionLayout(sequence = "1")
 @RequiredArgsConstructor
 public class CollectionDomainEventVm_addChild implements HasAsciiDocDescription {
 

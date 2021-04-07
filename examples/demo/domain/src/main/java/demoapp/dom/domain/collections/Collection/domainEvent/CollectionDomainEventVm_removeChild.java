@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Objects;
 
 import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
 import lombok.RequiredArgsConstructor;
@@ -32,8 +33,9 @@ import demoapp.dom.domain.collections.Collection.domainEvent.child.CollectionDom
 //tag::class[]
 @Action(
     semantics = SemanticsOf.IDEMPOTENT,
-    associateWith = "children", associateWithSequence = "2"
+    associateWith = "children"
 )
+@ActionLayout(sequence = "2")
 @RequiredArgsConstructor
 public class CollectionDomainEventVm_removeChild implements HasAsciiDocDescription {
 

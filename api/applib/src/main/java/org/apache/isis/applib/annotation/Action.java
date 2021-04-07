@@ -61,12 +61,11 @@ public @interface Action {
      * Associates this action with a property or collection, specifying its id.
      *
      * <p>
-     *     This is an alternative to using {@link MemberOrder#name()}.  To specify the order (equivalent to
-     *     {@link MemberOrder#sequence()}}), use {@link #associateWithSequence()}.
+     *     To specify the layout order use {@link ActionLayout#sequence()}.
      * </p>
      *
      * <p>
-     *     For example <code>@Action(associateWith="items", associateWithSequence="2.1")</code>
+     *     For example <code>@Action(associateWith="items") @ActionLayout(sequence="2.1")</code>
      * </p>
      *
      * <p>
@@ -76,7 +75,7 @@ public @interface Action {
      *     (in the Wicket UI, at least).
      * </p>
      *
-     * @see Action#associateWithSequence()
+     * @see ActionLayout#sequence()
      */
     String associateWith()
             default "";

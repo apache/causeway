@@ -30,11 +30,11 @@ import lombok.RequiredArgsConstructor;
 @Action(
     semantics = SemanticsOf.SAFE
     , associateWith = "propertyForMetaAnnotations"
-    , associateWithSequence = "2"
 )
 @ActionLayout(
     named = "Set to Value (Mixin)"
     , describedAs = "@ActionSemanticsIdempotentMetaAnnotation"
+    , sequence = "2"
 )
 @RequiredArgsConstructor
 public class ActionSemanticsVm_mixinSetToValueForPropertyMetaAnnotated {

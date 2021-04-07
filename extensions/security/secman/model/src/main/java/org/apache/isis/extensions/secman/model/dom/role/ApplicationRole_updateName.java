@@ -19,6 +19,7 @@
 package org.apache.isis.extensions.secman.model.dom.role;
 
 import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.extensions.secman.api.role.ApplicationRole;
@@ -28,8 +29,8 @@ import lombok.RequiredArgsConstructor;
 
 @Action(
         domainEvent = UpdateNameDomainEvent.class, 
-        associateWith = "name",
-        associateWithSequence = "1")
+        associateWith = "name")
+@ActionLayout(sequence = "1")
 @RequiredArgsConstructor
 public class ApplicationRole_updateName {
     

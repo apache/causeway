@@ -21,6 +21,7 @@ package demoapp.dom.domain.properties.PropertyLayout.renderDay;
 import java.time.LocalDate;
 
 import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
@@ -31,8 +32,9 @@ import lombok.RequiredArgsConstructor;
 
 @Action(
     semantics = SemanticsOf.IDEMPOTENT,
-    associateWith = "endDateUsingMetaAnnotationButOverridden", associateWithSequence = "1"
+    associateWith = "endDateUsingMetaAnnotationButOverridden"
 )
+@ActionLayout(sequence = "1")
 @RequiredArgsConstructor
 public class PropertyLayoutRenderDayVm_updateEndDateWithMetaAnnotationOverridden {
 

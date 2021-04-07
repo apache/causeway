@@ -21,6 +21,7 @@ package org.apache.isis.extensions.secman.model.dom.user;
 import javax.enterprise.inject.Model;
 
 import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.extensions.secman.api.user.ApplicationUser;
@@ -30,8 +31,8 @@ import lombok.RequiredArgsConstructor;
 
 @Action(
         domainEvent = UpdateEmailAddressDomainEvent.class, 
-        associateWith = "emailAddress",
-        associateWithSequence = "1")
+        associateWith = "emailAddress")
+@ActionLayout(sequence = "1")
 @RequiredArgsConstructor
 public class ApplicationUser_updateEmailAddress {
     

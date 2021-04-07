@@ -43,9 +43,8 @@ import lombok.experimental.Accessors;
 
 @Action(
         domainEvent = AddPermissionDomainEvent.class, 
-        associateWith = "permissions", 
-        associateWithSequence = "0")
-@ActionLayout(named="Add")
+        associateWith = "permissions")
+@ActionLayout(named="Add", sequence = "0")
 @RequiredArgsConstructor
 public class ApplicationRole_addPermission {
     

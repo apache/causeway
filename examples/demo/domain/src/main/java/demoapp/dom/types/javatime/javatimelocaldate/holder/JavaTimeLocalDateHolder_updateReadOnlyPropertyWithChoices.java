@@ -37,10 +37,9 @@ import demoapp.dom.types.Samples;
 //tag::class[]
 @Action(
         semantics = SemanticsOf.IDEMPOTENT,
-        associateWith = "readOnlyProperty",
-        associateWithSequence = "2"
+        associateWith = "readOnlyProperty"
 )
-@ActionLayout(promptStyle = PromptStyle.INLINE, named = "Update with choices")
+@ActionLayout(promptStyle = PromptStyle.INLINE, named = "Update with choices", sequence = "2")
 @RequiredArgsConstructor
 public class JavaTimeLocalDateHolder_updateReadOnlyPropertyWithChoices {
 

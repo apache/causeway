@@ -32,6 +32,7 @@ import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
 import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
@@ -40,11 +41,10 @@ import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.val;
-
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
 //tag::class[]
 @XmlRootElement(name = "root")
@@ -75,7 +75,8 @@ public class StatefulVmJaxbRefsEntity implements HasAsciiDocDescription {
     @XmlElement(required = false)
     private ChildJdo favoriteChild = null;
 
-    @Action(semantics = SemanticsOf.IDEMPOTENT, associateWith = "favoriteChild", associateWithSequence = "1")
+    @Action(semantics = SemanticsOf.IDEMPOTENT, associateWith = "favoriteChild")
+    @ActionLayout(sequence = "1")
     public StatefulVmJaxbRefsEntity changeFavoriteChild(ChildJdo newFavorite) {
         favoriteChild = newFavorite;
         return this;
@@ -105,7 +106,8 @@ public class StatefulVmJaxbRefsEntity implements HasAsciiDocDescription {
     }
 
     //XXX shortcut for debugging
-    @Action(associateWith = "children", associateWithSequence = "2", semantics = SemanticsOf.NON_IDEMPOTENT)
+    @Action(associateWith = "children", semantics = SemanticsOf.NON_IDEMPOTENT)
+    @ActionLayout(sequence = "2")
     public StatefulVmJaxbRefsEntity addAll() {
         Objects.requireNonNull(childJdoEntities,
                 "ViewModel must have its injections points resolved, before any actions can be invoked.");
@@ -130,7 +132,8 @@ public class StatefulVmJaxbRefsEntity implements HasAsciiDocDescription {
     @XmlElement(name = "child")
     private List<ChildJdo> children = new ArrayList<>();
 
-    @Action(associateWith = "children", associateWithSequence = "1", semantics = SemanticsOf.NON_IDEMPOTENT)
+    @Action(associateWith = "children", semantics = SemanticsOf.NON_IDEMPOTENT)
+    @ActionLayout(sequence = "1")
     public StatefulVmJaxbRefsEntity addChild(final ChildJdo child) {
         children.add(child);
         if(children.size() == 1) {
@@ -139,7 +142,8 @@ public class StatefulVmJaxbRefsEntity implements HasAsciiDocDescription {
         return this;
     }
 
-    @Action(associateWith = "children", associateWithSequence = "2", semantics = SemanticsOf.IDEMPOTENT)
+    @Action(associateWith = "children", semantics = SemanticsOf.IDEMPOTENT)
+    @ActionLayout(sequence = "2")
     public StatefulVmJaxbRefsEntity removeChild(final ChildJdo child) {
         children.remove(child);
         return this;

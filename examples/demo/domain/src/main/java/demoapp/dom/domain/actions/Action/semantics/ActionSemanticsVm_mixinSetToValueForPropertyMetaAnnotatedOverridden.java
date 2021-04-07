@@ -30,13 +30,13 @@ import lombok.RequiredArgsConstructor;
 @Action(
     semantics = SemanticsOf.IDEMPOTENT                      // <.>
     , associateWith = "propertyForMetaAnnotationsOverridden"
-    , associateWithSequence = "2"
 )
 @ActionLayout(
     named = "Set to Value (Mixin)"
     , describedAs =
         "@ActionSemanticsSafeMetaAnnotation " +
         "@Action(semantics = SemanticsOf.IDEMPOTENT)"
+    , sequence = "2"
 )
 @RequiredArgsConstructor
 public class ActionSemanticsVm_mixinSetToValueForPropertyMetaAnnotatedOverridden {

@@ -34,12 +34,12 @@ import demoapp.dom.domain.collections.Collection.domainEvent.CollectionDomainEve
 //tag::class[]
 @Action(
     semantics = SemanticsOf.IDEMPOTENT
-    , associateWith = "controlChildren", associateWithSequence = "1"
+    , associateWith = "controlChildren"
 )
 @ActionLayout(
     promptStyle = PromptStyle.INLINE_AS_IF_EDIT
     , redirectPolicy = Redirect.EVEN_IF_SAME                        // <.>
-)
+    , sequence = "1")
 @RequiredArgsConstructor
 public class CollectionDomainEventVm_controlChildrenVisibility {
 

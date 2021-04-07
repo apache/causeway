@@ -35,9 +35,8 @@ import lombok.RequiredArgsConstructor;
 
 @Action(
         domainEvent = RemoveUserDomainEvent.class, 
-        associateWith = "users", 
-        associateWithSequence = "2")
-@ActionLayout(named="Remove")
+        associateWith = "users")
+@ActionLayout(named="Remove", sequence = "2")
 @RequiredArgsConstructor
 public class ApplicationTenancy_removeUser {
     

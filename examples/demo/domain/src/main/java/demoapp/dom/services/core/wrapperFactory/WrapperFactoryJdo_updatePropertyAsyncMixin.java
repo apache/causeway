@@ -28,11 +28,11 @@ import lombok.RequiredArgsConstructor;
 @Action(
     semantics = SemanticsOf.IDEMPOTENT
     , associateWith = "propertyAsyncMixin"
-    , associateWithSequence = "2"
 )
 @ActionLayout(
     named = "Update Property Async"
     , describedAs = "Mixin that Updates 'property async mixin' directly"
+    , sequence = "2"
 )
 @RequiredArgsConstructor
 public class WrapperFactoryJdo_updatePropertyAsyncMixin {

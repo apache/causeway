@@ -29,11 +29,11 @@ import lombok.RequiredArgsConstructor;
 @Action(
     semantics = SemanticsOf.NON_IDEMPOTENT_ARE_YOU_SURE     // <.>
     , associateWith = "propertyForNonIdempotentAreYouSure"
-    , associateWithSequence = "2"
 )
 @ActionLayout(
     named = "Increment (Mixin)"
     , describedAs = "@Action(semantics = SemanticsOf.NON_IDEMPOTENT_ARE_YOU_SURE)"
+    , sequence = "2"
 )
 @RequiredArgsConstructor
 public class ActionSemanticsVm_mixinIncrementNonIdempotentAreYouSure {

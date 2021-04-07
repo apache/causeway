@@ -22,6 +22,7 @@ import javax.enterprise.inject.Model;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.extensions.secman.api.user.AccountType;
 import org.apache.isis.extensions.secman.api.user.ApplicationUser;
 import org.apache.isis.extensions.secman.api.user.ApplicationUser.UpdateAccountTypeDomainEvent;
@@ -31,8 +32,8 @@ import lombok.RequiredArgsConstructor;
 
 @Action(
         domainEvent = UpdateAccountTypeDomainEvent.class, 
-        associateWith = "accountType",
-        associateWithSequence = "1")
+        associateWith = "accountType")
+@ActionLayout(sequence = "1")
 @RequiredArgsConstructor
 public class ApplicationUser_updateAccountType {
     

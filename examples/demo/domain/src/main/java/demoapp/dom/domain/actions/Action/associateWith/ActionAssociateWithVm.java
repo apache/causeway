@@ -107,11 +107,11 @@ public class ActionAssociateWithVm implements HasAsciiDocDescription {
     @Action(
         semantics = SemanticsOf.IDEMPOTENT
         , associateWith = "text"                // <.>
-        , associateWithSequence = "1"           // <.>
     )
     @ActionLayout(
         describedAs =
             "@Action(associateWith = \"text\", associateWithSequence = \"1\")"
+        , sequence = "1"           // <.>
     )
     public ActionAssociateWithVm updateText(final String text) {
         setText(text);
@@ -126,11 +126,11 @@ public class ActionAssociateWithVm implements HasAsciiDocDescription {
     @Action(
         semantics = SemanticsOf.IDEMPOTENT
         , associateWith = "children"        // <.>
-        , associateWithSequence = "1"       // <.>
     )
     @ActionLayout(
         describedAs =
             "@Action(associateWith = \"children\", associateWithSequence = \"1\")"
+        , sequence = "1"       // <.>
     )
     public ActionAssociateWithVm addChild(final String value) {
         val childVm = new ActionAssociateWithChildVm(value);
@@ -144,11 +144,11 @@ public class ActionAssociateWithVm implements HasAsciiDocDescription {
     @Action(
         semantics = SemanticsOf.IDEMPOTENT
         , associateWith = "children"        // <.>
-        , associateWithSequence = "2"       // <.>
     )
     @ActionLayout(
         describedAs =
-            "@Action(associateWith = \"children\", associateWithSequence = \"2\")"
+            "@Action(associateWith = \"children\", associateWithSequence = \"2\")",
+        sequence = "2"       // <.>
     )
     public ActionAssociateWithVm removeChild(final ActionAssociateWithChildVm child) {
         getChildren().removeIf(x -> Objects.equals(x.getValue(), child.getValue()));
@@ -161,12 +161,12 @@ public class ActionAssociateWithVm implements HasAsciiDocDescription {
     @Action(
             semantics = SemanticsOf.IDEMPOTENT
             , associateWith = "children"        // <.>
-            , associateWithSequence = "3"       // <.>
     )
     @ActionLayout(
         describedAs =
             "@Action(associateWith = \"children\"" +
                     ", associateWithSequence = \"3\")"
+        , sequence = "3"       // <.>
     )
     public ActionAssociateWithVm removeChildren(final List<ActionAssociateWithChildVm> children) {
         for (ActionAssociateWithChildVm child : children) {

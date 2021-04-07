@@ -30,12 +30,12 @@ import lombok.RequiredArgsConstructor;
 @Action(
     semantics = SemanticsOf.SAFE
     , associateWith = "otherText"
-    , associateWithSequence = "3"
     , hidden = Where.OBJECT_FORMS   // <.>
 )
 @ActionLayout(
     describedAs =
         "@Action(hidden = Where.OBJECT_FORMS)"
+    , sequence = "3"
 )
 @RequiredArgsConstructor
 public class ActionHiddenVm_mixinUpdateTextButHiddenObjectForms {

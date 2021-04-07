@@ -21,6 +21,7 @@ package org.apache.isis.extensions.secman.model.dom.user;
 import javax.enterprise.inject.Model;
 
 import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
@@ -31,8 +32,8 @@ import lombok.RequiredArgsConstructor;
 
 @Action(
         domainEvent = UpdateFaxNumberDomainEvent.class, 
-        associateWith = "faxNumber",
-        associateWithSequence = "1")
+        associateWith = "faxNumber")
+@ActionLayout(sequence = "1")
 @RequiredArgsConstructor
 public class ApplicationUser_updateFaxNumber {
     

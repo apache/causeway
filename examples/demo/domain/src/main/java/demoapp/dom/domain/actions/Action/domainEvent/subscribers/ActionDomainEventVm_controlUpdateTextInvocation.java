@@ -33,9 +33,9 @@ import demoapp.dom.domain.actions.Action.domainEvent.ActionDomainEventVm;
 //tag::class[]
 @Action(
     semantics = SemanticsOf.IDEMPOTENT
-    , associateWith = "controlUpdateText", associateWithSequence = "1"
+    , associateWith = "controlUpdateText"
 )
-@ActionLayout(promptStyle = PromptStyle.INLINE)
+@ActionLayout(promptStyle = PromptStyle.INLINE, sequence = "1")
 @RequiredArgsConstructor
 public class ActionDomainEventVm_controlUpdateTextInvocation {
 

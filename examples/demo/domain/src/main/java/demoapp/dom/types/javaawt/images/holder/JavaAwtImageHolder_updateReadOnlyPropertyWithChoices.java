@@ -39,10 +39,9 @@ import demoapp.dom.types.Samples;
 @Action(
         semantics = SemanticsOf.IDEMPOTENT,
         associateWith = "readOnlyProperty",
-        associateWithSequence = "2",
         hidden = Where.EVERYWHERE   // TODO: action parameters for images not yet supported.
 )
-@ActionLayout(promptStyle = PromptStyle.INLINE, named = "Update with choices")
+@ActionLayout(promptStyle = PromptStyle.INLINE, named = "Update with choices", sequence = "2")
 @RequiredArgsConstructor
 public class JavaAwtImageHolder_updateReadOnlyPropertyWithChoices {
 

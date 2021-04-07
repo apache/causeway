@@ -19,6 +19,7 @@
 package demoapp.dom.domain.properties.Property.maxLength;
 
 import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.SemanticsOf;
@@ -27,8 +28,9 @@ import lombok.RequiredArgsConstructor;
 
 @Action(
     semantics = SemanticsOf.IDEMPOTENT,
-    associateWith = "propertyUsingMetaAnnotationButOverridden", associateWithSequence = "1"
+    associateWith = "propertyUsingMetaAnnotationButOverridden"
 )
+@ActionLayout(sequence = "1")
 @RequiredArgsConstructor
 public class PropertyMaxLengthVm_updateWithMetaAnnotationOverridden {
 
