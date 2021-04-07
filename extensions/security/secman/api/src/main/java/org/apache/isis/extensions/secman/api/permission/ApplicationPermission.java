@@ -21,7 +21,6 @@ package org.apache.isis.extensions.secman.api.permission;
 import java.util.Optional;
 
 import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
@@ -130,9 +129,9 @@ public interface ApplicationPermission {
 
     @Property
     @PropertyLayout(
-            hidden=Where.REFERENCES_PARENT
-            )
-    @MemberOrder(name="Role", sequence = "1")
+            hidden=Where.REFERENCES_PARENT,
+            group="Role", 
+            sequence = "1")
     default ApplicationRole getRole() {
         throw _Exceptions.unsupportedOperation("please implement me");
     }
@@ -141,7 +140,7 @@ public interface ApplicationPermission {
     // -- RULE
 
     @Property
-    @MemberOrder(name="Permissions", sequence = "2")
+    @PropertyLayout(group="Permissions", sequence = "2")
     default ApplicationPermissionRule getRule() {
         throw _Exceptions.unsupportedOperation("please implement me");
     }
@@ -150,7 +149,7 @@ public interface ApplicationPermission {
     // -- MODE
 
     @Property
-    @MemberOrder(name="Permissions", sequence = "3")
+    @PropertyLayout(group="Permissions", sequence = "3")
     default ApplicationPermissionMode getMode() {
         throw _Exceptions.unsupportedOperation("please implement me");
     }
@@ -159,7 +158,7 @@ public interface ApplicationPermission {
     // -- SORT
 
     @Property
-    @MemberOrder(name="Feature", sequence = "5")
+    @PropertyLayout(group="Feature", sequence = "5")
     default String getSort() {
         throw _Exceptions.unsupportedOperation("please implement me");
     }
@@ -167,7 +166,7 @@ public interface ApplicationPermission {
     // -- FQN
 
     @Property
-    @MemberOrder(name="Feature", sequence = "5.1")
+    @PropertyLayout(group="Feature", sequence = "5.1")
     default String getFeatureFqn() {
         throw _Exceptions.unsupportedOperation("please implement me");
     }

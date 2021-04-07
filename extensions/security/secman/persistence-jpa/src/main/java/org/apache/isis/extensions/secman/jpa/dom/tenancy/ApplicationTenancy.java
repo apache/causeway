@@ -38,7 +38,6 @@ import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.Editing;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Where;
@@ -101,9 +100,8 @@ implements
             editing = Editing.DISABLED
             )
     @PropertyLayout(
-            typicalLength=TYPICAL_LENGTH_NAME
-            )
-    @MemberOrder(sequence = "1")
+            typicalLength=TYPICAL_LENGTH_NAME,
+            sequence = "1")
     @Getter @Setter
     private String name;
 

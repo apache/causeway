@@ -26,7 +26,6 @@ import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
 
 @DomainObject(
@@ -70,9 +69,8 @@ public class ApplicationType extends ApplicationFeatureViewModel {
             domainEvent = ActionsDomainEvent.class
             )
     @CollectionLayout(
-            defaultView="table"
-            )
-    @MemberOrder(sequence = "20.1")
+            defaultView="table",
+            sequence = "20.1")
     public List<ApplicationTypeAction> getActions() {
         final SortedSet<ApplicationFeatureId> members = getFeature().getActions();
         return asViewModels(members);
@@ -89,9 +87,8 @@ public class ApplicationType extends ApplicationFeatureViewModel {
             domainEvent = PropertiesCollectionDomainEvent.class
             )
     @CollectionLayout(
-            defaultView="table"
-            )
-    @MemberOrder(sequence = "20.2")
+            defaultView="table",
+            sequence = "20.2")
     public List<ApplicationTypeProperty> getProperties() {
         final SortedSet<ApplicationFeatureId> members = getFeature().getProperties();
         return asViewModels(members);
@@ -106,9 +103,8 @@ public class ApplicationType extends ApplicationFeatureViewModel {
             domainEvent = CollectionsCollectionDomainEvent.class
             )
     @CollectionLayout(
-            defaultView="table"
-            )
-    @MemberOrder(sequence = "20.3")
+            defaultView="table",
+            sequence = "20.3")
     public List<ApplicationTypeCollection> getCollections() {
         final SortedSet<ApplicationFeatureId> members = getFeature().getCollections();
         return asViewModels(members);

@@ -26,17 +26,16 @@ import javax.xml.bind.annotation.XmlType;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Title;
-
-import lombok.Getter;
-import lombok.Setter;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom.types.javamath.bigdecimals.holder.JavaMathBigDecimalHolder2;
+import lombok.Getter;
+import lombok.Setter;
 
 //tag::class[]
 @XmlRootElement(name = "root")
@@ -58,24 +57,24 @@ public class JavaMathBigDecimalVm
 
 //tag::class[]
     @Title(prepend = "java.math.BigDecimalview model: ")
-    @MemberOrder(name = "read-only-properties", sequence = "1")
+    @PropertyLayout(group = "read-only-properties", sequence = "1")
     @XmlElement(required = true)                                                // <.>
     @Getter @Setter
     private java.math.BigDecimal readOnlyProperty;
 
     @Property(editing = Editing.ENABLED)                                        // <.>
-    @MemberOrder(name = "editable-properties", sequence = "1")
+    @PropertyLayout(group = "editable-properties", sequence = "1")
     @XmlElement(required = true)
     @Getter @Setter
     private java.math.BigDecimal readWriteProperty;
 
     @Property(optionality = Optionality.OPTIONAL)                               // <.>
-    @MemberOrder(name = "optional-properties", sequence = "1")
+    @PropertyLayout(group = "optional-properties", sequence = "1")
     @Getter @Setter
     private java.math.BigDecimal readOnlyOptionalProperty;
 
     @Property(editing = Editing.ENABLED, optionality = Optionality.OPTIONAL)
-    @MemberOrder(name = "optional-properties", sequence = "2")
+    @PropertyLayout(group = "optional-properties", sequence = "2")
     @Getter @Setter
     private java.math.BigDecimal readWriteOptionalProperty;
 

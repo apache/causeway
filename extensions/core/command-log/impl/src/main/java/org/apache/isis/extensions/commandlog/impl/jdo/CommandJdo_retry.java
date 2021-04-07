@@ -21,8 +21,8 @@ package org.apache.isis.extensions.commandlog.impl.jdo;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.Publishing;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.command.CommandExecutorService;
@@ -35,8 +35,10 @@ import org.apache.isis.extensions.commandlog.impl.IsisModuleExtCommandLogImpl;
 @Action(
     semantics = SemanticsOf.NON_IDEMPOTENT_ARE_YOU_SURE,
     domainEvent = CommandJdo_retry.ActionDomainEvent.class,
-    commandPublishing = Publishing.DISABLED
+    commandPublishing = Publishing.DISABLED,
+    associateWith = "executeIn"
 )
+@ActionLayout(sequence = "1")
 public class CommandJdo_retry {
 
     private final CommandJdo commandJdo;
@@ -45,7 +47,7 @@ public class CommandJdo_retry {
     }
 
     public static class ActionDomainEvent extends IsisModuleExtCommandLogImpl.ActionDomainEvent<CommandJdo_retry> { }
-    @MemberOrder(name = "executeIn", sequence = "1")
+    
     public CommandJdo act() {
 
         commandJdo.setReplayState(ReplayState.PENDING);

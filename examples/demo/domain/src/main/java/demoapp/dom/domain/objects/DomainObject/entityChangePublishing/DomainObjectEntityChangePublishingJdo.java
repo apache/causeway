@@ -19,8 +19,8 @@
 package demoapp.dom.domain.objects.DomainObject.entityChangePublishing;
 
 import org.apache.isis.applib.annotation.Editing;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.PropertyLayout;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom.domain._changes.ExposeCapturedChanges;
@@ -30,12 +30,12 @@ public interface DomainObjectEntityChangePublishingJdo
         extends HasAsciiDocDescription, ExposeCapturedChanges {
 
     @Property(editing = Editing.ENABLED)
-    @MemberOrder(name = "property", sequence = "1")
+    @PropertyLayout(group = "property", sequence = "1")
     String getProperty();
     void setProperty(String value);
 
     @Property(editing = Editing.DISABLED)
-    @MemberOrder(name = "action", sequence = "1")
+    @PropertyLayout(group = "action", sequence = "1")
     String getPropertyUpdatedByAction();
     void setPropertyUpdatedByAction(String value);
 

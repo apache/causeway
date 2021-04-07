@@ -19,7 +19,6 @@
 package demoapp.dom.domain.properties.PropertyLayout.labelPosition;
 
 import org.apache.isis.applib.annotation.LabelPosition;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 
@@ -31,7 +30,8 @@ import lombok.RequiredArgsConstructor;
 @PropertyLayout(
     labelPosition = LabelPosition.LEFT                          // <.>
     , describedAs =
-        "@LabelPositionTopMetaAnnotation @ParameterLayout(...)"
+        "@LabelPositionTopMetaAnnotation @ParameterLayout(...)",
+    group = "meta-annotated-overridden", sequence = "2"
 )
 @RequiredArgsConstructor
 public class PropertyLayoutLabelPositionVm_mixinPropertyWithMetaAnnotationOverridden {
@@ -40,7 +40,6 @@ public class PropertyLayoutLabelPositionVm_mixinPropertyWithMetaAnnotationOverri
 
     private final PropertyLayoutLabelPositionVm propertyLayoutLabelPositionVm;
 
-    @MemberOrder(name = "meta-annotated-overridden", sequence = "2")
     public String prop() {
         return propertyLayoutLabelPositionVm.getPropertyUsingAnnotation();
     }

@@ -21,7 +21,7 @@ package org.apache.isis.applib.services.user;
 import java.io.Serializable;
 
 import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.MemberOrder;
+import org.apache.isis.applib.annotation.PropertyLayout;
 
 import lombok.Getter;
 import lombok.Value;
@@ -62,11 +62,11 @@ public class RoleMemento implements Serializable {
         return name;
     }
 
-    @MemberOrder(sequence = "1.1")
+    @PropertyLayout(sequence = "1.1")
     @Getter
     String name;
 
-    @MemberOrder(sequence = "1.2")
+    @PropertyLayout(sequence = "1.2")
     @Getter
     String description;
 

@@ -65,6 +65,15 @@ public @interface PropertyLayout {
     String describedAs()
             default "";
 
+    
+    /**
+     * Indicates the property group, as properties can be grouped together.
+     * @apiNote similarly grouping of <i>Actions</i> is made available via {@link Action#associateWith()};
+     * currently for <i>Collections</i> there is no counterpart
+     */
+    String group()
+            default "";
+    
     /**
      * Indicates where in the UI the property
      * should <i>not</i> be visible.
@@ -200,6 +209,15 @@ public @interface PropertyLayout {
      */
     Repainting repainting()
             default Repainting.NOT_SPECIFIED;
+    
+
+    /**
+     * The order of this member relative to other members in the same (layout) group, 
+     * given in <i>Dewey-decimal</i> notation.
+     *
+     */
+    String sequence()
+            default "";
 
     /**
      * The typical entry length of a field, use to determine the optimum width

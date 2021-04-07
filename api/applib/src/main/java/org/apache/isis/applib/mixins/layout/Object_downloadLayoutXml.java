@@ -22,7 +22,6 @@ import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
@@ -44,11 +43,13 @@ import lombok.val;
 @Action(
         domainEvent = Object_downloadLayoutXml.ActionDomainEvent.class,
         semantics = SemanticsOf.SAFE,
-        restrictTo = RestrictTo.PROTOTYPING
+        restrictTo = RestrictTo.PROTOTYPING,
+        associateWith = LayoutMixinConstants.METADATA_LAYOUT_GROUPNAME
 )
 @ActionLayout(
         cssClassFa = "fa-download",
-        position = ActionLayout.Position.PANEL_DROPDOWN
+        position = ActionLayout.Position.PANEL_DROPDOWN,
+        sequence = "700.1"
 )
 @RequiredArgsConstructor
 public class Object_downloadLayoutXml {
@@ -58,7 +59,6 @@ public class Object_downloadLayoutXml {
 
     private final Object holder;
 
-    @MemberOrder(name = LayoutMixinConstants.METADATA_LAYOUT_GROUPNAME, sequence = "700.1")
     public Object act(
             @ParameterLayout(
                     named = DtoMixinConstants.FILENAME_PROPERTY_NAME,

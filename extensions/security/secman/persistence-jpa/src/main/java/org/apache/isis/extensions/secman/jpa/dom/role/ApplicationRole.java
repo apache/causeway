@@ -42,7 +42,6 @@ import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.Editing;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.types.DescriptionType;
@@ -112,8 +111,7 @@ implements
             domainEvent = NameDomainEvent.class,
             editing = Editing.DISABLED
             )
-    @PropertyLayout(typicalLength=TYPICAL_LENGTH_NAME)
-    @MemberOrder(sequence = "1")
+    @PropertyLayout(typicalLength=TYPICAL_LENGTH_NAME, sequence = "1")
     @Getter @Setter
     private String name;
 
@@ -129,9 +127,8 @@ implements
             editing = Editing.DISABLED
             )
     @PropertyLayout(
-            typicalLength=TYPICAL_LENGTH_DESCRIPTION
-            )
-    @MemberOrder(sequence = "2")
+            typicalLength=TYPICAL_LENGTH_DESCRIPTION, 
+            sequence = "2")
     @Getter @Setter
     private String description;
 
@@ -143,9 +140,8 @@ implements
             )
     @CollectionLayout(
             defaultView="table",
-            sortedBy = ApplicationPermission.DefaultComparator.class
-            )
-    @MemberOrder(sequence = "10")
+            sortedBy = ApplicationPermission.DefaultComparator.class, 
+            sequence = "10")
     public List<ApplicationPermission> getPermissions() {
         return applicationPermissionRepository.findByRole(this);
     }
@@ -159,9 +155,8 @@ implements
             domainEvent = UsersDomainEvent.class
             )
     @CollectionLayout(
-            defaultView="table"
-            )
-    @MemberOrder(sequence = "20")
+            defaultView="table", 
+            sequence = "20")
     @Getter @Setter
     private Set<ApplicationUser> users = new TreeSet<>();
 

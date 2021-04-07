@@ -20,8 +20,8 @@ package org.apache.isis.extensions.secman.model.dom.feature;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
 
 @DomainObject(
@@ -36,8 +36,6 @@ public class ApplicationTypeCollection extends ApplicationTypeMember {
 
     public static abstract class ActionDomainEvent extends ApplicationTypeMember.ActionDomainEvent<ApplicationTypeCollection> {}
 
-
-
     // -- constructors
 
     public ApplicationTypeCollection() {}
@@ -46,9 +44,6 @@ public class ApplicationTypeCollection extends ApplicationTypeMember {
         super(featureId);
     }
 
-
-
-
     // -- returnType
 
     public static class ElementTypeDomainEvent extends PropertyDomainEvent<String> {}
@@ -56,13 +51,12 @@ public class ApplicationTypeCollection extends ApplicationTypeMember {
     @Property(
             domainEvent = ElementTypeDomainEvent.class
             )
-    @MemberOrder(name="Data Type", sequence = "2.6")
+    @PropertyLayout(group="Data Type", sequence = "2.6")
     public String getElementType() {
         return getFeature().getActionReturnType()
                 .map(Class::getSimpleName)
                 .orElse("<none>");
     }
-
 
     // -- derived
 
@@ -71,7 +65,7 @@ public class ApplicationTypeCollection extends ApplicationTypeMember {
     @Property(
             domainEvent = DerivedDomainEvent.class
             )
-    @MemberOrder(name="Detail", sequence = "2.7")
+    @PropertyLayout(group="Detail", sequence = "2.7")
     public boolean isDerived() {
         return getFeature().isPropertyOrCollectionDerived();
     }

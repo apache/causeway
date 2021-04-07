@@ -18,7 +18,6 @@
  */
 package demoapp.dom.domain.properties.PropertyLayout.cssClass;
 
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Where;
@@ -31,7 +30,8 @@ import lombok.RequiredArgsConstructor;
     cssClass = "red"                // <.>
     , describedAs =
         "@PropertyLayout(cssClass = \"red\")"
-    , hidden = Where.ALL_TABLES
+    , hidden = Where.ALL_TABLES,
+    group = "contributed", sequence = "1"
 )
 @RequiredArgsConstructor
 public class PropertyLayoutCssClassVm_mixinProperty {
@@ -40,7 +40,6 @@ public class PropertyLayoutCssClassVm_mixinProperty {
 
     private final PropertyLayoutCssClassVm propertyLayoutCssClassVm;
 
-    @MemberOrder(name = "contributed", sequence = "1")
     public String prop() {
         return propertyLayoutCssClassVm.getPropertyUsingAnnotation();
     }

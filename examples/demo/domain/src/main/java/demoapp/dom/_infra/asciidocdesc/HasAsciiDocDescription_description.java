@@ -21,26 +21,23 @@ package demoapp.dom._infra.asciidocdesc;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.LabelPosition;
-import org.apache.isis.applib.annotation.MemberOrder;
-import org.apache.isis.applib.annotation.Snapshot;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
+import org.apache.isis.applib.annotation.Snapshot;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.valuetypes.asciidoc.applib.value.AsciiDoc;
 
+import demoapp.dom._infra.resources.AsciiDocReaderService;
 import lombok.RequiredArgsConstructor;
 
-import demoapp.dom._infra.resources.AsciiDocReaderService;
-
-@SuppressWarnings("CdiManagedBeanInconsistencyInspection")
 @Property(snapshot = Snapshot.EXCLUDED)
 @RequiredArgsConstructor
 public class HasAsciiDocDescription_description {
 
     private final HasAsciiDocDescription hasAsciiDocDescription;
 
-    @PropertyLayout(labelPosition = LabelPosition.NONE, hidden = Where.ALL_TABLES)
-    @MemberOrder(name = "description", sequence = "1")
+    @PropertyLayout(labelPosition = LabelPosition.NONE, hidden = Where.ALL_TABLES, 
+            group = "description", sequence = "1")
     public AsciiDoc prop() {
         return asciiDocReaderService.readFor(hasAsciiDocDescription, "description");
     }

@@ -26,16 +26,14 @@ import javax.xml.bind.annotation.XmlType;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import lombok.Getter;
 import lombok.Setter;
-
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
 //tag::class[]
 @XmlRootElement(name = "root")
@@ -56,9 +54,8 @@ public class PropertyLayoutDescribedAsVm implements HasAsciiDocDescription {
     @Property(optionality = Optionality.OPTIONAL)
     @PropertyLayout(
         describedAs =                                   // <.>
-            "@PropertyLayout(describedAs= \"...\")"
-    )
-    @MemberOrder(name = "annotation", sequence = "1")
+            "@PropertyLayout(describedAs= \"...\")",
+        group = "annotation", sequence = "1")
     @XmlElement(required = false)
     @Getter @Setter
     private String propertyUsingAnnotation;
@@ -66,8 +63,7 @@ public class PropertyLayoutDescribedAsVm implements HasAsciiDocDescription {
 
 //tag::layout-file[]
     @Property(optionality = Optionality.OPTIONAL)
-    @PropertyLayout()                                       // <.>
-    @MemberOrder(name = "layout-file", sequence = "1")
+    @PropertyLayout(group = "layout-file", sequence = "1") // <.>
     @XmlElement(required = false)
     @Getter @Setter
     private String propertyUsingLayout;
@@ -77,9 +73,8 @@ public class PropertyLayoutDescribedAsVm implements HasAsciiDocDescription {
     @Property(optionality = Optionality.OPTIONAL)
     @DescribedAsMetaAnnotation                            // <.>
     @PropertyLayout(
-        describedAs = "@DescribedAsMetaAnnotation"
-    )
-    @MemberOrder(name = "meta-annotated", sequence = "1")
+        describedAs = "@DescribedAsMetaAnnotation",
+        group = "meta-annotated", sequence = "1")
     @XmlElement(required = false)
     @Getter @Setter
     private String propertyUsingMetaAnnotation;
@@ -90,9 +85,8 @@ public class PropertyLayoutDescribedAsVm implements HasAsciiDocDescription {
     @Property(optionality = Optionality.OPTIONAL)
     @PropertyLayout(
         describedAs =
-            "@DescribedAsMetaAnnotation @PropertyLayout(...)"   // <.>
-    )
-    @MemberOrder(name = "meta-annotated-overridden", sequence = "1")
+            "@DescribedAsMetaAnnotation @PropertyLayout(...)",  // <.>
+        group = "meta-annotated-overridden", sequence = "1")
     @XmlElement(required = false)
     @Getter @Setter
     private String propertyUsingMetaAnnotationButOverridden;

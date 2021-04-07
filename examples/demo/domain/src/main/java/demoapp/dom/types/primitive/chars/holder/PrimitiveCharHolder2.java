@@ -19,7 +19,6 @@
 package demoapp.dom.types.primitive.chars.holder;
 
 import org.apache.isis.applib.annotation.LabelPosition;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Where;
@@ -32,9 +31,8 @@ public interface PrimitiveCharHolder2 extends PrimitiveCharHolder {
         labelPosition = LabelPosition.LEFT,                 // <.>
         describedAs =
             "@PropertyLayout(labelPosition=LEFT)",
-        hidden = Where.ALL_TABLES
-    )
-    @MemberOrder(name = "label-positions", sequence = "1")  // <.>
+        hidden = Where.ALL_TABLES,
+        group = "label-positions", sequence = "1")  // <.>
     default char getReadOnlyPropertyDerivedLabelPositionLeft() {
         return getReadOnlyProperty();
     }
@@ -44,9 +42,8 @@ public interface PrimitiveCharHolder2 extends PrimitiveCharHolder {
         labelPosition = LabelPosition.TOP,                  // <.>
         describedAs =
             "@PropertyLayout(labelPosition=TOP)",
-        hidden = Where.ALL_TABLES
-    )
-    @MemberOrder(name = "label-positions", sequence = "2")
+        hidden = Where.ALL_TABLES,
+        group = "label-positions", sequence = "2")
     default char getReadOnlyPropertyDerivedLabelPositionTop() {
         return getReadOnlyProperty();
     }
@@ -56,9 +53,8 @@ public interface PrimitiveCharHolder2 extends PrimitiveCharHolder {
         labelPosition = LabelPosition.RIGHT,                // <.>
         describedAs =
             "@PropertyLayout(labelPosition=RIGHT)",
-        hidden = Where.ALL_TABLES
-    )
-    @MemberOrder(name = "label-positions", sequence = "3")
+        hidden = Where.ALL_TABLES,
+        group = "label-positions", sequence = "3")
     default char getReadOnlyPropertyDerivedLabelPositionRight() {
         return getReadOnlyProperty();
     }
@@ -68,9 +64,8 @@ public interface PrimitiveCharHolder2 extends PrimitiveCharHolder {
         labelPosition = LabelPosition.NONE,                 // <.>
         describedAs =
             "@PropertyLayout(labelPosition=NONE)",
-        hidden = Where.ALL_TABLES
-    )
-    @MemberOrder(name = "label-positions", sequence = "4")
+        hidden = Where.ALL_TABLES,
+        group = "label-positions", sequence = "4")
     default char getReadOnlyPropertyDerivedLabelPositionNone() {
         return getReadOnlyProperty();
     }

@@ -25,15 +25,14 @@ import javax.jdo.annotations.PersistenceCapable;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Title;
-
-import lombok.Getter;
-import lombok.Setter;
 
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom.types.primitive.chars.holder.PrimitiveCharHolder2;
+import lombok.Getter;
+import lombok.Setter;
 
 //tag::class[]
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
@@ -52,12 +51,12 @@ public class PrimitiveCharJdo                                       // <.>
 
 //tag::class[]
     @Title(prepend = "char (primitive) JDO entity: ")
-    @MemberOrder(name = "read-only-properties", sequence = "1")
+    @PropertyLayout(group = "read-only-properties", sequence = "1")
     @Getter @Setter
     private char readOnlyProperty;                                  // <.>
 
     @Property(editing = Editing.ENABLED)
-    @MemberOrder(name = "editable-properties", sequence = "1")
+    @PropertyLayout(group = "editable-properties", sequence = "1")
     @Getter @Setter
     private char readWriteProperty;
 

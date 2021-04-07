@@ -26,17 +26,15 @@ import javax.xml.bind.annotation.XmlType;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.events.domain.PropertyDomainEvent;
 
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
 @XmlRootElement(name = "root")
 @XmlType
@@ -68,9 +66,8 @@ public class PropertyDomainEventVm implements HasAsciiDocDescription {
         domainEvent = TextDomainEvent.class                         // <.>
     )
     @PropertyLayout(
-        describedAs = "@Property(domainEvent = TextDomainEvent.class)"
-    )
-    @MemberOrder(name = "annotation", sequence = "1")
+        describedAs = "@Property(domainEvent = TextDomainEvent.class)",
+        group = "annotation", sequence = "1")
     @XmlElement(required = true)
     @Getter @Setter
     private String text;

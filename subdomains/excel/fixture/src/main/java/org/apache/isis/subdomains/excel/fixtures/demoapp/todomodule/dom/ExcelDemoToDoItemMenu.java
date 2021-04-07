@@ -31,7 +31,6 @@ import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.DomainService;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.MinLength;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Parameter;
@@ -55,8 +54,7 @@ public class ExcelDemoToDoItemMenu {
     @Inject private ClockService clockService;
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(bookmarking = BookmarkPolicy.AS_ROOT)
-    @MemberOrder(sequence = "1")
+    @ActionLayout(bookmarking = BookmarkPolicy.AS_ROOT, sequence = "1")
     public List<ExcelDemoToDoItem> toDoItemsNotYetComplete() {
         final List<ExcelDemoToDoItem> items = notYetCompleteNoUi();
         if(items.isEmpty()) {
@@ -80,7 +78,7 @@ public class ExcelDemoToDoItemMenu {
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    @MemberOrder(sequence = "3")
+    @ActionLayout(sequence = "3")
     public List<ExcelDemoToDoItem> toDoItemsComplete() {
         final List<ExcelDemoToDoItem> items = completeNoUi();
         if(items.isEmpty()) {
@@ -98,7 +96,7 @@ public class ExcelDemoToDoItemMenu {
 
 
 
-    @MemberOrder(sequence = "40")
+    @ActionLayout(sequence = "40")
     public ExcelDemoToDoItem newToDoItem(
             @Parameter(regexPattern = "\\w[@&:\\-\\,\\.\\+ \\w]*")
             final String description,
@@ -133,7 +131,7 @@ public class ExcelDemoToDoItemMenu {
 
 
     @Action(semantics = SemanticsOf.SAFE)
-    @MemberOrder(sequence = "50")
+    @ActionLayout(sequence = "50")
     public List<ExcelDemoToDoItem> allMyToDoItems() {
         final String currentUser = currentUserName();
         final List<ExcelDemoToDoItem> items = repositoryService.allMatches(ExcelDemoToDoItem.class, ExcelDemoToDoItem.Predicates.thoseOwnedBy(currentUser));

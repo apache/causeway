@@ -25,17 +25,15 @@ import javax.jdo.annotations.PersistenceCapable;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Publishing;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom.domain._commands.ExposePersistedCommands;
+import lombok.Getter;
+import lombok.Setter;
 
 //tag::class[]
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
@@ -66,9 +64,8 @@ public class PropertyCommandPublishingJdo
         commandPublishing = Publishing.ENABLED                  // <.>
     )
     @PropertyLayout(
-        describedAs = "@Property(command = ENABLED)"
-    )
-    @MemberOrder(name = "annotation", sequence = "1")
+        describedAs = "@Property(command = ENABLED)",
+        group = "annotation", sequence = "1")
     @Getter @Setter
     private String property;
 //end::annotation[]
@@ -78,9 +75,8 @@ public class PropertyCommandPublishingJdo
         commandPublishing = Publishing.DISABLED                 // <.>
     )
     @PropertyLayout(
-        describedAs = "@Property(command = DISABLED)"
-    )
-    @MemberOrder(name = "annotation", sequence = "2")
+        describedAs = "@Property(command = DISABLED)",
+        group = "annotation", sequence = "2")
     @Getter @Setter
     private String propertyCommandDispatchDisabled;
 //end::annotation-2[]
@@ -88,9 +84,8 @@ public class PropertyCommandPublishingJdo
 //tag::meta-annotation[]
     @PropertyCommandPublishingEnabledMetaAnnotation               // <.>
     @PropertyLayout(
-            describedAs = "@PropertyCommandEnabledMetaAnnotation"
-    )
-    @MemberOrder(name = "meta-annotated", sequence = "1")
+            describedAs = "@PropertyCommandEnabledMetaAnnotation",
+            group = "meta-annotated", sequence = "1")
     @Getter @Setter
     private String propertyMetaAnnotated;
 //end::meta-annotation[]
@@ -101,9 +96,8 @@ public class PropertyCommandPublishingJdo
     @PropertyLayout(
         describedAs =
             "@PropertyCommandDisabledMetaAnnotation " +
-            "@Property(command = ENABLED)"
-    )
-    @MemberOrder(name = "meta-annotated-overridden", sequence = "1")
+            "@Property(command = ENABLED)",
+            group = "meta-annotated-overridden", sequence = "1")
     @Getter @Setter
     private String propertyMetaAnnotatedOverridden;
 //end::meta-annotation-overridden[]

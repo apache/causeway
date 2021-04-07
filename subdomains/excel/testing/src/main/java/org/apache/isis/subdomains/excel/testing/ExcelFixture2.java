@@ -25,14 +25,13 @@ import java.util.List;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.MemberOrder;
+import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.commons.internal.base._Bytes;
 import org.apache.isis.subdomains.excel.applib.dom.ExcelService;
 import org.apache.isis.subdomains.excel.applib.dom.WorksheetSpec;
 import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScript;
-import org.apache.isis.testing.fixtures.applib.fixturescripts.FixtureScripts;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -55,14 +54,14 @@ public class ExcelFixture2 extends FixtureScript {
      * Input, optional: defines the name of the resource.
      */
     @Getter @Setter
-    @MemberOrder(sequence = "1.1")
+    @PropertyLayout(sequence = "1.1")
     private String excelResourceName;
 
     /**
      * Input, either this or the blob is mandatory ... the Excel spreadsheet to read.
      */
     @Getter @Setter
-    @MemberOrder(sequence = "1.2")
+    @PropertyLayout(sequence = "1.2")
     private URL excelResource;
 
     /**

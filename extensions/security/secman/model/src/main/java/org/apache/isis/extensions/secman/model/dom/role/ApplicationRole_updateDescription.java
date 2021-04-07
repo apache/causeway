@@ -21,7 +21,6 @@ package org.apache.isis.extensions.secman.model.dom.role;
 import javax.enterprise.inject.Model;
 
 import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
@@ -33,13 +32,13 @@ import lombok.RequiredArgsConstructor;
 
 @Action(
         domainEvent = UpdateDescriptionDomainEvent.class, 
-        associateWith = "description")
+        associateWith = "description",
+        associateWithSequence = "1")
 @RequiredArgsConstructor
 public class ApplicationRole_updateDescription {
     
     private final ApplicationRole target;
     
-    @MemberOrder(sequence = "1")
     public ApplicationRole act(
             @Parameter(
                     maxLength = DescriptionType.Meta.MAX_LEN,

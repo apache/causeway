@@ -33,18 +33,17 @@ import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
+import demoapp.dom.domain.actions.Action.associateWith.child.ActionAssociateWithChildVm;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.val;
-
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
-import demoapp.dom.domain.actions.Action.associateWith.child.ActionAssociateWithChildVm;
 
 @XmlRootElement(name = "root")
 @XmlType
@@ -72,13 +71,13 @@ public class ActionAssociateWithVm implements HasAsciiDocDescription {
 
 //tag::class-properties[]
     @Property()
-    @MemberOrder(name = "annotation", sequence = "1")
+    @PropertyLayout(group = "annotation", sequence = "1")
     @XmlElement(required = true)
     @Getter @Setter
     private String text;
 
     @Property()
-    @MemberOrder(name = "annotation", sequence = "2")
+    @PropertyLayout(group = "annotation", sequence = "2")
     @XmlElement(required = true)
     @Getter @Setter
     private String otherProperty;

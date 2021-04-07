@@ -308,7 +308,6 @@ implements GridSystemService<G> {
                                 
                 final IdentifiedHolder identifiedHolder = (IdentifiedHolder) oneToOneAssociation;
                 val translationContext = TranslationContext.forMemberOrderNameIdentifier(identifiedHolder.getIdentifier());
-                // TranslationContext translationContext = TranslationContext.ofIdentifierForMemberOrderName(oneToOneAssociation.getIdentifier());
                 final String sequence = "" + (propertySequence.incrementAndGet());
                 addOrReplaceFacet(
                         new MemberOrderFacetXml(translationContext, groupName, sequence, translationService, oneToOneAssociation));

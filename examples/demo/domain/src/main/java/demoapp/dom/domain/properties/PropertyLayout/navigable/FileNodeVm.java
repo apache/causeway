@@ -25,7 +25,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.LabelPosition;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Navigable;
 import org.apache.isis.applib.annotation.Property;
@@ -33,13 +32,12 @@ import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.graph.tree.TreeNode;
 
+import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.val;
-
-import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 
 @XmlRootElement(name="FileNode")
 @DomainObject(nature=Nature.VIEW_MODEL, objectType = "demo.FileNode")
@@ -74,8 +72,7 @@ public class FileNodeVm implements HasAsciiDocDescription {
 
 //tag::tree[]
     @Property
-    @PropertyLayout(labelPosition = LabelPosition.NONE)
-    @MemberOrder(name = "tree", sequence = "1")
+    @PropertyLayout(labelPosition = LabelPosition.NONE, group = "tree", sequence = "1")
     public TreeNode<FileNodeVm> getTree() {
         return fileTreeNodeService.sessionTree();
     }
@@ -83,8 +80,7 @@ public class FileNodeVm implements HasAsciiDocDescription {
 
 //tag::navigable[]
     @Property
-    @PropertyLayout(navigable=Navigable.PARENT, hidden=Where.EVERYWHERE)
-    @MemberOrder(name = "detail", sequence = "1")
+    @PropertyLayout(navigable=Navigable.PARENT, hidden=Where.EVERYWHERE, group = "detail", sequence = "1")
     public FileNodeVm getParent() {
         val parentFile = asFile().getParentFile();
         return parentFile != null
@@ -94,14 +90,12 @@ public class FileNodeVm implements HasAsciiDocDescription {
 //end::navigable[]
 
     @Property
-    @PropertyLayout(labelPosition = LabelPosition.TOP)
-    @MemberOrder(name = "detail", sequence = "2")
+    @PropertyLayout(labelPosition = LabelPosition.TOP, group = "detail", sequence = "2")
     @Getter @Setter
     private String path;
 
     @Property
-    @PropertyLayout(labelPosition = LabelPosition.TOP)
-    @MemberOrder(name = "detail", sequence = "3")
+    @PropertyLayout(labelPosition = LabelPosition.TOP, group = "detail", sequence = "3")
     @Getter @Setter
     private FileNodeType type;
 

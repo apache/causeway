@@ -18,7 +18,6 @@
  */
 package demoapp.dom.domain.properties.PropertyLayout.describedAs;
 
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 
@@ -29,7 +28,8 @@ import lombok.RequiredArgsConstructor;
 @DescribedAsMetaAnnotation              // <.>
 @PropertyLayout(
     describedAs =
-        "@DescribedAsMetaAnnotation)"
+        "@DescribedAsMetaAnnotation)",
+    group = "meta-annotated", sequence = "2"
 )
 @RequiredArgsConstructor
 public class PropertyLayoutDescribedAsVm_mixinPropertyWithMetaAnnotation {
@@ -38,7 +38,6 @@ public class PropertyLayoutDescribedAsVm_mixinPropertyWithMetaAnnotation {
 
     private final PropertyLayoutDescribedAsVm propertyLayoutDescribedAsVm;
 
-    @MemberOrder(name = "meta-annotated", sequence = "2")
     public String prop() {
         return propertyLayoutDescribedAsVm.getPropertyUsingAnnotation();
     }

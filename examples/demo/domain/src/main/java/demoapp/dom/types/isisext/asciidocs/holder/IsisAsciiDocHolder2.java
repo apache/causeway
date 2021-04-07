@@ -19,7 +19,6 @@
 package demoapp.dom.types.isisext.asciidocs.holder;
 
 import org.apache.isis.applib.annotation.LabelPosition;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Where;
@@ -33,9 +32,9 @@ public interface IsisAsciiDocHolder2 extends demoapp.dom.types.isisext.asciidocs
         labelPosition = LabelPosition.LEFT,                 // <.>
         describedAs =
             "@PropertyLayout(labelPosition=LEFT)",
-        hidden = Where.ALL_TABLES
-    )
-    @MemberOrder(name = "label-positions", sequence = "1")  // <.>
+        hidden = Where.ALL_TABLES,
+        group = "label-positions", 
+        sequence = "1")  // <.>
     default AsciiDoc getReadOnlyPropertyDerivedLabelPositionLeft() {
         return getReadOnlyProperty();
     }
@@ -45,9 +44,9 @@ public interface IsisAsciiDocHolder2 extends demoapp.dom.types.isisext.asciidocs
         labelPosition = LabelPosition.TOP,                  // <.>
         describedAs =
             "@PropertyLayout(labelPosition=TOP)",
-        hidden = Where.ALL_TABLES
-    )
-    @MemberOrder(name = "label-positions", sequence = "2")
+        hidden = Where.ALL_TABLES,
+        group = "label-positions", 
+        sequence = "2")
     default AsciiDoc getReadOnlyPropertyDerivedLabelPositionTop() {
         return getReadOnlyProperty();
     }
@@ -57,9 +56,9 @@ public interface IsisAsciiDocHolder2 extends demoapp.dom.types.isisext.asciidocs
         labelPosition = LabelPosition.RIGHT,                // <.>
         describedAs =
             "@PropertyLayout(labelPosition=RIGHT)",
-        hidden = Where.ALL_TABLES
-    )
-    @MemberOrder(name = "label-positions", sequence = "3")
+        hidden = Where.ALL_TABLES,
+        group = "label-positions", 
+        sequence = "3")
     default AsciiDoc getReadOnlyPropertyDerivedLabelPositionRight() {
         return getReadOnlyProperty();
     }
@@ -69,9 +68,9 @@ public interface IsisAsciiDocHolder2 extends demoapp.dom.types.isisext.asciidocs
         labelPosition = LabelPosition.NONE,                 // <.>
         describedAs =
             "@PropertyLayout(labelPosition=NONE)",
-        hidden = Where.ALL_TABLES
-    )
-    @MemberOrder(name = "label-positions", sequence = "4")
+        hidden = Where.ALL_TABLES,
+        group = "label-positions", 
+        sequence = "4")
     default AsciiDoc getReadOnlyPropertyDerivedLabelPositionNone() {
         return getReadOnlyProperty();
     }

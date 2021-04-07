@@ -33,7 +33,7 @@ public class ApplicationPermission_veto {
 
     private final ApplicationPermission target;
 
-    //@MemberOrder(name = "Rule", sequence = "1")
+    //@PropertyLayout(group = "Rule", sequence = "1")
     public ApplicationPermission act() {
         target.setRule(ApplicationPermissionRule.VETO);
         return target;

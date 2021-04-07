@@ -28,7 +28,6 @@ import javax.inject.Inject;
 import org.apache.isis.applib.ViewModel;
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.CollectionLayout;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Navigable;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.Property;
@@ -181,8 +180,10 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
     @Property(
             domainEvent = NamespaceNameDomainEvent.class
             )
-    @PropertyLayout(typicalLength=ApplicationFeatureConstants.TYPICAL_LENGTH_NAMESPACE)
-    @MemberOrder(name="Id", sequence = "2.2")
+    @PropertyLayout(
+            typicalLength=ApplicationFeatureConstants.TYPICAL_LENGTH_NAMESPACE,
+            group="Id", 
+            sequence = "2.2")
     public String getNamespaceName() {
         return getFeatureId().getNamespace();
     }
@@ -198,8 +199,10 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
     @Property(
             domainEvent = TypeSimpleNameDomainEvent.class
             )
-    @PropertyLayout(typicalLength=ApplicationFeatureConstants.TYPICAL_LENGTH_TYPE_SIMPLE_NAME)
-    @MemberOrder(name="Id", sequence = "2.3")
+    @PropertyLayout(
+            typicalLength=ApplicationFeatureConstants.TYPICAL_LENGTH_TYPE_SIMPLE_NAME,
+            group="Id", 
+            sequence = "2.3")
     public String getTypeSimpleName() {
         return getFeatureId().getTypeSimpleName();
     }
@@ -217,8 +220,10 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
     @Property(
             domainEvent = MemberNameDomainEvent.class
             )
-    @PropertyLayout(typicalLength=ApplicationFeatureConstants.TYPICAL_LENGTH_MEMBER_NAME)
-    @MemberOrder(name="Id", sequence = "2.4")
+    @PropertyLayout(
+            typicalLength=ApplicationFeatureConstants.TYPICAL_LENGTH_MEMBER_NAME,
+            group="Id", 
+            sequence = "2.4")
     public String getMemberName() {
         return getFeatureId().getMemberName();
     }
@@ -237,8 +242,9 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
             )
     @PropertyLayout(
             navigable = Navigable.PARENT,
-            hidden = Where.ALL_TABLES)
-    @MemberOrder(name = "Parent", sequence = "2.6")
+            hidden = Where.ALL_TABLES,
+            group = "Parent", 
+            sequence = "2.6")
     public ApplicationFeatureViewModel getParent() {
         final ApplicationFeatureId parentId;
         parentId = getSort() == ApplicationFeatureSort.MEMBER
@@ -264,9 +270,9 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
             domainEvent = PermissionsDomainEvent.class
             )
     @CollectionLayout(
-            defaultView="table"
+            defaultView="table",
+            sequence = "10"
             )
-    @MemberOrder(sequence = "10")
     public java.util.Collection<? extends ApplicationPermission> getPermissions() {
         return applicationPermissionRepository.findByFeatureCached(getFeatureId());
     }

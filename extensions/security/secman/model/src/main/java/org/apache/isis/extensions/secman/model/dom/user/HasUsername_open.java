@@ -21,10 +21,10 @@ package org.apache.isis.extensions.secman.model.dom.user;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.MemberOrder;
+import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.mixins.security.HasUsername;
+import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
 import org.apache.isis.extensions.secman.api.user.ApplicationUser;
 import org.apache.isis.extensions.secman.api.user.ApplicationUserRepository;
@@ -33,8 +33,10 @@ import lombok.RequiredArgsConstructor;
 
 @Action(
         semantics = SemanticsOf.SAFE,
-        domainEvent = HasUsername_open.ActionDomainEvent.class
+        domainEvent = HasUsername_open.ActionDomainEvent.class,
+        associateWith = "User" // associate with a 'User' property (if any)
         )
+@ActionLayout(sequence = "1") 
 @RequiredArgsConstructor
 public class HasUsername_open {
 
@@ -44,8 +46,6 @@ public class HasUsername_open {
 
     public static class ActionDomainEvent extends IsisModuleExtSecmanApi.ActionDomainEvent<HasUsername_open> {}
 
-
-    @MemberOrder(name = "User", sequence = "1") // associate with a 'User' property (if any)
     public ApplicationUser act() {
         if (target == null || target.getUsername() == null) {
             return null;

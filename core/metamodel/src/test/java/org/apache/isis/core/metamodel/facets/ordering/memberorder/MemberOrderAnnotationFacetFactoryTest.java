@@ -28,7 +28,9 @@ import org.jmock.api.Action;
 import org.jmock.api.Invocation;
 import org.junit.Rule;
 
-import org.apache.isis.applib.annotation.MemberOrder;
+import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.CollectionLayout;
+import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -78,7 +80,7 @@ public class MemberOrderAnnotationFacetFactoryTest extends AbstractFacetFactoryT
 
     public void testMemberOrderAnnotationPickedUpOnProperty() {
         class Customer {
-            @MemberOrder(sequence = "1")
+            @PropertyLayout(sequence = "1")
             public String getFirstName() {
                 return null;
             }
@@ -100,7 +102,7 @@ public class MemberOrderAnnotationFacetFactoryTest extends AbstractFacetFactoryT
         class Order {
         }
         class Customer {
-            @MemberOrder(sequence = "2")
+            @CollectionLayout(sequence = "2")
             public Collection<Order> getOrders() {
                 return null;
             }
@@ -124,7 +126,7 @@ public class MemberOrderAnnotationFacetFactoryTest extends AbstractFacetFactoryT
 
     public void testMemberOrderAnnotationPickedUpOnAction() {
         class Customer {
-            @MemberOrder(sequence = "3")
+            @ActionLayout(sequence = "3")
             public void someAction() {
             }
         }

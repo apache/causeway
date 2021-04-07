@@ -447,7 +447,7 @@ public class ExcelDemoToDoItem implements Comparable<ExcelDemoToDoItem> /*, Cale
 //        locationLatitude = location != null ? location.getLatitude() : null;
 //    }
 //
-//    @MemberOrder(name="location", sequence="1")
+//    @PropertyLayout(group="location", sequence="1")
 //    public ExcelDemoToDoItem updateLocation(final Double longitude, final Double latitude) {
 //        locationLatitude = latitude;
 //        locationLongitude = longitude;

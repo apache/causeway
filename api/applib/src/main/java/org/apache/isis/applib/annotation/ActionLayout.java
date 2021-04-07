@@ -175,5 +175,13 @@ public @interface ActionLayout {
      */
     Redirect redirectPolicy()
             default Redirect.AS_CONFIGURED;
+    
+    /**
+     * The order of this member relative to other members in the same (layout) group, 
+     * given in <i>Dewey-decimal</i> notation.
+     *
+     */
+    String sequence()
+            default "";
 
 }

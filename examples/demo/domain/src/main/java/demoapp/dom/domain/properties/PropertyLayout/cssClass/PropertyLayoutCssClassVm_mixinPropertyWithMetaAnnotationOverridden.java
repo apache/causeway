@@ -18,7 +18,6 @@
  */
 package demoapp.dom.domain.properties.PropertyLayout.cssClass;
 
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 
@@ -30,7 +29,8 @@ import lombok.RequiredArgsConstructor;
 @PropertyLayout(
     cssClass = "blue"                                   // <.>
     , describedAs =
-        "@CssClassRedMetaAnnotation  @ParameterLayout(...)"
+        "@CssClassRedMetaAnnotation  @ParameterLayout(...)",
+    group = "meta-annotated-overridden", sequence = "2"
 )
 @RequiredArgsConstructor
 public class PropertyLayoutCssClassVm_mixinPropertyWithMetaAnnotationOverridden {
@@ -39,7 +39,6 @@ public class PropertyLayoutCssClassVm_mixinPropertyWithMetaAnnotationOverridden 
 
     private final PropertyLayoutCssClassVm propertyLayoutCssClassVm;
 
-    @MemberOrder(name = "meta-annotated-overridden", sequence = "2")
     public String prop() {
         return propertyLayoutCssClassVm.getPropertyUsingAnnotation();
     }

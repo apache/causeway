@@ -27,17 +27,16 @@ import javax.jdo.annotations.Persistent;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.applib.value.Clob;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import demoapp.dom._infra.asciidocdesc.HasAsciiDocDescription;
 import demoapp.dom.types.isis.clobs.holder.IsisClobHolder2;
+import lombok.Getter;
+import lombok.Setter;
 
 //tag::class[]
 @PersistenceCapable(identityType = IdentityType.DATASTORE, schema = "demo")
@@ -56,7 +55,7 @@ public class IsisClobJdo                                          // <.>
 
 //tag::class[]
     @Title(prepend = "Clob JDO entity: ")
-    @MemberOrder(name = "read-only-properties", sequence = "1")
+    @PropertyLayout(group = "read-only-properties", sequence = "1")
     @Persistent(defaultFetchGroup="false", columns = {              // <.>
             @Column(name = "readOnlyProperty_name"),
             @Column(name = "readOnlyProperty_mimetype"),
@@ -68,7 +67,7 @@ public class IsisClobJdo                                          // <.>
     private Clob readOnlyProperty;
 
     @Property(editing = Editing.ENABLED)                            // <.>
-    @MemberOrder(name = "editable-properties", sequence = "1")
+    @PropertyLayout(group = "editable-properties", sequence = "1")
     @Persistent(defaultFetchGroup="false", columns = {
             @Column(name = "readWriteProperty_name"),
             @Column(name = "readWriteProperty_mimetype"),
@@ -80,7 +79,7 @@ public class IsisClobJdo                                          // <.>
     private Clob readWriteProperty;
 
     @Property(optionality = Optionality.OPTIONAL)                   // <.>
-    @MemberOrder(name = "optional-properties", sequence = "1")
+    @PropertyLayout(group = "optional-properties", sequence = "1")
     @Persistent(defaultFetchGroup="false", columns = {
             @Column(name = "readOnlyOptionalProperty_name",
                     allowsNull = "true"),                           // <.>
@@ -94,7 +93,7 @@ public class IsisClobJdo                                          // <.>
     private Clob readOnlyOptionalProperty;
 
     @Property(editing = Editing.ENABLED, optionality = Optionality.OPTIONAL)
-    @MemberOrder(name = "optional-properties", sequence = "2")
+    @PropertyLayout(group = "optional-properties", sequence = "2")
     @Persistent(defaultFetchGroup="false", columns = {
             @Column(name = "readWriteOptionalProperty_name"
                     , allowsNull = "true"),                           // <.>

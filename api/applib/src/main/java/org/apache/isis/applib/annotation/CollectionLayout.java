@@ -142,6 +142,14 @@ public @interface CollectionLayout {
             default -1;
 
     /**
+     * The order of this member relative to other members in the same (layout) group, 
+     * given in <i>Dewey-decimal</i> notation.
+     *
+     */
+    String sequence()
+            default "";
+    
+    /**
      * Indicates that the elements in a ({@link java.util.SortedSet}) collection should be sorted according to a different order than the
      * natural sort order, as defined by the specified{@link java.util.Comparator}.
      *

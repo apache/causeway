@@ -24,7 +24,7 @@ import javax.enterprise.inject.Model;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.MemberOrder;
+import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.extensions.secman.api.role.ApplicationRole;
 import org.apache.isis.extensions.secman.api.role.ApplicationRole.DeleteDomainEvent;
@@ -35,6 +35,7 @@ import lombok.RequiredArgsConstructor;
 @Action(
         domainEvent = DeleteDomainEvent.class, 
         semantics = SemanticsOf.IDEMPOTENT_ARE_YOU_SURE)
+@ActionLayout(sequence = "1")
 @RequiredArgsConstructor
 public class ApplicationRole_delete {
     
@@ -42,7 +43,6 @@ public class ApplicationRole_delete {
     
     private final ApplicationRole holder;
     
-    @MemberOrder(sequence = "1")
     public Collection<? extends ApplicationRole> act() {
         applicationRoleRepository.deleteRole(holder);
         return applicationRoleRepository.allRoles();

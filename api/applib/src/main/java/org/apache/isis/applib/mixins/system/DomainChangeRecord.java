@@ -21,13 +21,12 @@ package org.apache.isis.applib.mixins.system;
 import java.sql.Timestamp;
 import java.util.UUID;
 
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.mixins.security.HasUsername;
+import org.apache.isis.applib.services.bookmark.Bookmark;
 
 
 /**
@@ -58,8 +57,10 @@ public interface DomainChangeRecord extends HasInteractionId, HasUsername {
      * Distinguishes commands from audit entries from published events/interactions (when these are shown mixed together in a (standalone) table).
      */
     @Property
-    @PropertyLayout(hidden = Where.ALL_EXCEPT_STANDALONE_TABLES)
-    @MemberOrder(name="Identifiers", sequence = "1")
+    @PropertyLayout(
+            hidden = Where.ALL_EXCEPT_STANDALONE_TABLES,
+            group="Identifiers", 
+            sequence = "1")
     ChangeType getType();
 
 
@@ -69,7 +70,7 @@ public interface DomainChangeRecord extends HasInteractionId, HasUsername {
      * this change occurred.
      */
     @Property
-    @MemberOrder(name="Identifiers",sequence = "50")
+    @PropertyLayout(group="Identifiers",sequence = "50")
     UUID getInteractionId();
 
 
@@ -77,7 +78,7 @@ public interface DomainChangeRecord extends HasInteractionId, HasUsername {
      * The user that caused the change.
      */
     @Property
-    @MemberOrder(name="Identifiers", sequence = "10")
+    @PropertyLayout(group="Identifiers", sequence = "10")
     String getUsername();
 
 
@@ -85,7 +86,7 @@ public interface DomainChangeRecord extends HasInteractionId, HasUsername {
      * The time that the change occurred.
      */
     @Property
-    @MemberOrder(name="Identifiers", sequence = "20")
+    @PropertyLayout(group="Identifiers", sequence = "20")
     Timestamp getTimestamp();
 
 
@@ -93,8 +94,10 @@ public interface DomainChangeRecord extends HasInteractionId, HasUsername {
      * The object type of the domain object being changed.
      */
     @Property
-    @PropertyLayout(named="Object Type")
-    @MemberOrder(name="Target", sequence = "10")
+    @PropertyLayout(
+            named="Object Type",
+            group="Target", 
+            sequence = "10")
     default String getTargetObjectType() {
         return getTarget().getObjectType();
     }
@@ -105,8 +108,10 @@ public interface DomainChangeRecord extends HasInteractionId, HasUsername {
      * The {@link Bookmark} identifying the domain object that has changed.
      */
     @Property
-    @PropertyLayout(named="Object")
-    @MemberOrder(name="Target", sequence="30")
+    @PropertyLayout(
+            named="Object",
+            group="Target", 
+            sequence="30")
     Bookmark getTarget();
 
 
@@ -118,8 +123,7 @@ public interface DomainChangeRecord extends HasInteractionId, HasUsername {
      * </p>
      */
     @Property(optionality = Optionality.OPTIONAL)
-    @PropertyLayout(named="Member", hidden = Where.ALL_EXCEPT_STANDALONE_TABLES)
-    @MemberOrder(name="Target", sequence = "20")
+    @PropertyLayout(named="Member", hidden = Where.ALL_EXCEPT_STANDALONE_TABLES, group="Target", sequence = "20")
     String getTargetMember();
 
 
@@ -131,8 +135,7 @@ public interface DomainChangeRecord extends HasInteractionId, HasUsername {
      * </p>
      */
     @Property(optionality = Optionality.OPTIONAL)
-    @PropertyLayout(hidden = Where.ALL_EXCEPT_STANDALONE_TABLES)
-    @MemberOrder(name="Detail",sequence = "6")
+    @PropertyLayout(hidden = Where.ALL_EXCEPT_STANDALONE_TABLES, group="Detail",sequence = "6")
     String getPreValue();
 
 
@@ -144,8 +147,8 @@ public interface DomainChangeRecord extends HasInteractionId, HasUsername {
      * </p>
      */
     @Property(optionality = Optionality.MANDATORY)
-    @PropertyLayout(hidden = Where.ALL_EXCEPT_STANDALONE_TABLES)
-    @MemberOrder(name="Detail",sequence = "7")
+    @PropertyLayout(hidden = Where.ALL_EXCEPT_STANDALONE_TABLES, group="Detail", 
+    sequence = "7")
     String getPostValue();
 
 

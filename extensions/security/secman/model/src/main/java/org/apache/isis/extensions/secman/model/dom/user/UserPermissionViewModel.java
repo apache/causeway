@@ -31,7 +31,6 @@ import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.Editing;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.Property;
@@ -248,8 +247,7 @@ public class UserPermissionViewModel implements ViewModel {
     @Property(
             domainEvent = UserDomainEvent.class
             )
-    @PropertyLayout(hidden=Where.PARENTED_TABLES)
-    @MemberOrder(name = "Permission", sequence = "1")
+    @PropertyLayout(hidden=Where.PARENTED_TABLES, group = "Permission", sequence = "1")
     public ApplicationUser getUser() {
         return applicationUserRepository.findOrCreateUserByUsername(getUsername());
     }
@@ -273,8 +271,8 @@ public class UserPermissionViewModel implements ViewModel {
     @Property(
             domainEvent = VerbDomainEvent.class
             )
-    @PropertyLayout(typicalLength=UserPermissionViewModel.TYPICAL_LENGTH_VERB)
-    @MemberOrder(name="Permission", sequence = "2")
+    @PropertyLayout(typicalLength=UserPermissionViewModel.TYPICAL_LENGTH_VERB,
+        group="Permission", sequence = "2")
     public String getVerb() {
         return changingGranted
                 ? "Can change"
@@ -292,8 +290,7 @@ public class UserPermissionViewModel implements ViewModel {
             domainEvent = FeatureDomainEvent.class,
             editing = Editing.DISABLED
             )
-    @PropertyLayout(hidden=Where.REFERENCES_PARENT)
-    @MemberOrder(name = "Permission",sequence = "4")
+    @PropertyLayout(hidden=Where.REFERENCES_PARENT, group = "Permission",sequence = "4")
     public ApplicationFeatureViewModel getFeature() {
         if(getFeatureId() == null) {
             return null;
@@ -326,8 +323,7 @@ public class UserPermissionViewModel implements ViewModel {
             domainEvent = ViewingPermissionDomainEvent.class,
             editing = Editing.DISABLED
             )
-    @PropertyLayout(hidden=Where.REFERENCES_PARENT)
-    @MemberOrder(name="Cause", sequence = "2.1")
+    @PropertyLayout(hidden=Where.REFERENCES_PARENT, group="Cause", sequence = "2.1")
     public ApplicationPermission getViewingPermission() {
         if(getViewingPermissionValue() == null) {
             return null;
@@ -357,8 +353,7 @@ public class UserPermissionViewModel implements ViewModel {
             domainEvent = ChangingPermissionDomainEvent.class,
             editing = Editing.DISABLED
             )
-    @PropertyLayout(hidden=Where.REFERENCES_PARENT)
-    @MemberOrder(name="Cause", sequence = "2.2")
+    @PropertyLayout(hidden=Where.REFERENCES_PARENT, group="Cause", sequence = "2.2")
     public ApplicationPermission getChangingPermission() {
         if(getChangingPermissionValue() == null) {
             return null;

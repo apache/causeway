@@ -22,7 +22,6 @@ import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
@@ -66,7 +65,8 @@ import lombok.val;
 )
 @ActionLayout(
         cssClassFa = "fa-circle",
-        position = ActionLayout.Position.PANEL_DROPDOWN
+        position = ActionLayout.Position.PANEL_DROPDOWN, 
+        sequence = "400.1"
 )
 @RequiredArgsConstructor
 public class Object_clearHints {
@@ -76,7 +76,6 @@ public class Object_clearHints {
 
     private final Object holder;
 
-    @MemberOrder(name = "datanucleusIdLong", sequence = "400.1")
     public Object act() {
         if (getHintStoreUsingWicketSession() != null) {
             val bookmark = bookmarkService.bookmarkForElseThrow(holder);

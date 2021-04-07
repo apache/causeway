@@ -18,19 +18,19 @@
  */
 package demoapp.dom.domain.objects.other.mixins;
 
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.PropertyLayout;
 
 import lombok.RequiredArgsConstructor;
 
 //tag::class[]
 @Property                                   // <.>
+@PropertyLayout(group = "properties", sequence = "1")
 @RequiredArgsConstructor                    // <.>
 public class CountHolder_explanation {
 
     private final CountHolder holder;       // <.>
-
-    @MemberOrder(name = "properties", sequence = "1")
+    
     public String prop() {
         return String.format(
                 "The collection shows the first %d fibonacci numbers",

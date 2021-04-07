@@ -31,7 +31,7 @@ public class ApplicationPermission_allow {
 
     private final ApplicationPermission target;
 
-    //@MemberOrder(name = "Rule", sequence = "1")
+    //@PropertyLayout(group = "Rule", sequence = "1")
     public ApplicationPermission act() {
         target.setRule(ApplicationPermissionRule.ALLOW);
         return target;

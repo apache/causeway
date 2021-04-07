@@ -24,7 +24,6 @@ import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.extensions.secman.api.role.ApplicationRole;
 import org.apache.isis.extensions.secman.api.role.ApplicationRoleRepository;
@@ -36,7 +35,8 @@ import lombok.val;
 
 @Action(
         domainEvent = AddRoleDomainEvent.class, 
-        associateWith = "roles")
+        associateWith = "roles",
+        associateWithSequence = "1")
 @ActionLayout(named="Add")
 @RequiredArgsConstructor
 public class ApplicationUser_addRole {
@@ -45,7 +45,6 @@ public class ApplicationUser_addRole {
     
     private final ApplicationUser target;
 
-    @MemberOrder(sequence = "1")
     public ApplicationUser act(final ApplicationRole role) {
         applicationRoleRepository.addRoleToUser(role, target);
         return target;

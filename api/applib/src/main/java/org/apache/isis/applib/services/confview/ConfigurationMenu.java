@@ -27,7 +27,6 @@ import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.factory.FactoryService;
 
@@ -60,9 +59,8 @@ public class ConfigurationMenu {
             semantics = SemanticsOf.SAFE
     )
     @ActionLayout(
-            cssClassFa = "fa-wrench"
-    )
-    @MemberOrder(sequence = "500.900.1")
+            cssClassFa = "fa-wrench",
+            sequence = "500.900.1")
     public ConfigurationViewmodel configuration(){
         return factoryService.viewModel(new ConfigurationViewmodel());
     }

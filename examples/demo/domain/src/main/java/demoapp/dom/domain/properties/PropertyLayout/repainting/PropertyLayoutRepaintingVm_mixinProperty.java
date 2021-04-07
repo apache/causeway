@@ -18,7 +18,6 @@
  */
 package demoapp.dom.domain.properties.PropertyLayout.repainting;
 
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Repainting;
@@ -31,7 +30,8 @@ import lombok.RequiredArgsConstructor;
 @PropertyLayout(
     repainting = Repainting.NO_REPAINT              // <.>
     , describedAs =
-        "@PropertyLayout(repainting = NO_REPAINT)"
+        "@PropertyLayout(repainting = NO_REPAINT)",
+    group = "contributed", sequence = "1"
 )
 @RequiredArgsConstructor
 public class PropertyLayoutRepaintingVm_mixinProperty {
@@ -41,7 +41,6 @@ public class PropertyLayoutRepaintingVm_mixinProperty {
     private final PropertyLayoutRepaintingVm propertyLayoutRepaintingVm;
 
 //    @PdfJsViewer
-    @MemberOrder(name = "contributed", sequence = "1")
     public Blob prop() {
         return propertyLayoutRepaintingVm.getPropertyUsingAnnotation();
     }

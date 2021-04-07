@@ -23,13 +23,12 @@ import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
 import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.annotated.disabled.DomainObjectEntityChangePublishingDisabledJdo;
 import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.annotated.disabled.DomainObjectEntityChangePublishingDisabledJdoEntities;
-import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.annotated.enabled.DomainObjectEntityChangePublishingEnabledJdo;
 import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.annotated.enabled.DomainObjectAuditingEnabledJdoEntities;
+import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.annotated.enabled.DomainObjectEntityChangePublishingEnabledJdo;
 import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.metaAnnot.enabled.DomainObjectEntityChangePublishingEnabledMetaAnnotatedJdo;
 import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.metaAnnot.enabled.DomainObjectEntityChangePublishingEnabledMetaAnnotatedJdoEntities;
 import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.metaAnnotOverridden.enabled.DomainObjectEntityChangePublishingEnabledMetaAnnotOverriddenJdo;
@@ -38,16 +37,15 @@ import demoapp.dom.domain.objects.DomainObject.entityChangePublishing.metaAnnotO
 //tag::class[]
 @Action(semantics = SemanticsOf.IDEMPOTENT)
 @ActionLayout(
-    describedAs = "Deletes one publishing enabled entity and one publishing disabled entity"
-)
+    describedAs = "Deletes one publishing enabled entity and one publishing disabled entity",
+    sequence = "3.0")
 public class DomainObjectEntityChangePublishingVm_delete {
 
     private final DomainObjectEntityChangePublishingVm domainObjectAuditingVm;
     public DomainObjectEntityChangePublishingVm_delete(DomainObjectEntityChangePublishingVm domainObjectAuditingVm) {
         this.domainObjectAuditingVm = domainObjectAuditingVm;
     }
-
-    @MemberOrder(sequence = "3.0")
+    
     public DomainObjectEntityChangePublishingVm act(
             @Nullable DomainObjectEntityChangePublishingEnabledJdo enabledJdo
             , @Nullable DomainObjectEntityChangePublishingDisabledJdo disabledJdo

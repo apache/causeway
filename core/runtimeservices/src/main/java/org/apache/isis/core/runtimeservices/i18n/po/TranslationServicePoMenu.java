@@ -26,7 +26,6 @@ import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
@@ -54,9 +53,8 @@ public class TranslationServicePoMenu {
             restrictTo = RestrictTo.PROTOTYPING
             )
     @ActionLayout(
-            cssClassFa = "fa-download"
-            )
-    @MemberOrder(sequence="500.700.1")
+            cssClassFa = "fa-download",
+            sequence="500.700.1")
     public Clob downloadTranslations(
             @ParameterLayout(named = ".pot file name")
             final String potFileName) {
@@ -85,9 +83,8 @@ public class TranslationServicePoMenu {
             )
     @ActionLayout(
             named="Clear translation cache",
-            cssClassFa = "fa-trash"
-            )
-    @MemberOrder(sequence="500.700.2")
+            cssClassFa = "fa-trash",
+            sequence="500.700.2")
     public void resetTranslationCache() {
         translationService.clearCache();
     }
@@ -108,9 +105,8 @@ public class TranslationServicePoMenu {
             restrictTo = RestrictTo.PROTOTYPING
             )
     @ActionLayout(
-            cssClassFa = "fa-book"
-            )
-    @MemberOrder(sequence="500.700.2")
+            cssClassFa = "fa-book",
+            sequence="500.700.2")
     public void switchToReadingTranslations() {
         translationService.toggleMode();
     }
@@ -130,9 +126,8 @@ public class TranslationServicePoMenu {
             restrictTo = RestrictTo.PROTOTYPING
             )
     @ActionLayout(
-            cssClassFa = "fa-pencil-alt"
-            )
-    @MemberOrder(sequence="500.700.3")
+            cssClassFa = "fa-pencil-alt",
+            sequence="500.700.3")
     public void switchToWritingTranslations() {
         translationService.toggleMode();
     }

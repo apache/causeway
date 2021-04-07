@@ -25,15 +25,14 @@ import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.CollectionLayout;
-import org.apache.isis.applib.annotation.MemberOrder;
-import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.extensions.commandlog.impl.IsisModuleExtCommandLogImpl;
 
 @Collection(
     domainEvent = CommandJdo_siblingCommands.CollectionDomainEvent.class
 )
 @CollectionLayout(
-    defaultView = "table"
+    defaultView = "table",
+    sequence = "100.110"
 )
 public class CommandJdo_siblingCommands {
 
@@ -45,7 +44,6 @@ public class CommandJdo_siblingCommands {
         this.commandJdo = commandJdo;
     }
 
-    @MemberOrder(sequence = "100.110")
     public List<CommandJdo> coll() {
         final CommandJdo parentJdo = commandJdo.getParent();
         if(parentJdo == null) {
