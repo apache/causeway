@@ -34,9 +34,11 @@ import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
-import org.apache.isis.core.metamodel.facets.members.order.MemberOrderFacet;
+import org.apache.isis.core.metamodel.facets.members.layout.group.LayoutGroupFacet;
 import org.apache.isis.core.metamodel.layout.memberorderfacet.MemberIdentifierComparator;
 import org.apache.isis.core.metamodel.layout.memberorderfacet.MemberOrderComparator;
+
+import lombok.val;
 
 /**
  * Represents a nested hierarchy of ordered members.
@@ -44,7 +46,7 @@ import org.apache.isis.core.metamodel.layout.memberorderfacet.MemberOrderCompara
  * <p>
  * At each level the elements are either {@link FacetedMethod}s or they are
  * instances of {@link DeweyOrderSet} represent a group of {@link FacetedMethod}s
- * that have a {@link MemberOrderFacet} of the same name.
+ * that have a {@link LayoutGroupFacet} of the same group (name).
  *
  * <p>
  * With no name, (ie <tt>name=""</tt> is the default), at the top level
@@ -81,12 +83,13 @@ public class DeweyOrderSet implements Comparable<DeweyOrderSet>, Iterable<Object
         // spin over all the members and put them into a Map of SortedSets
         // any non-annotated members go into additional nonAnnotatedGroup set.
         for (final IdentifiedHolder identifiedHolder : identifiedHolders) {
-            final MemberOrderFacet memberOrder = identifiedHolder.getFacet(MemberOrderFacet.class);
-            if (memberOrder == null) {
+            val layoutGroupFacet = identifiedHolder.getFacet(LayoutGroupFacet.class);
+            if (layoutGroupFacet == null) {
                 nonAnnotatedGroup.add(identifiedHolder);
                 continue;
             }
-            final SortedSet<IdentifiedHolder> sortedMembersForGroup = getSortedSet(sortedMembersByGroup, memberOrder.name());
+            final SortedSet<IdentifiedHolder> sortedMembersForGroup = 
+                    getSortedSet(sortedMembersByGroup, layoutGroupFacet.getGroup());
             sortedMembersForGroup.add(identifiedHolder);
         }
 
