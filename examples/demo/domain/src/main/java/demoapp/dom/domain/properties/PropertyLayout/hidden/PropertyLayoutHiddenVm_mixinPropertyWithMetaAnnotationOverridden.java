@@ -32,7 +32,7 @@ import lombok.RequiredArgsConstructor;
     , describedAs =
         "@HiddenEverywhereMetaAnnotation " +
         "@PropertyLayout(hidden = NOWHERE)",
-    fieldSet = "meta-annotated-overridden", sequence = "2"
+    fieldSetId = "meta-annotated-overridden", sequence = "2"
 )
 @RequiredArgsConstructor
 public class PropertyLayoutHiddenVm_mixinPropertyWithMetaAnnotationOverridden {

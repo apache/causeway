@@ -33,7 +33,7 @@ public interface IsisMarkupHolder2 extends demoapp.dom.types.isis.markups.holder
         describedAs =
             "@PropertyLayout(labelPosition=LEFT)",
         hidden = Where.ALL_TABLES,
-        fieldSet = "label-positions", sequence = "1")  // <.>
+        fieldSetId = "label-positions", sequence = "1")  // <.>
     default Markup getReadOnlyPropertyDerivedLabelPositionLeft() {
         return getReadOnlyProperty();
     }
@@ -44,7 +44,7 @@ public interface IsisMarkupHolder2 extends demoapp.dom.types.isis.markups.holder
         describedAs =
             "@PropertyLayout(labelPosition=TOP)",
         hidden = Where.ALL_TABLES,
-        fieldSet = "label-positions", sequence = "2")
+        fieldSetId = "label-positions", sequence = "2")
     default Markup getReadOnlyPropertyDerivedLabelPositionTop() {
         return getReadOnlyProperty();
     }
@@ -55,7 +55,7 @@ public interface IsisMarkupHolder2 extends demoapp.dom.types.isis.markups.holder
         describedAs =
             "@PropertyLayout(labelPosition=RIGHT)",
         hidden = Where.ALL_TABLES,
-        fieldSet = "label-positions", sequence = "3")
+        fieldSetId = "label-positions", sequence = "3")
     default Markup getReadOnlyPropertyDerivedLabelPositionRight() {
         return getReadOnlyProperty();
     }
@@ -66,7 +66,7 @@ public interface IsisMarkupHolder2 extends demoapp.dom.types.isis.markups.holder
         describedAs =
             "@PropertyLayout(labelPosition=NONE)",
         hidden = Where.ALL_TABLES,
-        fieldSet = "label-positions", sequence = "4")
+        fieldSetId = "label-positions", sequence = "4")
     default Markup getReadOnlyPropertyDerivedLabelPositionNone() {
         return getReadOnlyProperty();
     }

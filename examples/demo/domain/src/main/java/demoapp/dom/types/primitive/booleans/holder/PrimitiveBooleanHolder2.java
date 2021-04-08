@@ -32,7 +32,7 @@ public interface PrimitiveBooleanHolder2 extends PrimitiveBooleanHolder {
         describedAs =
             "@PropertyLayout(labelPosition=LEFT)",
         hidden = Where.ALL_TABLES,
-        fieldSet = "label-positions", sequence = "1")  // <.>
+        fieldSetId = "label-positions", sequence = "1")  // <.>
     default boolean isReadOnlyPropertyDerivedLabelPositionLeft() {
         return isReadOnlyProperty();
     }
@@ -43,7 +43,7 @@ public interface PrimitiveBooleanHolder2 extends PrimitiveBooleanHolder {
         describedAs =
             "@PropertyLayout(labelPosition=TOP)",
         hidden = Where.ALL_TABLES,
-        fieldSet = "label-positions", sequence = "2")
+        fieldSetId = "label-positions", sequence = "2")
     default boolean isReadOnlyPropertyDerivedLabelPositionTop() {
         return isReadOnlyProperty();
     }
@@ -54,7 +54,7 @@ public interface PrimitiveBooleanHolder2 extends PrimitiveBooleanHolder {
         describedAs =
             "@PropertyLayout(labelPosition=RIGHT)",
         hidden = Where.ALL_TABLES,
-        fieldSet = "label-positions", sequence = "3")
+        fieldSetId = "label-positions", sequence = "3")
     default boolean isReadOnlyPropertyDerivedLabelPositionRight() {
         return isReadOnlyProperty();
     }
@@ -65,7 +65,7 @@ public interface PrimitiveBooleanHolder2 extends PrimitiveBooleanHolder {
         describedAs =
             "@PropertyLayout(labelPosition=NONE)",
         hidden = Where.ALL_TABLES,
-        fieldSet = "label-positions", sequence = "4")
+        fieldSetId = "label-positions", sequence = "4")
     default boolean isReadOnlyPropertyDerivedLabelPositionNone() {
         return isReadOnlyProperty();
     }

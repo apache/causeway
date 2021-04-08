@@ -31,7 +31,7 @@ import lombok.RequiredArgsConstructor;
     labelPosition = LabelPosition.LEFT                          // <.>
     , describedAs =
         "@LabelPositionTopMetaAnnotation @ParameterLayout(...)",
-    fieldSet = "meta-annotated-overridden", sequence = "2"
+    fieldSetId = "meta-annotated-overridden", sequence = "2"
 )
 @RequiredArgsConstructor
 public class PropertyLayoutLabelPositionVm_mixinPropertyWithMetaAnnotationOverridden {

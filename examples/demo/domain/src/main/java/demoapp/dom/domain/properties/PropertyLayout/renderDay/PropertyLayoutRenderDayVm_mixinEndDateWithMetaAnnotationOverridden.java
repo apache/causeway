@@ -35,7 +35,7 @@ import lombok.RequiredArgsConstructor;
     , describedAs =
         "@RenderDayMetaAnnotationStartDateInclusive" +
         " @PropertyLayout(renderDay = AS_DAY_BEFORE",
-    fieldSet = "meta-annotated-overridden", sequence = "2"
+    fieldSetId = "meta-annotated-overridden", sequence = "2"
 )
 @RequiredArgsConstructor
 public class PropertyLayoutRenderDayVm_mixinEndDateWithMetaAnnotationOverridden {

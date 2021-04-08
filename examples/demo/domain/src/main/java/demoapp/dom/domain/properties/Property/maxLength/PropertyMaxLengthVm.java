@@ -56,7 +56,7 @@ public class PropertyMaxLengthVm implements HasAsciiDocDescription {
     @PropertyLayout(
         describedAs =
             "@Property(maxLength = 10)",
-        fieldSet = "annotation", sequence = "1")
+        fieldSetId = "annotation", sequence = "1")
     @XmlElement(required = true)
     @Getter @Setter
     private String propertyUsingAnnotation;
@@ -67,7 +67,7 @@ public class PropertyMaxLengthVm implements HasAsciiDocDescription {
     @Property()
     @PropertyLayout(
         describedAs = "@MaxLength10MetaAnnotation",
-        fieldSet = "meta-annotated", sequence = "1")
+        fieldSetId = "meta-annotated", sequence = "1")
     @XmlElement(required = true)
     @Getter @Setter
     private String propertyUsingMetaAnnotation;
@@ -82,7 +82,7 @@ public class PropertyMaxLengthVm implements HasAsciiDocDescription {
         describedAs =
             "@MaxLength10MetaAnnotation " +
             "@PropertyLayout(maxLength = 3)",
-        fieldSet = "meta-annotated-overridden", sequence = "1")
+        fieldSetId = "meta-annotated-overridden", sequence = "1")
     @XmlElement(required = true)
     @Getter @Setter
     private String propertyUsingMetaAnnotationButOverridden;

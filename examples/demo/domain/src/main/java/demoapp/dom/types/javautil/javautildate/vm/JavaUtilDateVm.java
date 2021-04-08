@@ -59,27 +59,27 @@ public class JavaUtilDateVm
 
 //tag::class[]
     @Title(prepend = "java.util.Date view model: ")
-    @PropertyLayout(fieldSet = "read-only-properties", sequence = "1")
+    @PropertyLayout(fieldSetId = "read-only-properties", sequence = "1")
     @XmlElement(required = true)                                                // <.>
     @XmlJavaTypeAdapter(JavaUtilJaxbAdapters.DateToStringAdapter.class)                         // <.>
     @Getter @Setter
     private java.util.Date readOnlyProperty;
 
     @Property(editing = Editing.ENABLED)                                        // <.>
-    @PropertyLayout(fieldSet = "editable-properties", sequence = "1")
+    @PropertyLayout(fieldSetId = "editable-properties", sequence = "1")
     @XmlElement(required = true)
     @XmlJavaTypeAdapter(JavaUtilJaxbAdapters.DateToStringAdapter.class)
     @Getter @Setter
     private java.util.Date readWriteProperty;
 
     @Property(optionality = Optionality.OPTIONAL)                               // <.>
-    @PropertyLayout(fieldSet = "optional-properties", sequence = "1")
+    @PropertyLayout(fieldSetId = "optional-properties", sequence = "1")
     @XmlJavaTypeAdapter(JavaUtilJaxbAdapters.DateToStringAdapter.class)
     @Getter @Setter
     private java.util.Date readOnlyOptionalProperty;
 
     @Property(editing = Editing.ENABLED, optionality = Optionality.OPTIONAL)
-    @PropertyLayout(fieldSet = "optional-properties", sequence = "2")
+    @PropertyLayout(fieldSetId = "optional-properties", sequence = "2")
     @XmlJavaTypeAdapter(JavaUtilJaxbAdapters.DateToStringAdapter.class)
     @Getter @Setter
     private java.util.Date readWriteOptionalProperty;

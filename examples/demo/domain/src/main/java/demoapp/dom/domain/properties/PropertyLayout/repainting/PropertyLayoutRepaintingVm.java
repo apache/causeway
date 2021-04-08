@@ -57,7 +57,7 @@ public class PropertyLayoutRepaintingVm implements HasAsciiDocDescription {
         describedAs =
             "Editable property " +
             "(PDFs should not repaint if it changes)",
-        fieldSet = "edit", sequence = "1")
+        fieldSetId = "edit", sequence = "1")
     @XmlElement(required = false)
     @Getter @Setter
     private String editMe;
@@ -68,7 +68,7 @@ public class PropertyLayoutRepaintingVm implements HasAsciiDocDescription {
         repainting = Repainting.NO_REPAINT                  // <.>
         , describedAs =
             "@PropertyLayout(repainting = NO_REPAINT)",
-        fieldSet = "annotation", sequence = "1")
+        fieldSetId = "annotation", sequence = "1")
     @XmlElement(required = true)
     @PdfJsViewer                                            // <.>
     @Getter @Setter
@@ -80,7 +80,7 @@ public class PropertyLayoutRepaintingVm implements HasAsciiDocDescription {
     @PropertyLayout(                                        // <.>
         describedAs =
             "<cpt:property id=\"...\" repainting = \"NO_REPAINT\"/>",
-        fieldSet = "layout-file", sequence = "1")
+        fieldSetId = "layout-file", sequence = "1")
     @XmlElement(required = false)
 //    @PdfJsViewer
     @Getter @Setter
@@ -92,7 +92,7 @@ public class PropertyLayoutRepaintingVm implements HasAsciiDocDescription {
     @Property(optionality = Optionality.OPTIONAL)
     @PropertyLayout(
         describedAs = "@RepaintingNoRepaintMetaAnnotation",
-        fieldSet = "meta-annotated", sequence = "1")
+        fieldSetId = "meta-annotated", sequence = "1")
     @XmlElement(required = false)
 //    @PdfJsViewer
     @Getter @Setter
@@ -106,7 +106,7 @@ public class PropertyLayoutRepaintingVm implements HasAsciiDocDescription {
         repainting = Repainting.NO_REPAINT                // <.>
         , describedAs =
             "@RepaintingRepaintMetaAnnotation @PropertyLayout(...)",
-        fieldSet = "meta-annotated-overridden", sequence = "1")
+        fieldSetId = "meta-annotated-overridden", sequence = "1")
     @XmlElement(required = false)
 //    @PdfJsViewer
     @Getter @Setter

@@ -111,8 +111,10 @@ public @interface ActionLayout {
             default "";
 
     /**
-     * Associates this <i>Action</i> with a <i>FieldSet</i> either by <b>id</b>, <b>friendly-name</b> 
-     * or both. For a more in depth description see {@link PropertyLayout#fieldSet()}.
+     * Specifies the <b>id</b> of associated <i>FieldSet</i>.
+     * <p>
+     * For a more in depth description see the analogous {@link PropertyLayout#fieldSetId()}.
+     * </p>
      * 
      * @apiNote An <i>Action</i> can be associated with with a <i>Property</i> or <i>Collection</i> 
      * its so called <i>peer</i>. 
@@ -122,10 +124,28 @@ public @interface ActionLayout {
      * this default placement is overruled.
      * 
      * @see Action#associateWith()
-     * @see PropertyLayout#fieldSet()
+     * @see ActionLayout#fieldSetName()
+     * @see PropertyLayout#fieldSetId()
+     * @see PropertyLayout#fieldSetName()
+     * @see PropertyLayout#sequence()
      */
-    String fieldSet()
-            default "";
+    String fieldSetId()
+            default "__infer";
+    
+    /**
+     * Specifies the <b>friendly-name</b> of associated <i>FieldSet</i>.
+     * <p>
+     * For a more in depth description see the analogous {@link PropertyLayout#fieldSetId()}; 
+     * </p>
+     * 
+     * @see Action#associateWith()
+     * @see ActionLayout#fieldSetId()
+     * @see PropertyLayout#fieldSetId()
+     * @see PropertyLayout#fieldSetName()
+     * @see PropertyLayout#sequence()
+     */
+    String fieldSetName()
+            default "__infer";
     
     /**
      * Indicates where in the UI the action should <i>not</i>not be visible.

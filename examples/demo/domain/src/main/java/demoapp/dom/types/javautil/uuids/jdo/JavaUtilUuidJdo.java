@@ -53,25 +53,25 @@ public class JavaUtilUuidJdo                                          // <.>
 
 //tag::class[]
     @Title(prepend = "java.util.UUID JDO entity: ")
-    @PropertyLayout(fieldSet = "read-only-properties", sequence = "1")
+    @PropertyLayout(fieldSetId = "read-only-properties", sequence = "1")
     @Column(allowsNull = "false")                                               // <.>
     @Getter @Setter
     private java.util.UUID readOnlyProperty;
 
     @Property(editing = Editing.ENABLED)                                        // <.>
-    @PropertyLayout(fieldSet = "editable-properties", sequence = "1")
+    @PropertyLayout(fieldSetId = "editable-properties", sequence = "1")
     @Column(allowsNull = "false")
     @Getter @Setter
     private java.util.UUID readWriteProperty;
 
     @Property(optionality = Optionality.OPTIONAL)                               // <.>
-    @PropertyLayout(fieldSet = "optional-properties", sequence = "1")
+    @PropertyLayout(fieldSetId = "optional-properties", sequence = "1")
     @Column(allowsNull = "true")                                                // <.>
     @Getter @Setter
     private java.util.UUID readOnlyOptionalProperty;
 
     @Property(editing = Editing.ENABLED, optionality = Optionality.OPTIONAL)
-    @PropertyLayout(fieldSet = "optional-properties", sequence = "2")
+    @PropertyLayout(fieldSetId = "optional-properties", sequence = "2")
     @Column(allowsNull = "true")
     @Getter @Setter
     private java.util.UUID readWriteOptionalProperty;

@@ -72,7 +72,7 @@ public class FileNodeVm implements HasAsciiDocDescription {
 
 //tag::tree[]
     @Property
-    @PropertyLayout(labelPosition = LabelPosition.NONE, fieldSet = "tree", sequence = "1")
+    @PropertyLayout(labelPosition = LabelPosition.NONE, fieldSetId = "tree", sequence = "1")
     public TreeNode<FileNodeVm> getTree() {
         return fileTreeNodeService.sessionTree();
     }
@@ -80,7 +80,7 @@ public class FileNodeVm implements HasAsciiDocDescription {
 
 //tag::navigable[]
     @Property
-    @PropertyLayout(navigable=Navigable.PARENT, hidden=Where.EVERYWHERE, fieldSet = "detail", sequence = "1")
+    @PropertyLayout(navigable=Navigable.PARENT, hidden=Where.EVERYWHERE, fieldSetId = "detail", sequence = "1")
     public FileNodeVm getParent() {
         val parentFile = asFile().getParentFile();
         return parentFile != null
@@ -90,12 +90,12 @@ public class FileNodeVm implements HasAsciiDocDescription {
 //end::navigable[]
 
     @Property
-    @PropertyLayout(labelPosition = LabelPosition.TOP, fieldSet = "detail", sequence = "2")
+    @PropertyLayout(labelPosition = LabelPosition.TOP, fieldSetId = "detail", sequence = "2")
     @Getter @Setter
     private String path;
 
     @Property
-    @PropertyLayout(labelPosition = LabelPosition.TOP, fieldSet = "detail", sequence = "3")
+    @PropertyLayout(labelPosition = LabelPosition.TOP, fieldSetId = "detail", sequence = "3")
     @Getter @Setter
     private FileNodeType type;
 

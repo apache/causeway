@@ -54,7 +54,7 @@ public class ApplicationTypeAction extends ApplicationTypeMember {
     @Property(
             domainEvent = ReturnTypeDomainEvent.class
             )
-    @PropertyLayout(fieldSet="Data Type", sequence = "2.6")
+    @PropertyLayout(fieldSetId="Data Type", sequence = "2.6")
     public String getReturnType() {
         return getFeature().getActionReturnType()
                 .map(Class::getSimpleName)
@@ -67,7 +67,7 @@ public class ApplicationTypeAction extends ApplicationTypeMember {
     @Property(
             domainEvent = ActionSemanticsDomainEvent.class
             )
-    @PropertyLayout(fieldSet="Detail", sequence = "2.8")
+    @PropertyLayout(fieldSetId="Detail", sequence = "2.8")
     public SemanticsOf getActionSemantics() {
         return getFeature().getActionSemantics()
                 .orElse(null);

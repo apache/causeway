@@ -57,7 +57,7 @@ public class PropertyLayoutLabelPositionVm implements HasAsciiDocDescription {
         labelPosition = LabelPosition.TOP                   // <.>
         , describedAs =
             "@PropertyLayout(labelPosition = TOP)",
-        fieldSet = "annotation", sequence = "1")
+        fieldSetId = "annotation", sequence = "1")
     @XmlElement(required = false)
     @Getter @Setter
     private String propertyUsingAnnotation;
@@ -68,7 +68,7 @@ public class PropertyLayoutLabelPositionVm implements HasAsciiDocDescription {
     @PropertyLayout(                                        // <.>
         describedAs =
             "<cpt:property id=\"...\" labelPosition=\"TOP\"/>",
-        fieldSet = "layout-file", sequence = "1")
+        fieldSetId = "layout-file", sequence = "1")
     @XmlElement(required = false)
     @Getter @Setter
     private String propertyUsingLayout;
@@ -79,7 +79,7 @@ public class PropertyLayoutLabelPositionVm implements HasAsciiDocDescription {
     @LabelPositionTopMetaAnnotation                         // <.>
     @PropertyLayout(
         describedAs = "@LabelPositionTopMetaAnnotation",
-        fieldSet = "meta-annotated", sequence = "1")
+        fieldSetId = "meta-annotated", sequence = "1")
     @XmlElement(required = false)
     @Getter @Setter
     private String propertyUsingMetaAnnotation;
@@ -92,7 +92,7 @@ public class PropertyLayoutLabelPositionVm implements HasAsciiDocDescription {
         labelPosition = LabelPosition.LEFT                  // <.>
         , describedAs =
             "@LabelPositionTopMetaAnnotation @PropertyLayout(...)",
-        fieldSet = "meta-annotated-overridden", sequence = "1")
+        fieldSetId = "meta-annotated-overridden", sequence = "1")
     @XmlElement(required = false)
     @Getter @Setter
     private String propertyUsingMetaAnnotationButOverridden;
@@ -104,7 +104,7 @@ public class PropertyLayoutLabelPositionVm implements HasAsciiDocDescription {
         labelPosition = LabelPosition.TOP                   // <.>
         , describedAs =
         "@PropertyLayout(labelPosition = TOP)",
-        fieldSet = "variants", sequence = "1")
+        fieldSetId = "variants", sequence = "1")
     @XmlElement(required = false)
     @Getter @Setter
     private String propertyLabelPositionTop;
@@ -116,7 +116,7 @@ public class PropertyLayoutLabelPositionVm implements HasAsciiDocDescription {
         labelPosition = LabelPosition.LEFT                  // <.>
         , describedAs =
         "@PropertyLayout(labelPosition = LEFT)",
-        fieldSet = "variants", sequence = "2")
+        fieldSetId = "variants", sequence = "2")
     @XmlElement(required = false)
     @Getter @Setter
     private String propertyLabelPositionLeft;
@@ -128,7 +128,7 @@ public class PropertyLayoutLabelPositionVm implements HasAsciiDocDescription {
         labelPosition = LabelPosition.RIGHT                 // <.>
         , describedAs =
         "@PropertyLayout(labelPosition = RIGHT)",
-        fieldSet = "variants", sequence = "3")
+        fieldSetId = "variants", sequence = "3")
     @XmlElement(required = false)
     @Getter @Setter
     private String propertyLabelPositionRight;
@@ -140,7 +140,7 @@ public class PropertyLayoutLabelPositionVm implements HasAsciiDocDescription {
         labelPosition = LabelPosition.RIGHT                 // <.>
         , describedAs =
         "@PropertyLayout(labelPosition = RIGHT)",
-        fieldSet = "variants", sequence = "3.1")
+        fieldSetId = "variants", sequence = "3.1")
     @XmlElement(required = false)
     @Getter @Setter
     private Boolean propertyBooleanLabelPositionRight;
@@ -152,7 +152,7 @@ public class PropertyLayoutLabelPositionVm implements HasAsciiDocDescription {
         labelPosition = LabelPosition.NONE                  // <.>
         , describedAs =
         "@PropertyLayout(labelPosition = NONE)",
-        fieldSet = "variants", sequence = "4")
+        fieldSetId = "variants", sequence = "4")
     @XmlElement(required = false)
     @Getter @Setter
     private String propertyLabelPositionNone;
@@ -165,7 +165,7 @@ public class PropertyLayoutLabelPositionVm implements HasAsciiDocDescription {
             , multiLine = 10
             , describedAs =
             "@PropertyLayout(labelPosition = NONE, multiLine = 10)",
-            fieldSet = "variants", sequence = "4.1")
+            fieldSetId = "variants", sequence = "4.1")
     @XmlElement(required = false)
     @Getter @Setter
     private String propertyLabelPositionNoneMultiline;
@@ -177,7 +177,7 @@ public class PropertyLayoutLabelPositionVm implements HasAsciiDocDescription {
         labelPosition = LabelPosition.NOT_SPECIFIED         // <.>
         , describedAs =
         "@PropertyLayout(labelPosition = NONE)",
-        fieldSet = "variants", sequence = "5")
+        fieldSetId = "variants", sequence = "5")
     @XmlElement(required = false)
     @Getter @Setter
     private String propertyLabelPositionNotSpecified;

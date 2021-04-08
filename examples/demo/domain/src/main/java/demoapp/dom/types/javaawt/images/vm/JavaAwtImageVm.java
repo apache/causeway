@@ -66,7 +66,7 @@ public class JavaAwtImageVm
 
 //    @Title(prepend = "Image view model: ")  // not yet supported
 //tag::class[]
-    @PropertyLayout(fieldSet = "read-only-properties", sequence = "1")
+    @PropertyLayout(fieldSetId = "read-only-properties", sequence = "1")
     @XmlElement(required = true)                                        // <.>
     @Getter @Setter
     private BufferedImage readOnlyProperty;
@@ -81,7 +81,7 @@ public class JavaAwtImageVm
 
 //tag::class[]
     @Property(optionality = Optionality.OPTIONAL)                       // <.>
-    @PropertyLayout(fieldSet = "optional-properties", sequence = "1")
+    @PropertyLayout(fieldSetId = "optional-properties", sequence = "1")
     @Getter @Setter
     private BufferedImage readOnlyOptionalProperty;
 

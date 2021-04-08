@@ -29,7 +29,7 @@ import lombok.RequiredArgsConstructor;
     typicalLength = 10                      // <.>
     , describedAs =
         "@PropertyLayout(typicalLength = 10)",
-    fieldSet = "contributed", sequence = "1"
+    fieldSetId = "contributed", sequence = "1"
 )
 @RequiredArgsConstructor
 public class PropertyLayoutTypicalLengthVm_mixinProperty {

@@ -51,7 +51,7 @@ public class ApplicationTypeCollection extends ApplicationTypeMember {
     @Property(
             domainEvent = ElementTypeDomainEvent.class
             )
-    @PropertyLayout(fieldSet="Data Type", sequence = "2.6")
+    @PropertyLayout(fieldSetId="Data Type", sequence = "2.6")
     public String getElementType() {
         return getFeature().getActionReturnType()
                 .map(Class::getSimpleName)
@@ -65,7 +65,7 @@ public class ApplicationTypeCollection extends ApplicationTypeMember {
     @Property(
             domainEvent = DerivedDomainEvent.class
             )
-    @PropertyLayout(fieldSet="Detail", sequence = "2.7")
+    @PropertyLayout(fieldSetId="Detail", sequence = "2.7")
     public boolean isDerived() {
         return getFeature().isPropertyOrCollectionDerived();
     }

@@ -30,12 +30,12 @@ public interface DomainObjectEntityChangePublishingJdo
         extends HasAsciiDocDescription, ExposeCapturedChanges {
 
     @Property(editing = Editing.ENABLED)
-    @PropertyLayout(fieldSet = "property", sequence = "1")
+    @PropertyLayout(fieldSetId = "property", sequence = "1")
     String getProperty();
     void setProperty(String value);
 
     @Property(editing = Editing.DISABLED)
-    @PropertyLayout(fieldSet = "action", sequence = "1")
+    @PropertyLayout(fieldSetId = "action", sequence = "1")
     String getPropertyUpdatedByAction();
     void setPropertyUpdatedByAction(String value);
 

@@ -62,13 +62,13 @@ public class XmlSnapshotParentVm implements HasAsciiDocDescription {
     }
 
     @Property(editing = Editing.ENABLED)
-    @PropertyLayout(fieldSet = "properties", sequence = "1")
+    @PropertyLayout(fieldSetId = "properties", sequence = "1")
     @XmlElement(required = true)
     @Getter @Setter
     private String text;
 
     @Property(editing = Editing.DISABLED)
-    @PropertyLayout(fieldSet = "properties", sequence = "3")
+    @PropertyLayout(fieldSetId = "properties", sequence = "3")
     @XmlElement(required = false)
     @Getter @Setter
     private XmlSnapshotPeerVm peer;

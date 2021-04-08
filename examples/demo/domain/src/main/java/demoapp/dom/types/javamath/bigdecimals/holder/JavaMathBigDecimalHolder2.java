@@ -32,7 +32,7 @@ public interface JavaMathBigDecimalHolder2 extends JavaMathBigDecimalHolder {
         describedAs =
             "@PropertyLayout(labelPosition=LEFT)",
         hidden = Where.ALL_TABLES,
-        fieldSet = "label-positions", sequence = "1")  // <.>
+        fieldSetId = "label-positions", sequence = "1")  // <.>
     default java.math.BigDecimal getReadOnlyPropertyDerivedLabelPositionLeft() {
         return getReadOnlyProperty();
     }
@@ -43,7 +43,7 @@ public interface JavaMathBigDecimalHolder2 extends JavaMathBigDecimalHolder {
         describedAs =
             "@PropertyLayout(labelPosition=TOP)",
         hidden = Where.ALL_TABLES,
-        fieldSet = "label-positions", sequence = "2")
+        fieldSetId = "label-positions", sequence = "2")
     default java.math.BigDecimal getReadOnlyPropertyDerivedLabelPositionTop() {
         return getReadOnlyProperty();
     }
@@ -54,7 +54,7 @@ public interface JavaMathBigDecimalHolder2 extends JavaMathBigDecimalHolder {
         describedAs =
             "@PropertyLayout(labelPosition=RIGHT)",
         hidden = Where.ALL_TABLES,
-        fieldSet = "label-positions", sequence = "3")
+        fieldSetId = "label-positions", sequence = "3")
     default java.math.BigDecimal getReadOnlyPropertyDerivedLabelPositionRight() {
         return getReadOnlyProperty();
     }
@@ -65,7 +65,7 @@ public interface JavaMathBigDecimalHolder2 extends JavaMathBigDecimalHolder {
         describedAs =
             "@PropertyLayout(labelPosition=NONE)",
         hidden = Where.ALL_TABLES,
-        fieldSet = "label-positions", sequence = "4")
+        fieldSetId = "label-positions", sequence = "4")
     default java.math.BigDecimal getReadOnlyPropertyDerivedLabelPositionNone() {
         return getReadOnlyProperty();
     }

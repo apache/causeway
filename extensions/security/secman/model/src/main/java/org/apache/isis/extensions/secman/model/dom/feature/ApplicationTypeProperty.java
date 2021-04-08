@@ -57,7 +57,7 @@ public class ApplicationTypeProperty extends ApplicationTypeMember {
     @Property(
             domainEvent = ReturnTypeDomainEvent.class
             )
-    @PropertyLayout(fieldSet="Data Type", sequence = "2.6")
+    @PropertyLayout(fieldSetId="Data Type", sequence = "2.6")
     public String getReturnType() {
         return getFeature().getActionReturnType()
                 .map(Class::getSimpleName)
@@ -72,7 +72,7 @@ public class ApplicationTypeProperty extends ApplicationTypeMember {
     @Property(
             domainEvent = DerivedDomainEvent.class
             )
-    @PropertyLayout(fieldSet="Detail", sequence = "2.7")
+    @PropertyLayout(fieldSetId="Detail", sequence = "2.7")
     public boolean isDerived() {
         return getFeature().isPropertyOrCollectionDerived();
     }
@@ -86,7 +86,7 @@ public class ApplicationTypeProperty extends ApplicationTypeMember {
             domainEvent = MaxLengthDomainEvent.class,
             optionality = Optionality.OPTIONAL
             )
-    @PropertyLayout(fieldSet="Detail", sequence = "2.8")
+    @PropertyLayout(fieldSetId="Detail", sequence = "2.8")
     public Integer getMaxLength() {
         val maxLen = getFeature().getPropertyMaxLength();
         return maxLen.isPresent() 
@@ -111,7 +111,7 @@ public class ApplicationTypeProperty extends ApplicationTypeMember {
             domainEvent = TypicalLengthDomainEvent.class,
             optionality = Optionality.OPTIONAL
             )
-    @PropertyLayout(fieldSet="Detail", sequence = "2.9")
+    @PropertyLayout(fieldSetId="Detail", sequence = "2.9")
     public Integer getTypicalLength() {
         val maxLen = getFeature().getPropertyTypicalLength();
         return maxLen.isPresent() 

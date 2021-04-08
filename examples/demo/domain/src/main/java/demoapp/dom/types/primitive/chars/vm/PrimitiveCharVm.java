@@ -55,12 +55,12 @@ public class PrimitiveCharVm
 
 //tag::class[]
     @Title(prepend = "char (primitive) view model: ")
-    @PropertyLayout(fieldSet = "read-only-properties", sequence = "1")
+    @PropertyLayout(fieldSetId = "read-only-properties", sequence = "1")
     @Getter @Setter
     private char readOnlyProperty;                                  // <.>
 
     @Property(editing = Editing.ENABLED)
-    @PropertyLayout(fieldSet = "editable-properties", sequence = "1")
+    @PropertyLayout(fieldSetId = "editable-properties", sequence = "1")
     @Getter @Setter
     private char readWriteProperty;
 

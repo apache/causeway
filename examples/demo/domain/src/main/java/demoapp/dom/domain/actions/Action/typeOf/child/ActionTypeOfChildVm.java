@@ -57,25 +57,25 @@ public class ActionTypeOfChildVm implements HasAsciiDocDescription {
     }
 
     @Property()
-    @PropertyLayout(fieldSet = "annotation", sequence = "1")
+    @PropertyLayout(fieldSetId = "annotation", sequence = "1")
     @XmlElement(required = false)
     @Getter @Setter
     private String value;
 
     @Property()
-    @PropertyLayout(fieldSet = "annotation", sequence = "2")
+    @PropertyLayout(fieldSetId = "annotation", sequence = "2")
     @XmlElement(required = false)
     @Getter @Setter
     private String valueUpper;
 
     @Property()
-    @PropertyLayout(fieldSet = "annotation", sequence = "3")
+    @PropertyLayout(fieldSetId = "annotation", sequence = "3")
     @XmlElement(required = false)
     @Getter @Setter
     private String valueLower;
 
     @Property()
-    @PropertyLayout(fieldSet = "annotation", sequence = "4")
+    @PropertyLayout(fieldSetId = "annotation", sequence = "4")
     @XmlElement(required = false)
     @Getter @Setter
     private String valueReversed;

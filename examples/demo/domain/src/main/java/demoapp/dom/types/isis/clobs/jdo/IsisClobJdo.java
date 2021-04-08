@@ -55,7 +55,7 @@ public class IsisClobJdo                                          // <.>
 
 //tag::class[]
     @Title(prepend = "Clob JDO entity: ")
-    @PropertyLayout(fieldSet = "read-only-properties", sequence = "1")
+    @PropertyLayout(fieldSetId = "read-only-properties", sequence = "1")
     @Persistent(defaultFetchGroup="false", columns = {              // <.>
             @Column(name = "readOnlyProperty_name"),
             @Column(name = "readOnlyProperty_mimetype"),
@@ -67,7 +67,7 @@ public class IsisClobJdo                                          // <.>
     private Clob readOnlyProperty;
 
     @Property(editing = Editing.ENABLED)                            // <.>
-    @PropertyLayout(fieldSet = "editable-properties", sequence = "1")
+    @PropertyLayout(fieldSetId = "editable-properties", sequence = "1")
     @Persistent(defaultFetchGroup="false", columns = {
             @Column(name = "readWriteProperty_name"),
             @Column(name = "readWriteProperty_mimetype"),
@@ -79,7 +79,7 @@ public class IsisClobJdo                                          // <.>
     private Clob readWriteProperty;
 
     @Property(optionality = Optionality.OPTIONAL)                   // <.>
-    @PropertyLayout(fieldSet = "optional-properties", sequence = "1")
+    @PropertyLayout(fieldSetId = "optional-properties", sequence = "1")
     @Persistent(defaultFetchGroup="false", columns = {
             @Column(name = "readOnlyOptionalProperty_name",
                     allowsNull = "true"),                           // <.>
@@ -93,7 +93,7 @@ public class IsisClobJdo                                          // <.>
     private Clob readOnlyOptionalProperty;
 
     @Property(editing = Editing.ENABLED, optionality = Optionality.OPTIONAL)
-    @PropertyLayout(fieldSet = "optional-properties", sequence = "2")
+    @PropertyLayout(fieldSetId = "optional-properties", sequence = "2")
     @Persistent(defaultFetchGroup="false", columns = {
             @Column(name = "readWriteOptionalProperty_name"
                     , allowsNull = "true"),                           // <.>

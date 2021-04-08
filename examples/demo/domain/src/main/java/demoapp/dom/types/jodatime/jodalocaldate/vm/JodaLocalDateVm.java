@@ -59,27 +59,27 @@ public class JodaLocalDateVm
 
 //tag::class[]
     @Title(prepend = "org.joda.time.LocalDate view model: ")
-    @PropertyLayout(fieldSet = "read-only-properties", sequence = "1")
+    @PropertyLayout(fieldSetId = "read-only-properties", sequence = "1")
     @XmlElement(required = true)                                                // <.>
     @XmlJavaTypeAdapter(JodaTimeJaxbAdapters.LocalDateToStringAdapter.class)                    // <.>
     @Getter @Setter
     private org.joda.time.LocalDate readOnlyProperty;
 
     @Property(editing = Editing.ENABLED)                                        // <.>
-    @PropertyLayout(fieldSet = "editable-properties", sequence = "1")
+    @PropertyLayout(fieldSetId = "editable-properties", sequence = "1")
     @XmlElement(required = true)
     @XmlJavaTypeAdapter(JodaTimeJaxbAdapters.LocalDateToStringAdapter.class)
     @Getter @Setter
     private org.joda.time.LocalDate readWriteProperty;
 
     @Property(optionality = Optionality.OPTIONAL)                               // <.>
-    @PropertyLayout(fieldSet = "optional-properties", sequence = "1")
+    @PropertyLayout(fieldSetId = "optional-properties", sequence = "1")
     @XmlJavaTypeAdapter(JodaTimeJaxbAdapters.LocalDateToStringAdapter.class)
     @Getter @Setter
     private org.joda.time.LocalDate readOnlyOptionalProperty;
 
     @Property(editing = Editing.ENABLED, optionality = Optionality.OPTIONAL)
-    @PropertyLayout(fieldSet = "optional-properties", sequence = "2")
+    @PropertyLayout(fieldSetId = "optional-properties", sequence = "2")
     @XmlJavaTypeAdapter(JodaTimeJaxbAdapters.LocalDateToStringAdapter.class)
     @Getter @Setter
     private org.joda.time.LocalDate readWriteOptionalProperty;

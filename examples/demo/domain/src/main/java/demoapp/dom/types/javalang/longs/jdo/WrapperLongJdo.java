@@ -53,25 +53,25 @@ public class WrapperLongJdo                                          // <.>
 
 //tag::class[]
     @Title(prepend = "Long (wrapper) JDO entity: ")
-    @PropertyLayout(fieldSet = "read-only-properties", sequence = "1")
+    @PropertyLayout(fieldSetId = "read-only-properties", sequence = "1")
     @Column(allowsNull = "false")                                               // <.>
     @Getter @Setter
     private Long readOnlyProperty;
 
     @Property(editing = Editing.ENABLED)                                        // <.>
-    @PropertyLayout(fieldSet = "editable-properties", sequence = "1")
+    @PropertyLayout(fieldSetId = "editable-properties", sequence = "1")
     @Column(allowsNull = "false")
     @Getter @Setter
     private Long readWriteProperty;
 
     @Property(optionality = Optionality.OPTIONAL)                               // <.>
-    @PropertyLayout(fieldSet = "optional-properties", sequence = "1")
+    @PropertyLayout(fieldSetId = "optional-properties", sequence = "1")
     @Column(allowsNull = "true")                                                // <.>
     @Getter @Setter
     private Long readOnlyOptionalProperty;
 
     @Property(editing = Editing.ENABLED, optionality = Optionality.OPTIONAL)
-    @PropertyLayout(fieldSet = "optional-properties", sequence = "2")
+    @PropertyLayout(fieldSetId = "optional-properties", sequence = "2")
     @Column(allowsNull = "true")
     @Getter @Setter
     private Long readWriteOptionalProperty;

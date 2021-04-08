@@ -61,24 +61,24 @@ public class IsisMarkupVm
         return "Markup view model";
     }
     
-    @PropertyLayout(fieldSet = "read-only-properties", sequence = "1")
+    @PropertyLayout(fieldSetId = "read-only-properties", sequence = "1")
     @XmlElement(required = true)                                                // <.>
     @Getter @Setter
     private Markup readOnlyProperty;
 
     @Property(editing = Editing.ENABLED)                                        // <.>
-    @PropertyLayout(hidden = Where.ALL_TABLES, fieldSet = "editable-properties", sequence = "1")
+    @PropertyLayout(hidden = Where.ALL_TABLES, fieldSetId = "editable-properties", sequence = "1")
     @XmlElement(required = true)
     @Getter @Setter
     private Markup readWriteProperty;
 
     @Property(optionality = Optionality.OPTIONAL)                               // <.>
-    @PropertyLayout(hidden = Where.ALL_TABLES, fieldSet = "optional-properties", sequence = "1")
+    @PropertyLayout(hidden = Where.ALL_TABLES, fieldSetId = "optional-properties", sequence = "1")
     @Getter @Setter
     private Markup readOnlyOptionalProperty;
 
     @Property(editing = Editing.ENABLED, optionality = Optionality.OPTIONAL)
-    @PropertyLayout(hidden = Where.ALL_TABLES, fieldSet = "optional-properties", sequence = "2")
+    @PropertyLayout(hidden = Where.ALL_TABLES, fieldSetId = "optional-properties", sequence = "2")
     @Getter @Setter
     private Markup readWriteOptionalProperty;
 

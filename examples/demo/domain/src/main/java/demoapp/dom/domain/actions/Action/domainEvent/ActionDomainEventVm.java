@@ -60,7 +60,7 @@ public class ActionDomainEventVm implements HasAsciiDocDescription {
     }
 
     @Property()
-    @PropertyLayout(fieldSet = "annotation", sequence = "1")
+    @PropertyLayout(fieldSetId = "annotation", sequence = "1")
     @XmlElement(required = true)
     @Getter @Setter
     private String text;

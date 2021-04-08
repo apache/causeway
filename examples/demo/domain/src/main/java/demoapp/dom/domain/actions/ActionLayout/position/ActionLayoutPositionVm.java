@@ -49,13 +49,13 @@ public class ActionLayoutPositionVm implements HasAsciiDocDescription {
     }
 
     @Property(optionality = Optionality.OPTIONAL)
-    @PropertyLayout(fieldSet = "annotated", sequence = "1")
+    @PropertyLayout(fieldSetId = "annotated", sequence = "1")
     @XmlElement(required = false)
     @Getter @Setter
     private String readOnlyProperty1;
 
     @Property(optionality = Optionality.OPTIONAL)
-    @PropertyLayout(fieldSet = "layout", sequence = "1")
+    @PropertyLayout(fieldSetId = "layout", sequence = "1")
     @XmlElement(required = false)
     @Getter @Setter
     private String readOnlyProperty2;

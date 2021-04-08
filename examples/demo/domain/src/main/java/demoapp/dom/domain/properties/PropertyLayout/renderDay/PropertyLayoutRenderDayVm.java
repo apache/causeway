@@ -68,7 +68,7 @@ public class PropertyLayoutRenderDayVm implements HasAsciiDocDescription {
         renderDay = RenderDay.NOT_SPECIFIED         // <.>
         , describedAs =
             "@PropertyLayout(renderDay = NOT_SPECIFIED)",
-        fieldSet = "annotation", sequence = "1")
+        fieldSetId = "annotation", sequence = "1")
     @XmlElement(required = false)
     @XmlJavaTypeAdapter(JodaTimeJaxbAdapters.LocalDateToStringAdapter.class)
     @Getter @Setter
@@ -81,7 +81,7 @@ public class PropertyLayoutRenderDayVm implements HasAsciiDocDescription {
         renderDay = RenderDay.AS_DAY_BEFORE         // <.>
         , describedAs =
             "@PropertyLayout(renderDay = AS_DAY_BEFORE)",
-        fieldSet = "annotation", sequence = "2")
+        fieldSetId = "annotation", sequence = "2")
     @XmlElement(required = false)
     @XmlJavaTypeAdapter(JodaTimeJaxbAdapters.LocalDateToStringAdapter.class)
     @Getter @Setter
@@ -94,7 +94,7 @@ public class PropertyLayoutRenderDayVm implements HasAsciiDocDescription {
         renderDay = RenderDay.AS_DAY             // <.>
         , describedAs =
             "Value of getEndDate(), but @PropertyLayout(renderDay = AS_DAY)",
-        fieldSet = "annotation", sequence = "3")
+        fieldSetId = "annotation", sequence = "3")
     public LocalDate getEndDateRaw() {
         return getEndDate();
     }
@@ -106,7 +106,7 @@ public class PropertyLayoutRenderDayVm implements HasAsciiDocDescription {
         describedAs =
             "<cpt:property id=\"endDateLayoutFile\" " +
             "renderedAsDayBefore=\"true\"/>",
-        fieldSet = "layout-file", sequence = "1")
+        fieldSetId = "layout-file", sequence = "1")
     @XmlElement(required = false)
     @XmlJavaTypeAdapter(JodaTimeJaxbAdapters.LocalDateToStringAdapter.class)
     @Getter @Setter
@@ -119,7 +119,7 @@ public class PropertyLayoutRenderDayVm implements HasAsciiDocDescription {
     @PropertyLayout(
         describedAs =
             "@RenderDayMetaAnnotationEndDateExclusive",
-        fieldSet = "meta-annotated", sequence = "1")
+        fieldSetId = "meta-annotated", sequence = "1")
     @XmlElement(required = false)
     @XmlJavaTypeAdapter(JodaTimeJaxbAdapters.LocalDateToStringAdapter.class)
     @Getter @Setter
@@ -133,7 +133,7 @@ public class PropertyLayoutRenderDayVm implements HasAsciiDocDescription {
         renderDay = RenderDay.AS_DAY_BEFORE
         , describedAs =
             "@RenderDayMetaAnnotationEndDateExclusive",
-        fieldSet = "meta-annotated-overridden", sequence = "1")
+        fieldSetId = "meta-annotated-overridden", sequence = "1")
     @XmlElement(required = false)
     @XmlJavaTypeAdapter(JodaTimeJaxbAdapters.LocalDateToStringAdapter.class)
     @Getter @Setter

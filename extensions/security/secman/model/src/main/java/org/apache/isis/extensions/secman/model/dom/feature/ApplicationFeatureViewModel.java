@@ -182,7 +182,7 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
             )
     @PropertyLayout(
             typicalLength=ApplicationFeatureConstants.TYPICAL_LENGTH_NAMESPACE,
-            fieldSet="Id", 
+            fieldSetId="Id", 
             sequence = "2.2")
     public String getNamespaceName() {
         return getFeatureId().getNamespace();
@@ -201,7 +201,7 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
             )
     @PropertyLayout(
             typicalLength=ApplicationFeatureConstants.TYPICAL_LENGTH_TYPE_SIMPLE_NAME,
-            fieldSet="Id", 
+            fieldSetId="Id", 
             sequence = "2.3")
     public String getTypeSimpleName() {
         return getFeatureId().getTypeSimpleName();
@@ -222,7 +222,7 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
             )
     @PropertyLayout(
             typicalLength=ApplicationFeatureConstants.TYPICAL_LENGTH_MEMBER_NAME,
-            fieldSet="Id", 
+            fieldSetId="Id", 
             sequence = "2.4")
     public String getMemberName() {
         return getFeatureId().getMemberName();
@@ -243,7 +243,7 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
     @PropertyLayout(
             navigable = Navigable.PARENT,
             hidden = Where.ALL_TABLES,
-            fieldSet = "Parent", 
+            fieldSetId = "Parent", 
             sequence = "2.6")
     public ApplicationFeatureViewModel getParent() {
         final ApplicationFeatureId parentId;

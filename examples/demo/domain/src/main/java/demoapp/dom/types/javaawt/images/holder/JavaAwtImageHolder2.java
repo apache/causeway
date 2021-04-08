@@ -34,7 +34,7 @@ public interface JavaAwtImageHolder2 extends JavaAwtImageHolder {
         describedAs =
             "@PropertyLayout(labelPosition=LEFT)",
         hidden = Where.ALL_TABLES,
-        fieldSet = "label-positions", sequence = "1")  // <.>
+        fieldSetId = "label-positions", sequence = "1")  // <.>
     default BufferedImage getReadOnlyPropertyDerivedLabelPositionLeft() {
         return getReadOnlyProperty();
     }
@@ -45,7 +45,7 @@ public interface JavaAwtImageHolder2 extends JavaAwtImageHolder {
         describedAs =
             "@PropertyLayout(labelPosition=TOP)",
         hidden = Where.ALL_TABLES,
-        fieldSet = "label-positions", sequence = "2")
+        fieldSetId = "label-positions", sequence = "2")
     default BufferedImage getReadOnlyPropertyDerivedLabelPositionTop() {
         return getReadOnlyProperty();
     }
@@ -56,7 +56,7 @@ public interface JavaAwtImageHolder2 extends JavaAwtImageHolder {
         describedAs =
             "@PropertyLayout(labelPosition=RIGHT)",
         hidden = Where.ALL_TABLES,
-        fieldSet = "label-positions", sequence = "3")
+        fieldSetId = "label-positions", sequence = "3")
     default BufferedImage getReadOnlyPropertyDerivedLabelPositionRight() {
         return getReadOnlyProperty();
     }
@@ -67,7 +67,7 @@ public interface JavaAwtImageHolder2 extends JavaAwtImageHolder {
         describedAs =
             "@PropertyLayout(labelPosition=NONE)",
         hidden = Where.ALL_TABLES,
-        fieldSet = "label-positions", sequence = "4")
+        fieldSetId = "label-positions", sequence = "4")
     default BufferedImage getReadOnlyPropertyDerivedLabelPositionNone() {
         return getReadOnlyProperty();
     }

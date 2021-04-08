@@ -28,7 +28,7 @@ import lombok.RequiredArgsConstructor;
 
 //tag::class[]
 @Property()
-@PropertyLayout(hidden = Where.ALL_TABLES, fieldSet = "contributed", sequence = "1")
+@PropertyLayout(hidden = Where.ALL_TABLES, fieldSetId = "contributed", sequence = "1")
 @RequiredArgsConstructor
 public class IsisAsciiDocHolder_mixinProperty {
 

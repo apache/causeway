@@ -53,25 +53,25 @@ public class WrapperFloatJdo                                          // <.>
 
 //tag::class[]
     @Title(prepend = "Float (wrapper) JDO entity: ")
-    @PropertyLayout(fieldSet = "read-only-properties", sequence = "1")
+    @PropertyLayout(fieldSetId = "read-only-properties", sequence = "1")
     @Column(allowsNull = "false")                                               // <.>
     @Getter @Setter
     private Float readOnlyProperty;
 
     @Property(editing = Editing.ENABLED)                                        // <.>
-    @PropertyLayout(fieldSet = "editable-properties", sequence = "1")
+    @PropertyLayout(fieldSetId = "editable-properties", sequence = "1")
     @Column(allowsNull = "false")
     @Getter @Setter
     private Float readWriteProperty;
 
     @Property(optionality = Optionality.OPTIONAL)                               // <.>
-    @PropertyLayout(fieldSet = "optional-properties", sequence = "1")
+    @PropertyLayout(fieldSetId = "optional-properties", sequence = "1")
     @Column(allowsNull = "true")                                                // <.>
     @Getter @Setter
     private Float readOnlyOptionalProperty;
 
     @Property(editing = Editing.ENABLED, optionality = Optionality.OPTIONAL)
-    @PropertyLayout(fieldSet = "optional-properties", sequence = "2")
+    @PropertyLayout(fieldSetId = "optional-properties", sequence = "2")
     @Column(allowsNull = "true")
     @Getter @Setter
     private Float readWriteOptionalProperty;

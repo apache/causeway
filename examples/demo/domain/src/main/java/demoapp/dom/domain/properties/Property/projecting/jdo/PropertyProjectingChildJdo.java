@@ -54,7 +54,7 @@ public class PropertyProjectingChildJdo implements HasAsciiDocDescription {
 
 //tag::class[]
     @Title(prepend = "Entity: ")
-    @PropertyLayout(fieldSet = "properties", sequence = "1")
+    @PropertyLayout(fieldSetId = "properties", sequence = "1")
     @Getter @Setter
     private String name;
 

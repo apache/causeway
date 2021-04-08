@@ -66,7 +66,7 @@ public class PropertyExecutionPublishingJdo
     @PropertyLayout(
         describedAs =
             "@Property(publishing = ENABLED)",
-        fieldSet = "annotation", sequence = "1")
+        fieldSetId = "annotation", sequence = "1")
     @Getter @Setter
     private String propertyUsingAnnotation;
 //end::annotation[]
@@ -76,7 +76,7 @@ public class PropertyExecutionPublishingJdo
     @Property()
     @PropertyLayout(
         describedAs = "@PropertyPublishingEnabledMetaAnnotation",
-        fieldSet = "meta-annotated", sequence = "1")
+        fieldSetId = "meta-annotated", sequence = "1")
     @XmlElement(required = true)
     @Getter @Setter
     private String propertyUsingMetaAnnotation;
@@ -91,7 +91,7 @@ public class PropertyExecutionPublishingJdo
         describedAs =
             "@PropertyPublishingDisabledMetaAnnotation " +
             "@Property(publishing = ENABLED)",
-        fieldSet = "meta-annotated-overridden", sequence = "1")
+        fieldSetId = "meta-annotated-overridden", sequence = "1")
     @XmlElement(required = false)
     @Getter @Setter
     private String propertyUsingMetaAnnotationButOverridden;

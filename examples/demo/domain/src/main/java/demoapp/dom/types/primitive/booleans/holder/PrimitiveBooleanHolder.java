@@ -26,14 +26,14 @@ public interface PrimitiveBooleanHolder {
 
 //end::class[]
     @Property
-    @PropertyLayout(fieldSet = "read-only-properties", sequence = "1") // TODO: doesn't seem to get picked up
+    @PropertyLayout(fieldSetId = "read-only-properties", sequence = "1") // TODO: doesn't seem to get picked up
 //tag::class[]
     boolean isReadOnlyProperty();
     void setReadOnlyProperty(boolean c);
 
 //end::class[]
     @Property
-    @PropertyLayout(fieldSet = "editable-properties", sequence = "1") // TODO: doesn't seem to get picked up
+    @PropertyLayout(fieldSetId = "editable-properties", sequence = "1") // TODO: doesn't seem to get picked up
 //tag::class[]
     boolean isReadWriteProperty();
     void setReadWriteProperty(boolean c);

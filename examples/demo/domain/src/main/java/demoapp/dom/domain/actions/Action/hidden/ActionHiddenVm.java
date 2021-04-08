@@ -61,13 +61,13 @@ public class ActionHiddenVm implements HasAsciiDocDescription {
     }
 
     @Property()
-    @PropertyLayout(fieldSet = "properties", sequence = "1")
+    @PropertyLayout(fieldSetId = "properties", sequence = "1")
     @XmlElement(required = true)
     @Getter @Setter
     private String text;
 
     @Property()
-    @PropertyLayout(fieldSet = "properties", sequence = "2")
+    @PropertyLayout(fieldSetId = "properties", sequence = "2")
     @XmlElement(required = true)
     @Getter @Setter
     private String otherText;

@@ -33,7 +33,7 @@ public interface IsisLocalResourcePathHolder2 extends IsisLocalResourcePathHolde
         describedAs =
             "@PropertyLayout(labelPosition=LEFT)",
         hidden = Where.ALL_TABLES,
-        fieldSet = "label-positions", sequence = "1")  // <.>
+        fieldSetId = "label-positions", sequence = "1")  // <.>
     default LocalResourcePath getReadOnlyPropertyDerivedLabelPositionLeft() {
         return getReadOnlyProperty();
     }
@@ -44,7 +44,7 @@ public interface IsisLocalResourcePathHolder2 extends IsisLocalResourcePathHolde
         describedAs =
             "@PropertyLayout(labelPosition=TOP)",
         hidden = Where.ALL_TABLES,
-        fieldSet = "label-positions", sequence = "2")
+        fieldSetId = "label-positions", sequence = "2")
     default LocalResourcePath getReadOnlyPropertyDerivedLabelPositionTop() {
         return getReadOnlyProperty();
     }
@@ -55,7 +55,7 @@ public interface IsisLocalResourcePathHolder2 extends IsisLocalResourcePathHolde
         describedAs =
             "@PropertyLayout(labelPosition=RIGHT)",
         hidden = Where.ALL_TABLES,
-        fieldSet = "label-positions", sequence = "3")
+        fieldSetId = "label-positions", sequence = "3")
     default LocalResourcePath getReadOnlyPropertyDerivedLabelPositionRight() {
         return getReadOnlyProperty();
     }
@@ -66,7 +66,7 @@ public interface IsisLocalResourcePathHolder2 extends IsisLocalResourcePathHolde
         describedAs =
             "@PropertyLayout(labelPosition=NONE)",
         hidden = Where.ALL_TABLES,
-        fieldSet = "label-positions", sequence = "4")
+        fieldSetId = "label-positions", sequence = "4")
     default LocalResourcePath getReadOnlyPropertyDerivedLabelPositionNone() {
         return getReadOnlyProperty();
     }

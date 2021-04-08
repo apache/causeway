@@ -59,27 +59,27 @@ public class JavaTimeOffsetTimeVm
 
 //tag::class[]
     @Title(prepend = "java.time.OffsetTime view model: ")
-    @PropertyLayout(fieldSet = "read-only-properties", sequence = "1")
+    @PropertyLayout(fieldSetId = "read-only-properties", sequence = "1")
     @XmlElement(required = true)                                                // <.>
     @XmlJavaTypeAdapter(JavaTimeJaxbAdapters.OffsetTimeAdapter.class)               // <.>
     @Getter @Setter
     private java.time.OffsetTime readOnlyProperty;
 
     @Property(editing = Editing.ENABLED)                                        // <.>
-    @PropertyLayout(fieldSet = "editable-properties", sequence = "1")
+    @PropertyLayout(fieldSetId = "editable-properties", sequence = "1")
     @XmlElement(required = true)
     @XmlJavaTypeAdapter(JavaTimeJaxbAdapters.OffsetTimeAdapter.class)
     @Getter @Setter
     private java.time.OffsetTime readWriteProperty;
 
     @Property(optionality = Optionality.OPTIONAL)                               // <.>
-    @PropertyLayout(fieldSet = "optional-properties", sequence = "1")
+    @PropertyLayout(fieldSetId = "optional-properties", sequence = "1")
     @XmlJavaTypeAdapter(JavaTimeJaxbAdapters.OffsetTimeAdapter.class)
     @Getter @Setter
     private java.time.OffsetTime readOnlyOptionalProperty;
 
     @Property(editing = Editing.ENABLED, optionality = Optionality.OPTIONAL)
-    @PropertyLayout(fieldSet = "optional-properties", sequence = "2")
+    @PropertyLayout(fieldSetId = "optional-properties", sequence = "2")
     @XmlJavaTypeAdapter(JavaTimeJaxbAdapters.OffsetTimeAdapter.class)
     @Getter @Setter
     private java.time.OffsetTime readWriteOptionalProperty;

@@ -55,12 +55,12 @@ public class PrimitiveFloatVm
 
 //tag::class[]
     @Title(prepend = "float (primitive) view model: ")
-    @PropertyLayout(fieldSet = "read-only-properties", sequence = "1")
+    @PropertyLayout(fieldSetId = "read-only-properties", sequence = "1")
     @Getter @Setter
     private float readOnlyProperty;                                 // <.>
 
     @Property(editing = Editing.ENABLED)
-    @PropertyLayout(fieldSet = "editable-properties", sequence = "1")
+    @PropertyLayout(fieldSetId = "editable-properties", sequence = "1")
     @Getter @Setter
     private float readWriteProperty;
 

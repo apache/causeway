@@ -30,7 +30,7 @@ import lombok.RequiredArgsConstructor;
     typicalLength = 3                                       // <.>
     , describedAs =
         "@TypicalLengthMetaAnnotation @PropertyLayout(...)",
-    fieldSet = "meta-annotated-overridden", sequence = "2"
+    fieldSetId = "meta-annotated-overridden", sequence = "2"
 )
 @RequiredArgsConstructor
 public class PropertyLayoutTypicalLengthVm_mixinPropertyWithMetaAnnotationOverridden {

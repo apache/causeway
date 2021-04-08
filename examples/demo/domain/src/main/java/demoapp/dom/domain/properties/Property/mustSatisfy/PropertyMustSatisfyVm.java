@@ -56,7 +56,7 @@ public class PropertyMustSatisfyVm implements HasAsciiDocDescription {
     @PropertyLayout(
         describedAs =
             "mustSatisfy = OfWorkingAgeSpecification.class",
-        fieldSet = "annotation", sequence = "1")
+        fieldSetId = "annotation", sequence = "1")
     @XmlElement(required = true)
     @Getter @Setter
     private Integer customerAgePropertyUsingAnnotation;
@@ -67,7 +67,7 @@ public class PropertyMustSatisfyVm implements HasAsciiDocDescription {
     @Property()
     @PropertyLayout(
         describedAs = "@MustSatisfyOfWorkingAgeMetaAnnotation",
-        fieldSet = "meta-annotated", sequence = "1")
+        fieldSetId = "meta-annotated", sequence = "1")
     @XmlElement(required = true)
     @Getter @Setter
     private Integer customerAgePropertyUsingMetaAnnotation;
@@ -82,7 +82,7 @@ public class PropertyMustSatisfyVm implements HasAsciiDocDescription {
         describedAs =
             "@MustSatisfyOfWorkingAgeMetaAnnotation " +
             "@PropertyLayout(mustSatisfy = OfRetirementAgeSpecification.class)",
-        fieldSet = "meta-annotated-overridden", sequence = "1")
+        fieldSetId = "meta-annotated-overridden", sequence = "1")
     @XmlElement(required = true)
     @Getter @Setter
     private Integer customerAgePropertyUsingMetaAnnotationButOverridden;

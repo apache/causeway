@@ -62,7 +62,7 @@ public class JavaAwtImageJdo                                          // <.>
 
     // @Title(prepend = "Image JDO entity: ")  // not yet supported
 //tag::class[]
-    @PropertyLayout(fieldSet = "read-only-properties", sequence = "1")
+    @PropertyLayout(fieldSetId = "read-only-properties", sequence = "1")
     @Column(allowsNull = "false")                                   // <.>
     @Getter @Setter
     private BufferedImage readOnlyProperty;
@@ -77,7 +77,7 @@ public class JavaAwtImageJdo                                          // <.>
 
 //tag::class[]
     @Property(optionality = Optionality.OPTIONAL)                   // <.>
-    @PropertyLayout(fieldSet = "optional-properties", sequence = "1")
+    @PropertyLayout(fieldSetId = "optional-properties", sequence = "1")
     @Column(allowsNull = "true")                                    // <.>
     @Getter @Setter
     private BufferedImage readOnlyOptionalProperty;

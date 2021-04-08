@@ -32,7 +32,7 @@ import lombok.RequiredArgsConstructor;
     , describedAs =
         "@PropertyLayout(labelPosition = TOP)"
     , hidden = Where.ALL_TABLES,
-    fieldSet = "contributed", sequence = "1"
+    fieldSetId = "contributed", sequence = "1"
 )
 @RequiredArgsConstructor
 public class PropertyLayoutLabelPositionVm_mixinProperty {

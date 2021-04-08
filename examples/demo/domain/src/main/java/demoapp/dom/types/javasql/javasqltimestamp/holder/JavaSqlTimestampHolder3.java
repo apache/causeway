@@ -33,7 +33,7 @@ public interface JavaSqlTimestampHolder3 extends JavaSqlTimestampHolder2 {
             describedAs = "@PropertyLayout(renderDay=AS_DAY_BEFORE)",
             labelPosition = LabelPosition.TOP,
             hidden = Where.ALL_TABLES,
-            fieldSet = "render-day", sequence = "1")            // <.>
+            fieldSetId = "render-day", sequence = "1")            // <.>
     default java.sql.Timestamp getReadOnlyPropertyDerivedRenderDayAsDayBefore() {
         return getReadOnlyProperty();
     }
@@ -44,7 +44,7 @@ public interface JavaSqlTimestampHolder3 extends JavaSqlTimestampHolder2 {
             describedAs = "@PropertyLayout(renderDay=AS_DAY)",
             labelPosition = LabelPosition.TOP,
             hidden = Where.ALL_TABLES,
-            fieldSet = "render-day", sequence = "2")
+            fieldSetId = "render-day", sequence = "2")
     default java.sql.Timestamp getReadOnlyPropertyDerivedRenderDayAsDay() {
         return getReadOnlyProperty();
     }
@@ -55,7 +55,7 @@ public interface JavaSqlTimestampHolder3 extends JavaSqlTimestampHolder2 {
             describedAs = "@PropertyLayout(renderDay=NOT_SPECIFIED)",
             labelPosition = LabelPosition.TOP,
             hidden = Where.ALL_TABLES,
-            fieldSet = "render-day", sequence = "3")
+            fieldSetId = "render-day", sequence = "3")
     default java.sql.Timestamp getReadOnlyPropertyDerivedRenderDayNotSpecified() {
         return getReadOnlyProperty();
     }

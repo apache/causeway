@@ -60,25 +60,25 @@ public class IsisAsciiDocJdo                                          // <.>
             bookmarkService.bookmarkFor(this).getIdentifier();
     }
 
-    @PropertyLayout(fieldSet = "read-only-properties", sequence = "1")
+    @PropertyLayout(fieldSetId = "read-only-properties", sequence = "1")
     @Column(allowsNull = "false", jdbcType = "CLOB")                // <.>
     @Getter @Setter
     private AsciiDoc readOnlyProperty;
 
     @Property(editing = Editing.ENABLED)                            // <.>
-    @PropertyLayout(hidden = Where.ALL_TABLES, fieldSet = "editable-properties", sequence = "1")
+    @PropertyLayout(hidden = Where.ALL_TABLES, fieldSetId = "editable-properties", sequence = "1")
     @Column(allowsNull = "false", jdbcType = "CLOB")
     @Getter @Setter
     private AsciiDoc readWriteProperty;
 
     @Property(optionality = Optionality.OPTIONAL)                   // <.>
-    @PropertyLayout(hidden = Where.ALL_TABLES, fieldSet = "optional-properties", sequence = "1")
+    @PropertyLayout(hidden = Where.ALL_TABLES, fieldSetId = "optional-properties", sequence = "1")
     @Column(allowsNull = "true")                                    // <.>
     @Getter @Setter
     private AsciiDoc readOnlyOptionalProperty;
 
     @Property(editing = Editing.ENABLED, optionality = Optionality.OPTIONAL)
-    @PropertyLayout(hidden = Where.ALL_TABLES, fieldSet = "optional-properties", sequence = "2")
+    @PropertyLayout(hidden = Where.ALL_TABLES, fieldSetId = "optional-properties", sequence = "2")
     @Column(allowsNull = "true")
     @Getter @Setter
     private AsciiDoc readWriteOptionalProperty;

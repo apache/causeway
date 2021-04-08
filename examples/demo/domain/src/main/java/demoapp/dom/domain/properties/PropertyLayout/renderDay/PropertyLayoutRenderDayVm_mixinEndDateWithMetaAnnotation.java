@@ -31,7 +31,7 @@ import lombok.RequiredArgsConstructor;
 @PropertyLayout(
     describedAs =
         "@RenderDayMetaAnnotationEndDateExclusive",
-    fieldSet = "meta-annotated", sequence = "2"
+    fieldSetId = "meta-annotated", sequence = "2"
 )
 @RequiredArgsConstructor
 public class PropertyLayoutRenderDayVm_mixinEndDateWithMetaAnnotation {

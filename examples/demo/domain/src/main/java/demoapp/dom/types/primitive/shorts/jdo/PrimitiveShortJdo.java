@@ -51,12 +51,12 @@ public class PrimitiveShortJdo                                      // <.>
 
 //tag::class[]
     @Title(prepend = "short (primitive) JDO entity: ")
-    @PropertyLayout(fieldSet = "read-only-properties", sequence = "1")
+    @PropertyLayout(fieldSetId = "read-only-properties", sequence = "1")
     @Getter @Setter
     private short readOnlyProperty;                                 // <.>
 
     @Property(editing = Editing.ENABLED)
-    @PropertyLayout(fieldSet = "editable-properties", sequence = "1")
+    @PropertyLayout(fieldSetId = "editable-properties", sequence = "1")
     @Getter @Setter
     private short readWriteProperty;
 

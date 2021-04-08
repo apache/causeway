@@ -24,7 +24,7 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 
 /**
  * In the framework's default programming model corresponds to annotations
- * {@link Action#associateWith()} and {@link PropertyLayout#fieldSet()}.
+ * {@link Action#associateWith()} and {@link PropertyLayout#fieldSetId()}.
  * <br>
  * Collections don't support grouping.
  * <p>
@@ -33,7 +33,7 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
  * </p>
  * 
  * @see Action#associateWith() 
- * @see PropertyLayout#fieldSet()
+ * @see PropertyLayout#fieldSetId()
  * 
  * @since 2.0
  */

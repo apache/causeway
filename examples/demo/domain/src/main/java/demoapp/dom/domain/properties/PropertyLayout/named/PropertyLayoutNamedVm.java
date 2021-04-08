@@ -56,7 +56,7 @@ public class PropertyLayoutNamedVm implements HasAsciiDocDescription {
         named = "Named using @PropertyLayout"                // <.>
         , describedAs =
             "@PropertyLayout(named= \"...\")",
-        fieldSet = "annotation", sequence = "1")
+        fieldSetId = "annotation", sequence = "1")
     @XmlElement(required = false)
     @Getter @Setter
     private String propertyUsingAnnotation;
@@ -69,7 +69,7 @@ public class PropertyLayoutNamedVm implements HasAsciiDocDescription {
             "<cpt:property id=\"...\">" +
                 "<cpt:named>...</cpt:named>" +
             "</cpt:property>",
-        fieldSet = "layout-file", sequence = "1")
+        fieldSetId = "layout-file", sequence = "1")
     @XmlElement(required = false)
     @Getter @Setter
     private String propertyUsingLayout;
@@ -80,7 +80,7 @@ public class PropertyLayoutNamedVm implements HasAsciiDocDescription {
     @NamedMetaAnnotation                            // <.>
     @PropertyLayout(
         describedAs = "@NamedMetaAnnotation",
-        fieldSet = "meta-annotated", sequence = "1")
+        fieldSetId = "meta-annotated", sequence = "1")
     @XmlElement(required = false)
     @Getter @Setter
     private String propertyUsingMetaAnnotation;
@@ -94,7 +94,7 @@ public class PropertyLayoutNamedVm implements HasAsciiDocDescription {
                 "overrides meta-annotation"         // <.>
         , describedAs =
             "@NamedMetaAnnotation @PropertyLayout(...)",
-        fieldSet = "meta-annotated-overridden", sequence = "1")
+        fieldSetId = "meta-annotated-overridden", sequence = "1")
     @XmlElement(required = false)
     @Getter @Setter
     private String propertyUsingMetaAnnotationButOverridden;
@@ -107,7 +107,7 @@ public class PropertyLayoutNamedVm implements HasAsciiDocDescription {
         namedEscaped = false                                // <.>
         , describedAs =
             "@PropertyLayout(named= \"...\", namedEscaped=false)",
-        fieldSet = "markup", sequence = "1")
+        fieldSetId = "markup", sequence = "1")
     @XmlElement(required = false)
     @Getter @Setter
     private String propertyUsingMarkup;
@@ -121,7 +121,7 @@ public class PropertyLayoutNamedVm implements HasAsciiDocDescription {
         , describedAs =
             "@PropertyLayout(" +
             "named = \"...\", namedEscaped=true)",
-        fieldSet = "markup", sequence = "2")
+        fieldSetId = "markup", sequence = "2")
     @XmlElement(required = false)
     @Getter @Setter
     private String propertyUsingEscapedMarkup;

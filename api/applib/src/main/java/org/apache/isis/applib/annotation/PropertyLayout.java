@@ -67,62 +67,72 @@ public @interface PropertyLayout {
 
     
     /**
-     * Associates this <i>Property</i> with a <i>FieldSet</i> either by <b>id</b>, <b>friendly-name</b> 
-     * or both. 
+     * Specifies the <b>id</b> of associated <i>FieldSet</i>.
+     * 
      * <p>
      * A <i>FieldSet</i> is a layout component for property grouping, that can either be specified via
      * a <code>Xxx.layout.xml</code> file (with <code>Xxx</code> the domain object name) or is 
-     * inferred by the framework via annotations (aka the programming model).
+     * inferred by the framework via annotations (aka the programming model). 
+     * <i>FieldSet</i>s are represented in-memory and requires a framework internal unique id per domain 
+     * object type.
      * </p>
-     * 
-     * We discuss those 2 scenarios in more detail, as these have different behavior.
+     * <p>
+     * Following 2 scenarios have slightly different behavior:
+     * </p>
      * 
      * <h1>XML layout is present</h1>
      * <p>
-     * When a XML layout is present, every <i>FieldSet</i> requires a framework internal (in-memory) <b>id</b>, 
-     * which is either explicitly specified in the file or may be inferred from a non-empty <b>name</b>.
-     * If the <b>name</b> is empty "" or missing, then the <b>id</b> is mandatory with the file.
+     * When a XML layout is present, every <i>FieldSet</i> <b>id</b> is either explicitly specified in 
+     * the file or may be inferred from a non-empty <b>name</b>.
+     * If the <b>name</b> is empty "" or missing, then the <b>id</b> within the file is mandatory.
      * </p><p>
-     * If not already explicitly listed within the XML layout, the framework interprets 
-     * {@code @PropertyLayout(fieldSet=...)} 
-     * as an <b>id</b> first, and falls back as a <b>friendly-name</b> to associate this <i>Property</i>
-     * with its designated <i>FieldSet</i>. 
+     * If this <i>Property</i> is not already explicitly listed within the XML layout, we lookup the 
+     * associated <i>FieldSet</i> in the XML layout file first matching by <b>id</b> 
+     * using {@code @PropertyLayout(fieldSetId=...)} if any, then falling back to matching by (friendly) 
+     * <b>name</b> using @PropertyLayout(fieldSetName=...)} if any.
      * </p>
      * 
      * <h1>XML layout is absent</h1>
-     * 
      * <p>
-     * Whereas, when a XML layout is absent, {@code @PropertyLayout(fieldSet=...)} is used to infer a 
-     * <i>FieldSet</i>'s <b>id</b> and <b>friendly-name</b>.
-     * </p><p>
-     * The framework interprets {@code @PropertyLayout(fieldSet=...)} 
-     * as a <b>friendly-name</b> and infers an <b>id</b> from it, to associate this <i>Property</i>
-     * with its designated <i>FieldSet</i>. However, to provide more control, special syntax is 
-     * available to provide both <b>id</b> and <b>friendly-name</b>. (See section Special syntax below.)
+     * We reify (in-memory) the associated <i>FieldSet</i> using {@code @PropertyLayout(fieldSetId=...)} 
+     * (if present) as its <b>id</b> and using {@code @PropertyLayout(fieldSetId=...)} as its (friendly) 
+     * <b>name</b>. 
+     * While if no <b>id</b> is provided an <b>id</b> is inferred from the (friendly) <b>name</b>, in which 
+     * case the (friendly) <b>name</b> must not be empty.
+     * Whereas if no (friendly) <b>name</b> is provided a (friendly) <b>name</b> is inferred from the 
+     * (<b>id</b>. 
      * </p><p>
      * With {@code @PropertyLayout(sequence=...)} the relative position within that <i>FieldSet</i> can be 
      * specified.
      * </p>
-     * 
-     * <h1>Special syntax</h1>
-     * <p>
-     * Special syntax is picked up by the framework interpreting both <b>id</b> and 
-     * <b>friendly-name</b> when separated by a delimiter {@literal ::}. 
-     * (That behavior was specifically introduced for the case when no XML layout is present.)
-     * <h2>Examples</h2>
-     * <p> 
-     * {@code @PropertyLayout(fieldSet="sales::Sales Department")} would identify 
-     * {@code id: sales} and {@code friendly-name: Sales Department}.
-     * </p><p> 
-     * Or similar {@code @PropertyLayout(fieldSet="sales::")} allows to suppress the <i>FieldSet</i>'s
-     * <b>friendly-name</b> from rendering.
-     * 
+     *  
      * @see Action#associateWith()
-     * @see ActionLayout#fieldSet()
+     * @see ActionLayout#fieldSetId()
+     * @see ActionLayout#fieldSetName()
+     * @see PropertyLayout#fieldSetName()
      * @see PropertyLayout#sequence()
      */
-    String fieldSet()
-            default "";
+    String fieldSetId()
+            default "__infer";
+    
+    /**
+     * Specifies the <b>friendly-name</b> of associated <i>FieldSet</i>. 
+     * <p>
+     * Explicitly specifying an empty "" <b>friendly-name</b> will suppress the <i>FieldSet</i>'s label
+     * from being rendered.
+     * </p>
+     * <p>
+     * For a more in depth description see {@link PropertyLayout#fieldSetId()}.
+     * </p>
+     * 
+     * @see Action#associateWith()
+     * @see ActionLayout#fieldSetId()
+     * @see ActionLayout#fieldSetName()
+     * @see PropertyLayout#fieldSetId()
+     * @see PropertyLayout#sequence()
+     */
+    String fieldSetName()
+            default "__infer";
     
     /**
      * Indicates where in the UI the property

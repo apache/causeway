@@ -32,7 +32,7 @@ public interface JavaTimeLocalDateTimeHolder2 extends JavaTimeLocalDateTimeHolde
         describedAs =
             "@PropertyLayout(labelPosition=LEFT)",
         hidden = Where.ALL_TABLES,
-        fieldSet = "label-positions", sequence = "1")  // <.>
+        fieldSetId = "label-positions", sequence = "1")  // <.>
     default java.time.LocalDateTime getReadOnlyPropertyDerivedLabelPositionLeft() {
         return getReadOnlyProperty();
     }
@@ -43,7 +43,7 @@ public interface JavaTimeLocalDateTimeHolder2 extends JavaTimeLocalDateTimeHolde
         describedAs =
             "@PropertyLayout(labelPosition=TOP)",
         hidden = Where.ALL_TABLES,
-        fieldSet = "label-positions", sequence = "2")
+        fieldSetId = "label-positions", sequence = "2")
     default java.time.LocalDateTime getReadOnlyPropertyDerivedLabelPositionTop() {
         return getReadOnlyProperty();
     }
@@ -54,7 +54,7 @@ public interface JavaTimeLocalDateTimeHolder2 extends JavaTimeLocalDateTimeHolde
         describedAs =
             "@PropertyLayout(labelPosition=RIGHT)",
         hidden = Where.ALL_TABLES,
-        fieldSet = "label-positions", sequence = "3")
+        fieldSetId = "label-positions", sequence = "3")
     default java.time.LocalDateTime getReadOnlyPropertyDerivedLabelPositionRight() {
         return getReadOnlyProperty();
     }
@@ -65,7 +65,7 @@ public interface JavaTimeLocalDateTimeHolder2 extends JavaTimeLocalDateTimeHolde
         describedAs =
             "@PropertyLayout(labelPosition=NONE)",
         hidden = Where.ALL_TABLES,
-        fieldSet = "label-positions", sequence = "4")
+        fieldSetId = "label-positions", sequence = "4")
     default java.time.LocalDateTime getReadOnlyPropertyDerivedLabelPositionNone() {
         return getReadOnlyProperty();
     }

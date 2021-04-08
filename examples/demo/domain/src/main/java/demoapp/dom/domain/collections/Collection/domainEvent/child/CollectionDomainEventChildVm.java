@@ -54,7 +54,7 @@ public class CollectionDomainEventChildVm implements HasAsciiDocDescription {
 //tag::class[]
     @Title
     @Property()
-    @PropertyLayout(fieldSet = "properties", sequence = "1")
+    @PropertyLayout(fieldSetId = "properties", sequence = "1")
     @XmlElement(required = true)
     @Getter @Setter
     private String value;

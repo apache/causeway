@@ -55,12 +55,12 @@ public class PrimitiveBooleanVm
 
 //tag::class[]
     @Title(prepend = "boolean (primitive) view model: ")
-    @PropertyLayout(fieldSet = "read-only-properties", sequence = "1")
+    @PropertyLayout(fieldSetId = "read-only-properties", sequence = "1")
     @Getter @Setter
     private boolean readOnlyProperty;                                   // <.>
 
     @Property(editing = Editing.ENABLED)
-    @PropertyLayout(fieldSet = "editable-properties", sequence = "1")
+    @PropertyLayout(fieldSetId = "editable-properties", sequence = "1")
     @Getter @Setter
     private boolean readWriteProperty;
 

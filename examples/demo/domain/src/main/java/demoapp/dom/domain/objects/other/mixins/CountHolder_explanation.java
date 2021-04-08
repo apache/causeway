@@ -25,7 +25,7 @@ import lombok.RequiredArgsConstructor;
 
 //tag::class[]
 @Property                                   // <.>
-@PropertyLayout(fieldSet = "properties", sequence = "1")
+@PropertyLayout(fieldSetId = "properties", sequence = "1")
 @RequiredArgsConstructor                    // <.>
 public class CountHolder_explanation {
 

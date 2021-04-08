@@ -30,7 +30,7 @@ import lombok.RequiredArgsConstructor;
     cssClass = "blue"                                   // <.>
     , describedAs =
         "@CssClassRedMetaAnnotation  @ParameterLayout(...)",
-    fieldSet = "meta-annotated-overridden", sequence = "2"
+    fieldSetId = "meta-annotated-overridden", sequence = "2"
 )
 @RequiredArgsConstructor
 public class PropertyLayoutCssClassVm_mixinPropertyWithMetaAnnotationOverridden {

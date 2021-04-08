@@ -53,25 +53,25 @@ public class WrapperShortJdo                                          // <.>
 
 //tag::class[]
     @Title(prepend = "Short (wrapper) JDO entity: ")
-    @PropertyLayout(fieldSet = "read-only-properties", sequence = "1")
+    @PropertyLayout(fieldSetId = "read-only-properties", sequence = "1")
     @Column(allowsNull = "false")                                               // <.>
     @Getter @Setter
     private Short readOnlyProperty;
 
     @Property(editing = Editing.ENABLED)                                        // <.>
-    @PropertyLayout(fieldSet = "editable-properties", sequence = "1")
+    @PropertyLayout(fieldSetId = "editable-properties", sequence = "1")
     @Column(allowsNull = "false")
     @Getter @Setter
     private Short readWriteProperty;
 
     @Property(optionality = Optionality.OPTIONAL)                               // <.>
-    @PropertyLayout(fieldSet = "optional-properties", sequence = "1")
+    @PropertyLayout(fieldSetId = "optional-properties", sequence = "1")
     @Column(allowsNull = "true")                                                // <.>
     @Getter @Setter
     private Short readOnlyOptionalProperty;
 
     @Property(editing = Editing.ENABLED, optionality = Optionality.OPTIONAL)
-    @PropertyLayout(fieldSet = "optional-properties", sequence = "2")
+    @PropertyLayout(fieldSetId = "optional-properties", sequence = "2")
     @Column(allowsNull = "true")
     @Getter @Setter
     private Short readWriteOptionalProperty;

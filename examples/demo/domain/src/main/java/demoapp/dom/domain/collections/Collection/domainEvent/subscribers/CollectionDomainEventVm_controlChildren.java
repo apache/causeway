@@ -34,7 +34,7 @@ public class CollectionDomainEventVm_controlChildren {
 
     private final CollectionDomainEventVm collectionDomainEventVm;
 
-    @PropertyLayout(fieldSet = "contributed", sequence = "1")
+    @PropertyLayout(fieldSetId = "contributed", sequence = "1")
     public CollectionDomainEventControlStrategy prop() {
         return eventControlService.controlStrategy;
     }

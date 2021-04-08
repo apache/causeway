@@ -57,7 +57,7 @@ public class PropertyProjectingVm implements HasAsciiDocDescription {
     }
 
 //tag::property[]
-    @PropertyLayout(fieldSet = "properties", sequence = "1")
+    @PropertyLayout(fieldSetId = "properties", sequence = "1")
     public PropertyProjectingChildVm getFirstChild() {
         return getChildren().get(0);
     }

@@ -29,7 +29,7 @@ import lombok.RequiredArgsConstructor;
 @PropertyLayout(
     describedAs =
         "@TypicalLengthMetaAnnotation",
-    fieldSet = "meta-annotated", sequence = "2"
+    fieldSetId = "meta-annotated", sequence = "2"
 )
 @RequiredArgsConstructor
 public class PropertyLayoutTypicalLengthVm_mixinPropertyWithMetaAnnotation {

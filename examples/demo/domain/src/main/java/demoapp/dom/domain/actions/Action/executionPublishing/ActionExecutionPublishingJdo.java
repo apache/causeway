@@ -63,17 +63,17 @@ public class ActionExecutionPublishingJdo
 
 //tag::property[]
     @Property()
-    @PropertyLayout(fieldSet = "annotation", sequence = "1")
+    @PropertyLayout(fieldSetId = "annotation", sequence = "1")
     @Getter @Setter
     private String property;
 
     @Property()
-    @PropertyLayout(fieldSet = "meta-annotated", sequence = "1")
+    @PropertyLayout(fieldSetId = "meta-annotated", sequence = "1")
     @Getter @Setter
     private String propertyMetaAnnotated;
 
     @Property()
-    @PropertyLayout(fieldSet = "meta-annotated-overridden", sequence = "1")
+    @PropertyLayout(fieldSetId = "meta-annotated-overridden", sequence = "1")
     @Getter @Setter
     private String propertyMetaAnnotatedOverridden;
 //end::property[]

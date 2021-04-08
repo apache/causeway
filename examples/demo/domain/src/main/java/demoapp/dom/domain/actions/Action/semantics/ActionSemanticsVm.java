@@ -80,56 +80,56 @@ public class ActionSemanticsVm implements HasAsciiDocDescription {
     }
 
     @Property()
-    @PropertyLayout(fieldSet = "not-annotated", sequence = "1")
+    @PropertyLayout(fieldSetId = "not-annotated", sequence = "1")
     @XmlElement(required = true)
     @Getter @Setter
     private int propertyNoAnnotation;
 
     @Property()
-    @PropertyLayout(fieldSet = "annotated-safe", sequence = "1")
+    @PropertyLayout(fieldSetId = "annotated-safe", sequence = "1")
     @XmlElement(required = true)
     @Getter @Setter
     private int propertyForSafe;
 
     @Property()
-    @PropertyLayout(fieldSet = "annotated-safe", sequence = "2")
+    @PropertyLayout(fieldSetId = "annotated-safe", sequence = "2")
     @XmlElement(required = true)
     @Getter @Setter
     private int propertyForSafeAndRequestCacheable;
 
 
     @Property()
-    @PropertyLayout(fieldSet = "annotated-idempotent", sequence = "1")
+    @PropertyLayout(fieldSetId = "annotated-idempotent", sequence = "1")
     @XmlElement(required = true)
     @Getter @Setter
     private int propertyForIdempotent;
 
     @Property()
-    @PropertyLayout(fieldSet = "annotated-idempotent", sequence = "2")
+    @PropertyLayout(fieldSetId = "annotated-idempotent", sequence = "2")
     @XmlElement(required = true)
     @Getter @Setter
     private int propertyForIdempotentAreYouSure;
 
     @Property()
-    @PropertyLayout(fieldSet = "annotated-non-idempotent", sequence = "5")
+    @PropertyLayout(fieldSetId = "annotated-non-idempotent", sequence = "5")
     @XmlElement(required = true)
     @Getter @Setter
     private int propertyForNonIdempotent;
 
     @Property()
-    @PropertyLayout(fieldSet = "annotated-non-idempotent", sequence = "6")
+    @PropertyLayout(fieldSetId = "annotated-non-idempotent", sequence = "6")
     @XmlElement(required = true)
     @Getter @Setter
     private int propertyForNonIdempotentAreYouSure;
 
     @Property()
-    @PropertyLayout(fieldSet = "meta-annotated", sequence = "1")
+    @PropertyLayout(fieldSetId = "meta-annotated", sequence = "1")
     @XmlElement(required = true)
     @Getter @Setter
     private int propertyForMetaAnnotations;
 
     @Property()
-    @PropertyLayout(fieldSet = "meta-annotated-overridden", sequence = "1")
+    @PropertyLayout(fieldSetId = "meta-annotated-overridden", sequence = "1")
     @XmlElement(required = true)
     @Getter @Setter
     private int propertyForMetaAnnotationsOverridden;

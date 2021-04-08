@@ -71,13 +71,13 @@ public class ActionAssociateWithVm implements HasAsciiDocDescription {
 
 //tag::class-properties[]
     @Property()
-    @PropertyLayout(fieldSet = "annotation", sequence = "1")
+    @PropertyLayout(fieldSetId = "annotation", sequence = "1")
     @XmlElement(required = true)
     @Getter @Setter
     private String text;
 
     @Property()
-    @PropertyLayout(fieldSet = "annotation", sequence = "2")
+    @PropertyLayout(fieldSetId = "annotation", sequence = "2")
     @XmlElement(required = true)
     @Getter @Setter
     private String otherProperty;

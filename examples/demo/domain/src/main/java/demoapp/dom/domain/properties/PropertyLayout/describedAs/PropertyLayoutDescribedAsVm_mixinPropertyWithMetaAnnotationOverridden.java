@@ -30,7 +30,7 @@ import lombok.RequiredArgsConstructor;
     describedAs =                               // <.>
         "@DescribedAsMetaAnnotation " +
         "overridden with @PropertyLayout(...)",
-    fieldSet = "meta-annotated-overridden", sequence = "2"
+    fieldSetId = "meta-annotated-overridden", sequence = "2"
 )
 @RequiredArgsConstructor
 public class PropertyLayoutDescribedAsVm_mixinPropertyWithMetaAnnotationOverridden {

@@ -29,7 +29,7 @@ import lombok.RequiredArgsConstructor;
     named = "Mixin named using @PropertyLayout"     // <.>
     , describedAs =
         "@PropertyLayout(named = \"...\")",
-    fieldSet = "contributed", sequence = "1"
+    fieldSetId = "contributed", sequence = "1"
 )
 @RequiredArgsConstructor
 public class PropertyLayoutNamedVm_mixinProperty {

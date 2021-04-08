@@ -58,7 +58,7 @@ public abstract class ApplicationTypeMember extends ApplicationFeatureViewModel 
     @Property(
             domainEvent = MemberNameDomainEvent.class
             )
-    @PropertyLayout(fieldSet="Id", sequence = "2.4")
+    @PropertyLayout(fieldSetId="Id", sequence = "2.4")
     public String getMemberName() {
         return super.getMemberName();
     }
