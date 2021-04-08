@@ -100,7 +100,7 @@ public @interface PropertyLayout {
      * While if no <b>id</b> is provided an <b>id</b> is inferred from the (friendly) <b>name</b>, in which 
      * case the (friendly) <b>name</b> must not be empty.
      * Whereas if no (friendly) <b>name</b> is provided a (friendly) <b>name</b> is inferred from the 
-     * (<b>id</b>. 
+     * <b>id</b>, in which case the <b>id</b> must not be empty.
      * </p><p>
      * With {@code @PropertyLayout(sequence=...)} the relative position within that <i>FieldSet</i> can be 
      * specified.
