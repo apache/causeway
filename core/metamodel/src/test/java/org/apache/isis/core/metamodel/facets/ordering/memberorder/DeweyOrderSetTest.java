@@ -34,6 +34,7 @@ import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
+import org.apache.isis.core.metamodel.facets.members.layout.group.GroupIdAndName;
 import org.apache.isis.core.metamodel.facets.members.layout.group.LayoutGroupFacetAbstract;
 import org.apache.isis.core.metamodel.facets.members.layout.order.LayoutOrderFacetAbstract;
 import org.apache.isis.core.metamodel.layout.DeweyOrderSet;
@@ -269,8 +270,8 @@ public class DeweyOrderSetTest extends TestCase {
     
     // -- HELPER
     
-    void setupLayoutFacets(String group, String sequence, IdentifiedHolder facetedHolder) {
-        facetedHolder.addFacet(new LayoutGroupFacetAbstract(group, facetedHolder) {});
+    void setupLayoutFacets(String groupId, String sequence, IdentifiedHolder facetedHolder) {
+        facetedHolder.addFacet(new LayoutGroupFacetAbstract(GroupIdAndName.of(groupId, ""), facetedHolder) {});
         facetedHolder.addFacet(new LayoutOrderFacetAbstract(sequence, facetedHolder) {});
     }
 

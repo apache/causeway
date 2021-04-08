@@ -18,25 +18,46 @@
  */
 package org.apache.isis.core.metamodel.facets.members.layout.group;
 
+import javax.annotation.Nullable;
+
+import org.apache.isis.applib.layout.component.FieldSet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+
+import lombok.NonNull;
+import lombok.val;
 
 public class LayoutGroupFacetFromXml
 extends LayoutGroupFacetAbstract {
 
-    public static LayoutGroupFacetFromXml create(
-            final String group,
-            final FacetHolder holder) {
+    // -- FACTORIES
+    
+    public static @Nullable LayoutGroupFacetFromXml create(
+            final @Nullable GroupIdAndName groupIdAndName, 
+            final @NonNull  FacetHolder holder) {
         
-        return new LayoutGroupFacetFromXml(group, holder);
+        return groupIdAndName!=null        
+                ? new LayoutGroupFacetFromXml(groupIdAndName, holder)
+                : null;
     }
+    
+    public static @Nullable LayoutGroupFacetFromXml create(
+            final @NonNull FieldSet fieldSet,
+            final @NonNull FacetHolder holder) {
+        
+        val groupIdAndName = GroupIdAndName.forFieldSet(fieldSet);
+        return create(groupIdAndName, holder);
+    }
+    
+    // -- IMPLEMENTATION
 
-    public LayoutGroupFacetFromXml(final String group, final FacetHolder holder) {
-        super(group, holder);
+    private LayoutGroupFacetFromXml(GroupIdAndName groupIdAndName, FacetHolder holder) {
+        super(groupIdAndName, holder);
     }
     
     @Override
     public boolean isExplicitBinding() {
         return true;
     }
+    
     
 }

@@ -40,7 +40,6 @@ import org.apache.isis.applib.services.grid.GridSystemService;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.services.message.MessageService;
-import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.core.config.environment.IsisSystemEnvironment;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -62,6 +61,7 @@ import org.apache.isis.core.metamodel.facets.collections.layout.HiddenFacetForCo
 import org.apache.isis.core.metamodel.facets.collections.layout.NamedFacetForCollectionXml;
 import org.apache.isis.core.metamodel.facets.collections.layout.PagedFacetForCollectionXml;
 import org.apache.isis.core.metamodel.facets.collections.layout.SortedByFacetForCollectionXml;
+import org.apache.isis.core.metamodel.facets.members.layout.group.GroupIdAndName;
 import org.apache.isis.core.metamodel.facets.members.layout.group.LayoutGroupFacetFromXml;
 import org.apache.isis.core.metamodel.facets.members.layout.order.LayoutOrderFacetFromXml;
 import org.apache.isis.core.metamodel.facets.object.domainobjectlayout.BookmarkPolicyFacetForDomainObjectXml;
@@ -212,7 +212,7 @@ implements GridSystemService<G> {
                     return;
                 }
 
-                String memberOrderName = null;
+                GroupIdAndName groupIdAndName = null;
                 int memberOrderSequence;
                 if(actionLayoutDataOwner instanceof FieldSet) {
                     final FieldSet fieldSet = (FieldSet) actionLayoutDataOwner;
@@ -221,28 +221,33 @@ implements GridSystemService<G> {
                         final String propertyId = propertyLayoutData.getId();
                         // any will do; choose the first one that we know is valid
                         if(oneToOneAssociationById.containsKey(propertyId)) {
-                            memberOrderName = propertyLayoutData.getId();                            
+                            groupIdAndName = GroupIdAndName.of(
+                                    propertyLayoutData.getId(),
+                                    propertyLayoutData.getNamed());                            
                             break;
                         }
                     }
                     memberOrderSequence = actionPropertyGroupSequence++;
                 } else if(actionLayoutDataOwner instanceof PropertyLayoutData) {
                     final PropertyLayoutData propertyLayoutData = (PropertyLayoutData) actionLayoutDataOwner;
-                    memberOrderName = propertyLayoutData.getId();
+                    groupIdAndName = GroupIdAndName.of(
+                            propertyLayoutData.getId(),
+                            propertyLayoutData.getNamed());
                     memberOrderSequence = actionPropertySequence++;
                 } else if(actionLayoutDataOwner instanceof CollectionLayoutData) {
                     final CollectionLayoutData collectionLayoutData = (CollectionLayoutData) actionLayoutDataOwner;
-                    memberOrderName = collectionLayoutData.getId();
+                    groupIdAndName = GroupIdAndName.of(
+                            collectionLayoutData.getId(),
+                            collectionLayoutData.getNamed());
                     memberOrderSequence = actionCollectionSequence++;
                 } else {
                     // don't add: any existing metadata should be preserved
-                    memberOrderName = null;
+                    groupIdAndName = null;
                     memberOrderSequence = actionDomainObjectSequence++;
                 }
                 addOrReplaceFacet(LayoutOrderFacetFromXml.create(memberOrderSequence, objectAction));
-                if(_Strings.isNotEmpty(memberOrderName)) {
-                    addOrReplaceFacet(LayoutGroupFacetFromXml.create(memberOrderName, objectAction));
-                }
+                addOrReplaceFacet(LayoutGroupFacetFromXml.create(groupIdAndName, objectAction));
+                
 
                 // fix up the action position if required
                 if(actionLayoutDataOwner instanceof FieldSet) {
@@ -303,13 +308,9 @@ implements GridSystemService<G> {
                 // nb for any given field set the sequence won't reset to zero; however this is what we want so that
                 // table columns are shown correctly (by fieldset, then property order within that fieldset).
                 final FieldSet fieldSet = propertyLayoutData.getOwner();
-                final String groupName = fieldSet.getName();
                 
                 addOrReplaceFacet(LayoutOrderFacetFromXml.create(propertySequence.incrementAndGet(), oneToOneAssociation));
-                if(_Strings.isNotEmpty(groupName)) {
-                    addOrReplaceFacet(LayoutGroupFacetFromXml.create(groupName, oneToOneAssociation));
-                }
-                
+                addOrReplaceFacet(LayoutGroupFacetFromXml.create(fieldSet, oneToOneAssociation));
             }
 
             @Override

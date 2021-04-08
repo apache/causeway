@@ -21,23 +21,25 @@ package org.apache.isis.core.metamodel.facets.members.layout.group;
 import java.util.Optional;
 
 import org.apache.isis.applib.annotation.PropertyLayout;
+import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
 public class LayoutGroupFacetFromPropertyLayoutAnnotation
 extends LayoutGroupFacetAbstract {
 
     public static LayoutGroupFacetFromPropertyLayoutAnnotation create(
-            final Optional<PropertyLayout> actionIfAny, 
+            final Optional<PropertyLayout> propertyLayoutIfAny, 
             final FacetHolder holder) {
-        
-        return actionIfAny
-                .map(PropertyLayout::fieldSetId)
-                .map(group -> new LayoutGroupFacetFromPropertyLayoutAnnotation(group, holder))
+
+        return propertyLayoutIfAny
+                .map(GroupIdAndName::forPropertyLayout)
+                .filter(_NullSafe::isPresent)
+                .map(groupIdAndName->new LayoutGroupFacetFromPropertyLayoutAnnotation(groupIdAndName, holder))
                 .orElse(null);
     }
 
-    public LayoutGroupFacetFromPropertyLayoutAnnotation(final String group, final FacetHolder holder) {
-        super(group, holder);
+    private LayoutGroupFacetFromPropertyLayoutAnnotation(GroupIdAndName groupIdAndName, FacetHolder holder) {
+        super(groupIdAndName, holder);
     }
-    
+
 }

@@ -524,12 +524,12 @@ public interface ObjectAction extends ObjectMember {
                 if (layoutGroupFacet == null) {
                     return false;
                 }
-                val memberGroupName = layoutGroupFacet.getGroup();
-                if (_Strings.isNullOrEmpty(memberGroupName)) {
+                val fieldSetId = layoutGroupFacet.getGroupId();
+                if (_Strings.isNullOrEmpty(fieldSetId)) {
                     return false;
                 }
-                return memberGroupName.equalsIgnoreCase(assocName) 
-                        || memberGroupName.equalsIgnoreCase(assocId);
+                return fieldSetId.equalsIgnoreCase(assocName) 
+                        || fieldSetId.equalsIgnoreCase(assocId);
             };
         }
 
@@ -549,11 +549,11 @@ public interface ObjectAction extends ObjectMember {
                 if (layoutGroupFacet == null) {
                     return true;
                 }
-                val memberGroupName = layoutGroupFacet.getGroup();
-                if (_Strings.isNullOrEmpty(memberGroupName)) {
+                val fieldSetId = layoutGroupFacet.getGroupId();
+                if (_Strings.isNullOrEmpty(fieldSetId)) {
                     return true;
                 }
-                return !associationNamesAndIds.contains(memberGroupName.toLowerCase());
+                return !associationNamesAndIds.contains(fieldSetId.toLowerCase());
             };
         }
     }

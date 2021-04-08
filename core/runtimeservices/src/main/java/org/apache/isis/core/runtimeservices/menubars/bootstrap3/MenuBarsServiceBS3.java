@@ -375,7 +375,7 @@ public class MenuBarsServiceBS3 implements MenuBarsService {
                 .filter(objectAction->objectAction.getFacet(NotInServiceMenuFacet.class) == null)
                 .map(objectAction->{
                     val layoutGroupFacet = objectAction.getFacet(LayoutGroupFacet.class);
-                    String serviceName = layoutGroupFacet != null ? layoutGroupFacet.getGroup(): null;
+                    String serviceName = layoutGroupFacet != null ? layoutGroupFacet.getGroupId(): null;
                     if(_Strings.isNullOrEmpty(serviceName)){
                         serviceName = serviceSpec.getFacet(NamedFacet.class).value();
                     }

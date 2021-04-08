@@ -187,9 +187,9 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
             
             val layoutGroupFacet = association.getFacet(LayoutGroupFacet.class);
             if(layoutGroupFacet != null) {
-                val groupName = layoutGroupFacet.getGroup();
-                if(_Strings.isNotEmpty(groupName)) {
-                    getFrom(associationsByGroup, groupName).add(association);
+                val fieldSetId = layoutGroupFacet.getGroupId();
+                if(_Strings.isNotEmpty(fieldSetId)) {
+                    getFrom(associationsByGroup, fieldSetId).add(association);
                     return;
                 }
             }

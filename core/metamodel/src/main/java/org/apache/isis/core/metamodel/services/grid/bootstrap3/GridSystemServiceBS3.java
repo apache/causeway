@@ -229,7 +229,7 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
             if(layoutGroupFacet == null) {
                 continue;
             }
-            val id = layoutGroupFacet.getGroup();
+            val id = layoutGroupFacet.getGroupId();
             if(gridModel.containsFieldSetId(id)) {
                 Set<String> boundAssociationIds =
                         boundAssociationIdsByFieldSetId.computeIfAbsent(id, k -> _Sets.newLinkedHashSet());
@@ -341,7 +341,7 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
             if(layoutGroupFacet == null) {
                 continue;
             }
-            final String layoutGroupName = layoutGroupFacet.getGroup();
+            final String layoutGroupName = layoutGroupFacet.getGroupId();
             if (layoutGroupName == null) {
                 continue;
             }

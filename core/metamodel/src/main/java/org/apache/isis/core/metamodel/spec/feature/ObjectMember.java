@@ -238,14 +238,14 @@ public interface ObjectMember extends ObjectFeature {
                         
                         val groupFacet1 = m1.getFacet(LayoutGroupFacet.class);
                         val groupFacet2 = m2.getFacet(LayoutGroupFacet.class);
-                        val group1 = _Strings.nullToEmpty(groupFacet1==null ? null : groupFacet1.getGroup());
-                        val group2 = _Strings.nullToEmpty(groupFacet2==null ? null : groupFacet2.getGroup());
+                        val groupId1 = _Strings.nullToEmpty(groupFacet1==null ? null : groupFacet1.getGroupId());
+                        val groupId2 = _Strings.nullToEmpty(groupFacet2==null ? null : groupFacet2.getGroupId());
                         
-                        if(!Objects.equals(group1, group2)) {
+                        if(!Objects.equals(groupId1, groupId2)) {
                             throw _Exceptions.illegalArgument(
-                                    "Not in same group when comparing: '%s', '%s'", 
-                                    group1, 
-                                    group2);
+                                    "Not in same fieldSetId1 when comparing: '%s', '%s'", 
+                                    groupId1, 
+                                    groupId2);
                         }
                     }
 

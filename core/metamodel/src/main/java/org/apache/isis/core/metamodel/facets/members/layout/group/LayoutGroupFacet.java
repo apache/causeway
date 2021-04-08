@@ -33,17 +33,31 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
  * </p>
  * 
  * @see Action#associateWith() 
+ * @see ActionLayout#fieldSetId()
  * @see PropertyLayout#fieldSetId()
  * 
  * @since 2.0
  */
 public interface LayoutGroupFacet extends Facet {
+    
+    /**
+     * Id and (Friendly) name of the layout group this member is associated with.
+     */
+    public GroupIdAndName getGroupIdAndName();
 
     /**
-     * Name of the (layout) group, this member belongs to.
-     * Collections don't support grouping.
+     * Id of the layout group this member is associated with.
      */
-    public String getGroup();
+    public default String getGroupId() {
+        return getGroupIdAndName().getId();
+    }
+    
+    /**
+     * (Friendly) name of the layout group this member is associated with.
+     */
+    public default String getGroupName() {
+        return getGroupIdAndName().getName();
+    }
     
     /** 
      * {@code true} for layouts originating from XML, 

@@ -63,14 +63,14 @@ Serializable {
         setName(name);
     }
 
-
-
+    
+    
     private String id;
 
     /**
      * As per &lt;div id=&quot;...&quot;&gt;...&lt;/div&gt; : must be unique across entire page.
      */
-    @XmlAttribute(required = true)
+    @XmlAttribute(required = false)
     public String getId() {
         return id;
     }

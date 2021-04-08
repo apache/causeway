@@ -20,24 +20,26 @@ package org.apache.isis.core.metamodel.facets.members.layout.group;
 
 import java.util.Optional;
 
-import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
-public class LayoutGroupFacetFromActionAnnotation
+public class LayoutGroupFacetFromActionLayoutAnnotation
 extends LayoutGroupFacetAbstract {
 
-    public static LayoutGroupFacetFromActionAnnotation create(
-            final Optional<Action> actionIfAny, 
+    public static LayoutGroupFacetFromActionLayoutAnnotation create(
+            final Optional<ActionLayout> actionLayoutIfAny, 
             final FacetHolder holder) {
         
-        return actionIfAny
-                .map(Action::associateWith)
-                .map(group -> new LayoutGroupFacetFromActionAnnotation(group, holder))
-                .orElse(null);
+        return actionLayoutIfAny
+            .map(GroupIdAndName::forActionLayout)
+            .filter(_NullSafe::isPresent)
+            .map(groupIdAndName->new LayoutGroupFacetFromActionLayoutAnnotation(groupIdAndName, holder))
+            .orElse(null);
     }
 
-    public LayoutGroupFacetFromActionAnnotation(final String group, final FacetHolder holder) {
-        super(group, holder);
+    private LayoutGroupFacetFromActionLayoutAnnotation(GroupIdAndName groupIdAndName, FacetHolder holder) {
+        super(groupIdAndName, holder);
     }
     
 }

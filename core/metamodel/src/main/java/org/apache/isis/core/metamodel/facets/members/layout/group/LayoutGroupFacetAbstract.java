@@ -30,17 +30,20 @@ extends FacetAbstract
 implements LayoutGroupFacet {
 
     @Getter(onMethod_ = {@Override})
-    private final String group;
+    private final GroupIdAndName groupIdAndName;
     
-    protected LayoutGroupFacetAbstract(String group, FacetHolder holder) {
+    protected LayoutGroupFacetAbstract(
+            final GroupIdAndName groupIdAndName, 
+            final FacetHolder holder) {
         super(LayoutGroupFacet.class, holder);
-        this.group = group;
+        this.groupIdAndName = groupIdAndName;
     }
     
     @Override 
     public void appendAttributesTo(final Map<String, Object> attributeMap) {
         super.appendAttributesTo(attributeMap);
-        attributeMap.put("group", group);
+        attributeMap.put("groupId", getGroupId());
+        attributeMap.put("groupName", getGroupName());
     }
 
 }
