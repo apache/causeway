@@ -67,14 +67,59 @@ public @interface PropertyLayout {
 
     
     /**
-     * Indicates the property group, as properties can be grouped together.
-     * @apiNote similarly grouping of <i>Actions</i> is made available via {@link Action#associateWith()};
-     * currently for <i>Collections</i> there is no counterpart.
+     * Associates this <i>Property</i> with a <i>FieldSet</i> either by <b>id</b>, <b>friendly-name</b> 
+     * or both. 
      * <p>
-     *     An alternative is to use the <code>Xxx.layout.xml</code> file,
-     *     where <code>Xxx</code> is the domain object name.
+     * A <i>FieldSet</i> is a layout component for property grouping, that can either be specified via
+     * a <code>Xxx.layout.xml</code> file (with <code>Xxx</code> the domain object name) or is 
+     * inferred by the framework via annotations (aka the programming model).
      * </p>
+     * 
+     * We discuss those 2 scenarios in more detail, as these have different behavior.
+     * 
+     * <h1>XML layout is present</h1>
+     * <p>
+     * When a XML layout is present, every <i>FieldSet</i> requires a framework internal (in-memory) <b>id</b>, 
+     * which is either explicitly specified in the file or may be inferred from a non-empty <b>name</b>.
+     * If the <b>name</b> is empty "" or missing, then the <b>id</b> is mandatory with the file.
+     * </p><p>
+     * If not already explicitly listed within the XML layout, the framework interprets 
+     * {@code @PropertyLayout(fieldSet=...)} 
+     * as an <b>id</b> first, and falls back as a <b>friendly-name</b> to associate this <i>Property</i>
+     * with its designated <i>FieldSet</i>. 
+     * </p>
+     * 
+     * <h1>XML layout is absent</h1>
+     * 
+     * <p>
+     * Whereas, when a XML layout is absent, {@code @PropertyLayout(fieldSet=...)} is used to infer a 
+     * <i>FieldSet</i>'s <b>id</b> and <b>friendly-name</b>.
+     * </p><p>
+     * The framework interprets {@code @PropertyLayout(fieldSet=...)} 
+     * as a <b>friendly-name</b> and infers an <b>id</b> from it, to associate this <i>Property</i>
+     * with its designated <i>FieldSet</i>. However, to provide more control, special syntax is 
+     * available to provide both <b>id</b> and <b>friendly-name</b>. (See section Special syntax below.)
+     * </p><p>
+     * With {@code @PropertyLayout(sequence=...)} the relative position within that <i>FieldSet</i> can be 
+     * specified.
+     * </p>
+     * 
+     * <h1>Special syntax</h1>
+     * <p>
+     * Special syntax is picked up by the framework interpreting both <b>id</b> and 
+     * <b>friendly-name</b> when separated by a delimiter {@literal ::}. 
+     * (That behavior was specifically introduced for the case when no XML layout is present.)
+     * <h2>Examples</h2>
+     * <p> 
+     * {@code @PropertyLayout(fieldSet="sales::Sales Department")} would identify 
+     * {@code id: sales} and {@code friendly-name: Sales Department}.
+     * </p><p> 
+     * Or similar {@code @PropertyLayout(fieldSet="sales::")} allows to suppress the <i>FieldSet</i>'s
+     * <b>friendly-name</b> from rendering.
+     * 
      * @see Action#associateWith()
+     * @see ActionLayout#fieldSet()
+     * @see PropertyLayout#sequence()
      */
     String fieldSet()
             default "";

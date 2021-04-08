@@ -111,6 +111,23 @@ public @interface ActionLayout {
             default "";
 
     /**
+     * Associates this <i>Action</i> with a <i>FieldSet</i> either by <b>id</b>, <b>friendly-name</b> 
+     * or both. For a more in depth description see {@link PropertyLayout#fieldSet()}.
+     * 
+     * @apiNote An <i>Action</i> can be associated with with a <i>Property</i> or <i>Collection</i> 
+     * its so called <i>peer</i>. 
+     * It will then be positioned close to its <i>peer</i>, either under it or on the header panel
+     * depending on other layout facets. Such an association is made available via 
+     * {@link Action#associateWith()}. However, in the presence of a {@link ActionLayout#fieldSet()} 
+     * this default placement is overruled.
+     * 
+     * @see Action#associateWith()
+     * @see PropertyLayout#fieldSet()
+     */
+    String fieldSet()
+            default "";
+    
+    /**
      * Indicates where in the UI the action should <i>not</i>not be visible.
      */
     Where hidden()
