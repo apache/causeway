@@ -12,6 +12,10 @@ export ANTORA_TARGET_SITE=antora/target/site
 #
 PLAYBOOK_FILE=antora/playbooks/site.yml
 
+BRANCH=$(git branch --show-current)
+DATE=$(date +%Y%m%d-%H%M)
+export REVISION="${BRANCH}.${DATE}"
+
 while getopts 'ECDAKSLecdaksxylhf:' opt
 do
   case $opt in
