@@ -85,7 +85,6 @@ securityManager.realms = $realmName
 ----
 
 Shiro's ini file supports a "poor-man's" dependency injection (link:https://shiro.apache.org/configuration.html[their words]), and so `$realmName` in the above example is a reference to a realm defined elsewhere in `shiro.ini`.
-The subsequent sections describe the specifics for thevarious realm implementations available to you.
 
 It's also possible to configure Shiro to support multiple realms.
 
@@ -96,6 +95,9 @@ securityManager.realms = $realm1,$realm2
 
 How to configure the text-based ini realm is explained <<shiro-ini-realm,below>>.
 Another option lternative is the xref:security:shiro-realm-ldap:about.adoc[LDAP realm].
+
+To leverage Apache Isis' <<enhanced-wildcard-permission,enhanced wildcard permissions>>, you should also specify the Apache Isis permission resolver for the specified realm; further details <<permission-resolver-configuration,below>>.
+
 
 
 [#shiro-ini-realm]
@@ -369,37 +371,44 @@ For example:
 
 [source,ini]
 ----
-user_role   = !reg/org.estatio.api,\
-              !reg/org.estatio.webapp.services.admin,\
+user_role   = !reg/com.mycompany.myapp.api,\
+              !reg/com.mycompany.myapp.webapp.services.admin,\
               reg/* ; \
-api_role    = org.estatio.api ;\
+api_role    = com.mycompany.myapp.api ;\
 admin_role = adm/*
 ----
 
 sets up:
 
-* the `user_role` with access to all permissions except those in `org.estatio.api` and `org.estatio.webapp.services.admin`
-* the `api_role` with access to all permissions in `org.estatio.api`
+* the `user_role` with access to all permissions except those in `com.mycompany.myapp.api` and `com.mycompany.myapp.webapp.services.admin`
+* the `api_role` with access to all permissions in `com.mycompany.myapp.api`
 * the `admin_role` with access to everything.
 
 The permission group concept is required to scope the applicability of any veto permission.
 This is probably best explained by an example.
 Suppose that a user has both `admin_role` and `user_role`; we would want the `admin_role` to trump the vetos of the `user_role`, in other words to give the user access to everything.
 
-Because of the permission groups, the two "+++!reg/...+""" vetos in user_role only veto out selected permissions granted by the "+++reg/*+++" permissions, but they do not veto the permissions granted by a different scope, namely "+++adm/*+++".
+:asterisk: *
+Because of the permission groups, the two `!reg/...` vetos in `user_role` only veto out selected permissions granted by the ``reg/{asterisk}`` permissions, but they do not veto the permissions granted by a different scope, namely `adm/*`.
 
 The net effect is therefore what we would want: that a user with both `admin_role` and `user_role` would have access to everything, irrespective of those two veto permissions of the `user_role`.
 
-Finally, the Apache Isis permission resolver is specified in `shiro.ini` file:
+[[permission-resolver-configuration]]
+=== Configuration
+
+To configure Apache Isis' extended permission support requires that a custom permission resolver is specified in `shiro.ini` file:
 
 [source,ini]
 ----
 permissionResolver = org.apache.isis.security.shiro.authorization.IsisPermissionResolver
-myRealm.permissionResolver = $permissionResolver  # <1>
+myRealm.permissionResolver = $permissionResolver  # <.>
 ----
-<1> `myRealm` is the handle to the configured realm, eg `$iniRealm` or `$isisLdapRealm` etc.
+<.> `myRealm` is the handle to the configured realm, eg `$iniRealm` or `$isisLdapRealm` etc.
 
-== Run-as
+
+== Hints and Tips
+
+=== Run-as
 
 This hint shows how to temporarily change the current user as reported by Shiro.
 This can be useful to support "Run As", for example.
