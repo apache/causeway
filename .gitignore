@@ -58,9 +58,7 @@ component/objectstore/xml/xml/objects/
 component/objectstore/xml/tmp/tests/
 
 # log files
-datanucleus.log
-isis.log
-hs_err_pid*.log
+*.log
 
 # Package Files #
 *.jar
