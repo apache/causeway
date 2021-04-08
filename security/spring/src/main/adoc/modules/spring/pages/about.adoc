@@ -29,3 +29,46 @@ public class AppManifest {
 ----
 
 Make sure that no other `IsisModuleSecurityXxx` module is imported.
+
+
+== Design
+
+The module brings in a transitive dependency to `org.springframework.boot:spring-boot-starter-security`:
+
+[source,xml]
+.pom.xml
+----
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-security</artifactId>
+</dependency>
+----
+
+This enables security by default, and should then be adjusted as required to enable access.
+See the Spring documentation for details on how to do this, for example:
+
+* link:https://spring.io/guides/gs/securing-web/[Spring security introductory guide]
+* link:https://www.baeldung.com/spring-boot-security-autoconfiguration[Baeldung article] on `spring-boot-starter-security`
+* link:https://www.tutorialspoint.com/spring_boot/spring_boot_securing_web_applications.htm[Tutorialspoint] tutorial on `spring-boot-starter-security`
+
+The module itself configures a filter that is installed at the end of Spring Security's filter chain.
+It uses the link:https://docs.spring.io/spring-security/site/docs/current/api/org/springframework/security/core/context/SecurityContextHolder.html[SecurityContextHolder] to obtain the current authentication:
+
+[source,java]
+.SpringSecurityFilter.java
+----
+val springAuthentication = SecurityContextHolder.getContext().getAuthentication();
+if(springAuthentication==null
+        || !springAuthentication.isAuthenticated()) {
+    httpServletResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+    return; // not authenticated
+}
+----
+
+For an authenticated user the `org.apache.isis.viewer.wicket.roles.USER` role -- as required by xref:vw::about.adoc[Web UI (Wicket viewer)]  -- is automatically added to the list of roles.
+
+
+== Walk-through
+
+WARNING: TODO - show how this fits together.
+
