@@ -31,7 +31,7 @@ import lombok.RequiredArgsConstructor;
     repainting = Repainting.NO_REPAINT              // <.>
     , describedAs =
         "@PropertyLayout(repainting = NO_REPAINT)",
-    group = "contributed", sequence = "1"
+    fieldSet = "contributed", sequence = "1"
 )
 @RequiredArgsConstructor
 public class PropertyLayoutRepaintingVm_mixinProperty {

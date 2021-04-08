@@ -57,24 +57,24 @@ public class JavaLangStringVm
 
 //tag::class[]
     @Title(prepend = "Stringview model: ")
-    @PropertyLayout(group = "read-only-properties", sequence = "1")
+    @PropertyLayout(fieldSet = "read-only-properties", sequence = "1")
     @XmlElement(required = true)                                                // <.>
     @Getter @Setter
     private String readOnlyProperty;
 
     @Property(editing = Editing.ENABLED)                                        // <.>
-    @PropertyLayout(group = "editable-properties", sequence = "1")
+    @PropertyLayout(fieldSet = "editable-properties", sequence = "1")
     @XmlElement(required = true)
     @Getter @Setter
     private String readWriteProperty;
 
     @Property(optionality = Optionality.OPTIONAL)                               // <.>
-    @PropertyLayout(group = "optional-properties", sequence = "1")
+    @PropertyLayout(fieldSet = "optional-properties", sequence = "1")
     @Getter @Setter
     private String readOnlyOptionalProperty;
 
     @Property(editing = Editing.ENABLED, optionality = Optionality.OPTIONAL)
-    @PropertyLayout(group = "optional-properties", sequence = "2")
+    @PropertyLayout(fieldSet = "optional-properties", sequence = "2")
     @Getter @Setter
     private String readWriteOptionalProperty;
 

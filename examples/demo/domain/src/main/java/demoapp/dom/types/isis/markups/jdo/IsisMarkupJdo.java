@@ -60,25 +60,25 @@ public class IsisMarkupJdo                                          // <.>
             bookmarkService.bookmarkFor(this).getIdentifier();
     }
 
-    @PropertyLayout(group = "read-only-properties", sequence = "1")
+    @PropertyLayout(fieldSet = "read-only-properties", sequence = "1")
     @Column(allowsNull = "false", jdbcType = "CLOB")                // <.>
     @Getter @Setter
     private Markup readOnlyProperty;
 
     @Property(editing = Editing.ENABLED)                            // <.>
-    @PropertyLayout(hidden = Where.ALL_TABLES, group = "editable-properties", sequence = "1")
+    @PropertyLayout(hidden = Where.ALL_TABLES, fieldSet = "editable-properties", sequence = "1")
     @Column(allowsNull = "false", jdbcType = "CLOB")
     @Getter @Setter
     private Markup readWriteProperty;
 
     @Property(optionality = Optionality.OPTIONAL)                   // <.>
-    @PropertyLayout(hidden = Where.ALL_TABLES, group = "optional-properties", sequence = "1")
+    @PropertyLayout(hidden = Where.ALL_TABLES, fieldSet = "optional-properties", sequence = "1")
     @Column(allowsNull = "true")                                    // <.>
     @Getter @Setter
     private Markup readOnlyOptionalProperty;
 
     @Property(editing = Editing.ENABLED, optionality = Optionality.OPTIONAL)
-    @PropertyLayout(hidden = Where.ALL_TABLES, group = "optional-properties", sequence = "2")
+    @PropertyLayout(hidden = Where.ALL_TABLES, fieldSet = "optional-properties", sequence = "2")
     @Column(allowsNull = "true")
     @Getter @Setter
     private Markup readWriteOptionalProperty;

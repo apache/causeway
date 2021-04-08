@@ -59,27 +59,27 @@ public class JodaDateTimeVm
 
 //tag::class[]
     @Title(prepend = "org.joda.time.DateTime view model: ")
-    @PropertyLayout(group = "read-only-properties", sequence = "1")
+    @PropertyLayout(fieldSet = "read-only-properties", sequence = "1")
     @XmlElement(required = true)                                                // <.>
     @XmlJavaTypeAdapter(JodaTimeJaxbAdapters.DateTimeToStringAdapter.class)                    // <.>
     @Getter @Setter
     private org.joda.time.DateTime readOnlyProperty;
 
     @Property(editing = Editing.ENABLED)                                        // <.>
-    @PropertyLayout(group = "editable-properties", sequence = "1")
+    @PropertyLayout(fieldSet = "editable-properties", sequence = "1")
     @XmlElement(required = true)
     @XmlJavaTypeAdapter(JodaTimeJaxbAdapters.DateTimeToStringAdapter.class)
     @Getter @Setter
     private org.joda.time.DateTime readWriteProperty;
 
     @Property(optionality = Optionality.OPTIONAL)                               // <.>
-    @PropertyLayout(group = "optional-properties", sequence = "1")
+    @PropertyLayout(fieldSet = "optional-properties", sequence = "1")
     @XmlJavaTypeAdapter(JodaTimeJaxbAdapters.DateTimeToStringAdapter.class)
     @Getter @Setter
     private org.joda.time.DateTime readOnlyOptionalProperty;
 
     @Property(editing = Editing.ENABLED, optionality = Optionality.OPTIONAL)
-    @PropertyLayout(group = "optional-properties", sequence = "2")
+    @PropertyLayout(fieldSet = "optional-properties", sequence = "2")
     @XmlJavaTypeAdapter(JodaTimeJaxbAdapters.DateTimeToStringAdapter.class)
     @Getter @Setter
     private org.joda.time.DateTime readWriteOptionalProperty;

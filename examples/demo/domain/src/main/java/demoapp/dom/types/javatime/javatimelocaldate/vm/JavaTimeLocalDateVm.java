@@ -59,27 +59,27 @@ public class JavaTimeLocalDateVm
 
 //tag::class[]
     @Title(prepend = "java.time.LocalDate view model: ")
-    @PropertyLayout(group = "read-only-properties", sequence = "1")
+    @PropertyLayout(fieldSet = "read-only-properties", sequence = "1")
     @XmlElement(required = true)                                                // <.>
     @XmlJavaTypeAdapter(JavaTimeJaxbAdapters.LocalDateToStringAdapter.class)                    // <.>
     @Getter @Setter
     private java.time.LocalDate readOnlyProperty;
 
     @Property(editing = Editing.ENABLED)                                        // <.>
-    @PropertyLayout(group = "editable-properties", sequence = "1")
+    @PropertyLayout(fieldSet = "editable-properties", sequence = "1")
     @XmlElement(required = true)
     @XmlJavaTypeAdapter(JavaTimeJaxbAdapters.LocalDateToStringAdapter.class)
     @Getter @Setter
     private java.time.LocalDate readWriteProperty;
 
     @Property(optionality = Optionality.OPTIONAL)                               // <.>
-    @PropertyLayout(group = "optional-properties", sequence = "1")
+    @PropertyLayout(fieldSet = "optional-properties", sequence = "1")
     @XmlJavaTypeAdapter(JavaTimeJaxbAdapters.LocalDateToStringAdapter.class)
     @Getter @Setter
     private java.time.LocalDate readOnlyOptionalProperty;
 
     @Property(editing = Editing.ENABLED, optionality = Optionality.OPTIONAL)
-    @PropertyLayout(group = "optional-properties", sequence = "2")
+    @PropertyLayout(fieldSet = "optional-properties", sequence = "2")
     @XmlJavaTypeAdapter(JavaTimeJaxbAdapters.LocalDateToStringAdapter.class)
     @Getter @Setter
     private java.time.LocalDate readWriteOptionalProperty;

@@ -56,7 +56,7 @@ public class PropertyLayoutTypicalLengthVm implements HasAsciiDocDescription {
         typicalLength = 10                                  // <.>
         , describedAs =
             "@PropertyLayout(typicalLength = 10)",
-        group = "annotation", sequence = "1")
+        fieldSet = "annotation", sequence = "1")
     @XmlElement(required = false)
     @Getter @Setter
     private String propertyUsingAnnotation;
@@ -67,7 +67,7 @@ public class PropertyLayoutTypicalLengthVm implements HasAsciiDocDescription {
     @PropertyLayout(                                        // <.>
         describedAs =
             "<cpt:property id=\"...\" typicalLength=\"10\"/>",
-        group = "layout-file", sequence = "1")
+        fieldSet = "layout-file", sequence = "1")
     @XmlElement(required = false)
     @Getter @Setter
     private String propertyUsingLayout;
@@ -78,7 +78,7 @@ public class PropertyLayoutTypicalLengthVm implements HasAsciiDocDescription {
     @Property(optionality = Optionality.OPTIONAL)
     @PropertyLayout(
         describedAs = "@TypicalLengthMetaAnnotation",
-        group = "meta-annotated", sequence = "1")
+        fieldSet = "meta-annotated", sequence = "1")
     @XmlElement(required = false)
     @Getter @Setter
     private String propertyUsingMetaAnnotation;
@@ -91,7 +91,7 @@ public class PropertyLayoutTypicalLengthVm implements HasAsciiDocDescription {
         typicalLength = 5                                   // <.>
         , describedAs =
             "@TypicalLengthMetaAnnotation @PropertyLayout(...)",
-        group = "meta-annotated-overridden", sequence = "1")
+        fieldSet = "meta-annotated-overridden", sequence = "1")
     @XmlElement(required = false)
     @Getter @Setter
     private String propertyUsingMetaAnnotationButOverridden;

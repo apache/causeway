@@ -62,7 +62,7 @@ public class PropertySnapshotVm implements HasAsciiDocDescription {
 
 //tag::no-annotation[]
     @Property()
-    @PropertyLayout(group = "no-annotations", sequence = "1")
+    @PropertyLayout(fieldSet = "no-annotations", sequence = "1")
     @XmlElement(required = true)
     @Getter @Setter
     private String text;
@@ -74,7 +74,7 @@ public class PropertySnapshotVm implements HasAsciiDocDescription {
     )
     @PropertyLayout(
         describedAs = "@Property(snapshot = NOT_SPECIFIED)",
-        group = "annotations", sequence = "1")
+        fieldSet = "annotations", sequence = "1")
     @XmlElement(required = true)
     @Getter @Setter
     private String notSpecifiedProperty;
@@ -86,7 +86,7 @@ public class PropertySnapshotVm implements HasAsciiDocDescription {
     )
     @PropertyLayout(
         describedAs = "@Property(snapshot = EXCLUDED)",
-        group = "annotations", sequence = "2")
+        fieldSet = "annotations", sequence = "2")
     @XmlElement(required = true)
     @Getter @Setter
     private String excludedProperty;
@@ -98,7 +98,7 @@ public class PropertySnapshotVm implements HasAsciiDocDescription {
     )
     @PropertyLayout(
         describedAs = "@Property(snapshot = INCLUDED)",
-        group = "annotations", sequence = "2")
+        fieldSet = "annotations", sequence = "2")
     @XmlElement(required = true)
     @Getter @Setter
     private String includedProperty;
@@ -109,7 +109,7 @@ public class PropertySnapshotVm implements HasAsciiDocDescription {
     @Property()
     @PropertyLayout(
         describedAs = "@SnapshotExcludedMetaAnnotation ",
-        group = "meta-annotations", sequence = "1")
+        fieldSet = "meta-annotations", sequence = "1")
     @XmlElement(required = true)
     @Getter @Setter
     private String metaAnnotatedProperty;
@@ -124,7 +124,7 @@ public class PropertySnapshotVm implements HasAsciiDocDescription {
         describedAs =
             "@SnapshotIncludedMetaAnnotation "
             + "@Property(snapshot = EXCLUDED)",
-        group = "meta-annotations-overridden", sequence = "1")
+        fieldSet = "meta-annotations-overridden", sequence = "1")
     @XmlElement(required = true)
     @Getter @Setter
     private String metaAnnotatedPropertyOverridden;

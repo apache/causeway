@@ -58,7 +58,7 @@ public class PropertyFileAcceptVm implements HasAsciiDocDescription {
     @PropertyLayout(
         describedAs =
             "@Property(fileAccept = \".pdf\")",
-        group = "annotation", sequence = "1")
+        fieldSet = "annotation", sequence = "1")
     @XmlElement(required = true)
     @Getter @Setter
     private Blob pdfPropertyUsingAnnotation;
@@ -71,7 +71,7 @@ public class PropertyFileAcceptVm implements HasAsciiDocDescription {
     @PropertyLayout(
         describedAs =
             "@Property(fileAccept = \".txt\")",
-        group = "annotation", sequence = "1")
+        fieldSet = "annotation", sequence = "1")
     @XmlElement(required = true)
     @Getter @Setter
     private Clob txtPropertyUsingAnnotation;
@@ -82,7 +82,7 @@ public class PropertyFileAcceptVm implements HasAsciiDocDescription {
     @FileAcceptPdfMetaAnnotation                            // <.>
     @PropertyLayout(
         describedAs = "@FileAcceptPdfMetaAnnotation",
-        group = "meta-annotated", sequence = "1")
+        fieldSet = "meta-annotated", sequence = "1")
     @XmlElement(required = true)
     @Getter @Setter
     private Blob pdfPropertyUsingMetaAnnotation;
@@ -96,7 +96,7 @@ public class PropertyFileAcceptVm implements HasAsciiDocDescription {
     @PropertyLayout(
         describedAs =
             "@FileAcceptPdfMetaAnnotation @PropertyLayout(...)",
-        group = "meta-annotated-overridden", sequence = "1")
+        fieldSet = "meta-annotated-overridden", sequence = "1")
     @XmlElement(required = true)
     @Getter @Setter
     private Blob docxPropertyUsingMetaAnnotationButOverridden;

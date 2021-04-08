@@ -64,31 +64,31 @@ public class ActionRestrictToVm implements HasAsciiDocDescription {
     }
 
     @Property()
-    @PropertyLayout(group = "not-annotated", sequence = "1")
+    @PropertyLayout(fieldSet = "not-annotated", sequence = "1")
     @XmlElement(required = true)
     @Getter @Setter
     private String propertyNoAnnotation;
 
     @Property()
-    @PropertyLayout(group = "annotated", sequence = "1")
+    @PropertyLayout(fieldSet = "annotated", sequence = "1")
     @XmlElement(required = true)
     @Getter @Setter
     private String propertyForPrototyping;
 
     @Property()
-    @PropertyLayout(group = "annotated", sequence = "2")
+    @PropertyLayout(fieldSet = "annotated", sequence = "2")
     @XmlElement(required = true)
     @Getter @Setter
     private String propertyForNoRestrictions;
 
     @Property()
-    @PropertyLayout(group = "meta-annotated", sequence = "1")
+    @PropertyLayout(fieldSet = "meta-annotated", sequence = "1")
     @XmlElement(required = true)
     @Getter @Setter
     private String propertyForMetaAnnotations;
 
     @Property()
-    @PropertyLayout(group = "meta-annotated-overridden", sequence = "1")
+    @PropertyLayout(fieldSet = "meta-annotated-overridden", sequence = "1")
     @XmlElement(required = true)
     @Getter @Setter
     private String propertyForMetaAnnotationsOverridden;

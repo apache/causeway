@@ -56,7 +56,7 @@ public class PropertyLayoutMultiLineVm implements HasAsciiDocDescription {
         multiLine = 5                           // <.>
         , describedAs =
             "@PropertyLayout(multiLine = 5)",
-        group = "annotation", sequence = "1")
+        fieldSet = "annotation", sequence = "1")
     @XmlElement(required = false)
     @Getter @Setter
     private String propertyUsingAnnotation;
@@ -71,7 +71,7 @@ public class PropertyLayoutMultiLineVm implements HasAsciiDocDescription {
         multiLine = 5
         , describedAs =
             "@PropertyLayout(multiLine = 5)",
-        group = "annotation", sequence = "2")
+        fieldSet = "annotation", sequence = "2")
     @XmlElement(required = false)
     @Getter @Setter
     private String propertyUsingAnnotationReadOnly;
@@ -82,7 +82,7 @@ public class PropertyLayoutMultiLineVm implements HasAsciiDocDescription {
     @PropertyLayout(                                        // <.>
         describedAs =
             "<cpt:property id=\"...\" multiLine=\"5\"/>",
-        group = "layout-file", sequence = "1")
+        fieldSet = "layout-file", sequence = "1")
     @XmlElement(required = false)
     @Getter @Setter
     private String propertyUsingLayout;
@@ -93,7 +93,7 @@ public class PropertyLayoutMultiLineVm implements HasAsciiDocDescription {
     @Property(optionality = Optionality.OPTIONAL)
     @PropertyLayout(
         describedAs = "@MultiLine10MetaAnnotation",
-        group = "meta-annotated", sequence = "1")
+        fieldSet = "meta-annotated", sequence = "1")
     @XmlElement(required = false)
     @Getter @Setter
     private String propertyUsingMetaAnnotation;
@@ -107,7 +107,7 @@ public class PropertyLayoutMultiLineVm implements HasAsciiDocDescription {
         , describedAs =
             "@MultiLine10MetaAnnotation " +
             "@PropertyLayout(multiLine = 3)",
-        group = "meta-annotated-overridden", sequence = "1")
+        fieldSet = "meta-annotated-overridden", sequence = "1")
     @XmlElement(required = false)
     @Getter @Setter
     private String propertyUsingMetaAnnotationButOverridden;

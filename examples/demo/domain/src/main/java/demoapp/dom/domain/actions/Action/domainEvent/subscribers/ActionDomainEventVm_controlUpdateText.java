@@ -29,7 +29,7 @@ import lombok.RequiredArgsConstructor;
 
 //tag::class[]
 @Property()
-@PropertyLayout(group = "contributed", sequence = "1")
+@PropertyLayout(fieldSet = "contributed", sequence = "1")
 @RequiredArgsConstructor
 public class ActionDomainEventVm_controlUpdateText {
 

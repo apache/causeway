@@ -33,7 +33,7 @@ import lombok.RequiredArgsConstructor;
     , describedAs =
         "@RepaintingRepaintMetaAnnotation " +
         "@PropertyLayout(repainting = NO_REPAINT)",
-    group = "meta-annotated-overridden", sequence = "2"
+    fieldSet = "meta-annotated-overridden", sequence = "2"
 )
 @RequiredArgsConstructor
 public class PropertyLayoutRepaintingVm_mixinPropertyWithMetaAnnotationOverridden {

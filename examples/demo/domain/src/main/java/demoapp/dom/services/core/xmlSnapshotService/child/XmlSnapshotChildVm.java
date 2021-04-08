@@ -52,7 +52,7 @@ public class XmlSnapshotChildVm implements HasAsciiDocDescription {
 
     @Title
     @Property()
-    @PropertyLayout(group = "annotation", sequence = "1")
+    @PropertyLayout(fieldSet = "annotation", sequence = "1")
     @XmlElement(required = false)
     @Getter @Setter
     private String value;

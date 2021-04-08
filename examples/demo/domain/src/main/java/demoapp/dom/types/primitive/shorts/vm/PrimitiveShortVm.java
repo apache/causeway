@@ -55,12 +55,12 @@ public class PrimitiveShortVm
 
 //tag::class[]
     @Title(prepend = "short (primitive) view model: ")
-    @PropertyLayout(group = "read-only-properties", sequence = "1")
+    @PropertyLayout(fieldSet = "read-only-properties", sequence = "1")
     @Getter @Setter
     private short readOnlyProperty;                                 // <.>
 
     @Property(editing = Editing.ENABLED)
-    @PropertyLayout(group = "editable-properties", sequence = "1")
+    @PropertyLayout(fieldSet = "editable-properties", sequence = "1")
     @Getter @Setter
     private short readWriteProperty;
 

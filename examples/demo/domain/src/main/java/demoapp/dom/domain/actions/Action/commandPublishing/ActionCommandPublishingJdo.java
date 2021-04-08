@@ -64,22 +64,22 @@ public class ActionCommandPublishingJdo
 
 //tag::property[]
     @Property()
-    @PropertyLayout(group = "annotation", sequence = "1")
+    @PropertyLayout(fieldSet = "annotation", sequence = "1")
     @Getter @Setter
     private String property;
 
     @Property()
-    @PropertyLayout(group = "annotation", sequence = "2")
+    @PropertyLayout(fieldSet = "annotation", sequence = "2")
     @Getter @Setter
     private String propertyCommandDisabled;
 
     @Property()
-    @PropertyLayout(group = "meta-annotated", sequence = "1")
+    @PropertyLayout(fieldSet = "meta-annotated", sequence = "1")
     @Getter @Setter
     private String propertyMetaAnnotated;
 
     @Property()
-    @PropertyLayout(group = "meta-annotated-overridden", sequence = "1")
+    @PropertyLayout(fieldSet = "meta-annotated-overridden", sequence = "1")
     @Getter @Setter
     private String propertyMetaAnnotatedOverridden;
 //end::property[]

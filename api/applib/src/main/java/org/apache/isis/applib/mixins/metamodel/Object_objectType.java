@@ -48,7 +48,7 @@ import lombok.val;
  * @since 1.x {@index}
  */
 @Property
-@PropertyLayout(hidden = Where.ALL_TABLES, group = LayoutMixinConstants.METADATA_LAYOUT_GROUPNAME, sequence = "700.1")
+@PropertyLayout(hidden = Where.ALL_TABLES, fieldSet = LayoutMixinConstants.METADATA_LAYOUT_GROUPNAME, sequence = "700.1")
 @RequiredArgsConstructor
 public class Object_objectType {
 

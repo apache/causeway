@@ -67,7 +67,7 @@ public class PropertyDomainEventVm implements HasAsciiDocDescription {
     )
     @PropertyLayout(
         describedAs = "@Property(domainEvent = TextDomainEvent.class)",
-        group = "annotation", sequence = "1")
+        fieldSet = "annotation", sequence = "1")
     @XmlElement(required = true)
     @Getter @Setter
     private String text;

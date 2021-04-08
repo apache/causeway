@@ -32,7 +32,7 @@ import lombok.RequiredArgsConstructor;
     renderDay = RenderDay.AS_DAY_BEFORE         // <.>
     , describedAs =
         "@PropertyLayout(renderDay = AS_DAY_BEFORE)",
-    group = "contributed", sequence = "1"
+    fieldSet = "contributed", sequence = "1"
 )
 @RequiredArgsConstructor
 public class PropertyLayoutRenderDayVm_mixinEndDateWithPropertyLayout {

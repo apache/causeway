@@ -65,7 +65,7 @@ public class PropertyCommandPublishingJdo
     )
     @PropertyLayout(
         describedAs = "@Property(command = ENABLED)",
-        group = "annotation", sequence = "1")
+        fieldSet = "annotation", sequence = "1")
     @Getter @Setter
     private String property;
 //end::annotation[]
@@ -76,7 +76,7 @@ public class PropertyCommandPublishingJdo
     )
     @PropertyLayout(
         describedAs = "@Property(command = DISABLED)",
-        group = "annotation", sequence = "2")
+        fieldSet = "annotation", sequence = "2")
     @Getter @Setter
     private String propertyCommandDispatchDisabled;
 //end::annotation-2[]
@@ -85,7 +85,7 @@ public class PropertyCommandPublishingJdo
     @PropertyCommandPublishingEnabledMetaAnnotation               // <.>
     @PropertyLayout(
             describedAs = "@PropertyCommandEnabledMetaAnnotation",
-            group = "meta-annotated", sequence = "1")
+            fieldSet = "meta-annotated", sequence = "1")
     @Getter @Setter
     private String propertyMetaAnnotated;
 //end::meta-annotation[]
@@ -97,7 +97,7 @@ public class PropertyCommandPublishingJdo
         describedAs =
             "@PropertyCommandDisabledMetaAnnotation " +
             "@Property(command = ENABLED)",
-            group = "meta-annotated-overridden", sequence = "1")
+            fieldSet = "meta-annotated-overridden", sequence = "1")
     @Getter @Setter
     private String propertyMetaAnnotatedOverridden;
 //end::meta-annotation-overridden[]

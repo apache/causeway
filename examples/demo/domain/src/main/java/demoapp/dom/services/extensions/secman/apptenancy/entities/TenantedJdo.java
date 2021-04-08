@@ -45,7 +45,7 @@ public class TenantedJdo {
 
     @Title
     @Property(editing = Editing.ENABLED)
-    @PropertyLayout(group = "General", sequence = "1")
+    @PropertyLayout(fieldSet = "General", sequence = "1")
     @Getter @Setter
     private String name;
 

@@ -32,7 +32,7 @@ public interface JodaDateTimeHolder2 extends JodaDateTimeHolder {
         describedAs =
             "@PropertyLayout(labelPosition=LEFT)",
         hidden = Where.ALL_TABLES,
-        group = "label-positions", sequence = "1")  // <.>
+        fieldSet = "label-positions", sequence = "1")  // <.>
     default org.joda.time.DateTime getReadOnlyPropertyDerivedLabelPositionLeft() {
         return getReadOnlyProperty();
     }
@@ -43,7 +43,7 @@ public interface JodaDateTimeHolder2 extends JodaDateTimeHolder {
         describedAs =
             "@PropertyLayout(labelPosition=TOP)",
         hidden = Where.ALL_TABLES,
-        group = "label-positions", sequence = "2")
+        fieldSet = "label-positions", sequence = "2")
     default org.joda.time.DateTime getReadOnlyPropertyDerivedLabelPositionTop() {
         return getReadOnlyProperty();
     }
@@ -54,7 +54,7 @@ public interface JodaDateTimeHolder2 extends JodaDateTimeHolder {
         describedAs =
             "@PropertyLayout(labelPosition=RIGHT)",
         hidden = Where.ALL_TABLES,
-        group = "label-positions", sequence = "3")
+        fieldSet = "label-positions", sequence = "3")
     default org.joda.time.DateTime getReadOnlyPropertyDerivedLabelPositionRight() {
         return getReadOnlyProperty();
     }
@@ -65,7 +65,7 @@ public interface JodaDateTimeHolder2 extends JodaDateTimeHolder {
         describedAs =
             "@PropertyLayout(labelPosition=NONE)",
         hidden = Where.ALL_TABLES,
-        group = "label-positions", sequence = "4")
+        fieldSet = "label-positions", sequence = "4")
     default org.joda.time.DateTime getReadOnlyPropertyDerivedLabelPositionNone() {
         return getReadOnlyProperty();
     }

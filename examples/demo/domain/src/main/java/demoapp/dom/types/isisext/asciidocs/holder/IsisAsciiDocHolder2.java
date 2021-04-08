@@ -33,7 +33,7 @@ public interface IsisAsciiDocHolder2 extends demoapp.dom.types.isisext.asciidocs
         describedAs =
             "@PropertyLayout(labelPosition=LEFT)",
         hidden = Where.ALL_TABLES,
-        group = "label-positions", 
+        fieldSet = "label-positions", 
         sequence = "1")  // <.>
     default AsciiDoc getReadOnlyPropertyDerivedLabelPositionLeft() {
         return getReadOnlyProperty();
@@ -45,7 +45,7 @@ public interface IsisAsciiDocHolder2 extends demoapp.dom.types.isisext.asciidocs
         describedAs =
             "@PropertyLayout(labelPosition=TOP)",
         hidden = Where.ALL_TABLES,
-        group = "label-positions", 
+        fieldSet = "label-positions", 
         sequence = "2")
     default AsciiDoc getReadOnlyPropertyDerivedLabelPositionTop() {
         return getReadOnlyProperty();
@@ -57,7 +57,7 @@ public interface IsisAsciiDocHolder2 extends demoapp.dom.types.isisext.asciidocs
         describedAs =
             "@PropertyLayout(labelPosition=RIGHT)",
         hidden = Where.ALL_TABLES,
-        group = "label-positions", 
+        fieldSet = "label-positions", 
         sequence = "3")
     default AsciiDoc getReadOnlyPropertyDerivedLabelPositionRight() {
         return getReadOnlyProperty();
@@ -69,7 +69,7 @@ public interface IsisAsciiDocHolder2 extends demoapp.dom.types.isisext.asciidocs
         describedAs =
             "@PropertyLayout(labelPosition=NONE)",
         hidden = Where.ALL_TABLES,
-        group = "label-positions", 
+        fieldSet = "label-positions", 
         sequence = "4")
     default AsciiDoc getReadOnlyPropertyDerivedLabelPositionNone() {
         return getReadOnlyProperty();

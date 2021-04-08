@@ -57,7 +57,7 @@ public class Persistable_datanucleusIdLong {
     extends org.apache.isis.applib.IsisModuleApplib.PropertyDomainEvent
     <Persistable_datanucleusIdLong, Long> {}
 
-    @PropertyLayout(group = LayoutMixinConstants.METADATA_LAYOUT_GROUPNAME, sequence = "800.1")
+    @PropertyLayout(fieldSet = LayoutMixinConstants.METADATA_LAYOUT_GROUPNAME, sequence = "800.1")
     public Long prop() {
         final Object objectId = JDOHelper.getObjectId(persistable);
         if(objectId instanceof DatastoreId) {

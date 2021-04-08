@@ -56,7 +56,7 @@ public class PropertyLayoutCssClassVm implements HasAsciiDocDescription {
         cssClass = "red"                                // <.>
         , describedAs =
             "@PropertyLayout(cssClass = \"red\")",
-        group = "annotation", sequence = "1")
+        fieldSet = "annotation", sequence = "1")
     @XmlElement(required = false)
     @Getter @Setter
     private String propertyUsingAnnotation;
@@ -67,7 +67,7 @@ public class PropertyLayoutCssClassVm implements HasAsciiDocDescription {
     @PropertyLayout(                                        // <.>
         describedAs =
             "<cpt:property id=\"...\" cssClass=\"red\"/>",
-        group = "layout-file", sequence = "1")
+        fieldSet = "layout-file", sequence = "1")
     @XmlElement(required = false)
     @Getter @Setter
     private String propertyUsingLayout;
@@ -78,7 +78,7 @@ public class PropertyLayoutCssClassVm implements HasAsciiDocDescription {
     @Property(optionality = Optionality.OPTIONAL)
     @PropertyLayout(
         describedAs = "@CssClassRedMetaAnnotation",
-        group = "meta-annotated", sequence = "1")
+        fieldSet = "meta-annotated", sequence = "1")
     @XmlElement(required = false)
     @Getter @Setter
     private String propertyUsingMetaAnnotation;
@@ -91,7 +91,7 @@ public class PropertyLayoutCssClassVm implements HasAsciiDocDescription {
         cssClass = "blue"                               // <.>
         , describedAs =
             "@CssClassRedMetaAnnotation @PropertyLayout(...)",
-        group = "meta-annotated-overridden", sequence = "1")
+        fieldSet = "meta-annotated-overridden", sequence = "1")
     @XmlElement(required = false)
     @Getter @Setter
     private String propertyUsingMetaAnnotationButOverridden;

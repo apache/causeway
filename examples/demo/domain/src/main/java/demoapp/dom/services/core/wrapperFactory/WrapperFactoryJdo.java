@@ -70,12 +70,12 @@ public class WrapperFactoryJdo
 
 //tag::property[]
     @Property()
-    @PropertyLayout(group = "async", sequence = "1")
+    @PropertyLayout(fieldSet = "async", sequence = "1")
     @Getter @Setter
     private String propertyAsync;
 
     @Property()
-    @PropertyLayout(group = "async", sequence = "2")
+    @PropertyLayout(fieldSet = "async", sequence = "2")
     @Getter @Setter
     private String propertyAsyncMixin;
 //end::property[]

@@ -38,7 +38,7 @@ import lombok.RequiredArgsConstructor;
         )
 @PropertyLayout(
         hidden=Where.REFERENCES_PARENT,
-        group="Feature", sequence = "4"
+        fieldSet="Feature", sequence = "4"
         )
 @RequiredArgsConstructor
 public class ApplicationPermission_feature {

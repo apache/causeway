@@ -30,7 +30,7 @@ import lombok.RequiredArgsConstructor;
     named = "@PropertyLayout overrides meta-annotation for mixin"   // <.>
     , describedAs =
         "@NamedMetaAnnotation @PropertyLayout(...)",
-    group = "meta-annotated-overridden", sequence = "2"
+    fieldSet = "meta-annotated-overridden", sequence = "2"
 )
 @RequiredArgsConstructor
 public class PropertyLayoutNamedVm_mixinPropertyWithMetaAnnotationOverridden {

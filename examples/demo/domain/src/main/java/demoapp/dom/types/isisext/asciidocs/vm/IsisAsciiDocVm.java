@@ -61,24 +61,24 @@ public class IsisAsciiDocVm
         return "AsciiDoc view model";
     }
 
-    @PropertyLayout(group = "read-only-properties", sequence = "1")
+    @PropertyLayout(fieldSet = "read-only-properties", sequence = "1")
     @XmlElement(required = true)                                                // <.>
     @Getter @Setter
     private AsciiDoc readOnlyProperty;
 
     @Property(editing = Editing.ENABLED)                                        // <.>
-    @PropertyLayout(hidden = Where.ALL_TABLES, group = "editable-properties", sequence = "1")
+    @PropertyLayout(hidden = Where.ALL_TABLES, fieldSet = "editable-properties", sequence = "1")
     @XmlElement(required = true)
     @Getter @Setter
     private AsciiDoc readWriteProperty;
 
     @Property(optionality = Optionality.OPTIONAL)                               // <.>
-    @PropertyLayout(group = "optional-properties", sequence = "1")
+    @PropertyLayout(fieldSet = "optional-properties", sequence = "1")
     @Getter @Setter
     private AsciiDoc readOnlyOptionalProperty;
 
     @Property(editing = Editing.ENABLED, optionality = Optionality.OPTIONAL)
-    @PropertyLayout(hidden = Where.ALL_TABLES, group = "optional-properties", sequence = "2")
+    @PropertyLayout(hidden = Where.ALL_TABLES, fieldSet = "optional-properties", sequence = "2")
     @Getter @Setter
     private AsciiDoc readWriteOptionalProperty;
 

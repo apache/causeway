@@ -33,7 +33,7 @@ public interface IsisMarkdownHolder2 extends demoapp.dom.types.isisext.markdowns
         describedAs =
             "@PropertyLayout(labelPosition=LEFT)",
         hidden = Where.ALL_TABLES,
-        group = "label-positions", sequence = "1")  // <.>
+        fieldSet = "label-positions", sequence = "1")  // <.>
     default Markdown getReadOnlyPropertyDerivedLabelPositionLeft() {
         return getReadOnlyProperty();
     }
@@ -44,7 +44,7 @@ public interface IsisMarkdownHolder2 extends demoapp.dom.types.isisext.markdowns
         describedAs =
             "@PropertyLayout(labelPosition=TOP)",
         hidden = Where.ALL_TABLES,
-        group = "label-positions", sequence = "2")
+        fieldSet = "label-positions", sequence = "2")
     default Markdown getReadOnlyPropertyDerivedLabelPositionTop() {
         return getReadOnlyProperty();
     }
@@ -55,7 +55,7 @@ public interface IsisMarkdownHolder2 extends demoapp.dom.types.isisext.markdowns
         describedAs =
             "@PropertyLayout(labelPosition=RIGHT)",
         hidden = Where.ALL_TABLES,
-        group = "label-positions", sequence = "3")
+        fieldSet = "label-positions", sequence = "3")
     default Markdown getReadOnlyPropertyDerivedLabelPositionRight() {
         return getReadOnlyProperty();
     }
@@ -66,7 +66,7 @@ public interface IsisMarkdownHolder2 extends demoapp.dom.types.isisext.markdowns
         describedAs =
             "@PropertyLayout(labelPosition=NONE)",
         hidden = Where.ALL_TABLES,
-        group = "label-positions", sequence = "4")
+        fieldSet = "label-positions", sequence = "4")
     default Markdown getReadOnlyPropertyDerivedLabelPositionNone() {
         return getReadOnlyProperty();
     }

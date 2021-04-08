@@ -55,7 +55,7 @@ public class PropertyLayoutDescribedAsVm implements HasAsciiDocDescription {
     @PropertyLayout(
         describedAs =                                   // <.>
             "@PropertyLayout(describedAs= \"...\")",
-        group = "annotation", sequence = "1")
+        fieldSet = "annotation", sequence = "1")
     @XmlElement(required = false)
     @Getter @Setter
     private String propertyUsingAnnotation;
@@ -63,7 +63,7 @@ public class PropertyLayoutDescribedAsVm implements HasAsciiDocDescription {
 
 //tag::layout-file[]
     @Property(optionality = Optionality.OPTIONAL)
-    @PropertyLayout(group = "layout-file", sequence = "1") // <.>
+    @PropertyLayout(fieldSet = "layout-file", sequence = "1") // <.>
     @XmlElement(required = false)
     @Getter @Setter
     private String propertyUsingLayout;
@@ -74,7 +74,7 @@ public class PropertyLayoutDescribedAsVm implements HasAsciiDocDescription {
     @DescribedAsMetaAnnotation                            // <.>
     @PropertyLayout(
         describedAs = "@DescribedAsMetaAnnotation",
-        group = "meta-annotated", sequence = "1")
+        fieldSet = "meta-annotated", sequence = "1")
     @XmlElement(required = false)
     @Getter @Setter
     private String propertyUsingMetaAnnotation;
@@ -86,7 +86,7 @@ public class PropertyLayoutDescribedAsVm implements HasAsciiDocDescription {
     @PropertyLayout(
         describedAs =
             "@DescribedAsMetaAnnotation @PropertyLayout(...)",  // <.>
-        group = "meta-annotated-overridden", sequence = "1")
+        fieldSet = "meta-annotated-overridden", sequence = "1")
     @XmlElement(required = false)
     @Getter @Setter
     private String propertyUsingMetaAnnotationButOverridden;

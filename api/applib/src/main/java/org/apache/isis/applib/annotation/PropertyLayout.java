@@ -76,7 +76,7 @@ public @interface PropertyLayout {
      * </p>
      * @see Action#associateWith()
      */
-    String group()
+    String fieldSet()
             default "";
     
     /**

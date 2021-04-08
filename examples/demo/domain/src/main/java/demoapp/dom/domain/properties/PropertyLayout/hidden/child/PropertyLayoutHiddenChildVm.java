@@ -74,7 +74,7 @@ public class PropertyLayoutHiddenChildVm implements HasAsciiDocDescription {
         hidden = Where.NOWHERE                           // <.>
         , describedAs =
             "@PropertyLayout(hidden = Where.NOWHERE)",
-        group = "variants", sequence = "1")
+        fieldSet = "variants", sequence = "1")
     @XmlElement(required = false)
     @Getter @Setter
     private String propertyHiddenNowhere;
@@ -86,7 +86,7 @@ public class PropertyLayoutHiddenChildVm implements HasAsciiDocDescription {
         hidden = Where.EVERYWHERE                        // <.>
         , describedAs =
             "@PropertyLayout(hidden = Where.EVERYWHERE)",
-        group = "variants", sequence = "2")
+        fieldSet = "variants", sequence = "2")
     @XmlElement(required = false)
     @Getter @Setter
     private String propertyHiddenEverywhere;
@@ -98,7 +98,7 @@ public class PropertyLayoutHiddenChildVm implements HasAsciiDocDescription {
         hidden = Where.ANYWHERE                        // <.>
         , describedAs =
             "@PropertyLayout(hidden = Where.ANYWHERE)",
-        group = "variants", sequence = "2.1")
+        fieldSet = "variants", sequence = "2.1")
     @XmlElement(required = false)
     @Getter @Setter
     private String propertyHiddenAnywhere;
@@ -110,7 +110,7 @@ public class PropertyLayoutHiddenChildVm implements HasAsciiDocDescription {
         hidden = Where.ALL_TABLES                       // <.>
         , describedAs =
         "@PropertyLayout(hidden = Where.ALL_TABLES)",
-        group = "variants", sequence = "3")
+        fieldSet = "variants", sequence = "3")
     @XmlElement(required = false)
     @Getter @Setter
     private String propertyHiddenAllTables;
@@ -122,7 +122,7 @@ public class PropertyLayoutHiddenChildVm implements HasAsciiDocDescription {
             hidden = Where.OBJECT_FORMS                     // <.>
             , describedAs =
             "@PropertyLayout(hidden = Where.OBJECT_FORMS)",
-            group = "variants", sequence = "4")
+            fieldSet = "variants", sequence = "4")
     @XmlElement(required = false)
     @Getter @Setter
     private String propertyHiddenObjectForms;
@@ -134,7 +134,7 @@ public class PropertyLayoutHiddenChildVm implements HasAsciiDocDescription {
             hidden = Where.STANDALONE_TABLES            // <.>
             , describedAs =
             "@PropertyLayout(hidden = Where.STANDALONE_TABLES)",
-            group = "variants", sequence = "5")
+            fieldSet = "variants", sequence = "5")
     @XmlElement(required = false)
     @Getter @Setter
     private String propertyHiddenStandaloneTables;
@@ -146,7 +146,7 @@ public class PropertyLayoutHiddenChildVm implements HasAsciiDocDescription {
             hidden = Where.ALL_EXCEPT_STANDALONE_TABLES            // <.>
             , describedAs =
             "@PropertyLayout(hidden = Where.ALL_EXCEPT_STANDALONE_TABLES)",
-            group = "variants", sequence = "6")
+            fieldSet = "variants", sequence = "6")
     @XmlElement(required = false)
     @Getter @Setter
     private String propertyHiddenAllExceptStandaloneTables;
@@ -159,7 +159,7 @@ public class PropertyLayoutHiddenChildVm implements HasAsciiDocDescription {
             hidden = Where.PARENTED_TABLES            // <.>
             , describedAs =
             "@PropertyLayout(hidden = Where.PARENTED_TABLES)",
-            group = "variants", sequence = "7")
+            fieldSet = "variants", sequence = "7")
     @XmlElement(required = false)
     @Getter @Setter
     private String propertyHiddenParentedTables;
@@ -171,7 +171,7 @@ public class PropertyLayoutHiddenChildVm implements HasAsciiDocDescription {
             hidden = Where.REFERENCES_PARENT            // <.>
             , describedAs =
             "@PropertyLayout(hidden = Where.REFERENCES_PARENT)",
-            group = "variants", sequence = "8")
+            fieldSet = "variants", sequence = "8")
     @XmlTransient   // to avoid cycles
     @Getter @Setter
     private PropertyLayoutHiddenVm propertyHiddenReferencesParent;

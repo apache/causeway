@@ -130,7 +130,7 @@ public interface ApplicationPermission {
     @Property
     @PropertyLayout(
             hidden=Where.REFERENCES_PARENT,
-            group="Role", 
+            fieldSet="Role", 
             sequence = "1")
     default ApplicationRole getRole() {
         throw _Exceptions.unsupportedOperation("please implement me");
@@ -140,7 +140,7 @@ public interface ApplicationPermission {
     // -- RULE
 
     @Property
-    @PropertyLayout(group="Permissions", sequence = "2")
+    @PropertyLayout(fieldSet="Permissions", sequence = "2")
     default ApplicationPermissionRule getRule() {
         throw _Exceptions.unsupportedOperation("please implement me");
     }
@@ -149,7 +149,7 @@ public interface ApplicationPermission {
     // -- MODE
 
     @Property
-    @PropertyLayout(group="Permissions", sequence = "3")
+    @PropertyLayout(fieldSet="Permissions", sequence = "3")
     default ApplicationPermissionMode getMode() {
         throw _Exceptions.unsupportedOperation("please implement me");
     }
@@ -158,7 +158,7 @@ public interface ApplicationPermission {
     // -- SORT
 
     @Property
-    @PropertyLayout(group="Feature", sequence = "5")
+    @PropertyLayout(fieldSet="Feature", sequence = "5")
     default String getSort() {
         throw _Exceptions.unsupportedOperation("please implement me");
     }
@@ -166,7 +166,7 @@ public interface ApplicationPermission {
     // -- FQN
 
     @Property
-    @PropertyLayout(group="Feature", sequence = "5.1")
+    @PropertyLayout(fieldSet="Feature", sequence = "5.1")
     default String getFeatureFqn() {
         throw _Exceptions.unsupportedOperation("please implement me");
     }

@@ -53,25 +53,25 @@ public class JodaLocalDateJdo                                          // <.>
 
 //tag::class[]
     @Title(prepend = "org.joda.time.LocalDate JDO entity: ")
-    @PropertyLayout(group = "read-only-properties", sequence = "1")
+    @PropertyLayout(fieldSet = "read-only-properties", sequence = "1")
     @Column(allowsNull = "false")                                               // <.>
     @Getter @Setter
     private org.joda.time.LocalDate readOnlyProperty;
 
     @Property(editing = Editing.ENABLED)                                        // <.>
-    @PropertyLayout(group = "editable-properties", sequence = "1")
+    @PropertyLayout(fieldSet = "editable-properties", sequence = "1")
     @Column(allowsNull = "false")
     @Getter @Setter
     private org.joda.time.LocalDate readWriteProperty;
 
     @Property(optionality = Optionality.OPTIONAL)                               // <.>
-    @PropertyLayout(group = "optional-properties", sequence = "1")
+    @PropertyLayout(fieldSet = "optional-properties", sequence = "1")
     @Column(allowsNull = "true")                                                // <.>
     @Getter @Setter
     private org.joda.time.LocalDate readOnlyOptionalProperty;
 
     @Property(editing = Editing.ENABLED, optionality = Optionality.OPTIONAL)
-    @PropertyLayout(group = "optional-properties", sequence = "2")
+    @PropertyLayout(fieldSet = "optional-properties", sequence = "2")
     @Column(allowsNull = "true")
     @Getter @Setter
     private org.joda.time.LocalDate readWriteOptionalProperty;

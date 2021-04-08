@@ -65,7 +65,7 @@ public class PropertyHiddenVm implements HasAsciiDocDescription {
     @PropertyLayout(
         describedAs =
             "@Property(hidden = Where.NOWHERE)",
-        group = "annotation", sequence = "1")
+        fieldSet = "annotation", sequence = "1")
     @XmlElement(required = false)
     @Getter @Setter
     private String propertyHiddenNowhereUsingAnnotation;
@@ -78,7 +78,7 @@ public class PropertyHiddenVm implements HasAsciiDocDescription {
     @PropertyLayout(
         describedAs =
             "@Property(hidden = Where.EVERYWHERE)",
-        group = "variants", sequence = "1")
+        fieldSet = "variants", sequence = "1")
     @XmlElement(required = true)
     @Getter @Setter
     private String propertyHiddenEverywhere;
@@ -91,7 +91,7 @@ public class PropertyHiddenVm implements HasAsciiDocDescription {
     @PropertyLayout(
         describedAs =
             "@Property(hidden = Where.ANYWHERE)",
-        group = "variants", sequence = "2")
+        fieldSet = "variants", sequence = "2")
     @XmlElement(required = true)
     @Getter @Setter
     private String propertyHiddenAnywhere;
@@ -110,7 +110,7 @@ public class PropertyHiddenVm implements HasAsciiDocDescription {
     @Property()
     @PropertyLayout(
         describedAs = "@HiddenEverywhereMetaAnnotation",
-        group = "meta-annotated", sequence = "1")
+        fieldSet = "meta-annotated", sequence = "1")
     @XmlElement(required = true)
     @Getter @Setter
     private String propertyUsingMetaAnnotation;
@@ -125,7 +125,7 @@ public class PropertyHiddenVm implements HasAsciiDocDescription {
         describedAs =
             "@HiddenEverywhereMetaAnnotation " +
             "@Property(hidden = Where.NOWHERE)",
-        group = "meta-annotated-overridden", sequence = "2")
+        fieldSet = "meta-annotated-overridden", sequence = "2")
     @XmlElement(required = true)
     @Getter @Setter
     private String propertyUsingMetaAnnotationButOverridden;

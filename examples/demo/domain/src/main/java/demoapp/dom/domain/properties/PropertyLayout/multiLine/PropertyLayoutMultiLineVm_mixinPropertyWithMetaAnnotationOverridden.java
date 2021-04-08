@@ -31,7 +31,7 @@ import lombok.RequiredArgsConstructor;
     , describedAs =
         "@MultiLine10MetaAnnotation " +
         "@PropertyLayout(multiLine = 3)",
-    group = "meta-annotated-overridden", sequence = "2"
+    fieldSet = "meta-annotated-overridden", sequence = "2"
 )
 @RequiredArgsConstructor
 public class PropertyLayoutMultiLineVm_mixinPropertyWithMetaAnnotationOverridden {

@@ -80,56 +80,56 @@ public class ActionSemanticsVm implements HasAsciiDocDescription {
     }
 
     @Property()
-    @PropertyLayout(group = "not-annotated", sequence = "1")
+    @PropertyLayout(fieldSet = "not-annotated", sequence = "1")
     @XmlElement(required = true)
     @Getter @Setter
     private int propertyNoAnnotation;
 
     @Property()
-    @PropertyLayout(group = "annotated-safe", sequence = "1")
+    @PropertyLayout(fieldSet = "annotated-safe", sequence = "1")
     @XmlElement(required = true)
     @Getter @Setter
     private int propertyForSafe;
 
     @Property()
-    @PropertyLayout(group = "annotated-safe", sequence = "2")
+    @PropertyLayout(fieldSet = "annotated-safe", sequence = "2")
     @XmlElement(required = true)
     @Getter @Setter
     private int propertyForSafeAndRequestCacheable;
 
 
     @Property()
-    @PropertyLayout(group = "annotated-idempotent", sequence = "1")
+    @PropertyLayout(fieldSet = "annotated-idempotent", sequence = "1")
     @XmlElement(required = true)
     @Getter @Setter
     private int propertyForIdempotent;
 
     @Property()
-    @PropertyLayout(group = "annotated-idempotent", sequence = "2")
+    @PropertyLayout(fieldSet = "annotated-idempotent", sequence = "2")
     @XmlElement(required = true)
     @Getter @Setter
     private int propertyForIdempotentAreYouSure;
 
     @Property()
-    @PropertyLayout(group = "annotated-non-idempotent", sequence = "5")
+    @PropertyLayout(fieldSet = "annotated-non-idempotent", sequence = "5")
     @XmlElement(required = true)
     @Getter @Setter
     private int propertyForNonIdempotent;
 
     @Property()
-    @PropertyLayout(group = "annotated-non-idempotent", sequence = "6")
+    @PropertyLayout(fieldSet = "annotated-non-idempotent", sequence = "6")
     @XmlElement(required = true)
     @Getter @Setter
     private int propertyForNonIdempotentAreYouSure;
 
     @Property()
-    @PropertyLayout(group = "meta-annotated", sequence = "1")
+    @PropertyLayout(fieldSet = "meta-annotated", sequence = "1")
     @XmlElement(required = true)
     @Getter @Setter
     private int propertyForMetaAnnotations;
 
     @Property()
-    @PropertyLayout(group = "meta-annotated-overridden", sequence = "1")
+    @PropertyLayout(fieldSet = "meta-annotated-overridden", sequence = "1")
     @XmlElement(required = true)
     @Getter @Setter
     private int propertyForMetaAnnotationsOverridden;

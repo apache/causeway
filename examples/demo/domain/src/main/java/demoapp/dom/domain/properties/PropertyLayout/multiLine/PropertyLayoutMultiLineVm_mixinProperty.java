@@ -29,7 +29,7 @@ import lombok.RequiredArgsConstructor;
     multiLine = 5                           // <.>
     , describedAs =
         "@PropertyLayout(multiLine = 5)",
-    group = "contributed", sequence = "1"
+    fieldSet = "contributed", sequence = "1"
 )
 @RequiredArgsConstructor
 public class PropertyLayoutMultiLineVm_mixinProperty {

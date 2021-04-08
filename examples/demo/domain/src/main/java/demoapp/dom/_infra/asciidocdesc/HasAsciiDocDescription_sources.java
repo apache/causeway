@@ -38,7 +38,7 @@ public class HasAsciiDocDescription_sources {
     private final HasAsciiDocDescription hasAsciiDocDescription;
 
     @PropertyLayout(labelPosition = LabelPosition.NONE, hidden = Where.ALL_TABLES,
-            group = "sources", sequence = "1")
+            fieldSet = "sources", sequence = "1")
     public AsciiDoc prop() {
         val packageName = hasAsciiDocDescription.getClass().getPackage().getName();
         val sourceLocation = packageName.replace('.', '/');

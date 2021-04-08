@@ -52,13 +52,13 @@ public class ActionLayoutPromptStyleVm implements HasAsciiDocDescription {
 
     @Title
     @Property(editing = Editing.DISABLED)
-    @PropertyLayout(group = "general", sequence = "1")
+    @PropertyLayout(fieldSet = "general", sequence = "1")
     @XmlElement(required = true)
     @Getter @Setter
     private String title;
 
     @Property(optionality = Optionality.OPTIONAL)
-    @PropertyLayout(group = "annotated", sequence = "1")
+    @PropertyLayout(fieldSet = "annotated", sequence = "1")
     @XmlElement(required = false)
     @Getter @Setter
     private String readOnlyProperty1;
@@ -66,14 +66,14 @@ public class ActionLayoutPromptStyleVm implements HasAsciiDocDescription {
     @Property(optionality = Optionality.OPTIONAL)
     @PropertyLayout(
             describedAs = "has associated action with promptStyle=INLINE_AS_IF_EDIT",
-            group = "annotated",
+            fieldSet = "annotated",
             sequence = "2")
     @XmlElement(required = false)
     @Getter @Setter
     private String readOnlyProperty2;
 
     @Property(optionality = Optionality.OPTIONAL)
-    @PropertyLayout(group = "layout", sequence = "1")
+    @PropertyLayout(fieldSet = "layout", sequence = "1")
     @XmlElement(required = false)
     @Getter @Setter
     private String readOnlyProperty3;
@@ -81,7 +81,7 @@ public class ActionLayoutPromptStyleVm implements HasAsciiDocDescription {
     @Property(optionality = Optionality.OPTIONAL)
     @PropertyLayout(
             describedAs = "has associated action with promptStyle=INLINE_AS_IF_EDIT",
-            group = "layout",
+            fieldSet = "layout",
             sequence = "2")
     @XmlElement(required = false)
     @Getter @Setter

@@ -30,7 +30,7 @@ import lombok.RequiredArgsConstructor;
     hidden = Where.ALL_TABLES                   // <.>
     , describedAs =
         "@PropertyLayout(hidden = ALL_TABLES)",
-    group = "contributed", sequence = "1"
+    fieldSet = "contributed", sequence = "1"
 )
 @RequiredArgsConstructor
 public class PropertyLayoutHiddenChildVm_mixinProperty {

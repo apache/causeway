@@ -59,7 +59,7 @@ public interface DomainChangeRecord extends HasInteractionId, HasUsername {
     @Property
     @PropertyLayout(
             hidden = Where.ALL_EXCEPT_STANDALONE_TABLES,
-            group="Identifiers", 
+            fieldSet="Identifiers", 
             sequence = "1")
     ChangeType getType();
 
@@ -70,7 +70,7 @@ public interface DomainChangeRecord extends HasInteractionId, HasUsername {
      * this change occurred.
      */
     @Property
-    @PropertyLayout(group="Identifiers",sequence = "50")
+    @PropertyLayout(fieldSet="Identifiers",sequence = "50")
     UUID getInteractionId();
 
 
@@ -78,7 +78,7 @@ public interface DomainChangeRecord extends HasInteractionId, HasUsername {
      * The user that caused the change.
      */
     @Property
-    @PropertyLayout(group="Identifiers", sequence = "10")
+    @PropertyLayout(fieldSet="Identifiers", sequence = "10")
     String getUsername();
 
 
@@ -86,7 +86,7 @@ public interface DomainChangeRecord extends HasInteractionId, HasUsername {
      * The time that the change occurred.
      */
     @Property
-    @PropertyLayout(group="Identifiers", sequence = "20")
+    @PropertyLayout(fieldSet="Identifiers", sequence = "20")
     Timestamp getTimestamp();
 
 
@@ -96,7 +96,7 @@ public interface DomainChangeRecord extends HasInteractionId, HasUsername {
     @Property
     @PropertyLayout(
             named="Object Type",
-            group="Target", 
+            fieldSet="Target", 
             sequence = "10")
     default String getTargetObjectType() {
         return getTarget().getObjectType();
@@ -110,7 +110,7 @@ public interface DomainChangeRecord extends HasInteractionId, HasUsername {
     @Property
     @PropertyLayout(
             named="Object",
-            group="Target", 
+            fieldSet="Target", 
             sequence="30")
     Bookmark getTarget();
 
@@ -123,7 +123,7 @@ public interface DomainChangeRecord extends HasInteractionId, HasUsername {
      * </p>
      */
     @Property(optionality = Optionality.OPTIONAL)
-    @PropertyLayout(named="Member", hidden = Where.ALL_EXCEPT_STANDALONE_TABLES, group="Target", sequence = "20")
+    @PropertyLayout(named="Member", hidden = Where.ALL_EXCEPT_STANDALONE_TABLES, fieldSet="Target", sequence = "20")
     String getTargetMember();
 
 
@@ -135,7 +135,7 @@ public interface DomainChangeRecord extends HasInteractionId, HasUsername {
      * </p>
      */
     @Property(optionality = Optionality.OPTIONAL)
-    @PropertyLayout(hidden = Where.ALL_EXCEPT_STANDALONE_TABLES, group="Detail",sequence = "6")
+    @PropertyLayout(hidden = Where.ALL_EXCEPT_STANDALONE_TABLES, fieldSet="Detail",sequence = "6")
     String getPreValue();
 
 
@@ -147,7 +147,7 @@ public interface DomainChangeRecord extends HasInteractionId, HasUsername {
      * </p>
      */
     @Property(optionality = Optionality.MANDATORY)
-    @PropertyLayout(hidden = Where.ALL_EXCEPT_STANDALONE_TABLES, group="Detail", 
+    @PropertyLayout(hidden = Where.ALL_EXCEPT_STANDALONE_TABLES, fieldSet="Detail", 
     sequence = "7")
     String getPostValue();
 

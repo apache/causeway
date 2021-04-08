@@ -31,7 +31,7 @@ extends LayoutGroupFacetAbstract {
             final FacetHolder holder) {
         
         return actionIfAny
-                .map(PropertyLayout::group)
+                .map(PropertyLayout::fieldSet)
                 .map(group -> new LayoutGroupFacetFromPropertyLayoutAnnotation(group, holder))
                 .orElse(null);
     }

@@ -32,7 +32,7 @@ public interface WrapperBooleanHolder2 extends WrapperBooleanHolder {
         describedAs =
             "@PropertyLayout(labelPosition=LEFT)",
         hidden = Where.ALL_TABLES, 
-        group = "label-positions", sequence = "1")  // <.>
+        fieldSet = "label-positions", sequence = "1")  // <.>
     default Boolean getReadOnlyPropertyDerivedLabelPositionLeft() {
         return getReadOnlyProperty();
     }
@@ -43,7 +43,7 @@ public interface WrapperBooleanHolder2 extends WrapperBooleanHolder {
         describedAs =
             "@PropertyLayout(labelPosition=TOP)",
         hidden = Where.ALL_TABLES, 
-        group = "label-positions", sequence = "2")
+        fieldSet = "label-positions", sequence = "2")
     default Boolean getReadOnlyPropertyDerivedLabelPositionTop() {
         return getReadOnlyProperty();
     }
@@ -54,7 +54,7 @@ public interface WrapperBooleanHolder2 extends WrapperBooleanHolder {
         describedAs =
             "@PropertyLayout(labelPosition=RIGHT)",
         hidden = Where.ALL_TABLES,
-        group = "label-positions", sequence = "3")
+        fieldSet = "label-positions", sequence = "3")
     default Boolean getReadOnlyPropertyDerivedLabelPositionRight() {
         return getReadOnlyProperty();
     }
@@ -65,7 +65,7 @@ public interface WrapperBooleanHolder2 extends WrapperBooleanHolder {
         describedAs =
             "@PropertyLayout(labelPosition=NONE)",
         hidden = Where.ALL_TABLES, 
-        group = "label-positions", sequence = "4")
+        fieldSet = "label-positions", sequence = "4")
     default Boolean getReadOnlyPropertyDerivedLabelPositionNone() {
         return getReadOnlyProperty();
     }

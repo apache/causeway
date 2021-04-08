@@ -60,7 +60,7 @@ public class PropertyRegexPatternVm implements HasAsciiDocDescription {
     @PropertyLayout(
         describedAs =
             "@Property(regexPattern = \"^\\w+@\\w+[.]com$\"\")",
-        group = "annotation", sequence = "1")
+        fieldSet = "annotation", sequence = "1")
     @XmlElement(required = true)
     @Getter @Setter
     private String emailAddressPropertyUsingAnnotation;
@@ -71,7 +71,7 @@ public class PropertyRegexPatternVm implements HasAsciiDocDescription {
     @Property()
     @PropertyLayout(
         describedAs = "@RegexPatternEmailComMetaAnnotation",
-        group = "meta-annotated", sequence = "1")
+        fieldSet = "meta-annotated", sequence = "1")
     @XmlElement(required = false)
     @Getter @Setter
     private String emailAddressPropertyUsingMetaAnnotation;
@@ -88,7 +88,7 @@ public class PropertyRegexPatternVm implements HasAsciiDocDescription {
         describedAs =
             "@RegexPatternEmailComMetaAnnotation " +
             "@Property(regexPattern = \"^\\w+@\\w+[.]org$\"\")",
-        group = "meta-annotated-overridden", sequence = "1")
+        fieldSet = "meta-annotated-overridden", sequence = "1")
     @XmlElement(required = true)
     @Getter @Setter
     private String emailAddressPropertyUsingMetaAnnotationButOverridden;

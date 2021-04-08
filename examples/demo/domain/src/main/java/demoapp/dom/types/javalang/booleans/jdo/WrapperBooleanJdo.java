@@ -53,25 +53,25 @@ public class WrapperBooleanJdo                                          // <.>
 
 //tag::class[]
     @Title(prepend = "Boolean (wrapper) JDO entity: ")
-    @PropertyLayout(group = "read-only-properties", sequence = "1")
+    @PropertyLayout(fieldSet = "read-only-properties", sequence = "1")
     @Column(allowsNull = "false")                                               // <.>
     @Getter @Setter
     private Boolean readOnlyProperty;
 
     @Property(editing = Editing.ENABLED)                                        // <.>
-    @PropertyLayout(group = "editable-properties", sequence = "1")
+    @PropertyLayout(fieldSet = "editable-properties", sequence = "1")
     @Column(allowsNull = "false")
     @Getter @Setter
     private Boolean readWriteProperty;
 
     @Property(optionality = Optionality.OPTIONAL)                               // <.>
-    @PropertyLayout(group = "optional-properties", sequence = "1")
+    @PropertyLayout(fieldSet = "optional-properties", sequence = "1")
     @Column(allowsNull = "true")                                                // <.>
     @Getter @Setter
     private Boolean readOnlyOptionalProperty;
 
     @Property(editing = Editing.ENABLED, optionality = Optionality.OPTIONAL)
-    @PropertyLayout(group = "optional-properties", sequence = "2")
+    @PropertyLayout(fieldSet = "optional-properties", sequence = "2")
     @Column(allowsNull = "true")
     @Getter @Setter
     private Boolean readWriteOptionalProperty;

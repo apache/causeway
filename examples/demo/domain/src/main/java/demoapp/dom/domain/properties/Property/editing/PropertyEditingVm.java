@@ -57,7 +57,7 @@ public class PropertyEditingVm implements HasAsciiDocDescription {
     )
     @PropertyLayout(
         describedAs = "@Property(editing = ENABLED)",
-        group = "annotation", sequence = "1")
+        fieldSet = "annotation", sequence = "1")
     @XmlElement(required = true)
     @Getter @Setter
     private String propertyUsingAnnotation;
@@ -68,7 +68,7 @@ public class PropertyEditingVm implements HasAsciiDocDescription {
     @EditingEnabledMetaAnnotation               // <.>
     @PropertyLayout(
         describedAs = "@EditingEnabledMetaAnnotation",
-        group = "meta-annotated", sequence = "1")
+        fieldSet = "meta-annotated", sequence = "1")
     @XmlElement(required = true)
     @Getter @Setter
     private String propertyUsingMetaAnnotation;
@@ -83,7 +83,7 @@ public class PropertyEditingVm implements HasAsciiDocDescription {
         describedAs =
             "@EditingEnabledMetaAnnotation " +
             "@PropertyLayout(editing = DISABLED)",
-            group = "meta-annotated-overridden", sequence = "1")
+            fieldSet = "meta-annotated-overridden", sequence = "1")
     @XmlElement(required = false)
     @Getter @Setter
     private String propertyUsingMetaAnnotationButOverridden;

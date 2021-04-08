@@ -31,7 +31,7 @@ import lombok.RequiredArgsConstructor;
     , describedAs =
         "@PropertyLayout(cssClass = \"red\")"
     , hidden = Where.ALL_TABLES,
-    group = "contributed", sequence = "1"
+    fieldSet = "contributed", sequence = "1"
 )
 @RequiredArgsConstructor
 public class PropertyLayoutCssClassVm_mixinProperty {

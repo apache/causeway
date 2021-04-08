@@ -28,7 +28,7 @@ import lombok.RequiredArgsConstructor;
 @PropertyLayout(
     describedAs =                                   // <.>
         "@PropertyLayout(describedAs = \"...\")",
-    group = "contributed", sequence = "1"
+    fieldSet = "contributed", sequence = "1"
 )
 @RequiredArgsConstructor
 public class PropertyLayoutDescribedAsVm_mixinProperty {

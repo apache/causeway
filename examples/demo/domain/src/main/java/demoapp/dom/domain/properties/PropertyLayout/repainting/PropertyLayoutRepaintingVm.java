@@ -57,7 +57,7 @@ public class PropertyLayoutRepaintingVm implements HasAsciiDocDescription {
         describedAs =
             "Editable property " +
             "(PDFs should not repaint if it changes)",
-        group = "edit", sequence = "1")
+        fieldSet = "edit", sequence = "1")
     @XmlElement(required = false)
     @Getter @Setter
     private String editMe;
@@ -68,7 +68,7 @@ public class PropertyLayoutRepaintingVm implements HasAsciiDocDescription {
         repainting = Repainting.NO_REPAINT                  // <.>
         , describedAs =
             "@PropertyLayout(repainting = NO_REPAINT)",
-        group = "annotation", sequence = "1")
+        fieldSet = "annotation", sequence = "1")
     @XmlElement(required = true)
     @PdfJsViewer                                            // <.>
     @Getter @Setter
@@ -80,7 +80,7 @@ public class PropertyLayoutRepaintingVm implements HasAsciiDocDescription {
     @PropertyLayout(                                        // <.>
         describedAs =
             "<cpt:property id=\"...\" repainting = \"NO_REPAINT\"/>",
-        group = "layout-file", sequence = "1")
+        fieldSet = "layout-file", sequence = "1")
     @XmlElement(required = false)
 //    @PdfJsViewer
     @Getter @Setter
@@ -92,7 +92,7 @@ public class PropertyLayoutRepaintingVm implements HasAsciiDocDescription {
     @Property(optionality = Optionality.OPTIONAL)
     @PropertyLayout(
         describedAs = "@RepaintingNoRepaintMetaAnnotation",
-        group = "meta-annotated", sequence = "1")
+        fieldSet = "meta-annotated", sequence = "1")
     @XmlElement(required = false)
 //    @PdfJsViewer
     @Getter @Setter
@@ -106,7 +106,7 @@ public class PropertyLayoutRepaintingVm implements HasAsciiDocDescription {
         repainting = Repainting.NO_REPAINT                // <.>
         , describedAs =
             "@RepaintingRepaintMetaAnnotation @PropertyLayout(...)",
-        group = "meta-annotated-overridden", sequence = "1")
+        fieldSet = "meta-annotated-overridden", sequence = "1")
     @XmlElement(required = false)
 //    @PdfJsViewer
     @Getter @Setter

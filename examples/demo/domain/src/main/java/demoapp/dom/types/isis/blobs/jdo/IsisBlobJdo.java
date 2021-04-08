@@ -55,7 +55,7 @@ public class IsisBlobJdo                                            // <.>
 
 //tag::class[]
     @Title(prepend = "Blob JDO entity: ")
-    @PropertyLayout(group = "read-only-properties", sequence = "1")
+    @PropertyLayout(fieldSet = "read-only-properties", sequence = "1")
     @Persistent(defaultFetchGroup="false", columns = {              // <.>
             @Column(name = "readOnlyProperty_name"),
             @Column(name = "readOnlyProperty_mimetype"),
@@ -65,7 +65,7 @@ public class IsisBlobJdo                                            // <.>
     private Blob readOnlyProperty;
 
     @Property(editing = Editing.ENABLED)                            // <.>
-    @PropertyLayout(group = "editable-properties", sequence = "1")
+    @PropertyLayout(fieldSet = "editable-properties", sequence = "1")
     @Persistent(defaultFetchGroup="false", columns = {
             @Column(name = "readWriteProperty_name"),
             @Column(name = "readWriteProperty_mimetype"),
@@ -75,7 +75,7 @@ public class IsisBlobJdo                                            // <.>
     private Blob readWriteProperty;
 
     @Property(optionality = Optionality.OPTIONAL)                   // <.>
-    @PropertyLayout(group = "optional-properties", sequence = "1")
+    @PropertyLayout(fieldSet = "optional-properties", sequence = "1")
     @Persistent(defaultFetchGroup="false", columns = {
             @Column(name = "readOnlyOptionalProperty_name",
                     allowsNull = "true"),                           // <.>
@@ -88,7 +88,7 @@ public class IsisBlobJdo                                            // <.>
     private Blob readOnlyOptionalProperty;
 
     @Property(editing = Editing.ENABLED, optionality = Optionality.OPTIONAL)
-    @PropertyLayout(group = "optional-properties", sequence = "2")
+    @PropertyLayout(fieldSet = "optional-properties", sequence = "2")
     @Persistent(defaultFetchGroup="false", columns = {
             @Column(name = "readWriteOptionalProperty_name",
                     allowsNull = "true"),
