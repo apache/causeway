@@ -73,18 +73,20 @@ The Shiro integration supports the following config properties:
 
 === Shiro Realms and shiro.ini
 
-Shiro uses the concept of realms to define its own set of authenticated users and their roles.
+Shiro uses the `shiro.ini` file for configuration, which resides in the default package (in other words, in `src/main/resources` in the webapp module).
+
+Shiro uses the concept of realms to define its own set of authenticated users and their roles, and this is the most important configuration specified in the `shiro.ini` file.
 Either one or many realms can be configured.
 
-The `shiro.ini` file is used to define which realm are to be used.
-This resides in the default package (in other words, in `src/main/resources` in the webapp module).
+For example:
 
 [source,ini]
 ----
 securityManager.realms = $realmName
 ----
 
-Shiro's ini file supports a "poor-man's" dependency injection (link:https://shiro.apache.org/configuration.html[their words]), and so `$realmName` in the above example is a reference to a realm defined elsewhere in `shiro.ini`.
+where `$realmName` in the above example is a reference to a realm defined elsewhere in `shiro.ini`.
+This is an example of Shiro's "poor-man's" dependency injection (link:https://shiro.apache.org/configuration.html[their words]).
 
 It's also possible to configure Shiro to support multiple realms.
 
@@ -94,10 +96,13 @@ securityManager.realms = $realm1,$realm2
 ----
 
 How to configure the text-based ini realm is explained <<shiro-ini-realm,below>>.
-Another option lternative is the xref:security:shiro-realm-ldap:about.adoc[LDAP realm].
+Another option alternative is the xref:security:shiro-realm-ldap:about.adoc[LDAP realm].
 
-To leverage Apache Isis' <<enhanced-wildcard-permission,enhanced wildcard permissions>>, you should also specify the Apache Isis permission resolver for the specified realm; further details <<permission-resolver-configuration,below>>.
 
+As noted above, as well as realms many other aspects of configuration can be specified in this file:
+
+* enable caching for performance; discussed <<caching,below>>
+* leverage Apache Isis' <<enhanced-wildcard-permission,enhanced wildcard permissions>>,by specifying the Apache Isis permission resolver; discussed <<permission-resolver-configuration,below>>.
 
 
 [#shiro-ini-realm]
@@ -300,6 +305,7 @@ myRealm.permissionResolver = $permissionResolver  # <.>
 
 
 
+[#caching]
 == Caching
 
 To ensure that security operations does not impede performance, Shiro supports caching.
@@ -323,10 +329,4 @@ Check out:
 * community-contributed articles can be found link:http://shiro.apache.org/articles.html[here]. +
 +
 These include for instance link:http://meri-stuff.blogspot.co.uk/2011/04/apache-shiro-part-2-realms-database-and.html[this interesting article] describing how to perform certificate-based authentication (ie login using Google or Facebook credentials).
-
-
-
-
-
-
 
