@@ -46,6 +46,7 @@ import lombok.RequiredArgsConstructor;
         domainEvent = Persistable_datanucleusIdLong.PropertyDomainEvent.class)
 @PropertyLayout(
         named = "Id",
+        fieldSetId = LayoutMixinConstants.METADATA_LAYOUT_GROUPNAME, sequence = "800.1",
         hidden = Where.ALL_TABLES
         )
 @RequiredArgsConstructor
@@ -57,7 +58,6 @@ public class Persistable_datanucleusIdLong {
     extends org.apache.isis.applib.IsisModuleApplib.PropertyDomainEvent
     <Persistable_datanucleusIdLong, Long> {}
 
-    @PropertyLayout(fieldSetId = LayoutMixinConstants.METADATA_LAYOUT_GROUPNAME, sequence = "800.1")
     public Long prop() {
         final Object objectId = JDOHelper.getObjectId(persistable);
         if(objectId instanceof DatastoreId) {
@@ -71,6 +71,5 @@ public class Persistable_datanucleusIdLong {
     public boolean hideProp() {
         return prop() == null;
     }
-
 
 }
