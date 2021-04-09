@@ -13,7 +13,7 @@ class TranslatableString {
   String getPluralText()     // <.>
   boolean isPluralForm()
   Map<String, Object> getArgumentsByParameterName()     // <.>
-  String translate(final TranslationService translationService, final String context)     // <.>
+  String translate(final TranslationService translationService, final TranslationContext context)     // <.>
   String getPattern()     // <.>
   String translated(final String translatedText)
   String format(String format, Map<String, Object> values)
@@ -48,7 +48,7 @@ The plural text as provided in the _#trn(String, String, int, Object...) factory
 --
 The arguments; excluded from _#equals(Object)_ comparison.
 --
-<.> xref:#translate__TranslationService_String[translate(TranslationService, String)]
+<.> xref:#translate__TranslationService_TranslationContext[translate(TranslationService, TranslationContext)]
 +
 --
 Translates this string using the provided xref:refguide:applib:index/services/i18n/TranslationService.adoc[TranslationService] , selecting either the single or plural form as per _#getPattern()_ .
@@ -86,8 +86,8 @@ The plural text as provided in the _#trn(String, String, int, Object...) factory
 
 The arguments; excluded from _#equals(Object)_ comparison.
 
-[#translate__TranslationService_String]
-=== translate(TranslationService, String)
+[#translate__TranslationService_TranslationContext]
+=== translate(TranslationService, TranslationContext)
 
 Translates this string using the provided xref:refguide:applib:index/services/i18n/TranslationService.adoc[TranslationService] , selecting either the single or plural form as per _#getPattern()_ .
 

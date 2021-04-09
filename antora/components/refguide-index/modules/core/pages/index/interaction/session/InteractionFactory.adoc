@@ -13,7 +13,7 @@ The implementation is a singleton service.
 interface InteractionFactory {
   AuthenticationLayer openInteraction()     // <.>
   AuthenticationLayer openInteraction(Authentication authentication)     // <.>
-  boolean isInInteractionSession()     // <.>
+  boolean isInInteraction()     // <.>
   R callAuthenticated(Authentication authentication, Callable<R> callable)     // <.>
   void runAuthenticated(Authentication authentication, ThrowingRunnable runnable)     // <.>
   R callAnonymous(Callable<R> callable)     // <.>
@@ -32,7 +32,7 @@ If present, reuses the current top level _AuthenticationLayer_ , otherwise creat
 --
 Returns a new or reused _AuthenticationLayer_ that is a holder of xref:refguide:core:index/security/authentication/Authentication.adoc[Authentication] on top of the current thread's authentication layer stack.
 --
-<.> xref:#isInInteractionSession__[isInInteractionSession()]
+<.> xref:#isInInteraction__[isInInteraction()]
 <.> xref:#callAuthenticated__Authentication_Callable[callAuthenticated(Authentication, Callable)]
 +
 --
@@ -75,8 +75,8 @@ If available reuses an existing _InteractionSession_ , otherwise creates a new o
 
 The _InteractionSession_ represents a user's span of activities interacting with the application. The session's stack is later closed using _#closeSessionStack()_ .
 
-[#isInInteractionSession__]
-=== isInInteractionSession()
+[#isInInteraction__]
+=== isInInteraction()
 
 [#callAuthenticated__Authentication_Callable]
 === callAuthenticated(Authentication, Callable)

@@ -17,8 +17,6 @@ class UnrecoverableException {
   UnrecoverableException(final String msg, final Throwable cause)
   UnrecoverableException(final TranslatableString translatableMessage, final Class<?> translationContextClass, final String translationContextMethod, final Throwable cause)
   String getMessage()
-  TranslatableString getTranslatableMessage()
-  String getTranslationContext()
 }
 ----
 

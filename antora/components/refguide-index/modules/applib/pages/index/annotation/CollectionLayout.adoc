@@ -16,6 +16,7 @@ Layout hints for collections.
   String named() default "";     // <.>
   boolean namedEscaped() default true;     // <.>
   int paged() default -1;     // <.>
+  String sequence() default "";     // <.>
   @SuppressWarnings("rawtypes")
 Class sortedBy() default Comparator.class;     // <.>
 }
@@ -55,6 +56,11 @@ A flag indicating whether the value of _#named()_ should be HTML escaped or not.
 +
 --
 The page size for instances of this class when rendered within a table.
+--
+<.> xref:#sequence[sequence]
++
+--
+The order of this member relative to other members in the same (layout) group, given in _Dewey-decimal_ notation.
 --
 <.> xref:#sortedBy[sortedBy]
 +
@@ -110,6 +116,13 @@ The page size for instances of this class when rendered within a table.
 If annotated on a collection, then the page size refers to parented collections (eg `Order#lineItems` ).
 
 If annotated on a type, then the page size refers to standalone collections (eg as returned from a repository query).
+
+[#sequence]
+=== sequence
+
+The order of this member relative to other members in the same (layout) group, given in _Dewey-decimal_ notation.
+
+An alternative is to use the `Xxx.layout.xml` file, where `Xxx` is the domain object name.
 
 [#sortedBy]
 === sortedBy

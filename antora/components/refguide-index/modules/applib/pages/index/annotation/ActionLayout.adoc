@@ -14,11 +14,14 @@ Layout hints for actions.
   String cssClassFa() default "";     // <.>
   CssClassFaPosition cssClassFaPosition() default CssClassFaPosition.LEFT;     // <.>
   String describedAs() default "";     // <.>
+  String fieldSetId() default "__infer";     // <.>
+  String fieldSetName() default "__infer";     // <.>
   Where hidden() default Where.NOT_SPECIFIED;     // <.>
   String named() default "";     // <.>
   Position position() default Position.NOT_SPECIFIED;     // <.>
   PromptStyle promptStyle() default PromptStyle.AS_CONFIGURED;     // <.>
   Redirect redirectPolicy() default Redirect.AS_CONFIGURED;     // <.>
+  String sequence() default "";     // <.>
 }
 ----
 
@@ -47,6 +50,16 @@ Indicates the position of theFont Awesomeicon.
 --
 Description of this action, eg to be rendered in a tooltip.
 --
+<.> xref:#fieldSetId[fieldSetId]
++
+--
+Specifies the *id* of associated _FieldSet_ .To associate an _Action_ with a _Collection_ , use _Action#associateWith()_ instead.
+--
+<.> xref:#fieldSetName[fieldSetName]
++
+--
+Specifies the *friendly-name* of associated _FieldSet_ or _Collection_ .To associate an _Action_ with a _Collection_ , use _Action#associateWith()_ instead.
+--
 <.> xref:#hidden[hidden]
 +
 --
@@ -71,6 +84,11 @@ How the parameters for this action are prompted, either _PromptStyle#DIALOG dial
 +
 --
 If the action returns its target, then determines whether to update the page or instead to redirect (forcing a re-rendering of a new page).
+--
+<.> xref:#sequence[sequence]
++
+--
+The order of this member relative to other members in the same (layout) group, given in _Dewey-decimal_ notation.
 --
 
 == Members
@@ -106,6 +124,20 @@ The icon could be rendered on the left or the right of the action button
 
 Description of this action, eg to be rendered in a tooltip.
 
+[#fieldSetId]
+=== fieldSetId
+
+Specifies the *id* of associated _FieldSet_ .To associate an _Action_ with a _Collection_ , use _Action#associateWith()_ instead.
+
+For a more in depth description see the analogous _PropertyLayout#fieldSetId()_ .
+
+[#fieldSetName]
+=== fieldSetName
+
+Specifies the *friendly-name* of associated _FieldSet_ or _Collection_ .To associate an _Action_ with a _Collection_ , use _Action#associateWith()_ instead.
+
+For a more in depth description see the analogous _PropertyLayout#fieldSetId()_ ;
+
 [#hidden]
 === hidden
 
@@ -138,6 +170,13 @@ If the action returns its target, then determines whether to update the page or 
 Not re-rendering can provide a smoother UI experience.
 
 Supported by the Wicket viewer.
+
+[#sequence]
+=== sequence
+
+The order of this member relative to other members in the same (layout) group, given in _Dewey-decimal_ notation.
+
+An alternative is to use the `Xxx.layout.xml` file, where `Xxx` is the domain object name.
 
 include::hooks/ActionLayout_010-examples-and-usage.adoc[]
 

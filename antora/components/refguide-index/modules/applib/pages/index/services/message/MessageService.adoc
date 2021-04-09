@@ -13,13 +13,13 @@ These messages can either be simple strings, or can be translated.
 interface MessageService {
   void informUser(String message)     // <.>
   String informUser(TranslatableString message, final Class<?> contextClass, final String contextMethod)     // <.>
-  String informUser(TranslatableString message, final String translationContext)     // <.>
+  String informUser(TranslatableString message, final TranslationContext translationContext)     // <.>
   void warnUser(String message)     // <.>
   String warnUser(TranslatableString message, final Class<?> contextClass, final String contextMethod)     // <.>
-  String warnUser(TranslatableString message, final String translationContext)     // <.>
+  String warnUser(TranslatableString message, final TranslationContext translationContext)     // <.>
   void raiseError(String message)     // <.>
   String raiseError(TranslatableString message, final Class<?> contextClass, final String contextMethod)     // <.>
-  String raiseError(TranslatableString message, final String translationContext)     // <.>
+  String raiseError(TranslatableString message, final TranslationContext translationContext)     // <.>
 }
 ----
 
@@ -33,7 +33,7 @@ Make the specified message available to the user, intended to be useful but opti
 --
 As _#informUser(String)_ , but with the message translated (if possible) to user's _java.util.Locale_ .
 --
-<.> xref:#informUser__TranslatableString_String[informUser(TranslatableString, String)]
+<.> xref:#informUser__TranslatableString_TranslationContext[informUser(TranslatableString, TranslationContext)]
 +
 --
 Override of _MessageService#informUser(TranslatableString, Class, String)_ , but with an arbitrary translation context (rather than inferred from the context class and method).
@@ -48,7 +48,7 @@ Warn the user about a situation with the specified message.
 --
 As _#warnUser(String)_ , but with the message translated (if possible) to user's _java.util.Locale_ .
 --
-<.> xref:#warnUser__TranslatableString_String[warnUser(TranslatableString, String)]
+<.> xref:#warnUser__TranslatableString_TranslationContext[warnUser(TranslatableString, TranslationContext)]
 +
 --
 Override of _MessageService#warnUser(TranslatableString, Class, String)_ , but with an arbitrary translation context (rather than inferred from the context class and method).
@@ -63,7 +63,7 @@ Notify the user of an application error with the specified message.
 --
 As _#raiseError(String)_ , but with the message translated (if possible) to user's _java.util.Locale_ .
 --
-<.> xref:#raiseError__TranslatableString_String[raiseError(TranslatableString, String)]
+<.> xref:#raiseError__TranslatableString_TranslationContext[raiseError(TranslatableString, TranslationContext)]
 +
 --
 Override of _MessageService#raiseError(TranslatableString, Class, String)_ , but with an arbitrary translation context (rather than inferred from the context class and method).
@@ -85,8 +85,8 @@ As _#informUser(String)_ , but with the message translated (if possible) to user
 
 More precisely, the locale is as provided by the configured _org.apache.isis.applib.services.i18n.LocaleProvider_ service. This should be the _java.util.Locale_ of the user making the current request.
 
-[#informUser__TranslatableString_String]
-=== informUser(TranslatableString, String)
+[#informUser__TranslatableString_TranslationContext]
+=== informUser(TranslatableString, TranslationContext)
 
 Override of _MessageService#informUser(TranslatableString, Class, String)_ , but with an arbitrary translation context (rather than inferred from the context class and method).
 
@@ -106,8 +106,8 @@ As _#warnUser(String)_ , but with the message translated (if possible) to user's
 
 More precisely, the locale is as provided by the configured _org.apache.isis.applib.services.i18n.LocaleProvider_ service. This should be the _java.util.Locale_ of the user making the current request.
 
-[#warnUser__TranslatableString_String]
-=== warnUser(TranslatableString, String)
+[#warnUser__TranslatableString_TranslationContext]
+=== warnUser(TranslatableString, TranslationContext)
 
 Override of _MessageService#warnUser(TranslatableString, Class, String)_ , but with an arbitrary translation context (rather than inferred from the context class and method).
 
@@ -127,8 +127,8 @@ As _#raiseError(String)_ , but with the message translated (if possible) to user
 
 More precisely, the locale is as provided by the configured _org.apache.isis.applib.services.i18n.LocaleProvider_ service. This should be the _java.util.Locale_ of the user making the current request.
 
-[#raiseError__TranslatableString_String]
-=== raiseError(TranslatableString, String)
+[#raiseError__TranslatableString_TranslationContext]
+=== raiseError(TranslatableString, TranslationContext)
 
 Override of _MessageService#raiseError(TranslatableString, Class, String)_ , but with an arbitrary translation context (rather than inferred from the context class and method).
 

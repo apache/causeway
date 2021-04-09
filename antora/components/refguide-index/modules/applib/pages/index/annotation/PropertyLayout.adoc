@@ -11,6 +11,8 @@ Collects together all layout hints for a property of a domain object.
 @interface PropertyLayout {
   String cssClass() default "";     // <.>
   String describedAs() default "";     // <.>
+  String fieldSetId() default "__infer";     // <.>
+  String fieldSetName() default "__infer";     // <.>
   Where hidden() default Where.NOT_SPECIFIED;     // <.>
   LabelPosition labelPosition() default LabelPosition.NOT_SPECIFIED;     // <.>
   int multiLine() default -1;     // <.>
@@ -20,6 +22,7 @@ Collects together all layout hints for a property of a domain object.
   PromptStyle promptStyle() default PromptStyle.NOT_SPECIFIED;     // <.>
   RenderDay renderDay() default RenderDay.NOT_SPECIFIED;     // <.>
   Repainting repainting() default Repainting.NOT_SPECIFIED;     // <.>
+  String sequence() default "";     // <.>
   int typicalLength() default -1;     // <.>
 }
 ----
@@ -33,6 +36,16 @@ Indicates the css class that a property should have, to allow more targeted styl
 +
 --
 Description of this property, eg to be rendered in a tooltip.
+--
+<.> xref:#fieldSetId[fieldSetId]
++
+--
+Specifies the *id* of associated _FieldSet_ .XML layout is presentXML layout is absent
+--
+<.> xref:#fieldSetName[fieldSetName]
++
+--
+Specifies the *friendly-name* of associated _FieldSet_ .
 --
 <.> xref:#hidden[hidden]
 +
@@ -79,6 +92,11 @@ For date properties (and parameters) only, instructs the viewer that the date sh
 --
 Indicates that the value held by the property never changes over time, even when other properties of the object do change.
 --
+<.> xref:#sequence[sequence]
++
+--
+The order of this member relative to other members in the same (layout) group, given in _Dewey-decimal_ notation.
+--
 <.> xref:#typicalLength[typicalLength]
 +
 --
@@ -96,6 +114,32 @@ Indicates the css class that a property should have, to allow more targeted styl
 === describedAs
 
 Description of this property, eg to be rendered in a tooltip.
+
+[#fieldSetId]
+=== fieldSetId
+
+Specifies the *id* of associated _FieldSet_ .XML layout is presentXML layout is absent
+
+A _FieldSet_ is a layout component for property grouping, that can either be specified via a `Xxx.layout.xml` file (with `Xxx` the domain object name) or is inferred by the framework via annotations (aka the programming model). _FieldSet_ s are represented in-memory and requires a framework internal unique id per domain object type.
+
+Following 2 scenarios have slightly different behavior:
+
+When a XML layout is present, every _FieldSet_  *id* is either explicitly specified in the file or may be inferred from a non-empty *name* . If the *name* is empty "" or missing, then the *id* within the file is mandatory.
+
+If this _Property_ is not already explicitly listed within the XML layout, we lookup the associated _FieldSet_ in the XML layout file first matching by *id* using _@PropertyLayout(fieldSetId=...)_ if any, then falling back to matching by (friendly) *name* using @PropertyLayout(fieldSetName=...)} if any.
+
+We reify (in-memory) the associated _FieldSet_ using _@PropertyLayout(fieldSetId=...)_ (if present) as its *id* and using _@PropertyLayout(fieldSetId=...)_ as its (friendly) *name* . While if no *id* is provided an *id* is inferred from the (friendly) *name* , in which case the (friendly) *name* must not be empty. Whereas if no (friendly) *name* is provided a (friendly) *name* is inferred from the *id* , in which case the *id* must not be empty.
+
+With _@PropertyLayout(sequence=...)_ the relative position within that _FieldSet_ can be specified.
+
+[#fieldSetName]
+=== fieldSetName
+
+Specifies the *friendly-name* of associated _FieldSet_ .
+
+Explicitly specifying an empty "" *friendly-name* will suppress the _FieldSet_ 's label from being rendered.
+
+For a more in depth description see _PropertyLayout#fieldSetId()_ .
 
 [#hidden]
 === hidden
@@ -169,6 +213,13 @@ Setting this attribute to `RepaintPolicy.NO_REPAINT` is used as a hint to the vi
 Note that for this to work, the viewer will also ensure that none of the property's parent component (such as a tab group panel) are re-rendered.
 
 Design note: we considered implementing this an "immutable" flag on the xref:refguide:applib:index/annotation/Property.adoc[Property] annotation (because this flag is typically appropriate for immutable/unchanging properties of a domain object). However, we decided not to do that, on the basis that it might be interpreted as having a deeper impact within the framework than simply a hint for rendering.
+
+[#sequence]
+=== sequence
+
+The order of this member relative to other members in the same (layout) group, given in _Dewey-decimal_ notation.
+
+An alternative is to use the `Xxx.layout.xml` file, where `Xxx` is the domain object name.
 
 [#typicalLength]
 === typicalLength

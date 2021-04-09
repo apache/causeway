@@ -28,4 +28,4 @@ Holds the sequence number uniquely identifying the transaction number within the
 
 Holds the sequence number uniquely identifying the transaction number within the overall _org.apache.isis.applib.services.iactn.Interaction_ .
 
-The values in this sequence are ultimately obtained from the non-API method _org.apache.isis.applib.services.iactn.Interaction#next(SequenceType)_ , with a xref:refguide:applib:index/services/iactn/SequenceType.adoc[SequenceType] of _SequenceType#TRANSACTION_ .
+The values in this sequence are ultimately obtained from the non-API method _org.apache.isis.core.metamodel.execution.InteractionInternal#getTransactionSequence_ .

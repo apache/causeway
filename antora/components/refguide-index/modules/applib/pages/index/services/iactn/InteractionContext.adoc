@@ -11,23 +11,45 @@ An xref:refguide:applib:index/services/iactn/Interaction.adoc[Interaction] conta
 .InteractionContext.java
 ----
 interface InteractionContext {
+  boolean isInInteraction()     // <.>
   Optional<Interaction> currentInteraction()     // <.>
+  Optional<UUID> getInteractionId()     // <.>
   Interaction currentInteractionElseFail()
 }
 ----
 
+<.> xref:#isInInteraction__[isInInteraction()]
++
+--
+Whether there is a currently active xref:refguide:applib:index/services/iactn/Interaction.adoc[Interaction] for the calling thread.
+--
 <.> xref:#currentInteraction__[currentInteraction()]
 +
 --
 Optionally, the currently active xref:refguide:applib:index/services/iactn/Interaction.adoc[Interaction] for the calling thread.
 --
+<.> xref:#getInteractionId__[getInteractionId()]
++
+--
+Unique id of the current request- or test-scoped xref:refguide:applib:index/services/iactn/Interaction.adoc[Interaction] .
+--
 
 == Members
+
+[#isInInteraction__]
+=== isInInteraction()
+
+Whether there is a currently active xref:refguide:applib:index/services/iactn/Interaction.adoc[Interaction] for the calling thread.
 
 [#currentInteraction__]
 === currentInteraction()
 
 Optionally, the currently active xref:refguide:applib:index/services/iactn/Interaction.adoc[Interaction] for the calling thread.
+
+[#getInteractionId__]
+=== getInteractionId()
+
+Unique id of the current request- or test-scoped xref:refguide:applib:index/services/iactn/Interaction.adoc[Interaction] .
 
 include::hooks/InteractionContext_010-implementation.adoc[]
 

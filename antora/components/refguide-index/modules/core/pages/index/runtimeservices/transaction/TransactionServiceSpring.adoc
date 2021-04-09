@@ -13,13 +13,13 @@ class TransactionServiceSpring {
   void flushTransaction()
   Optional<TransactionId> currentTransactionId()
   TransactionState currentTransactionState()
-  void beforeEnteringTransactionalBoundary(InteractionSession interactionSession)     // <.>
+  void beforeEnteringTransactionalBoundary(Interaction interaction)     // <.>
   void onTransactionEnded(TransactionAfterCompletionEvent event)     // <.>
-  void afterLeavingTransactionalBoundary(InteractionSession interactionSession)     // <.>
+  void afterLeavingTransactionalBoundary(Interaction interaction)     // <.>
 }
 ----
 
-<.> xref:#beforeEnteringTransactionalBoundary__InteractionSession[beforeEnteringTransactionalBoundary(InteractionSession)]
+<.> xref:#beforeEnteringTransactionalBoundary__Interaction[beforeEnteringTransactionalBoundary(Interaction)]
 +
 --
 INTERACTION BEGIN BOUNDARY
@@ -29,7 +29,7 @@ INTERACTION BEGIN BOUNDARY
 --
 TRANSACTION END BOUNDARY
 --
-<.> xref:#afterLeavingTransactionalBoundary__InteractionSession[afterLeavingTransactionalBoundary(InteractionSession)]
+<.> xref:#afterLeavingTransactionalBoundary__Interaction[afterLeavingTransactionalBoundary(Interaction)]
 +
 --
 INTERACTION END BOUNDARY
@@ -37,8 +37,8 @@ INTERACTION END BOUNDARY
 
 == Members
 
-[#beforeEnteringTransactionalBoundary__InteractionSession]
-=== beforeEnteringTransactionalBoundary(InteractionSession)
+[#beforeEnteringTransactionalBoundary__Interaction]
+=== beforeEnteringTransactionalBoundary(Interaction)
 
 INTERACTION BEGIN BOUNDARY
 
@@ -47,7 +47,7 @@ INTERACTION BEGIN BOUNDARY
 
 TRANSACTION END BOUNDARY
 
-[#afterLeavingTransactionalBoundary__InteractionSession]
-=== afterLeavingTransactionalBoundary(InteractionSession)
+[#afterLeavingTransactionalBoundary__Interaction]
+=== afterLeavingTransactionalBoundary(Interaction)
 
 INTERACTION END BOUNDARY

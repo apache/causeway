@@ -7,24 +7,23 @@
 .EntityChangeTrackerDefault.java
 ----
 class EntityChangeTrackerDefault {
-  void onPreCommit(TransactionBeforeCompletionEvent event)     // <.>
-  EntityChanges getEntityChanges(final java.sql.Timestamp timestamp, final String userName)
+  void onTransactionCompleting(TransactionBeforeCompletionEvent event)     // <.>
+  Optional<EntityChanges> getEntityChanges(final java.sql.Timestamp timestamp, final String userName)
   Interaction currentInteraction()
-  String asString(Object object)
   int numberEntitiesLoaded()
   int numberEntitiesDirtied()
-  int numberAuditedEntityPropertiesModified()
+  int propertyChangeRecordCount()
   void enlistCreated(ManagedObject entity)
   void enlistDeleting(ManagedObject entity)
   void enlistUpdating(ManagedObject entity)
   void recognizeLoaded(ManagedObject entity)
   void recognizePersisting(ManagedObject entity)
   void recognizeUpdating(ManagedObject entity)
-  Stream<EntityPropertyChange> streamPropertyChanges(final java.sql.Timestamp timestamp, final String userName, final TransactionId txId)
+  Can<EntityPropertyChange> getPropertyChanges(final java.sql.Timestamp timestamp, final String userName, final TransactionId txId)
 }
 ----
 
-<.> xref:#onPreCommit__TransactionBeforeCompletionEvent[onPreCommit(TransactionBeforeCompletionEvent)]
+<.> xref:#onTransactionCompleting__TransactionBeforeCompletionEvent[onTransactionCompleting(TransactionBeforeCompletionEvent)]
 +
 --
 TRANSACTION END BOUNDARY
@@ -32,7 +31,7 @@ TRANSACTION END BOUNDARY
 
 == Members
 
-[#onPreCommit__TransactionBeforeCompletionEvent]
-=== onPreCommit(TransactionBeforeCompletionEvent)
+[#onTransactionCompleting__TransactionBeforeCompletionEvent]
+=== onTransactionCompleting(TransactionBeforeCompletionEvent)
 
 TRANSACTION END BOUNDARY

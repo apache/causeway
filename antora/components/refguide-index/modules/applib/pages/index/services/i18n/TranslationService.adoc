@@ -11,18 +11,18 @@ As such, this domain service is the cornerstone of the framework's i18n support.
 .TranslationService.java
 ----
 interface TranslationService {
-  String translate(final String context, final String text)     // <.>
-  String translate(final String context, final String singularText, final String pluralText, int num)     // <.>
+  String translate(final TranslationContext context, final String text)     // <.>
+  String translate(final TranslationContext context, final String singularText, final String pluralText, int num)     // <.>
   Mode getMode()     // <.>
 }
 ----
 
-<.> xref:#translate__String_String[translate(String, String)]
+<.> xref:#translate__TranslationContext_String[translate(TranslationContext, String)]
 +
 --
 Return a translation of the text, in the locale of the "current user".
 --
-<.> xref:#translate__String_String_String_int[translate(String, String, String, int)]
+<.> xref:#translate__TranslationContext_String_String_int[translate(TranslationContext, String, String, int)]
 +
 --
 Return a translation of either the singular or the plural text, dependent on the `num` parameter, in the locale of the "current user".
@@ -35,15 +35,15 @@ Whether this implementation is operating in read or in write mode.
 
 == Members
 
-[#translate__String_String]
-=== translate(String, String)
+[#translate__TranslationContext_String]
+=== translate(TranslationContext, String)
 
 Return a translation of the text, in the locale of the "current user".
 
 The mechanism to determine the locale is implementation-specific.
 
-[#translate__String_String_String_int]
-=== translate(String, String, String, int)
+[#translate__TranslationContext_String_String_int]
+=== translate(TranslationContext, String, String, int)
 
 Return a translation of either the singular or the plural text, dependent on the `num` parameter, in the locale of the "current user".
 

@@ -19,7 +19,6 @@ interface Interaction {
   Command getCommand()     // <.>
   Execution<?, ?> getCurrentExecution()     // <.>
   Execution<?, ?> getPriorExecution()     // <.>
-  int next(final SequenceType sequenceType)     // <.>
 }
 ----
 
@@ -42,11 +41,6 @@ The current (most recently pushed) xref:refguide:applib:index/services/iactn/Exe
 +
 --
 The execution that preceded the current one.
---
-<.> xref:#next__SequenceType[next(SequenceType)]
-+
---
-Framework use only: generates numbers for a named sequence type.
 --
 
 == Members
@@ -72,11 +66,6 @@ The current (most recently pushed) xref:refguide:applib:index/services/iactn/Exe
 === getPriorExecution()
 
 The execution that preceded the current one.
-
-[#next__SequenceType]
-=== next(SequenceType)
-
-Framework use only: generates numbers for a named sequence type.
 
 include::hooks/Interaction_010-implementation.adoc[]
 
