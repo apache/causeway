@@ -253,6 +253,8 @@ There is no way to specify these semantics in the `.layout.xml` file (action par
 
 === Layout file styles
 
+NOTE: TODO v2 - Style has been changed (WIP)
+
 If you want to make your usage of layout files consistent, then the framework can help because it allows the layout XML files to be downloaded using the xref:refguide:applib:index/services/layout/LayoutService.adoc[LayoutService].
 This is exposed on the prototyping menu to allow you to download a ZIP file of layout XML files for all domain entities and view models.
 

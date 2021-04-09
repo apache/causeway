@@ -15,9 +15,9 @@ public class ToDoItems {
         cssClass="x-key",
         cssClassFa="fa-checkbox",
         describedAs="Mark the todo item as not complete after all",
-        hidden=Where.NOWHERE                        // <2>
+        hidden=Where.NOWHERE,                       // <2>
+        sequence = "1"
     )
-    @MemberOrder(sequence = "1")
     public List<ToDoItem> notYetComplete() {
         ...
     }

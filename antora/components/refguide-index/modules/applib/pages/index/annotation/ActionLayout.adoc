@@ -73,7 +73,7 @@ Name of this action (overriding the name derived from its name in code).
 <.> xref:#position[position]
 +
 --
-For actions that are associated with a property (using either _Action#associateWith()_ or _MemberOrder#name()_ , indicates the positioning of the action's button relative to the property.
+For actions that are associated with a property (using either _Action#associateWith()_ or _ActionLayout#fieldSetId()_ or _ActionLayout#fieldSetName()_ , indicates the positioning of the action's button relative to the property.
 --
 <.> xref:#promptStyle[promptStyle]
 +
@@ -153,7 +153,7 @@ A typical use case is if the desired name is a reserved Java keyword, such as `d
 [#position]
 === position
 
-For actions that are associated with a property (using either _Action#associateWith()_ or _MemberOrder#name()_ , indicates the positioning of the action's button relative to the property.
+For actions that are associated with a property (using either _Action#associateWith()_ or _ActionLayout#fieldSetId()_ or _ActionLayout#fieldSetName()_ , indicates the positioning of the action's button relative to the property.
 
 Ignored if the action has not been associated with a property.
 

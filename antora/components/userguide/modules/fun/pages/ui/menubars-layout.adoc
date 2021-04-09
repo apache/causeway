@@ -61,15 +61,15 @@ image::application-menu/tertiary.png[width="300px"]
 
 
 
-In addition, the xref:refguide:applib:index/annotation/MemberOrder.adoc[@MemberOrder] annotation can be used to group and order domain service actions:
+In addition, the xref:refguide:applib:index/annotation/ActionLayout.adoc[@ActionLayout] annotation can be used to group and order domain service actions:
 
-* `@MemberOrder#name()` is used to define the name of the menu
+* `@ActionLayout#named()` is used to define the name of the menu
 +
 in which the menu items of the domain service action will appear
 
-* `@MemberOrder#sequence()` is used to order menu items within that menu.
+* `@ActionLayout#sequence()` is used to order menu items within that menu.
 
-Thus, using `name()` it's possible to group menu items from actions that are from different domain services.
+Thus, using `named()` it's possible to group menu items from actions that are from different domain services.
 
 There are some significant limitations, however:
 

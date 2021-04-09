@@ -20,8 +20,9 @@ For example:
 ----
 public class ToDoItems {
     @Action(semantics=SemanticsOf.SAFE)
-    @ActionLayout(bookmarking=BookmarkPolicy.AS_ROOT)
-    @MemberOrder(sequence = "1")
+    @ActionLayout(
+        bookmarking=BookmarkPolicy.AS_ROOT,
+        sequence = "1")
     public List<ToDoItem> notYetComplete() {
         ...
     }
