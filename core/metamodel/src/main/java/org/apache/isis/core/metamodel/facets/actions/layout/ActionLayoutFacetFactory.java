@@ -73,7 +73,7 @@ extends FacetFactoryAbstract {
         HiddenFacet hiddenFacet = HiddenFacetForActionLayoutAnnotation.create(actionLayoutIfAny, facetHolder);
         super.addFacet(hiddenFacet);
         
-        // layoutGroupFacet
+        // layoutGroup
         LayoutGroupFacet layoutGroupFacet = LayoutGroupFacetFromActionLayoutAnnotation.create(actionLayoutIfAny, facetHolder);
         super.addFacet(layoutGroupFacet);
 
