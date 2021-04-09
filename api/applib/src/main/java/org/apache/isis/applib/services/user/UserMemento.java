@@ -19,6 +19,7 @@
 package org.apache.isis.applib.services.user;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -103,6 +104,12 @@ public final class UserMemento implements Serializable {
         }
         this.name = name;
         this.roles = roles.collect(_Lists.toUnmodifiable());
+    }
+
+    public UserMemento withRole(String role) {
+        final List<RoleMemento> roles = new ArrayList<>(this.roles);
+        roles.add(new RoleMemento(role));
+        return new UserMemento(this.name, roles.stream());
     }
 
     public String title() {
