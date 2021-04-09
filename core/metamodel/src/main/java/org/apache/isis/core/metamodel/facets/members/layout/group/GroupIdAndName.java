@@ -44,12 +44,12 @@ implements
     private static final long serialVersionUID = 1L;
 
     /**
-     * Id of a layout group (a <i>FieldSet</i> or a <i>Collection</i>).
+     * Id of a layout group (a <i>FieldSet</i> or a <i>Collection panel</i>).
      */
     private final @NonNull String id;
     
     /**
-     * (Friendly) name of a layout group (a <i>FieldSet</i> or a <i>Collection</i>).
+     * (Friendly) name of a layout group (a <i>FieldSet</i> or a <i>Collection panel</i>).
      */
     private final @NonNull String name;
 
@@ -108,10 +108,10 @@ implements
     
     // -- HELPER
     
-    /* 
-     * if id is missing tries to infer it;
-     * if name is missing tries to infer it;
-     * if cannot reason about a usable id, returns Optional.empty()
+    /** 
+     * if id is missing tries to infer it;<br>
+     * if name is missing tries to infer it;<br>
+     * if cannot reason about a usable id, returns Optional.empty()<br>
      */
     private static Optional<GroupIdAndName> inferIfOneMissing(
             final @Nullable String _id, 
@@ -139,7 +139,9 @@ implements
         return Optional.of(GroupIdAndName.of(id, name));
     }
     
-    // note: this is a copy of the original logic from GridSystemServiceBS3
+    /**
+     * @implNote this is a copy of the original logic from GridSystemServiceBS3
+     */
     private static @NonNull String inferIdFromName(final @NonNull String name) {
         if(name.isEmpty()) {
             return name;
@@ -148,7 +150,9 @@ implements
         return Character.toLowerCase(c) + name.substring(1).replaceAll("\\s+", "");
     }
     
-    // note: could potentially be improved to work similar as the title service
+    /**
+     * @implNote could potentially be improved to work similar as the title service
+     */
     private static @NonNull String inferNameFromId(final @NonNull String id) {
         return _Strings.asNaturalName2.apply(id);
     }
@@ -169,8 +173,5 @@ implements
                     : idOrName;
         
     }
-
-    
-
     
 }

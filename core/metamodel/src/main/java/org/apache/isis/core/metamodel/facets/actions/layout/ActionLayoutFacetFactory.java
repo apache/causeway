@@ -69,13 +69,13 @@ extends FacetFactoryAbstract {
         DescribedAsFacet describedAsFacet = DescribedAsFacetForActionLayoutAnnotation.create(actionLayoutIfAny, facetHolder);
         super.addFacet(describedAsFacet);
 
-        // fieldSet
-        LayoutGroupFacet fieldSetFacet = LayoutGroupFacetFromActionLayoutAnnotation.create(actionLayoutIfAny, facetHolder);
-        super.addFacet(fieldSetFacet);
-        
         // hidden
         HiddenFacet hiddenFacet = HiddenFacetForActionLayoutAnnotation.create(actionLayoutIfAny, facetHolder);
         super.addFacet(hiddenFacet);
+        
+        // layoutGroupFacet
+        LayoutGroupFacet layoutGroupFacet = LayoutGroupFacetFromActionLayoutAnnotation.create(actionLayoutIfAny, facetHolder);
+        super.addFacet(layoutGroupFacet);
 
         // named
         NamedFacet namedFacet = NamedFacetForActionLayoutAnnotation.create(actionLayoutIfAny, facetHolder);
