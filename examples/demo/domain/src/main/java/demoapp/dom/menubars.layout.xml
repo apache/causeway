@@ -195,6 +195,7 @@ For latest we use: https://raw.githubusercontent.com/apache/isis/master/antora/s
                 <mb3:named>JodaTime</mb3:named>
                 <mb3:serviceAction objectType="demo.JodaTimeTypesMenu" id="localDates"/>
                 <mb3:serviceAction objectType="demo.JodaTimeTypesMenu" id="localDateTimes"/>
+                <mb3:serviceAction objectType="demo.JodaTimeTypesMenu" id="localTimes"/>
                 <mb3:serviceAction objectType="demo.JodaTimeTypesMenu" id="dateTimes"/>
             </mb3:section>
         </mb3:menu>

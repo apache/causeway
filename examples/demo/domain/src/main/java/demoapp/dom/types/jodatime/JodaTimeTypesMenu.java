@@ -31,6 +31,7 @@ import lombok.extern.log4j.Log4j2;
 import demoapp.dom.types.jodatime.jodadatetime.JodaDateTimes;
 import demoapp.dom.types.jodatime.jodalocaldate.JodaLocalDates;
 import demoapp.dom.types.jodatime.jodalocaldatetime.JodaLocalDateTimes;
+import demoapp.dom.types.jodatime.jodalocaltime.JodaLocalTimes;
 
 @DomainService(nature=NatureOfService.VIEW, objectType = "demo.JodaTimeTypesMenu")
 @DomainObjectLayout(named="JodaTimeTypes")
@@ -55,5 +56,10 @@ public class JodaTimeTypesMenu {
         return new JodaLocalDateTimes();
     }
 
+    @Action(semantics = SemanticsOf.SAFE)
+    @ActionLayout(cssClassFa="fa-clock")
+    public JodaLocalTimes localTimes(){
+        return new JodaLocalTimes();
+    }
 
 }
