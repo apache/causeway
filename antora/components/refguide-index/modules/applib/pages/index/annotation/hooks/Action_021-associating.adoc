@@ -5,7 +5,7 @@
 === Associating actions with properties and collections
 
 The `associateWith` element allows an action to be associated with other properties or collections of the same domain object.
-The optional `associateWithSequence` element specifies the order of the action in the UI.
+The optional `sequence` element specifies the order of the action in the UI.
 
 For example, an `Order` could have a collection of ``OrderItem``s, and might provide actions to add and remove items:
 
@@ -17,16 +17,14 @@ public class Order {
     @Collection
     private final SortedSet<OrderItem> items = ...
 
-    @Action(
-        associateWith="items",                      // <.>
-        associateWithSequence="1" )                 // <.>
+    @Action(associateWith="items")                  // <.>
+    @ActionLayout(sequence="1" )                    // <.>
     public Order addItem(Product p, int quantity) {
         // ...
     }
 
-    @Action(
-        associateWith="items",                      // <.>
-        associateWithSequence="2" )                 // <.>
+    @Action(associateWith="items")                  // <.>
+    @ActionLayout(sequence="2" )                    // <.>
     public Order removeItem(OrderItem item) {
         // ...
     }

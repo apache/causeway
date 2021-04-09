@@ -232,22 +232,18 @@ The annotations most relevant here is xref:refguide:applib:index/annotation/Memb
 
 * for properties:
 
-** `@MemberOrder#name()` can be used to identify associate a property with a fieldset.
+** `@PropertyLayout#fieldSetId()` and `@PropertyLayout#fieldSetName()` can be used to associate a property with a fieldset.
 +
 With this approach all of the fieldsets in the `layout.xml` file are left empty.
 The properties "slot into" the relevant field set to associate  = "...", sequence = "...")`.
 
-** `@MemberOrder#sequence()` specifies the order of properties within their fieldset
+** `@PropertyLayout#sequence()` specifies the order of properties within their fieldset
 
 * for actions:
 
-** `@MemberOrder#name()` is used to associate an action with a property.
-+
-The `@Action#associateWith()` annotation can be used instead as a direct replacement that "reads" better.
+** `@Action#associateWith()` is used to associate an action with a property.
 
-** `@MemberOrder#sequence()` specifies the order of actions (if there are multiple actions for a property)
-+
-The `@Action#associateWithSequence()` annotation can be used as a direct replacement.
+** `@ActionLayout#sequence()` specifies the order of actions (if there are multiple actions for a property)
 
 There are a number of other "layout" annotations, specifically xref:refguide:applib:index/annotation/PropertyLayout.adoc[@PropertyLayout], xref:refguide:applib:index/annotation/CollectionLayout.adoc[@CollectionLayout] and xref:refguide:applib:index/annotation/ActionLayout.adoc[@ActionLayout].
 All of the semantics in these layout annotations can also be specified in the `.layout.xml` files; which is used is a matter of taste.
