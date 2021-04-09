@@ -49,7 +49,7 @@ Whether this fieldset should be used to hold any unreferenced properties (contri
 <.> xref:#getName__[getName()]
 +
 --
-Corresponds to the _MemberOrder#name()_ (when applied to properties).
+Corresponds to the _PropertyLayout#fieldSetName()_ (when applied to properties).
 --
 <.> xref:#getOwner__[getOwner()]
 +
@@ -86,7 +86,7 @@ Any grid layout must have precisely one fieldset that has this attribute set.
 [#getName__]
 === getName()
 
-Corresponds to the _MemberOrder#name()_ (when applied to properties).
+Corresponds to the _PropertyLayout#fieldSetName()_ (when applied to properties).
 
 [#getOwner__]
 === getOwner()

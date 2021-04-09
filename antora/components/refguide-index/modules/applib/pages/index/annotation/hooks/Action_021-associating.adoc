@@ -44,6 +44,6 @@ In the user interface associated actions are rendered close to the member to whi
 
 [NOTE]
 ====
-The same effect can be accomplished using `@MemberOrder` or with the `.layout.xml` file.
+The same effect can be accomplished using the `.layout.xml` file.
 ====
 

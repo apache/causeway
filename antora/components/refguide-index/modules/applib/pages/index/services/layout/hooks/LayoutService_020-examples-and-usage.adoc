@@ -21,6 +21,8 @@ The `CURRENT` style corresponds to the layout already loaded for the domain clas
 The other three styles allow the developer to choose how much metadata is to be specified in the XML, and how much (if any) will be obtained elsewhere, typically from annotations in the metamodel.
 The table below summarises the choices:
 
+NOTE: TODO v2 - @MemberOrder was remove, Style has been changed as well (WIP)
+
 [cols="<.>,^.>,^.>",options="header"]
 .Styles
 |===

@@ -80,7 +80,6 @@ You are free, of course, to add additional "convenience" actions into it if you 
     @ActionLayout(
             cssClassFa="fa fa-refresh"
     )
-    @MemberOrder(sequence="20")
     public Object recreateObjectsAndReturnFirst() {
         final List<FixtureResult> run = findFixtureScriptFor(RecreateSimpleObjects.class).run(null);
         return run.get(0).getObject();
