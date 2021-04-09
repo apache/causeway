@@ -65,6 +65,7 @@ import org.apache.isis.viewer.wicket.ui.components.scalars.jdkmath.JavaMathBigIn
 import org.apache.isis.viewer.wicket.ui.components.scalars.jodatime.JodaDateTimePanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.jodatime.JodaLocalDatePanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.jodatime.JodaLocalDateTimePanelFactory;
+import org.apache.isis.viewer.wicket.ui.components.scalars.jodatime.JodaLocalTimePanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.markup.MarkupPanelFactories;
 import org.apache.isis.viewer.wicket.ui.components.scalars.oiddto.OidDtoPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.passwd.IsisPasswordPanelFactory;
@@ -252,6 +253,7 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
 
         componentFactories.add(new JodaLocalDatePanelFactory());
         componentFactories.add(new JodaLocalDateTimePanelFactory());
+        componentFactories.add(new JodaLocalTimePanelFactory());
         componentFactories.add(new JodaDateTimePanelFactory());
 
         componentFactories.add(new Jdk8OffsetDateTimePanelFactory());
