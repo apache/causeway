@@ -110,7 +110,8 @@ public class ActionAssociateWithVm implements HasAsciiDocDescription {
     )
     @ActionLayout(
         describedAs =
-            "@Action(associateWith = \"text\", associateWithSequence = \"1\")"
+            "@Action(associateWith = \"text\") " +
+            "@ActionLayout(sequence = \"1\")"
         , sequence = "1"           // <.>
     )
     public ActionAssociateWithVm updateText(final String text) {
@@ -129,8 +130,9 @@ public class ActionAssociateWithVm implements HasAsciiDocDescription {
     )
     @ActionLayout(
         describedAs =
-            "@Action(associateWith = \"children\", associateWithSequence = \"1\")"
-        , sequence = "1"       // <.>
+            "@Action(associateWith = \"children\") " +
+            "@ActionLayout(sequence = \"1\")"
+        , sequence = "1"                    // <.>
     )
     public ActionAssociateWithVm addChild(final String value) {
         val childVm = new ActionAssociateWithChildVm(value);
@@ -147,8 +149,9 @@ public class ActionAssociateWithVm implements HasAsciiDocDescription {
     )
     @ActionLayout(
         describedAs =
-            "@Action(associateWith = \"children\", associateWithSequence = \"2\")",
-        sequence = "2"       // <.>
+            "@Action(associateWith = \"children\") " +
+            "@ActionLayout(sequence = \"2\")"
+        , sequence = "2"                   // <.>
     )
     public ActionAssociateWithVm removeChild(final ActionAssociateWithChildVm child) {
         getChildren().removeIf(x -> Objects.equals(x.getValue(), child.getValue()));
@@ -164,9 +167,9 @@ public class ActionAssociateWithVm implements HasAsciiDocDescription {
     )
     @ActionLayout(
         describedAs =
-            "@Action(associateWith = \"children\"" +
-                    ", associateWithSequence = \"3\")"
-        , sequence = "3"       // <.>
+            "@Action(associateWith = \"children\") " +
+            "@ActionLayout(sequence = \"3\")"
+        , sequence = "3"                        // <.>
     )
     public ActionAssociateWithVm removeChildren(final List<ActionAssociateWithChildVm> children) {
         for (ActionAssociateWithChildVm child : children) {

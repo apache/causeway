@@ -30,9 +30,8 @@ import lombok.RequiredArgsConstructor;
 )
 @ActionLayout(
     describedAs =
-        "@Action(" +
-            "associateWith = \"otherProperty\"" +
-            ", associateWithSequence = \"1\")"
+            "@Action(associateWith = \"favorites\") " +
+            "@ActionLayout(sequence = \"1\")"
     , sequence = "2"                                            // <.>
 )
 @RequiredArgsConstructor

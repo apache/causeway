@@ -35,9 +35,8 @@ import demoapp.dom.domain.actions.Action.associateWith.ActionAssociateWithVm;
 )
 @ActionLayout(
     describedAs =
-        "@Action(" +
-            "associateWith = \"favorites\"" +
-            ", associateWithSequence = \"1\")"
+            "@Action(associateWith = \"favorites\") " +
+            "@ActionLayout(sequence = \"1\")"
     , sequence = "1"                                            // <.>
 )
 @RequiredArgsConstructor
