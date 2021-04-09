@@ -24,7 +24,9 @@ import javax.annotation.Nullable;
 
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.PropertyLayout;
+import org.apache.isis.applib.layout.component.CollectionLayoutData;
 import org.apache.isis.applib.layout.component.FieldSet;
+import org.apache.isis.applib.layout.component.PropertyLayoutData;
 import org.apache.isis.commons.internal.base._Strings;
 
 import lombok.NonNull;
@@ -57,27 +59,53 @@ implements
         return this.getId().compareTo(other.getId());
     }
     
-    // -- FACTORIES
+    // -- FACTORIES FOR ANNOTATIONS
 
-    public static @Nullable GroupIdAndName forActionLayout(final @NonNull ActionLayout actionLayout) {
-        return GroupIdAndName.inferIfOneMissing(actionLayout.fieldSetId(), actionLayout.fieldSetName());
-    }
-
-    public static @Nullable GroupIdAndName forPropertyLayout(final @NonNull PropertyLayout propertyLayout) {
-        return GroupIdAndName.inferIfOneMissing(propertyLayout.fieldSetId(), propertyLayout.fieldSetName());
-    }
-
-    public static @Nullable GroupIdAndName forFieldSet(final @NonNull FieldSet fieldSet) {
+    public static @Nullable GroupIdAndName forActionLayout(
+            final @NonNull ActionLayout actionLayout) {
         return GroupIdAndName.inferIfOneMissing(
-                fieldSet.getId() == null ? "__infer" : fieldSet.getId(), 
-                fieldSet.getName() == null ? "__infer" : fieldSet.getName());
+                actionLayout.fieldSetId(), 
+                actionLayout.fieldSetName());
+    }
+
+    public static @Nullable GroupIdAndName forPropertyLayout(
+            final @NonNull PropertyLayout propertyLayout) {
+        return GroupIdAndName.inferIfOneMissing(
+                propertyLayout.fieldSetId(), 
+                propertyLayout.fieldSetName());
+    }
+    
+    // -- FACTORIES FOR XML LAYOUT
+
+    public static @Nullable GroupIdAndName forPropertyLayoutData(
+            final @NonNull PropertyLayoutData propertyLayoutData) {
+        return GroupIdAndName.inferIfOneMissing(
+                propertyLayoutData.getId(), 
+                propertyLayoutData.getNamed());
+    }
+    
+    public static @Nullable GroupIdAndName forCollectionLayoutData(
+            final @NonNull CollectionLayoutData collectionLayoutData) {
+        return GroupIdAndName.inferIfOneMissing(
+                collectionLayoutData.getId(), 
+                collectionLayoutData.getNamed());
+    }
+    
+    public static @Nullable GroupIdAndName forFieldSet(
+            final @NonNull FieldSet fieldSet) {
+        return GroupIdAndName.inferIfOneMissing(
+                fieldSet.getId(), 
+                fieldSet.getName());
     }
     
     // -- HELPER
     
     private static @Nullable GroupIdAndName inferIfOneMissing(
-            final @NonNull String id, 
-            final @NonNull String name) {
+            final @Nullable String _id, 
+            final @Nullable String _name) {
+        
+        val id = nullToUnspecified(_id);
+        val name = nullToUnspecified(_name);
         
         val isIdUnspecified = isUnspecified(id) || id.isEmpty();
         val isNameUnspecified = isUnspecified(name);
@@ -107,7 +135,7 @@ implements
         return Character.toLowerCase(c) + name.substring(1).replaceAll("\\s+", "");
     }
     
-    // note: could be potentially improved to work similar as the title service
+    // note: could potentially be improved to work similar as the title service
     private static @NonNull String inferNameFromId(final @NonNull String id) {
         return _Strings.asNaturalName2.apply(id);
     }
@@ -118,6 +146,17 @@ implements
     private static boolean isUnspecified(final @NonNull String idOrName) {
         return "__infer".equals(idOrName);
     }
+
+    /**
+     * Corresponds to the defaults set in {@link ActionLayout#fieldSetId()} etc.
+     */
+    private static String nullToUnspecified(final @Nullable String idOrName) {
+        return idOrName==null
+                    ? "__infer"
+                    : idOrName;
+        
+    }
+
     
 
     
