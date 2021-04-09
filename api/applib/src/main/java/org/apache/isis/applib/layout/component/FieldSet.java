@@ -28,6 +28,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
+import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3Col;
 
 /**
@@ -123,7 +124,7 @@ Serializable {
     private String name;
 
     /**
-     * Corresponds to the {@link MemberOrder#name()} (when applied to properties).
+     * Corresponds to the {@link PropertyLayout#fieldSetName()} (when applied to properties).
      */
     @XmlAttribute(required = false)
     public String getName() {

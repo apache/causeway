@@ -29,8 +29,8 @@ import java.lang.annotation.Target;
  *
  * <p>
  * If more than one property is used, the order can be specified (using the
- * same Dewey-decimal notation as used by `@MemberOrder`) and the string to
- * use between the components can also be specified.
+ * same Dewey-decimal notation). 
+ * The string to use between the components can also be specified.
  * </p>
  *
  * @since 1.x {@index}

@@ -28,10 +28,13 @@ import org.apache.isis.applib.layout.grid.Grid;
  * content is assembled. Once a layout file is in place, its layout data takes precedence over any
  * conflicting layout data from annotations.
  * </p>
+ * 
+ * TODO update for v2 - @MemberGroupLayout and @MemberOrder have been removed
  *
  * @since 1.x {@index}
  */
 public enum Style {
+    
     /**
      * The current layout for the domain class.
      * <p>
@@ -42,6 +45,7 @@ public enum Style {
      * also {@link org.apache.isis.applib.services.grid.GridService#normalize(Grid) normalized}.
      */
     CURRENT,
+    
     /**
      * As per {@link #NORMALIZED}, but also with all (non-null) facets for all
      * properties/collections/actions also included included in the grid.
@@ -54,6 +58,7 @@ public enum Style {
      * </ul>
      */
     COMPLETE,
+    
     /**
      * Default, whereby missing properties/collections/actions are added to regions,
      * and unused/empty regions are removed/trimmed.
@@ -67,6 +72,7 @@ public enum Style {
      * </ul>
      */
     NORMALIZED,
+    
     /**
      * As per {@link #NORMALIZED}, but with no properties/collections/actions.
      * <p>

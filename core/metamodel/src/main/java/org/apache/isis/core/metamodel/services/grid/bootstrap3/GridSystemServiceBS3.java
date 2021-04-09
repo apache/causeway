@@ -126,7 +126,7 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
         final BS3Row propsRow = new BS3Row();
         bs3Grid.getRows().add(propsRow);
 
-        // if no layout hints other than @MemberOrder
+        // if no layout hints
         addFieldSetsToColumn(propsRow, 4, Arrays.asList("General"), true);
 
         final BS3Col col = new BS3Col();
@@ -385,7 +385,7 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
                 }
                 continue;
             }
-            // if the @MemberOrder for the action references a field set (that has bound
+            // if the @ActionLayout for the action references a field set (that has bound
             // associations), then don't mark it as missing, but instead explicitly add it to the
             // list of actions of that field-set.
             final Set<String> boundAssociationIds = boundAssociationIdsByFieldSetId.get(layoutGroupName);
@@ -401,8 +401,8 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
             }
         }
 
-        // ... the missing actions are those in the second tuple, excluding those associated (via @MemberOrder#name)
-        // to a property or collection.
+        // ... the missing actions are those in the second tuple, excluding those associated 
+        // (via @Action#associateWith) to a property or collection. (XXX comment might be outdated)
         final List<String> missingActionIds = _Lists.newArrayList(sortedPossiblyMissingActionIds);
         missingActionIds.removeAll(associatedActionIds);
 

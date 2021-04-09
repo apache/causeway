@@ -438,7 +438,7 @@ public class ExcelDemoToDoItem implements Comparable<ExcelDemoToDoItem> /*, Cale
 //            optionality = Optionality.OPTIONAL,
 //            editing = Editing.DISABLED
 //    )
-//    @MemberOrder(sequence="3")
+//    @PropertyLayout(sequence="3")
 //    public Location getLocation() {
 //        return locationLatitude != null && locationLongitude != null? new Location(locationLatitude, locationLongitude): null;
 //    }

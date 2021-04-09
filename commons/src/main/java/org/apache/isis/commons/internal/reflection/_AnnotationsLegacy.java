@@ -256,7 +256,6 @@ public final class _AnnotationsLegacy  {
 //                    Collection.class,
 //                    CollectionLayout.class,
 //                    Programmatic.class,
-//                    MemberOrder.class,
 //                    Pattern.class,
 //                    javax.annotation.Nullable.class,
 //                    Title.class,

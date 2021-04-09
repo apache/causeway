@@ -177,7 +177,8 @@ public @interface ActionLayout {
 
     /**
      * For actions that are associated with a property (using either
-     * {@link Action#associateWith()} or {@link MemberOrder#name()},
+     * {@link Action#associateWith()} or {@link ActionLayout#fieldSetId()}
+     * or {@link ActionLayout#fieldSetName()},
      * indicates the positioning of the action's button relative to the
      * property.
      *
