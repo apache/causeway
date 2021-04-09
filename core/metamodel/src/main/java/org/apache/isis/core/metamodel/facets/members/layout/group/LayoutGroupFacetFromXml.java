@@ -24,7 +24,6 @@ import org.apache.isis.applib.layout.component.FieldSet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
 import lombok.NonNull;
-import lombok.val;
 
 public class LayoutGroupFacetFromXml
 extends LayoutGroupFacetAbstract {
@@ -44,8 +43,9 @@ extends LayoutGroupFacetAbstract {
             final @NonNull FieldSet fieldSet,
             final @NonNull FacetHolder holder) {
         
-        val groupIdAndName = GroupIdAndName.forFieldSet(fieldSet);
-        return create(groupIdAndName, holder);
+        return GroupIdAndName.forFieldSet(fieldSet)
+            .map(groupIdAndName->create(groupIdAndName, holder))
+            .orElse(null);
     }
     
     // -- IMPLEMENTATION

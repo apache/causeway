@@ -21,7 +21,6 @@ package org.apache.isis.core.metamodel.facets.members.layout.group;
 import java.util.Optional;
 
 import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
 public class LayoutGroupFacetFromActionLayoutAnnotation
@@ -32,8 +31,7 @@ extends LayoutGroupFacetAbstract {
             final FacetHolder holder) {
         
         return actionLayoutIfAny
-            .map(GroupIdAndName::forActionLayout)
-            .filter(_NullSafe::isPresent)
+            .flatMap(GroupIdAndName::forActionLayout)
             .map(groupIdAndName->new LayoutGroupFacetFromActionLayoutAnnotation(groupIdAndName, holder))
             .orElse(null);
     }

@@ -221,18 +221,21 @@ implements GridSystemService<G> {
                         final String propertyId = propertyLayoutData.getId();
                         // any will do; choose the first one that we know is valid
                         if(oneToOneAssociationById.containsKey(propertyId)) {
-                            groupIdAndName = GroupIdAndName.forPropertyLayoutData(propertyLayoutData);                            
+                            groupIdAndName = GroupIdAndName.forPropertyLayoutData(propertyLayoutData)
+                                    .orElse(null);
                             break;
                         }
                     }
                     memberOrderSequence = actionPropertyGroupSequence++;
                 } else if(actionLayoutDataOwner instanceof PropertyLayoutData) {
                     final PropertyLayoutData propertyLayoutData = (PropertyLayoutData) actionLayoutDataOwner;
-                    groupIdAndName = GroupIdAndName.forPropertyLayoutData(propertyLayoutData);
+                    groupIdAndName = GroupIdAndName.forPropertyLayoutData(propertyLayoutData)
+                            .orElse(null);
                     memberOrderSequence = actionPropertySequence++;
                 } else if(actionLayoutDataOwner instanceof CollectionLayoutData) {
                     final CollectionLayoutData collectionLayoutData = (CollectionLayoutData) actionLayoutDataOwner;
-                    groupIdAndName = GroupIdAndName.forCollectionLayoutData(collectionLayoutData);
+                    groupIdAndName = GroupIdAndName.forCollectionLayoutData(collectionLayoutData)
+                            .orElse(null);
                     memberOrderSequence = actionCollectionSequence++;
                 } else {
                     // don't add: any existing metadata should be preserved

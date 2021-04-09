@@ -21,7 +21,6 @@ package org.apache.isis.core.metamodel.facets.members.layout.group;
 import java.util.Optional;
 
 import org.apache.isis.applib.annotation.PropertyLayout;
-import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
 public class LayoutGroupFacetFromPropertyLayoutAnnotation
@@ -32,8 +31,7 @@ extends LayoutGroupFacetAbstract {
             final FacetHolder holder) {
 
         return propertyLayoutIfAny
-                .map(GroupIdAndName::forPropertyLayout)
-                .filter(_NullSafe::isPresent)
+                .flatMap(GroupIdAndName::forPropertyLayout)
                 .map(groupIdAndName->new LayoutGroupFacetFromPropertyLayoutAnnotation(groupIdAndName, holder))
                 .orElse(null);
     }

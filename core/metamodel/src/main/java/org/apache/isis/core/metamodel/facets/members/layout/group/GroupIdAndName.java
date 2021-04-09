@@ -19,6 +19,7 @@
 package org.apache.isis.core.metamodel.facets.members.layout.group;
 
 import java.io.Serializable;
+import java.util.Optional;
 
 import javax.annotation.Nullable;
 
@@ -61,14 +62,14 @@ implements
     
     // -- FACTORIES FOR ANNOTATIONS
 
-    public static @Nullable GroupIdAndName forActionLayout(
+    public static Optional<GroupIdAndName> forActionLayout(
             final @NonNull ActionLayout actionLayout) {
         return GroupIdAndName.inferIfOneMissing(
                 actionLayout.fieldSetId(), 
                 actionLayout.fieldSetName());
     }
 
-    public static @Nullable GroupIdAndName forPropertyLayout(
+    public static Optional<GroupIdAndName> forPropertyLayout(
             final @NonNull PropertyLayout propertyLayout) {
         return GroupIdAndName.inferIfOneMissing(
                 propertyLayout.fieldSetId(), 
@@ -77,21 +78,21 @@ implements
     
     // -- FACTORIES FOR XML LAYOUT
 
-    public static @Nullable GroupIdAndName forPropertyLayoutData(
+    public static Optional<GroupIdAndName> forPropertyLayoutData(
             final @NonNull PropertyLayoutData propertyLayoutData) {
         return GroupIdAndName.inferIfOneMissing(
                 propertyLayoutData.getId(), 
                 propertyLayoutData.getNamed());
     }
     
-    public static @Nullable GroupIdAndName forCollectionLayoutData(
+    public static Optional<GroupIdAndName> forCollectionLayoutData(
             final @NonNull CollectionLayoutData collectionLayoutData) {
         return GroupIdAndName.inferIfOneMissing(
                 collectionLayoutData.getId(), 
                 collectionLayoutData.getNamed());
     }
     
-    public static @Nullable GroupIdAndName forFieldSet(
+    public static Optional<GroupIdAndName> forFieldSet(
             final @NonNull FieldSet fieldSet) {
         return GroupIdAndName.inferIfOneMissing(
                 fieldSet.getId(), 
@@ -100,7 +101,7 @@ implements
     
     // -- HELPER
     
-    private static @Nullable GroupIdAndName inferIfOneMissing(
+    private static Optional<GroupIdAndName> inferIfOneMissing(
             final @Nullable String _id, 
             final @Nullable String _name) {
         
@@ -111,19 +112,19 @@ implements
         val isNameUnspecified = isUnspecified(name);
         if(isIdUnspecified
                 && isNameUnspecified) {
-            return null; // fully unspecified, don't create a LayoutGroupFacet down the line
+            return Optional.empty(); // fully unspecified, don't create a LayoutGroupFacet down the line
         }
         if(isIdUnspecified) {
             val inferredId = inferIdFromName(name);
             if(inferredId.isEmpty()) {
-                return null; // cannot infer a usable id, so don't create a LayoutGroupFacet down the line
+                return Optional.empty(); // cannot infer a usable id, so don't create a LayoutGroupFacet down the line
             }
-            return GroupIdAndName.of(inferIdFromName(name), name);
+            return Optional.of(GroupIdAndName.of(inferIdFromName(name), name));
         } else if(isNameUnspecified) {
             val inferredName = inferNameFromId(id);
-            return GroupIdAndName.of(id, inferredName);
+            return Optional.of(GroupIdAndName.of(id, inferredName));
         }
-        return GroupIdAndName.of(id, name);
+        return Optional.of(GroupIdAndName.of(id, name));
     }
     
     // note: this is a copy of the original logic from GridSystemServiceBS3
