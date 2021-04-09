@@ -23,6 +23,7 @@ import java.util.Optional;
 
 import javax.annotation.Nullable;
 
+import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.layout.component.CollectionLayoutData;
@@ -43,12 +44,12 @@ implements
     private static final long serialVersionUID = 1L;
 
     /**
-     * Id of a layout group.
+     * Id of a layout group (a <i>FieldSet</i> or a <i>Collection</i>).
      */
     private final @NonNull String id;
     
     /**
-     * (Friendly) name of a layout group.
+     * (Friendly) name of a layout group (a <i>FieldSet</i> or a <i>Collection</i>).
      */
     private final @NonNull String name;
 
@@ -62,6 +63,12 @@ implements
     
     // -- FACTORIES FOR ANNOTATIONS
 
+    public static Optional<GroupIdAndName> forAction(
+            final @NonNull Action action) {
+        return GroupIdAndName.inferIfOneMissing(
+                action.associateWith(), null);
+    }
+    
     public static Optional<GroupIdAndName> forActionLayout(
             final @NonNull ActionLayout actionLayout) {
         return GroupIdAndName.inferIfOneMissing(

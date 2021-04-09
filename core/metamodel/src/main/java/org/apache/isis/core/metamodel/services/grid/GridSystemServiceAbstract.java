@@ -21,7 +21,6 @@ package org.apache.isis.core.metamodel.services.grid;
 import static org.apache.isis.core.metamodel.facetapi.FacetUtil.addOrReplaceFacet;
 
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
@@ -215,12 +214,10 @@ implements GridSystemService<G> {
                 GroupIdAndName groupIdAndName = null;
                 int memberOrderSequence;
                 if(actionLayoutDataOwner instanceof FieldSet) {
-                    final FieldSet fieldSet = (FieldSet) actionLayoutDataOwner;
-                    final List<PropertyLayoutData> properties = fieldSet.getProperties();
-                    for (PropertyLayoutData propertyLayoutData : properties) {
-                        final String propertyId = propertyLayoutData.getId();
+                    val fieldSet = (FieldSet) actionLayoutDataOwner;
+                    for (val propertyLayoutData : fieldSet.getProperties()) {
                         // any will do; choose the first one that we know is valid
-                        if(oneToOneAssociationById.containsKey(propertyId)) {
+                        if(oneToOneAssociationById.containsKey(propertyLayoutData.getId())) {
                             groupIdAndName = GroupIdAndName.forPropertyLayoutData(propertyLayoutData)
                                     .orElse(null);
                             break;
@@ -228,13 +225,13 @@ implements GridSystemService<G> {
                     }
                     memberOrderSequence = actionPropertyGroupSequence++;
                 } else if(actionLayoutDataOwner instanceof PropertyLayoutData) {
-                    final PropertyLayoutData propertyLayoutData = (PropertyLayoutData) actionLayoutDataOwner;
-                    groupIdAndName = GroupIdAndName.forPropertyLayoutData(propertyLayoutData)
+                    groupIdAndName = GroupIdAndName
+                            .forPropertyLayoutData((PropertyLayoutData) actionLayoutDataOwner)
                             .orElse(null);
                     memberOrderSequence = actionPropertySequence++;
                 } else if(actionLayoutDataOwner instanceof CollectionLayoutData) {
-                    final CollectionLayoutData collectionLayoutData = (CollectionLayoutData) actionLayoutDataOwner;
-                    groupIdAndName = GroupIdAndName.forCollectionLayoutData(collectionLayoutData)
+                    groupIdAndName = GroupIdAndName
+                            .forCollectionLayoutData((CollectionLayoutData) actionLayoutDataOwner)
                             .orElse(null);
                     memberOrderSequence = actionCollectionSequence++;
                 } else {

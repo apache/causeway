@@ -111,10 +111,13 @@ public @interface ActionLayout {
             default "";
 
     /**
-     * Specifies the <b>id</b> of associated <i>FieldSet</i>.
+     * Specifies the <b>id</b> of associated <i>FieldSet</i>.  
      * <p>
      * For a more in depth description see the analogous {@link PropertyLayout#fieldSetId()}.
      * </p>
+     * 
+     * To associate an <i>Action</i> with a <i>Collection</i>, use {@link Action#associateWith()} 
+     * instead.
      * 
      * @apiNote An <i>Action</i> can be associated with with a <i>Property</i> or <i>Collection</i> 
      * its so called <i>peer</i>. 
@@ -133,10 +136,13 @@ public @interface ActionLayout {
             default "__infer";
     
     /**
-     * Specifies the <b>friendly-name</b> of associated <i>FieldSet</i>.
+     * Specifies the <b>friendly-name</b> of associated <i>FieldSet</i> or <i>Collection</i>.
      * <p>
      * For a more in depth description see the analogous {@link PropertyLayout#fieldSetId()}; 
      * </p>
+     * 
+     * To associate an <i>Action</i> with a <i>Collection</i>, use {@link Action#associateWith()} 
+     * instead.
      * 
      * @see Action#associateWith()
      * @see ActionLayout#fieldSetId()

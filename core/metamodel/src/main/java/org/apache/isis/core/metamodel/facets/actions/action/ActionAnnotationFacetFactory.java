@@ -42,6 +42,7 @@ import org.apache.isis.core.metamodel.facets.actions.action.prototype.PrototypeF
 import org.apache.isis.core.metamodel.facets.actions.action.semantics.ActionSemanticsFacetForActionAnnotation;
 import org.apache.isis.core.metamodel.facets.actions.action.typeof.TypeOfFacetForActionAnnotation;
 import org.apache.isis.core.metamodel.facets.actions.fileaccept.FileAcceptFacetForActionAnnotation;
+import org.apache.isis.core.metamodel.facets.members.layout.group.LayoutGroupFacetFromActionAnnotation;
 import org.apache.isis.core.metamodel.facets.members.publish.command.CommandPublishingFacetForActionAnnotation;
 import org.apache.isis.core.metamodel.facets.members.publish.execution.ExecutionPublishingActionFacetForActionAnnotation;
 import org.apache.isis.core.metamodel.facets.object.domainobject.domainevents.ActionDomainEventDefaultFacetForDomainObjectAnnotation;
@@ -270,6 +271,7 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract {
             val associateWith = action.associateWith();
             if(_Strings.isNotEmpty(associateWith)) {
                 super.addFacet(new AssociatedWithFacetForActionAnnotation(associateWith, facetedMethod));
+                super.addFacet(LayoutGroupFacetFromActionAnnotation.create(actionIfAny, facetedMethod));
             }
         });
     }
