@@ -108,6 +108,11 @@ implements
     
     // -- HELPER
     
+    /* 
+     * if id is missing tries to infer it;
+     * if name is missing tries to infer it;
+     * if cannot reason about a usable id, returns Optional.empty()
+     */
     private static Optional<GroupIdAndName> inferIfOneMissing(
             final @Nullable String _id, 
             final @Nullable String _name) {
@@ -126,7 +131,7 @@ implements
             if(inferredId.isEmpty()) {
                 return Optional.empty(); // cannot infer a usable id, so don't create a LayoutGroupFacet down the line
             }
-            return Optional.of(GroupIdAndName.of(inferIdFromName(name), name));
+            return Optional.of(GroupIdAndName.of(inferredId, name));
         } else if(isNameUnspecified) {
             val inferredName = inferNameFromId(id);
             return Optional.of(GroupIdAndName.of(id, inferredName));
