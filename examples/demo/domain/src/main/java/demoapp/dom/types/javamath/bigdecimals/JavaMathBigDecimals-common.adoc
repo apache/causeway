@@ -57,7 +57,7 @@ include::holder/JavaMathBigDecimalHolder2.java[tags=class]
 
 <.> The default methods have annotations that are automatically inherited.
 <.> Position to the left
-<.> Uses `@MemberOrder` positions the properties into the appropriate `<field-set>` within the `Xxx.layout.xml` layout file.
+<.> Using `@PropertyLayout(fieldSetId=...)` positions the properties into the appropriate `<field-set>` within the `Xxx.layout.xml` layout file.
 <.> Position label on top
 <.> Position label to the right
 +
