@@ -18,7 +18,7 @@ public class ToDoItems {
 }
 ----
 
-In the xref:vw:ROOT:about.adoc[Wicket viewer], domain services placed:
+In the xref:vw:ROOT:about.adoc[Web UI (Wicket viewer)], domain services placed:
 
 * on the `PRIMARY` menu bar appears to the left.
 * on the `SECONDARY` menu bar appear to the right:

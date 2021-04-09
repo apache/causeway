@@ -8,7 +8,7 @@
 Some of the extension/mapping modules that have entities that implement this mixee are:
 
 * xref:security:audit-trail:about.adoc[Auditer] module: `AuditEntry` entity
-* xref:extensions:command-log:about.adoc[Command Log] module: `CommandJdo` entity
+* xref:userguide:command-log:about.adoc[Command Log] module: `CommandJdo` entity
 * xref:mappings:outbox-publisher:about.adoc[Outbox Publisher] module: `OutboxEvent` entity
 
 

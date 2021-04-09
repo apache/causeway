@@ -33,7 +33,7 @@ The layout file distinguishes between two types of element:
 
 * those that define a grid structure, of: rows, columns, tab groups and tabs.
 +
-The rows and columns are closely modelled on link:http://getbootstrap.com[Bootstrap 3] (used in the implementation of the xref:vw:ROOT:about.adoc[Wicket viewer]).
+The rows and columns are closely modelled on link:http://getbootstrap.com[Bootstrap 3] (used in the implementation of the xref:vw:ROOT:about.adoc[Web UI (Wicket viewer)]).
 
 * those that define common components, of: fieldsets (previously called member groups or property groups), properties, collections, actions and also the title/icon of the domain object itself.
 

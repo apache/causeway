@@ -28,6 +28,8 @@ import org.apache.isis.core.security.authentication.manager.AuthenticationManage
 /**
  * Decouples the <code>IsisRestfulObjectsInteractionFilter</code> from the mechanism of obtaining the
  * {@link Authentication}.
+ *
+ * @since 2.0 {@index}
  */
 public interface AuthenticationStrategy {
 
@@ -36,7 +38,7 @@ public interface AuthenticationStrategy {
      * @see AuthenticationManager#isSessionValid(Authentication)
      */
     Authentication lookupValid(
-            HttpServletRequest httpServletRequest, 
+            HttpServletRequest httpServletRequest,
             HttpServletResponse httpServletResponse);
 
     /**
@@ -46,11 +48,11 @@ public interface AuthenticationStrategy {
      * @param auth
      */
     void bind(
-            HttpServletRequest httpServletRequest, 
-            HttpServletResponse httpServletResponse, 
+            HttpServletRequest httpServletRequest,
+            HttpServletResponse httpServletResponse,
             Authentication auth);
 
     void invalidate(
-            HttpServletRequest httpServletRequest, 
+            HttpServletRequest httpServletRequest,
             HttpServletResponse httpServletResponse);
 }

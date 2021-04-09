@@ -189,7 +189,7 @@ public List<Tag> autoCompleteTag(@MinLength(1) search) {
 
 If the action has been associated with a collection, using xref:refguide:applib:index/annotation/Action.adoc#associateWith[@Action#associateWith()], then the collection can be used to provide a list of candidate values.
 
-The xref:vw:ROOT:about.adoc[Wicket Viewer] handles this by rendering checkboxes against the associated collection; the user can select/deselect these checkboxes and the selected items are taken as the values for the multi-select action.
+The xref:vw:ROOT:about.adoc[Web UI (Wicket viewer)] handles this by rendering checkboxes against the associated collection; the user can select/deselect these checkboxes and the selected items are taken as the values for the multi-select action.
 
 
 

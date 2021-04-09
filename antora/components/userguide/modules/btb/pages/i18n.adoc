@@ -9,7 +9,7 @@ Apache Isis' support for internationlization (i18n) allows every element of the 
 
 It also supports translations of messages raised imperatively, by which we mean as the result of a call to `title()` to obtain an object's title, or messages resulting from any business rule violations (eg xref:refguide:applib-methods:prefixes.adoc#disable[disable...()] or xref:refguide:applib-methods:prefixes.adoc#validate[validate...()], and so on.
 
-The xref:vw:ROOT:about.adoc[Wicket viewer] (that is, its labels and messages) is also internationalized using the same mechanism.
+The xref:vw:ROOT:about.adoc[Web UI (Wicket viewer)] (that is, its labels and messages) is also internationalized using the same mechanism.
 If no translations are available, then the Wicket viewer falls back to using Wicket resource bundles.
 
 Isis does not translate the values of your domain objects, though.

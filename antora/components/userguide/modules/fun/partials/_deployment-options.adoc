@@ -18,7 +18,7 @@ Once you've sketched out your domain model, you can then either start-over and d
 
 One of the original motivations for Apache Isis was to be able automatically generate a user interface for a domain object model.
 The framework's architecture allows for different user interface technologies.
-The principal implementation is the xref:vw:ROOT:about.adoc[Wicket viewer], which as well as providing an appealing default user interface also has the ability to be customized the user interface by writing new link:http://wicket.apache.org[Apache Wicket] components.
+The principal implementation is the xref:vw:ROOT:about.adoc[Web UI (Wicket viewer)], which as well as providing an appealing default user interface also has the ability to be customized the user interface by writing new link:http://wicket.apache.org[Apache Wicket] components.
 The framework provides a xref:extensions:ROOT:about.adoc[number of these].
 
 Deploying on Apache Isis means that the framework also manages object persistence.
@@ -30,7 +30,7 @@ JDO/DataNucleus historically has link:https://www.datanucleus.org/products/acces
 
 == Deploy with custom controllers
 
-If the xref:vw:ROOT:about.adoc[Wicket viewer]'s extensions are too restrictive, another option is to deploy custom controllers/views for specific use cases _alongside_ the generic viewer.
+If the xref:vw:ROOT:about.adoc[Web UI (Wicket viewer)]'s extensions are too restrictive, another option is to deploy custom controllers/views for specific use cases _alongside_ the generic viewer.
 This way you can use the generic viewer to deliver the majority of the app's functionality, but you can justify the additional effort of writing a custom controller for those specialised/high volume use cases where a different flow is needed.
 
 Because Apache Isis runs on top of link:https://spring.io/projects/spring-boot[Spring Boot], you can easily integrate any of the UI technologies supported by Spring, or of course use Apache Wicket for a similar look-n-feel.

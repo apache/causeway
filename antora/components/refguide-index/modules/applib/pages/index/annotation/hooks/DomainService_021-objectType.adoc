@@ -13,7 +13,7 @@ This can appear in several contexts, including:
 (see xref:refguide:applib:index/services/bookmark/BookmarkService.adoc[BookmarkService])
 * in the serialization of `OidDto` in the xref:refguide:schema:cmd.adoc[command] and xref:refguide:schema:ixn.adoc[interaction] schemas
 * in the URLs of the xref:vro:ROOT:about.adoc[RestfulObjects viewer]
-* in the URLs of the xref:vw:ROOT:about.adoc[Wicket viewer] (specifically, for bookmarked actions)
+* in the URLs of the xref:vw:ROOT:about.adoc[Web UI (Wicket viewer)] (specifically, for bookmarked actions)
 
 == Example
 

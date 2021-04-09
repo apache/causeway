@@ -12,13 +12,13 @@ The main uses cases are:
 
 * as a means to audit (persist) commands, by implementing the xref:refguide:applib:index/services/publishing/spi/CommandSubscriber.adoc[CommandSubscriber] SPI.
 +
-The xref:extensions:command-log:about.adoc[Command Log] extension _does_ provide such an implementation.
+The xref:userguide:command-log:about.adoc[Command Log] extension _does_ provide such an implementation.
 +
 TIP: Another option to achieve this is to use the xref:refguide:applib:index/services/publishing/spi/ExecutionSubscriber.adoc[ExecutionSubscriber] SPI.
 
 * to replay commands onto a secondary system, for regression testing.
 +
-This is implemented by the xref:extensions:command-replay:about.adoc[Command Replay] extension, working in conjunction with the xref:extensions:command-log:about.adoc[Command Log] extension.
+This is implemented by the xref:userguide:command-replay:about.adoc[Command Replay] extension, working in conjunction with the xref:userguide:command-log:about.adoc[Command Log] extension.
 
 The xref:refguide:applib:index/annotation/Action.adoc#commandPublishing[commandPublishing()] element can be used to explicitly enable or disable command publishing for the action invocation.
 

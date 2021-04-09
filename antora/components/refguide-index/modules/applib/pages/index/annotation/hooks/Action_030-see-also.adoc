@@ -8,11 +8,11 @@
 +
 for actions where command publishing (as per xref:refguide:applib:index/annotation/Action.adoc#commandPublishing[@Action#commandPublishing()]) is enabled
 
-** xref:extensions:command-log:about.adoc[Command Log] extension
+** xref:userguide:command-log:about.adoc[Command Log] extension
 +
 provides an implementation that simply logs actions using the logging library
 
-** xref:extensions:command-replay:about.adoc[Command Replay] extension
+** xref:userguide:command-replay:about.adoc[Command Replay] extension
 +
 provides an implementation to replicate commands from a primary to a secondary system.
 +

@@ -29,6 +29,6 @@ Domain service APIs for the presentation layer allow the domain objects to contr
 |===
 
 
-CAUTION: The implementations are specific to the particular viewer (xref:vw:ROOT:about.adoc[Wicket viewer] or xref:vro:ROOT:about.adoc[Restful Objects viewer]) so domain code must guard against them being unavailable in some cases.
+CAUTION: The implementations are specific to the particular viewer (xref:vw:ROOT:about.adoc[Web UI (Wicket viewer)] or xref:vro:ROOT:about.adoc[REST API (Restful Objects viewer)]) so domain code must guard against them being unavailable in some cases.
 
 

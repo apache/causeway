@@ -7,7 +7,7 @@ This section describes the core values that the the Apache Isis framework tries 
 
 == Aligned with the Business
 
-Apache Isis is primarily aimed at custom-built "enterprise" applications, with a UI provided by the xref:vw:ROOT:about.adoc[Wicket viewer] is intended to be usable by domain experts, typically end-users within the organization.
+Apache Isis is primarily aimed at custom-built "enterprise" applications, with a UI provided by the xref:vw:ROOT:about.adoc[Web UI (Wicket viewer)] is intended to be usable by domain experts, typically end-users within the organization.
 
 But why should an organisation build software, when it could just buy it?
 

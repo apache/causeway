@@ -12,7 +12,7 @@ The icon is often the same for all instances of a particular class, but it's als
 This could represent the state of that object (eg a shipped order, say, or overdue library book).
 
 It is also possible for an object to provide a CSS class hint.
-In conjunction with xref:vw:ROOT:customisation.adoc#tweaking-css-classes[customized CSS] this can be used to apply arbitrary styling; for example each object could be rendered in a page with a different background colour.
+In conjunction with xref:vw:ROOT:customisation.adoc#custom-css[customized CSS] this can be used to apply arbitrary styling; for example each object could be rendered in a page with a different background colour.
 
 Finally, a domain object can even indicate the xref:ui.adoc#object-layout[layout] that should be used to render it.
 For example, a domain object may be rendered differently depending upon the role of the user viewing it.
@@ -263,7 +263,7 @@ public class OrderSubscriptions {
 == Object CSS Styling
 
 It is also possible for an object to return a xref:refguide:applib-methods:ui-hints.adoc#cssclass[CSS class].
-In conjunction with a viewer-specific customisation of CSS (eg for the xref:vw:ROOT:about.adoc[Wicket Viewer], seexref:vw:ROOT:customisation.adoc#tweaking-css-classes[here]) this can be used to apply arbitrary styling; for example each object could be rendered in a page with a different background colour.
+In conjunction with a viewer-specific customisation of CSS (eg for the xref:vw:ROOT:about.adoc[Web UI (Wicket viewer)], seexref:vw:ROOT:customisation.adoc#custom-css[here]) this can be used to apply arbitrary styling; for example each object could be rendered in a page with a different background colour.
 
 === Declarative style
 
@@ -271,7 +271,7 @@ To render an object with a particular CSS, use
 xref:refguide:applib:index/annotation/DomainObjectLayout.adoc#cssClass[@DomainObjectLayout#cssClass()] or in the xref:userguide:fun:ui.adoc#object-layout[layout.xml] file.
 
 The usage of this CSS class is viewer-specific.
-In the case of the xref:vw:ROOT:about.adoc[Wicket Viewer], when the domain object is rendered on its own page, this CSS class will appear on a top-level `<div>`.
+In the case of the xref:vw:ROOT:about.adoc[Web UI (Wicket viewer)], when the domain object is rendered on its own page, this CSS class will appear on a top-level `<div>`.
 Or, when the domain object is rendered as a row in a collection, then the CSS class will appear in a `<div>` wrapped by the `<tr>` of the row.
 
 One possible use case would be to render the most important object types with a subtle background colour: ``Customer``s shown in light green, or ``Order``s shown in a light pink, for example.

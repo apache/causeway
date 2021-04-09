@@ -1,10 +1,445 @@
-= Sring Security
+= Spring Security
 
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :page-partial:
 
-WARNING: TODO: this content has not yet been reviewed/updated for v2.0
 
-This guide describes the configuration of the Spring implementation of Apache Isis' `Authenticator and `Authorizor` APIs.
+This guide describes the configuration of the Spring implementation of Apache Isis' xref:refguide:core:index/security/authentication/Authenticator.adoc[Authenticator] SPI.
+
+It does _not_ however provide any implementation of xref:refguide:core:index/security/authorization/Authorizor.adoc[Authorizor] SPI.
+You will therefore need to configure an alternative implementation, eg the xref:bypass:about.adoc[Bypass] implementation (to disable authorisation checks completely), or use the xref:secman:about.adoc[SecMan] implementation.
 
 
+include::docs:mavendeps:partial$setup-and-configure-dependencyManagement.adoc[leveloffset=+1]
+
+
+== Dependency
+
+In the webapp module of your application, add the following dependency:
+
+[source,xml]
+.pom.xml
+----
+<dependencies>
+    <dependency>
+        <groupId>org.apache.isis.security</groupId>
+        <artifactId>isis-security-spring</artifactId>
+    </dependency>
+</dependencies>
+----
+
+[[_update-appmanifest]]
+== Update AppManifest
+
+In your application's `AppManifest` (top-level Spring `@Configuration` used to bootstrap the app), import the `IsisModuleSecuritySpring` module and remove any other `IsisModuleSecurityXxx` modules.
+
+Also, as this module provides no implementation of the xref:refguide:core:index/security/authorization/Authorizor.adoc[Authorizor] SPI, instead you will need some an alternative implementation, such as the xref:bypass:about.adoc[Bypass] implementation.
+(Note: this will in effect disable authorisation checks).
+
+[source,java]
+.AppManifest.java
+----
+@Configuration
+@Import({
+        ...
+        IsisModuleSecuritySpring.class,     // <.>
+        AuthorizorBypass.class,             // <.>
+        ...
+})
+public class AppManifest {
+}
+----
+<.> make sure that no other `IsisModuleSecurityXxx` module is imported.
+<.> or some other implementation of `Authorizor`.
+
+
+== Design
+
+The module brings in a transitive dependency to `org.springframework.boot:spring-boot-starter-security`:
+
+[source,xml]
+.pom.xml
+----
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-security</artifactId>
+</dependency>
+----
+
+This enables security by default, and should then be adjusted as required to enable access.
+See the Spring documentation for details on how to do this, for example:
+
+* link:https://spring.io/guides/gs/securing-web/[Spring security introductory guide]
+* link:https://www.baeldung.com/spring-boot-security-autoconfiguration[Baeldung article] on `spring-boot-starter-security`
+* link:https://www.tutorialspoint.com/spring_boot/spring_boot_securing_web_applications.htm[Tutorialspoint] tutorial on `spring-boot-starter-security`
+
+The module itself configures a filter that is installed at the end of Spring Security's filter chain.
+It uses the link:https://docs.spring.io/spring-security/site/docs/current/api/org/springframework/security/core/context/SecurityContextHolder.html[SecurityContextHolder] to obtain the current authentication:
+
+[source,java]
+.SpringSecurityFilter.java
+----
+val springAuthentication = SecurityContextHolder.getContext().getAuthentication();
+if(springAuthentication==null
+        || !springAuthentication.isAuthenticated()) {
+    httpServletResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+    return; // not authenticated
+}
+----
+
+For an authenticated user the `org.apache.isis.viewer.wicket.roles.USER` role -- as required by xref:vw::about.adoc[Web UI (Wicket viewer)]  -- is automatically added to the list of roles.
+
+
+
+== Walk-through : In-memory
+
+Using Spring Security we can configure your app with various authentication providers.
+In this section we describe how to modify the xref:docs:starters:helloworld.adoc[HelloWorld] starter app to use an in-memory authenticator.
+
+TIP: These changes have been applied to the `origin/jdo-spring-security-inmemory` branch.
+
+=== Code Changes
+
+First, we need an implementation of `WebSecurityConfigurerAdapter` to setup the inmemory authenticator:
+
+[source,java]
+----
+@Configuration
+@EnableWebSecurity
+public class SecurityConfig extends WebSecurityConfigurerAdapter
+{
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.inMemoryAuthentication()
+                .withUser("sven")
+                .password(passwordEncoder().encode("pass"))
+                .roles("USER");   // <.>
+                ;
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+}
+----
+<.> at least one role must be assigned to each user.
+
+Next, we configure the necessary components (including `SecurityConfig`, above).
+As discussed <<_update-appmanifest,above>>, we need to reference Apache Isis' Spring security module and also an implementation of xref:refguide:core:index/security/authorization/Authorizor.adoc[Authorizor] SPI, eg the xref:bypass:about.adoc[Bypass] implementation:
+
+[source,java]
+.AppManifest.java
+----
+@Configuration
+@Import({
+        ...
+        IsisModuleSecuritySpring.class,
+        AuthorizorBypass.class,
+        SecurityConfig.class,
+        ...
+})
+public class AppManifest {
+}
+----
+
+
+=== Code Patch
+
+In the current release of Apache Isis ({page-isisrel}), there is an issue with its `SpringSecurityFilter`; it does not recognise `UserDetails` as a valid authenticated principal.
+We therefore (for now) need to patch in our own replacement.
+
+[source,java]
+.org/apache/isis/security/spring/webmodule/SpringSecurityFilter.java
+----
+package org.apache.isis.security.spring.webmodule;
+
+//...
+
+public class SpringSecurityFilter implements Filter {
+
+    @Autowired
+    private InteractionFactory isisInteractionFactory;
+
+    @Override
+    public void doFilter(
+            final ServletRequest servletRequest,
+            final ServletResponse servletResponse,
+            final FilterChain filterChain) throws IOException, ServletException {
+
+        HttpServletResponse httpServletResponse = (HttpServletResponse) servletResponse;
+
+        org.springframework.security.core.Authentication springAuthentication = SecurityContextHolder.getContext().getAuthentication();
+        if(springAuthentication==null
+                || !springAuthentication.isAuthenticated()) {
+            httpServletResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            return; // not authenticated
+        }
+
+        String principalIdentity;
+        Object principal = springAuthentication.getPrincipal();
+        if (principal instanceof UserDetails) {
+            final UserDetails user = (UserDetails) principal;
+            principalIdentity = user.getUsername();
+        } else {
+            httpServletResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            return; // unknown principal type, not handled
+        }
+
+        UserMemento user = UserMemento.ofNameAndRoleNames(principalIdentity,
+                Stream.of("org.apache.isis.viewer.wicket.roles.USER"));
+        SimpleAuthentication authentication = SimpleAuthentication.validOf(user);
+        authentication.setType(Authentication.Type.EXTERNAL);
+
+        isisInteractionFactory.runAuthenticated(
+                authentication,
+                ()->{
+                    filterChain.doFilter(servletRequest, servletResponse);
+                });
+    }
+}
+----
+
+=== Tidying up
+
+Finally, (and optionally), the swagger/REST API is not configured for spring security, so we replace the `index.html` page with one to redirect straight to the xref:vw::about.adoc[Wicket Viewer]:
+
+[source,html]
+.static/index.html
+----
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <meta http-equiv="refresh" content="0;url=/wicket/" />
+</head>
+<body>
+<div id="wrapper">
+    <!-- we just redirect immediately, because swagger/restful API not configured to use spring security -->
+</div>
+</body>
+</html>
+----
+
+=== Run the application
+
+You should now be able to run the application.
+You will see that the usual login page is replaced by one provided by Spring:
+
+image::spring-security-login.png[width=300px]
+
+== Walk-through : OAuth2
+
+Using Spring Security we can configure your app with various authentication providers.
+In this section we describe how to modify the xref:docs:starters:helloworld.adoc[HelloWorld] starter app to use github as an OAuth2 provider.
+The steps here are based on link:https://spring.io/guides/tutorials/spring-boot-oauth2/[this Spring tutorial].
+
+TIP: These changes have been applied to the `origin/jdo-spring-security-oauth2` branch.
+
+=== Code Changes
+
+First, we add in the OAuth2 client dependency:
+
+[source,xml]
+.pom.xml
+----
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-oauth2-client</artifactId>
+    <exclusions>
+        <exclusion>
+            <groupId>org.springframework.boot</groupId>           <!--.-->
+            <artifactId>spring-boot-starter-logging</artifactId>
+        </exclusion>
+    </exclusions>
+</dependency>
+----
+<.> excluded to avoid log4j2 <--> slf4j bidirectional dependency
+
+Next: the OAuth2 integration provided by Spring (seemingly) forwards onto an "/login" endpoint immediately after the user has logged into github, but with an authenticated principal.
+We therefore use a controller to simply forward directly onto the xref:vw::about.adoc[Wicket Viewer]:
+
+* create this page to redirect:
++
+[source,html]
+.templates/redirect-immediately.html
+----
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+        <meta http-equiv="refresh" content="0;url=/wicket/" />
+    </head>
+    <body>
+        <div id="wrapper">
+        </div>
+    </body>
+</html>
+----
+
+* define this controller for `/login`:
++
+[source,java]
+.LoginController.java
+----
+@Controller
+@RequestMapping({"/login"})
+public class LoginController {
+
+    @RequestMapping(
+        produces = {"text/html"}
+    )
+    public String login(HttpServletRequest request, HttpServletResponse response) {
+        return "redirect-immediately";
+    }
+}
+----
+
+Next, we configure the necessary components (including `LoginController`, above).
+As discussed <<_update-appmanifest,above>>, we need to reference Apache Isis' Spring security module and also an implementation of xref:refguide:core:index/security/authorization/Authorizor.adoc[Authorizor] SPI, eg the xref:bypass:about.adoc[Bypass] implementation:
+
+[source,java]
+.AppManifest.java
+----
+@Configuration
+@Import({
+        ...
+        IsisModuleSecuritySpring.class,
+        AuthorizorBypass.class,
+        LoginController.class,
+        ...
+})
+public class AppManifest {
+}
+----
+
+
+=== Code Patch
+
+In the current release of Apache Isis ({page-isisrel}), there is an issue with its `SpringSecurityFilter`.
+We therefore (for now) need to patch in our own replacement.
+
+[source,java]
+.org/apache/isis/security/spring/webmodule/SpringSecurityFilter.java
+----
+package org.apache.isis.security.spring.webmodule;
+
+//...
+
+public class SpringSecurityFilter implements Filter {
+
+    @Autowired
+    private InteractionFactory isisInteractionFactory;
+
+    @Override
+    public void doFilter(
+            final ServletRequest servletRequest,
+            final ServletResponse servletResponse,
+            final FilterChain filterChain) throws IOException, ServletException {
+
+        HttpServletResponse httpServletResponse = (HttpServletResponse) servletResponse;
+
+        org.springframework.security.core.Authentication springAuthentication = SecurityContextHolder.getContext().getAuthentication();
+        if(springAuthentication==null
+                || !springAuthentication.isAuthenticated()) {
+            httpServletResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            return; // not authenticated
+        }
+
+         Object principal = springAuthentication.getPrincipal();
+        if (principal instanceof OAuth2User) {
+            OAuth2User oAuth2User = (OAuth2User) principal;
+            final Object login = oAuth2User.getAttributes().get("login");
+            principalIdentity = login instanceof String ? (String)login : oAuth2User.getName();
+        } else {
+            httpServletResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            return; // unknown principal type, not handled
+        }
+
+        UserMemento user = UserMemento.ofNameAndRoleNames(principalIdentity,
+                Stream.of("org.apache.isis.viewer.wicket.roles.USER"));
+        SimpleAuthentication authentication = SimpleAuthentication.validOf(user);
+        authentication.setType(Authentication.Type.EXTERNAL);
+
+        isisInteractionFactory.runAuthenticated(
+                authentication,
+                ()->{
+                    filterChain.doFilter(servletRequest, servletResponse);
+                });
+    }
+}
+----
+
+
+=== Tidying up
+
+Finally, (and optionally), the swagger/REST API is not configured for oauth2, so we replace the `index.html` page with one to redirect straight to the xref:vw::about.adoc[Wicket Viewer]:
+
+[source,html]
+.static/index.html
+----
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <meta http-equiv="refresh" content="0;url=/wicket/" />
+</head>
+<body>
+<div id="wrapper">
+    <!-- we just redirect immediately, because swagger/restful API not configured to use spring security -->
+</div>
+</body>
+</html>
+----
+
+=== Configuration
+
+We are now ready to configure the app.
+As described in the link:https://spring.io/guides/tutorials/spring-boot-oauth2/[this Spring tutorial]:
+
+* register the app on github:
++
+image::register-github-oauth-app.png[width=500px]
+
+* obtain the clientId and create a new client secret:
++
+image::github-client-id.png[width=600px]
+
+* update the configuration:
++
+[source,properties]
+.config/application-github-example.properties
+----
+spring.security.oauth2.client.registration.github.clientId=XXXX
+spring.security.oauth2.client.registration.github.clientSecret=XXXXXXXX
+----
+
+=== Run the application
+
+You should now be able to run the application, setting the "github-example" profile using this JVM argument:
+
+    -Dspring.profiles.active=github-example
+
+If you are already signed into github:
+
+image::github-already-signed-in.png[width=300px]
+
+then you should be logged in directly; the app will show your user name:
+
+image::helloworld-shows-username.png[width=300px]
+
+On the other hand, if you are not signed in then you will be redirected to the github login page:
+
+image::github-login-page.png[width=300px]
+
+If you have 2FA enabled, then this also works:
+
+image::github-2fa.png[width=300px]
+
+and then, once again, you will be redirected to the app and it will show your user name:
+
+image::helloworld-shows-username.png[width=250px]
+
+Finally, if you log out then Spring will show a page to allow you to trigger the login process:
+
+image::github-sign-in-again.png[width=600px]

@@ -24,6 +24,6 @@ public class BusRoute {
 ----
 <.> renders the collection as a table view.
 
-The xref:vw:ROOT:about.adoc[Wicket viewer] allows additional views to be configured to render collections of objects, eg xref:vw:exceldownload:about.adoc[Excel Download] ("excel"), xref:vw:fullcalendar:about.adoc[Fullcalendar] ("fullcalendar") and xref:vw:gmap3:about.adoc[Gmap3] ("map") extensions.
+The xref:vw:ROOT:about.adoc[Web UI (Wicket viewer)] allows additional views to be configured to render collections of objects, eg xref:vw:exceldownload:about.adoc[Excel Download] ("excel"), xref:vw:fullcalendar:about.adoc[Fullcalendar] ("fullcalendar") and xref:vw:gmap3:about.adoc[Gmap3] ("map") extensions.
 This attribute can be used to select any of these alternative views instead.
 

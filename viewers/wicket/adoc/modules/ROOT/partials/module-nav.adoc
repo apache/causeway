@@ -1,16 +1,11 @@
 
 
 
-* xref:vw:ROOT:configuration-properties.adoc[Configuration Properties]
+* xref:vw:ROOT:setup-and-configuration.adoc[Setup and Configuration]
 * xref:vw:ROOT:features.adoc[End-user Features]
-* xref:vw:ROOT:security.adoc[Security]
 * xref:vw:ROOT:customisation.adoc[Customisation]
 * xref:vw:ROOT:extending.adoc[Extending]
 * xref:vw:ROOT:hints-and-tips.adoc[Hints-n-Tips]
-* xref:vw:ROOT:other-resources.adoc[Other Resources]
-
-
-
-
+* xref:vw:ROOT:security.adoc[Security]
 
 

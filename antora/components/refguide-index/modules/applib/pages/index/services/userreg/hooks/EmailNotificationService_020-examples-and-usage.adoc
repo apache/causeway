@@ -15,7 +15,7 @@ If necessary, one can be created on the fly using the `InteractionFactory#runAut
 
 == User Registration
 
-The `EmailNotificationService` supports the xref:vw:ROOT:features.adoc#user-registration[user registration] (self sign-up) features of the xref:vw:ROOT:about.adoc[Wicket viewer] whereby a user can sign-up to access an application by providing a valid email address.
+The `EmailNotificationService` supports the xref:vw:ROOT:features.adoc#user-registration[user registration] (self sign-up) features of the xref:vw:ROOT:about.adoc[Web UI (Wicket viewer)] whereby a user can sign-up to access an application by providing a valid email address.
 
 * The Wicket viewer will check whether an implementation of this service (and also the xref:refguide:applib:index/services/userreg/UserRegistrationService.adoc[UserRegistrationService]) is available, and if so will (unless configured not to) expose a sign-up page where the user enters their email address.
 

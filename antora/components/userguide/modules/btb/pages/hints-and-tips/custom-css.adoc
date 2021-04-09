@@ -36,7 +36,7 @@ Custom CSS styles can be associated with specific regions of the layout:
 <3> Ditto
 
 For example the `custom-width-100` style is used to "stretch" the button for the `exportToWordDoc` action in the left-most column.
-For the xref:vw:ROOT:about.adoc[Wicket Viewer] this is accomplished with xref:refguide:config:application-specific/application-css.adoc[custom CSS], usually CSS in the `static/css/application.css` file:
+For the xref:vw:ROOT:about.adoc[Web UI (Wicket viewer)] this is accomplished with xref:refguide:config:application-specific/application-css.adoc[custom CSS], usually CSS in the `static/css/application.css` file:
 
 [source,css]
 ----

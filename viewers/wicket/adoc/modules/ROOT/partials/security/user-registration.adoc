@@ -4,22 +4,12 @@
 
 
 
-
 As well as providing a sign-in screen, the Wicket viewer also provides the ability for users to self-register.
 By and large this operates outside of Apache Isis' security mechanisms; indeed the various pages (sign-up, sign-up verification, password reset) are all rendered _without_ there being any current user session.
 These pages all "reach inside" Apache Isis framework in order to actually do their stuff.
-
-[TIP]
-====
-The sign-in verification page to render is pluggable; see xref:vw:ROOT:extending.adoc#custom-pages[extensions chapter] for details.
-====
 
 User registration is only available if the xref:refguide:applib:index/services/userreg/UserRegistrationService.adoc[UserRegistrationService] is configured; this is used by the framework to actually create new instances of the user as accessed by the corresponding (Shiro) realm.
 
 Because Shiro realms are pluggable, the Apache Isis framework does not provide default implementations of this service.
 However, if you are using the xref:security:ROOT:about.adoc[SecMan extension], then this module _does_ provide an implementation (that, as you might expect, creates new "user" domain entities).
-
-And, if you are using the xref:security:realm-ldap:about.adoc[LDAP realm] and want to enable user-self registration then you'll need to write your own implementation of this service.
-
-
 

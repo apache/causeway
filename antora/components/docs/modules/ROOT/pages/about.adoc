@@ -16,7 +16,6 @@
 * xref:what-is-apache-isis/common-use-cases.adoc[Common Use Cases]
 
 * xref:what-is-apache-isis/screencasts.adoc[Screencasts]
-// * xref:what-is-apache-isis/powered-by.adoc[Powered By]
 
 |
 [discrete]
@@ -42,7 +41,7 @@ _POMs_
 
 * xref:docs:demo:about.adoc[Demo App]
 (link:https://demo-wicket.isis.incode.work[online])
-//* link:https://danhaywood.gitlab.io/isis-petclinic-tutorial-docs/petclinic/1.16.2/intro.html[Petclinic (v1.16.2)]
+* link:https://danhaywood.gitlab.io/isis-petclinic-tutorial-docs/petclinic/1.16.2/intro.html[Petclinic (v1.16.2)]
 
 [discrete]
 == Resources
@@ -80,7 +79,6 @@ _Integrate between Apps_
 _Other_
 
 *  xref:incubator:ROOT:about.adoc[Incubator]
-*  xref:legacy:ROOT:about.adoc[Legacy]
 
 
 |
@@ -92,14 +90,14 @@ _Viewers_
 * xref:vw:ROOT:about.adoc[Web UI (Wicket)]
 * xref:vro:ROOT:about.adoc[REST API (Restful Objects)]
 
-_Security_
-
-* xref:security:ROOT:about.adoc[Security Guide]
-
 _Persistence_
 
 * xref:pjpa:ROOT:about.adoc[JPA (EclipseLink)]
 * xref:pjdo:ROOT:about.adoc[JDO (DataNucleus)]
+
+_Security_
+
+* xref:security:ROOT:about.adoc[Security Guide]
 
 _Extensions_
 
@@ -124,7 +122,8 @@ _Releases_
 _Nightly Builds (not ASF)_
 
 * link:https://github.com/apache-isis-committers/isis-nightly[CI]
-* link:https://repo.incode.cloud/[Maven Repo]
+* link:https://nexus.incode.work/[Maven Repo] (current)
+* link:https://repo.incode.cloud/[Maven Repo] (v1 only)
 * link:https://apache-isis-committers.github.io/isis-nightly[Website preview]
 
 

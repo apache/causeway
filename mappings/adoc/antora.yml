@@ -16,7 +16,7 @@
 #  under the License.
 
 name: mappings
-title: "BC Mappings Catalog"
+title: "BC Mapping Libraries"
 version: latest
 start_page: ROOT:about.adoc
 nav:

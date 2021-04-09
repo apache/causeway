@@ -4,7 +4,7 @@
 
 // TODO: v2: NICE-TO-HAVE: these screenshots should be updated, but first need to port the todoapp over first (which also means the various modules from incode-platform)
 
-On this page we want to show you what an Apache Isis application looks like, running on the xref:vw:ROOT:about.adoc[Wicket viewer].
+On this page we want to show you what an Apache Isis application looks like, running on the xref:vw:ROOT:about.adoc[Web UI (Wicket viewer)].
 The screenshots below are taken from a "Todo" application.
 
 NOTE: these screenshots are based on an app running against v1.13  and v1.10 of the framework.

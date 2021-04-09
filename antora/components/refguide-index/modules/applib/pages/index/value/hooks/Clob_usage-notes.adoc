@@ -5,23 +5,18 @@
 
 == Usage Notes
 
-Mandatory properties of this type can be mapped to xref:pjdo:ROOT:about.adoc[JDO/DataNucleus] using:
+If using xref:pjdo:ROOT:about.adoc[JDO/DataNucleus], `Clob` properties can be mapped using:
 
 [source,java]
 ----
-import javax.jdo.annotations.Persistent;
-import javax.jdo.annotations.Column;
-
-@Persistent(defaultFetchGroup="false", columns = {
-    @Column(name = "someClob_name"
-            , allowsNull = "false"),
-    @Column(name = "someClob_mimetype"
-            , allowsNull = "false"),
-    @Column(name = "someClob_chars"
-            , jdbcType = "CLOB"
-            , allowsNull = "false")
+@javax.jdo.annotations.Persistent(defaultFetchGroup="false", columns = {
+        @javax.jdo.annotations.Column(name = "doc_name"),
+        @javax.jdo.annotations.Column(name = "doc_mimetype"),
+        @javax.jdo.annotations.Column(name = "doc_chars", jdbcType = "CLOB", sqlType = "CLOB")
 })
-private Clob someClob;
+@Property( optionality = Optionality.OPTIONAL )
+@Getter @Setter
+private Clob doc;
 ----
 
-while optional properties can be mapped the same, but using `allowsNull = "true` for each of the ``@Column``s.
+If the property is mandatory, add `allowsNull = "false` for each of the ``@Column``s.

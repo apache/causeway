@@ -6,7 +6,7 @@
 
 Beware of entities with a property called "timestamp": you run the risk of "timestamp" being treated as a keyword in certain contexts, probably not as you intended.
 
-By way of example, the xref:extensions:command-log:about.adoc[Command Log] module has an entity called `CommandJdo`.
+By way of example, the xref:userguide:command-log:about.adoc[Command Log] module has an entity called `CommandJdo`.
 This has a property called "timestamp", of type `java.sql.Timestamp`.
 
 This defines a query using JDOQL:

@@ -25,7 +25,7 @@ This is most easily done using the Spring link:https://docs.spring.io/spring-fra
 Generally speaking in such cases higher precedence implementation will be used instead of the framework-provided implementation.
 For some services, though, _all_ available implementations are delegated to; these are typically subscribers such as xref:refguide:applib:index/services/publishing/spi/EntityPropertyChangeSubscriber.adoc[EntityPropertyChangeSubscriber].
 
-A small number of domain services can be considered both API and SPI; a good example is the xref:refguide:applib:index/services/email/EmailService.adoc[EmailService] that is of direct use for domain objects wishing to send out emails, but is also used by the framework to support the xref:vw:ROOT:features.adoc#user-registration[user registration] functionality supported by the xref:vw:ROOT:about.adoc[Wicket viewer].
+A small number of domain services can be considered both API and SPI; a good example is the xref:refguide:applib:index/services/email/EmailService.adoc[EmailService] that is of direct use for domain objects wishing to send out emails, but is also used by the framework to support the xref:vw:ROOT:features.adoc#user-registration[user registration] functionality supported by the xref:vw:ROOT:about.adoc[Web UI (Wicket viewer)].
 The same is true of the xref:refguide:applib:index/services/eventbus/EventBusService.adoc[EventBusService]; this can be used by domain objects to broadcast arbitrary events, but is also used by the framework to automatically emit events for
 xref:refguide:applib:index/annotation/Action.adoc#domainEvent[@Action#domainEvent()] etc.
 For these hybrid services we have categorized the service as an API service.
@@ -180,7 +180,7 @@ Note that it's possible for there to be more than one transaction per top-level 
 * At the end of the entire interaction footnote:[although rare, there can be multiple transactions in a single interaction], details of the top-level `Command` are sent to each xref:refguide:applib:index/services/publishing/spi/CommandSubscriber.adoc[CommandSubscriber].
 This captures whether the command succeeded or failed.
 +
-The xref:extensions:command-log:about.adoc[Command Log] extension uses this to persist a log of commands, for auditing or to support regression testing with the xref:extensions:command-replay:about.adoc[Command Replay] extension.
+The xref:userguide:command-log:about.adoc[Command Log] extension uses this to persist a log of commands, for auditing or to support regression testing with the xref:userguide:command-replay:about.adoc[Command Replay] extension.
 
 
 Implementations of xref:refguide:applib:index/services/publishing/spi/CommandSubscriber.adoc[CommandSubscriber] can use the `Command#getMemento()` method to obtain a XML equivalent of that `Command`, reified using the xref:refguide:schema:cmd.adoc[cmd.xsd] schema.

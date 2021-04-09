@@ -96,7 +96,7 @@ Documentation tooling was also developed to automate large parts of the xref:ref
 * link:https://issues.apache.org/jira/browse/ISIS-2582[ISIS-2582] - Wicket: NPE when ComponentHintKey#hintStore not restored on deserialization
 * link:https://issues.apache.org/jira/browse/ISIS-2577[ISIS-2577] - Potential NPE when clearing a scalar property.
 * link:https://issues.apache.org/jira/browse/ISIS-2576[ISIS-2576] - favicon missing from signin page
-* link:https://issues.apache.org/jira/browse/ISIS-2572[ISIS-2572] - RO/Swagger: Generated schema offers outdated urn:org.apache.isis/v1
+* link:https://issues.apache.org/jira/browse/ISIS-2572[ISIS-2572] - RO/Swagger: Generated schema offers outdated urn:org.apache.isis/v2
 * link:https://issues.apache.org/jira/browse/ISIS-2567[ISIS-2567] - Regression: commands are not published
 * link:https://issues.apache.org/jira/browse/ISIS-2563[ISIS-2563] - Autocomplete MinLength not always handled correctly
 * link:https://issues.apache.org/jira/browse/ISIS-2547[ISIS-2547] - layout() method does not reload grid in production mode

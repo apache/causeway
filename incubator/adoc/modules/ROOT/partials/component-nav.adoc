@@ -1,5 +1,4 @@
 include::incubator:ROOT:partial$module-nav.adoc[]
-include::incubator:microprofile:partial$module-nav.adoc[]
 //include::incubator:javafx:partial$module-nav.adoc[]
 include::incubator:kroviz:partial$module-nav.adoc[]
 include::incubator:vaadin:partial$module-nav.adoc[]

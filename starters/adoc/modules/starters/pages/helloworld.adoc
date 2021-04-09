@@ -56,7 +56,7 @@ Then browse to link:http://localhost:8080[], and read on.
 
 == Using the App
 
-When you start the app, you'll be presented with a welcome page from which you can access the webapp using either the generic UI provided by xref:vw:ROOT:about.adoc[Wicket viewer] or use Swagger to access the xref:vro:ROOT:about.adoc[Restful Objects viewer]:
+When you start the app, you'll be presented with a welcome page from which you can access the webapp using either the generic UI provided by xref:vw:ROOT:about.adoc[Web UI (Wicket viewer)] or use Swagger to access the xref:vro:ROOT:about.adoc[REST API (Restful Objects viewer)]:
 
 image::helloworld/using/010-root-page.png[width="600px"]
 
@@ -358,9 +358,9 @@ There are several security implementations, precisely one must be selected
 <.> Enables JDO/DataNucleus for persistence.
 Optional (though if omitted then only xref:userguide:fun:overview.adoc#view-models[view models] may be used, with hand-rolled persistence).
 
-<.> Enables the xref:vro:ROOT:about.adoc[Restful Objects viewer] (ie REST API).
+<.> Enables the xref:vro:ROOT:about.adoc[REST API (Restful Objects viewer)] (ie REST API).
 
-<.> Enables the xref:vw:ROOT:about.adoc[Wicket viewer]
+<.> Enables the xref:vw:ROOT:about.adoc[Web UI (Wicket viewer)]
 
 <.> Enables the H2 Console (menu from the "Prototyping" menu), applicable only if running against h2 in-memory database.
 

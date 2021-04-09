@@ -4,23 +4,20 @@
 
 == Usage Notes
 
-Mandatory properties of this type can be mapped with xref:pjdo:ROOT:about.adoc[JDO/DataNucleus] using:
+If using xref:pjdo:ROOT:about.adoc[JDO/DataNucleus], `Blob` properties can be mapped using:
 
 [source,java]
 ----
-import javax.jdo.annotations.Persistent;
-import javax.jdo.annotations.Column;
-
-@Persistent(defaultFetchGroup="false", columns = {
-    @Column(name = "someImage_name"
-            , allowsNull = "false"),
-    @Column(name = "someImage_mimetype"
-            , allowsNull = "false"),
-    @Column(name = "someImage_bytes"
-            , allowsNull = "false")
-})
-private Blob someImage;
+@javax.jdo.annotations.Persistent(defaultFetchGroup="false")
+    @javax.jdo.annotations.Persistent(defaultFetchGroup="false", columns = {
+            @javax.jdo.annotations.Column(name = "attachment_name"),
+            @javax.jdo.annotations.Column(name = "attachment_mimetype"),
+            @javax.jdo.annotations.Column(name = "attachment_bytes", jdbcType = "BLOB", sqlType = "BLOB")
+    })
+@Property(optionality = Optionality.OPTIONAL)
+@Getter @Setter
+private Blob attachment;
 ----
 
-while optional properties can be mapped the same, but using `allowsNull = "true` for each of the ``@Column``s.
+If the property is mandatory, add `allowsNull = "false` for each of the ``@Column``s.
 

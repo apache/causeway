@@ -36,7 +36,7 @@ Some of the extension/mapping modules that have domain entity/ies that implement
 
 * xref:security:ROOT:about.adoc[SecMan extension]: `ApplicationUser` entity
 * xref:security:audit-trail:about.adoc[Auditer] module: `AuditEntry` entity
-* xref:extensions:command-log:about.adoc[Command Log] module: `CommandJdo` entity
+* xref:userguide:command-log:about.adoc[Command Log] module: `CommandJdo` entity
 * xref:mappings:outbox-publisher:about.adoc[Outbox Publisher] module: `OutboxEvent` entity
 * xref:security:session-log:about.adoc[Session Log] module: `SessionLogEntry` entity
 * xref:subdomains:settings:about.adoc[Settings] module: `UserSettingJdo` entity

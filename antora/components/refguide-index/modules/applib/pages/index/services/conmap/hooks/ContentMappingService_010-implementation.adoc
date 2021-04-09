@@ -6,7 +6,7 @@
 == Implementation
 
 The framework provides two implementations of this service, both to allow objects implementing `HasCommandDto` to be converted into serializable ``CommandDto``s, in other words XML.
-This is used by the xref:extensions:command-log:about.adoc[Command Log] and xref:extensions:command-replay:about.adoc[Command Replay] extensions to allow commands to be replicated from a primary to secondary system, for regression testing.
+This is used by the xref:userguide:command-log:about.adoc[Command Log] and xref:userguide:command-replay:about.adoc[Command Replay] extensions to allow commands to be replicated from a primary to secondary system, for regression testing.
 
 The implementations are:
 

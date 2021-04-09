@@ -60,9 +60,8 @@ content:
 
 ui:
   bundle:
-    url: ../isis-antora/build/ui-bundle.zip
-#    url: https://github.com/apache/isis-antora/blob/master/build/ui-bundle.zip?raw=true
-    #url: ./antora/theme/ui-bundle.zip
+#    url: ../isis-antora/build/ui-bundle.zip
+    url: https://github.com/apache/isis-antora/blob/master/build/ui-bundle.zip?raw=true
     snapshot: true
   supplemental_files: antora/supplemental-ui
 

@@ -7,7 +7,7 @@
 
 The xref:refguide:applib:index/annotation/DomainObjectLayout.adoc#bookmarking[bookmarking()] element indicates that an entity is automatically bookmarked.
 
-In the xref:vw:ROOT:about.adoc[Wicket Viewer], a link to a bookmarked object is shown in the bookmarks panel, top right.
+In the xref:vw:ROOT:about.adoc[Web UI (Wicket viewer)], a link to a bookmarked object is shown in the bookmarks panel, top right.
 
 
 For example:

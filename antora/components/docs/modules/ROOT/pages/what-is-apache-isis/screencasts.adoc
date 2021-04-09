@@ -207,20 +207,20 @@ Using xref:userguide:fun:ui.adoc#object-layout[dynamic (XML) layouts] to specify
 include::screencasts/playlists.adoc[]
 
 |link:https://www.youtube.com/watch?v=0d713-V4vrg[019^] +
-Demonstrates how Apache Isis' xref:vw:ROOT:about.adoc[Wicket viewer] remembers the state of rendered domain objects, and how the end-user of the
+Demonstrates how Apache Isis' xref:vw:ROOT:about.adoc[Web UI (Wicket viewer)] remembers the state of rendered domain objects, and how the end-user of the
  application can clear these UI hints using the (framework-provided) xref:refguide:viewer:index/wicket/viewer/mixins/Object_clearHints.adoc["clear hints"] mixin action.
 |||X||||||||
 
 
 
 |link:https://www.youtube.com/watch?v=Kqch-XNlBMA[020^] +
-Demonstrates how the end-user can copy and share URLs for domain objects - including UI hints - using Apache Isis' xref:vw:ROOT:about.adoc[Wicket viewer].
+Demonstrates how the end-user can copy and share URLs for domain objects - including UI hints - using Apache Isis' xref:vw:ROOT:about.adoc[Web UI (Wicket viewer)].
 |||X||||||||
 
 
 
 |link:https://www.youtube.com/watch?v=a0QQLT_16To[021^] +
-Demonstrates how the end-user can use bookmarks and breadcrumbs within Apache Isis' xref:vw:ROOT:about.adoc[Wicket viewer], and how the developer can ensure that xref:refguide:applib:index/annotation/DomainObjectLayout.adoc#bookmarking[domain objects] and (xref:refguide:applib:index/annotation/Action.adoc#semantics[query-only]) xref:refguide:applib:index/annotation/ActionLayout.adoc#bookmarking[actions] can be bookmarked.
+Demonstrates how the end-user can use bookmarks and breadcrumbs within Apache Isis' xref:vw:ROOT:about.adoc[Web UI (Wicket viewer)], and how the developer can ensure that xref:refguide:applib:index/annotation/DomainObjectLayout.adoc#bookmarking[domain objects] and (xref:refguide:applib:index/annotation/Action.adoc#semantics[query-only]) xref:refguide:applib:index/annotation/ActionLayout.adoc#bookmarking[actions] can be bookmarked.
 |||X||||||||
 
 
@@ -416,7 +416,7 @@ include::screencasts/playlists.adoc[]
 
 
 |link:https://www.youtube.com/watch?v=esujf_DFeWA[041^] +
-Using BigDecimal as a property within a domain object, also demonstrating the "summary" view within the xref:vw:ROOT:about.adoc[Wicket viewer].
+Using BigDecimal as a property within a domain object, also demonstrating the "summary" view within the xref:vw:ROOT:about.adoc[Web UI (Wicket viewer)].
 |||||||X||X|X|
 
 
@@ -540,7 +540,7 @@ The (very simple) steps required to rename a domain entity class.
 
 
 |link:https://www.youtube.com/watch?v=J5xobU6X0ng[057^] +
-How to rename a menu (on the top-level menubar) as rendered in the  xref:vw:ROOT:about.adoc[Wicket viewer].
+How to rename a menu (on the top-level menubar) as rendered in the  xref:vw:ROOT:about.adoc[Web UI (Wicket viewer)].
 |X||||||||||
 
 

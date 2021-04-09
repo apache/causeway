@@ -14,3 +14,7 @@ WARNING: TODO
 // == Setting up Users/Groups in Apache Directory Studio
 
 
+
+The Shiro framework also ships with an implementation of an LDAP-based realm; LDAP is often used to manage user/passwords and corresponding user groups.
+
+Apache Isis extends Shiro's implementation this  `IsisLdapRealm`, which provides more flexibility for both group/role and role/permissions management.

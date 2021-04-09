@@ -5,7 +5,7 @@
 
 This service provides the ability for the domain application to return supplementary metadata about the current user.
 
-The xref:vw:ROOT:about.adoc[Wicket viewer] uses this to customize the appearance of the tertiary "Me" menu bar (top right).
+The xref:vw:ROOT:about.adoc[Web UI (Wicket viewer)] uses this to customize the appearance of the tertiary "Me" menu bar (top right).
 For example, rather than display the username, instead the user's first and last name could be displayed.
 
 [NOTE]

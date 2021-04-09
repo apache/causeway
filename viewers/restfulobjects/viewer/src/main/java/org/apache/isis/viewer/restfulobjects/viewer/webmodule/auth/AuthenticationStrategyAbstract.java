@@ -27,16 +27,22 @@ import javax.servlet.http.HttpSession;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.core.security.authentication.Authentication;
 import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
 
 import lombok.val;
 
+/**
+ * Convenience abstract implementation.
+ *
+ * @since 2.0 {@index}
+ */
 public abstract class AuthenticationStrategyAbstract implements AuthenticationStrategy {
 
     public static final int STATUS_UNAUTHORIZED = 401;
-    
+
     private AuthenticationManager authenticationManager;
-    
+
     protected AuthenticationManager getAuthenticationManager(ServletRequest servletRequest) {
         if(authenticationManager==null) {
             val servletContext = getServletContext(servletRequest);
@@ -58,14 +64,14 @@ public abstract class AuthenticationStrategyAbstract implements AuthenticationSt
         return servletRequest.getServletContext();
     }
 
-    
+
     @Override
     public final void invalidate(
-            final HttpServletRequest httpServletRequest, 
+            final HttpServletRequest httpServletRequest,
             final HttpServletResponse httpServletResponse) {
-        
+
         bind(httpServletRequest, httpServletResponse, null);
         httpServletResponse.setStatus(STATUS_UNAUTHORIZED);
     }
-    
+
 }
