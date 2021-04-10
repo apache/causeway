@@ -96,13 +96,7 @@ public class SpringSecurityFilter implements Filter {
 
         userMemento = userMemento.withRole("org.apache.isis.viewer.wicket.roles.USER");
 
-
-        val authenticatedPrincipal = (AuthenticatedPrincipal)principal;
-        val principalIdentity = authenticatedPrincipal.getName();
-
-        val user = UserMemento.ofNameAndRoleNames(principalIdentity,
-                Stream.of("org.apache.isis.viewer.wicket.roles.USER"));
-        val authentication = SimpleAuthentication.validOf(user);
+        val authentication = SimpleAuthentication.validOf(userMemento);
         authentication.setType(Authentication.Type.EXTERNAL);
 
         isisInteractionFactory.runAuthenticated(

@@ -41,8 +41,8 @@ public class AuthenticationConverterOfOauth2UserPrincipal implements Authenticat
             val oAuth2User = (OAuth2User) principal;
             final Object login = oAuth2User.getAttributes().get("login");
             val principalIdentity =
-                    login instanceof String
-                            ? (String) login
+                    login instanceof CharSequence
+                            ? ((CharSequence) login).toString()
                             : oAuth2User.getName();
             return UserMemento.ofNameAndRoleNames(principalIdentity);
         }
