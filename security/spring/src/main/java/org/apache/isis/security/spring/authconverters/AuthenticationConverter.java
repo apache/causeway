@@ -14,13 +14,10 @@ import org.apache.isis.applib.services.user.UserMemento;
  * </p>
  *
  * <p>
- *     Implementations should be defined as Spring {@link org.springframework.stereotype.Component}s
- *     and added to the
- *     {@link org.springframework.context.annotation.Configuration application context}
- *     either by being
- *     {@link org.springframework.context.annotation.Import imported} explicitly
- *     or  implicitly through
- *     {@link org.springframework.context.annotation.ComponentScan}.
+ *     Implementations should be defined as Spring {@link Component}s
+ *     and added to the {@link Configuration application context}
+ *     either by being {@link Import imported} explicitly
+ *     or  implicitly through {@link ComponentScan}.
  * </p>
  *
  * <p>
@@ -36,6 +33,21 @@ import org.apache.isis.applib.services.user.UserMemento;
 public interface AuthenticationConverter {
 
     /**
+     * Attempt to convert a Spring {@link Authentication} (which will have been
+     * {@link Authentication#isAuthenticated() authenticated}) into a
+     * {@link UserMemento}.
+     *
+     * <p>
+     *     There are many different implementations of {@link Authentication},
+     *     so the implementation should be targetted at a specific
+     *     implementation.
+     * </p>
+     *
+     * <p>
+     *     The framework provides some default implementations for the most
+     *     common use cases.
+     * </p>
+     *
      * @param authentication to attempt to convert
      * @return non-null if could be converted
      */

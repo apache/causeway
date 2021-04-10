@@ -5,7 +5,7 @@ Defines an SPI to attempt to convert a Spring _Authentication_ into an Apache Is
 
 The _Authentication_ will have already been verified as having been _Authentication#isAuthenticated() authenticated_ .
 
-Implementations should be defined as Spring _org.springframework.stereotype.Component_ s and added to the _org.springframework.context.annotation.Configuration application context_ either by being _org.springframework.context.annotation.Import imported_ explicitly or implicitly through _org.springframework.context.annotation.ComponentScan_ .
+Implementations should be defined as Spring _Component_ s and added to the _Configuration application context_ either by being _Import imported_ explicitly or implicitly through _ComponentScan_ .
 
 All known converters are checked one by one, but checking stops once one converter has successively converted the _Authentication_ into a xref:refguide:applib:index/services/user/UserMemento.adoc[UserMemento] (in other words, chain-of-responsibility pattern). Use the _org.springframework.core.Ordered_ to influence the order in which converter implementations are checked.
 
@@ -20,8 +20,18 @@ interface AuthenticationConverter {
 ----
 
 <.> xref:#convert__Authentication[convert(Authentication)]
++
+--
+Attempt to convert a Spring _Authentication_ (which will have been _Authentication#isAuthenticated() authenticated_ ) into a xref:refguide:applib:index/services/user/UserMemento.adoc[UserMemento] .
+--
 
 == Members
 
 [#convert__Authentication]
 === convert(Authentication)
+
+Attempt to convert a Spring _Authentication_ (which will have been _Authentication#isAuthenticated() authenticated_ ) into a xref:refguide:applib:index/services/user/UserMemento.adoc[UserMemento] .
+
+There are many different implementations of _Authentication_ , so the implementation should be targetted at a specific implementation.
+
+The framework provides some default implementations for the most common use cases.
