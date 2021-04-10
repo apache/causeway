@@ -15,6 +15,7 @@ class UserMemento {
   UserMemento ofNameAndRoles(final String name, final RoleMemento... roles)     // <.>
   UserMemento ofNameAndRoleNames(final String name, final String... roleNames)     // <.>
   UserMemento ofNameAndRoleNames(final String name, final Stream<String> roleNames)     // <.>
+  UserMemento withRole(String role)
   String title()
   List<RoleMemento> getRoles()
   boolean isCurrentUser(final String userName)     // <.>

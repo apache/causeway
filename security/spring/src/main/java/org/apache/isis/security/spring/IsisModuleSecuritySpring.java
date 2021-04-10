@@ -33,6 +33,10 @@ import org.springframework.security.web.csrf.CsrfFilter;
 
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
+import org.apache.isis.security.spring.authconverters.AuthenticationConverterOfAuthenticatedPrincipal;
+import org.apache.isis.security.spring.authconverters.AuthenticationConverterOfOAuth2UserPrincipal;
+import org.apache.isis.security.spring.authconverters.AuthenticationConverterOfStringPrincipal;
+import org.apache.isis.security.spring.authconverters.AuthenticationConverterOfUserDetailsPrincipal;
 import org.apache.isis.security.spring.authentication.AuthenticatorSpring;
 import org.apache.isis.security.spring.webmodule.WebModuleSpringSecurity;
 
@@ -48,6 +52,12 @@ import lombok.extern.log4j.Log4j2;
         // modules
         IsisModuleCoreRuntimeServices.class,
 
+        // @Component's
+        AuthenticationConverterOfAuthenticatedPrincipal.class,
+        AuthenticationConverterOfOAuth2UserPrincipal.class,
+        AuthenticationConverterOfStringPrincipal.class,
+        AuthenticationConverterOfUserDetailsPrincipal.class,
+
         // @Service's
         AuthenticatorSpring.class,
         WebModuleSpringSecurity.class,
@@ -59,7 +69,7 @@ public class IsisModuleSecuritySpring {
     @Qualifier("springSecurityFilterChain")
     @Inject private Filter springSecurityFilterChain;
     @Inject private IsisConfiguration isisConfiguration;
-    
+
     @PostConstruct
     public void disableCsrf() {
         if(isisConfiguration.getSecurity().getSpring().isAllowCsrfFilters()) {
@@ -74,11 +84,11 @@ public class IsisModuleSecuritySpring {
           .map(CsrfFilter.class::cast)
           .forEach(this::disable);
     }
-    
+
     private void disable(CsrfFilter csrfFilter) {
         log.info("disabling {}", csrfFilter.getClass().getName());
         // render the csrfFilter ineffective: filter never gets applied as matcher never matches
-        csrfFilter.setRequireCsrfProtectionMatcher(request->false); 
+        csrfFilter.setRequireCsrfProtectionMatcher(request->false);
     }
-    
+
 }

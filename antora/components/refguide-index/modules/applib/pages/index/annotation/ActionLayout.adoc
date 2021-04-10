@@ -178,8 +178,6 @@ The order of this member relative to other members in the same (layout) group, g
 
 An alternative is to use the `Xxx.layout.xml` file, where `Xxx` is the domain object name.
 
-include::hooks/Action-Collection-PropertyLayout-FieldSet-examples-and-usage.adoc[]
-
 include::hooks/ActionLayout_010-examples-and-usage.adoc[]
 
 include::hooks/ActionLayout_021-promptStyle.adoc[]

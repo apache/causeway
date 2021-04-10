@@ -91,6 +91,7 @@ For an authenticated user the `org.apache.isis.viewer.wicket.roles.USER` role --
 
 
 
+[#walk-through-in-memory]
 == Walk-through : In-memory
 
 Using Spring Security we can configure your app with various authentication providers.
@@ -144,65 +145,7 @@ public class AppManifest {
 ----
 
 
-=== Code Patch
-
-In the current release of Apache Isis ({page-isisrel}), there is an issue with its `SpringSecurityFilter`; it does not recognise `UserDetails` as a valid authenticated principal.
-We therefore (for now) need to patch in our own replacement.
-
-[source,java]
-.org/apache/isis/security/spring/webmodule/SpringSecurityFilter.java
-----
-package org.apache.isis.security.spring.webmodule;
-
-//...
-
-public class SpringSecurityFilter implements Filter {
-
-    @Autowired
-    private InteractionFactory isisInteractionFactory;
-
-    @Override
-    public void doFilter(
-            final ServletRequest servletRequest,
-            final ServletResponse servletResponse,
-            final FilterChain filterChain) throws IOException, ServletException {
-
-        HttpServletResponse httpServletResponse = (HttpServletResponse) servletResponse;
-
-        org.springframework.security.core.Authentication springAuthentication = SecurityContextHolder.getContext().getAuthentication();
-        if(springAuthentication==null
-                || !springAuthentication.isAuthenticated()) {
-            httpServletResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            return; // not authenticated
-        }
-
-        String principalIdentity;
-        Object principal = springAuthentication.getPrincipal();
-        if (principal instanceof UserDetails) {
-            final UserDetails user = (UserDetails) principal;
-            principalIdentity = user.getUsername();
-        } else {
-            httpServletResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            return; // unknown principal type, not handled
-        }
-
-        UserMemento user = UserMemento.ofNameAndRoleNames(principalIdentity,
-                Stream.of("org.apache.isis.viewer.wicket.roles.USER"));
-        SimpleAuthentication authentication = SimpleAuthentication.validOf(user);
-        authentication.setType(Authentication.Type.EXTERNAL);
-
-        isisInteractionFactory.runAuthenticated(
-                authentication,
-                ()->{
-                    filterChain.doFilter(servletRequest, servletResponse);
-                });
-    }
-}
-----
-
-=== Tidying up
-
-Finally, (and optionally), the swagger/REST API is not configured for spring security, so we replace the `index.html` page with one to redirect straight to the xref:vw::about.adoc[Wicket Viewer]:
+Lastly (and optionally), the swagger/REST API is not configured for spring security, so we replace the `index.html` page with one to redirect straight to the xref:vw::about.adoc[Wicket Viewer]:
 
 [source,html]
 .static/index.html
@@ -228,6 +171,8 @@ You will see that the usual login page is replaced by one provided by Spring:
 
 image::spring-security-login.png[width=300px]
 
+
+[#walk-through-oauth2]
 == Walk-through : OAuth2
 
 Using Spring Security we can configure your app with various authentication providers.
@@ -314,66 +259,7 @@ public class AppManifest {
 ----
 
 
-=== Code Patch
-
-In the current release of Apache Isis ({page-isisrel}), there is an issue with its `SpringSecurityFilter`.
-We therefore (for now) need to patch in our own replacement.
-
-[source,java]
-.org/apache/isis/security/spring/webmodule/SpringSecurityFilter.java
-----
-package org.apache.isis.security.spring.webmodule;
-
-//...
-
-public class SpringSecurityFilter implements Filter {
-
-    @Autowired
-    private InteractionFactory isisInteractionFactory;
-
-    @Override
-    public void doFilter(
-            final ServletRequest servletRequest,
-            final ServletResponse servletResponse,
-            final FilterChain filterChain) throws IOException, ServletException {
-
-        HttpServletResponse httpServletResponse = (HttpServletResponse) servletResponse;
-
-        org.springframework.security.core.Authentication springAuthentication = SecurityContextHolder.getContext().getAuthentication();
-        if(springAuthentication==null
-                || !springAuthentication.isAuthenticated()) {
-            httpServletResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            return; // not authenticated
-        }
-
-         Object principal = springAuthentication.getPrincipal();
-        if (principal instanceof OAuth2User) {
-            OAuth2User oAuth2User = (OAuth2User) principal;
-            final Object login = oAuth2User.getAttributes().get("login");
-            principalIdentity = login instanceof String ? (String)login : oAuth2User.getName();
-        } else {
-            httpServletResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            return; // unknown principal type, not handled
-        }
-
-        UserMemento user = UserMemento.ofNameAndRoleNames(principalIdentity,
-                Stream.of("org.apache.isis.viewer.wicket.roles.USER"));
-        SimpleAuthentication authentication = SimpleAuthentication.validOf(user);
-        authentication.setType(Authentication.Type.EXTERNAL);
-
-        isisInteractionFactory.runAuthenticated(
-                authentication,
-                ()->{
-                    filterChain.doFilter(servletRequest, servletResponse);
-                });
-    }
-}
-----
-
-
-=== Tidying up
-
-Finally, (and optionally), the swagger/REST API is not configured for oauth2, so we replace the `index.html` page with one to redirect straight to the xref:vw::about.adoc[Wicket Viewer]:
+Lastly (and optionally), the swagger/REST API is not configured for oauth2, so we replace the `index.html` page with one to redirect straight to the xref:vw::about.adoc[Wicket Viewer]:
 
 [source,html]
 .static/index.html
@@ -443,3 +329,11 @@ image::helloworld-shows-username.png[width=250px]
 Finally, if you log out then Spring will show a page to allow you to trigger the login process:
 
 image::github-sign-in-again.png[width=600px]
+
+
+== AuthenticatorConverter SPI
+
+The module provides a number of implementations of xref:refguide:security:index/spring/authconverters/AuthenticationConverter.adoc[AuthenticationConverter] that (attempt to) convert a Spring `Authentication` object into an Apache Isis `UserMemento`.
+
+Several implementations are provided by default for most of the common representations of a user principal, including support for link:https://docs.spring.io/spring-security/site/docs/current/api/org/springframework/security/core/userdetails/UserDetails.html[UserDetails] (as returned in the <<walk-through-in-memory,in-memory walk through above>>) and link:https://docs.spring.io/spring-security/site/docs/current/api/org/springframework/security/oauth2/core/user/OAuth2User.html[OAuth2User] (as returned in the <<walk-through-oauth2,oauth2 walk-through>>).
+This SPI does though provide additional flexibility for other security technologies that may be supported by link:https://spring.io/projects/spring-security[Spring].
