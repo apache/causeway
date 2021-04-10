@@ -1,6 +1,4 @@
 
-
-
 * xref:refguide:applib-svc:about.adoc[Domain Services]
 
 ** xref:refguide:applib:index/services/acceptheader/AcceptHeaderService.adoc[AcceptHeaderService]

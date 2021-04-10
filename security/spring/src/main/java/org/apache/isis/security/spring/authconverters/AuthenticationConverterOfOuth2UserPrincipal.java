@@ -32,17 +32,17 @@ import lombok.val;
  */
 @Component
 @Order(OrderPrecedence.LATE - 150)
-public class AuthenticationConverterOfOauth2UserPrincipal implements AuthenticationConverter {
+public class AuthenticationConverterOfOuth2UserPrincipal implements AuthenticationConverter {
 
     @Override
     public UserMemento convert(Authentication authentication) {
         val principal = authentication.getPrincipal();
         if (principal instanceof OAuth2User) {
             val oAuth2User = (OAuth2User) principal;
-            final Object login = oAuth2User.getAttributes().get("login");
+            final Object loginAttr = oAuth2User.getAttributes().get("login");
             val principalIdentity =
-                    login instanceof CharSequence
-                            ? ((CharSequence) login).toString()
+                    loginAttr instanceof CharSequence
+                            ? ((CharSequence) loginAttr).toString()
                             : oAuth2User.getName();
             return UserMemento.ofNameAndRoleNames(principalIdentity);
         }

@@ -91,6 +91,7 @@ For an authenticated user the `org.apache.isis.viewer.wicket.roles.USER` role --
 
 
 
+[#walk-through-in-memory]
 == Walk-through : In-memory
 
 Using Spring Security we can configure your app with various authentication providers.
@@ -171,6 +172,7 @@ You will see that the usual login page is replaced by one provided by Spring:
 image::spring-security-login.png[width=300px]
 
 
+[#walk-through-oauth2]
 == Walk-through : OAuth2
 
 Using Spring Security we can configure your app with various authentication providers.
@@ -331,5 +333,7 @@ image::github-sign-in-again.png[width=600px]
 
 == AuthenticatorConverter SPI
 
-The module provides a number of implementations of `AuthenticatorConverter` that (attempt to) convet a Spring `Authentication` object into an Apache Isis `UserMemento`.
-This is however intended as an SPI; provide additional implementations as necessary for other security technologies.
+The module provides a number of implementations of xref:refguide:security:index/spring/authconverters/AuthenticationConverter.adoc[AuthenticationConverter] that (attempt to) convert a Spring `Authentication` object into an Apache Isis `UserMemento`.
+
+Several implementations are provided by default for most of the common representations of a user principal, including support for link:https://docs.spring.io/spring-security/site/docs/current/api/org/springframework/security/core/userdetails/UserDetails.html[UserDetails] (as returned in the <<walk-through-in-memory,in-memory walk through above>>) and link:https://docs.spring.io/spring-security/site/docs/current/api/org/springframework/security/oauth2/core/user/OAuth2User.html[OAuth2User] (as returned in the <<walk-through-oauth2,oauth2 walk-through>>).
+This SPI does though provide additional flexibility for other security technologies that may be supported by link:https://spring.io/projects/spring-security[Spring].

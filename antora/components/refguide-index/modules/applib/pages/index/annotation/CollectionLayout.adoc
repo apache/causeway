@@ -135,8 +135,6 @@ However, in some circumstances the ordering of collection may be different to th
 
 The purpose of this annotation is to provide a _java.util.Comparator_ such that the collection may be sorted in an order more suitable to the context.
 
-include::hooks/Action-Collection-PropertyLayout-FieldSet-examples-and-usage.adoc[]
-
 include::hooks/CollectionLayout_010-examples-and-usage.adoc[]
 
 include::hooks/CollectionLayout_021-defaultView.adoc[]
