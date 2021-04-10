@@ -32,7 +32,7 @@ import lombok.val;
  */
 @Component
 @Order(OrderPrecedence.LATE - 150)
-public class AuthenticationConverterOfOuth2UserPrincipal implements AuthenticationConverter {
+public class AuthenticationConverterOfOAuth2UserPrincipal implements AuthenticationConverter {
 
     @Override
     public UserMemento convert(Authentication authentication) {

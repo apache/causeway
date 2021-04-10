@@ -34,7 +34,7 @@ import org.springframework.security.web.csrf.CsrfFilter;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
 import org.apache.isis.security.spring.authconverters.AuthenticationConverterOfAuthenticatedPrincipal;
-import org.apache.isis.security.spring.authconverters.AuthenticationConverterOfOuth2UserPrincipal;
+import org.apache.isis.security.spring.authconverters.AuthenticationConverterOfOAuth2UserPrincipal;
 import org.apache.isis.security.spring.authconverters.AuthenticationConverterOfStringPrincipal;
 import org.apache.isis.security.spring.authconverters.AuthenticationConverterOfUserDetailsPrincipal;
 import org.apache.isis.security.spring.authentication.AuthenticatorSpring;
@@ -54,7 +54,7 @@ import lombok.extern.log4j.Log4j2;
 
         // @Component's
         AuthenticationConverterOfAuthenticatedPrincipal.class,
-        AuthenticationConverterOfOuth2UserPrincipal.class,
+        AuthenticationConverterOfOAuth2UserPrincipal.class,
         AuthenticationConverterOfStringPrincipal.class,
         AuthenticationConverterOfUserDetailsPrincipal.class,
 
