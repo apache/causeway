@@ -19,6 +19,7 @@
 package org.apache.isis.applib.services.user;
 
 import java.io.Serializable;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -27,8 +28,12 @@ import java.util.stream.Stream;
 
 import javax.annotation.Nullable;
 
+import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.Optionality;
+import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
@@ -106,12 +111,6 @@ public final class UserMemento implements Serializable {
         this.roles = roles.collect(_Lists.toUnmodifiable());
     }
 
-    public UserMemento withRole(String role) {
-        final List<RoleMemento> roles = new ArrayList<>(this.roles);
-        roles.add(new RoleMemento(role));
-        return new UserMemento(this.name, roles.stream());
-    }
-
     public String title() {
         return name;
     }
@@ -119,18 +118,67 @@ public final class UserMemento implements Serializable {
     /**
      * The user's login name.
      */
+    @Property
     @PropertyLayout(sequence = "1.1")
     @Getter
     private final String name;
 
+    @Property(optionality = Optionality.OPTIONAL)
+    @PropertyLayout(sequence = "1.2")
+    @Getter
+    private String realName;
+
+    @Programmatic
+    public UserMemento withRealName(final String realName) {
+        val userMemento = copy();
+        userMemento.realName = realName;
+        return userMemento;
+    }
+
+    @Property(optionality = Optionality.OPTIONAL)
+    @PropertyLayout(sequence = "1.3")
+    @Getter
+    private URL avatarUrl;
+
+    @Programmatic
+    public UserMemento withAvatarUrl(final URL avatarUrl) {
+        val userMemento = copy();
+        userMemento.avatarUrl = avatarUrl;
+        return userMemento;
+    }
+
+    private UserMemento copy() {
+        return copy(this.roles);
+    }
+
+    private UserMemento copy(final List<RoleMemento> roles) {
+        val userMemento = new UserMemento(this.name, roles.stream());
+        userMemento.realName = this.realName;
+        userMemento.avatarUrl = this.avatarUrl;
+        return userMemento;
+    }
+
+
+
     /**
      * The roles associated with this user.
      */
-    @CollectionLayout(sequence = "1.2")
+    @Collection
+    @CollectionLayout(sequence = "1.4")
     private final List<RoleMemento> roles;
     public List<RoleMemento> getRoles() {
         return roles;
     }
+
+    @Programmatic
+    public UserMemento withRole(String role) {
+        final List<RoleMemento> roles = new ArrayList<>(this.roles);
+        roles.add(new RoleMemento(role));
+        val userMemento = copy(roles);
+        return userMemento;
+    }
+
+
 
     /**
      * Determine if the specified name is this user.
@@ -143,11 +191,13 @@ public final class UserMemento implements Serializable {
         return name.equals(userName);
     }
 
+    @Programmatic
     public Stream<String> streamRoleNames() {
         return roles.stream()
                 .map(RoleMemento::getName);
     }
 
+    @Programmatic
     public boolean hasRoleName(final @Nullable String roleName) {
         return streamRoleNames().anyMatch(myRoleName->myRoleName.equals(roleName));
     }
