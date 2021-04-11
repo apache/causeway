@@ -18,6 +18,8 @@
  */
 package org.apache.isis.core.runtimeservices.user;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import javax.inject.Inject;
@@ -34,20 +36,52 @@ import org.apache.isis.applib.services.user.UserMemento;
 import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.core.interaction.session.InteractionTracker;
 
+import lombok.RequiredArgsConstructor;
+
 @Service
 @Named("isis.runtimeservices.UserServiceDefault")
 @Order(OrderPrecedence.MIDPOINT)
 @Primary
 @Qualifier("Default")
+@RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class UserServiceDefault implements UserService {
-    
-    @Inject private InteractionTracker isisInteractionTracker;
-    
+
+    private final InteractionTracker isisInteractionTracker;
+    private final ImpersonatedUserHolder impersonatedUserHolder;
+
+    /**
+     * Either the current user or the one being impersonated.
+     */
     @Override
     public Optional<UserMemento> currentUser() {
-        return isisInteractionTracker.currentExecutionContext()
-                .map(ExecutionContext::getUser);
+        return or(getImpersonatedUser(),
+                    isisInteractionTracker.currentExecutionContext()
+                        .map(ExecutionContext::getUser)
+        );
     }
-    
+
+    private static <T> Optional<T> or(Optional<T> optional, Optional<T> fallback) {
+        return optional.isPresent() ? optional : fallback;
+    }
+
+    @Override
+    public void impersonateUser(final String userName, final List<String> roles) {
+        impersonatedUserHolder.setUserMemento(UserMemento.ofNameAndRoleNames(userName, roles));
+    }
+
+    @Override
+    public void stopImpersonating() {
+        impersonatedUserHolder.clearUserMemento();
+    }
+
+    @Override
+    public boolean supportsImpersonation() {
+        return true;
+    }
+
+    @Override
+    public Optional<UserMemento> getImpersonatedUser() {
+        return impersonatedUserHolder.getUserMemento();
+    }
 
 }
