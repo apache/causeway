@@ -86,7 +86,16 @@ public final class UserMemento implements Serializable {
     public static UserMemento ofNameAndRoleNames(
             final @NonNull String name,
             final String... roleNames) {
-        return new UserMemento(name, Stream.of(roleNames).map(RoleMemento::new));
+        return ofNameAndRoleNames(name, Stream.of(roleNames));
+    }
+
+    /**
+     * Creates a new user with the specified name and assigned role names.
+     */
+    public static UserMemento ofNameAndRoleNames(
+            final @NonNull String name,
+            final @NonNull List<String> roleNames) {
+        return ofNameAndRoleNames(name, roleNames.stream());
     }
 
     /**
