@@ -73,7 +73,7 @@ class RestServiceTest {
         assertEquals("Book of the week", bookOfTheWeek.getName());
 
     }
-    
+
     @Test
     void addNewBook_viaRestEndpoint() throws JAXBException {
 
@@ -82,9 +82,9 @@ class RestServiceTest {
         val useRequestDebugLogging = false;
         val restfulClient = restService.newClient(useRequestDebugLogging);
 
-        val newBook = JdoBook.of("REST Book", "A sample REST book for testing.", 77., 
+        val newBook = JdoBook.of("REST Book", "A sample REST book for testing.", 77.,
                 "REST Author", "REST ISBN", "REST Publisher");
-        
+
         val digest = restService.storeBook(restfulClient, newBook);
 
         if(!digest.isSuccess()) {
@@ -97,13 +97,13 @@ class RestServiceTest {
         assertEquals("REST Book", storedBook.getName());
 
     }
-    
+
     @Test
     void multipleBooks_viaRestEndpoint() throws JAXBException {
 
         assertTrue(restService.getPort()>0);
 
-        val useRequestDebugLogging = false; 
+        val useRequestDebugLogging = false;
         val restfulClient = restService.newClient(useRequestDebugLogging);
 
         val digest = restService.getMultipleBooks(restfulClient);
@@ -113,15 +113,15 @@ class RestServiceTest {
         }
 
         val multipleBooks = digest.getEntities();
-        
+
         assertEquals(2, multipleBooks.size());
-        
+
         for(val book : multipleBooks) {
-            assertEquals("MultipleBooksTest", book.getName());    
+            assertEquals("MultipleBooksTest", book.getName());
         }
 
     }
-    
+
     @Test
     void bookOfTheWeek_asDto_viaRestEndpoint() {
 
@@ -142,13 +142,13 @@ class RestServiceTest {
         assertEquals("Book of the week", bookOfTheWeek.getName());
 
     }
-    
+
     @Test
     void multipleBooks_asDto_viaRestEndpoint() throws JAXBException {
 
         assertTrue(restService.getPort()>0);
 
-        val useRequestDebugLogging = false; 
+        val useRequestDebugLogging = false;
         val restfulClient = restService.newClient(useRequestDebugLogging);
 
         val digest = restService.getMultipleBooksAsDto(restfulClient);
@@ -158,16 +158,16 @@ class RestServiceTest {
         }
 
         val multipleBooks = digest.getEntities();
-        
+
         assertEquals(2, multipleBooks.size());
-        
+
         for(val book : multipleBooks) {
-            assertEquals("MultipleBooksTest", book.getName());    
+            assertEquals("MultipleBooksTest", book.getName());
         }
 
     }
-    
-    
+
+
     @Test
     void httpSessionInfo() {
 
@@ -183,10 +183,14 @@ class RestServiceTest {
         val httpSessionInfo = digest.getEntities().getSingletonOrFail();
 
         assertNotNull(httpSessionInfo);
-        assertEquals("no http-session", httpSessionInfo);
+
+        // impersonation in UserServiceDefault means that we _do_ now get
+        // an httpSession as a side-effect
+        //assertEquals("no http-session", httpSessionInfo);
+        assertEquals("http-session attribute names: {}", httpSessionInfo);
 
     }
-    
-    
+
+
 
 }
