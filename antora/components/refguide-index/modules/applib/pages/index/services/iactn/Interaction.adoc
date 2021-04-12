@@ -3,7 +3,7 @@
 
 Represents an action invocation or property modification, resulting in some state change of the system. It captures not only the target object and arguments passed, but also builds up the call-graph, and captures metrics, eg for profiling.
 
-The `Interaction` can be used to obtain the xref:refguide:applib:index/services/command/Command.adoc[Command] object representing the top-level invocation action/property edit.
+The xref:refguide:applib:index/services/iactn/Interaction.adoc[Interaction] can be used to obtain the xref:refguide:applib:index/services/command/Command.adoc[Command] object representing the top-level invocation action/property edit.
 
 The distinction between xref:refguide:applib:index/services/command/Command.adoc[Command] and this object is perhaps subtle: the former represents the intention to invoke an action/edit a property, whereas this represents the actual invocation/edit itself.
 

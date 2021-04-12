@@ -1,6 +1,5 @@
 package org.apache.isis.applib.services.user;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -12,7 +11,6 @@ import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.applib.annotation.NatureOfService;
-import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
@@ -20,6 +18,21 @@ import org.apache.isis.applib.services.message.MessageService;
 
 import lombok.RequiredArgsConstructor;
 
+/**
+ * Provides the UI to allow a current user to be impersonated.
+ *
+ * <p>
+ *     All of the actions provided here are restricted to PROTOTYPE mode only;
+ *     this feature is <i>not</i> intended for production use as it would imply
+ *     a large security hole !
+ * </p>
+ *
+ * @see UserService
+ * @see ImpersonateMenuAdvisor
+ * @see ImpersonatedUserHolder
+ *
+ * @since 2.0 {@index}
+ */
 @DomainService(
         nature = NatureOfService.VIEW,
         objectType = "isis.applib.ImpersonateMenu"
@@ -33,7 +46,7 @@ public class ImpersonateMenu {
 
     final UserService userService;
     final MessageService messageService;
-    final ImpersonationMenuAdvisor impersonationMenuAdvisor;
+    final List<ImpersonateMenuAdvisor> impersonateMenuAdvisors;
 
 
 
@@ -82,7 +95,7 @@ public class ImpersonateMenu {
      *
      * <p>
      * This more sophisticated implementation is only available if there is
-     * an {@link ImpersonationMenuAdvisor} implementation to provide the
+     * an {@link ImpersonateMenuAdvisor} implementation to provide the
      * choices.
      * </p>
      *
@@ -111,13 +124,19 @@ public class ImpersonateMenu {
         return this.userService.isImpersonating() ? "currently impersonating" : null;
     }
     public List<String> choices0ImpersonateWithRoles() {
-        return impersonationMenuAdvisor.allUserNames();
+        return impersonateMenuAdvisor().allUserNames();
     }
+
     public List<String> choices1ImpersonateWithRoles() {
-        return impersonationMenuAdvisor.allRoleNames();
+        return impersonateMenuAdvisor().allRoleNames();
     }
     public List<String> default1ImpersonateWithRoles(String userName) {
-        return impersonationMenuAdvisor.roleNamesFor(userName);
+        return impersonateMenuAdvisor().roleNamesFor(userName);
+    }
+
+    private ImpersonateMenuAdvisor impersonateMenuAdvisor() {
+        // this is safe because there will always be at least one implementation.
+        return impersonateMenuAdvisors.get(0);
     }
 
 
@@ -144,5 +163,8 @@ public class ImpersonateMenu {
     public String disableStopImpersonating() {
         return ! this.userService.isImpersonating() ? "no user is currently being impersonated": null;
     }
+
+
+
 
 }

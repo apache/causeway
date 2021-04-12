@@ -5,5 +5,5 @@
 
 == Implementation
 
-The framework provides a default implementation of this service, `o.a.i.core.runtimeservices.UserProfileServiceDefault`.
-This simply returns the user's name as the user's profile name.
+The framework provides a default implementation of this service, `o.a.i.viewer.common.model.userprofile.UserProfileUiModelProviderDefault`.
+This returns the user profile name based upon whether the real name is available, and whether the user is currently being impersonated.

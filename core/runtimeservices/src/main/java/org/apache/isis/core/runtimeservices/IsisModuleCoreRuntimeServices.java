@@ -60,7 +60,7 @@ import org.apache.isis.core.runtimeservices.sudo.SudoServiceDefault;
 import org.apache.isis.core.runtimeservices.transaction.TransactionServiceSpring;
 import org.apache.isis.core.runtimeservices.urlencoding.UrlEncodingServiceWithCompression;
 import org.apache.isis.core.runtimeservices.user.ImpersonatedUserHolderDefault;
-import org.apache.isis.core.runtimeservices.user.ImpersonationMenuAdvisorDefault;
+import org.apache.isis.core.runtimeservices.user.ImpersonateMenuAdvisorDefault;
 import org.apache.isis.core.runtimeservices.user.UserServiceDefault;
 import org.apache.isis.core.runtimeservices.userreg.EmailNotificationServiceDefault;
 import org.apache.isis.core.runtimeservices.wrapper.WrapperFactoryDefault;
@@ -90,7 +90,7 @@ import org.apache.isis.core.runtimeservices.xmlsnapshot.XmlSnapshotServiceDefaul
         FactoryServiceDefault.class,
         HomePageResolverServiceDefault.class,
         ImpersonatedUserHolderDefault.class,
-        ImpersonationMenuAdvisorDefault.class,
+        ImpersonateMenuAdvisorDefault.class,
         InteractionDtoFactoryDefault.class,
         InteractionFactoryDefault.class,
         JaxbServiceDefault.class,

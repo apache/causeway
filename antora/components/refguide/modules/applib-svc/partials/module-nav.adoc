@@ -55,10 +55,12 @@
 ** xref:refguide:applib:index/services/xactn/TransactionalProcessor.adoc[TransactionProcessor]
 ** xref:refguide:applib:index/services/xactn/TransactionService.adoc[TransactionService]
 ** xref:refguide:applib:index/services/urlencoding/UrlEncodingService.adoc[UrlEncodingService]
-** xref:refguide:applib:index/services/userprof/UserProfileService.adoc[UserProfileService]
 ** xref:refguide:applib:index/services/userreg/UserRegistrationService.adoc[UserRegistrationService]
 ** xref:refguide:applib:index/services/user/UserService.adoc[UserService]
 ** xref:refguide:applib:index/services/wrapper/WrapperFactory.adoc[WrapperFactory]
 ** xref:refguide:applib:index/services/xml/XmlService.adoc[XmlService]
 ** xref:refguide:applib:index/services/xmlsnapshot/XmlSnapshotService.adoc[XmlSnapshotService]
+
+** Viewer (Common Applib)
+*** xref:refguide:viewer:index/common/applib/services/userprof/UserProfileUiModelProvider.adoc[UserProfileUiModelProvider]
 

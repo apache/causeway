@@ -11,7 +11,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
-import org.apache.isis.applib.services.user.ImpersonationMenuAdvisor;
+import org.apache.isis.applib.services.user.ImpersonateMenuAdvisor;
 
 /**
  * This default implementation simply returns empty lists.
@@ -19,16 +19,15 @@ import org.apache.isis.applib.services.user.ImpersonationMenuAdvisor;
  * <p>
  *  This has the effect that the
  *  {@link org.apache.isis.applib.services.user.ImpersonateMenu}'s
- *  {@link org.apache.isis.applib.services.user.ImpersonateMenu#impersonateWithRoles(String, boolean, List) impersonateWithRoles}
+ *  {@link org.apache.isis.applib.services.user.ImpersonateMenu#impersonateWithRoles(String, List) impersonateWithRoles}
  *  action will be hidden.
  * </p>
  */
 @Service
-@Named("isis.runtimeservices.ImpersonationMenuAdvisorDefault")
+@Named("isis.runtimeservices.ImpersonateMenuAdvisorDefault")
 @Order(OrderPrecedence.LAST)
-@Primary
 @Qualifier("Default")
-public class ImpersonationMenuAdvisorDefault implements ImpersonationMenuAdvisor {
+public class ImpersonateMenuAdvisorDefault implements ImpersonateMenuAdvisor {
 
     @Override
     public List<String> allUserNames() {
@@ -42,7 +41,7 @@ public class ImpersonationMenuAdvisorDefault implements ImpersonationMenuAdvisor
 
     @Override
     public List<String> roleNamesFor(
-            final String applicationUserName) {
+            final String username) {
         return Collections.emptyList();
     }
 

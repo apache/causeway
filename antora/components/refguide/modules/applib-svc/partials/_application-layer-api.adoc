@@ -16,13 +16,17 @@ Domain service APIs for the application layer allow the domain objects to contro
 
 
 |xref:refguide:applib:index/services/command/CommandExecutorService.adoc[CommandExecutorService]
-|Executes the specified `Command`.
+|Executes the specified xref:refguide:applib:index/services/command/Command.adoc[Command].
 
+
+|xref:refguide:applib:index/services/user/ImpersonateMenu.adoc[ImpersonateMenu]
+|Provides a UI to allow the current user to be impersonated as some other user.
+
+The actions in this menu are restricted to non-production use only.
 
 
 |xref:refguide:applib:index/services/iactn/InteractionContext.adoc[InteractionContext]
-|Request-scoped access to the current member execution (action invocation or property edit), represented as the `Interaction` context.
-
+|Request-scoped access to the current member execution (action invocation or property edit), represented as the xref:refguide:applib:index/services/iactn/Interaction.adoc[Interaction] context.
 
 
 |xref:refguide:applib:index/services/message/MessageService.adoc[MessageService]
