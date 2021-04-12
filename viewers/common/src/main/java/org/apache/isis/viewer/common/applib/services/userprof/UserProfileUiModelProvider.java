@@ -16,30 +16,27 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.common.model.userprofile;
-
-import java.util.Optional;
-
-import javax.inject.Inject;
-
-import org.springframework.stereotype.Service;
+package org.apache.isis.viewer.common.applib.services.userprof;
 
 import org.apache.isis.applib.services.user.UserService;
-import org.apache.isis.applib.services.userprof.UserProfileService;
 
-@Service
-public class UserProfileUiModelProvider implements UserProfileService {
+/**
+ * Return a UI model to represent the currently logged in user.
+ *
+ * <p>
+ *     This is backed by the
+ *     {@link org.apache.isis.applib.services.user.UserMemento} obtained from
+ *     {@link UserService#currentUser()} API, but could be presented in various
+ *     ways.
+ * </p>
+ *
+ * @since 2.0 {@index}
+ */
+public interface UserProfileUiModelProvider {
 
-    @Inject private UserService userService;
-    
-    @Override
-    public String userProfileName() {
-        return userService.currentUserName().orElse("<Anonymous>");
-    }
+    /**
+     * A UI model to represent the currently logged in user.
+     */
+    UserProfileUiModel userProfile();
 
-    public UserProfileUiModel getUserProfile() {
-        Optional<String> avatarUrl = Optional.empty(); //not supported yet
-        return UserProfileUiModel.of(userProfileName(), avatarUrl);
-    }
-    
 }

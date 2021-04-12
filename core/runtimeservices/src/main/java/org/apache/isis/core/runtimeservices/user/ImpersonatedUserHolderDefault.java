@@ -20,53 +20,68 @@ package org.apache.isis.core.runtimeservices.user;
 
 import java.util.Optional;
 
-import javax.inject.Inject;
 import javax.inject.Named;
-import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
+import org.apache.isis.applib.services.user.ImpersonatedUserHolder;
 import org.apache.isis.applib.services.user.UserMemento;
 
 /**
- * Used by {@link UserServiceDefault} to allow the current user to be
- * temporarily impersonated.
+ * Used by the framework's default implementation of {@link org.apache.isis.applib.services.user.UserService} to
+ * allow the current user to be temporarily impersonated.
  *
  * <p>
- *     Intended for non-production environments only.
+ *     The intention is that viewers provide an implementation of this service..
+ *     Note that the Wicket viewer <i>does</i> implement this service and
+ *     uses an {@link javax.servlet.http.HttpSession}; this will have the
+ *     side-effect of making REST API potentially non stateful.
  * </p>
  *
- * @since 2.0 {@index}
+ * <p>
+ *     The default implementation does <i>not</i> support impersonation.
+ * </p>
  */
 @Service
-@Named("isis.runtimeservices.ImpersonatedUserHolder")
-@Order(OrderPrecedence.MIDPOINT)
-@Primary
+@Named("isis.runtimeservices.ImpersonatedUserHolderDefault")
+@Order(OrderPrecedence.LAST)
 @Qualifier("Default")
-public class ImpersonatedUserHolder {
+public class ImpersonatedUserHolderDefault implements ImpersonatedUserHolder {
 
-    @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
-    @Inject private HttpSession httpSession;
+    /**
+     * Returns <code>false</code>, as this implementation does <i>not</i>
+     * support impersonation.
+     */
+    @Override
+    public boolean supportsImpersonation() {
+        return false;
+    }
 
-    private static final String HTTP_SESSION_KEY_IMPERSONATED_USER = ImpersonatedUserHolder.class.getName() + "#userMemento";
-
+    /**
+     * Simply throws an exception.
+     */
+    @Override
     public void setUserMemento(final UserMemento userMemento) {
-        this.httpSession.setAttribute(HTTP_SESSION_KEY_IMPERSONATED_USER, userMemento);
+        throw new RuntimeException("This implementation does not support impersonation");
     }
 
+    /**
+     * Simply returns an empty Optional.
+     */
+    @Override
     public Optional<UserMemento> getUserMemento() {
-        final Object attribute = this.httpSession.getAttribute(HTTP_SESSION_KEY_IMPERSONATED_USER);
-        return attribute instanceof UserMemento
-                ? Optional.of((UserMemento)attribute)
-                : Optional.empty();
+        return Optional.empty();
     }
 
+    /**
+     * No-op
+     */
+    @Override
     public void clearUserMemento() {
-        this.httpSession.removeAttribute(HTTP_SESSION_KEY_IMPERSONATED_USER);
     }
+
 }

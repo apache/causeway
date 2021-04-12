@@ -18,7 +18,6 @@
  */
 package org.apache.isis.core.runtimeservices.user;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,12 +31,18 @@ import org.springframework.stereotype.Service;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.iactn.ExecutionContext;
+import org.apache.isis.applib.services.user.ImpersonatedUserHolder;
 import org.apache.isis.applib.services.user.UserMemento;
 import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.core.interaction.session.InteractionTracker;
 
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 
+/**
+ * This default implementation delegates to {@link ImpersonatedUserHolder} to
+ * hold an impersonated user (if supported).
+ */
 @Service
 @Named("isis.runtimeservices.UserServiceDefault")
 @Order(OrderPrecedence.MIDPOINT)
@@ -47,41 +52,50 @@ import lombok.RequiredArgsConstructor;
 public class UserServiceDefault implements UserService {
 
     private final InteractionTracker isisInteractionTracker;
-    private final ImpersonatedUserHolder impersonatedUserHolder;
+    private final List<ImpersonatedUserHolder> impersonatedUserHolders;
 
     /**
      * Either the current user or the one being impersonated.
      */
     @Override
     public Optional<UserMemento> currentUser() {
-        return or(getImpersonatedUser(),
-                    isisInteractionTracker.currentExecutionContext()
-                        .map(ExecutionContext::getUser)
-        );
-    }
-
-    private static <T> Optional<T> or(Optional<T> optional, Optional<T> fallback) {
-        return optional.isPresent() ? optional : fallback;
-    }
-
-    @Override
-    public void impersonateUser(final String userName, final List<String> roles) {
-        impersonatedUserHolder.setUserMemento(UserMemento.ofNameAndRoleNames(userName, roles));
-    }
-
-    @Override
-    public void stopImpersonating() {
-        impersonatedUserHolder.clearUserMemento();
+        Optional<UserMemento> optional = getImpersonatedUser();
+        return optional.isPresent()
+                ? optional
+                : isisInteractionTracker.currentExecutionContext().map(ExecutionContext::getUser);
     }
 
     @Override
     public boolean supportsImpersonation() {
-        return true;
+        return impersonatingHolder()
+                .isPresent();
+    }
+
+    private Optional<ImpersonatedUserHolder> impersonatingHolder() {
+        return impersonatedUserHolders.stream()
+                .filter(ImpersonatedUserHolder::supportsImpersonation)
+                .findFirst();
+    }
+
+    @Override
+    public void impersonateUser(final String userName, final List<String> roles) {
+        impersonatingHolder().ifPresent(x ->
+                {
+                    val userMemento = UserMemento.ofNameAndRoleNames(userName, roles)
+                                        .withImpersonating();
+                    x.setUserMemento(userMemento);
+                }
+        );
+    }
+
+    @Override
+    public void stopImpersonating() {
+        impersonatingHolder().ifPresent(ImpersonatedUserHolder::clearUserMemento);
     }
 
     @Override
     public Optional<UserMemento> getImpersonatedUser() {
-        return impersonatedUserHolder.getUserMemento();
+        return impersonatingHolder().flatMap(ImpersonatedUserHolder::getUserMemento);
     }
 
 }

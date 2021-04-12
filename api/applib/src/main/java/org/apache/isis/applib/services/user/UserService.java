@@ -57,7 +57,7 @@ public interface UserService {
         return currentUser().orElse(null);
     }
 
-    // -- UTILITIES
+
 
     /**
      * Gets the details about the current user.

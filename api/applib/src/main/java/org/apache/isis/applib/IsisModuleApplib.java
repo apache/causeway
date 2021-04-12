@@ -46,6 +46,7 @@ import org.apache.isis.applib.services.publishing.log.ExecutionLogger;
 import org.apache.isis.applib.services.session.SessionLoggingServiceLogging;
 import org.apache.isis.applib.services.user.RoleMemento;
 import org.apache.isis.applib.services.user.UserMemento;
+import org.apache.isis.applib.services.user.ImpersonateMenu;
 import org.apache.isis.schema.IsisModuleSchema;
 
 /**
@@ -77,6 +78,7 @@ import org.apache.isis.schema.IsisModuleSchema;
         // @DomainService(s)
         ConfigurationMenu.class,
         LayoutServiceMenu.class,
+        ImpersonateMenu.class,
         MetaModelServiceMenu.class,
 
         // @Service(s)
