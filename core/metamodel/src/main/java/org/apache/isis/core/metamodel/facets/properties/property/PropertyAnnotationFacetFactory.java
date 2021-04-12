@@ -33,8 +33,8 @@ import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.core.metamodel.facets.actions.contributing.ContributingFacetAbstract;
 import org.apache.isis.core.metamodel.facets.actions.contributing.ContributingFacet.Contributing;
+import org.apache.isis.core.metamodel.facets.actions.contributing.ContributingFacetAbstract;
 import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacetAbstract;
 import org.apache.isis.core.metamodel.facets.members.publish.command.CommandPublishingFacetForPropertyAnnotation;
 import org.apache.isis.core.metamodel.facets.members.publish.execution.ExecutionPublishingPropertyFacetForPropertyAnnotation;
@@ -62,16 +62,21 @@ import org.apache.isis.core.metamodel.facets.properties.update.clear.PropertyCle
 import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForAmbiguousMixinAnnotations;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForConflictingOptionality;
 import org.apache.isis.core.metamodel.util.EventUtil;
 
 import lombok.val;
 
-public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract
+public class PropertyAnnotationFacetFactory 
+extends FacetFactoryAbstract
 implements MetaModelRefiner {
 
-    private final MetaModelValidatorForConflictingOptionality conflictingOptionalityValidator =
-            new MetaModelValidatorForConflictingOptionality();
+    private final MetaModelValidatorForConflictingOptionality conflictingOptionalityValidator 
+        = new MetaModelValidatorForConflictingOptionality();
+    
+    private final MetaModelValidatorForAmbiguousMixinAnnotations ambiguousMixinAnnotationsValidator
+        = new MetaModelValidatorForAmbiguousMixinAnnotations();
 
     public PropertyAnnotationFacetFactory() {
         super(FeatureType.PROPERTIES_AND_ACTIONS);
@@ -86,7 +91,11 @@ implements MetaModelRefiner {
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
 
-        val propertyIfAny = processMethodContext.synthesizeOnMethodOrMixinType(Property.class);
+        val propertyIfAny = processMethodContext
+                .synthesizeOnMethodOrMixinType(
+                        Property.class, 
+                        () -> ambiguousMixinAnnotationsValidator
+                            .addValidationFailure(processMethodContext.getFacetHolder(), Property.class));
 
         inferIntentWhenOnTypeLevel(processMethodContext, propertyIfAny);
 
@@ -103,7 +112,6 @@ implements MetaModelRefiner {
         processRegEx(processMethodContext, propertyIfAny);
         processFileAccept(processMethodContext, propertyIfAny);
     }
-
 
     void inferIntentWhenOnTypeLevel(ProcessMethodContext processMethodContext, Optional<Property> propertyIfAny) {
         if(!processMethodContext.isMixinMain() || !propertyIfAny.isPresent()) {
@@ -371,11 +379,12 @@ implements MetaModelRefiner {
         super.addFacet(facet);
     }
 
-    // //////////////////////////////////////
+    // -- METAMODEL REFINER
 
     @Override
     public void refineProgrammingModel(ProgrammingModel programmingModel) {
         programmingModel.addValidator(conflictingOptionalityValidator);
+        programmingModel.addValidator(ambiguousMixinAnnotationsValidator);
     }
 
 

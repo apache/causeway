@@ -25,7 +25,6 @@ import java.lang.reflect.Parameter;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
-import java.util.function.Supplier;
 
 import org.apache.isis.commons.collections.ImmutableEnumSet;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
@@ -36,6 +35,8 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MethodRemover;
 
 import lombok.Getter;
+import lombok.NonNull;
+import lombok.val;
 
 public interface FacetFactory {
 
@@ -239,22 +240,28 @@ public interface FacetFactory {
         /** 
          * Annotation lookup on this context's method, if not found, extends search to type in case 
          * the predicate {@link #isMixinMain} evaluates {@code true}.
+         * <p>
+         * As of [ISIS-2604] we also make sure the annotation type does not appear in both places 
+         * (method and type). Hence the 2nd parameter is a callback that fires if the annotation 
+         * is found in both places. 
+         * 
          * @since 2.0
          */
-        public <A extends Annotation> Optional<A> synthesizeOnMethodOrMixinType(Class<A> annotationType) {
-            return computeIfAbsent(synthesizeOnMethod(annotationType),
-                    ()-> isMixinMain()
-                        ? synthesizeOnType(annotationType)
-                                : Optional.empty() ) ;
-        }
-        
-        private static <T> Optional<T> computeIfAbsent(
-                Optional<T> optional,
-                Supplier<Optional<T>> supplier) {
+        public <A extends Annotation> Optional<A> synthesizeOnMethodOrMixinType(
+                final @NonNull Class<A> annotationType,
+                final @NonNull Runnable onAmbiguity) {
             
-            return optional.isPresent() ? 
-                    optional
-                        : supplier.get();
+            
+            val onMethod = synthesizeOnMethod(annotationType);
+            val onType = synthesizeOnType(annotationType);
+            
+            if(onMethod.isPresent()) {
+                if(onType.isPresent()) {
+                    onAmbiguity.run();    
+                }
+                return onMethod;
+            }
+            return onType;
         }
         
     }
@@ -265,11 +272,7 @@ public interface FacetFactory {
      */
     void process(ProcessMethodContext processMethodContext);
 
-
-
-    // //////////////////////////////////////
-    // process param
-    // //////////////////////////////////////
+    // -- PROCESS PARAM
 
     public static class ProcessParameterContext 
     extends AbstractProcessWithMethodContext<FacetedMethodParameter> {

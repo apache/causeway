@@ -20,14 +20,21 @@ package org.apache.isis.core.metamodel.facets.collections.layout;
 
 import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.members.layout.order.LayoutOrderFacetFromCollectionLayoutAnnotation;
+import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForAmbiguousMixinAnnotations;
 
 import lombok.val;
 
 public class CollectionLayoutFacetFactory 
-extends FacetFactoryAbstract {
+extends FacetFactoryAbstract
+implements MetaModelRefiner {
 
+    private final MetaModelValidatorForAmbiguousMixinAnnotations ambiguousMixinAnnotationsValidator
+        = new MetaModelValidatorForAmbiguousMixinAnnotations();
+    
     public CollectionLayoutFacetFactory() {
         super(FeatureType.COLLECTIONS_AND_ACTIONS);
     }
@@ -36,7 +43,11 @@ extends FacetFactoryAbstract {
     public void process(final ProcessMethodContext processMethodContext) {
 
         val facetHolder = processMethodContext.getFacetHolder();
-        val collectionLayoutIfAny = processMethodContext.synthesizeOnMethodOrMixinType(CollectionLayout.class);
+        val collectionLayoutIfAny = processMethodContext
+                .synthesizeOnMethodOrMixinType(
+                        CollectionLayout.class, 
+                        () -> ambiguousMixinAnnotationsValidator
+                        .addValidationFailure(processMethodContext.getFacetHolder(), CollectionLayout.class));
 
         val cssClassFacet = CssClassFacetForCollectionLayoutAnnotation
                 .create(collectionLayoutIfAny, facetHolder);
@@ -71,6 +82,12 @@ extends FacetFactoryAbstract {
         super.addFacet(sortedByFacet);
     }
 
+    // -- METAMODEL REFINER
+
+    @Override
+    public void refineProgrammingModel(ProgrammingModel programmingModel) {
+        programmingModel.addValidator(ambiguousMixinAnnotationsValidator);
+    }
 
 
 }

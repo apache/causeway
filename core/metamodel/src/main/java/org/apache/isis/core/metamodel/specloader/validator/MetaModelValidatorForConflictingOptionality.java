@@ -33,6 +33,8 @@ public class MetaModelValidatorForConflictingOptionality extends MetaModelValida
         }
         return facet;
     }
+    
+    // -- HELPER
 
     private Facet addFailure(final Facet facet, final String message) {
         if(facet != null) {

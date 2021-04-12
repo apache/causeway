@@ -20,6 +20,7 @@ package org.apache.isis.core.metamodel.facets.actions.layout;
 
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.actions.position.ActionPositionFacet;
 import org.apache.isis.core.metamodel.facets.actions.position.ActionPositionFacetFallback;
@@ -36,11 +37,17 @@ import org.apache.isis.core.metamodel.facets.members.layout.order.LayoutOrderFac
 import org.apache.isis.core.metamodel.facets.members.layout.order.LayoutOrderFacetFromActionLayoutAnnotation;
 import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet;
 import org.apache.isis.core.metamodel.facets.object.promptStyle.PromptStyleFacet;
+import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForAmbiguousMixinAnnotations;
 
 import lombok.val;
 
 public class ActionLayoutFacetFactory 
-extends FacetFactoryAbstract {
+extends FacetFactoryAbstract
+implements MetaModelRefiner {
+    
+    private final MetaModelValidatorForAmbiguousMixinAnnotations ambiguousMixinAnnotationsValidator
+            = new MetaModelValidatorForAmbiguousMixinAnnotations();
 
     public ActionLayoutFacetFactory() {
         super(FeatureType.ACTIONS_ONLY);
@@ -50,7 +57,11 @@ extends FacetFactoryAbstract {
     public void process(final ProcessMethodContext processMethodContext) {
 
         val facetHolder = processMethodContext.getFacetHolder();
-        val actionLayoutIfAny = processMethodContext.synthesizeOnMethodOrMixinType(ActionLayout.class);
+        val actionLayoutIfAny = processMethodContext
+                .synthesizeOnMethodOrMixinType(
+                        ActionLayout.class,
+                        () -> ambiguousMixinAnnotationsValidator
+                        .addValidationFailure(processMethodContext.getFacetHolder(), ActionLayout.class));
         
         // bookmarkable
         BookmarkPolicyFacet bookmarkableFacet = BookmarkPolicyFacetForActionLayoutAnnotation
@@ -106,6 +117,13 @@ extends FacetFactoryAbstract {
         LayoutOrderFacet layoutOrderFacet = LayoutOrderFacetFromActionLayoutAnnotation.create(actionLayoutIfAny, facetHolder); 
         super.addFacet(layoutOrderFacet);
 
+    }
+
+    // -- METAMODEL REFINER
+
+    @Override
+    public void refineProgrammingModel(ProgrammingModel programmingModel) {
+        programmingModel.addValidator(ambiguousMixinAnnotationsValidator);
     }
 
 }

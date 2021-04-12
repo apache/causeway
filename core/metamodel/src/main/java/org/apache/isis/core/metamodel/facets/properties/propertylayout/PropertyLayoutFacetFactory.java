@@ -21,14 +21,21 @@ package org.apache.isis.core.metamodel.facets.properties.propertylayout;
 
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.members.layout.group.LayoutGroupFacetFromPropertyLayoutAnnotation;
 import org.apache.isis.core.metamodel.facets.members.layout.order.LayoutOrderFacetFromPropertyLayoutAnnotation;
+import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForAmbiguousMixinAnnotations;
 
 import lombok.val;
 
 public class PropertyLayoutFacetFactory 
-extends FacetFactoryAbstract {
+extends FacetFactoryAbstract
+implements MetaModelRefiner {
+    
+    private final MetaModelValidatorForAmbiguousMixinAnnotations ambiguousMixinAnnotationsValidator
+        = new MetaModelValidatorForAmbiguousMixinAnnotations();
 
     public PropertyLayoutFacetFactory() {
         super(FeatureType.PROPERTIES_AND_ACTIONS);
@@ -39,7 +46,10 @@ extends FacetFactoryAbstract {
 
         val facetHolder = processMethodContext.getFacetHolder();
         val propertyLayoutIfAny = processMethodContext
-                .synthesizeOnMethodOrMixinType(PropertyLayout.class);
+                .synthesizeOnMethodOrMixinType(
+                        PropertyLayout.class, 
+                        () -> ambiguousMixinAnnotationsValidator
+                        .addValidationFailure(processMethodContext.getFacetHolder(), PropertyLayout.class));
 
         val cssClassFacet = CssClassFacetForPropertyLayoutAnnotation
                 .create(propertyLayoutIfAny, facetHolder);
@@ -89,6 +99,13 @@ extends FacetFactoryAbstract {
                 .create(propertyLayoutIfAny, facetHolder);
         super.addFacet(unchangingFacet);
         
+    }
+    
+    // -- METAMODEL REFINER
+
+    @Override
+    public void refineProgrammingModel(ProgrammingModel programmingModel) {
+        programmingModel.addValidator(ambiguousMixinAnnotationsValidator);
     }
 
 }

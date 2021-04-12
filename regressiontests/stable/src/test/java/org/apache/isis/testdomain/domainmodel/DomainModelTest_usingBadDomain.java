@@ -18,23 +18,39 @@
  */
 package org.apache.isis.testdomain.domainmodel;
 
+import java.lang.annotation.Annotation;
+import java.util.stream.Stream;
+
 import javax.inject.Inject;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.Collection;
+import org.apache.isis.applib.annotation.CollectionLayout;
+import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.exceptions.unrecoverable.DomainModelException;
+import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.environment.IsisSystemEnvironment;
 import org.apache.isis.core.config.metamodel.specloader.IntrospectionMode;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.testdomain.conf.Configuration_headless;
+import org.apache.isis.testdomain.model.bad.AmbiguousMixinAnnotations;
 import org.apache.isis.testdomain.model.bad.AmbiguousTitle;
 import org.apache.isis.testdomain.model.bad.Configuration_usingInvalidDomain;
 import org.apache.isis.testdomain.model.bad.InvalidOrphanedActionSupport;
@@ -42,8 +58,6 @@ import org.apache.isis.testdomain.model.bad.InvalidOrphanedCollectionSupport;
 import org.apache.isis.testdomain.model.bad.InvalidOrphanedPropertySupport;
 import org.apache.isis.testdomain.model.bad.InvalidPropertyAnnotationOnAction;
 import org.apache.isis.testing.integtestsupport.applib.validate.DomainModelValidator;
-
-import lombok.val;
 
 @SpringBootTest(
         classes = { 
@@ -65,6 +79,15 @@ class DomainModelTest_usingBadDomain {
     @Inject private IsisSystemEnvironment isisSystemEnvironment;
     @Inject private SpecificationLoader specificationLoader;
     
+    private DomainModelValidator validator;
+    
+    @BeforeEach
+    void setup() {
+        validator = new DomainModelValidator(specificationLoader, configuration, isisSystemEnvironment);
+        assertThrows(DomainModelException.class, validator::throwIfInvalid);
+    }
+    
+    
     @Test
     void fullIntrospection_shouldBeEnabledByThisTestClass() {
         assertTrue(IntrospectionMode.isFullIntrospect(configuration, isisSystemEnvironment));
@@ -72,24 +95,63 @@ class DomainModelTest_usingBadDomain {
     
     @Test
     void ambiguousTitle_shouldFail() {
-           
-        val validator = new DomainModelValidator(specificationLoader, configuration, isisSystemEnvironment);
-        
-        assertThrows(DomainModelException.class, validator::throwIfInvalid);
         assertTrue(validator.anyMatchesContaining(
-                AmbiguousTitle.class, 
+                Identifier.classIdentifier(LogicalType.fqcn(AmbiguousTitle.class)),
                 "conflict for determining a strategy for retrieval of title"));
     }
     
     @Test
     void orphanedActionSupport_shouldFail() {
-           
-        val validateDomainModel = new DomainModelValidator(specificationLoader, configuration, isisSystemEnvironment);
-        
-        assertThrows(DomainModelException.class, validateDomainModel::throwIfInvalid);
-        assertTrue(validateDomainModel.anyMatchesContaining(
-                InvalidOrphanedActionSupport.class, 
+        assertTrue(validator.anyMatchesContaining(
+                Identifier.classIdentifier(LogicalType.fqcn(InvalidOrphanedActionSupport.class)), 
                 "is assumed to support"));
+    }
+
+    @Test
+    void orphanedPropertySupport_shouldFail() {
+        assertTrue(validator.anyMatchesContaining(
+                Identifier.classIdentifier(LogicalType.fqcn(InvalidOrphanedPropertySupport.class)), 
+                "is assumed to support"));
+    }
+    
+    @Test
+    void orphanedCollectionSupport_shouldFail() {
+        assertTrue(validator.anyMatchesContaining(
+                Identifier.classIdentifier(LogicalType.fqcn(InvalidOrphanedCollectionSupport.class)), 
+                "is assumed to support"));
+    }
+    
+    @ParameterizedTest
+    @MethodSource("provideAmbiguousMixins")
+    void ambiguousMixinAnnotions_shouldFailValidation(
+            final Class<?> mixinClass, 
+            final Class<? extends Annotation> annotationType, 
+            final String mixinMethodName) {
+        
+        final String annotationLiteral = "@" + annotationType.getSimpleName();
+        assertTrue(validator.anyMatchesContaining(
+                Identifier.propertyOrCollectionIdentifier(LogicalType.fqcn(mixinClass), mixinMethodName), 
+                String.format("Annotation %s on both method and type level is not allowed", annotationLiteral)));
+    }
+    
+    private static Stream<Arguments> provideAmbiguousMixins() {
+        return Stream.of(
+          Arguments.of(AmbiguousMixinAnnotations.InvalidMixinA.class, Action.class, "act"),
+          Arguments.of(AmbiguousMixinAnnotations.InvalidMixinAL.class, ActionLayout.class, "act"),
+          Arguments.of(AmbiguousMixinAnnotations.InvalidMixinP.class, Property.class, "prop"),
+          Arguments.of(AmbiguousMixinAnnotations.InvalidMixinPL.class, PropertyLayout.class, "prop"),
+          Arguments.of(AmbiguousMixinAnnotations.InvalidMixinC.class, Collection.class, "coll"),
+          Arguments.of(AmbiguousMixinAnnotations.InvalidMixinCL.class, CollectionLayout.class, "coll")
+        );
+    }
+    
+    // -- INCUBATING
+    
+    @Test @Disabled("this case has no vaildation refiner yet")
+    void invalidPropertyAnnotationOnAction_shouldFail() {
+        assertTrue(validator.anyMatchesContaining(
+                Identifier.classIdentifier(LogicalType.fqcn(InvalidPropertyAnnotationOnAction.class)), 
+                "TODO"));
     }
     
 //    @Test
@@ -102,41 +164,4 @@ class DomainModelTest_usingBadDomain {
 //                OrphanedPrefixedAction.class, 
 //                "is assumed to support"));
 //    }
-
-    @Test
-    void orphanedPropertySupport_shouldFail() {
-           
-        val validateDomainModel = new DomainModelValidator(specificationLoader, configuration, isisSystemEnvironment);
-        
-        assertThrows(DomainModelException.class, validateDomainModel::throwIfInvalid);
-        assertTrue(validateDomainModel.anyMatchesContaining(
-                InvalidOrphanedPropertySupport.class, 
-                "is assumed to support"));
-    }
-    
-    @Test
-    void orphanedCollectionSupport_shouldFail() {
-           
-        val validateDomainModel = new DomainModelValidator(specificationLoader, configuration, isisSystemEnvironment);
-        
-        assertThrows(DomainModelException.class, validateDomainModel::throwIfInvalid);
-        assertTrue(validateDomainModel.anyMatchesContaining(
-                InvalidOrphanedCollectionSupport.class, 
-                "is assumed to support"));
-    }
-    
-    @Test @Disabled("this case has no vaildation refiner yet")
-    void invalidPropertyAnnotationOnAction_shouldFail() {
-        
-        val validateDomainModel = new DomainModelValidator(specificationLoader, configuration, isisSystemEnvironment);
-        
-        assertThrows(DomainModelException.class, validateDomainModel::throwIfInvalid);
-        assertTrue(validateDomainModel.anyMatchesContaining(
-                InvalidPropertyAnnotationOnAction.class, 
-                "TODO"));
-    }
-    
-
-    
-
 }

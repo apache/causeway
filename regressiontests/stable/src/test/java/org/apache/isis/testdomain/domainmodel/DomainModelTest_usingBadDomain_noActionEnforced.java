@@ -28,7 +28,9 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.exceptions.unrecoverable.DomainModelException;
+import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.config.environment.IsisSystemEnvironment;
 import org.apache.isis.core.config.metamodel.specloader.IntrospectionMode;
@@ -80,7 +82,7 @@ class DomainModelTest_usingBadDomain_noActionEnforced {
         
         assertThrows(DomainModelException.class, validateDomainModel::throwIfInvalid);
         assertTrue(validateDomainModel.anyMatchesContaining(
-                InvalidOrphanedActionSupportNoActionEnforced.class, 
+                Identifier.classIdentifier(LogicalType.fqcn(InvalidOrphanedActionSupportNoActionEnforced.class)), 
                 "is assumed to support"));
     }
     

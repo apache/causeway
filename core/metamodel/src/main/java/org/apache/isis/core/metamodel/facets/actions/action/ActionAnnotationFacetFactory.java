@@ -27,6 +27,7 @@ import org.apache.isis.applib.mixins.system.HasInteractionId;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Collections;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.actions.action.associateWith.AssociatedWithFacetForActionAnnotation;
@@ -46,13 +47,21 @@ import org.apache.isis.core.metamodel.facets.members.layout.group.LayoutGroupFac
 import org.apache.isis.core.metamodel.facets.members.publish.command.CommandPublishingFacetForActionAnnotation;
 import org.apache.isis.core.metamodel.facets.members.publish.execution.ExecutionPublishingActionFacetForActionAnnotation;
 import org.apache.isis.core.metamodel.facets.object.domainobject.domainevents.ActionDomainEventDefaultFacetForDomainObjectAnnotation;
+import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForAmbiguousMixinAnnotations;
 import org.apache.isis.core.metamodel.util.EventUtil;
 
 import lombok.val;
 
-public class ActionAnnotationFacetFactory extends FacetFactoryAbstract {
+public class ActionAnnotationFacetFactory
+extends FacetFactoryAbstract
+implements MetaModelRefiner {
 
+    private final MetaModelValidatorForAmbiguousMixinAnnotations ambiguousMixinAnnotationsValidator
+            = new MetaModelValidatorForAmbiguousMixinAnnotations();
+
+    
     public ActionAnnotationFacetFactory() {
         super(FeatureType.ACTIONS_ONLY);
     }
@@ -60,7 +69,11 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract {
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
 
-        val actionIfAny = processMethodContext.synthesizeOnMethodOrMixinType(Action.class);
+        val actionIfAny = processMethodContext
+                .synthesizeOnMethodOrMixinType(
+                        Action.class, 
+                        () -> ambiguousMixinAnnotationsValidator
+                        .addValidationFailure(processMethodContext.getFacetHolder(), Action.class));
 
         processExplicit(processMethodContext, actionIfAny);
         processInvocation(processMethodContext, actionIfAny);
@@ -283,6 +296,13 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract {
         // check for @Action(fileAccept=...)
         val facet = FileAcceptFacetForActionAnnotation.create(actionIfAny, holder);
         super.addFacet(facet);
+    }
+
+    // -- METAMODEL REFINER
+
+    @Override
+    public void refineProgrammingModel(ProgrammingModel programmingModel) {
+        programmingModel.addValidator(ambiguousMixinAnnotationsValidator);
     }
 
 }
