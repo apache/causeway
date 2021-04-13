@@ -23,10 +23,12 @@ import java.lang.annotation.Annotation;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.all.deficiencies.DeficiencyFacet;
 
-public class MetaModelValidatorForAmbiguousMixinAnnotations 
-extends MetaModelValidatorAbstract {
+import lombok.experimental.UtilityClass;
 
-    public <A extends Annotation> void addValidationFailure(
+@UtilityClass
+public class MetaModelValidatorForAmbiguousMixinAnnotations {
+
+    public static <A extends Annotation> void addValidationFailure(
             final FacetedMethod holder,
             final Class<A> annotationType) {
         

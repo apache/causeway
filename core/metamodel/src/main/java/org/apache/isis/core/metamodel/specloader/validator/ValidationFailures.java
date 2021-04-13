@@ -47,6 +47,10 @@ public final class ValidationFailures implements Iterable<ValidationFailure> {
         }
     }
 
+    public void add(ValidationFailure validationFailure) {
+        failures.add(validationFailure);
+    }
+    
     public void add(ValidationFailures validationFailures) {
         addAll(validationFailures.getFailures());
     }

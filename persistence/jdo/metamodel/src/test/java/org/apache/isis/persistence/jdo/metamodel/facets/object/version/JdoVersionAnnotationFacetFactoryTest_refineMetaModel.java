@@ -30,15 +30,16 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.services.inject.ServiceInjector;
+import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.internaltestsupport.jmocking.JUnitRuleMockery2.Mode;
+import org.apache.isis.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.metamodel.facets.all.deficiencies.DeficiencyFacet;
+import org.apache.isis.core.metamodel.progmodel.ProgrammingModelAbstract;
+import org.apache.isis.core.metamodel.progmodel.ProgrammingModelInitFilterDefault;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
-import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorAbstract;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVisiting.Visitor;
-import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
 import org.apache.isis.persistence.jdo.metamodel.testing.AbstractFacetFactoryTest;
 
 import lombok.val;
@@ -51,9 +52,10 @@ public class JdoVersionAnnotationFacetFactoryTest_refineMetaModel {
     private ObjectSpecification mockChildType;
     private ObjectSpecification mockParentType;
     private ObjectSpecification mockGrandParentType;
+    private ServiceInjector mockServicesInjector;
 
     private Visitor newValidatorVisitor;
-    private MetaModelValidator validator;
+    private MetaModelContext metaModelContext;
 
     private Sequence sequence;
 
@@ -63,22 +65,22 @@ public class JdoVersionAnnotationFacetFactoryTest_refineMetaModel {
         mockParentType = context.mock(ObjectSpecification.class, "mockParenttype");
         mockGrandParentType = context.mock(ObjectSpecification.class, "mockGrandParenttype");
 
-        val mockMetaModelContext = context.mock(MetaModelContext.class, "mockMetaModelContext");
-        
-        sequence = context.sequence("inorder");
+        val configuration = new IsisConfiguration(null);
 
-        validator = new MetaModelValidatorAbstract() {
-            {
-                setMetaModelContext(mockMetaModelContext);
-            }
-        };
+        val programmingModel = new ProgrammingModelAbstract(mockServicesInjector) {};
+        programmingModel.init(new ProgrammingModelInitFilterDefault(), metaModelContext);
         
+        metaModelContext = MetaModelContext_forTesting.builder()
+                .configuration(configuration)
+                .programmingModel(programmingModel)
+                .build();
+
+        sequence = context.sequence("inorder");
         
         val facetFactory = new JdoVersionAnnotationFacetFactory();
         facetFactory.setJdoFacetContext(AbstractFacetFactoryTest.jdoFacetContextForTesting());
         
         newValidatorVisitor = facetFactory.newValidatorVisitor();
-                
     }
 
     @Test
@@ -95,9 +97,7 @@ public class JdoVersionAnnotationFacetFactoryTest_refineMetaModel {
 
         newValidatorVisitor.visit(mockChildType);
         
-        val failures = new ValidationFailures();
-        ((MetaModelValidatorAbstract)validator).collectFailuresInto(failures);
-        
+        val failures = metaModelContext.getSpecificationLoader().getValidationResult();
         assertThat(failures.getNumberOfFailures(), is(0));
     }
 
@@ -121,9 +121,7 @@ public class JdoVersionAnnotationFacetFactoryTest_refineMetaModel {
 
         newValidatorVisitor.visit(mockChildType);
 
-        val failures = new ValidationFailures();
-        ((MetaModelValidatorAbstract)validator).collectFailuresInto(failures);
-        
+        val failures = metaModelContext.getSpecificationLoader().getValidationResult();
         assertThat(failures.getNumberOfFailures(), is(0));
     }
 
@@ -157,9 +155,7 @@ public class JdoVersionAnnotationFacetFactoryTest_refineMetaModel {
 
         newValidatorVisitor.visit(mockChildType);
 
-        val failures = new ValidationFailures();
-        ((MetaModelValidatorAbstract)validator).collectFailuresInto(failures);
-        
+        val failures = metaModelContext.getSpecificationLoader().getValidationResult();
         assertThat(failures.getNumberOfFailures(), is(0));
     }
 
@@ -175,41 +171,44 @@ public class JdoVersionAnnotationFacetFactoryTest_refineMetaModel {
 
         context.checking(new Expectations() {
             {
-                oneOf(mockChildType).getCorrespondingClass();
+                allowing(mockChildType).getCorrespondingClass();
                 inSequence(sequence);
                 will(returnValue(Child.class));
 
-                oneOf(mockChildType).superclass();
+                allowing(mockChildType).superclass();
                 inSequence(sequence);
                 will(returnValue(mockParentType));
 
-                oneOf(mockParentType).getCorrespondingClass();
+                allowing(mockParentType).getCorrespondingClass();
                 inSequence(sequence);
                 will(returnValue(Parent.class));
                 
-                oneOf(mockChildType).getIdentifier();
+                allowing(mockChildType).getIdentifier();
                 inSequence(sequence);
                 will(returnValue(Identifier.classIdentifier(TypeIdentifierTestFactory.customer())));
 
-                oneOf(mockChildType).getFullIdentifier();
+                allowing(mockChildType).getFullIdentifier();
                 inSequence(sequence);
                 will(returnValue("mockChildType"));
 
-                oneOf(mockParentType).getFullIdentifier();
+                allowing(mockParentType).getFullIdentifier();
                 inSequence(sequence);
                 will(returnValue("mockParentType"));
                 
-                oneOf(mockChildType).getFacet(DeficiencyFacet.class);
-                will(returnValue(null));
-
-
+                allowing(mockParentType).getSpecificationLoader();
+                inSequence(sequence);
+                will(returnValue(metaModelContext.getSpecificationLoader()));
+                
+                allowing(mockChildType).getSpecificationLoader();
+                inSequence(sequence);
+                will(returnValue(metaModelContext.getSpecificationLoader()));
+                
             }
         });
 
         newValidatorVisitor.visit(mockChildType);
 
-        val failures = new ValidationFailures();
-        ((MetaModelValidatorAbstract)validator).collectFailuresInto(failures);
+        val failures = metaModelContext.getSpecificationLoader().getValidationResult();
         
         assertThat(failures.getNumberOfFailures(), is(1));
         assertThat(failures.getMessages().iterator().next(), is("mockChildType: cannot have @Version annotated on this subclass and any of its supertypes; superclass: mockParentType"));
@@ -230,48 +229,52 @@ public class JdoVersionAnnotationFacetFactoryTest_refineMetaModel {
 
         context.checking(new Expectations() {
             {
-                oneOf(mockChildType).getCorrespondingClass();
+                allowing(mockChildType).getCorrespondingClass();
                 inSequence(sequence);
                 will(returnValue(Child.class));
 
-                oneOf(mockChildType).superclass();
+                allowing(mockChildType).superclass();
                 inSequence(sequence);
                 will(returnValue(mockParentType));
 
-                oneOf(mockParentType).getCorrespondingClass();
+                allowing(mockParentType).getCorrespondingClass();
                 inSequence(sequence);
                 will(returnValue(Parent.class));
 
-                oneOf(mockParentType).superclass();
+                allowing(mockParentType).superclass();
                 inSequence(sequence);
                 will(returnValue(mockGrandParentType));
 
-                oneOf(mockGrandParentType).getCorrespondingClass();
+                allowing(mockGrandParentType).getCorrespondingClass();
                 inSequence(sequence);
                 will(returnValue(GrandParent.class));
                 
-                oneOf(mockChildType).getIdentifier();
+                allowing(mockChildType).getIdentifier();
                 inSequence(sequence);
                 will(returnValue(Identifier.classIdentifier(TypeIdentifierTestFactory.customer())));
 
-                oneOf(mockChildType).getFullIdentifier();
+                allowing(mockChildType).getFullIdentifier();
                 inSequence(sequence);
                 will(returnValue("mockChildType"));
 
-                oneOf(mockGrandParentType).getFullIdentifier();
+                allowing(mockGrandParentType).getFullIdentifier();
                 inSequence(sequence);
                 will(returnValue("mockGrandParentType"));
                 
-                oneOf(mockChildType).getFacet(DeficiencyFacet.class);
-                will(returnValue(null));
-
+                allowing(mockParentType).getSpecificationLoader();
+                inSequence(sequence);
+                will(returnValue(metaModelContext.getSpecificationLoader()));
+                
+                allowing(mockChildType).getSpecificationLoader();
+                inSequence(sequence);
+                will(returnValue(metaModelContext.getSpecificationLoader()));
+                
             }
         });
 
         newValidatorVisitor.visit(mockChildType);
 
-        val failures = new ValidationFailures();
-        ((MetaModelValidatorAbstract)validator).collectFailuresInto(failures);
+        val failures = metaModelContext.getSpecificationLoader().getValidationResult();
         
         assertThat(failures.getNumberOfFailures(), is(1));
         assertThat(failures.getMessages().iterator().next(), is("mockChildType: cannot have @Version annotated on this subclass and any of its supertypes; superclass: mockGrandParentType"));

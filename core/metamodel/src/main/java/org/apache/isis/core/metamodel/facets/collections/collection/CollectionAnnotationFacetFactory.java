@@ -30,7 +30,6 @@ import org.apache.isis.applib.events.domain.CollectionDomainEvent;
 import org.apache.isis.commons.internal.collections._Collections;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetInferredFromArray;
@@ -45,7 +44,6 @@ import org.apache.isis.core.metamodel.facets.collections.collection.modify.Colle
 import org.apache.isis.core.metamodel.facets.collections.collection.typeof.TypeOfFacetOnCollectionFromCollectionAnnotation;
 import org.apache.isis.core.metamodel.facets.object.domainobject.domainevents.CollectionDomainEventDefaultFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
-import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForAmbiguousMixinAnnotations;
 import org.apache.isis.core.metamodel.util.EventUtil;
@@ -53,12 +51,8 @@ import org.apache.isis.core.metamodel.util.EventUtil;
 import lombok.val;
 
 public class CollectionAnnotationFacetFactory
-extends FacetFactoryAbstract
-implements MetaModelRefiner {
+extends FacetFactoryAbstract {
     
-    private final MetaModelValidatorForAmbiguousMixinAnnotations ambiguousMixinAnnotationsValidator
-        = new MetaModelValidatorForAmbiguousMixinAnnotations();
-
     public CollectionAnnotationFacetFactory() {
         super(FeatureType.COLLECTIONS_AND_ACTIONS);
     }
@@ -69,7 +63,7 @@ implements MetaModelRefiner {
         val collectionIfAny = processMethodContext
                 .synthesizeOnMethodOrMixinType(
                         Collection.class, 
-                        () -> ambiguousMixinAnnotationsValidator
+                        () -> MetaModelValidatorForAmbiguousMixinAnnotations
                         .addValidationFailure(processMethodContext.getFacetHolder(), Collection.class));
 
         inferIntentWhenOnTypeLevel(processMethodContext, collectionIfAny);
@@ -227,12 +221,6 @@ implements MetaModelRefiner {
         return null;
     }
 
-    // -- METAMODEL REFINER
-
-    @Override
-    public void refineProgrammingModel(ProgrammingModel programmingModel) {
-        programmingModel.addValidator(ambiguousMixinAnnotationsValidator);
-    }
 
 
 }

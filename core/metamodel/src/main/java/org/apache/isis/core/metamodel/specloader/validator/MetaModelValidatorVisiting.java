@@ -72,10 +72,9 @@ extends MetaModelValidatorAbstract {
     }
 
     @Override
-    public void collectFailuresInto(@NonNull ValidationFailures validationFailures) {
+    public void validate() {
         validateAll();
         summarize();
-        super.collectFailuresInto(validationFailures);
     }
 
     private void validateAll() {

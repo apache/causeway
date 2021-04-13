@@ -72,6 +72,7 @@ import org.apache.isis.core.metamodel.specloader.postprocessor.PostProcessor;
 import org.apache.isis.core.metamodel.specloader.specimpl.IntrospectionState;
 import org.apache.isis.core.metamodel.specloader.specimpl.dflt.ObjectSpecificationDefault;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorAbstract;
+import org.apache.isis.core.metamodel.specloader.validator.ValidationFailure;
 import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
 import org.apache.isis.core.metamodel.valuetypes.ValueTypeProviderDefault;
 import org.apache.isis.core.metamodel.valuetypes.ValueTypeRegistry;
@@ -463,6 +464,19 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
     
     // -- VALIDATION STUFF
     
+    private final ValidationFailures validationFailures = new ValidationFailures();
+    
+    @Override
+    public void addValidationFailure(ValidationFailure validationFailure) {
+        if(validationResult.isMemoized()) {
+            throw _Exceptions.illegalState(
+                    "Validation result was already created and can no longer be modified.");
+        }
+        synchronized(validationFailures) {
+            validationFailures.add(validationFailure);;
+        }
+    }
+    
     private _Lazy<ValidationFailures> validationResult = 
             _Lazy.threadSafe(this::collectFailuresFromMetaModel);
 
@@ -471,13 +485,13 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
     
     private ValidationFailures collectFailuresFromMetaModel() {
         validationInProgress.set(true);               
-        val failures = new ValidationFailures();
+        
         programmingModel.streamValidators()
         .map(MetaModelValidatorAbstract.class::cast)
         .forEach(validator -> {
             log.debug("Running validator: {}", validator);
             try {
-                validator.collectFailuresInto(failures);
+                validator.validate();
             } catch (Throwable t) {
                 log.error(t);
                 throw t;
@@ -485,9 +499,11 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
                 log.debug("Done validator: {}", validator);
             }
         });
+        
         log.debug("Done");
         validationInProgress.set(false);
-        return failures;
+        
+        return validationFailures;
     }
 
     // -- HELPER

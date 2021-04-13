@@ -76,8 +76,6 @@ import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacetForDomainObj
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
-import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForValidationFailures;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVisiting;
 import org.apache.isis.core.metamodel.util.EventUtil;
 
@@ -89,13 +87,8 @@ import lombok.val;
 public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
 implements MetaModelRefiner, PostConstructMethodCache, ObjectSpecIdFacetFactory {
 
-    private final MetaModelValidatorForValidationFailures autoCompleteMethodInvalid =
-            new MetaModelValidatorForValidationFailures();
-
     private final MetaModelValidatorForMixinTypes mixinTypeValidator =
             new MetaModelValidatorForMixinTypes("@DomainObject#nature=MIXIN");
-
-
 
     public DomainObjectAnnotationFacetFactory() {
         super(FeatureType.OBJECTS_ONLY);
@@ -104,8 +97,6 @@ implements MetaModelRefiner, PostConstructMethodCache, ObjectSpecIdFacetFactory 
     @Override
     public void setMetaModelContext(MetaModelContext metaModelContext) {
         super.setMetaModelContext(metaModelContext);
-        autoCompleteMethodInvalid.setMetaModelContext(metaModelContext);
-        mixinTypeValidator.setMetaModelContext(metaModelContext);
     }
 
     @Override
@@ -483,13 +474,9 @@ implements MetaModelRefiner, PostConstructMethodCache, ObjectSpecIdFacetFactory 
 
     @Override
     public void refineProgrammingModel(ProgrammingModel programmingModel) {
-
         if(getConfiguration().getCore().getMetaModel().getValidator().isEnsureUniqueObjectTypes()) {
             addValidatorToEnsureUniqueLogicalTypeNames(programmingModel);
         }
-
-        programmingModel.addValidator(autoCompleteMethodInvalid);
-        programmingModel.addValidator(mixinTypeValidator);
     }
 
     private void addValidatorToEnsureUniqueLogicalTypeNames(ProgrammingModel pm) {

@@ -43,12 +43,8 @@ import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorFor
 import lombok.val;
 
 public class ActionLayoutFacetFactory 
-extends FacetFactoryAbstract
-implements MetaModelRefiner {
+extends FacetFactoryAbstract {
     
-    private final MetaModelValidatorForAmbiguousMixinAnnotations ambiguousMixinAnnotationsValidator
-            = new MetaModelValidatorForAmbiguousMixinAnnotations();
-
     public ActionLayoutFacetFactory() {
         super(FeatureType.ACTIONS_ONLY);
     }
@@ -60,7 +56,7 @@ implements MetaModelRefiner {
         val actionLayoutIfAny = processMethodContext
                 .synthesizeOnMethodOrMixinType(
                         ActionLayout.class,
-                        () -> ambiguousMixinAnnotationsValidator
+                        () -> MetaModelValidatorForAmbiguousMixinAnnotations
                         .addValidationFailure(processMethodContext.getFacetHolder(), ActionLayout.class));
         
         // bookmarkable
@@ -119,11 +115,5 @@ implements MetaModelRefiner {
 
     }
 
-    // -- METAMODEL REFINER
-
-    @Override
-    public void refineProgrammingModel(ProgrammingModel programmingModel) {
-        programmingModel.addValidator(ambiguousMixinAnnotationsValidator);
-    }
 
 }

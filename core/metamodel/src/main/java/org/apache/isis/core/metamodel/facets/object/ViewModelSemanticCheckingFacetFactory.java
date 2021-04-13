@@ -26,31 +26,22 @@ import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.all.deficiencies.DeficiencyFacet;
-import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
-import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForValidationFailures;
 
 import lombok.val;
 
 public class ViewModelSemanticCheckingFacetFactory 
-extends FacetFactoryAbstract
-implements MetaModelRefiner {
-
+extends FacetFactoryAbstract {
 
     public ViewModelSemanticCheckingFacetFactory() {
         super(FeatureType.OBJECTS_ONLY);
     }
 
-    private final MetaModelValidatorForValidationFailures validator = 
-            new MetaModelValidatorForValidationFailures();
-
     @Override
     public void setMetaModelContext(MetaModelContext metaModelContext) {
         super.setMetaModelContext(metaModelContext);
-        validator.setMetaModelContext(metaModelContext);
     }
     
     @Override
@@ -132,11 +123,6 @@ implements MetaModelRefiner {
                     );
         }
 
-    }
-
-    @Override
-    public void refineProgrammingModel(ProgrammingModel programmingModel) {
-        programmingModel.addValidator(validator);
     }
 
 

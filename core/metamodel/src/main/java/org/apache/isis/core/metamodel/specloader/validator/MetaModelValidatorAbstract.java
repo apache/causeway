@@ -19,15 +19,11 @@
 
 package org.apache.isis.core.metamodel.specloader.validator;
 
-import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.context.MetaModelContextAware;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.all.deficiencies.DeficiencyFacet;
 
 import lombok.Getter;
-import lombok.NonNull;
 import lombok.Setter;
 
 public abstract class MetaModelValidatorAbstract 
@@ -35,30 +31,30 @@ implements
     MetaModelValidator, 
     MetaModelContextAware {
 
-    protected final ValidationFailures failures = new ValidationFailures();
+    //protected final ValidationFailures failures = new ValidationFailures();
     
     @Getter @Setter(onMethod = @__(@Override))
     private MetaModelContext metaModelContext;
     
-    /**
-     * Collect any {@link ValidationFailure} to given validationFailures. 
-     *  
-     * @param validationFailures
-     */
-    public void collectFailuresInto(@NonNull ValidationFailures validationFailures) {
-        validationFailures.addAll(failures);
-    }
+//    /**
+//     * Collect any {@link ValidationFailure} to given validationFailures. 
+//     *  
+//     * @param validationFailures
+//     */
+//    @Override
+//    public void collectFailuresInto(@NonNull ValidationFailures validationFailures) {
+//        validationFailures.addAll(failures);
+//    }
 
-    @Override
-    public void onFailure(
-            @NonNull FacetHolder facetHolder, 
-            @NonNull Identifier deficiencyOrigin,
-            @NonNull String deficiencyMessageFormat, 
-            Object... args) {
-        
-        DeficiencyFacet.appendTo(facetHolder, deficiencyOrigin, String.format(deficiencyMessageFormat, args));
-        failures.add(deficiencyOrigin, deficiencyMessageFormat, args);
-    }
+//    public void onFailure(
+//            @NonNull FacetHolder facetHolder, 
+//            @NonNull Identifier deficiencyOrigin,
+//            @NonNull String deficiencyMessageFormat, 
+//            Object... args) {
+//        
+//        DeficiencyFacet.appendTo(facetHolder, deficiencyOrigin, String.format(deficiencyMessageFormat, args));
+//        failures.add(deficiencyOrigin, deficiencyMessageFormat, args);
+//    }
     
     protected IsisConfiguration getConfiguration() {
         return metaModelContext.getConfiguration();

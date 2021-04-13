@@ -20,14 +20,17 @@ package org.apache.isis.core.metamodel.specloader.validator;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
+import org.apache.isis.core.metamodel.facets.all.deficiencies.DeficiencyFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacetDefault;
 
 import lombok.val;
+import lombok.experimental.UtilityClass;
 
-public class MetaModelValidatorForConflictingOptionality extends MetaModelValidatorAbstract {
+@UtilityClass
+public class MetaModelValidatorForConflictingOptionality {
 
-    public Facet flagIfConflict(final MandatoryFacet facet, final String message) {
+    public static Facet flagIfConflict(final MandatoryFacet facet, final String message) {
         if(conflictingOptionality(facet)) {
             addFailure(facet, message);
         }
@@ -36,11 +39,14 @@ public class MetaModelValidatorForConflictingOptionality extends MetaModelValida
     
     // -- HELPER
 
-    private Facet addFailure(final Facet facet, final String message) {
+    private static Facet addFailure(final Facet facet, final String message) {
         if(facet != null) {
             val holder = (IdentifiedHolder) facet.getFacetHolder();
-            val identifier = holder.getIdentifier();
-            super.onFailure(holder, identifier, "%s : %s", message, identifier.getFullIdentityString());
+            DeficiencyFacet.appendToWithFormat(
+                    holder, 
+                    "%s : %s", 
+                    message, 
+                    holder.getIdentifier().getFullIdentityString());
         }
         return facet;
     }

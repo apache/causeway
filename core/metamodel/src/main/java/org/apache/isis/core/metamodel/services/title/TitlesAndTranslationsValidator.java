@@ -24,10 +24,9 @@ import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.applib.services.title.TitleService;
 import org.apache.isis.commons.internal.base._Blackhole;
 import org.apache.isis.core.config.messages.MessageRegistry;
+import org.apache.isis.core.metamodel.facets.all.deficiencies.DeficiencyFacet;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorAbstract;
-import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
 
-import lombok.NonNull;
 import lombok.val;
 
 /**
@@ -38,13 +37,10 @@ import lombok.val;
 public class TitlesAndTranslationsValidator extends MetaModelValidatorAbstract {
 
     @Override
-    public void collectFailuresInto(@NonNull ValidationFailures validationFailures) {
-        
+    public void validate() {
         validateServiceTitles();
         validateEnumTitles();
         validateRegisteredMessageTranslation();
-        
-        super.collectFailuresInto(validationFailures);
     }
 
     private void validateServiceTitles() {
@@ -67,11 +63,13 @@ public class TitlesAndTranslationsValidator extends MetaModelValidatorAbstract {
                         LogicalType.eager(managedBeanAdapter.getBeanClass(), objectType));
                 val facetHolder = specificationLoader.loadSpecification(managedBeanAdapter.getBeanClass());
                 
-                super.onFailure(
+                DeficiencyFacet.appendTo(
                         facetHolder, 
                         deficiencyOrigin, 
-                        "Failed to get instance of service bean %s", 
-                        managedBeanAdapter.getId());
+                        String.format(
+                                "Failed to get instance of service bean %s", 
+                                managedBeanAdapter.getId())
+                        );
                 return; // next
             }
 
@@ -88,11 +86,13 @@ public class TitlesAndTranslationsValidator extends MetaModelValidatorAbstract {
                         LogicalType.eager(managedBeanAdapter.getBeanClass(), objectType));
                 val facetHolder = specificationLoader.loadSpecification(managedBeanAdapter.getBeanClass());
 
-                super.onFailure(
+                DeficiencyFacet.appendTo(
                         facetHolder, 
                         deficiencyOrigin, 
-                        "Failed to get title for service bean %s", 
-                        managedBeanAdapter.getId());
+                        String.format(
+                                "Failed to get title for service bean %s", 
+                                managedBeanAdapter.getId())
+                        );
             }
 
 
@@ -124,11 +124,13 @@ public class TitlesAndTranslationsValidator extends MetaModelValidatorAbstract {
                         val deficiencyOrigin = Identifier.classIdentifier(objSpec.getLogicalType());
                         val facetHolder = objSpec;
 
-                        super.onFailure(
+                        DeficiencyFacet.appendTo(
                                 facetHolder, 
                                 deficiencyOrigin, 
-                                "Failed to get title for enum constant %s", 
-                                "" + enumConstant);
+                                String.format(
+                                        "Failed to get title for enum constant %s", 
+                                        "" + enumConstant)
+                                );
                     }
 
                 }
@@ -160,15 +162,18 @@ public class TitlesAndTranslationsValidator extends MetaModelValidatorAbstract {
                 val spec = specificationLoader.loadSpecification(MessageRegistry.class);
                 val deficiencyOrigin = Identifier.classIdentifier(spec.getLogicalType());
 
-                super.onFailure(
+                DeficiencyFacet.appendTo(
                         spec, 
                         deficiencyOrigin, 
-                        "Failed to translate message %s from MessageRegistry", 
-                        "" + message);
+                        String.format(
+                                "Failed to translate message %s from MessageRegistry", 
+                                "" + message)
+                        );
             }
 
         }
 
     }
+
 
 }

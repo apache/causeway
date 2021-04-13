@@ -33,6 +33,7 @@ import org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutor
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.specimpl.IntrospectionState;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
+import org.apache.isis.core.metamodel.specloader.validator.ValidationFailure;
 import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
 
 import static org.apache.isis.core.metamodel.specloader.specimpl.IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED;
@@ -65,6 +66,8 @@ public interface SpecificationLoader {
      * others are only triggered when calling this method. 
      */
     ValidationFailures getValidationResult();
+    
+    void addValidationFailure(ValidationFailure validationFailure);
 
     // -- LOOKUP
 

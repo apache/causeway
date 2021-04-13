@@ -55,13 +55,8 @@ import org.apache.isis.core.metamodel.util.EventUtil;
 import lombok.val;
 
 public class ActionAnnotationFacetFactory
-extends FacetFactoryAbstract
-implements MetaModelRefiner {
+extends FacetFactoryAbstract {
 
-    private final MetaModelValidatorForAmbiguousMixinAnnotations ambiguousMixinAnnotationsValidator
-            = new MetaModelValidatorForAmbiguousMixinAnnotations();
-
-    
     public ActionAnnotationFacetFactory() {
         super(FeatureType.ACTIONS_ONLY);
     }
@@ -72,7 +67,7 @@ implements MetaModelRefiner {
         val actionIfAny = processMethodContext
                 .synthesizeOnMethodOrMixinType(
                         Action.class, 
-                        () -> ambiguousMixinAnnotationsValidator
+                        () -> MetaModelValidatorForAmbiguousMixinAnnotations
                         .addValidationFailure(processMethodContext.getFacetHolder(), Action.class));
 
         processExplicit(processMethodContext, actionIfAny);
@@ -298,11 +293,5 @@ implements MetaModelRefiner {
         super.addFacet(facet);
     }
 
-    // -- METAMODEL REFINER
-
-    @Override
-    public void refineProgrammingModel(ProgrammingModel programmingModel) {
-        programmingModel.addValidator(ambiguousMixinAnnotationsValidator);
-    }
 
 }
