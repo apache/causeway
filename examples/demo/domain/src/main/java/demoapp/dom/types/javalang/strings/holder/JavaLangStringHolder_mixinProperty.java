@@ -33,7 +33,6 @@ public class JavaLangStringHolder_mixinProperty {
 
     private final JavaLangStringHolder holder;
 
-    @PropertyLayout(fieldSetId = "contributed", sequence = "1")
     public String prop() {
         return holder.getReadOnlyProperty();
     }

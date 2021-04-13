@@ -18,8 +18,6 @@
  */
 package org.apache.isis.core.metamodel.specloader.validator;
 
-import lombok.val;
-
 public abstract class MetaModelVisitingValidatorAbstract 
 extends MetaModelValidatorAbstract
 implements MetaModelVisitingValidator {
@@ -27,18 +25,8 @@ implements MetaModelVisitingValidator {
     @Override
     public final void validate() {
 
-        val isActionExplicit = getConfiguration().getApplib().getAnnotation().getAction().isExplicit();
-        
         super.getMetaModelContext().getSpecificationLoader()
-        .forEach(spec->{
-            
-            if(!isActionExplicit
-                    && spec.getBeanSort().isUnknown()) {
-                    return; // in support of @Action not being forced, we need to relax 
-            }
-            
-            validate(spec);
-        });
+        .forEach(this::validate);
         
         summarize();
         

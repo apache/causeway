@@ -29,16 +29,15 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class MetaModelValidatorForConflictingOptionality {
 
-    public static Facet flagIfConflict(final MandatoryFacet facet, final String message) {
+    public static void flagIfConflict(final MandatoryFacet facet, final String message) {
         if(conflictingOptionality(facet)) {
             addFailure(facet, message);
         }
-        return facet;
     }
     
     // -- HELPER
 
-    private static Facet addFailure(final Facet facet, final String message) {
+    private static void addFailure(final Facet facet, final String message) {
         if(facet != null) {
             val holder = (IdentifiedHolder) facet.getFacetHolder();
             ValidationFailure.raiseFormatted(
@@ -47,7 +46,6 @@ public class MetaModelValidatorForConflictingOptionality {
                     message, 
                     holder.getIdentifier().getFullIdentityString());
         }
-        return facet;
     }
 
     private static boolean conflictingOptionality(final MandatoryFacet facet) {

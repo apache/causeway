@@ -41,6 +41,7 @@ import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModelAbstract;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModelInitFilterDefault;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
 import org.apache.isis.persistence.jdo.metamodel.testing.AbstractFacetFactoryTest;
 
 import lombok.val;
@@ -102,9 +103,7 @@ public class JdoVersionAnnotationFacetFactoryTest_refineMetaModel {
             }
         });
 
-        validate(mockChildType);
-        
-        val failures = metaModelContext.getSpecificationLoader().getValidationResult();
+        val failures = processThenValidate(mockChildType);
         assertThat(failures.getNumberOfFailures(), is(0));
     }
 
@@ -127,9 +126,7 @@ public class JdoVersionAnnotationFacetFactoryTest_refineMetaModel {
             }
         });
 
-        validate(mockChildType);
-
-        val failures = metaModelContext.getSpecificationLoader().getValidationResult();
+        val failures = processThenValidate(mockChildType);
         assertThat(failures.getNumberOfFailures(), is(0));
     }
 
@@ -162,9 +159,7 @@ public class JdoVersionAnnotationFacetFactoryTest_refineMetaModel {
             }
         });
 
-        validate(mockChildType);
-
-        val failures = metaModelContext.getSpecificationLoader().getValidationResult();
+        val failures = processThenValidate(mockChildType);
         assertThat(failures.getNumberOfFailures(), is(0));
     }
 
@@ -215,11 +210,9 @@ public class JdoVersionAnnotationFacetFactoryTest_refineMetaModel {
             }
         });
 
-        validate(mockChildType);
-
         //((SpecificationLoaderDefault)metaModelContext.getSpecificationLoader()).invalidateValidationResult();
         
-        val failures = metaModelContext.getSpecificationLoader().getValidationResult();
+        val failures = processThenValidate(mockChildType);
         
         assertThat(failures.getNumberOfFailures(), is(1));
         assertThat(failures.getMessages().iterator().next(), 
@@ -284,17 +277,17 @@ public class JdoVersionAnnotationFacetFactoryTest_refineMetaModel {
             }
         });
 
-        validate(mockChildType);
+        val failures = processThenValidate(mockChildType);
 
-        val failures = metaModelContext.getSpecificationLoader().getValidationResult();
-        
         assertThat(failures.getNumberOfFailures(), is(1));
         assertThat(failures.getMessages().iterator().next(), 
                 CoreMatchers.containsString("cannot have @Version annotated on this subclass and any of its supertypes; superclass: "));
     }
 
-    private void validate(ObjectSpecification spec) {
-        metaModelContext.getSpecificationLoader().loadSpecification(spec.getCorrespondingClass());
+    private ValidationFailures processThenValidate(ObjectSpecification spec) {
+        val specLoader = metaModelContext.getSpecificationLoader();
+        specLoader.specForType(spec.getCorrespondingClass()).get(); // fail if empty
+        return specLoader.getValidationResult();
     }
 
 }
