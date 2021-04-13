@@ -97,7 +97,7 @@ implements MetaModelRefiner, PostConstructMethodCache {
     @Override
     public void refineProgrammingModel(ProgrammingModel programmingModel) {
 
-        programmingModel.addValidatorSkipManagedBeans((objectSpec, validate) -> {
+        programmingModel.addValidatorSkipManagedBeans(objectSpec -> {
 
             val viewModelFacet = objectSpec.getFacet(ViewModelFacet.class);
             val underlyingFacet = viewModelFacet != null ? viewModelFacet.getUnderlyingFacet() : null;

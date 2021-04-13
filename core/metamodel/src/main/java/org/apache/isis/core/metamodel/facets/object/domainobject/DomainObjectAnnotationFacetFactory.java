@@ -507,7 +507,7 @@ implements MetaModelRefiner, PostConstructMethodCache, ObjectSpecIdFacetFactory 
                     }
 
                     @Override
-                    public void summarize(MetaModelValidator validator) {
+                    public void summarize() {
                         for (val logicalTypeName : collidingSpecsByLogicalTypeName.keySet()) {
                             val collidingSpecs = collidingSpecsByLogicalTypeName.get(logicalTypeName);
                             val isCollision = collidingSpecs.size()>1;

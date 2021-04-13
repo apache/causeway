@@ -53,7 +53,7 @@ implements MetaModelRefiner {
     @Override
     public void refineProgrammingModel(ProgrammingModel programmingModel) {
         
-        programmingModel.addValidatorSkipManagedBeans((objectSpec, validator) -> {
+        programmingModel.addValidatorSkipManagedBeans(objectSpec -> {
 
             // as an optimization only checking declared members (skipping inherited ones)
             objectSpec.streamDeclaredActions(MixedIn.EXCLUDED)

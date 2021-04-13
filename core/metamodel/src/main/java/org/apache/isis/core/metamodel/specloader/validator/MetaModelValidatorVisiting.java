@@ -48,7 +48,7 @@ extends MetaModelValidatorAbstract {
     }
     
     public interface SummarizingVisitor extends Visitor {
-        void summarize(MetaModelValidator validator);
+        void summarize();
     }
     
     // -- IMPLEMENTATION
@@ -101,8 +101,7 @@ extends MetaModelValidatorAbstract {
 
     private void summarize() {
         if(visitor instanceof SummarizingVisitor) {
-            SummarizingVisitor summarizingVisitor = (SummarizingVisitor) visitor;
-            summarizingVisitor.summarize(this);
+            ((SummarizingVisitor) visitor).summarize();
         }
     }
 

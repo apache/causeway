@@ -38,7 +38,6 @@ import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVisiting;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVisiting.Visitor;
 
@@ -101,7 +100,7 @@ implements MetaModelRefiner {
             }
 
             @Override
-            public void summarize(MetaModelValidator validator) {
+            public void summarize() {
                 if(actionsHavingHomePageFacet.size()>1) {
                     
                     final Set<String> homepageActionIdSet = actionsHavingHomePageFacet.values().stream()

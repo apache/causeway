@@ -132,7 +132,8 @@ public class ViewModelSemanticCheckingFacetFactoryTest {
             }
         }
 
-        final ValidationFailures validationFailures = processThenValidate(InvalidDomainObjectWithNatureNotSpecifiedImplementingRecreatableDomainObject.class);
+        final ValidationFailures validationFailures = 
+                processThenValidate(InvalidDomainObjectWithNatureNotSpecifiedImplementingRecreatableDomainObject.class);
         assertThat(validationFailures.getNumberOfFailures(), is(1));
         assertThat(validationFailures.getMessages().iterator().next(), containsString("should not be annotated with @DomainObject with nature of NOT_SPECIFIED and also implement RecreatableDomainObject (specify a nature of VIEW_MODEL)"));
     }
@@ -151,7 +152,8 @@ public class ViewModelSemanticCheckingFacetFactoryTest {
             }
         }
 
-        final ValidationFailures validationFailures = processThenValidate(InvalidDomainObjectWithNatureJdoEntityImplementingRecreatableDomainObject.class);
+        final ValidationFailures validationFailures = 
+                processThenValidate(InvalidDomainObjectWithNatureJdoEntityImplementingRecreatableDomainObject.class);
         assertThat(validationFailures.getNumberOfFailures(), is(1));
         assertThat(validationFailures.getMessages().iterator().next(), 
                 containsString("should not be annotated with @DomainObject with nature of ENTITY and also implement RecreatableDomainObject (specify a nature of VIEW_MODEL)"));
