@@ -60,7 +60,6 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-oauth2-client</artifactId>
-			<optional>true</optional>	<!-- to avoid polluting the classpath if oauth2 isn't in use -->
 			<exclusions>
 				<exclusion>
 					<groupId>org.springframework.boot</groupId>
