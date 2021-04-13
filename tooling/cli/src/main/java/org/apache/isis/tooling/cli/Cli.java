@@ -75,14 +75,14 @@ class Cli implements Callable<Integer> {
 
     public  File getOverviewPath() {
         return overviewPath !=null
-                ? new File(getProjectRoot(), overviewPath)
-                : getProjectRoot();
+                ? new File(overviewPath)
+                : new File(".");
     }
 
     public  File getIndexPath() {
         return indexPath !=null
-                ? new File(getProjectRoot(), indexPath)
-                : getProjectRoot();
+                ? new File(indexPath)
+                : new File(".");
     }
 
     @Override
