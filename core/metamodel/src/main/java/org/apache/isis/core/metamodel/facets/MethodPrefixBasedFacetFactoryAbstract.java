@@ -106,12 +106,16 @@ implements MethodPrefixBasedFacetFactory {
             }
 
             @Override
-            public void validate(ObjectSpecification objectSpec) {
+            public void validate(ObjectSpecification spec) {
+                
+                if(spec.isManagedBean()) {
+                    return;
+                }
 
                 // as an optimization only checking declared members (skipping inherited ones)  
                 
                 // ensure accepted actions do not have any of the reserved prefixes
-                objectSpec.streamDeclaredActions(MixedIn.EXCLUDED)
+                spec.streamDeclaredActions(MixedIn.EXCLUDED)
                 .forEach(objectAction -> {
 
                     val actionId = objectAction.getId();
@@ -136,10 +140,10 @@ implements MethodPrefixBasedFacetFactory {
                                     + "completely using @Programmatic";
 
                             ValidationFailure.raise(
-                                    objectSpec,
+                                    spec,
                                     String.format(
                                             messageFormat, 
-                                            objectSpec.getIdentifier().getClassName(),
+                                            spec.getIdentifier().getClassName(),
                                             actionId,
                                             prefix,
                                             explanation));

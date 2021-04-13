@@ -28,11 +28,8 @@ import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.object.domainservice.DomainServiceFacet;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.core.metamodel.specloader.validator.MetaModelVisitingValidator;
-import org.apache.isis.core.metamodel.specloader.validator.MetaModelVisitingValidatorAbstract;
 import org.apache.isis.core.metamodel.specloader.validator.ValidationFailure;
 
 import lombok.val;
@@ -67,33 +64,29 @@ implements MetaModelRefiner {
     @Override
     public void refineProgrammingModel(ProgrammingModel programmingModel) {
         
-        programmingModel.addValidator(new MetaModelVisitingValidatorAbstract() {
+        programmingModel.addVisitingValidatorSkipManagedBeans(spec->{
 
-            @Override
-            public void validate(final ObjectSpecification objectSpec) {
-
-                if(!objectSpec.containsFacet(DomainServiceFacet.class)) {
-                    return;
-                }
-
-                final String associationNames = objectSpec
-                        .streamAssociations(MixedIn.EXCLUDED)
-                        .map(ObjectAssociation::getName)
-                        // it's okay to have an "association" called "Id" (corresponding to getId() method)
-                        .filter(associationName->!"Id".equalsIgnoreCase(associationName))
-                        .collect(Collectors.joining(", "));
-
-                if(associationNames.isEmpty()) {
-                    return;
-                }
-
-                ValidationFailure.raiseFormatted(
-                        objectSpec,
-                        "%s: services can only have actions ('%s' config property), not properties or collections; annotate with @Programmatic if required.  Found: %s",
-                        objectSpec.getFullIdentifier(),
-                        "'isis.core.meta-model.validator.serviceActionsOnly'",
-                        associationNames);
+            if(!spec.containsFacet(DomainServiceFacet.class)) {
+                return;
             }
+
+            final String associationNames = spec
+                    .streamAssociations(MixedIn.EXCLUDED)
+                    .map(ObjectAssociation::getName)
+                    // it's okay to have an "association" called "Id" (corresponding to getId() method)
+                    .filter(associationName->!"Id".equalsIgnoreCase(associationName))
+                    .collect(Collectors.joining(", "));
+
+            if(associationNames.isEmpty()) {
+                return;
+            }
+
+            ValidationFailure.raiseFormatted(
+                    spec,
+                    "%s: services can only have actions ('%s' config property), not properties or collections; annotate with @Programmatic if required.  Found: %s",
+                    spec.getFullIdentifier(),
+                    "'isis.core.meta-model.validator.serviceActionsOnly'",
+                    associationNames);
         });
 
     }

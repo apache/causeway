@@ -25,9 +25,6 @@ import lombok.NonNull;
 @FunctionalInterface
 public interface MetaModelVisitingValidator {
 
-//    /**
-//     * @return <tt>true</tt> continue visiting specs.
-//     */
     void validate(@NonNull ObjectSpecification spec);
     
     default void summarize() {

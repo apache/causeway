@@ -367,25 +367,25 @@ public final class ProgrammingModelFacetsJava8 extends ProgrammingModelAbstract 
                 
                 if(spec.getBeanSort()==BeanSort.UNKNOWN 
                         && !spec.isAbstract()) {
-                    return;
-                }
                 
-                val actions = spec.streamActions(MixedIn.INCLUDED).collect(Collectors.toList());
-                
-                final int numActions = actions.size();
-                if (numActions > 0) {
+                    val actions = spec.streamActions(MixedIn.INCLUDED).collect(Collectors.toList());
+                    
+                    final int numActions = actions.size();
+                    if (numActions > 0) {
 
-                    val actionIds = actions.stream()
-                    .map(ObjectAction::getIdentifier)
-                    .map(Identifier::toString)
-                    .collect(Collectors.joining(", "));
+                        val actionIds = actions.stream()
+                        .map(ObjectAction::getIdentifier)
+                        .map(Identifier::toString)
+                        .collect(Collectors.joining(", "));
 
-                    ValidationFailure.raiseFormatted(
-                            spec,
-                            "%s: is a (concrete) but UNKNOWN sort, yet has %d actions: {%s}",
-                            spec.getCorrespondingClass().getName(),
-                            numActions,
-                            actionIds);
+                        ValidationFailure.raiseFormatted(
+                                spec,
+                                "%s: is a (concrete) but UNKNOWN sort, yet has %d actions: {%s}",
+                                spec.getCorrespondingClass().getName(),
+                                numActions,
+                                actionIds);
+                    }
+                    
                 }
                 
             }
