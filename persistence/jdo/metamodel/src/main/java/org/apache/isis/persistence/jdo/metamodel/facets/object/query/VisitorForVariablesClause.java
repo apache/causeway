@@ -23,7 +23,6 @@ import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.core.metamodel.facets.all.deficiencies.DeficiencyFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.specimpl.IntrospectionState;
-import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.isis.persistence.jdo.provider.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacet;
 
 import lombok.val;
@@ -43,8 +42,7 @@ class VisitorForVariablesClause extends VisitorForClauseAbstract {
     void postInterpretJdoql(
             final String classNameFromClause,
             final ObjectSpecification objectSpec,
-            final String query,
-            final MetaModelValidator validator) {
+            final String query) {
 
 
         val cls = objectSpec.getCorrespondingClass();

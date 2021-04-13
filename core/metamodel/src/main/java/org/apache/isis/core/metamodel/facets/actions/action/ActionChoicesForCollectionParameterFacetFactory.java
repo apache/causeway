@@ -34,7 +34,6 @@ import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.specloader.specimpl.ObjectActionMixedIn;
-import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVisiting;
 
 import lombok.val;
@@ -67,9 +66,7 @@ implements MetaModelRefiner {
         val vistingValidator = new MetaModelValidatorVisiting.Visitor() {
             
             @Override
-            public boolean visit(
-                    final ObjectSpecification objectSpec,
-                    final MetaModelValidator validator) {
+            public boolean visit(final ObjectSpecification objectSpec) {
                 
                 validate(objectSpec);
                 return true;

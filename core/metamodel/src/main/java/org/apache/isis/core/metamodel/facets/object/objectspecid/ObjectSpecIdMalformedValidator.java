@@ -24,7 +24,6 @@ import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.facets.all.deficiencies.DeficiencyFacet;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVisiting;
 
 import lombok.val;
@@ -47,20 +46,17 @@ implements MetaModelRefiner {
             new MetaModelValidatorVisiting.Visitor() {
                 
                 @Override
-                public boolean visit(
-                        ObjectSpecification objectSpec,
-                        MetaModelValidator validator) {
+                public boolean visit(ObjectSpecification objectSpec) {
                     
                     if(objectSpec.isEntityOrViewModel()
                             || objectSpec.isManagedBean() ) {
-                        validate(objectSpec, validator);    
+                        validate(objectSpec);    
                     }
                     return true;
                 }
     
                 private void validate(
-                        ObjectSpecification objectSpec,
-                        MetaModelValidator validator) {
+                        ObjectSpecification objectSpec) {
                     
                     val objectSpecIdFacet = objectSpec.getFacet(ObjectSpecIdFacet.class);
                     if(objectSpecIdFacet == null) {

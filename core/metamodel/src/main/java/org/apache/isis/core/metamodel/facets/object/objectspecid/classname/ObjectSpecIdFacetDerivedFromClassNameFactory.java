@@ -38,7 +38,6 @@ import org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutor
 import org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutorRegistry;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
-import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVisiting;
 
 import lombok.val;
@@ -118,17 +117,12 @@ implements MetaModelRefiner, ObjectSpecIdFacetFactory {
             new MetaModelValidatorVisiting.Visitor() {
                 
                 @Override
-                public boolean visit(
-                        ObjectSpecification objectSpec,
-                        MetaModelValidator validator) {
-                    
-                    validate(objectSpec, validator);
+                public boolean visit(ObjectSpecification objectSpec) {
+                    validate(objectSpec);
                     return true;
                 }
     
-                private void validate(
-                        ObjectSpecification objectSpec,
-                        MetaModelValidator validator) {
+                private void validate(ObjectSpecification objectSpec) {
                     
                     if(skip(objectSpec)) {
                         return;

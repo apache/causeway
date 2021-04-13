@@ -36,7 +36,6 @@ import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVisiting;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVisiting.Visitor;
 import org.apache.isis.persistence.jdo.provider.entities.JdoFacetContext;
@@ -102,12 +101,12 @@ implements MetaModelRefiner {
         return new MetaModelValidatorVisiting.Visitor() {
 
             @Override
-            public boolean visit(ObjectSpecification objectSpec, MetaModelValidator validator) {
-                validate(objectSpec, validator);
+            public boolean visit(ObjectSpecification objectSpec) {
+                validate(objectSpec);
                 return true;
             }
 
-            private void validate(ObjectSpecification objectSpec, MetaModelValidator validator) {
+            private void validate(ObjectSpecification objectSpec) {
 
                 final JdoPersistenceCapableFacet pcFacet = objectSpec.getFacet(JdoPersistenceCapableFacet.class);
                 if(pcFacet==null || pcFacet.getIdentityType() == IdentityType.NONDURABLE) {

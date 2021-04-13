@@ -44,7 +44,7 @@ extends MetaModelValidatorAbstract {
         /**
          * @return <tt>true</tt> continue visiting specs.
          */
-        boolean visit(ObjectSpecification objectSpec, MetaModelValidator validator);
+        boolean visit(ObjectSpecification spec);
     }
     
     public interface SummarizingVisitor extends Visitor {
@@ -95,7 +95,7 @@ extends MetaModelValidatorAbstract {
                 return;
             }
             
-            visitor.visit(spec, this);
+            visitor.visit(spec);
         });
     }
 

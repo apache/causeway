@@ -501,7 +501,7 @@ implements MetaModelRefiner, PostConstructMethodCache, ObjectSpecIdFacetFactory 
                 new MetaModelValidatorVisiting.SummarizingVisitor(){
 
                     @Override
-                    public boolean visit(ObjectSpecification objSpec, MetaModelValidator validator) {
+                    public boolean visit(ObjectSpecification objSpec) {
                         collidingSpecsByLogicalTypeName.putElement(objSpec.getLogicalTypeName() , objSpec);
                         return true;
                     }

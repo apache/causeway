@@ -93,7 +93,7 @@ public class JdoVersionAnnotationFacetFactoryTest_refineMetaModel {
             }
         });
 
-        newValidatorVisitor.visit(mockChildType, validator);
+        newValidatorVisitor.visit(mockChildType);
         
         val failures = new ValidationFailures();
         ((MetaModelValidatorAbstract)validator).collectFailuresInto(failures);
@@ -119,7 +119,7 @@ public class JdoVersionAnnotationFacetFactoryTest_refineMetaModel {
             }
         });
 
-        newValidatorVisitor.visit(mockChildType, validator);
+        newValidatorVisitor.visit(mockChildType);
 
         val failures = new ValidationFailures();
         ((MetaModelValidatorAbstract)validator).collectFailuresInto(failures);
@@ -155,7 +155,7 @@ public class JdoVersionAnnotationFacetFactoryTest_refineMetaModel {
             }
         });
 
-        newValidatorVisitor.visit(mockChildType, validator);
+        newValidatorVisitor.visit(mockChildType);
 
         val failures = new ValidationFailures();
         ((MetaModelValidatorAbstract)validator).collectFailuresInto(failures);
@@ -206,7 +206,7 @@ public class JdoVersionAnnotationFacetFactoryTest_refineMetaModel {
             }
         });
 
-        newValidatorVisitor.visit(mockChildType, validator);
+        newValidatorVisitor.visit(mockChildType);
 
         val failures = new ValidationFailures();
         ((MetaModelValidatorAbstract)validator).collectFailuresInto(failures);
@@ -268,7 +268,7 @@ public class JdoVersionAnnotationFacetFactoryTest_refineMetaModel {
             }
         });
 
-        newValidatorVisitor.visit(mockChildType, validator);
+        newValidatorVisitor.visit(mockChildType);
 
         val failures = new ValidationFailures();
         ((MetaModelValidatorAbstract)validator).collectFailuresInto(failures);

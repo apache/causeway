@@ -27,7 +27,6 @@ import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.core.metamodel.facets.all.deficiencies.DeficiencyFacet;
 import org.apache.isis.core.metamodel.spec.Hierarchical;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
 
 import lombok.val;
 
@@ -47,8 +46,7 @@ class VisitorForFromClause extends VisitorForClauseAbstract {
     void postInterpretJdoql(
             final String classNameFromClause,
             final ObjectSpecification objectSpec,
-            final String query,
-            final MetaModelValidator validator) {
+            final String query) {
 
         val cls = objectSpec.getCorrespondingClass();
         if (Objects.equals(classNameFromClause, cls.getName())) {

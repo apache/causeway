@@ -21,8 +21,7 @@ package org.apache.isis.core.metamodel.specloader.validator;
 import java.lang.annotation.Annotation;
 
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
-
-import lombok.val;
+import org.apache.isis.core.metamodel.facets.all.deficiencies.DeficiencyFacet;
 
 public class MetaModelValidatorForAmbiguousMixinAnnotations 
 extends MetaModelValidatorAbstract {
@@ -32,15 +31,13 @@ extends MetaModelValidatorAbstract {
             final Class<A> annotationType) {
         
         final String annotationLiteral = "@" + annotationType.getSimpleName();
-        val identifier = holder.getIdentifier();
         
-        super.onFailure(
+        DeficiencyFacet.appendToWithFormat(
                 holder, 
-                identifier, 
                 "Annotation %s on both method and type level is not allowed, "
                 + "it must be one or the other. Found with mixin: %s", 
                 annotationLiteral, 
-                identifier.getFullIdentityString());
+                holder.getIdentifier().getFullIdentityString());
     }
 
     

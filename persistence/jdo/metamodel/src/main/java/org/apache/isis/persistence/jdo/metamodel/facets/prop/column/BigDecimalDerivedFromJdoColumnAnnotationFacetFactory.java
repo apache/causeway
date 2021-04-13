@@ -35,7 +35,6 @@ import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVisiting;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVisiting.Visitor;
 import org.apache.isis.persistence.jdo.provider.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacet;
@@ -111,12 +110,12 @@ implements MetaModelRefiner {
         return new MetaModelValidatorVisiting.Visitor() {
 
             @Override
-            public boolean visit(ObjectSpecification objectSpec, MetaModelValidator validator) {
-                validate(objectSpec, validator);
+            public boolean visit(ObjectSpecification objectSpec) {
+                validate(objectSpec);
                 return true;
             }
 
-            private void validate(ObjectSpecification objectSpec, MetaModelValidator validator) {
+            private void validate(ObjectSpecification objectSpec) {
 
                 // only consider persistent entities
                 final JdoPersistenceCapableFacet pcFacet = objectSpec.getFacet(JdoPersistenceCapableFacet.class);
@@ -128,12 +127,12 @@ implements MetaModelRefiner {
                 // skip checks if annotated with JDO @NotPersistent
                 .filter(association->!association.containsNonFallbackFacet(JdoNotPersistentFacet.class))
                 .forEach(association->{
-                    validateBigDecimalValueFacet(association, validator);
+                    validateBigDecimalValueFacet(association);
                 });
 
             }
 
-            private void validateBigDecimalValueFacet(ObjectAssociation association, MetaModelValidator validator) {
+            private void validateBigDecimalValueFacet(ObjectAssociation association) {
                 BigDecimalValueFacet facet = association.getFacet(BigDecimalValueFacet.class);
                 if(facet == null) {
                     return;

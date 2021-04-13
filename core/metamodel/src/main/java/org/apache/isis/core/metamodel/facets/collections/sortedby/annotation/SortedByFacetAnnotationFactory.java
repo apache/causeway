@@ -31,7 +31,6 @@ import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
-import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVisiting;
 
 /**
@@ -62,8 +61,9 @@ implements MetaModelRefiner {
         return new MetaModelValidatorVisiting.Visitor() {
 
             @Override
-            public boolean visit(ObjectSpecification objectSpec, MetaModelValidator validator) {
-                final Stream<OneToManyAssociation> objectCollections = objectSpec.streamCollections(MixedIn.EXCLUDED);
+            public boolean visit(ObjectSpecification objectSpec) {
+                final Stream<OneToManyAssociation> objectCollections = 
+                        objectSpec.streamCollections(MixedIn.EXCLUDED);
 
                 objectCollections.forEach(objectCollection->{
                     final SortedByFacet facet = objectCollection.getFacet(SortedByFacet.class);

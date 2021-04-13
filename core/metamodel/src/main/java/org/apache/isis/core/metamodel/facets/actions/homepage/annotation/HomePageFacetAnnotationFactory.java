@@ -79,7 +79,7 @@ implements MetaModelRefiner {
             private final Map<String, ObjectAction> actionsHavingHomePageFacet = _Maps.newHashMap();
 
             @Override
-            public boolean visit(ObjectSpecification objectSpec, MetaModelValidator validator) {
+            public boolean visit(ObjectSpecification objectSpec) {
                 
                 // as an optimization only checking declared members (skipping inherited ones)                 
                 objectSpec.streamDeclaredActions(MixedIn.EXCLUDED)

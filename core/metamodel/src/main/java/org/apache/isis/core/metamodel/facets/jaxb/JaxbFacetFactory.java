@@ -50,7 +50,6 @@ import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVisiting;
 
 import static org.apache.isis.commons.internal.reflection._Reflect.Filter.isPublic;
@@ -174,17 +173,13 @@ implements MetaModelRefiner {
         programmingModel.addValidatorSkipManagedBeans(
                 new MetaModelValidatorVisiting.Visitor() {
                     @Override
-                    public boolean visit(
-                            final ObjectSpecification objectSpec,
-                            final MetaModelValidator validator) {
+                    public boolean visit(final ObjectSpecification objectSpec) {
 
-                        validate(objectSpec, validator);
+                        validate(objectSpec);
                         return true;
                     }
 
-                    private void validate(
-                            final ObjectSpecification objectSpec,
-                            final MetaModelValidator validator) {
+                    private void validate(final ObjectSpecification objectSpec) {
 
                         final boolean viewModel = objectSpec.isViewModel();
                         if(!viewModel) {
@@ -197,7 +192,7 @@ implements MetaModelRefiner {
                         }
 
                         for (final TypeValidator typeValidator : typeValidators) {
-                            typeValidator.validate(objectSpec, validator);
+                            typeValidator.validate(objectSpec);
                         }
 
                         final Stream<OneToOneAssociation> properties = objectSpec
@@ -208,7 +203,7 @@ implements MetaModelRefiner {
                         .filter(property->property.containsNonFallbackFacet(PropertySetterFacet.class))
                         .forEach(property->{
                             for (final PropertyValidator adapterValidator : propertyValidators) {
-                                adapterValidator.validate(objectSpec, property, validator);
+                                adapterValidator.validate(objectSpec, property);
                             }
                         });
 
@@ -253,17 +248,14 @@ implements MetaModelRefiner {
     }
 
     private static abstract class TypeValidator {
-        abstract void validate(
-                final ObjectSpecification objectSpec,
-                final MetaModelValidator validator);
+        abstract void validate(ObjectSpecification objectSpec);
 
     }
 
     private static abstract class PropertyValidator {
         abstract void validate(
-                final ObjectSpecification objectSpec,
-                final OneToOneAssociation property,
-                final MetaModelValidator validator);
+                ObjectSpecification objectSpec,
+                OneToOneAssociation property);
 
     }
 
@@ -272,8 +264,7 @@ implements MetaModelRefiner {
         @Override
         void validate(
                 final ObjectSpecification objectSpec,
-                final OneToOneAssociation property,
-                final MetaModelValidator validator) {
+                final OneToOneAssociation property) {
 
             final ObjectSpecification propertyTypeSpec = property.getSpecification();
             if (!propertyTypeSpec.isEntity()) {
@@ -306,8 +297,7 @@ implements MetaModelRefiner {
         @Override
         void validate(
                 final ObjectSpecification objectSpec,
-                final OneToOneAssociation property,
-                final MetaModelValidator validator) {
+                final OneToOneAssociation property) {
 
             final ObjectSpecification propertyTypeSpec = property.getSpecification();
             final Class<?> propertyType = propertyTypeSpec.getCorrespondingClass();
@@ -340,8 +330,7 @@ implements MetaModelRefiner {
     private static class JaxbViewModelNotAbstractValidator extends TypeValidator {
         @Override
         void validate(
-                final ObjectSpecification objectSpec,
-                final MetaModelValidator validator) {
+                final ObjectSpecification objectSpec) {
 
             if(objectSpec.isAbstract()) {
                 DeficiencyFacet.appendTo(
@@ -355,8 +344,7 @@ implements MetaModelRefiner {
     private static class JaxbViewModelNotInnerClassValidator extends TypeValidator {
         @Override
         void validate(
-                final ObjectSpecification objectSpec,
-                final MetaModelValidator validator) {
+                final ObjectSpecification objectSpec) {
 
             final Class<?> correspondingClass = objectSpec.getCorrespondingClass();
             if(correspondingClass.isAnonymousClass()) {
@@ -380,9 +368,7 @@ implements MetaModelRefiner {
 
     private static class JaxbViewModelPublicNoArgConstructorValidator extends TypeValidator {
         @Override
-        void validate(
-                final ObjectSpecification objectSpec,
-                final MetaModelValidator validator) {
+        void validate(final ObjectSpecification objectSpec) {
 
             val correspondingClass = objectSpec.getCorrespondingClass();
             

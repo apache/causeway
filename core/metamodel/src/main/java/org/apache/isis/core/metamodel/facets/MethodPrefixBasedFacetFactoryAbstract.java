@@ -27,7 +27,6 @@ import org.apache.isis.core.metamodel.facets.all.deficiencies.DeficiencyFacet;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
-import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVisiting;
 
 import lombok.Getter;
@@ -107,7 +106,7 @@ implements MethodPrefixBasedFacetFactory {
             }
 
             @Override
-            public boolean visit(ObjectSpecification objectSpec, MetaModelValidator metaModelValidator) {
+            public boolean visit(ObjectSpecification objectSpec) {
 
                 // as an optimization only checking declared members (skipping inherited ones)  
                 

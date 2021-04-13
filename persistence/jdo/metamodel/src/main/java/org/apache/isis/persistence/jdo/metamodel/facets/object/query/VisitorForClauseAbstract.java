@@ -26,7 +26,6 @@ import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.core.metamodel.facets.all.deficiencies.DeficiencyFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVisiting;
 import org.apache.isis.persistence.jdo.provider.metamodel.facets.object.query.JdoQueryFacet;
 
@@ -46,17 +45,12 @@ abstract class VisitorForClauseAbstract implements MetaModelValidatorVisiting.Vi
     }
 
     @Override
-    public boolean visit(
-            final ObjectSpecification objectSpec,
-            final MetaModelValidator validator) {
-        
-        validate(objectSpec, validator);
+    public boolean visit(final ObjectSpecification objectSpec) {
+        validate(objectSpec);
         return true;
     }
 
-    private void validate(
-            final ObjectSpecification objectSpec,
-            final MetaModelValidator validator) {
+    private void validate(final ObjectSpecification objectSpec) {
         
         val jdoQueryFacet = objectSpec.getFacet(JdoQueryFacet.class);
         if(jdoQueryFacet == null) {
@@ -66,7 +60,7 @@ abstract class VisitorForClauseAbstract implements MetaModelValidatorVisiting.Vi
             if(namedQuery.getLanguage().equals("JDOQL")) {
                 final String query = namedQuery.getQuery();
                 final String fromClassName = deriveClause(query);
-                interpretJdoql(fromClassName, objectSpec, query, validator);
+                interpretJdoql(fromClassName, objectSpec, query);
             }
         }
     }
@@ -74,8 +68,7 @@ abstract class VisitorForClauseAbstract implements MetaModelValidatorVisiting.Vi
     private void interpretJdoql(
             final String classNameFromClause,
             final ObjectSpecification objectSpec,
-            final String query,
-            final MetaModelValidator validator) {
+            final String query) {
 
         if (_Strings.isNullOrEmpty(classNameFromClause)) {
             return;
@@ -101,7 +94,7 @@ abstract class VisitorForClauseAbstract implements MetaModelValidatorVisiting.Vi
             return;
         }
 
-        postInterpretJdoql(classNameFromClause, objectSpec, query, validator);
+        postInterpretJdoql(classNameFromClause, objectSpec, query);
     }
 
     abstract String deriveClause(final String query);
@@ -109,8 +102,7 @@ abstract class VisitorForClauseAbstract implements MetaModelValidatorVisiting.Vi
     abstract void postInterpretJdoql(
             final String classNameFromClause,
             final ObjectSpecification objectSpec,
-            final String query,
-            final MetaModelValidator validator);
+            final String query);
 
 
     SpecificationLoader getSpecificationLoader() {

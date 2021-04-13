@@ -32,7 +32,6 @@ import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVisiting;
 
 import lombok.val;
@@ -70,14 +69,12 @@ implements MetaModelRefiner {
         programmingModel.addValidatorSkipManagedBeans(new MetaModelValidatorVisiting.Visitor() {
 
             @Override
-            public boolean visit(final ObjectSpecification thisSpec, final MetaModelValidator validator) {
-                validate(thisSpec, validator);
+            public boolean visit(final ObjectSpecification thisSpec) {
+                validate(thisSpec);
                 return true;
             }
 
-            private void validate(
-                    final ObjectSpecification objectSpec,
-                    final MetaModelValidator validator) {
+            private void validate(final ObjectSpecification objectSpec) {
 
                 if(!objectSpec.containsFacet(DomainServiceFacet.class)) {
                     return;

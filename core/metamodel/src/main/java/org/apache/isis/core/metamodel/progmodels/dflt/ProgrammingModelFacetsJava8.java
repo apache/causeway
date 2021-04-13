@@ -357,7 +357,7 @@ public final class ProgrammingModelFacetsJava8 extends ProgrammingModelAbstract 
         addPostProcessor(PostProcessingOrder.A1_BUILTIN, DeriveFacetsPostProcessor.class);
         addValidator(new TitlesAndTranslationsValidator());
 
-        addValidator((objectSpec, validator) -> {
+        addValidator(objectSpec -> {
             
             val actions = objectSpec.streamActions(MixedIn.INCLUDED).collect(Collectors.toList());
             
