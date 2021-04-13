@@ -2484,10 +2484,12 @@ xref:refguide:security:index/shiro/IsisModuleSecurityShiro.adoc[IsisModuleSecuri
 
 == Viewer
 
-[plantuml,Viewer,svg]
+=== Common
+
+[plantuml,Common,svg]
 ----
-@startuml(id=Viewer)
-title Viewer - Containers
+@startuml(id=Common)
+title Common - Containers
 caption Artifact Hierarchy (Maven)
 
 skinparam {
@@ -2504,12 +2506,12 @@ skinparam rectangle<<2>> {
   FontColor #fffffe
   BorderColor #2E6295
 }
-package "Viewer\n[Software System]" {
+package "Common\n[Software System]" {
   rectangle "==Apache Isis Viewer - Common Model\n<size:10>[Container: packaging: jar]</size>" <<2>> as 2
 }
 @enduml
 ----
-.Projects/Modules (Viewer)
+.Projects/Modules (Common)
 [cols="3a,5a", options="header"]
 |===
 |Coordinates |Description 
@@ -3776,22 +3778,22 @@ skinparam {
 }
 hide stereotype
 left to right direction
-skinparam rectangle<<11>> {
-  BackgroundColor #438dd5
-  FontColor #fffffe
-  BorderColor #2E6295
-}
 skinparam rectangle<<22>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
 }
-skinparam rectangle<<12>> {
+skinparam rectangle<<11>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
 }
 skinparam rectangle<<23>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2E6295
+}
+skinparam rectangle<<12>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2E6295
