@@ -18,7 +18,6 @@
  */
 package org.apache.isis.core.metamodel.facets.object;
 
-
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.RecreatableDomainObject;
 import org.apache.isis.applib.annotation.DomainObject;
@@ -30,13 +29,14 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
+import org.apache.isis.core.metamodel.facets.all.deficiencies.DeficiencyFacet;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForValidationFailures;
 
 import lombok.val;
 
-
-public class ViewModelSemanticCheckingFacetFactory extends FacetFactoryAbstract
+public class ViewModelSemanticCheckingFacetFactory 
+extends FacetFactoryAbstract
 implements MetaModelRefiner {
 
 
@@ -74,55 +74,62 @@ implements MetaModelRefiner {
         final boolean annotatedWithDomainObject = domainObject != null;
 
         if(implementsViewModel && implementsRecreatableDomainObject) {
-            validator.onFailure(
+            DeficiencyFacet.appendTo(
                     facetHolder,
                     Identifier.classIdentifier(LogicalType.fqcn(cls)),
-                    "Inconsistent view model / domain object semantics; %s should not implement "
-                    + "both %s and %s interfaces (implement one or the other)",
-                    cls.getName(),
-                    org.apache.isis.applib.ViewModel.class.getSimpleName(),
-                    org.apache.isis.applib.RecreatableDomainObject.class.getSimpleName());
+                    String.format(
+                        "Inconsistent view model / domain object semantics; %s should not implement "
+                        + "both %s and %s interfaces (implement one or the other)",
+                        cls.getName(),
+                        org.apache.isis.applib.ViewModel.class.getSimpleName(),
+                        org.apache.isis.applib.RecreatableDomainObject.class.getSimpleName())
+                    );
 
         }
         if(implementsViewModel && annotatedWithDomainObject) {
-            validator.onFailure(
+            DeficiencyFacet.appendTo(
                     facetHolder,
                     Identifier.classIdentifier(LogicalType.fqcn(cls)),
-                    "Inconsistent view model / domain object semantics; %1$s should not implement "
-                    + "%2$s and be annotated with @%3$s (annotate with %4$s instead of %2$s, or implement %5s instead of %2$s)",
-                    cls.getName(),
-                    org.apache.isis.applib.ViewModel.class.getSimpleName(),
-                    DomainObject.class.getSimpleName(),
-                    "TODO ViewModel removed",
-                    RecreatableDomainObject.class.getSimpleName()
+                    String.format(
+                        "Inconsistent view model / domain object semantics; %1$s should not implement "
+                        + "%2$s and be annotated with @%3$s (annotate with %4$s instead of %2$s, or implement %5s instead of %2$s)",
+                        cls.getName(),
+                        org.apache.isis.applib.ViewModel.class.getSimpleName(),
+                        DomainObject.class.getSimpleName(),
+                        "TODO ViewModel removed",
+                        RecreatableDomainObject.class.getSimpleName())
                     );
         }
         if(implementsViewModel && annotatedWithDomainObjectLayout) {
-            validator.onFailure(
+            DeficiencyFacet.appendTo(
                     facetHolder,
                     Identifier.classIdentifier(LogicalType.fqcn(cls)),
-                    "Inconsistent view model / domain object semantics; %1$s should not implement "
-                    + "%2$s and be annotated with @%3$s (annotate with @%4$s instead of %3$s, or implement %5$s instead of %2$s)",
-                    cls.getName(),
-                    org.apache.isis.applib.ViewModel.class.getSimpleName(),
-                    DomainObjectLayout.class.getSimpleName(),
-                    RecreatableDomainObject.class.getSimpleName());
+                    String.format(
+                        "Inconsistent view model / domain object semantics; %1$s should not implement "
+                        + "%2$s and be annotated with @%3$s (annotate with @%4$s instead of %3$s, or implement %5$s instead of %2$s)",
+                        cls.getName(),
+                        org.apache.isis.applib.ViewModel.class.getSimpleName(),
+                        DomainObjectLayout.class.getSimpleName(),
+                        RecreatableDomainObject.class.getSimpleName())
+                    );
         }
 
         if(annotatedWithDomainObject
                 && (domainObject.nature() == Nature.NOT_SPECIFIED 
                     || domainObject.nature().isEntity()) 
                 && implementsRecreatableDomainObject) {
-            validator.onFailure(
+            DeficiencyFacet.appendTo(
                     facetHolder,
                     Identifier.classIdentifier(LogicalType.fqcn(cls)),
-                    "Inconsistent view model / domain object semantics; %1$s should not be annotated with "
-                    + "@%2$s with nature of %3$s and also implement %4$s (specify a nature of %5$s)",
-                    cls.getName(),
-                    DomainObject.class.getSimpleName(),
-                    domainObject.nature(),
-                    org.apache.isis.applib.RecreatableDomainObject.class.getSimpleName(),
-                    Nature.VIEW_MODEL);
+                    String.format(
+                        "Inconsistent view model / domain object semantics; %1$s should not be annotated with "
+                        + "@%2$s with nature of %3$s and also implement %4$s (specify a nature of %5$s)",
+                        cls.getName(),
+                        DomainObject.class.getSimpleName(),
+                        domainObject.nature(),
+                        org.apache.isis.applib.RecreatableDomainObject.class.getSimpleName(),
+                        Nature.VIEW_MODEL)
+                    );
         }
 
     }

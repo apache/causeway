@@ -24,6 +24,7 @@ import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.commons.functional.Result;
 import org.apache.isis.commons.internal.context._Context;
+import org.apache.isis.core.metamodel.facets.all.deficiencies.DeficiencyFacet;
 import org.apache.isis.core.metamodel.spec.Hierarchical;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
@@ -60,11 +61,16 @@ class VisitorForFromClause extends VisitorForClauseAbstract {
                 
         if(fromSpecResult.isFailure() 
                 || !fromSpecResult.getValue().isPresent()) {
-            validator.onFailure(
+            DeficiencyFacet.appendTo(
                     objectSpec,
                     Identifier.classIdentifier(LogicalType.fqcn(cls)),
-                    "%s: error in JDOQL query, class name after '%s' clause could not be loaded (JDOQL : %s)",
-                    cls.getName(), clause, query);
+                    String.format(
+                            "%s: error in JDOQL query, "
+                            + "class name after '%s' clause could not be loaded (JDOQL : %s)",
+                            cls.getName(), 
+                            clause, 
+                            query)
+                    );
             return;
         }
         
@@ -73,11 +79,17 @@ class VisitorForFromClause extends VisitorForClauseAbstract {
         if(subclasses.contains(objectSpec)) {
             return;
         }
-        validator.onFailure(
+        DeficiencyFacet.appendTo(
                 objectSpec,
                 Identifier.classIdentifier(LogicalType.fqcn(cls)),
-                "%s: error in JDOQL query, class name after '%s' clause should be same as class name on which annotated, or one of its supertypes (JDOQL : %s)",
-                cls.getName(), clause, query);
+                String.format(
+                        "%s: error in JDOQL query, class name after '%s' "
+                        + "clause should be same as class name on which annotated, "
+                        + "or one of its supertypes (JDOQL : %s)",
+                        cls.getName(), 
+                        clause, 
+                        query)
+                );
     }
 
 

@@ -171,13 +171,12 @@ implements MetaModelRefiner {
                         DeficiencyFacet.appendToWithFormat(
                                 association,
                                 "%s: incompatible usage of Isis' @Optional annotation and @javax.jdo.annotations.Column; use just @javax.jdo.annotations.Column(allowsNull=\"...\")",
-                                association.getIdentifier().toString());
+                                association.getIdentifier().getFullIdentityString());
                     } else {
-                        validator.onFailure(
+                        DeficiencyFacet.appendToWithFormat(
                                 association,
-                                association.getIdentifier(),
                                 "%s: incompatible Isis' default of required/optional properties vs JDO; add @javax.jdo.annotations.Column(allowsNull=\"...\")",
-                                association.getIdentifier().toString());
+                                association.getIdentifier().getFullIdentityString());
                     }
                 }
 
@@ -191,12 +190,12 @@ implements MetaModelRefiner {
                         DeficiencyFacet.appendToWithFormat(
                                 association,
                                 "%s: incompatible usage of Isis' @Optional annotation and @javax.jdo.annotations.Column; use just @javax.jdo.annotations.Column(allowsNull=\"...\")",
-                                association.getIdentifier().toString());
+                                association.getIdentifier().getFullIdentityString());
                     } else {
                         DeficiencyFacet.appendToWithFormat(
                                 association,
                                 "%s: incompatible default handling of required/optional properties between Isis and JDO; add @javax.jdo.annotations.Column(allowsNull=\"...\")",
-                                association.getIdentifier().toString());
+                                association.getIdentifier().getFullIdentityString());
                     }
                 }
             }

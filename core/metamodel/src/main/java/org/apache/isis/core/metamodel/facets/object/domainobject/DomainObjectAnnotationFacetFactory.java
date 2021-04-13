@@ -219,11 +219,16 @@ implements MetaModelRefiner, PostConstructMethodCache, ObjectSpecIdFacetFactory 
                 }
             }
         }
-        autoCompleteMethodInvalid.onFailure(
+        DeficiencyFacet.appendTo(
                 facetHolder,
                 Identifier.classIdentifier(LogicalType.fqcn(cls)),
-                "%s annotation on %s specifies method '%s' that does not exist in repository '%s'",
-                annotationName, cls.getName(), methodName, repositoryClass.getName());
+                String.format(
+                        "%s annotation on %s specifies method '%s' that does not exist in repository '%s'",
+                        annotationName, 
+                        cls.getName(), 
+                        methodName, 
+                        repositoryClass.getName())
+                );
         return null;
     }
 
