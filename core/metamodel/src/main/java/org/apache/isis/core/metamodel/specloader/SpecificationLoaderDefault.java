@@ -468,12 +468,13 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
     
     @Override
     public void addValidationFailure(ValidationFailure validationFailure) {
-        if(validationResult.isMemoized()) {
-            throw _Exceptions.illegalState(
-                    "Validation result was already created and can no longer be modified.");
-        }
+//        if(validationResult.isMemoized()) {
+//            validationResult.clear(); // invalidate
+////            throw _Exceptions.illegalState(
+////                    "Validation result was already created and can no longer be modified.");
+//        }
         synchronized(validationFailures) {
-            validationFailures.add(validationFailure);;
+            validationFailures.add(validationFailure);
         }
     }
     
@@ -490,6 +491,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
         .map(MetaModelValidatorAbstract.class::cast)
         .forEach(validator -> {
             log.debug("Running validator: {}", validator);
+            validator.setMetaModelContext(metaModelContext);
             try {
                 validator.validate();
             } catch (Throwable t) {
@@ -505,6 +507,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
         
         return validationFailures;
     }
+
 
     // -- HELPER
     
@@ -645,5 +648,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
             spec = spec.superclass();
         }
     }
+
+   
 
 }

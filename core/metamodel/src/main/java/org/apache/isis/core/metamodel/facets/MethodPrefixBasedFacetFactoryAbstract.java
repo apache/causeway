@@ -23,11 +23,11 @@ import java.util.function.IntFunction;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.collections.ImmutableEnumSet;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.all.deficiencies.DeficiencyFacet;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
-import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVisiting;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelVisitingValidatorAbstract;
+import org.apache.isis.core.metamodel.specloader.validator.ValidationFailure;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -98,7 +98,7 @@ implements MethodPrefixBasedFacetFactory {
         
         val noParamsOnly = getConfiguration().getCore().getMetaModel().getValidator().isNoParamsOnly();
 
-        programmingModel.addValidatorSkipManagedBeans(new MetaModelValidatorVisiting.Visitor() {
+        programmingModel.addValidator(new MetaModelVisitingValidatorAbstract() {
 
             @Override
             public String toString() {
@@ -106,7 +106,7 @@ implements MethodPrefixBasedFacetFactory {
             }
 
             @Override
-            public boolean visit(ObjectSpecification objectSpec) {
+            public void validate(ObjectSpecification objectSpec) {
 
                 // as an optimization only checking declared members (skipping inherited ones)  
                 
@@ -135,7 +135,7 @@ implements MethodPrefixBasedFacetFactory {
                                     + "be an action, then rename and use @ActionLayout(named=\"...\") or ignore "
                                     + "completely using @Programmatic";
 
-                            DeficiencyFacet.appendTo(
+                            ValidationFailure.raise(
                                     objectSpec,
                                     String.format(
                                             messageFormat, 
@@ -146,8 +146,6 @@ implements MethodPrefixBasedFacetFactory {
                         }
                     }
                 });
-
-                return true;
 
             }
         });

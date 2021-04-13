@@ -30,7 +30,6 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.ObjectSpecIdFacetFactory;
-import org.apache.isis.core.metamodel.facets.all.deficiencies.DeficiencyFacet;
 import org.apache.isis.core.metamodel.facets.object.domainservice.DomainServiceFacet;
 import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
@@ -38,7 +37,7 @@ import org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutor
 import org.apache.isis.core.metamodel.services.classsubstitutor.ClassSubstitutorRegistry;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
-import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVisiting;
+import org.apache.isis.core.metamodel.specloader.validator.ValidationFailure;
 
 import lombok.val;
 
@@ -112,39 +111,26 @@ implements MetaModelRefiner, ObjectSpecIdFacetFactory {
             return;
         }
 
-        programmingModel.addValidatorSkipManagedBeans(
-
-            new MetaModelValidatorVisiting.Visitor() {
-                
-                @Override
-                public boolean visit(ObjectSpecification objectSpec) {
-                    validate(objectSpec);
-                    return true;
-                }
-    
-                private void validate(ObjectSpecification objectSpec) {
+        programmingModel.addVisitingValidatorSkipManagedBeans(objectSpec-> {
                     
-                    if(skip(objectSpec)) {
-                        return;
-                    }
-                    val objectSpecIdFacet = objectSpec.getFacet(ObjectSpecIdFacet.class);
-                    if(objectSpecIdFacet instanceof ObjectSpecIdFacetDerivedFromClassName) {
-                        DeficiencyFacet.appendToWithFormat(
-                                objectSpec,
-                                "%s: the object type must be specified explicitly ('%s' config property). "
-                                        + "Defaulting the object type from the package/class/package name can lead "
-                                        + "to data migration issues for apps deployed to production (if the class is "
-                                        + "subsequently refactored). "
-                                        + "Use @Discriminator, @DomainObject(objectType=...) or "
-                                        + "@PersistenceCapable(schema=...) to specify explicitly.",
-                                objectSpec.getFullIdentifier(),
-                                "isis.core.meta-model.validator.explicit-object-type");
-                    } 
-                }
-    
-                private boolean skip(ObjectSpecification objectSpec) {
-                    return !check(objectSpec);
-                }
+            if(!check(objectSpec)) {
+                return;
+            }
+            
+            val objectSpecIdFacet = objectSpec.getFacet(ObjectSpecIdFacet.class);
+            if(objectSpecIdFacet instanceof ObjectSpecIdFacetDerivedFromClassName) {
+                ValidationFailure.raiseFormatted(
+                        objectSpec,
+                        "%s: the object type must be specified explicitly ('%s' config property). "
+                                + "Defaulting the object type from the package/class/package name can lead "
+                                + "to data migration issues for apps deployed to production (if the class is "
+                                + "subsequently refactored). "
+                                + "Use @Discriminator, @DomainObject(objectType=...) or "
+                                + "@PersistenceCapable(schema=...) to specify explicitly.",
+                        objectSpec.getFullIdentifier(),
+                        "isis.core.meta-model.validator.explicit-object-type");
+            } 
+                
             });
 
     }

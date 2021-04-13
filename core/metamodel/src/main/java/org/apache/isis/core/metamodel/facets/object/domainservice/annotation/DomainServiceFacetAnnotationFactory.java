@@ -26,13 +26,14 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.core.metamodel.facets.all.deficiencies.DeficiencyFacet;
 import org.apache.isis.core.metamodel.facets.object.domainservice.DomainServiceFacet;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVisiting;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelVisitingValidator;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelVisitingValidatorAbstract;
+import org.apache.isis.core.metamodel.specloader.validator.ValidationFailure;
 
 import lombok.val;
 
@@ -66,15 +67,10 @@ implements MetaModelRefiner {
     @Override
     public void refineProgrammingModel(ProgrammingModel programmingModel) {
         
-        programmingModel.addValidatorSkipManagedBeans(new MetaModelValidatorVisiting.Visitor() {
+        programmingModel.addValidator(new MetaModelVisitingValidatorAbstract() {
 
             @Override
-            public boolean visit(final ObjectSpecification thisSpec) {
-                validate(thisSpec);
-                return true;
-            }
-
-            private void validate(final ObjectSpecification objectSpec) {
+            public void validate(final ObjectSpecification objectSpec) {
 
                 if(!objectSpec.containsFacet(DomainServiceFacet.class)) {
                     return;
@@ -91,7 +87,7 @@ implements MetaModelRefiner {
                     return;
                 }
 
-                DeficiencyFacet.appendToWithFormat(
+                ValidationFailure.raiseFormatted(
                         objectSpec,
                         "%s: services can only have actions ('%s' config property), not properties or collections; annotate with @Programmatic if required.  Found: %s",
                         objectSpec.getFullIdentifier(),

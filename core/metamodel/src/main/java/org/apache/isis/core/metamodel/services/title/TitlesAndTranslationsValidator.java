@@ -24,8 +24,8 @@ import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.applib.services.title.TitleService;
 import org.apache.isis.commons.internal.base._Blackhole;
 import org.apache.isis.core.config.messages.MessageRegistry;
-import org.apache.isis.core.metamodel.facets.all.deficiencies.DeficiencyFacet;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorAbstract;
+import org.apache.isis.core.metamodel.specloader.validator.ValidationFailure;
 
 import lombok.val;
 
@@ -34,7 +34,8 @@ import lombok.val;
  * @since 2.0
  *
  */
-public class TitlesAndTranslationsValidator extends MetaModelValidatorAbstract {
+public class TitlesAndTranslationsValidator 
+extends MetaModelValidatorAbstract {
 
     @Override
     public void validate() {
@@ -63,8 +64,8 @@ public class TitlesAndTranslationsValidator extends MetaModelValidatorAbstract {
                         LogicalType.eager(managedBeanAdapter.getBeanClass(), objectType));
                 val facetHolder = specificationLoader.loadSpecification(managedBeanAdapter.getBeanClass());
                 
-                DeficiencyFacet.appendTo(
-                        facetHolder, 
+                ValidationFailure.raise(
+                        facetHolder.getSpecificationLoader(), 
                         deficiencyOrigin, 
                         String.format(
                                 "Failed to get instance of service bean %s", 
@@ -86,8 +87,8 @@ public class TitlesAndTranslationsValidator extends MetaModelValidatorAbstract {
                         LogicalType.eager(managedBeanAdapter.getBeanClass(), objectType));
                 val facetHolder = specificationLoader.loadSpecification(managedBeanAdapter.getBeanClass());
 
-                DeficiencyFacet.appendTo(
-                        facetHolder, 
+                ValidationFailure.raise(
+                        facetHolder.getSpecificationLoader(), 
                         deficiencyOrigin, 
                         String.format(
                                 "Failed to get title for service bean %s", 
@@ -124,8 +125,8 @@ public class TitlesAndTranslationsValidator extends MetaModelValidatorAbstract {
                         val deficiencyOrigin = Identifier.classIdentifier(objSpec.getLogicalType());
                         val facetHolder = objSpec;
 
-                        DeficiencyFacet.appendTo(
-                                facetHolder, 
+                        ValidationFailure.raise(
+                                facetHolder.getSpecificationLoader(), 
                                 deficiencyOrigin, 
                                 String.format(
                                         "Failed to get title for enum constant %s", 
@@ -162,8 +163,8 @@ public class TitlesAndTranslationsValidator extends MetaModelValidatorAbstract {
                 val spec = specificationLoader.loadSpecification(MessageRegistry.class);
                 val deficiencyOrigin = Identifier.classIdentifier(spec.getLogicalType());
 
-                DeficiencyFacet.appendTo(
-                        spec, 
+                ValidationFailure.raise(
+                        spec.getSpecificationLoader(), 
                         deficiencyOrigin, 
                         String.format(
                                 "Failed to translate message %s from MessageRegistry", 

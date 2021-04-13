@@ -22,7 +22,7 @@ import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.commons.internal.reflection._Reflect;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.all.deficiencies.DeficiencyFacet;
+import org.apache.isis.core.metamodel.specloader.validator.ValidationFailure;
 
 import static org.apache.isis.commons.internal.reflection._Reflect.Filter.paramCount;
 
@@ -50,8 +50,8 @@ public class MetaModelValidatorForMixinTypes {
         }
         
         if(mixinContructors.getCardinality().isZero()) {
-            DeficiencyFacet.appendTo(
-                    facetHolder,
+            ValidationFailure.raise(
+                    facetHolder.getSpecificationLoader(),
                     Identifier.classIdentifier(LogicalType.fqcn(candidateMixinType)),
                     String.format(
                         "%s: annotated with %s annotation but does not have a public 1-arg constructor",
@@ -59,8 +59,8 @@ public class MetaModelValidatorForMixinTypes {
                         annotation)
                     );
         } else {
-            DeficiencyFacet.appendTo(
-                    facetHolder,
+            ValidationFailure.raise(
+                    facetHolder.getSpecificationLoader(),
                     Identifier.classIdentifier(LogicalType.fqcn(candidateMixinType)),
                     String.format(
                             "%s: annotated with %s annotation needs a single public 1-arg constructor but has %d",

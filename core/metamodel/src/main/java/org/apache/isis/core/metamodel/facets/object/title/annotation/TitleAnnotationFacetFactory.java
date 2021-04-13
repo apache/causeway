@@ -35,10 +35,10 @@ import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.MethodFinderUtils;
-import org.apache.isis.core.metamodel.facets.all.deficiencies.DeficiencyFacet;
 import org.apache.isis.core.metamodel.facets.fallback.FallbackFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.title.methods.TitleFacetViaMethodsFactory;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
+import org.apache.isis.core.metamodel.specloader.validator.ValidationFailure;
 
 public class TitleAnnotationFacetFactory extends FacetFactoryAbstract
 implements MetaModelRefiner {
@@ -150,33 +150,31 @@ implements MetaModelRefiner {
     @Override
     public void refineProgrammingModel(ProgrammingModel programmingModel) {
 
-        programmingModel.addValidatorSkipManagedBeans(objectSpec -> {
+        programmingModel.addVisitingValidatorSkipManagedBeans(objectSpec -> {
 
             final Class<?> cls = objectSpec.getCorrespondingClass();
 
             final Method titleMethod = MethodFinderUtils.findMethod(cls, TITLE_METHOD_NAME, String.class, null);
             if (titleMethod == null) {
-                return true;
+                return;
             }
 
             // determine if cls contains an @Title annotated method, not inherited from superclass
             final Class<?> supClass = cls.getSuperclass();
             if (supClass == null) {
-                return true;
+                return;
             }
 
             final List<Method> methods = methodsWithTitleAnnotation(cls);
             final List<Method> superClassMethods = methodsWithTitleAnnotation(supClass);
             if (methods.size() > superClassMethods.size()) {
-                DeficiencyFacet.appendToWithFormat(
+                ValidationFailure.raiseFormatted(
                         objectSpec,
                         "%s: conflict for determining a strategy for retrieval of title for class, contains a method '%s' and an annotation '@%s'",
                         objectSpec.getIdentifier().getClassName(),
                         TITLE_METHOD_NAME,
                         Title.class.getName());
             }
-
-            return true;
 
         });
     }

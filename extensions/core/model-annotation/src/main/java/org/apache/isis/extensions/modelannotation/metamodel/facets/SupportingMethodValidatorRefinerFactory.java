@@ -33,9 +33,9 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
-import org.apache.isis.core.metamodel.facets.all.deficiencies.DeficiencyFacet;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.specloader.validator.ValidationFailure;
 import org.apache.isis.extensions.modelannotation.applib.annotation.Model;
 
 /**
@@ -57,7 +57,7 @@ implements MetaModelRefiner {
     @Override
     public void refineProgrammingModel(ProgrammingModel programmingModel) {
 
-        programmingModel.addValidatorSkipManagedBeans(spec -> {
+        programmingModel.addVisitingValidatorSkipManagedBeans(spec -> {
 
             final Class<?> type = spec.getCorrespondingClass();
 
@@ -102,7 +102,7 @@ implements MetaModelRefiner {
 
                 String messageFormat = "%s#%s: has annotation @%s, is assumed to support "
                         + "a property, collection or action. Unmet constraint(s): %s";
-                DeficiencyFacet.appendToWithFormat(
+                ValidationFailure.raiseFormatted(
                         spec,
                         messageFormat,
                         spec.getIdentifier().getClassName(),
@@ -111,9 +111,7 @@ implements MetaModelRefiner {
                         unmetContraints.stream()
                         .collect(Collectors.joining("; ")));
             });
-
-
-            return true; // continue
+            
         });
 
     }

@@ -74,13 +74,13 @@ implements MetaModelRefiner {
         val isValidateFromClause = 
                 getConfiguration().getCore().getMetaModel().getValidator().getJdoql().isFromClause();
         if (isValidateFromClause) {
-            programmingModel.addValidatorSkipManagedBeans(new VisitorForFromClause(this));
+            programmingModel.addValidator(new VisitorForFromClause());
         }
 
         val isValidateVariablesClause = 
                 getConfiguration().getCore().getMetaModel().getValidator().getJdoql().isVariablesClause();
         if (isValidateVariablesClause) {
-            programmingModel.addValidatorSkipManagedBeans(new VisitorForVariablesClause(this));
+            programmingModel.addValidator(new VisitorForVariablesClause());
         }
     }
 

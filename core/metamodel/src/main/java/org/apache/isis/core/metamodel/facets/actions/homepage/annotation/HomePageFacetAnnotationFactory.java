@@ -33,16 +33,17 @@ import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.actions.homepage.HomePageFacet;
-import org.apache.isis.core.metamodel.facets.all.deficiencies.DeficiencyFacet;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVisiting;
-import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVisiting.Visitor;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelVisitingValidatorAbstract;
+import org.apache.isis.core.metamodel.specloader.validator.ValidationFailure;
 
 import static org.apache.isis.commons.internal.functions._Predicates.not;
 
+import lombok.NonNull;
 import lombok.val;
 
 public class HomePageFacetAnnotationFactory extends FacetFactoryAbstract
@@ -69,19 +70,22 @@ implements MetaModelRefiner {
 
     @Override
     public void refineProgrammingModel(ProgrammingModel programmingModel) {
-        programmingModel.addValidatorSkipManagedBeans(newValidatorVisitor());
+        programmingModel.addValidator(newValidatorVisitor());
     }
 
-    private Visitor newValidatorVisitor() {
-        return new MetaModelValidatorVisiting.SummarizingVisitor() {
-
+    private MetaModelValidator newValidatorVisitor() {
+        return new MetaModelVisitingValidatorAbstract() {
+            
             private final Map<String, ObjectAction> actionsHavingHomePageFacet = _Maps.newHashMap();
 
             @Override
-            public boolean visit(ObjectSpecification objectSpec) {
-                
+            public void validate(@NonNull ObjectSpecification spec) {
+                if(spec.isManagedBean()) {
+                    return;
+                }
+                             
                 // as an optimization only checking declared members (skipping inherited ones)                 
-                objectSpec.streamDeclaredActions(MixedIn.EXCLUDED)
+                spec.streamDeclaredActions(MixedIn.EXCLUDED)
                 .filter(objectAction->objectAction.containsFacet(HomePageFacet.class))
                 .forEach(objectAction->{
                     
@@ -95,8 +99,6 @@ implements MetaModelRefiner {
                     // TODO might collide with type level annotations as well 
                     
                 });
-
-                return true; // keep searching
             }
 
             @Override
@@ -114,7 +116,7 @@ implements MetaModelRefiner {
                                 .filter(not(actionId::equals))
                                 .collect(Collectors.joining(", "));
 
-                        DeficiencyFacet.appendTo(
+                        ValidationFailure.raise(
                                 objectAction, 
                                 String.format(
                                         "%s: other actions also specified as home page: %s ",
@@ -124,6 +126,8 @@ implements MetaModelRefiner {
                     }
                 }
             }
+
         };
+
     }
 }

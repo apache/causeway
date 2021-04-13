@@ -52,7 +52,6 @@ import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.MethodFinderUtils;
 import org.apache.isis.core.metamodel.facets.ObjectSpecIdFacetFactory;
 import org.apache.isis.core.metamodel.facets.PostConstructMethodCache;
-import org.apache.isis.core.metamodel.facets.all.deficiencies.DeficiencyFacet;
 import org.apache.isis.core.metamodel.facets.object.autocomplete.AutoCompleteFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.CreatedLifecycleEventFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.callbacks.LoadedLifecycleEventFacetForDomainObjectAnnotation;
@@ -76,7 +75,8 @@ import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacetForDomainObj
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVisiting;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelVisitingValidatorAbstract;
+import org.apache.isis.core.metamodel.specloader.validator.ValidationFailure;
 import org.apache.isis.core.metamodel.util.EventUtil;
 
 import static org.apache.isis.commons.internal.base._NullSafe.stream;
@@ -210,8 +210,8 @@ implements MetaModelRefiner, PostConstructMethodCache, ObjectSpecIdFacetFactory 
                 }
             }
         }
-        DeficiencyFacet.appendTo(
-                facetHolder,
+        ValidationFailure.raise(
+                facetHolder.getSpecificationLoader(),
                 Identifier.classIdentifier(LogicalType.fqcn(cls)),
                 String.format(
                         "%s annotation on %s specifies method '%s' that does not exist in repository '%s'",
@@ -484,13 +484,15 @@ implements MetaModelRefiner, PostConstructMethodCache, ObjectSpecIdFacetFactory 
         final _Multimaps.ListMultimap<String, ObjectSpecification> collidingSpecsByLogicalTypeName =
                 _Multimaps.newConcurrentListMultimap();
 
-        final MetaModelValidatorVisiting.SummarizingVisitor ensureUniqueObjectIds =
-                new MetaModelValidatorVisiting.SummarizingVisitor(){
+        final MetaModelVisitingValidatorAbstract ensureUniqueObjectIds =
+                new MetaModelVisitingValidatorAbstract(){
 
                     @Override
-                    public boolean visit(ObjectSpecification objSpec) {
+                    public void validate(ObjectSpecification objSpec) {
+                        if(objSpec.isManagedBean()) {
+                            return;
+                        }
                         collidingSpecsByLogicalTypeName.putElement(objSpec.getLogicalTypeName() , objSpec);
-                        return true;
                     }
 
                     @Override
@@ -502,7 +504,7 @@ implements MetaModelRefiner, PostConstructMethodCache, ObjectSpecIdFacetFactory 
                                 val csv = asCsv(collidingSpecs);
 
                                 collidingSpecs.forEach(spec->{
-                                    DeficiencyFacet.appendToWithFormat(
+                                    ValidationFailure.raiseFormatted(
                                             spec,
                                             "Logical-type-name (aka. object-type) '%s' mapped to multiple classes: %s",
                                             logicalTypeName,
@@ -524,7 +526,7 @@ implements MetaModelRefiner, PostConstructMethodCache, ObjectSpecIdFacetFactory 
 
                 };
 
-        pm.addValidatorSkipManagedBeans(ensureUniqueObjectIds);
+        pm.addValidator(ensureUniqueObjectIds);
     }
 
 

@@ -23,34 +23,31 @@ import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.commons.functional.Result;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.context._Context;
-import org.apache.isis.core.metamodel.facets.all.deficiencies.DeficiencyFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVisiting;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelVisitingValidatorAbstract;
+import org.apache.isis.core.metamodel.specloader.validator.ValidationFailure;
 import org.apache.isis.persistence.jdo.provider.metamodel.facets.object.query.JdoQueryFacet;
 
 import lombok.val;
 
-abstract class VisitorForClauseAbstract implements MetaModelValidatorVisiting.Visitor {
+abstract class VisitorForClauseAbstract 
+extends MetaModelVisitingValidatorAbstract {
 
-    private final JdoQueryAnnotationFacetFactory facetFactory;
     final String clause;
 
     VisitorForClauseAbstract(
-            final JdoQueryAnnotationFacetFactory facetFactory,
             final String clause) {
         
-        this.facetFactory = facetFactory;
         this.clause = clause;
     }
 
     @Override
-    public boolean visit(final ObjectSpecification objectSpec) {
-        validate(objectSpec);
-        return true;
-    }
-
-    private void validate(final ObjectSpecification objectSpec) {
+    public void validate(final ObjectSpecification objectSpec) {
+        
+        if(objectSpec.isManagedBean()) {
+            return;
+        }
         
         val jdoQueryFacet = objectSpec.getFacet(JdoQueryFacet.class);
         if(jdoQueryFacet == null) {
@@ -82,8 +79,8 @@ abstract class VisitorForClauseAbstract implements MetaModelValidatorVisiting.Vi
             
         if(fromSpecResult.isFailure() 
                 || !fromSpecResult.getValue().isPresent()) {
-            DeficiencyFacet.appendTo(
-                    objectSpec,
+            ValidationFailure.raise(
+                    objectSpec.getSpecificationLoader(),
                     Identifier.classIdentifier(LogicalType.fqcn(cls)),
                     String.format(
                             "%s: error in JDOQL query, class name for '%s' clause not recognized (JDOQL : %s)",
@@ -106,7 +103,7 @@ abstract class VisitorForClauseAbstract implements MetaModelValidatorVisiting.Vi
 
 
     SpecificationLoader getSpecificationLoader() {
-        return facetFactory.getSpecificationLoader();
+        return super.getMetaModelContext().getSpecificationLoader();
     }
 
 }

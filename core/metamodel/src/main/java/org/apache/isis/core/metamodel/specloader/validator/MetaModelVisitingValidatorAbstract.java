@@ -18,28 +18,30 @@
  */
 package org.apache.isis.core.metamodel.specloader.validator;
 
-import java.lang.annotation.Annotation;
+import lombok.val;
 
-import org.apache.isis.core.metamodel.facets.FacetedMethod;
+public abstract class MetaModelVisitingValidatorAbstract 
+extends MetaModelValidatorAbstract
+implements MetaModelVisitingValidator {
 
-import lombok.experimental.UtilityClass;
+    @Override
+    public final void validate() {
 
-@UtilityClass
-public class MetaModelValidatorForAmbiguousMixinAnnotations {
-
-    public static <A extends Annotation> void addValidationFailure(
-            final FacetedMethod holder,
-            final Class<A> annotationType) {
+        val isActionExplicit = getConfiguration().getApplib().getAnnotation().getAction().isExplicit();
         
-        final String annotationLiteral = "@" + annotationType.getSimpleName();
+        super.getMetaModelContext().getSpecificationLoader()
+        .forEach(spec->{
+            
+            if(!isActionExplicit
+                    && spec.getBeanSort().isUnknown()) {
+                    return; // in support of @Action not being forced, we need to relax 
+            }
+            
+            validate(spec);
+        });
         
-        ValidationFailure.raiseFormatted(
-                holder, 
-                "Annotation %s on both method and type level is not allowed, "
-                + "it must be one or the other. Found with mixin: %s", 
-                annotationLiteral, 
-                holder.getIdentifier().getFullIdentityString());
+        summarize();
+        
     }
-
     
 }

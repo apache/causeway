@@ -25,19 +25,18 @@ import java.util.stream.Stream;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.core.metamodel.facets.all.deficiencies.DeficiencyFacet;
 import org.apache.isis.core.metamodel.facets.collections.sortedby.SortedByFacet;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
-import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVisiting;
+import org.apache.isis.core.metamodel.specloader.validator.ValidationFailure;
 
 /**
  * There is no check that the value is a {@link Comparator}; 
  * instead this is done via {@link #refineProgrammingModel(ProgrammingModel)}.
  */
-public class SortedByFacetAnnotationFactory extends FacetFactoryAbstract
+public class SortedByFacetAnnotationFactory 
+extends FacetFactoryAbstract
 implements MetaModelRefiner {
 
     public SortedByFacetAnnotationFactory() {
@@ -54,40 +53,29 @@ implements MetaModelRefiner {
 
     @Override
     public void refineProgrammingModel(ProgrammingModel programmingModel) {
-        programmingModel.addValidatorSkipManagedBeans(newValidatorVisitor());
-    }
+        programmingModel.addVisitingValidatorSkipManagedBeans(objectSpec->{
+            final Stream<OneToManyAssociation> objectCollections = 
+                    objectSpec.streamCollections(MixedIn.EXCLUDED);
 
-    protected MetaModelValidatorVisiting.Visitor newValidatorVisitor() {
-        return new MetaModelValidatorVisiting.Visitor() {
-
-            @Override
-            public boolean visit(ObjectSpecification objectSpec) {
-                final Stream<OneToManyAssociation> objectCollections = 
-                        objectSpec.streamCollections(MixedIn.EXCLUDED);
-
-                objectCollections.forEach(objectCollection->{
-                    final SortedByFacet facet = objectCollection.getFacet(SortedByFacet.class);
-                    if(facet != null) {
-                        final Class<? extends Comparator<?>> cls = facet.value();
-                        if(!Comparator.class.isAssignableFrom(cls)) {
-                            
-                            DeficiencyFacet.appendTo(
-                                    objectSpec,
-                                    String.format(
-                                        "%s#%s: is annotated with @SortedBy, "
-                                        + "but the class specified '%s' is not a Comparator",
-                                        objectSpec.getIdentifier().getClassName(), 
-                                        objectCollection.getId(),
-                                        facet.value().getName()));
-                        }
+            objectCollections.forEach(objectCollection->{
+                final SortedByFacet facet = objectCollection.getFacet(SortedByFacet.class);
+                if(facet != null) {
+                    final Class<? extends Comparator<?>> cls = facet.value();
+                    if(!Comparator.class.isAssignableFrom(cls)) {
+                        
+                        ValidationFailure.raiseFormatted(
+                                objectSpec,
+                                String.format(
+                                    "%s#%s: is annotated with @SortedBy, "
+                                    + "but the class specified '%s' is not a Comparator",
+                                    objectSpec.getIdentifier().getClassName(), 
+                                    objectCollection.getId(),
+                                    facet.value().getName()));
                     }
-                });
-
-                return true;
-            }
-        };
+                }
+            });
+        });
     }
-
 
 
 }

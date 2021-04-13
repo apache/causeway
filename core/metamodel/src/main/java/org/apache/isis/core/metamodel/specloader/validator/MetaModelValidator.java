@@ -21,14 +21,6 @@ package org.apache.isis.core.metamodel.specloader.validator;
 
 public interface MetaModelValidator {
 
-    /**
-     * Collect any {@link ValidationFailure} to given validationFailures. 
-     *  
-     * @param validationFailures
-     */
-    //void collectFailuresInto(@NonNull ValidationFailures validationFailures);
-    
     void validate();
-    
     
 }

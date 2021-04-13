@@ -29,9 +29,9 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.core.metamodel.facets.all.deficiencies.DeficiencyFacet;
 import org.apache.isis.core.metamodel.facets.object.navparent.method.NavigableParentFacetMethod;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
+import org.apache.isis.core.metamodel.specloader.validator.ValidationFailure;
 
 import lombok.extern.log4j.Log4j2;
 
@@ -110,27 +110,26 @@ implements MetaModelRefiner {
     @Override
     public void refineProgrammingModel(ProgrammingModel programmingModel) {
 
-        programmingModel.addValidatorSkipManagedBeans(objectSpec -> {
-
-
-            final Class<?> cls = objectSpec.getCorrespondingClass();
+        programmingModel.addVisitingValidatorSkipManagedBeans(spec->{
+                
+            final Class<?> cls = spec.getCorrespondingClass();
 
             final List<Annotations.Evaluator<PropertyLayout>> evaluators =
                     Annotations.firstEvaluatorsInHierarchyHaving(cls, PropertyLayout.class,
                             NavigableParentAnnotationFacetFactory::isNavigableParentFlagSet);
 
             if (_NullSafe.isEmpty(evaluators)) {
-                return true; // no conflict, continue validation processing
+                return; // no conflict, continue validation processing
             } else if (evaluators.size()>1) {
 
-                DeficiencyFacet.appendToWithFormat(
-                        objectSpec,
+                ValidationFailure.raiseFormatted(
+                        spec,
                         "%s: conflict for determining a strategy for retrieval of (navigable) parent for class, "
                                 + "contains multiple annotations '@%s' having navigable=PARENT, while at most one is allowed.",
-                                objectSpec.getIdentifier().getClassName(),
+                                spec.getIdentifier().getClassName(),
                                 PropertyLayout.class.getName());
 
-                return true; // continue validation processing
+                return; // continue validation processing
             }
 
             final Annotations.Evaluator<PropertyLayout> parentEvaluator = evaluators.get(0);
@@ -143,21 +142,19 @@ implements MetaModelRefiner {
 
                 if(!fieldEvaluator.getGetter(cls).isPresent()) {
 
-                    DeficiencyFacet.appendToWithFormat(
-                            objectSpec,
+                    ValidationFailure.raiseFormatted(
+                            spec,
                             "%s: unable to determine a strategy for retrieval of (navigable) parent for class, "
                                     + "field '%s' annotated with '@%s' having navigable=PARENT does not provide a getter.",
-                                    objectSpec.getIdentifier().getClassName(),
+                                    spec.getIdentifier().getClassName(),
                                     fieldEvaluator.getField().getName(),
                                     PropertyLayout.class.getName());
                 }
 
             }
-
-
-            return true; //continue validation processing
-
+            
         });
+
     }
 
 

@@ -21,10 +21,8 @@ package org.apache.isis.core.metamodel.facets.object.objectspecid;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
-import org.apache.isis.core.metamodel.facets.all.deficiencies.DeficiencyFacet;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVisiting;
+import org.apache.isis.core.metamodel.specloader.validator.ValidationFailure;
 
 import lombok.val;
 
@@ -41,48 +39,37 @@ implements MetaModelRefiner {
     @Override
     public void refineProgrammingModel(ProgrammingModel programmingModel) {
         
-        programmingModel.addValidatorIncludeManagedBeans(
-
-            new MetaModelValidatorVisiting.Visitor() {
+        programmingModel.addVisitingValidator(spec->{
+                    
+            if(!spec.isEntityOrViewModel()
+                    && !spec.isManagedBean() ) {
+                return;   
+            }
+            
+            val objectSpecIdFacet = spec.getFacet(ObjectSpecIdFacet.class);
+            if(objectSpecIdFacet == null) {
+                return;
+            }
+            
+            val logicalTypeName = objectSpecIdFacet.value();
+            
+            val nameParts = _Strings.splitThenStream(logicalTypeName, ".")
+                    .collect(Can.toCan());
+            
+            if(!nameParts.getCardinality().isMultiple()
+                    || nameParts.stream()
+                        .anyMatch(String::isEmpty)) {
                 
-                @Override
-                public boolean visit(ObjectSpecification objectSpec) {
-                    
-                    if(objectSpec.isEntityOrViewModel()
-                            || objectSpec.isManagedBean() ) {
-                        validate(objectSpec);    
-                    }
-                    return true;
-                }
+                ValidationFailure.raiseFormatted(
+                        spec,
+                        "%s: the object type must declare a namespace, yet was found to be invalid '%s'; "
+                        + "eg. @DomainObject(objectType=\"Customer\") is considered invalid, "
+                        + "whereas @DomainObject(objectType=\"sales.Customer\") is valid.",
+                        spec.getFullIdentifier(),
+                        logicalTypeName);
+            }
     
-                private void validate(
-                        ObjectSpecification objectSpec) {
-                    
-                    val objectSpecIdFacet = objectSpec.getFacet(ObjectSpecIdFacet.class);
-                    if(objectSpecIdFacet == null) {
-                        return;
-                    }
-                    
-                    val logicalTypeName = objectSpecIdFacet.value();
-                    
-                    val nameParts = _Strings.splitThenStream(logicalTypeName, ".")
-                            .collect(Can.toCan());
-                    
-                    if(!nameParts.getCardinality().isMultiple()
-                            || nameParts.stream()
-                                .anyMatch(String::isEmpty)) {
-                        
-                        DeficiencyFacet.appendToWithFormat(
-                                objectSpec,
-                                "%s: the object type must declare a namespace, yet was found to be invalid '%s'; "
-                                + "eg. @DomainObject(objectType=\"Customer\") is considered invalid, "
-                                + "whereas @DomainObject(objectType=\"sales.Customer\") is valid.",
-                                objectSpec.getFullIdentifier(),
-                                logicalTypeName);
-                    }
-                }
-    
-            });
+        });
 
     }
 }

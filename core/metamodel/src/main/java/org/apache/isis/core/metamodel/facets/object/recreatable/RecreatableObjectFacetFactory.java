@@ -29,7 +29,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.apache.isis.applib.RecreatableDomainObject;
 import org.apache.isis.applib.ViewModel;
 import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -38,9 +37,9 @@ import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.MethodFinderUtils;
 import org.apache.isis.core.metamodel.facets.PostConstructMethodCache;
-import org.apache.isis.core.metamodel.facets.all.deficiencies.DeficiencyFacet;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
+import org.apache.isis.core.metamodel.specloader.validator.ValidationFailure;
 
 import lombok.val;
 
@@ -53,7 +52,7 @@ implements MetaModelRefiner, PostConstructMethodCache {
 
     /**
      * We simply attach all facets we can find; 
-     * the {@link #refineMetaModelValidator(org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite, IsisConfiguration) meta-model validation} 
+     * the {@link #refineProgrammingModel(ProgrammingModel) meta-model validation} 
      * will detect if multiple interfaces/annotations have
      * been attached.
      */
@@ -97,15 +96,15 @@ implements MetaModelRefiner, PostConstructMethodCache {
     @Override
     public void refineProgrammingModel(ProgrammingModel programmingModel) {
 
-        programmingModel.addValidatorSkipManagedBeans(objectSpec -> {
+        programmingModel.addVisitingValidatorSkipManagedBeans(objectSpec -> {
 
             val viewModelFacet = objectSpec.getFacet(ViewModelFacet.class);
             val underlyingFacet = viewModelFacet != null ? viewModelFacet.getUnderlyingFacet() : null;
             if(underlyingFacet == null) {
-                return true;    
+                return;    
             }
             if(underlyingFacet.getClass() != viewModelFacet.getClass()) {
-                DeficiencyFacet.appendToWithFormat(
+                ValidationFailure.raiseFormatted(
                         objectSpec,
                         "%s: has multiple incompatible annotations/interfaces indicating that " +
                                 "it is a recreatable object of some sort (%s and %s)",
@@ -113,7 +112,6 @@ implements MetaModelRefiner, PostConstructMethodCache {
                                 viewModelFacet.getClass().getSimpleName(),
                                 underlyingFacet.getClass().getSimpleName());
             }
-            return true;
         });
     }
 

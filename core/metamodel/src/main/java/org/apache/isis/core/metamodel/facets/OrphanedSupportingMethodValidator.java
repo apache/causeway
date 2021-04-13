@@ -29,10 +29,10 @@ import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
-import org.apache.isis.core.metamodel.facets.all.deficiencies.DeficiencyFacet;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.specimpl.ObjectSpecificationAbstract;
+import org.apache.isis.core.metamodel.specloader.validator.ValidationFailure;
 
 import lombok.val;
 
@@ -61,15 +61,15 @@ implements MetaModelRefiner {
             return; // continue
         }
 
-        programmingModel.addValidatorSkipManagedBeans(spec -> {
+        programmingModel.addVisitingValidatorSkipManagedBeans(spec -> {
             
             if(!(spec instanceof ObjectSpecificationAbstract)) {
-                return true; // continue
+                return; // continue
             }
 
             val potentialOrphans = ((ObjectSpecificationAbstract) spec).getPotentialOrphans();
             if(potentialOrphans.isEmpty()) {
-                return true; // continue
+                return; // continue
             }
 
             // methods known to the meta-model
@@ -93,7 +93,7 @@ implements MetaModelRefiner {
                 val messageFormat = "%s#%s: is assumed to support "
                         + "a property, collection or action. Unmet constraint(s): %s";
                 
-                DeficiencyFacet.appendTo(
+                ValidationFailure.raiseFormatted(
                         spec,
                         String.format(
                                 messageFormat,
@@ -104,8 +104,6 @@ implements MetaModelRefiner {
             });
 
             potentialOrphans.clear(); // no longer needed  
-            
-            return true; // continue
         });
 
     }

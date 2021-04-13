@@ -20,17 +20,17 @@ package org.apache.isis.persistence.jdo.metamodel.facets.object.query;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.id.LogicalType;
-import org.apache.isis.core.metamodel.facets.all.deficiencies.DeficiencyFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.specimpl.IntrospectionState;
+import org.apache.isis.core.metamodel.specloader.validator.ValidationFailure;
 import org.apache.isis.persistence.jdo.provider.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacet;
 
 import lombok.val;
 
 class VisitorForVariablesClause extends VisitorForClauseAbstract {
 
-    VisitorForVariablesClause(final JdoQueryAnnotationFacetFactory facetFactory) {
-        super(facetFactory, "VARIABLES");
+    VisitorForVariablesClause() {
+        super("VARIABLES");
     }
 
     @Override
@@ -55,8 +55,8 @@ class VisitorForVariablesClause extends VisitorForClauseAbstract {
                 objectSpecification.getFacet(JdoPersistenceCapableFacet.class);
 
         if(persistenceCapableFacet == null) {
-            DeficiencyFacet.appendTo(
-                    objectSpec,
+            ValidationFailure.raise(
+                    objectSpec.getSpecificationLoader(),
                     Identifier.classIdentifier(LogicalType.fqcn(cls)),
                     String.format(
                             "%s: error in JDOQL query, class name for '%s' "

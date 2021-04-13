@@ -28,7 +28,7 @@ import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.core.metamodel.facets.all.deficiencies.DeficiencyFacet;
+import org.apache.isis.core.metamodel.specloader.validator.ValidationFailure;
 
 import lombok.val;
 
@@ -65,8 +65,8 @@ extends FacetFactoryAbstract {
         final boolean annotatedWithDomainObject = domainObject != null;
 
         if(implementsViewModel && implementsRecreatableDomainObject) {
-            DeficiencyFacet.appendTo(
-                    facetHolder,
+            ValidationFailure.raise(
+                    facetHolder.getSpecificationLoader(),
                     Identifier.classIdentifier(LogicalType.fqcn(cls)),
                     String.format(
                         "Inconsistent view model / domain object semantics; %s should not implement "
@@ -78,8 +78,8 @@ extends FacetFactoryAbstract {
 
         }
         if(implementsViewModel && annotatedWithDomainObject) {
-            DeficiencyFacet.appendTo(
-                    facetHolder,
+            ValidationFailure.raise(
+                    facetHolder.getSpecificationLoader(),
                     Identifier.classIdentifier(LogicalType.fqcn(cls)),
                     String.format(
                         "Inconsistent view model / domain object semantics; %1$s should not implement "
@@ -92,8 +92,8 @@ extends FacetFactoryAbstract {
                     );
         }
         if(implementsViewModel && annotatedWithDomainObjectLayout) {
-            DeficiencyFacet.appendTo(
-                    facetHolder,
+            ValidationFailure.raise(
+                    facetHolder.getSpecificationLoader(),
                     Identifier.classIdentifier(LogicalType.fqcn(cls)),
                     String.format(
                         "Inconsistent view model / domain object semantics; %1$s should not implement "
@@ -109,8 +109,8 @@ extends FacetFactoryAbstract {
                 && (domainObject.nature() == Nature.NOT_SPECIFIED 
                     || domainObject.nature().isEntity()) 
                 && implementsRecreatableDomainObject) {
-            DeficiencyFacet.appendTo(
-                    facetHolder,
+            ValidationFailure.raise(
+                    facetHolder.getSpecificationLoader(),
                     Identifier.classIdentifier(LogicalType.fqcn(cls)),
                     String.format(
                         "Inconsistent view model / domain object semantics; %1$s should not be annotated with "

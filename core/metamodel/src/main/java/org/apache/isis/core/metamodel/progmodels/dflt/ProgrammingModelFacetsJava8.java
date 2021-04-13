@@ -32,7 +32,6 @@ import org.apache.isis.core.metamodel.facets.actions.homepage.annotation.HomePag
 import org.apache.isis.core.metamodel.facets.actions.layout.ActionLayoutFacetFactory;
 import org.apache.isis.core.metamodel.facets.actions.notinservicemenu.derived.NotInServiceMenuFacetDerivedFromDomainServiceFacetFactory;
 import org.apache.isis.core.metamodel.facets.actions.validate.method.ActionValidationFacetViaMethodFactory;
-import org.apache.isis.core.metamodel.facets.all.deficiencies.DeficiencyFacet;
 import org.apache.isis.core.metamodel.facets.all.i18n.TranslationFacetFactory;
 import org.apache.isis.core.metamodel.facets.collections.accessor.CollectionAccessorFacetViaAccessorFactory;
 import org.apache.isis.core.metamodel.facets.collections.collection.CollectionAnnotationFacetFactory;
@@ -147,9 +146,13 @@ import org.apache.isis.core.metamodel.facets.value.uuid.UUIDValueFacetUsingSeman
 import org.apache.isis.core.metamodel.postprocessors.param.DeriveFacetsPostProcessor;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModelAbstract;
 import org.apache.isis.core.metamodel.services.title.TitlesAndTranslationsValidator;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelVisitingValidatorAbstract;
+import org.apache.isis.core.metamodel.specloader.validator.ValidationFailure;
 
+import lombok.NonNull;
 import lombok.val;
 
 public final class ProgrammingModelFacetsJava8 extends ProgrammingModelAbstract {
@@ -357,27 +360,37 @@ public final class ProgrammingModelFacetsJava8 extends ProgrammingModelAbstract 
         addPostProcessor(PostProcessingOrder.A1_BUILTIN, DeriveFacetsPostProcessor.class);
         addValidator(new TitlesAndTranslationsValidator());
 
-        addValidator(objectSpec -> {
-            
-            val actions = objectSpec.streamActions(MixedIn.INCLUDED).collect(Collectors.toList());
-            
-            final int numActions = actions.size();
-            if (numActions > 0) {
+        addValidator(new MetaModelVisitingValidatorAbstract() {
 
-                val actionIds = actions.stream()
-                .map(ObjectAction::getIdentifier)
-                .map(Identifier::toString)
-                .collect(Collectors.joining(", "));
+            @Override
+            public void validate(@NonNull ObjectSpecification spec) {
+                
+                if(spec.getBeanSort()==BeanSort.UNKNOWN 
+                        && !spec.isAbstract()) {
+                    return;
+                }
+                
+                val actions = spec.streamActions(MixedIn.INCLUDED).collect(Collectors.toList());
+                
+                final int numActions = actions.size();
+                if (numActions > 0) {
 
-                DeficiencyFacet.appendToWithFormat(
-                        objectSpec,
-                        "%s: is a (concrete) but UNKNOWN sort, yet has %d actions: {%s}",
-                        objectSpec.getCorrespondingClass().getName(),
-                        numActions,
-                        actionIds);
+                    val actionIds = actions.stream()
+                    .map(ObjectAction::getIdentifier)
+                    .map(Identifier::toString)
+                    .collect(Collectors.joining(", "));
+
+                    ValidationFailure.raiseFormatted(
+                            spec,
+                            "%s: is a (concrete) but UNKNOWN sort, yet has %d actions: {%s}",
+                            spec.getCorrespondingClass().getName(),
+                            numActions,
+                            actionIds);
+                }
+                
             }
-            return false;
-        }, objectSpec -> objectSpec.getBeanSort() == BeanSort.UNKNOWN && ! objectSpec.isAbstract());
+            
+        });
 
     }
 

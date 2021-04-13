@@ -42,7 +42,6 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.core.metamodel.facets.all.deficiencies.DeficiencyFacet;
 import org.apache.isis.core.metamodel.facets.object.recreatable.RecreatableObjectFacetForXmlRootElementAnnotation;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
@@ -50,7 +49,7 @@ import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVisiting;
+import org.apache.isis.core.metamodel.specloader.validator.ValidationFailure;
 
 import static org.apache.isis.commons.internal.reflection._Reflect.Filter.isPublic;
 import static org.apache.isis.commons.internal.reflection._Reflect.Filter.paramCount;
@@ -170,45 +169,35 @@ implements MetaModelRefiner {
         final List<TypeValidator> typeValidators = getTypeValidators(getConfiguration());
         final List<PropertyValidator> propertyValidators = getPropertyValidators(getConfiguration());
 
-        programmingModel.addValidatorSkipManagedBeans(
-                new MetaModelValidatorVisiting.Visitor() {
-                    @Override
-                    public boolean visit(final ObjectSpecification objectSpec) {
+        programmingModel.addVisitingValidatorSkipManagedBeans(objectSpec->{
 
-                        validate(objectSpec);
-                        return true;
-                    }
+            final boolean viewModel = objectSpec.isViewModel();
+            if(!viewModel) {
+                return;
+            }
 
-                    private void validate(final ObjectSpecification objectSpec) {
+            final ViewModelFacet facet = objectSpec.getFacet(ViewModelFacet.class);
+            if (!(facet instanceof RecreatableObjectFacetForXmlRootElementAnnotation)) {
+                return;
+            }
 
-                        final boolean viewModel = objectSpec.isViewModel();
-                        if(!viewModel) {
-                            return;
-                        }
+            for (final TypeValidator typeValidator : typeValidators) {
+                typeValidator.validate(objectSpec);
+            }
 
-                        final ViewModelFacet facet = objectSpec.getFacet(ViewModelFacet.class);
-                        if (!(facet instanceof RecreatableObjectFacetForXmlRootElementAnnotation)) {
-                            return;
-                        }
+            final Stream<OneToOneAssociation> properties = objectSpec
+                    .streamProperties(MixedIn.EXCLUDED);
 
-                        for (final TypeValidator typeValidator : typeValidators) {
-                            typeValidator.validate(objectSpec);
-                        }
+            properties
+            // ignore derived
+            .filter(property->property.containsNonFallbackFacet(PropertySetterFacet.class))
+            .forEach(property->{
+                for (final PropertyValidator adapterValidator : propertyValidators) {
+                    adapterValidator.validate(objectSpec, property);
+                }
+            });
 
-                        final Stream<OneToOneAssociation> properties = objectSpec
-                                .streamProperties(MixedIn.EXCLUDED);
-
-                        properties
-                        // ignore derived
-                        .filter(property->property.containsNonFallbackFacet(PropertySetterFacet.class))
-                        .forEach(property->{
-                            for (final PropertyValidator adapterValidator : propertyValidators) {
-                                adapterValidator.validate(objectSpec, property);
-                            }
-                        });
-
-                    }
-                });
+        });
         
     }
 
@@ -277,7 +266,7 @@ implements MetaModelRefiner {
                 return;
             }
             final Class<?> propertyType = propertyTypeSpec.getCorrespondingClass();
-            DeficiencyFacet.appendToWithFormat(
+            ValidationFailure.raiseFormatted(
                     property,
                     "JAXB view model '%s' property '%s' is of type '%s' but that type is not annotated with @XmlJavaTypeAdapter.  The type must be annotated with @XmlJavaTypeAdapter(org.apache.isis.applib.jaxb.PersistentEntityAdapter.class) or equivalent.",
                     objectSpec.getFullIdentifier(),
@@ -318,7 +307,7 @@ implements MetaModelRefiner {
             }
 
             // else
-            DeficiencyFacet.appendToWithFormat(
+            ValidationFailure.raiseFormatted(
                     property,
                     "JAXB view model '%s' property '%s' is of type '%s' but is not annotated with @XmlJavaTypeAdapter.  The field/method must be annotated with @XmlJavaTypeAdapter(org.apache.isis.schema.utils.jaxbadapters.XxxAdapter.ForJaxb.class) or equivalent, or be ignored by being annotated with @XmlTransient.",
                     objectSpec.getFullIdentifier(),
@@ -333,7 +322,7 @@ implements MetaModelRefiner {
                 final ObjectSpecification objectSpec) {
 
             if(objectSpec.isAbstract()) {
-                DeficiencyFacet.appendTo(
+                ValidationFailure.raise(
                         objectSpec,
                         String.format("JAXB view model '%s' is abstract", objectSpec.getFullIdentifier())
                         );
@@ -348,17 +337,17 @@ implements MetaModelRefiner {
 
             final Class<?> correspondingClass = objectSpec.getCorrespondingClass();
             if(correspondingClass.isAnonymousClass()) {
-                DeficiencyFacet.appendToWithFormat(
+                ValidationFailure.raiseFormatted(
                         objectSpec,
                         "JAXB view model '%s' is an anonymous class", 
                         objectSpec.getFullIdentifier());
             } else if(correspondingClass.isLocalClass()) {
-                DeficiencyFacet.appendToWithFormat(
+                ValidationFailure.raiseFormatted(
                         objectSpec,
                         "JAXB view model '%s' is a local class", 
                         objectSpec.getFullIdentifier());
             } else if(correspondingClass.isMemberClass() && !Modifier.isStatic(correspondingClass.getModifiers())) {
-                DeficiencyFacet.appendToWithFormat(
+                ValidationFailure.raiseFormatted(
                         objectSpec,
                         "JAXB view model '%s' is an non-static inner class", 
                         objectSpec.getFullIdentifier());
@@ -385,12 +374,12 @@ implements MetaModelRefiner {
                     .filter(paramCount(0).and(isPublic().negate()));
             
             if(privateNoArgConstructors.isNotEmpty()) {
-                DeficiencyFacet.appendToWithFormat(
+                ValidationFailure.raiseFormatted(
                         objectSpec,
                         "JAXB view model '%s' has a no-arg constructor, however it is not public",
                         objectSpec.getFullIdentifier());
             } else {
-                DeficiencyFacet.appendToWithFormat(
+                ValidationFailure.raiseFormatted(
                         objectSpec,
                         "JAXB view model '%s' does not have a public no-arg constructor", 
                         objectSpec.getFullIdentifier());

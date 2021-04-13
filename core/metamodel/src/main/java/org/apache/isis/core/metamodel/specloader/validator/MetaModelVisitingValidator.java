@@ -18,28 +18,20 @@
  */
 package org.apache.isis.core.metamodel.specloader.validator;
 
-import java.lang.annotation.Annotation;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
-import org.apache.isis.core.metamodel.facets.FacetedMethod;
+import lombok.NonNull;
 
-import lombok.experimental.UtilityClass;
+@FunctionalInterface
+public interface MetaModelVisitingValidator {
 
-@UtilityClass
-public class MetaModelValidatorForAmbiguousMixinAnnotations {
-
-    public static <A extends Annotation> void addValidationFailure(
-            final FacetedMethod holder,
-            final Class<A> annotationType) {
+//    /**
+//     * @return <tt>true</tt> continue visiting specs.
+//     */
+    void validate(@NonNull ObjectSpecification spec);
+    
+    default void summarize() {
         
-        final String annotationLiteral = "@" + annotationType.getSimpleName();
-        
-        ValidationFailure.raiseFormatted(
-                holder, 
-                "Annotation %s on both method and type level is not allowed, "
-                + "it must be one or the other. Found with mixin: %s", 
-                annotationLiteral, 
-                holder.getIdentifier().getFullIdentityString());
     }
-
     
 }

@@ -20,7 +20,6 @@ package org.apache.isis.core.metamodel.specloader.validator;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
-import org.apache.isis.core.metamodel.facets.all.deficiencies.DeficiencyFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacetDefault;
 
@@ -42,7 +41,7 @@ public class MetaModelValidatorForConflictingOptionality {
     private static Facet addFailure(final Facet facet, final String message) {
         if(facet != null) {
             val holder = (IdentifiedHolder) facet.getFacetHolder();
-            DeficiencyFacet.appendToWithFormat(
+            ValidationFailure.raiseFormatted(
                     holder, 
                     "%s : %s", 
                     message, 

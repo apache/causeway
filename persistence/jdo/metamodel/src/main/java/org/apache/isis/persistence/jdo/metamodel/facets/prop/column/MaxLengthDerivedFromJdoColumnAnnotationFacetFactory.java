@@ -29,15 +29,12 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
-import org.apache.isis.core.metamodel.facets.all.deficiencies.DeficiencyFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacet;
 import org.apache.isis.core.metamodel.facets.properties.property.maxlength.MaxLengthFacetForPropertyAnnotation;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVisiting;
-import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVisiting.Visitor;
+import org.apache.isis.core.metamodel.specloader.validator.ValidationFailure;
 import org.apache.isis.persistence.jdo.provider.entities.JdoFacetContext;
 import org.apache.isis.persistence.jdo.provider.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacet;
 import org.apache.isis.persistence.jdo.provider.metamodel.facets.prop.notpersistent.JdoNotPersistentFacet;
@@ -94,59 +91,41 @@ implements MetaModelRefiner {
 
     @Override
     public void refineProgrammingModel(ProgrammingModel programmingModel) {
-        programmingModel.addValidatorSkipManagedBeans(newValidatorVisitor());
-    }
-
-    private Visitor newValidatorVisitor() {
-        return new MetaModelValidatorVisiting.Visitor() {
-
-            @Override
-            public boolean visit(ObjectSpecification objectSpec) {
-                validate(objectSpec);
-                return true;
+        programmingModel.addVisitingValidatorSkipManagedBeans(objectSpec->{
+            final JdoPersistenceCapableFacet pcFacet = objectSpec.getFacet(JdoPersistenceCapableFacet.class);
+            if(pcFacet==null || pcFacet.getIdentityType() == IdentityType.NONDURABLE) {
+                return;
             }
 
-            private void validate(ObjectSpecification objectSpec) {
+            final Stream<ObjectAssociation> associations = objectSpec
+                    .streamAssociations(MixedIn.EXCLUDED)
+                    .filter(ObjectAssociation.Predicates.PROPERTIES);
 
-                final JdoPersistenceCapableFacet pcFacet = objectSpec.getFacet(JdoPersistenceCapableFacet.class);
-                if(pcFacet==null || pcFacet.getIdentityType() == IdentityType.NONDURABLE) {
+            associations.forEach(association->{
+                // skip checks if annotated with JDO @NotPersistent
+                if(association.containsNonFallbackFacet(JdoNotPersistentFacet.class)) {
                     return;
                 }
 
-                final Stream<ObjectAssociation> associations = objectSpec
-                        .streamAssociations(MixedIn.EXCLUDED)
-                        .filter(ObjectAssociation.Predicates.PROPERTIES);
+                final MaxLengthFacet facet = association.getFacet(MaxLengthFacet.class);
+                final MaxLengthFacet underlying = (MaxLengthFacet) facet.getUnderlyingFacet();
+                if(underlying == null) {
+                    return;
+                }
 
-                associations.forEach(association->{
-                    // skip checks if annotated with JDO @NotPersistent
-                    if(association.containsNonFallbackFacet(JdoNotPersistentFacet.class)) {
-                        return;
+                if(facet instanceof MaxLengthFacetDerivedFromJdoColumn 
+                        && underlying instanceof MaxLengthFacetForPropertyAnnotation) {
+                    if(facet.value() != underlying.value()) {
+                        ValidationFailure.raiseFormatted(
+                                association,
+                                "%s: inconsistent lengths specified in Isis' @Property(maxLength=...) "
+                                + "and @javax.jdo.annotations.Column(length=...); "
+                                + "use just @javax.jdo.annotations.Column(length=...)",
+                                association.getIdentifier().toString());
                     }
-
-                    final MaxLengthFacet facet = association.getFacet(MaxLengthFacet.class);
-                    final MaxLengthFacet underlying = (MaxLengthFacet) facet.getUnderlyingFacet();
-                    if(underlying == null) {
-                        return;
-                    }
-
-                    if(facet instanceof MaxLengthFacetDerivedFromJdoColumn 
-                            && underlying instanceof MaxLengthFacetForPropertyAnnotation) {
-                        if(facet.value() != underlying.value()) {
-                            DeficiencyFacet.appendToWithFormat(
-                                    association,
-                                    "%s: inconsistent lengths specified in Isis' @Property(maxLength=...) "
-                                    + "and @javax.jdo.annotations.Column(length=...); "
-                                    + "use just @javax.jdo.annotations.Column(length=...)",
-                                    association.getIdentifier().toString());
-                        }
-                    }
-                });
-
-
-            }
-        };
+                }
+            });
+        });
     }
-
-
 
 }

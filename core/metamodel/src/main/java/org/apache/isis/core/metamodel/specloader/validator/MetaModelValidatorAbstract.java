@@ -31,30 +31,8 @@ implements
     MetaModelValidator, 
     MetaModelContextAware {
 
-    //protected final ValidationFailures failures = new ValidationFailures();
-    
     @Getter @Setter(onMethod = @__(@Override))
     private MetaModelContext metaModelContext;
-    
-//    /**
-//     * Collect any {@link ValidationFailure} to given validationFailures. 
-//     *  
-//     * @param validationFailures
-//     */
-//    @Override
-//    public void collectFailuresInto(@NonNull ValidationFailures validationFailures) {
-//        validationFailures.addAll(failures);
-//    }
-
-//    public void onFailure(
-//            @NonNull FacetHolder facetHolder, 
-//            @NonNull Identifier deficiencyOrigin,
-//            @NonNull String deficiencyMessageFormat, 
-//            Object... args) {
-//        
-//        DeficiencyFacet.appendTo(facetHolder, deficiencyOrigin, String.format(deficiencyMessageFormat, args));
-//        failures.add(deficiencyOrigin, deficiencyMessageFormat, args);
-//    }
     
     protected IsisConfiguration getConfiguration() {
         return metaModelContext.getConfiguration();

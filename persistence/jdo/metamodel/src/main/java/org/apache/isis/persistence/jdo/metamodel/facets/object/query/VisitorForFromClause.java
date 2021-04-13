@@ -24,17 +24,16 @@ import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.id.LogicalType;
 import org.apache.isis.commons.functional.Result;
 import org.apache.isis.commons.internal.context._Context;
-import org.apache.isis.core.metamodel.facets.all.deficiencies.DeficiencyFacet;
 import org.apache.isis.core.metamodel.spec.Hierarchical;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.specloader.validator.ValidationFailure;
 
 import lombok.val;
 
 class VisitorForFromClause extends VisitorForClauseAbstract {
 
-    VisitorForFromClause(
-            final JdoQueryAnnotationFacetFactory specificationLoader) {
-        super(specificationLoader, "FROM");
+    VisitorForFromClause() {
+        super("FROM");
     }
 
     @Override
@@ -59,8 +58,8 @@ class VisitorForFromClause extends VisitorForClauseAbstract {
                 
         if(fromSpecResult.isFailure() 
                 || !fromSpecResult.getValue().isPresent()) {
-            DeficiencyFacet.appendTo(
-                    objectSpec,
+            ValidationFailure.raise(
+                    objectSpec.getSpecificationLoader(),
                     Identifier.classIdentifier(LogicalType.fqcn(cls)),
                     String.format(
                             "%s: error in JDOQL query, "
@@ -77,8 +76,8 @@ class VisitorForFromClause extends VisitorForClauseAbstract {
         if(subclasses.contains(objectSpec)) {
             return;
         }
-        DeficiencyFacet.appendTo(
-                objectSpec,
+        ValidationFailure.raise(
+                objectSpec.getSpecificationLoader(),
                 Identifier.classIdentifier(LogicalType.fqcn(cls)),
                 String.format(
                         "%s: error in JDOQL query, class name after '%s' "

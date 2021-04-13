@@ -23,7 +23,6 @@ import javax.jdo.annotations.IdentityType;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
-import org.apache.isis.core.metamodel.facets.all.deficiencies.DeficiencyFacet;
 import org.apache.isis.core.metamodel.facets.collections.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.object.ignore.datanucleus.RemoveDatanucleusPersistableTypesFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.ignore.datanucleus.RemoveDnPrefixedMethodsFacetFactory;
@@ -32,6 +31,7 @@ import org.apache.isis.core.metamodel.facets.object.ignore.jdo.RemoveJdoPrefixed
 import org.apache.isis.core.metamodel.facets.object.parented.ParentedCollectionFacet;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel.Marker;
+import org.apache.isis.core.metamodel.specloader.validator.ValidationFailure;
 import org.apache.isis.persistence.jdo.metamodel.facets.object.datastoreidentity.JdoDatastoreIdentityAnnotationFacetFactory;
 import org.apache.isis.persistence.jdo.metamodel.facets.object.persistencecapable.JdoPersistenceCapableAnnotationFacetFactory;
 import org.apache.isis.persistence.jdo.metamodel.facets.object.query.JdoQueryAnnotationFacetFactory;
@@ -98,11 +98,11 @@ public class JdoProgrammingModel implements MetaModelRefiner {
 
     private void addValidatorToEnsureIdentityType(ProgrammingModel pm) {
 
-        pm.addValidatorSkipManagedBeans(objSpec -> {
+        pm.addVisitingValidatorSkipManagedBeans(objSpec -> {
 
             final JdoPersistenceCapableFacet jpcf = objSpec.getFacet(JdoPersistenceCapableFacet.class);
             if(jpcf == null) {
-                return true;
+                return;
             }
             final IdentityType identityType = jpcf.getIdentityType();
             if(identityType == IdentityType.APPLICATION) {
@@ -118,28 +118,26 @@ public class JdoProgrammingModel implements MetaModelRefiner {
             } else {
                 // in fact, at the time of writing there are no others, so this is theoretical in case there is
                 // a future change to the JDO spec
-                DeficiencyFacet.appendToWithFormat(
+                ValidationFailure.raiseFormatted(
                         objSpec,
                         "%s: is annotated with @PersistenceCapable but with an unrecognized identityType (%s)",
                         objSpec.getFullIdentifier(),
                         identityType);
             }
 
-            return true;
         }, Marker.JDO);
 
     }
 
     private void addValidatorToCheckForUnsupportedAnnotations(ProgrammingModel pm) {
 
-        pm.addValidatorSkipManagedBeans(objSpec -> {
+        pm.addVisitingValidatorSkipManagedBeans(objSpec -> {
             if (objSpec.containsNonFallbackFacet(ParentedCollectionFacet.class) && !objSpec.containsNonFallbackFacet(CollectionFacet.class)) {
-                DeficiencyFacet.appendToWithFormat(
+                ValidationFailure.raiseFormatted(
                         objSpec,
                         "%s: JDO/DataNucleus object store currently does not supported Aggregated or EmbeddedOnly annotations",
                         objSpec.getFullIdentifier());
             }
-            return true;
         }, Marker.JDO);
 
     }
