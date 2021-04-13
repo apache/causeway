@@ -22,6 +22,7 @@ import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.mixins.layout.LayoutMixinConstants;
@@ -39,8 +40,10 @@ import lombok.RequiredArgsConstructor;
 @Action(
         domainEvent = Object_rebuildMetamodel.ActionDomainEvent.class,
         semantics = SemanticsOf.IDEMPOTENT,
-        restrictTo = RestrictTo.PROTOTYPING,
-        associateWith = LayoutMixinConstants.METADATA_LAYOUT_GROUPNAME
+        commandPublishing = Publishing.DISABLED,
+        executionPublishing = Publishing.DISABLED,
+        associateWith = LayoutMixinConstants.METADATA_LAYOUT_GROUPNAME,
+        restrictTo = RestrictTo.PROTOTYPING
 )
 @ActionLayout(
         cssClassFa = "fa-sync",

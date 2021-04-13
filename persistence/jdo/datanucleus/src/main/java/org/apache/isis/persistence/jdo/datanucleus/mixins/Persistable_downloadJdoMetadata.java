@@ -30,6 +30,7 @@ import org.datanucleus.enhancement.Persistable;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.ParameterLayout;
+import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.mixins.layout.LayoutMixinConstants;
@@ -49,14 +50,16 @@ import lombok.RequiredArgsConstructor;
 @Action(
         domainEvent = Persistable_downloadJdoMetadata.ActionDomainEvent.class,
         semantics = SemanticsOf.SAFE,
-        restrictTo = RestrictTo.PROTOTYPING,
-        associateWith = LayoutMixinConstants.METADATA_LAYOUT_GROUPNAME 
-        )
+        commandPublishing = Publishing.DISABLED,
+        executionPublishing = Publishing.DISABLED,
+        associateWith = LayoutMixinConstants.METADATA_LAYOUT_GROUPNAME,
+        restrictTo = RestrictTo.PROTOTYPING
+)
 @ActionLayout(
         cssClassFa = "fa-download",
         position = ActionLayout.Position.PANEL_DROPDOWN,
         sequence = "710.1"
-        )
+)
 @RequiredArgsConstructor
 public class Persistable_downloadJdoMetadata {
 

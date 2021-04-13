@@ -24,8 +24,10 @@ import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.mixins.layout.LayoutMixinConstants;
 import org.apache.isis.applib.mixins.system.HasInteractionId;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
@@ -42,14 +44,17 @@ import org.apache.isis.extensions.commandlog.impl.jdo.CommandJdoRepository;
  * (unless also {@link HasInteractionId} - commands don't themselves have commands).
  */
 @Action(
-    semantics = SemanticsOf.SAFE,
-    domainEvent = Object_recentCommands.ActionDomainEvent.class,
-    restrictTo = RestrictTo.PROTOTYPING
+        domainEvent = Object_recentCommands.ActionDomainEvent.class,
+        semantics = SemanticsOf.SAFE,
+        commandPublishing = Publishing.DISABLED,
+        executionPublishing = Publishing.DISABLED,
+        associateWith = LayoutMixinConstants.METADATA_LAYOUT_GROUPNAME,
+        restrictTo = RestrictTo.PROTOTYPING
 )
 @ActionLayout(
-    cssClassFa = "fa-bolt",
-    position = ActionLayout.Position.PANEL_DROPDOWN,
-    sequence = "900.1"
+        cssClassFa = "fa-bolt",
+        position = ActionLayout.Position.PANEL_DROPDOWN,
+        sequence = "900.1"
 )
 public class Object_recentCommands {
 

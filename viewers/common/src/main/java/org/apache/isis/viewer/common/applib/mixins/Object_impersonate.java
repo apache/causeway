@@ -44,8 +44,8 @@ import lombok.RequiredArgsConstructor;
         semantics = SemanticsOf.IDEMPOTENT,
         commandPublishing = Publishing.DISABLED,
         executionPublishing = Publishing.DISABLED,
-        restrictTo = RestrictTo.PROTOTYPING,
-        associateWith = LayoutMixinConstants.METADATA_LAYOUT_GROUPNAME
+        associateWith = LayoutMixinConstants.METADATA_LAYOUT_GROUPNAME,
+        restrictTo = RestrictTo.PROTOTYPING
 )
 @ActionLayout(
         cssClassFa = "fa-mask",
