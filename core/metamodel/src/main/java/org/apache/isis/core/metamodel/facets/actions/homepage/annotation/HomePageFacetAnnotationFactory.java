@@ -33,6 +33,7 @@ import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.actions.homepage.HomePageFacet;
+import org.apache.isis.core.metamodel.facets.all.deficiencies.DeficiencyFacet;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
@@ -109,17 +110,18 @@ implements MetaModelRefiner {
                             .collect(Collectors.toCollection(HashSet::new));
                     
                     for (val objectAction : actionsHavingHomePageFacet.values()) {
-                        val actionIdentifier = objectAction.getIdentifier(); 
-                        val actionId = actionIdentifier.getFullIdentityString();
+                        val actionId = objectAction.getIdentifier().getFullIdentityString(); 
                         val colission = homepageActionIdSet.stream()
                                 .filter(not(actionId::equals))
                                 .collect(Collectors.joining(", "));
 
-                        validator.onFailure(
-                                objectAction,
-                                actionIdentifier,
-                                "%s: other actions also specified as home page: %s ",
-                                actionId, colission);
+                        DeficiencyFacet.appendTo(
+                                objectAction, 
+                                String.format(
+                                        "%s: other actions also specified as home page: %s ",
+                                        actionId, 
+                                        colission));
+                        
                     }
                 }
             }

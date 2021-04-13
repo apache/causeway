@@ -30,6 +30,7 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.ObjectSpecIdFacetFactory;
+import org.apache.isis.core.metamodel.facets.all.deficiencies.DeficiencyFacet;
 import org.apache.isis.core.metamodel.facets.object.domainservice.DomainServiceFacet;
 import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
@@ -134,9 +135,8 @@ implements MetaModelRefiner, ObjectSpecIdFacetFactory {
                     }
                     val objectSpecIdFacet = objectSpec.getFacet(ObjectSpecIdFacet.class);
                     if(objectSpecIdFacet instanceof ObjectSpecIdFacetDerivedFromClassName) {
-                        validator.onFailure(
+                        DeficiencyFacet.appendToWithFormat(
                                 objectSpec,
-                                objectSpec.getIdentifier(),
                                 "%s: the object type must be specified explicitly ('%s' config property). "
                                         + "Defaulting the object type from the package/class/package name can lead "
                                         + "to data migration issues for apps deployed to production (if the class is "

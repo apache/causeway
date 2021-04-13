@@ -29,6 +29,7 @@ import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
+import org.apache.isis.core.metamodel.facets.all.deficiencies.DeficiencyFacet;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.specimpl.ObjectSpecificationAbstract;
@@ -91,14 +92,15 @@ implements MetaModelRefiner {
 
                 val messageFormat = "%s#%s: is assumed to support "
                         + "a property, collection or action. Unmet constraint(s): %s";
-                validationFailures.onFailure(
+                
+                DeficiencyFacet.appendTo(
                         spec,
-                        spec.getIdentifier(),
-                        messageFormat,
-                        spec.getIdentifier().getClassName(),
-                        notRecognizedMethod.getName(),
-                        unmetContraints.stream()
-                        .collect(Collectors.joining("; ")));
+                        String.format(
+                                messageFormat,
+                                spec.getIdentifier().getClassName(),
+                                notRecognizedMethod.getName(),
+                                unmetContraints.stream()
+                                .collect(Collectors.joining("; "))));
             });
 
             potentialOrphans.clear(); // no longer needed  

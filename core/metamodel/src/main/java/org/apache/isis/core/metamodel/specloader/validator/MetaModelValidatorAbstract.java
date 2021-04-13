@@ -24,6 +24,7 @@ import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
 import org.apache.isis.core.metamodel.context.MetaModelContextAware;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.all.deficiencies.DeficiencyFacet;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -55,7 +56,7 @@ implements
             @NonNull String deficiencyMessageFormat, 
             Object... args) {
         
-        MetaModelValidator.super.onFailure(facetHolder, deficiencyOrigin, deficiencyMessageFormat, args);
+        DeficiencyFacet.appendTo(facetHolder, deficiencyOrigin, String.format(deficiencyMessageFormat, args));
         failures.add(deficiencyOrigin, deficiencyMessageFormat, args);
     }
     

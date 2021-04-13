@@ -35,6 +35,7 @@ import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.MethodFinderUtils;
+import org.apache.isis.core.metamodel.facets.all.deficiencies.DeficiencyFacet;
 import org.apache.isis.core.metamodel.facets.fallback.FallbackFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.title.methods.TitleFacetViaMethodsFactory;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
@@ -167,9 +168,8 @@ implements MetaModelRefiner {
             final List<Method> methods = methodsWithTitleAnnotation(cls);
             final List<Method> superClassMethods = methodsWithTitleAnnotation(supClass);
             if (methods.size() > superClassMethods.size()) {
-                validate.onFailure(
+                DeficiencyFacet.appendToWithFormat(
                         objectSpec,
-                        objectSpec.getIdentifier(),
                         "%s: conflict for determining a strategy for retrieval of title for class, contains a method '%s' and an annotation '@%s'",
                         objectSpec.getIdentifier().getClassName(),
                         TITLE_METHOD_NAME,

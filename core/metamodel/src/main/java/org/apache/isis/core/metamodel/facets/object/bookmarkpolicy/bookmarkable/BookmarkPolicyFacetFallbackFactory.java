@@ -24,6 +24,7 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacet;
+import org.apache.isis.core.metamodel.facets.all.deficiencies.DeficiencyFacet;
 import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet;
 import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacetFallback;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
@@ -67,8 +68,8 @@ implements MetaModelRefiner {
             .forEach(objectAction->{
                 final ActionSemanticsFacet semanticsFacet = objectAction.getFacet(ActionSemanticsFacet.class);
                 if(semanticsFacet == null || semanticsFacet.isFallback() || !semanticsFacet.value().isSafeInNature()) {
-                    validator.onFailure(objectAction,
-                            objectAction.getIdentifier(),
+                    DeficiencyFacet.appendToWithFormat(
+                            objectAction,
                             "%s: action is bookmarkable but action semantics are not explicitly indicated as being safe.  " +
                                     "Either add @Action(semantics=SemanticsOf.SAFE) or @Action(semantics=SemanticsOf.SAFE_AND_REQUEST_CACHEABLE), or remove @ActionLayout(bookmarking=...).",
                             objectAction.getIdentifier().toString());

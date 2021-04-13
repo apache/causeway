@@ -52,6 +52,7 @@ import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.MethodFinderUtils;
 import org.apache.isis.core.metamodel.facets.ObjectSpecIdFacetFactory;
 import org.apache.isis.core.metamodel.facets.PostConstructMethodCache;
+import org.apache.isis.core.metamodel.facets.all.deficiencies.DeficiencyFacet;
 import org.apache.isis.core.metamodel.facets.object.autocomplete.AutoCompleteFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.CreatedLifecycleEventFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.callbacks.LoadedLifecycleEventFacetForDomainObjectAnnotation;
@@ -509,9 +510,8 @@ implements MetaModelRefiner, PostConstructMethodCache, ObjectSpecIdFacetFactory 
                                 val csv = asCsv(collidingSpecs);
 
                                 collidingSpecs.forEach(spec->{
-                                    validator.onFailure(
+                                    DeficiencyFacet.appendToWithFormat(
                                             spec,
-                                            spec.getIdentifier(),
                                             "Logical-type-name (aka. object-type) '%s' mapped to multiple classes: %s",
                                             logicalTypeName,
                                             csv);

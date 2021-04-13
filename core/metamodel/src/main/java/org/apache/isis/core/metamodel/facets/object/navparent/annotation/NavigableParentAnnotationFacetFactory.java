@@ -29,6 +29,7 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
+import org.apache.isis.core.metamodel.facets.all.deficiencies.DeficiencyFacet;
 import org.apache.isis.core.metamodel.facets.object.navparent.method.NavigableParentFacetMethod;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 
@@ -122,9 +123,8 @@ implements MetaModelRefiner {
                 return true; // no conflict, continue validation processing
             } else if (evaluators.size()>1) {
 
-                validate.onFailure(
+                DeficiencyFacet.appendToWithFormat(
                         objectSpec,
-                        objectSpec.getIdentifier(),
                         "%s: conflict for determining a strategy for retrieval of (navigable) parent for class, "
                                 + "contains multiple annotations '@%s' having navigable=PARENT, while at most one is allowed.",
                                 objectSpec.getIdentifier().getClassName(),
@@ -143,9 +143,8 @@ implements MetaModelRefiner {
 
                 if(!fieldEvaluator.getGetter(cls).isPresent()) {
 
-                    validate.onFailure(
+                    DeficiencyFacet.appendToWithFormat(
                             objectSpec,
-                            objectSpec.getIdentifier(),
                             "%s: unable to determine a strategy for retrieval of (navigable) parent for class, "
                                     + "field '%s' annotated with '@%s' having navigable=PARENT does not provide a getter.",
                                     objectSpec.getIdentifier().getClassName(),

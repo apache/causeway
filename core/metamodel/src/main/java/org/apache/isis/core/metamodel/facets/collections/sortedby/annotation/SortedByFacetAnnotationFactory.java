@@ -25,6 +25,7 @@ import java.util.stream.Stream;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
+import org.apache.isis.core.metamodel.facets.all.deficiencies.DeficiencyFacet;
 import org.apache.isis.core.metamodel.facets.collections.sortedby.SortedByFacet;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -34,8 +35,8 @@ import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVisiting;
 
 /**
- * There is no check that the value is a {@link Comparator}; instead this is done through
- * the {@link #refineMetaModelValidator(MetaModelValidatorComposite)}.
+ * There is no check that the value is a {@link Comparator}; 
+ * instead this is done via {@link #refineProgrammingModel(ProgrammingModel)}.
  */
 public class SortedByFacetAnnotationFactory extends FacetFactoryAbstract
 implements MetaModelRefiner {
@@ -69,13 +70,15 @@ implements MetaModelRefiner {
                     if(facet != null) {
                         final Class<? extends Comparator<?>> cls = facet.value();
                         if(!Comparator.class.isAssignableFrom(cls)) {
-                            validator.onFailure(
+                            
+                            DeficiencyFacet.appendTo(
                                     objectSpec,
-                                    objectSpec.getIdentifier(),
-                                    "%s#%s: is annotated with @SortedBy, but the class specified '%s' is not a Comparator",
-                                    objectSpec.getIdentifier().getClassName(), 
-                                    objectCollection.getId(),
-                                    facet.value().getName());
+                                    String.format(
+                                        "%s#%s: is annotated with @SortedBy, "
+                                        + "but the class specified '%s' is not a Comparator",
+                                        objectSpec.getIdentifier().getClassName(), 
+                                        objectCollection.getId(),
+                                        facet.value().getName()));
                         }
                     }
                 });

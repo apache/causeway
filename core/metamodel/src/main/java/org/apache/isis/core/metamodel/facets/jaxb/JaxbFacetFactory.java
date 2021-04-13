@@ -42,6 +42,7 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
+import org.apache.isis.core.metamodel.facets.all.deficiencies.DeficiencyFacet;
 import org.apache.isis.core.metamodel.facets.object.recreatable.RecreatableObjectFacetForXmlRootElementAnnotation;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
@@ -285,9 +286,8 @@ implements MetaModelRefiner {
                 return;
             }
             final Class<?> propertyType = propertyTypeSpec.getCorrespondingClass();
-            validator.onFailure(
+            DeficiencyFacet.appendToWithFormat(
                     property,
-                    property.getIdentifier(),
                     "JAXB view model '%s' property '%s' is of type '%s' but that type is not annotated with @XmlJavaTypeAdapter.  The type must be annotated with @XmlJavaTypeAdapter(org.apache.isis.applib.jaxb.PersistentEntityAdapter.class) or equivalent.",
                     objectSpec.getFullIdentifier(),
                     property.getId(),
@@ -328,9 +328,8 @@ implements MetaModelRefiner {
             }
 
             // else
-            validator.onFailure(
+            DeficiencyFacet.appendToWithFormat(
                     property,
-                    property.getIdentifier(),
                     "JAXB view model '%s' property '%s' is of type '%s' but is not annotated with @XmlJavaTypeAdapter.  The field/method must be annotated with @XmlJavaTypeAdapter(org.apache.isis.schema.utils.jaxbadapters.XxxAdapter.ForJaxb.class) or equivalent, or be ignored by being annotated with @XmlTransient.",
                     objectSpec.getFullIdentifier(),
                     property.getId(),
@@ -345,11 +344,10 @@ implements MetaModelRefiner {
                 final MetaModelValidator validator) {
 
             if(objectSpec.isAbstract()) {
-                validator.onFailure(
+                DeficiencyFacet.appendTo(
                         objectSpec,
-                        objectSpec.getIdentifier(),
-                        "JAXB view model '%s' is abstract", 
-                        objectSpec.getFullIdentifier());
+                        String.format("JAXB view model '%s' is abstract", objectSpec.getFullIdentifier())
+                        );
             }
         }
     }
@@ -362,21 +360,18 @@ implements MetaModelRefiner {
 
             final Class<?> correspondingClass = objectSpec.getCorrespondingClass();
             if(correspondingClass.isAnonymousClass()) {
-                validator.onFailure(
+                DeficiencyFacet.appendToWithFormat(
                         objectSpec,
-                        objectSpec.getIdentifier(),
                         "JAXB view model '%s' is an anonymous class", 
                         objectSpec.getFullIdentifier());
             } else if(correspondingClass.isLocalClass()) {
-                validator.onFailure(
+                DeficiencyFacet.appendToWithFormat(
                         objectSpec,
-                        objectSpec.getIdentifier(),
                         "JAXB view model '%s' is a local class", 
                         objectSpec.getFullIdentifier());
             } else if(correspondingClass.isMemberClass() && !Modifier.isStatic(correspondingClass.getModifiers())) {
-                validator.onFailure(
+                DeficiencyFacet.appendToWithFormat(
                         objectSpec,
-                        objectSpec.getIdentifier(),
                         "JAXB view model '%s' is an non-static inner class", 
                         objectSpec.getFullIdentifier());
             }
@@ -404,15 +399,13 @@ implements MetaModelRefiner {
                     .filter(paramCount(0).and(isPublic().negate()));
             
             if(privateNoArgConstructors.isNotEmpty()) {
-                validator.onFailure(
+                DeficiencyFacet.appendToWithFormat(
                         objectSpec,
-                        objectSpec.getIdentifier(),
                         "JAXB view model '%s' has a no-arg constructor, however it is not public",
                         objectSpec.getFullIdentifier());
             } else {
-                validator.onFailure(
+                DeficiencyFacet.appendToWithFormat(
                         objectSpec,
-                        objectSpec.getIdentifier(),
                         "JAXB view model '%s' does not have a public no-arg constructor", 
                         objectSpec.getFullIdentifier());
             }

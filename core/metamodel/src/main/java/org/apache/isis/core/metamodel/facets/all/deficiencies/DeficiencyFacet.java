@@ -28,6 +28,7 @@ import org.apache.isis.applib.Identifier;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 
 import static org.apache.isis.commons.internal.base._With.computeIfAbsent;
 
@@ -38,7 +39,7 @@ import lombok.Value;
 import lombok.val;
 
 /**
- * Collects meta-model validation failures (deficiencies) directly on the holder that is involved.
+ * Collects meta-model validation failures (deficiencies) directly with the holder that is involved.
  * @since 2.0
  */
 @RequiredArgsConstructor(staticName = "of")
@@ -56,9 +57,6 @@ public final class DeficiencyFacet implements Facet {
     /**
      * Create a new DeficiencyFacet for the facetHolder (if it not already has one), 
      * then adds given deficiency information to the facet. 
-     * @param facetHolder
-     * @param deficiencyOrigin
-     * @param deficiencyMessage
      */
     public static DeficiencyFacet appendTo(
             @NonNull FacetHolder facetHolder, 
@@ -71,6 +69,28 @@ public final class DeficiencyFacet implements Facet {
         deficiencyFacet.getDeficiencies().add(Deficiency.of(deficiencyOrigin, deficiencyMessage));
         return deficiencyFacet;
     }
+    
+    /**
+     * Create a new DeficiencyFacet for the facetHolder (if it not already has one), 
+     * then adds given deficiency information to the facet. 
+     */
+    public static DeficiencyFacet appendTo(
+            @NonNull IdentifiedHolder facetHolder, 
+            @NonNull String deficiencyMessage) {
+        return appendTo(facetHolder, facetHolder.getIdentifier(), deficiencyMessage);
+    }
+    
+    /**
+     * Create a new DeficiencyFacet for the facetHolder (if it not already has one), 
+     * then adds given deficiency information to the facet. 
+     */
+    public static DeficiencyFacet appendToWithFormat(
+            @NonNull IdentifiedHolder facetHolder, 
+            @NonNull String messageFormat, 
+            final Object ...args) {
+        return appendTo(facetHolder, String.format(messageFormat, args));
+    }
+
     
     // -- FACET IMPLEMENTATION
     

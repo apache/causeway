@@ -27,6 +27,7 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
+import org.apache.isis.core.metamodel.facets.all.deficiencies.DeficiencyFacet;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
@@ -85,9 +86,8 @@ implements MetaModelRefiner {
                 ObjectSpecification superclassSpec = objectSpec.superclass();
                 while(superclassSpec != null) {
                     if(declaresVersionAnnotation(superclassSpec)) {
-                        validator.onFailure(
+                        DeficiencyFacet.appendToWithFormat(
                                 objectSpec,
-                                objectSpec.getIdentifier(),
                                 "%s: cannot have @Version annotated on this subclass and any of its supertypes; superclass: %s",
                                 objectSpec.getFullIdentifier(),
                                 superclassSpec.getFullIdentifier() );

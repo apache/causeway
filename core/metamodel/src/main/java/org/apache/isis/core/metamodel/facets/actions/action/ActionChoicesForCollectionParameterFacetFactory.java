@@ -23,6 +23,7 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.actions.action.associateWith.AssociatedWithFacet;
+import org.apache.isis.core.metamodel.facets.all.deficiencies.DeficiencyFacet;
 import org.apache.isis.core.metamodel.facets.collparam.semantics.CollectionSemanticsFacet;
 import org.apache.isis.core.metamodel.facets.object.autocomplete.AutoCompleteFacet;
 import org.apache.isis.core.metamodel.facets.param.autocomplete.ActionParameterAutoCompleteFacet;
@@ -70,13 +71,11 @@ implements MetaModelRefiner {
                     final ObjectSpecification objectSpec,
                     final MetaModelValidator validator) {
                 
-                validate(objectSpec, validator);
+                validate(objectSpec);
                 return true;
             }
 
-            private void validate(
-                    final ObjectSpecification objectSpec,
-                    final MetaModelValidator validator) {
+            private void validate(final ObjectSpecification objectSpec) {
                 
                 // as an optimization only checking declared members (skipping inherited ones)  
                 objectSpec.streamDeclaredActions(MixedIn.INCLUDED)
@@ -90,7 +89,7 @@ implements MetaModelRefiner {
                     for (ObjectActionParameter parameter : objectAction.getParameters()) {
                         if(parameter.getFeatureType() == FeatureType.ACTION_PARAMETER_COLLECTION) {
                             validateActionParameter_whenCollection(
-                                    objectSpec, objectAction, parameter, paramNum, validator);
+                                    objectSpec, objectAction, parameter, paramNum);
                         }
                         paramNum++;
                     }
@@ -101,8 +100,7 @@ implements MetaModelRefiner {
                     final ObjectSpecification objectSpec,
                     final ObjectAction objectAction,
                     final ObjectActionParameter parameter,
-                    final int paramNum,
-                    final MetaModelValidator validator) {
+                    final int paramNum) {
 
 
                 val collectionSemanticsFacet = parameter.getFacet(CollectionSemanticsFacet.class);
@@ -111,16 +109,23 @@ implements MetaModelRefiner {
                     // from java.util.Collection but are not of
                     // exact type List, Set, SortedSet or Collection.
                     if(!collectionSemanticsFacet.value().isSupportedInterfaceForActionParameters()) {
-                        validator.onFailure(
+                        
+                        val messageFormat = "Collection action parameter found that is not exactly one "
+                                + "of the following supported types: "
+                                + "List, Set, SortedSet, Collection or Array.  "
+                                + "Class: %s action: %s parameter %d";
+                        
+                        val message = String.format(
+                                messageFormat, 
+                                objectSpec.getFullIdentifier(), 
+                                objectAction.getName(), 
+                                paramNum);
+                        
+                        DeficiencyFacet.appendTo(
                                 objectSpec,
                                 objectSpec.getIdentifier(),
-                                "Collection action parameter found that is not exactly one "
-                                        + "of the following supported types: "
-                                        + "List, Set, SortedSet, Collection or Array.  "
-                                        + "Class: %s action: %s parameter %d",
-                                        objectSpec.getFullIdentifier(), 
-                                        objectAction.getName(), 
-                                        paramNum);
+                                message);
+                        
                         return;
                     }
                 }
@@ -140,16 +145,18 @@ implements MetaModelRefiner {
                 if(paramNum==0 && objectAction.containsNonFallbackFacet(AssociatedWithFacet.class)) {
                     return; 
                 }
-
-                validator.onFailure(
-                        objectSpec,
-                        objectSpec.getIdentifier(),
-                        "Collection action parameter found without supporting "
-                                + "choices or autoComplete facet.  "
-                                + "Class: %s action: %s parameter %d",
+                
+                val messageFormat = "Collection action parameter found without supporting "
+                        + "choices or autoComplete facet.  "
+                        + "Class: %s action: %s parameter %d";
+                
+                DeficiencyFacet.appendTo(
+                        objectSpec, 
+                        String.format(
+                                messageFormat,
                                 objectSpec.getFullIdentifier(), 
                                 objectAction.getName(), 
-                                paramNum);
+                                paramNum));
             }
         };
 

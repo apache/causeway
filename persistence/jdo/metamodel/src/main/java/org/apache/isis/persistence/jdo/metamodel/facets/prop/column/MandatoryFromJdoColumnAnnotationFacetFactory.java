@@ -30,6 +30,7 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
+import org.apache.isis.core.metamodel.facets.all.deficiencies.DeficiencyFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacetDefault;
 import org.apache.isis.core.metamodel.facets.properties.property.mandatory.MandatoryFacetForPropertyAnnotation;
@@ -167,9 +168,8 @@ implements MetaModelRefiner {
 
                     if(underlying.isInvertedSemantics()) {
                         // ie @Optional
-                        validator.onFailure(
+                        DeficiencyFacet.appendToWithFormat(
                                 association,
-                                association.getIdentifier(),
                                 "%s: incompatible usage of Isis' @Optional annotation and @javax.jdo.annotations.Column; use just @javax.jdo.annotations.Column(allowsNull=\"...\")",
                                 association.getIdentifier().toString());
                     } else {
@@ -188,15 +188,13 @@ implements MetaModelRefiner {
                     }
                     if(underlying.isInvertedSemantics()) {
                         // ie @Optional
-                        validator.onFailure(
+                        DeficiencyFacet.appendToWithFormat(
                                 association,
-                                association.getIdentifier(),
                                 "%s: incompatible usage of Isis' @Optional annotation and @javax.jdo.annotations.Column; use just @javax.jdo.annotations.Column(allowsNull=\"...\")",
                                 association.getIdentifier().toString());
                     } else {
-                        validator.onFailure(
+                        DeficiencyFacet.appendToWithFormat(
                                 association,
-                                association.getIdentifier(),
                                 "%s: incompatible default handling of required/optional properties between Isis and JDO; add @javax.jdo.annotations.Column(allowsNull=\"...\")",
                                 association.getIdentifier().toString());
                     }

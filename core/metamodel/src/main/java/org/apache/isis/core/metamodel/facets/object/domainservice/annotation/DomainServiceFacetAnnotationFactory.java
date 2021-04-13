@@ -26,6 +26,7 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
+import org.apache.isis.core.metamodel.facets.all.deficiencies.DeficiencyFacet;
 import org.apache.isis.core.metamodel.facets.object.domainservice.DomainServiceFacet;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -93,9 +94,8 @@ implements MetaModelRefiner {
                     return;
                 }
 
-                validator.onFailure(
+                DeficiencyFacet.appendToWithFormat(
                         objectSpec,
-                        objectSpec.getIdentifier(),
                         "%s: services can only have actions ('%s' config property), not properties or collections; annotate with @Programmatic if required.  Found: %s",
                         objectSpec.getFullIdentifier(),
                         "'isis.core.meta-model.validator.serviceActionsOnly'",

@@ -27,6 +27,7 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
+import org.apache.isis.core.metamodel.facets.all.deficiencies.DeficiencyFacet;
 import org.apache.isis.core.metamodel.facets.properties.bigdecimal.javaxvaldigits.BigDecimalFacetOnPropertyFromJavaxValidationDigitsAnnotation;
 import org.apache.isis.core.metamodel.facets.value.bigdecimal.BigDecimalValueFacet;
 import org.apache.isis.core.metamodel.facets.value.bigdecimal.BigDecimalValueSemanticsProvider;
@@ -148,17 +149,15 @@ implements MetaModelRefiner {
                     if(underlying instanceof BigDecimalFacetOnPropertyFromJavaxValidationDigitsAnnotation) {
 
                         if(notNullButNotEqual(facet.getPrecision(), underlying.getPrecision())) {
-                            validator.onFailure(
+                            DeficiencyFacet.appendToWithFormat(
                                     association,
-                                    association.getIdentifier(),
                                     "%s: @javax.jdo.annotations.Column(length=...) different from @javax.validation.constraint.Digits(...); should equal the sum of its integer and fraction attributes",
                                     association.getIdentifier().toString());
                         }
 
                         if(notNullButNotEqual(facet.getScale(), underlying.getScale())) {
-                            validator.onFailure(
+                            DeficiencyFacet.appendToWithFormat(
                                     association,
-                                    association.getIdentifier(),
                                     "%s: @javax.jdo.annotations.Column(scale=...) different from @javax.validation.constraint.Digits(fraction=...)",
                                     association.getIdentifier().toString());
                         }

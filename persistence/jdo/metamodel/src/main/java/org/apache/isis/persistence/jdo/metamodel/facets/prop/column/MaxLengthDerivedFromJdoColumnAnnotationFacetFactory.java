@@ -29,6 +29,7 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
+import org.apache.isis.core.metamodel.facets.all.deficiencies.DeficiencyFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacet;
 import org.apache.isis.core.metamodel.facets.properties.property.maxlength.MaxLengthFacetForPropertyAnnotation;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
@@ -129,21 +130,14 @@ implements MetaModelRefiner {
                         return;
                     }
 
-//                    if(facet instanceof MaxLengthFacetDerivedFromJdoColumn && underlying instanceof MaxLengthFacetForMaxLengthAnnotationOnProperty) {
-//                        if(facet.value() != underlying.value()) {
-//                            validator.onFailure(
-//                                    association,
-//                                    association.getIdentifier(),
-//                                    "%s: inconsistent lengths specified in Isis' @MaxLength(...) and @javax.jdo.annotations.Column(length=...); use just @javax.jdo.annotations.Column(length=...)",
-//                                    association.getIdentifier().toClassAndNameIdentityString());
-//                        }
-//                    }
-                    if(facet instanceof MaxLengthFacetDerivedFromJdoColumn && underlying instanceof MaxLengthFacetForPropertyAnnotation) {
+                    if(facet instanceof MaxLengthFacetDerivedFromJdoColumn 
+                            && underlying instanceof MaxLengthFacetForPropertyAnnotation) {
                         if(facet.value() != underlying.value()) {
-                            validator.onFailure(
+                            DeficiencyFacet.appendToWithFormat(
                                     association,
-                                    association.getIdentifier(),
-                                    "%s: inconsistent lengths specified in Isis' @Property(maxLength=...) and @javax.jdo.annotations.Column(length=...); use just @javax.jdo.annotations.Column(length=...)",
+                                    "%s: inconsistent lengths specified in Isis' @Property(maxLength=...) "
+                                    + "and @javax.jdo.annotations.Column(length=...); "
+                                    + "use just @javax.jdo.annotations.Column(length=...)",
                                     association.getIdentifier().toString());
                         }
                     }

@@ -32,6 +32,7 @@ import org.apache.isis.core.metamodel.facets.actions.homepage.annotation.HomePag
 import org.apache.isis.core.metamodel.facets.actions.layout.ActionLayoutFacetFactory;
 import org.apache.isis.core.metamodel.facets.actions.notinservicemenu.derived.NotInServiceMenuFacetDerivedFromDomainServiceFacetFactory;
 import org.apache.isis.core.metamodel.facets.actions.validate.method.ActionValidationFacetViaMethodFactory;
+import org.apache.isis.core.metamodel.facets.all.deficiencies.DeficiencyFacet;
 import org.apache.isis.core.metamodel.facets.all.i18n.TranslationFacetFactory;
 import org.apache.isis.core.metamodel.facets.collections.accessor.CollectionAccessorFacetViaAccessorFactory;
 import org.apache.isis.core.metamodel.facets.collections.collection.CollectionAnnotationFacetFactory;
@@ -368,7 +369,8 @@ public final class ProgrammingModelFacetsJava8 extends ProgrammingModelAbstract 
                 .map(Identifier::toString)
                 .collect(Collectors.joining(", "));
 
-                validator.onFailure(objectSpec, objectSpec.getIdentifier(),
+                DeficiencyFacet.appendToWithFormat(
+                        objectSpec,
                         "%s: is a (concrete) but UNKNOWN sort, yet has %d actions: {%s}",
                         objectSpec.getCorrespondingClass().getName(),
                         numActions,

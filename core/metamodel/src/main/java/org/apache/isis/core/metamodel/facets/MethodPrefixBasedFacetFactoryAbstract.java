@@ -23,6 +23,7 @@ import java.util.function.IntFunction;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.collections.ImmutableEnumSet;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facets.all.deficiencies.DeficiencyFacet;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
@@ -130,19 +131,19 @@ implements MethodPrefixBasedFacetFactory {
                                             + "' config property)"
                                             : "";
 
-                            val message = "%s#%s: has prefix %s, is probably intended as a supporting method "
+                            val messageFormat = "%s#%s: has prefix %s, is probably intended as a supporting method "
                                     + "for a property, collection or action%s.  If the method is intended to "
                                     + "be an action, then rename and use @ActionLayout(named=\"...\") or ignore "
                                     + "completely using @Programmatic";
 
-                            metaModelValidator.onFailure(
+                            DeficiencyFacet.appendTo(
                                     objectSpec,
-                                    objectSpec.getIdentifier(),
-                                    message,
-                                    objectSpec.getIdentifier().getClassName(),
-                                    actionId,
-                                    prefix,
-                                    explanation);
+                                    String.format(
+                                            messageFormat, 
+                                            objectSpec.getIdentifier().getClassName(),
+                                            actionId,
+                                            prefix,
+                                            explanation));
                         }
                     }
                 });

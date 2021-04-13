@@ -21,6 +21,7 @@ package org.apache.isis.core.metamodel.facets.object.objectspecid;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
+import org.apache.isis.core.metamodel.facets.all.deficiencies.DeficiencyFacet;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
@@ -75,9 +76,8 @@ implements MetaModelRefiner {
                             || nameParts.stream()
                                 .anyMatch(String::isEmpty)) {
                         
-                        validator.onFailure(
+                        DeficiencyFacet.appendToWithFormat(
                                 objectSpec,
-                                objectSpec.getIdentifier(),
                                 "%s: the object type must declare a namespace, yet was found to be invalid '%s'; "
                                 + "eg. @DomainObject(objectType=\"Customer\") is considered invalid, "
                                 + "whereas @DomainObject(objectType=\"sales.Customer\") is valid.",

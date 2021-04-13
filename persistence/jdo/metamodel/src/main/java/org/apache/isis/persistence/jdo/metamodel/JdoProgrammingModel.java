@@ -23,6 +23,7 @@ import javax.jdo.annotations.IdentityType;
 import org.springframework.stereotype.Component;
 
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
+import org.apache.isis.core.metamodel.facets.all.deficiencies.DeficiencyFacet;
 import org.apache.isis.core.metamodel.facets.collections.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.object.ignore.datanucleus.RemoveDatanucleusPersistableTypesFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.ignore.datanucleus.RemoveDnPrefixedMethodsFacetFactory;
@@ -117,9 +118,8 @@ public class JdoProgrammingModel implements MetaModelRefiner {
             } else {
                 // in fact, at the time of writing there are no others, so this is theoretical in case there is
                 // a future change to the JDO spec
-                validation.onFailure(
+                DeficiencyFacet.appendToWithFormat(
                         objSpec,
-                        objSpec.getIdentifier(),
                         "%s: is annotated with @PersistenceCapable but with an unrecognized identityType (%s)",
                         objSpec.getFullIdentifier(),
                         identityType);
@@ -134,9 +134,8 @@ public class JdoProgrammingModel implements MetaModelRefiner {
 
         pm.addValidatorSkipManagedBeans((objSpec, validation) -> {
             if (objSpec.containsNonFallbackFacet(ParentedCollectionFacet.class) && !objSpec.containsNonFallbackFacet(CollectionFacet.class)) {
-                validation.onFailure(
+                DeficiencyFacet.appendToWithFormat(
                         objSpec,
-                        objSpec.getIdentifier(),
                         "%s: JDO/DataNucleus object store currently does not supported Aggregated or EmbeddedOnly annotations",
                         objSpec.getFullIdentifier());
             }

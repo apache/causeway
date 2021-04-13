@@ -38,6 +38,7 @@ import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.MethodFinderUtils;
 import org.apache.isis.core.metamodel.facets.PostConstructMethodCache;
+import org.apache.isis.core.metamodel.facets.all.deficiencies.DeficiencyFacet;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 
@@ -104,9 +105,8 @@ implements MetaModelRefiner, PostConstructMethodCache {
                 return true;    
             }
             if(underlyingFacet.getClass() != viewModelFacet.getClass()) {
-                validate.onFailure(
+                DeficiencyFacet.appendToWithFormat(
                         objectSpec,
-                        objectSpec.getIdentifier(),
                         "%s: has multiple incompatible annotations/interfaces indicating that " +
                                 "it is a recreatable object of some sort (%s and %s)",
                                 objectSpec.getFullIdentifier(),
