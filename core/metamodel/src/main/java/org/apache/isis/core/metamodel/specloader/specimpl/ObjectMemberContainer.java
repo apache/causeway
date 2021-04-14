@@ -24,6 +24,7 @@ import java.util.stream.Stream;
 
 import javax.annotation.Nullable;
 
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.commons.collections.ImmutableEnumSet;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
@@ -81,19 +82,23 @@ implements
             final MixedIn contributed,
             final Consumer<ObjectAction> onActionOverloaded) {
         
-        if(isTypeHierarchyRoot()) {
-            return streamDeclaredActions(contributed); // stop going deeper
-        }
+        val actionStream = isTypeHierarchyRoot()
+                ? streamDeclaredActions(types, contributed) // stop going deeper
+                : Stream.concat(
+                        streamDeclaredActions(types, contributed), 
+                        superclass().streamActions(types, contributed));
         
-        val ids = _Sets.<String>newHashSet();
+        val actionIdentifier = _Sets.<Identifier>newHashSet();
+        val actionIds = _Sets.<String>newHashSet();
         
-        return Stream.concat(
-            streamDeclaredActions(contributed), 
-            superclass().streamActions(contributed)
-        )
+        return actionStream
+        
+        // as of contributing super-classes (and mixins?) same actions might appear more than once 
+        .filter(action->actionIdentifier.add(action.getIdentifier()))
+        
+        // ensure we don't emit duplicates
         .filter(action->{
-            // ensure we don't emit duplicates
-            val isUnique = ids.add(action.getId());
+            val isUnique = actionIds.add(action.getId());
             if(!isUnique) {
                 onActionOverloaded.accept(action); 
             }
