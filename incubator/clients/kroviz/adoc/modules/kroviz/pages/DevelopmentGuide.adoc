@@ -5,7 +5,33 @@ image::WheatFieldWithCrows.png[]
 
 == Quickstart
 
-This section provides a quickstart to developing the kroviz client.
+. Build Isis with kroviz
+
+```
+cd ~/isis
+mvn -T 1C clean install \
+ -Dmodule-kroviz \
+ -Dmaven.source.skip=true
+```
+
+[start=2]
+. Start kroviz
+
+```
+cd ~/isis/incubator/clients/kroviz/
+#gradle build
+./gradlew.sh -t run
+```
+
+[start=3]
+. Start the Server App
+. Enter in the Browser:
+```
+http://localhost:3000
+```
+[start=5]
+. Select 'Connect' in the Burger Menu
+
 
 TIP: Originally Apache Isis SimpleApp 1.16.0 was used as the reference RO backend.
 This required some extra steps in order to deal with CORS setup, see sections on pre 2.0.0-M3 and CORS.
