@@ -45,9 +45,13 @@ import org.apache.isis.applib.services.user.UserMemento;
 public class ImpersonatedUserHolderWicket implements ImpersonatedUserHolder {
 
     @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
-    @Inject private HttpSession httpSession;
+    @Inject private final HttpSession httpSession;
 
     private static final String HTTP_SESSION_KEY_IMPERSONATED_USER = ImpersonatedUserHolderWicket.class.getName() + "#userMemento";
+
+    public ImpersonatedUserHolderWicket(HttpSession httpSession) {
+        this.httpSession = httpSession;
+    }
 
     @Override
     public boolean supportsImpersonation() {

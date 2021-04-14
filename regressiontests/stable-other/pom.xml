@@ -21,24 +21,22 @@
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
-	<artifactId>isis-regressiontests-stable</artifactId>
+	<artifactId>isis-regressiontests-stable-other</artifactId>
 
-	<name>Apache Isis - Regression Tests (stable)</name>
+	<name>Apache Isis - Regression Tests (stable) - Other</name>
 
 	<dependencies>
-		<dependency>
-			<groupId>org.glassfish.jersey.ext</groupId>
-			<artifactId>jersey-spring5</artifactId>
-			<exclusions>
-				<exclusion>
-					<groupId>org.glassfish.jersey.core</groupId>
-					<artifactId>jersey-server</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
         <dependency>
             <groupId>org.apache.isis.extensions</groupId>
             <artifactId>isis-extensions-cors-impl</artifactId>
+			<scope>test</scope>
         </dependency>
+
+		<dependency>
+			<groupId>org.apache.isis.regressiontests</groupId>
+			<artifactId>isis-regressiontests-stable</artifactId>
+			<scope>test</scope>
+		</dependency>
+
 	</dependencies>
 </project>

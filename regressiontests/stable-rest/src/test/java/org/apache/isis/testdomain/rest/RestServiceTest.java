@@ -184,10 +184,8 @@ class RestServiceTest {
 
         assertNotNull(httpSessionInfo);
 
-        // impersonation in UserServiceDefault means that we _do_ now get
-        // an httpSession as a side-effect
-        //assertEquals("no http-session", httpSessionInfo);
-        assertEquals("http-session attribute names: {}", httpSessionInfo);
+        // NB: this works only because we excluded wicket viewer from the app.
+        assertEquals("no http-session", httpSessionInfo);
 
     }
 
