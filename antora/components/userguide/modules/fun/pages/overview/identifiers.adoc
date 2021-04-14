@@ -60,7 +60,7 @@ When the PDF is scanned by the mail room, the barcode could be read to attach th
 
 * as a handle to any object in an audit record, as used by xref:refguide:applib:index/services/publishing/spi/EntityPropertyChangeSubscriber.adoc[EntityPropertyChangeSubscriber];
 
-* similarly within implementations of xref:refguide:applib:index/services/publishing/spi/CommandSubscriber.adoc[CommandSubscriber] to persist `Command` objects
+* similarly within implementations of xref:refguide:applib:index/services/publishing/spi/CommandSubscriber.adoc[CommandSubscriber] to persist xref:refguide:applib:index/services/command/Command.adoc[Command] objects
 
 * similarly within implementations of xref:refguide:applib:index/services/publishing/spi/ExecutionSubscriber.adoc[ExecutionSubscriber] to persist published action invocations
 

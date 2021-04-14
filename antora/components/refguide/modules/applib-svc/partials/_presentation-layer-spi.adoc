@@ -65,7 +65,7 @@ For example, the viewer remembers which tabs are selected, and for collections w
 Used to convert view models mementos into usable URL form.
 
 
-|xref:refguide:applib:index/services/userprof/UserProfileService.adoc[UserProfileService]
+|xref:refguide:viewer:index/common/applib/services/userprof/UserProfileUiModelProvider.adoc[UserProfileUiModelProvider]
 |Obtain an alternative (usually enriched/customized) name for the current user, to render in the UI.
 
 |===

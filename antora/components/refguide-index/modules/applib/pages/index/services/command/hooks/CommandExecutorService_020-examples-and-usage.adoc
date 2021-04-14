@@ -5,12 +5,12 @@
 
 == Usage
 
-The `CommandExecutorService` domain service is provides the ability to execute a specified `Command`, optionally running the command with the identity of the user captured in that `Command`.
+The `CommandExecutorService` domain service is provides the ability to execute a specified xref:refguide:applib:index/services/command/Command.adoc[Command], optionally running the command with the identity of the user captured in that xref:refguide:applib:index/services/command/Command.adoc[Command].
 
 
 // TODO - v2 this is out of date; reference the command-replay service, now part of framework.
 
-//In fact, the service requires that the implementation of the `Command` being executed implements the `CommandWithDto` sub-interface.
+//In fact, the service requires that the implementation of the xref:refguide:applib:index/services/command/Command.adoc[Command] being executed implements the `CommandWithDto` sub-interface.
 //This allows the xref:refguide:schema:cmd.adoc[CommandDto] memento to be extracted, from which the action can be invoked/property edited.
 //
 //The primary use case for this service is to allow the replay of commands, eg for regression testing.

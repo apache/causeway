@@ -21,7 +21,6 @@ package org.apache.isis.security.spring.webmodule;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Stream;
 
 import javax.inject.Inject;
 import javax.servlet.Filter;
@@ -32,7 +31,6 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.AuthenticatedPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import org.apache.isis.applib.services.user.UserMemento;
@@ -67,25 +65,15 @@ public class SpringSecurityFilter implements Filter {
             return; // not authenticated
         }
 
-        val principal = springAuthentication.getPrincipal();
-        if(! (principal instanceof AuthenticatedPrincipal)) {
-            httpServletResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            return; // unknown principal type, not handled
-        }
-
         UserMemento userMemento = null;
-        for (AuthenticationConverter interpreter : interpreters) {
-            if(blackListedInterpreters.contains(interpreter)) {
-                continue;
-            }
+        for (AuthenticationConverter converter : converters) {
             try {
-                userMemento = interpreter.convert(springAuthentication);
+                userMemento = converter.convert(springAuthentication);
                 if(userMemento != null) {
                     break;
                 }
             } catch(Exception ex) {
-                log.info("Blacklisted {}", interpreter.getClass().getName());
-                blackListedInterpreters.add(interpreter);
+                continue;
             }
         }
 
@@ -106,6 +94,5 @@ public class SpringSecurityFilter implements Filter {
                 });
     }
 
-    @Inject List<AuthenticationConverter> interpreters;
-    private List<AuthenticationConverter> blackListedInterpreters = new ArrayList<>();
+    @Inject List<AuthenticationConverter> converters;
 }

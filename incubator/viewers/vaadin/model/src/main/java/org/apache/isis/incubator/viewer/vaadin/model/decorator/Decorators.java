@@ -18,6 +18,7 @@
  */
 package org.apache.isis.incubator.viewer.vaadin.model.decorator;
 
+import java.net.URL;
 import java.util.Optional;
 
 import com.vaadin.flow.component.Component;
@@ -30,12 +31,12 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 
 import org.apache.isis.applib.layout.component.CssClassFaPosition;
 import org.apache.isis.core.runtime.context.IsisAppCommonContext;
+import org.apache.isis.viewer.common.applib.services.userprof.UserProfileUiModel;
+import org.apache.isis.viewer.common.applib.services.userprof.UserProfileUiModelProvider;
 import org.apache.isis.viewer.common.model.decorator.icon.FontAwesomeUiModel;
 import org.apache.isis.viewer.common.model.decorator.icon.IconDecorator;
 import org.apache.isis.viewer.common.model.decorator.tooltip.TooltipDecorator;
 import org.apache.isis.viewer.common.model.decorator.tooltip.TooltipUiModel;
-import org.apache.isis.viewer.common.model.userprofile.UserProfileUiModel;
-import org.apache.isis.viewer.common.model.userprofile.UserProfileUiModelProvider;
 
 import lombok.Getter;
 import lombok.val;
@@ -43,7 +44,7 @@ import lombok.experimental.UtilityClass;
 import lombok.extern.log4j.Log4j2;
 
 /**
- * 
+ *
  */
 @UtilityClass
 @Log4j2
@@ -98,9 +99,9 @@ public class Decorators {
         }
 
     }
-    
+
     public final static class Menu {
-        
+
         public Component decorateTopLevel(
                 final Label label) {
             val icon = getTopLevelMenuIcon();
@@ -108,14 +109,14 @@ public class Decorators {
             layout.setVerticalComponentAlignment(Alignment.END, icon);
             return (Component) layout;
         }
-        
+
         private Component getTopLevelMenuIcon() {
             val menuIcon = new com.vaadin.flow.component.icon.Icon(VaadinIcon.CARET_DOWN);
             menuIcon.setSize("1em");
             menuIcon.getElement().getStyle().set("margin-left", "2px");
             return menuIcon;
         }
-        
+
     }
 
     public final static class User {
@@ -123,27 +124,27 @@ public class Decorators {
         public Component decorateWithAvatar(
                 final Label label,
                 final IsisAppCommonContext commonContext) {
-            
+
             val profileIfAny = commonContext.lookupServiceElseFail(UserProfileUiModelProvider.class)
-                    .getUserProfile(); 
+                    .userProfile();
             return decorateWithAvatar(label, Optional.ofNullable(profileIfAny));
         }
-        
-        public Component decorateWithAvatar( 
+
+        public Component decorateWithAvatar(
                 final Label label,
                 final Optional<UserProfileUiModel> userProfileUiModel) {
-            
+
             val decoratedUiComponent = userProfileUiModel
             .map(userProfile->{
-                
+
                 label.setText(userProfile.getUserProfileName());
-                
-                val userIcon = userProfile.getAvatar()
+
+                val userIcon = userProfile.avatarUrl()
                 .map(this::getUserIcon)
                 .orElseGet(this::getFallbackUserIcon);
-                
-                return (Component) new HorizontalLayout(userIcon, label);    
-                
+
+                return (Component) new HorizontalLayout(userIcon, label);
+
             })
             .orElseGet(()->{
                 label.setText("<anonymous>");
@@ -153,19 +154,19 @@ public class Decorators {
             return (Component) decoratedUiComponent;
 
         }
-        
-        private Component getUserIcon(String avatarUrl) {
-            return new Image(avatarUrl, "avatar");
+
+        private Component getUserIcon(URL avatarUrl) {
+            return new Image(avatarUrl.toExternalForm(), "avatar");
         }
-        
+
         private Component getFallbackUserIcon() {
             val userIcon = new com.vaadin.flow.component.icon.Icon(VaadinIcon.USER);
             userIcon.setSize("1em");
             return userIcon;
         }
-        
-        
-        
+
+
+
     }
 
 

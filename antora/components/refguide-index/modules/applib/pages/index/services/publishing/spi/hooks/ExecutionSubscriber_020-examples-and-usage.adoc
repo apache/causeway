@@ -15,7 +15,7 @@ If the xref:refguide:applib:index/services/wrapper/WrapperFactory.adoc[WrapperFa
 
 See also:
 
-* the xref:refguide:applib:index/services/iactn/InteractionContext.adoc[InteractionContext] is used to obtain the `Interaction` from which the member executions are published.
+* the xref:refguide:applib:index/services/iactn/InteractionContext.adoc[InteractionContext] is used to obtain the xref:refguide:applib:index/services/iactn/Interaction.adoc[Interaction] from which the member executions are published.
 
 * the xref:refguide:applib:index/services/publishing/spi/EntityChangesSubscriber.adoc[EntityChangesSubscriber] is used to obtain the set of objects modified within the interaction
 

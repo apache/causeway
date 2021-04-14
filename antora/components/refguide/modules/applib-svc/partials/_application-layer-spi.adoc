@@ -38,6 +38,15 @@ Used for command/auditing and background services.
 |Returns the home page object, if any is defined.
 
 
+|xref:refguide:applib:index/services/user/ImpersonateMenuAdvisor.adoc[ImpersonateMenuAdvisor]
+|Provides a mechanism to influence the UI provided by xref:refguide:applib:index/services/user/ImpersonateMenu.adoc[ImpersonateMenu]
+
+
+
+|xref:refguide:applib:index/services/user/ImpersonatedUserHolder.adoc[ImpersonatedUserHolder]
+|Provides a mechanism to hold the impersonated user
+
+
 
 
 

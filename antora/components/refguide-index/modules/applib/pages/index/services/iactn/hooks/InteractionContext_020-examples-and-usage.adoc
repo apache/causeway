@@ -6,14 +6,14 @@
 
 == Usage Notes
 
-Typically domain objects will have little need to interact with the `InteractionContext` and `Interaction` directly.
+Typically domain objects will have little need to interact with the xref:refguide:applib:index/services/iactn/InteractionContext.adoc[InteractionContext] and xref:refguide:applib:index/services/iactn/Interaction.adoc[Interaction] directly.
 The services are used within the framework however, primarily to support the xref:refguide:applib:index/services/publishing/spi/ExecutionSubscriber.adoc[ExecutionSubscriber] SPI, and to emit domain events over the xref:refguide:applib:index/services/eventbus/EventBusService.adoc[EventBusService].
 
 
 
 == See Also
 
-* xref:refguide:applib:index/services/iactn/Interaction.adoc[Interaction], as provided by the `InteractionContext`
+* xref:refguide:applib:index/services/iactn/Interaction.adoc[Interaction], as provided by the xref:refguide:applib:index/services/iactn/InteractionContext.adoc[InteractionContext]
 
 * xref:refguide:applib:index/services/iactn/Execution.adoc[Execution], as referenced by xref:refguide:applib:index/services/iactn/Interaction.adoc[Interaction].
 

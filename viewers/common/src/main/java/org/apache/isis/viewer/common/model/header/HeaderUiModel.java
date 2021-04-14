@@ -20,7 +20,7 @@ package org.apache.isis.viewer.common.model.header;
 
 import org.apache.isis.viewer.common.model.branding.BrandingUiModel;
 import org.apache.isis.viewer.common.model.menu.MenuUiModel;
-import org.apache.isis.viewer.common.model.userprofile.UserProfileUiModel;
+import org.apache.isis.viewer.common.applib.services.userprof.UserProfileUiModel;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -34,5 +34,5 @@ public class HeaderUiModel {
     private final MenuUiModel primary;
     private final MenuUiModel secondary;
     private final MenuUiModel tertiary;
-    
+
 }

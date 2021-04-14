@@ -4,7 +4,7 @@
 
 === Command Processing
 
-Every action invocation (and xref:refguide:applib:index/annotation/Property.adoc#commandPublishing[property edit] for that matter) is normally reified into a concrete `Command` object, basically a wrapper around the xref:schema:cmd.adoc[CommandDto] that also captures some timing metrics about the execution as well as the outcome.
+Every action invocation (and xref:refguide:applib:index/annotation/Property.adoc#commandPublishing[property edit] for that matter) is normally reified into a concrete xref:refguide:applib:index/services/command/Command.adoc[Command] object, basically a wrapper around the xref:schema:cmd.adoc[CommandDto] that also captures some timing metrics about the execution as well as the outcome.
 
 The main uses cases are:
 
@@ -37,23 +37,23 @@ public interface CommandDtoProcessor {
 ----
 <.> The returned `CommandDto`.
 This will typically be the `CommandDto` passed in, but may be supplemented in some way.
-<.> The `CommandDto` obtained already from the `Command`.
+<.> The `CommandDto` obtained already from the xref:refguide:applib:index/services/command/Command.adoc[Command].
 
-This interface is used by the framework-provided implementations of xref:refguide:applib:index/services/conmap/ContentMappingService.adoc[ContentMappingService] for the REST API, allowing ``Command``s implementations that also implement `CommandWithDto` to be further customised as they are serialized out.
+This interface is used by the framework-provided implementations of xref:refguide:applib:index/services/conmap/ContentMappingService.adoc[ContentMappingService] for the REST API, allowing xref:refguide:applib:index/services/command/Command.adoc[Command]s implementations that also implement `CommandWithDto` to be further customised as they are serialized out.
 The primary use case for this capability is in support of primary/secondary replication.
 
-* on the primary, ``Command``s are serialized to XML.
+* on the primary, xref:refguide:applib:index/services/command/Command.adoc[Command]s are serialized to XML.
 This includes the identity of the target object and the argument values of all parameters.
 
 +
 [IMPORTANT]
 ====
 Any ``Blob``s and ``Clob``s are deliberately excluded from this XML (they are instead stored as references).
-This is to prevent the storage requirements for `Command` from becoming excessive.
+This is to prevent the storage requirements for xref:refguide:applib:index/services/command/Command.adoc[Command] from becoming excessive.
 A `CommandDtoProcessor` can be provided to re-attach blob information if required.
 ====
 
-* replaying ``Command``s requires this missing parameter information to be reinstated.
+* replaying xref:refguide:applib:index/services/command/Command.adoc[Command]s requires this missing parameter information to be reinstated.
 The `CommandDtoProcessor` therefore offers a hook to dynamically re-attach the missing `Blob` or `Clob` argument.
 
 As a special case, returning `null` means that the command's DTO is effectively excluded when retrieving the list of commands.
@@ -87,7 +87,7 @@ public Document upload(final Blob blob) {
 }
 ----
 
-The `Blob` argument will not be persisted in the memento of the `Command`, but the information is implicitly available in the `Document` that is returned by the action.
+The `Blob` argument will not be persisted in the memento of the xref:refguide:applib:index/services/command/Command.adoc[Command], but the information is implicitly available in the `Document` that is returned by the action.
 The `DeriveBlobArg0FromReturnedDocument` processor retrieves this information and dynamically adds:
 
 [source,java]
@@ -119,7 +119,7 @@ public class DeriveBlobArg0FromReturnedDocument
 
 ==== Null implementation
 
-The null implementation can be used to simply indicate that no DTO should be returned for a `Command`.
+The null implementation can be used to simply indicate that no DTO should be returned for a xref:refguide:applib:index/services/command/Command.adoc[Command].
 The effect is to ignore it for replay purposes:
 
 [source,xml]
