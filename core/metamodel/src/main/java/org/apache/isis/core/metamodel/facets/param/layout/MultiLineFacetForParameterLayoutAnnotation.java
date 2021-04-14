@@ -35,11 +35,11 @@ public class MultiLineFacetForParameterLayoutAnnotation extends MultiLineFacetAb
         return parameterLayoutIfAny
                 .map(ParameterLayout::multiLine)
                 .filter(multiLine -> multiLine != -1)
-                .map(multiLine -> new MultiLineFacetForParameterLayoutAnnotation(multiLine, false, holder))
+                .map(multiLine -> new MultiLineFacetForParameterLayoutAnnotation(multiLine, holder))
                 .orElse(null);
     }
 
-    private MultiLineFacetForParameterLayoutAnnotation(int numberOfLines, boolean preventWrapping, FacetHolder holder) {
-        super(numberOfLines, preventWrapping, holder);
+    private MultiLineFacetForParameterLayoutAnnotation(int numberOfLines, FacetHolder holder) {
+        super(numberOfLines, holder);
     }
 }

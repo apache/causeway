@@ -17,13 +17,10 @@
 
 package org.apache.isis.core.metamodel.progmodels.dflt;
 
-import java.util.stream.Collectors;
-
-import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.inject.ServiceInjector;
-import org.apache.isis.applib.services.metamodel.BeanSort;
 import org.apache.isis.core.metamodel.authorization.standard.AuthorizationFacetFactory;
 import org.apache.isis.core.metamodel.facets.actions.action.ActionAnnotationFacetFactory;
+import org.apache.isis.core.metamodel.facets.actions.action.ActionAnnotationShouldEnforceTypeToBeIncludedWithMetamodel;
 import org.apache.isis.core.metamodel.facets.actions.action.ActionChoicesForCollectionParameterFacetFactory;
 import org.apache.isis.core.metamodel.facets.actions.contributing.derived.ContributingFacetDerivedFromMixinFacetFactory;
 import org.apache.isis.core.metamodel.facets.actions.defaults.method.ActionDefaultsFacetViaMethodFactory;
@@ -146,14 +143,6 @@ import org.apache.isis.core.metamodel.methods.OrphanedSupportingMethodValidator;
 import org.apache.isis.core.metamodel.postprocessors.param.DeriveFacetsPostProcessor;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModelAbstract;
 import org.apache.isis.core.metamodel.services.title.TitlesAndTranslationsValidator;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.MixedIn;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.metamodel.specloader.validator.MetaModelVisitingValidatorAbstract;
-import org.apache.isis.core.metamodel.specloader.validator.ValidationFailure;
-
-import lombok.NonNull;
-import lombok.val;
 
 public final class ProgrammingModelFacetsJava8 extends ProgrammingModelAbstract {
 
@@ -360,44 +349,8 @@ public final class ProgrammingModelFacetsJava8 extends ProgrammingModelAbstract 
         
         addValidator(new OrphanedSupportingMethodValidator());
         addValidator(new TitlesAndTranslationsValidator());
+        addValidator(new ActionAnnotationShouldEnforceTypeToBeIncludedWithMetamodel());
         
-        addValidator(new MetaModelVisitingValidatorAbstract() {
-            
-            @Override
-            public boolean isEnabled() {
-                val isActionExplicit = getConfiguration().getApplib().getAnnotation().getAction().isExplicit();
-                return !isActionExplicit; // in support of @Action not being forced, we need to relax
-            }
-            
-            @Override
-            public void validate(@NonNull ObjectSpecification spec) {
-                
-                if(spec.getBeanSort()==BeanSort.UNKNOWN 
-                        && !spec.isAbstract()) {
-                
-                    val actions = spec.streamActions(MixedIn.INCLUDED).collect(Collectors.toList());
-                    
-                    final int numActions = actions.size();
-                    if (numActions > 0) {
-
-                        val actionIds = actions.stream()
-                        .map(ObjectAction::getIdentifier)
-                        .map(Identifier::toString)
-                        .collect(Collectors.joining(", "));
-
-                        ValidationFailure.raiseFormatted(
-                                spec,
-                                "%s: is a (concrete) but UNKNOWN sort, yet has %d actions: {%s}",
-                                spec.getCorrespondingClass().getName(),
-                                numActions,
-                                actionIds);
-                    }
-                    
-                }
-                
-            }
-            
-        });
 
     }
 

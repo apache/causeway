@@ -98,7 +98,7 @@ public class FallbackFacetFactory extends FacetFactoryAbstract {
         final FeatureType featureType = facetedMethod.getFeatureType();
         if (featureType.isProperty()) {
             super.addFacet(new MaxLengthFacetUnlimited(facetedMethod));
-            super.addFacet(new MultiLineFacetNone(true, facetedMethod));
+            super.addFacet(new MultiLineFacetNone(facetedMethod));
 
             super.addFacet(newPropParamLayoutFacetIfAny(facetedMethod, "propertyLayout", getConfiguration().getApplib().getAnnotation().getPropertyLayout()));
         }
@@ -120,7 +120,7 @@ public class FallbackFacetFactory extends FacetFactoryAbstract {
             super.addFacet(new NamedFacetNone(typedHolder));
             super.addFacet(new DescribedAsFacetNone(typedHolder));
             super.addFacet(new HelpFacetNone(typedHolder));
-            super.addFacet(new MultiLineFacetNone(false, typedHolder));
+            super.addFacet(new MultiLineFacetNone(typedHolder));
 
             super.addFacet(new MaxLengthFacetUnlimited(typedHolder));
 

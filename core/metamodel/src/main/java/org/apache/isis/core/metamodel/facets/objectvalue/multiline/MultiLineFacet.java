@@ -36,16 +36,4 @@ public interface MultiLineFacet extends Facet {
      */
     int numberOfLines();
 
-    /**
-     * Whether carriage returns should be used to split over multiple lines or
-     * not.
-     *
-     * <p>
-     * If set to <tt>true</tt>, then user must use carriage returns to split. If
-     * set to <tt>false</tt>, then the viewer should automatically wrap when
-     * spills over the length of one line.
-     */
-    @Deprecated
-    boolean preventWrapping();
-
 }

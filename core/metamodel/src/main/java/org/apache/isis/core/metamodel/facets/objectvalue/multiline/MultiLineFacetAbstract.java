@@ -25,19 +25,19 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
-public abstract class MultiLineFacetAbstract extends FacetAbstract implements MultiLineFacet {
+public abstract class MultiLineFacetAbstract 
+extends FacetAbstract 
+implements MultiLineFacet {
 
     public static Class<? extends Facet> type() {
         return MultiLineFacet.class;
     }
 
     private final int numberOfLines;
-    private final boolean preventWrapping;
 
-    public MultiLineFacetAbstract(final int numberOfLines, final boolean preventWrapping, final FacetHolder holder) {
+    public MultiLineFacetAbstract(final int numberOfLines, final FacetHolder holder) {
         super(type(), holder);
         this.numberOfLines = numberOfLines;
-        this.preventWrapping = preventWrapping;
     }
 
     @Override
@@ -46,18 +46,12 @@ public abstract class MultiLineFacetAbstract extends FacetAbstract implements Mu
     }
 
     @Override
-    public boolean preventWrapping() {
-        return preventWrapping;
-    }
-
-    @Override
     protected String toStringValues() {
-        return "lines=" + numberOfLines + "," + (preventWrapping ? "prevent-wrapping" : "allow-wrapping");
+        return "lines=" + numberOfLines;
     }
 
     @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
         super.appendAttributesTo(attributeMap);
         attributeMap.put("numberOfLines", numberOfLines);
-        attributeMap.put("preventWrapping", preventWrapping);
     }
 }

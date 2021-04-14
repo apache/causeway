@@ -32,12 +32,12 @@ public class MultiLineFacetForPropertyXml extends MultiLineFacetAbstract {
         }
         final Integer multiLine = propertyLayout.getMultiLine();
         return multiLine != null && multiLine > 1 
-                ? new MultiLineFacetForPropertyXml(multiLine, false, holder) 
+                ? new MultiLineFacetForPropertyXml(multiLine, holder) 
                         : null;
     }
 
-    private MultiLineFacetForPropertyXml(int numberOfLines, boolean preventWrapping, FacetHolder holder) {
-        super(numberOfLines, preventWrapping, holder);
+    private MultiLineFacetForPropertyXml(int numberOfLines, FacetHolder holder) {
+        super(numberOfLines, holder);
     }
 
 }
