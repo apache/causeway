@@ -23,7 +23,6 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -35,10 +34,8 @@ import lombok.val;
 
 public class RemoveCallbackViaDeleteMethodFacetFactory extends MethodPrefixBasedFacetFactoryAbstract {
 
-    private static final Can<String> PREFIXES = Can.ofCollection(_Lists.of(
-            MethodLiteralConstants.DELETED_PREFIX,
-            MethodLiteralConstants.DELETING_PREFIX));
-    
+    private static final Can<String> PREFIXES = Can.of(
+            MethodLiteralConstants.DELETING_PREFIX);
 
     public RemoveCallbackViaDeleteMethodFacetFactory() {
         super(FeatureType.OBJECTS_ONLY, OrphanValidation.VALIDATE, PREFIXES);
@@ -57,17 +54,6 @@ public class RemoveCallbackViaDeleteMethodFacetFactory extends MethodPrefixBased
             final RemovingCallbackFacet facet = facetHolder.getFacet(RemovingCallbackFacet.class);
             if (facet == null) {
                 facets.add(new RemovingCallbackFacetViaMethod(method, facetHolder));
-            } else {
-                facet.addMethod(method);
-            }
-        }
-
-        method = MethodFinderUtils.findMethod(cls, MethodLiteralConstants.DELETED_PREFIX, void.class, NO_ARG);
-        if (method != null) {
-            processClassContext.removeMethod(method);
-            val facet = facetHolder.getFacet(RemovedCallbackFacet.class);
-            if (facet == null) {
-                facets.add(new RemovedCallbackFacetViaMethod(method, facetHolder));
             } else {
                 facet.addMethod(method);
             }

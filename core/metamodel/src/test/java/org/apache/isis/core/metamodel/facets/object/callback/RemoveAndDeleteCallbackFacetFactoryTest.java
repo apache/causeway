@@ -27,8 +27,6 @@ import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.object.callbacks.RemoveCallbackFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.callbacks.RemoveCallbackViaDeleteMethodFacetFactory;
-import org.apache.isis.core.metamodel.facets.object.callbacks.RemovedCallbackFacet;
-import org.apache.isis.core.metamodel.facets.object.callbacks.RemovedCallbackFacetViaMethod;
 import org.apache.isis.core.metamodel.facets.object.callbacks.RemovingCallbackFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.RemovingCallbackFacetViaMethod;
 
@@ -79,31 +77,5 @@ public class RemoveAndDeleteCallbackFacetFactoryTest extends AbstractFacetFactor
         assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(deleteMethod));
     }
 
-    public void testSavedAndPersistedLifecycleMethodPickedUpOn() {
-        class Customer {
-            @SuppressWarnings("unused")
-            public void deleted() {
-            };
-
-            @SuppressWarnings("unused")
-            public void removed() {
-            };
-        }
-        final Method removeMethod = findMethod(Customer.class, "removed");
-        final Method deleteMethod = findMethod(Customer.class, "deleted");
-
-        removeFacetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
-        deleteFacetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
-
-        final Facet facet = facetedMethod.getFacet(RemovedCallbackFacet.class);
-        assertNotNull(facet);
-        assertTrue(facet instanceof RemovedCallbackFacetViaMethod);
-        final RemovedCallbackFacetViaMethod removedCallbackFacetViaMethod = (RemovedCallbackFacetViaMethod) facet;
-        final List<Method> methods = removedCallbackFacetViaMethod.getMethods();
-        assertTrue(methods.contains(removeMethod));
-        assertTrue(methods.contains(deleteMethod));
-
-        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(removeMethod));
-    }
 
 }
