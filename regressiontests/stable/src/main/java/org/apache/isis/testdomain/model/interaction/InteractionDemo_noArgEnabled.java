@@ -19,7 +19,7 @@
 package org.apache.isis.testdomain.model.interaction;
 
 import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.extensions.modelannotation.applib.annotation.Model;
+import org.apache.isis.applib.annotation.MemberSupport;
 
 import lombok.RequiredArgsConstructor;
 
@@ -30,7 +30,7 @@ public class InteractionDemo_noArgEnabled {
     @SuppressWarnings("unused")
     private final InteractionDemo holder;
     
-    @Model
+    @MemberSupport
     public Integer act() {
         return 99;
     }

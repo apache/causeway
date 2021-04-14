@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.extensions.modelannotation.applib.annotation;
+package org.apache.isis.applib.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Inherited;
@@ -27,9 +27,9 @@ import java.lang.annotation.Target;
 
 /**
  * Indicates that a method is a supporting-method, one that contributes (hide, validate, ...)
- * to an <em>Action</em>.
+ * to an <i>Action</i>, <i>Property</i> or <i>Collection</i>.
  * <p>
- * By placing the {@link Model} annotation on a method, a contract with the meta-model is enforced,
+ * By placing the {@link MemberSupport} annotation on a method, a contract with the meta-model is enforced,
  * such that this method must be recognized and cannot be ignored.
  *
  * @since 2.0 {@index}
@@ -37,6 +37,6 @@ import java.lang.annotation.Target;
 @Inherited
 @Target({ ElementType.METHOD })
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Model {
+public @interface MemberSupport {
 
 }

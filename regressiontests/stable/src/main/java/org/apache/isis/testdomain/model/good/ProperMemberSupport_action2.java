@@ -21,9 +21,9 @@ package org.apache.isis.testdomain.model.good;
 import java.util.Set;
 
 import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.MinLength;
 import org.apache.isis.applib.annotation.Publishing;
-import org.apache.isis.extensions.modelannotation.applib.annotation.Model;
 
 import lombok.RequiredArgsConstructor;
 
@@ -39,27 +39,27 @@ public class ProperMemberSupport_action2 {
         return holder;
     }
     
-    @Model
+    @MemberSupport
     public String disableAct() {
         return null;
     }
     
-    @Model
+    @MemberSupport
     public boolean hideAct() {
         return false;
     }
 
-    @Model
+    @MemberSupport
     public String validateAct(String p0, String p1) {
         return null;
     }
     
-    @Model
+    @MemberSupport
     public Set<String> autoComplete0Act(@MinLength(3) String search) {
         return null;
     }
 
-    @Model
+    @MemberSupport
     public Set<String> autoComplete1Act(@MinLength(3) String search) {
         return null;
     }
@@ -70,12 +70,12 @@ public class ProperMemberSupport_action2 {
 //        return null;
 //    }
     
-    @Model
+    @MemberSupport
     public Set<String> choices0Act() {
         return null;
     }
 
-    @Model
+    @MemberSupport
     public Set<String> choices1Act() {
         return null;
     }
@@ -86,22 +86,22 @@ public class ProperMemberSupport_action2 {
 //        return null;
 //    }
     
-    @Model
+    @MemberSupport
     public String default0Act() {
         return null;
     }
 
-    @Model
+    @MemberSupport
     public String default1Act() {
         return null;
     }
 
-    @Model
+    @MemberSupport
     public String validate0Act(String p0) {
         return null;
     }
 
-    @Model
+    @MemberSupport
     public String validate1Act(String p1) {
         return null;
     }

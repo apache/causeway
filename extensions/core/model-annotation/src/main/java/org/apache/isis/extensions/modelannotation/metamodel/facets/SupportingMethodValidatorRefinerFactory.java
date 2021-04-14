@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.commons.collections.ImmutableEnumSet;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Sets;
@@ -36,7 +37,6 @@ import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.validator.ValidationFailure;
-import org.apache.isis.extensions.modelannotation.applib.annotation.Model;
 
 /**
  * @since 2.0 {@index}
@@ -87,7 +87,7 @@ implements MetaModelRefiner {
             // methods intended to be included with the meta-model
             final HashSet<Method> intendedMethods = _Sets.<Method>newHashSet();
             for(Method method: type.getDeclaredMethods()) {
-                if(method.getDeclaredAnnotation(Model.class)!=null) {
+                if(method.getDeclaredAnnotation(MemberSupport.class)!=null) {
                     intendedMethods.add(method);
                 }
             }
@@ -107,7 +107,7 @@ implements MetaModelRefiner {
                         messageFormat,
                         spec.getIdentifier().getClassName(),
                         notRecognizedMethod.getName(),
-                        Model.class.getSimpleName(),
+                        MemberSupport.class.getSimpleName(),
                         unmetContraints.stream()
                         .collect(Collectors.joining("; ")));
             });

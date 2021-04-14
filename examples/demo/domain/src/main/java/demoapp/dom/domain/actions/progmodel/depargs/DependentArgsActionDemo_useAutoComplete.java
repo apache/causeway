@@ -25,12 +25,12 @@ import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.MinLength;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.services.message.MessageService;
-import org.apache.isis.extensions.modelannotation.applib.annotation.Model;
 
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
@@ -70,14 +70,14 @@ public class DependentArgsActionDemo_useAutoComplete {
 
     // -- PARAM 0 (Parity)
 
-    @Model
+    @MemberSupport
     public Parity default0Act() {
         return holder.getDialogParityDefault();
     }
 
     // -- PARAM 1 (DemoItem)
 
-    @Model
+    @MemberSupport
     public Collection<DemoItem> autoComplete1Act(
             Parameters params,
             @MinLength(3) String search) {

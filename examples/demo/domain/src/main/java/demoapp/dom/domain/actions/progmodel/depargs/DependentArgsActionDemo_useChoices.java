@@ -25,12 +25,12 @@ import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.message.MessageService;
-import org.apache.isis.extensions.modelannotation.applib.annotation.Model;
 
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
@@ -70,14 +70,14 @@ public class DependentArgsActionDemo_useChoices {
 
     // -- PARAM 0 (Parity)
 
-    @Model
+    @MemberSupport
     public Parity default0Act() {
         return holder.getDialogParityDefault();
     }
 
     // -- PARAM 1 (DemoItem)
 
-    @Model
+    @MemberSupport
     public Collection<DemoItem> choices1Act(Parameters params) {
 
         val parity = params.parity(); // <-- the refining parameter from the dialog above

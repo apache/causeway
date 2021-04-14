@@ -19,10 +19,10 @@
 package org.apache.isis.testdomain.model.good;
 
 import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.Property;
-import org.apache.isis.extensions.modelannotation.applib.annotation.Model;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -37,7 +37,7 @@ public class ProperPrefixedMember {
     }
     
     // should be identified as support
-    @Model
+    @MemberSupport
     public String disableDisableSomething() {
         return null;
     }

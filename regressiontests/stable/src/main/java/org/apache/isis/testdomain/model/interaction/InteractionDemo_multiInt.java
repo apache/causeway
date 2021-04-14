@@ -19,7 +19,7 @@
 package org.apache.isis.testdomain.model.interaction;
 
 import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.extensions.modelannotation.applib.annotation.Model;
+import org.apache.isis.applib.annotation.MemberSupport;
 
 import lombok.RequiredArgsConstructor;
 
@@ -30,43 +30,43 @@ public class InteractionDemo_multiInt {
     @SuppressWarnings("unused")
     private final InteractionDemo holder;
     
-    @Model
+    @MemberSupport
     public int act(int a, int b, int c) {
         return a * (b + c);
     }
     
     // -- PARAM A
     
-    @Model 
+    @MemberSupport 
     public int defaultA(Parameters.TriInt p) {
         return 2;
     }
     
-    @Model
+    @MemberSupport
     public int[] choicesA(Parameters.TriInt p) {
         return new int[] {1, 2, 3, 4};
     }
     
     // -- PARAM B
     
-    @Model 
+    @MemberSupport 
     public int defaultB(Parameters.TriInt p) {
         return 3;
     }
     
-    @Model
+    @MemberSupport
     public int[] choicesB(Parameters.TriInt p) {
         return new int[] {1, 2, 3, 4};
     }
     
     // -- PARAM C
     
-    @Model 
+    @MemberSupport 
     public int defaultC(Parameters.TriInt p) {
         return 4;
     }
     
-    @Model
+    @MemberSupport
     public int[] choicesC(Parameters.TriInt p) {
         return new int[] {1, 2, 3, 4};
     }
