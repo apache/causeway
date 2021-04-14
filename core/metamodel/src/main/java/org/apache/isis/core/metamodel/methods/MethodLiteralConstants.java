@@ -138,12 +138,8 @@ public final class MethodLiteralConstants {
     
     // -- DEPRECATIONS
     
-    @Deprecated public static final String VALIDATE_ADD_TO_PREFIX = "validateAddTo";
-    @Deprecated public static final String VALIDATE_REMOVE_FROM_PREFIX = "validateRemoveFrom";
-    @Deprecated public static final String CLEAR_PREFIX = "clear";
+    //@Deprecated public static final String CLEAR_PREFIX = "clear";
     @Deprecated public static final String MODIFY_PREFIX = "modify";
-    @Deprecated public static final String ADD_TO_PREFIX = "addTo";
-    @Deprecated public static final String REMOVE_FROM_PREFIX = "removeFrom";
     
 
 }

@@ -25,7 +25,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 public class BookmarkPolicyFacetFallback extends BookmarkPolicyFacetAbstract {
 
     public BookmarkPolicyFacetFallback(FacetHolder facetHolder) {
-        super(facetHolder, BookmarkPolicy.NEVER);
+        super(BookmarkPolicy.NEVER, facetHolder);
     }
 
 
