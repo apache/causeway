@@ -44,22 +44,12 @@ public class OrphanedSupportingMethodValidator
 extends MetaModelVisitingValidatorAbstract {
     
     @Override
-    public boolean isEnabled() {
-        //return !getConfiguration().getApplib().getAnnotation().getAction().isExplicit();
-        return true; 
-    }
-    
-    @Override
     public void validate(@NonNull ObjectSpecification spec) {
             
         if(!(spec instanceof ObjectSpecificationAbstract)) {
             return; // continue
         }
 
-        if(spec.getCorrespondingClass().getName().equals("org.apache.isis.testdomain.model.bad.InvalidOrphanedActionSupport")) {
-            System.err.println("!!! BINGO");
-        }
-        
         val potentialOrphans = ((ObjectSpecificationAbstract) spec).getPotentialOrphans();
         if(potentialOrphans.isEmpty()) {
             return; // continue
