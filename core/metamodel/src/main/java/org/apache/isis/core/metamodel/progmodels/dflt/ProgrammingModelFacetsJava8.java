@@ -139,6 +139,7 @@ import org.apache.isis.core.metamodel.facets.value.timesql.JavaSqlTimeValueFacet
 import org.apache.isis.core.metamodel.facets.value.timestampsql.JavaSqlTimeStampValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.core.metamodel.facets.value.url.URLValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.core.metamodel.facets.value.uuid.UUIDValueFacetUsingSemanticsProviderFactory;
+import org.apache.isis.core.metamodel.methods.MemberSupportAnnotationEnforcesSupportingMethodValidator;
 import org.apache.isis.core.metamodel.methods.OrphanedSupportingMethodValidator;
 import org.apache.isis.core.metamodel.postprocessors.param.DeriveFacetsPostProcessor;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModelAbstract;
@@ -250,6 +251,7 @@ public final class ProgrammingModelFacetsJava8 extends ProgrammingModelAbstract 
         // must come after DomainObjectAnnotationFacetFactory & MixinFacetFactory
         addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, ContributingFacetDerivedFromMixinFacetFactory.class);
 
+        
         addFactory(FacetProcessingOrder.F1_LAYOUT, GridFacetFactory.class);
 
         // must come before DomainObjectLayoutFacetFactory
@@ -345,6 +347,7 @@ public final class ProgrammingModelFacetsJava8 extends ProgrammingModelAbstract 
 
         addPostProcessor(PostProcessingOrder.A1_BUILTIN, DeriveFacetsPostProcessor.class);
         
+        addValidator(new MemberSupportAnnotationEnforcesSupportingMethodValidator());
         addValidator(new OrphanedSupportingMethodValidator());
         addValidator(new TitlesAndTranslationsValidator());
         addValidator(new ActionAnnotationShouldEnforceConcreteTypeToBeIncludedWithMetamodelValidator());

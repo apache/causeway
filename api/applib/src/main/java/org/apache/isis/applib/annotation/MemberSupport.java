@@ -32,9 +32,12 @@ import java.lang.annotation.Target;
  * For <i>mixins<i> is also allowed to be placed on the mixin's main method.
  * <p>
  * By placing the {@link MemberSupport} annotation on a method, a contract with the meta-model is enforced,
- * such that this method must be recognized by the meta-model and cannot be ignored.
+ * such that this method must be recognized by the meta-model and cannot be ignored. 
+ * <p>
+ * In some sense acts as the semantic counterpart to {@link Programmatic}.
  *
  * @since 2.0 {@index}
+ * @see Programmatic
  */
 @Inherited
 @Target({ ElementType.METHOD })

@@ -28,7 +28,6 @@ import org.springframework.context.annotation.PropertySources;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
 import org.apache.isis.extensions.commandlog.impl.IsisModuleExtCommandLogImpl;
-import org.apache.isis.extensions.modelannotation.metamodel.IsisModuleExtModelAnnotation;
 import org.apache.isis.extensions.secman.api.SecmanConfiguration;
 import org.apache.isis.extensions.secman.api.permission.PermissionsEvaluationService;
 import org.apache.isis.extensions.secman.api.permission.PermissionsEvaluationServiceAllowBeatsVeto;
@@ -42,8 +41,6 @@ import org.apache.isis.testing.fixtures.applib.IsisModuleTestingFixturesApplib;
     IsisModuleJdoDatanucleus.class,
 
     IsisModuleTestingFixturesApplib.class,
-
-    IsisModuleExtModelAnnotation.class, // @Model support
 
     IsisModuleExtCommandLogImpl.class,
 

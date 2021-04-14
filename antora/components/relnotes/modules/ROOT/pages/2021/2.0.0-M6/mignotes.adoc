@@ -31,6 +31,7 @@ there is no counterpart for _Collection_
 | `@Model` (from extensions) removed
 | use `@MemberSupport`  (Applib) instead
 
-
 |===
+
+Module `IsisModuleExtModelAnnotation` was removed and is no longer required.
 

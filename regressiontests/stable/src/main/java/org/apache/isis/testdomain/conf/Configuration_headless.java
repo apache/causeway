@@ -40,7 +40,6 @@ import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.core.config.presets.IsisPresets;
 import org.apache.isis.core.interaction.scope.InteractionScopeAware;
 import org.apache.isis.core.runtimeservices.IsisModuleCoreRuntimeServices;
-import org.apache.isis.extensions.modelannotation.metamodel.IsisModuleExtModelAnnotation;
 import org.apache.isis.security.bypass.IsisModuleSecurityBypass;
 import org.apache.isis.testdomain.util.kv.KVStoreForTesting;
 
@@ -50,7 +49,6 @@ import lombok.RequiredArgsConstructor;
 @Import({
     IsisModuleCoreRuntimeServices.class,
     IsisModuleSecurityBypass.class,
-    IsisModuleExtModelAnnotation.class, // @MemberSupport support
     Configuration_headless.HeadlessCommandSupport.class,
     KVStoreForTesting.class, // Helper for JUnit Tests
 })
