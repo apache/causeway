@@ -18,12 +18,10 @@
  */
 package org.apache.isis.core.metamodel.services.ixn;
 
-import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.isis.schema.cmd.v2.CommandDto;
 import org.apache.isis.schema.ixn.v2.ActionInvocationDto;
 import org.apache.isis.schema.ixn.v2.PropertyEditDto;
 

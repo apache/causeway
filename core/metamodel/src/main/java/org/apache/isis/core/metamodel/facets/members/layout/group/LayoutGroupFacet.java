@@ -30,7 +30,7 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
  * {@link ActionLayout#fieldSetName()} and {@link PropertyLayout#fieldSetName()}.
  * <p>
  * Collections don't support grouping, but can be associated using 
- * {@link ActionLayout#associateWith()}. 
+ * {@link Action#associateWith()}. 
  * </p><p>
  * An alternative is to use the <code>Xxx.layout.xml</code> file,
  * where <code>Xxx</code> is the domain object name.

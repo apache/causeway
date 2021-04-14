@@ -19,13 +19,7 @@
 
 package org.apache.isis.core.metamodel.facets.actions.action.explicit;
 
-import java.util.List;
-
-import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 
 /**
  * Indicates that this method has been explicitly indicated as an action.

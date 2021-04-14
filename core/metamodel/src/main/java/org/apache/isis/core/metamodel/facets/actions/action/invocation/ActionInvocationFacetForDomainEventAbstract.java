@@ -33,7 +33,6 @@ import org.apache.isis.applib.services.queryresultscache.QueryResultsCache;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.assertions._Assert;
-import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Arrays;
 import org.apache.isis.core.metamodel.commons.CanonicalParameterUtil;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -149,16 +148,6 @@ implements ImperativeFacet {
                 DomainEventMemberExecutor::new,
                 getFacetHolder(),
                 getIdentified());
-    }
-
-    private static String trim(String message, final int maxLen) {
-        if(!_Strings.isNullOrEmpty(message)) {
-            message = message.substring(0, Math.min(message.length(), maxLen));
-            if(message.length() == maxLen) {
-                message += " ...";
-            }
-        }
-        return message;
     }
 
     private Object invokeMethodElseFromCache(

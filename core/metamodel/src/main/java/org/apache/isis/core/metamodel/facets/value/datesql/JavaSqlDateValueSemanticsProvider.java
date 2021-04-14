@@ -20,7 +20,6 @@
 package org.apache.isis.core.metamodel.facets.value.datesql;
 
 import java.sql.Date;
-import java.sql.Time;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;

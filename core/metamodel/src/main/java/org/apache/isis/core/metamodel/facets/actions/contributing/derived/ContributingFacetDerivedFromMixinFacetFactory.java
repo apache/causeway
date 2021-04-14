@@ -24,8 +24,8 @@ import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.core.metamodel.facets.actions.contributing.ContributingFacetAbstract;
 import org.apache.isis.core.metamodel.facets.actions.contributing.ContributingFacet.Contributing;
+import org.apache.isis.core.metamodel.facets.actions.contributing.ContributingFacetAbstract;
 import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacet;
 
 import lombok.val;

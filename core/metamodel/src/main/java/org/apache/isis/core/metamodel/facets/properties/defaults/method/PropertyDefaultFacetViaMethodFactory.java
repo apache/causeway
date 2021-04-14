@@ -23,7 +23,7 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.methods.MethodFinder2;
+import org.apache.isis.core.metamodel.methods.MethodFinder;
 import org.apache.isis.core.metamodel.methods.MethodLiteralConstants;
 import org.apache.isis.core.metamodel.methods.MethodPrefixBasedFacetFactoryAbstract;
 
@@ -58,7 +58,7 @@ public class PropertyDefaultFacetViaMethodFactory extends MethodPrefixBasedFacet
 
         val cls = processMethodContext.getCls();
         val returnType = getterOrMixinMain.getReturnType();
-        val method = MethodFinder2
+        val method = MethodFinder
                 .findMethod(
                     cls,
                     namingConvention, 

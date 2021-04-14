@@ -23,7 +23,7 @@ import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.methods.MethodFinder2;
+import org.apache.isis.core.metamodel.methods.MethodFinder;
 import org.apache.isis.core.metamodel.methods.MethodLiteralConstants;
 import org.apache.isis.core.metamodel.methods.MethodPrefixBasedFacetFactoryAbstract;
 
@@ -59,7 +59,7 @@ public class PropertyAutoCompleteFacetMethodFactory extends MethodPrefixBasedFac
         
         val cls = processMethodContext.getCls();
         val returnType = getterOrMixinMain.getReturnType();
-        val autoCompleteMethod = MethodFinder2
+        val autoCompleteMethod = MethodFinder
                 .findMethod(
                         cls, 
                         namingConvention, 

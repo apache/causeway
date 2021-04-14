@@ -141,7 +141,7 @@ final class Oid_Marshaller implements Oid.Marshaller, Oid.Unmarshaller {
             throw _Exceptions.illegalArgument("Could not parse OID '" + oidStr + "'; should match pattern: " + OIDSTR_PATTERN.pattern());
         }
 
-        final String isTransientOrViewModelStr = getGroup(matcher, 3); // deprecated
+        //final String isTransientOrViewModelStr = getGroup(matcher, 3); // deprecated
 
         final String rootObjectType = getGroup(matcher, 4);
         if(_Strings.isEmpty(rootObjectType)) {

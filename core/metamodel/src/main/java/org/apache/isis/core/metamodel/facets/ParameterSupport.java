@@ -30,7 +30,7 @@ import javax.annotation.Nullable;
 
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.collections._Arrays;
-import org.apache.isis.core.metamodel.methods.MethodFinder2;
+import org.apache.isis.core.metamodel.methods.MethodFinder;
 import org.apache.isis.core.metamodel.methods.MethodFinderUtils.MethodAndPpmConstructor;
 
 import lombok.Builder;
@@ -137,25 +137,25 @@ public final class ParameterSupport {
         
         switch(searchRequest.getReturnType()) {
         case BOOLEAN:
-            MethodFinder2
+            MethodFinder
                 .findMethodWithPPMArg_returningBoolean(type, methodNames, paramTypes, additionalParamTypes)
                 .map(methodAndPpmConstructor->toSearchResult(paramIndex, paramType, methodAndPpmConstructor))
                 .forEach(onMethodFound);
             break;
         case TEXT:
-            MethodFinder2
+            MethodFinder
                 .findMethodWithPPMArg_returningText(type, methodNames, paramTypes, additionalParamTypes)
                 .map(methodAndPpmConstructor->toSearchResult(paramIndex, paramType, methodAndPpmConstructor))
                 .forEach(onMethodFound);
             break;
         case NON_SCALAR:
-            MethodFinder2
+            MethodFinder
                 .findMethodWithPPMArg_returningNonScalar(type, methodNames, paramType, paramTypes, additionalParamTypes)
                 .map(methodAndPpmConstructor->toSearchResult(paramIndex, paramType, methodAndPpmConstructor))
                 .forEach(onMethodFound);
             break;
         case SAME_AS_PARAMETER_TYPE:
-            MethodFinder2
+            MethodFinder
                 .findMethodWithPPMArg(type, methodNames, paramType, paramTypes, additionalParamTypes)
                 .map(methodAndPpmConstructor->toSearchResult(paramIndex, paramType, methodAndPpmConstructor))
                 .forEach(onMethodFound);
@@ -191,25 +191,25 @@ public final class ParameterSupport {
         
         switch(searchRequest.getReturnType()) {
         case BOOLEAN:
-            MethodFinder2
+            MethodFinder
                 .findMethod_returningBoolean(type, methodNames, singleArg)
                 .map(supportingMethod->toSearchResult(paramIndex, paramType, supportingMethod))
                 .forEach(onMethodFound);
             break;
         case TEXT:
-            MethodFinder2
+            MethodFinder
                 .findMethod_returningText(type, methodNames, singleArg)
                 .map(supportingMethod->toSearchResult(paramIndex, paramType, supportingMethod))
                 .forEach(onMethodFound);
             break;
         case NON_SCALAR:
-            MethodFinder2
+            MethodFinder
                 .findMethod_returningNonScalar(type, methodNames, paramType, singleArg)
                 .map(supportingMethod->toSearchResult(paramIndex, paramType, supportingMethod))
                 .forEach(onMethodFound);
             break;
         case SAME_AS_PARAMETER_TYPE:
-            MethodFinder2
+            MethodFinder
                 .findMethod(type, methodNames, paramType, singleArg)
                 .map(supportingMethod->toSearchResult(paramIndex, paramType, supportingMethod))
                 .forEach(onMethodFound);
@@ -244,25 +244,25 @@ public final class ParameterSupport {
             
             switch(searchRequest.getReturnType()) {
             case BOOLEAN:
-                supportingMethod = MethodFinder2
+                supportingMethod = MethodFinder
                     .findMethod_returningBoolean(type, methodNames, paramTypesToLookFor)
                     .findFirst()
                     .orElse(null);
                 break;
             case TEXT:
-                supportingMethod = MethodFinder2
+                supportingMethod = MethodFinder
                     .findMethod_returningText(type, methodNames, paramTypesToLookFor)
                     .findFirst()
                     .orElse(null);
                 break;
             case NON_SCALAR:
-                supportingMethod = MethodFinder2
+                supportingMethod = MethodFinder
                     .findMethod_returningNonScalar(type, methodNames, paramType, paramTypesToLookFor)
                     .findFirst()
                     .orElse(null);
                 break;
             case SAME_AS_PARAMETER_TYPE:
-                supportingMethod = MethodFinder2
+                supportingMethod = MethodFinder
                     .findMethod(type, methodNames, paramType, paramTypesToLookFor)
                     .findFirst()
                     .orElse(null);

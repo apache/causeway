@@ -25,7 +25,7 @@ import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
-import org.apache.isis.core.metamodel.methods.MethodFinder2;
+import org.apache.isis.core.metamodel.methods.MethodFinder;
 import org.apache.isis.core.metamodel.methods.MethodLiteralConstants;
 import org.apache.isis.core.metamodel.methods.MethodPrefixBasedFacetFactoryAbstract;
 
@@ -59,7 +59,7 @@ extends MethodPrefixBasedFacetFactoryAbstract  {
         boolean searchExactMatch = !noParamsOnly;
         if(searchExactMatch) {
             // search for exact match
-            disableMethod = MethodFinder2.findMethod_returningText(
+            disableMethod = MethodFinder.findMethod_returningText(
                     cls,
                     namingConvention,
                     actionOrGetter.getParameterTypes())
@@ -68,7 +68,7 @@ extends MethodPrefixBasedFacetFactoryAbstract  {
         }
         if (disableMethod == null) {
             // search for no-arg version
-            disableMethod = MethodFinder2.findMethod_returningText(
+            disableMethod = MethodFinder.findMethod_returningText(
                     cls,
                     namingConvention,
                     NO_ARG)

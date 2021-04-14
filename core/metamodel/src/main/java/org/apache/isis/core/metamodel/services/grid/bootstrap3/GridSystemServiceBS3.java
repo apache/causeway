@@ -18,8 +18,6 @@
  */
 package org.apache.isis.core.metamodel.services.grid.bootstrap3;
 
-import static org.apache.isis.commons.internal.base._NullSafe.stream;
-
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -70,6 +68,8 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
+
+import static org.apache.isis.commons.internal.base._NullSafe.stream;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;

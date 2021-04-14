@@ -18,8 +18,6 @@
  */
 package org.apache.isis.core.metamodel.services.grid;
 
-import static org.apache.isis.core.metamodel.facetapi.FacetUtil.addOrReplaceFacet;
-
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -86,6 +84,8 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+
+import static org.apache.isis.core.metamodel.facetapi.FacetUtil.addOrReplaceFacet;
 
 import lombok.Value;
 import lombok.val;

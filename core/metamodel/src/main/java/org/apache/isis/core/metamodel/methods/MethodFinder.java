@@ -30,7 +30,7 @@ import org.apache.isis.core.metamodel.methods.MethodFinderUtils.MethodAndPpmCons
  * @apiNote each method name candidate is processed in sequence as given by {@code Can<String> names} 
  */
 //@Log4j2
-public final class MethodFinder2 {
+public final class MethodFinder {
 
     public static Stream<Method> findMethod(
             final Class<?> type,

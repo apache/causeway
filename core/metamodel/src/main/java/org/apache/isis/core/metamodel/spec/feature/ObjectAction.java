@@ -17,8 +17,6 @@
 
 package org.apache.isis.core.metamodel.spec.feature;
 
-import static org.apache.isis.commons.internal.base._NullSafe.stream;
-
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -58,6 +56,8 @@ import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.specimpl.MixedInMember;
+
+import static org.apache.isis.commons.internal.base._NullSafe.stream;
 
 import lombok.NonNull;
 import lombok.val;

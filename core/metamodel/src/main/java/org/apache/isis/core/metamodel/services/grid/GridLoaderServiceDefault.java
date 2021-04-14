@@ -38,8 +38,8 @@ import org.apache.isis.applib.services.grid.GridLoaderService;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.core.config.environment.IsisSystemEnvironment;
 import org.apache.isis.commons.internal.resources._Resources;
+import org.apache.isis.core.config.environment.IsisSystemEnvironment;
 
 import lombok.Value;
 import lombok.extern.log4j.Log4j2;

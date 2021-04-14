@@ -22,7 +22,7 @@ package org.apache.isis.core.metamodel.facets.properties.validating.method;
 import org.apache.isis.applib.services.i18n.TranslationContext;
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.methods.MethodFinder2;
+import org.apache.isis.core.metamodel.methods.MethodFinder;
 import org.apache.isis.core.metamodel.methods.MethodLiteralConstants;
 import org.apache.isis.core.metamodel.methods.MethodPrefixBasedFacetFactoryAbstract;
 
@@ -50,7 +50,7 @@ public class PropertyValidateFacetViaMethodFactory extends MethodPrefixBasedFace
         val namingConvention = getNamingConventionForPropertyAndCollectionSupport(processMethodContext, PREFIX);
         val returnType = getterMethod.getReturnType();
 
-        val validateMethod = MethodFinder2.findMethod_returningText(
+        val validateMethod = MethodFinder.findMethod_returningText(
                 cls,
                 namingConvention,
                 new Class[] { returnType })
