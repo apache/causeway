@@ -55,6 +55,10 @@ extends MetaModelVisitingValidatorAbstract {
             
             if(!overloadedNames.isEmpty()) {
             
+                //XXX there is a small chance of a false positive with method overriding, 
+                // when the method signatures are not exactly the same;
+                // meaning, when the parameter classes differ
+                
                 ValidationFailure.raiseFormatted(
                         spec,
                         "Action method overloading is not allowed, "

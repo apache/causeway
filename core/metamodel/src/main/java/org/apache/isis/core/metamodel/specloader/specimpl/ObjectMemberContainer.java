@@ -24,7 +24,6 @@ import java.util.stream.Stream;
 
 import javax.annotation.Nullable;
 
-import org.apache.isis.applib.Identifier;
 import org.apache.isis.commons.collections.ImmutableEnumSet;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
@@ -88,19 +87,20 @@ implements
                         streamDeclaredActions(types, contributed), 
                         superclass().streamActions(types, contributed));
         
-        val actionIdentifier = _Sets.<Identifier>newHashSet();
+        val actionSignatures = _Sets.<String>newHashSet();
         val actionIds = _Sets.<String>newHashSet();
         
         return actionStream
         
-        // as of contributing super-classes (and mixins?) same actions might appear more than once 
-        .filter(action->actionIdentifier.add(action.getIdentifier()))
+        // as of contributing super-classes same actions might appear more than once (overriding) 
+        .filter(action->actionSignatures.add(
+                action.getIdentifier().getMemberNameAndParameterClassNamesIdentityString()))
         
         // ensure we don't emit duplicates
         .filter(action->{
             val isUnique = actionIds.add(action.getId());
             if(!isUnique) {
-                onActionOverloaded.accept(action); 
+                onActionOverloaded.accept(action);
             }
             return isUnique;
         }); 
