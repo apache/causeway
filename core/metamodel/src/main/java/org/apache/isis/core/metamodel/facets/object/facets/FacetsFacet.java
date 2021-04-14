@@ -22,7 +22,6 @@ package org.apache.isis.core.metamodel.facets.object.facets;
 import org.apache.isis.applib.annotation.Facets;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
-import org.apache.isis.core.metamodel.facets.MultipleValueFacet;
 
 /**
  * Indicates that this class has additional arbitrary facets, to be processed.
@@ -34,7 +33,7 @@ import org.apache.isis.core.metamodel.facets.MultipleValueFacet;
  * <i>This</i> {@link Facet} allows the {@link FacetFactory}(s) that will create
  * those {@link Facet}s to be accessed. Which, admittedly, is rather confusing.
  */
-public interface FacetsFacet extends MultipleValueFacet {
+public interface FacetsFacet extends Facet {
 
     /**
      * Returns the fully qualified class of the facet factory, which should be

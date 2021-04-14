@@ -32,6 +32,7 @@ import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.apache.isis.commons.internal.collections._Maps;
+import org.apache.isis.core.metamodel.methods.MethodFinderUtils;
 
 public class MethodFinderUtilsTest {
 

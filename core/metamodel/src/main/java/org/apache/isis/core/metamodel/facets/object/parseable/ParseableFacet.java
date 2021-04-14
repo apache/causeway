@@ -20,14 +20,14 @@
 package org.apache.isis.core.metamodel.facets.object.parseable;
 
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.facets.MultipleValueFacet;
+import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 /**
  * Indicates that this class can parse an entry string.
  */
-public interface ParseableFacet extends MultipleValueFacet {
+public interface ParseableFacet extends Facet {
 
     /**
      * Parses a text entry made by a user and sets the domain object's value.

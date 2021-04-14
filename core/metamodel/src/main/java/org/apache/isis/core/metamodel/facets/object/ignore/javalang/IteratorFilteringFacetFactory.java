@@ -24,7 +24,7 @@ import java.lang.reflect.Method;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.core.metamodel.facets.MethodFilteringFacetFactory;
+import org.apache.isis.core.metamodel.methods.MethodFilteringFacetFactory;
 
 /**
  * Designed to simply filter out {@link Iterable#iterator()} method if it

@@ -29,7 +29,7 @@ import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 import org.apache.isis.commons.collections.Can;
-import org.apache.isis.core.metamodel.facets.MethodLiteralConstants;
+import org.apache.isis.core.metamodel.methods.MethodLiteralConstants;
 
 import lombok.val;
 import lombok.experimental.UtilityClass;

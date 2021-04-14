@@ -17,9 +17,11 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets;
+package org.apache.isis.core.metamodel.methods;
 
 import java.lang.reflect.Method;
+
+import org.apache.isis.core.metamodel.facets.FacetFactory;
 
 /**
  * A {@link FacetFactory} which filters out arbitrary {@link Method method}s.

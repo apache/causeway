@@ -19,9 +19,6 @@
 
 package org.apache.isis.core.metamodel.facets.object.title.methods;
 
-import static org.apache.isis.core.metamodel.facets.MethodLiteralConstants.TITLE;
-import static org.apache.isis.core.metamodel.facets.MethodLiteralConstants.TO_STRING;
-
 import java.lang.reflect.Method;
 
 import org.apache.isis.applib.services.i18n.TranslationContext;
@@ -31,10 +28,13 @@ import org.apache.isis.core.metamodel.commons.ClassExtensions;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.MethodFinderUtils;
-import org.apache.isis.core.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.fallback.FallbackFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
+import org.apache.isis.core.metamodel.methods.MethodFinderUtils;
+import org.apache.isis.core.metamodel.methods.MethodPrefixBasedFacetFactoryAbstract;
+
+import static org.apache.isis.core.metamodel.methods.MethodLiteralConstants.TITLE;
+import static org.apache.isis.core.metamodel.methods.MethodLiteralConstants.TO_STRING;
 
 import lombok.val;
 

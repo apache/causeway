@@ -17,10 +17,24 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets;
+package org.apache.isis.core.metamodel.methods;
 
-import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.commons.collections.Can;
+import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
+import org.apache.isis.core.metamodel.facets.FacetFactory;
+import org.apache.isis.core.metamodel.specloader.facetprocessor.FacetProcessor;
 
-public interface MultipleValueFacet extends Facet {
+/**
+ * Indicates that the {@link FacetFactory} works by recognizing methods with a
+ * certain prefix (or prefixes).
+ *
+ * <p>
+ * Used by {@link FacetProcessor#recognizes(java.lang.reflect.Method)}.
+ */
+public interface MethodPrefixBasedFacetFactory extends FacetFactory, MetaModelRefiner {
 
+    /**
+     * All prefixes recognized by this {@link FacetFactory}.
+     */
+    public Can<String> getPrefixes();
 }

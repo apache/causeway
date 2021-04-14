@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets;
+package org.apache.isis.core.metamodel.methods;
 
 import java.lang.reflect.Method;
 import java.util.function.Consumer;

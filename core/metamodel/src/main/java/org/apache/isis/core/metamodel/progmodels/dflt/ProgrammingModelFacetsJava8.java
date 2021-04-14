@@ -23,7 +23,6 @@ import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.metamodel.BeanSort;
 import org.apache.isis.core.metamodel.authorization.standard.AuthorizationFacetFactory;
-import org.apache.isis.core.metamodel.facets.OrphanedSupportingMethodValidator;
 import org.apache.isis.core.metamodel.facets.actions.action.ActionAnnotationFacetFactory;
 import org.apache.isis.core.metamodel.facets.actions.action.ActionChoicesForCollectionParameterFacetFactory;
 import org.apache.isis.core.metamodel.facets.actions.contributing.derived.ContributingFacetDerivedFromMixinFacetFactory;
@@ -143,6 +142,7 @@ import org.apache.isis.core.metamodel.facets.value.timesql.JavaSqlTimeValueFacet
 import org.apache.isis.core.metamodel.facets.value.timestampsql.JavaSqlTimeStampValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.core.metamodel.facets.value.url.URLValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.core.metamodel.facets.value.uuid.UUIDValueFacetUsingSemanticsProviderFactory;
+import org.apache.isis.core.metamodel.methods.OrphanedSupportingMethodValidator;
 import org.apache.isis.core.metamodel.postprocessors.param.DeriveFacetsPostProcessor;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModelAbstract;
 import org.apache.isis.core.metamodel.services.title.TitlesAndTranslationsValidator;
@@ -262,7 +262,6 @@ public final class ProgrammingModelFacetsJava8 extends ProgrammingModelAbstract 
 
         // must come after DomainObjectAnnotationFacetFactory & MixinFacetFactory
         addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, ContributingFacetDerivedFromMixinFacetFactory.class);
-        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, OrphanedSupportingMethodValidator.class);
 
         addFactory(FacetProcessingOrder.F1_LAYOUT, GridFacetFactory.class);
 
@@ -358,10 +357,18 @@ public final class ProgrammingModelFacetsJava8 extends ProgrammingModelAbstract 
         addFactory(FacetProcessingOrder.Z1_FINALLY, ViewModelSemanticCheckingFacetFactory.class);
 
         addPostProcessor(PostProcessingOrder.A1_BUILTIN, DeriveFacetsPostProcessor.class);
+        
+        addValidator(new OrphanedSupportingMethodValidator());
         addValidator(new TitlesAndTranslationsValidator());
-
+        
         addValidator(new MetaModelVisitingValidatorAbstract() {
-
+            
+            @Override
+            public boolean isEnabled() {
+                val isActionExplicit = getConfiguration().getApplib().getAnnotation().getAction().isExplicit();
+                return !isActionExplicit; // in support of @Action not being forced, we need to relax
+            }
+            
             @Override
             public void validate(@NonNull ObjectSpecification spec) {
                 

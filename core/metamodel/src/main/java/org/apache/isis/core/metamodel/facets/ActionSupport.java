@@ -29,7 +29,8 @@ import javax.annotation.Nullable;
 
 import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.collections._Arrays;
-import org.apache.isis.core.metamodel.facets.MethodFinderUtils.MethodAndPpmConstructor;
+import org.apache.isis.core.metamodel.methods.MethodFinder2;
+import org.apache.isis.core.metamodel.methods.MethodFinderUtils.MethodAndPpmConstructor;
 
 import lombok.Builder;
 import lombok.Getter;

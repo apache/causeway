@@ -25,6 +25,10 @@ implements MetaModelVisitingValidator {
     @Override
     public final void validate() {
 
+        if(!isEnabled()){
+            return;
+        }
+        
         super.getMetaModelContext().getSpecificationLoader()
         .forEach(this::validate);
         

@@ -19,7 +19,7 @@
 
 package org.apache.isis.core.metamodel.facets.objectvalue.multiline;
 
-import org.apache.isis.core.metamodel.facets.MultipleValueFacet;
+import org.apache.isis.core.metamodel.facetapi.Facet;
 
 /**
  * Whether the (string) property or parameter should be rendered over multiple
@@ -29,7 +29,7 @@ import org.apache.isis.core.metamodel.facets.MultipleValueFacet;
  * In the standard Apache Isis Programming Model, corresponds to the
  * <tt>@MultiLine</tt> annotation.
  */
-public interface MultiLineFacet extends MultipleValueFacet {
+public interface MultiLineFacet extends Facet {
 
     /**
      * How many lines to use.
