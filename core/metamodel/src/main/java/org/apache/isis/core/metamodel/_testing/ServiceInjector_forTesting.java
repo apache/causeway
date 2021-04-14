@@ -22,7 +22,6 @@ import static java.util.Objects.requireNonNull;
 
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.core.metamodel.context.MetaModelContext;
-import org.apache.isis.core.metamodel.specloader.InjectorMethodEvaluatorDefault;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -50,11 +49,11 @@ class ServiceInjector_forTesting implements ServiceInjector {
 
             val configuration = requireNonNull(mmcb.getConfiguration());
             val serviceRegistry = requireNonNull(mmcb.getServiceRegistry());
-            val injectorMethodEvaluator = new InjectorMethodEvaluatorDefault();
+            val injectorMethodEvaluator = new _InjectorMethodEvaluator();
 
             //Note: when testing we don't report un-resolvable injection points.
 
-            delegate = ServiceInjectorLegacy.getInstanceAndInit(
+            delegate = _ServiceInjectorLegacy.getInstanceAndInit(
                     configuration, serviceRegistry, injectorMethodEvaluator);
 
         }

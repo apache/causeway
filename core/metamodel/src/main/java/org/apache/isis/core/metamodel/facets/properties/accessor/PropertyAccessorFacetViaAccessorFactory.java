@@ -35,7 +35,8 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 import lombok.val;
 
-public class PropertyAccessorFacetViaAccessorFactory extends PropertyOrCollectionIdentifyingFacetFactoryAbstract {
+public class PropertyAccessorFacetViaAccessorFactory 
+extends PropertyOrCollectionIdentifyingFacetFactoryAbstract {
 
     private static final Can<String> PREFIXES = Can.empty();
 
@@ -57,8 +58,7 @@ public class PropertyAccessorFacetViaAccessorFactory extends PropertyOrCollectio
 
         final FacetHolder property = processMethodContext.getFacetHolder();
         FacetUtil.addFacet(
-                new PropertyAccessorFacetViaAccessor(
-                        typeSpec, accessorMethod, property));
+                new PropertyAccessorFacetViaAccessor(typeSpec, accessorMethod, property));
     }
 
     // ///////////////////////////////////////////////////////
@@ -71,7 +71,8 @@ public class PropertyAccessorFacetViaAccessorFactory extends PropertyOrCollectio
         if (methodName.startsWith(MethodLiteralConstants.GET_PREFIX)) {
             return true;
         }
-        if (methodName.startsWith(MethodLiteralConstants.IS_PREFIX) && method.getReturnType() == boolean.class) {
+        if (methodName.startsWith(MethodLiteralConstants.IS_PREFIX) 
+                && method.getReturnType() == boolean.class) {
             return true;
         }
         return false;

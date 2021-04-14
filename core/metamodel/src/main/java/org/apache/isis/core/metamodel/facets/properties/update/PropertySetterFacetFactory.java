@@ -56,7 +56,8 @@ public class PropertySetterFacetFactory extends MethodPrefixBasedFacetFactoryAbs
      * {@link NotPersistableFacet not-persistable} and {@link DisabledFacet
      * disabled} otherwise.
      */
-    private static Method attachPropertyModifyFacetIfSetterIsFound(final ProcessMethodContext processMethodContext) {
+    private static Method attachPropertyModifyFacetIfSetterIsFound(
+            final ProcessMethodContext processMethodContext) {
 
         final Method getMethod = processMethodContext.getMethod();
         final String capitalizedName = StringExtensions.asJavaBaseName(getMethod.getName());
@@ -67,7 +68,7 @@ public class PropertySetterFacetFactory extends MethodPrefixBasedFacetFactoryAbs
         final Method setMethod = MethodFinderUtils
                 .findMethod(cls, MethodLiteralConstants.SET_PREFIX + capitalizedName, void.class, paramTypes);
         processMethodContext.removeMethod(setMethod);
-
+        
         final FacetHolder property = processMethodContext.getFacetHolder();
         if (setMethod != null) {
             FacetUtil.addFacet(new PropertySetterFacetViaSetterMethod(setMethod, property));

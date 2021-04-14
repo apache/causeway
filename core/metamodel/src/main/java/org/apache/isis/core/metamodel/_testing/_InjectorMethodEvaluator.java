@@ -16,16 +16,21 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.spec;
+package org.apache.isis.core.metamodel._testing;
 
 import java.lang.reflect.Method;
 
-public interface InjectorMethodEvaluator {
+final class _InjectorMethodEvaluator {
 
-    /**
-     * @param method
-     * @return null - if method is not a setter to act as an injection point 
-     */
-    Class<?> getTypeToBeInjected(Method method);
+    public Class<?> getTypeToBeInjected(Method setter) {
+        final String methodName = setter.getName();
+        if (methodName.startsWith("set") || methodName.startsWith("inject")) {
+            final Class<?>[] parameterTypes = setter.getParameterTypes();
+            if (parameterTypes.length == 1 && parameterTypes[0] != Object.class) { 
+                return parameterTypes[0];
+            }
+        }
+        return null;
+    }
 
 }

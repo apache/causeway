@@ -35,6 +35,7 @@ import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.exceptions.UnrecoverableException;
 import org.apache.isis.applib.exceptions.unrecoverable.MetaModelException;
+import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.reflection._Annotations;
@@ -71,12 +72,19 @@ public class FacetedMethodsBuilder {
 
         private FacetedMethodsMethodRemover(final Class<?> introspectedClass, Method[] methods) {
             this.methodsRemaining = Stream.of(methods)
+                    .filter(_NullSafe::isPresent)
                     .collect(Collectors.toCollection(_Sets::newConcurrentHashSet));
         }
         
         @Override
-        public void removeMethods(Predicate<Method> filter, Consumer<Method> onRemoval) {
-            MethodUtil.removeMethods(methodsRemaining, filter, onRemoval);
+        public void removeMethods(Predicate<Method> removeIf, Consumer<Method> onRemoval) {
+            methodsRemaining.removeIf(method -> { 
+                val doRemove = removeIf.test(method);
+                if(doRemove) {
+                    onRemoval.accept(method);
+                }
+                return doRemove;
+            });
         }
 
         @Override
@@ -87,12 +95,8 @@ public class FacetedMethodsBuilder {
             methodsRemaining.remove(method);    
         }
 
-        void removeIf(Predicate<Method> matcher) {
-            methodsRemaining.removeIf(matcher);
-        }
-
-        void acceptRemaining(Consumer<Set<Method>> consumer) {
-            consumer.accept(methodsRemaining);
+        Stream<Method> streamRemaining() {
+            return methodsRemaining.stream();
         }
         
     }
@@ -214,10 +218,11 @@ public class FacetedMethodsBuilder {
         
         val associationCandidateMethods = new HashSet<Method>();
         
-        methodRemover.acceptRemaining(methodsRemaining->{
-            getFacetProcessor()
-            .findAssociationCandidateAccessors(methodsRemaining, associationCandidateMethods::add);
-        });
+        
+        getFacetProcessor().findAssociationCandidateAccessors(
+                    methodRemover.streamRemaining(), 
+                    associationCandidateMethods::add);
+        
         
         // Ensure all return types are known
         
@@ -352,7 +357,7 @@ public class FacetedMethodsBuilder {
             log.debug("  looking for action methods");
         }
 
-        methodRemover.removeIf(method->{
+        methodRemover.removeMethods(method->{
             val actionPeer = findActionFacetedMethod(method);
             if (actionPeer != null) {
                 onActionFacetedMethod.accept(actionPeer);
@@ -533,10 +538,7 @@ public class FacetedMethodsBuilder {
             Consumer<Method> onMatch) {
         
         val filter = MethodUtil.Predicates.prefixed(prefix, returnType, canBeVoid, paramCount);
-        
-        methodRemover.acceptRemaining(methodsRemaining->{
-            MethodUtil.removeMethods(methodsRemaining, filter, onMatch);
-        });
+        methodRemover.removeMethods(filter, onMatch);
         
     }
     

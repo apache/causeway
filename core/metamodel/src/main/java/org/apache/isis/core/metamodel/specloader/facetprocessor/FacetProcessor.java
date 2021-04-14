@@ -20,12 +20,12 @@
 package org.apache.isis.core.metamodel.specloader.facetprocessor;
 
 import java.lang.reflect.Method;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Consumer;
+import java.util.stream.Stream;
 
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.collections._Lists;
@@ -156,22 +156,18 @@ public class FacetProcessor {
      * {@link PropertyOrCollectionIdentifyingFacetFactory}s.
      */
     public void findAssociationCandidateAccessors(
-            Collection<Method> methods, 
+            Stream<Method> methods, 
             Consumer<Method> onCandidate) {
         
         val factories = propertyOrCollectionIdentifyingFactories.get();
         
-        for (val method : methods) {
-            if (method == null) {
-                continue;
-            }
+        methods.forEach(method->{
             for (val facetFactory : factories) {
                 if (facetFactory.isPropertyOrCollectionAccessorCandidate(method)) {
                     onCandidate.accept(method);
                 }
             }
-        }
-        
+        });
     }
 
     /**

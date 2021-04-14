@@ -29,8 +29,6 @@ import org.apache.isis.core.metamodel.commons.ClassExtensions;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.core.metamodel.spec.InjectorMethodEvaluator;
-import org.apache.isis.core.metamodel.specloader.InjectorMethodEvaluatorDefault;
 
 /**
  * Designed to simply filter out any synthetic methods.
@@ -53,11 +51,7 @@ public class RemoveMethodsFacetFactory extends FacetFactoryAbstract {
         }
     }
 
-
-    private final InjectorMethodEvaluator injectorMethodEvaluator = new InjectorMethodEvaluatorDefault();
-
     private final List<MethodAndParameterTypes> javaLangObjectMethodsToIgnore = _Lists.newArrayList();
-
 
     public RemoveMethodsFacetFactory() {
         super(FeatureType.OBJECTS_ONLY);
@@ -90,15 +84,6 @@ public class RemoveMethodsFacetFactory extends FacetFactoryAbstract {
                 processClassContext.removeMethod(method);
             }
 
-        }
-
-
-        // removeInjectMethods(processClassContext);
-        Method[] methods2 = processClassContext.getCls().getMethods();
-        for (Method method : methods2) {
-            if(injectorMethodEvaluator.getTypeToBeInjected(method)!=null) {
-                processClassContext.removeMethod(method);
-            }
         }
 
         removeSuperclassMethods(processClassContext.getCls(), processClassContext);

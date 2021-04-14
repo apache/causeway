@@ -45,18 +45,17 @@ import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.reflection._Reflect;
 import org.apache.isis.core.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.commons.ToString;
-import org.apache.isis.core.metamodel.spec.InjectorMethodEvaluator;
 
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
-public class ServiceInjectorLegacy implements ServiceInjector {
+final class _ServiceInjectorLegacy implements ServiceInjector {
 
     @SuppressWarnings("unused")
     @Inject private IsisConfiguration configuration;
     @Inject private ServiceRegistry serviceRegistry;
-    @Inject private InjectorMethodEvaluator injectorMethodEvaluator;
+    @Inject private _InjectorMethodEvaluator injectorMethodEvaluator;
 
     private final Map<Class<?>, Method[]> methodsByClassCache = _Maps.newConcurrentHashMap();
     private final Map<Class<?>, Field[]> fieldsByClassCache = _Maps.newConcurrentHashMap();
@@ -279,11 +278,11 @@ public class ServiceInjectorLegacy implements ServiceInjector {
     /**
      * JUnit Test support. 
      */
-    public static ServiceInjectorLegacy getInstanceAndInit(
+    public static _ServiceInjectorLegacy getInstanceAndInit(
             IsisConfiguration configuration,
             ServiceRegistry serviceRegistry,
-            InjectorMethodEvaluator injectorMethodEvaluator) {
-        val instance = new ServiceInjectorLegacy();
+            _InjectorMethodEvaluator injectorMethodEvaluator) {
+        val instance = new _ServiceInjectorLegacy();
 
         instance.configuration = configuration;
         instance.serviceRegistry = serviceRegistry;
