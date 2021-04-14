@@ -18,13 +18,11 @@
  */
 package org.apache.isis.core.metamodel.facets.actions.action;
 
-import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.metamodel.BeanSort;
-import org.apache.isis.commons.collections.Can;
 import org.apache.isis.commons.internal.collections._Sets;
+import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.MixedIn;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelVisitingValidatorAbstract;
 import org.apache.isis.core.metamodel.specloader.validator.ValidationFailure;
 
@@ -45,29 +43,24 @@ extends MetaModelVisitingValidatorAbstract {
     @Override
     public void validate(@NonNull ObjectSpecification spec) {
         
-        if(spec.getBeanSort()==BeanSort.UNKNOWN 
+        if(spec.getBeanSort()!=BeanSort.UNKNOWN 
                 && !spec.isAbstract()) {
         
-            val actionMemberNames = spec.streamActions(MixedIn.INCLUDED)
-                    .map(ObjectAction::getIdentifier)
-                    .map(Identifier::getMemberName)
-                    .collect(Can.toCan());
+            val overloadedNames = _Sets.<String>newHashSet();
             
-            if (actionMemberNames.isCardinalityMultiple()) {
-                
-                val overloadedNames = _Sets.<String>newHashSet();
-                
-                actionMemberNames.toSet(overloadedNames::add);
-
-                if(!overloadedNames.isEmpty()) {
-                
-                    ValidationFailure.raiseFormatted(
-                            spec,
-                            "Action method overloading is not allowed, "
-                            + "yet %s has action(s) that have a the same member name: %s",
-                            spec.getCorrespondingClass().getName(),
-                            overloadedNames);
-                }
+            spec.streamActions(ActionType.ANY, MixedIn.INCLUDED, oa->{
+                overloadedNames.add(oa.getIdentifier().getMemberName());
+            })
+            .count(); // consumer the stream
+            
+            if(!overloadedNames.isEmpty()) {
+            
+                ValidationFailure.raiseFormatted(
+                        spec,
+                        "Action method overloading is not allowed, "
+                        + "yet %s has action(s) that have a the same member name: %s",
+                        spec.getCorrespondingClass().getName(),
+                        overloadedNames);
             }
             
         }

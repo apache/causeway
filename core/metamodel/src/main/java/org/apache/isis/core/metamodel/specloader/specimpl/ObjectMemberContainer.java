@@ -19,6 +19,7 @@
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
 import java.util.Optional;
+import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 import javax.annotation.Nullable;
@@ -77,7 +78,8 @@ implements
     @Override
     public Stream<ObjectAction> streamActions(
             final ImmutableEnumSet<ActionType> types, 
-            final MixedIn contributed) {
+            final MixedIn contributed,
+            final Consumer<ObjectAction> onActionOverloaded) {
         
         if(isTypeHierarchyRoot()) {
             return streamDeclaredActions(contributed); // stop going deeper
@@ -89,7 +91,14 @@ implements
             streamDeclaredActions(contributed), 
             superclass().streamActions(contributed)
         )
-        .filter(action->ids.add(action.getId())); // ensure we don't emit duplicates
+        .filter(action->{
+            // ensure we don't emit duplicates
+            val isUnique = ids.add(action.getId());
+            if(!isUnique) {
+                onActionOverloaded.accept(action); 
+            }
+            return isUnique;
+        }); 
     }
     
     // -- ASSOCIATIONS

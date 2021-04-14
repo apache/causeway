@@ -24,6 +24,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 import org.apache.isis.applib.Identifier;
@@ -358,7 +359,10 @@ implements ObjectSpecification {
     }
     
     @Override
-    public Stream<ObjectAction> streamActions(ImmutableEnumSet<ActionType> types, MixedIn contributed) {
+    public Stream<ObjectAction> streamActions(
+            ImmutableEnumSet<ActionType> types, 
+            MixedIn contributed,
+            final Consumer<ObjectAction> onActionOverloaded) {
         // poorly implemented, inheritance not supported
         return streamDeclaredActions(contributed);
     }

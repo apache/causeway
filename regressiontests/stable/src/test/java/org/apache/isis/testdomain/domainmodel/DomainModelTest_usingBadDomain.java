@@ -53,6 +53,7 @@ import org.apache.isis.testdomain.conf.Configuration_headless;
 import org.apache.isis.testdomain.model.bad.AmbiguousMixinAnnotations;
 import org.apache.isis.testdomain.model.bad.AmbiguousTitle;
 import org.apache.isis.testdomain.model.bad.Configuration_usingInvalidDomain;
+import org.apache.isis.testdomain.model.bad.InvalidActionOverloading;
 import org.apache.isis.testdomain.model.bad.InvalidOrphanedActionSupport;
 import org.apache.isis.testdomain.model.bad.InvalidOrphanedCollectionSupport;
 import org.apache.isis.testdomain.model.bad.InvalidOrphanedPropertySupport;
@@ -119,6 +120,13 @@ class DomainModelTest_usingBadDomain {
         assertTrue(validator.anyMatchesContaining(
                 Identifier.classIdentifier(LogicalType.fqcn(InvalidOrphanedCollectionSupport.class)), 
                 "is assumed to support"));
+    }
+    
+    @Test
+    void actionOverloading_shouldFail() {
+        assertTrue(validator.anyMatchesContaining(
+                Identifier.classIdentifier(LogicalType.fqcn(InvalidActionOverloading.class)), 
+                "Action method overloading is not allowed"));
     }
     
     @ParameterizedTest

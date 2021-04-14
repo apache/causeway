@@ -19,6 +19,7 @@
 package org.apache.isis.commons.collections;
 
 import java.io.IOException;
+import java.util.Set;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
@@ -27,6 +28,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.testing._SerializationTester;
 
 import lombok.val;
@@ -151,9 +153,22 @@ class CanTest {
         
     }
     
+    // -- TO SET CONVERSION
     
+    @Test
+    void multiCan_toSet_should_find_duplicates() {
+        val expectedSet = _Sets.of("a", "b", "c");
+        val duplicates = _Sets.<String>newHashSet();
+        
+        assertSetEquals(expectedSet, Can.<String>of("a", "c", "b", "a").toSet());
+        assertSetEquals(expectedSet, Can.<String>of("a", "c", "b", "a").toSet(duplicates::add));
+        assertSetEquals(_Sets.of("a"), duplicates);
+    }
     
-    
+    private static <T> void assertSetEquals(Set<T> a, Set<T> b) {
+        assertTrue(_Sets.minus(a, b).isEmpty());
+        assertTrue(_Sets.minus(b, a).isEmpty());
+    }
     
 
 }
