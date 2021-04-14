@@ -18,17 +18,39 @@
  */
 package org.apache.isis.extensions.secman.jdo;
 
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+
+import org.apache.isis.extensions.secman.api.permission.ApplicationPermissionRepository;
+import org.apache.isis.extensions.secman.api.role.ApplicationRoleRepository;
+import org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancyRepository;
+import org.apache.isis.extensions.secman.api.user.ApplicationUserRepository;
+import org.apache.isis.extensions.secman.jdo.seed.SeedSecurityModuleService;
+import org.apache.isis.extensions.secman.model.IsisModuleExtSecmanModel;
 
 /**
  * @since 2.0 {@index}
  */
 @Configuration
-@ComponentScan(
-        basePackageClasses= {
-                IsisModuleExtSecmanPersistenceJdo.class
-        })
+@Import({
+        // modules
+        IsisModuleExtSecmanModel.class,
+
+        // services
+        ApplicationPermissionRepository.class,
+        ApplicationRoleRepository.class,
+        ApplicationTenancyRepository.class,
+        ApplicationUserRepository.class,
+        SeedSecurityModuleService.class,
+
+        // pretty sure we don't need to import/register these view models
+//        ApplicationPermission.class,
+//        ApplicationRole.class,
+//        ApplicationTenancy.class,
+//        ApplicationUser.class,
+
+
+})
 public class IsisModuleExtSecmanPersistenceJdo {
 
 }

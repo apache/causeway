@@ -20,15 +20,37 @@ package org.apache.isis.extensions.secman.model;
 
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+
+import org.apache.isis.extensions.secman.api.IsisModuleExtSecmanApi;
+import org.apache.isis.extensions.secman.model.dom.feature.ApplicationFeatureViewModels;
+import org.apache.isis.extensions.secman.model.dom.permission.ApplicationOrphanedPermissionManager;
+import org.apache.isis.extensions.secman.model.dom.permission.ApplicationPermissionMenu;
+import org.apache.isis.extensions.secman.model.dom.role.ApplicationRoleMenu;
+import org.apache.isis.extensions.secman.model.dom.tenancy.ApplicationTenancyMenu;
+import org.apache.isis.extensions.secman.model.dom.user.ApplicationUserMenu;
+import org.apache.isis.extensions.secman.model.facets.TenantedAuthorizationFacetFactory;
 
 /**
  * @since 2.0 {@index}
  */
 @Configuration
-@ComponentScan(
-        basePackageClasses= {
-                IsisModuleExtSecmanModel.class
-        })
+@Import({
+        // Module
+        IsisModuleExtSecmanApi.class,
+
+        // @DomainService
+        ApplicationFeatureViewModels.class,
+        ApplicationOrphanedPermissionManager.class,
+        ApplicationPermissionMenu.class,
+        ApplicationRoleMenu.class,
+        ApplicationTenancyMenu.class,
+        ApplicationUserMenu.class,
+
+        // @Component
+        TenantedAuthorizationFacetFactory.Register.class,
+
+})
 public class IsisModuleExtSecmanModel {
 
 }

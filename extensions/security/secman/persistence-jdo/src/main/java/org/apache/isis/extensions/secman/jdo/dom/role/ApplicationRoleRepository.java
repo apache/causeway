@@ -42,25 +42,31 @@ import lombok.val;
 
 @Repository
 @Named("isis.ext.secman.ApplicationRoleRepository")
-public class ApplicationRoleRepository 
+public class ApplicationRoleRepository
 implements org.apache.isis.extensions.secman.api.role.ApplicationRoleRepository<ApplicationRole> {
 
     @Inject private FactoryService factoryService;
     @Inject private RepositoryService repository;
     @Inject private SecmanConfiguration configBean;
-    
+
     @Inject private javax.inject.Provider<QueryResultsCache> queryResultsCacheProvider;
 
-    
+
     @Override
     public ApplicationRole newApplicationRole() {
         return factoryService.detachedEntity(new ApplicationRole());
     }
-    
+
     @Override
     public Optional<ApplicationRole> findByNameCached(final String name) {
         return queryResultsCacheProvider.get().execute(()->findByName(name),
                 ApplicationRoleRepository.class, "findByNameCached", name);
+    }
+
+    @Override
+    public ApplicationRole upsert(final String name, final String roleDescription) {
+        return findByName(name)
+                .orElseGet(() -> newRole(name, roleDescription));
     }
 
     @Override
@@ -74,7 +80,7 @@ implements org.apache.isis.extensions.secman.api.role.ApplicationRoleRepository<
 
     @Override
     public Collection<ApplicationRole> findNameContaining(final String search) {
-        
+
         if(search != null && search.length() > 0) {
             String nameRegex = String.format("(?i).*%s.*", search.replace("*", ".*").replace("?", "."));
             return repository.allMatches(
@@ -117,20 +123,20 @@ implements org.apache.isis.extensions.secman.api.role.ApplicationRoleRepository<
 
     @Override
     public void addRoleToUser(
-            org.apache.isis.extensions.secman.api.role.ApplicationRole genericRole, 
+            org.apache.isis.extensions.secman.api.role.ApplicationRole genericRole,
             org.apache.isis.extensions.secman.api.user.ApplicationUser genericUser) {
-        
+
         val role = _Casts.<ApplicationRole>uncheckedCast(genericRole);
         val user = _Casts.<ApplicationUser>uncheckedCast(genericUser);
         // no need to add to users set, since will be done by JDO/DN.
         user.getRoles().add(role);
     }
-    
+
     @Override
     public void removeRoleFromUser(
             org.apache.isis.extensions.secman.api.role.ApplicationRole genericRole,
             org.apache.isis.extensions.secman.api.user.ApplicationUser genericUser) {
-        
+
         val role = _Casts.<ApplicationRole>uncheckedCast(genericRole);
         val user = _Casts.<ApplicationUser>uncheckedCast(genericUser);
         // no need to remove from users set, since will be done by JDO/DN.
@@ -145,9 +151,9 @@ implements org.apache.isis.extensions.secman.api.role.ApplicationRoleRepository<
 
     @Override
     public void deleteRole(org.apache.isis.extensions.secman.api.role.ApplicationRole genericRole) {
-        
+
         val role = _Casts.<ApplicationRole>uncheckedCast(genericRole);
-        
+
         role.getUsers().clear();
         val permissions = role.getPermissions();
         for (val permission : permissions) {

@@ -50,6 +50,11 @@ public interface ApplicationRoleRepository<R extends ApplicationRole> {
     Optional<R> findByName(String roleName);
     Optional<R> findByNameCached(String roleName);
 
+    default R upsert(final String name, final String roleDescription) {
+        return findByName(name)
+                .orElseGet(() -> newRole(name, roleDescription));
+    }
+
     void addRoleToUser(ApplicationRole role, ApplicationUser user);
     void removeRoleFromUser(ApplicationRole role, ApplicationUser user);
 

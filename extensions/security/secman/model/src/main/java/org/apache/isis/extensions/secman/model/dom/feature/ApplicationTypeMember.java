@@ -25,12 +25,15 @@ import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureId;
 
+import lombok.NoArgsConstructor;
+
 @DomainObject(
         objectType = "isis.ext.secman.ApplicationTypeMember"
         )
 @DomainObjectLayout(
         bookmarking = BookmarkPolicy.AS_CHILD
         )
+@NoArgsConstructor
 public abstract class ApplicationTypeMember extends ApplicationFeatureViewModel {
 
     public static abstract class PropertyDomainEvent<S extends ApplicationTypeMember, T> extends ApplicationFeatureViewModel.PropertyDomainEvent<ApplicationTypeMember, T> {}
@@ -40,11 +43,7 @@ public abstract class ApplicationTypeMember extends ApplicationFeatureViewModel 
     public static abstract class ActionDomainEvent<S extends ApplicationTypeMember> extends ApplicationFeatureViewModel.ActionDomainEvent<S> {}
 
 
-
     // -- constructors
-    public ApplicationTypeMember() {
-    }
-
     public ApplicationTypeMember(final ApplicationFeatureId featureId) {
         super(featureId);
     }
