@@ -63,6 +63,8 @@ interface Can<T> {
   boolean isCardinalityMultiple()
   Collector<T, ?, Can<T>> toCan()
   List<T> toList()     // <.>
+  Set<T> toSet()     // <.>
+  Set<T> toSet(Consumer<T> onDuplicated)     // <.>
   C toCollection(Supplier<C> collectionFactory)     // <.>
   T[] toArray(T[] a)     // <.>
   T[] toArray(Class<T> elementType)     // <.>
@@ -214,6 +216,8 @@ Let _n_ be the number of elements in _other_ . Returns whether the first _n_ ele
 Let _n_ be the number of elements in _other_ . Returns whether the last _n_ elements of this _Can_ are element-wise equal to _other_ .
 --
 <.> xref:#toList__[toList()]
+<.> xref:#toSet__[toSet()]
+<.> xref:#toSet__Consumer[toSet(Consumer)]
 <.> xref:#toCollection__Supplier[toCollection(Supplier)]
 <.> xref:#toArray__T[][toArray(T[])]
 <.> xref:#toArray__Class[toArray(Class)]
@@ -390,6 +394,12 @@ Let _n_ be the number of elements in _other_ . Returns whether the last _n_ elem
 
 [#toList__]
 === toList()
+
+[#toSet__]
+=== toSet()
+
+[#toSet__Consumer]
+=== toSet(Consumer)
 
 [#toCollection__Supplier]
 === toCollection(Supplier)

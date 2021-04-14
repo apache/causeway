@@ -3,7 +3,7 @@
 
 Used by the framework's default implementation of xref:refguide:applib:index/services/user/UserService.adoc[UserService] to allow the current user to be temporarily impersonated.
 
-The intention is that viewers provide an implementation of this service.. Note that the Wicket viewer _does_ implement this service and uses an _HttpSession_ ; this will have the side-effect
+The intention is that viewers provide an implementation of this service.. Note that the Wicket viewer _does_ implement this service and uses an _HttpSession_ ; this will have the side-effect for REST API that a session will be created if the xref:refguide:applib:index/services/user/UserService.adoc[UserService] is interacted with.
 
 == API
 

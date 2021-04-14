@@ -21,7 +21,7 @@ package org.apache.isis.viewer.common.applib.services.userprof;
 import org.apache.isis.applib.services.user.UserService;
 
 /**
- * Return a UI model to represent the currently logged in user.
+ * Returns a UI model to represent the currently logged in user.
  *
  * <p>
  *     This is backed by the

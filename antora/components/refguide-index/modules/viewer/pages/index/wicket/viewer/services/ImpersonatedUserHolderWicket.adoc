@@ -9,6 +9,7 @@ Implementation that supports impersonation, using the _HttpSession_ to store the
 .ImpersonatedUserHolderWicket.java
 ----
 class ImpersonatedUserHolderWicket {
+  ImpersonatedUserHolderWicket(HttpSession httpSession)
   boolean supportsImpersonation()
   void setUserMemento(final UserMemento userMemento)
   Optional<UserMemento> getUserMemento()
