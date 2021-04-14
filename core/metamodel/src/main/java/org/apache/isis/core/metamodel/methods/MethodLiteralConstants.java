@@ -45,7 +45,7 @@ public final class MethodLiteralConstants {
     
     public static final String CREATED_PREFIX = "created";
     public static final String LOADED_PREFIX = "loaded";
-    public static final String LOADING_PREFIX = "loading";
+    //public static final String LOADING_PREFIX = "loading";
     public static final String SAVED_PREFIX = "saved";
     public static final String SAVING_PREFIX = "saving";
     public static final String PERSISTED_PREFIX = "persisted";

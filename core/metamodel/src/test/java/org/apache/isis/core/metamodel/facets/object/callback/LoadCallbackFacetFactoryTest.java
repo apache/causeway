@@ -27,8 +27,6 @@ import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.object.callbacks.LoadCallbackFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.callbacks.LoadedCallbackFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.LoadedCallbackFacetViaMethod;
-import org.apache.isis.core.metamodel.facets.object.callbacks.LoadingCallbackFacet;
-import org.apache.isis.core.metamodel.facets.object.callbacks.LoadingCallbackFacetViaMethod;
 
 public class LoadCallbackFacetFactoryTest extends AbstractFacetFactoryTest {
 
@@ -45,25 +43,6 @@ public class LoadCallbackFacetFactoryTest extends AbstractFacetFactoryTest {
     protected void tearDown() throws Exception {
         facetFactory = null;
         super.tearDown();
-    }
-
-    public void testLoadingLifecycleMethodPickedUpOn() {
-        class Customer {
-            @SuppressWarnings("unused")
-            public void loading() {
-            };
-        }
-        final Method method = findMethod(Customer.class, "loading");
-
-        facetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
-
-        final Facet facet = facetedMethod.getFacet(LoadingCallbackFacet.class);
-        assertNotNull(facet);
-        assertTrue(facet instanceof LoadingCallbackFacetViaMethod);
-        final LoadingCallbackFacetViaMethod loadingCallbackFacetViaMethod = (LoadingCallbackFacetViaMethod) facet;
-        assertEquals(method, loadingCallbackFacetViaMethod.getMethods().get(0));
-
-        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(method));
     }
 
     public void testLoadedLifecycleMethodPickedUpOn() {
