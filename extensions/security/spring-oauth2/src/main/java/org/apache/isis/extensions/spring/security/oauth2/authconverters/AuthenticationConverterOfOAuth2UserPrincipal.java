@@ -1,4 +1,4 @@
-package org.apache.isis.security.spring.authconverters;
+package org.apache.isis.extensions.spring.security.oauth2.authconverters;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.annotation.OrderPrecedence;
 import org.apache.isis.applib.services.user.UserMemento;
+import org.apache.isis.security.spring.authconverters.AuthenticationConverter;
 
 import lombok.val;
 import lombok.var;

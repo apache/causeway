@@ -123,10 +123,21 @@
 			<groupId>org.apache.isis.security</groupId>
 			<artifactId>isis-security-keycloak</artifactId>
 		</dependency>
+
+		<!--
+		we deliberately do NOT include isis-security-spring, because it
+		has a transitive dependency on
+
+			org.springframework.boot:spring-boot-starter-security
+
+		 and that will (following a 'secure-by-default' philosophy)
+		 automatically enable security on all endpoints
+
 		<dependency>
 			<groupId>org.apache.isis.security</groupId>
 			<artifactId>isis-security-spring</artifactId>
 		</dependency>
+		-->
 
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>

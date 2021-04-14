@@ -15,40 +15,34 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>org.apache.isis.core</groupId>
-		<artifactId>isis-core</artifactId>
+		<groupId>org.apache.isis.extensions</groupId>
+		<artifactId>isis-extensions</artifactId>
 		<version>2.0.0-SNAPSHOT</version>
-		<relativePath>../../core/pom.xml</relativePath>
+		<relativePath>../../pom.xml</relativePath>
 	</parent>
 
-	<groupId>org.apache.isis.security</groupId>
-	<artifactId>isis-security-spring</artifactId>
+	<artifactId>isis-extensions-spring-security-oauth2</artifactId>
 
-	<name>Apache Isis Security - Spring</name>
+	<name>Apache Isis Ext - Security - Spring Oauth2</name>
 	<description>
-        Authentication using Spring Security
+        Authentication Converter, using Spring Security's OAuth2 client
     </description>
 
 	<properties>
-		<jar-plugin.automaticModuleName>org.apache.isis.security.spring</jar-plugin.automaticModuleName>
-		<git-plugin.propertiesDir>org/apache/isis/security/spring</git-plugin.propertiesDir>
+		<jar-plugin.automaticModuleName>org.apache.isis.extensions.springoauth2</jar-plugin.automaticModuleName>
+		<git-plugin.propertiesDir>org/apache/isis/extensions/springoauth2</git-plugin.propertiesDir>
 	</properties>
 
 	<dependencies>
 
 		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-core-runtimeservices</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-core-webapp</artifactId>
+			<groupId>org.apache.isis.security</groupId>
+			<artifactId>isis-security-spring</artifactId>
 		</dependency>
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-security</artifactId>
+			<artifactId>spring-boot-starter-oauth2-client</artifactId>
 			<exclusions>
 				<exclusion>
 					<groupId>org.springframework.boot</groupId>
