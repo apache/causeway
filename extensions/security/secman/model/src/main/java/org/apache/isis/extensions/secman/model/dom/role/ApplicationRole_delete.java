@@ -20,11 +20,11 @@ package org.apache.isis.extensions.secman.model.dom.role;
 
 import java.util.Collection;
 
-import javax.enterprise.inject.Model;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.extensions.secman.api.role.ApplicationRole;
 import org.apache.isis.extensions.secman.api.role.ApplicationRole.DeleteDomainEvent;
@@ -43,12 +43,13 @@ public class ApplicationRole_delete {
     
     private final ApplicationRole holder;
     
+    @MemberSupport
     public Collection<? extends ApplicationRole> act() {
         applicationRoleRepository.deleteRole(holder);
         return applicationRoleRepository.allRoles();
     }
 
-    @Model
+    @MemberSupport
     public String disableAct() {
         return applicationRoleRepository.isAdminRole(holder) ? "Cannot delete the admin role" : null;
     }

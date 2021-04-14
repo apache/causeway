@@ -66,7 +66,7 @@ public class ProperMemberSupport_action {
         return null;
     }
     
-//    @Model
+//    @MemberSupport
 //    public Set<String> autoComplete1Act(String p0, @MinLength(3) String search) {
 //        return null;
 //    }

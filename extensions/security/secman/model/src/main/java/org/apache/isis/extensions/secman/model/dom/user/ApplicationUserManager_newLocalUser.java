@@ -20,10 +20,10 @@ package org.apache.isis.extensions.secman.model.dom.user;
 
 import java.util.Objects;
 
-import javax.enterprise.inject.Model;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.value.Password;
@@ -50,7 +50,7 @@ public class ApplicationUserManager_newLocalUser {
     @SuppressWarnings("unused")
     private final ApplicationUserManager target;
 
-    @Model
+    @MemberSupport
     public ApplicationUser act(
             final String username,
             final Password password,
@@ -75,7 +75,7 @@ public class ApplicationUserManager_newLocalUser {
         return user;
     }
 
-    @Model
+    @MemberSupport
     public String validateAct(
             final String username,
             final Password newPassword,

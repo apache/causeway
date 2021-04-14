@@ -18,11 +18,11 @@
  */
 package org.apache.isis.extensions.secman.model.dom.role;
 
-import javax.enterprise.inject.Model;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.MinLength;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
@@ -84,17 +84,17 @@ public class ApplicationRole_addPermission {
         return target;
     }
 
-    @Model
+    @MemberSupport
     public ApplicationPermissionRule defaultRule(Parameters params) {
         return ApplicationPermissionRule.ALLOW;
     }
 
-    @Model
+    @MemberSupport
     public ApplicationPermissionMode defaultMode(Parameters params) {
         return ApplicationPermissionMode.CHANGING;
     }
 
-    @Model
+    @MemberSupport
     public java.util.Collection<ApplicationFeatureChoices.AppFeat> autoCompleteFeature(
             final Parameters params,
             final @MinLength(3) String search) {

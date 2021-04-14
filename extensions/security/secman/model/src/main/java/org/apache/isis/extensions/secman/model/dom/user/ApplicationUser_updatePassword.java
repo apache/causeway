@@ -21,11 +21,11 @@ package org.apache.isis.extensions.secman.model.dom.user;
 import java.util.Objects;
 import java.util.Optional;
 
-import javax.enterprise.inject.Model;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.value.Password;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
@@ -49,7 +49,7 @@ public class ApplicationUser_updatePassword {
     
     private final ApplicationUser target;
 
-    @Model
+    @MemberSupport
     public ApplicationUser act(
             @ParameterLayout(named="Existing password")
             final Password existingPassword,
@@ -62,12 +62,12 @@ public class ApplicationUser_updatePassword {
         return target;
     }
 
-    @Model
+    @MemberSupport
     public boolean hideAct() {
         return !applicationUserRepository.isPasswordFeatureEnabled(target);
     }
 
-    @Model
+    @MemberSupport
     public String disableAct() {
 
         if(!target.isForSelfOrRunAsAdministrator()) {
@@ -79,7 +79,7 @@ public class ApplicationUser_updatePassword {
         return null;
     }
 
-    @Model
+    @MemberSupport
     public String validateAct(
             final Password existingPassword,
             final Password newPassword,

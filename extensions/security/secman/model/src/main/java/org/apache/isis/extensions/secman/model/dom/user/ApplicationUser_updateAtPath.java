@@ -18,10 +18,9 @@
  */
 package org.apache.isis.extensions.secman.model.dom.user;
 
-import javax.enterprise.inject.Model;
-
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
@@ -39,7 +38,7 @@ public class ApplicationUser_updateAtPath {
     
     private final ApplicationUser target;
 
-    @Model
+    @MemberSupport
     public ApplicationUser act(
             @Parameter(optionality = Optionality.OPTIONAL)
             @ParameterLayout(named = "AtPath")
@@ -48,7 +47,7 @@ public class ApplicationUser_updateAtPath {
         return target;
     }
 
-    @Model
+    @MemberSupport
     public String default0Act() {
         return target.getAtPath();
     }

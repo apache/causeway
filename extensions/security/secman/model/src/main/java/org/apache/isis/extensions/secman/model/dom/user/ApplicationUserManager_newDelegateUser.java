@@ -18,10 +18,10 @@
  */
 package org.apache.isis.extensions.secman.model.dom.user;
 
-import javax.enterprise.inject.Model;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.extensions.secman.api.role.ApplicationRole;
 import org.apache.isis.extensions.secman.api.role.ApplicationRoleRepository;
@@ -45,7 +45,7 @@ public class ApplicationUserManager_newDelegateUser {
     @SuppressWarnings("unused")
     private final ApplicationUserManager target;
     
-    @Model
+    @MemberSupport
     public ApplicationUser act(
             final String username,
             final ApplicationRole initialRole,

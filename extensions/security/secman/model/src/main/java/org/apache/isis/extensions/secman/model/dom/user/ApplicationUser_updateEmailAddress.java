@@ -18,10 +18,9 @@
  */
 package org.apache.isis.extensions.secman.model.dom.user;
 
-import javax.enterprise.inject.Model;
-
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.extensions.secman.api.user.ApplicationUser;
@@ -38,7 +37,7 @@ public class ApplicationUser_updateEmailAddress {
     
     private final ApplicationUser target;
 
-    @Model
+    @MemberSupport
     public ApplicationUser act(
             @Parameter(maxLength = ApplicationUser.MAX_LENGTH_EMAIL_ADDRESS)
             @ParameterLayout(named="Email")
@@ -47,12 +46,12 @@ public class ApplicationUser_updateEmailAddress {
         return target;
     }
 
-    @Model
+    @MemberSupport
     public String default0Act() {
         return target.getEmailAddress();
     }
 
-    @Model
+    @MemberSupport
     public String disableAct() {
         return target.isForSelfOrRunAsAdministrator()? null: "Can only update your own user record.";
     }

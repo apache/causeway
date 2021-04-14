@@ -18,10 +18,9 @@
  */
 package org.apache.isis.extensions.secman.model.dom.user;
 
-import javax.enterprise.inject.Model;
-
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
@@ -39,7 +38,7 @@ public class ApplicationUser_updateName {
     
     private final ApplicationUser target;
 
-    @Model
+    @MemberSupport
     public ApplicationUser act(
             @Parameter(maxLength = ApplicationUser.MAX_LENGTH_FAMILY_NAME, optionality = Optionality.OPTIONAL)
             @ParameterLayout(named="Family Name")
@@ -57,27 +56,27 @@ public class ApplicationUser_updateName {
         return target;
     }
 
-    @Model
+    @MemberSupport
     public String default0Act() {
         return target.getFamilyName();
     }
 
-    @Model
+    @MemberSupport
     public String default1Act() {
         return target.getGivenName();
     }
 
-    @Model
+    @MemberSupport
     public String default2Act() {
         return target.getKnownAs();
     }
 
-    @Model
+    @MemberSupport
     public String disableAct() {
         return target.isForSelfOrRunAsAdministrator()? null: "Can only update your own user record.";
     }
 
-    @Model
+    @MemberSupport
     public String validateAct(final String familyName, final String givenName, final String knownAs) {
         if(familyName != null && givenName == null) {
             return "Must provide given name if family name has been provided.";

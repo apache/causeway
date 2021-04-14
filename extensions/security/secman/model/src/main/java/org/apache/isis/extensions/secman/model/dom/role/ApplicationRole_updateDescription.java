@@ -18,10 +18,9 @@
  */
 package org.apache.isis.extensions.secman.model.dom.role;
 
-import javax.enterprise.inject.Model;
-
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
@@ -40,6 +39,7 @@ public class ApplicationRole_updateDescription {
     
     private final ApplicationRole target;
     
+    @MemberSupport
     public ApplicationRole act(
             @Parameter(
                     maxLength = DescriptionType.Meta.MAX_LEN,
@@ -54,7 +54,7 @@ public class ApplicationRole_updateDescription {
         return target;
     }
 
-    @Model
+    @MemberSupport
     public String default0Act() {
         return target.getDescription();
     }

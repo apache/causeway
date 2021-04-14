@@ -21,11 +21,11 @@ package org.apache.isis.extensions.secman.model.dom.tenancy;
 import java.util.Collection;
 import java.util.List;
 
-import javax.enterprise.inject.Model;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy;
 import org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy.AddUserDomainEvent;
@@ -47,13 +47,13 @@ public class ApplicationTenancy_addUser {
     
     private final ApplicationTenancy target;
 
-    @Model
+    @MemberSupport
     public ApplicationTenancy act(final ApplicationUser applicationUser) {
         applicationTenancyRepository.setTenancyOnUser(target, applicationUser);
         return target;
     }
 
-    @Model
+    @MemberSupport
     public List<? extends ApplicationUser> autoComplete0Act(final String search) {
         final Collection<? extends ApplicationUser> matchingSearch = applicationUserRepository.find(search);
         final List<? extends ApplicationUser> list = _Lists.newArrayList(matchingSearch);

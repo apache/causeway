@@ -18,11 +18,11 @@
  */
 package org.apache.isis.extensions.secman.model.dom.user;
 
-import javax.enterprise.inject.Model;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.extensions.secman.api.SecmanConfiguration;
 import org.apache.isis.extensions.secman.api.user.ApplicationUser;
 import org.apache.isis.extensions.secman.api.user.ApplicationUser.LockDomainEvent;
@@ -43,13 +43,13 @@ public class ApplicationUser_lock {
     
     private final ApplicationUser target;
 
-    @Model
+    @MemberSupport
     public ApplicationUser act() {
         target.setStatus(ApplicationUserStatus.DISABLED);
         return target;
     }
     
-    @Model
+    @MemberSupport
     public String disableAct() {
         if(applicationUserRepository.isAdminUser(target)) {
             return "Cannot disable the '" + configBean.getAdminUserName() + "' user.";

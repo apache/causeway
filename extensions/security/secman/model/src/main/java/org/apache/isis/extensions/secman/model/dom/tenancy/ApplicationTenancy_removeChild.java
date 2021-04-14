@@ -20,11 +20,11 @@ package org.apache.isis.extensions.secman.model.dom.tenancy;
 
 import java.util.Collection;
 
-import javax.enterprise.inject.Model;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy;
 import org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy.RemoveChildDomainEvent;
 import org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancyRepository;
@@ -42,18 +42,18 @@ public class ApplicationTenancy_removeChild {
 
     private final ApplicationTenancy target;
 
-    @Model
+    @MemberSupport
     public ApplicationTenancy act(final ApplicationTenancy child) {
         applicationTenancyRepository.clearParentOnTenancy(child);
         return target;
     }
     
-    @Model
+    @MemberSupport
     public Collection<? extends ApplicationTenancy> choices0Act() {
         return applicationTenancyRepository.getChildren(target);
     }
     
-    @Model
+    @MemberSupport
     public String disableAct() {
         return choices0Act().isEmpty()? "No children to remove": null;
     }

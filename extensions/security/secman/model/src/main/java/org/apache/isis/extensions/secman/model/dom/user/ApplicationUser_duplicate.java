@@ -18,10 +18,10 @@
  */
 package org.apache.isis.extensions.secman.model.dom.user;
 
-import javax.enterprise.inject.Model;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.extensions.secman.api.role.ApplicationRole;
@@ -44,7 +44,7 @@ public class ApplicationUser_duplicate {
 
     private final ApplicationUser target;
 
-    @Model
+    @MemberSupport
     public ApplicationUser act(
             @Parameter(optionality = Optionality.MANDATORY)
             final String username,

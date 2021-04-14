@@ -20,11 +20,11 @@ package org.apache.isis.extensions.secman.model.dom.user;
 
 import java.util.Collection;
 
-import javax.enterprise.inject.Model;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.extensions.secman.api.user.ApplicationUser;
@@ -45,13 +45,13 @@ public class ApplicationUser_delete {
     
     private final ApplicationUser target;
 
-    @Model
+    @MemberSupport
     public Collection<? extends ApplicationUser> act() {
         repository.removeAndFlush(target);
         return applicationUserRepository.allUsers();
     }
 
-    @Model
+    @MemberSupport
     public String disableAct() {
         return applicationUserRepository.isAdminUser(target)? "Cannot delete the admin user": null;
     }

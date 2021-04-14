@@ -18,10 +18,9 @@
  */
 package org.apache.isis.extensions.secman.model.dom.user;
 
-import javax.enterprise.inject.Model;
-
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
@@ -39,7 +38,7 @@ public class ApplicationUser_updateFaxNumber {
     
     private final ApplicationUser holder;
 
-    @Model
+    @MemberSupport
     public ApplicationUser act(
             @Parameter(maxLength = ApplicationUser.MAX_LENGTH_PHONE_NUMBER, optionality = Optionality.OPTIONAL)
             @ParameterLayout(named="Fax")
@@ -48,12 +47,12 @@ public class ApplicationUser_updateFaxNumber {
         return holder;
     }
 
-    @Model
+    @MemberSupport
     public String default0Act() {
         return holder.getFaxNumber();
     }
 
-    @Model
+    @MemberSupport
     public String disableAct() {
         return holder.isForSelfOrRunAsAdministrator()? null: "Can only update your own user record.";
     }

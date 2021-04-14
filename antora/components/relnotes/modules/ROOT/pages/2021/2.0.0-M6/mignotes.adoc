@@ -28,6 +28,9 @@ there is no counterpart for _Collection_
 | `@MemberOrder(sequence=...)` removed
 | use `@ActionLayout/@PropertyLayout/@CollectionLayout(sequence=...)` instead
 
+| `@Model` (from extensions) removed
+| use `@MemberSupport`  (Applib) instead
+
 
 |===
 

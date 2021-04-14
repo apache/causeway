@@ -20,11 +20,11 @@ package org.apache.isis.extensions.secman.model.dom.user;
 
 import java.util.Collection;
 
-import javax.enterprise.inject.Model;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.extensions.secman.api.role.ApplicationRole;
@@ -49,7 +49,7 @@ public class ApplicationUser_removeRoles {
     private final ApplicationUser target;
 
     
-    @Model
+    @MemberSupport
     public ApplicationUser act(Collection<ApplicationRole> roles) {
         
         _NullSafe.stream(roles)
@@ -59,7 +59,7 @@ public class ApplicationUser_removeRoles {
         return target;
     }
 
-    @Model
+    @MemberSupport
     // same logic in ApplicationRole_removeUsers
     public boolean canRemove(
             final ApplicationRole applicationRole) {

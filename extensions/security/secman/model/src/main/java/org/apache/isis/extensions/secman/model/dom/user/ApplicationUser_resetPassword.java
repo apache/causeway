@@ -20,11 +20,11 @@ package org.apache.isis.extensions.secman.model.dom.user;
 
 import java.util.Objects;
 
-import javax.enterprise.inject.Model;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.value.Password;
 import org.apache.isis.extensions.secman.api.user.ApplicationUser;
@@ -44,7 +44,7 @@ public class ApplicationUser_resetPassword {
     
     private final ApplicationUser target;
 
-    @Model
+    @MemberSupport
     public ApplicationUser act(
             @ParameterLayout(named="New password")
             final Password newPassword,
@@ -55,12 +55,12 @@ public class ApplicationUser_resetPassword {
         return target;
     }
 
-    @Model
+    @MemberSupport
     public boolean hideAct() {
         return !applicationUserRepository.isPasswordFeatureEnabled(target);
     }
 
-    @Model
+    @MemberSupport
     public String validateAct(
             final Password newPassword,
             final Password newPasswordRepeat) {

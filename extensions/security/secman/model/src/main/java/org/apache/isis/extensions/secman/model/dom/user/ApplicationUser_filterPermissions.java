@@ -23,11 +23,11 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.Predicate;
 
-import javax.enterprise.inject.Model;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.MinLength;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
@@ -56,7 +56,7 @@ public class ApplicationUser_filterPermissions {
 
     private final ApplicationUser target;
 
-    @Model
+    @MemberSupport
     public List<UserPermissionViewModel> act(
             
             @Parameter(optionality = Optionality.MANDATORY)
@@ -75,7 +75,7 @@ public class ApplicationUser_filterPermissions {
         return asViewModels(filtered);
     }
 
-    @Model
+    @MemberSupport
     public java.util.Collection<ApplicationFeatureChoices.AppFeat> autoComplete0Act(
             final @MinLength(3) String search) {
         return ApplicationFeatureChoices.autoCompleteFeature(featureRepository, search);

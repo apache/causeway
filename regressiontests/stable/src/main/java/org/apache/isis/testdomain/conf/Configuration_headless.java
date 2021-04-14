@@ -50,7 +50,7 @@ import lombok.RequiredArgsConstructor;
 @Import({
     IsisModuleCoreRuntimeServices.class,
     IsisModuleSecurityBypass.class,
-    IsisModuleExtModelAnnotation.class, // @Model support
+    IsisModuleExtModelAnnotation.class, // @MemberSupport support
     Configuration_headless.HeadlessCommandSupport.class,
     KVStoreForTesting.class, // Helper for JUnit Tests
 })

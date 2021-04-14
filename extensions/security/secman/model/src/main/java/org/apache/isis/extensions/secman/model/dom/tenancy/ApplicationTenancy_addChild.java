@@ -18,11 +18,11 @@
  */
 package org.apache.isis.extensions.secman.model.dom.tenancy;
 
-import javax.enterprise.inject.Model;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy;
 import org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy.AddChildDomainEvent;
 import org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancyRepository;
@@ -40,7 +40,7 @@ public class ApplicationTenancy_addChild {
     
     private final ApplicationTenancy target;
 
-    @Model
+    @MemberSupport
     public ApplicationTenancy act(final ApplicationTenancy child) {
         applicationTenancyRepository.setParentOnTenancy(child, target);
         return target;

@@ -105,7 +105,7 @@ public class ProperMemberSupport {
     }
     
 // variant with dependent args
-//    @Model
+//    @MemberSupport
 //    public Set<String> choices1MyAction(String p0) {
 //        return null;
 //    }

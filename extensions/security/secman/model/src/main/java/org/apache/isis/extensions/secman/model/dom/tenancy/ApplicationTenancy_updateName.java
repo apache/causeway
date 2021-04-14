@@ -18,10 +18,9 @@
  */
 package org.apache.isis.extensions.secman.model.dom.tenancy;
 
-import javax.enterprise.inject.Model;
-
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy;
@@ -38,7 +37,7 @@ public class ApplicationTenancy_updateName {
     
     private final ApplicationTenancy target;
 
-    @Model
+    @MemberSupport
     public ApplicationTenancy act(
             @Parameter(maxLength = ApplicationTenancy.MAX_LENGTH_NAME)
             @ParameterLayout(named="Name", typicalLength=ApplicationTenancy.TYPICAL_LENGTH_NAME)
@@ -47,7 +46,7 @@ public class ApplicationTenancy_updateName {
         return target;
     }
 
-    @Model
+    @MemberSupport
     public String default0Act() {
         return target.getName();
     }

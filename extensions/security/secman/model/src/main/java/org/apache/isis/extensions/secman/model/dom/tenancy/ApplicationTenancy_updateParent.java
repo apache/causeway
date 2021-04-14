@@ -18,11 +18,11 @@
  */
 package org.apache.isis.extensions.secman.model.dom.tenancy;
 
-import javax.enterprise.inject.Model;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.extensions.secman.api.tenancy.ApplicationTenancy;
@@ -42,7 +42,7 @@ public class ApplicationTenancy_updateParent {
     
     private final ApplicationTenancy target;
 
-    @Model
+    @MemberSupport
     public ApplicationTenancy act(
             @Parameter(optionality = Optionality.OPTIONAL)
             final ApplicationTenancy parent) {
@@ -51,7 +51,7 @@ public class ApplicationTenancy_updateParent {
         return target;
     }
 
-    @Model
+    @MemberSupport
     public ApplicationTenancy default0Act() {
         return target.getParent();
     }

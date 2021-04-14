@@ -21,11 +21,11 @@ package org.apache.isis.extensions.secman.model.dom.user;
 
 import java.util.List;
 
-import javax.enterprise.inject.Model;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.CollectionLayout;
+import org.apache.isis.applib.annotation.MemberSupport;
 import org.apache.isis.applib.services.appfeat.ApplicationFeature;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureRepository;
 import org.apache.isis.applib.services.factory.FactoryService;
@@ -53,7 +53,7 @@ public class ApplicationUser_permissions {
 
     private final ApplicationUser target;
 
-    @Model
+    @MemberSupport
     public List<UserPermissionViewModel> coll() {
         val allMembers = applicationFeatureRepository.allMembers();
         return asViewModels(allMembers);
