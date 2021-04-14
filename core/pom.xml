@@ -129,7 +129,7 @@
 		<javassist.version>3.27.0-GA</javassist.version>
 		<javax-servlet.version>4.0.1</javax-servlet.version>
 		<jaxb-core.version>2.3.0.1</jaxb-core.version> <!-- 2.3.2 is not yet available -->
-		<jaxb-impl.version>2.3.3</jaxb-impl.version>
+		<jaxb-impl.version>2.3.4</jaxb-impl.version>
 		<jaxws-ri.version>2.3.3</jaxws-ri.version>
 
 		<jbcrypt.version>0.4</jbcrypt.version>
