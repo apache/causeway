@@ -416,6 +416,10 @@ public class FacetedMethodsBuilder {
             return false;
         }
         
+        val hasActionAnnotation = _Annotations
+                .findNearestAnnotation(actionMethod, Action.class)
+                .isPresent();
+        
         // just an optimization, not strictly required:
         // return false if both are true
         // 1. actionMethod has no @Action annotation
@@ -425,9 +429,7 @@ public class FacetedMethodsBuilder {
             // even though when @Action is mandatory for action methods, 
             // mixins now can contribute methods, 
             // that do not need to be annotated (see ISIS-1998)
-            val hasActionAnnotation = _Annotations
-                    .findNearestAnnotation(actionMethod, Action.class)
-                    .isPresent();
+            
             if(!hasActionAnnotation) {
                 // omitting the @Action annotation at given method is only allowed, when the 
                 // type is a mixin, and the mixin's main method identifies as the given actionMethod 
@@ -475,22 +477,21 @@ public class FacetedMethodsBuilder {
             return true;
         } 
         
-        if(isExplicitActionAnnotationConfigured()) {
-            
-            if(_Annotations.isPresent(actionMethod, Action.class)) {
-                log.debug("  identified action {}", actionMethod);
-                return true;
-            }
-            // we have no @Action, so dismiss
-            return false;
-            
-        } 
+        if(hasActionAnnotation) {
+            log.debug("  identified action {}", actionMethod);
+            return true;
+        }
         
         // exclude those that have eg. reserved prefixes
         if (getFacetProcessor().recognizes(actionMethod)) {
             // this is a potential orphan candidate, collect these, than use when validating
             
             inspectedTypeSpec.getPotentialOrphans().add(actionMethod);
+            return false;
+        }
+        
+        if(isExplicitActionAnnotationConfigured()) {
+            // we have no @Action, so dismiss
             return false;
         }
 

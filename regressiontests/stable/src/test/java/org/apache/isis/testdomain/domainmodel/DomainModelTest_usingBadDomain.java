@@ -105,21 +105,46 @@ class DomainModelTest_usingBadDomain {
     void orphanedActionSupport_shouldFail() {
         assertTrue(validator.anyMatchesContaining(
                 Identifier.classIdentifier(LogicalType.fqcn(InvalidOrphanedActionSupport.class)), 
-                "is assumed to support"));
+                "InvalidOrphanedActionSupport#hideOrphaned: has annotation @MemberSupport, "
+                + "is assumed to support"));
+        
+        assertTrue(validator.anyMatchesContaining(
+                Identifier.classIdentifier(LogicalType.fqcn(InvalidOrphanedActionSupport.class)), 
+                "InvalidOrphanedActionSupport#hideMe: "
+                + "is assumed to support a property, collection or action. "
+                + "Unmet constraint(s): unsupported method signature or orphaned "
+                + "(not associated with a member)"));
     }
+    
 
     @Test
     void orphanedPropertySupport_shouldFail() {
         assertTrue(validator.anyMatchesContaining(
                 Identifier.classIdentifier(LogicalType.fqcn(InvalidOrphanedPropertySupport.class)), 
-                "is assumed to support"));
+                "InvalidOrphanedPropertySupport#hideMyProperty: has annotation @MemberSupport, "
+                + "is assumed to support"));
+        
+        assertTrue(validator.anyMatchesContaining(
+                Identifier.classIdentifier(LogicalType.fqcn(InvalidOrphanedPropertySupport.class)), 
+                "InvalidOrphanedPropertySupport#hideMe: "
+                + "is assumed to support a property, collection or action. "
+                + "Unmet constraint(s): unsupported method signature or orphaned "
+                + "(not associated with a member)"));
     }
     
     @Test
     void orphanedCollectionSupport_shouldFail() {
         assertTrue(validator.anyMatchesContaining(
                 Identifier.classIdentifier(LogicalType.fqcn(InvalidOrphanedCollectionSupport.class)), 
-                "is assumed to support"));
+                "InvalidOrphanedCollectionSupport#hideMyCollection: has annotation @MemberSupport, "
+                + "is assumed to support"));
+        
+        assertTrue(validator.anyMatchesContaining(
+                Identifier.classIdentifier(LogicalType.fqcn(InvalidOrphanedCollectionSupport.class)), 
+                "InvalidOrphanedCollectionSupport#hideMe: "
+                + "is assumed to support a property, collection or action. "
+                + "Unmet constraint(s): unsupported method signature or orphaned "
+                + "(not associated with a member)"));
     }
     
     @Test

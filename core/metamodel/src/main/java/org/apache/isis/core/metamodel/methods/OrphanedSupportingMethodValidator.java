@@ -45,7 +45,8 @@ extends MetaModelVisitingValidatorAbstract {
     
     @Override
     public boolean isEnabled() {
-        return !getConfiguration().getApplib().getAnnotation().getAction().isExplicit();
+        //return !getConfiguration().getApplib().getAnnotation().getAction().isExplicit();
+        return true; 
     }
     
     @Override
@@ -55,6 +56,10 @@ extends MetaModelVisitingValidatorAbstract {
             return; // continue
         }
 
+        if(spec.getCorrespondingClass().getName().equals("org.apache.isis.testdomain.model.bad.InvalidOrphanedActionSupport")) {
+            System.err.println("!!! BINGO");
+        }
+        
         val potentialOrphans = ((ObjectSpecificationAbstract) spec).getPotentialOrphans();
         if(potentialOrphans.isEmpty()) {
             return; // continue
@@ -103,8 +108,8 @@ extends MetaModelVisitingValidatorAbstract {
 
         val unmetContraints = _Lists.<String>newArrayList();
 
-        unmetContraints.add("misspelled prefix or unsupported method signature or "
-                + "orphaned (not associated with an action)");
+        unmetContraints.add("unsupported method signature or "
+                + "orphaned (not associated with a member)");
         return unmetContraints;
 
     }

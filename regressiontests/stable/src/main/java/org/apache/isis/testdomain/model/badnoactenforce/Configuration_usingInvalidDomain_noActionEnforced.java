@@ -16,17 +16,16 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.testdomain.model.badnoact;
+package org.apache.isis.testdomain.model.badnoactenforce;
 
-import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.Nature;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
 
-@DomainObject(nature = Nature.VIEW_MODEL)
-public class InvalidOrphanedActionSupportNoActionEnforced {
+@Configuration
+@ComponentScan(
+        basePackageClasses= {               
+                Configuration_usingInvalidDomain_noActionEnforced.class
+        })
+public class Configuration_usingInvalidDomain_noActionEnforced {
 
-    // should fail
-    public boolean hideOrphaned() {
-        return false;
-    }
-    
 }

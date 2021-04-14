@@ -153,7 +153,7 @@ implements ObjectSpecification {
     
     private final List<ObjectAction> objectActions = _Lists.newArrayList();
     
-    /** not API, used for validation, when {@code @Action} is NOT mandatory */
+    /** not API, used for validation */
     @Getter private final Set<Method> potentialOrphans = _Sets.newHashSet();
 
     // defensive immutable lazy copy of objectActions

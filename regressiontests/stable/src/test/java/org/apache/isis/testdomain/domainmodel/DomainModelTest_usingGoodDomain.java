@@ -95,14 +95,14 @@ class DomainModelTest_usingGoodDomain {
                 .withPackagePrefix("org.apache.isis.testdomain.")
                 ;
 
-        System.out.println("!!! listing MM");
+        System.out.println("=== listing MM");
         val metamodelDto = metaModelService.exportMetaModel(config);
         for (DomainClassDto domainClass : metamodelDto.getDomainClassDto()) {
             System.out.println("dc: " + domainClass.getId());
             val xmlString = jaxbService.toXml(domainClass);
             System.out.println(xmlString);
         }
-        System.out.println("!!! ---");
+        System.out.println("==============");
     }
 
     @Test
@@ -112,6 +112,17 @@ class DomainModelTest_usingGoodDomain {
 
         val validateDomainModel = new DomainModelValidator(serviceRegistry);
         validateDomainModel.throwIfInvalid(); // should not throw
+    }
+    
+    @Test
+    void reservedPrefixShouldBeAllowed_onExplicitAction() {
+     
+        val holderSpec = specificationLoader.loadSpecification(ProperMemberSupport.class,
+                IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
+        
+        val prefixed_action = holderSpec.getActionElseFail("hideMe");
+        assertNotNull(prefixed_action);
+        assertEquals("hideMe", prefixed_action.getId());
     }
 
     @Test

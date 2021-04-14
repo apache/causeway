@@ -129,6 +129,12 @@ public class ProperMemberSupport {
     public String validate1MyAction(String p1) {
         return null;
     }
+    
+    // [ISIS-2561] should be detected as Action (despite the prefix, which normally suggests otherwise)
+    @Action
+    public String hideMe() {
+        return null;
+    }
 
     // -- PROPER PROPERTY
 
