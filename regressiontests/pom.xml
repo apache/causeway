@@ -466,8 +466,18 @@
 
 	<modules>
 		<module>stable</module>
+		<module>stable-bootstrapping</module>
+		<module>stable-config</module>
+		<module>stable-cucumber</module>
+		<module>stable-domainmodel</module>
+		<module>stable-eventhandling</module>
+		<module>stable-factory</module>
+		<module>stable-injecting</module>
+		<module>stable-interact</module>
+		<module>stable-logging</module>
+		<module>stable-persistence-jdo</module>
+		<module>stable-persistence-jpa</module>
 		<module>stable-rest</module>
-		<module>stable-other</module>
 <!-- 		<module>incubating</module> -->
 	</modules>
 
