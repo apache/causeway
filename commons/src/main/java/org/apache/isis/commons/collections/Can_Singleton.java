@@ -26,6 +26,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
@@ -238,6 +239,16 @@ final class Can_Singleton<T> implements Can<T> {
     @Override
     public List<T> toList() {
         return Collections.singletonList(element); // serializable and immutable
+    }
+    
+    @Override
+    public Set<T> toSet() {
+        return Collections.singleton(element); // serializable and immutable
+    }
+    
+    @Override
+    public Set<T> toSet(@NonNull Consumer<T> onDuplicated) {
+        return Collections.singleton(element); // serializable and immutable
     }
     
     @Override

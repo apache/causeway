@@ -25,6 +25,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
@@ -37,6 +38,7 @@ import javax.annotation.Nullable;
 
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._Objects;
+import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 
 import lombok.NonNull;
@@ -293,6 +295,25 @@ final class Can_Multiple<T> implements Can<T> {
     @Override
     public List<T> toList() {
         return Collections.unmodifiableList(elements); // serializable and immutable
+    }
+    
+    @Override
+    public Set<T> toSet() {
+        val set = _Sets.<T>newHashSet(); // serializable
+        elements.forEach(set::add);
+        return Collections.unmodifiableSet(set); // serializable and immutable
+    }
+    
+    @Override
+    public Set<T> toSet(@NonNull Consumer<T> onDuplicated) {
+        val set = _Sets.<T>newHashSet(); // serializable
+        elements
+        .forEach(s->{
+            if(!set.add(s)) {
+                onDuplicated.accept(s);
+            }
+        });
+        return Collections.unmodifiableSet(set); // serializable and immutable
     }
     
     @Override

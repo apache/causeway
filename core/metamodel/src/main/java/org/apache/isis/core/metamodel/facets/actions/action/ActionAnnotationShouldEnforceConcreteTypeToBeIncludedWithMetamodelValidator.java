@@ -31,7 +31,7 @@ import org.apache.isis.core.metamodel.specloader.validator.ValidationFailure;
 import lombok.NonNull;
 import lombok.val;
 
-public class ActionAnnotationShouldEnforceTypeToBeIncludedWithMetamodel 
+public class ActionAnnotationShouldEnforceConcreteTypeToBeIncludedWithMetamodelValidator 
 extends MetaModelVisitingValidatorAbstract {
 
     @Override

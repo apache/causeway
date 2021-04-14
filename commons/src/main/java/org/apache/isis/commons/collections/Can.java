@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
@@ -665,9 +666,18 @@ extends Iterable<T>, Comparable<Can<T>>, Serializable {
      * @return a serializable and immutable List, containing the elements of this Can
      */
     List<T> toList();
+    
+    /**
+     * @return a serializable and immutable Set, containing the elements of this Can
+     */
+    Set<T> toSet();
+    
+    /**
+     * @return a serializable and immutable Set, containing the elements of this Can
+     */
+    Set<T> toSet(@NonNull Consumer<T> onDuplicated);
 
 //XXX to implement when needed    
-//    Set<T> toSet();
 //    Set<T> toSortedSet();
 //    Set<T> toSortedSet(Comparator<T> comparator);
 

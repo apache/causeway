@@ -20,8 +20,9 @@ package org.apache.isis.core.metamodel.progmodels.dflt;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.core.metamodel.authorization.standard.AuthorizationFacetFactory;
 import org.apache.isis.core.metamodel.facets.actions.action.ActionAnnotationFacetFactory;
-import org.apache.isis.core.metamodel.facets.actions.action.ActionAnnotationShouldEnforceTypeToBeIncludedWithMetamodel;
+import org.apache.isis.core.metamodel.facets.actions.action.ActionAnnotationShouldEnforceConcreteTypeToBeIncludedWithMetamodelValidator;
 import org.apache.isis.core.metamodel.facets.actions.action.ActionChoicesForCollectionParameterFacetFactory;
+import org.apache.isis.core.metamodel.facets.actions.action.ActionOverloadingValidator;
 import org.apache.isis.core.metamodel.facets.actions.contributing.derived.ContributingFacetDerivedFromMixinFacetFactory;
 import org.apache.isis.core.metamodel.facets.actions.defaults.method.ActionDefaultsFacetViaMethodFactory;
 import org.apache.isis.core.metamodel.facets.actions.homepage.annotation.HomePageFacetAnnotationFactory;
@@ -346,8 +347,8 @@ public final class ProgrammingModelFacetsJava8 extends ProgrammingModelAbstract 
         
         addValidator(new OrphanedSupportingMethodValidator());
         addValidator(new TitlesAndTranslationsValidator());
-        addValidator(new ActionAnnotationShouldEnforceTypeToBeIncludedWithMetamodel());
-        
+        addValidator(new ActionAnnotationShouldEnforceConcreteTypeToBeIncludedWithMetamodelValidator());
+        addValidator(new ActionOverloadingValidator());
 
     }
 
