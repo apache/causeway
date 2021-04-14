@@ -34,11 +34,11 @@ import org.apache.isis.core.metamodel.methods.MethodFinderUtils;
 import org.apache.isis.core.metamodel.methods.MethodLiteralConstants;
 import org.apache.isis.core.metamodel.methods.MethodPrefixBasedFacetFactoryAbstract;
 
-public class PropertySetAndClearFacetFactory extends MethodPrefixBasedFacetFactoryAbstract {
+public class PropertySetterFacetFactory extends MethodPrefixBasedFacetFactoryAbstract {
 
     private static final Can<String> PREFIXES = Can.empty();
 
-    public PropertySetAndClearFacetFactory() {
+    public PropertySetterFacetFactory() {
         super(FeatureType.PROPERTIES_ONLY, OrphanValidation.VALIDATE, PREFIXES);
     }
 

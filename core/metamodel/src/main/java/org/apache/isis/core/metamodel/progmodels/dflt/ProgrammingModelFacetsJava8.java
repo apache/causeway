@@ -95,8 +95,7 @@ import org.apache.isis.core.metamodel.facets.properties.disabled.inferred.Disabl
 import org.apache.isis.core.metamodel.facets.properties.mandatory.dflt.MandatoryFacetOnProperyDefaultFactory;
 import org.apache.isis.core.metamodel.facets.properties.property.PropertyAnnotationFacetFactory;
 import org.apache.isis.core.metamodel.facets.properties.propertylayout.PropertyLayoutFacetFactory;
-import org.apache.isis.core.metamodel.facets.properties.update.PropertyModifyFacetFactory;
-import org.apache.isis.core.metamodel.facets.properties.update.PropertySetAndClearFacetFactory;
+import org.apache.isis.core.metamodel.facets.properties.update.PropertySetterFacetFactory;
 import org.apache.isis.core.metamodel.facets.properties.validating.dflt.PropertyValidateFacetDefaultFactory;
 import org.apache.isis.core.metamodel.facets.properties.validating.method.PropertyValidateFacetViaMethodFactory;
 import org.apache.isis.core.metamodel.facets.value.bigdecimal.BigDecimalValueFacetUsingSemanticsProviderFactory;
@@ -173,9 +172,7 @@ public final class ProgrammingModelFacetsJava8 extends ProgrammingModelAbstract 
 
         // properties
         addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, PropertyAccessorFacetViaAccessorFactory.class);
-        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, PropertySetAndClearFacetFactory.class);
-        // must come after PropertySetAndClearFacetFactory (replaces setter facet with modify if need be)
-        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, PropertyModifyFacetFactory.class);
+        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, PropertySetterFacetFactory.class);
 
         addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, PropertyValidateFacetViaMethodFactory.class);
         addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, PropertyChoicesFacetViaMethodFactory.class);

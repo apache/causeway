@@ -136,10 +136,5 @@ public final class MethodLiteralConstants {
         return capitalizedName;
     }
     
-    // -- DEPRECATIONS
-    
-    //@Deprecated public static final String CLEAR_PREFIX = "clear";
-    @Deprecated public static final String MODIFY_PREFIX = "modify";
-    
 
 }

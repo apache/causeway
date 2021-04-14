@@ -27,7 +27,6 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
-import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
 import org.apache.isis.core.metamodel.facets.members.disabled.method.DisableForContextFacet;
 import org.apache.isis.core.metamodel.facets.members.disabled.method.DisableForContextFacetViaMethod;
 import org.apache.isis.core.metamodel.facets.members.disabled.method.DisableForContextFacetViaMethodFactory;
@@ -47,17 +46,12 @@ import org.apache.isis.core.metamodel.facets.properties.choices.method.PropertyC
 import org.apache.isis.core.metamodel.facets.properties.defaults.PropertyDefaultFacet;
 import org.apache.isis.core.metamodel.facets.properties.defaults.method.PropertyDefaultFacetViaMethod;
 import org.apache.isis.core.metamodel.facets.properties.defaults.method.PropertyDefaultFacetViaMethodFactory;
-import org.apache.isis.core.metamodel.facets.properties.disabled.inferred.DisabledFacetOnPropertyInferredFactory;
-import org.apache.isis.core.metamodel.facets.properties.update.SnapshotExcludeFacetInferred;
-import org.apache.isis.core.metamodel.facets.properties.update.PropertyModifyFacetFactory;
-import org.apache.isis.core.metamodel.facets.properties.update.PropertySetAndClearFacetFactory;
+import org.apache.isis.core.metamodel.facets.properties.update.PropertySetterFacetFactory;
 import org.apache.isis.core.metamodel.facets.properties.update.clear.PropertyClearFacet;
-import org.apache.isis.core.metamodel.facets.properties.update.clear.PropertyClearFacetViaClearMethod;
 import org.apache.isis.core.metamodel.facets.properties.update.clear.PropertyClearFacetViaSetterMethod;
 import org.apache.isis.core.metamodel.facets.properties.update.init.PropertyInitializationFacet;
 import org.apache.isis.core.metamodel.facets.properties.update.init.PropertyInitializationFacetViaSetterMethod;
 import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
-import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySetterFacetViaModifyMethod;
 import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySetterFacetViaSetterMethod;
 import org.apache.isis.core.metamodel.facets.properties.validating.PropertyValidateFacet;
 import org.apache.isis.core.metamodel.facets.properties.validating.method.PropertyValidateFacetViaMethod;
@@ -102,7 +96,7 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
     public void testSetterFacetIsInstalledForSetterMethodAndMethodRemoved() {
-        val facetFactory = new PropertySetAndClearFacetFactory();
+        val facetFactory = new PropertySetterFacetFactory();
         facetFactory.setMetaModelContext(super.metaModelContext);
 
         class Customer {
@@ -130,7 +124,7 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
     public void testInitializationFacetIsInstalledForSetterMethodAndMethodRemoved() {
-        val facetFactory = new PropertySetAndClearFacetFactory();
+        val facetFactory = new PropertySetterFacetFactory();
         facetFactory.setMetaModelContext(super.metaModelContext);
 
         class Customer {
@@ -158,7 +152,7 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
     public void testSetterFacetIsInstalledMeansNoDisabledOrDerivedFacetsInstalled() {
-        val facetFactory = new PropertySetAndClearFacetFactory();
+        val facetFactory = new PropertySetterFacetFactory();
         facetFactory.setMetaModelContext(super.metaModelContext);
 
         class Customer {
@@ -177,146 +171,10 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
         assertNull(facetedMethod.getFacet(SnapshotExcludeFacet.class));
         assertNull(facetedMethod.getFacet(SnapshotExcludeFacet.class));
-    }
-
-    public void testSetterFacetIsInstalledForModifyMethodAndMethodRemoved() {
-
-        val facetFactoryForModify = new PropertyModifyFacetFactory();
-        val facetFactoryForSetter = new PropertySetAndClearFacetFactory();
-        facetFactoryForModify.setMetaModelContext(super.metaModelContext);
-        facetFactoryForSetter.setMetaModelContext(super.metaModelContext);
-
-        class Customer {
-            @SuppressWarnings("unused")
-            public String getFirstName() {
-                return null;
-            }
-
-            @SuppressWarnings("unused")
-            public void modifyFirstName(final String firstName) {
-            }
-        }
-        final Method propertyAccessorMethod = findMethod(Customer.class, "getFirstName");
-        final Method propertyModifyMethod = findMethod(Customer.class, "modifyFirstName", new Class[] { String.class });
-
-        final FacetFactory.ProcessMethodContext processMethodContext = new FacetFactory.ProcessMethodContext(Customer.class, null,
-                propertyAccessorMethod, methodRemover, facetedMethod);
-        facetFactoryForModify.process(processMethodContext);
-        facetFactoryForSetter.process(processMethodContext);
-
-        final Facet facet = facetedMethod.getFacet(PropertySetterFacet.class);
-        assertNotNull(facet);
-        assertTrue(facet instanceof PropertySetterFacetViaModifyMethod);
-        final PropertySetterFacetViaModifyMethod propertySetterFacet = (PropertySetterFacetViaModifyMethod) facet;
-        assertEquals(propertyModifyMethod, propertySetterFacet.getMethods().get(0));
-
-        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(propertyModifyMethod));
-    }
-
-    public void testModifyMethodWithNoSetterInstallsNotPersistedFacetButDoesNotInstallADisabledFacets() {
-        val facetFactory = new PropertySetAndClearFacetFactory();
-        val facetFactoryForModify = new PropertyModifyFacetFactory();
-        val disabledFacetOnPropertyInferredFactory = new DisabledFacetOnPropertyInferredFactory();
-        facetFactory.setMetaModelContext(super.metaModelContext);
-        facetFactoryForModify.setMetaModelContext(super.metaModelContext);
-        disabledFacetOnPropertyInferredFactory.setMetaModelContext(super.metaModelContext);
-
-        class Customer {
-            @SuppressWarnings("unused")
-            public String getFirstName() {
-                return null;
-            }
-
-            @SuppressWarnings("unused")
-            public void modifyFirstName(final String firstName) {
-            }
-        }
-        final Method propertyAccessorMethod = findMethod(Customer.class, "getFirstName");
-
-        final FacetFactory.ProcessMethodContext processMethodContext = new FacetFactory.ProcessMethodContext(Customer.class, null,
-                propertyAccessorMethod, methodRemover, facetedMethod);
-        facetFactory.process(processMethodContext);
-        facetFactoryForModify.process(processMethodContext);
-        disabledFacetOnPropertyInferredFactory.process(processMethodContext);
-
-        Facet facet = facetedMethod.getFacet(SnapshotExcludeFacet.class);
-        assertNotNull(facet);
-        assertTrue(facet instanceof SnapshotExcludeFacetInferred);
-
-        facet = facetedMethod.getFacet(DisabledFacet.class);
-        assertNull(facet);
-    }
-
-    public void testIfHaveSetterAndModifyFacetThenTheModifyFacetWinsOut() {
-
-        val facetFactory = new PropertySetAndClearFacetFactory();
-        val facetFactoryForModify = new PropertyModifyFacetFactory();
-        facetFactory.setMetaModelContext(super.metaModelContext);
-        facetFactoryForModify.setMetaModelContext(super.metaModelContext);
-
-        class Customer {
-            @SuppressWarnings("unused")
-            public String getFirstName() {
-                return null;
-            }
-
-            @SuppressWarnings("unused")
-            public void setFirstName(final String firstName) {
-            }
-
-            @SuppressWarnings("unused")
-            public void modifyFirstName(final String firstName) {
-            }
-        }
-        final Method propertyAccessorMethod = findMethod(Customer.class, "getFirstName");
-        final Method propertySetterMethod = findMethod(Customer.class, "setFirstName", new Class[] { String.class });
-        final Method propertyModifyMethod = findMethod(Customer.class, "modifyFirstName", new Class[] { String.class });
-
-        final FacetFactory.ProcessMethodContext processMethodContext = new FacetFactory.ProcessMethodContext(Customer.class, null,
-                propertyAccessorMethod, methodRemover, facetedMethod);
-        facetFactory.process(processMethodContext);
-        facetFactoryForModify.process(processMethodContext);
-
-        final Facet facet = facetedMethod.getFacet(PropertySetterFacet.class);
-        assertNotNull(facet);
-        assertTrue(facet instanceof PropertySetterFacetViaModifyMethod);
-        final PropertySetterFacetViaModifyMethod propertySetterFacet = (PropertySetterFacetViaModifyMethod) facet;
-        assertEquals(propertyModifyMethod, propertySetterFacet.getMethods().get(0));
-
-        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(propertySetterMethod));
-        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(propertyModifyMethod));
-    }
-
-    public void testClearFacet() {
-        val facetFactory = new PropertySetAndClearFacetFactory();
-        facetFactory.setMetaModelContext(super.metaModelContext);
-
-        class Customer {
-            @SuppressWarnings("unused")
-            public String getFirstName() {
-                return null;
-            }
-
-            @SuppressWarnings("unused")
-            public void clearFirstName() {
-            }
-        }
-        final Method propertyAccessorMethod = findMethod(Customer.class, "getFirstName");
-        final Method propertyClearMethod = findMethod(Customer.class, "clearFirstName");
-
-        facetFactory.process(new FacetFactory.ProcessMethodContext(Customer.class, null, propertyAccessorMethod, methodRemover, facetedMethod));
-
-        final Facet facet = facetedMethod.getFacet(PropertyClearFacet.class);
-        assertNotNull(facet);
-        assertTrue(facet instanceof PropertyClearFacetViaClearMethod);
-        final PropertyClearFacetViaClearMethod propertyClearFacet = (PropertyClearFacetViaClearMethod) facet;
-        assertEquals(propertyClearMethod, propertyClearFacet.getMethods().get(0));
-
-        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(propertyClearMethod));
     }
 
     public void testClearFacetViaSetterIfNoExplicitClearMethod() {
-        val facetFactory = new PropertySetAndClearFacetFactory();
+        val facetFactory = new PropertySetterFacetFactory();
         facetFactory.setMetaModelContext(super.metaModelContext);
 
         class Customer {
